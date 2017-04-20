@@ -194,16 +194,7 @@ public class TooBeeTooTeeBot {
 
                 @Override
                 public void disconnected(DisconnectedEvent disconnectedEvent) {
-                    System.out.println("Disconnected. Reconnecting in...");
-                    for (int i = 5; i != 0; i--)    {
-                        System.out.println(i);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e)    {
-                        }
-                    }
-                    System.out.println("Reconnecting!");
-                    TooBeeTooTeeBot.INSTANCE.client.getSession().connect(true);
+                    System.out.println("Disconnected.");
                 }
             });
             System.out.println("Connecting to 2b2t.org:25565...");
