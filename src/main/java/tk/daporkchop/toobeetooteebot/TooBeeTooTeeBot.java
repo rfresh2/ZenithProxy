@@ -146,7 +146,7 @@ public class TooBeeTooTeeBot {
                                 client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
                             }
                         }
-                    }, 500, 500);
+                    }, 20000, 500);
 
                     new Timer().schedule(new TimerTask() {
                         @Override
@@ -189,12 +189,18 @@ public class TooBeeTooTeeBot {
 
                 @Override
                 public void disconnecting(DisconnectingEvent disconnectingEvent) {
-                    System.out.println("Disconnecting...");
+                    System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
+                    queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
                 }
 
                 @Override
                 public void disconnected(DisconnectedEvent disconnectedEvent) {
                     System.out.println("Disconnected.");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e)    {
+
+                    }
                 }
             });
             System.out.println("Connecting to 2b2t.org:25565...");
