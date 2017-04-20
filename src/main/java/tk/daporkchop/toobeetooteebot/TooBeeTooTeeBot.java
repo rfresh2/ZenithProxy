@@ -151,40 +151,58 @@ public class TooBeeTooTeeBot {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() { //chat
-                            switch (new Random().nextInt(10))    {
+                            switch (new Random().nextInt(16))    {
                                 case 0:
-                                    sendChat("> Did you know? The Did you know? meme is dead!");
+                                    sendChat("Did you know? The Did you know? meme is dead!");
                                     break;
                                 case 1:
-                                    sendChat("> Contact me on Discord for new spam message suggestions! DaPorkchop_#2459");
+                                    sendChat("Contact me on Discord for new spam message suggestions! DaPorkchop_#2459");
                                     break;
                                 case 2:
-                                    sendChat("> Pepsi > Coke");
+                                    sendChat("Pepsi > Coke");
                                     break;
                                 case 3:
-                                    sendChat("> Did you know? VoCo is dead!");
+                                    sendChat("Did you know? VoCo is dead!");
                                     break;
                                 case 4:
-                                    sendChat("> Welcome to TOOBEETOOTEEDOTORG! A friendly christian survival server!");
+                                    sendChat("Welcome to TOOBEETOOTEEDOTORG! A friendly christian survival server!");
                                     break;
                                 case 5:
-                                    sendChat("> -- HOURLY STATS -- Average queue size: 1000 Average TPS: 0.00");
+                                    sendChat("-- HOURLY STATS -- Average queue size: 1000 Average TPS: 0.00");
                                     break;
                                 case 6:
-                                    sendChat("> OMG it's FeetMC!!!");
+                                    sendChat("OMG it's FeetMC!!!");
                                     break;
                                 case 7:
-                                    sendChat("> Daily reminder that Pepsi is better than Coke");
+                                    sendChat("Daily reminder that Pepsi is better than Coke");
                                     break;
                                 case 8:
-                                    sendChat("> 卐卐卐 KILL HITLER 卐卐卐");
+                                    sendChat("卐卐卐 KILL HITLER 卐卐卐");
                                     break;
                                 case 9:
-                                    sendChat("> team vet train best faction");
+                                    sendChat("team vet train best faction");
+                                    break;
+                                case 10:
+                                    sendChat("Press F3+C for 15 seconds to dupe!");
+                                    break;
+                                case 11:
+                                    sendChat("The cactus dupe is the best dupe!");
+                                    break;
+                                case 12:
+                                    sendChat("I just walked " + (new Random().nextInt(75) + 3) + " blocks!");
+                                    break;
+                                case 13:
+                                    sendChat("<insert meme here>");
+                                    break;
+                                case 14:
+                                    sendChat("I just drank 1 Pepsi!");
+                                    break;
+                                case 15:
+                                    sendChat("Daily reminder that pressing alt+F4 reduces lag");
                                     break;
                             }
                         }
-                    }, 25000, 25000);
+                    }, 30000, 30000);
                 }
 
                 @Override
@@ -214,7 +232,7 @@ public class TooBeeTooTeeBot {
     }
 
     public void sendChat(String message)    {
-        ClientChatPacket toSend = new ClientChatPacket(message);
+        ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi  " + message);
         client.getSession().send(toSend);
     }
 }
