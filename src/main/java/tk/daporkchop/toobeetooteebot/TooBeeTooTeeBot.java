@@ -191,16 +191,18 @@ public class TooBeeTooTeeBot {
                 public void disconnecting(DisconnectingEvent disconnectingEvent) {
                     System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
                     queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
+                    
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e)    {
+
+                    }
+                    System.exit(0);
                 }
 
                 @Override
                 public void disconnected(DisconnectedEvent disconnectedEvent) {
                     System.out.println("Disconnected.");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e)    {
-
-                    }
                 }
             });
             System.out.println("Connecting to 2b2t.org:25565...");
