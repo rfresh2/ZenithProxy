@@ -151,7 +151,7 @@ public class TooBeeTooTeeBot {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() { //chat
-                            switch (new Random().nextInt(16))    {
+                            switch (new Random().nextInt(17))    {
                                 case 0:
                                     sendChat("Did you know? The Did you know? meme is dead!");
                                     break;
@@ -199,6 +199,9 @@ public class TooBeeTooTeeBot {
                                     break;
                                 case 15:
                                     sendChat("Daily reminder that pressing alt+F4 reduces lag");
+                                    break;
+                                case 16:
+                                    sendChat("Position in queue: " + (new Random().nextInt(130) + 93));
                                     break;
                             }
                         }
