@@ -26,9 +26,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by DaPorkchop_ on 4/20/2017.
- */
 public class TooBeeTooTeeBot {
 
     public Client client = null;
