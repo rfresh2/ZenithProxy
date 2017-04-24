@@ -29,6 +29,9 @@ import java.util.regex.Pattern;
 public class TooBeeTooTeeBot {
 
     public Client client = null;
+    
+    public Random r = new Random();
+    public Timer timer = new Timer();
 
     public String username;
     public String password;
@@ -71,7 +74,8 @@ public class TooBeeTooTeeBot {
                         .setToken(token)
                         .buildBlocking();
                 channel = jda.getTextChannelById("304662676343357442");
-                new Timer().schedule(new TimerTask() {
+                
+                timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
                         if (queuedMessages.size() > 0)  {
@@ -114,7 +118,7 @@ public class TooBeeTooTeeBot {
                         queuedMessages.add(msg);
                     } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                         ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
-                        new Timer().schedule(new TimerTask() { // respawn
+                        timer.schedule(new TimerTask() { // respawn
                             @Override
                             public void run() {
                                 client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
@@ -131,13 +135,12 @@ public class TooBeeTooTeeBot {
                 @Override
                 public void connected(ConnectedEvent connectedEvent) {
                     System.out.println("Connected to 2b2t.org:25565!");
-                    new Timer().schedule(new TimerTask() {
+                    timer.schedule(new TimerTask() {
                         @Override
                         public void run() { //antiafk
-                            if (new Random().nextBoolean()) {
-                                client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+                            if (r.nextBoolean()) {
+                                client.getSession().send(new ClientPlayerSwingArmPacket(r.nextBoolean() ? Hand.MAIN_HAND : Hand.MAIN_HAND)); //TODO: offhand, what's the name of that enum
                             } else {
-                                Random r = new Random();
                                 float yaw = -90 + (90 - -90) * r.nextFloat();
                                 float pitch = -90 + (90 - -90) * r.nextFloat();
                                 client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
@@ -145,10 +148,10 @@ public class TooBeeTooTeeBot {
                         }
                     }, 20000, 500);
 
-                    new Timer().schedule(new TimerTask() {
+                    new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                         @Override
                         public void run() { //chat
-                            switch (new Random().nextInt(17))    {
+                            switch (r.nextInt(17))    {
                                 case 0:
                                     sendChat("Did you know? The Did you know? meme is dead!");
                                     break;
@@ -186,7 +189,7 @@ public class TooBeeTooTeeBot {
                                     sendChat("The cactus dupe is the best dupe!");
                                     break;
                                 case 12:
-                                    sendChat("I just walked " + (new Random().nextInt(75) + 3) + " blocks!");
+                                    sendChat("I just walked " + (r.nextInt(75) + 3) + " blocks!");
                                     break;
                                 case 13:
                                     sendChat("<insert meme here>");
@@ -198,11 +201,16 @@ public class TooBeeTooTeeBot {
                                     sendChat("Daily reminder that pressing alt+F4 reduces lag");
                                     break;
                                 case 16:
-                                    sendChat("Position in queue: " + (new Random().nextInt(130) + 93));
+                                    sendChat("Position in queue: " + (r.nextInt(130) + 93));
                                     break;
                             }
+                            try {
+                            	Thread.sleep(r.nextInt(10000) + 5000);
+                            } catch (InterruptedException e) {
+                            	//fuck java lol
+                            }
                         }
-                    }, 30000, 30000);
+                    }, 30000, 19000);
                 }
 
                 @Override
@@ -239,13 +247,17 @@ public class TooBeeTooTeeBot {
     }
 
     public void sendChat(String message)    {
-        ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi  " + message);
+        ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi " + message);
         client.getSession().send(toSend);
     }
 }
 
 /**
  * A bunch of utilities for dealing with Minecraft color codes
+ * Totally not skidded from Nukkit
+ * sorry nukkit
+ * deal with it
+ * kek
  */
 enum TextFormat {
     /**

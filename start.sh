@@ -31,13 +31,13 @@ clear
 while [ "$DO_LOOP" == "true" ]; do
 	mvn exec:java -Dexec.mainClass="tk.daporkchop.toobeetooteebot.TooBeeTooTeeBot" -Dexec.classpathScope=runtime
 	echo "Press Ctrl+c to stop" 
-	sleep 1
+	sleep 0.5
     if git pull | grep -q 'Already up-to-date.'; then
 		clear
                 echo "Nothing  changed, starting..."
 	else
 		./compile.sh
-		sleep 1
+		sleep 0.5
 		clear
 		echo "Compiled, starting..." 
 	fi
