@@ -27,6 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TooBeeTooTeeBot {
+	
+	public static final String[] BLOCK_NAMES = new String[] { "Cobblestone", "Stone", "Netherrack", "Stone Bricks", "Block of Coal", "Block of Iron", "Block of Gold", "Block of Diamond", "Block of Emerald", "Obsidian" };
 
     public Client client = null;
     
@@ -167,7 +169,7 @@ public class TooBeeTooTeeBot {
                     new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                         @Override
                         public void run() { //chat
-                            switch (r.nextInt(17))    {
+                            switch (r.nextInt(26))    {
                                 case 0:
                                     sendChat("Did you know? The Did you know? meme is dead!");
                                     break;
@@ -218,6 +220,21 @@ public class TooBeeTooTeeBot {
                                     break;
                                 case 16:
                                     sendChat("Position in queue: " + (r.nextInt(130) + 93));
+                                    break;
+                                case 17:
+                                case 18:
+                                case 19:
+                                    sendChat("I just broke " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    break;
+                                case 20:
+                                case 21:
+                                case 22:
+                                    sendChat("I just placed " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    break;
+                                case 23:
+                                case 24:
+                                case 25:
+                                    sendChat("I just picked up " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
                                     break;
                             }
                             try {
