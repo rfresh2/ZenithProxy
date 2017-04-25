@@ -37,8 +37,11 @@ public class TooBeeTooTeeBot {
     public String password;
 
     public JDA jda;
+    public JDA otherJda;
     public String token;
+    public String otherToken;
     public TextChannel channel;
+    public TextChannel otherTextChannel;
     public ArrayList<String> queuedMessages = new ArrayList<>();
 
     public boolean firstRun = true;
@@ -68,12 +71,17 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.username = scanner.nextLine();
                 TooBeeTooTeeBot.INSTANCE.password = scanner.nextLine();
                 TooBeeTooTeeBot.INSTANCE.token = scanner.nextLine();
+                TooBeeTooTeeBot.INSTANCE.otherToken = scanner.nextLine();
                 scanner.close();
 
                 jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
                 channel = jda.getTextChannelById("304662676343357442");
+                otherJda = new JDABuilder(AccountType.BOT)
+                        .setToken(otherToken)
+                        .buildBlocking();
+                otherTextChannel = otherJda.getTextChannelById("305346913488863243");
                 
                 timer.schedule(new TimerTask() {
                     @Override
@@ -87,6 +95,7 @@ public class TooBeeTooTeeBot {
                                 copiedBuilder.append(iter.next() + "\n");
                                 if (builder.length() > 2000)    {
                                     channel.sendMessage(copiedBuilder.toString()).queue();
+                                    otherTextChannel.sendMessage(copiedBuilder.toString()).queue();
                                     queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                                     return;
                                 } else {
@@ -97,6 +106,7 @@ public class TooBeeTooTeeBot {
                                 }
                             }
                             channel.sendMessage(builder.toString()).queue();
+                            otherTextChannel.sendMessage(builder.toString()).queue();
                             queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
                     }
@@ -139,7 +149,7 @@ public class TooBeeTooTeeBot {
                         @Override
                         public void run() { //antiafk
                             if (r.nextBoolean()) {
-                                client.getSession().send(new ClientPlayerSwingArmPacket(r.nextBoolean() ? Hand.MAIN_HAND : Hand.MAIN_HAND)); //TODO: offhand, what's the name of that enum
+                                client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND)); //TODO: offhand, what's the name of that enum
                             } else {
                                 float yaw = -90 + (90 - -90) * r.nextFloat();
                                 float pitch = -90 + (90 - -90) * r.nextFloat();
@@ -225,9 +235,9 @@ public class TooBeeTooTeeBot {
                     queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
                     
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(1500);
                     } catch (InterruptedException e)    {
-
+                        
                     }
                     System.exit(0);
                 }
@@ -237,7 +247,7 @@ public class TooBeeTooTeeBot {
                     System.out.println("Disconnected.");
                     queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(1500);
                     } catch (InterruptedException e)    {
 
                     }
