@@ -145,6 +145,12 @@ public class TooBeeTooTeeBot {
                                 float pitch = -90 + (90 - -90) * r.nextFloat();
                                 client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
                             }
+                            
+                            try {
+                            	Thread.sleep(r.nextInt(200));
+                            } catch (InterruptedException e) {
+                            	
+                            }
                         }
                     }, 20000, 500);
 
