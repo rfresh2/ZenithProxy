@@ -157,12 +157,6 @@ public class TooBeeTooTeeBot {
                                 float pitch = -90 + (90 - -90) * r.nextFloat();
                                 client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
                             }
-                            
-                            try {
-                            	Thread.sleep(r.nextInt(200));
-                            } catch (InterruptedException e) {
-                            	
-                            }
                         }
                     }, 20000, 500);
 
@@ -237,13 +231,8 @@ public class TooBeeTooTeeBot {
                                     sendChat("I just picked up " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
                                     break;
                             }
-                            try {
-                            	Thread.sleep(r.nextInt(10000) + 5000);
-                            } catch (InterruptedException e) {
-                            	//fuck java lol
-                            }
                         }
-                    }, 30000, 19000);
+                    }, 30000, 30000);
                 }
 
                 @Override
