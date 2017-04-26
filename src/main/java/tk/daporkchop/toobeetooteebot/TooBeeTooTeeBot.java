@@ -218,17 +218,17 @@ public class TooBeeTooTeeBot {
                                 case 17:
                                 case 18:
                                 case 19:
-                                    sendChat("I just broke " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    sendChat("I just broke " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
                                     break;
                                 case 20:
                                 case 21:
                                 case 22:
-                                    sendChat("I just placed " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    sendChat("I just placed " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
                                     break;
                                 case 23:
                                 case 24:
                                 case 25:
-                                    sendChat("I just picked up " + (r.nextInt(15) + 5) + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    sendChat("I just picked up " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
                                     break;
                             }
                         }
