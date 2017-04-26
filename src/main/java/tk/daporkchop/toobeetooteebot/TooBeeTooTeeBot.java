@@ -163,7 +163,7 @@ public class TooBeeTooTeeBot {
                     new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                         @Override
                         public void run() { //chat
-                            switch (r.nextInt(26))    {
+                            switch (r.nextInt(27))    {
                                 case 0:
                                     sendChat("Did you know? The Did you know? meme is dead!");
                                     break;
@@ -229,6 +229,9 @@ public class TooBeeTooTeeBot {
                                 case 24:
                                 case 25:
                                     sendChat("I just picked up " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    break;
+                                case 26:
+                                    sendChat("kekekekekekekekekekepepsibetterthancokekekekekekekekekek");
                                     break;
                             }
                         }
