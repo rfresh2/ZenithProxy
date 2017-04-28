@@ -24,6 +24,10 @@
             <name>jcenter-bintray</name>
             <url>http://jcenter.bintray.com</url>
         </repository>
+        <repository>
+            <id>clojars.org</id>
+            <url>http://clojars.org/repo</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -46,6 +50,11 @@
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>1.18</version>
+        </dependency>
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>java-websocket</artifactId>
+            <version>1.3.3</version>
         </dependency>
     </dependencies>
 </project>

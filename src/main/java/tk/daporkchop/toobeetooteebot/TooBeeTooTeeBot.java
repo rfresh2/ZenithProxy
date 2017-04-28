@@ -2,12 +2,16 @@ package tk.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
+import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.event.session.*;
@@ -18,8 +22,12 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.UnknownHostException;
 import java.util.*;
 import com.google.common.collect.Maps;
+import org.java_websocket.WebSocketImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,17 +54,31 @@ public class TooBeeTooTeeBot {
 
     public boolean firstRun = true;
 
+    public WebsocketServer websocketServer;
+
+    public Message tabHeader;
+    public Message tabFooter;
+    public ArrayList<PlayerListEntry> playerListEntries = new ArrayList<>();
+
+    public MinecraftProtocol protocol;
+
     public static TooBeeTooTeeBot INSTANCE;
 
     public static void main(String[] args)  {
         new TooBeeTooTeeBot().start(args);
-
         try {
+            TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
+            TooBeeTooTeeBot.INSTANCE.websocketServer.start();
+
             Scanner scanner = new Scanner(System.in);
+
             String whatever = scanner.nextLine();
             if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
                 TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("idk lol");
             }
+            TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_. Refresh the page in a few seconds!");
+            Thread.sleep(100);
+            TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
             System.exit(0);
         } catch (Exception e)   {
             e.printStackTrace();
@@ -114,26 +136,106 @@ public class TooBeeTooTeeBot {
             }
 
             System.out.println("Logging in with credentials: " + username + ":" + password);
-            MinecraftProtocol protocol = new MinecraftProtocol(username, password);
+            protocol = new MinecraftProtocol(username, password);
             System.out.println("Success!");
 
             client = new Client("2b2t.org", 25565, protocol, new TcpSessionFactory());
             client.getSession().addListener(new SessionListener() {
                 @Override
                 public void packetReceived(PacketReceivedEvent packetReceivedEvent) {
-                    if (packetReceivedEvent.getPacket() instanceof ServerChatPacket)    {
-                        ServerChatPacket pck = (ServerChatPacket) packetReceivedEvent.getPacket();
-                        String msg = TextFormat.clean(pck.getMessage().getFullText());
-                        System.out.println("[CHAT] " + msg);
-                        queuedMessages.add(msg);
-                    } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
-                        ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
-                        timer.schedule(new TimerTask() { // respawn
-                            @Override
-                            public void run() {
-                                client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                    try {
+                        if (packetReceivedEvent.getPacket() instanceof ServerChatPacket) {
+                            ServerChatPacket pck = (ServerChatPacket) packetReceivedEvent.getPacket();
+                            String msg = TextFormat.clean(pck.getMessage().getFullText());
+                            System.out.println("[CHAT] " + msg);
+                            queuedMessages.add(msg);
+                        } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
+                            ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
+                            timer.schedule(new TimerTask() { // respawn
+                                @Override
+                                public void run() {
+                                    client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                                }
+                            }, 100);
+                        } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
+                            ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
+                            System.out.println("Player list packet mode: " + pck.getAction().ordinal());
+                            switch (pck.getAction()) {
+                                case ADD_PLAYER:
+                                    for (PlayerListEntry entry : pck.getEntries()) {
+                                        if (entry.getPing() == 0)   {
+                                            continue;
+                                        }
+                                        playerListEntries.add(entry);
+                                        websocketServer.sendToAll("tabAdd  " + entry.getProfile().getName() + "SPLIT" + entry.getPing());
+                                    }
+                                    break;
+                                case UPDATE_GAMEMODE:
+                                    //ignore
+                                    break;
+                                case UPDATE_LATENCY:
+                                    for (PlayerListEntry entry : pck.getEntries()) {
+                                        UUID uuid = entry.getProfile().getId();
+                                        for (PlayerListEntry toChange : playerListEntries) {
+                                            if (uuid.equals(toChange.getProfile().getId())) {
+                                                Field hack = PlayerListEntry.class.getDeclaredField("ping");
+                                                hack.setAccessible(true);
+                                                hack.setInt(toChange, entry.getPing());
+                                                websocketServer.sendToAll("tabPing " + toChange.getProfile().getName() + "SPLIT" + entry.getPing());
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case UPDATE_DISPLAY_NAME:
+                                    /*for (PlayerListEntry entry : pck.getEntries()) {
+                                        UUID uuid = entry.getProfile().getId();
+                                        for (PlayerListEntry toChange : playerListEntries) {
+                                            if (uuid.equals(toChange.getProfile().getId())) {
+                                                if (entry.getDisplayName() == null) {
+                                                    websocketServer.sendToAll("tabName " + (toChange.getDisplayName() != null ? toChange.getDisplayName().getFullText() : toChange.getProfile().getName()) + "SPLIT" + entry.getProfile().getName());
+                                                    Field hack = PlayerListEntry.class.getDeclaredField("displayName");
+                                                    hack.setAccessible(true);
+                                                    hack.set(toChange, null);
+                                                } else {
+                                                    websocketServer.sendToAll("tabName " + (toChange.getDisplayName() != null ? toChange.getDisplayName().getFullText() : toChange.getProfile().getName()) + "SPLIT" + entry.getDisplayName().getFullText());
+                                                    Field hack = PlayerListEntry.class.getDeclaredField("displayName");
+                                                    hack.setAccessible(true);
+                                                    hack.set(toChange, entry.getDisplayName());
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }*/
+                                    //ignore
+                                    break;
+                                case REMOVE_PLAYER:
+                                    for (PlayerListEntry entry : pck.getEntries()) {
+                                        UUID uuid = entry.getProfile().getId();
+                                        Iterator<PlayerListEntry> iterator = playerListEntries.iterator();
+                                        while (iterator.hasNext())  {
+                                            PlayerListEntry toChange = iterator.next();
+                                            if (uuid.equals(toChange.getProfile().getId())) {
+                                                websocketServer.sendToAll("tabDel  " + toChange.getProfile().getName());
+                                                iterator.remove();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    break;
                             }
-                        }, 100);
+                            //TODO: send changed players
+                        } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListDataPacket) {
+                            ServerPlayerListDataPacket pck = (ServerPlayerListDataPacket) packetReceivedEvent.getPacket();
+                            tabHeader = pck.getHeader();
+                            tabFooter = pck.getFooter();
+                            String header = tabHeader.getFullText();
+                            String footer = tabFooter.getFullText();
+                            websocketServer.sendToAll("tabDiff " + header + "SPLIT" + footer);
+                        }
+                    } catch (Exception e)   {
+                        e.printStackTrace();
+                        System.exit(1);
                     }
                 }
 
@@ -155,14 +257,15 @@ public class TooBeeTooTeeBot {
                                 float pitch = -90 + (90 - -90) * r.nextFloat();
                                 client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
                             }
-                            
-                            try {
-                            	Thread.sleep(r.nextInt(200));
-                            } catch (InterruptedException e) {
-                            	
-                            }
                         }
                     }, 20000, 500);
+
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            websocketServer.sendToAll("tabPing " + protocol.getProfile().getName() + "SPLIT1");
+                        }
+                    }, 5000, 10000);
 
                     new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                         @Override
@@ -220,24 +323,21 @@ public class TooBeeTooTeeBot {
                                     sendChat("Position in queue: " + (r.nextInt(130) + 93));
                                     break;
                             }
-                            try {
-                            	Thread.sleep(r.nextInt(10000) + 5000);
-                            } catch (InterruptedException e) {
-                            	//fuck java lol
-                            }
                         }
-                    }, 30000, 19000);
+                    }, 30000, 10000);
                 }
 
                 @Override
                 public void disconnecting(DisconnectingEvent disconnectingEvent) {
                     System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
                     queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
-                    
+                    TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown");
+
                     try {
                         Thread.sleep(1500);
-                    } catch (InterruptedException e)    {
-                        
+                        TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
+                    } catch (InterruptedException | IOException e)    {
+
                     }
                     System.exit(0);
                 }
@@ -246,9 +346,12 @@ public class TooBeeTooTeeBot {
                 public void disconnected(DisconnectedEvent disconnectedEvent) {
                     System.out.println("Disconnected.");
                     queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
+                    TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown");
+
                     try {
                         Thread.sleep(1500);
-                    } catch (InterruptedException e)    {
+                        TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
+                    } catch (InterruptedException | IOException e)    {
 
                     }
                     System.exit(0);
