@@ -60,7 +60,7 @@ public class TooBeeTooTeeBot {
 
     public Message tabHeader;
     public Message tabFooter;
-    public ArrayList<PlayerListEntry> playerListEntries = new ArrayList<>();
+    public ArrayList<TabListPlayer> playerListEntries = new ArrayList<>();
 
     public MinecraftProtocol protocol;
 
@@ -168,8 +168,9 @@ public class TooBeeTooTeeBot {
                                         if (entry.getPing() == 0)   {
                                             continue;
                                         }
-                                        playerListEntries.add(entry);
-                                        websocketServer.sendToAll("tabAdd  " + entry.getProfile().getName() + "SPLIT" + entry.getPing());
+                                        TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
+                                        playerListEntries.add(player);
+                                        websocketServer.sendToAll("tabAdd  " + player.name + "SPLIT" + player.ping);
                                     }
                                     break;
                                 case UPDATE_GAMEMODE:
@@ -177,48 +178,27 @@ public class TooBeeTooTeeBot {
                                     break;
                                 case UPDATE_LATENCY:
                                     for (PlayerListEntry entry : pck.getEntries()) {
-                                        UUID uuid = entry.getProfile().getId();
-                                        for (PlayerListEntry toChange : playerListEntries) {
-                                            if (uuid.equals(toChange.getProfile().getId())) {
-                                                Field hack = PlayerListEntry.class.getDeclaredField("ping");
-                                                hack.setAccessible(true);
-                                                hack.setInt(toChange, entry.getPing());
-                                                websocketServer.sendToAll("tabPing " + toChange.getProfile().getName() + "SPLIT" + entry.getPing());
+                                        String uuid = entry.getProfile().getId().toString();
+                                        for (TabListPlayer toChange : playerListEntries) {
+                                            if (uuid.equals(toChange.uuid)) {
+                                                toChange.ping = entry.getPing();
+                                                websocketServer.sendToAll("tabPing " + toChange.name + "SPLIT" + toChange.ping);
                                                 break;
                                             }
                                         }
                                     }
                                     break;
                                 case UPDATE_DISPLAY_NAME:
-                                    /*for (PlayerListEntry entry : pck.getEntries()) {
-                                        UUID uuid = entry.getProfile().getId();
-                                        for (PlayerListEntry toChange : playerListEntries) {
-                                            if (uuid.equals(toChange.getProfile().getId())) {
-                                                if (entry.getDisplayName() == null) {
-                                                    websocketServer.sendToAll("tabName " + (toChange.getDisplayName() != null ? toChange.getDisplayName().getFullText() : toChange.getProfile().getName()) + "SPLIT" + entry.getProfile().getName());
-                                                    Field hack = PlayerListEntry.class.getDeclaredField("displayName");
-                                                    hack.setAccessible(true);
-                                                    hack.set(toChange, null);
-                                                } else {
-                                                    websocketServer.sendToAll("tabName " + (toChange.getDisplayName() != null ? toChange.getDisplayName().getFullText() : toChange.getProfile().getName()) + "SPLIT" + entry.getDisplayName().getFullText());
-                                                    Field hack = PlayerListEntry.class.getDeclaredField("displayName");
-                                                    hack.setAccessible(true);
-                                                    hack.set(toChange, entry.getDisplayName());
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }*/
                                     //ignore
                                     break;
                                 case REMOVE_PLAYER:
                                     for (PlayerListEntry entry : pck.getEntries()) {
-                                        UUID uuid = entry.getProfile().getId();
-                                        Iterator<PlayerListEntry> iterator = playerListEntries.iterator();
+                                        String uuid = entry.getProfile().getId().toString();
+                                        Iterator<TabListPlayer> iterator = playerListEntries.iterator();
                                         while (iterator.hasNext())  {
-                                            PlayerListEntry toChange = iterator.next();
-                                            if (uuid.equals(toChange.getProfile().getId())) {
-                                                websocketServer.sendToAll("tabDel  " + toChange.getProfile().getName());
+                                            TabListPlayer toChange = iterator.next();
+                                            if (uuid.equals(toChange.uuid)) {
+                                                websocketServer.sendToAll("tabDel  " + toChange.name);
                                                 iterator.remove();
                                                 break;
                                             }
@@ -261,13 +241,6 @@ public class TooBeeTooTeeBot {
                             }
                         }
                     }, 20000, 500);
-
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            websocketServer.sendToAll("tabPing " + protocol.getProfile().getName() + "SPLIT1");
-                        }
-                    }, 5000, 10000);
 
                     new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                         @Override

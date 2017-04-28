@@ -40,8 +40,8 @@ public class WebsocketServer extends WebSocketServer {
                     String footer = TooBeeTooTeeBot.INSTANCE.tabFooter.getFullText();
                     conn.send("tabDiff  SPLIT" + footer);
                 }
-                for (PlayerListEntry entry : TooBeeTooTeeBot.INSTANCE.playerListEntries)    {
-                    conn.send("tabAdd  " + (entry.getDisplayName() != null ? entry.getDisplayName().getFullText() : entry.getProfile().getName()) + "SPLIT" + entry.getPing());
+                for (TabListPlayer entry : TooBeeTooTeeBot.INSTANCE.playerListEntries)    {
+                    conn.send("tabAdd  " + entry.name + "SPLIT" + entry.ping);
                 }
                 conn.send("tabAdd  " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName() + "SPLIT" + 1);
             }
