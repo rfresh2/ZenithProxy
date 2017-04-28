@@ -86,7 +86,7 @@ function onMessage(evt) {
             var name = split[0];
             var ping = parseInt(split[1]);
 			
-			console.log(ping);
+			//console.log(ping);
 
             var img = document.getElementById('playerping_' + name);
             if (img != null) {
