@@ -1,26 +1,26 @@
 //thanks to whoever made this and put it on stackoverflow
 var obfuscators = [];
 var styleMap = {
-    '§0': 'color:#000000',
-    '§1': 'color:#0000AA',
-    '§2': 'color:#00AA00',
-    '§3': 'color:#00AAAA',
-    '§4': 'color:#AA0000',
-    '§5': 'color:#AA00AA',
-    '§6': 'color:#FFAA00',
-    '§7': 'color:#AAAAAA',
-    '§8': 'color:#555555',
-    '§9': 'color:#5555FF',
-    '§a': 'color:#55FF55',
-    '§b': 'color:#55FFFF',
-    '§c': 'color:#FF5555',
-    '§d': 'color:#FF55FF',
-    '§e': 'color:#FFFF55',
-    '§f': 'color:#FFFFFF',
-    '§l': 'font-weight:bold',
-    '§m': 'text-decoration:line-through',
-    '§n': 'text-decoration:underline',
-    '§o': 'font-style:italic',
+    'Â§0': 'color:#000000',
+    'Â§1': 'color:#0000AA',
+    'Â§2': 'color:#00AA00',
+    'Â§3': 'color:#00AAAA',
+    'Â§4': 'color:#AA0000',
+    'Â§5': 'color:#AA00AA',
+    'Â§6': 'color:#FFAA00',
+    'Â§7': 'color:#AAAAAA',
+    'Â§8': 'color:#555555',
+    'Â§9': 'color:#5555FF',
+    'Â§a': 'color:#55FF55',
+    'Â§b': 'color:#55FFFF',
+    'Â§c': 'color:#FF5555',
+    'Â§d': 'color:#FF55FF',
+    'Â§e': 'color:#FFFF55',
+    'Â§f': 'color:#FFFFFF',
+    'Â§l': 'font-weight:bold',
+    'Â§m': 'text-decoration:line-through',
+    'Â§n': 'text-decoration:underline',
+    'Â§o': 'font-style:italic',
 };
 
 function obfuscate(string, elem) {
@@ -69,7 +69,7 @@ function applyCode(string, codes) {
     string = string.replace(/\x00*/g, '');
     for (var i = 0, len = codes.length; i < len; i++) {
         elem.style.cssText += styleMap[codes[i]] + ';';
-        if (codes[i] === '§k') {
+        if (codes[i] === 'Â§k') {
             obfuscate(string, elem);
             obfuscated = true;
         }
@@ -79,7 +79,7 @@ function applyCode(string, codes) {
 }
 
 function parseStyle(string) {
-    var codes = string.match(/§.{1}/g) || [],
+    var codes = string.match(/Â§.{1}/g) || [],
         indexes = [],
         apply = [],
         tmpStr,
@@ -107,8 +107,8 @@ function parseStyle(string) {
         } else {
             apply.push(codes[i]);
         }
-        if (apply.lastIndexOf('§r') > -1) {
-            apply = apply.slice(apply.lastIndexOf('§r') + 1);
+        if (apply.lastIndexOf('Â§r') > -1) {
+            apply = apply.slice(apply.lastIndexOf('Â§r') + 1);
         }
         tmpStr = string.substring(indexes[i], indexes[i + 1]);
         final.appendChild(applyCode(tmpStr, apply));
@@ -143,5 +143,5 @@ function initParser(input, output, isRawInput) {
 //var parseBtn = document.getElementById('parse');
 //
 //parseBtn.onclick = function () {
-//   initParser("§4RED§lBOLD§9blue§nunderline§r§2§kOBFUSCATED §4kek", 'output', true);
+//   initParser("Â§4REDÂ§lBOLDÂ§9blueÂ§nunderlineÂ§rÂ§2Â§kOBFUSCATED Â§4kek", 'output', true);
 //};

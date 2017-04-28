@@ -161,7 +161,7 @@ public class TooBeeTooTeeBot {
                             }, 100);
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
                             ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
-                            System.out.println("Player list packet mode: " + pck.getAction().ordinal());
+                            //System.out.println("Player list packet mode: " + pck.getAction().ordinal());
                             switch (pck.getAction()) {
                                 case ADD_PLAYER:
                                     for (PlayerListEntry entry : pck.getEntries()) {

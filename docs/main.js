@@ -30,7 +30,7 @@ function onClose(evt) {
 }
 
 function onMessage(evt) {
-	console.log(evt.data);
+	//console.log(evt.data);
     var command = evt.data.substring(0, 8);
     //writeToScreen(command);
     switch (command) {
