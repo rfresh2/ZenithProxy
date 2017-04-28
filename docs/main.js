@@ -120,11 +120,11 @@ function writeToScreen(message) {
 function getIconFromPing(ping)	{
 	if (ping < 25)	{
 		return "5bar.png";
-	} else if (ping < 50)	{
-		return "4bar.png";
 	} else if (ping < 75)	{
+		return "4bar.png";
+	} else if (ping < 125)	{
 		return "3bar.png";
-	} else if (ping < 100)	{
+	} else if (ping < 175)	{
 		return "2bar.png";
 	} else {
 		return "1bar.png";
