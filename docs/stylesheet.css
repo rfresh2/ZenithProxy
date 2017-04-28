@@ -20,3 +20,8 @@ pre {
 * {
    font-family: Minecraftia !important;
 }
+
+td {
+    display:table-cell;
+    vertical-align: middle;
+}

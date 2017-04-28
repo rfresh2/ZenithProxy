@@ -1,26 +1,26 @@
 //thanks to whoever made this and put it on stackoverflow
 var obfuscators = [];
 var styleMap = {
-    '§0': 'color:#000000',
-    '§1': 'color:#0000AA',
-    '§2': 'color:#00AA00',
-    '§3': 'color:#00AAAA',
-    '§4': 'color:#AA0000',
-    '§5': 'color:#AA00AA',
-    '§6': 'color:#FFAA00',
-    '§7': 'color:#AAAAAA',
-    '§8': 'color:#555555',
-    '§9': 'color:#5555FF',
-    '§a': 'color:#55FF55',
-    '§b': 'color:#55FFFF',
-    '§c': 'color:#FF5555',
-    '§d': 'color:#FF55FF',
-    '§e': 'color:#FFFF55',
-    '§f': 'color:#FFFFFF',
-    '§l': 'font-weight:bold',
-    '§m': 'text-decoration:line-through',
-    '§n': 'text-decoration:underline',
-    '§o': 'font-style:italic',
+    '\u00A70': 'color:#000000',
+    '\u00A71': 'color:#0000AA',
+    '\u00A72': 'color:#00AA00',
+    '\u00A73': 'color:#00AAAA',
+    '\u00A74': 'color:#AA0000',
+    '\u00A75': 'color:#AA00AA',
+    '\u00A76': 'color:#FFAA00',
+    '\u00A77': 'color:#AAAAAA',
+    '\u00A78': 'color:#555555',
+    '\u00A79': 'color:#5555FF',
+    '\u00A7a': 'color:#55FF55',
+    '\u00A7b': 'color:#55FFFF',
+    '\u00A7c': 'color:#FF5555',
+    '\u00A7d': 'color:#FF55FF',
+    '\u00A7e': 'color:#FFFF55',
+    '\u00A7f': 'color:#FFFFFF',
+    '\u00A7l': 'font-weight:bold',
+    '\u00A7m': 'text-decoration:line-through',
+    '\u00A7n': 'text-decoration:underline',
+    '\u00A7o': 'font-style:italic',
 };
 
 function obfuscate(string, elem) {
@@ -69,7 +69,7 @@ function applyCode(string, codes) {
     string = string.replace(/\x00*/g, '');
     for (var i = 0, len = codes.length; i < len; i++) {
         elem.style.cssText += styleMap[codes[i]] + ';';
-        if (codes[i] === '§k') {
+        if (codes[i] === '\u00A7k') {
             obfuscate(string, elem);
             obfuscated = true;
         }
@@ -79,7 +79,7 @@ function applyCode(string, codes) {
 }
 
 function parseStyle(string) {
-    var codes = string.match(/§.{1}/g) || [],
+    var codes = string.match(/\u00A7.{1}/g) || [],
         indexes = [],
         apply = [],
         tmpStr,
@@ -107,8 +107,8 @@ function parseStyle(string) {
         } else {
             apply.push(codes[i]);
         }
-        if (apply.lastIndexOf('§r') > -1) {
-            apply = apply.slice(apply.lastIndexOf('§r') + 1);
+        if (apply.lastIndexOf('\u00A7r') > -1) {
+            apply = apply.slice(apply.lastIndexOf('\u00A7r') + 1);
         }
         tmpStr = string.substring(indexes[i], indexes[i + 1]);
         final.appendChild(applyCode(tmpStr, apply));
@@ -143,5 +143,5 @@ function initParser(input, output, isRawInput) {
 //var parseBtn = document.getElementById('parse');
 //
 //parseBtn.onclick = function () {
-//   initParser("§4RED§lBOLD§9blue§nunderline§r§2§kOBFUSCATED §4kek", 'output', true);
+//   initParser("\u00A74RED\u00A7lBOLD\u00A79blue\u00A7nunderline\u00A7r\u00A72\u00A7kOBFUSCATED \u00A74kek", 'output', true);
 //};

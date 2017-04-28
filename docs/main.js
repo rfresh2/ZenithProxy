@@ -63,15 +63,15 @@ function onMessage(evt) {
             newCell.setAttribute('id', 'player_' + name);
 
             var img = document.createElement("img");
-            img.setAttribute('src', 'https://crafatar.com/avatars/' + name + '?size=32&overlay');
-            img.setAttribute('height', '32px');
-            img.setAttribute('width', '32px');
+            img.setAttribute('src', 'https://crafatar.com/avatars/' + name + '?size=24&overlay');
+            img.setAttribute('height', '24px');
+            img.setAttribute('width', '24px');
             newCell.appendChild(img);
 			
             var newText = document.createElement("p");
             newText.setAttribute('id', 'playername_' + name);
-            newText.setAttribute('style', 'display:inline');
-            newText.innerHTML = ' ' + name + ' ';
+            newText.setAttribute('style', 'display:inline; font-size: 12px;');
+            newText.innerHTML = ' ' + name;
             newCell.appendChild(newText);
 			
 			var ping = document.createElement("img");
@@ -122,9 +122,9 @@ function getIconFromPing(ping)	{
 		return "5bar.png";
 	} else if (ping < 75)	{
 		return "4bar.png";
-	} else if (ping < 125)	{
+	} else if (ping < 150)	{
 		return "3bar.png";
-	} else if (ping < 175)	{
+	} else if (ping < 225)	{
 		return "2bar.png";
 	} else {
 		return "1bar.png";
