@@ -1,0 +1,22 @@
+@font-face {
+    font-family:"Minecraftia";
+    src: url("Minecraftia-Regular.eot") /* EOT file for IE */
+}
+
+@font-face {
+    font-family:"Minecraftia";
+    src: url("Minecraftia-Regular.ttf") /* TTF file for CSS3 browsers */
+}
+
+#tabplayers  {display: block; }
+
+#tabplayers  td {display: inline-block; }
+
+pre {
+    text-align: center;
+    white-space: pre-line;
+}
+
+* {
+   font-family: Minecraftia !important;
+}
