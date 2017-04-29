@@ -201,12 +201,12 @@ public class TooBeeTooTeeBot {
                                             TabListPlayer player = playerListEntries.get(i);
                                             if (uuid.equals(player.uuid))   {
                                                 removalIndex = i;
-                                                websocketServer.sendToAll("" + player.name);
+                                                websocketServer.sendToAll("tabDel  " + player.name);
                                                 break;
                                             }
                                         }
                                         if (removalIndex != -1) {
-
+                                            playerListEntries.remove(removalIndex);
                                         }
                                     }
                                     break;
