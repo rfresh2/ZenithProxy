@@ -16,18 +16,17 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.Serv
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import com.google.gson.JsonElement;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.UnknownHostException;
 import java.util.*;
 import com.google.common.collect.Maps;
-import org.java_websocket.WebSocketImpl;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,11 +46,8 @@ public class TooBeeTooTeeBot {
     public String password;
 
     public JDA jda;
-    public JDA otherJda;
     public String token;
-    public String otherToken;
     public TextChannel channel;
-    public TextChannel otherTextChannel;
     public ArrayList<String> queuedMessages = new ArrayList<>();
 
     public boolean firstRun = true;
@@ -64,7 +60,6 @@ public class TooBeeTooTeeBot {
 
     public MinecraftProtocol protocol;
 
-    public boolean onGround;
 
     public static TooBeeTooTeeBot INSTANCE;
 
@@ -78,9 +73,9 @@ public class TooBeeTooTeeBot {
 
             String whatever = scanner.nextLine();
             if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
-                TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("idk lol");
+                TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("Forced reboot by DaPorkchop_.");
             }
-            TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_. Refresh the page in a few seconds!");
+            TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_.");
             Thread.sleep(100);
             TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
             System.exit(0);
@@ -97,17 +92,12 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.username = scanner.nextLine();
                 TooBeeTooTeeBot.INSTANCE.password = scanner.nextLine();
                 TooBeeTooTeeBot.INSTANCE.token = scanner.nextLine();
-                TooBeeTooTeeBot.INSTANCE.otherToken = scanner.nextLine();
                 scanner.close();
 
-                jda = new JDABuilder(AccountType.BOT)
+                /*jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
-                channel = jda.getTextChannelById("304662676343357442");
-                otherJda = new JDABuilder(AccountType.BOT)
-                        .setToken(otherToken)
-                        .buildBlocking();
-                otherTextChannel = otherJda.getTextChannelById("305346913488863243");
+                channel = jda.getTextChannelById("305346913488863243");
                 
                 timer.schedule(new TimerTask() {
                     @Override
@@ -121,7 +111,6 @@ public class TooBeeTooTeeBot {
                                 copiedBuilder.append(iter.next() + "\n");
                                 if (builder.length() > 2000)    {
                                     channel.sendMessage(copiedBuilder.toString()).queue();
-                                    otherTextChannel.sendMessage(copiedBuilder.toString()).queue();
                                     queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                                     return;
                                 } else {
@@ -132,11 +121,10 @@ public class TooBeeTooTeeBot {
                                 }
                             }
                             channel.sendMessage(builder.toString()).queue();
-                            otherTextChannel.sendMessage(builder.toString()).queue();
                             queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
                     }
-                }, 1000, 1000);
+                }, 1000, 1000);*/
             }
 
             System.out.println("Logging in with credentials: " + username + ":" + password);
@@ -150,9 +138,12 @@ public class TooBeeTooTeeBot {
                     try {
                         if (packetReceivedEvent.getPacket() instanceof ServerChatPacket) {
                             ServerChatPacket pck = (ServerChatPacket) packetReceivedEvent.getPacket();
-                            String msg = TextFormat.clean(pck.getMessage().getFullText());
+                            String messageJson = pck.getMessage().toJsonString();
+                            String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
+                            String msg = TextFormat.clean(legacyColorCodes);
                             System.out.println("[CHAT] " + msg);
-                            queuedMessages.add(msg);
+                            //queuedMessages.add(msg);
+                            websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                             ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
                             timer.schedule(new TimerTask() { // respawn
@@ -220,7 +211,7 @@ public class TooBeeTooTeeBot {
                             String footer = tabFooter.getFullText();
                             websocketServer.sendToAll("tabDiff " + header + "SPLIT" + footer);
                         }
-                    } catch (Exception e)   {
+                    } catch (Exception | Error e)   {
                         e.printStackTrace();
                         System.exit(1);
                     }
@@ -329,7 +320,7 @@ public class TooBeeTooTeeBot {
                 public void disconnecting(DisconnectingEvent disconnectingEvent) {
                     System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
                     queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
-                    TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown");
+                    TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
 
                     try {
                         Thread.sleep(1500);
@@ -344,7 +335,7 @@ public class TooBeeTooTeeBot {
                 public void disconnected(DisconnectedEvent disconnectedEvent) {
                     System.out.println("Disconnected.");
                     queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
-                    TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown");
+                    TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
 
                     try {
                         Thread.sleep(1500);

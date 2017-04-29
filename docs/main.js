@@ -1,5 +1,11 @@
-var wsUri = "ws://repo.daporkchop.tk:8888";
+var wsUri = "ws://localhost:8888";
 var output;
+var shutdown = false;
+
+function updateScroll(){
+    var element = document.getElementById("chat");
+    element.scrollTop = element.scrollHeight;
+}
 
 function init() {
     testWebSocket();
@@ -19,14 +25,19 @@ function testWebSocket() {
     websocket.onerror = function(evt) {
         onError(evt)
     };
+    document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...";
 }
 
 function onOpen(evt) {
-    doSend("connectrquest");
+    doSend("connectrequest");
 }
 
 function onClose(evt) {
-    alert("DISCONNECTED");
+    if (!shutdown)   {
+        var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe seem to have been disconnected!\n\u00A7c\u00A7lReload the page in a few seconds!";
+        initParser(newText, 'chat', true);
+    }
+    shutdown = false;
 }
 
 function onMessage(evt) {
@@ -38,7 +49,9 @@ function onMessage(evt) {
             //ignore for now, might be used later
             break;
         case "shutdown":
-            alert("Bot stopped! Reason: " + evt.data.substring(8));
+            var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe've been disconnected because: <strong>" + evt.data.substring(8)+ "</strong>\n\u00A7c\u00A7lReload the page in a few seconds!";
+            initParser(newText, 'chat', true);
+            shutdown = true;
             break;
         case "tabDiff ":
             var split = evt.data.substring(8).split("SPLIT");
@@ -74,9 +87,9 @@ function onMessage(evt) {
             newText.innerHTML = ' ' + name;
             newCell.appendChild(newText);
 
-      var ping = document.createElement("img");
-      ping.setAttribute('id', 'playerping_' + name);
-      ping.setAttribute('src', getIconFromPing(ping));
+            var ping = document.createElement("img");
+            ping.setAttribute('id', 'playerping_' + name);
+            ping.setAttribute('src', getIconFromPing(ping));
             ping.setAttribute('height', '32px');
             ping.setAttribute('width', '40px');
             newCell.appendChild(ping);
@@ -86,35 +99,44 @@ function onMessage(evt) {
             var name = split[0];
             var ping = parseInt(split[1]);
 
-      //console.log(ping);
+            //console.log(ping);
 
             var img = document.getElementById('playerping_' + name);
             if (img != null) {
                 img.src = getIconFromPing(ping);
             }
+            updateScroll();
             break;
         case "tabDel  ":
             var name = evt.data.substring(8);
 
-            document.getElementById('player_' + name).remove();
+            var toRemove = document.getElementById('player_' + name);
+            if (toRemove != null)   {
+                toRemove.remove();
+            }
+            break;
+        case "chat    ":
+            var text = evt.data.substring(8);
+            var oldTextSplit = document.getElementById("chat").innerHTML.split("\u2000");
+            console.log(oldTextSplit.length);
+            if (oldTextSplit.length > 499)  {
+                oldTextSplit.splice(0, 1);
+            }
+            console.log(oldTextSplit.length);
+            oldTextSplit.push("\n" + text);
+            var newText = oldTextSplit.join("\u2000");
+            initParser(newText, 'chat', true);
+            updateScroll();
             break;
     }
 }
 
 function onError(evt) {
-    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+
 }
 
 function doSend(message) {
     websocket.send(message);
-}
-
-function writeToScreen(message) {
-    var tableRef = document.getElementById('tabplayers').getElementsByTagName('tbody')[0];
-    var newRow = tableRef.rows[0];
-    var newCell = newRow.insertCell(tableRef.rows.length - 1);
-    var newText = document.createTextNode(message + " ");
-    newCell.appendChild(newText);
 }
 
 function getIconFromPing(ping)  {

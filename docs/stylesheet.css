@@ -25,3 +25,8 @@ td {
     display:table-cell;
     vertical-align: middle;
 }
+
+div {
+    resize: none;
+    line-height: 100%;
+}
