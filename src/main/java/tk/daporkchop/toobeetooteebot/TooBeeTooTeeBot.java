@@ -64,6 +64,8 @@ public class TooBeeTooTeeBot {
 
     public MinecraftProtocol protocol;
 
+    public boolean onGround;
+
     public static TooBeeTooTeeBot INSTANCE;
 
     public static void main(String[] args)  {
@@ -98,7 +100,7 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.otherToken = scanner.nextLine();
                 scanner.close();
 
-                jda = new JDABuilder(AccountType.BOT)
+                /*jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
                 channel = jda.getTextChannelById("304662676343357442");
@@ -134,14 +136,14 @@ public class TooBeeTooTeeBot {
                             queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
                     }
-                }, 1000, 1000);
+                }, 1000, 1000);*/
             }
 
             System.out.println("Logging in with credentials: " + username + ":" + password);
             protocol = new MinecraftProtocol(username, password);
             System.out.println("Success!");
 
-            client = new Client("2b2t.org", 25565, protocol, new TcpSessionFactory());
+            client = new Client("mc.glowstone.net", 25565, protocol, new TcpSessionFactory());
             client.getSession().addListener(new SessionListener() {
                 @Override
                 public void packetReceived(PacketReceivedEvent packetReceivedEvent) {
@@ -150,7 +152,7 @@ public class TooBeeTooTeeBot {
                             ServerChatPacket pck = (ServerChatPacket) packetReceivedEvent.getPacket();
                             String msg = TextFormat.clean(pck.getMessage().getFullText());
                             System.out.println("[CHAT] " + msg);
-                            queuedMessages.add(msg);
+                            //queuedMessages.add(msg);
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                             ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
                             timer.schedule(new TimerTask() { // respawn
@@ -165,7 +167,7 @@ public class TooBeeTooTeeBot {
                             switch (pck.getAction()) {
                                 case ADD_PLAYER:
                                     for (PlayerListEntry entry : pck.getEntries()) {
-                                        if (entry.getPing() == 0)   {
+                                        if (entry.getProfile().getName().equals(protocol.getProfile().getName()))  {
                                             continue;
                                         }
                                         TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
@@ -194,14 +196,17 @@ public class TooBeeTooTeeBot {
                                 case REMOVE_PLAYER:
                                     for (PlayerListEntry entry : pck.getEntries()) {
                                         String uuid = entry.getProfile().getId().toString();
-                                        Iterator<TabListPlayer> iterator = playerListEntries.iterator();
-                                        while (iterator.hasNext())  {
-                                            TabListPlayer toChange = iterator.next();
-                                            if (uuid.equals(toChange.uuid)) {
-                                                websocketServer.sendToAll("tabDel  " + toChange.name);
-                                                iterator.remove();
+                                        int removalIndex = -1;
+                                        for (int i = 0; i < playerListEntries.size(); i++)  {
+                                            TabListPlayer player = playerListEntries.get(i);
+                                            if (uuid.equals(player.uuid))   {
+                                                removalIndex = i;
+                                                websocketServer.sendToAll("" + player.name);
                                                 break;
                                             }
+                                        }
+                                        if (removalIndex != -1) {
+
                                         }
                                     }
                                     break;
@@ -237,7 +242,7 @@ public class TooBeeTooTeeBot {
                             } else {
                                 float yaw = -90 + (90 - -90) * r.nextFloat();
                                 float pitch = -90 + (90 - -90) * r.nextFloat();
-                                client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
+                                //client.getSession().send(new ClientPlayerRotationPacket(false, yaw, pitch));
                             }
                         }
                     }, 20000, 500);
@@ -300,17 +305,17 @@ public class TooBeeTooTeeBot {
                                 case 17:
                                 case 18:
                                 case 19:
-                                    sendChat("I just broke " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    sendChat("I just mined " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)] + "!");
                                     break;
                                 case 20:
                                 case 21:
                                 case 22:
-                                    sendChat("I just placed " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    sendChat("I just placed " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)] + "!");
                                     break;
                                 case 23:
                                 case 24:
                                 case 25:
-                                    sendChat("I just picked up " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)]);
+                                    sendChat("I just picked up " + (r.nextInt(15) + 5) + " " + BLOCK_NAMES[r.nextInt(BLOCK_NAMES.length)] + "!");
                                     break;
                                 case 26:
                                     sendChat("kekekekekekekekekekepepsibetterthancokekekekekekekekekek");
@@ -360,7 +365,7 @@ public class TooBeeTooTeeBot {
 
     public void sendChat(String message)    {
         ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi " + message);
-        client.getSession().send(toSend);
+        //client.getSession().send(toSend);
     }
 }
 
