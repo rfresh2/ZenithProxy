@@ -100,7 +100,7 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.otherToken = scanner.nextLine();
                 scanner.close();
 
-                /*jda = new JDABuilder(AccountType.BOT)
+                jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
                 channel = jda.getTextChannelById("304662676343357442");
@@ -136,7 +136,7 @@ public class TooBeeTooTeeBot {
                             queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
                     }
-                }, 1000, 1000);*/
+                }, 1000, 1000);
             }
 
             System.out.println("Logging in with credentials: " + username + ":" + password);
@@ -152,7 +152,7 @@ public class TooBeeTooTeeBot {
                             ServerChatPacket pck = (ServerChatPacket) packetReceivedEvent.getPacket();
                             String msg = TextFormat.clean(pck.getMessage().getFullText());
                             System.out.println("[CHAT] " + msg);
-                            //queuedMessages.add(msg);
+                            queuedMessages.add(msg);
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                             ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
                             timer.schedule(new TimerTask() { // respawn
