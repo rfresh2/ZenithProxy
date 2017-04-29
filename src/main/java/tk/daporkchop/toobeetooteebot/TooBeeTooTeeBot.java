@@ -19,6 +19,7 @@ import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import com.google.gson.JsonElement;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
@@ -94,7 +95,7 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.token = scanner.nextLine();
                 scanner.close();
 
-                /*jda = new JDABuilder(AccountType.BOT)
+                jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
                 channel = jda.getTextChannelById("305346913488863243");
@@ -124,7 +125,7 @@ public class TooBeeTooTeeBot {
                             queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
                     }
-                }, 1000, 1000);*/
+                }, 1000, 1000);
             }
 
             System.out.println("Logging in with credentials: " + username + ":" + password);
@@ -142,7 +143,7 @@ public class TooBeeTooTeeBot {
                             String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                             String msg = TextFormat.clean(legacyColorCodes);
                             System.out.println("[CHAT] " + msg);
-                            //queuedMessages.add(msg);
+                            queuedMessages.add(msg);
                             websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                             ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
