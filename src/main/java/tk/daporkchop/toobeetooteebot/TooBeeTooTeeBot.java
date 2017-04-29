@@ -143,7 +143,7 @@ public class TooBeeTooTeeBot {
             protocol = new MinecraftProtocol(username, password);
             System.out.println("Success!");
 
-            client = new Client("mc.glowstone.net", 25565, protocol, new TcpSessionFactory());
+            client = new Client("2b2t.org", 25565, protocol, new TcpSessionFactory());
             client.getSession().addListener(new SessionListener() {
                 @Override
                 public void packetReceived(PacketReceivedEvent packetReceivedEvent) {
