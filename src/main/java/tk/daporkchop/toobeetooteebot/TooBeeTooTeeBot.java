@@ -65,7 +65,7 @@ public class TooBeeTooTeeBot {
     public String ip;
     public int port;
 
-    public boolean doAFK;
+    public boolean doAFK = true;
 
     public static TooBeeTooTeeBot INSTANCE;
 
