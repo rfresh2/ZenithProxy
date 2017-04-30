@@ -155,11 +155,16 @@ public class TooBeeTooTeeBot {
                             String messageJson = pck.getMessage().toJsonString();
                             String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                             String msg = TextFormat.clean(legacyColorCodes);
+                            try {
+                                if (msg.split(" ")[1].startsWith("whispers")) {
+                                    //TODO: process messages
+                                    return;
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e)  {
+                                //ignore kek
+                            }
 
-                            if (msg.split(" ")[1].startsWith("whispers"))   {
-                                //TODO: process messages
-                                return;
-                            } else if (msg.startsWith("!")) { //command from PorkProxy
+                            if (msg.startsWith("!")) { //command from PorkProxy
                                 if (msg.equals("!toggleafk"))   { //useful when manually moving bot around
                                     doAFK = !doAFK;
                                     client.getSession().send(new ClientChatPacket("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off")));

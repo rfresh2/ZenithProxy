@@ -1,4 +1,4 @@
-var wsUri = "ws://localhost:8888";
+var wsUri = "ws://repo.daporkchop.tk:8888";
 var output;
 var shutdown = false;
 
