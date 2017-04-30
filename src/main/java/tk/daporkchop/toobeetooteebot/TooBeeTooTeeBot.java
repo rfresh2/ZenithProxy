@@ -45,6 +45,7 @@ public class TooBeeTooTeeBot {
 
     public String username;
     public String password;
+    public boolean doAuth;
 
     public JDA jda;
     public String token;
@@ -61,6 +62,10 @@ public class TooBeeTooTeeBot {
 
     public MinecraftProtocol protocol;
 
+    public String ip;
+    public int port;
+
+    public boolean doAFK;
 
     public static TooBeeTooTeeBot INSTANCE;
 
@@ -90,9 +95,12 @@ public class TooBeeTooTeeBot {
         try {
             if (firstRun)   {
                 Scanner scanner = new Scanner(new File(System.getProperty("user.dir") + File.separator + "logininfo.txt"));
-                TooBeeTooTeeBot.INSTANCE.username = scanner.nextLine();
-                TooBeeTooTeeBot.INSTANCE.password = scanner.nextLine();
-                TooBeeTooTeeBot.INSTANCE.token = scanner.nextLine();
+                TooBeeTooTeeBot.INSTANCE.username = scanner.nextLine().trim();
+                TooBeeTooTeeBot.INSTANCE.password = scanner.nextLine().trim();
+                TooBeeTooTeeBot.INSTANCE.token = scanner.nextLine().trim();
+                TooBeeTooTeeBot.INSTANCE.doAuth = Boolean.parseBoolean(scanner.nextLine().trim());
+                TooBeeTooTeeBot.INSTANCE.ip = scanner.nextLine().trim();
+                TooBeeTooTeeBot.INSTANCE.port = Integer.parseInt(scanner.nextLine().trim());
                 scanner.close();
 
                 jda = new JDABuilder(AccountType.BOT)
@@ -128,11 +136,16 @@ public class TooBeeTooTeeBot {
                 }, 1000, 1000);
             }
 
-            System.out.println("Logging in with credentials: " + username + ":" + password);
-            protocol = new MinecraftProtocol(username, password);
+            if (doAuth) {
+                System.out.println("Logging in with credentials: " + username + ":" + password);
+                protocol = new MinecraftProtocol(username, password);
+            } else {
+                System.out.println("Loggin in with cracked account, username: " + username);
+                protocol = new MinecraftProtocol(username);
+            }
             System.out.println("Success!");
 
-            client = new Client("2b2t.org", 25565, protocol, new TcpSessionFactory());
+            client = new Client(ip, port, protocol, new TcpSessionFactory());
             client.getSession().addListener(new SessionListener() {
                 @Override
                 public void packetReceived(PacketReceivedEvent packetReceivedEvent) {
@@ -142,6 +155,17 @@ public class TooBeeTooTeeBot {
                             String messageJson = pck.getMessage().toJsonString();
                             String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                             String msg = TextFormat.clean(legacyColorCodes);
+
+                            if (msg.split(" ")[1].startsWith("whispers"))   {
+                                //TODO: process messages
+                                return;
+                            } else if (msg.startsWith("!")) { //command from PorkProxy
+                                if (msg.equals("!toggleafk"))   { //useful when manually moving bot around
+                                    doAFK = !doAFK;
+                                    client.getSession().send(new ClientChatPacket("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off")));
+                                    return;
+                                }
+                            }
                             System.out.println("[CHAT] " + msg);
                             queuedMessages.add(msg);
                             websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
@@ -155,7 +179,6 @@ public class TooBeeTooTeeBot {
                             }, 100);
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
                             ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
-                            //System.out.println("Player list packet mode: " + pck.getAction().ordinal());
                             switch (pck.getAction()) {
                                 case ADD_PLAYER:
                                     for (PlayerListEntry entry : pck.getEntries()) {
@@ -203,7 +226,6 @@ public class TooBeeTooTeeBot {
                                     }
                                     break;
                             }
-                            //TODO: send changed players
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListDataPacket) {
                             ServerPlayerListDataPacket pck = (ServerPlayerListDataPacket) packetReceivedEvent.getPacket();
                             tabHeader = pck.getHeader();
@@ -225,16 +247,18 @@ public class TooBeeTooTeeBot {
 
                 @Override
                 public void connected(ConnectedEvent connectedEvent) {
-                    System.out.println("Connected to 2b2t.org:25565!");
+                    System.out.println("Connected to " + ip + ":" + port + "!");
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() { //antiafk
-                            if (r.nextBoolean()) {
-                                client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND)); //TODO: offhand, what's the name of that enum
-                            } else {
-                                float yaw = -90 + (90 - -90) * r.nextFloat();
-                                float pitch = -90 + (90 - -90) * r.nextFloat();
-                                //client.getSession().send(new ClientPlayerRotationPacket(false, yaw, pitch));
+                            if (doAFK) {
+                                if (r.nextBoolean()) {
+                                    client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+                                } else {
+                                    float yaw = -90 + (90 - -90) * r.nextFloat();
+                                    float pitch = -90 + (90 - -90) * r.nextFloat();
+                                    client.getSession().send(new ClientPlayerRotationPacket(false, yaw, pitch));
+                                }
                             }
                         }
                     }, 20000, 500);
@@ -347,7 +371,7 @@ public class TooBeeTooTeeBot {
                     System.exit(0);
                 }
             });
-            System.out.println("Connecting to 2b2t.org:25565...");
+            System.out.println("Connecting to " + ip + ":" + port + "...");
             client.getSession().connect(true);
         } catch (Exception e)   {
             e.printStackTrace();
@@ -357,7 +381,7 @@ public class TooBeeTooTeeBot {
 
     public void sendChat(String message)    {
         ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi " + message);
-        //client.getSession().send(toSend);
+        client.getSession().send(toSend);
     }
 }
 

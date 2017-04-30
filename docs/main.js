@@ -1,4 +1,4 @@
-var wsUri = "ws://repo.daporkchop.tk:8888";
+var wsUri = "ws://localhost:8888";
 var output;
 var shutdown = false;
 
@@ -34,7 +34,8 @@ function onOpen(evt) {
 
 function onClose(evt) {
     if (!shutdown)   {
-        var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe seem to have been disconnected!\n\u00A7c\u00A7lReload the page in a few seconds!";
+        var error = createCORSRequest('GET', "http://home.daporkchop.net/misc/2b2terror.txt");
+        var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe seem to have been disconnected, or are unable to connect to the bot! Error:\n\n" + error;
         initParser(newText, 'chat', true);
     }
     shutdown = false;
@@ -133,6 +134,20 @@ function onMessage(evt) {
 
 function onError(evt) {
 
+}
+
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    xhr.open(method, url, false);
+  } else if (typeof XDomainRequest != "undefined") {
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    xhr = "Your browser doesn't support CORS, unable to fetch the error lol";
+  }
+  xhr.send();
+  return xhr.responseText;
 }
 
 function doSend(message) {
