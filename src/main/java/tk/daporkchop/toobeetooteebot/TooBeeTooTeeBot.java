@@ -155,6 +155,7 @@ public class TooBeeTooTeeBot {
                             String messageJson = pck.getMessage().toJsonString();
                             String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                             String msg = TextFormat.clean(legacyColorCodes);
+                            System.out.println("[CHAT] " + msg);
                             try {
                                 if (msg.split(" ")[1].startsWith("whispers")) {
                                     //TODO: process messages
@@ -165,13 +166,13 @@ public class TooBeeTooTeeBot {
                             }
 
                             if (msg.startsWith("!")) { //command from PorkProxy
-                                if (msg.equals("!toggleafk"))   { //useful when manually moving bot around
+                                if (msg.startsWith("!toggleafk"))   { //useful when manually moving bot around
                                     doAFK = !doAFK;
+                                    System.out.println("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off"));
                                     client.getSession().send(new ClientChatPacket("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off")));
                                     return;
                                 }
                             }
-                            System.out.println("[CHAT] " + msg);
                             queuedMessages.add(msg);
                             websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                         } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
