@@ -355,8 +355,7 @@ public class TooBeeTooTeeBot {
 
                     try {
                         Thread.sleep(1500);
-                        TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
-                    } catch (InterruptedException | IOException e)    {
+                    } catch (InterruptedException e)    {
 
                     }
                     System.exit(0);
@@ -370,8 +369,7 @@ public class TooBeeTooTeeBot {
 
                     try {
                         Thread.sleep(1500);
-                        TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
-                    } catch (InterruptedException | IOException e)    {
+                    } catch (InterruptedException e)    {
 
                     }
                     System.exit(0);
