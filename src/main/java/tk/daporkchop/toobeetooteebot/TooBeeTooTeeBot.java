@@ -188,7 +188,7 @@ public class TooBeeTooTeeBot {
                             switch (pck.getAction()) {
                                 case ADD_PLAYER:
                                     for (PlayerListEntry entry : pck.getEntries()) {
-                                        if (entry.getProfile().getName().equals(protocol.getProfile().getName()))  {
+                                        if (entry.getProfile().getName().equals("2pork2bot"))  {
                                             continue;
                                         }
                                         TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
