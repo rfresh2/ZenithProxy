@@ -43,7 +43,7 @@ public class WebsocketServer extends WebSocketServer {
                 for (TabListPlayer entry : TooBeeTooTeeBot.INSTANCE.playerListEntries)    {
                     conn.send("tabAdd  " + entry.name + "SPLIT" + entry.ping);
                 }
-                conn.send("tabAdd  " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName() + "SPLIT" + 1);
+                conn.send("tabAdd  2pork2botSPLIT" + 1);
             }
         }, 1000);
     }
