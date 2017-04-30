@@ -72,9 +72,6 @@ public class TooBeeTooTeeBot {
     public static void main(String[] args)  {
         new TooBeeTooTeeBot().start(args);
         try {
-            TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
-            TooBeeTooTeeBot.INSTANCE.websocketServer.start();
-
             Scanner scanner = new Scanner(System.in);
 
             String whatever = scanner.nextLine();
@@ -102,6 +99,9 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.ip = scanner.nextLine().trim();
                 TooBeeTooTeeBot.INSTANCE.port = Integer.parseInt(scanner.nextLine().trim());
                 scanner.close();
+
+                TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
+                TooBeeTooTeeBot.INSTANCE.websocketServer.start();
 
                 jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
