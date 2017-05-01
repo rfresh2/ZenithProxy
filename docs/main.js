@@ -55,7 +55,7 @@ function onMessage(evt) {
             shutdown = true;
             break;
         case "tabDiff ":
-            var split = evt.data.substring(8).split("SPLIT");
+            var split = evt.data.substring(8).split(" ");
             var header = split[0];
             var footer = split[1];
             //console.log("header: " + header);
@@ -64,7 +64,7 @@ function onMessage(evt) {
             initParser(footer, 'tabfooter', true);
             break;
         case "tabAdd  ":
-            var split = evt.data.substring(8).split("SPLIT");
+            var split = evt.data.substring(8).split(" ");
             var name = split[0];
             var ping = parseInt(split[1]);
 
@@ -96,7 +96,7 @@ function onMessage(evt) {
             newCell.appendChild(ping);
             break;
         case "tabPing ":
-            var split = evt.data.substring(8).split("SPLIT");
+            var split = evt.data.substring(8).split(" ");
             var name = split[0];
             var ping = parseInt(split[1]);
 

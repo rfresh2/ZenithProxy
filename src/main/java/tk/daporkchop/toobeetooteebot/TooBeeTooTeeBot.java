@@ -170,8 +170,8 @@ public class TooBeeTooTeeBot {
                                     doAFK = !doAFK;
                                     System.out.println("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off"));
                                     client.getSession().send(new ClientChatPacket("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off")));
-                                    return;
                                 }
+                                return;
                             }
                             queuedMessages.add(msg);
                             websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
@@ -193,7 +193,7 @@ public class TooBeeTooTeeBot {
                                         }
                                         TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
                                         playerListEntries.add(player);
-                                        websocketServer.sendToAll("tabAdd  " + player.name + "SPLIT" + player.ping);
+                                        websocketServer.sendToAll("tabAdd  " + player.name + " " + player.ping);
                                     }
                                     break;
                                 case UPDATE_GAMEMODE:
@@ -205,7 +205,7 @@ public class TooBeeTooTeeBot {
                                         for (TabListPlayer toChange : playerListEntries) {
                                             if (uuid.equals(toChange.uuid)) {
                                                 toChange.ping = entry.getPing();
-                                                websocketServer.sendToAll("tabPing " + toChange.name + "SPLIT" + toChange.ping);
+                                                websocketServer.sendToAll("tabPing " + toChange.name + " " + toChange.ping);
                                                 break;
                                             }
                                         }
@@ -238,7 +238,7 @@ public class TooBeeTooTeeBot {
                             tabFooter = pck.getFooter();
                             String header = tabHeader.getFullText();
                             String footer = tabFooter.getFullText();
-                            websocketServer.sendToAll("tabDiff " + header + "SPLIT" + footer);
+                            websocketServer.sendToAll("tabDiff " + header + " " + footer);
                         }
                     } catch (Exception | Error e)   {
                         e.printStackTrace();

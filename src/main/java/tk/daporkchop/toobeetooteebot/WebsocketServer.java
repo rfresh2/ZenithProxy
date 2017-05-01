@@ -32,18 +32,18 @@ public class WebsocketServer extends WebSocketServer {
                 if (TooBeeTooTeeBot.INSTANCE.tabHeader != null && TooBeeTooTeeBot.INSTANCE.tabFooter != null) {
                     String header = TooBeeTooTeeBot.INSTANCE.tabHeader.getFullText();
                     String footer = TooBeeTooTeeBot.INSTANCE.tabFooter.getFullText();
-                    conn.send("tabDiff " + header + "SPLIT" + footer);
+                    conn.send("tabDiff " + header + " " + footer);
                 } else if (TooBeeTooTeeBot.INSTANCE.tabHeader != null)  {
                     String header = TooBeeTooTeeBot.INSTANCE.tabHeader.getFullText();
-                    conn.send("tabDiff " + header + "SPLIT ");
+                    conn.send("tabDiff " + header + "  ");
                 } else if (TooBeeTooTeeBot.INSTANCE.tabFooter != null)  {
                     String footer = TooBeeTooTeeBot.INSTANCE.tabFooter.getFullText();
-                    conn.send("tabDiff  SPLIT" + footer);
+                    conn.send("tabDiff   " + footer);
                 }
                 for (TabListPlayer entry : TooBeeTooTeeBot.INSTANCE.playerListEntries)    {
-                    conn.send("tabAdd  " + entry.name + "SPLIT" + entry.ping);
+                    conn.send("tabAdd  " + entry.name + " " + entry.ping);
                 }
-                conn.send("tabAdd  2pork2botSPLIT" + 1);
+                conn.send("tabAdd  2pork2bot " + 1);
             }
         }, 1000);
     }
