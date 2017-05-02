@@ -1,13 +1,10 @@
 package tk.daporkchop.toobeetooteebot;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import org.java_websocket.WebSocket;
-import org.java_websocket.WebSocketImpl;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;

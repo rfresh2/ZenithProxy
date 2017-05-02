@@ -16,6 +16,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.Serv
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
 import com.google.gson.JsonElement;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -23,7 +25,6 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import com.google.common.collect.Maps;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -67,6 +68,10 @@ public class TooBeeTooTeeBot {
 
     public boolean doAFK = true;
 
+    public DataTag dataTag = new DataTag(new File(DataTag.USER_FOLDER + "players.dat"));
+    public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;
+    public HashMap<String, NotRegisteredPlayer> namesToTempAuths = new HashMap<>();
+
     public static TooBeeTooTeeBot INSTANCE;
 
     public static void main(String[] args)  {
@@ -103,6 +108,8 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
                 TooBeeTooTeeBot.INSTANCE.websocketServer.start();
 
+                namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) dataTag.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
+
                 jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
@@ -133,7 +140,7 @@ public class TooBeeTooTeeBot {
                             queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
                     }
-                }, 1000, 1000);
+                }, 2000, 2000);
             }
 
             if (doAuth) {
@@ -157,8 +164,9 @@ public class TooBeeTooTeeBot {
                             String msg = TextFormat.clean(legacyColorCodes);
                             System.out.println("[CHAT] " + msg);
                             try {
-                                if (msg.split(" ")[1].startsWith("whispers")) {
-                                    //TODO: process messages
+                                String[] split = msg.split(" ");
+                                if (split[1].startsWith("whispers") && !msg.startsWith("<")) {
+                                    processMsg(split[0], msg.substring(split[0].length() + split[1].length() + 2));
                                     return;
                                 }
                             } catch (ArrayIndexOutOfBoundsException e)  {
@@ -171,6 +179,8 @@ public class TooBeeTooTeeBot {
                                     System.out.println("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off"));
                                     client.getSession().send(new ClientChatPacket("! Toggled AntiAFK! Current state: " + (doAFK ? "on" : "off")));
                                 }
+                                return;
+                            } else if (msg.startsWith("To "))   {
                                 return;
                             }
                             queuedMessages.add(msg);
@@ -272,7 +282,7 @@ public class TooBeeTooTeeBot {
                     new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                         @Override
                         public void run() { //chat
-                            switch (r.nextInt(27))    {
+                            switch (r.nextInt(30))    {
                                 case 0:
                                     sendChat("Did you know? The Did you know? meme is dead!");
                                     break;
@@ -342,6 +352,15 @@ public class TooBeeTooTeeBot {
                                 case 26:
                                     sendChat("kekekekekekekekekekepepsibetterthancokekekekekekekekekek");
                                     break;
+								case 27:
+                                    sendChat("traps are not gay");
+                                    break;
+								case 28:
+                                    sendChat("I have a thing for exclamation marks!");
+                                    break;
+								case 29:
+                                    sendChat("- Because if I want to dissolve a porkchop in soda, the choice is clear!");
+                                    break;
                             }
                         }
                     }, 30000, 10000);
@@ -386,6 +405,30 @@ public class TooBeeTooTeeBot {
     public void sendChat(String message)    {
         ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi " + message);
         client.getSession().send(toSend);
+    }
+
+    public void processMsg(String playername, String message)   {
+        RegisteredPlayer player = namesToRegisteredPlayers.getOrDefault(playername, null);
+        if (player == null) {
+            NotRegisteredPlayer tempAuth = namesToTempAuths.getOrDefault(playername, null);
+            if (tempAuth == null)   {
+                client.getSession().send(new ClientChatPacket("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!"));
+                return;
+            } else {
+                if (message.equals(tempAuth.tempAuthUUID))   {
+                    String hashedPwd = Hashing.sha256().hashString(tempAuth.pwd, Charsets.UTF_8).toString();
+                    RegisteredPlayer newPlayer = new RegisteredPlayer(hashedPwd, tempAuth.name);
+                    newPlayer.lastUsed = System.currentTimeMillis();
+                    namesToTempAuths.remove(tempAuth.name);
+                    namesToRegisteredPlayers.put(tempAuth.name, newPlayer);
+                    dataTag.setSerializable("registeredPlayers", namesToRegisteredPlayers);
+                    client.getSession().send(new ClientChatPacket("/msg " + playername + " Successfully registered! You can now use your username and password on the website!"));
+                    return;
+                }
+            }
+        } else {
+            //TODO: send message
+        }
     }
 }
 

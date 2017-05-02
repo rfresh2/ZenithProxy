@@ -1,6 +1,7 @@
 var wsUri = "ws://repo.daporkchop.tk:8888";
 var output;
 var shutdown = false;
+var password;
 
 function updateScroll(){
     var element = document.getElementById("chat");
@@ -26,6 +27,9 @@ function testWebSocket() {
         onError(evt)
     };
     document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...";
+    document.getElementById("chatinput").style.display = 'none';
+    document.getElementById("chatsendbutton").style.display = 'none';
+    document.getElementById("loggingintext").style.display = 'none';
 }
 
 function onOpen(evt) {
@@ -55,20 +59,16 @@ function onMessage(evt) {
             shutdown = true;
             break;
         case "tabDiff ":
-            var split = evt.data.substring(8).split(" ");
+            var split = evt.data.substring(8).split("\u2001");
             var header = split[0];
             var footer = split[1];
-            //console.log("header: " + header);
-            //console.log("footer: " + footer);
             initParser(header, 'tabheader', true);
             initParser(footer, 'tabfooter', true);
             break;
         case "tabAdd  ":
-            var split = evt.data.substring(8).split(" ");
+            var split = evt.data.substring(8).split("\u2001");
             var name = split[0];
             var ping = parseInt(split[1]);
-
-            //console.log(name + " " + ping + "ms");
 
             var tableRef = document.getElementById('tabplayers').getElementsByTagName('tbody')[0];
             var newRow = tableRef.rows[0];
@@ -96,7 +96,7 @@ function onMessage(evt) {
             newCell.appendChild(ping);
             break;
         case "tabPing ":
-            var split = evt.data.substring(8).split(" ");
+            var split = evt.data.substring(8).split("\u2001");
             var name = split[0];
             var ping = parseInt(split[1]);
 
@@ -119,15 +119,25 @@ function onMessage(evt) {
         case "chat    ":
             var text = evt.data.substring(8);
             var oldTextSplit = document.getElementById("chat").innerHTML.split("\u2000");
-            console.log(oldTextSplit.length);
             if (oldTextSplit.length > 499)  {
                 oldTextSplit.splice(0, 1);
             }
-            console.log(oldTextSplit.length);
             oldTextSplit.push("\n" + text);
             var newText = oldTextSplit.join("\u2000");
             initParser(newText, 'chat', true);
             updateScroll();
+            break;
+        case "chatSent":
+            document.getElementById("chatinput").value = "";
+            break;
+        case "loginErr":
+            document.getElementById("loggingintext").style.display = '';
+            document.getElementById("loggingintext").innerHTML = "<br>" + evt.data.substring(8);
+            break;
+        case "loginOk ":
+            document.getElementById("loggingintext").style.display = 'none';
+            document.getElementById("chatinput").style.display = '';
+            document.getElementById("chatsendbutton").style.display = '';
             break;
     }
 }
@@ -166,6 +176,24 @@ function getIconFromPing(ping)  {
   } else {
     return "1bar.png";
   }
+}
+
+function sendChat() {
+    var textInput = document.getElementById("chatinput");
+    var toSend = textInput.value;
+    doSend("sendChat" + toSend + "\u2001" + username + "\u2001" + password);
+}
+
+function login()    {
+    var enteredUsername = document.getElementById("usernamein").value;
+    var enteredPassword = document.getElementById("passwordin").value;
+    username = enteredUsername;
+    password = enteredPassword;
+    document.getElementById("usernamein").style.display = 'none';
+    document.getElementById("passwordin").style.display = 'none';
+    document.getElementById("loginbutton").style.display = 'none';
+    document.getElementById("loggingintext").style.display = '';
+    doSend("login   " + enteredUsername + "\u2001" + enteredPassword);
 }
 
 window.addEventListener("load", init, false);
