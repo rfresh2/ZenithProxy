@@ -1,6 +1,8 @@
 var wsUri = "ws://repo.daporkchop.tk:8888";
 var output;
 var shutdown = false;
+
+var username;
 var password;
 
 function updateScroll(){
@@ -138,6 +140,10 @@ function onMessage(evt) {
             document.getElementById("loggingintext").style.display = 'none';
             document.getElementById("chatinput").style.display = '';
             document.getElementById("chatsendbutton").style.display = '';
+            var split = evt.data.substring(8).split("\u2001");
+            username = split[0];
+            password = split[1];
+            console.log("Authenticated with server! Username: " + username + " Access token: " + password);
             break;
     }
 }
@@ -180,20 +186,25 @@ function getIconFromPing(ping)  {
 
 function sendChat() {
     var textInput = document.getElementById("chatinput");
-    var toSend = textInput.value;
-    doSend("sendChat" + toSend + "\u2001" + username + "\u2001" + password);
+    var toSend = textInput.value.replace(/[^\x00-\x7F]/g, ""); //remove all non-ASCII chars from string, as they'll get the bot kicked
+    if (toSend.length > 0)  {
+        doSend("sendChat" + toSend + "\u2001" + username + "\u2001" + password);
+    }
 }
 
 function login()    {
     var enteredUsername = document.getElementById("usernamein").value;
     var enteredPassword = document.getElementById("passwordin").value;
-    username = enteredUsername;
-    password = enteredPassword;
+
+    var shaObj = new jsSHA("SHA-1", "TEXT");
+    shaObj.update(enteredPassword);
+    var hashedPassword = shaObj.getHash("HEX");
+
     document.getElementById("usernamein").style.display = 'none';
     document.getElementById("passwordin").style.display = 'none';
     document.getElementById("loginbutton").style.display = 'none';
     document.getElementById("loggingintext").style.display = '';
-    doSend("login   " + enteredUsername + "\u2001" + enteredPassword);
+    doSend("login   " + enteredUsername + "\u2001" + hashedPassword);
 }
 
 window.addEventListener("load", init, false);

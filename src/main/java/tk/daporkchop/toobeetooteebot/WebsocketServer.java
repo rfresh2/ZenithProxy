@@ -1,5 +1,8 @@
 package tk.daporkchop.toobeetooteebot;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
+import gnu.trove.procedure.TObjectObjectProcedure;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ClientHandshake;
@@ -7,17 +10,25 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class WebsocketServer extends WebSocketServer {
     public WebsocketServer(int port) throws UnknownHostException {
         super(new InetSocketAddress(port));
-    }
-
-    public WebsocketServer(InetSocketAddress address) {
-        super(address);
+        TooBeeTooTeeBot.INSTANCE.timer.schedule(new TimerTask() {
+            @Override
+            public void run() { //Automatically log inactive users out
+                long maxIdleTime = System.currentTimeMillis() - 600000;
+                Iterator<LoggedInPlayer> iterator = TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.values().iterator();
+                while (iterator.hasNext()) {
+                    LoggedInPlayer next = iterator.next();
+                    if (next.lastUsed < maxIdleTime)  {
+                        iterator.remove();
+                        continue;
+                    }
+                }
+            }
+        }, 10000, 10000);
     }
 
     @Override
@@ -52,7 +63,57 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        //TODO: handle
+        try {
+            if (message.startsWith("login   ")) {
+                message = message.substring(8);
+                String[] split = message.split(" ");
+                String username = split[0];
+                String passwordHash = split[1];
+                if (TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.containsKey(username))   {
+                    RegisteredPlayer player = TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.get(username);
+                    passwordHash = Hashing.sha256().hashString(passwordHash, Charsets.UTF_8).toString();
+                    if (passwordHash.equals(player.passwordHash))   {
+                        LoggedInPlayer toAdd = new LoggedInPlayer(player, conn);
+                        TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.put(username, toAdd);
+                        conn.send("loginOk " + username + " " + passwordHash);
+                        return;
+                    } else {
+                        conn.send("loginErrInvalid password!");
+                        return;
+                    }
+                } else { //TODO: limit accounts per IP
+                    NotRegisteredPlayer toAdd = new NotRegisteredPlayer();
+                    toAdd.name = username;
+                    toAdd.pwd = passwordHash;
+                    toAdd.tempAuthUUID = UUID.randomUUID().toString();
+                    TooBeeTooTeeBot.INSTANCE.namesToTempAuths.put(toAdd.name, toAdd);
+                    conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
+                    return;
+                }
+            } else if (message.startsWith("sendChat"))  {
+                message = message.substring(8);
+                String[] split = message.split(" ");
+                String text = split[0];
+                String username = split[1];
+                String passwordHash = split[2];
+                LoggedInPlayer player = TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.getOrDefault(username, null);
+                if (player == null) {
+                    RegisteredPlayer registeredPlayer = TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.getOrDefault(username, null);
+                    if (registeredPlayer == null)   {
+                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP.");
+                        return;
+                    } else {
+                        LoggedInPlayer toAdd = new LoggedInPlayer(registeredPlayer, conn);
+
+                    }
+                } else {
+
+                }
+            }
+        } catch (Exception e)   {
+            conn.send("loginErr" + e.getMessage());
+            return;
+        }
     }
 
     @Override

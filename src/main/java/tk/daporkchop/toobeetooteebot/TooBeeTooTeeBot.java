@@ -71,6 +71,7 @@ public class TooBeeTooTeeBot {
     public DataTag dataTag = new DataTag(new File(DataTag.USER_FOLDER + "players.dat"));
     public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;
     public HashMap<String, NotRegisteredPlayer> namesToTempAuths = new HashMap<>();
+    public HashMap<String, LoggedInPlayer> namesToLoggedInPlayers = new HashMap<>();
 
     public static TooBeeTooTeeBot INSTANCE;
 
@@ -163,9 +164,13 @@ public class TooBeeTooTeeBot {
                             String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                             String msg = TextFormat.clean(legacyColorCodes);
                             System.out.println("[CHAT] " + msg);
+                            if (msg.startsWith("To "))  {
+                                //don't bother processing sent DMs
+                                return;
+                            }
                             try {
                                 String[] split = msg.split(" ");
-                                if (split[1].startsWith("whispers") && !msg.startsWith("<")) {
+                                if (!msg.startsWith("<") && split[1].startsWith("whispers")) {
                                     processMsg(split[0], msg.substring(split[0].length() + split[1].length() + 2));
                                     return;
                                 }
@@ -414,8 +419,9 @@ public class TooBeeTooTeeBot {
             if (tempAuth == null)   {
                 client.getSession().send(new ClientChatPacket("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!"));
                 return;
-            } else {
-                if (message.equals(tempAuth.tempAuthUUID))   {
+            } else if (message.startsWith("register")) {
+                message = message.substring(9);
+                if (message.startsWith(tempAuth.tempAuthUUID))   {
                     String hashedPwd = Hashing.sha256().hashString(tempAuth.pwd, Charsets.UTF_8).toString();
                     RegisteredPlayer newPlayer = new RegisteredPlayer(hashedPwd, tempAuth.name);
                     newPlayer.lastUsed = System.currentTimeMillis();
@@ -424,10 +430,18 @@ public class TooBeeTooTeeBot {
                     dataTag.setSerializable("registeredPlayers", namesToRegisteredPlayers);
                     client.getSession().send(new ClientChatPacket("/msg " + playername + " Successfully registered! You can now use your username and password on the website!"));
                     return;
+                } else {
+                    client.getSession().send(new ClientChatPacket("/msg " + playername + " Incorrect authentication UUID!"));
+                    return;
                 }
             }
         } else {
-            //TODO: send message
+            if (message.startsWith("help")) {
+                client.getSession().send(new ClientChatPacket("/msg " + playername + " Use '/msg 2pork2bot <player name> <message>' to send them a message! Visit http://www.daporkchop.net/pork2b2tbot for more info!"));
+                return;
+            } else {
+                //TODO: manage a chache of logged in users
+            }
         }
     }
 }
