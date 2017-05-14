@@ -1,5 +1,6 @@
 package tk.daporkchop.toobeetooteebot;
 
+import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
@@ -25,6 +26,7 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.*;
 import com.google.common.collect.Maps;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -106,47 +108,44 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.port = Integer.parseInt(scanner.nextLine().trim());
                 scanner.close();
 
-                TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
-                TooBeeTooTeeBot.INSTANCE.websocketServer.start();
-
-                namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) dataTag.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
-
-                jda = new JDABuilder(AccountType.BOT)
-                        .setToken(token)
-                        .buildBlocking();
-                channel = jda.getTextChannelById("305346913488863243");
-                
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if (queuedMessages.size() > 0)  {
-                            StringBuilder builder = new StringBuilder();
-                            Iterator<String> iter = queuedMessages.iterator();
-                            iter.hasNext(); //idk lol
-                            while (builder.length() < 2001)   {
-                                StringBuilder copiedBuilder = new StringBuilder(builder.toString());
-                                copiedBuilder.append(iter.next() + "\n");
-                                if (builder.length() > 2000)    {
-                                    channel.sendMessage(copiedBuilder.toString()).queue();
-                                    queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                                    return;
-                                } else {
-                                    builder = copiedBuilder;
-                                }
-                                if (!iter.hasNext())    {
-                                    break;
-                                }
-                            }
-                            channel.sendMessage(builder.toString()).queue();
-                            queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                        }
+                        doPostConnectSetup();
                     }
-                }, 2000, 2000);
+                }, 10000);
             }
 
             if (doAuth) {
-                System.out.println("Logging in with credentials: " + username + ":" + password);
-                protocol = new MinecraftProtocol(username, password);
+                File sessionIdCache = new File(System.getProperty("user.dir") + File.separator + "sessionId.txt");
+                if (sessionIdCache.exists())    {
+                    System.out.println("Attempting to log in with session ID");
+                    Scanner s = new Scanner(sessionIdCache);
+                    String sessionID = s.nextLine().trim();
+                    s.close();
+                    System.out.println("Session ID: " + sessionID);
+                    try {
+                        protocol = new MinecraftProtocol(username, sessionID, true);
+                    } catch (RequestException e)    {
+                        System.out.println("Bad/expired session ID, attempting login with username and password");
+                        protocol = new MinecraftProtocol(username, password);
+
+                        System.out.println("Logged in with credentials " + username + ":" + password);
+                        System.out.println("Saving session ID: " + sessionID + " to disk");
+                        PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
+                        writer.println(protocol.getAccessToken());
+                        writer.close();
+                    }
+                } else {
+                    System.out.println("Attempting login with username and password...");
+                    protocol = new MinecraftProtocol(username, password);
+
+                    System.out.println("Logged in with credentials " + username + ":" + password);
+                    System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
+                    PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
+                    writer.println(protocol.getAccessToken());
+                    writer.close();
+                }
             } else {
                 System.out.println("Loggin in with cracked account, username: " + username);
                 protocol = new MinecraftProtocol(username);
@@ -376,12 +375,6 @@ public class TooBeeTooTeeBot {
                     System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
                     queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
                     TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
-
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e)    {
-
-                    }
                     System.exit(0);
                 }
 
@@ -390,12 +383,6 @@ public class TooBeeTooTeeBot {
                     System.out.println("Disconnected.");
                     queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
                     TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
-
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e)    {
-
-                    }
                     System.exit(0);
                 }
             });
@@ -442,6 +429,55 @@ public class TooBeeTooTeeBot {
             } else {
                 //TODO: manage a chache of logged in users
             }
+        }
+    }
+
+    protected boolean hasDonePostConnect = false;
+
+    public void doPostConnectSetup()    {
+        try {
+            if (!hasDonePostConnect) {
+                TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
+                TooBeeTooTeeBot.INSTANCE.websocketServer.start();
+
+                namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) dataTag.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
+
+                jda = new JDABuilder(AccountType.BOT)
+                        .setToken(token)
+                        .buildBlocking();
+                channel = jda.getTextChannelById("305346913488863243");
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (queuedMessages.size() > 0) {
+                            StringBuilder builder = new StringBuilder();
+                            Iterator<String> iter = queuedMessages.iterator();
+                            iter.hasNext(); //idk lol
+                            while (builder.length() < 2001) {
+                                StringBuilder copiedBuilder = new StringBuilder(builder.toString());
+                                copiedBuilder.append(iter.next() + "\n");
+                                if (builder.length() > 2000) {
+                                    channel.sendMessage(copiedBuilder.toString()).queue();
+                                    queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
+                                    return;
+                                } else {
+                                    builder = copiedBuilder;
+                                }
+                                if (!iter.hasNext()) {
+                                    break;
+                                }
+                            }
+                            channel.sendMessage(builder.toString()).queue();
+                            queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
+                        }
+                    }
+                }, 2000, 2000);
+                hasDonePostConnect = true;
+            }
+        } catch (Exception e)   {
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 }

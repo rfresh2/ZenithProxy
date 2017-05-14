@@ -100,14 +100,20 @@ public class WebsocketServer extends WebSocketServer {
                 if (player == null) {
                     RegisteredPlayer registeredPlayer = TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.getOrDefault(username, null);
                     if (registeredPlayer == null)   {
-                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP.");
+                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A RegisteredPlayer was null! (or you broke the script lol)");
                         return;
                     } else {
                         LoggedInPlayer toAdd = new LoggedInPlayer(registeredPlayer, conn);
-
+                        TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.put(toAdd.player.name, toAdd);
+                        player = toAdd;
                     }
-                } else {
+                }
 
+                if (player != null) { //doing another check in case it logged the user back in
+
+                } else {
+                    conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A message was sent for an invalid user! (or you broke the script lol)");
+                    return;
                 }
             }
         } catch (Exception e)   {
