@@ -80,7 +80,12 @@ public class WebsocketServer extends WebSocketServer {
                         conn.send("loginErrInvalid password!");
                         return;
                     }
-                } else { //TODO: limit accounts per IP
+                } else {
+                    if (TooBeeTooTeeBot.INSTANCE.namesToTempAuths.containsKey(username)) {
+                        NotRegisteredPlayer toAdd = TooBeeTooTeeBot.INSTANCE.namesToTempAuths.get(username);
+                        conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
+                        return;
+                    }
                     NotRegisteredPlayer toAdd = new NotRegisteredPlayer();
                     toAdd.name = username;
                     toAdd.pwd = passwordHash;
