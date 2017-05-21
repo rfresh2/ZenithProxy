@@ -42,9 +42,6 @@ import java.net.Proxy;
 import java.util.Iterator;
 import java.util.TimerTask;
 
-/**
- * Created by DaPorkchop_ on 5/14/2017.
- */
 public class PorkSessionListener implements SessionListener {
     public TooBeeTooTeeBot bot;
 
@@ -109,6 +106,13 @@ public class PorkSessionListener implements SessionListener {
                             bot.playerListEntries.add(player);
                             if (bot.websocketServer != null)
                                 bot.websocketServer.sendToAll("tabAdd  " + player.name + " " + player.ping);
+                            if (bot.uuidsToPlayData.containsKey(player.uuid)) {
+                                PlayData data = bot.uuidsToPlayData.get(player.uuid);
+                                data.lastPlayed = System.currentTimeMillis();
+                            } else {
+                                PlayData data = new PlayData(player.uuid, player.name);
+                                bot.uuidsToPlayData.put(data.UUID, data);
+                            }
                         }
                         break;
                     case UPDATE_GAMEMODE:
@@ -122,6 +126,12 @@ public class PorkSessionListener implements SessionListener {
                                     toChange.ping = entry.getPing();
                                     if (bot.websocketServer != null)
                                         bot.websocketServer.sendToAll("tabPing " + toChange.name + " " + toChange.ping);
+                                    for (PlayData playData : bot.uuidsToPlayData.values())  {
+                                        int playTimeDifference = (int) (System.currentTimeMillis() - playData.lastPlayed);
+                                        playData.playTimeByHour[0] += playTimeDifference;
+                                        playData.playTimeByDay[0] += playTimeDifference;
+                                        playData.lastPlayed = System.currentTimeMillis();
+                                    }
                                     break;
                                 }
                             }
@@ -140,6 +150,7 @@ public class PorkSessionListener implements SessionListener {
                                     removalIndex = i;
                                     if (bot.websocketServer != null)
                                         bot.websocketServer.sendToAll("tabDel  " + player.name);
+                                    bot.uuidsToPlayData.get(uuid).lastPlayed = System.currentTimeMillis();
                                     break;
                                 }
                             }
@@ -261,8 +272,10 @@ public class PorkSessionListener implements SessionListener {
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
         if (bot.websocketServer != null)
             bot.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
-        TooBeeTooTeeBot.INSTANCE.dataTag.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
-        TooBeeTooTeeBot.INSTANCE.dataTag.save();
+        TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
+        TooBeeTooTeeBot.INSTANCE.loginData.save();
+        TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
+        TooBeeTooTeeBot.INSTANCE.playData.save();
         System.exit(0);
     }
 
@@ -272,8 +285,10 @@ public class PorkSessionListener implements SessionListener {
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
         if (bot.websocketServer != null)
             bot.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
-        TooBeeTooTeeBot.INSTANCE.dataTag.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
-        TooBeeTooTeeBot.INSTANCE.dataTag.save();
+        TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
+        TooBeeTooTeeBot.INSTANCE.loginData.save();
+        TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
+        TooBeeTooTeeBot.INSTANCE.playData.save();
         System.exit(0);
     }
 }

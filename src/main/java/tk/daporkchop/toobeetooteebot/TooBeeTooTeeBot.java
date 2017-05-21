@@ -19,11 +19,15 @@ import tk.daporkchop.toobeetooteebot.server.PorkClient;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/* * A bunch of utilities for dealing with Minecraft color codes
+/** A bunch of utilities for dealing with Minecraft color codes
  * Totally not skidded from Nukkit
  * sorry nukkit
  * deal with it
@@ -333,7 +337,7 @@ public class TooBeeTooTeeBot {
     public String ip;
     public int port;
     public boolean doAFK = true;
-    public DataTag dataTag = new DataTag(new File(System.getProperty("user.dir") + File.separator + "players.dat"));
+    public DataTag loginData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "players.dat"));
     public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;
     public HashMap<String, NotRegisteredPlayer> namesToTempAuths = new HashMap<>();
     public HashMap<String, LoggedInPlayer> namesToLoggedInPlayers = new HashMap<>();
@@ -350,6 +354,8 @@ public class TooBeeTooTeeBot {
     public ArrayList<String> queuedIngameMessages = new ArrayList<>();
     public HashMap<String, Long> ingamePlayerCooldown = new HashMap<>();
     protected boolean hasDonePostConnect = false;
+    public DataTag playData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "online.dat"));
+    public HashMap<String, PlayData> uuidsToPlayData;
 
     public static void main(String[] args)  {
         new TooBeeTooTeeBot().start(args);
@@ -365,8 +371,10 @@ public class TooBeeTooTeeBot {
             Thread.sleep(100);
             if (TooBeeTooTeeBot.INSTANCE.websocketServer != null)
                 TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
-            INSTANCE.dataTag.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
-            INSTANCE.dataTag.save();
+            INSTANCE.loginData.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
+            INSTANCE.loginData.save();
+            INSTANCE.playData.setSerializable("uuidsToPlayData", INSTANCE.uuidsToPlayData);
+            INSTANCE.playData.save();
             System.exit(0);
         } catch (Exception e)   {
             e.printStackTrace();
@@ -385,6 +393,9 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.ip = scanner.nextLine().trim();
                 TooBeeTooTeeBot.INSTANCE.port = Integer.parseInt(scanner.nextLine().trim());
                 scanner.close();
+
+                namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
+                uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
 
                 timer.schedule(new TimerTask() {
                     @Override
@@ -468,7 +479,7 @@ public class TooBeeTooTeeBot {
                     newPlayer.lastUsed = System.currentTimeMillis();
                     namesToTempAuths.remove(tempAuth.name);
                     namesToRegisteredPlayers.put(tempAuth.name, newPlayer);
-                    dataTag.setSerializable("registeredPlayers", namesToRegisteredPlayers);
+                    loginData.setSerializable("registeredPlayers", namesToRegisteredPlayers);
                     queueMessage("/msg " + playername + " Successfully registered! You can now use your username and password on the website!");
                     return;
                 } else {
@@ -507,8 +518,6 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
                 TooBeeTooTeeBot.INSTANCE.websocketServer.start();
 
-                namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) dataTag.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
-
                 jda = new JDABuilder(AccountType.BOT)
                         .setToken(token)
                         .buildBlocking();
@@ -541,9 +550,56 @@ public class TooBeeTooTeeBot {
                     }
                 }, 2000, 2000);
                 hasDonePostConnect = true;
+                Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MILLIS);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        long currentTime = System.currentTimeMillis();
+                        Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
+                        while (iterator.hasNext())  {
+                            Map.Entry<String, PlayData> entry = iterator.next();
+                            PlayData data = entry.getValue();
+                            if (currentTime - data.lastPlayed >= 2592000000L) { //one month
+                                iterator.remove();
+                                continue;
+                            }
+                            for (int i = data.playTimeByDay.length - 1; i >= 0; i--) {
+                                data.playTimeByDay[i + 1] = data.playTimeByDay[i];
+                            }
+                            data.playTimeByDay[0] = 0;
+                        }
+                    }
+                }, midnight, 1440 * 60 * 60 * 1000);
+
+                Long nextHour = millisToNextHour(Calendar.getInstance());
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        long currentTime = System.currentTimeMillis();
+                        Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
+                        while (iterator.hasNext())  {
+                            Map.Entry<String, PlayData> entry = iterator.next();
+                            PlayData data = entry.getValue();
+                            for (int i = data.playTimeByHour.length - 1; i >= 0; i--) {
+                                data.playTimeByHour[i + 1] = data.playTimeByHour[i];
+                            }
+                            data.playTimeByHour[0] = 0;
+                        }
+                    }
+                }, nextHour, 60 * 60 * 1000);
             }
         } catch (Exception e)   {
             e.printStackTrace();
         }
+    }
+
+    public static long millisToNextHour(Calendar calendar) {
+        int minutes = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+        int millis = calendar.get(Calendar.MILLISECOND);
+        int minutesToNextHour = 60 - minutes;
+        int secondsToNextHour = 60 - seconds;
+        int millisToNextHour = 1000 - millis;
+        return minutesToNextHour * 60 * 1000 + secondsToNextHour * 1000 + millisToNextHour;
     }
 }
