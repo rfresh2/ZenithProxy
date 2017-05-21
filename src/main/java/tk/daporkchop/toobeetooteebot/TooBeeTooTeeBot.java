@@ -2,80 +2,68 @@ package tk.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.game.ClientRequest;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
+import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.packetlib.Client;
-import com.github.steveice10.packetlib.event.session.*;
+import com.github.steveice10.packetlib.Server;
+import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
-import com.google.gson.JsonElement;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
+import tk.daporkchop.toobeetooteebot.server.PorkClient;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.*;
-import com.google.common.collect.Maps;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TooBeeTooTeeBot {
-	
-	public static final String[] BLOCK_NAMES = new String[] { "Cobblestone", "Stone", "Netherrack", "Stone Bricks", "Block of Coal", "Block of Iron", "Block of Gold", "Block of Diamond", "Block of Emerald", "Obsidian" };
+*
 
+public class TooBeeTooTeeBot {
+
+	public static final String[] BLOCK_NAMES = new String[] { "Cobblestone", "Stone", "Netherrack", "Stone Bricks", "Block of Coal", "Block of Iron", "Block of Gold", "Block of Diamond", "Block of Emerald", "Obsidian" };
+    public static TooBeeTooTeeBot INSTANCE;
     public Client client = null;
-    
     public Random r = new Random();
     public Timer timer = new Timer();
-
     public String username;
     public String password;
     public boolean doAuth;
-
     public JDA jda;
     public String token;
     public TextChannel channel;
     public ArrayList<String> queuedMessages = new ArrayList<>();
-
     public boolean firstRun = true;
-
     public WebsocketServer websocketServer;
-
     public Message tabHeader;
     public Message tabFooter;
     public ArrayList<TabListPlayer> playerListEntries = new ArrayList<>();
-
     public MinecraftProtocol protocol;
-
     public String ip;
     public int port;
-
     public boolean doAFK = true;
-
-    public DataTag dataTag = new DataTag(new File(DataTag.USER_FOLDER + "players.dat"));
+    public DataTag dataTag = new DataTag(new File(System.getProperty("user.dir") + File.separator + "players.dat"));
     public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;
     public HashMap<String, NotRegisteredPlayer> namesToTempAuths = new HashMap<>();
     public HashMap<String, LoggedInPlayer> namesToLoggedInPlayers = new HashMap<>();
-
-    public static TooBeeTooTeeBot INSTANCE;
+    //BEGIN SERVER VARIABLES
+    public ArrayList<PorkClient> clients = new ArrayList<>();
+    public boolean isLoggedIn = false;
+    public HashMap<Session, PorkClient> sessionToClient = new HashMap<>();
+    public double x = 0, y = 0, z = 0;
+    public float yaw = 0, pitch = 0;
+    public boolean onGround;
+    public HashMap<Long, Column> cachedChunks = new HashMap<>();
+    //END SERVER VARIABLES
+    public Server server;
+    protected boolean hasDonePostConnect = false;
 
     public static void main(String[] args)  {
         new TooBeeTooTeeBot().start(args);
@@ -89,6 +77,8 @@ public class TooBeeTooTeeBot {
             TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_.");
             Thread.sleep(100);
             TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
+            INSTANCE.dataTag.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
+            INSTANCE.dataTag.save();
             System.exit(0);
         } catch (Exception e)   {
             e.printStackTrace();
@@ -164,10 +154,11 @@ public class TooBeeTooTeeBot {
 
     public void sendChat(String message)    {
         ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi " + message);
-        client.getSession().send(toSend);
+        //client.getSession().send(toSend);
     }
 
     public void processMsg(String playername, String message)   {
+        //TODO: limit commands per player per time
         RegisteredPlayer player = namesToRegisteredPlayers.getOrDefault(playername, null);
         if (player == null) {
             NotRegisteredPlayer tempAuth = namesToTempAuths.getOrDefault(playername, null);
@@ -194,13 +185,28 @@ public class TooBeeTooTeeBot {
             if (message.startsWith("help")) {
                 client.getSession().send(new ClientChatPacket("/msg " + playername + " Use '/msg 2pork2bot <player name> <message>' to send them a message! Visit http://www.daporkchop.net/pork2b2tbot for more info!"));
                 return;
+            } else if (message.startsWith("changepass")) {
+                String[] messageSplit = message.split(" ");
+                String sha1 = Hashing.sha1().hashString(messageSplit[1], Charsets.UTF_8).toString();
+                String sha256 = Hashing.sha256().hashString(sha1, Charsets.UTF_8).toString();
+                player.passwordHash = sha256;
+                client.getSession().send(new ClientChatPacket("/msg " + playername + " Changed password to " + messageSplit[1] + " (sha1: " + sha1 + ")"));
             } else {
                 //TODO: manage a chache of logged in users
+                String[] messageSplit = message.split(" ");
+                LoggedInPlayer loggedInPlayer = namesToLoggedInPlayers.getOrDefault(messageSplit[0], null);
+                if (loggedInPlayer == null) {
+                    client.getSession().send(new ClientChatPacket("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!"));
+                    return;
+                } else {
+                    loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + " says: " + message.substring(messageSplit[0].length() + 1));
+                    client.getSession().send(new ClientChatPacket("/msg " + playername + " Sent message to " + messageSplit[0]));
+                    return;
+                }
+                //TODO: message queue
             }
         }
     }
-
-    protected boolean hasDonePostConnect = false;
 
     public void doPostConnectSetup()    {
         try {
@@ -245,13 +251,11 @@ public class TooBeeTooTeeBot {
             }
         } catch (Exception e)   {
             e.printStackTrace();
-            System.exit(1);
         }
     }
 }
 
-/**
- * A bunch of utilities for dealing with Minecraft color codes
+/* * A bunch of utilities for dealing with Minecraft color codes
  * Totally not skidded from Nukkit
  * sorry nukkit
  * deal with it

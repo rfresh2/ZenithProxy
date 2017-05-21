@@ -1,8 +1,8 @@
 package tk.daporkchop.toobeetooteebot;
 
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-import gnu.trove.procedure.TObjectObjectProcedure;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ClientHandshake;
@@ -94,8 +94,9 @@ public class WebsocketServer extends WebSocketServer {
                 message = message.substring(8);
                 String[] split = message.split(" ");
                 String text = split[0];
-                String username = split[1];
-                String passwordHash = split[2];
+                String targetName = split[1];
+                String username = split[2];
+                String password = split[3];
                 LoggedInPlayer player = TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.getOrDefault(username, null);
                 if (player == null) {
                     RegisteredPlayer registeredPlayer = TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.getOrDefault(username, null);
@@ -110,7 +111,20 @@ public class WebsocketServer extends WebSocketServer {
                 }
 
                 if (player != null) { //doing another check in case it logged the user back in
-
+                    //String pwdH = Hashing.sha256().hashString(password, Charsets.UTF_8).toString();
+                    if (player.player.passwordHash.equals(password)) {
+                        if (player.lastSentMessage + 3000 > System.currentTimeMillis()) {
+                            conn.send("loginErrPlease slow down! Max. 1 message per 3 seconds!");
+                            return;
+                        }
+                        player.lastSentMessage = System.currentTimeMillis();
+                        conn.send("chat    " + ("§dTo " + targetName + ": " + text).replace("<", "&lt;").replace(">", "&gt;"));
+                        TooBeeTooTeeBot.INSTANCE.client.getSession().send(new ClientChatPacket("/msg " + targetName + " " + username + ": " + text));
+                        return;
+                    } else {
+                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. Invalid password sent with chat! (or you broke the script lol)");
+                        return;
+                    }
                 } else {
                     conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A message was sent for an invalid user! (or you broke the script lol)");
                     return;

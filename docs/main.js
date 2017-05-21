@@ -1,4 +1,4 @@
-var wsUri = "ws://repo.daporkchop.tk:8888";
+var wsUri = "ws://localhost:8888";
 var output;
 var shutdown = false;
 
@@ -32,6 +32,7 @@ function testWebSocket() {
     document.getElementById("chatinput").style.display = 'none';
     document.getElementById("chatsendbutton").style.display = 'none';
     document.getElementById("loggingintext").style.display = 'none';
+    document.getElementById("usernameinput").style.display = 'none';
 }
 
 function onOpen(evt) {
@@ -139,6 +140,7 @@ function onMessage(evt) {
         case "loginOk ":
             document.getElementById("loggingintext").style.display = 'none';
             document.getElementById("chatinput").style.display = '';
+            document.getElementById("usernameinput").style.display = '';
             document.getElementById("chatsendbutton").style.display = '';
             var split = evt.data.substring(8).split("\u2001");
             username = split[0];
@@ -186,9 +188,11 @@ function getIconFromPing(ping)  {
 
 function sendChat() {
     var textInput = document.getElementById("chatinput");
+    var usernameinput = document.getElementById("usernameinput");
     var toSend = textInput.value.replace(/[^\x00-\x7F]/g, ""); //remove all non-ASCII chars from string, as they'll get the bot kicked
+    var toSendname = usernameinput.value.replace(/[^\x00-\x7F]/g, ""); //remove all non-ASCII chars from string, as they'll get the bot kicked
     if (toSend.length > 0)  {
-        doSend("sendChat" + toSend + "\u2001" + username + "\u2001" + password);
+        doSend("sendChat" + toSend + "\u2001" + toSendname + "\u2001" + username + "\u2001" + password);
     }
 }
 
