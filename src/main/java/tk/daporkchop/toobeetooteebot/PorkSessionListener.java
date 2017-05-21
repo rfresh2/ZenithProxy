@@ -87,13 +87,15 @@ public class PorkSessionListener implements SessionListener {
                     bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
             } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                 ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
-                bot.timer.schedule(new TimerTask() { // respawn
-                    @Override
-                    public void run() {
-                        bot.client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
-                        bot.cachedChunks.clear(); //memory leak
-                    }
-                }, 100);
+                if (pck.getHealth() < 1) {
+                    bot.timer.schedule(new TimerTask() { // respawn
+                        @Override
+                        public void run() {
+                            bot.client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                            bot.cachedChunks.clear(); //memory leak
+                        }
+                    }, 100);
+                }
             } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
                 ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
                 switch (pck.getAction()) {

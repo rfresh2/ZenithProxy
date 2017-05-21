@@ -12,6 +12,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerSpawnPositionPacket;
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
@@ -21,9 +22,6 @@ import tk.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 
 import java.util.Collections;
 
-/**
- * Created by DaPorkchop_ on 5/14/2017.
- */
 public class PorkSessionAdapter extends SessionAdapter {
     public PorkClient client;
     public TooBeeTooTeeBot bot;
@@ -146,14 +144,17 @@ public class PorkSessionAdapter extends SessionAdapter {
 
     @Override
     public void packetSent(PacketSentEvent event) {
+        //System.out.println(event.getPacket().getClass().getCanonicalName());
         if (event.getPacket() instanceof LoginSuccessPacket) {
             client.loggedIn = true;
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
+                System.out.println(bot.cachedChunks.values().size());
                 for (Column chunk : bot.cachedChunks.values()) {
                     client.session.send(new ServerChunkDataPacket(chunk));
                 }
                 System.out.println("Sent all cached chunks!");
+                client.session.send(new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(1000) + 10));
                 client.sentChunks = true;
             }
         } else if (event.getPacket() instanceof ClientTeleportConfirmPacket) {
