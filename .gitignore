@@ -1,12 +1,7 @@
-
 \.idea/
-
 *.iml
-
 run/
-
 target/
-
 logininfo.txt
-
 sessionId.txt
+players.dat
