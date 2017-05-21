@@ -2,6 +2,9 @@ var wsUri = "ws://repo.daporkchop.tk:8888";
 var output;
 var shutdown = false;
 
+var username;
+var password;
+
 function updateScroll(){
     var element = document.getElementById("chat");
     element.scrollTop = element.scrollHeight;
@@ -26,6 +29,10 @@ function testWebSocket() {
         onError(evt)
     };
     document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...";
+    document.getElementById("chatinput").style.display = 'none';
+    document.getElementById("chatsendbutton").style.display = 'none';
+    document.getElementById("loggingintext").style.display = 'none';
+    document.getElementById("usernameinput").style.display = 'none';
 }
 
 function onOpen(evt) {
@@ -47,7 +54,7 @@ function onMessage(evt) {
     //writeToScreen(command);
     switch (command) {
         case "connect ":
-            //ignore for now, might be used later
+            document.getElementById("chat").innerHTML = "\n\n";
             break;
         case "shutdown":
             var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe've been disconnected because: <strong>" + evt.data.substring(8)+ "</strong>\n\u00A7c\u00A7lReload the page in a few seconds!";
@@ -55,20 +62,16 @@ function onMessage(evt) {
             shutdown = true;
             break;
         case "tabDiff ":
-            var split = evt.data.substring(8).split(" ");
+            var split = evt.data.substring(8).split("\u2001");
             var header = split[0];
             var footer = split[1];
-            //console.log("header: " + header);
-            //console.log("footer: " + footer);
             initParser(header, 'tabheader', true);
             initParser(footer, 'tabfooter', true);
             break;
         case "tabAdd  ":
-            var split = evt.data.substring(8).split(" ");
+            var split = evt.data.substring(8).split("\u2001");
             var name = split[0];
             var ping = parseInt(split[1]);
-
-            //console.log(name + " " + ping + "ms");
 
             var tableRef = document.getElementById('tabplayers').getElementsByTagName('tbody')[0];
             var newRow = tableRef.rows[0];
@@ -96,7 +99,7 @@ function onMessage(evt) {
             newCell.appendChild(ping);
             break;
         case "tabPing ":
-            var split = evt.data.substring(8).split(" ");
+            var split = evt.data.substring(8).split("\u2001");
             var name = split[0];
             var ping = parseInt(split[1]);
 
@@ -119,15 +122,30 @@ function onMessage(evt) {
         case "chat    ":
             var text = evt.data.substring(8);
             var oldTextSplit = document.getElementById("chat").innerHTML.split("\u2000");
-            console.log(oldTextSplit.length);
             if (oldTextSplit.length > 499)  {
                 oldTextSplit.splice(0, 1);
             }
-            console.log(oldTextSplit.length);
             oldTextSplit.push("\n" + text);
             var newText = oldTextSplit.join("\u2000");
             initParser(newText, 'chat', true);
             updateScroll();
+            break;
+        case "chatSent":
+            document.getElementById("chatinput").value = "";
+            break;
+        case "loginErr":
+            document.getElementById("loggingintext").style.display = '';
+            document.getElementById("loggingintext").innerHTML = "<br>" + evt.data.substring(8);
+            break;
+        case "loginOk ":
+            document.getElementById("loggingintext").style.display = 'none';
+            document.getElementById("chatinput").style.display = '';
+            document.getElementById("usernameinput").style.display = '';
+            document.getElementById("chatsendbutton").style.display = '';
+            var split = evt.data.substring(8).split("\u2001");
+            username = split[0];
+            password = split[1];
+            console.log("Authenticated with server! Username: " + username + " Access token: " + password);
             break;
     }
 }
@@ -166,6 +184,31 @@ function getIconFromPing(ping)  {
   } else {
     return "1bar.png";
   }
+}
+
+function sendChat() {
+    var textInput = document.getElementById("chatinput");
+    var usernameinput = document.getElementById("usernameinput");
+    var toSend = textInput.value.replace(/[^\x00-\x7F]/g, ""); //remove all non-ASCII chars from string, as they'll get the bot kicked
+    var toSendname = usernameinput.value.replace(/[^\x00-\x7F]/g, ""); //remove all non-ASCII chars from string, as they'll get the bot kicked
+    if (toSend.length > 0)  {
+        doSend("sendChat" + toSend + "\u2001" + toSendname + "\u2001" + username + "\u2001" + password);
+    }
+}
+
+function login()    {
+    var enteredUsername = document.getElementById("usernamein").value;
+    var enteredPassword = document.getElementById("passwordin").value;
+
+    var shaObj = new jsSHA("SHA-1", "TEXT");
+    shaObj.update(enteredPassword);
+    var hashedPassword = shaObj.getHash("HEX");
+
+    document.getElementById("usernamein").style.display = 'none';
+    document.getElementById("passwordin").style.display = 'none';
+    document.getElementById("loginbutton").style.display = 'none';
+    document.getElementById("loggingintext").style.display = '';
+    doSend("login   " + enteredUsername + "\u2001" + hashedPassword);
 }
 
 window.addEventListener("load", init, false);

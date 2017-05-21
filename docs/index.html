@@ -2,6 +2,7 @@
  <head>
   <title>toobeetootee</title>
   <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  <script type="text/javascript" src="hash/sha.js"></script>
  </head>
  <body>
   <div id="tablist" style="background: rgba(0,0,0,0.25);">
@@ -17,6 +18,15 @@
   <div style="height: 500px; width: 100%px; border: 0px; overflow: auto;background: rgba(0,0,0,0.45);" id="chat">
       If you can see this, something is wrong. Please report to DaPorkchop_ ASAP!
   </div>
+
+  <input type="text" id="usernameinput" value="" style="height: 40px; width: 20%">
+  <input type="text" id="chatinput" value="" style="height: 40px; width: 69%">
+  <input type="submit" value="Send" style="height: 40px; width: 8%" onclick="sendChat()" id="chatsendbutton">
+
+  <div id="loggingintext" style="height: 40px; width: 99%"><br>Logging in...</div>
+  <input type="text" id="usernamein" value="" style="height: 40px; width: 45%">
+  <input type="password" id="passwordin" value="" style="height: 40px; width: 45%">
+  <input type="submit" value="Log in" style="height: 40px; width: 8%" onclick="login()" id="loginbutton">
   
   <!-- js -->
   <script type="text/javascript" src="main.js"></script>
