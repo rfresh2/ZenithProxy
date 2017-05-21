@@ -40,7 +40,6 @@ import tk.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 
 import java.net.Proxy;
 import java.util.Iterator;
-import java.util.Timer;
 import java.util.TimerTask;
 
 /**
@@ -61,7 +60,6 @@ public class PorkSessionListener implements SessionListener {
                 String messageJson = pck.getMessage().toJsonString();
                 String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                 String msg = TextFormat.clean(legacyColorCodes);
-                System.out.println("[CHAT] " + msg);
                 if (msg.startsWith("To ")) {
                     //don't bother processing sent DMs
                     return;
@@ -80,12 +78,13 @@ public class PorkSessionListener implements SessionListener {
                     if (msg.startsWith("!toggleafk")) { //useful when manually moving bot around
                         bot.doAFK = !bot.doAFK;
                         System.out.println("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off"));
-                        bot.client.getSession().send(new ClientChatPacket("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off")));
+                        bot.queueMessage("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off"));
                     }
                     return;
                 } else if (msg.startsWith("To ")) {
                     return;
                 }
+                System.out.println("[CHAT] " + msg);
                 bot.queuedMessages.add(msg);
                 if (bot.websocketServer != null)
                     bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
@@ -95,6 +94,7 @@ public class PorkSessionListener implements SessionListener {
                     @Override
                     public void run() {
                         bot.client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                        bot.cachedChunks.clear(); //memory leak
                     }
                 }, 100);
             } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
@@ -209,91 +209,25 @@ public class PorkSessionListener implements SessionListener {
             }
         }, 20000, 500);
 
-        new Timer().schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
+        bot.timer.schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
             @Override
             public void run() { //chat
-                switch (bot.r.nextInt(30)) {
-                    case 0:
-                        bot.sendChat("Did you know? The Did you know? meme is dead!");
-                        break;
-                    case 1:
-                        bot.sendChat("Contact me on Discord for new spam message suggestions! DaPorkchop_#2459");
-                        break;
-                    case 2:
-                        bot.sendChat("Pepsi > Coke");
-                        break;
-                    case 3:
-                        bot.sendChat("Did you know? VoCo is dead!");
-                        break;
-                    case 4:
-                        bot.sendChat("Welcome to TOOBEETOOTEEDOTORG! A friendly christian survival server!");
-                        break;
-                    case 5:
-                        bot.sendChat("-- HOURLY STATS -- Average queue size: 1000 Average TPS: 0.00");
-                        break;
-                    case 6:
-                        bot.sendChat("OMG it's FeetMC!!!");
-                        break;
-                    case 7:
-                        bot.sendChat("Daily reminder that Pepsi is better than Coke");
-                        break;
-                    case 8:
-                        bot.sendChat("卐卐卐 KILL HITLER 卐卐卐");
-                        break;
-                    case 9:
-                        bot.sendChat("team vet train best faction");
-                        break;
-                    case 10:
-                        bot.sendChat("Press F3+C for 15 seconds to dupe!");
-                        break;
-                    case 11:
-                        bot.sendChat("The cactus dupe is the best dupe!");
-                        break;
-                    case 12:
-                        bot.sendChat("I just walked " + (bot.r.nextInt(75) + 3) + " blocks!");
-                        break;
-                    case 13:
-                        bot.sendChat("<insert meme here>");
-                        break;
-                    case 14:
-                        bot.sendChat("I just drank 1 Pepsi!");
-                        break;
-                    case 15:
-                        bot.sendChat("Daily reminder that pressing alt+F4 reduces lag");
-                        break;
-                    case 16:
-                        bot.sendChat("Position in queue: " + (bot.r.nextInt(130) + 93));
-                        break;
-                    case 17:
-                    case 18:
-                    case 19:
-                        bot.sendChat("I just mined " + (bot.r.nextInt(15) + 5) + " " + bot.BLOCK_NAMES[bot.r.nextInt(bot.BLOCK_NAMES.length)] + "!");
-                        break;
-                    case 20:
-                    case 21:
-                    case 22:
-                        bot.sendChat("I just placed " + (bot.r.nextInt(15) + 5) + " " + bot.BLOCK_NAMES[bot.r.nextInt(bot.BLOCK_NAMES.length)] + "!");
-                        break;
-                    case 23:
-                    case 24:
-                    case 25:
-                        bot.sendChat("I just picked up " + (bot.r.nextInt(15) + 5) + " " + bot.BLOCK_NAMES[bot.r.nextInt(bot.BLOCK_NAMES.length)] + "!");
-                        break;
-                    case 26:
-                        bot.sendChat("kekekekekekekekekekepepsibetterthancokekekekekekekekekek");
-                        break;
-                    case 27:
-                        bot.sendChat("traps are not gay");
-                        break;
-                    case 28:
-                        bot.sendChat("I have a thing for exclamation marks!");
-                        break;
-                    case 29:
-                        bot.sendChat("- Because if I want to dissolve a porkchop in soda, the choice is clear!");
-                        break;
+                if (bot.r.nextBoolean()) {
+                    bot.sendChat("Chat viewing, DM sending and more at http://www.daporkchop.net/pork2b2tbot");
+                } else {
+                    bot.sendChat("Registered users! Use \"/msg 2pork2bot help\" for info on 2pork2bot!");
                 }
             }
-        }, 30000, 10000);
+        }, 30000, 60000);
+
+        bot.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (bot.queuedIngameMessages.size() > 0) {
+                    bot.client.getSession().send(new ClientChatPacket(bot.queuedIngameMessages.remove(0)));
+                }
+            }
+        }, 30000, 950);
 
         System.out.println("Starting server...");
         Server server = new Server("0.0.0.0", 10293, MinecraftProtocol.class, new TcpSessionFactory());

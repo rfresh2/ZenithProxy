@@ -4,7 +4,6 @@ import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.message.Message;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
@@ -348,6 +347,8 @@ public class TooBeeTooTeeBot {
     public HashMap<Long, Column> cachedChunks = new HashMap<>();
     //END SERVER VARIABLES
     public Server server;
+    public ArrayList<String> queuedIngameMessages = new ArrayList<>();
+    public HashMap<String, Long> ingamePlayerCooldown = new HashMap<>();
     protected boolean hasDonePostConnect = false;
 
     public static void main(String[] args)  {
@@ -438,17 +439,24 @@ public class TooBeeTooTeeBot {
     }
 
     public void sendChat(String message)    {
-        ClientChatPacket toSend = new ClientChatPacket("> #TeamPepsi " + message);
-        //client.getSession().send(toSend);
+        queueMessage("> " + message);
+    }
+
+    public void queueMessage(String toQueue) {
+        queuedIngameMessages.add(toQueue);
     }
 
     public void processMsg(String playername, String message)   {
-        //TODO: limit commands per player per time
+        if (ingamePlayerCooldown.getOrDefault(playername, 0L) + 5000 > System.currentTimeMillis()) {
+            return;
+        } else {
+            ingamePlayerCooldown.put(playername, System.currentTimeMillis());
+        }
         RegisteredPlayer player = namesToRegisteredPlayers.getOrDefault(playername, null);
         if (player == null) {
             NotRegisteredPlayer tempAuth = namesToTempAuths.getOrDefault(playername, null);
             if (tempAuth == null)   {
-                client.getSession().send(new ClientChatPacket("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!"));
+                queueMessage("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!");
                 return;
             } else if (message.startsWith("register")) {
                 message = message.substring(9);
@@ -459,36 +467,34 @@ public class TooBeeTooTeeBot {
                     namesToTempAuths.remove(tempAuth.name);
                     namesToRegisteredPlayers.put(tempAuth.name, newPlayer);
                     dataTag.setSerializable("registeredPlayers", namesToRegisteredPlayers);
-                    client.getSession().send(new ClientChatPacket("/msg " + playername + " Successfully registered! You can now use your username and password on the website!"));
+                    queueMessage("/msg " + playername + " Successfully registered! You can now use your username and password on the website!");
                     return;
                 } else {
-                    client.getSession().send(new ClientChatPacket("/msg " + playername + " Incorrect authentication UUID!"));
+                    queueMessage("/msg " + playername + " Incorrect authentication UUID!");
                     return;
                 }
             }
         } else {
             if (message.startsWith("help")) {
-                client.getSession().send(new ClientChatPacket("/msg " + playername + " Use '/msg 2pork2bot <player name> <message>' to send them a message! Visit http://www.daporkchop.net/pork2b2tbot for more info!"));
+                queueMessage("/msg " + playername + " Use '/msg 2pork2bot <player name> <message>' to send them a message! Visit http://www.daporkchop.net/pork2b2tbot for more info!");
                 return;
             } else if (message.startsWith("changepass")) {
                 String[] messageSplit = message.split(" ");
                 String sha1 = Hashing.sha1().hashString(messageSplit[1], Charsets.UTF_8).toString();
                 String sha256 = Hashing.sha256().hashString(sha1, Charsets.UTF_8).toString();
                 player.passwordHash = sha256;
-                client.getSession().send(new ClientChatPacket("/msg " + playername + " Changed password to " + messageSplit[1] + " (sha1: " + sha1 + ")"));
+                queueMessage("/msg " + playername + " Changed password to " + messageSplit[1] + " (sha1: " + sha1 + ")");
             } else {
-                //TODO: manage a chache of logged in users
                 String[] messageSplit = message.split(" ");
                 LoggedInPlayer loggedInPlayer = namesToLoggedInPlayers.getOrDefault(messageSplit[0], null);
                 if (loggedInPlayer == null) {
-                    client.getSession().send(new ClientChatPacket("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!"));
+                    queueMessage("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!");
                     return;
                 } else {
                     loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + " says: " + message.substring(messageSplit[0].length() + 1));
-                    client.getSession().send(new ClientChatPacket("/msg " + playername + " Sent message to " + messageSplit[0]));
+                    queueMessage("/msg " + playername + " Sent message to " + messageSplit[0]);
                     return;
                 }
-                //TODO: message queue
             }
         }
     }

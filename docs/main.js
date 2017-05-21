@@ -1,4 +1,4 @@
-var wsUri = "ws://localhost:8888";
+var wsUri = "ws://repo.daporkchop.tk:8888";
 var output;
 var shutdown = false;
 
@@ -54,7 +54,7 @@ function onMessage(evt) {
     //writeToScreen(command);
     switch (command) {
         case "connect ":
-            //ignore for now, might be used later
+            document.getElementById("chat").innerHTML = "\n\n";
             break;
         case "shutdown":
             var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe've been disconnected because: <strong>" + evt.data.substring(8)+ "</strong>\n\u00A7c\u00A7lReload the page in a few seconds!";

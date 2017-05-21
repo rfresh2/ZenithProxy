@@ -1,6 +1,5 @@
 package tk.daporkchop.toobeetooteebot;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.java_websocket.WebSocket;
@@ -113,13 +112,14 @@ public class WebsocketServer extends WebSocketServer {
                 if (player != null) { //doing another check in case it logged the user back in
                     //String pwdH = Hashing.sha256().hashString(password, Charsets.UTF_8).toString();
                     if (player.player.passwordHash.equals(password)) {
-                        if (player.lastSentMessage + 3000 > System.currentTimeMillis()) {
-                            conn.send("loginErrPlease slow down! Max. 1 message per 3 seconds!");
+                        if (player.lastSentMessage + 5000 > System.currentTimeMillis()) {
+                            conn.send("loginErrPlease slow down! Max. 1 message per 5 seconds!");
                             return;
                         }
                         player.lastSentMessage = System.currentTimeMillis();
                         conn.send("chat    " + ("§dTo " + targetName + ": " + text).replace("<", "&lt;").replace(">", "&gt;"));
-                        TooBeeTooTeeBot.INSTANCE.client.getSession().send(new ClientChatPacket("/msg " + targetName + " " + username + ": " + text));
+                        conn.send("chatSent");
+                        TooBeeTooTeeBot.INSTANCE.queueMessage("/msg " + targetName + " " + username + ": " + text);
                         return;
                     } else {
                         conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. Invalid password sent with chat! (or you broke the script lol)");
