@@ -138,7 +138,8 @@ public class PorkSessionListener implements SessionListener {
                                 TabListPlayer player = bot.playerListEntries.get(i);
                                 if (uuid.equals(player.uuid)) {
                                     removalIndex = i;
-                                    bot.websocketServer.sendToAll("tabDel  " + player.name);
+                                    if (bot.websocketServer != null)
+                                        bot.websocketServer.sendToAll("tabDel  " + player.name);
                                     break;
                                 }
                             }
@@ -154,7 +155,9 @@ public class PorkSessionListener implements SessionListener {
                 bot.tabFooter = pck.getFooter();
                 String header = bot.tabHeader.getFullText();
                 String footer = bot.tabFooter.getFullText();
-                bot.websocketServer.sendToAll("tabDiff " + header + " " + footer);
+                if (bot.websocketServer != null) {
+                    bot.websocketServer.sendToAll("tabDiff " + header + " " + footer);
+                }
             } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerPositionRotationPacket) {
                 ServerPlayerPositionRotationPacket pck = (ServerPlayerPositionRotationPacket) packetReceivedEvent.getPacket();
                 bot.x = pck.getX();
@@ -256,7 +259,8 @@ public class PorkSessionListener implements SessionListener {
     public void disconnecting(DisconnectingEvent disconnectingEvent) {
         System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
-        bot.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
+        if (bot.websocketServer != null)
+            bot.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
         TooBeeTooTeeBot.INSTANCE.dataTag.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
         TooBeeTooTeeBot.INSTANCE.dataTag.save();
         System.exit(0);
@@ -266,7 +270,8 @@ public class PorkSessionListener implements SessionListener {
     public void disconnected(DisconnectedEvent disconnectedEvent) {
         System.out.println("Disconnected.");
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
-        bot.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
+        if (bot.websocketServer != null)
+            bot.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
         TooBeeTooTeeBot.INSTANCE.dataTag.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
         TooBeeTooTeeBot.INSTANCE.dataTag.save();
         System.exit(0);

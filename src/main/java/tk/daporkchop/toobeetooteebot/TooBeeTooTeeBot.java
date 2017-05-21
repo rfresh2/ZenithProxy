@@ -360,9 +360,11 @@ public class TooBeeTooTeeBot {
             if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
                 TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("Forced reboot by DaPorkchop_.");
             }
-            TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_.");
+            if (TooBeeTooTeeBot.INSTANCE.websocketServer != null)
+                TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_.");
             Thread.sleep(100);
-            TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
+            if (TooBeeTooTeeBot.INSTANCE.websocketServer != null)
+                TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
             INSTANCE.dataTag.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
             INSTANCE.dataTag.save();
             System.exit(0);
