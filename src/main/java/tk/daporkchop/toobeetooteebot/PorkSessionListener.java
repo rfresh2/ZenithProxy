@@ -278,6 +278,11 @@ public class PorkSessionListener implements SessionListener {
         TooBeeTooTeeBot.INSTANCE.loginData.save();
         TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
         TooBeeTooTeeBot.INSTANCE.playData.save();
+        try {
+        	Thread.sleep(5000);
+        } catch (InterruptedExcpetion e) {
+        	
+        }
         System.exit(0);
     }
 
@@ -291,6 +296,11 @@ public class PorkSessionListener implements SessionListener {
         TooBeeTooTeeBot.INSTANCE.loginData.save();
         TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
         TooBeeTooTeeBot.INSTANCE.playData.save();
+        try {
+        	Thread.sleep(5000);
+        } catch (InterruptedExcpetion e) {
+        	
+        }
         System.exit(0);
     }
 }
