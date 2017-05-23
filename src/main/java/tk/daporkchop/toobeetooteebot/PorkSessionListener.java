@@ -285,7 +285,7 @@ public class PorkSessionListener implements SessionListener {
         TooBeeTooTeeBot.INSTANCE.playData.save();
         try {
         	Thread.sleep(5000);
-        } catch (InterruptedExcpetion e) {
+        } catch (InterruptedException e) {
         	
         }
         System.exit(0);
@@ -303,7 +303,7 @@ public class PorkSessionListener implements SessionListener {
         TooBeeTooTeeBot.INSTANCE.playData.save();
         try {
         	Thread.sleep(5000);
-        } catch (InterruptedExcpetion e) {
+        } catch (InterruptedException e) {
         	
         }
         System.exit(0);
