@@ -219,7 +219,7 @@ public class PorkSessionListener implements SessionListener {
                     } else {
                         float yaw = -90 + (90 - -90) * bot.r.nextFloat();
                         float pitch = -90 + (90 - -90) * bot.r.nextFloat();
-                        bot.client.getSession().send(new ClientPlayerRotationPacket(false, yaw, pitch));
+                        bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
                     }
                 }
             }
