@@ -394,6 +394,11 @@ public class TooBeeTooTeeBot {
         return minutesToNextHour * 60 * 1000 + secondsToNextHour * 1000 + millisToNextHour;
     }
 
+    public static int ensureRange(int value, int min, int max) {
+        int toReturn = Math.min(Math.max(value, min), max);
+        return toReturn;
+    }
+
     public void start(String[] args)    {
         INSTANCE = this;
         try {
@@ -571,38 +576,6 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
                 TooBeeTooTeeBot.INSTANCE.websocketServer.start();
 
-                jda = new JDABuilder(AccountType.BOT)
-                        .setToken(token)
-                        .buildBlocking();
-                channel = jda.getTextChannelById("305346913488863243");
-
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (queuedMessages.size() > 0) {
-                            StringBuilder builder = new StringBuilder();
-                            Iterator<String> iter = queuedMessages.iterator();
-                            iter.hasNext(); //idk lol
-                            while (builder.length() < 2001) {
-                                StringBuilder copiedBuilder = new StringBuilder(builder.toString());
-                                copiedBuilder.append(iter.next() + "\n");
-                                if (builder.length() > 2000) {
-                                    channel.sendMessage(copiedBuilder.toString()).queue();
-                                    queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                                    return;
-                                } else {
-                                    builder = copiedBuilder;
-                                }
-                                if (!iter.hasNext()) {
-                                    break;
-                                }
-                            }
-                            channel.sendMessage(builder.toString()).queue();
-                            queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                        }
-                    }
-                }, 2000, 2000);
-                hasDonePostConnect = true;
                 Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MILLIS);
                 timer.schedule(new TimerTask() {
                     @Override
@@ -640,6 +613,39 @@ public class TooBeeTooTeeBot {
                         }
                     }
                 }, nextHour, 60 * 60 * 1000);
+
+                jda = new JDABuilder(AccountType.BOT)
+                        .setToken(token)
+                        .buildBlocking();
+                channel = jda.getTextChannelById("305346913488863243");
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (queuedMessages.size() > 0) {
+                            StringBuilder builder = new StringBuilder();
+                            Iterator<String> iter = queuedMessages.iterator();
+                            iter.hasNext(); //idk lol
+                            while (builder.length() < 2001) {
+                                StringBuilder copiedBuilder = new StringBuilder(builder.toString());
+                                copiedBuilder.append(iter.next() + "\n");
+                                if (builder.length() > 2000) {
+                                    channel.sendMessage(copiedBuilder.toString()).queue();
+                                    queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
+                                    return;
+                                } else {
+                                    builder = copiedBuilder;
+                                }
+                                if (!iter.hasNext()) {
+                                    break;
+                                }
+                            }
+                            channel.sendMessage(builder.toString()).queue();
+                            queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
+                        }
+                    }
+                }, 2000, 2000);
+                hasDonePostConnect = true;
             }
         } catch (Exception e)   {
             e.printStackTrace();
