@@ -1,6 +1,7 @@
 package tk.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.auth.exception.request.RequestException;
+import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.message.Message;
@@ -19,9 +20,10 @@ import tk.daporkchop.toobeetooteebot.server.PorkClient;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.net.Proxy;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -353,9 +355,10 @@ public class TooBeeTooTeeBot {
     public Server server;
     public ArrayList<String> queuedIngameMessages = new ArrayList<>();
     public HashMap<String, Long> ingamePlayerCooldown = new HashMap<>();
-    protected boolean hasDonePostConnect = false;
     public DataTag playData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "online.dat"));
     public HashMap<String, PlayData> uuidsToPlayData;
+    public String clientId;
+    protected boolean hasDonePostConnect = false;
 
     public static void main(String[] args)  {
         new TooBeeTooTeeBot().start(args);
@@ -381,6 +384,16 @@ public class TooBeeTooTeeBot {
         }
     }
 
+    public static long millisToNextHour(Calendar calendar) {
+        int minutes = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+        int millis = calendar.get(Calendar.MILLISECOND);
+        int minutesToNextHour = 60 - minutes;
+        int secondsToNextHour = 60 - seconds;
+        int millisToNextHour = 1000 - millis;
+        return minutesToNextHour * 60 * 1000 + secondsToNextHour * 1000 + millisToNextHour;
+    }
+
     public void start(String[] args)    {
         INSTANCE = this;
         try {
@@ -394,6 +407,17 @@ public class TooBeeTooTeeBot {
                 TooBeeTooTeeBot.INSTANCE.port = Integer.parseInt(scanner.nextLine().trim());
                 scanner.close();
 
+                File clientId = new File(System.getProperty("user.dir") + File.separator + "clientId.txt");
+                if (clientId.exists()) {
+                    scanner = new Scanner(clientId);
+                    TooBeeTooTeeBot.INSTANCE.clientId = scanner.nextLine().trim();
+                    scanner.close();
+                } else {
+                    PrintWriter writer = new PrintWriter(clientId, "UTF-8");
+                    writer.println(TooBeeTooTeeBot.INSTANCE.clientId = UUID.randomUUID().toString());
+                    writer.close();
+                }
+
                 namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
                 uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
 
@@ -404,42 +428,71 @@ public class TooBeeTooTeeBot {
                     }
                 }, 10000);
             }
+            ESCAPE:
+            if (protocol == null) {
+                if (doAuth) {
+                    File sessionIdCache = new File(System.getProperty("user.dir") + File.separator + "sessionId.txt");
+                    if (sessionIdCache.exists()) {
+                        System.out.println("Attempting to log in with session ID");
+                        Scanner s = new Scanner(sessionIdCache);
+                        String sessionID = s.nextLine().trim();
+                        s.close();
+                        System.out.println("Session ID: " + sessionID);
+                        try {
+                            protocol = new MinecraftProtocol(username); //create random thing because we need to handle login ourselves
+                            AuthenticationService auth = new AuthenticationService(clientId, Proxy.NO_PROXY);
+                            auth.setUsername(username);
+                            auth.setAccessToken(sessionID);
 
-            if (doAuth) {
-                File sessionIdCache = new File(System.getProperty("user.dir") + File.separator + "sessionId.txt");
-                if (sessionIdCache.exists())    {
-                    System.out.println("Attempting to log in with session ID");
-                    Scanner s = new Scanner(sessionIdCache);
-                    String sessionID = s.nextLine().trim();
-                    s.close();
-                    System.out.println("Session ID: " + sessionID);
-                    try {
-                        protocol = new MinecraftProtocol(username, sessionID, true);
-                    } catch (RequestException e)    {
-                        System.out.println("Bad/expired session ID, attempting login with username and password");
+                            auth.login();
+
+                            Field profile = MinecraftProtocol.class.getDeclaredField("profile");
+                            Field accessToken = MinecraftProtocol.class.getDeclaredField("accessToken");
+                            profile.setAccessible(true);
+                            accessToken.setAccessible(true);
+                            profile.set(protocol, auth.getSelectedProfile());
+                            accessToken.set(protocol, auth.getAccessToken());
+                            System.out.println("Done! Account name: " + protocol.getProfile().getName() + ", session ID:" + protocol.getAccessToken());
+                            break ESCAPE;
+                        } catch (RequestException e) {
+                            System.out.println("Bad/expired session ID, attempting login with username and password");
+
+                            protocol = new MinecraftProtocol(username); //create random thing because we need to handle login ourselves
+                            AuthenticationService auth = new AuthenticationService(clientId, Proxy.NO_PROXY);
+                            auth.setUsername(username);
+                            auth.setPassword(password);
+
+                            auth.login();
+
+                            Field profile = MinecraftProtocol.class.getDeclaredField("profile");
+                            Field accessToken = MinecraftProtocol.class.getDeclaredField("accessToken");
+                            profile.setAccessible(true);
+                            accessToken.setAccessible(true);
+                            profile.set(protocol, auth.getSelectedProfile());
+                            accessToken.set(protocol, auth.getAccessToken());
+                            System.out.println("Logged in with credentials " + username + ":" + password);
+                            System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
+                            PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
+                            writer.println(protocol.getAccessToken());
+                            writer.close();
+                            break ESCAPE;
+                        }
+                    } else {
+                        System.out.println("Attempting login with username and password...");
                         protocol = new MinecraftProtocol(username, password);
 
                         System.out.println("Logged in with credentials " + username + ":" + password);
-                        System.out.println("Saving session ID: " + sessionID + " to disk");
+                        System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
                         PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
                         writer.println(protocol.getAccessToken());
                         writer.close();
                     }
                 } else {
-                    System.out.println("Attempting login with username and password...");
-                    protocol = new MinecraftProtocol(username, password);
-
-                    System.out.println("Logged in with credentials " + username + ":" + password);
-                    System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
-                    PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
-                    writer.println(protocol.getAccessToken());
-                    writer.close();
+                    System.out.println("Logging in with cracked account, username: " + username);
+                    protocol = new MinecraftProtocol(username);
                 }
-            } else {
-                System.out.println("Loggin in with cracked account, username: " + username);
-                protocol = new MinecraftProtocol(username);
+                System.out.println("Success!");
             }
-            System.out.println("Success!");
 
             client = new Client(ip, port, protocol, new TcpSessionFactory());
             client.getSession().addListener(new PorkSessionListener(this));
@@ -591,15 +644,5 @@ public class TooBeeTooTeeBot {
         } catch (Exception e)   {
             e.printStackTrace();
         }
-    }
-
-    public static long millisToNextHour(Calendar calendar) {
-        int minutes = calendar.get(Calendar.MINUTE);
-        int seconds = calendar.get(Calendar.SECOND);
-        int millis = calendar.get(Calendar.MILLISECOND);
-        int minutesToNextHour = 60 - minutes;
-        int secondsToNextHour = 60 - seconds;
-        int millisToNextHour = 1000 - millis;
-        return minutesToNextHour * 60 * 1000 + secondsToNextHour * 1000 + millisToNextHour;
     }
 }
