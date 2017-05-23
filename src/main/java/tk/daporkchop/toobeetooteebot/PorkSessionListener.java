@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
+import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
@@ -26,6 +27,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDa
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUnloadChunkPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTimePacket;
@@ -192,6 +194,9 @@ public class PorkSessionListener implements SessionListener {
                     bot.server.bind(true);
                     System.out.println("Started server!");
                 }
+            } else if (packetReceivedEvent.getPacket() instanceof ServerBlockChangePacket) {
+                ServerBlockChangePacket pck = (ServerBlockChangePacket) packetReceivedEvent.getPacket();
+                Column chunk = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(pck.getRecord().getPosition().getX() >> 4, pck.getRecord().getPosition().getZ() >> 4), null);
             }
             Iterator<PorkClient> iterator = bot.clients.iterator();
             while (iterator.hasNext()) {
