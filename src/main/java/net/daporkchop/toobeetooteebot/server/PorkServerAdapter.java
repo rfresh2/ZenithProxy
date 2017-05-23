@@ -1,9 +1,9 @@
-package tk.daporkchop.toobeetooteebot.server;
+package net.daporkchop.toobeetooteebot.server;
 
 import com.github.steveice10.packetlib.event.server.ServerAdapter;
 import com.github.steveice10.packetlib.event.server.SessionAddedEvent;
 import com.github.steveice10.packetlib.event.server.SessionRemovedEvent;
-import tk.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
+import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 
 public class PorkServerAdapter extends ServerAdapter {
     public TooBeeTooTeeBot bot;

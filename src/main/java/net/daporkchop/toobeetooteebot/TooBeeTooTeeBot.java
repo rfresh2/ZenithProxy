@@ -1,4 +1,4 @@
-package tk.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
@@ -12,11 +12,11 @@ import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
+import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
-import tk.daporkchop.toobeetooteebot.server.PorkClient;
 
 import java.io.File;
 import java.io.PrintWriter;

@@ -1,4 +1,4 @@
-package tk.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot;
 
 import java.io.Serializable;
 

@@ -1,4 +1,8 @@
-package tk.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,10 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
-
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("deprecation")
 public class HTTPUtils {

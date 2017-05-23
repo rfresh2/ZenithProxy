@@ -1,4 +1,4 @@
-package tk.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;

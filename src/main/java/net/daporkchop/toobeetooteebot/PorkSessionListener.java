@@ -1,4 +1,4 @@
-package tk.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
@@ -34,10 +34,10 @@ import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import net.daporkchop.toobeetooteebot.server.PorkClient;
+import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import tk.daporkchop.toobeetooteebot.server.PorkClient;
-import tk.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 
 import java.net.Proxy;
 import java.util.Iterator;

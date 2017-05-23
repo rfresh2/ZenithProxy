@@ -1,4 +1,4 @@
-package tk.daporkchop.toobeetooteebot.server;
+package net.daporkchop.toobeetooteebot.server;
 
 import com.github.steveice10.packetlib.Session;
 

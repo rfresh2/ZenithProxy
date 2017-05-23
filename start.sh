@@ -29,7 +29,7 @@ sleep 2
 clear 
 
 while [ "$DO_LOOP" == "true" ]; do
-	mvn exec:java -Dexec.mainClass="tk.daporkchop.toobeetooteebot.TooBeeTooTeeBot" -Dexec.classpathScope=runtime
+	mvn exec:java -Dexec.mainClass="TooBeeTooTeeBot" -Dexec.classpathScope=runtime
 	echo "Press Ctrl+c to stop" 
 	sleep 0.5
     if git pull | grep -q 'Already up-to-date.'; then
