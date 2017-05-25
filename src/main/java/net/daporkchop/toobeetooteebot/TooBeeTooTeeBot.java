@@ -37,7 +37,7 @@ public class TooBeeTooTeeBot {
     public Timer timer = new Timer();
     public JDA jda;
     public TextChannel channel;
-    public ArrayList<String> queuedMessages = new ArrayList<>();
+    public ArrayList<String> queuedMessages = null;
     public boolean firstRun = true;
     public WebsocketServer websocketServer;
     public Message tabHeader;
@@ -70,7 +70,7 @@ public class TooBeeTooTeeBot {
         try {
             Scanner scanner = new Scanner(System.in);
 
-            String whatever = scanner.nextLine();
+            scanner.nextLine();
             if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
                 TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("Forced reboot by DaPorkchop_.");
             }
@@ -79,10 +79,14 @@ public class TooBeeTooTeeBot {
             Thread.sleep(100);
             if (TooBeeTooTeeBot.INSTANCE.websocketServer != null)
                 TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
-            INSTANCE.loginData.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
-            INSTANCE.loginData.save();
-            INSTANCE.playData.setSerializable("uuidsToPlayData", INSTANCE.uuidsToPlayData);
-            INSTANCE.playData.save();
+            if (Config.doWebsocket) {
+                INSTANCE.loginData.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
+                INSTANCE.loginData.save();
+            }
+            if (Config.doStatCollection) {
+                INSTANCE.playData.setSerializable("uuidsToPlayData", INSTANCE.uuidsToPlayData);
+                INSTANCE.playData.save();
+            }
             System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,28 +112,15 @@ public class TooBeeTooTeeBot {
         INSTANCE = this;
         try {
             if (firstRun) {
-                Scanner scanner = new Scanner(new File(System.getProperty("user.dir") + File.separator + "logininfo.txt"));
-                Config.username = scanner.nextLine().trim();
-                Config.password = scanner.nextLine().trim();
-                Config.token = scanner.nextLine().trim();
-                Config.doAuth = Boolean.parseBoolean(scanner.nextLine().trim());
-                Config.ip = scanner.nextLine().trim();
-                Config.port = Integer.parseInt(scanner.nextLine().trim());
-                scanner.close();
-
-                File clientId = new File(System.getProperty("user.dir") + File.separator + "clientId.txt");
-                if (clientId.exists()) {
-                    scanner = new Scanner(clientId);
-                    Config.clientId = scanner.nextLine().trim();
-                    scanner.close();
-                } else {
-                    PrintWriter writer = new PrintWriter(clientId, "UTF-8");
-                    writer.println(Config.clientId = UUID.randomUUID().toString());
-                    writer.close();
+                if (Config.doWebsocket) {
+                    namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
                 }
-
-                namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
-                uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
+                if (Config.doStatCollection) {
+                    uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
+                }
+                if (Config.doDiscord) {
+                    queuedMessages = new ArrayList<>();
+                }
 
                 timer.schedule(new TimerTask() {
                     @Override
@@ -278,78 +269,84 @@ public class TooBeeTooTeeBot {
     public void doPostConnectSetup() {
         try {
             if (!hasDonePostConnect) {
-                TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
-                TooBeeTooTeeBot.INSTANCE.websocketServer.start();
+                if (Config.doWebsocket) {
+                    TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(Config.websocketPort);
+                    TooBeeTooTeeBot.INSTANCE.websocketServer.start();
+                }
 
-                Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MILLIS);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        long currentTime = System.currentTimeMillis();
-                        Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
-                        while (iterator.hasNext()) {
-                            Map.Entry<String, PlayData> entry = iterator.next();
-                            PlayData data = entry.getValue();
-                            if (currentTime - data.lastPlayed >= 2592000000L) { //one month
-                                iterator.remove();
-                                continue;
-                            }
-                            for (int i = data.playTimeByDay.length - 1; i >= 0; i--) {
-                                data.playTimeByDay[i + 1] = data.playTimeByDay[i];
-                            }
-                            data.playTimeByDay[0] = 0;
-                        }
-                    }
-                }, midnight, 1440 * 60 * 60 * 1000);
-
-                Long nextHour = millisToNextHour(Calendar.getInstance());
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        long currentTime = System.currentTimeMillis();
-                        Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
-                        while (iterator.hasNext()) {
-                            Map.Entry<String, PlayData> entry = iterator.next();
-                            PlayData data = entry.getValue();
-                            for (int i = data.playTimeByHour.length - 1; i >= 0; i--) {
-                                data.playTimeByHour[i + 1] = data.playTimeByHour[i];
-                            }
-                            data.playTimeByHour[0] = 0;
-                        }
-                    }
-                }, nextHour, 60 * 60 * 1000);
-
-                jda = new JDABuilder(AccountType.BOT)
-                        .setToken(Config.token)
-                        .buildBlocking();
-                channel = jda.getTextChannelById("305346913488863243");
-
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (queuedMessages.size() > 0) {
-                            StringBuilder builder = new StringBuilder();
-                            Iterator<String> iter = queuedMessages.iterator();
-                            iter.hasNext(); //idk lol
-                            while (builder.length() < 2001) {
-                                StringBuilder copiedBuilder = new StringBuilder(builder.toString());
-                                copiedBuilder.append(iter.next() + "\n");
-                                if (builder.length() > 2000) {
-                                    channel.sendMessage(copiedBuilder.toString()).queue();
-                                    queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                                    return;
-                                } else {
-                                    builder = copiedBuilder;
+                if (Config.doStatCollection) {
+                    Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MILLIS);
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            long currentTime = System.currentTimeMillis();
+                            Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
+                            while (iterator.hasNext()) {
+                                Map.Entry<String, PlayData> entry = iterator.next();
+                                PlayData data = entry.getValue();
+                                if (currentTime - data.lastPlayed >= 2592000000L) { //one month
+                                    iterator.remove();
+                                    continue;
                                 }
-                                if (!iter.hasNext()) {
-                                    break;
+                                for (int i = data.playTimeByDay.length - 1; i >= 0; i--) {
+                                    data.playTimeByDay[i + 1] = data.playTimeByDay[i];
                                 }
+                                data.playTimeByDay[0] = 0;
                             }
-                            channel.sendMessage(builder.toString()).queue();
-                            queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
                         }
-                    }
-                }, 2000, 2000);
+                    }, midnight, 1440 * 60 * 60 * 1000);
+
+                    Long nextHour = millisToNextHour(Calendar.getInstance());
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            long currentTime = System.currentTimeMillis();
+                            Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
+                            while (iterator.hasNext()) {
+                                Map.Entry<String, PlayData> entry = iterator.next();
+                                PlayData data = entry.getValue();
+                                for (int i = data.playTimeByHour.length - 1; i >= 0; i--) {
+                                    data.playTimeByHour[i + 1] = data.playTimeByHour[i];
+                                }
+                                data.playTimeByHour[0] = 0;
+                            }
+                        }
+                    }, nextHour, 60 * 60 * 1000);
+                }
+
+                if (Config.doDiscord) {
+                    jda = new JDABuilder(AccountType.BOT)
+                            .setToken(Config.token)
+                            .buildBlocking();
+                    channel = jda.getTextChannelById("305346913488863243");
+
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (queuedMessages.size() > 0) {
+                                StringBuilder builder = new StringBuilder();
+                                Iterator<String> iter = queuedMessages.iterator();
+                                iter.hasNext(); //idk lol
+                                while (builder.length() < 2001) {
+                                    StringBuilder copiedBuilder = new StringBuilder(builder.toString());
+                                    copiedBuilder.append(iter.next() + "\n");
+                                    if (builder.length() > 2000) {
+                                        channel.sendMessage(copiedBuilder.toString()).queue();
+                                        queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
+                                        return;
+                                    } else {
+                                        builder = copiedBuilder;
+                                    }
+                                    if (!iter.hasNext()) {
+                                        break;
+                                    }
+                                }
+                                channel.sendMessage(builder.toString()).queue();
+                                queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
+                            }
+                        }
+                    }, 2000, 2000);
+                }
                 hasDonePostConnect = true;
             }
         } catch (Exception e) {

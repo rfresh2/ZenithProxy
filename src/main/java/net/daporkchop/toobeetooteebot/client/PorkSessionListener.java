@@ -66,44 +66,49 @@ public class PorkSessionListener implements SessionListener {
                     String messageJson = pck.getMessage().toJsonString();
                     String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                     String msg = TextFormat.clean(legacyColorCodes);
-                    if (msg.startsWith("To ")) {
-                        //don't bother processing sent DMs
-                        return;
-                    }
-                    try {
-                        String[] split = msg.split(" ");
-                        if (!msg.startsWith("<") && split[1].startsWith("whispers")) {
-                            bot.processMsg(split[0], msg.substring(split[0].length() + split[1].length() + 2));
+                    if (Config.processChat) {
+                        if (msg.startsWith("To ")) {
+                            //don't bother processing sent DMs
                             return;
                         }
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        //ignore kek
+                        try {
+                            String[] split = msg.split(" ");
+                            if (!msg.startsWith("<") && split[1].startsWith("whispers")) {
+                                bot.processMsg(split[0], msg.substring(split[0].length() + split[1].length() + 2));
+                                return;
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            //ignore kek
+                        }
                     }
 
-                    if (msg.startsWith("!")) { //command from PorkProxy
+                    if (msg.startsWith("!")) { //command from connected user
                         if (msg.startsWith("!toggleafk")) { //useful when manually moving bot around
                             bot.doAFK = !bot.doAFK;
                             System.out.println("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off"));
                             bot.queueMessage("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off"));
                         }
                         return;
-                    } else if (msg.startsWith("To ")) {
-                        return;
                     }
                     System.out.println("[CHAT] " + msg);
-                    bot.queuedMessages.add(msg);
-                    if (bot.websocketServer != null)
+                    if (Config.doDiscord) {
+                        bot.queuedMessages.add(msg);
+                    }
+                    if (bot.websocketServer != null) {
                         bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
+                    }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                     ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
-                    if (pck.getHealth() < 1) {
-                        bot.timer.schedule(new TimerTask() { // respawn
-                            @Override
-                            public void run() {
-                                bot.client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
-                                bot.cachedChunks.clear(); //memory leak
-                            }
-                        }, 100);
+                    if (Config.doAutoRespawn) {
+                        if (pck.getHealth() < 1) {
+                            bot.timer.schedule(new TimerTask() { // respawn
+                                @Override
+                                public void run() {
+                                    bot.client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                                    bot.cachedChunks.clear(); //memory leak
+                                }
+                            }, 100);
+                        }
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
                     ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
@@ -115,14 +120,17 @@ public class PorkSessionListener implements SessionListener {
                                 }
                                 TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
                                 bot.playerListEntries.add(player);
-                                if (bot.websocketServer != null)
+                                if (bot.websocketServer != null) {
                                     bot.websocketServer.sendToAll("tabAdd  " + player.name + " " + player.ping);
-                                if (bot.uuidsToPlayData.containsKey(player.uuid)) {
-                                    PlayData data = bot.uuidsToPlayData.get(player.uuid);
-                                    data.lastPlayed = System.currentTimeMillis();
-                                } else {
-                                    PlayData data = new PlayData(player.uuid, player.name);
-                                    bot.uuidsToPlayData.put(data.UUID, data);
+                                }
+                                if (Config.doStatCollection) {
+                                    if (bot.uuidsToPlayData.containsKey(player.uuid)) {
+                                        PlayData data = bot.uuidsToPlayData.get(player.uuid);
+                                        data.lastPlayed = System.currentTimeMillis();
+                                    } else {
+                                        PlayData data = new PlayData(player.uuid, player.name);
+                                        bot.uuidsToPlayData.put(data.UUID, data);
+                                    }
                                 }
                             }
                             break;
@@ -135,13 +143,16 @@ public class PorkSessionListener implements SessionListener {
                                 for (TabListPlayer toChange : bot.playerListEntries) {
                                     if (uuid.equals(toChange.uuid)) {
                                         toChange.ping = entry.getPing();
-                                        if (bot.websocketServer != null)
+                                        if (bot.websocketServer != null) {
                                             bot.websocketServer.sendToAll("tabPing " + toChange.name + " " + toChange.ping);
-                                        for (PlayData playData : bot.uuidsToPlayData.values()) {
-                                            int playTimeDifference = (int) (System.currentTimeMillis() - playData.lastPlayed);
-                                            playData.playTimeByHour[0] += playTimeDifference;
-                                            playData.playTimeByDay[0] += playTimeDifference;
-                                            playData.lastPlayed = System.currentTimeMillis();
+                                        }
+                                        if (Config.doStatCollection) {
+                                            for (PlayData playData : bot.uuidsToPlayData.values()) {
+                                                int playTimeDifference = (int) (System.currentTimeMillis() - playData.lastPlayed);
+                                                playData.playTimeByHour[0] += playTimeDifference;
+                                                playData.playTimeByDay[0] += playTimeDifference;
+                                                playData.lastPlayed = System.currentTimeMillis();
+                                            }
                                         }
                                         break;
                                     }
@@ -159,9 +170,12 @@ public class PorkSessionListener implements SessionListener {
                                     TabListPlayer player = bot.playerListEntries.get(i);
                                     if (uuid.equals(player.uuid)) {
                                         removalIndex = i;
-                                        if (bot.websocketServer != null)
+                                        if (bot.websocketServer != null) {
                                             bot.websocketServer.sendToAll("tabDel  " + player.name);
-                                        bot.uuidsToPlayData.get(uuid).lastPlayed = System.currentTimeMillis();
+                                        }
+                                        if (Config.doStatCollection) {
+                                            bot.uuidsToPlayData.get(uuid).lastPlayed = System.currentTimeMillis();
+                                        }
                                         break;
                                     }
                                 }
@@ -189,11 +203,15 @@ public class PorkSessionListener implements SessionListener {
                     bot.pitch = pck.getPitch();
                     bot.client.getSession().send(new ClientTeleportConfirmPacket(pck.getTeleportId()));
                 } else if (packetReceivedEvent.getPacket() instanceof ServerChunkDataPacket) {
-                    ServerChunkDataPacket pck = (ServerChunkDataPacket) packetReceivedEvent.getPacket();
-                    bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(pck.getColumn().getX(), pck.getColumn().getZ()), pck.getColumn());
+                    if (Config.doServer) {
+                        ServerChunkDataPacket pck = (ServerChunkDataPacket) packetReceivedEvent.getPacket();
+                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(pck.getColumn().getX(), pck.getColumn().getZ()), pck.getColumn());
+                    }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUnloadChunkPacket) {
-                    ServerUnloadChunkPacket pck = (ServerUnloadChunkPacket) packetReceivedEvent.getPacket();
-                    bot.cachedChunks.remove(ChunkPos.getChunkHashFromXZ(pck.getX(), pck.getZ()));
+                    if (Config.doServer) {
+                        ServerUnloadChunkPacket pck = (ServerUnloadChunkPacket) packetReceivedEvent.getPacket();
+                        bot.cachedChunks.remove(ChunkPos.getChunkHashFromXZ(pck.getX(), pck.getZ()));
+                    }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUpdateTimePacket) {
                     if (!bot.isLoggedIn) {
                         System.out.println("Logged in!");
@@ -202,58 +220,64 @@ public class PorkSessionListener implements SessionListener {
                         System.out.println("Started server!");
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerBlockChangePacket) { //update cached chunks
-                    ServerBlockChangePacket pck = (ServerBlockChangePacket) packetReceivedEvent.getPacket();
-                    int chunkX = pck.getRecord().getPosition().getX() >> 4;
-                    int chunkZ = pck.getRecord().getPosition().getZ() >> 4;
-                    int subchunkY = TooBeeTooTeeBot.ensureRange(pck.getRecord().getPosition().getY() >> 4, 0, 15);
-                    Column column = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
-                    if (column == null) {
-                        //unloaded or invalid chunk, ignore pls
-                        System.out.println("null chunk, this is probably a server bug");
-                        break BREAK;
-                    }
-                    Chunk subChunk = column.getChunks()[subchunkY];
-                    int subchunkRelativeY = Math.abs(pck.getRecord().getPosition().getY() - 16 * subchunkY);
-                    try {
-                        subChunk.getBlocks().set(Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16)), TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15), Math.abs(Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getZ() >> 4)) * 16)), pck.getRecord().getBlock());
-                        column.getChunks()[subchunkY] = subChunk;
-                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
-                    } catch (IndexOutOfBoundsException e) {
-                        System.out.println((Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16))) + " " + subchunkRelativeY + " " + (Math.abs(Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getZ() >> 4)) * 16))) + " " + (subchunkRelativeY << 8 | chunkZ << 4 | chunkX));
-                    }
-                    bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
-                    //System.out.println("chunk " + chunkX + ":" + subchunkY + ":" + chunkZ + " relative pos " + (Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16))) + ":" + TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15) + "(" + subchunkRelativeY + "):" + (Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(chunkZ) * 16)) + " original position " + pck.getRecord().getPosition().toString());
-                } else if (packetReceivedEvent.getPacket() instanceof ServerMultiBlockChangePacket) { //update cached chunks with passion
-                    ServerMultiBlockChangePacket pck = (ServerMultiBlockChangePacket) packetReceivedEvent.getPacket();
-                    int chunkX = pck.getRecords()[0] //there HAS to be at least one element
-                            .getPosition().getX() >> 4; //this cuts away the additional relative chunk coordinates
-                    int chunkZ = pck.getRecords()[0] //there HAS to be at least one element
-                            .getPosition().getZ() >> 4; //this cuts away the additional relative chunk coordinates
-                    Column column = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
-                    if (column == null) {
-                        //unloaded or invalid chunk, ignore pls
-                        System.out.println("null chunk multi, this is probably a server bug");
-                        break BREAK;
-                    }
-                    for (BlockChangeRecord record : pck.getRecords()) {
-                        int relativeChunkX = Math.abs(Math.abs(record.getPosition().getX()) - (Math.abs(Math.abs(record.getPosition().getX() >> 4)) * 16));
-                        int relativeChunkZ = Math.abs(Math.abs(record.getPosition().getZ()) - (Math.abs(Math.abs(record.getPosition().getZ() >> 4)) * 16));
-                        int subchunkY = TooBeeTooTeeBot.ensureRange(record.getPosition().getY() >> 4, 0, 15);
-                        Chunk subChunk = column.getChunks()[subchunkY];
-                        int subchunkRelativeY = Math.abs(record.getPosition().getY() - 16 * subchunkY);
-                        try {
-                            subChunk.getBlocks().set(relativeChunkX, TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15), relativeChunkZ, record.getBlock());
-                            column.getChunks()[subchunkY] = subChunk;
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println(relativeChunkX + " " + subchunkRelativeY + " " + relativeChunkZ + " " + (subchunkRelativeY << 8 | relativeChunkZ << 4 | relativeChunkX));
+                    if (Config.doServer) {
+                        ServerBlockChangePacket pck = (ServerBlockChangePacket) packetReceivedEvent.getPacket();
+                        int chunkX = pck.getRecord().getPosition().getX() >> 4;
+                        int chunkZ = pck.getRecord().getPosition().getZ() >> 4;
+                        int subchunkY = TooBeeTooTeeBot.ensureRange(pck.getRecord().getPosition().getY() >> 4, 0, 15);
+                        Column column = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
+                        if (column == null) {
+                            //unloaded or invalid chunk, ignore pls
+                            System.out.println("null chunk, this is probably a server bug");
+                            break BREAK;
                         }
+                        Chunk subChunk = column.getChunks()[subchunkY];
+                        int subchunkRelativeY = Math.abs(pck.getRecord().getPosition().getY() - 16 * subchunkY);
+                        try {
+                            subChunk.getBlocks().set(Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16)), TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15), Math.abs(Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getZ() >> 4)) * 16)), pck.getRecord().getBlock());
+                            column.getChunks()[subchunkY] = subChunk;
+                            bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println((Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16))) + " " + subchunkRelativeY + " " + (Math.abs(Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getZ() >> 4)) * 16))) + " " + (subchunkRelativeY << 8 | chunkZ << 4 | chunkX));
+                        }
+                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                        //System.out.println("chunk " + chunkX + ":" + subchunkY + ":" + chunkZ + " relative pos " + (Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16))) + ":" + TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15) + "(" + subchunkRelativeY + "):" + (Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(chunkZ) * 16)) + " original position " + pck.getRecord().getPosition().toString());
                     }
-                    bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerMultiBlockChangePacket) { //update cached chunks with passion
+                    if (Config.doServer) {
+                        ServerMultiBlockChangePacket pck = (ServerMultiBlockChangePacket) packetReceivedEvent.getPacket();
+                        int chunkX = pck.getRecords()[0] //there HAS to be at least one element
+                                .getPosition().getX() >> 4; //this cuts away the additional relative chunk coordinates
+                        int chunkZ = pck.getRecords()[0] //there HAS to be at least one element
+                                .getPosition().getZ() >> 4; //this cuts away the additional relative chunk coordinates
+                        Column column = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
+                        if (column == null) {
+                            //unloaded or invalid chunk, ignore pls
+                            System.out.println("null chunk multi, this is probably a server bug");
+                            break BREAK;
+                        }
+                        for (BlockChangeRecord record : pck.getRecords()) {
+                            int relativeChunkX = Math.abs(Math.abs(record.getPosition().getX()) - (Math.abs(Math.abs(record.getPosition().getX() >> 4)) * 16));
+                            int relativeChunkZ = Math.abs(Math.abs(record.getPosition().getZ()) - (Math.abs(Math.abs(record.getPosition().getZ() >> 4)) * 16));
+                            int subchunkY = TooBeeTooTeeBot.ensureRange(record.getPosition().getY() >> 4, 0, 15);
+                            Chunk subChunk = column.getChunks()[subchunkY];
+                            int subchunkRelativeY = Math.abs(record.getPosition().getY() - 16 * subchunkY);
+                            try {
+                                subChunk.getBlocks().set(relativeChunkX, TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15), relativeChunkZ, record.getBlock());
+                                column.getChunks()[subchunkY] = subChunk;
+                            } catch (IndexOutOfBoundsException e) {
+                                System.out.println(relativeChunkX + " " + subchunkRelativeY + " " + relativeChunkZ + " " + (subchunkRelativeY << 8 | relativeChunkZ << 4 | relativeChunkX));
+                            }
+                        }
+                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                    }
                 }
             }
-            Iterator<PorkClient> iterator = bot.clients.iterator();
-            while (iterator.hasNext()) {
-                iterator.next().session.send(packetReceivedEvent.getPacket());
+            if (Config.doServer) {
+                Iterator<PorkClient> iterator = bot.clients.iterator();
+                while (iterator.hasNext()) {
+                    iterator.next().session.send(packetReceivedEvent.getPacket());
+                }
             }
         } catch (Exception | Error e) {
             e.printStackTrace();
@@ -268,31 +292,31 @@ public class PorkSessionListener implements SessionListener {
     @Override
     public void connected(ConnectedEvent connectedEvent) {
         System.out.println("Connected to " + Config.ip + ":" + Config.port + "!");
-        bot.timer.schedule(new TimerTask() {
-            @Override
-            public void run() { //antiafk
-                if (bot.doAFK && bot.clients.size() == 0) {
-                    if (bot.r.nextBoolean()) {
-                        bot.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
-                    } else {
-                        float yaw = -90 + (90 - -90) * bot.r.nextFloat();
-                        float pitch = -90 + (90 - -90) * bot.r.nextFloat();
-                        bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
+        if (Config.doAntiAFK) {
+            bot.timer.schedule(new TimerTask() {
+                @Override
+                public void run() { //antiafk
+                    if (bot.doAFK && bot.clients.size() == 0) {
+                        if (bot.r.nextBoolean()) {
+                            bot.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+                        } else {
+                            float yaw = -90 + (90 - -90) * bot.r.nextFloat();
+                            float pitch = -90 + (90 - -90) * bot.r.nextFloat();
+                            bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
+                        }
                     }
                 }
-            }
-        }, 20000, 500);
+            }, 20000, 500);
+        }
 
-        bot.timer.schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
-            @Override
-            public void run() { //chat
-                if (bot.r.nextBoolean()) {
-                    bot.sendChat("Chat viewing, DM sending and more at http://www.daporkchop.net/pork2b2tbot");
-                } else {
-                    bot.sendChat("Registered users! Use \"/msg 2pork2bot help\" for info on 2pork2bot!");
+        if (Config.doSpammer) { //TODO: configurable spam messages
+            bot.timer.schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
+                @Override
+                public void run() { //chat
+                    bot.sendChat(Config.spamMesages[bot.r.nextInt(Config.spamMesages.length - 1)]);
                 }
-            }
-        }, 30000, 60000);
+            }, 30000, Config.spamDelay);
+        }
 
         bot.timer.schedule(new TimerTask() {
             @Override
@@ -301,41 +325,48 @@ public class PorkSessionListener implements SessionListener {
                     bot.client.getSession().send(new ClientChatPacket(bot.queuedIngameMessages.remove(0)));
                 }
             }
-        }, 30000, 950);
+        }, 30000, 1000);
 
-        System.out.println("Starting server...");
-        Server server = new Server("0.0.0.0", 10293, MinecraftProtocol.class, new TcpSessionFactory());
-        server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
-        server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, false);
-        server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
-            @Override
-            public ServerStatusInfo buildInfo(Session session) {
-                return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(100, 0, new GameProfile[0]), new TextMessage("2pork2bot"), null);
-            }
-        });
+        if (Config.doServer) {
+            System.out.println("Starting server...");
+            Server server = new Server("0.0.0.0", 10293, MinecraftProtocol.class, new TcpSessionFactory());
+            server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
+            server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, false);
+            server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
+                @Override
+                public ServerStatusInfo buildInfo(Session session) {
+                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(100, 0, new GameProfile[0]), new TextMessage("2pork2bot"), null);
+                }
+            });
 
-        server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
-            @Override
-            public void loggedIn(Session session) {
-                session.send(new ServerJoinGamePacket(0, false, GameMode.SURVIVAL, 0, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
-            }
-        });
+            server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
+                @Override
+                public void loggedIn(Session session) {
+                    session.send(new ServerJoinGamePacket(0, false, GameMode.SURVIVAL, 0, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
+                }
+            });
 
-        server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, 256);
-        server.addListener(new PorkServerAdapter(bot));
-        bot.server = server;
+            server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, 256);
+            server.addListener(new PorkServerAdapter(bot));
+            bot.server = server;
+        }
     }
 
     @Override
     public void disconnecting(DisconnectingEvent disconnectingEvent) {
         System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
-        if (bot.websocketServer != null)
+        if (bot.websocketServer != null) {
             bot.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
-        TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
-        TooBeeTooTeeBot.INSTANCE.loginData.save();
-        TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
-        TooBeeTooTeeBot.INSTANCE.playData.save();
+        }
+        if (Config.doWebsocket) {
+            TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
+            TooBeeTooTeeBot.INSTANCE.loginData.save();
+        }
+        if (Config.doStatCollection) {
+            TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
+            TooBeeTooTeeBot.INSTANCE.playData.save();
+        }
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -348,12 +379,17 @@ public class PorkSessionListener implements SessionListener {
     public void disconnected(DisconnectedEvent disconnectedEvent) {
         System.out.println("Disconnected.");
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
-        if (bot.websocketServer != null)
+        if (bot.websocketServer != null) {
             bot.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
-        TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
-        TooBeeTooTeeBot.INSTANCE.loginData.save();
-        TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
-        TooBeeTooTeeBot.INSTANCE.playData.save();
+        }
+        if (Config.doWebsocket) {
+            TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
+            TooBeeTooTeeBot.INSTANCE.loginData.save();
+        }
+        if (Config.doStatCollection) {
+            TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
+            TooBeeTooTeeBot.INSTANCE.playData.save();
+        }
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
