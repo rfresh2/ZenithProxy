@@ -38,6 +38,7 @@ import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 import net.daporkchop.toobeetooteebot.util.ChunkPos;
+import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.TextFormat;
 import net.daporkchop.toobeetooteebot.web.PlayData;
 import net.daporkchop.toobeetooteebot.web.TabListPlayer;
@@ -266,7 +267,7 @@ public class PorkSessionListener implements SessionListener {
 
     @Override
     public void connected(ConnectedEvent connectedEvent) {
-        System.out.println("Connected to " + bot.ip + ":" + bot.port + "!");
+        System.out.println("Connected to " + Config.ip + ":" + Config.port + "!");
         bot.timer.schedule(new TimerTask() {
             @Override
             public void run() { //antiafk
