@@ -9,7 +9,7 @@ public class LoggedInPlayer {
     public RegisteredPlayer player;
     public WebSocket clientSocket;
 
-    public LoggedInPlayer(RegisteredPlayer player, WebSocket clientSocket)    {
+    public LoggedInPlayer(RegisteredPlayer player, WebSocket clientSocket) {
         this.player = player;
         this.lastUsed = System.currentTimeMillis();
         this.clientSocket = clientSocket;

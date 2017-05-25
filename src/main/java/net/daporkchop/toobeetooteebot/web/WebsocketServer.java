@@ -3,10 +3,6 @@ package net.daporkchop.toobeetooteebot.web;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
-import net.daporkchop.toobeetooteebot.web.LoggedInPlayer;
-import net.daporkchop.toobeetooteebot.web.NotRegisteredPlayer;
-import net.daporkchop.toobeetooteebot.web.RegisteredPlayer;
-import net.daporkchop.toobeetooteebot.web.TabListPlayer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ClientHandshake;
@@ -26,7 +22,7 @@ public class WebsocketServer extends WebSocketServer {
                 Iterator<LoggedInPlayer> iterator = TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.values().iterator();
                 while (iterator.hasNext()) {
                     LoggedInPlayer next = iterator.next();
-                    if (next.lastUsed < maxIdleTime)  {
+                    if (next.lastUsed < maxIdleTime) {
                         iterator.remove();
                         continue;
                     }
@@ -45,14 +41,14 @@ public class WebsocketServer extends WebSocketServer {
                     String header = TooBeeTooTeeBot.INSTANCE.tabHeader.getFullText();
                     String footer = TooBeeTooTeeBot.INSTANCE.tabFooter.getFullText();
                     conn.send("tabDiff " + header + " " + footer);
-                } else if (TooBeeTooTeeBot.INSTANCE.tabHeader != null)  {
+                } else if (TooBeeTooTeeBot.INSTANCE.tabHeader != null) {
                     String header = TooBeeTooTeeBot.INSTANCE.tabHeader.getFullText();
                     conn.send("tabDiff " + header + "  ");
-                } else if (TooBeeTooTeeBot.INSTANCE.tabFooter != null)  {
+                } else if (TooBeeTooTeeBot.INSTANCE.tabFooter != null) {
                     String footer = TooBeeTooTeeBot.INSTANCE.tabFooter.getFullText();
                     conn.send("tabDiff   " + footer);
                 }
-                for (TabListPlayer entry : TooBeeTooTeeBot.INSTANCE.playerListEntries)    {
+                for (TabListPlayer entry : TooBeeTooTeeBot.INSTANCE.playerListEntries) {
                     conn.send("tabAdd  " + entry.name + " " + entry.ping);
                 }
                 conn.send("tabAdd  2pork2bot " + 1);
@@ -73,10 +69,10 @@ public class WebsocketServer extends WebSocketServer {
                 String[] split = message.split(" ");
                 String username = split[0];
                 String passwordHash = split[1];
-                if (TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.containsKey(username))   {
+                if (TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.containsKey(username)) {
                     RegisteredPlayer player = TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.get(username);
                     passwordHash = Hashing.sha256().hashString(passwordHash, Charsets.UTF_8).toString();
-                    if (passwordHash.equals(player.passwordHash))   {
+                    if (passwordHash.equals(player.passwordHash)) {
                         LoggedInPlayer toAdd = new LoggedInPlayer(player, conn);
                         TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.put(username, toAdd);
                         conn.send("loginOk " + username + " " + passwordHash);
@@ -99,7 +95,7 @@ public class WebsocketServer extends WebSocketServer {
                     conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
                     return;
                 }
-            } else if (message.startsWith("sendChat"))  {
+            } else if (message.startsWith("sendChat")) {
                 message = message.substring(8);
                 String[] split = message.split(" ");
                 String text = split[0];
@@ -109,7 +105,7 @@ public class WebsocketServer extends WebSocketServer {
                 LoggedInPlayer player = TooBeeTooTeeBot.INSTANCE.namesToLoggedInPlayers.getOrDefault(username, null);
                 if (player == null) {
                     RegisteredPlayer registeredPlayer = TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers.getOrDefault(username, null);
-                    if (registeredPlayer == null)   {
+                    if (registeredPlayer == null) {
                         conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A RegisteredPlayer was null! (or you broke the script lol)");
                         return;
                     } else {
@@ -140,7 +136,7 @@ public class WebsocketServer extends WebSocketServer {
                     return;
                 }
             }
-        } catch (Exception e)   {
+        } catch (Exception e) {
             conn.send("loginErr" + e.getMessage());
             return;
         }

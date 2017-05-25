@@ -34,13 +34,13 @@ import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
-import net.daporkchop.toobeetooteebot.web.PlayData;
-import net.daporkchop.toobeetooteebot.web.TabListPlayer;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 import net.daporkchop.toobeetooteebot.util.ChunkPos;
 import net.daporkchop.toobeetooteebot.util.TextFormat;
+import net.daporkchop.toobeetooteebot.web.PlayData;
+import net.daporkchop.toobeetooteebot.web.TabListPlayer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 

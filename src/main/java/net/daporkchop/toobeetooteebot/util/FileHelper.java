@@ -11,8 +11,7 @@ public class FileHelper {
     /**
      * Create a file by default (Not a directory)
      *
-     * @param dir
-     *            The path for the file
+     * @param dir The path for the file
      * @return True: If the file was created
      */
     public static boolean createFile(String dir) {
@@ -22,10 +21,8 @@ public class FileHelper {
     /**
      * Create a file or a directory by default
      *
-     * @param dir
-     *            The path for the file
-     * @param isDirectory
-     *            Is is a directory of a file
+     * @param dir         The path for the file
+     * @param isDirectory Is is a directory of a file
      * @return True: If the file was created
      */
     public static boolean createFile(String dir, boolean isDirectory) {
@@ -54,8 +51,7 @@ public class FileHelper {
     /**
      * Deletes the given file
      *
-     * @param fileName
-     *            The path for the file
+     * @param fileName The path for the file
      * @return True: If the file was successfully deleted
      */
     public static boolean deleteFile(String fileName) {
@@ -88,8 +84,7 @@ public class FileHelper {
     /**
      * Retrieves all the lines of a file and neatly puts them into an array!
      *
-     * @param fileName
-     *            The path for the file
+     * @param fileName The path for the file
      * @return The Lines of the given file
      */
     public static String[] getFileContents(String fileName) {
@@ -114,8 +109,7 @@ public class FileHelper {
      * <p>
      * Recommended you don't use this and use {@link #getFileContents(String)} instead!
      *
-     * @param fileName
-     *            The path for the file
+     * @param fileName The path for the file
      * @return The given file's <code>BufferedReader</code>
      */
     public static BufferedReader getFileReader(String fileName) {
@@ -132,12 +126,11 @@ public class FileHelper {
 
     /**
      * Returns all the Files in the specified directory and all sub-directories.
-     *
+     * <p>
      * <p>
      * For instance, If you have a folder, /Files/Documents/Maps, and call this method for Hello. It will return all the files in Documents and all the files in Maps!
      *
-     * @param directory
-     *            The directory to check.
+     * @param directory The directory to check.
      * @return All the files in the folder and sub folders
      */
     public static File[] getFilesInFolder(File dir) {
@@ -147,8 +140,7 @@ public class FileHelper {
     /**
      * Prints the files lines to the console
      *
-     * @param fileName
-     *            The path for the file
+     * @param fileName The path for the file
      */
     public static void printFileContents(String fileName) {
         String[] lines = getFileContents(fileName);
@@ -161,8 +153,7 @@ public class FileHelper {
     /**
      * Deletes the given file and creates a new one with no content
      *
-     * @param fileName
-     *            The path for the file
+     * @param fileName The path for the file
      * @return A Path to the given File
      */
     public static Path resetFile(String fileName) {
@@ -172,10 +163,8 @@ public class FileHelper {
     /**
      * Deletes the given file and creates a new one with the given text
      *
-     * @param fileName
-     *            The path for the file
-     * @param textToAdd
-     *            Any text you would like to add to the new file
+     * @param fileName  The path for the file
+     * @param textToAdd Any text you would like to add to the new file
      * @return A Path to the given File
      */
     public static Path resetFile(String fileName, String textToAdd) {
@@ -191,10 +180,8 @@ public class FileHelper {
     /**
      * Writes the given string to the given File with a new line afterwards
      *
-     * @param fileName
-     *            The path for the file
-     * @param stuff
-     *            The String you want to write to the given file
+     * @param fileName The path for the file
+     * @param stuff    The String you want to write to the given file
      * @return True: if the String was written to the file
      */
     public static boolean writeToFile(String fileName, String stuff) {
@@ -204,12 +191,9 @@ public class FileHelper {
     /**
      * Writes the given string to the given File with
      *
-     * @param fileName
-     *            The path for the file
-     * @param stuff
-     *            The String you want to write to the given file
-     * @param newLine
-     *            If you want a '\n' character after the 'stuff' parameter
+     * @param fileName The path for the file
+     * @param stuff    The String you want to write to the given file
+     * @param newLine  If you want a '\n' character after the 'stuff' parameter
      * @return True: if the String was written to the file
      */
     public static boolean writeToFile(String fileName, String stuff, boolean newLine) {

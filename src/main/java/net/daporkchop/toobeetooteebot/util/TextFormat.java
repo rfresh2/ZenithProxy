@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** A bunch of utilities for dealing with Minecraft color codes
+/**
+ * A bunch of utilities for dealing with Minecraft color codes
  * Totally not skidded from Nukkit
  * sorry nukkit
  * deal with it

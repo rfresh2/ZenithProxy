@@ -31,7 +31,7 @@ import java.util.*;
 
 public class TooBeeTooTeeBot {
 
-	public static final String[] BLOCK_NAMES = new String[] { "Cobblestone", "Stone", "Netherrack", "Stone Bricks", "Block of Coal", "Block of Iron", "Block of Gold", "Block of Diamond", "Block of Emerald", "Obsidian" };
+    public static final String[] BLOCK_NAMES = new String[]{"Cobblestone", "Stone", "Netherrack", "Stone Bricks", "Block of Coal", "Block of Iron", "Block of Gold", "Block of Diamond", "Block of Emerald", "Obsidian"};
     public static TooBeeTooTeeBot INSTANCE;
     public Client client = null;
     public Random r = new Random();
@@ -73,7 +73,7 @@ public class TooBeeTooTeeBot {
     public String clientId;
     protected boolean hasDonePostConnect = false;
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         new TooBeeTooTeeBot().start(args);
         try {
             Scanner scanner = new Scanner(System.in);
@@ -92,7 +92,7 @@ public class TooBeeTooTeeBot {
             INSTANCE.playData.setSerializable("uuidsToPlayData", INSTANCE.uuidsToPlayData);
             INSTANCE.playData.save();
             System.exit(0);
-        } catch (Exception e)   {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -112,10 +112,10 @@ public class TooBeeTooTeeBot {
         return toReturn;
     }
 
-    public void start(String[] args)    {
+    public void start(String[] args) {
         INSTANCE = this;
         try {
-            if (firstRun)   {
+            if (firstRun) {
                 Scanner scanner = new Scanner(new File(System.getProperty("user.dir") + File.separator + "logininfo.txt"));
                 TooBeeTooTeeBot.INSTANCE.username = scanner.nextLine().trim();
                 TooBeeTooTeeBot.INSTANCE.password = scanner.nextLine().trim();
@@ -146,7 +146,8 @@ public class TooBeeTooTeeBot {
                     }
                 }, 10000);
             }
-            ESCAPE: if (protocol == null) {
+            ESCAPE:
+            if (protocol == null) {
                 if (doAuth) {
                     File sessionIdCache = new File(System.getProperty("user.dir") + File.separator + "sessionId.txt");
                     if (sessionIdCache.exists()) {
@@ -215,13 +216,13 @@ public class TooBeeTooTeeBot {
             client.getSession().addListener(new PorkSessionListener(this));
             System.out.println("Connecting to " + ip + ":" + port + "...");
             client.getSession().connect(true);
-        } catch (Exception e)   {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    public void sendChat(String message)    {
+    public void sendChat(String message) {
         queueMessage("> " + message);
     }
 
@@ -229,7 +230,7 @@ public class TooBeeTooTeeBot {
         queuedIngameMessages.add(toQueue);
     }
 
-    public void processMsg(String playername, String message)   {
+    public void processMsg(String playername, String message) {
         if (ingamePlayerCooldown.getOrDefault(playername, 0L) + 5000 > System.currentTimeMillis()) {
             return;
         } else {
@@ -238,12 +239,12 @@ public class TooBeeTooTeeBot {
         RegisteredPlayer player = namesToRegisteredPlayers.getOrDefault(playername, null);
         if (player == null) {
             NotRegisteredPlayer tempAuth = namesToTempAuths.getOrDefault(playername, null);
-            if (tempAuth == null)   {
+            if (tempAuth == null) {
                 queueMessage("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!");
                 return;
             } else if (message.startsWith("register")) {
                 message = message.substring(9);
-                if (message.startsWith(tempAuth.tempAuthUUID))   {
+                if (message.startsWith(tempAuth.tempAuthUUID)) {
                     String hashedPwd = Hashing.sha256().hashString(tempAuth.pwd, Charsets.UTF_8).toString();
                     RegisteredPlayer newPlayer = new RegisteredPlayer(hashedPwd, tempAuth.name);
                     newPlayer.lastUsed = System.currentTimeMillis();
@@ -282,7 +283,7 @@ public class TooBeeTooTeeBot {
         }
     }
 
-    public void doPostConnectSetup()    {
+    public void doPostConnectSetup() {
         try {
             if (!hasDonePostConnect) {
                 TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(8888);
@@ -294,7 +295,7 @@ public class TooBeeTooTeeBot {
                     public void run() {
                         long currentTime = System.currentTimeMillis();
                         Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
-                        while (iterator.hasNext())  {
+                        while (iterator.hasNext()) {
                             Map.Entry<String, PlayData> entry = iterator.next();
                             PlayData data = entry.getValue();
                             if (currentTime - data.lastPlayed >= 2592000000L) { //one month
@@ -315,7 +316,7 @@ public class TooBeeTooTeeBot {
                     public void run() {
                         long currentTime = System.currentTimeMillis();
                         Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
-                        while (iterator.hasNext())  {
+                        while (iterator.hasNext()) {
                             Map.Entry<String, PlayData> entry = iterator.next();
                             PlayData data = entry.getValue();
                             for (int i = data.playTimeByHour.length - 1; i >= 0; i--) {
@@ -359,7 +360,7 @@ public class TooBeeTooTeeBot {
                 }, 2000, 2000);
                 hasDonePostConnect = true;
             }
-        } catch (Exception e)   {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
