@@ -1,7 +1,12 @@
-package net.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot.web;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
+import net.daporkchop.toobeetooteebot.web.LoggedInPlayer;
+import net.daporkchop.toobeetooteebot.web.NotRegisteredPlayer;
+import net.daporkchop.toobeetooteebot.web.RegisteredPlayer;
+import net.daporkchop.toobeetooteebot.web.TabListPlayer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ClientHandshake;

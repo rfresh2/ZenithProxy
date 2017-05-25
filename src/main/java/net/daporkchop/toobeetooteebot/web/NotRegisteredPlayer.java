@@ -1,8 +1,5 @@
-package net.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot.web;
 
-/**
- * Created by DaPorkchop_ on 5/1/2017.
- */
 public class NotRegisteredPlayer {
     public String name;
     public String tempAuthUUID;

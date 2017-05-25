@@ -1,4 +1,4 @@
-package net.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot.util;
 
 import java.io.*;
 import java.nio.charset.Charset;

@@ -1,8 +1,5 @@
-package net.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot.web;
 
-/**
- * Created by DaPorkchop_ on 4/28/2017.
- */
 public class TabListPlayer {
     public String uuid;
     public String name;

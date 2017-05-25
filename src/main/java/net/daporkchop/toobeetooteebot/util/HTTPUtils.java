@@ -1,4 +1,4 @@
-package net.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot.util;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.IOUtils;

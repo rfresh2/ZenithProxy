@@ -2,6 +2,7 @@ package net.daporkchop.toobeetooteebot.server;
 
 import com.github.steveice10.mc.protocol.data.game.MessageType;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientKeepAlivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
@@ -50,7 +51,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.yaw = (float) pck.getYaw();
                     bot.pitch = (float) pck.getPitch();
                     bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), null);
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0) {
                             continue;
@@ -64,7 +65,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.y = pck.getY();
                     bot.z = pck.getZ();
                     bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), null);
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0) {
                             continue;
@@ -80,7 +81,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.yaw = (float) pck.getYaw();
                     bot.pitch = (float) pck.getPitch();
                     bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), null);
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0) {
                             continue;

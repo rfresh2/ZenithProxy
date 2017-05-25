@@ -1,4 +1,4 @@
-package net.daporkchop.toobeetooteebot;
+package net.daporkchop.toobeetooteebot.util;
 
 /**
  * Created by DaPorkchop_ on 4/18/2017.
