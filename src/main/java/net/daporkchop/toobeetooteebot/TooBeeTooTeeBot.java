@@ -258,7 +258,7 @@ public class TooBeeTooTeeBot {
                     queueMessage("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!");
                     return;
                 } else {
-                    loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + " says: " + message.substring(messageSplit[0].length() + 1));
+                    loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + "\u00A7d says: \u00A7d" + message.substring(messageSplit[0].length() + 1));
                     queueMessage("/msg " + playername + " Sent message to " + messageSplit[0]);
                     return;
                 }
