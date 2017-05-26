@@ -329,7 +329,7 @@ public class PorkSessionListener implements SessionListener {
 
         if (Config.doServer) {
             System.out.println("Starting server...");
-            Server server = new Server("0.0.0.0", 10293, MinecraftProtocol.class, new TcpSessionFactory());
+            Server server = new Server(Config.serverHost, Config.serverPort, MinecraftProtocol.class, new TcpSessionFactory());
             server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
             server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, false);
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {

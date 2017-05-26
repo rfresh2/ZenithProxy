@@ -51,6 +51,8 @@ public class Config {
     public static String[] spamMesages;
 
     public static boolean doServer;
+    public static int serverPort;
+    public static String serverHost;
 
     static {
         File configFile = new File(System.getProperty("user.dir") + File.separatorChar + "config.yml");
@@ -64,6 +66,15 @@ public class Config {
             }
         }
         YMLParser parser = new YMLParser(configFile);
+        switch (parser.getInt("config-version")) {
+            case 1:
+                parser.set("server.doServer", true);
+                parser.set("server.port", 25565);
+                parser.set("server.host", "0.0.0.0");
+
+                parser.set("config-version", 2);
+                parser.save();
+        }
         username = parser.getString("login.username", "Steve");
         password = parser.getString("login.password", "password");
         doAuth = parser.getBoolean("login.doAuthentication", false);
@@ -80,6 +91,8 @@ public class Config {
         doSpammer = parser.getBoolean("chat.spam.doSpam", false);
         doServer = parser.getBoolean("server.doServer", true);
         spamDelay = parser.getInt("chat.spam.delay", 10000);
+        serverPort = parser.getInt("server.port", 25565);
+        serverHost = parser.getString("server.host", "0.0.0.0");
 
         List<String> spam = parser.getStringList("chat.spam.messages");
         spamMesages = spam.toArray(new String[spam.size()]);

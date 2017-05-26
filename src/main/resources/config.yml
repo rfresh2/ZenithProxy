@@ -96,6 +96,21 @@ stats:
   # Default: false
   doStats: false
 
+server:
+  # Whether or not to run a server inside the bot
+  # Useful for moving the bot while still having it run
+  # Default: true
+  doServer: true
+
+  # The port to run the server on
+  # Default: 25565
+  port: 25565
+
+  # The host to listen on
+  # By default we listen on all addresses
+  # Default: 0.0.0.0
+  address: '0.0.0.0'
+
 # Don't touch this!
 config-version: 1
 
