@@ -288,7 +288,7 @@ public class TooBeeTooTeeBot {
                                     iterator.remove();
                                     continue;
                                 }
-                                for (int i = data.playTimeByDay.length - 1; i >= 0; i--) {
+                                for (int i = data.playTimeByDay.length - 2; i >= 0; i--) {
                                     data.playTimeByDay[i + 1] = data.playTimeByDay[i];
                                 }
                                 data.playTimeByDay[0] = 0;
@@ -305,7 +305,7 @@ public class TooBeeTooTeeBot {
                             while (iterator.hasNext()) {
                                 Map.Entry<String, PlayData> entry = iterator.next();
                                 PlayData data = entry.getValue();
-                                for (int i = data.playTimeByHour.length - 1; i >= 0; i--) {
+                                for (int i = data.playTimeByHour.length - 2; i >= 0; i--) {
                                     data.playTimeByHour[i + 1] = data.playTimeByHour[i];
                                 }
                                 data.playTimeByHour[0] = 0;
