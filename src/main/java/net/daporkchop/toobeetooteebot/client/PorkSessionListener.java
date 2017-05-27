@@ -23,10 +23,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacke
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
@@ -271,6 +268,12 @@ public class PorkSessionListener implements SessionListener {
                         }
                         bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
                     }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerJoinGamePacket) {
+                    ServerJoinGamePacket pck = (ServerJoinGamePacket) packetReceivedEvent.getPacket();
+                    bot.dimension = pck.getDimension();
+                } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
+                    ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
+                    bot.dimension = pck.getDimension();
                 }
             }
             if (Config.doServer) {
@@ -335,14 +338,14 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
                 @Override
                 public ServerStatusInfo buildInfo(Session session) {
-                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(100, 0, new GameProfile[0]), new TextMessage("2pork2bot"), null);
+                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(100, bot.clients.size(), new GameProfile[0]), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), null);
                 }
             });
 
             server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
                 @Override
                 public void loggedIn(Session session) {
-                    session.send(new ServerJoinGamePacket(0, false, GameMode.SURVIVAL, 0, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
+                    session.send(new ServerJoinGamePacket(0, false, GameMode.SURVIVAL, bot.dimension, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
                 }
             });
 
