@@ -375,29 +375,11 @@ public class PorkSessionListener implements SessionListener {
         } catch (InterruptedException e) {
 
         }
-        System.exit(0);
     }
 
     @Override
     public void disconnected(DisconnectedEvent disconnectedEvent) {
         System.out.println("Disconnected.");
-        bot.queuedMessages.add("Disconnecting. Reason: " + disconnectedEvent.getReason());
-        if (bot.websocketServer != null) {
-            bot.websocketServer.sendToAll("shutdown" + disconnectedEvent.getReason());
-        }
-        if (Config.doWebsocket) {
-            TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
-            TooBeeTooTeeBot.INSTANCE.loginData.save();
-        }
-        if (Config.doStatCollection) {
-            TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
-            TooBeeTooTeeBot.INSTANCE.playData.save();
-        }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-
-        }
-        System.exit(0);
+        Runtime.getRuntime().halt(0);
     }
 }

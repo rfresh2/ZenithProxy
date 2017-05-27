@@ -88,7 +88,7 @@ public class TooBeeTooTeeBot {
                 INSTANCE.playData.setSerializable("uuidsToPlayData", INSTANCE.uuidsToPlayData);
                 INSTANCE.playData.save();
             }
-            System.exit(0);
+            Runtime.getRuntime().halt(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -202,7 +202,7 @@ public class TooBeeTooTeeBot {
             client.getSession().connect(true);
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(1);
+            Runtime.getRuntime().halt(0);
         }
     }
 

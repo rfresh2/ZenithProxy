@@ -62,7 +62,7 @@ public class Config {
                 org.apache.commons.io.FileUtils.copyURLToFile(inputUrl, configFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                System.exit(0);
+                Runtime.getRuntime().halt(0);
             }
         }
         YMLParser parser = new YMLParser(configFile);
