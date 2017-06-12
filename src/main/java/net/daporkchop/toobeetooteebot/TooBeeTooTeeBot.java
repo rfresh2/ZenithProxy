@@ -5,6 +5,7 @@ import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.message.Message;
+import com.github.steveice10.mc.protocol.data.message.TextMessage;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
@@ -45,7 +46,6 @@ public class TooBeeTooTeeBot {
     public Message tabFooter;
     public ArrayList<TabListPlayer> playerListEntries = new ArrayList<>();
     public MinecraftProtocol protocol;
-    public boolean doAFK = true;
     public DataTag loginData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "players.dat"));
     public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;
     public HashMap<String, NotRegisteredPlayer> namesToTempAuths = new HashMap<>();
@@ -60,12 +60,12 @@ public class TooBeeTooTeeBot {
     public boolean onGround;
     public HashMap<Long, Column> cachedChunks = new HashMap<>();
     //END SERVER VARIABLES
-    public Server server;
+    public Server server = null;
     public ArrayList<String> queuedIngameMessages = new ArrayList<>();
     public HashMap<String, Long> ingamePlayerCooldown = new HashMap<>();
     public DataTag playData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "online.dat"));
     public HashMap<String, PlayData> uuidsToPlayData;
-    protected boolean hasDonePostConnect = false;
+    public boolean hasDonePostConnect = false;
 
     public static void main(String[] args) {
         new TooBeeTooTeeBot().start(args);
@@ -365,5 +365,52 @@ public class TooBeeTooTeeBot {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public void reLaunch()  {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+
+        }
+        System.out.println("Resetting EVERYTHING...");
+        this.client = null;
+        System.out.println("Reset client");
+        this.timer.cancel();
+        System.out.println("Cancelled timer");
+        this.timer.purge();
+        System.out.println("Purged timer");
+        this.timer = new Timer();
+        System.out.println("Reset timer");
+        this.queuedMessages = new ArrayList<>();
+        System.out.println("Reset queued messages");
+        this.tabHeader = new TextMessage("");
+        this.tabFooter = new TextMessage("");
+        System.out.println("Reset tab header and footer");
+        this.playerListEntries.clear();
+        System.out.println("Reset player list");
+        this.isLoggedIn = false;
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.yaw = 0;
+        this.pitch = 0;
+        this.onGround = true;
+        System.out.println("Reset position");
+        this.cachedChunks.clear();
+        System.out.println("Reset cached chunks");
+        this.queuedIngameMessages.clear();
+        System.out.println("Reset queued ingame messages");
+        this.ingamePlayerCooldown.clear();
+        System.out.println("Reset ingame cooldown timer");
+        this.hasDonePostConnect = false;
+        System.out.println("Reset complete!");
+        this.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Launching everything again!");
+                TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+            }
+        }, 0);
     }
 }

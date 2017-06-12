@@ -27,6 +27,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
+import com.github.steveice10.mc.protocol.packet.login.server.LoginDisconnectPacket;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
@@ -44,7 +45,9 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
 import java.util.TimerTask;
 
 public class PorkSessionListener implements SessionListener {
@@ -56,6 +59,7 @@ public class PorkSessionListener implements SessionListener {
 
     @Override
     public void packetReceived(PacketReceivedEvent packetReceivedEvent) {
+        //System.out.println(packetReceivedEvent.getPacket().getClass().getCanonicalName());
         try {
             BREAK:
             if (true) {
@@ -82,9 +86,9 @@ public class PorkSessionListener implements SessionListener {
 
                     if (msg.startsWith("!")) { //command from connected user
                         if (msg.startsWith("!toggleafk")) { //useful when manually moving bot around
-                            bot.doAFK = !bot.doAFK;
-                            System.out.println("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off"));
-                            bot.queueMessage("! Toggled AntiAFK! Current state: " + (bot.doAFK ? "on" : "off"));
+                            Config.doAntiAFK = !Config.doAntiAFK;
+                            System.out.println("! Toggled AntiAFK! Current state: " + (Config.doAntiAFK ? "on" : "off"));
+                            bot.queueMessage("! Toggled AntiAFK! Current state: " + (Config.doAntiAFK ? "on" : "off"));
                         }
                         return;
                     }
@@ -289,6 +293,10 @@ public class PorkSessionListener implements SessionListener {
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
+                } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket)    {
+                    LoginDisconnectPacket pck = (LoginDisconnectPacket) packetReceivedEvent.getPacket();
+                    System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
+                    bot.client.getSession().disconnect(pck.getReason().getFullText());
                 }
             }
             if (Config.doServer) {
@@ -304,7 +312,7 @@ public class PorkSessionListener implements SessionListener {
 
     @Override
     public void packetSent(PacketSentEvent packetSentEvent) {
-
+        System.out.println("Sending " + packetSentEvent.getPacket().getClass().getCanonicalName());
     }
 
     @Override
@@ -314,7 +322,7 @@ public class PorkSessionListener implements SessionListener {
             bot.timer.schedule(new TimerTask() {
                 @Override
                 public void run() { //antiafk
-                    if (bot.doAFK && bot.clients.size() == 0) {
+                    if (Config.doAntiAFK && bot.clients.size() == 0) {
                         if (bot.r.nextBoolean()) {
                             bot.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
                         } else {
@@ -345,7 +353,7 @@ public class PorkSessionListener implements SessionListener {
             }
         }, 30000, 1000);
 
-        if (Config.doServer) {
+        if (Config.doServer && bot.server == null) {
             System.out.println("Starting server...");
             Server server = new Server(Config.serverHost, Config.serverPort, MinecraftProtocol.class, new TcpSessionFactory());
             server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
@@ -385,6 +393,11 @@ public class PorkSessionListener implements SessionListener {
             TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
             TooBeeTooTeeBot.INSTANCE.playData.save();
         }
+        if (Config.doServer)    {
+            TooBeeTooTeeBot.INSTANCE.server.getSessions().forEach((session) -> {
+                session.disconnect("Bot was kicked from server!!!");
+            });
+        }
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -395,6 +408,8 @@ public class PorkSessionListener implements SessionListener {
     @Override
     public void disconnected(DisconnectedEvent disconnectedEvent) {
         System.out.println("Disconnected.");
-        Runtime.getRuntime().halt(0);
+        //bot.client.getSession().disconnect("");
+
+        bot.reLaunch();
     }
 }
