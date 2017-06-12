@@ -28,7 +28,7 @@ function testWebSocket() {
     websocket.onerror = function(evt) {
         onError(evt)
     };
-     var error = createCORSRequest('GET', "http://home.daporkchop.net/misc/2b2terror.txt");
+     var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
              initParser(newText, 'chat', true);
     document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...\nBot status: \u00A7" + error;
 
@@ -47,7 +47,7 @@ function onOpen(evt) {
 
 function onClose(evt) {
     if (!shutdown) {
-        var error = createCORSRequest('GET', "http://home.daporkchop.net/misc/2b2terror.txt");
+        var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
         var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe seem to have been disconnected, or are unable to connect to the bot! Error:\n\n" + error;
         initParser(newText, 'chat', true);
     }
