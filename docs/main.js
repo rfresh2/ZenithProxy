@@ -28,7 +28,10 @@ function testWebSocket() {
     websocket.onerror = function(evt) {
         onError(evt)
     };
-    document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...";
+     var error = createCORSRequest('GET', "http://home.daporkchop.net/misc/2b2terror.txt");
+             initParser(newText, 'chat', true);
+    document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...\nBot status: \u00A7" + error;
+
     document.getElementById("chatinput").style.display = 'none';
     document.getElementById("chatsendbutton").style.display = 'none';
     document.getElementById("loggingintext").style.display = 'none';
