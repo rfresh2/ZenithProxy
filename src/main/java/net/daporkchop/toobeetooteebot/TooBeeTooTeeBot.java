@@ -12,6 +12,7 @@ import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import net.daporkchop.toobeetooteebot.client.PorkSessionListener;
+import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.DataTag;
@@ -111,25 +112,8 @@ public class TooBeeTooTeeBot {
 
     public void start(String[] args) {
         INSTANCE = this;
-        try {
-            if (firstRun) {
-                if (Config.doWebsocket) {
-                    namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
-                }
-                if (Config.doStatCollection) {
-                    uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
-                }
-                if (Config.doDiscord) {
-                    queuedMessages = new ArrayList<>();
-                }
 
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        doPostConnectSetup();
-                    }
-                }, 10000);
-            }
+        try {
             ESCAPE:
             if (protocol == null) {
                 if (Config.doAuth) {
@@ -194,6 +178,34 @@ public class TooBeeTooTeeBot {
                     protocol = new MinecraftProtocol(Config.username);
                 }
                 System.out.println("Success!");
+            }
+
+            if (Config.doGUI && GuiBot.INSTANCE == null)    {
+                GuiBot guiBot = new GuiBot();
+                guiBot.createBufferStrategy(1);
+                guiBot.setVisible(true);
+                return;
+            }
+
+            if (firstRun) {
+                if (Config.doWebsocket) {
+                    namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
+                }
+                if (Config.doStatCollection) {
+                    uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
+                }
+                if (Config.doDiscord) {
+                    queuedMessages = new ArrayList<>();
+                }
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        doPostConnectSetup();
+                    }
+                }, 10000);
+
+                firstRun = false;
             }
 
             client = new Client(Config.ip, Config.port, protocol, new TcpSessionFactory());

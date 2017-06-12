@@ -54,6 +54,12 @@ public class Config {
     public static int serverPort;
     public static String serverHost;
 
+    public static boolean doGUI;
+
+    public static boolean doAutoRelog;
+
+    public static final YMLParser parser;
+
     static {
         File configFile = new File(System.getProperty("user.dir") + File.separatorChar + "config.yml");
         if (!configFile.exists()) {
@@ -65,14 +71,17 @@ public class Config {
                 Runtime.getRuntime().halt(0);
             }
         }
-        YMLParser parser = new YMLParser(configFile);
+        parser = new YMLParser(configFile);
         switch (parser.getInt("config-version")) {
             case 1:
                 parser.set("server.doServer", true);
                 parser.set("server.port", 25565);
                 parser.set("server.host", "0.0.0.0");
+            case 2:
+                parser.set("interface.doGUI", true);
+                parser.set("misc.doAutoRelog", true);
 
-                parser.set("config-version", 2);
+                parser.set("config-version", 3);
                 parser.save();
         }
         username = parser.getString("login.username", "Steve");
@@ -93,6 +102,8 @@ public class Config {
         spamDelay = parser.getInt("chat.spam.delay", 10000);
         serverPort = parser.getInt("server.port", 25565);
         serverHost = parser.getString("server.host", "0.0.0.0");
+        doGUI = parser.getBoolean("interface.doGUI", true);
+        doAutoRelog = parser.getBoolean("misc.doAutoRelog", true);
 
         List<String> spam = parser.getStringList("chat.spam.messages");
         spamMesages = spam.toArray(new String[spam.size()]);

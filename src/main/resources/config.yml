@@ -69,6 +69,11 @@ misc:
   # Default: true
   antiafk: true
 
+  # Automatically relogs after getting kicked.
+  # Waits 5 seconds.
+  # Default: true
+  autoreconnect: true
+
 discord:
   # Whether or not to use a Discord bot.
   # Default: false
@@ -111,7 +116,13 @@ server:
   # Default: 0.0.0.0
   address: '0.0.0.0'
 
+interface:
+  # Whether or not to open a GUI
+  # If you're running headless then disable this!!!
+  # Default: true
+  doGUI: true
+
 # Don't touch this!
-config-version: 1
+config-version: 3
 
 

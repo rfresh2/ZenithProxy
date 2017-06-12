@@ -32,6 +32,7 @@ import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
+import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 import net.daporkchop.toobeetooteebot.util.ChunkPos;
@@ -88,6 +89,20 @@ public class PorkSessionListener implements SessionListener {
                         return;
                     }
                     System.out.println("[CHAT] " + msg);
+
+                    if (GuiBot.INSTANCE != null)    {
+                        GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>" + msg + "</html>");
+                        String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+                        if (split.length > 500)   {
+                            String toSet = "<html>";
+                            for (int i = 1; i < split.length; i++)  {
+                                toSet += split[i] + "<br>";
+                            }
+                            toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                            GuiBot.INSTANCE.chatDisplay.setText(toSet);
+                        }
+                    }
+
                     if (Config.doDiscord) {
                         bot.queuedMessages.add(msg);
                     }
@@ -112,7 +127,7 @@ public class PorkSessionListener implements SessionListener {
                     switch (pck.getAction()) {
                         case ADD_PLAYER:
                             for (PlayerListEntry entry : pck.getEntries()) {
-                                if (entry.getProfile().getName().equals("2pork2bot")) {
+                                if (entry.getProfile().getName().equals(TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName())) {
                                     continue;
                                 }
                                 TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
