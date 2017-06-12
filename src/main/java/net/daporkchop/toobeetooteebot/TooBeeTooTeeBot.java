@@ -112,10 +112,9 @@ public class TooBeeTooTeeBot {
 
     public void start(String[] args) {
         INSTANCE = this;
-
         try {
             ESCAPE:
-            if (protocol == null) {
+            if (!(args.length == 1 && args[0].equals("firstart"))) {
                 if (Config.doAuth) {
                     File sessionIdCache = new File(System.getProperty("user.dir") + File.separator + "sessionId.txt");
                     if (sessionIdCache.exists()) {
@@ -180,7 +179,7 @@ public class TooBeeTooTeeBot {
                 System.out.println("Success!");
             }
 
-            if (Config.doGUI && GuiBot.INSTANCE == null)    {
+            if (Config.doGUI && GuiBot.INSTANCE == null) {
                 GuiBot guiBot = new GuiBot();
                 guiBot.createBufferStrategy(1);
                 guiBot.setVisible(true);
@@ -366,16 +365,53 @@ public class TooBeeTooTeeBot {
             e.printStackTrace();
         }
     }
-    
-    public void reLaunch()  {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
 
+    public void reLaunch() {
+        for (int i = 10; i > 0; i--) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (GuiBot.INSTANCE != null) {
+                GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>Reconnecting in " + i + "</html>");
+                String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+                if (split.length > 500) {
+                    String toSet = "<html>";
+                    for (int j = 1; j < split.length; j++) {
+                        toSet += split[j] + "<br>";
+                    }
+                    toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                    GuiBot.INSTANCE.chatDisplay.setText(toSet);
+                }
+            }
+
+            System.out.println("Reconnecting in " + i);
         }
+
+        cleanUp();
+
+        if (GuiBot.INSTANCE != null) {
+            if (!GuiBot.INSTANCE.connect_disconnectButton.isEnabled()) {
+                GuiBot.INSTANCE.connect_disconnectButton.setEnabled(true);
+                return;
+            }
+        }
+
+        this.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                System.out.println("Launching everything again!");
+                TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+            }
+        }, 1000);
+    }
+
+    public void cleanUp() {
         System.out.println("Resetting EVERYTHING...");
-        this.client = null;
-        System.out.println("Reset client");
+        //this.client = null;
+        //System.out.println("Reset client");
         this.timer.cancel();
         System.out.println("Cancelled timer");
         this.timer.purge();
@@ -405,12 +441,5 @@ public class TooBeeTooTeeBot {
         System.out.println("Reset ingame cooldown timer");
         this.hasDonePostConnect = false;
         System.out.println("Reset complete!");
-        this.timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("Launching everything again!");
-                TooBeeTooTeeBot.INSTANCE.start(new String[0]);
-            }
-        }, 0);
     }
 }

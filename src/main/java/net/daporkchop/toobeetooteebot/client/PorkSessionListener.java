@@ -232,8 +232,34 @@ public class PorkSessionListener implements SessionListener {
                     if (!bot.isLoggedIn) {
                         System.out.println("Logged in!");
                         bot.isLoggedIn = true;
-                        bot.server.bind(true);
-                        System.out.println("Started server!");
+                        if (GuiBot.INSTANCE != null) {
+                            GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>Logged in!</html>");
+                            String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+                            if (split.length > 500) {
+                                String toSet = "<html>";
+                                for (int j = 1; j < split.length; j++) {
+                                    toSet += split[j] + "<br>";
+                                }
+                                toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                                GuiBot.INSTANCE.chatDisplay.setText(toSet);
+                            }
+                        }
+                        if (!bot.server.isListening()) {
+                            bot.server.bind(true);
+                            System.out.println("Started server!");
+                            if (GuiBot.INSTANCE != null) {
+                                GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>Started server!</html>");
+                                String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+                                if (split.length > 500) {
+                                    String toSet = "<html>";
+                                    for (int j = 1; j < split.length; j++) {
+                                        toSet += split[j] + "<br>";
+                                    }
+                                    toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                                    GuiBot.INSTANCE.chatDisplay.setText(toSet);
+                                }
+                            }
+                        }
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerBlockChangePacket) { //update cached chunks
                     if (Config.doServer) {
@@ -312,7 +338,7 @@ public class PorkSessionListener implements SessionListener {
 
     @Override
     public void packetSent(PacketSentEvent packetSentEvent) {
-        System.out.println("Sending " + packetSentEvent.getPacket().getClass().getCanonicalName());
+        //System.out.println("Sending " + packetSentEvent.getPacket().getClass().getCanonicalName());
     }
 
     @Override
@@ -361,7 +387,7 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
                 @Override
                 public ServerStatusInfo buildInfo(Session session) {
-                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(100, bot.clients.size(), new GameProfile[0]), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), null);
+                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, bot.clients.size() - 1, new GameProfile[0]), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), null);
                 }
             });
 
@@ -376,6 +402,23 @@ public class PorkSessionListener implements SessionListener {
             server.addListener(new PorkServerAdapter(bot));
             bot.server = server;
         }
+
+        if (GuiBot.INSTANCE != null) {
+            GuiBot.INSTANCE.connect_disconnectButton.setEnabled(true);
+        }
+
+        if (GuiBot.INSTANCE != null) {
+            GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>Connected to " + Config.ip + ":" + Config.port + "</html>");
+            String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+            if (split.length > 500) {
+                String toSet = "<html>";
+                for (int j = 1; j < split.length; j++) {
+                    toSet += split[j] + "<br>";
+                }
+                toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                GuiBot.INSTANCE.chatDisplay.setText(toSet);
+            }
+        }
     }
 
     @Override
@@ -383,7 +426,7 @@ public class PorkSessionListener implements SessionListener {
         System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
         bot.queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
         if (bot.websocketServer != null) {
-            bot.websocketServer.sendToAll("shutdown" + disconnectingEvent.getReason());
+            bot.websocketServer.sendToAll("chat    \u00A7cDisconnected from server! Reason: " + disconnectingEvent.getReason());
         }
         if (Config.doWebsocket) {
             TooBeeTooTeeBot.INSTANCE.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.INSTANCE.namesToRegisteredPlayers);
@@ -398,17 +441,43 @@ public class PorkSessionListener implements SessionListener {
                 session.disconnect("Bot was kicked from server!!!");
             });
         }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-
+        if (GuiBot.INSTANCE != null) {
+            GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>Disconnectimg from " + Config.ip + ":" + Config.port + "...</html>");
+            String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+            if (split.length > 500) {
+                String toSet = "<html>";
+                for (int j = 1; j < split.length; j++) {
+                    toSet += split[j] + "<br>";
+                }
+                toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                GuiBot.INSTANCE.chatDisplay.setText(toSet);
+            }
         }
     }
 
     @Override
     public void disconnected(DisconnectedEvent disconnectedEvent) {
         System.out.println("Disconnected.");
-        //bot.client.getSession().disconnect("");
+
+        if (GuiBot.INSTANCE != null)    {
+            if (!GuiBot.INSTANCE.connect_disconnectButton.isEnabled())  {
+                GuiBot.INSTANCE.connect_disconnectButton.setEnabled(true);
+                return;
+            }
+        }
+
+        if (GuiBot.INSTANCE != null) {
+            GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>Disconnected.</html>");
+            String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
+            if (split.length > 500) {
+                String toSet = "<html>";
+                for (int j = 1; j < split.length; j++) {
+                    toSet += split[j] + "<br>";
+                }
+                toSet = toSet.substring(toSet.length() - 4) + "</html>";
+                GuiBot.INSTANCE.chatDisplay.setText(toSet);
+            }
+        }
 
         bot.reLaunch();
     }

@@ -70,7 +70,7 @@ misc:
   antiafk: true
 
   # Automatically relogs after getting kicked.
-  # Waits 5 seconds.
+  # Waits 10 seconds.
   # Default: true
   autoreconnect: true
 

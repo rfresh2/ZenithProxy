@@ -7,16 +7,21 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
+import java.util.TimerTask;
 
 public class GuiBot extends JFrame {
     public static GuiBot INSTANCE = null;
+
+    public java.util.Timer guiTimer = new java.util.Timer();
 
     public JPanel contentPane;
     public JTextField chatInput;
@@ -35,6 +40,7 @@ public class GuiBot extends JFrame {
     public JCheckBox processChatIn;
     public JLabel usernameLabel;
     public JLabel chatDisplay;
+    public JButton connect_disconnectButton;
 
     /**
      * Create the frame.
@@ -73,18 +79,38 @@ public class GuiBot extends JFrame {
         JPanel tabMain = new JPanel();
         tabbedPane.addTab("Main", null, tabMain, null);
 
-        JButton connect_disconnectButton = new JButton("Connect");
+        connect_disconnectButton = new JButton("Connect");
         connect_disconnectButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 if (TooBeeTooTeeBot.INSTANCE.client == null)    {
                     connect_disconnectButton.setText("Disconnect");
-                    TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+                    connect_disconnectButton.setEnabled(false);
+                    guiTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            TooBeeTooTeeBot.INSTANCE.start(new String[] {"firstart"});
+                        }
+                    }, 0);
                 } else if (TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected())  {
                     connect_disconnectButton.setText("Connect");
-                    TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("Disconnected");
+                    connect_disconnectButton.setEnabled(false);
+                    guiTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("User disconnected");
+                        }
+                    }, 0);
                 } else {
-                    //TODO: reset everything and connect again
+                    connect_disconnectButton.setText("Disconnect");
+                    connect_disconnectButton.setEnabled(false);
+                    guiTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            TooBeeTooTeeBot.INSTANCE.cleanUp();
+                            TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+                        }
+                    }, 0);
                 }
             }
         });
@@ -110,6 +136,12 @@ public class GuiBot extends JFrame {
                         .addGroup(gl_tabMain.createParallelGroup(Alignment.BASELINE).addComponent(sendButton)
                                 .addComponent(chatInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
                                         GroupLayout.PREFERRED_SIZE))));
+
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+            }
+        });
 
         chatDisplay = new JLabel("<html>Welcome to Pork2b2tBot v0.1a!</html>");
         chatDisplay.setVerticalAlignment(SwingConstants.TOP);
@@ -202,7 +234,7 @@ public class GuiBot extends JFrame {
         panel2.add(lblDoAutorespawn);
 
         JLabel lblDoAutorelog = new JLabel("Do AutoRelog");
-        lblDoAutorelog.setToolTipText("<html>If this is enabled, the bot will try to reconnect after getting disconnected/kicked.<br>There's a 5 second wait before reconnects.</html>");
+        lblDoAutorelog.setToolTipText("<html>If this is enabled, the bot will try to reconnect after getting disconnected/kicked.<br>There's a 10 second wait before reconnects.</html>");
         panel2.add(lblDoAutorelog);
 
         JLabel lblDoServer = new JLabel("Do Server");
@@ -345,6 +377,19 @@ public class GuiBot extends JFrame {
             }
         });
         contentPane.setLayout(gl_contentPane);
+
+        guiTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (TooBeeTooTeeBot.INSTANCE.client == null)    {
+                    connect_disconnectButton.setText("Connect");
+                } else if (!TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected())  {
+                    connect_disconnectButton.setText("Connect");
+                } else {
+                    connect_disconnectButton.setText("Disconnect");
+                }
+            }
+        }, 0, 500);
     }
 }
 
