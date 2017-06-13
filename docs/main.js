@@ -28,10 +28,6 @@ function testWebSocket() {
     websocket.onerror = function(evt) {
         onError(evt)
     };
-     var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
-             initParser(newText, 'chat', true);
-    document.getElementById("chat").innerHTML = "\n\nTrying to connect to chat...\nBot status: \u00A7" + error;
-
     document.getElementById("chatinput").style.display = 'none';
     document.getElementById("chatsendbutton").style.display = 'none';
     document.getElementById("loggingintext").style.display = 'none';
@@ -39,6 +35,9 @@ function testWebSocket() {
     if (Notification.permission == "granted") {
         document.getElementById("requestpermsbutton").style.display = 'none';
     }
+    var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
+        error = document.getElementById("chat").innerHTML + "\n\nTrying to connect to chat...\nBot status: \u00A7" + error;
+    initParser(error, 'chat', true);
 }
 
 function onOpen(evt) {
@@ -48,7 +47,7 @@ function onOpen(evt) {
 function onClose(evt) {
     if (!shutdown) {
         var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
-        var newText = document.getElementById("chat").innerHTML + "\n\n\u00A7c\u00A7lWe seem to have been disconnected, or are unable to connect to the bot! Error:\n\n" + error;
+        var newText = "\n\n\u00A7c\u00A7lWe seem to have been disconnected, or are unable to connect to the bot! Error:\n\n\u00A7r\u00A7f\u00A7" + error;
         initParser(newText, 'chat', true);
     }
     shutdown = false;
