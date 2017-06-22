@@ -4,6 +4,7 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
@@ -92,12 +93,12 @@ public class PorkSessionListener implements SessionListener {
                     }
                     System.out.println("[CHAT] " + msg);
 
-                    if (GuiBot.INSTANCE != null)    {
+                    if (GuiBot.INSTANCE != null) {
                         GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>" + msg + "</html>");
                         String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
-                        if (split.length > 500)   {
+                        if (split.length > 500) {
                             String toSet = "<html>";
-                            for (int i = 1; i < split.length; i++)  {
+                            for (int i = 1; i < split.length; i++) {
                                 toSet += split[i] + "<br>";
                             }
                             toSet = toSet.substring(toSet.length() - 4) + "</html>";
@@ -317,7 +318,7 @@ public class PorkSessionListener implements SessionListener {
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
-                } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket)    {
+                } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket) {
                     LoginDisconnectPacket pck = (LoginDisconnectPacket) packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
                     bot.client.getSession().disconnect(pck.getReason().getFullText());
@@ -326,7 +327,10 @@ public class PorkSessionListener implements SessionListener {
             if (Config.doServer) {
                 Iterator<PorkClient> iterator = bot.clients.iterator();
                 while (iterator.hasNext()) {
-                    iterator.next().session.send(packetReceivedEvent.getPacket());
+                    PorkClient client = iterator.next();
+                    if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) { //thx 0x kek
+                        client.session.send(packetReceivedEvent.getPacket());
+                    }
                 }
             }
         } catch (Exception | Error e) {
@@ -434,7 +438,7 @@ public class PorkSessionListener implements SessionListener {
             TooBeeTooTeeBot.INSTANCE.playData.setSerializable("uuidsToPlayData", TooBeeTooTeeBot.INSTANCE.uuidsToPlayData);
             TooBeeTooTeeBot.INSTANCE.playData.save();
         }
-        if (Config.doServer)    {
+        if (Config.doServer) {
             TooBeeTooTeeBot.INSTANCE.server.getSessions().forEach((session) -> {
                 session.disconnect("Bot was kicked from server!!!");
             });
@@ -457,8 +461,8 @@ public class PorkSessionListener implements SessionListener {
     public void disconnected(DisconnectedEvent disconnectedEvent) {
         System.out.println("Disconnected.");
 
-        if (GuiBot.INSTANCE != null)    {
-            if (!GuiBot.INSTANCE.connect_disconnectButton.isEnabled())  {
+        if (GuiBot.INSTANCE != null) {
+            if (!GuiBot.INSTANCE.connect_disconnectButton.isEnabled()) {
                 GuiBot.INSTANCE.connect_disconnectButton.setEnabled(true);
                 return;
             }
