@@ -120,11 +120,15 @@ server:
   # Default: false
   doAuth: false
 
-  # Only users with this name will be able to connect.
+  # Only users with these names will be able to connect.
   # Leave at "" to allow anyone to connect.
-  # e.g. whiteListUser: "DaPorkchop_"
+  # e.g.
+  # whiteListUser:
+  #   - "DaPorkchop_"
+  #   - "0x22"
   # Default: ""
-  whiteListUser: ""
+  whiteListUser:
+  - ""
 
 interface:
   # Whether or not to open a GUI
@@ -133,6 +137,6 @@ interface:
   doGUI: true
 
 # Don't touch this!
-config-version: 4
+config-version: 5
 
 

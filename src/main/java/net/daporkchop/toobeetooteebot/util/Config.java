@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class Config {
     public static String serverHost;
     public static boolean doServerAuth;
     public static boolean doServerWhitelist;
-    public static String whitelistedName;
+    public static List<String> whitelistedNames;
     public static boolean doGUI;
     public static boolean doAutoRelog;
 
@@ -75,8 +76,12 @@ public class Config {
             case 3:
                 parser.set("server.doAuth", false);
                 parser.set("server.whiteListUser", "");
+            case 4:
+                ArrayList<String> list = new ArrayList<>();
+                list.add("");
+                parser.set("server.whiteListUser", list);
 
-                parser.set("config-version", 4);
+                parser.set("config-version", 5);
                 parser.save();
         }
         username = parser.getString("login.username", "Steve");
@@ -100,8 +105,8 @@ public class Config {
         doGUI = parser.getBoolean("interface.doGUI", true);
         doAutoRelog = parser.getBoolean("misc.doAutoRelog", true);
         doServerAuth = parser.getBoolean("server.doAuth", false);
-        whitelistedName = parser.getString("server.whiteListUser", "");
-        doServerWhitelist = whitelistedName != null && !whitelistedName.isEmpty();
+        whitelistedNames = parser.getStringList("server.whiteListUser");
+        doServerWhitelist = whitelistedNames != null && !whitelistedNames.isEmpty();
 
         List<String> spam = parser.getStringList("chat.spam.messages");
         spamMesages = spam.toArray(new String[spam.size()]);

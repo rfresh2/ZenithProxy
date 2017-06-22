@@ -1,5 +1,7 @@
 package net.daporkchop.toobeetooteebot.server;
 
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.MessageType;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
@@ -14,6 +16,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePack
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
+import com.github.steveice10.mc.protocol.packet.login.server.LoginDisconnectPacket;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
@@ -38,10 +41,13 @@ public class PorkSessionAdapter extends SessionAdapter {
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
-        if (event.getPacket() instanceof LoginStartPacket) {
-            LoginStartPacket pck = (LoginStartPacket) event.getPacket();
-            if (Config.doServerWhitelist && !pck.getUsername().equals(Config.whitelistedName)) {
-                event.getSession().disconnect("\u00a76why tf do you thonk you can just use my bot??? reeeeeeeeee       - DaPorkchop_");
+        if (event.getPacket() instanceof LoginStartPacket
+                && ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.LOGIN
+                && ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.HANDSHAKE) {
+            LoginStartPacket pck = event.getPacket();
+            if (Config.doServerWhitelist && !Config.whitelistedNames.contains(pck.getUsername())) {
+                event.getSession().send(new LoginDisconnectPacket("\u00a76why tf do you thonk you can just use my bot??? reeeeeeeeee       - DaPorkchop_"));
+                event.getSession().disconnect(null);
                 try {
                     Files.write(Paths.get("whitelist.txt"), ("\n" + pck.getUsername() + " just tried to connect!!! ip:" + event.getSession().getHost()).getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException e) {
@@ -51,7 +57,7 @@ public class PorkSessionAdapter extends SessionAdapter {
             client.username = pck.getUsername();
             return;
         }
-        if (client.loggedIn) {
+        if (client.loggedIn && ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
             if (event.getPacket() instanceof ClientKeepAlivePacket || event.getPacket() instanceof ClientTeleportConfirmPacket) {
                 return;
             }
