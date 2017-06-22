@@ -116,6 +116,16 @@ server:
   # Default: 0.0.0.0
   address: '0.0.0.0'
 
+  # Whether or not the server will run in online mode.
+  # Default: false
+  doAuth: false
+
+  # Only users with this name will be able to connect.
+  # Leave at "" to allow anyone to connect.
+  # e.g. whiteListUser: "DaPorkchop_"
+  # Default: ""
+  whiteListUser: ""
+
 interface:
   # Whether or not to open a GUI
   # If you're running headless then disable this!!!
@@ -123,6 +133,6 @@ interface:
   doGUI: true
 
 # Don't touch this!
-config-version: 3
+config-version: 4
 
 

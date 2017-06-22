@@ -25,40 +25,32 @@ import java.util.UUID;
  * kek
  */
 public class Config {
+    public static final YMLParser parser;
     public static String username;
     public static String password;
     public static boolean doAuth;
-
     public static String token;
     public static boolean doDiscord;
-
     public static String ip;
     public static int port;
-
     public static String clientId;
-
     public static boolean doWebsocket;
     public static int websocketPort;
-
     public static boolean doStatCollection;
-
     public static boolean processChat;
-
     public static boolean doAutoRespawn;
     public static boolean doAntiAFK;
     public static boolean doSpammer;
     public static int spamDelay;
     public static String[] spamMesages;
-
     public static boolean doServer;
     public static int serverPort;
     public static String serverHost;
-
+    public static boolean doServerAuth;
+    public static boolean doServerWhitelist;
+    public static String whitelistedName;
     public static boolean doGUI;
-
     public static boolean doAutoRelog;
-
-    public static final YMLParser parser;
 
     static {
         File configFile = new File(System.getProperty("user.dir") + File.separatorChar + "config.yml");
@@ -80,8 +72,11 @@ public class Config {
             case 2:
                 parser.set("interface.doGUI", true);
                 parser.set("misc.doAutoRelog", true);
+            case 3:
+                parser.set("server.doAuth", false);
+                parser.set("server.whiteListUser", "");
 
-                parser.set("config-version", 3);
+                parser.set("config-version", 4);
                 parser.save();
         }
         username = parser.getString("login.username", "Steve");
@@ -104,6 +99,9 @@ public class Config {
         serverHost = parser.getString("server.host", "0.0.0.0");
         doGUI = parser.getBoolean("interface.doGUI", true);
         doAutoRelog = parser.getBoolean("misc.doAutoRelog", true);
+        doServerAuth = parser.getBoolean("server.doAuth", false);
+        whitelistedName = parser.getString("server.whiteListUser", "");
+        doServerWhitelist = whitelistedName != null && !whitelistedName.isEmpty();
 
         List<String> spam = parser.getStringList("chat.spam.messages");
         spamMesages = spam.toArray(new String[spam.size()]);

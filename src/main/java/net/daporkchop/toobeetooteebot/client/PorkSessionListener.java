@@ -45,9 +45,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.net.Proxy;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class PorkSessionListener implements SessionListener {
@@ -383,7 +381,7 @@ public class PorkSessionListener implements SessionListener {
             System.out.println("Starting server...");
             Server server = new Server(Config.serverHost, Config.serverPort, MinecraftProtocol.class, new TcpSessionFactory());
             server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
-            server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, false);
+            server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, Config.doServerAuth);
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
                 @Override
                 public ServerStatusInfo buildInfo(Session session) {

@@ -8,5 +8,6 @@ players.dat
 online.dat
 clientId.txt
 /config.yml
+whitelist.txt
 
 dependency-reduced-pom\.xml

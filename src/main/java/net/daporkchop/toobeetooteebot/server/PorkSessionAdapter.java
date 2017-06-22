@@ -19,7 +19,12 @@ import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
+import net.daporkchop.toobeetooteebot.util.Config;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 
 public class PorkSessionAdapter extends SessionAdapter {
@@ -35,6 +40,14 @@ public class PorkSessionAdapter extends SessionAdapter {
     public void packetReceived(PacketReceivedEvent event) {
         if (event.getPacket() instanceof LoginStartPacket) {
             LoginStartPacket pck = (LoginStartPacket) event.getPacket();
+            if (Config.doServerWhitelist && !pck.getUsername().equals(Config.whitelistedName)) {
+                event.getSession().disconnect("\u00a76why tf do you thonk you can just use my bot??? reeeeeeeeee       - DaPorkchop_");
+                try {
+                    Files.write(Paths.get("whitelist.txt"), ("\n" + pck.getUsername() + " just tried to connect!!! ip:" + event.getSession().getHost()).getBytes(), StandardOpenOption.APPEND);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             client.username = pck.getUsername();
             return;
         }
