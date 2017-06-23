@@ -130,9 +130,6 @@ public class PorkSessionListener implements SessionListener {
                     switch (pck.getAction()) {
                         case ADD_PLAYER:
                             for (PlayerListEntry entry : pck.getEntries()) {
-                                if (entry.getProfile().getName().equals(TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName())) {
-                                    continue;
-                                }
                                 bot.playerListEntries.add(entry);
                                 if (bot.websocketServer != null) {
                                     bot.websocketServer.sendToAll("tabAdd  " + entry.getDisplayName() + " " + entry.getPing());
@@ -158,6 +155,7 @@ public class PorkSessionListener implements SessionListener {
                                 for (PlayerListEntry toChange : bot.playerListEntries) {
                                     if (uuid.equals(toChange.getProfile().getId().toString())) {
                                         Field f = PlayerListEntry.class.getDeclaredField("ping");
+                                        f.setAccessible(true);
                                         f.set(toChange, entry.getPing());
                                         if (bot.websocketServer != null) {
                                             bot.websocketServer.sendToAll("tabPing " + toChange.getDisplayName() + " " + toChange.getPing());

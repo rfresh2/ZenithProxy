@@ -166,7 +166,6 @@ public class PorkSessionAdapter extends SessionAdapter {
 
     @Override
     public void packetSent(PacketSentEvent event) {
-        //System.out.println(event.getPacket().getClass().getCanonicalName());
         if (event.getPacket() instanceof LoginSuccessPacket) {
             client.loggedIn = true;
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
@@ -177,6 +176,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                 }
                 System.out.println("Sent all cached chunks!");
                 ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.INSTANCE.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.INSTANCE.playerListEntries.size()]));
+                System.out.println(playerListEntryPacket.getEntries().length);
                 client.session.send(new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(1000) + 10));
                 client.session.send(playerListEntryPacket);
                 client.sentChunks = true;

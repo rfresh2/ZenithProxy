@@ -52,7 +52,6 @@ public class WebsocketServer extends WebSocketServer {
                 for (PlayerListEntry entry : TooBeeTooTeeBot.INSTANCE.playerListEntries) {
                     conn.send("tabAdd  " + entry.getDisplayName() + " " + entry.getPing());
                 }
-                conn.send("tabAdd  2pork2bot " + 1);
             }
         }, 1000);
     }
