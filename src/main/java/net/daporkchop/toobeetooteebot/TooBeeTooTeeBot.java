@@ -3,6 +3,7 @@ package net.daporkchop.toobeetooteebot;
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.data.message.TextMessage;
@@ -44,7 +45,7 @@ public class TooBeeTooTeeBot {
     public WebsocketServer websocketServer;
     public Message tabHeader;
     public Message tabFooter;
-    public ArrayList<TabListPlayer> playerListEntries = new ArrayList<>();
+    public ArrayList<PlayerListEntry> playerListEntries = new ArrayList<>();
     public MinecraftProtocol protocol;
     public DataTag loginData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "players.dat"));
     public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;

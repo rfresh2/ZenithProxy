@@ -41,10 +41,10 @@ import net.daporkchop.toobeetooteebot.util.ChunkPos;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.TextFormat;
 import net.daporkchop.toobeetooteebot.web.PlayData;
-import net.daporkchop.toobeetooteebot.web.TabListPlayer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
+import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -133,17 +133,17 @@ public class PorkSessionListener implements SessionListener {
                                 if (entry.getProfile().getName().equals(TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName())) {
                                     continue;
                                 }
-                                TabListPlayer player = new TabListPlayer(entry.getProfile().getId().toString(), entry.getProfile().getName(), entry.getPing());
-                                bot.playerListEntries.add(player);
+                                bot.playerListEntries.add(entry);
                                 if (bot.websocketServer != null) {
-                                    bot.websocketServer.sendToAll("tabAdd  " + player.name + " " + player.ping);
+                                    bot.websocketServer.sendToAll("tabAdd  " + entry.getDisplayName() + " " + entry.getPing());
                                 }
                                 if (Config.doStatCollection) {
-                                    if (bot.uuidsToPlayData.containsKey(player.uuid)) {
-                                        PlayData data = bot.uuidsToPlayData.get(player.uuid);
+                                    String uuid = entry.getProfile().getId().toString();
+                                    if (bot.uuidsToPlayData.containsKey(uuid)) {
+                                        PlayData data = bot.uuidsToPlayData.get(uuid);
                                         data.lastPlayed = System.currentTimeMillis();
                                     } else {
-                                        PlayData data = new PlayData(player.uuid, player.name);
+                                        PlayData data = new PlayData(uuid, entry.getDisplayName().getFullText());
                                         bot.uuidsToPlayData.put(data.UUID, data);
                                     }
                                 }
@@ -155,11 +155,12 @@ public class PorkSessionListener implements SessionListener {
                         case UPDATE_LATENCY:
                             for (PlayerListEntry entry : pck.getEntries()) {
                                 String uuid = entry.getProfile().getId().toString();
-                                for (TabListPlayer toChange : bot.playerListEntries) {
-                                    if (uuid.equals(toChange.uuid)) {
-                                        toChange.ping = entry.getPing();
+                                for (PlayerListEntry toChange : bot.playerListEntries) {
+                                    if (uuid.equals(toChange.getProfile().getId().toString())) {
+                                        Field f = PlayerListEntry.class.getDeclaredField("ping");
+                                        f.set(toChange, entry.getPing());
                                         if (bot.websocketServer != null) {
-                                            bot.websocketServer.sendToAll("tabPing " + toChange.name + " " + toChange.ping);
+                                            bot.websocketServer.sendToAll("tabPing " + toChange.getDisplayName() + " " + toChange.getPing());
                                         }
                                         if (Config.doStatCollection) {
                                             for (PlayData playData : bot.uuidsToPlayData.values()) {
@@ -182,11 +183,11 @@ public class PorkSessionListener implements SessionListener {
                                 String uuid = entry.getProfile().getId().toString();
                                 int removalIndex = -1;
                                 for (int i = 0; i < bot.playerListEntries.size(); i++) {
-                                    TabListPlayer player = bot.playerListEntries.get(i);
-                                    if (uuid.equals(player.uuid)) {
+                                    PlayerListEntry player = bot.playerListEntries.get(i);
+                                    if (uuid.equals(player.getProfile().getId().toString())) {
                                         removalIndex = i;
                                         if (bot.websocketServer != null) {
-                                            bot.websocketServer.sendToAll("tabDel  " + player.name);
+                                            bot.websocketServer.sendToAll("tabDel  " + player.getDisplayName());
                                         }
                                         if (Config.doStatCollection) {
                                             bot.uuidsToPlayData.get(uuid).lastPlayed = System.currentTimeMillis();
