@@ -1,5 +1,6 @@
 package net.daporkchop.toobeetooteebot.web;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
@@ -48,8 +49,8 @@ public class WebsocketServer extends WebSocketServer {
                     String footer = TooBeeTooTeeBot.INSTANCE.tabFooter.getFullText();
                     conn.send("tabDiff   " + footer);
                 }
-                for (TabListPlayer entry : TooBeeTooTeeBot.INSTANCE.playerListEntries) {
-                    conn.send("tabAdd  " + entry.name + " " + entry.ping);
+                for (PlayerListEntry entry : TooBeeTooTeeBot.INSTANCE.playerListEntries) {
+                    conn.send("tabAdd  " + entry.getDisplayName() + " " + entry.getPing());
                 }
                 conn.send("tabAdd  2pork2bot " + 1);
             }
