@@ -111,6 +111,10 @@ public class TooBeeTooTeeBot {
         return toReturn;
     }
 
+    public static String getName(PlayerListEntry entry) {
+        return entry.getDisplayName() == null ? entry.getProfile().getName() : entry.getDisplayName().getFullText();
+    }
+
     public void start(String[] args) {
         INSTANCE = this;
         try {

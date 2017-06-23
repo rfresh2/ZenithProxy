@@ -132,7 +132,7 @@ public class PorkSessionListener implements SessionListener {
                             for (PlayerListEntry entry : pck.getEntries()) {
                                 bot.playerListEntries.add(entry);
                                 if (bot.websocketServer != null) {
-                                    bot.websocketServer.sendToAll("tabAdd  " + entry.getDisplayName() + " " + entry.getPing());
+                                    bot.websocketServer.sendToAll("tabAdd  " + TooBeeTooTeeBot.getName(entry) + " " + entry.getPing());
                                 }
                                 if (Config.doStatCollection) {
                                     String uuid = entry.getProfile().getId().toString();
@@ -140,7 +140,7 @@ public class PorkSessionListener implements SessionListener {
                                         PlayData data = bot.uuidsToPlayData.get(uuid);
                                         data.lastPlayed = System.currentTimeMillis();
                                     } else {
-                                        PlayData data = new PlayData(uuid, entry.getDisplayName().getFullText());
+                                        PlayData data = new PlayData(uuid, TooBeeTooTeeBot.getName(entry));
                                         bot.uuidsToPlayData.put(data.UUID, data);
                                     }
                                 }
@@ -185,7 +185,7 @@ public class PorkSessionListener implements SessionListener {
                                     if (uuid.equals(player.getProfile().getId().toString())) {
                                         removalIndex = i;
                                         if (bot.websocketServer != null) {
-                                            bot.websocketServer.sendToAll("tabDel  " + player.getDisplayName());
+                                            bot.websocketServer.sendToAll("tabDel  " + TooBeeTooTeeBot.getName(player));
                                         }
                                         if (Config.doStatCollection) {
                                             bot.uuidsToPlayData.get(uuid).lastPlayed = System.currentTimeMillis();
