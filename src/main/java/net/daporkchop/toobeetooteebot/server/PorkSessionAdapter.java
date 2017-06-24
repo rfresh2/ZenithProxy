@@ -168,6 +168,7 @@ public class PorkSessionAdapter extends SessionAdapter {
     public void packetSent(PacketSentEvent event) {
         if (event.getPacket() instanceof LoginSuccessPacket) {
             client.loggedIn = true;
+            System.out.println(((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString());
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
                 System.out.println(bot.cachedChunks.values().size());
@@ -181,7 +182,6 @@ public class PorkSessionAdapter extends SessionAdapter {
                 client.session.send(playerListEntryPacket);
                 client.sentChunks = true;
             }
-        } else if (event.getPacket() instanceof ClientTeleportConfirmPacket) {
         }
     }
 }

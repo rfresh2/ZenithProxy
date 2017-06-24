@@ -183,6 +183,7 @@ public class TooBeeTooTeeBot {
                     protocol = new MinecraftProtocol(Config.username);
                 }
                 System.out.println("Success!");
+                System.out.println(protocol.getProfile().getIdAsString());
             }
 
             if (Config.doGUI && GuiBot.INSTANCE == null) {

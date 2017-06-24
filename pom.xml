@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.github.Steveice10</groupId>
             <artifactId>MCProtocolLib</artifactId>
-            <version>cdb3489fe9</version>
+            <version>a4a40f3407</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

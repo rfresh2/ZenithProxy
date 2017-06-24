@@ -106,7 +106,7 @@ public class Config {
         doAutoRelog = parser.getBoolean("misc.doAutoRelog", true);
         doServerAuth = parser.getBoolean("server.doAuth", false);
         whitelistedNames = parser.getStringList("server.whiteListUser");
-        doServerWhitelist = whitelistedNames != null && !whitelistedNames.isEmpty();
+        doServerWhitelist = whitelistedNames != null && !(whitelistedNames.isEmpty() || whitelistedNames.get(0).isEmpty());
 
         List<String> spam = parser.getStringList("chat.spam.messages");
         spamMesages = spam.toArray(new String[spam.size()]);
