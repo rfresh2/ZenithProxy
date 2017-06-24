@@ -58,6 +58,7 @@ public class TooBeeTooTeeBot {
     public double x = 0, y = 0, z = 0;
     public float yaw = 0, pitch = 0;
     public int dimension = 0;
+    public int eid = 0;
     public boolean onGround;
     public HashMap<Long, Column> cachedChunks = new HashMap<>();
     //END SERVER VARIABLES

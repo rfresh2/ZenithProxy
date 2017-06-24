@@ -314,6 +314,7 @@ public class PorkSessionListener implements SessionListener {
                 } else if (packetReceivedEvent.getPacket() instanceof ServerJoinGamePacket) {
                     ServerJoinGamePacket pck = (ServerJoinGamePacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
+                    bot.eid = pck.getEntityId();
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
@@ -395,7 +396,7 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
                 @Override
                 public void loggedIn(Session session) {
-                    session.send(new ServerJoinGamePacket(0, false, GameMode.SURVIVAL, bot.dimension, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
+                    session.send(new ServerJoinGamePacket(bot.eid, false, GameMode.SURVIVAL, bot.dimension, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
                 }
             });
 
