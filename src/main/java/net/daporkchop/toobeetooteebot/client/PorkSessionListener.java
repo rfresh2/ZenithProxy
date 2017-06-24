@@ -9,7 +9,6 @@ import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
@@ -315,6 +314,7 @@ public class PorkSessionListener implements SessionListener {
                     ServerJoinGamePacket pck = (ServerJoinGamePacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
                     bot.eid = pck.getEntityId();
+                    bot.gameMode = pck.getGameMode();
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
@@ -396,7 +396,7 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
                 @Override
                 public void loggedIn(Session session) {
-                    session.send(new ServerJoinGamePacket(bot.eid, false, GameMode.SURVIVAL, bot.dimension, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
+                    session.send(new ServerJoinGamePacket(bot.eid, false, bot.gameMode, bot.dimension, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
                 }
             });
 

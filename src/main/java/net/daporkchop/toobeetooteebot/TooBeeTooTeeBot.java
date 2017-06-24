@@ -5,6 +5,7 @@ import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.data.message.TextMessage;
 import com.github.steveice10.packetlib.Client;
@@ -59,6 +60,7 @@ public class TooBeeTooTeeBot {
     public float yaw = 0, pitch = 0;
     public int dimension = 0;
     public int eid = 0;
+    public GameMode gameMode = GameMode.SURVIVAL;
     public boolean onGround;
     public HashMap<Long, Column> cachedChunks = new HashMap<>();
     //END SERVER VARIABLES
