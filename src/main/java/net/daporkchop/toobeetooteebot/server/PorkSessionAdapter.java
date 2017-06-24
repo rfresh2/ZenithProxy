@@ -45,8 +45,8 @@ public class PorkSessionAdapter extends SessionAdapter {
     @Override
     public void packetReceived(PacketReceivedEvent event) {
         if (event.getPacket() instanceof LoginStartPacket
-                && ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.LOGIN
-                && ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.HANDSHAKE) {
+                && (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.LOGIN
+                || ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.HANDSHAKE)) {
             LoginStartPacket pck = event.getPacket();
             if (Config.doServerWhitelist && !Config.whitelistedNames.contains(pck.getUsername())) {
                 event.getSession().send(new LoginDisconnectPacket("\u00a76why tf do you thonk you can just use my bot??? reeeeeeeeee       - DaPorkchop_"));
@@ -75,7 +75,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.onGround = pck.isOnGround();
                     ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
                     for (PorkClient porkClient : bot.clients) {
-                        if (porkClient.arrayIndex == 0) {
+                        if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
                         }
                         porkClient.session.send(toSend);
@@ -89,7 +89,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.onGround = pck.isOnGround();
                     ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
                     for (PorkClient porkClient : bot.clients) {
-                        if (porkClient.arrayIndex == 0) {
+                        if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
                         }
                         porkClient.session.send(toSend);
@@ -105,7 +105,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.onGround = pck.isOnGround();
                     ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
                     for (PorkClient porkClient : bot.clients) {
-                        if (porkClient.arrayIndex == 0) {
+                        if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
                         }
                         porkClient.session.send(toSend);
@@ -121,7 +121,9 @@ public class PorkSessionAdapter extends SessionAdapter {
 
                         ServerChatPacket toSend = new ServerChatPacket(pck.getMessage(), MessageType.CHAT);
                         for (PorkClient client : bot.clients) {
-                            client.session.send(toSend);
+                            if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+                                client.session.send(toSend);
+                            }
                         }
                         return;
                     } else {
@@ -150,7 +152,9 @@ public class PorkSessionAdapter extends SessionAdapter {
 
                     ServerChatPacket toSend = new ServerChatPacket(pck.getMessage(), MessageType.CHAT);
                     for (PorkClient client : bot.clients) {
-                        client.session.send(toSend);
+                        if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+                            client.session.send(toSend);
+                        }
                     }
                     return;
                 } else {
