@@ -113,7 +113,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientChatPacket) {
                     ClientChatPacket pck = (ClientChatPacket) event.getPacket();
-                    if (pck.getMessage().startsWith("!")) {
+                    if (pck.getMessage().startsWith("!") && !pck.getMessage().startsWith("!!")) {
                         if (pck.getMessage().equals("!setmainclient")) {
                             client.session.send(new ServerChatPacket("You're already at index 0!", MessageType.CHAT));
                             return;
@@ -136,7 +136,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                 }
             } else if (event.getPacket() instanceof ClientChatPacket) {
                 ClientChatPacket pck = (ClientChatPacket) event.getPacket();
-                if (pck.getMessage().startsWith("!")) {
+                if (pck.getMessage().startsWith("!") && !pck.getMessage().startsWith("!!")) {
                     if (pck.getMessage().equals("!setmainclient")) {
                         if (bot.clients.size() < 2) {
                             client.session.send(new ServerChatPacket("There's only one client connected!", MessageType.CHAT));
