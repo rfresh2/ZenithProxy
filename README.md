@@ -1,3 +1,3 @@
 # Pork2b2tBot
 
-TODO: everything
+TODO: make a descreitive readme
