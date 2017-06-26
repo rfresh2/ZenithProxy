@@ -77,6 +77,9 @@ function onMessage(evt) {
             var split = evt.data.substring(8).split("\u2001");
             var name = split[0];
             var ping = parseInt(split[1]);
+            var uuid = split[2];
+
+            if (!document.body.contains('player_' + name))  {
 
             var tableRef = document.getElementById('tabplayers').getElementsByTagName('tbody')[0];
             var newRow = tableRef.rows[0];
@@ -85,7 +88,7 @@ function onMessage(evt) {
             newCell.setAttribute('id', 'player_' + name);
 
             var img = document.createElement("img");
-            img.setAttribute('src', 'https://crafatar.com/avatars/' + name + '?size=24&overlay');
+            img.setAttribute('src', 'https://crafatar.com/avatars/' + uuid + '?size=24&overlay');
             img.setAttribute('height', '24px');
             img.setAttribute('width', '24px');
             newCell.appendChild(img);
@@ -102,6 +105,7 @@ function onMessage(evt) {
             ping.setAttribute('height', '32px');
             ping.setAttribute('width', '40px');
             newCell.appendChild(ping);
+            }
             break;
         case "tabPing ":
             var split = evt.data.substring(8).split("\u2001");

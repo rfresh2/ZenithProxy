@@ -131,7 +131,7 @@ public class PorkSessionListener implements SessionListener {
                             for (PlayerListEntry entry : pck.getEntries()) {
                                 bot.playerListEntries.add(entry);
                                 if (bot.websocketServer != null) {
-                                    bot.websocketServer.sendToAll("tabAdd  " + TooBeeTooTeeBot.getName(entry) + " " + entry.getPing());
+                                    bot.websocketServer.sendToAll("tabAdd  " + TooBeeTooTeeBot.getName(entry) + " " + entry.getPing() + " " + entry.getProfile().getIdAsString());
                                 }
                                 if (Config.doStatCollection) {
                                     String uuid = entry.getProfile().getId().toString();
