@@ -172,7 +172,7 @@ public class PorkSessionAdapter extends SessionAdapter {
     public void packetSent(PacketSentEvent event) {
         if (event.getPacket() instanceof LoginSuccessPacket) {
             client.loggedIn = true;
-            System.out.println(((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString());
+            System.out.println("UUID: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString() + "\nBot UUID: " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getIdAsString() + "\nUser name: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getName() + "\nBot name: " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName());
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
                 System.out.println(bot.cachedChunks.values().size());
@@ -181,7 +181,6 @@ public class PorkSessionAdapter extends SessionAdapter {
                 }
                 System.out.println("Sent all cached chunks!");
                 ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.INSTANCE.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.INSTANCE.playerListEntries.size()]));
-                System.out.println(playerListEntryPacket.getEntries().length);
                 client.session.send(new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(1000) + 10));
                 client.session.send(playerListEntryPacket);
                 client.sentChunks = true;
