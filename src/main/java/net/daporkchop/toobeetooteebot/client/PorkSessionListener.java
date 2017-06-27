@@ -318,6 +318,7 @@ public class PorkSessionListener implements SessionListener {
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
+                    bot.cachedChunks.clear();
                 } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket) {
                     LoginDisconnectPacket pck = (LoginDisconnectPacket) packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
