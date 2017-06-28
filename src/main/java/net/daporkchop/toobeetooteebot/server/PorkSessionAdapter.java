@@ -14,10 +14,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDisconnectPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerNotifyClientPacket;
@@ -28,6 +25,7 @@ import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.util.Config;
+import net.daporkchop.toobeetooteebot.util.RefStrings;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -177,6 +175,7 @@ public class PorkSessionAdapter extends SessionAdapter {
             System.out.println("UUID: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString() + "\nBot UUID: " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getIdAsString() + "\nUser name: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getName() + "\nBot name: " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName());
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
+                client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
                 System.out.println(bot.cachedChunks.values().size());
                 for (Column chunk : bot.cachedChunks.values()) {
                     client.session.send(new ServerChunkDataPacket(chunk));
