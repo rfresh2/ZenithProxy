@@ -43,7 +43,6 @@ import net.daporkchop.toobeetooteebot.web.PlayData;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -153,9 +152,7 @@ public class PorkSessionListener implements SessionListener {
                                 String uuid = entry.getProfile().getId().toString();
                                 for (PlayerListEntry toChange : bot.playerListEntries) {
                                     if (uuid.equals(toChange.getProfile().getId().toString())) {
-                                        Field f = PlayerListEntry.class.getDeclaredField("ping");
-                                        f.setAccessible(true);
-                                        f.set(toChange, entry.getPing());
+                                        toChange.ping = entry.getPing();
                                         if (bot.websocketServer != null) {
                                             bot.websocketServer.sendToAll("tabPing " + toChange.getDisplayName() + " " + toChange.getPing());
                                         }

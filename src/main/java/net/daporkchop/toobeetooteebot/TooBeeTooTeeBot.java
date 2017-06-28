@@ -27,7 +27,6 @@ import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -138,13 +137,8 @@ public class TooBeeTooTeeBot {
                             auth.setAccessToken(sessionID);
 
                             auth.login();
-
-                            Field profile = MinecraftProtocol.class.getDeclaredField("profile");
-                            Field accessToken = MinecraftProtocol.class.getDeclaredField("accessToken");
-                            profile.setAccessible(true);
-                            accessToken.setAccessible(true);
-                            profile.set(protocol, auth.getSelectedProfile());
-                            accessToken.set(protocol, auth.getAccessToken());
+                            protocol.profile = auth.getSelectedProfile();
+                            protocol.accessToken = auth.getAccessToken();
                             System.out.println("Done! Account name: " + protocol.getProfile().getName() + ", session ID:" + protocol.getAccessToken());
                             break ESCAPE;
                         } catch (RequestException e) {
@@ -157,12 +151,8 @@ public class TooBeeTooTeeBot {
 
                             auth.login();
 
-                            Field profile = MinecraftProtocol.class.getDeclaredField("profile");
-                            Field accessToken = MinecraftProtocol.class.getDeclaredField("accessToken");
-                            profile.setAccessible(true);
-                            accessToken.setAccessible(true);
-                            profile.set(protocol, auth.getSelectedProfile());
-                            accessToken.set(protocol, auth.getAccessToken());
+                            protocol.profile = auth.getSelectedProfile();
+                            protocol.accessToken = auth.getAccessToken();
                             System.out.println("Logged in with credentials " + Config.username + ":" + Config.password);
                             System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
                             PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
