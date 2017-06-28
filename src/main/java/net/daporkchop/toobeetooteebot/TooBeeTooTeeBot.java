@@ -8,6 +8,9 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.data.message.TextMessage;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
@@ -62,6 +65,9 @@ public class TooBeeTooTeeBot {
     public GameMode gameMode = GameMode.SURVIVAL;
     public boolean onGround;
     public HashMap<Long, Column> cachedChunks = new HashMap<>();
+    public HashMap<Integer, ServerSpawnPlayerPacket> cachedPlayers = new HashMap<>();
+    public HashMap<Integer, ServerSpawnMobPacket> cachedMobs = new HashMap<>();
+    public HashMap<Integer, ServerSpawnObjectPacket> cachedObjects = new HashMap<>();
     //END SERVER VARIABLES
     public Server server = null;
     public ArrayList<String> queuedIngameMessages = new ArrayList<>();

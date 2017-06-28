@@ -106,7 +106,7 @@ public class MagicValues {
 
         register(ClientRequest.RESPAWN, 0);
         register(ClientRequest.STATS, 1);
-        register(ClientRequest.OPEN_INVENTORY, 2);
+        //register(ClientRequest, 2);
 
         register(ChatVisibility.FULL, 0);
         register(ChatVisibility.SYSTEM, 1);
