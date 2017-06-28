@@ -128,7 +128,13 @@ public class PorkSessionListener implements SessionListener {
                     ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
                     switch (pck.getAction()) {
                         case ADD_PLAYER:
+                            LOOP:
                             for (PlayerListEntry entry : pck.getEntries()) {
+                                for (PlayerListEntry listEntry : bot.playerListEntries) {
+                                    if (listEntry.getProfile().getIdAsString().equals(entry.getProfile().getIdAsString())) {
+                                        continue LOOP;
+                                    }
+                                }
                                 bot.playerListEntries.add(entry);
                                 if (bot.websocketServer != null) {
                                     bot.websocketServer.sendToAll("tabAdd  " + TooBeeTooTeeBot.getName(entry) + " " + entry.getPing() + " " + entry.getProfile().getIdAsString());
