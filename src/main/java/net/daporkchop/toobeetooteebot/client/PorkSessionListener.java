@@ -61,7 +61,7 @@ public class PorkSessionListener implements SessionListener {
             BREAK:
             if (true) {
                 if (packetReceivedEvent.getPacket() instanceof ServerChatPacket) {
-                    ServerChatPacket pck = (ServerChatPacket) packetReceivedEvent.getPacket();
+                    ServerChatPacket pck = packetReceivedEvent.getPacket();
                     String messageJson = pck.getMessage().toJsonString();
                     String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
                     String msg = TextFormat.clean(legacyColorCodes);
@@ -111,7 +111,7 @@ public class PorkSessionListener implements SessionListener {
                         bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
-                    ServerPlayerHealthPacket pck = (ServerPlayerHealthPacket) packetReceivedEvent.getPacket();
+                    ServerPlayerHealthPacket pck = packetReceivedEvent.getPacket();
                     if (Config.doAutoRespawn) {
                         if (pck.getHealth() < 1) {
                             bot.timer.schedule(new TimerTask() { // respawn
@@ -124,7 +124,7 @@ public class PorkSessionListener implements SessionListener {
                         }
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListEntryPacket) {
-                    ServerPlayerListEntryPacket pck = (ServerPlayerListEntryPacket) packetReceivedEvent.getPacket();
+                    ServerPlayerListEntryPacket pck = packetReceivedEvent.getPacket();
                     switch (pck.getAction()) {
                         case ADD_PLAYER:
                             LOOP:
@@ -202,7 +202,7 @@ public class PorkSessionListener implements SessionListener {
                             break;
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerListDataPacket) {
-                    ServerPlayerListDataPacket pck = (ServerPlayerListDataPacket) packetReceivedEvent.getPacket();
+                    ServerPlayerListDataPacket pck = packetReceivedEvent.getPacket();
                     bot.tabHeader = pck.getHeader();
                     bot.tabFooter = pck.getFooter();
                     String header = bot.tabHeader.getFullText();
@@ -211,7 +211,7 @@ public class PorkSessionListener implements SessionListener {
                         bot.websocketServer.sendToAll("tabDiff " + header + " " + footer);
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerPositionRotationPacket) {
-                    ServerPlayerPositionRotationPacket pck = (ServerPlayerPositionRotationPacket) packetReceivedEvent.getPacket();
+                    ServerPlayerPositionRotationPacket pck = packetReceivedEvent.getPacket();
                     bot.x = pck.getX();
                     bot.y = pck.getY();
                     bot.z = pck.getZ();
@@ -220,12 +220,12 @@ public class PorkSessionListener implements SessionListener {
                     bot.client.getSession().send(new ClientTeleportConfirmPacket(pck.getTeleportId()));
                 } else if (packetReceivedEvent.getPacket() instanceof ServerChunkDataPacket) {
                     if (Config.doServer) {
-                        ServerChunkDataPacket pck = (ServerChunkDataPacket) packetReceivedEvent.getPacket();
+                        ServerChunkDataPacket pck = packetReceivedEvent.getPacket();
                         bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(pck.getColumn().getX(), pck.getColumn().getZ()), pck.getColumn());
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUnloadChunkPacket) {
                     if (Config.doServer) {
-                        ServerUnloadChunkPacket pck = (ServerUnloadChunkPacket) packetReceivedEvent.getPacket();
+                        ServerUnloadChunkPacket pck = packetReceivedEvent.getPacket();
                         bot.cachedChunks.remove(ChunkPos.getChunkHashFromXZ(pck.getX(), pck.getZ()));
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUpdateTimePacket) {
@@ -263,7 +263,7 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerBlockChangePacket) { //update cached chunks
                     if (Config.doServer) {
-                        ServerBlockChangePacket pck = (ServerBlockChangePacket) packetReceivedEvent.getPacket();
+                        ServerBlockChangePacket pck = packetReceivedEvent.getPacket();
                         int chunkX = pck.getRecord().getPosition().getX() >> 4;
                         int chunkZ = pck.getRecord().getPosition().getZ() >> 4;
                         int subchunkY = TooBeeTooTeeBot.ensureRange(pck.getRecord().getPosition().getY() >> 4, 0, 15);
@@ -287,7 +287,7 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerMultiBlockChangePacket) { //update cached chunks with passion
                     if (Config.doServer) {
-                        ServerMultiBlockChangePacket pck = (ServerMultiBlockChangePacket) packetReceivedEvent.getPacket();
+                        ServerMultiBlockChangePacket pck = packetReceivedEvent.getPacket();
                         int chunkX = pck.getRecords()[0] //there HAS to be at least one element
                                 .getPosition().getX() >> 4; //this cuts away the additional relative chunk coordinates
                         int chunkZ = pck.getRecords()[0] //there HAS to be at least one element
@@ -314,16 +314,16 @@ public class PorkSessionListener implements SessionListener {
                         bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerJoinGamePacket) {
-                    ServerJoinGamePacket pck = (ServerJoinGamePacket) packetReceivedEvent.getPacket();
+                    ServerJoinGamePacket pck = packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
                     bot.eid = pck.getEntityId();
                     bot.gameMode = pck.getGameMode();
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
-                    ServerRespawnPacket pck = (ServerRespawnPacket) packetReceivedEvent.getPacket();
+                    ServerRespawnPacket pck = packetReceivedEvent.getPacket();
                     bot.dimension = pck.getDimension();
                     bot.cachedChunks.clear();
                 } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket) {
-                    LoginDisconnectPacket pck = (LoginDisconnectPacket) packetReceivedEvent.getPacket();
+                    LoginDisconnectPacket pck = packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
                     bot.client.getSession().disconnect(pck.getReason().getFullText());
                 }
@@ -486,5 +486,9 @@ public class PorkSessionListener implements SessionListener {
         }
 
         bot.reLaunch();
+    }
+
+    @Override
+    public void packetSending(PacketSendingEvent event) {
     }
 }
