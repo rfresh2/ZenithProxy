@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
@@ -83,16 +82,20 @@ public class GuiBot extends JFrame {
         connect_disconnectButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                if (TooBeeTooTeeBot.INSTANCE.client == null)    {
+                if (TooBeeTooTeeBot.INSTANCE.client == null) {
                     connect_disconnectButton.setText("Disconnect");
                     connect_disconnectButton.setEnabled(false);
                     guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            TooBeeTooTeeBot.INSTANCE.start(new String[] {"firstart"});
+                            try {
+                                TooBeeTooTeeBot.INSTANCE.start(new String[]{"firstart"});
+                            } catch (InterruptedException e) {
+
+                            }
                         }
                     }, 0);
-                } else if (TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected())  {
+                } else if (TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
                     connect_disconnectButton.setText("Connect");
                     connect_disconnectButton.setEnabled(false);
                     guiTimer.schedule(new TimerTask() {
@@ -108,7 +111,11 @@ public class GuiBot extends JFrame {
                         @Override
                         public void run() {
                             TooBeeTooTeeBot.INSTANCE.cleanUp();
-                            TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+                            try {
+                                TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+                            } catch (InterruptedException e) {
+
+                            }
                         }
                     }, 0);
                 }
@@ -370,7 +377,7 @@ public class GuiBot extends JFrame {
         sendButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected())  {
+                if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
                     TooBeeTooTeeBot.INSTANCE.queueMessage(chatInput.getText());
                     chatInput.setText("");
                 }
@@ -381,9 +388,9 @@ public class GuiBot extends JFrame {
         guiTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (TooBeeTooTeeBot.INSTANCE.client == null)    {
+                if (TooBeeTooTeeBot.INSTANCE.client == null) {
                     connect_disconnectButton.setText("Connect");
-                } else if (!TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected())  {
+                } else if (!TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
                     connect_disconnectButton.setText("Connect");
                 } else {
                     connect_disconnectButton.setText("Disconnect");
