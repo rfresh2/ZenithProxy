@@ -44,6 +44,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TimerTask;
 
@@ -92,7 +93,7 @@ public class PorkSessionListener implements SessionListener {
                     System.out.println("[CHAT] " + msg);
 
                     if (GuiBot.INSTANCE != null) {
-                        GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>" + msg + "</html>");
+                        GuiBot.INSTANCE.chatDisplay.setText(GuiBot.INSTANCE.chatDisplay.getText().substring(0, GuiBot.INSTANCE.chatDisplay.getText().length() - 7) + "<br>" + msg.replace("<", "&lt;").replace(">", "&gt;") + "</html>");
                         String[] split = GuiBot.INSTANCE.chatDisplay.getText().split("<br>");
                         if (split.length > 500) {
                             String toSet = "<html>";
@@ -393,14 +394,14 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
                 @Override
                 public ServerStatusInfo buildInfo(Session session) {
-                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, bot.clients.size() - 1, new GameProfile[0]), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), null);
+                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, bot.clients.size() - 1, getOnline()), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), null);
                 }
             });
 
             server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
                 @Override
                 public void loggedIn(Session session) {
-                    session.send(new ServerJoinGamePacket(bot.eid, false, bot.gameMode, bot.dimension, Difficulty.NORMAL, 10, WorldType.DEFAULT, false));
+                    session.send(new ServerJoinGamePacket(bot.eid, false, bot.gameMode, bot.dimension, Difficulty.NORMAL, Integer.MAX_VALUE, WorldType.DEFAULT, false));
                 }
             });
 
@@ -425,6 +426,18 @@ public class PorkSessionListener implements SessionListener {
                 GuiBot.INSTANCE.chatDisplay.setText(toSet);
             }
         }
+    }
+
+    public GameProfile[] getOnline() {
+        ArrayList<GameProfile> arr = new ArrayList<>();
+
+        for (PorkClient session : bot.clients) {
+            if (((MinecraftProtocol) session.session.getPacketProtocol()).subProtocol == SubProtocol.GAME) {
+                arr.add(((MinecraftProtocol) session.session.getPacketProtocol()).profile);
+            }
+        }
+
+        return arr.toArray(new GameProfile[arr.size()]);
     }
 
     @Override
