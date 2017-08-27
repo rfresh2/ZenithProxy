@@ -24,10 +24,6 @@ import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.DataTag;
 import net.daporkchop.toobeetooteebot.web.*;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -42,9 +38,6 @@ public class TooBeeTooTeeBot {
     public Client client = null;
     public Random r = new Random();
     public Timer timer = new Timer();
-    public JDA jda;
-    public TextChannel channel;
-    public ArrayList<String> queuedMessages = null;
     public boolean firstRun = true;
     public WebsocketServer websocketServer;
     public Message tabHeader;
@@ -206,9 +199,6 @@ public class TooBeeTooTeeBot {
                 if (Config.doStatCollection) {
                     uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
                 }
-                if (Config.doDiscord) {
-                    queuedMessages = new ArrayList<>();
-                }
 
                 timer.schedule(new TimerTask() {
                     @Override
@@ -338,40 +328,6 @@ public class TooBeeTooTeeBot {
                         }
                     }, nextHour, 60 * 60 * 1000);
                 }
-
-                if (Config.doDiscord) {
-                    jda = new JDABuilder(AccountType.BOT)
-                            .setToken(Config.token)
-                            .buildBlocking();
-                    channel = jda.getTextChannelById("305346913488863243");
-
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (queuedMessages.size() > 0) {
-                                StringBuilder builder = new StringBuilder();
-                                Iterator<String> iter = queuedMessages.iterator();
-                                iter.hasNext(); //idk lol
-                                while (builder.length() < 2001) {
-                                    StringBuilder copiedBuilder = new StringBuilder(builder.toString());
-                                    copiedBuilder.append(iter.next() + "\n");
-                                    if (builder.length() > 2000) {
-                                        channel.sendMessage(copiedBuilder.toString()).queue();
-                                        queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                                        return;
-                                    } else {
-                                        builder = copiedBuilder;
-                                    }
-                                    if (!iter.hasNext()) {
-                                        break;
-                                    }
-                                }
-                                channel.sendMessage(builder.toString()).queue();
-                                queuedMessages.clear(); //yes, ik that this might lose some messages but idrc
-                            }
-                        }
-                    }, 2000, 2000);
-                }
                 hasDonePostConnect = true;
             }
         } catch (Exception e) {
@@ -435,7 +391,6 @@ public class TooBeeTooTeeBot {
         System.out.println("Purged timer");
         this.timer = new Timer();
         System.out.println("Reset timer");
-        this.queuedMessages = new ArrayList<>();
         System.out.println("Reset queued messages");
         this.tabHeader = new TextMessage("");
         this.tabFooter = new TextMessage("");

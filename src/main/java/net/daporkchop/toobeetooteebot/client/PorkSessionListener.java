@@ -104,10 +104,6 @@ public class PorkSessionListener implements SessionListener {
                             GuiBot.INSTANCE.chatDisplay.setText(toSet);
                         }
                     }
-
-                    if (Config.doDiscord) {
-                        bot.queuedMessages.add(msg);
-                    }
                     if (bot.websocketServer != null) {
                         bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                     }
@@ -443,7 +439,6 @@ public class PorkSessionListener implements SessionListener {
     @Override
     public void disconnecting(DisconnectingEvent disconnectingEvent) {
         System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
-        bot.queuedMessages.add("Disconnecting. Reason: " + disconnectingEvent.getReason());
         if (bot.websocketServer != null) {
             bot.websocketServer.sendToAll("chat    \u00A7cDisconnected from server! Reason: " + disconnectingEvent.getReason());
         }

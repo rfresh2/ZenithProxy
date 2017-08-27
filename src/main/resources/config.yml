@@ -74,15 +74,6 @@ misc:
   # Default: true
   autoreconnect: true
 
-discord:
-  # Whether or not to use a Discord bot.
-  # Default: false
-  doDiscord: false
-
-  # The Discord bot token to use.
-  # Default: blank
-  token: ''
-
 websocket:
   # Whether or not to run the websocket server.
   # A demonstration can be found at http://www.daporkchop.net/pork2b2tbot
@@ -137,6 +128,6 @@ interface:
   doGUI: true
 
 # Don't touch this!
-config-version: 5
+config-version: 6
 
 

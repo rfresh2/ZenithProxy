@@ -30,8 +30,6 @@ public class Config {
     public static String username;
     public static String password;
     public static boolean doAuth;
-    public static String token;
-    public static boolean doDiscord;
     public static String ip;
     public static int port;
     public static String clientId;
@@ -80,15 +78,16 @@ public class Config {
                 ArrayList<String> list = new ArrayList<>();
                 list.add("");
                 parser.set("server.whiteListUser", list);
+            case 5:
+                parser.remove("discord.token");
+                parser.remove("discord.doDiscord");
 
-                parser.set("config-version", 5);
+                parser.set("config-version", 6);
                 parser.save();
         }
         username = parser.getString("login.username", "Steve");
         password = parser.getString("login.password", "password");
         doAuth = parser.getBoolean("login.doAuthentication", false);
-        token = parser.getString("discord.token", "");
-        doDiscord = parser.getBoolean("discord.doDiscord", false);
         ip = parser.getString("client.hostIP", "mc.example.com");
         port = parser.getInt("client.hostPort", 25565);
         doWebsocket = parser.getBoolean("websocket.doWebsocket", false);

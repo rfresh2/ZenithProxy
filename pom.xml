@@ -38,17 +38,12 @@
         <dependency>
             <groupId>com.github.DaMatrix</groupId>
             <artifactId>McProtocolLib</artifactId>
-            <version>23d1b6ad16</version>
+            <version>bedbd8441e</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>21.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>3.0.0_165</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
