@@ -495,8 +495,4 @@ public class PorkSessionListener implements SessionListener {
 
         bot.reLaunch();
     }
-
-    @Override
-    public void packetSending(PacketSendingEvent event) {
-    }
 }

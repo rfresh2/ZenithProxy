@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.github.DaMatrix</groupId>
             <artifactId>McProtocolLib</artifactId>
-            <version>bedbd8441e</version>
+            <version>09958eac2daf8f9f149de1c19d0460c472cbdc41</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

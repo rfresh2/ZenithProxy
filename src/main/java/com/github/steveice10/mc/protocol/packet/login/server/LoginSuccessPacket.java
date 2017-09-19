@@ -1,18 +1,18 @@
 package com.github.steveice10.mc.protocol.packet.login.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.util.ReflectionToString;
+import com.github.steveice10.mc.protocol.packet.MinecraftPacket;
 import com.github.steveice10.packetlib.io.NetInput;
 import com.github.steveice10.packetlib.io.NetOutput;
-import com.github.steveice10.packetlib.packet.Packet;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 
 import java.io.IOException;
 
-public class LoginSuccessPacket implements Packet {
-    private GameProfile profile;
+public class LoginSuccessPacket extends MinecraftPacket {
+    public GameProfile profile;
 
-    private LoginSuccessPacket() {
+    @SuppressWarnings("unused")
+    public LoginSuccessPacket() {
     }
 
     public LoginSuccessPacket(GameProfile profile) {
@@ -23,20 +23,19 @@ public class LoginSuccessPacket implements Packet {
         return this.profile;
     }
 
+    @Override
     public void read(NetInput in) throws IOException {
         this.profile = new GameProfile(in.readString(), in.readString());
     }
 
+    @Override
     public void write(NetOutput out) throws IOException {
         out.writeString(this.profile.getIdAsString());
         out.writeString(this.profile.getName());
     }
 
+    @Override
     public boolean isPriority() {
         return true;
-    }
-
-    public String toString() {
-        return ReflectionToString.toString(this);
     }
 }
