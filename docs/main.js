@@ -37,10 +37,12 @@ function testWebSocket() {
     document.getElementById("chatsendbutton").style.display = 'none';
     document.getElementById("loggingintext").style.display = 'none';
     document.getElementById("usernameinput").style.display = 'none';
-    if (get("hidelogin") != "undefined")    {
+    if (get("showlogin") == "false")    {
+        console.log("Hiding login buttons");
         document.getElementById("usernamein").style.display = 'none';
         document.getElementById("passwordin").style.display = 'none';
         document.getElementById("loginbutton").style.display = 'none';
+        document.getElementById("requestpermsbutton").style.display = 'none';
     }
     if (Notification.permission == "granted") {
         document.getElementById("requestpermsbutton").style.display = 'none';
