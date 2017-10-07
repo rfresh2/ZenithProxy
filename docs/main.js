@@ -37,6 +37,11 @@ function testWebSocket() {
     document.getElementById("chatsendbutton").style.display = 'none';
     document.getElementById("loggingintext").style.display = 'none';
     document.getElementById("usernameinput").style.display = 'none';
+    if (get("hidelogin") != "undefined")    {
+        document.getElementById("usernamein").style.display = 'none';
+        document.getElementById("passwordin").style.display = 'none';
+        document.getElementById("loginbutton").style.display = 'none';
+    }
     if (Notification.permission == "granted") {
         document.getElementById("requestpermsbutton").style.display = 'none';
     }
