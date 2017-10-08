@@ -36,12 +36,14 @@ import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
+import net.daporkchop.toobeetooteebot.util.ChatUtils;
 import net.daporkchop.toobeetooteebot.util.ChunkPos;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.TextFormat;
 import net.daporkchop.toobeetooteebot.web.PlayData;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.daporkchop.toobeetooteebot.web.WebsocketServer;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class PorkSessionListener implements SessionListener {
                 if (packetReceivedEvent.getPacket() instanceof ServerChatPacket) {
                     ServerChatPacket pck = packetReceivedEvent.getPacket();
                     String messageJson = pck.getMessage().toJsonString();
-                    String legacyColorCodes = BaseComponent.toLegacyText(ComponentSerializer.parse(messageJson));
+                    String legacyColorCodes = ChatUtils.getOldText(messageJson);
                     String msg = TextFormat.clean(legacyColorCodes);
                     if (Config.processChat) {
                         if (msg.startsWith("To ")) {

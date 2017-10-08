@@ -394,6 +394,11 @@ public class TooBeeTooTeeBot {
         System.out.println("Reset queued messages");
         this.tabHeader = new TextMessage("");
         this.tabFooter = new TextMessage("");
+        if (websocketServer != null) {
+            for (PlayerListEntry entry : playerListEntries) {
+                websocketServer.sendToAll("tabDel  " + TooBeeTooTeeBot.getName(entry));
+            }
+        }
         System.out.println("Reset tab header and footer");
         this.playerListEntries.clear();
         System.out.println("Reset player list");
