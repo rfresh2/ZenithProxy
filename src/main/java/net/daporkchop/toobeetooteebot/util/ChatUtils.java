@@ -11,7 +11,6 @@ public class ChatUtils {
         String text = component.getFormattedText();
         if (TextFormat.clean(text).startsWith("{")) {
             text = ITextComponent.Serializer.jsonToComponent(TextFormat.clean(text)).getFormattedText();
-            System.out.println("tried a second time");
         }
         return text;
     }
