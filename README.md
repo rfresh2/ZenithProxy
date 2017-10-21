@@ -1,3 +1,3 @@
 # Pork2b2tBot
 
-TODO: make a descreitive readme
+Spambot, web overview and proxy all in one :D
