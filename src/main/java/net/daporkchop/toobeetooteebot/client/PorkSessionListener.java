@@ -41,9 +41,6 @@ import net.daporkchop.toobeetooteebot.util.ChunkPos;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.TextFormat;
 import net.daporkchop.toobeetooteebot.web.PlayData;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.daporkchop.toobeetooteebot.web.WebsocketServer;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -88,6 +85,14 @@ public class PorkSessionListener implements SessionListener {
                             Config.doAntiAFK = !Config.doAntiAFK;
                             System.out.println("! Toggled AntiAFK! Current state: " + (Config.doAntiAFK ? "on" : "off"));
                             bot.queueMessage("! Toggled AntiAFK! Current state: " + (Config.doAntiAFK ? "on" : "off"));
+                        } else if (msg.startsWith("!dc")) {
+                            bot.server.close();
+                            bot.client.getSession().disconnect("Reboot!");
+                            if (msg.startsWith("!dchard")) {
+                                Runtime.getRuntime().exit(0);
+                            }
+                        } else if (msg.startsWith("!!")) {
+                            bot.client.getSession().send(new ClientChatPacket(msg.replace("!!", "!")));
                         }
                         return;
                     }
@@ -108,6 +113,15 @@ public class PorkSessionListener implements SessionListener {
                     if (bot.websocketServer != null && !(msg.contains("whispers") || msg.startsWith("to"))) {
                         bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                     }
+
+                    Iterator<PorkClient> iterator = bot.clients.iterator();
+                    while (iterator.hasNext()) {
+                        PorkClient client = iterator.next();
+                        if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) { //thx 0x kek
+                            client.session.send(new ServerChatPacket(msg));
+                        }
+                    }
+                    return;
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
                     ServerPlayerHealthPacket pck = packetReceivedEvent.getPacket();
                     if (Config.doAutoRespawn) {
