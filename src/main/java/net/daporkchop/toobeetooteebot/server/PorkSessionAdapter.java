@@ -37,6 +37,7 @@ import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
+import net.daporkchop.toobeetooteebot.Caches;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.RefStrings;
@@ -81,13 +82,13 @@ public class PorkSessionAdapter extends SessionAdapter {
             if (client.arrayIndex == 0) {
                 if (event.getPacket() instanceof ClientPlayerPositionRotationPacket) {
                     ClientPlayerPositionRotationPacket pck = event.getPacket();
-                    bot.x = pck.getX();
-                    bot.y = pck.getY();
-                    bot.z = pck.getZ();
-                    bot.yaw = (float) pck.getYaw();
-                    bot.pitch = (float) pck.getPitch();
-                    bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100));
+                    Caches.x = pck.getX();
+                    Caches.y = pck.getY();
+                    Caches.z = pck.getZ();
+                    Caches.yaw = (float) pck.getYaw();
+                    Caches.pitch = (float) pck.getPitch();
+                    Caches.onGround = pck.isOnGround();
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
@@ -97,11 +98,11 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientPlayerPositionPacket) {
                     ClientPlayerPositionPacket pck = event.getPacket();
-                    bot.x = pck.getX();
-                    bot.y = pck.getY();
-                    bot.z = pck.getZ();
-                    bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100));
+                    Caches.x = pck.getX();
+                    Caches.y = pck.getY();
+                    Caches.z = pck.getZ();
+                    Caches.onGround = pck.isOnGround();
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
@@ -111,13 +112,13 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientPlayerRotationPacket) {
                     ClientPlayerRotationPacket pck = event.getPacket();
-                    bot.x = pck.getX();
-                    bot.y = pck.getY();
-                    bot.z = pck.getZ();
-                    bot.yaw = (float) pck.getYaw();
-                    bot.pitch = (float) pck.getPitch();
-                    bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100));
+                    Caches.x = pck.getX();
+                    Caches.y = pck.getY();
+                    Caches.z = pck.getZ();
+                    Caches.yaw = (float) pck.getYaw();
+                    Caches.pitch = (float) pck.getPitch();
+                    Caches.onGround = pck.isOnGround();
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
@@ -190,15 +191,15 @@ public class PorkSessionAdapter extends SessionAdapter {
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
                 client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
-                System.out.println(bot.cachedChunks.values().size());
-                for (Column chunk : bot.cachedChunks.values()) {
+                System.out.println(Caches.cachedChunks.values().size());
+                for (Column chunk : Caches.cachedChunks.values()) {
                     client.session.send(new ServerChunkDataPacket(chunk));
                 }
                 System.out.println("Sent all cached chunks!");
                 ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.INSTANCE.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.INSTANCE.playerListEntries.size()]));
-                client.session.send(new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(1000) + 10));
+                client.session.send(new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(1000) + 10));
                 client.session.send(playerListEntryPacket);
-                client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, bot.gameMode));
+                client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));
                 client.sentChunks = true;
             }
         }

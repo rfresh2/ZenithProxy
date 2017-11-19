@@ -47,6 +47,7 @@ import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import net.daporkchop.toobeetooteebot.Caches;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
@@ -145,7 +146,7 @@ public class PorkSessionListener implements SessionListener {
                                 @Override
                                 public void run() {
                                     bot.client.getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
-                                    bot.cachedChunks.clear(); //memory leak
+                                    Caches.cachedChunks.clear(); //memory leak
                                 }
                             }, 100);
                         }
@@ -239,21 +240,21 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerPositionRotationPacket) {
                     ServerPlayerPositionRotationPacket pck = packetReceivedEvent.getPacket();
-                    bot.x = pck.getX();
-                    bot.y = pck.getY();
-                    bot.z = pck.getZ();
-                    bot.yaw = pck.getYaw();
-                    bot.pitch = pck.getPitch();
+                    Caches.x = pck.getX();
+                    Caches.y = pck.getY();
+                    Caches.z = pck.getZ();
+                    Caches.yaw = pck.getYaw();
+                    Caches.pitch = pck.getPitch();
                     bot.client.getSession().send(new ClientTeleportConfirmPacket(pck.getTeleportId()));
                 } else if (packetReceivedEvent.getPacket() instanceof ServerChunkDataPacket) {
                     if (Config.doServer) {
                         ServerChunkDataPacket pck = packetReceivedEvent.getPacket();
-                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(pck.getColumn().getX(), pck.getColumn().getZ()), pck.getColumn());
+                        Caches.cachedChunks.put(ChunkPos.getChunkHashFromXZ(pck.getColumn().getX(), pck.getColumn().getZ()), pck.getColumn());
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUnloadChunkPacket) {
                     if (Config.doServer) {
                         ServerUnloadChunkPacket pck = packetReceivedEvent.getPacket();
-                        bot.cachedChunks.remove(ChunkPos.getChunkHashFromXZ(pck.getX(), pck.getZ()));
+                        Caches.cachedChunks.remove(ChunkPos.getChunkHashFromXZ(pck.getX(), pck.getZ()));
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUpdateTimePacket) {
                     if (!bot.isLoggedIn) {
@@ -294,7 +295,7 @@ public class PorkSessionListener implements SessionListener {
                         int chunkX = pck.getRecord().getPosition().getX() >> 4;
                         int chunkZ = pck.getRecord().getPosition().getZ() >> 4;
                         int subchunkY = TooBeeTooTeeBot.ensureRange(pck.getRecord().getPosition().getY() >> 4, 0, 15);
-                        Column column = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
+                        Column column = Caches.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
                         if (column == null) {
                             //unloaded or invalid chunk, ignore pls
                             System.out.println("null chunk, this is probably a server bug");
@@ -305,11 +306,11 @@ public class PorkSessionListener implements SessionListener {
                         try {
                             subChunk.getBlocks().set(Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16)), TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15), Math.abs(Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getZ() >> 4)) * 16)), pck.getRecord().getBlock());
                             column.getChunks()[subchunkY] = subChunk;
-                            bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                            Caches.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println((Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16))) + " " + subchunkRelativeY + " " + (Math.abs(Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getZ() >> 4)) * 16))) + " " + (subchunkRelativeY << 8 | chunkZ << 4 | chunkX));
                         }
-                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                        Caches.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
                         //System.out.println("chunk " + chunkX + ":" + subchunkY + ":" + chunkZ + " relative pos " + (Math.abs(Math.abs(pck.getRecord().getPosition().getX()) - (Math.abs(Math.abs(pck.getRecord().getPosition().getX() >> 4)) * 16))) + ":" + TooBeeTooTeeBot.ensureRange(subchunkRelativeY, 0, 15) + "(" + subchunkRelativeY + "):" + (Math.abs(pck.getRecord().getPosition().getZ()) - (Math.abs(chunkZ) * 16)) + " original position " + pck.getRecord().getPosition().toString());
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerMultiBlockChangePacket) { //update cached chunks with passion
@@ -319,7 +320,7 @@ public class PorkSessionListener implements SessionListener {
                                 .getPosition().getX() >> 4; //this cuts away the additional relative chunk coordinates
                         int chunkZ = pck.getRecords()[0] //there HAS to be at least one element
                                 .getPosition().getZ() >> 4; //this cuts away the additional relative chunk coordinates
-                        Column column = bot.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
+                        Column column = Caches.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
                         if (column == null) {
                             //unloaded or invalid chunk, ignore pls
                             System.out.println("null chunk multi, this is probably a server bug");
@@ -338,17 +339,17 @@ public class PorkSessionListener implements SessionListener {
                                 System.out.println(relativeChunkX + " " + subchunkRelativeY + " " + relativeChunkZ + " " + (subchunkRelativeY << 8 | relativeChunkZ << 4 | relativeChunkX));
                             }
                         }
-                        bot.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
+                        Caches.cachedChunks.put(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), column);
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerJoinGamePacket) {
                     ServerJoinGamePacket pck = packetReceivedEvent.getPacket();
-                    bot.dimension = pck.getDimension();
-                    bot.eid = pck.getEntityId();
-                    bot.gameMode = pck.getGameMode();
+                    Caches.dimension = pck.getDimension();
+                    Caches.eid = pck.getEntityId();
+                    Caches.gameMode = pck.getGameMode();
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = packetReceivedEvent.getPacket();
-                    bot.dimension = pck.getDimension();
-                    bot.cachedChunks.clear();
+                    Caches.dimension = pck.getDimension();
+                    Caches.cachedChunks.clear();
                 } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket) {
                     LoginDisconnectPacket pck = packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
@@ -427,7 +428,7 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ServerLoginHandler() {
                 @Override
                 public void loggedIn(Session session) {
-                    session.send(new ServerJoinGamePacket(bot.eid, false, bot.gameMode, bot.dimension, Difficulty.NORMAL, Integer.MAX_VALUE, WorldType.DEFAULT, false));
+                    session.send(new ServerJoinGamePacket(Caches.eid, false, Caches.gameMode, Caches.dimension, Difficulty.NORMAL, Integer.MAX_VALUE, WorldType.DEFAULT, false));
                 }
             });
 
