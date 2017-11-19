@@ -33,8 +33,11 @@ import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.DataTag;
+import net.daporkchop.toobeetooteebot.util.HTTPUtils;
 import net.daporkchop.toobeetooteebot.web.*;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.PrintWriter;
 import java.net.Proxy;
@@ -183,6 +186,13 @@ public class TooBeeTooTeeBot {
                 }
                 System.out.println("Success!");
                 System.out.println(protocol.getProfile().getIdAsString());
+            }
+
+            if (Config.doServer) {
+                System.out.println("Getting server icon...");
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(HTTPUtils.downloadImage("https://crafatar.com/avatars/" + protocol.profile.getName() + "?size=64&overlay&default=MHF_Steve"));
+                Caches.icon = ImageIO.read(inputStream);
+                System.out.println("Done!");
             }
 
             if (Config.doGUI && GuiBot.INSTANCE == null) {

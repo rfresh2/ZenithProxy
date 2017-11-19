@@ -21,6 +21,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class Caches {
@@ -37,4 +39,11 @@ public class Caches {
     public static HashMap<Integer, ServerSpawnPlayerPacket> cachedPlayers = new HashMap<>();
     public static HashMap<Integer, ServerSpawnMobPacket> cachedMobs = new HashMap<>();
     public static HashMap<Integer, ServerSpawnObjectPacket> cachedObjects = new HashMap<>();
+    public static BufferedImage icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+
+    static {
+        Graphics g2 = icon.getGraphics();
+        g2.setColor(new Color(0, 0, 0, 1));
+        g2.fillRect(0, 0, 256, 256);
+    }
 }

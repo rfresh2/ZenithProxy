@@ -251,11 +251,13 @@ public class PorkSessionListener implements SessionListener {
                         ServerChunkDataPacket pck = packetReceivedEvent.getPacket();
                         Caches.cachedChunks.put(ChunkPos.getChunkHashFromXZ(pck.getColumn().getX(), pck.getColumn().getZ()), pck.getColumn());
                     }
+                    //System.out.println("Received chunk");
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUnloadChunkPacket) {
                     if (Config.doServer) {
                         ServerUnloadChunkPacket pck = packetReceivedEvent.getPacket();
                         Caches.cachedChunks.remove(ChunkPos.getChunkHashFromXZ(pck.getX(), pck.getZ()));
                     }
+                    //System.out.println("Unloaded chunk");
                 } else if (packetReceivedEvent.getPacket() instanceof ServerUpdateTimePacket) {
                     if (!bot.isLoggedIn) {
                         System.out.println("Logged in!");
@@ -421,7 +423,7 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
                 @Override
                 public ServerStatusInfo buildInfo(Session session) {
-                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, bot.clients.size() - 1, getOnline()), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), null);
+                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, bot.clients.size() - 1, getOnline()), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), Caches.icon);
                 }
             });
 
