@@ -1,3 +1,18 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2016-2017 DaPorkchop_
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from DaPorkchop_.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: DaPorkchop_), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.daporkchop.toobeetooteebot.server;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
@@ -6,7 +21,6 @@ import com.github.steveice10.mc.protocol.data.game.MessageType;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
 import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientKeepAlivePacket;
@@ -66,14 +80,14 @@ public class PorkSessionAdapter extends SessionAdapter {
             }
             if (client.arrayIndex == 0) {
                 if (event.getPacket() instanceof ClientPlayerPositionRotationPacket) {
-                    ClientPlayerPositionRotationPacket pck = (ClientPlayerPositionRotationPacket) event.getPacket();
+                    ClientPlayerPositionRotationPacket pck = event.getPacket();
                     bot.x = pck.getX();
                     bot.y = pck.getY();
                     bot.z = pck.getZ();
                     bot.yaw = (float) pck.getYaw();
                     bot.pitch = (float) pck.getPitch();
                     bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
@@ -82,12 +96,12 @@ public class PorkSessionAdapter extends SessionAdapter {
                     }
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientPlayerPositionPacket) {
-                    ClientPlayerPositionPacket pck = (ClientPlayerPositionPacket) event.getPacket();
+                    ClientPlayerPositionPacket pck = event.getPacket();
                     bot.x = pck.getX();
                     bot.y = pck.getY();
                     bot.z = pck.getZ();
                     bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
@@ -96,14 +110,14 @@ public class PorkSessionAdapter extends SessionAdapter {
                     }
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientPlayerRotationPacket) {
-                    ClientPlayerRotationPacket pck = (ClientPlayerRotationPacket) event.getPacket();
+                    ClientPlayerRotationPacket pck = event.getPacket();
                     bot.x = pck.getX();
                     bot.y = pck.getY();
                     bot.z = pck.getZ();
                     bot.yaw = (float) pck.getYaw();
                     bot.pitch = (float) pck.getPitch();
                     bot.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100), new PositionElement[0]);
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(bot.x, bot.y, bot.z, bot.yaw, bot.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
@@ -112,7 +126,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     }
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientChatPacket) {
-                    ClientChatPacket pck = (ClientChatPacket) event.getPacket();
+                    ClientChatPacket pck = event.getPacket();
                     if (pck.getMessage().startsWith("!") && !pck.getMessage().startsWith("!!")) {
                         if (pck.getMessage().equals("!setmainclient")) {
                             client.session.send(new ServerChatPacket("You're already at index 0!", MessageType.CHAT));
@@ -135,7 +149,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     return;
                 }
             } else if (event.getPacket() instanceof ClientChatPacket) {
-                ClientChatPacket pck = (ClientChatPacket) event.getPacket();
+                ClientChatPacket pck = event.getPacket();
                 if (pck.getMessage().startsWith("!") && !pck.getMessage().startsWith("!!")) {
                     if (pck.getMessage().equals("!setmainclient")) {
                         if (bot.clients.size() < 2) {
