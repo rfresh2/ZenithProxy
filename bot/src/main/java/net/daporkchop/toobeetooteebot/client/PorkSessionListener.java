@@ -401,7 +401,7 @@ public class PorkSessionListener implements SessionListener {
             bot.timer.schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                 @Override
                 public void run() { //chat
-                    bot.sendChat(Config.spamMesages[bot.r.nextInt(Config.spamMesages.length - 1)]);
+                    bot.sendChat(Config.spamMesages[bot.r.nextInt(Config.spamMesages.length)]);
                 }
             }, 30000, Config.spamDelay);
         }
