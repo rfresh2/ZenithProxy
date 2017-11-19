@@ -134,7 +134,7 @@ public class PorkSessionListener implements SessionListener {
                     while (iterator.hasNext()) {
                         PorkClient client = iterator.next();
                         if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) { //thx 0x kek
-                            client.session.send(new ServerChatPacket(msg));
+                            client.session.send(new ServerChatPacket(legacyColorCodes));
                         }
                     }
                     return;
