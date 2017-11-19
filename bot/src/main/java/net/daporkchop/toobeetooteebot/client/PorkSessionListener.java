@@ -24,10 +24,12 @@ import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
+import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
 import com.github.steveice10.mc.protocol.data.message.TextMessage;
 import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
@@ -81,6 +83,7 @@ public class PorkSessionListener implements SessionListener {
                     String messageJson = pck.getMessage().toJsonString();
                     String legacyColorCodes = ChatUtils.getOldText(messageJson);
                     String msg = TextFormat.clean(legacyColorCodes);
+
                     if (Config.processChat) {
                         if (msg.startsWith("To ")) {
                             //don't bother processing sent DMs
@@ -348,6 +351,11 @@ public class PorkSessionListener implements SessionListener {
                     Caches.dimension = pck.getDimension();
                     Caches.eid = pck.getEntityId();
                     Caches.gameMode = pck.getGameMode();
+                } else if (packetReceivedEvent.getPacket() instanceof ServerNotifyClientPacket) {
+                    ServerNotifyClientPacket pck = packetReceivedEvent.getPacket();
+                    if (pck.notification == ClientNotification.CHANGE_GAMEMODE) {
+                        Caches.gameMode = (GameMode) pck.value;
+                    }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = packetReceivedEvent.getPacket();
                     Caches.dimension = pck.getDimension();
