@@ -15,6 +15,19 @@ DO_LOOP="true"
 
 clear
 
+cd MCProtocolLib
+if git pull origin master | grep -q 'Already up-to-date.'; then
+        clear
+        cd ..
+        echo "Nothing  changed, starting..."
+else
+        cd ..
+        ./compile.sh
+        sleep 0.5
+        clear
+        echo "Compiled, continuing..." 
+fi
+
 if git pull | grep -q 'Already up-to-date.'; then
     clear
     echo "Nothing  changed, starting..."
@@ -32,7 +45,20 @@ while [ "$DO_LOOP" == "true" ]; do
 	mvn exec:java -Dexec.mainClass="net.daporkchop.toobeetooteebot.TooBeeTooTeeBot" -Dexec.classpathScope=runtime
 	echo "Press Ctrl+c to stop" 
 	sleep 0.5
-    if git pull | grep -q 'Already up-to-date.'; then
+	cd MCProtocolLib
+        if git pull origin master | grep -q 'Already up-to-date.'; then
+                clear
+		cd ..
+                echo "Nothing  changed, starting..."
+        else
+		cd ..
+                ./compile.sh
+                sleep 0.5
+                clear
+                echo "Compiled, continuing..." 
+        fi
+
+        if git pull | grep -q 'Already up-to-date.'; then
 		clear
                 echo "Nothing  changed, starting..."
 	else
