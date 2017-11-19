@@ -1,0 +1,3 @@
+[submodule "MCProtocolLib"]
+	path = MCProtocolLib
+	url = https://github.com/DaMatrix/MCProtocolLib.git
