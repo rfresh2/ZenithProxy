@@ -77,7 +77,6 @@ public class PorkSessionListener implements SessionListener {
                             String[] split = msg.split(" ");
                             if (!msg.startsWith("<") && split[1].startsWith("whispers")) {
                                 bot.processMsg(split[0], msg.substring(split[0].length() + split[1].length() + 2));
-                                return;
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
                             //ignore kek
@@ -106,7 +105,7 @@ public class PorkSessionListener implements SessionListener {
                             GuiBot.INSTANCE.chatDisplay.setText(toSet);
                         }
                     }
-                    if (bot.websocketServer != null) {
+                    if (bot.websocketServer != null && !(msg.contains("whispers") || msg.startsWith("to"))) {
                         bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerPlayerHealthPacket) {
