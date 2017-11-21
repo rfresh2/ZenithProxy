@@ -24,6 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
@@ -41,16 +42,31 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.*;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginDisconnectPacket;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import com.google.common.collect.Lists;
 import net.daporkchop.toobeetooteebot.Caches;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
+import net.daporkchop.toobeetooteebot.entity.EntityType;
+import net.daporkchop.toobeetooteebot.entity.PotionEffect;
+import net.daporkchop.toobeetooteebot.entity.api.Entity;
+import net.daporkchop.toobeetooteebot.entity.api.EntityEquipment;
+import net.daporkchop.toobeetooteebot.entity.api.EntityRotation;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityMob;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityObject;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityPainting;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
@@ -364,6 +380,177 @@ public class PorkSessionListener implements SessionListener {
                     LoginDisconnectPacket pck = packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
                     bot.client.getSession().disconnect(pck.getReason().getFullText());
+                } else if (packetReceivedEvent.getPacket() instanceof ServerSpawnMobPacket) {
+                    ServerSpawnMobPacket pck = packetReceivedEvent.getPacket();
+                    EntityMob mob = new EntityMob();
+                    mob.type = EntityType.MOB;
+                    mob.entityId = pck.entityId;
+                    mob.uuid = pck.uuid;
+                    mob.mobType = pck.type;
+                    mob.x = pck.x;
+                    mob.y = pck.y;
+                    mob.z = pck.z;
+                    mob.pitch = pck.pitch;
+                    mob.yaw = pck.yaw;
+                    mob.headYaw = pck.headYaw;
+                    mob.motX = pck.motX;
+                    mob.motY = pck.motY;
+                    mob.motZ = pck.motZ;
+                    mob.metadata = pck.metadata;
+                    Caches.cachedEntities.put(pck.entityId, mob);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerSpawnObjectPacket) {
+                    ServerSpawnObjectPacket pck = packetReceivedEvent.getPacket();
+                    EntityObject mob = new EntityObject();
+                    mob.type = EntityType.OBJECT;
+                    mob.entityId = pck.entityId;
+                    mob.uuid = pck.uuid;
+                    mob.objectType = pck.type;
+                    mob.x = pck.x;
+                    mob.y = pck.y;
+                    mob.z = pck.z;
+                    mob.pitch = pck.pitch;
+                    mob.yaw = pck.yaw;
+                    mob.data = pck.data;
+                    mob.motX = pck.motX;
+                    mob.motY = pck.motY;
+                    mob.motZ = pck.motZ;
+                    Caches.cachedEntities.put(pck.entityId, mob);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerSpawnPaintingPacket) {
+                    ServerSpawnPaintingPacket pck = packetReceivedEvent.getPacket();
+                    EntityPainting mob = new EntityPainting();
+                    mob.type = EntityType.PAINTING;
+                    mob.entityId = pck.entityId;
+                    mob.uuid = pck.uuid;
+                    mob.paintingType = pck.paintingType;
+                    mob.x = pck.position.x;
+                    mob.y = pck.position.y;
+                    mob.z = pck.position.z;
+                    mob.direction = pck.direction;
+                    Caches.cachedEntities.put(pck.entityId, mob);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerSpawnPlayerPacket) {
+                    ServerSpawnPlayerPacket pck = packetReceivedEvent.getPacket();
+                    EntityPlayer mob = new EntityPlayer();
+                    mob.type = EntityType.PLAYER;
+                    mob.entityId = pck.entityId;
+                    mob.uuid = pck.uuid;
+                    mob.x = pck.x;
+                    mob.y = pck.y;
+                    mob.z = pck.z;
+                    mob.pitch = pck.pitch;
+                    mob.yaw = pck.yaw;
+                    mob.metadata = pck.metadata;
+                    Caches.cachedEntities.put(pck.entityId, mob);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityDestroyPacket) {
+                    ServerEntityDestroyPacket pck = packetReceivedEvent.getPacket();
+                    for (int eid : pck.entityIds) {
+                        if (Caches.cachedEntities.remove(eid) == null) { //Not needed for vanilla AFAIK, but you never know
+                            //I'm not bothering with adding checks on all packets though
+                            System.out.println("[Warning] Attempted to remove non-existant entity with ID " + eid);
+                        }
+                    }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityAttachPacket) {
+                    ServerEntityAttachPacket pck = packetReceivedEvent.getPacket();
+                    EntityRotation entityRotation = (EntityRotation) Caches.cachedEntities.get(pck.entityId);
+                    if (pck.attachedToId == -1) {
+                        entityRotation.isLeashed = false;
+                    } else {
+                        entityRotation.isLeashed = true;
+                        entityRotation.leashedID = pck.attachedToId;
+                    }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityCollectItemPacket) {
+                    ServerEntityCollectItemPacket pck = packetReceivedEvent.getPacket();
+                    Caches.cachedEntities.remove(pck.collectedEntityId);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityEffectPacket) {
+                    ServerEntityEffectPacket pck = packetReceivedEvent.getPacket();
+                    PotionEffect effect = new PotionEffect();
+                    effect.effect = pck.effect;
+                    effect.amplifier = pck.amplifier;
+                    effect.duration = pck.duration;
+                    effect.ambient = pck.ambient;
+                    effect.showParticles = pck.showParticles;
+                    ((EntityEquipment) Caches.cachedEntities.get(pck.entityId)).potionEffects.add(effect);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityEquipmentPacket) {
+                    ServerEntityEquipmentPacket pck = packetReceivedEvent.getPacket();
+                    EntityEquipment equipment = (EntityEquipment) Caches.cachedEntities.get(pck.entityId);
+                    equipment.equipment.put(pck.slot, pck.item);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityHeadLookPacket) {
+                    ServerEntityHeadLookPacket pck = packetReceivedEvent.getPacket();
+                    EntityRotation rotation = (EntityRotation) Caches.cachedEntities.get(pck.entityId);
+                    rotation.headYaw = pck.headYaw;
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityMetadataPacket) {
+                    ServerEntityMetadataPacket pck = packetReceivedEvent.getPacket();
+                    Entity entity = Caches.cachedEntities.get(pck.entityId);
+                    ArrayList<EntityMetadata> oldMeta = Lists.newArrayList(entity.metadata);
+                    ArrayList<EntityMetadata> newMeta = new ArrayList<>();
+                    OLDCHECK:
+                    for (EntityMetadata oldCheck : oldMeta) { //add old fields and merge
+                        for (EntityMetadata newCheck : pck.metadata) {
+                            if (newCheck.id == oldCheck.id) {
+                                newMeta.add(newCheck);
+                                continue OLDCHECK;
+                            }
+                        }
+                        newMeta.add(oldCheck);
+                    }
+                    NEWCHECK:
+                    for (EntityMetadata newCheck : pck.metadata) {
+                        for (EntityMetadata oldCheck : oldMeta) {
+                            if (oldCheck.id == newCheck.id) {
+                                continue NEWCHECK;
+                            }
+                        }
+
+                        newMeta.add(newCheck);
+                    }
+                    entity.metadata = newMeta.toArray(new EntityMetadata[newMeta.size()]);
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityMovementPacket) {
+                    ServerEntityMovementPacket pck = packetReceivedEvent.getPacket();
+                    Entity entity = Caches.cachedEntities.get(pck.entityId);
+                    if (pck.pos) {
+                        entity.x += pck.moveX / 4096.0D;
+                        entity.y += pck.moveY / 4096.0D;
+                        entity.z += pck.moveZ / 4096.0D;
+                    }
+                    if (pck.rot) {
+                        if (entity instanceof EntityRotation) {
+                            ((EntityRotation) entity).yaw = pck.yaw;
+                            ((EntityRotation) entity).pitch = pck.pitch;
+                        }
+                    }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityPropertiesPacket) {
+                    ServerEntityPropertiesPacket pck = packetReceivedEvent.getPacket();
+                    ((EntityEquipment) Caches.cachedEntities.get(pck.entityId)).properties = pck.attributes;
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityRemoveEffectPacket) {
+                    ServerEntityRemoveEffectPacket pck = packetReceivedEvent.getPacket();
+                    EntityEquipment equipment = (EntityEquipment) Caches.cachedEntities.get(pck.entityId);
+                    for (Iterator<PotionEffect> iterator = equipment.potionEffects.iterator(); iterator.hasNext(); ) {
+                        if (iterator.next().effect == pck.effect) {
+                            iterator.remove();
+                            break;
+                        }
+                    }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntitySetPassengersPacket) {
+                    ServerEntitySetPassengersPacket pck = packetReceivedEvent.getPacket();
+                    EntityEquipment equipment = (EntityEquipment) Caches.cachedEntities.get(pck.entityId);
+                    if (pck.passengerIds == null || pck.passengerIds.length == 0) {
+                        equipment.passengerIds = null;
+                    } else {
+                        equipment.passengerIds = pck.passengerIds;
+                    }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerEntityTeleportPacket) {
+                    ServerEntityTeleportPacket pck = packetReceivedEvent.getPacket();
+                    Entity entity = Caches.cachedEntities.get(pck.entityId);
+                    entity.x = pck.x;
+                    entity.y = pck.y;
+                    entity.z = pck.z;
+
+                    if (entity instanceof EntityRotation) {
+                        ((EntityRotation) entity).yaw = pck.yaw;
+                        ((EntityRotation) entity).pitch = pck.pitch;
+                    }
+                } else if (packetReceivedEvent.getPacket() instanceof ServerVehicleMovePacket) {
+                    ServerVehicleMovePacket pck = packetReceivedEvent.getPacket();
+                    Entity entity = Entity.getEntityBeingRiddenBy(Caches.eid);
                 }
             }
             if (Config.doServer) {
@@ -375,6 +562,9 @@ public class PorkSessionListener implements SessionListener {
                     }
                 }
             }
+        } catch (ClassCastException e) {
+            System.out.println("[Warning] ClassCast exception in entity decoder");
+            e.printStackTrace();
         } catch (Exception | Error e) {
             e.printStackTrace();
         }

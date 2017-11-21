@@ -19,11 +19,14 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import net.daporkchop.toobeetooteebot.entity.api.Entity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 public class Caches {
     public static double x = 0;
@@ -39,6 +42,8 @@ public class Caches {
     public static HashMap<Integer, ServerSpawnPlayerPacket> cachedPlayers = new HashMap<>();
     public static HashMap<Integer, ServerSpawnMobPacket> cachedMobs = new HashMap<>();
     public static HashMap<Integer, ServerSpawnObjectPacket> cachedObjects = new HashMap<>();
+    public static HashMap<Integer, ServerSpawnPaintingPacket> cachedPaintings = new HashMap<>();
+    public static Hashtable<Integer, Entity> cachedEntities = new Hashtable<>();
     public static BufferedImage icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
 
     static {
