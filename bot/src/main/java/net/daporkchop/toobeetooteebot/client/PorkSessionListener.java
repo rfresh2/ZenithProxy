@@ -80,6 +80,7 @@ import net.daporkchop.toobeetooteebot.web.PlayData;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TimerTask;
 
 public class PorkSessionListener implements SessionListener {
@@ -388,6 +389,12 @@ public class PorkSessionListener implements SessionListener {
                     ServerRespawnPacket pck = packetReceivedEvent.getPacket();
                     Caches.dimension = pck.getDimension();
                     Caches.cachedChunks.clear();
+                    Iterator<Map.Entry<Integer, Entity>> iterator = Caches.cachedEntities.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        if (iterator.next().getKey() != Caches.eid) {
+                            iterator.remove();
+                        }
+                    }
                 } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket) {
                     LoginDisconnectPacket pck = packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
