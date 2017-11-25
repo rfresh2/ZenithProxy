@@ -51,6 +51,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginDisconnectPacket;
+import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
@@ -264,6 +265,7 @@ public class PorkSessionListener implements SessionListener {
                     Caches.z = pck.getZ();
                     Caches.yaw = pck.getYaw();
                     Caches.pitch = pck.getPitch();
+                    Caches.updatePlayerLocRot();
                     bot.client.getSession().send(new ClientTeleportConfirmPacket(pck.getTeleportId()));
                 } else if (packetReceivedEvent.getPacket() instanceof ServerChunkDataPacket) {
                     if (Config.doServer) {
@@ -367,6 +369,16 @@ public class PorkSessionListener implements SessionListener {
                     Caches.dimension = pck.getDimension();
                     Caches.eid = pck.getEntityId();
                     Caches.gameMode = pck.getGameMode();
+                    EntityPlayer player = new EntityPlayer();
+                    player.type = EntityType.REAL_PLAYER;
+                    player.entityId = Caches.eid;
+                    player.uuid = Caches.uuid;
+
+                    Caches.player = player;
+                    Caches.cachedEntities.put(player.entityId, player);
+                } else if (packetReceivedEvent.getPacket() instanceof LoginSuccessPacket) {
+                    LoginSuccessPacket pck = packetReceivedEvent.getPacket();
+                    Caches.uuid = pck.profile.getId();
                 } else if (packetReceivedEvent.getPacket() instanceof ServerNotifyClientPacket) {
                     ServerNotifyClientPacket pck = packetReceivedEvent.getPacket();
                     if (pck.notification == ClientNotification.CHANGE_GAMEMODE) {

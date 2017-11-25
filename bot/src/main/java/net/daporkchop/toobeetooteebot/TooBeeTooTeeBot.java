@@ -427,6 +427,8 @@ public class TooBeeTooTeeBot {
         this.ingamePlayerCooldown.clear();
         System.out.println("Reset ingame cooldown timer");
         this.hasDonePostConnect = false;
+        System.out.println("Clearing entity cache");
+        Caches.cachedEntities.clear();
         System.out.println("Reset complete!");
     }
 }

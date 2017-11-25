@@ -19,5 +19,6 @@ public enum EntityType {
     PLAYER,
     MOB,
     OBJECT,
-    PAINTING
+    PAINTING,
+    REAL_PLAYER
 }

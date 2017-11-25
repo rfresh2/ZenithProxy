@@ -22,11 +22,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import net.daporkchop.toobeetooteebot.entity.api.Entity;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.UUID;
 
 public class Caches {
     public static double x = 0;
@@ -38,6 +40,8 @@ public class Caches {
     public static int eid = 0;
     public static GameMode gameMode = GameMode.SURVIVAL;
     public static boolean onGround;
+    public static EntityPlayer player;
+    public static UUID uuid;
     public static HashMap<Long, Column> cachedChunks = new HashMap<>();
     public static HashMap<Integer, ServerSpawnPlayerPacket> cachedPlayers = new HashMap<>();
     public static HashMap<Integer, ServerSpawnMobPacket> cachedMobs = new HashMap<>();
@@ -50,5 +54,13 @@ public class Caches {
         Graphics g2 = icon.getGraphics();
         g2.setColor(new Color(0, 0, 0, 1));
         g2.fillRect(0, 0, 256, 256);
+    }
+
+    public static void updatePlayerLocRot() {
+        player.x = x;
+        player.y = y;
+        player.z = z;
+        player.yaw = yaw;
+        player.pitch = pitch;
     }
 }

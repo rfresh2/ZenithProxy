@@ -87,6 +87,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     Caches.z = pck.getZ();
                     Caches.yaw = (float) pck.getYaw();
                     Caches.pitch = (float) pck.getPitch();
+                    Caches.updatePlayerLocRot();
                     Caches.onGround = pck.isOnGround();
                     ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
@@ -101,6 +102,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     Caches.x = pck.getX();
                     Caches.y = pck.getY();
                     Caches.z = pck.getZ();
+                    Caches.updatePlayerLocRot();
                     Caches.onGround = pck.isOnGround();
                     ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
@@ -117,6 +119,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                     Caches.z = pck.getZ();
                     Caches.yaw = (float) pck.getYaw();
                     Caches.pitch = (float) pck.getPitch();
+                    Caches.updatePlayerLocRot();
                     Caches.onGround = pck.isOnGround();
                     ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
                     for (PorkClient porkClient : bot.clients) {
