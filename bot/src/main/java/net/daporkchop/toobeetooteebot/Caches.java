@@ -17,17 +17,14 @@ package net.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import net.daporkchop.toobeetooteebot.entity.api.Entity;
 import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
+import net.daporkchop.toobeetooteebot.util.EntityNotFoundException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.UUID;
 
 public class Caches {
@@ -43,11 +40,8 @@ public class Caches {
     public static EntityPlayer player;
     public static UUID uuid;
     public static HashMap<Long, Column> cachedChunks = new HashMap<>();
-    public static HashMap<Integer, ServerSpawnPlayerPacket> cachedPlayers = new HashMap<>();
-    public static HashMap<Integer, ServerSpawnMobPacket> cachedMobs = new HashMap<>();
-    public static HashMap<Integer, ServerSpawnObjectPacket> cachedObjects = new HashMap<>();
-    public static HashMap<Integer, ServerSpawnPaintingPacket> cachedPaintings = new HashMap<>();
-    public static Hashtable<Integer, Entity> cachedEntities = new Hashtable<>();
+    public static HashMap<Integer, Entity> cachedEntities = new HashMap<>();
+    public static HashMap<UUID, ServerBossBarPacket> cachedBossBars = new HashMap<>();
     public static BufferedImage icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
 
     static {
@@ -62,5 +56,13 @@ public class Caches {
         player.z = z;
         player.yaw = yaw;
         player.pitch = pitch;
+    }
+
+    public static Entity getEntityByEID(int eid) {
+        Entity entity = cachedEntities.get(eid);
+        if (entity == null) {
+            throw new EntityNotFoundException();
+        }
+        return entity;
     }
 }

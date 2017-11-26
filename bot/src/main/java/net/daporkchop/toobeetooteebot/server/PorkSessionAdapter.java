@@ -21,7 +21,9 @@ import com.github.steveice10.mc.protocol.data.game.MessageType;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientKeepAlivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
@@ -29,16 +31,29 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.*;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerNotifyClientPacket;
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
+import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import net.daporkchop.toobeetooteebot.Caches;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
+import net.daporkchop.toobeetooteebot.entity.PotionEffect;
+import net.daporkchop.toobeetooteebot.entity.api.Entity;
+import net.daporkchop.toobeetooteebot.entity.api.EntityEquipment;
+import net.daporkchop.toobeetooteebot.entity.api.EntityRotation;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityMob;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityObject;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityPainting;
+import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.RefStrings;
 
@@ -47,6 +62,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
+import java.util.Map;
 
 public class PorkSessionAdapter extends SessionAdapter {
     public PorkClient client;
@@ -131,9 +147,19 @@ public class PorkSessionAdapter extends SessionAdapter {
                     bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientChatPacket) {
                     ClientChatPacket pck = event.getPacket();
-                    if (pck.getMessage().startsWith("!") && !pck.getMessage().startsWith("!!")) {
+                    if (pck.getMessage().startsWith("!")) {
                         if (pck.getMessage().equals("!setmainclient")) {
                             client.session.send(new ServerChatPacket("You're already at index 0!", MessageType.CHAT));
+                            return;
+                        } else if (pck.getMessage().startsWith("!!")) {
+                            bot.client.getSession().send(new ClientChatPacket(pck.message.substring(1)));
+                            return;
+                        } else if (pck.message.startsWith("!dc")) {
+                            bot.client.getSession().disconnect("Reboot!");
+                            bot.server.close();
+                            if (pck.message.startsWith("!dchard")) {
+                                Runtime.getRuntime().exit(0);
+                            }
                             return;
                         }
 
@@ -154,7 +180,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                 }
             } else if (event.getPacket() instanceof ClientChatPacket) {
                 ClientChatPacket pck = event.getPacket();
-                if (pck.getMessage().startsWith("!") && !pck.getMessage().startsWith("!!")) {
+                if (pck.getMessage().startsWith("!")) {
                     if (pck.getMessage().equals("!setmainclient")) {
                         if (bot.clients.size() < 2) {
                             client.session.send(new ServerChatPacket("There's only one client connected!", MessageType.CHAT));
@@ -165,6 +191,16 @@ public class PorkSessionAdapter extends SessionAdapter {
                         bot.clients.get(client.arrayIndex).arrayIndex = client.arrayIndex;
                         bot.clients.get(0).arrayIndex = 0;
                         client.session.send(new ServerChatPacket("Set your position in the array to 0! You now can move yourself!", MessageType.CHAT));
+                        return;
+                    } else if (pck.getMessage().startsWith("!!")) {
+                        client.session.send(new ClientChatPacket(pck.message.substring(1)));
+                        return;
+                    } else if (pck.message.startsWith("!dc")) {
+                        bot.server.close();
+                        bot.client.getSession().disconnect("Reboot!");
+                        if (pck.message.startsWith("!dchard")) {
+                            Runtime.getRuntime().exit(0);
+                        }
                         return;
                     }
 
@@ -194,15 +230,126 @@ public class PorkSessionAdapter extends SessionAdapter {
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
                 client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
-                System.out.println(Caches.cachedChunks.values().size());
                 for (Column chunk : Caches.cachedChunks.values()) {
                     client.session.send(new ServerChunkDataPacket(chunk));
                 }
-                System.out.println("Sent all cached chunks!");
+                System.out.println("Sent " + Caches.cachedChunks.size() + " chunks!");
+                Session session = event.getSession();
                 ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.INSTANCE.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.INSTANCE.playerListEntries.size()]));
                 client.session.send(new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(1000) + 10));
                 client.session.send(playerListEntryPacket);
-                client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));
+                //client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));
+                for (Entity entity : Caches.cachedEntities.values()) {
+                    switch (entity.type) {
+                        case MOB:
+                            EntityMob mob = (EntityMob) entity;
+                            session.send(new ServerSpawnMobPacket(entity.entityId,
+                                    entity.uuid,
+                                    mob.mobType,
+                                    entity.x,
+                                    entity.y,
+                                    entity.z,
+                                    mob.yaw,
+                                    mob.pitch,
+                                    mob.headYaw,
+                                    mob.motX,
+                                    mob.motY,
+                                    mob.motZ,
+                                    mob.metadata));
+                            for (PotionEffect effect : mob.potionEffects) {
+                                session.send(new ServerEntityEffectPacket(entity.entityId,
+                                        effect.effect,
+                                        effect.amplifier,
+                                        effect.duration,
+                                        effect.ambient,
+                                        effect.showParticles));
+                            }
+                            for (Map.Entry<EquipmentSlot, ItemStack> entry : mob.equipment.entrySet()) {
+                                session.send(new ServerEntityEquipmentPacket(entity.entityId,
+                                        entry.getKey(),
+                                        entry.getValue()));
+                            }
+                            if (mob.properties.size() > 0) {
+                                session.send(new ServerEntityPropertiesPacket(entity.entityId,
+                                        mob.properties));
+                            }
+                            break;
+                        case PLAYER:
+                            EntityPlayer playerSending = (EntityPlayer) entity;
+                            session.send(new ServerSpawnPlayerPacket(entity.entityId,
+                                    entity.uuid,
+                                    entity.x,
+                                    entity.y,
+                                    entity.z,
+                                    playerSending.yaw,
+                                    playerSending.pitch,
+                                    playerSending.metadata));
+                        case REAL_PLAYER:
+                            EntityPlayer player = (EntityPlayer) entity;
+                            for (PotionEffect effect : player.potionEffects) {
+                                session.send(new ServerEntityEffectPacket(entity.entityId,
+                                        effect.effect,
+                                        effect.amplifier,
+                                        effect.duration,
+                                        effect.ambient,
+                                        effect.showParticles));
+                            }
+                            for (Map.Entry<EquipmentSlot, ItemStack> entry : player.equipment.entrySet()) {
+                                session.send(new ServerEntityEquipmentPacket(entity.entityId,
+                                        entry.getKey(),
+                                        entry.getValue()));
+                            }
+                            if (player.properties.size() > 0) {
+                                session.send(new ServerEntityPropertiesPacket(entity.entityId,
+                                        player.properties));
+                            }
+                            break;
+                        case OBJECT:
+                            EntityObject object = (EntityObject) entity;
+                            session.send(new ServerSpawnObjectPacket(entity.entityId,
+                                    entity.uuid,
+                                    object.objectType,
+                                    object.data,
+                                    entity.x,
+                                    entity.y,
+                                    entity.z,
+                                    object.yaw,
+                                    object.pitch));
+                            break;
+                        case PAINTING:
+                            EntityPainting painting = (EntityPainting) entity;
+                            session.send(new ServerSpawnPaintingPacket(entity.entityId,
+                                    entity.uuid,
+                                    painting.paintingType,
+                                    new Position(
+                                            (int) entity.x,
+                                            (int) entity.y,
+                                            (int) entity.z
+                                    ),
+                                    painting.direction));
+                            break;
+                    }
+                }
+                for (Entity entity : Caches.cachedEntities.values()) {
+                    if (entity instanceof EntityEquipment) {
+                        if (((EntityEquipment) entity).passengerIds.length > 0) {
+                            session.send(new ServerEntitySetPassengersPacket(entity.entityId,
+                                    ((EntityEquipment) entity).passengerIds));
+                        }
+                    }
+                    if (entity instanceof EntityRotation) {
+                        EntityRotation rotation = (EntityRotation) entity;
+                        if (rotation.isLeashed) {
+                            session.send(new ServerEntityAttachPacket(entity.entityId,
+                                    rotation.leashedID));
+                        }
+                    }
+                }
+                System.out.println("Sent " + Caches.cachedEntities.size() + " entities!");
+                for (ServerBossBarPacket packet : Caches.cachedBossBars.values()) {
+                    session.send(packet);
+                }
+                System.out.println("Sent " + Caches.cachedBossBars.size() + " boss bars!");
                 client.sentChunks = true;
             }
         }

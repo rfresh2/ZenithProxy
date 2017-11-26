@@ -71,10 +71,7 @@ import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 import net.daporkchop.toobeetooteebot.gui.GuiBot;
 import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
-import net.daporkchop.toobeetooteebot.util.ChatUtils;
-import net.daporkchop.toobeetooteebot.util.ChunkPos;
-import net.daporkchop.toobeetooteebot.util.Config;
-import net.daporkchop.toobeetooteebot.util.TextFormat;
+import net.daporkchop.toobeetooteebot.util.*;
 import net.daporkchop.toobeetooteebot.web.PlayData;
 
 import java.net.Proxy;
@@ -116,20 +113,11 @@ public class PorkSessionListener implements SessionListener {
                             //ignore kek
                         }
                     }
-
                     if (msg.startsWith("!")) { //command from connected user
                         if (msg.startsWith("!toggleafk")) { //useful when manually moving bot around
                             Config.doAntiAFK = !Config.doAntiAFK;
                             System.out.println("! Toggled AntiAFK! Current state: " + (Config.doAntiAFK ? "on" : "off"));
                             bot.queueMessage("! Toggled AntiAFK! Current state: " + (Config.doAntiAFK ? "on" : "off"));
-                        } else if (msg.startsWith("!dc")) {
-                            bot.server.close();
-                            bot.client.getSession().disconnect("Reboot!");
-                            if (msg.startsWith("!dchard")) {
-                                Runtime.getRuntime().exit(0);
-                            }
-                        } else if (msg.startsWith("!!")) {
-                            bot.client.getSession().send(new ClientChatPacket(msg.replace("!!", "!")));
                         }
                         return;
                     }
@@ -395,6 +383,8 @@ public class PorkSessionListener implements SessionListener {
                             iterator.remove();
                         }
                     }
+                    Caches.cachedBossBars.clear();
+                    Caches.player.potionEffects.clear();
                 } else if (packetReceivedEvent.getPacket() instanceof LoginDisconnectPacket) {
                     LoginDisconnectPacket pck = packetReceivedEvent.getPacket();
                     System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
@@ -464,12 +454,12 @@ public class PorkSessionListener implements SessionListener {
                     for (int eid : pck.entityIds) {
                         if (Caches.cachedEntities.remove(eid) == null) { //Not needed for vanilla AFAIK, but you never know
                             //I'm not bothering with adding checks on all packets though
-                            System.out.println("[Warning] Attempted to remove non-existant entity with ID " + eid);
+                            //System.out.println("[Warning] Attempted to remove non-existant entity with ID " + eid);
                         }
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityAttachPacket) {
                     ServerEntityAttachPacket pck = packetReceivedEvent.getPacket();
-                    EntityRotation entityRotation = (EntityRotation) Caches.cachedEntities.get(pck.entityId);
+                    EntityRotation entityRotation = (EntityRotation) Caches.getEntityByEID(pck.entityId);
                     if (pck.attachedToId == -1) {
                         entityRotation.isLeashed = false;
                     } else {
@@ -487,18 +477,22 @@ public class PorkSessionListener implements SessionListener {
                     effect.duration = pck.duration;
                     effect.ambient = pck.ambient;
                     effect.showParticles = pck.showParticles;
-                    ((EntityEquipment) Caches.cachedEntities.get(pck.entityId)).potionEffects.add(effect);
+                    ((EntityEquipment) Caches.getEntityByEID(pck.entityId)).potionEffects.add(effect);
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityEquipmentPacket) {
                     ServerEntityEquipmentPacket pck = packetReceivedEvent.getPacket();
-                    EntityEquipment equipment = (EntityEquipment) Caches.cachedEntities.get(pck.entityId);
-                    equipment.equipment.put(pck.slot, pck.item);
+                    try {
+                        EntityEquipment equipment = (EntityEquipment) Caches.getEntityByEID(pck.entityId);
+                        equipment.equipment.put(pck.slot, pck.item);
+                    } catch (ClassCastException e) {
+                        //TODO: net.daporkchop.toobeetooteebot.entity.impl.EntityObject cannot be cast to net.daporkchop.toobeetooteebot.entity.api.EntityEquipment
+                    }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityHeadLookPacket) {
                     ServerEntityHeadLookPacket pck = packetReceivedEvent.getPacket();
-                    EntityRotation rotation = (EntityRotation) Caches.cachedEntities.get(pck.entityId);
+                    EntityRotation rotation = (EntityRotation) Caches.getEntityByEID(pck.entityId);
                     rotation.headYaw = pck.headYaw;
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityMetadataPacket) {
                     ServerEntityMetadataPacket pck = packetReceivedEvent.getPacket();
-                    Entity entity = Caches.cachedEntities.get(pck.entityId);
+                    Entity entity = Caches.getEntityByEID(pck.entityId);
                     ArrayList<EntityMetadata> oldMeta = Lists.newArrayList(entity.metadata);
                     ArrayList<EntityMetadata> newMeta = new ArrayList<>();
                     OLDCHECK:
@@ -524,7 +518,7 @@ public class PorkSessionListener implements SessionListener {
                     entity.metadata = newMeta.toArray(new EntityMetadata[newMeta.size()]);
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityMovementPacket) {
                     ServerEntityMovementPacket pck = packetReceivedEvent.getPacket();
-                    Entity entity = Caches.cachedEntities.get(pck.entityId);
+                    Entity entity = Caches.getEntityByEID(pck.entityId);
                     if (pck.pos) {
                         entity.x += pck.moveX / 4096.0D;
                         entity.y += pck.moveY / 4096.0D;
@@ -538,10 +532,10 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityPropertiesPacket) {
                     ServerEntityPropertiesPacket pck = packetReceivedEvent.getPacket();
-                    ((EntityEquipment) Caches.cachedEntities.get(pck.entityId)).properties = pck.attributes;
+                    ((EntityRotation) Caches.getEntityByEID(pck.entityId)).properties = pck.attributes;
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityRemoveEffectPacket) {
                     ServerEntityRemoveEffectPacket pck = packetReceivedEvent.getPacket();
-                    EntityEquipment equipment = (EntityEquipment) Caches.cachedEntities.get(pck.entityId);
+                    EntityEquipment equipment = (EntityEquipment) Caches.getEntityByEID(pck.entityId);
                     for (Iterator<PotionEffect> iterator = equipment.potionEffects.iterator(); iterator.hasNext(); ) {
                         if (iterator.next().effect == pck.effect) {
                             iterator.remove();
@@ -550,7 +544,7 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntitySetPassengersPacket) {
                     ServerEntitySetPassengersPacket pck = packetReceivedEvent.getPacket();
-                    EntityEquipment equipment = (EntityEquipment) Caches.cachedEntities.get(pck.entityId);
+                    EntityEquipment equipment = (EntityEquipment) Caches.getEntityByEID(pck.entityId);
                     if (pck.passengerIds == null || pck.passengerIds.length == 0) {
                         equipment.passengerIds = null;
                     } else {
@@ -558,7 +552,7 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityTeleportPacket) {
                     ServerEntityTeleportPacket pck = packetReceivedEvent.getPacket();
-                    Entity entity = Caches.cachedEntities.get(pck.entityId);
+                    Entity entity = Caches.getEntityByEID(pck.entityId);
                     entity.x = pck.x;
                     entity.y = pck.y;
                     entity.z = pck.z;
@@ -570,6 +564,29 @@ public class PorkSessionListener implements SessionListener {
                 } else if (packetReceivedEvent.getPacket() instanceof ServerVehicleMovePacket) {
                     ServerVehicleMovePacket pck = packetReceivedEvent.getPacket();
                     Entity entity = Entity.getEntityBeingRiddenBy(Caches.eid);
+                    //TODO
+                } else if (packetReceivedEvent.getPacket() instanceof ServerBossBarPacket) {
+                    ServerBossBarPacket pck = packetReceivedEvent.getPacket();
+                    switch (pck.action) {
+                        case ADD:
+                            Caches.cachedBossBars.put(pck.uuid, pck);
+                            break;
+                        case REMOVE:
+                            Caches.cachedBossBars.remove(pck.uuid);
+                            break;
+                        case UPDATE_HEALTH:
+                            Caches.cachedBossBars.get(pck.uuid).health = pck.health;
+                            break;
+                        case UPDATE_TITLE:
+                            Caches.cachedBossBars.get(pck.uuid).title = pck.title;
+                            break;
+                        case UPDATE_STYLE:
+                            Caches.cachedBossBars.get(pck.uuid).color = pck.color;
+                            break;
+                        case UPDATE_FLAGS:
+                            Caches.cachedBossBars.get(pck.uuid).darkenSky = pck.darkenSky;
+                            break;
+                    }
                 }
             }
             if (Config.doServer) {
@@ -581,6 +598,8 @@ public class PorkSessionListener implements SessionListener {
                     }
                 }
             }
+        } catch (EntityNotFoundException e) {
+            //xd xd xd
         } catch (ClassCastException e) {
             System.out.println("[Warning] ClassCast exception in entity decoder");
             e.printStackTrace();

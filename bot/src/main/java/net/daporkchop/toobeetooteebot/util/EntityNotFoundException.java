@@ -13,23 +13,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.toobeetooteebot.entity.api;
+package net.daporkchop.toobeetooteebot.util;
 
-import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
-import net.daporkchop.toobeetooteebot.entity.PotionEffect;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public abstract class EntityEquipment extends EntityRotation {
-    public ArrayList<PotionEffect> potionEffects = new ArrayList<>();
-    public HashMap<EquipmentSlot, ItemStack> equipment = new HashMap<>();
-    public int passengerIds[] = {};
-
-    {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            equipment.put(slot, null);
-        }
-    }
+public class EntityNotFoundException extends IllegalStateException {
 }

@@ -15,6 +15,11 @@
 
 package net.daporkchop.toobeetooteebot.entity.api;
 
+import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class EntityRotation extends Entity {
     public float yaw, pitch;
     public double motX;
@@ -23,4 +28,5 @@ public abstract class EntityRotation extends Entity {
     public int leashedID;
     public boolean isLeashed;
     public float headYaw;
+    public List<Attribute> properties = new ArrayList<>();
 }
