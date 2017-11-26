@@ -161,7 +161,27 @@ public class PorkSessionAdapter extends SessionAdapter {
                                 Runtime.getRuntime().exit(0);
                             }
                             return;
-                        }
+                        }/* else if (pck.message.startsWith("!gm "))   {
+                            switch (pck.message.substring(4))   {
+                                case "0":
+                                case "s":
+                                    Caches.gameMode = GameMode.SURVIVAL;
+                                    break;
+                                case "1":
+                                case "c":
+                                    Caches.gameMode = GameMode.CREATIVE;
+                                    break;
+                                case "spectator":
+                                    Caches.gameMode = GameMode.SPECTATOR;
+                                    break;
+                                default:
+                                    client.session.send(new ServerChatPacket("Invalid game mode!"));
+                                    return;
+                            }
+                            client.session.send(new ServerChatPacket("Changed game mode to: " + Caches.gameMode.name()));
+                            client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));
+                            return;
+                        }*/
 
                         ServerChatPacket toSend = new ServerChatPacket(pck.getMessage(), MessageType.CHAT);
                         for (PorkClient client : bot.clients) {
@@ -194,13 +214,6 @@ public class PorkSessionAdapter extends SessionAdapter {
                         return;
                     } else if (pck.getMessage().startsWith("!!")) {
                         client.session.send(new ClientChatPacket(pck.message.substring(1)));
-                        return;
-                    } else if (pck.message.startsWith("!dc")) {
-                        bot.server.close();
-                        bot.client.getSession().disconnect("Reboot!");
-                        if (pck.message.startsWith("!dchard")) {
-                            Runtime.getRuntime().exit(0);
-                        }
                         return;
                     }
 

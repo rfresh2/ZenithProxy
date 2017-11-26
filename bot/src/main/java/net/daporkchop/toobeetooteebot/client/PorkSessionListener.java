@@ -376,6 +376,7 @@ public class PorkSessionListener implements SessionListener {
                 } else if (packetReceivedEvent.getPacket() instanceof ServerRespawnPacket) {
                     ServerRespawnPacket pck = packetReceivedEvent.getPacket();
                     Caches.dimension = pck.getDimension();
+                    Caches.gameMode = pck.gamemode;
                     Caches.cachedChunks.clear();
                     Iterator<Map.Entry<Integer, Entity>> iterator = Caches.cachedEntities.entrySet().iterator();
                     while (iterator.hasNext()) {
