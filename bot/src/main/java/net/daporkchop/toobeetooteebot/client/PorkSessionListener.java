@@ -545,11 +545,11 @@ public class PorkSessionListener implements SessionListener {
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntitySetPassengersPacket) {
                     ServerEntitySetPassengersPacket pck = packetReceivedEvent.getPacket();
-                    EntityEquipment equipment = (EntityEquipment) Caches.getEntityByEID(pck.entityId);
+                    Entity entity = Caches.getEntityByEID(pck.entityId);
                     if (pck.passengerIds == null || pck.passengerIds.length == 0) {
-                        equipment.passengerIds = null;
+                        entity.passengerIds = null;
                     } else {
-                        equipment.passengerIds = pck.passengerIds;
+                        entity.passengerIds = pck.passengerIds;
                     }
                 } else if (packetReceivedEvent.getPacket() instanceof ServerEntityTeleportPacket) {
                     ServerEntityTeleportPacket pck = packetReceivedEvent.getPacket();

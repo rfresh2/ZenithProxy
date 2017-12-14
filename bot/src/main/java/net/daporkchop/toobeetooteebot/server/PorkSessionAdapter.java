@@ -48,7 +48,6 @@ import net.daporkchop.toobeetooteebot.Caches;
 import net.daporkchop.toobeetooteebot.TooBeeTooTeeBot;
 import net.daporkchop.toobeetooteebot.entity.PotionEffect;
 import net.daporkchop.toobeetooteebot.entity.api.Entity;
-import net.daporkchop.toobeetooteebot.entity.api.EntityEquipment;
 import net.daporkchop.toobeetooteebot.entity.api.EntityRotation;
 import net.daporkchop.toobeetooteebot.entity.impl.EntityMob;
 import net.daporkchop.toobeetooteebot.entity.impl.EntityObject;
@@ -344,11 +343,9 @@ public class PorkSessionAdapter extends SessionAdapter {
                     }
                 }
                 for (Entity entity : Caches.cachedEntities.values()) {
-                    if (entity instanceof EntityEquipment) {
-                        if (((EntityEquipment) entity).passengerIds.length > 0) {
-                            session.send(new ServerEntitySetPassengersPacket(entity.entityId,
-                                    ((EntityEquipment) entity).passengerIds));
-                        }
+                    if (entity.passengerIds.length > 0) {
+                        session.send(new ServerEntitySetPassengersPacket(entity.entityId,
+                                entity.passengerIds));
                     }
                     if (entity instanceof EntityRotation) {
                         EntityRotation rotation = (EntityRotation) entity;

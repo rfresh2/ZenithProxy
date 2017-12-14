@@ -27,6 +27,7 @@ public abstract class Entity {
     public int entityId;
     public UUID uuid;
     public EntityMetadata metadata[] = new EntityMetadata[0];
+    public int passengerIds[] = {};
 
     public static Entity getEntityByID(int id) {
         for (Entity entity : Caches.cachedEntities.values()) {

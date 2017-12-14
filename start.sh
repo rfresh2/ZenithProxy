@@ -19,7 +19,7 @@ cd MCProtocolLib
 if git pull origin master | grep -q 'Already up-to-date.'; then
         clear
         cd ..
-        echo "Nothing  changed, starting..."
+        echo "Nothing  changed, continuing..."
 else
         cd ..
         ./compile.sh
@@ -48,10 +48,10 @@ while [ "$DO_LOOP" == "true" ]; do
 	cd MCProtocolLib
         if git pull origin master | grep -q 'Already up-to-date.'; then
                 clear
-		cd ..
-                echo "Nothing  changed, starting..."
+		        cd ..
+                echo "Nothing  changed, continuing..."
         else
-		cd ..
+		        cd ..
                 ./compile.sh
                 sleep 0.5
                 clear

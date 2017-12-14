@@ -25,7 +25,6 @@ import java.util.HashMap;
 public abstract class EntityEquipment extends EntityRotation {
     public ArrayList<PotionEffect> potionEffects = new ArrayList<>();
     public HashMap<EquipmentSlot, ItemStack> equipment = new HashMap<>();
-    public int passengerIds[] = {};
 
     {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
