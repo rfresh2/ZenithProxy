@@ -21,12 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class EntityRotation extends Entity {
-    public float yaw, pitch;
     public double motX;
     public double motY;
     public double motZ;
     public int leashedID;
     public boolean isLeashed;
-    public float headYaw;
     public List<Attribute> properties = new ArrayList<>();
 }

@@ -22,6 +22,8 @@ import net.daporkchop.toobeetooteebot.entity.EntityType;
 import java.util.UUID;
 
 public abstract class Entity {
+    public float yaw, pitch;
+    public float headYaw;
     public EntityType type;
     public double x, y, z;
     public int entityId;
