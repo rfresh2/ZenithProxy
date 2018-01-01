@@ -47,7 +47,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class TooBeeTooTeeBot {
-    public static TooBeeTooTeeBot INSTANCE;
+    public static TooBeeTooTeeBot bot;
     public Client client = null;
     public Random r = new Random();
     public Timer timer = new Timer();
@@ -79,21 +79,21 @@ public class TooBeeTooTeeBot {
             Scanner scanner = new Scanner(System.in);
 
             scanner.nextLine();
-            if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
-                TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("Forced reboot by DaPorkchop_.");
+            if (TooBeeTooTeeBot.bot.client != null && TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
+                TooBeeTooTeeBot.bot.client.getSession().disconnect("Forced reboot by DaPorkchop_.");
             }
-            if (TooBeeTooTeeBot.INSTANCE.websocketServer != null)
-                TooBeeTooTeeBot.INSTANCE.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_.");
+            if (TooBeeTooTeeBot.bot.websocketServer != null)
+                TooBeeTooTeeBot.bot.websocketServer.sendToAll("shutdownForced reboot by DaPorkchop_.");
             Thread.sleep(100);
-            if (TooBeeTooTeeBot.INSTANCE.websocketServer != null)
-                TooBeeTooTeeBot.INSTANCE.websocketServer.stop();
+            if (TooBeeTooTeeBot.bot.websocketServer != null)
+                TooBeeTooTeeBot.bot.websocketServer.stop();
             if (Config.doWebsocket) {
-                INSTANCE.loginData.setSerializable("registeredPlayers", INSTANCE.namesToRegisteredPlayers);
-                INSTANCE.loginData.save();
+                bot.loginData.setSerializable("registeredPlayers", bot.namesToRegisteredPlayers);
+                bot.loginData.save();
             }
             if (Config.doStatCollection) {
-                INSTANCE.playData.setSerializable("uuidsToPlayData", INSTANCE.uuidsToPlayData);
-                INSTANCE.playData.save();
+                bot.playData.setSerializable("uuidsToPlayData", bot.uuidsToPlayData);
+                bot.playData.save();
             }
             Runtime.getRuntime().halt(0);
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class TooBeeTooTeeBot {
     }
 
     public void start(String[] args) throws InterruptedException {
-        INSTANCE = this;
+        bot = this;
         try {
             ESCAPE:
             if (!(args.length == 1 && args[0].equals("firstart"))) {
@@ -295,8 +295,8 @@ public class TooBeeTooTeeBot {
         try {
             if (!hasDonePostConnect) {
                 if (Config.doWebsocket) {
-                    TooBeeTooTeeBot.INSTANCE.websocketServer = new WebsocketServer(Config.websocketPort);
-                    TooBeeTooTeeBot.INSTANCE.websocketServer.start();
+                    TooBeeTooTeeBot.bot.websocketServer = new WebsocketServer(Config.websocketPort);
+                    TooBeeTooTeeBot.bot.websocketServer.start();
                 }
 
                 if (Config.doStatCollection) {
@@ -383,7 +383,7 @@ public class TooBeeTooTeeBot {
 
                 System.out.println("Launching everything again!");
                 try {
-                    TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+                    TooBeeTooTeeBot.bot.start(new String[0]);
                 } catch (InterruptedException e) {
 
                 }

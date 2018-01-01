@@ -238,7 +238,7 @@ public class PorkSessionAdapter extends SessionAdapter {
     public void packetSent(PacketSentEvent event) {
         if (event.getPacket() instanceof LoginSuccessPacket) {
             client.loggedIn = true;
-            System.out.println("UUID: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString() + "\nBot UUID: " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getIdAsString() + "\nUser name: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getName() + "\nBot name: " + TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName());
+            System.out.println("UUID: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString() + "\nBot UUID: " + TooBeeTooTeeBot.bot.protocol.getProfile().getIdAsString() + "\nUser name: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getName() + "\nBot name: " + TooBeeTooTeeBot.bot.protocol.getProfile().getName());
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
                 client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
@@ -247,7 +247,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                 }
                 System.out.println("Sent " + Caches.cachedChunks.size() + " chunks!");
                 Session session = event.getSession();
-                ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.INSTANCE.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.INSTANCE.playerListEntries.size()]));
+                ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.bot.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.bot.playerListEntries.size()]));
                 client.session.send(new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(1000) + 10));
                 client.session.send(playerListEntryPacket);
                 //client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));

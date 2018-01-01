@@ -78,7 +78,7 @@ public class GuiBot extends JFrame {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
 
-        usernameLabel = new JLabel(TooBeeTooTeeBot.INSTANCE.protocol.getProfile().getName());
+        usernameLabel = new JLabel(TooBeeTooTeeBot.bot.protocol.getProfile().getName());
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -97,26 +97,26 @@ public class GuiBot extends JFrame {
         connect_disconnectButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                if (TooBeeTooTeeBot.INSTANCE.client == null) {
+                if (TooBeeTooTeeBot.bot.client == null) {
                     connect_disconnectButton.setText("Disconnect");
                     connect_disconnectButton.setEnabled(false);
                     guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             try {
-                                TooBeeTooTeeBot.INSTANCE.start(new String[]{"firstart"});
+                                TooBeeTooTeeBot.bot.start(new String[]{"firstart"});
                             } catch (InterruptedException e) {
 
                             }
                         }
                     }, 0);
-                } else if (TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
+                } else if (TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
                     connect_disconnectButton.setText("Connect");
                     connect_disconnectButton.setEnabled(false);
                     guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            TooBeeTooTeeBot.INSTANCE.client.getSession().disconnect("User disconnected");
+                            TooBeeTooTeeBot.bot.client.getSession().disconnect("User disconnected");
                         }
                     }, 0);
                 } else {
@@ -125,9 +125,9 @@ public class GuiBot extends JFrame {
                     guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            TooBeeTooTeeBot.INSTANCE.cleanUp();
+                            TooBeeTooTeeBot.bot.cleanUp();
                             try {
-                                TooBeeTooTeeBot.INSTANCE.start(new String[0]);
+                                TooBeeTooTeeBot.bot.start(new String[0]);
                             } catch (InterruptedException e) {
 
                             }
@@ -392,8 +392,8 @@ public class GuiBot extends JFrame {
         sendButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (TooBeeTooTeeBot.INSTANCE.client != null && TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
-                    TooBeeTooTeeBot.INSTANCE.queueMessage(chatInput.getText());
+                if (TooBeeTooTeeBot.bot.client != null && TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
+                    TooBeeTooTeeBot.bot.queueMessage(chatInput.getText());
                     chatInput.setText("");
                 }
             }
@@ -403,9 +403,9 @@ public class GuiBot extends JFrame {
         guiTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (TooBeeTooTeeBot.INSTANCE.client == null) {
+                if (TooBeeTooTeeBot.bot.client == null) {
                     connect_disconnectButton.setText("Connect");
-                } else if (!TooBeeTooTeeBot.INSTANCE.client.getSession().isConnected()) {
+                } else if (!TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
                     connect_disconnectButton.setText("Connect");
                 } else {
                     connect_disconnectButton.setText("Disconnect");

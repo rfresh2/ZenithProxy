@@ -72,8 +72,8 @@
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.11-SNAPSHOT</version>
+            <artifactId>bungeecord-chat</artifactId>
+            <version>1.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -31,7 +31,7 @@ public class LoginSuccessPacket extends MinecraftPacket {
     }
 
     public LoginSuccessPacket(GameProfile profile) {
-        this.profile = TooBeeTooTeeBot.INSTANCE.protocol.getProfile();
+        this.profile = TooBeeTooTeeBot.bot.protocol.getProfile();
     }
 
     public GameProfile getProfile() {
