@@ -67,8 +67,8 @@
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
-            <artifactId>java-websocket</artifactId>
-            <version>1.3.3</version>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.3.7</version>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>

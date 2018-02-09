@@ -165,7 +165,7 @@ public class GuiBot extends JFrame {
             }
         });
 
-        chatDisplay = new JLabel("<html>Welcome to Pork2b2tBot v0.1a!</html>");
+        chatDisplay = new JLabel("<html>Welcome to <strong>Pork2b2tBot v0.1a</strong>!</html>");
         chatDisplay.setVerticalAlignment(SwingConstants.TOP);
         chatDisplay.setHorizontalAlignment(SwingConstants.LEFT);
         scrollPane.setViewportView(chatDisplay);
