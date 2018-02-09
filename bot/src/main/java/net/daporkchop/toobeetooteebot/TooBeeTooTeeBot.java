@@ -179,6 +179,8 @@ public class TooBeeTooTeeBot {
                         //ignore
                         System.out.println("Being rate limited, waiting...");
                         Thread.sleep(60000);
+                        System.out.println("Please try relaunching, if the rate limit occurs again, please check your account credentials, or wait 10 minutes before attempting again.");
+                        System.exit(3);
                     }
                 } else {
                     System.out.println("Logging in with cracked account, username: " + Config.username);
