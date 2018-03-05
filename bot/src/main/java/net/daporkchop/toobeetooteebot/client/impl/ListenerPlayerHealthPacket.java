@@ -31,6 +31,11 @@ public class ListenerPlayerHealthPacket implements IPacketListener<ServerPlayerH
     @Override
     public void handlePacket(Session session, ServerPlayerHealthPacket pck) {
         if (Config.doAutoRespawn) {
+            //don't respawn when player is connected
+            if (Config.doServer && bot.clients.size() != 0) {
+                return;
+            }
+
             if (pck.getHealth() < 1) {
                 bot.timer.schedule(new TimerTask() { // respawn
                     @Override
