@@ -52,13 +52,13 @@ import java.util.TimerTask;
 public class PorkSessionListener implements SessionListener {
     public TooBeeTooTeeBot bot;
 
+    public PorkSessionListener(TooBeeTooTeeBot tooBeeTooTeeBot) {
+        bot = tooBeeTooTeeBot;
+    }
+
     @Override
     public void packetSending(PacketSendingEvent packetSendingEvent) {
         //TODO: we might be able to use this for something
-    }
-
-    public PorkSessionListener(TooBeeTooTeeBot tooBeeTooTeeBot) {
-        bot = tooBeeTooTeeBot;
     }
 
     @Override

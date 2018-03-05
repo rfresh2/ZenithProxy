@@ -301,16 +301,6 @@ public class HTTPUtils {
         }
     }
 
-    public static class HTTPRequest {
-        public String data;
-        public int statusCode;
-
-        public HTTPRequest(String a, int b) {
-            this.data = a;
-            this.statusCode = b;
-        }
-    }
-
     /**
      * Downloads an image
      *
@@ -345,5 +335,15 @@ public class HTTPUtils {
         }
 
         return baos.toByteArray();
+    }
+
+    public static class HTTPRequest {
+        public String data;
+        public int statusCode;
+
+        public HTTPRequest(String a, int b) {
+            this.data = a;
+            this.statusCode = b;
+        }
     }
 }

@@ -75,9 +75,9 @@ public class ListenerRegistry {
         listeners.put(ServerEntityVelocityPacket.class, new IPacketListener.IgnoreListener());
     }
 
-    public static void handlePacket(Session session, MinecraftPacket pck)   {
+    public static void handlePacket(Session session, MinecraftPacket pck) {
         IPacketListener listener = listeners.get(pck.getClass());
-        if (listener == null)   {
+        if (listener == null) {
             System.out.println("[WARN] Unable to find listener for " + pck.getClass().getCanonicalName());
         } else {
             listener.handlePacket(session, pck);

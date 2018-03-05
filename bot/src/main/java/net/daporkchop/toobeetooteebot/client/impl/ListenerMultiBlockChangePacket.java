@@ -34,7 +34,7 @@ public class ListenerMultiBlockChangePacket implements IPacketListener<ServerMul
                     .getPosition().getX() >> 4; //this cuts away the additional relative chunk coordinates
             int chunkZ = pck.getRecords()[0] //there HAS to be at least one element
                     .getPosition().getZ() >> 4; //this cuts away the additional relative chunk coordinates
-            Column column = Caches.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
+            Column column = Caches.cachedChunks.get(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ));
             if (column == null) {
                 //unloaded or invalid chunk, ignore pls
                 System.out.println("null chunk multi, this is probably a server bug");

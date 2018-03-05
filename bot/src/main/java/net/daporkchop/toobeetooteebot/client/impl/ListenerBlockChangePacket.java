@@ -32,7 +32,7 @@ public class ListenerBlockChangePacket implements IPacketListener<ServerBlockCha
             int chunkX = pck.getRecord().getPosition().getX() >> 4;
             int chunkZ = pck.getRecord().getPosition().getZ() >> 4;
             int subchunkY = TooBeeTooTeeBot.ensureRange(pck.getRecord().getPosition().getY() >> 4, 0, 15);
-            Column column = Caches.cachedChunks.getOrDefault(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ), null);
+            Column column = Caches.cachedChunks.get(ChunkPos.getChunkHashFromXZ(chunkX, chunkZ));
             if (column == null) {
                 //unloaded or invalid chunk, ignore pls
                 System.out.println("null chunk, this is probably a server bug");
