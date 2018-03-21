@@ -192,7 +192,7 @@ public class TooBeeTooTeeBot {
 
             if (Config.doServer) {
                 System.out.println("Getting server icon...");
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(HTTPUtils.downloadImage("https://crafatar.com/avatars/" + protocol.profile.getName() + "?size=64&overlay&default=MHF_Steve"));
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(HTTPUtils.downloadImage("https://crafatar.com/avatars/" + protocol.profile.getId() + "?size=64&overlay&default=MHF_Steve"));
                 Caches.icon = ImageIO.read(inputStream);
                 System.out.println("Done!");
             }
