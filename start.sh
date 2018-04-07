@@ -22,7 +22,7 @@ if git pull origin master | grep -q 'Already up-to-date.'; then
         echo "Nothing  changed, continuing..."
 else
         cd ..
-        ./compile.sh
+        mvn clean compile
         sleep 0.5
         clear
         echo "Compiled, continuing..." 
@@ -32,7 +32,7 @@ if git pull | grep -q 'Already up-to-date.'; then
     clear
     echo "Nothing  changed, starting..."
 else
-    ./compile.sh
+    mvn clean compile
     clear
     echo "Compiled, starting..." 
 fi
@@ -52,7 +52,7 @@ while [ "$DO_LOOP" == "true" ]; do
                 echo "Nothing  changed, continuing..."
         else
 		        cd ..
-                ./compile.sh
+                mvn clean compile
                 sleep 0.5
                 clear
                 echo "Compiled, continuing..." 
@@ -62,7 +62,7 @@ while [ "$DO_LOOP" == "true" ]; do
 		clear
                 echo "Nothing  changed, starting..."
 	else
-		./compile.sh
+        mvn clean compile
 		sleep 0.5
 		clear
 		echo "Compiled, starting..." 

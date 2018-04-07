@@ -85,7 +85,7 @@ public class TooBeeTooTeeBot {
     public HashMap<String, PlayData> uuidsToPlayData;
     public boolean hasDonePostConnect = false;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new TooBeeTooTeeBot().start(args);
         try {
             Scanner scanner = new Scanner(System.in);
@@ -395,13 +395,8 @@ public class TooBeeTooTeeBot {
         this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-
                 System.out.println("Launching everything again!");
-                try {
-                    TooBeeTooTeeBot.bot.start(new String[0]);
-                } catch (InterruptedException e) {
-
-                }
+                TooBeeTooTeeBot.bot.start(new String[0]);
             }
         }, 1000);
     }
