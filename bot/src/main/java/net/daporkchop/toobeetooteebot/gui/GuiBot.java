@@ -103,11 +103,7 @@ public class GuiBot extends JFrame {
                     guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            try {
-                                TooBeeTooTeeBot.bot.start(new String[]{"firstart"});
-                            } catch (InterruptedException e) {
-
-                            }
+                            TooBeeTooTeeBot.bot.start(new String[]{"firstart"});
                         }
                     }, 0);
                 } else if (TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
@@ -126,11 +122,7 @@ public class GuiBot extends JFrame {
                         @Override
                         public void run() {
                             TooBeeTooTeeBot.bot.cleanUp();
-                            try {
-                                TooBeeTooTeeBot.bot.start(new String[0]);
-                            } catch (InterruptedException e) {
-
-                            }
+                            TooBeeTooTeeBot.bot.start(new String[0]);
                         }
                     }, 0);
                 }
