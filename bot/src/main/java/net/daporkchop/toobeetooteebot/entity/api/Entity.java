@@ -32,7 +32,7 @@ public abstract class Entity {
     public int passengerIds[] = {};
 
     public static Entity getEntityByID(int id) {
-        for (Entity entity : Caches.cachedEntities.valueCollection()) {
+        for (Entity entity : Caches.cachedEntities.values()) {
             if (entity.entityId == id) {
                 return entity;
             }
@@ -42,7 +42,7 @@ public abstract class Entity {
     }
 
     public static Entity getEntityBeingRiddenBy(int entityId) {
-        for (Entity entity : Caches.cachedEntities.valueCollection()) {
+        for (Entity entity : Caches.cachedEntities.values()) {
             for (int pID : ((EntityEquipment) entity).passengerIds) {
                 if (pID == entityId) {
                     return entity;

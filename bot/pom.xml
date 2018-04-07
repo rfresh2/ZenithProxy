@@ -35,22 +35,8 @@
 
     <repositories>
         <repository>
-            <id>jcenter</id>
-            <name>jcenter-bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-        <repository>
-            <id>clojars.org</id>
-            <url>http://clojars.org/repo</url>
-        </repository>
-        <repository>
-            <id>bungeecord-repo</id>
+            <id>sonatype</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <name>nukkit-releases</name>
-            <url>https://repo.nukkitx.com/release/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -60,9 +46,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.sf.trove4j</groupId>
-            <artifactId>trove</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.DaMatrix</groupId>
@@ -72,7 +58,7 @@
         <dependency>
             <groupId>net.daporkchop</groupId>
             <artifactId>mcprotocollib</artifactId>
-            <version>1.12.2-1-SNAPSHOT</version>
+            <version>1.12.2-3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
@@ -90,30 +76,4 @@
             <version>1.12-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <transformers>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>net.daporkchop.toobeetooteebot.TooBeeTooTeeBot</mainClass>
-                        </transformer>
-                    </transformers>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

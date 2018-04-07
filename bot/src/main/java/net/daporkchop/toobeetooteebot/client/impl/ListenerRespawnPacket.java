@@ -17,10 +17,8 @@ package net.daporkchop.toobeetooteebot.client.impl;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
 import com.github.steveice10.packetlib.Session;
-import gnu.trove.iterator.TIntObjectIterator;
 import net.daporkchop.toobeetooteebot.Caches;
 import net.daporkchop.toobeetooteebot.client.IPacketListener;
-import net.daporkchop.toobeetooteebot.entity.api.Entity;
 
 public class ListenerRespawnPacket implements IPacketListener<ServerRespawnPacket> {
     @Override
@@ -28,13 +26,7 @@ public class ListenerRespawnPacket implements IPacketListener<ServerRespawnPacke
         Caches.dimension = pck.getDimension();
         Caches.gameMode = pck.gamemode;
         Caches.cachedChunks.clear();
-        TIntObjectIterator<Entity> iterator = Caches.cachedEntities.iterator();
-        while (iterator.hasNext()) {
-            iterator.advance();
-            if (iterator.key() != Caches.eid) {
-                iterator.remove();
-            }
-        }
+        Caches.cachedEntities.int2ObjectEntrySet().removeIf(entityEntry -> entityEntry.getIntKey() != Caches.eid);
         Caches.cachedBossBars.clear();
         Caches.player.potionEffects.clear();
     }

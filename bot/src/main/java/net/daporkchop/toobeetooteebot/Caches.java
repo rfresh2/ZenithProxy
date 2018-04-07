@@ -18,12 +18,10 @@ package net.daporkchop.toobeetooteebot;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
-import gnu.trove.impl.sync.TSynchronizedIntObjectMap;
-import gnu.trove.impl.sync.TSynchronizedLongObjectMap;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.daporkchop.toobeetooteebot.entity.api.Entity;
 import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 import net.daporkchop.toobeetooteebot.util.EntityNotFoundException;
@@ -45,8 +43,8 @@ public class Caches {
     public static boolean onGround;
     public static EntityPlayer player;
     public static UUID uuid;
-    public static TLongObjectMap<Column> cachedChunks = new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<>());
-    public static TIntObjectMap<Entity> cachedEntities = new TSynchronizedIntObjectMap<>(new TIntObjectHashMap<>());
+    public static Long2ObjectMap<Column> cachedChunks = new Long2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<Entity> cachedEntities = new Int2ObjectOpenHashMap<>();
     public static HashMap<UUID, ServerBossBarPacket> cachedBossBars = new HashMap<>();
     public static BufferedImage icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
 

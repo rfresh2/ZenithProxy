@@ -34,7 +34,11 @@ import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.DataTag;
 import net.daporkchop.toobeetooteebot.util.HTTPUtils;
-import net.daporkchop.toobeetooteebot.web.*;
+import net.daporkchop.toobeetooteebot.web.LoggedInPlayer;
+import net.daporkchop.toobeetooteebot.web.NotRegisteredPlayer;
+import net.daporkchop.toobeetooteebot.web.PlayData;
+import net.daporkchop.toobeetooteebot.web.RegisteredPlayer;
+import net.daporkchop.toobeetooteebot.web.WebsocketServer;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
@@ -44,7 +48,15 @@ import java.net.Proxy;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TooBeeTooTeeBot {
     public static TooBeeTooTeeBot bot;
@@ -120,7 +132,7 @@ public class TooBeeTooTeeBot {
         return entry.getDisplayName() == null ? entry.getProfile().getName() : entry.getDisplayName().getFullText();
     }
 
-    public void start(String[] args) throws InterruptedException {
+    public void start(String[] args) {
         bot = this;
         try {
             ESCAPE:
@@ -285,7 +297,8 @@ public class TooBeeTooTeeBot {
                     queueMessage("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!");
                     return;
                 } else {
-                    loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + "\u00A7d says: \u00A7d" + message.substring(messageSplit[0].length() + 1));
+                    if (loggedInPlayer.clientSocket.isOpen())
+                        loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + "\u00A7d says: \u00A7d" + message.substring(messageSplit[0].length() + 1));
                     queueMessage("/msg " + playername + " Sent message to " + messageSplit[0]);
                     return;
                 }

@@ -30,8 +30,17 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.*;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.*;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDisconnectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityAttachPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEffectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
@@ -242,7 +251,7 @@ public class PorkSessionAdapter extends SessionAdapter {
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
             if (!client.sentChunks) {
                 client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
-                for (Column chunk : Caches.cachedChunks.valueCollection()) {
+                for (Column chunk : Caches.cachedChunks.values()) {
                     client.session.send(new ServerChunkDataPacket(chunk));
                 }
                 System.out.println("Sent " + Caches.cachedChunks.size() + " chunks!");
@@ -251,7 +260,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                 client.session.send(new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(1000) + 10));
                 client.session.send(playerListEntryPacket);
                 //client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));
-                for (Entity entity : Caches.cachedEntities.valueCollection()) {
+                for (Entity entity : Caches.cachedEntities.values()) {
                     switch (entity.type) {
                         case MOB:
                             EntityMob mob = (EntityMob) entity;
@@ -342,7 +351,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                             break;
                     }
                 }
-                for (Entity entity : Caches.cachedEntities.valueCollection()) {
+                for (Entity entity : Caches.cachedEntities.values()) {
                     if (entity.passengerIds.length > 0) {
                         session.send(new ServerEntitySetPassengersPacket(entity.entityId,
                                 entity.passengerIds));

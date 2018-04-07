@@ -25,7 +25,6 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -34,7 +33,7 @@ import java.util.UUID;
 import static net.daporkchop.toobeetooteebot.TooBeeTooTeeBot.bot;
 
 public class WebsocketServer extends WebSocketServer {
-    public WebsocketServer(int port) throws UnknownHostException {
+    public WebsocketServer(int port) {
         super(new InetSocketAddress(port));
         bot.timer.schedule(new TimerTask() {
             @Override
@@ -54,23 +53,24 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        conn.send("connect ");
+        if (conn.isOpen()) conn.send("connect ");
         bot.timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (bot.tabHeader != null && bot.tabFooter != null) {
                     String header = bot.tabHeader.getFullText();
                     String footer = bot.tabFooter.getFullText();
-                    conn.send("tabDiff " + header + " " + footer);
+                    if (conn.isOpen()) conn.send("tabDiff " + header + " " + footer);
                 } else if (bot.tabHeader != null) {
                     String header = bot.tabHeader.getFullText();
-                    conn.send("tabDiff " + header + "  ");
+                    if (conn.isOpen()) conn.send("tabDiff " + header + "  ");
                 } else if (bot.tabFooter != null) {
                     String footer = bot.tabFooter.getFullText();
-                    conn.send("tabDiff   " + footer);
+                    if (conn.isOpen()) conn.send("tabDiff   " + footer);
                 }
                 for (PlayerListEntry entry : bot.playerListEntries) {
-                    conn.send("tabAdd  " + TooBeeTooTeeBot.getName(entry) + " " + entry.getPing() + " " + entry.getProfile().getIdAsString());
+                    if (conn.isOpen())
+                        conn.send("tabAdd  " + TooBeeTooTeeBot.getName(entry) + " " + entry.getPing() + " " + entry.getProfile().getIdAsString());
                 }
             }
         }, 1000);
@@ -95,16 +95,17 @@ public class WebsocketServer extends WebSocketServer {
                     if (passwordHash.equals(player.passwordHash)) {
                         LoggedInPlayer toAdd = new LoggedInPlayer(player, conn);
                         bot.namesToLoggedInPlayers.put(username, toAdd);
-                        conn.send("loginOk " + username + " " + passwordHash);
+                        if (conn.isOpen()) conn.send("loginOk " + username + " " + passwordHash);
                         return;
                     } else {
-                        conn.send("loginErrInvalid password!");
+                        if (conn.isOpen()) conn.send("loginErrInvalid password!");
                         return;
                     }
                 } else {
                     if (bot.namesToTempAuths.containsKey(username)) {
                         NotRegisteredPlayer toAdd = bot.namesToTempAuths.get(username);
-                        conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
+                        if (conn.isOpen())
+                            conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
                         return;
                     }
                     NotRegisteredPlayer toAdd = new NotRegisteredPlayer();
@@ -112,7 +113,8 @@ public class WebsocketServer extends WebSocketServer {
                     toAdd.pwd = passwordHash;
                     toAdd.tempAuthUUID = UUID.randomUUID().toString();
                     bot.namesToTempAuths.put(toAdd.name, toAdd);
-                    conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
+                    if (conn.isOpen())
+                        conn.send("loginErrThis account isn't registered! To register, please join 2b2t with the account and use <strong>/msg 2pork2bot register " + toAdd.tempAuthUUID + "</strong>! This registration information will expire after 10 minutes, but you can start the registration cycle again after that time expires.");
                     return;
                 }
             } else if (message.startsWith("sendChat")) {
@@ -126,7 +128,8 @@ public class WebsocketServer extends WebSocketServer {
                 if (player == null) {
                     RegisteredPlayer registeredPlayer = bot.namesToRegisteredPlayers.getOrDefault(username, null);
                     if (registeredPlayer == null) {
-                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A RegisteredPlayer was null! (or you broke the script lol)");
+                        if (conn.isOpen())
+                            conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A RegisteredPlayer was null! (or you broke the script lol)");
                         return;
                     } else {
                         LoggedInPlayer toAdd = new LoggedInPlayer(registeredPlayer, conn);
@@ -139,25 +142,28 @@ public class WebsocketServer extends WebSocketServer {
                     //String pwdH = Hashing.sha256().hashString(password, Charsets.UTF_8).toString();
                     if (player.player.passwordHash.equals(password)) {
                         if (player.lastSentMessage + 5000 > System.currentTimeMillis()) {
-                            conn.send("loginErrPlease slow down! Max. 1 message per 5 seconds!");
+                            if (conn.isOpen()) conn.send("loginErrPlease slow down! Max. 1 message per 5 seconds!");
                             return;
                         }
                         player.lastSentMessage = System.currentTimeMillis();
-                        conn.send("chat    " + ("§dTo " + targetName + ": " + text).replace("<", "&lt;").replace(">", "&gt;"));
-                        conn.send("chatSent");
+                        if (conn.isOpen())
+                            conn.send("chat    " + ("§dTo " + targetName + ": " + text).replace("<", "&lt;").replace(">", "&gt;"));
+                        if (conn.isOpen()) conn.send("chatSent");
                         bot.queueMessage("/msg " + targetName + " " + username + ": " + text);
                         return;
                     } else {
-                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. Invalid password sent with chat! (or you broke the script lol)");
+                        if (conn.isOpen())
+                            conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. Invalid password sent with chat! (or you broke the script lol)");
                         return;
                     }
                 } else {
-                    conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A message was sent for an invalid user! (or you broke the script lol)");
+                    if (conn.isOpen())
+                        conn.send("loginErrSomething is SERIOUSLY wrong. Please report this to DaPorkchop_ ASAP. A message was sent for an invalid user! (or you broke the script lol)");
                     return;
                 }
             }
         } catch (Exception e) {
-            conn.send("loginErr" + e.getMessage());
+            if (conn.isOpen()) conn.send("loginErr" + e.getMessage());
             return;
         }
     }
@@ -170,7 +176,7 @@ public class WebsocketServer extends WebSocketServer {
     @Override
     public void onError(WebSocket conn, Exception ex) {
         ex.printStackTrace();
-        if (conn != null) {
+        if (conn != null && conn.isOpen()) {
             // some errors like port binding failed may not be assignable to a specific websocket
             conn.send("error   ");
         }
@@ -192,7 +198,7 @@ public class WebsocketServer extends WebSocketServer {
         Collection<WebSocket> con = connections();
         synchronized (con) {
             for (WebSocket c : con) {
-                c.send(text);
+                if (c.isOpen()) c.send(text);
             }
         }
     }
