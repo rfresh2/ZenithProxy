@@ -104,13 +104,13 @@ public class PorkSessionListener implements SessionListener {
                 @Override
                 public void run() { //antiafk
                     if (Config.doAntiAFK && bot.clients.size() == 0) {
-                        if (bot.r.nextBoolean()) {
+                        //if (bot.r.nextBoolean()) {
                             bot.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
-                        } else {
-                            float yaw = -90 + (90 - -90) * bot.r.nextFloat();
-                            float pitch = -90 + (90 - -90) * bot.r.nextFloat();
-                            bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
-                        }
+                        //} else {
+                        //    float yaw = -90 + (90 - -90) * bot.r.nextFloat();
+                        //    float pitch = -90 + (90 - -90) * bot.r.nextFloat();
+                        //    bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
+                        //}
                     }
                 }
             }, 20000, 500);
