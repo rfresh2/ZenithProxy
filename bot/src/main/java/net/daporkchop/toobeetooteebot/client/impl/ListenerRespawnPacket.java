@@ -26,7 +26,7 @@ public class ListenerRespawnPacket implements IPacketListener<ServerRespawnPacke
         Caches.dimension = pck.getDimension();
         Caches.gameMode = pck.gamemode;
         Caches.cachedChunks.clear();
-        Caches.cachedEntities.int2ObjectEntrySet().removeIf(entityEntry -> entityEntry.getIntKey() != Caches.eid);
+        Caches.cachedEntities.entrySet().removeIf(entityEntry -> entityEntry.getKey() != Caches.eid);
         Caches.cachedBossBars.clear();
         Caches.player.potionEffects.clear();
     }

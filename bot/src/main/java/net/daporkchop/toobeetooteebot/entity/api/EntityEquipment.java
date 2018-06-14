@@ -21,10 +21,11 @@ import net.daporkchop.toobeetooteebot.entity.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class EntityEquipment extends EntityRotation {
     public ArrayList<PotionEffect> potionEffects = new ArrayList<>();
-    public HashMap<EquipmentSlot, ItemStack> equipment = new HashMap<>();
+    public Map<EquipmentSlot, ItemStack> equipment = new HashMap<>();
 
     {
         for (EquipmentSlot slot : EquipmentSlot.values()) {

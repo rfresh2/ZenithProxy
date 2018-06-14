@@ -50,6 +50,7 @@ import net.daporkchop.toobeetooteebot.server.PorkServerAdapter;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.EntityNotFoundException;
 
+import java.io.Serializable;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -129,7 +130,7 @@ public class PorkSessionListener implements SessionListener {
             @Override
             public void run() {
                 if (bot.queuedIngameMessages.size() > 0) {
-                    bot.client.getSession().send(new ClientChatPacket(bot.queuedIngameMessages.remove(0)));
+                    bot.client.getSession().send(new ClientChatPacket(bot.queuedIngameMessages.poll()));
                 }
             }
         }, 30000, 1000);
@@ -195,7 +196,7 @@ public class PorkSessionListener implements SessionListener {
             bot.websocketServer.sendToAll("chat    \u00A7cDisconnected from server! Reason: " + disconnectingEvent.getReason());
         }
         if (Config.doWebsocket) {
-            TooBeeTooTeeBot.bot.loginData.setSerializable("registeredPlayers", TooBeeTooTeeBot.bot.namesToRegisteredPlayers);
+            TooBeeTooTeeBot.bot.loginData.setSerializable("registeredPlayers", (Serializable) TooBeeTooTeeBot.bot.namesToRegisteredPlayers);
             TooBeeTooTeeBot.bot.loginData.save();
         }
         if (Config.doStatCollection) {

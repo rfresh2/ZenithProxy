@@ -44,6 +44,7 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.Proxy;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,10 +54,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TooBeeTooTeeBot {
     public static TooBeeTooTeeBot bot;
@@ -70,18 +74,18 @@ public class TooBeeTooTeeBot {
     public ArrayList<PlayerListEntry> playerListEntries = new ArrayList<>();
     public MinecraftProtocol protocol;
     public DataTag loginData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "players.dat"));
-    public HashMap<String, RegisteredPlayer> namesToRegisteredPlayers;
-    public HashMap<String, NotRegisteredPlayer> namesToTempAuths = new HashMap<>();
-    public HashMap<String, LoggedInPlayer> namesToLoggedInPlayers = new HashMap<>();
+    public Map<String, RegisteredPlayer> namesToRegisteredPlayers;
+    public final Map<String, NotRegisteredPlayer> namesToTempAuths = new ConcurrentHashMap<>();
+    public final Map<String, LoggedInPlayer> namesToLoggedInPlayers = new ConcurrentHashMap<>();
     //BEGIN SERVER VARIABLES
     public ArrayList<PorkClient> clients = new ArrayList<>();
     public boolean isLoggedIn = false;
-    public HashMap<Session, PorkClient> sessionToClient = new HashMap<>();
+    public final Map<Session, PorkClient> sessionToClient = new ConcurrentHashMap<>();
     //END SERVER VARIABLES
     public Server server = null;
-    public ArrayList<String> queuedIngameMessages = new ArrayList<>();
-    public HashMap<String, Long> ingamePlayerCooldown = new HashMap<>();
-    public DataTag playData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "online.dat"));
+    public final Queue<String> queuedIngameMessages = new ConcurrentLinkedQueue<>();
+    public final Map<String, Long> ingamePlayerCooldown = new ConcurrentHashMap<>();
+    public final DataTag playData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "online.dat"));
     public HashMap<String, PlayData> uuidsToPlayData;
     public boolean hasDonePostConnect = false;
 
@@ -100,7 +104,7 @@ public class TooBeeTooTeeBot {
             if (TooBeeTooTeeBot.bot.websocketServer != null)
                 TooBeeTooTeeBot.bot.websocketServer.stop();
             if (Config.doWebsocket) {
-                bot.loginData.setSerializable("registeredPlayers", bot.namesToRegisteredPlayers);
+                bot.loginData.setSerializable("registeredPlayers", (Serializable) bot.namesToRegisteredPlayers);
                 bot.loginData.save();
             }
             if (Config.doStatCollection) {
@@ -218,7 +222,13 @@ public class TooBeeTooTeeBot {
 
             if (firstRun) {
                 if (Config.doWebsocket) {
-                    namesToRegisteredPlayers = (HashMap<String, RegisteredPlayer>) loginData.getSerializable("registeredPlayers", new HashMap<String, RegisteredPlayer>());
+                    Object aaa = loginData.getSerializable("registeredPlayers", new ConcurrentHashMap<String, RegisteredPlayer>());
+                    if (aaa instanceof HashMap) {
+                        namesToRegisteredPlayers = new ConcurrentHashMap<>();
+                        namesToRegisteredPlayers.putAll((HashMap<String, RegisteredPlayer>) aaa);
+                    } else {
+                        namesToRegisteredPlayers = (ConcurrentHashMap<String, RegisteredPlayer>) aaa;
+                    }
                 }
                 if (Config.doStatCollection) {
                     uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
@@ -272,7 +282,7 @@ public class TooBeeTooTeeBot {
                     newPlayer.lastUsed = System.currentTimeMillis();
                     namesToTempAuths.remove(tempAuth.name);
                     namesToRegisteredPlayers.put(tempAuth.name, newPlayer);
-                    loginData.setSerializable("registeredPlayers", namesToRegisteredPlayers);
+                    loginData.setSerializable("registeredPlayers", (Serializable) namesToRegisteredPlayers);
                     queueMessage("/msg " + playername + " Successfully registered! You can now use your username and password on the website!");
                     return;
                 } else {

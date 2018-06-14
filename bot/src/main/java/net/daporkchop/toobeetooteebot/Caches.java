@@ -29,7 +29,9 @@ import net.daporkchop.toobeetooteebot.util.EntityNotFoundException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Caches {
     public static double x = 0;
@@ -43,9 +45,9 @@ public class Caches {
     public static boolean onGround;
     public static EntityPlayer player;
     public static UUID uuid;
-    public static Long2ObjectMap<Column> cachedChunks = new Long2ObjectOpenHashMap<>();
-    public static Int2ObjectMap<Entity> cachedEntities = new Int2ObjectOpenHashMap<>();
-    public static HashMap<UUID, ServerBossBarPacket> cachedBossBars = new HashMap<>();
+    public static Map<Long, Column> cachedChunks = new ConcurrentHashMap<>();
+    public static Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>();
+    public static Map<UUID, ServerBossBarPacket> cachedBossBars = new ConcurrentHashMap<>();
     public static BufferedImage icon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
 
     static {
