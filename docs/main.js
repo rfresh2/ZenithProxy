@@ -1,6 +1,4 @@
-var wsUri = "ws://repo.daporkchop.tk:8888";
-var wsAddress;
-var wsPort;
+var wsUri = "wss://repo.daporkchop.net:8888";
 var output;
 var shutdown = false;
 
@@ -15,7 +13,6 @@ function updateScroll() {
 function init() {
     wsAddress = get("address");
     wsPort = get("port");
-    wsUri = "ws://" + wsAddress + ":" + wsPort;
     testWebSocket();
 }
 
@@ -47,7 +44,7 @@ function testWebSocket() {
     if (Notification.permission == "granted") {
         document.getElementById("requestpermsbutton").style.display = 'none';
     }
-    var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
+    var error = createCORSRequest('GET', "https://www.daporkchop.net/Pork2b2tBot/error.txt");
         error = document.getElementById("chat").innerHTML + "\n\nTrying to connect to chat...\nBot status: \u00A7" + error;
     initParser(error, 'chat', true);
 }
@@ -58,7 +55,7 @@ function onOpen(evt) {
 
 function onClose(evt) {
     if (!shutdown) {
-        var error = createCORSRequest('GET', "http://www.daporkchop.net/Pork2b2tBot/error.txt");
+        var error = createCORSRequest('GET', "https://www.daporkchop.net/Pork2b2tBot/error.txt");
         var newText = "\n\n\u00A7c\u00A7lWe seem to have been disconnected, or are unable to connect to the bot! Error:\n\n\u00A7r\u00A7f\u00A7" + error;
         initParser(newText, 'chat', true);
     }
