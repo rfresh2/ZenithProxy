@@ -45,7 +45,7 @@ public class ListenerChatPacket implements IPacketListener<ServerChatPacket> {
             try {
                 String[] split = msg.split(" ");
                 if (!msg.startsWith("<") && split[1].startsWith("whispers")) {
-                    bot.processMsg(split[0], msg.substring(split[0].length() + split[1].length() + 2));
+                    bot.processMsg(split[0].replaceAll(":", ""), msg.substring(split[0].length() + split[1].length() + 2));
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
                 //ignore kek
@@ -77,12 +77,12 @@ public class ListenerChatPacket implements IPacketListener<ServerChatPacket> {
             bot.websocketServer.sendToAll("chat    " + legacyColorCodes.replace("<", "&lt;").replace(">", "&gt;"));
         }
 
-        Iterator<PorkClient> iterator = bot.clients.iterator();
+        /*Iterator<PorkClient> iterator = bot.clients.iterator();
         while (iterator.hasNext()) {
             PorkClient client = iterator.next();
             if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) { //thx 0x kek
                 client.session.send(new ServerChatPacket(legacyColorCodes));
             }
-        }
+        }*/
     }
 }

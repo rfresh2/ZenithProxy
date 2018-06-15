@@ -146,10 +146,14 @@ public class WebsocketServer extends WebSocketServer {
                             return;
                         }
                         player.lastSentMessage = System.currentTimeMillis();
-                        if (conn.isOpen())
-                            conn.send("chat    " + ("§dTo " + targetName + ": " + text).replace("<", "&lt;").replace(">", "&gt;"));
-                        if (conn.isOpen()) conn.send("chatSent");
-                        bot.queueMessage("/msg " + targetName + " " + username + ": " + text);
+                        if ("everyone".equals(targetName) && bot.protocol.profile.getName().equals(username)) {
+                            bot.queueMessage(text);
+                        } else {
+                            if (conn.isOpen())
+                                conn.send("chat    " + ("§dTo " + targetName + ": " + text).replace("<", "&lt;").replace(">", "&gt;"));
+                            if (conn.isOpen()) conn.send("chatSent");
+                            bot.queueMessage("/msg " + targetName + " " + username + ": " + text);
+                        }
                         return;
                     } else {
                         if (conn.isOpen())

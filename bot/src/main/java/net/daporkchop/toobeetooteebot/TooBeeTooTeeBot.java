@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
@@ -78,7 +79,7 @@ public class TooBeeTooTeeBot {
     public final Map<String, NotRegisteredPlayer> namesToTempAuths = new ConcurrentHashMap<>();
     public final Map<String, LoggedInPlayer> namesToLoggedInPlayers = new ConcurrentHashMap<>();
     //BEGIN SERVER VARIABLES
-    public ArrayList<PorkClient> clients = new ArrayList<>();
+    public List<PorkClient> clients = new ArrayList<>();
     public boolean isLoggedIn = false;
     public final Map<Session, PorkClient> sessionToClient = new ConcurrentHashMap<>();
     //END SERVER VARIABLES
