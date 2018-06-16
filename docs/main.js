@@ -1,4 +1,4 @@
-var wsUri = "wss://repo.daporkchop.net";
+var wsUri = "wss://2pork2bot.daporkchop.net/ws";
 var output;
 var shutdown = false;
 
