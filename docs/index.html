@@ -36,8 +36,8 @@
   <script type="text/javascript" src="mctext.js"></script>
   <script>
     window.addEventListener('message', function(event) {
-      window.height = event.data;
-    }
+      event.origin.contentWindow.postMessage(document.body.scrollHeight, '*');
+    });
   </script>
  </body>
 </html>
