@@ -34,5 +34,10 @@
   <!-- js -->
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="mctext.js"></script>
+  <script>
+    window.addEventListener('message', function(event) {
+      window.height = event.data;
+    }
+  </script>
  </body>
 </html>
