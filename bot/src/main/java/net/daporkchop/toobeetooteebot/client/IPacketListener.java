@@ -21,7 +21,7 @@ import com.github.steveice10.packetlib.Session;
 public interface IPacketListener<T extends MinecraftPacket> {
     void handlePacket(Session session, T pck);
 
-    final class IgnoreListener implements IPacketListener {
+    class IgnoreListener implements IPacketListener {
         @Override
         public void handlePacket(Session session, MinecraftPacket pck) {
             //do nothing

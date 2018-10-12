@@ -24,17 +24,18 @@ public class PorkServerAdapter extends ServerAdapter {
     public TooBeeTooTeeBot bot;
 
     public PorkServerAdapter(TooBeeTooTeeBot tooBeeTooTeeBot) {
-        bot = tooBeeTooTeeBot;
+        super();
+        this.bot = tooBeeTooTeeBot;
     }
 
     @Override
     public void sessionAdded(SessionAddedEvent event) {
-        if (bot.isLoggedIn) {
-            PorkClient newClient = new PorkClient(event.getSession(), bot.clients.size());
-            bot.clients.add(newClient);
-            bot.sessionToClient.put(event.getSession(), newClient);
+        if (this.bot.isLoggedIn) {
+            PorkClient newClient = new PorkClient(event.getSession(), this.bot.clients.size());
+            this.bot.clients.add(newClient);
+            this.bot.sessionToClient.put(event.getSession(), newClient);
 
-            event.getSession().addListener(new PorkSessionAdapter(newClient, bot));
+            event.getSession().addListener(new PorkSessionAdapter(newClient, this.bot));
         } else {
             event.getSession().disconnect("Not logged in yet, please wait a moment!");
         }
@@ -42,11 +43,11 @@ public class PorkServerAdapter extends ServerAdapter {
 
     @Override
     public void sessionRemoved(SessionRemovedEvent event) {
-        PorkClient toRemove = bot.sessionToClient.remove(event.getSession());
-        bot.clients.remove(toRemove.arrayIndex);
-        if (bot.clients.size() > 0) {
-            for (int i = toRemove.arrayIndex; i < bot.clients.size(); i++) {
-                bot.clients.get(i).arrayIndex--;
+        PorkClient toRemove = this.bot.sessionToClient.remove(event.getSession());
+        this.bot.clients.remove(toRemove.arrayIndex);
+        if (!this.bot.clients.isEmpty()) {
+            for (int i = toRemove.arrayIndex; i < this.bot.clients.size(); i++) {
+                this.bot.clients.get(i).arrayIndex--;
             }
         }
     }

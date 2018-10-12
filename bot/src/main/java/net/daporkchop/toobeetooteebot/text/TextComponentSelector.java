@@ -22,6 +22,7 @@ public class TextComponentSelector extends TextComponentBase {
     private final String selector;
 
     public TextComponentSelector(String selectorIn) {
+        super();
         this.selector = selectorIn;
     }
 

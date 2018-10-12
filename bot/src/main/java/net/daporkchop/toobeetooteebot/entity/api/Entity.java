@@ -22,14 +22,17 @@ import net.daporkchop.toobeetooteebot.entity.EntityType;
 import java.util.UUID;
 
 public abstract class Entity {
-    public float yaw, pitch;
+    public float yaw;
+    public float pitch;
     public float headYaw;
     public EntityType type;
-    public double x, y, z;
+    public double x;
+    public double y;
+    public double z;
     public int entityId;
     public UUID uuid;
     public EntityMetadata metadata[] = new EntityMetadata[0];
-    public int passengerIds[] = {};
+    public int passengerIds[] = new int[]{};
 
     public static Entity getEntityByID(int id) {
         for (Entity entity : Caches.cachedEntities.values()) {

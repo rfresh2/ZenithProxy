@@ -24,6 +24,7 @@ public class ClickEvent {
     private final String value;
 
     public ClickEvent(ClickEvent.Action theAction, String theValue) {
+        super();
         this.action = theAction;
         this.value = theValue;
     }

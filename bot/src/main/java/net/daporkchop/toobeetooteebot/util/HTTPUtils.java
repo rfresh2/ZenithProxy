@@ -295,7 +295,7 @@ public class HTTPUtils {
      */
     public static URL concatenateURL(final URL url, final String query) {
         try {
-            if (url.getQuery() != null && url.getQuery().length() > 0) {
+            if (url.getQuery() != null && !url.getQuery().isEmpty()) {
                 return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile() + "&" + query);
             } else {
                 return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile() + "?" + query);
@@ -346,6 +346,7 @@ public class HTTPUtils {
         public int statusCode;
 
         public HTTPRequest(String a, int b) {
+            super();
             this.data = a;
             this.statusCode = b;
         }

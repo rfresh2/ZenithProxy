@@ -68,10 +68,6 @@ public enum TextFormatting {
      * The name of this color/formatting
      */
     private final String name;
-    /**
-     * The formatting code that produces this format.
-     */
-    private final char formattingCode;
     private final boolean fancyStyling;
     /**
      * The control string (section sign + formatting code) that can be inserted into client-side text to display
@@ -93,7 +89,11 @@ public enum TextFormatting {
 
     TextFormatting(String formattingName, char formattingCodeIn, boolean fancyStylingIn, int colorIndex) {
         this.name = formattingName;
-        this.formattingCode = formattingCodeIn;
+        /*
+      The formatting code that produces this format.
+     */ /**
+         * The formatting code that produces this format.
+         */char formattingCode = formattingCodeIn;
         this.fancyStyling = fancyStylingIn;
         this.colorIndex = colorIndex;
         this.controlString = "\u00a7" + formattingCodeIn;

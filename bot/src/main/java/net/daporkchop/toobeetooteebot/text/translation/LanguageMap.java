@@ -43,6 +43,7 @@ public class LanguageMap {
     private long lastUpdateTimeInMilliseconds;
 
     public LanguageMap() {
+        super();
         InputStream inputstream = LanguageMap.class.getResourceAsStream("/assets/minecraft/lang/en_us.lang");
         inject(this, inputstream);
     }

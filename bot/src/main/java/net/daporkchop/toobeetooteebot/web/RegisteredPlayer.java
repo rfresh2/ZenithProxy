@@ -23,6 +23,7 @@ public class RegisteredPlayer implements Serializable {
     public String name;
 
     public RegisteredPlayer(String passwordHash, String name) {
+        super();
         this.passwordHash = passwordHash;
         this.name = name;
     }

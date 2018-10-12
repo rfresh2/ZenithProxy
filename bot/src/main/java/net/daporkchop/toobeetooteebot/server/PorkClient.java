@@ -22,13 +22,14 @@ import com.github.steveice10.packetlib.Session;
  */
 public class PorkClient {
     public Session session;
-    public boolean loggedIn = false;
-    public boolean sentChunks = false;
-    public boolean setInitialPosition = false;
+    public boolean loggedIn;
+    public boolean sentChunks;
+    public boolean setInitialPosition;
     public int arrayIndex;
     public String username;
 
     public PorkClient(Session session, int arrayIndex) {
+        super();
         this.session = session;
         this.arrayIndex = arrayIndex;
     }

@@ -18,29 +18,24 @@ package net.daporkchop.toobeetooteebot;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.daporkchop.toobeetooteebot.entity.api.Entity;
 import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 import net.daporkchop.toobeetooteebot.util.EntityNotFoundException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Caches {
-    public static double x = 0;
-    public static double y = 0;
-    public static double z = 0;
-    public static float yaw = 0;
-    public static float pitch = 0;
-    public static int dimension = 0;
-    public static int eid = 0;
+    public static double x;
+    public static double y;
+    public static double z;
+    public static float yaw;
+    public static float pitch;
+    public static int dimension;
+    public static int eid;
     public static GameMode gameMode = GameMode.SURVIVAL;
     public static boolean onGround;
     public static EntityPlayer player;

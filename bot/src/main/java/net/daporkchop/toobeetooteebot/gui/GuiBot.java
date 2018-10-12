@@ -33,7 +33,7 @@ import java.net.URISyntaxException;
 import java.util.TimerTask;
 
 public class GuiBot extends JFrame {
-    public static GuiBot INSTANCE = null;
+    public static GuiBot INSTANCE;
 
     public java.util.Timer guiTimer = new java.util.Timer();
 
@@ -60,6 +60,7 @@ public class GuiBot extends JFrame {
      * Create the frame.
      */
     public GuiBot() {
+        super();
         INSTANCE = this;
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -69,56 +70,56 @@ public class GuiBot extends JFrame {
             Runtime.getRuntime().exit(0);
         }
 
-        setIconImage(Toolkit.getDefaultToolkit()
+        this.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(GuiBot.class.getResource("/DaPorkchop_.png")));
-        setTitle("Pork2b2tBot v0.1 alpha");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 350, 500);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
+        this.setTitle("Pork2b2tBot v0.1 alpha");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setBounds(100, 100, 350, 500);
+        this.contentPane = new JPanel();
+        this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        this.setContentPane(this.contentPane);
 
-        usernameLabel = new JLabel(TooBeeTooTeeBot.bot.protocol.getProfile().getName());
+        this.usernameLabel = new JLabel(TooBeeTooTeeBot.bot.protocol.getProfile().getName());
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        GroupLayout gl_contentPane = new GroupLayout(contentPane);
+        GroupLayout gl_contentPane = new GroupLayout(this.contentPane);
         gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addComponent(usernameLabel, GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                .addComponent(this.usernameLabel, GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                 .addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE));
         gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup().addComponent(usernameLabel)
+                .addGroup(gl_contentPane.createSequentialGroup().addComponent(this.usernameLabel)
                         .addPreferredGap(ComponentPlacement.RELATED).addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE,
                                 431, Short.MAX_VALUE)));
 
         JPanel tabMain = new JPanel();
         tabbedPane.addTab("Main", null, tabMain, null);
 
-        connect_disconnectButton = new JButton("Connect");
-        connect_disconnectButton.addMouseListener(new MouseAdapter() {
+        this.connect_disconnectButton = new JButton("Connect");
+        this.connect_disconnectButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 if (TooBeeTooTeeBot.bot.client == null) {
-                    connect_disconnectButton.setText("Disconnect");
-                    connect_disconnectButton.setEnabled(false);
-                    guiTimer.schedule(new TimerTask() {
+                    GuiBot.this.connect_disconnectButton.setText("Disconnect");
+                    GuiBot.this.connect_disconnectButton.setEnabled(false);
+                    GuiBot.this.guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             TooBeeTooTeeBot.bot.start(new String[]{"firstart"});
                         }
                     }, 0);
                 } else if (TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
-                    connect_disconnectButton.setText("Connect");
-                    connect_disconnectButton.setEnabled(false);
-                    guiTimer.schedule(new TimerTask() {
+                    GuiBot.this.connect_disconnectButton.setText("Connect");
+                    GuiBot.this.connect_disconnectButton.setEnabled(false);
+                    GuiBot.this.guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             TooBeeTooTeeBot.bot.client.getSession().disconnect("User disconnected");
                         }
                     }, 0);
                 } else {
-                    connect_disconnectButton.setText("Disconnect");
-                    connect_disconnectButton.setEnabled(false);
-                    guiTimer.schedule(new TimerTask() {
+                    GuiBot.this.connect_disconnectButton.setText("Disconnect");
+                    GuiBot.this.connect_disconnectButton.setEnabled(false);
+                    GuiBot.this.guiTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             TooBeeTooTeeBot.bot.cleanUp();
@@ -131,24 +132,24 @@ public class GuiBot extends JFrame {
 
         JButton sendButton = new JButton("Send");
 
-        chatInput = new JTextField();
-        chatInput.setColumns(10);
+        this.chatInput = new JTextField();
+        this.chatInput.setColumns(10);
 
         JScrollPane scrollPane = new JScrollPane();
         GroupLayout gl_tabMain = new GroupLayout(tabMain);
         gl_tabMain.setHorizontalGroup(gl_tabMain.createParallelGroup(Alignment.TRAILING)
-                .addComponent(connect_disconnectButton, GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addComponent(this.connect_disconnectButton, GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                 .addGroup(gl_tabMain.createSequentialGroup()
-                        .addComponent(chatInput, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                        .addComponent(this.chatInput, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                         .addPreferredGap(ComponentPlacement.RELATED).addComponent(sendButton))
                 .addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE));
         gl_tabMain.setVerticalGroup(gl_tabMain.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_tabMain.createSequentialGroup().addComponent(connect_disconnectButton)
+                .addGroup(gl_tabMain.createSequentialGroup().addComponent(this.connect_disconnectButton)
                         .addPreferredGap(ComponentPlacement.RELATED)
                         .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
                         .addPreferredGap(ComponentPlacement.RELATED)
                         .addGroup(gl_tabMain.createParallelGroup(Alignment.BASELINE).addComponent(sendButton)
-                                .addComponent(chatInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                .addComponent(this.chatInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
                                         GroupLayout.PREFERRED_SIZE))));
 
         scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
@@ -157,12 +158,12 @@ public class GuiBot extends JFrame {
             }
         });
 
-        chatDisplay = new JLabel("<html>Welcome to <strong>Pork2b2tBot v0.1a</strong>!</html>");
-        chatDisplay.setVerticalAlignment(SwingConstants.TOP);
-        chatDisplay.setHorizontalAlignment(SwingConstants.LEFT);
-        scrollPane.setViewportView(chatDisplay);
+        this.chatDisplay = new JLabel("<html>Welcome to <strong>Pork2b2tBot v0.1a</strong>!</html>");
+        this.chatDisplay.setVerticalAlignment(SwingConstants.TOP);
+        this.chatDisplay.setHorizontalAlignment(SwingConstants.LEFT);
+        scrollPane.setViewportView(this.chatDisplay);
         tabMain.setLayout(gl_tabMain);
-        chatDisplay.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        this.chatDisplay.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         scrollPane.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         JPanel tabConfig = new JPanel();
@@ -176,19 +177,19 @@ public class GuiBot extends JFrame {
         btnSave.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                Config.parser.set("login.username", Config.username = usernameIn.getText());
-                Config.parser.set("login.password", Config.password = passwordIn.getText());
-                Config.parser.set("login.doAuthentication", Config.doAuth = doAuthenticationIn.isSelected());
-                Config.parser.set("server.host", Config.serverHost = bindHostIn.getText());
-                Config.parser.set("server.port", Config.serverPort = (int) bindPortIn.getValue());
-                Config.parser.set("server.doServer", Config.doServer = doServerIn.isSelected());
-                Config.parser.set("misc.antiafk", Config.doAntiAFK = doAntiAfkIn.isSelected());
-                Config.parser.set("client.hostIP", Config.ip = targetIpIn.getText());
-                Config.parser.set("client.hostPort", Config.port = (int) targetPortIn.getValue());
-                Config.parser.set("misc.autorespawn", Config.doAntiAFK = doAntiAfkIn.isSelected());
-                Config.parser.set("misc.doAutoRelog", Config.doAutoRelog = doAutoRelogIn.isSelected());
-                Config.parser.set("stats.doStats", Config.doStatCollection = statCollectionIn.isSelected());
-                Config.parser.set("chat.doProcess", Config.processChat = statCollectionIn.isSelected());
+                Config.parser.set("login.username", Config.username = GuiBot.this.usernameIn.getText());
+                Config.parser.set("login.password", Config.password = GuiBot.this.passwordIn.getText());
+                Config.parser.set("login.doAuthentication", Config.doAuth = GuiBot.this.doAuthenticationIn.isSelected());
+                Config.parser.set("server.host", Config.serverHost = GuiBot.this.bindHostIn.getText());
+                Config.parser.set("server.port", Config.serverPort = (int) GuiBot.this.bindPortIn.getValue());
+                Config.parser.set("server.doServer", Config.doServer = GuiBot.this.doServerIn.isSelected());
+                Config.parser.set("misc.antiafk", Config.doAntiAFK = GuiBot.this.doAntiAfkIn.isSelected());
+                Config.parser.set("client.hostIP", Config.ip = GuiBot.this.targetIpIn.getText());
+                Config.parser.set("client.hostPort", Config.port = (int) GuiBot.this.targetPortIn.getValue());
+                Config.parser.set("misc.autorespawn", Config.doAntiAFK = GuiBot.this.doAntiAfkIn.isSelected());
+                Config.parser.set("misc.doAutoRelog", Config.doAutoRelog = GuiBot.this.doAutoRelogIn.isSelected());
+                Config.parser.set("stats.doStats", Config.doStatCollection = GuiBot.this.statCollectionIn.isSelected());
+                Config.parser.set("chat.doProcess", Config.processChat = GuiBot.this.statCollectionIn.isSelected());
 
                 Config.parser.save();
             }
@@ -272,71 +273,71 @@ public class GuiBot extends JFrame {
         panel2.add(lblProcessChat);
         panel1.setLayout(new GridLayout(13, 1, 0, 0));
 
-        usernameIn = new JTextField();
-        panel1.add(usernameIn);
-        usernameIn.setColumns(10);
-        usernameIn.setText(Config.username);
+        this.usernameIn = new JTextField();
+        panel1.add(this.usernameIn);
+        this.usernameIn.setColumns(10);
+        this.usernameIn.setText(Config.username);
 
-        passwordIn = new JPasswordField();
-        panel1.add(passwordIn);
-        passwordIn.setText(Config.password);
+        this.passwordIn = new JPasswordField();
+        panel1.add(this.passwordIn);
+        this.passwordIn.setText(Config.password);
 
-        doAuthenticationIn = new JCheckBox("");
-        doAuthenticationIn.setHorizontalAlignment(SwingConstants.CENTER);
-        doAuthenticationIn.setSelected(Config.doAuth);
-        panel1.add(doAuthenticationIn);
+        this.doAuthenticationIn = new JCheckBox("");
+        this.doAuthenticationIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.doAuthenticationIn.setSelected(Config.doAuth);
+        panel1.add(this.doAuthenticationIn);
 
-        targetIpIn = new JTextField();
-        panel1.add(targetIpIn);
-        targetIpIn.setColumns(10);
-        targetIpIn.setText(Config.ip);
+        this.targetIpIn = new JTextField();
+        panel1.add(this.targetIpIn);
+        this.targetIpIn.setColumns(10);
+        this.targetIpIn.setText(Config.ip);
 
-        targetPortIn = new JSpinner();
-        targetPortIn.setModel(new SpinnerNumberModel(25565, 1, 65535, 1));
-        targetPortIn.setEditor(new JSpinner.NumberEditor(targetPortIn, "#"));
-        targetPortIn.setValue(Integer.valueOf(Config.port));
-        panel1.add(targetPortIn);
+        this.targetPortIn = new JSpinner();
+        this.targetPortIn.setModel(new SpinnerNumberModel(25565, 1, 65535, 1));
+        this.targetPortIn.setEditor(new JSpinner.NumberEditor(this.targetPortIn, "#"));
+        this.targetPortIn.setValue(Integer.valueOf(Config.port));
+        panel1.add(this.targetPortIn);
 
-        doAntiAfkIn = new JCheckBox("");
-        doAntiAfkIn.setHorizontalAlignment(SwingConstants.CENTER);
-        doAntiAfkIn.setSelected(Config.doAntiAFK);
-        panel1.add(doAntiAfkIn);
+        this.doAntiAfkIn = new JCheckBox("");
+        this.doAntiAfkIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.doAntiAfkIn.setSelected(Config.doAntiAFK);
+        panel1.add(this.doAntiAfkIn);
 
-        doAutoRespawnIn = new JCheckBox("");
-        doAutoRespawnIn.setHorizontalAlignment(SwingConstants.CENTER);
-        doAutoRespawnIn.setSelected(Config.doAutoRespawn);
-        panel1.add(doAutoRespawnIn);
+        this.doAutoRespawnIn = new JCheckBox("");
+        this.doAutoRespawnIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.doAutoRespawnIn.setSelected(Config.doAutoRespawn);
+        panel1.add(this.doAutoRespawnIn);
 
-        doAutoRelogIn = new JCheckBox("");
-        doAutoRelogIn.setHorizontalAlignment(SwingConstants.CENTER);
-        doAutoRelogIn.setSelected(Config.doAutoRelog);
-        panel1.add(doAutoRelogIn);
+        this.doAutoRelogIn = new JCheckBox("");
+        this.doAutoRelogIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.doAutoRelogIn.setSelected(Config.doAutoRelog);
+        panel1.add(this.doAutoRelogIn);
 
-        doServerIn = new JCheckBox("");
-        doServerIn.setHorizontalAlignment(SwingConstants.CENTER);
-        doServerIn.setSelected(Config.doServer);
-        panel1.add(doServerIn);
+        this.doServerIn = new JCheckBox("");
+        this.doServerIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.doServerIn.setSelected(Config.doServer);
+        panel1.add(this.doServerIn);
 
-        bindHostIn = new JTextField();
-        panel1.add(bindHostIn);
-        bindHostIn.setColumns(10);
-        bindHostIn.setText(Config.serverHost);
+        this.bindHostIn = new JTextField();
+        panel1.add(this.bindHostIn);
+        this.bindHostIn.setColumns(10);
+        this.bindHostIn.setText(Config.serverHost);
 
-        bindPortIn = new JSpinner();
-        bindPortIn.setModel(new SpinnerNumberModel(10293, 1, 65535, 1));
-        bindPortIn.setEditor(new JSpinner.NumberEditor(bindPortIn, "#"));
-        bindPortIn.setValue(Integer.valueOf(Config.serverPort));
-        panel1.add(bindPortIn);
+        this.bindPortIn = new JSpinner();
+        this.bindPortIn.setModel(new SpinnerNumberModel(10293, 1, 65535, 1));
+        this.bindPortIn.setEditor(new JSpinner.NumberEditor(this.bindPortIn, "#"));
+        this.bindPortIn.setValue(Integer.valueOf(Config.serverPort));
+        panel1.add(this.bindPortIn);
 
-        statCollectionIn = new JCheckBox("");
-        statCollectionIn.setHorizontalAlignment(SwingConstants.CENTER);
-        statCollectionIn.setSelected(Config.doStatCollection);
-        panel1.add(statCollectionIn);
+        this.statCollectionIn = new JCheckBox("");
+        this.statCollectionIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.statCollectionIn.setSelected(Config.doStatCollection);
+        panel1.add(this.statCollectionIn);
 
-        processChatIn = new JCheckBox("");
-        processChatIn.setHorizontalAlignment(SwingConstants.CENTER);
-        processChatIn.setSelected(Config.doStatCollection);
-        panel1.add(processChatIn);
+        this.processChatIn = new JCheckBox("");
+        this.processChatIn.setHorizontalAlignment(SwingConstants.CENTER);
+        this.processChatIn.setSelected(Config.doStatCollection);
+        panel1.add(this.processChatIn);
         splitPane.setResizeWeight(0.5);
         GroupLayout gl_panel = new GroupLayout(panel);
         gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addComponent(splitPane,
@@ -385,22 +386,22 @@ public class GuiBot extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (TooBeeTooTeeBot.bot.client != null && TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
-                    TooBeeTooTeeBot.bot.queueMessage(chatInput.getText());
-                    chatInput.setText("");
+                    TooBeeTooTeeBot.bot.queueMessage(GuiBot.this.chatInput.getText());
+                    GuiBot.this.chatInput.setText("");
                 }
             }
         });
-        contentPane.setLayout(gl_contentPane);
+        this.contentPane.setLayout(gl_contentPane);
 
-        guiTimer.schedule(new TimerTask() {
+        this.guiTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (TooBeeTooTeeBot.bot.client == null) {
-                    connect_disconnectButton.setText("Connect");
+                    GuiBot.this.connect_disconnectButton.setText("Connect");
                 } else if (!TooBeeTooTeeBot.bot.client.getSession().isConnected()) {
-                    connect_disconnectButton.setText("Connect");
+                    GuiBot.this.connect_disconnectButton.setText("Connect");
                 } else {
-                    connect_disconnectButton.setText("Disconnect");
+                    GuiBot.this.connect_disconnectButton.setText("Disconnect");
                 }
             }
         }, 0, 500);

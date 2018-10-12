@@ -77,6 +77,7 @@ public class PorkSessionAdapter extends SessionAdapter {
     public TooBeeTooTeeBot bot;
 
     public PorkSessionAdapter(PorkClient client, TooBeeTooTeeBot bot) {
+        super();
         this.client = client;
         this.bot = bot;
     }
@@ -84,8 +85,8 @@ public class PorkSessionAdapter extends SessionAdapter {
     @Override
     public void packetReceived(PacketReceivedEvent event) {
         if (event.getPacket() instanceof LoginStartPacket
-                && (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.LOGIN
-                || ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.HANDSHAKE)) {
+                && (((MinecraftProtocol) this.client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.LOGIN
+                || ((MinecraftProtocol) this.client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.HANDSHAKE)) {
             LoginStartPacket pck = event.getPacket();
             if (Config.doServerWhitelist && !Config.whitelistedNames.contains(pck.getUsername())) {
                 event.getSession().send(new ServerDisconnectPacket("\u00a76why tf do you thonk you can just use my bot??? reeeeeeeeee       - DaPorkchop_"));
@@ -96,14 +97,14 @@ public class PorkSessionAdapter extends SessionAdapter {
                     e.printStackTrace();
                 }
             }
-            client.username = pck.getUsername();
+            this.client.username = pck.getUsername();
             return;
         }
-        if (client.loggedIn && ((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+        if (this.client.loggedIn && ((MinecraftProtocol) this.client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
             if (event.getPacket() instanceof ClientKeepAlivePacket || event.getPacket() instanceof ClientTeleportConfirmPacket) {
                 return;
             }
-            if (client.arrayIndex == 0) {
+            if (this.client.arrayIndex == 0) {
                 if (event.getPacket() instanceof ClientPlayerPositionRotationPacket) {
                     ClientPlayerPositionRotationPacket pck = event.getPacket();
                     Caches.x = pck.getX();
@@ -113,14 +114,14 @@ public class PorkSessionAdapter extends SessionAdapter {
                     Caches.pitch = (float) pck.getPitch();
                     Caches.updatePlayerLocRot();
                     Caches.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
-                    for (PorkClient porkClient : bot.clients) {
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, this.bot.r.nextInt(100));
+                    for (PorkClient porkClient : this.bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
                         }
                         porkClient.session.send(toSend);
                     }
-                    bot.client.getSession().send(pck);
+                    this.bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientPlayerPositionPacket) {
                     ClientPlayerPositionPacket pck = event.getPacket();
                     Caches.x = pck.getX();
@@ -128,14 +129,14 @@ public class PorkSessionAdapter extends SessionAdapter {
                     Caches.z = pck.getZ();
                     Caches.updatePlayerLocRot();
                     Caches.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
-                    for (PorkClient porkClient : bot.clients) {
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, this.bot.r.nextInt(100));
+                    for (PorkClient porkClient : this.bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
                         }
                         porkClient.session.send(toSend);
                     }
-                    bot.client.getSession().send(pck);
+                    this.bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientPlayerRotationPacket) {
                     ClientPlayerRotationPacket pck = event.getPacket();
                     Caches.x = pck.getX();
@@ -145,28 +146,28 @@ public class PorkSessionAdapter extends SessionAdapter {
                     Caches.pitch = (float) pck.getPitch();
                     Caches.updatePlayerLocRot();
                     Caches.onGround = pck.isOnGround();
-                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(100));
-                    for (PorkClient porkClient : bot.clients) {
+                    ServerPlayerPositionRotationPacket toSend = new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, this.bot.r.nextInt(100));
+                    for (PorkClient porkClient : this.bot.clients) {
                         if (porkClient.arrayIndex == 0 || ((MinecraftProtocol) porkClient.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             continue;
                         }
                         porkClient.session.send(toSend);
                     }
-                    bot.client.getSession().send(pck);
+                    this.bot.client.getSession().send(pck);
                 } else if (event.getPacket() instanceof ClientChatPacket) {
                     ClientChatPacket pck = event.getPacket();
                     if (pck.getMessage().startsWith("!")) {
-                        if (pck.getMessage().equals("!setmainclient")) {
-                            client.session.send(new ServerChatPacket("You're already at index 0!", MessageType.CHAT));
+                        if ("!setmainclient".equals(pck.getMessage())) {
+                            this.client.session.send(new ServerChatPacket("You're already at index 0!", MessageType.CHAT));
                             return;
-                        } else if (pck.getMessage().equals("!sendchunks"))  {
+                        } else if ("!sendchunks".equals(pck.getMessage()))  {
                             this.sendChunks(event.getSession());
                         } else if (pck.getMessage().startsWith("!!")) {
-                            bot.client.getSession().send(new ClientChatPacket(pck.message.substring(1)));
+                            this.bot.client.getSession().send(new ClientChatPacket(pck.message.substring(1)));
                             return;
                         } else if (pck.message.startsWith("!dc")) {
-                            bot.client.getSession().disconnect("Reboot!");
-                            bot.server.close();
+                            this.bot.client.getSession().disconnect("Reboot!");
+                            this.bot.server.close();
                             if (pck.message.startsWith("!dchard")) {
                                 Runtime.getRuntime().exit(0);
                             }
@@ -194,54 +195,54 @@ public class PorkSessionAdapter extends SessionAdapter {
                         }*/
 
                         ServerChatPacket toSend = new ServerChatPacket(pck.getMessage(), MessageType.CHAT);
-                        for (PorkClient client : bot.clients) {
+                        for (PorkClient client : this.bot.clients) {
                             if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                                 client.session.send(toSend);
                             }
                         }
                         return;
                     } else {
-                        bot.client.getSession().send(event.getPacket());
+                        this.bot.client.getSession().send(event.getPacket());
                         return;
                     }
                 } else {
-                    bot.client.getSession().send(event.getPacket());
+                    this.bot.client.getSession().send(event.getPacket());
                     return;
                 }
             } else if (event.getPacket() instanceof ClientChatPacket) {
                 ClientChatPacket pck = event.getPacket();
                 if (pck.getMessage().startsWith("!")) {
-                    if (pck.getMessage().equals("!setmainclient")) {
-                        if (bot.clients.size() < 2) {
-                            client.session.send(new ServerChatPacket("There's only one client connected!", MessageType.CHAT));
+                    if ("!setmainclient".equals(pck.getMessage())) {
+                        if (this.bot.clients.size() < 2) {
+                            this.client.session.send(new ServerChatPacket("There's only one client connected!", MessageType.CHAT));
                             return;
                         }
 
-                        Collections.swap(bot.clients, 0, client.arrayIndex);
-                        bot.clients.get(client.arrayIndex).arrayIndex = client.arrayIndex;
-                        bot.clients.get(0).arrayIndex = 0;
-                        client.session.send(new ServerChatPacket("Set your position in the array to 0! You now can move yourself!", MessageType.CHAT));
+                        Collections.swap(this.bot.clients, 0, this.client.arrayIndex);
+                        this.bot.clients.get(this.client.arrayIndex).arrayIndex = this.client.arrayIndex;
+                        this.bot.clients.get(0).arrayIndex = 0;
+                        this.client.session.send(new ServerChatPacket("Set your position in the array to 0! You now can move yourself!", MessageType.CHAT));
                         return;
-                    } else if (pck.getMessage().equals("!sendchunks"))  {
+                    } else if ("!sendchunks".equals(pck.getMessage()))  {
                         this.sendChunks(event.getSession());
                     } else if (pck.getMessage().startsWith("!!")) {
-                        client.session.send(new ClientChatPacket(pck.message.substring(1)));
+                        this.client.session.send(new ClientChatPacket(pck.message.substring(1)));
                         return;
                     }
 
                     ServerChatPacket toSend = new ServerChatPacket(pck.getMessage(), MessageType.CHAT);
-                    for (PorkClient client : bot.clients) {
+                    for (PorkClient client : this.bot.clients) {
                         if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                             client.session.send(toSend);
                         }
                     }
                     return;
                 } else {
-                    bot.client.getSession().send(event.getPacket());
+                    this.bot.client.getSession().send(event.getPacket());
                     return;
                 }
             } else {
-                bot.client.getSession().send(event.getPacket());
+                this.bot.client.getSession().send(event.getPacket());
                 return;
             }
         }
@@ -250,24 +251,24 @@ public class PorkSessionAdapter extends SessionAdapter {
     @Override
     public void packetSent(PacketSentEvent event) {
         if (event.getPacket() instanceof LoginSuccessPacket) {
-            client.loggedIn = true;
+            this.client.loggedIn = true;
             System.out.println("UUID: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getIdAsString() + "\nBot UUID: " + TooBeeTooTeeBot.bot.protocol.getProfile().getIdAsString() + "\nUser name: " + ((LoginSuccessPacket) event.getPacket()).getProfile().getName() + "\nBot name: " + TooBeeTooTeeBot.bot.protocol.getProfile().getName());
         } else if (event.getPacket() instanceof ServerJoinGamePacket) {
-            if (!client.sentChunks) {
+            if (!this.client.sentChunks) {
                 this.sendChunks(event.getSession());
             }
         }
     }
 
     public void sendChunks(Session session)    {
-        client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
+        this.client.session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
         for (Column chunk : Caches.cachedChunks.values()) {
-            client.session.send(new ServerChunkDataPacket(chunk));
+            this.client.session.send(new ServerChunkDataPacket(chunk));
         }
         System.out.println("Sent " + Caches.cachedChunks.size() + " chunks!");
         ServerPlayerListEntryPacket playerListEntryPacket = new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, TooBeeTooTeeBot.bot.playerListEntries.toArray(new PlayerListEntry[TooBeeTooTeeBot.bot.playerListEntries.size()]));
-        client.session.send(new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, bot.r.nextInt(1000) + 10));
-        client.session.send(playerListEntryPacket);
+        this.client.session.send(new ServerPlayerPositionRotationPacket(Caches.x, Caches.y, Caches.z, Caches.yaw, Caches.pitch, this.bot.r.nextInt(1000) + 10));
+        this.client.session.send(playerListEntryPacket);
         //client.session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, Caches.gameMode));
         for (Entity entity : Caches.cachedEntities.values()) {
             switch (entity.type) {
@@ -299,7 +300,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                                 entry.getKey(),
                                 entry.getValue()));
                     }
-                    if (mob.properties.size() > 0) {
+                    if (!mob.properties.isEmpty()) {
                         session.send(new ServerEntityPropertiesPacket(entity.entityId,
                                 mob.properties));
                     }
@@ -329,7 +330,7 @@ public class PorkSessionAdapter extends SessionAdapter {
                                 entry.getKey(),
                                 entry.getValue()));
                     }
-                    if (player.properties.size() > 0) {
+                    if (!player.properties.isEmpty()) {
                         session.send(new ServerEntityPropertiesPacket(entity.entityId,
                                 player.properties));
                     }
@@ -378,6 +379,6 @@ public class PorkSessionAdapter extends SessionAdapter {
             session.send(packet);
         }
         System.out.println("Sent " + Caches.cachedBossBars.size() + " boss bars!");
-        client.sentChunks = true;
+        this.client.sentChunks = true;
     }
 }

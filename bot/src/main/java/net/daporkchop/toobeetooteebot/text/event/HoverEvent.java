@@ -25,6 +25,7 @@ public class HoverEvent {
     private final ITextComponent value;
 
     public HoverEvent(HoverEvent.Action actionIn, ITextComponent valueIn) {
+        super();
         this.action = actionIn;
         this.value = valueIn;
     }

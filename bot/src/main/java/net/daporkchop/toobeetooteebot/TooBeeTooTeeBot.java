@@ -65,7 +65,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TooBeeTooTeeBot {
     public static TooBeeTooTeeBot bot;
-    public Client client = null;
+    public Client client;
     public Random r = new Random();
     public Timer timer = new Timer();
     public boolean firstRun = true;
@@ -80,15 +80,15 @@ public class TooBeeTooTeeBot {
     public final Map<String, LoggedInPlayer> namesToLoggedInPlayers = new ConcurrentHashMap<>();
     //BEGIN SERVER VARIABLES
     public List<PorkClient> clients = new ArrayList<>();
-    public boolean isLoggedIn = false;
+    public boolean isLoggedIn;
     public final Map<Session, PorkClient> sessionToClient = new ConcurrentHashMap<>();
     //END SERVER VARIABLES
-    public Server server = null;
+    public Server server;
     public final Queue<String> queuedIngameMessages = new ConcurrentLinkedQueue<>();
     public final Map<String, Long> ingamePlayerCooldown = new ConcurrentHashMap<>();
     public final DataTag playData = new DataTag(new File(System.getProperty("user.dir") + File.separator + "online.dat"));
     public HashMap<String, PlayData> uuidsToPlayData;
-    public boolean hasDonePostConnect = false;
+    public boolean hasDonePostConnect;
 
     public static void main(String[] args) {
         new TooBeeTooTeeBot().start(args);
@@ -141,7 +141,7 @@ public class TooBeeTooTeeBot {
         bot = this;
         try {
             ESCAPE:
-            if (!(args.length == 1 && args[0].equals("firstart"))) {
+            if (!(args.length == 1 && "firstart".equals(args[0]))) {
                 if (Config.doAuth) {
                     try {
                         File sessionIdCache = new File(System.getProperty("user.dir") + File.separator + "sessionId.txt");
@@ -152,44 +152,44 @@ public class TooBeeTooTeeBot {
                             s.close();
                             System.out.println("Session ID: " + sessionID);
                             try {
-                                protocol = new MinecraftProtocol(Config.username); //create random thing because we need to handle login ourselves
+                                this.protocol = new MinecraftProtocol(Config.username); //create random thing because we need to handle login ourselves
                                 AuthenticationService auth = new AuthenticationService(Config.clientId, Proxy.NO_PROXY);
                                 auth.setUsername(Config.username);
                                 auth.setAccessToken(sessionID);
 
                                 auth.login();
-                                protocol.profile = auth.getSelectedProfile();
-                                protocol.accessToken = auth.getAccessToken();
-                                System.out.println("Done! Account name: " + protocol.getProfile().getName() + ", session ID:" + protocol.getAccessToken());
+                                this.protocol.profile = auth.getSelectedProfile();
+                                this.protocol.accessToken = auth.getAccessToken();
+                                System.out.println("Done! Account name: " + this.protocol.getProfile().getName() + ", session ID:" + this.protocol.getAccessToken());
                                 break ESCAPE;
                             } catch (RequestException e) {
                                 System.out.println("Bad/expired session ID, attempting login with username and password");
 
-                                protocol = new MinecraftProtocol(Config.username); //create random thing because we need to handle login ourselves
+                                this.protocol = new MinecraftProtocol(Config.username); //create random thing because we need to handle login ourselves
                                 AuthenticationService auth = new AuthenticationService(Config.clientId, Proxy.NO_PROXY);
                                 auth.setUsername(Config.username);
                                 auth.setPassword(Config.password);
 
                                 auth.login();
 
-                                protocol.profile = auth.getSelectedProfile();
-                                protocol.accessToken = auth.getAccessToken();
+                                this.protocol.profile = auth.getSelectedProfile();
+                                this.protocol.accessToken = auth.getAccessToken();
                                 System.out.println("Logged in with credentials " + Config.username + ":" + Config.password);
-                                System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
+                                System.out.println("Saving session ID: " + this.protocol.getAccessToken() + " to disk");
                                 PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
-                                writer.println(protocol.getAccessToken());
+                                writer.println(this.protocol.getAccessToken());
                                 writer.close();
                                 break ESCAPE;
                             }
 
                         } else {
                             System.out.println("Attempting login with username and password...");
-                            protocol = new MinecraftProtocol(Config.username, Config.password);
+                            this.protocol = new MinecraftProtocol(Config.username, Config.password);
 
                             System.out.println("Logged in with credentials " + Config.username + ":" + Config.password);
-                            System.out.println("Saving session ID: " + protocol.getAccessToken() + " to disk");
+                            System.out.println("Saving session ID: " + this.protocol.getAccessToken() + " to disk");
                             PrintWriter writer = new PrintWriter("sessionId.txt", "UTF-8");
-                            writer.println(protocol.getAccessToken());
+                            writer.println(this.protocol.getAccessToken());
                             writer.close();
                         }
                     } catch (InvalidCredentialsException e) {
@@ -201,15 +201,15 @@ public class TooBeeTooTeeBot {
                     }
                 } else {
                     System.out.println("Logging in with cracked account, username: " + Config.username);
-                    protocol = new MinecraftProtocol(Config.username);
+                    this.protocol = new MinecraftProtocol(Config.username);
                 }
                 System.out.println("Success!");
-                System.out.println(protocol.getProfile().getIdAsString());
+                System.out.println(this.protocol.getProfile().getIdAsString());
             }
 
             if (Config.doServer) {
                 System.out.println("Getting server icon...");
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(HTTPUtils.downloadImage("https://crafatar.com/avatars/" + protocol.profile.getId() + "?size=64&overlay&default=MHF_Steve"));
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(HTTPUtils.downloadImage("https://crafatar.com/avatars/" + this.protocol.profile.getId() + "?size=64&overlay&default=MHF_Steve"));
                 Caches.icon = ImageIO.read(inputStream);
                 System.out.println("Done!");
             }
@@ -221,34 +221,34 @@ public class TooBeeTooTeeBot {
                 return;
             }
 
-            if (firstRun) {
+            if (this.firstRun) {
                 if (Config.doWebsocket) {
-                    Object aaa = loginData.getSerializable("registeredPlayers", new ConcurrentHashMap<String, RegisteredPlayer>());
+                    Object aaa = this.loginData.getSerializable("registeredPlayers", new ConcurrentHashMap<String, RegisteredPlayer>());
                     if (aaa instanceof HashMap) {
-                        namesToRegisteredPlayers = new ConcurrentHashMap<>();
-                        namesToRegisteredPlayers.putAll((HashMap<String, RegisteredPlayer>) aaa);
+                        this.namesToRegisteredPlayers = new ConcurrentHashMap<>();
+                        this.namesToRegisteredPlayers.putAll((HashMap<String, RegisteredPlayer>) aaa);
                     } else {
-                        namesToRegisteredPlayers = (ConcurrentHashMap<String, RegisteredPlayer>) aaa;
+                        this.namesToRegisteredPlayers = (ConcurrentHashMap<String, RegisteredPlayer>) aaa;
                     }
                 }
                 if (Config.doStatCollection) {
-                    uuidsToPlayData = (HashMap<String, PlayData>) playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
+                    this.uuidsToPlayData = (HashMap<String, PlayData>) this.playData.getSerializable("uuidsToPlayData", new HashMap<String, PlayData>());
                 }
 
-                timer.schedule(new TimerTask() {
+                this.timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        doPostConnectSetup();
+                        TooBeeTooTeeBot.this.doPostConnectSetup();
                     }
                 }, 10000);
 
-                firstRun = false;
+                this.firstRun = false;
             }
 
-            client = new Client(Config.ip, Config.port, protocol, new TcpSessionFactory());
-            client.getSession().addListener(new PorkSessionListener(this));
+            this.client = new Client(Config.ip, Config.port, this.protocol, new TcpSessionFactory());
+            this.client.getSession().addListener(new PorkSessionListener(this));
             System.out.println("Connecting to " + Config.ip + ":" + Config.port + "...");
-            client.getSession().connect(true);
+            this.client.getSession().connect(true);
         } catch (Exception e) {
             e.printStackTrace();
             Runtime.getRuntime().halt(0);
@@ -256,24 +256,24 @@ public class TooBeeTooTeeBot {
     }
 
     public void sendChat(String message) {
-        queueMessage("> " + message);
+        this.queueMessage("> " + message);
     }
 
     public void queueMessage(String toQueue) {
-        queuedIngameMessages.add(toQueue);
+        this.queuedIngameMessages.add(toQueue);
     }
 
     public void processMsg(String playername, String message) {
-        if (ingamePlayerCooldown.getOrDefault(playername, 0L) + 5000 > System.currentTimeMillis()) {
+        if (this.ingamePlayerCooldown.getOrDefault(playername, 0L) + 5000 > System.currentTimeMillis()) {
             return;
         } else {
-            ingamePlayerCooldown.put(playername, System.currentTimeMillis());
+            this.ingamePlayerCooldown.put(playername, System.currentTimeMillis());
         }
-        RegisteredPlayer player = namesToRegisteredPlayers.getOrDefault(playername, null);
+        RegisteredPlayer player = this.namesToRegisteredPlayers.getOrDefault(playername, null);
         if (player == null) {
-            NotRegisteredPlayer tempAuth = namesToTempAuths.getOrDefault(playername, null);
+            NotRegisteredPlayer tempAuth = this.namesToTempAuths.getOrDefault(playername, null);
             if (tempAuth == null) {
-                queueMessage("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!");
+                this.queueMessage("/msg " + playername + " You're not registered! Go to http://www.daporkchop.net/pork2b2tbot to register!");
                 return;
             } else if (message.startsWith("register")) {
                 message = message.substring(9);
@@ -281,36 +281,36 @@ public class TooBeeTooTeeBot {
                     String hashedPwd = Hashing.sha256().hashString(tempAuth.pwd, Charsets.UTF_8).toString();
                     RegisteredPlayer newPlayer = new RegisteredPlayer(hashedPwd, tempAuth.name);
                     newPlayer.lastUsed = System.currentTimeMillis();
-                    namesToTempAuths.remove(tempAuth.name);
-                    namesToRegisteredPlayers.put(tempAuth.name, newPlayer);
-                    loginData.setSerializable("registeredPlayers", (Serializable) namesToRegisteredPlayers);
-                    queueMessage("/msg " + playername + " Successfully registered! You can now use your username and password on the website!");
+                    this.namesToTempAuths.remove(tempAuth.name);
+                    this.namesToRegisteredPlayers.put(tempAuth.name, newPlayer);
+                    this.loginData.setSerializable("registeredPlayers", (Serializable) this.namesToRegisteredPlayers);
+                    this.queueMessage("/msg " + playername + " Successfully registered! You can now use your username and password on the website!");
                     return;
                 } else {
-                    queueMessage("/msg " + playername + " Incorrect authentication UUID!");
+                    this.queueMessage("/msg " + playername + " Incorrect authentication UUID!");
                     return;
                 }
             }
         } else {
             if (message.startsWith("help")) {
-                queueMessage("/msg " + playername + " Use '/msg 2pork2bot <player name> <message>' to send them a message! Visit http://www.daporkchop.net/pork2b2tbot for more info!");
+                this.queueMessage("/msg " + playername + " Use '/msg 2pork2bot <player name> <message>' to send them a message! Visit http://www.daporkchop.net/pork2b2tbot for more info!");
                 return;
             } else if (message.startsWith("changepass")) {
                 String[] messageSplit = message.split(" ");
                 String sha1 = Hashing.sha1().hashString(messageSplit[1], Charsets.UTF_8).toString();
                 String sha256 = Hashing.sha256().hashString(sha1, Charsets.UTF_8).toString();
                 player.passwordHash = sha256;
-                queueMessage("/msg " + playername + " Changed password to " + messageSplit[1] + " (sha1: " + sha1 + ")");
+                this.queueMessage("/msg " + playername + " Changed password to " + messageSplit[1] + " (sha1: " + sha1 + ")");
             } else {
                 String[] messageSplit = message.split(" ");
-                LoggedInPlayer loggedInPlayer = namesToLoggedInPlayers.getOrDefault(messageSplit[0], null);
+                LoggedInPlayer loggedInPlayer = this.namesToLoggedInPlayers.getOrDefault(messageSplit[0], null);
                 if (loggedInPlayer == null) {
-                    queueMessage("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!");
+                    this.queueMessage("/msg " + playername + " The user " + messageSplit[0] + " could not be found! They might be idle, or they aren't logged in to the website!");
                     return;
                 } else {
                     if (loggedInPlayer.clientSocket.isOpen())
                         loggedInPlayer.clientSocket.send("chat    \u00A7d" + playername + "\u00A7d says: \u00A7d" + message.substring(messageSplit[0].length() + 1));
-                    queueMessage("/msg " + playername + " Sent message to " + messageSplit[0]);
+                    this.queueMessage("/msg " + playername + " Sent message to " + messageSplit[0]);
                     return;
                 }
             }
@@ -319,7 +319,7 @@ public class TooBeeTooTeeBot {
 
     public void doPostConnectSetup() {
         try {
-            if (!hasDonePostConnect) {
+            if (!this.hasDonePostConnect) {
                 if (Config.doWebsocket) {
                     TooBeeTooTeeBot.bot.websocketServer = new WebsocketServer(Config.websocketPort);
                     TooBeeTooTeeBot.bot.websocketServer.start();
@@ -327,11 +327,11 @@ public class TooBeeTooTeeBot {
 
                 if (Config.doStatCollection) {
                     Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MILLIS);
-                    timer.schedule(new TimerTask() {
+                    this.timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             long currentTime = System.currentTimeMillis();
-                            Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
+                            Iterator<Map.Entry<String, PlayData>> iterator = TooBeeTooTeeBot.this.uuidsToPlayData.entrySet().iterator();
                             while (iterator.hasNext()) {
                                 Map.Entry<String, PlayData> entry = iterator.next();
                                 PlayData data = entry.getValue();
@@ -348,11 +348,11 @@ public class TooBeeTooTeeBot {
                     }, midnight, 1440 * 60 * 60 * 1000);
 
                     Long nextHour = millisToNextHour(Calendar.getInstance());
-                    timer.schedule(new TimerTask() {
+                    this.timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             long currentTime = System.currentTimeMillis();
-                            Iterator<Map.Entry<String, PlayData>> iterator = uuidsToPlayData.entrySet().iterator();
+                            Iterator<Map.Entry<String, PlayData>> iterator = TooBeeTooTeeBot.this.uuidsToPlayData.entrySet().iterator();
                             while (iterator.hasNext()) {
                                 Map.Entry<String, PlayData> entry = iterator.next();
                                 PlayData data = entry.getValue();
@@ -364,7 +364,7 @@ public class TooBeeTooTeeBot {
                         }
                     }, nextHour, 60 * 60 * 1000);
                 }
-                hasDonePostConnect = true;
+                this.hasDonePostConnect = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -394,7 +394,7 @@ public class TooBeeTooTeeBot {
             System.out.println("Reconnecting in " + i);
         }
 
-        cleanUp();
+        this.cleanUp();
 
         if (GuiBot.INSTANCE != null) {
             if (!GuiBot.INSTANCE.connect_disconnectButton.isEnabled()) {
@@ -425,9 +425,9 @@ public class TooBeeTooTeeBot {
         System.out.println("Reset queued messages");
         this.tabHeader = new TextMessage("");
         this.tabFooter = new TextMessage("");
-        if (websocketServer != null) {
-            for (PlayerListEntry entry : playerListEntries) {
-                websocketServer.sendToAll("tabDel  " + TooBeeTooTeeBot.getName(entry));
+        if (this.websocketServer != null) {
+            for (PlayerListEntry entry : this.playerListEntries) {
+                this.websocketServer.sendToAll("tabDel  " + TooBeeTooTeeBot.getName(entry));
             }
         }
         System.out.println("Reset tab header and footer");

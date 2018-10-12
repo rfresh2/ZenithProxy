@@ -121,7 +121,7 @@ public abstract class TextComponentBase implements ITextComponent {
     /**
      * Gets the text of this component <em>and all sibling components</em>, without any formatting codes.
      */
-    public final String getUnformattedText() {
+    public String getUnformattedText() {
         StringBuilder stringbuilder = new StringBuilder();
 
         for (ITextComponent itextcomponent : this) {
@@ -134,7 +134,7 @@ public abstract class TextComponentBase implements ITextComponent {
     /**
      * Gets the text of this component <em>and all sibling components</em>, with formatting codes added for rendering.
      */
-    public final String getFormattedText() {
+    public String getFormattedText() {
         StringBuilder stringbuilder = new StringBuilder();
 
         for (ITextComponent itextcomponent : this) {

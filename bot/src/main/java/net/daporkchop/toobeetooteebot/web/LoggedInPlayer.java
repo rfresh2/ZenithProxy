@@ -25,6 +25,7 @@ public class LoggedInPlayer {
     public WebSocket clientSocket;
 
     public LoggedInPlayer(RegisteredPlayer player, WebSocket clientSocket) {
+        super();
         this.player = player;
         this.lastUsed = System.currentTimeMillis();
         this.clientSocket = clientSocket;

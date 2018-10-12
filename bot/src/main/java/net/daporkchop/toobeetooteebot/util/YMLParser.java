@@ -70,7 +70,7 @@ public class YMLParser {
     //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
     private ConfigSection config = new ConfigSection();
     private File file;
-    private boolean correct = false;
+    private boolean correct;
     private int type = YMLParser.DETECT;
 
     /**
@@ -79,6 +79,7 @@ public class YMLParser {
      * @param type - Config type
      */
     public YMLParser(int type) {
+        super();
         this.type = type;
         this.correct = true;
         this.config = new ConfigSection();
@@ -109,10 +110,12 @@ public class YMLParser {
 
     @Deprecated
     public YMLParser(String file, int type, LinkedHashMap<String, Object> defaultMap) {
+        super();
         this.load(file, type, new ConfigSection(defaultMap));
     }
 
     public YMLParser(String file, int type, ConfigSection defaultMap) {
+        super();
         this.load(file, type, defaultMap);
     }
 
@@ -192,14 +195,14 @@ public class YMLParser {
             }
             this.parseContent(content);
         }
-        return correct;
+        return this.correct;
     }
 
     public boolean loadRaw(String content) {
         if (this.correct) {
             this.parseContent(content);
         }
-        return correct;
+        return this.correct;
     }
 
     public boolean check() {
@@ -207,7 +210,7 @@ public class YMLParser {
     }
 
     public boolean isCorrect() {
-        return correct;
+        return this.correct;
     }
 
     /**
@@ -219,12 +222,12 @@ public class YMLParser {
      */
     public boolean save(File file, boolean async) {
         this.file = file;
-        return save(async);
+        return this.save(async);
     }
 
     public boolean save(File file) {
         this.file = file;
-        return save();
+        return this.save();
     }
 
     public boolean save() {
@@ -283,7 +286,7 @@ public class YMLParser {
     }
 
     public boolean isSection(String key) {
-        return config.isSection(key);
+        return this.config.isSection(key);
     }
 
     public ConfigSection getSections(String key) {
@@ -303,7 +306,7 @@ public class YMLParser {
     }
 
     public boolean isInt(String key) {
-        return config.isInt(key);
+        return this.config.isInt(key);
     }
 
     public long getLong(String key) {
@@ -315,7 +318,7 @@ public class YMLParser {
     }
 
     public boolean isLong(String key) {
-        return config.isLong(key);
+        return this.config.isLong(key);
     }
 
     public double getDouble(String key) {
@@ -327,7 +330,7 @@ public class YMLParser {
     }
 
     public boolean isDouble(String key) {
-        return config.isDouble(key);
+        return this.config.isDouble(key);
     }
 
     public String getString(String key) {
@@ -339,7 +342,7 @@ public class YMLParser {
     }
 
     public boolean isString(String key) {
-        return config.isString(key);
+        return this.config.isString(key);
     }
 
     public boolean getBoolean(String key) {
@@ -351,7 +354,7 @@ public class YMLParser {
     }
 
     public boolean isBoolean(String key) {
-        return config.isBoolean(key);
+        return this.config.isBoolean(key);
     }
 
     public List getList(String key) {
@@ -363,47 +366,47 @@ public class YMLParser {
     }
 
     public boolean isList(String key) {
-        return config.isList(key);
+        return this.config.isList(key);
     }
 
     public List<String> getStringList(String key) {
-        return config.getStringList(key);
+        return this.config.getStringList(key);
     }
 
     public List<Integer> getIntegerList(String key) {
-        return config.getIntegerList(key);
+        return this.config.getIntegerList(key);
     }
 
     public List<Boolean> getBooleanList(String key) {
-        return config.getBooleanList(key);
+        return this.config.getBooleanList(key);
     }
 
     public List<Double> getDoubleList(String key) {
-        return config.getDoubleList(key);
+        return this.config.getDoubleList(key);
     }
 
     public List<Float> getFloatList(String key) {
-        return config.getFloatList(key);
+        return this.config.getFloatList(key);
     }
 
     public List<Long> getLongList(String key) {
-        return config.getLongList(key);
+        return this.config.getLongList(key);
     }
 
     public List<Byte> getByteList(String key) {
-        return config.getByteList(key);
+        return this.config.getByteList(key);
     }
 
     public List<Character> getCharacterList(String key) {
-        return config.getCharacterList(key);
+        return this.config.getCharacterList(key);
     }
 
     public List<Short> getShortList(String key) {
-        return config.getShortList(key);
+        return this.config.getShortList(key);
     }
 
     public List<Map> getMapList(String key) {
-        return config.getMapList(key);
+        return this.config.getMapList(key);
     }
 
     public void setAll(LinkedHashMap<String, Object> map) {
@@ -411,15 +414,15 @@ public class YMLParser {
     }
 
     public boolean exists(String key) {
-        return config.exists(key);
+        return this.config.exists(key);
     }
 
     public boolean exists(String key, boolean ignoreCase) {
-        return config.exists(key, ignoreCase);
+        return this.config.exists(key, ignoreCase);
     }
 
     public void remove(String key) {
-        config.remove(key);
+        this.config.remove(key);
     }
 
     public Map<String, Object> getAll() {
@@ -436,11 +439,11 @@ public class YMLParser {
      * @return
      */
     public ConfigSection getRootSection() {
-        return config;
+        return this.config;
     }
 
     public int setDefault(LinkedHashMap<String, Object> map) {
-        return setDefault(new ConfigSection(map));
+        return this.setDefault(new ConfigSection(map));
     }
 
     public int setDefault(ConfigSection map) {
@@ -465,7 +468,7 @@ public class YMLParser {
             if (v.trim().isEmpty()) {
                 continue;
             }
-            config.put(v, true);
+            this.config.put(v, true);
         }
     }
 
@@ -516,7 +519,7 @@ public class YMLParser {
      */
     @Deprecated
     public Object getNested(String key) {
-        return get(key);
+        return this.get(key);
     }
 
     /**
@@ -524,7 +527,7 @@ public class YMLParser {
      */
     @Deprecated
     public <T> T getNested(String key, T defaultValue) {
-        return get(key, defaultValue);
+        return this.get(key, defaultValue);
     }
 
     /**
@@ -533,7 +536,7 @@ public class YMLParser {
     @Deprecated
     @SuppressWarnings("unchecked")
     public <T> T getNestedAs(String key, Class<T> type) {
-        return (T) get(key);
+        return (T) this.get(key);
     }
 
     /**
@@ -541,7 +544,7 @@ public class YMLParser {
      */
     @Deprecated
     public void removeNested(String key) {
-        remove(key);
+        this.remove(key);
     }
 
     private void parseContent(String content) {
@@ -574,12 +577,12 @@ public class YMLParser {
     }
 
     public Set<String> getKeys() {
-        if (this.correct) return config.getKeys();
+        if (this.correct) return this.config.getKeys();
         return new HashSet<>();
     }
 
     public Set<String> getKeys(boolean child) {
-        if (this.correct) return config.getKeys(child);
+        if (this.correct) return this.config.getKeys(child);
         return new HashSet<>();
     }
 }
@@ -730,7 +733,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      */
     //@formatter:on
     public ConfigSection getSections() {
-        return getSections(null);
+        return this.getSections(null);
     }
 
     /**
@@ -741,7 +744,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      */
     public ConfigSection getSections(String key) {
         ConfigSection sections = new ConfigSection();
-        ConfigSection parent = key == null || key.isEmpty() ? this.getAll() : getSection(key);
+        ConfigSection parent = key == null || key.isEmpty() ? this.getAll() : this.getSection(key);
         if (parent == null) return sections;
         parent.entrySet().forEach(e -> {
             if (e.getValue() instanceof ConfigSection)
@@ -778,7 +781,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean isInt(String key) {
-        Object val = get(key);
+        Object val = this.get(key);
         return val instanceof Integer;
     }
 
@@ -810,7 +813,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean isLong(String key) {
-        Object val = get(key);
+        Object val = this.get(key);
         return val instanceof Long;
     }
 
@@ -842,7 +845,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean isDouble(String key) {
-        Object val = get(key);
+        Object val = this.get(key);
         return val instanceof Double;
     }
 
@@ -875,7 +878,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean isString(String key) {
-        Object val = get(key);
+        Object val = this.get(key);
         return val instanceof String;
     }
 
@@ -907,7 +910,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean isBoolean(String key) {
-        Object val = get(key);
+        Object val = this.get(key);
         return val instanceof Boolean;
     }
 
@@ -939,7 +942,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean isList(String key) {
-        Object val = get(key);
+        Object val = this.get(key);
         return val instanceof List;
     }
 
@@ -970,7 +973,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Integer> getIntegerList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
         if (list == null) {
             return new ArrayList<>(0);
         }
@@ -1001,7 +1004,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Boolean> getBooleanList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
         if (list == null) {
             return new ArrayList<>(0);
         }
@@ -1027,7 +1030,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Double> getDoubleList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
         if (list == null) {
             return new ArrayList<>(0);
         }
@@ -1057,7 +1060,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Float> getFloatList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
         if (list == null) {
             return new ArrayList<>(0);
         }
@@ -1087,7 +1090,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Long> getLongList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
         if (list == null) {
             return new ArrayList<>(0);
         }
@@ -1117,7 +1120,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Byte> getByteList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
 
         if (list == null) {
             return new ArrayList<>(0);
@@ -1151,7 +1154,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Character> getCharacterList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
 
         if (list == null) {
             return new ArrayList<>(0);
@@ -1183,7 +1186,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Short> getShortList(String key) {
-        List<?> list = getList(key);
+        List<?> list = this.getList(key);
 
         if (list == null) {
             return new ArrayList<>(0);
@@ -1217,7 +1220,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public List<Map> getMapList(String key) {
-        List<Map> list = getList(key);
+        List<Map> list = this.getList(key);
         List<Map> result = new ArrayList<>();
 
         if (list == null) {
@@ -1256,7 +1259,7 @@ class ConfigSection extends LinkedHashMap<String, Object> {
      * @return
      */
     public boolean exists(String key) {
-        return exists(key, false);
+        return this.exists(key, false);
     }
 
     /**

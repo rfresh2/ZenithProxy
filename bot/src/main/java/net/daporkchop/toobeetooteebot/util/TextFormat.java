@@ -126,8 +126,8 @@ public enum TextFormat {
     public static final char ESCAPE = '\u00A7';
 
     private static final Pattern CLEAN_PATTERN = Pattern.compile("(?i)" + String.valueOf(ESCAPE) + "[0-9A-FK-OR]");
-    private final static Map<Integer, TextFormat> BY_ID = Maps.newTreeMap();
-    private final static Map<Character, TextFormat> BY_CHAR = new HashMap<>();
+    private static final Map<Integer, TextFormat> BY_ID = Maps.newTreeMap();
+    private static final Map<Character, TextFormat> BY_CHAR = new HashMap<>();
 
     static {
         for (TextFormat color : values()) {
@@ -287,25 +287,25 @@ public enum TextFormat {
      * @return A char value of this color code
      */
     public char getChar() {
-        return code;
+        return this.code;
     }
 
     @Override
     public String toString() {
-        return toString;
+        return this.toString;
     }
 
     /**
      * Checks if this code is a format code as opposed to a color code.
      */
     public boolean isFormat() {
-        return isFormat;
+        return this.isFormat;
     }
 
     /**
      * Checks if this code is a color code as opposed to a format code.
      */
     public boolean isColor() {
-        return !isFormat && this != RESET;
+        return !this.isFormat && this != RESET;
     }
 }

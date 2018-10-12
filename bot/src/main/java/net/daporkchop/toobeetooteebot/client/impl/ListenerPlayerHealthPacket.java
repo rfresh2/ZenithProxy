@@ -32,7 +32,7 @@ public class ListenerPlayerHealthPacket implements IPacketListener<ServerPlayerH
     public void handlePacket(Session session, ServerPlayerHealthPacket pck) {
         if (Config.doAutoRespawn) {
             //don't respawn when player is connected
-            if (Config.doServer && bot.clients.size() != 0) {
+            if (Config.doServer && !bot.clients.isEmpty()) {
                 return;
             }
 

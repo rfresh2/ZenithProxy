@@ -19,6 +19,7 @@ public class TextComponentString extends TextComponentBase {
     private final String text;
 
     public TextComponentString(String msg) {
+        super();
         this.text = msg;
     }
 

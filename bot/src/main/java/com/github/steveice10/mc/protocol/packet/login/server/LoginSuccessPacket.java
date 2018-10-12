@@ -28,9 +28,11 @@ public class LoginSuccessPacket extends MinecraftPacket {
 
     @SuppressWarnings("unused")
     public LoginSuccessPacket() {
+        super();
     }
 
     public LoginSuccessPacket(GameProfile profile) {
+        super();
         this.profile = TooBeeTooTeeBot.bot.protocol.getProfile();
     }
 

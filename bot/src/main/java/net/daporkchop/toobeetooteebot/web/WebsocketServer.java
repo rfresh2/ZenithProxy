@@ -199,7 +199,7 @@ public class WebsocketServer extends WebSocketServer {
      */
     public void sendToAll(String text) {
         //System.out.println(text);
-        Collection<WebSocket> con = connections();
+        Collection<WebSocket> con = this.connections();
         synchronized (con) {
             for (WebSocket c : con) {
                 if (c.isOpen()) c.send(text);

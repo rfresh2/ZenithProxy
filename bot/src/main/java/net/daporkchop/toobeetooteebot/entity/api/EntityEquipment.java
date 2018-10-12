@@ -29,7 +29,7 @@ public abstract class EntityEquipment extends EntityRotation {
 
     {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            equipment.put(slot, null);
+            this.equipment.put(slot, null);
         }
     }
 }

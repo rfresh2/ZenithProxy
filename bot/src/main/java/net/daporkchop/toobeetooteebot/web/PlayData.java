@@ -25,14 +25,15 @@ public class PlayData implements Serializable {
     public long lastPlayed;
 
     public PlayData(String UUID, String name) {
+        super();
         this.UUID = UUID;
         this.name = name;
         this.lastPlayed = System.currentTimeMillis();
-        for (int i = 0; i < playTimeByDay.length; i++) {
-            playTimeByDay[i] = 0;
+        for (int i = 0; i < this.playTimeByDay.length; i++) {
+            this.playTimeByDay[i] = 0;
         }
-        for (int i = 0; i < playTimeByHour.length; i++) {
-            playTimeByHour[i] = 0;
+        for (int i = 0; i < this.playTimeByHour.length; i++) {
+            this.playTimeByHour[i] = 0;
         }
     }
 }

@@ -60,7 +60,8 @@ public class PorkSessionListener implements SessionListener {
     public TooBeeTooTeeBot bot;
 
     public PorkSessionListener(TooBeeTooTeeBot tooBeeTooTeeBot) {
-        bot = tooBeeTooTeeBot;
+        super();
+        this.bot = tooBeeTooTeeBot;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class PorkSessionListener implements SessionListener {
             ListenerRegistry.handlePacket(packetReceivedEvent.getSession(), packetReceivedEvent.getPacket());
 
             if (Config.doServer) {
-                Iterator<PorkClient> iterator = bot.clients.iterator();
+                Iterator<PorkClient> iterator = this.bot.clients.iterator();
                 while (iterator.hasNext()) {
                     PorkClient client = iterator.next();
                     if (((MinecraftProtocol) client.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) { //thx 0x kek
@@ -101,16 +102,16 @@ public class PorkSessionListener implements SessionListener {
     public void connected(ConnectedEvent connectedEvent) {
         System.out.println("Connected to " + Config.ip + ":" + Config.port + "!");
         if (Config.doAntiAFK) {
-            bot.timer.schedule(new TimerTask() {
+            this.bot.timer.schedule(new TimerTask() {
                 @Override
                 public void run() { //antiafk
-                    if (Config.doAntiAFK && bot.clients.size() == 0) {
-                        if (bot.r.nextBoolean()) {
-                            bot.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+                    if (Config.doAntiAFK && PorkSessionListener.this.bot.clients.isEmpty()) {
+                        if (PorkSessionListener.this.bot.r.nextBoolean()) {
+                            PorkSessionListener.this.bot.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
                         } else {
-                            float yaw = -90 + (90 - -90) * bot.r.nextFloat();
-                            float pitch = -90 + (90 - -90) * bot.r.nextFloat();
-                            bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
+                            float yaw = -90 + (90 - -90) * PorkSessionListener.this.bot.r.nextFloat();
+                            float pitch = -90 + (90 - -90) * PorkSessionListener.this.bot.r.nextFloat();
+                            PorkSessionListener.this.bot.client.getSession().send(new ClientPlayerRotationPacket(true, yaw, pitch));
                         }
                     }
                 }
@@ -118,24 +119,24 @@ public class PorkSessionListener implements SessionListener {
         }
 
         if (Config.doSpammer) { //TODO: configurable spam messages
-            bot.timer.schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
+            this.bot.timer.schedule(new TimerTask() { // i actually want this in a seperate thread, no derp
                 @Override
                 public void run() { //chat
-                    bot.sendChat(Config.spamMesages[bot.r.nextInt(Config.spamMesages.length)]);
+                    PorkSessionListener.this.bot.sendChat(Config.spamMesages[PorkSessionListener.this.bot.r.nextInt(Config.spamMesages.length)]);
                 }
             }, 30000, Config.spamDelay);
         }
 
-        bot.timer.schedule(new TimerTask() {
+        this.bot.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (bot.queuedIngameMessages.size() > 0) {
-                    bot.client.getSession().send(new ClientChatPacket(bot.queuedIngameMessages.poll()));
+                if (!PorkSessionListener.this.bot.queuedIngameMessages.isEmpty()) {
+                    PorkSessionListener.this.bot.client.getSession().send(new ClientChatPacket(PorkSessionListener.this.bot.queuedIngameMessages.poll()));
                 }
             }
         }, 30000, 1000);
 
-        if (Config.doServer && bot.server == null) {
+        if (Config.doServer && this.bot.server == null) {
             System.out.println("Starting server...");
             Server server = new Server(Config.serverHost, Config.serverPort, MinecraftProtocol.class, new TcpSessionFactory());
             server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
@@ -143,7 +144,7 @@ public class PorkSessionListener implements SessionListener {
             server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new ServerInfoBuilder() {
                 @Override
                 public ServerStatusInfo buildInfo(Session session) {
-                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, bot.clients.size() - 1, getOnline()), new TextMessage("\u00A7c" + bot.protocol.getProfile().getName()), Caches.icon);
+                    return new ServerStatusInfo(new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION), new PlayerInfo(Integer.MAX_VALUE, PorkSessionListener.this.bot.clients.size() - 1, PorkSessionListener.this.getOnline()), new TextMessage("\u00A7c" + PorkSessionListener.this.bot.protocol.getProfile().getName()), Caches.icon);
                 }
             });
 
@@ -155,8 +156,8 @@ public class PorkSessionListener implements SessionListener {
             });
 
             server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, 256);
-            server.addListener(new PorkServerAdapter(bot));
-            bot.server = server;
+            server.addListener(new PorkServerAdapter(this.bot));
+            this.bot.server = server;
         }
 
         if (GuiBot.INSTANCE != null) {
@@ -180,7 +181,7 @@ public class PorkSessionListener implements SessionListener {
     public GameProfile[] getOnline() {
         ArrayList<GameProfile> arr = new ArrayList<>();
 
-        for (PorkClient session : bot.clients) {
+        for (PorkClient session : this.bot.clients) {
             if (((MinecraftProtocol) session.session.getPacketProtocol()).subProtocol == SubProtocol.GAME) {
                 arr.add(((MinecraftProtocol) session.session.getPacketProtocol()).profile);
             }
@@ -192,8 +193,8 @@ public class PorkSessionListener implements SessionListener {
     @Override
     public void disconnecting(DisconnectingEvent disconnectingEvent) {
         System.out.println("Disconnecting... Reason: " + disconnectingEvent.getReason());
-        if (bot.websocketServer != null) {
-            bot.websocketServer.sendToAll("chat    \u00A7cDisconnected from server! Reason: " + disconnectingEvent.getReason());
+        if (this.bot.websocketServer != null) {
+            this.bot.websocketServer.sendToAll("chat    \u00A7cDisconnected from server! Reason: " + disconnectingEvent.getReason());
         }
         if (Config.doWebsocket) {
             TooBeeTooTeeBot.bot.loginData.setSerializable("registeredPlayers", (Serializable) TooBeeTooTeeBot.bot.namesToRegisteredPlayers);
@@ -246,6 +247,6 @@ public class PorkSessionListener implements SessionListener {
             }
         }
 
-        bot.reLaunch();
+        this.bot.reLaunch();
     }
 }

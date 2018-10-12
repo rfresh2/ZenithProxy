@@ -25,12 +25,14 @@ public class ChunkPos {
     public long hash;
 
     public ChunkPos(long hash) {
+        super();
         this.hash = hash;
         this.x = getXFromHash(hash);
         this.z = getZFromHash(hash);
     }
 
     public ChunkPos(int x, int z) {
+        super();
         this.x = x;
         this.z = z;
         this.hash = getChunkHashFromXZ(x, z);

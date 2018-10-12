@@ -42,6 +42,7 @@ public class TextComponentTranslation extends TextComponentBase {
     private long lastTranslationUpdateTimeInMilliseconds = -1L;
 
     public TextComponentTranslation(String translationKey, Object... args) {
+        super();
         this.key = translationKey;
         this.formatArgs = args;
 

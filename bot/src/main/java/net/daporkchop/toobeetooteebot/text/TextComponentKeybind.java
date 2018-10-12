@@ -29,6 +29,7 @@ public class TextComponentKeybind extends TextComponentBase {
     private Supplier<String> displaySupplier;
 
     public TextComponentKeybind(String keybind) {
+        super();
         this.keybind = keybind;
     }
 

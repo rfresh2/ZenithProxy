@@ -15,18 +15,13 @@
 
 package net.daporkchop.toobeetooteebot.client.impl;
 
-import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.packetlib.Session;
 import net.daporkchop.toobeetooteebot.client.IPacketListener;
 import net.daporkchop.toobeetooteebot.gui.GuiBot;
-import net.daporkchop.toobeetooteebot.server.PorkClient;
 import net.daporkchop.toobeetooteebot.util.ChatUtils;
 import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.TextFormat;
-
-import java.util.Iterator;
 
 import static net.daporkchop.toobeetooteebot.TooBeeTooTeeBot.bot;
 
