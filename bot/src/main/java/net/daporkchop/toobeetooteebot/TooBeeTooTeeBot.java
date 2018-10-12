@@ -372,7 +372,7 @@ public class TooBeeTooTeeBot {
     }
 
     public void reLaunch() {
-        for (int i = 10; i > 0; i--) {
+        for (int i = 60; i > 0; i--) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

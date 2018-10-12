@@ -25,6 +25,9 @@ import net.daporkchop.toobeetooteebot.entity.impl.EntityPlayer;
 public class ListenerSpawnPlayerPacket implements IPacketListener<ServerSpawnPlayerPacket> {
     @Override
     public void handlePacket(Session session, ServerSpawnPlayerPacket pck) {
+        if (true)   {
+            return;
+        }
         EntityPlayer mob = new EntityPlayer();
         mob.type = EntityType.PLAYER;
         mob.entityId = pck.entityId;
