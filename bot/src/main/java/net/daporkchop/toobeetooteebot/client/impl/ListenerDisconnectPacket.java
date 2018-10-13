@@ -15,6 +15,7 @@
 
 package net.daporkchop.toobeetooteebot.client.impl;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDisconnectPacket;
 import com.github.steveice10.packetlib.Session;
 import net.daporkchop.toobeetooteebot.client.IPacketListener;
@@ -26,5 +27,6 @@ public class ListenerDisconnectPacket implements IPacketListener<ServerDisconnec
     public void handlePacket(Session session, ServerDisconnectPacket pck) {
         System.out.println("Kicked during login! Reason: " + pck.getReason().getFullText());
         bot.client.getSession().disconnect(pck.getReason().getFullText());
+        //bot.client.getSession().send(new ServerChatPacket());
     }
 }
