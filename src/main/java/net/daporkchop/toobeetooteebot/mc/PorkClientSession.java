@@ -14,26 +14,35 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util;
+package net.daporkchop.toobeetooteebot.mc;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
-import net.daporkchop.toobeetooteebot.config.Config;
+import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.packet.PacketProtocol;
+import com.github.steveice10.packetlib.tcp.TcpClientSession;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.net.Proxy;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author DaPorkchop_
  */
-public interface Constants {
-    String VERSION = "0.0.1";
+public class PorkClientSession extends TcpClientSession {
+    private final Lock runningLock = new ReentrantLock();
 
-    Config CONFIG = new Config("config.json");
-    DataCache CACHE = new DataCache();
+    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, Proxy proxy) {
+        super(host, port, protocol, client, proxy);
+        this.runningLock.lock();
+    }
 
-    AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect"));
+    public void waitForDisconnect() {
+        this.runningLock.lock();
+        this.runningLock.unlock();
+    }
 
-    JsonParser JSON_PARSER = new JsonParser();
-    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    @Override
+    public void disconnect(String reason, Throwable cause, boolean wait) {
+        super.disconnect(reason, cause, wait);
+        this.runningLock.unlock();
+    }
 }

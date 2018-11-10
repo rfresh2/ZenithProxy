@@ -16,15 +16,82 @@
 
 package net.daporkchop.toobeetooteebot;
 
+import com.github.steveice10.mc.auth.exception.request.RequestException;
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.packetlib.Client;
+import lombok.Getter;
+import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 /**
  * @author DaPorkchop_
  */
+@Getter
 public class Bot implements Constants {
+    @Getter
+    private static Bot instance;
+
+    private MinecraftProtocol protocol;
+    private Client client;
+
     public static void main(String... args) {
         System.out.printf("Starting Pork2b2tBot v%s...\n", VERSION);
 
-        System.out.println("Hello world!");
+        Bot bot = new Bot();
+        instance = bot;
+        bot.start();
+    }
+
+    public void start() {
+        do {
+            this.logIn();
+            this.connect();
+
+            //wait for client to disconnect before starting again
+            ((PorkClientSession) this.client.getSession()).waitForDisconnect();
+        } while (SHOULD_RECONNECT.get() && CACHE.reset());
+        System.out.println("Shutting down...");
+    }
+
+    private void connect() {
+        synchronized (this) {
+            if (this.isConnected()) {
+                throw new IllegalStateException("Already connected!");
+            }
+
+            String address = CONFIG.getString("client.server.address", "mc.example.com");
+            int port = CONFIG.getInt("client.server.port", 25565);
+
+            System.out.printf("Connecting to %s:%d...\n", address, port);
+            this.client = new Client(address, port, this.protocol, PorkSessionFactory.getInstance());
+            this.client.getSession().connect(true);
+        }
+    }
+
+    public boolean isConnected() {
+        return this.client != null && this.client.getSession() != null && this.client.getSession().isConnected();
+    }
+
+    private void logIn() {
+        if (this.protocol == null) {
+            System.out.println("Logging in...");
+            if (CONFIG.getBoolean("authentication.doAuthentication")) {
+                try {
+                    this.protocol = new MinecraftProtocol(
+                            CONFIG.getString("authentication.username", "john.doe@example.com"),
+                            CONFIG.getString("authentication.password", "hackme")
+                    );
+                } catch (RequestException e) {
+                    throw new RuntimeException(String.format(
+                            "Unable to log in using credentials %s:%s",
+                            CONFIG.getString("authentication.username"),
+                            CONFIG.getString("authentication.password")), e);
+                }
+            } else {
+                this.protocol = new MinecraftProtocol(CONFIG.getString("authentication.username", "Steve"));
+            }
+            System.out.println("Successfully logged in.");
+        }
     }
 }

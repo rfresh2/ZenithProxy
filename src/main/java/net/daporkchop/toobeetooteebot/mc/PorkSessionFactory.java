@@ -14,26 +14,33 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util;
+package net.daporkchop.toobeetooteebot.mc;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
-import net.daporkchop.toobeetooteebot.config.Config;
-
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.ConnectionListener;
+import com.github.steveice10.packetlib.Server;
+import com.github.steveice10.packetlib.Session;
+import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author DaPorkchop_
  */
-public interface Constants {
-    String VERSION = "0.0.1";
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class PorkSessionFactory extends TcpSessionFactory {
+    @Getter
+    private static final PorkSessionFactory instance = new PorkSessionFactory();
 
-    Config CONFIG = new Config("config.json");
-    DataCache CACHE = new DataCache();
+    @Override
+    public Session createClientSession(Client client) {
+        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, null);
+    }
 
-    AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect"));
-
-    JsonParser JSON_PARSER = new JsonParser();
-    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    @Override
+    public ConnectionListener createServerListener(Server server) {
+        //TODO
+        return super.createServerListener(server);
+    }
 }

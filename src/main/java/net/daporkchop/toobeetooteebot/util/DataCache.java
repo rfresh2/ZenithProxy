@@ -16,24 +16,39 @@
 
 package net.daporkchop.toobeetooteebot.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
-import net.daporkchop.toobeetooteebot.config.Config;
-
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import lombok.Getter;
+import net.daporkchop.lib.math.vector.d.Vec3dM;
+import net.daporkchop.lib.primitive.map.LongObjectMap;
+import net.daporkchop.lib.primitive.map.PorkMaps;
+import net.daporkchop.lib.primitive.map.hashmap.LongObjectHashMap;
 
 /**
  * @author DaPorkchop_
  */
-public interface Constants {
-    String VERSION = "0.0.1";
+@Getter
+public class DataCache implements Constants {
+    public DataCache() {
+        this.reset();
+    }
 
-    Config CONFIG = new Config("config.json");
-    DataCache CACHE = new DataCache();
+    private final LongObjectMap<Column> chunks = PorkMaps.synchronize(new LongObjectHashMap<>());
+    private final Vec3dM playerPos = new Vec3dM(0.0d, 0.0d, 0.0d);
 
-    AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect"));
+    public boolean reset() {
+        System.out.println("Clearing cache...");
 
-    JsonParser JSON_PARSER = new JsonParser();
-    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            this.chunks.clear();
+
+            this.playerPos.setX(0.0d);
+            this.playerPos.setY(0.0d);
+            this.playerPos.setZ(0.0d);
+
+            System.out.println("Cache cleared.");
+        } catch (Exception e)   {
+            throw new RuntimeException("Unable to clear cache", e);
+        }
+        return true;
+    }
 }
