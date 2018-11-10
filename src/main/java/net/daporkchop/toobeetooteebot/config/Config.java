@@ -31,7 +31,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -46,6 +50,8 @@ public class Config implements Constants {
     private final JsonObject object;
     private volatile boolean dirty;
 
+    private final Map<String, JsonElement> fastAccessCache = Collections.synchronizedMap(new Hashtable<>());
+
     public Config(@NonNull String path) {
         this(new File(".", path));
     }
@@ -59,6 +65,10 @@ public class Config implements Constants {
                 }
             } else if (!file.createNewFile()) {
                 throw new IllegalStateException(String.format("Could not create file: %s", file.getAbsolutePath()));
+            } else {
+                try (OutputStream os = new FileOutputStream(file))  {
+                    os.write("{}".getBytes(UTF8.utf8));
+                }
             }
             try (InputStream is = new FileInputStream(file)) {
                 this.object = JSON_PARSER.parse(new InputStreamReader(is)).getAsJsonObject();
@@ -73,6 +83,7 @@ public class Config implements Constants {
             if (this.dirty) {
                 try (OutputStream os = new FileOutputStream(this.file)) {
                     os.write(GSON.toJson(this.object).getBytes(UTF8.utf8));
+                    os.write("\n".getBytes(UTF8.utf8)); //need me newlines
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -82,49 +93,69 @@ public class Config implements Constants {
     }
 
     public JsonElement get(@NonNull String key) {
-        JsonElement element = this.object;
-        for (String s : key.split("\\.")) {
-            element = element.getAsJsonObject().get(s);
-        }
-        return element;
+        return this.fastAccessCache.computeIfAbsent(key, k -> {
+            JsonElement element = this.object;
+            for (String s : k.split("\\.")) {
+                if (element.getAsJsonObject().has(s))  {
+                    element = element.getAsJsonObject().get(s);
+                } else {
+                    return null;
+                }
+            }
+            return element;
+        });
     }
 
     public JsonElement set(@NonNull String key, @NonNull Object val) {
-        try {
-            JsonObject parent = null;
-            String name = null;
-            JsonElement element = this.object;
-            for (String s : key.split("\\.")) {
-                element = (parent = element.getAsJsonObject()).get(name = s);
+        synchronized (this.fastAccessCache) {
+            try {
+                JsonObject parent = null;
+                String name = null;
+                JsonElement element = this.object;
+                for (String s : key.split("\\.")) {
+                    if (element.getAsJsonObject().has(name = s))   {
+                        element = (parent = element.getAsJsonObject()).get(s);
+                    } else {
+                        JsonObject object = new JsonObject();
+                        element.getAsJsonObject().add(s, object);
+                        parent = element.getAsJsonObject();
+                        element = object;
+                    }
+                }
+                parent.remove(name);
+                if (val instanceof JsonElement) {
+                    parent.add(name, (JsonElement) val);
+                } else if (val instanceof String) {
+                    parent.addProperty(name, (String) val);
+                } else if (val instanceof Number) {
+                    parent.addProperty(name, (Number) val);
+                } else if (val instanceof Boolean) {
+                    parent.addProperty(name, (Boolean) val);
+                } else if (val instanceof Character) {
+                    parent.addProperty(name, (Character) val);
+                }
+                return parent.get(name);
+            } finally {
+                this.dirty = true;
+                this.fastAccessCache.remove(key);
             }
-            if (val instanceof JsonElement) {
-                parent.add(name, (JsonElement) val);
-            } else if (val instanceof String) {
-                parent.addProperty(name, (String) val);
-            } else if (val instanceof Number) {
-                parent.addProperty(name, (Number) val);
-            } else if (val instanceof Boolean) {
-                parent.addProperty(name, (Boolean) val);
-            } else if (val instanceof Character) {
-                parent.addProperty(name, (Character) val);
-            }
-            return parent.get(name);
-        } finally {
-            this.dirty = true;
         }
     }
 
     public void remove(@NonNull String key) {
-        try {
-            JsonObject parent = null;
-            String name = null;
-            JsonElement element = this.object;
-            for (String s : key.split("\\.")) {
-                element = (parent = element.getAsJsonObject()).get(name = s);
+        synchronized (this.fastAccessCache) {
+            try {
+                JsonObject parent = null;
+                String name = null;
+                JsonElement element = this.object;
+                for (String s : key.split("\\.")) {
+                    element = (parent = element.getAsJsonObject()).get(name = s);
+                }
+                parent.remove(name);
+            } finally {
+                this.dirty = true;
+                this.fastAccessCache.remove(key);
             }
-            parent.remove(name);
-        } finally {
-            this.dirty = true;
         }
     }
 

@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot;
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.SessionFactory;
 import lombok.Getter;
 import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
 import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
@@ -34,6 +35,7 @@ public class Bot implements Constants {
 
     private MinecraftProtocol protocol;
     private Client client;
+    private final SessionFactory sessionFactory = new PorkSessionFactory(this);
 
     public static void main(String... args) {
         System.out.printf("Starting Pork2b2tBot v%s...\n", VERSION);
@@ -48,9 +50,11 @@ public class Bot implements Constants {
             this.logIn();
             this.connect();
 
+            CONFIG.save();
             //wait for client to disconnect before starting again
-            ((PorkClientSession) this.client.getSession()).waitForDisconnect();
-        } while (SHOULD_RECONNECT.get() && CACHE.reset());
+            System.out.printf("Disconnected. Reason: %s\n", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
+            CONFIG.save();
+        } while (SHOULD_RECONNECT.get() && CACHE.reset() && this.delayBeforeReconnect());
         System.out.println("Shutting down...");
     }
 
@@ -64,7 +68,7 @@ public class Bot implements Constants {
             int port = CONFIG.getInt("client.server.port", 25565);
 
             System.out.printf("Connecting to %s:%d...\n", address, port);
-            this.client = new Client(address, port, this.protocol, PorkSessionFactory.getInstance());
+            this.client = new Client(address, port, this.protocol, this.sessionFactory);
             this.client.getSession().connect(true);
         }
     }
@@ -90,8 +94,22 @@ public class Bot implements Constants {
                 }
             } else {
                 this.protocol = new MinecraftProtocol(CONFIG.getString("authentication.username", "Steve"));
+                CONFIG.getString("authentication.password", "hackme"); //add password field to config by default
             }
             System.out.println("Successfully logged in.");
+        }
+    }
+
+    private boolean delayBeforeReconnect()  {
+        try {
+            for (int i = CONFIG.getInt("client.extra.autoreconnect.delay", 10); i > 0; i--) {
+                System.out.printf("Reconnecting in %d\n", i);
+                Thread.sleep(1000L);
+            }
+        } catch ( InterruptedException e)   {
+            throw new RuntimeException(e);
+        } finally {
+            return true;
         }
     }
 }

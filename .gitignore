@@ -2,13 +2,7 @@
 *.iml
 /run/
 /build/
-/logininfo.txt
-/sessionId.txt
-/players.dat
-/online.dat
-/clientId.txt
-/config.yml
-/whitelist.txt
+/config.json
 /.gradle/
 *.class
 *.jar

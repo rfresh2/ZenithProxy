@@ -21,21 +21,23 @@ import com.github.steveice10.packetlib.ConnectionListener;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import net.daporkchop.toobeetooteebot.Bot;
 
 /**
  * @author DaPorkchop_
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
+@Getter
 public class PorkSessionFactory extends TcpSessionFactory {
-    @Getter
-    private static final PorkSessionFactory instance = new PorkSessionFactory();
+    @NonNull
+    private final Bot bot;
 
     @Override
     public Session createClientSession(Client client) {
-        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, null);
+        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.bot);
     }
 
     @Override

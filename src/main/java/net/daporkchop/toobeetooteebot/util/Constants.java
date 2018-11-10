@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import net.daporkchop.toobeetooteebot.config.Config;
+import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,11 +31,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public interface Constants {
     String VERSION = "0.0.1";
 
+    JsonParser JSON_PARSER = new JsonParser();
+    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
     Config CONFIG = new Config("config.json");
     DataCache CACHE = new DataCache();
 
-    AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect"));
+    AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
 
-    JsonParser JSON_PARSER = new JsonParser();
-    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+            .build();
 }

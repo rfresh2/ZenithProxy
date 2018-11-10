@@ -19,30 +19,44 @@ package net.daporkchop.toobeetooteebot.mc;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+import net.daporkchop.toobeetooteebot.Bot;
+import net.daporkchop.toobeetooteebot.client.ClientListener;
 
-import java.net.Proxy;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author DaPorkchop_
  */
+@Getter
 public class PorkClientSession extends TcpClientSession {
-    private final Lock runningLock = new ReentrantLock();
+    @Getter(AccessLevel.PRIVATE)
+    private final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
+    private final Bot bot;
 
-    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, Proxy proxy) {
-        super(host, port, protocol, client, proxy);
-        this.runningLock.lock();
+    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Bot bot) {
+        super(host, port, protocol, client, null);
+        this.bot = bot;
+        this.addListener(new ClientListener(this.bot, this));
     }
 
-    public void waitForDisconnect() {
-        this.runningLock.lock();
-        this.runningLock.unlock();
+    public String getDisconnectReason() {
+        try {
+            return this.disconnectFuture.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void disconnect(String reason, Throwable cause, boolean wait) {
         super.disconnect(reason, cause, wait);
-        this.runningLock.unlock();
+        if (cause == null) {
+            this.disconnectFuture.complete(reason);
+        } else {
+            this.disconnectFuture.completeExceptionally(cause); //TODO: maybe just print stack trace? not sure what exceptions might be given to this
+        }
     }
 }
