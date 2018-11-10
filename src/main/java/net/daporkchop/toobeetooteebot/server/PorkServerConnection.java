@@ -14,8 +14,10 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client;
+package net.daporkchop.toobeetooteebot.server;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectingEvent;
@@ -28,7 +30,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 /**
@@ -36,24 +37,24 @@ import net.daporkchop.toobeetooteebot.util.Constants;
  */
 @RequiredArgsConstructor
 @Getter
-public class ClientListener implements SessionListener, Constants {
+public class PorkServerConnection implements SessionListener, Constants {
     @NonNull
     private final Bot bot;
 
     @NonNull
-    private final PorkClientSession session;
+    private final Session session;
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
-        if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
-            this.bot.getServerConnections().forEach(c -> c.send(event.getPacket()));
+        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this.session)) {
+            this.bot.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
 
     @Override
     public void packetSending(PacketSendingEvent event) {
         Packet p1 = event.getPacket();
-        Packet p2 = CLIENT_HANDLERS.handleOutgoing(p1, this.session);
+        Packet p2 = SERVER_HANDLERS.handleOutgoing(p1, this.session);
         if (p2 == null) {
             event.setCancelled(true);
         } else if (p1 != p2)    {
@@ -67,15 +68,23 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void connected(ConnectedEvent event) {
-        System.out.println("Connection complete!");
+        this.bot.getServerConnections().add(this);
+        System.out.printf("Client connected: %s\n", event.getSession().getRemoteAddress().toString());
+
+        //send cached data
+        CACHE.getChunks().values().stream().map(ServerChunkDataPacket::new).forEach(this.session::send);
     }
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
+        this.bot.getServerConnections().remove(this);
     }
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        System.out.printf("Disconnecting from server. Reason: %s\n", event.getReason());
+    }
+
+    public void send(@NonNull Packet packet)    {
+        this.session.send(packet);
     }
 }

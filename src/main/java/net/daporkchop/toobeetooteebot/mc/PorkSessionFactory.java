@@ -17,8 +17,6 @@
 package net.daporkchop.toobeetooteebot.mc;
 
 import com.github.steveice10.packetlib.Client;
-import com.github.steveice10.packetlib.ConnectionListener;
-import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import lombok.Getter;
@@ -38,11 +36,5 @@ public class PorkSessionFactory extends TcpSessionFactory {
     @Override
     public Session createClientSession(Client client) {
         return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.bot);
-    }
-
-    @Override
-    public ConnectionListener createServerListener(Server server) {
-        //TODO
-        return super.createServerListener(server);
     }
 }

@@ -14,37 +14,25 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client.handler.incoming;
+package net.daporkchop.toobeetooteebot.server.handler.outgoing;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
+import com.github.steveice10.packetlib.Session;
+import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerBlockChangePacket, PorkClientSession> {
+public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, Session> {
     @Override
-    public boolean apply(ServerBlockChangePacket packet, PorkClientSession session) {
-        handleChange(packet.getRecord());
-        return true;
+    public LoginSuccessPacket apply(LoginSuccessPacket packet, Session session) {
+        //TODO: receive profile from server
+        return new LoginSuccessPacket(Bot.getInstance().getProtocol().getProfile());
     }
 
     @Override
-    public Class<ServerBlockChangePacket> getPacketClass() {
-        return ServerBlockChangePacket.class;
-    }
-
-    static void handleChange(@NonNull BlockChangeRecord record) {
-        Position pos = record.getPosition();
-        Column column = CACHE.getChunks().get(new Vec2i(pos.getX() >> 4, pos.getZ() >> 4));
-        Chunk chunk = column.getChunks()[pos.getY() >> 4];
-        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+    public Class<LoginSuccessPacket> getPacketClass() {
+        return LoginSuccessPacket.class;
     }
 }

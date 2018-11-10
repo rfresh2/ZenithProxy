@@ -26,9 +26,10 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
  */
 public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPacket, PorkClientSession> {
     @Override
-    public void accept(ServerChatPacket packet, PorkClientSession session) {
+    public boolean apply(ServerChatPacket packet, PorkClientSession session) {
         String legacyColorCodes = ChatUtils.getOldText(packet.getMessage().toJsonString());
         System.out.println(legacyColorCodes);
+        return true;
     }
 
     @Override

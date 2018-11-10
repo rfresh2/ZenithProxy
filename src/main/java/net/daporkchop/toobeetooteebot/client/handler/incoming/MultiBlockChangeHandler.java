@@ -26,10 +26,11 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
  */
 public class MultiBlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerMultiBlockChangePacket, PorkClientSession> {
     @Override
-    public void accept(ServerMultiBlockChangePacket packet, PorkClientSession session) {
+    public boolean apply(ServerMultiBlockChangePacket packet, PorkClientSession session) {
         for (BlockChangeRecord record : packet.getRecords())    {
             BlockChangeHandler.handleChange(record);
         }
+        return true;
     }
 
     @Override

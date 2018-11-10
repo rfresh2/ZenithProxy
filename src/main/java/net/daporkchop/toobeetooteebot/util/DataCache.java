@@ -31,9 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DataCache implements Constants {
     private final Map<Vec2i, Column> chunks = new ConcurrentHashMap<>();
     private final Vec3dM playerPos = new Vec3dM(0.0d, 0.0d, 0.0d);
-    public DataCache() {
-        this.reset();
-    }
 
     public boolean reset() {
         System.out.println("Clearing cache...");

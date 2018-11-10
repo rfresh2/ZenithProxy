@@ -32,13 +32,14 @@ import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
-import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.SessionFactory;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.http.SimpleHTTP;
+import net.daporkchop.toobeetooteebot.mc.MinecraftProtocolWrapper;
 import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
 import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
+import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import javax.imageio.ImageIO;
@@ -48,6 +49,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author DaPorkchop_
@@ -57,10 +62,11 @@ public class Bot implements Constants {
     @Getter
     private static Bot instance;
 
+    private final SessionFactory sessionFactory = new PorkSessionFactory(this);
+    private final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private MinecraftProtocol protocol;
     private Client client;
     private Server server;
-    private final SessionFactory sessionFactory = new PorkSessionFactory(this);
     @Setter
     private BufferedImage serverIcon;
 
@@ -73,6 +79,16 @@ public class Bot implements Constants {
     }
 
     public void start() {
+        new Thread(() -> {
+            try (Scanner s = new Scanner(System.in))    {
+                s.nextLine(); //TODO: command processing from CLI
+            }
+            SHOULD_RECONNECT.set(false);
+            if (this.isConnected()) {
+                this.client.getSession().disconnect("user disconnect");
+            }
+        }, "Pork2b2tBot command processor thread").start();
+
         this.logIn();
         this.startServer();
         do {
@@ -82,9 +98,14 @@ public class Bot implements Constants {
             CONFIG.save();
             //wait for client to disconnect before starting again
             System.out.printf("Disconnected. Reason: %s\n", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
-            CONFIG.save();
         } while (SHOULD_RECONNECT.get() && CACHE.reset() && this.delayBeforeReconnect());
         System.out.println("Shutting down...");
+        if (this.server != null) {
+            System.out.println("Closing server...");
+            this.server.close(true);
+            System.out.println("Server closed.");
+        }
+        CONFIG.save();
     }
 
     private void connect() {
@@ -106,7 +127,7 @@ public class Bot implements Constants {
         return this.client != null && this.client.getSession() != null && this.client.getSession().isConnected();
     }
 
-    private void startServer()  {
+    private void startServer() {
         synchronized (this) {
             if (this.server != null) {
                 throw new IllegalStateException("Server already started!");
@@ -153,9 +174,10 @@ public class Bot implements Constants {
             System.out.println("Logging in...");
             if (CONFIG.getBoolean("authentication.doAuthentication")) {
                 try {
-                    this.protocol = new MinecraftProtocol(
+                    this.protocol = new MinecraftProtocolWrapper(
                             CONFIG.getString("authentication.username", "john.doe@example.com"),
-                            CONFIG.getString("authentication.password", "hackme")
+                            CONFIG.getString("authentication.password", "hackme"),
+                            this
                     );
                 } catch (RequestException e) {
                     throw new RuntimeException(String.format(
@@ -164,7 +186,7 @@ public class Bot implements Constants {
                             CONFIG.getString("authentication.password")), e);
                 }
             } else {
-                this.protocol = new MinecraftProtocol(CONFIG.getString("authentication.username", "Steve"));
+                this.protocol = new MinecraftProtocolWrapper(CONFIG.getString("authentication.username", "Steve"), this);
                 CONFIG.getString("authentication.password", "hackme"); //add password field to config by default
             }
             if (CONFIG.getBoolean("server.enable") && CONFIG.getBoolean("server.ping.favicon", true)) {
@@ -181,13 +203,13 @@ public class Bot implements Constants {
         }
     }
 
-    private boolean delayBeforeReconnect()  {
+    private boolean delayBeforeReconnect() {
         try {
             for (int i = CONFIG.getInt("client.extra.autoreconnect.delay", 10); i > 0; i--) {
                 System.out.printf("Reconnecting in %d\n", i);
                 Thread.sleep(1000L);
             }
-        } catch ( InterruptedException e)   {
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
             return true;
