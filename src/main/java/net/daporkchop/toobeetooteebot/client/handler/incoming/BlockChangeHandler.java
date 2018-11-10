@@ -14,41 +14,36 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util;
+package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import lombok.Getter;
-import net.daporkchop.lib.math.vector.d.Vec3dM;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
+import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
+import lombok.NonNull;
 import net.daporkchop.lib.math.vector.i.Vec2i;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-@Getter
-public class DataCache implements Constants {
-    private final Map<Vec2i, Column> chunks = new ConcurrentHashMap<>();
-    private final Vec3dM playerPos = new Vec3dM(0.0d, 0.0d, 0.0d);
-    public DataCache() {
-        this.reset();
+public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerBlockChangePacket, PorkClientSession> {
+    @Override
+    public void accept(ServerBlockChangePacket packet, PorkClientSession session) {
+        handleChange(packet.getRecord());
     }
 
-    public boolean reset() {
-        System.out.println("Clearing cache...");
+    @Override
+    public Class<ServerBlockChangePacket> getPacketClass() {
+        return ServerBlockChangePacket.class;
+    }
 
-        try {
-            this.chunks.clear();
-
-            this.playerPos.setX(0.0d);
-            this.playerPos.setY(0.0d);
-            this.playerPos.setZ(0.0d);
-
-            System.out.println("Cache cleared.");
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to clear cache", e);
-        }
-        return true;
+    static void handleChange(@NonNull BlockChangeRecord record) {
+        Position pos = record.getPosition();
+        Column column = CACHE.getChunks().get(new Vec2i(pos.getX() >> 4, pos.getZ() >> 4));
+        Chunk chunk = column.getChunks()[pos.getY() >> 4];
+        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
     }
 }

@@ -16,12 +16,14 @@
 
 package net.daporkchop.toobeetooteebot.util;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
-import net.daporkchop.lib.minecraft.text.util.ChatUtils;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
 import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
@@ -43,6 +45,10 @@ public interface Constants {
     AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
 
     HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+            .registerInbound(new BlockChangeHandler())
             .registerInbound(new ChatHandler())
+            .registerInbound(new ChunkDataHandler())
+            .registerInbound(new MultiBlockChangeHandler())
+            .registerInbound(new UnloadChunkHandler())
             .build();
 }

@@ -14,41 +14,24 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util;
+package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import lombok.Getter;
-import net.daporkchop.lib.math.vector.d.Vec3dM;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUnloadChunkPacket;
 import net.daporkchop.lib.math.vector.i.Vec2i;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-@Getter
-public class DataCache implements Constants {
-    private final Map<Vec2i, Column> chunks = new ConcurrentHashMap<>();
-    private final Vec3dM playerPos = new Vec3dM(0.0d, 0.0d, 0.0d);
-    public DataCache() {
-        this.reset();
+public class UnloadChunkHandler implements HandlerRegistry.IncomingHandler<ServerUnloadChunkPacket, PorkClientSession> {
+    @Override
+    public void accept(ServerUnloadChunkPacket packet, PorkClientSession session) {
+        CACHE.getChunks().remove(new Vec2i(packet.getX(), packet.getZ()));
     }
 
-    public boolean reset() {
-        System.out.println("Clearing cache...");
-
-        try {
-            this.chunks.clear();
-
-            this.playerPos.setX(0.0d);
-            this.playerPos.setY(0.0d);
-            this.playerPos.setZ(0.0d);
-
-            System.out.println("Cache cleared.");
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to clear cache", e);
-        }
-        return true;
+    @Override
+    public Class<ServerUnloadChunkPacket> getPacketClass() {
+        return ServerUnloadChunkPacket.class;
     }
 }

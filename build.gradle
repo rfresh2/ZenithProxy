@@ -38,6 +38,7 @@ dependencies {
     compile 'com.github.steveice10:mcprotocollib:1.12.2-3-SNAPSHOT'
     compile 'net.daporkchop.lib:hash:0.2.0'
     compile 'net.daporkchop.lib:primitive:0.2.1-SNAPSHOT'
+    compile 'net.daporkchop.lib:http:0.2.1-SNAPSHOT'
     compile 'net.daporkchop.lib:minecraft-text:0.2.1-SNAPSHOT'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'

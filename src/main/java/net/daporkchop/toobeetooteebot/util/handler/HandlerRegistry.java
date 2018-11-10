@@ -21,6 +21,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -82,14 +83,14 @@ public class HandlerRegistry<S extends Session> {
         }
     }
 
-    public interface IncomingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S>  {
+    public interface IncomingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S>, Constants {
         @Override
         void accept(P packet, S session);
 
         Class<P> getPacketClass();
     }
 
-    public interface OutgoingHandler<P extends Packet, S extends Session> extends BiFunction<P, S, P>  {
+    public interface OutgoingHandler<P extends Packet, S extends Session> extends BiFunction<P, S, P>, Constants  {
         @Override
         P apply(P packet, S session);
 
