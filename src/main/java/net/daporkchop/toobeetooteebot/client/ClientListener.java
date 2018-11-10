@@ -66,7 +66,6 @@ public class ClientListener implements SessionListener, Constants {
     @Override
     public void connected(ConnectedEvent event) {
         System.out.println("Connection complete!");
-        this.session.disconnect("debugging");
     }
 
     @Override

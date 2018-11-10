@@ -40,7 +40,7 @@ public class HandlerRegistry<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handleInbound(@NonNull P packet, @NonNull S session) {
-        BiConsumer<P, S> handler = (BiConsumer<P, S>) this.inboundHandlers.get(packet);
+        BiConsumer<P, S> handler = (BiConsumer<P, S>) this.inboundHandlers.get(packet.getClass());
         if (handler != null)    {
             handler.accept(packet, session);
         }
@@ -48,7 +48,7 @@ public class HandlerRegistry<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
-        BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet);
+        BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
     }
 
@@ -62,13 +62,37 @@ public class HandlerRegistry<S extends Session> {
             return this;
         }
 
+        public Builder<S> registerInbound(@NonNull IncomingHandler<? extends Packet, S> handler)    {
+            this.inboundHandlers.put(handler.getPacketClass(), handler);
+            return this;
+        }
+
         public <P extends Packet> Builder<S> registerOutbound(@NonNull Class<P> clazz, @NonNull BiFunction<P, S, P> handler)    {
             this.outboundHandlers.put(clazz, handler);
+            return this;
+        }
+
+        public Builder<S> registerOutbound(@NonNull OutgoingHandler<? extends Packet, S> handler)    {
+            this.outboundHandlers.put(handler.getPacketClass(), handler);
             return this;
         }
 
         public HandlerRegistry<S> build()   {
             return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers);
         }
+    }
+
+    public interface IncomingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S>  {
+        @Override
+        void accept(P packet, S session);
+
+        Class<P> getPacketClass();
+    }
+
+    public interface OutgoingHandler<P extends Packet, S extends Session> extends BiFunction<P, S, P>  {
+        @Override
+        P apply(P packet, S session);
+
+        Class<P> getPacketClass();
     }
 }
