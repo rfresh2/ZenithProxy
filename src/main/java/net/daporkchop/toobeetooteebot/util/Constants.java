@@ -14,52 +14,11 @@
  *
  */
 
-plugins {
-    id 'java'
-    id 'io.franzbecker.gradle-lombok' version '1.14'
-    id 'maven-publish'
+package net.daporkchop.toobeetooteebot.util;
+
+/**
+ * @author DaPorkchop_
+ */
+public interface Constants {
+    String VERSION = "0.0.1";
 }
-
-group 'net.daporkchop'
-version '0.0.1'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenLocal()
-    maven {
-        name = 'DaPorkchop_'
-        url = 'https://maven.daporkchop.net/'
-    }
-    mavenCentral()
-}
-
-dependencies {
-    compile 'com.github.steveice10:mcprotocollib:1.12.2-3-SNAPSHOT'
-    compile 'net.daporkchop.lib:hash:0.2.0'
-    compile 'net.daporkchop.lib:primitive:0.2.1-SNAPSHOT'
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = project.group
-            artifactId = 'toobeetooteebot'
-            version = project.version
-
-            from components.java
-
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
-    }
-}
-
-build.dependsOn(publishToMavenLocal)
