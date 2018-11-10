@@ -35,6 +35,12 @@ import java.net.Proxy;
 public class MinecraftProtocolWrapper extends MinecraftProtocol implements Constants {
     private final Bot bot;
 
+    public MinecraftProtocolWrapper()   {
+        //super();
+        super(SubProtocol.LOGIN);
+        this.bot = Bot.getInstance();
+    }
+
     public MinecraftProtocolWrapper(SubProtocol subProtocol, @NonNull Bot bot) {
         super(subProtocol);
         this.bot = bot;

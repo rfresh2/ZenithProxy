@@ -69,7 +69,7 @@ public class PorkServerConnection implements SessionListener, Constants {
     @Override
     public void connected(ConnectedEvent event) {
         this.bot.getServerConnections().add(this);
-        System.out.printf("Client connected: %s\n", event.getSession().getRemoteAddress().toString());
+        System.out.printf("Client connected: %s\n", event.getSession().getRemoteAddress());//.toString());
 
         //send cached data
         CACHE.getChunks().values().stream().map(ServerChunkDataPacket::new).forEach(this.session::send);
