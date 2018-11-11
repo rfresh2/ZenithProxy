@@ -36,7 +36,7 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
 
         //send cached data
         CACHE.getAllData().forEach(data -> {
-            if (CONFIG.getBoolean("debug.server.cachesendingmessages", true)) {
+            if (CONFIG.getBoolean("debug.server.cache.sendingmessages", true)) {
                 String msg = data.getSendingMessage();
                 if (msg == null)    {
                     System.out.printf("Sending data for %s\n", data.getClass().getCanonicalName());

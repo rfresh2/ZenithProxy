@@ -48,6 +48,24 @@ task sourceJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+jar {
+    from {
+        configurations.compile.collect {
+            zipTree(it)
+        }
+    }{
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+
+    manifest {
+        attributes 'Implementation-Title': 'DaPorkchop_',
+                'Implementation-Version': version,
+                'Main-Class': 'net.daporkchop.toobeetooteebot.Bot'
+    }
+}
+
 publishing {
     publications {
         maven(MavenPublication) {

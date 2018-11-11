@@ -59,7 +59,7 @@ public class TabList implements Constants {
     public PlayerEntry get(@NonNull PlayerListEntry entry) {
         PlayerEntry e = this.entries.get(entry.getProfile().getId());
         if (e == null)  {
-            if (CONFIG.getBoolean("debug.server.cache.printunknownplayers"))    {
+            if (CONFIG.getBoolean("debug.server.cache.unknownplayers"))    {
                 System.out.printf("Could not find player with UUID: %s\n", entry.getProfile().getId());
             }
             return new PlayerEntry("", entry.getProfile().getId());
