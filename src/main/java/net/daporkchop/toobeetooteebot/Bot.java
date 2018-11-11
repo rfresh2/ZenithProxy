@@ -81,33 +81,43 @@ public class Bot implements Constants {
     }
 
     public void start() {
-        new Thread(() -> {
-            try (Scanner s = new Scanner(System.in))    {
-                s.nextLine(); //TODO: command processing from CLI
+        try {
+            {
+                Thread commandReaderThread = new Thread(() -> {
+                    try (Scanner s = new Scanner(System.in)) {
+                        s.nextLine(); //TODO: command processing from CLI
+                    }
+                    SHOULD_RECONNECT.set(false);
+                    if (this.isConnected()) {
+                        this.client.getSession().disconnect("user disconnect");
+                    }
+                }, "Pork2b2tBot command processor thread");
+                commandReaderThread.setDaemon(true);
+                commandReaderThread.start();
             }
-            SHOULD_RECONNECT.set(false);
-            if (this.isConnected()) {
-                this.client.getSession().disconnect("user disconnect");
-            }
-        }, "Pork2b2tBot command processor thread").start();
 
-        this.logIn();
-        this.startServer();
-        do {
             this.logIn();
-            this.connect();
+            this.startServer();
+            do {
+                this.logIn();
+                this.connect();
 
+                CONFIG.save();
+                //wait for client to disconnect before starting again
+                System.out.printf("Disconnected. Reason: %s\n", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
+            } while (SHOULD_RECONNECT.get() && CACHE.reset() && this.delayBeforeReconnect());
+        } catch (Exception e)   {
+            System.out.println("Caught exception in main thread:");
+            e.printStackTrace(System.out);
+        } finally {
+            System.out.println("Shutting down...");
+            if (this.server != null) {
+                System.out.println("Closing server...");
+                this.server.close(true);
+                System.out.println("Server closed.");
+            }
             CONFIG.save();
-            //wait for client to disconnect before starting again
-            System.out.printf("Disconnected. Reason: %s\n", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
-        } while (SHOULD_RECONNECT.get() && CACHE.reset() && this.delayBeforeReconnect());
-        System.out.println("Shutting down...");
-        if (this.server != null) {
-            System.out.println("Closing server...");
-            this.server.close(true);
-            System.out.println("Server closed.");
         }
-        CONFIG.save();
     }
 
     private void connect() {

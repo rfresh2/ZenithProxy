@@ -20,6 +20,7 @@ import lombok.Getter;
 import net.daporkchop.toobeetooteebot.util.Constants;
 import net.daporkchop.toobeetooteebot.util.cache.data.ChunkCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.PlayerPosCache;
+import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabListCache;
 
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
@@ -57,7 +58,7 @@ public class DataCache implements Constants {
     private final ThreadLocal<Collection<CachedData>> dataCache = ThreadLocal.withInitial(() -> new ArrayList<>(dataFields.size()));
 
     private final ChunkCache chunkCache = new ChunkCache();
-
+    private final TabListCache tabListCache = new TabListCache();
     private final PlayerPosCache posCache = new PlayerPosCache(); //TODO: remove and cache player as entity
 
     public Collection<CachedData> getAllData() {

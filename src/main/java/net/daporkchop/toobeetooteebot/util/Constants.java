@@ -24,6 +24,8 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
 import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
@@ -56,6 +58,8 @@ public interface Constants {
             .registerInbound(new ChunkDataHandler())
             .registerInbound(new MultiBlockChangeHandler())
             .registerInbound(new PlayerPosRotHandler())
+            .registerInbound(new TabListDataHandler())
+            .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())
             .build();
 
