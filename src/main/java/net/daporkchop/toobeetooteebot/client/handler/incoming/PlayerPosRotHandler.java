@@ -14,28 +14,26 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.mc;
+package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
-import com.github.steveice10.packetlib.Client;
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import net.daporkchop.toobeetooteebot.Bot;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-@RequiredArgsConstructor
-@Getter
-public class PorkSessionFactory extends TcpSessionFactory {
-    @NonNull
-    private final Bot bot;
+public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<ServerPlayerPositionRotationPacket, PorkClientSession> {
+    @Override
+    public boolean apply(ServerPlayerPositionRotationPacket packet, PorkClientSession session) {
+        CACHE.getPlayerPos().setX(packet.getX());
+        CACHE.getPlayerPos().setY(packet.getY());
+        CACHE.getPlayerPos().setZ(packet.getZ());
+        return true;
+    }
 
     @Override
-    public Session createClientSession(Client client) {
-        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.bot);
+    public Class<ServerPlayerPositionRotationPacket> getPacketClass() {
+        return ServerPlayerPositionRotationPacket.class;
     }
 }

@@ -40,6 +40,9 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     private final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
 
+    @NonNull
+    private final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
+
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         ObjectObjectBooleanBiFunction<P, S> handler = (ObjectObjectBooleanBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
@@ -50,6 +53,14 @@ public class HandlerRegistry<S extends Session> {
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
+        PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
+        if (handler != null) {
+            handler.accept(packet, session);
+        }
     }
 
     public interface IncomingHandler<P extends Packet, S extends Session> extends ObjectObjectBooleanBiFunction<P, S>, Constants {
@@ -73,10 +84,19 @@ public class HandlerRegistry<S extends Session> {
         Class<P> getPacketClass();
     }
 
+    public interface PostOutgoingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S>, Constants {
+        @Override
+        void accept(P packet, S session);
+
+        Class<P> getPacketClass();
+    }
+
     public static class Builder<S extends Session> {
         private final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
         private final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
+
+        private final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
 
         public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull BiConsumer<P, S> handler) {
             return this.registerInbound(clazz, (packet, session) -> {
@@ -105,8 +125,18 @@ public class HandlerRegistry<S extends Session> {
             return this;
         }
 
+        public <P extends Packet> Builder<S> registerPostOutbound(@NonNull Class<P> clazz, @NonNull BiConsumer<P, S> handler) {
+            this.postOutboundHandlers.put(clazz, handler);
+            return this;
+        }
+
+        public Builder<S> registerPostOutbound(@NonNull PostOutgoingHandler<? extends Packet, S> handler) {
+            this.postOutboundHandlers.put(handler.getPacketClass(), handler);
+            return this;
+        }
+
         public HandlerRegistry<S> build() {
-            return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers);
+            return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers);
         }
     }
 }

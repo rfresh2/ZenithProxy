@@ -23,7 +23,7 @@ import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import lombok.NonNull;
 import net.daporkchop.lib.math.vector.i.Vec2i;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**

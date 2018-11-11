@@ -14,27 +14,43 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.server.handler.outgoing;
+package net.daporkchop.toobeetooteebot.server.handler.postoutgoing;
 
-import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
-import com.github.steveice10.packetlib.Session;
-import net.daporkchop.toobeetooteebot.Bot;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
+import net.daporkchop.toobeetooteebot.util.RefStrings;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author DaPorkchop_
  */
-public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
+public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<ServerJoinGamePacket, PorkServerConnection> {
     @Override
-    public LoginSuccessPacket apply(LoginSuccessPacket packet, PorkServerConnection session) {
-        System.out.printf("User UUID: %s\nBot UUID: %s\n", packet.getProfile().getId().toString(), Bot.getInstance().getProtocol().getProfile().getId().toString());
-        //TODO: receive profile from server
-        return new LoginSuccessPacket(Bot.getInstance().getProtocol().getProfile());
+    public void accept(ServerJoinGamePacket packet, PorkServerConnection session) {
+        session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
+
+        //send cached data
+        System.out.printf("Sending %d chunks...\n", CACHE.getChunks().size());
+        CACHE.getChunks().values().stream().map(ServerChunkDataPacket::new).forEach(session::send);
+
+        //this packet spawns the player
+        session.send(new ServerPlayerPositionRotationPacket(
+                CACHE.getPlayerPos().getX(),
+                CACHE.getPlayerPos().getY(),
+                CACHE.getPlayerPos().getZ(),
+                0.0f,
+                0.0f,
+                ThreadLocalRandom.current().nextInt(16, 1024)
+        ));
     }
 
     @Override
-    public Class<LoginSuccessPacket> getPacketClass() {
-        return LoginSuccessPacket.class;
+    public Class<ServerJoinGamePacket> getPacketClass() {
+        return ServerJoinGamePacket.class;
     }
 }

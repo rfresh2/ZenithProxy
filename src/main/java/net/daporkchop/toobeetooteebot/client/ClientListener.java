@@ -16,6 +16,8 @@
 
 package net.daporkchop.toobeetooteebot.client;
 
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectingEvent;
@@ -28,7 +30,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 /**
@@ -46,7 +47,9 @@ public class ClientListener implements SessionListener, Constants {
     @Override
     public void packetReceived(PacketReceivedEvent event) {
         if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
-            this.bot.getServerConnections().forEach(c -> c.send(event.getPacket()));
+            this.bot.getServerConnections().stream()
+                    .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
+                    .forEach(c -> c.send(event.getPacket()));
         }
     }
 
@@ -63,6 +66,7 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void packetSent(PacketSentEvent event) {
+        CLIENT_HANDLERS.handlePostOutgoing(event.getPacket(), this.session);
     }
 
     @Override

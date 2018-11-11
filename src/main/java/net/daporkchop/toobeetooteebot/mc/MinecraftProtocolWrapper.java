@@ -27,6 +27,7 @@ import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
+import java.lang.reflect.Field;
 import java.net.Proxy;
 
 /**
@@ -35,9 +36,16 @@ import java.net.Proxy;
 public class MinecraftProtocolWrapper extends MinecraftProtocol implements Constants {
     private final Bot bot;
 
-    public MinecraftProtocolWrapper()   {
+    private MinecraftProtocolWrapper()   {
         //super();
-        super(SubProtocol.LOGIN);
+        super(SubProtocol.STATUS);
+        try {
+            Field f = MinecraftProtocol.class.getDeclaredField("subProtocol");
+            f.setAccessible(true);
+            f.set(this, SubProtocol.HANDSHAKE);
+        } catch (Exception e)   {
+            throw new RuntimeException(e);
+        }
         this.bot = Bot.getInstance();
     }
 
@@ -79,7 +87,8 @@ public class MinecraftProtocolWrapper extends MinecraftProtocol implements Const
     @Override
     public void newServerSession(Server server, Session session) {
         super.newServerSession(server, session);
-        if (CONFIG.getBoolean("server.enabled"))     {
+        System.out.printf("Incoming connection: %s\n", session.getRemoteAddress());
+        if (CONFIG.getBoolean("server.enable"))     {
             session.addListener(new PorkServerConnection(this.bot, session));
         }
     }

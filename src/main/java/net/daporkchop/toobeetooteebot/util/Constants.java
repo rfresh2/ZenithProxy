@@ -16,7 +16,6 @@
 
 package net.daporkchop.toobeetooteebot.util;
 
-import com.github.steveice10.packetlib.Session;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -24,10 +23,14 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
 import net.daporkchop.toobeetooteebot.config.Config;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
+import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
 import net.daporkchop.toobeetooteebot.server.handler.outgoing.LoginSuccessOutgoingHandler;
+import net.daporkchop.toobeetooteebot.server.handler.postoutgoing.JoinGamePostHandler;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,10 +54,13 @@ public interface Constants {
             .registerInbound(new ChatHandler())
             .registerInbound(new ChunkDataHandler())
             .registerInbound(new MultiBlockChangeHandler())
+            .registerInbound(new PlayerPosRotHandler())
             .registerInbound(new UnloadChunkHandler())
             .build();
 
-    HandlerRegistry<Session> SERVER_HANDLERS = new HandlerRegistry.Builder<>()
+    HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+            .registerInbound(new LoginStartHandler())
             .registerOutbound(new LoginSuccessOutgoingHandler())
+            .registerPostOutbound(new JoinGamePostHandler())
             .build();
 }

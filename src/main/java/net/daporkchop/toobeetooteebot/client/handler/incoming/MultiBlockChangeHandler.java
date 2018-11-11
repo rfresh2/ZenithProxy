@@ -18,7 +18,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMultiBlockChangePacket;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**

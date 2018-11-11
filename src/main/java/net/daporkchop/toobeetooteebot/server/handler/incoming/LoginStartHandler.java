@@ -14,28 +14,28 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.mc;
+package net.daporkchop.toobeetooteebot.server.handler.incoming;
 
-import com.github.steveice10.packetlib.Client;
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
+import com.google.gson.JsonElement;
+import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-@RequiredArgsConstructor
-@Getter
-public class PorkSessionFactory extends TcpSessionFactory {
-    @NonNull
-    private final Bot bot;
+public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, PorkServerConnection> {
+    @Override
+    public boolean apply(LoginStartPacket packet, PorkServerConnection session) {
+        if (CONFIG.getBoolean("server.extra.whitelist.enable") && !CONFIG.getList("server.extra.whitelist.allowedusers", JsonElement::getAsString).contains(packet.getUsername())) {
+            System.out.printf("User %s [%s] tried to connect!\n", packet.getUsername(), session.getRemoteAddress());
+            session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg", "get out of here you HECKING scrub"));
+        }
+        return false;
+    }
 
     @Override
-    public Session createClientSession(Client client) {
-        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.bot);
+    public Class<LoginStartPacket> getPacketClass() {
+        return LoginStartPacket.class;
     }
 }

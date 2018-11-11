@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.mc;
+package net.daporkchop.toobeetooteebot.client;
 
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;

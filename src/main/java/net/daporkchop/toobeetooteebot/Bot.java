@@ -37,7 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.http.SimpleHTTP;
 import net.daporkchop.toobeetooteebot.mc.MinecraftProtocolWrapper;
-import net.daporkchop.toobeetooteebot.mc.PorkClientSession;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.Constants;

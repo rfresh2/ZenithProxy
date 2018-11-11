@@ -16,7 +16,6 @@
 
 package net.daporkchop.toobeetooteebot.server;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
@@ -24,20 +23,27 @@ import com.github.steveice10.packetlib.event.session.DisconnectingEvent;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSendingEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
+import com.github.steveice10.packetlib.event.session.SessionAdapter;
+import com.github.steveice10.packetlib.event.session.SessionEvent;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.github.steveice10.packetlib.packet.PacketProtocol;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
+import java.net.SocketAddress;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author DaPorkchop_
  */
 @RequiredArgsConstructor
 @Getter
-public class PorkServerConnection implements SessionListener, Constants {
+public class PorkServerConnection implements Session, SessionListener, Constants {
     @NonNull
     private final Bot bot;
 
@@ -46,7 +52,8 @@ public class PorkServerConnection implements SessionListener, Constants {
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
-        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this.session)) {
+        System.out.printf("Received %s\n", event.getPacket().getClass().getCanonicalName());
+        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this)) {
             this.bot.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
@@ -54,25 +61,24 @@ public class PorkServerConnection implements SessionListener, Constants {
     @Override
     public void packetSending(PacketSendingEvent event) {
         Packet p1 = event.getPacket();
-        Packet p2 = SERVER_HANDLERS.handleOutgoing(p1, this.session);
+        Packet p2 = SERVER_HANDLERS.handleOutgoing(p1, this);
         if (p2 == null) {
             event.setCancelled(true);
-        } else if (p1 != p2)    {
+        } else if (p1 != p2) {
             event.setPacket(p2);
         }
     }
 
     @Override
     public void packetSent(PacketSentEvent event) {
+        System.out.printf("Sent %s\n", event.getPacket().getClass().getCanonicalName());
+        SERVER_HANDLERS.handlePostOutgoing(event.getPacket(), this);
     }
 
     @Override
     public void connected(ConnectedEvent event) {
         this.bot.getServerConnections().add(this);
-        System.out.printf("Client connected: %s\n", event.getSession().getRemoteAddress());//.toString());
-
-        //send cached data
-        CACHE.getChunks().values().stream().map(ServerChunkDataPacket::new).forEach(this.session::send);
+        System.out.printf("Client connected: %s\n", this.session.getRemoteAddress());
     }
 
     @Override
@@ -84,7 +90,155 @@ public class PorkServerConnection implements SessionListener, Constants {
     public void disconnected(DisconnectedEvent event) {
     }
 
-    public void send(@NonNull Packet packet)    {
+    public void send(@NonNull Packet packet) {
         this.session.send(packet);
+    }
+
+    //
+    //
+    //
+    // SESSION METHOD IMPLEMENTATIONS
+    //
+    //
+    //
+
+    @Override
+    public void connect() {
+        this.session.connect();
+    }
+
+    @Override
+    public void connect(boolean wait) {
+        this.session.connect(wait);
+    }
+
+    @Override
+    public String getHost() {
+        return this.session.getHost();
+    }
+
+    @Override
+    public int getPort() {
+        return this.session.getPort();
+    }
+
+    @Override
+    public SocketAddress getLocalAddress() {
+        return this.session.getLocalAddress();
+    }
+
+    @Override
+    public SocketAddress getRemoteAddress() {
+        return this.session.getRemoteAddress();
+    }
+
+    @Override
+    public PacketProtocol getPacketProtocol() {
+        return this.session.getPacketProtocol();
+    }
+
+    @Override
+    public Map<String, Object> getFlags() {
+        return this.session.getFlags();
+    }
+
+    @Override
+    public boolean hasFlag(String key) {
+        return this.session.hasFlag(key);
+    }
+
+    @Override
+    public <T> T getFlag(String key) {
+        return this.session.getFlag(key);
+    }
+
+    @Override
+    public void setFlag(String key, Object value) {
+        this.session.setFlag(key, value);
+    }
+
+    @Override
+    public List<SessionListener> getListeners() {
+        return this.session.getListeners();
+    }
+
+    @Override
+    public void addListener(SessionListener listener) {
+        this.session.addListener(listener);
+    }
+
+    @Override
+    public void removeListener(SessionListener listener) {
+        this.session.removeListener(listener);
+    }
+
+    @Override
+    public void callEvent(SessionEvent event) {
+        this.session.callEvent(event);
+    }
+
+    @Override
+    public int getCompressionThreshold() {
+        return this.session.getCompressionThreshold();
+    }
+
+    @Override
+    public void setCompressionThreshold(int threshold) {
+        this.session.setCompressionThreshold(threshold);
+    }
+
+    @Override
+    public int getConnectTimeout() {
+        return this.session.getConnectTimeout();
+    }
+
+    @Override
+    public void setConnectTimeout(int timeout) {
+        this.session.setConnectTimeout(timeout);
+    }
+
+    @Override
+    public int getReadTimeout() {
+        return this.session.getReadTimeout();
+    }
+
+    @Override
+    public void setReadTimeout(int timeout) {
+        this.session.setReadTimeout(timeout);
+    }
+
+    @Override
+    public int getWriteTimeout() {
+        return this.session.getWriteTimeout();
+    }
+
+    @Override
+    public void setWriteTimeout(int timeout) {
+        this.session.setWriteTimeout(timeout);
+    }
+
+    @Override
+    public boolean isConnected() {
+        return this.session.isConnected();
+    }
+
+    @Override
+    public void disconnect(String reason) {
+        this.session.disconnect(reason);
+    }
+
+    @Override
+    public void disconnect(String reason, boolean wait) {
+        this.session.disconnect(reason, wait);
+    }
+
+    @Override
+    public void disconnect(String reason, Throwable cause) {
+        this.session.disconnect(reason, cause);
+    }
+
+    @Override
+    public void disconnect(String reason, Throwable cause, boolean wait) {
+        this.session.disconnect(reason, cause, wait);
     }
 }
