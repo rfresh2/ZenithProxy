@@ -14,29 +14,49 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client.handler.incoming;
+package net.daporkchop.toobeetooteebot.util.cache.data.bossbar;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
-import net.daporkchop.toobeetooteebot.client.PorkClientSession;
-import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+import com.github.steveice10.mc.protocol.data.game.BossBarAction;
+import com.github.steveice10.mc.protocol.data.game.BossBarColor;
+import com.github.steveice10.mc.protocol.data.game.BossBarDivision;
+import com.github.steveice10.mc.protocol.data.message.Message;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 /**
  * @author DaPorkchop_
  */
-public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
-    @Override
-    public boolean apply(ServerRespawnPacket packet, PorkClientSession session) {
-        CACHE.reset(false);
-        CACHE.getPlayerCache()
-                .setDimension(packet.getDimension())
-                .setGameMode(packet.getGameMode())
-                .setWorldType(packet.getWorldType())
-                .setDifficulty(packet.getDifficulty());
-        return true;
-    }
+@Getter
+@Setter
+@Accessors(chain = true)
+@RequiredArgsConstructor
+public class BossBar {
+    @NonNull
+    private final UUID uuid;
 
-    @Override
-    public Class<ServerRespawnPacket> getPacketClass() {
-        return ServerRespawnPacket.class;
+    private Message title;
+    private float health;
+    private BossBarColor color;
+    private BossBarDivision division;
+    private boolean darkenSky;
+    private boolean dragonBar;
+
+    public ServerBossBarPacket toMCProtocolLibPacket()  {
+        return new ServerBossBarPacket(
+                this.uuid,
+                BossBarAction.ADD,
+                this.title,
+                this.health,
+                this.color,
+                this.division,
+                this.darkenSky,
+                this.dragonBar
+        );
     }
 }

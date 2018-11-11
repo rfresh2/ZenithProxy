@@ -16,27 +16,30 @@
 
 package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
+public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJoinGamePacket, PorkClientSession> {
     @Override
-    public boolean apply(ServerRespawnPacket packet, PorkClientSession session) {
-        CACHE.reset(false);
+    public boolean apply(ServerJoinGamePacket packet, PorkClientSession session) {
         CACHE.getPlayerCache()
+                .setEntityId(packet.getEntityId())
                 .setDimension(packet.getDimension())
-                .setGameMode(packet.getGameMode())
                 .setWorldType(packet.getWorldType())
-                .setDifficulty(packet.getDifficulty());
-        return true;
+                .setGameMode(packet.getGameMode())
+                .setDifficulty(packet.getDifficulty())
+                .setHardcore(packet.getHardcore())
+                .setMaxPlayers(packet.getMaxPlayers())
+                .setReducedDebugInfo(packet.getReducedDebugInfo());
+        return false;
     }
 
     @Override
-    public Class<ServerRespawnPacket> getPacketClass() {
-        return ServerRespawnPacket.class;
+    public Class<ServerJoinGamePacket> getPacketClass() {
+        return ServerJoinGamePacket.class;
     }
 }

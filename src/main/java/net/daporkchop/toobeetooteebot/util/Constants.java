@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.DisconnectHandler;
@@ -57,6 +58,7 @@ public interface Constants {
 
     HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .registerInbound(new BlockChangeHandler())
+            .registerInbound(new BossBarHandler())
             .registerInbound(new ChatHandler())
             .registerInbound(new ChunkDataHandler())
             .registerInbound(new DisconnectHandler())

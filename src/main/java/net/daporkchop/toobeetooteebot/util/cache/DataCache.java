@@ -19,8 +19,9 @@ package net.daporkchop.toobeetooteebot.util.cache;
 import lombok.Getter;
 import net.daporkchop.toobeetooteebot.util.Constants;
 import net.daporkchop.toobeetooteebot.util.cache.data.ChunkCache;
-import net.daporkchop.toobeetooteebot.util.cache.data.PlayerPosCache;
+import net.daporkchop.toobeetooteebot.util.cache.data.PlayerCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.ServerProfileCache;
+import net.daporkchop.toobeetooteebot.util.cache.data.bossbar.BossBarCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabListCache;
 
 import java.lang.reflect.Field;
@@ -60,7 +61,8 @@ public class DataCache implements Constants {
 
     private final ChunkCache chunkCache = new ChunkCache();
     private final TabListCache tabListCache = new TabListCache();
-    private final PlayerPosCache posCache = new PlayerPosCache(); //TODO: remove and cache player as entity
+    private final BossBarCache bossBarCache = new BossBarCache();
+    private final PlayerCache playerCache = new PlayerCache(); //TODO: remove and cache player as entity
     private final ServerProfileCache profileCache = new ServerProfileCache();
 
     public Collection<CachedData> getAllData() {

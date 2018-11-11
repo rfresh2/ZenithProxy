@@ -16,27 +16,47 @@
 
 package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+
+import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
+public class BossBarHandler implements HandlerRegistry.IncomingHandler<ServerBossBarPacket, PorkClientSession> {
     @Override
-    public boolean apply(ServerRespawnPacket packet, PorkClientSession session) {
-        CACHE.reset(false);
-        CACHE.getPlayerCache()
-                .setDimension(packet.getDimension())
-                .setGameMode(packet.getGameMode())
-                .setWorldType(packet.getWorldType())
-                .setDifficulty(packet.getDifficulty());
+    public boolean apply(ServerBossBarPacket pck, PorkClientSession session) {
+        Consumer<ServerBossBarPacket> consumer = packet -> {
+            throw new IllegalStateException();
+        };
+        switch (pck.getAction())    {
+            case ADD:
+                consumer = CACHE.getBossBarCache()::add;
+                break;
+            case REMOVE:
+                consumer = CACHE.getBossBarCache()::remove;
+                break;
+            case UPDATE_HEALTH:
+                consumer = packet -> CACHE.getBossBarCache().get(packet).setHealth(packet.getHealth());
+                break;
+            case UPDATE_TITLE:
+                consumer = packet -> CACHE.getBossBarCache().get(packet).setTitle(packet.getTitle());
+                break;
+            case UPDATE_STYLE:
+                consumer = packet -> CACHE.getBossBarCache().get(packet).setColor(packet.getColor()).setDivision(packet.getDivision());
+                break;
+            case UPDATE_FLAGS:
+                consumer = packet -> CACHE.getBossBarCache().get(packet).setDarkenSky(packet.getDarkenSky()).setDragonBar(packet.isDragonBar());
+                break;
+        }
+        consumer.accept(pck);
         return true;
     }
 
     @Override
-    public Class<ServerRespawnPacket> getPacketClass() {
-        return ServerRespawnPacket.class;
+    public Class<ServerBossBarPacket> getPacketClass() {
+        return ServerBossBarPacket.class;
     }
 }

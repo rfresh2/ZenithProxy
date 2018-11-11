@@ -22,10 +22,7 @@ import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
-import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
-import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.data.message.TextMessage;
 import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
@@ -152,7 +149,7 @@ public class Bot implements Constants {
                     AtomicInteger i = new AtomicInteger(0);
                     System.out.printf("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), CONFIG.getInt("client.extra.spammer.delaySeconds"));
                     modules.add(() -> {
-                        if ((i.getAndIncrement() >> 1) == CONFIG.getInt("client.extra.spammer.delaySeconds"))   {
+                        if ((i.getAndIncrement() >> 1) == CONFIG.getInt("client.extra.spammer.delaySeconds")) {
                             i.set(0);
                             this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
                         }
@@ -242,20 +239,24 @@ public class Bot implements Constants {
                         new PlayerInfo(
                                 CONFIG.getInt("server.ping.maxplayers", Integer.MAX_VALUE),
                                 this.serverConnections.stream().filter(con -> ((MinecraftProtocol) con.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME).collect(Collectors.toList()).size(),
-                                new GameProfile[0]
-                        ), //TODO
+                                this.serverConnections.stream()
+                                        .map(con -> (MinecraftProtocol) con.getSession().getPacketProtocol())
+                                        .filter(p -> p.getSubProtocol() == SubProtocol.GAME)
+                                        .map(MinecraftProtocol::getProfile)
+                                        .toArray(GameProfile[]::new)
+                        ),
                         new TextMessage(String.format(CONFIG.getString("server.ping.motd", "\u00A7c%s"), this.protocol.getProfile().getName())),
                         this.serverIcon
                 ));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> session.send(new ServerJoinGamePacket(
-                        0, //TODO
-                        false,
-                        GameMode.SURVIVAL,
-                        0,
-                        Difficulty.NORMAL,
-                        Integer.MAX_VALUE,
-                        WorldType.DEFAULT,
-                        false
+                        CACHE.getPlayerCache().getEntityId(),
+                        CACHE.getPlayerCache().isHardcore(),
+                        CACHE.getPlayerCache().getGameMode(),
+                        CACHE.getPlayerCache().getDimension(),
+                        CACHE.getPlayerCache().getDifficulty(),
+                        CACHE.getPlayerCache().getMaxPlayers(),
+                        CACHE.getPlayerCache().getWorldType(),
+                        CACHE.getPlayerCache().isReducedDebugInfo()
                 )));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.getInt("server.compressionThreshold", 256));
                 this.server.addListener(new PorkServerListener(this));
