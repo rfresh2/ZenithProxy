@@ -14,13 +14,10 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data;
+package net.daporkchop.toobeetooteebot.util.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 
 import java.util.Map;
@@ -30,37 +27,33 @@ import java.util.function.Consumer;
 /**
  * @author DaPorkchop_
  */
-public class ChunkCache implements CachedData {
-    private final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
-
-    public void add(@NonNull Column column) {
-        if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {
-            throw new IllegalStateException(String.format("Chunk (%d,%d) is already cached! (this is probably a server issue)", column.getX(), column.getZ()));
-        }
-    }
-
-    public Column get(int x, int z)   {
-        return this.cache.get(new Vec2i(x, z));
-    }
-
-    public void remove(int x, int z)    {
-        if (this.cache.remove(new Vec2i(x, z)) == null) {
-            throw new IllegalStateException(String.format("Could not remove column (%d,%d)! this is probably a server issue", x, z));
-        }
-    }
+public class EntityCache implements CachedData {
+    private final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive so i can get streams
 
     @Override
     public void getPacketsSimple(Consumer<Packet> consumer) {
-        this.cache.values().stream().map(ServerChunkDataPacket::new).forEach(consumer);
+        this.cachedEntities.values().stream().map(Entity::getPacket).forEach(consumer);
     }
 
     @Override
     public void reset(boolean full) {
-        this.cache.clear();
+        this.cachedEntities.clear();
     }
 
     @Override
     public String getSendingMessage() {
-        return String.format("Sending %d chunks", this.cache.size());
+        return String.format("Sending %d entities", this.cachedEntities.size());
+    }
+
+    public void add(@NonNull Entity entity) {
+        this.cachedEntities.put(entity.getEntityId(), entity);
+    }
+
+    public void remove(int id)  {
+        this.cachedEntities.remove(id);
+    }
+
+    public Entity get(int id)   {
+        return this.cachedEntities.get(id);
     }
 }

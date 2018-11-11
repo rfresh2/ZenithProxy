@@ -22,6 +22,7 @@ import net.daporkchop.toobeetooteebot.util.cache.data.ChunkCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.PlayerCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.ServerProfileCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.bossbar.BossBarCache;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabListCache;
 
 import java.lang.reflect.Field;
@@ -62,6 +63,7 @@ public class DataCache implements Constants {
     private final ChunkCache chunkCache = new ChunkCache();
     private final TabListCache tabListCache = new TabListCache();
     private final BossBarCache bossBarCache = new BossBarCache();
+    private final EntityCache entityCache = new EntityCache();
     private final PlayerCache playerCache = new PlayerCache(); //TODO: remove and cache player as entity
     private final ServerProfileCache profileCache = new ServerProfileCache();
 

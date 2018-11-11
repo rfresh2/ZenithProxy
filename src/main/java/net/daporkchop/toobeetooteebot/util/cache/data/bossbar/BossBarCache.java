@@ -34,7 +34,7 @@ public class BossBarCache implements CachedData {
 
     @Override
     public void getPacketsSimple(Consumer<Packet> consumer) {
-        this.cachedBossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer::accept);
+        this.cachedBossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer);
     }
 
     @Override

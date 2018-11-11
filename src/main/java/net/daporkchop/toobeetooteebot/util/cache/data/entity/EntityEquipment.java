@@ -14,53 +14,50 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data;
+package net.daporkchop.toobeetooteebot.util.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEffectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
-import net.daporkchop.toobeetooteebot.util.cache.CachedData;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-public class ChunkCache implements CachedData {
-    private final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
+@Getter
+@Setter
+@Accessors(chain = true)
+public abstract class EntityEquipment extends Entity {
+    protected ArrayList<PotionEffect> potionEffects = new ArrayList<>();
+    protected Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
+    protected int health;
 
-    public void add(@NonNull Column column) {
-        if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {
-            throw new IllegalStateException(String.format("Chunk (%d,%d) is already cached! (this is probably a server issue)", column.getX(), column.getZ()));
-        }
-    }
-
-    public Column get(int x, int z)   {
-        return this.cache.get(new Vec2i(x, z));
-    }
-
-    public void remove(int x, int z)    {
-        if (this.cache.remove(new Vec2i(x, z)) == null) {
-            throw new IllegalStateException(String.format("Could not remove column (%d,%d)! this is probably a server issue", x, z));
+    {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            this.equipment.put(slot, null);
         }
     }
 
     @Override
-    public void getPacketsSimple(Consumer<Packet> consumer) {
-        this.cache.values().stream().map(ServerChunkDataPacket::new).forEach(consumer);
-    }
-
-    @Override
-    public void reset(boolean full) {
-        this.cache.clear();
-    }
-
-    @Override
-    public String getSendingMessage() {
-        return String.format("Sending %d chunks", this.cache.size());
+    public void addPackets(Consumer<Packet> consumer) {
+        this.potionEffects.forEach(effect -> consumer.accept(new ServerEntityEffectPacket(
+                this.entityId,
+                effect.effect,
+                effect.amplifier,
+                effect.duration,
+                effect.ambient,
+                effect.showParticles
+        )));
+        this.equipment.forEach((slot, stack) -> consumer.accept(new ServerEntityEquipmentPacket(this.entityId, slot, stack)));
+        super.addPackets(consumer);
     }
 }
