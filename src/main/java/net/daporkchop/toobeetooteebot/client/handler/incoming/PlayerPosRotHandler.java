@@ -26,9 +26,12 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<ServerPlayerPositionRotationPacket, PorkClientSession> {
     @Override
     public boolean apply(ServerPlayerPositionRotationPacket packet, PorkClientSession session) {
-        CACHE.getPlayerPos().setX(packet.getX());
-        CACHE.getPlayerPos().setY(packet.getY());
-        CACHE.getPlayerPos().setZ(packet.getZ());
+        CACHE.getPosCache()
+                .setX(packet.getX())
+                .setY(packet.getY())
+                .setZ(packet.getZ())
+                .setYaw(packet.getYaw())
+                .setPitch(packet.getPitch());
         return true;
     }
 

@@ -27,7 +27,7 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class ChunkDataHandler implements HandlerRegistry.IncomingHandler<ServerChunkDataPacket, PorkClientSession> {
     @Override
     public boolean apply(ServerChunkDataPacket packet, PorkClientSession session) {
-        CACHE.getChunks().put(new Vec2i(packet.getColumn().getX(), packet.getColumn().getZ()), packet.getColumn());
+        CACHE.getChunkCache().add(packet.getColumn());
         return true;
     }
 

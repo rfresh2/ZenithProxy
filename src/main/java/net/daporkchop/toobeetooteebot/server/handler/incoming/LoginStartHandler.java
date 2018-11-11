@@ -17,19 +17,38 @@
 package net.daporkchop.toobeetooteebot.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+
+import java.util.List;
 
 /**
  * @author DaPorkchop_
  */
 public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, PorkServerConnection> {
+    //TODO: better way of doing this?
+    static {
+        //this just adds the default values to the config
+
+        CONFIG.getBoolean("server.extra.whitelist.enable");
+        JsonArray def = new JsonArray();
+        def.add(new JsonPrimitive("DaPorkchop_"));
+        //def.add(new JsonPrimitive("069a79f4-44e9-4726-a5be-fca90e38aaf5")); //TODO: support UUIDs in whitelist
+        CONFIG.getArray("server.extra.whitelist.allowedusers", def);
+        CONFIG.getString("server.extra.whitelist.kickmsg", "get out of here you HECKING scrub");
+    }
+
     @Override
     public boolean apply(LoginStartPacket packet, PorkServerConnection session) {
-        if (CONFIG.getBoolean("server.extra.whitelist.enable") && !CONFIG.getList("server.extra.whitelist.allowedusers", JsonElement::getAsString).contains(packet.getUsername())) {
-            System.out.printf("User %s [%s] tried to connect!\n", packet.getUsername(), session.getRemoteAddress());
-            session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg", "get out of here you HECKING scrub"));
+        if (CONFIG.getBoolean("server.extra.whitelist.enable")) {
+            List<String> whitelist = CONFIG.getList("server.extra.whitelist.enable", JsonElement::getAsString);
+            if (!whitelist.contains(packet.getUsername())) {
+                System.out.printf("User %s [%s] tried to connect!\n", packet.getUsername(), session.getRemoteAddress());
+                session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg"));
+            }
         }
         return false;
     }

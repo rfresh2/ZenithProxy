@@ -14,38 +14,53 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util;
+package net.daporkchop.toobeetooteebot.util.cache.data;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import lombok.Getter;
-import net.daporkchop.lib.math.vector.d.Vec3dM;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.packetlib.packet.Packet;
+import lombok.NonNull;
 import net.daporkchop.lib.math.vector.i.Vec2i;
+import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-@Getter
-public class DataCache implements Constants {
-    private final Map<Vec2i, Column> chunks = new ConcurrentHashMap<>();
-    private final Vec3dM playerPos = new Vec3dM(0.0d, 0.0d, 0.0d);
+public class ChunkCache implements CachedData {
+    private final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
 
-    public boolean reset() {
-        System.out.println("Clearing cache...");
-
-        try {
-            this.chunks.clear();
-
-            this.playerPos.setX(0.0d);
-            this.playerPos.setY(0.0d);
-            this.playerPos.setZ(0.0d);
-
-            System.out.println("Cache cleared.");
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to clear cache", e);
+    public void add(@NonNull Column column) {
+        if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {
+            throw new IllegalStateException(String.format("Chunk (%d,%d) is already cached! (this is probably a server issue)", column.getX(), column.getZ()));
         }
-        return true;
+    }
+
+    public Column get(int x, int z)   {
+        return this.cache.get(new Vec2i(x, z));
+    }
+
+    public void remove(int x, int z)    {
+        if (this.cache.remove(new Vec2i(x, z)) == null) {
+            throw new IllegalStateException(String.format("Could not remove column (%d,%d)! this is probably a server issue", x, z));
+        }
+    }
+
+    @Override
+    public void getPacketsSimple(Consumer<Packet> consumer) {
+        this.cache.values().stream().map(ServerChunkDataPacket::new).forEach(consumer::accept);
+    }
+
+    @Override
+    public void reset() {
+        this.cache.clear();
+    }
+
+    @Override
+    public String getSendingMessage() {
+        return String.format("Sending %d chunks!", this.cache.size());
     }
 }

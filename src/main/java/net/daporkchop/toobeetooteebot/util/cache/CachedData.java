@@ -14,37 +14,33 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client.handler.incoming;
+package net.daporkchop.toobeetooteebot.util.cache;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
+import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
-import net.daporkchop.toobeetooteebot.client.PorkClientSession;
-import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerBlockChangePacket, PorkClientSession> {
-    @Override
-    public boolean apply(ServerBlockChangePacket packet, PorkClientSession session) {
-        handleChange(packet.getRecord());
-        return true;
+public interface CachedData {
+    ThreadLocal<Collection<Packet>> ZZZ_collection_cache = ThreadLocal.withInitial(ArrayDeque::new);
+
+    default Collection<Packet> getPackets() {
+        Collection<Packet> collection = ZZZ_collection_cache.get();
+        collection.clear();
+        this.getPacketsSimple(collection::add);
+        return collection;
     }
 
-    @Override
-    public Class<ServerBlockChangePacket> getPacketClass() {
-        return ServerBlockChangePacket.class;
-    }
+    void getPacketsSimple(@NonNull Consumer<Packet> consumer);
 
-    static void handleChange(@NonNull BlockChangeRecord record) {
-        Position pos = record.getPosition();
-        Column column = CACHE.getChunkCache().get(pos.getX() >> 4, pos.getZ() >> 4);
-        Chunk chunk = column.getChunks()[pos.getY() >> 4];
-        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+    void reset();
+
+    default String getSendingMessage()  {
+        return null;
     }
 }

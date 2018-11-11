@@ -33,7 +33,11 @@ import java.util.function.BiFunction;
  * @author DaPorkchop_
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class HandlerRegistry<S extends Session> {
+public class HandlerRegistry<S extends Session> implements Constants {
+    private static final boolean DEBUG_INBOUND_PACKETS = CONFIG.getBoolean("debug.packet.received");
+    private static final boolean DEBUG_OUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.preSent");
+    private static final boolean DEBUG_POSTOUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.postSent");
+
     @NonNull
     private final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers;
 
@@ -45,18 +49,27 @@ public class HandlerRegistry<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
+        if (DEBUG_INBOUND_PACKETS)  {
+            System.out.printf("Received packet: %s\n", packet.getClass().getCanonicalName());
+        }
         ObjectObjectBooleanBiFunction<P, S> handler = (ObjectObjectBooleanBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
     }
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
+        if (DEBUG_OUTBOUND_PACKETS)  {
+            System.out.printf("About to send packet: %s\n", packet.getClass().getCanonicalName());
+        }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
     }
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
+        if (DEBUG_POSTOUTBOUND_PACKETS)  {
+            System.out.printf("Sent packet: %s\n", packet.getClass().getCanonicalName());
+        }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (handler != null) {
             handler.accept(packet, session);

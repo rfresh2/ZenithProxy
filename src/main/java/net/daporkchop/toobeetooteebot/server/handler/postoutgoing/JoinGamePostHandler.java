@@ -35,18 +35,27 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
         session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
 
         //send cached data
-        System.out.printf("Sending %d chunks...\n", CACHE.getChunks().size());
-        CACHE.getChunks().values().stream().map(ServerChunkDataPacket::new).forEach(session::send);
+        CACHE.getAllData().forEach(data -> {
+            if (CONFIG.getBoolean("debug.server.cachesendingmessages", true)) {
+                String msg = data.getSendingMessage();
+                if (msg == null)    {
+                    System.out.printf("Sending data for %s\n", data.getClass().getCanonicalName());
+                } else {
+                    System.out.println(msg);
+                }
+            }
+            data.getPackets().forEach(session::send);
+        });
 
         //this packet spawns the player
-        session.send(new ServerPlayerPositionRotationPacket(
+        /*session.send(new ServerPlayerPositionRotationPacket(
                 CACHE.getPlayerPos().getX(),
                 CACHE.getPlayerPos().getY(),
                 CACHE.getPlayerPos().getZ(),
                 0.0f,
                 0.0f,
                 ThreadLocalRandom.current().nextInt(16, 1024)
-        ));
+        ));*/
     }
 
     @Override

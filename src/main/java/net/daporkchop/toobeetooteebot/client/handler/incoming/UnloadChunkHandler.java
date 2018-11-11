@@ -27,7 +27,7 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class UnloadChunkHandler implements HandlerRegistry.IncomingHandler<ServerUnloadChunkPacket, PorkClientSession> {
     @Override
     public boolean apply(ServerUnloadChunkPacket packet, PorkClientSession session) {
-        CACHE.getChunks().remove(new Vec2i(packet.getX(), packet.getZ()));
+        CACHE.getChunkCache().remove(packet.getX(), packet.getZ());
         return true;
     }
 

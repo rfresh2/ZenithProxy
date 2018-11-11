@@ -14,37 +14,50 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client.handler.incoming;
+package net.daporkchop.toobeetooteebot.util.cache.data;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
-import net.daporkchop.toobeetooteebot.client.PorkClientSession;
-import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.packetlib.packet.Packet;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import net.daporkchop.toobeetooteebot.util.cache.CachedData;
+
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerBlockChangePacket, PorkClientSession> {
+@Getter
+@Setter
+@Accessors(chain = true)
+public class PlayerPosCache implements CachedData {
+    private volatile double x;
+    private volatile double y;
+    private volatile double z;
+    private volatile float yaw;
+    private volatile float pitch;
+
     @Override
-    public boolean apply(ServerBlockChangePacket packet, PorkClientSession session) {
-        handleChange(packet.getRecord());
-        return true;
+    public void getPacketsSimple(Consumer<Packet> consumer) {
+        consumer.accept(new ServerPlayerPositionRotationPacket(this.x, this.y, this.z, this.yaw, this.pitch, ThreadLocalRandom.current().nextInt(16, 1024)));
     }
 
     @Override
-    public Class<ServerBlockChangePacket> getPacketClass() {
-        return ServerBlockChangePacket.class;
+    public void reset() {
+        this.x = this.y = this.z = this.yaw = this.pitch = 0.0f;
     }
 
-    static void handleChange(@NonNull BlockChangeRecord record) {
-        Position pos = record.getPosition();
-        Column column = CACHE.getChunkCache().get(pos.getX() >> 4, pos.getZ() >> 4);
-        Chunk chunk = column.getChunks()[pos.getY() >> 4];
-        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+    @Override
+    public String getSendingMessage() {
+        return String.format(
+                "Sending player position: (x=%.2f, y=%.2f, z=%.2f, yaw=%.2f, pitch=%.2f)",
+                this.x,
+                this.y,
+                this.z,
+                this.yaw,
+                this.pitch
+        );
     }
 }

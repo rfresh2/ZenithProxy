@@ -50,10 +50,6 @@ public class ClientListener implements SessionListener, Constants {
             this.bot.getServerConnections().stream()
                     .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                     .forEach(c -> c.send(event.getPacket()));
-                    /*.forEach(c -> {
-                        System.out.printf("Forwarding %s to client\n", event.getPacket().getClass().getCanonicalName());
-                        c.send(event.getPacket());
-                    });*/
         }
     }
 
