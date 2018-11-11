@@ -14,26 +14,37 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.server.handler.outgoing;
+package net.daporkchop.toobeetooteebot.util.cache.data;
 
-import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
-import com.github.steveice10.packetlib.Session;
+import com.github.steveice10.mc.auth.data.GameProfile;
+import com.github.steveice10.packetlib.packet.Packet;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
-import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+import net.daporkchop.toobeetooteebot.util.cache.CachedData;
+
+import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
+@Getter
+@Setter
+@Accessors(chain = true)
+public class ServerProfileCache implements CachedData {
+    @NonNull
+    private GameProfile profile;
+
     @Override
-    public LoginSuccessPacket apply(LoginSuccessPacket packet, PorkServerConnection session) {
-        System.out.printf("User UUID: %s\nBot UUID: %s\n", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-        return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+    public void getPacketsSimple(Consumer<Packet> consumer) {
     }
 
     @Override
-    public Class<LoginSuccessPacket> getPacketClass() {
-        return LoginSuccessPacket.class;
+    public void reset(boolean full) {
+        if (full)   {
+            this.profile = null;
+        }
     }
 }

@@ -162,7 +162,7 @@ public class Bot implements Constants {
                     try {
                         while (true) {
                             Thread.sleep(500L);
-                            if (this.isConnected()) {
+                            if (this.isConnected() && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
                                 modules.forEach(Runnable::run);
                             }
                         }
@@ -293,6 +293,7 @@ public class Bot implements Constants {
                     }
                 }, "Server icon downloader thread").start();
             }
+            CACHE.getProfileCache().setProfile(this.protocol.getProfile());
             System.out.println("Successfully logged in.");
         }
     }

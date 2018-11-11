@@ -14,22 +14,20 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.server.handler.outgoing;
+package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
-import com.github.steveice10.packetlib.Session;
-import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
+public class LoginSuccessHandler implements HandlerRegistry.IncomingHandler<LoginSuccessPacket, PorkClientSession> {
     @Override
-    public LoginSuccessPacket apply(LoginSuccessPacket packet, PorkServerConnection session) {
-        System.out.printf("User UUID: %s\nBot UUID: %s\n", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-        return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+    public boolean apply(LoginSuccessPacket packet, PorkClientSession session) {
+        CACHE.getProfileCache().setProfile(packet.getProfile());
+        return false;
     }
 
     @Override
