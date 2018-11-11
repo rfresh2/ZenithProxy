@@ -22,8 +22,10 @@ import com.google.gson.JsonParser;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.DisconnectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.RespawnHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
@@ -56,8 +58,10 @@ public interface Constants {
             .registerInbound(new BlockChangeHandler())
             .registerInbound(new ChatHandler())
             .registerInbound(new ChunkDataHandler())
+            .registerInbound(new DisconnectHandler())
             .registerInbound(new MultiBlockChangeHandler())
             .registerInbound(new PlayerPosRotHandler())
+            .registerInbound(new RespawnHandler())
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())

@@ -14,44 +14,24 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data.tab;
+package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
-import com.github.steveice10.packetlib.packet.Packet;
-import lombok.Getter;
-import net.daporkchop.toobeetooteebot.util.cache.CachedData;
-
-import java.util.function.Consumer;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-@Getter
-public class TabListCache implements CachedData {
-    private TabList tabList = new TabList();
-
+public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
     @Override
-    public void getPacketsSimple(Consumer<Packet> consumer) {
-        consumer.accept(new ServerPlayerListDataPacket(this.tabList.getHeader(), this.tabList.getFooter()));
-        consumer.accept(new ServerPlayerListEntryPacket(
-                PlayerListEntryAction.ADD_PLAYER,
-                this.tabList.getEntries().stream().map(PlayerEntry::toMCProtocolLibEntry).toArray(PlayerListEntry[]::new)
-        ));
+    public boolean apply(ServerRespawnPacket packet, PorkClientSession session) {
+        CACHE.reset(false);
+        return true;
     }
 
     @Override
-    public void reset(boolean full) {
-        if (full)   {
-            this.tabList = new TabList();
-        }
-    }
-
-    @Override
-    public String getSendingMessage() {
-        return "Sending tab list";
+    public Class<ServerRespawnPacket> getPacketClass() {
+        return ServerRespawnPacket.class;
     }
 }

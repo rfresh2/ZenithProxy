@@ -55,7 +55,7 @@ public class ChunkCache implements CachedData {
     }
 
     @Override
-    public void reset() {
+    public void reset(boolean full) {
         this.cache.clear();
     }
 

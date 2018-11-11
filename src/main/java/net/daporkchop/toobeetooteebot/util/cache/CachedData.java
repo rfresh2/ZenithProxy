@@ -38,7 +38,7 @@ public interface CachedData {
 
     void getPacketsSimple(@NonNull Consumer<Packet> consumer);
 
-    void reset();
+    void reset(boolean full);
 
     default String getSendingMessage()  {
         return null;

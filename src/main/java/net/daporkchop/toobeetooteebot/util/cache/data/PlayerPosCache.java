@@ -45,8 +45,10 @@ public class PlayerPosCache implements CachedData {
     }
 
     @Override
-    public void reset() {
-        this.x = this.y = this.z = this.yaw = this.pitch = 0.0f;
+    public void reset(boolean full) {
+        if (full)   {
+            this.x = this.y = this.z = this.yaw = this.pitch = 0.0f;
+        }
     }
 
     @Override

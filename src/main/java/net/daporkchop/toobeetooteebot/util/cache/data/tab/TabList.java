@@ -25,8 +25,6 @@ import lombok.experimental.Accessors;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,8 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Accessors(chain = true)
 public class TabList implements Constants {
     private static final Message EMPTY = Message.fromString("{\"text\":\"\"}");
-    //private final Map<UUID, PlayerEntry> entries = new ConcurrentHashMap<>();
-    private final Map<UUID, PlayerEntry> entries = Collections.synchronizedMap(new Hashtable<>());
+    private final Map<UUID, PlayerEntry> entries = new ConcurrentHashMap<>();
     @NonNull
     private Message header = EMPTY;
     @NonNull
@@ -51,15 +48,15 @@ public class TabList implements Constants {
     }
 
     public void remove(@NonNull PlayerListEntry entry) {
-        if (this.entries.remove(entry.getProfile().getId()) == null && CONFIG.getBoolean("debug.server.cache.printunknownplayers"))   {
+        if (this.entries.remove(entry.getProfile().getId()) == null && CONFIG.getBoolean("debug.server.cache.printunknownplayers")) {
             System.out.printf("Could not remove player with UUID: %s\n", entry.getProfile().getId());
         }
     }
 
     public PlayerEntry get(@NonNull PlayerListEntry entry) {
         PlayerEntry e = this.entries.get(entry.getProfile().getId());
-        if (e == null)  {
-            if (CONFIG.getBoolean("debug.server.cache.unknownplayers"))    {
+        if (e == null) {
+            if (CONFIG.getBoolean("debug.server.cache.unknownplayers")) {
                 System.out.printf("Could not find player with UUID: %s\n", entry.getProfile().getId());
             }
             return new PlayerEntry("", entry.getProfile().getId());

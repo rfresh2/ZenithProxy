@@ -23,6 +23,7 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
+import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.data.message.TextMessage;
@@ -30,10 +31,16 @@ import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
 import com.github.steveice10.mc.protocol.data.status.VersionInfo;
 import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.SessionFactory;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.http.SimpleHTTP;
@@ -49,11 +56,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
+import java.util.ArrayDeque;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -95,6 +106,73 @@ public class Bot implements Constants {
                 commandReaderThread.setDaemon(true);
                 commandReaderThread.start();
             }
+            { //TODO: clean this up
+                Collection<Runnable> modules = new ArrayDeque<>();
+                if (CONFIG.getBoolean("client.extra.antiafk.enabled", true)) {
+                    System.out.println("Enabling AntiAFK");
+                    modules.add(() -> {
+                        if (CONFIG.getBoolean("client.extra.antiafk.runEvenIfClientsConnected") || this.serverConnections.isEmpty()) {
+                            boolean swingHand = CONFIG.getBoolean("client.extra.antiafk.actions.swingHand", true);
+                            boolean rotate = CONFIG.getBoolean("client.extra.antiafk.actions.rotate", true);
+
+                            int action = -1;
+                            if (swingHand && rotate) {
+                                action = ThreadLocalRandom.current().nextInt(2);
+                            } else if (swingHand) {
+                                action = 0;
+                            } else if (rotate) {
+                                action = 1;
+                            }
+                            switch (action) {
+                                case 0:
+                                    this.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+                                    break;
+                                case 1:
+                                    this.client.getSession().send(new ClientPlayerRotationPacket(
+                                            true,
+                                            -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat(),
+                                            -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat()
+                                    ));
+                                    break;
+                            }
+                        }
+                    });
+                }
+
+                { //populate default messages
+                    JsonArray def = new JsonArray();
+                    def.add(new JsonPrimitive("#TeamPepsi"));
+                    def.add(new JsonPrimitive("https://pepsi.team"));
+                    def.add(new JsonPrimitive("https://daporkchop.net"));
+                    CONFIG.getArray("client.extra.spammer.messages", def);
+                    CONFIG.getInt("client.extra.spammer.delaySeconds", 30);
+                }
+                if (CONFIG.getBoolean("client.extra.spammer.enabled")) {
+                    List<String> messages = CONFIG.getList("client.extra.spammer.messages", JsonElement::getAsString);
+                    AtomicInteger i = new AtomicInteger(0);
+                    System.out.printf("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), CONFIG.getInt("client.extra.spammer.delaySeconds"));
+                    modules.add(() -> {
+                        if ((i.getAndIncrement() >> 1) == CONFIG.getInt("client.extra.spammer.delaySeconds"))   {
+                            i.set(0);
+                            this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
+                        }
+                    });
+                }
+                Thread moduleRunnerThread = new Thread(() -> {
+                    try {
+                        while (true) {
+                            Thread.sleep(500L);
+                            if (this.isConnected()) {
+                                modules.forEach(Runnable::run);
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                moduleRunnerThread.setDaemon(true);
+                moduleRunnerThread.start();
+            }
 
             this.logIn();
             this.startServer();
@@ -105,8 +183,8 @@ public class Bot implements Constants {
                 CONFIG.save();
                 //wait for client to disconnect before starting again
                 System.out.printf("Disconnected. Reason: %s\n", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
-            } while (SHOULD_RECONNECT.get() && CACHE.reset() && this.delayBeforeReconnect());
-        } catch (Exception e)   {
+            } while (SHOULD_RECONNECT.get() && CACHE.reset(true) && this.delayBeforeReconnect());
+        } catch (Exception e) {
             System.out.println("Caught exception in main thread:");
             e.printStackTrace(System.out);
         } finally {

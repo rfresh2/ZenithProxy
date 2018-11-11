@@ -74,11 +74,11 @@ public class DataCache implements Constants {
         return collection;
     }
 
-    public boolean reset() {
+    public boolean reset(boolean full) {
         System.out.println("Clearing cache...");
 
         try {
-            this.getAllData().forEach(CachedData::reset);
+            this.getAllData().forEach(d -> d.reset(full));
 
             System.out.println("Cache cleared.");
         } catch (Exception e) {
