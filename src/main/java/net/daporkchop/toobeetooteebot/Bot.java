@@ -21,6 +21,7 @@ import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
@@ -36,10 +37,10 @@ import com.github.steveice10.packetlib.SessionFactory;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.http.SimpleHTTP;
-import net.daporkchop.toobeetooteebot.mc.MinecraftProtocolWrapper;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
+import net.daporkchop.toobeetooteebot.server.PorkServerListener;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import javax.imageio.ImageIO;
@@ -53,6 +54,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author DaPorkchop_
@@ -144,12 +146,16 @@ public class Bot implements Constants {
                 int port = CONFIG.getInt("server.bind.port", 25565);
 
                 System.out.printf("Starting server on %s:%d...\n", address, port);
-                this.server = new Server(address, port, MinecraftProtocolWrapper.class, this.sessionFactory);
+                this.server = new Server(address, port, MinecraftProtocol.class, this.sessionFactory);
                 this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.getBoolean("server.verifyusers"));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
                         new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
-                        new PlayerInfo(CONFIG.getInt("server.ping.maxplayers", Integer.MAX_VALUE), 0, new GameProfile[0]), //TODO
+                        new PlayerInfo(
+                                CONFIG.getInt("server.ping.maxplayers", Integer.MAX_VALUE),
+                                this.serverConnections.stream().filter(con -> ((MinecraftProtocol) con.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME).collect(Collectors.toList()).size(),
+                                new GameProfile[0]
+                        ), //TODO
                         new TextMessage(String.format(CONFIG.getString("server.ping.motd", "\u00A7c%s"), this.protocol.getProfile().getName())),
                         this.serverIcon
                 ));
@@ -164,6 +170,7 @@ public class Bot implements Constants {
                         false
                 )));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.getInt("server.compressionThreshold", 256));
+                this.server.addListener(new PorkServerListener(this));
                 this.server.bind(false);
             }
         }
@@ -174,10 +181,9 @@ public class Bot implements Constants {
             System.out.println("Logging in...");
             if (CONFIG.getBoolean("authentication.doAuthentication")) {
                 try {
-                    this.protocol = new MinecraftProtocolWrapper(
+                    this.protocol = new MinecraftProtocol(
                             CONFIG.getString("authentication.username", "john.doe@example.com"),
-                            CONFIG.getString("authentication.password", "hackme"),
-                            this
+                            CONFIG.getString("authentication.password", "hackme")
                     );
                 } catch (RequestException e) {
                     throw new RuntimeException(String.format(
@@ -186,7 +192,7 @@ public class Bot implements Constants {
                             CONFIG.getString("authentication.password")), e);
                 }
             } else {
-                this.protocol = new MinecraftProtocolWrapper(CONFIG.getString("authentication.username", "Steve"), this);
+                this.protocol = new MinecraftProtocol(CONFIG.getString("authentication.username", "Steve"));
                 CONFIG.getString("authentication.password", "hackme"); //add password field to config by default
             }
             if (CONFIG.getBoolean("server.enable") && CONFIG.getBoolean("server.ping.favicon", true)) {

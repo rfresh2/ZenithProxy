@@ -16,6 +16,8 @@
 
 package net.daporkchop.toobeetooteebot.server;
 
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
@@ -23,7 +25,6 @@ import com.github.steveice10.packetlib.event.session.DisconnectingEvent;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSendingEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
-import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import com.github.steveice10.packetlib.event.session.SessionEvent;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -52,8 +53,9 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
-        System.out.printf("Received %s\n", event.getPacket().getClass().getCanonicalName());
-        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this)) {
+        //System.out.printf("Received %s\n", event.getPacket().getClass().getCanonicalName());
+        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+            //System.out.printf("Forwarding %s to remote server\n", event.getPacket().getClass().getCanonicalName());
             this.bot.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
@@ -71,19 +73,19 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void packetSent(PacketSentEvent event) {
-        System.out.printf("Sent %s\n", event.getPacket().getClass().getCanonicalName());
+        //System.out.printf("Sent %s\n", event.getPacket().getClass().getCanonicalName());
         SERVER_HANDLERS.handlePostOutgoing(event.getPacket(), this);
     }
 
     @Override
     public void connected(ConnectedEvent event) {
-        this.bot.getServerConnections().add(this);
-        System.out.printf("Client connected: %s\n", this.session.getRemoteAddress());
+        //this.bot.getServerConnections().add(this);
+        //System.out.printf("Client connected: %s\n", this.session.getRemoteAddress());
     }
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
-        this.bot.getServerConnections().remove(this);
+        //this.bot.getServerConnections().remove(this);
     }
 
     @Override
