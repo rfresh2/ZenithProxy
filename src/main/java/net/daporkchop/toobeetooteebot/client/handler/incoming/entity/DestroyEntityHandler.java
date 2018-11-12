@@ -14,47 +14,26 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data.entity;
+package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.packetlib.packet.Packet;
-import lombok.NonNull;
-import net.daporkchop.toobeetooteebot.util.cache.CachedData;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-public class EntityCache implements CachedData {
-    private final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive so i can get streams
-
+public class DestroyEntityHandler implements HandlerRegistry.IncomingHandler<ServerEntityDestroyPacket, PorkClientSession> {
     @Override
-    public void getPacketsSimple(Consumer<Packet> consumer) {
-        this.cachedEntities.values().forEach(entity -> entity.addPackets(consumer));
-    }
-
-    @Override
-    public void reset(boolean full) {
-        this.cachedEntities.clear();
+    public boolean apply(ServerEntityDestroyPacket packet, PorkClientSession session) {
+        for (int id : packet.getEntityIds())    {
+            CACHE.getEntityCache().remove(id);
+        }
+        return true;
     }
 
     @Override
-    public String getSendingMessage() {
-        return String.format("Sending %d entities", this.cachedEntities.size());
-    }
-
-    public void add(@NonNull Entity entity) {
-        this.cachedEntities.put(entity.getEntityId(), entity);
-    }
-
-    public void remove(int id)  {
-        this.cachedEntities.remove(id);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <E extends Entity> E get(int id)   {
-        return (E) this.cachedEntities.get(id);
+    public Class<ServerEntityDestroyPacket> getPacketClass() {
+        return ServerEntityDestroyPacket.class;
     }
 }

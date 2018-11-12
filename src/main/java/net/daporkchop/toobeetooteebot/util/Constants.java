@@ -31,6 +31,9 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.RespawnHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.DestroyEntityHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityEquipmentHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.SpawnMobHandler;
 import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
@@ -69,6 +72,10 @@ public interface Constants {
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())
+            //ENTITY HANDLERS
+            .registerInbound(new DestroyEntityHandler())
+            .registerInbound(new EntityEquipmentHandler())
+            .registerInbound(new SpawnMobHandler())
             .build();
 
     HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
