@@ -40,6 +40,9 @@ import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
+import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerPositionHandler;
+import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerPositionRotationHandler;
+import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerRotationHandler;
 import net.daporkchop.toobeetooteebot.server.handler.outgoing.LoginSuccessOutgoingHandler;
 import net.daporkchop.toobeetooteebot.server.handler.postoutgoing.JoinGamePostHandler;
 import net.daporkchop.toobeetooteebot.util.cache.DataCache;
@@ -62,6 +65,9 @@ public interface Constants extends Logging {
     AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
 
     HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+            //
+            // Inbound packets
+            //
             .registerInbound(new BlockChangeHandler())
             .registerInbound(new BossBarHandler())
             .registerInbound(new ChatHandler())
@@ -75,15 +81,28 @@ public interface Constants extends Logging {
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())
-            //ENTITY HANDLERS
+            //ENTITY
             .registerInbound(new DestroyEntityHandler())
             .registerInbound(new EntityEquipmentHandler())
             .registerInbound(new SpawnMobHandler())
             .build();
 
     HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+            //
+            // Inbound packets
+            //
             .registerInbound(new LoginStartHandler())
+            //PLAYER MOVEMENT
+            .registerInbound(new PlayerPositionHandler())
+            .registerInbound(new PlayerPositionRotationHandler())
+            .registerInbound(new PlayerRotationHandler())
+            //
+            // Outbound packets
+            //
             .registerOutbound(new LoginSuccessOutgoingHandler())
+            //
+            // Post-outbound packets
+            //
             .registerPostOutbound(new JoinGamePostHandler())
             .build();
 }
