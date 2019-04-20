@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -24,6 +24,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.DisconnectHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.JoinGameHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.LoginSuccessHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
@@ -65,6 +66,7 @@ public interface Constants {
             .registerInbound(new ChatHandler())
             .registerInbound(new ChunkDataHandler())
             .registerInbound(new DisconnectHandler())
+            .registerInbound(new JoinGameHandler())
             .registerInbound(new LoginSuccessHandler())
             .registerInbound(new MultiBlockChangeHandler())
             .registerInbound(new PlayerPosRotHandler())
