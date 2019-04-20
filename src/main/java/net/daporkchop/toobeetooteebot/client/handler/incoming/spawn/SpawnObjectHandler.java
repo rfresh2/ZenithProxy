@@ -14,25 +14,23 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
+package net.daporkchop.toobeetooteebot.client.handler.incoming.spawn;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
-import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityMob;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityObject;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
-
-import java.util.Arrays;
 
 /**
  * @author DaPorkchop_
  */
-public class SpawnMobHandler implements HandlerRegistry.IncomingHandler<ServerSpawnMobPacket, PorkClientSession> {
+public class SpawnObjectHandler implements HandlerRegistry.IncomingHandler<ServerSpawnObjectPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerSpawnMobPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().add(
-                new EntityMob()
-                        .setMobType(packet.getType())
+    public boolean apply(@NonNull ServerSpawnObjectPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getEntityCache().add(new EntityObject()
+                        .setObjectType(packet.getType())
+                        .setData(packet.getData())
                         .setEntityId(packet.getEntityId())
                         .setUuid(packet.getUUID())
                         .setX(packet.getX())
@@ -40,17 +38,15 @@ public class SpawnMobHandler implements HandlerRegistry.IncomingHandler<ServerSp
                         .setZ(packet.getZ())
                         .setYaw(packet.getYaw())
                         .setPitch(packet.getPitch())
-                        .setHeadYaw(packet.getHeadYaw())
                         .setVelX(packet.getMotionX())
                         .setVelY(packet.getMotionY())
                         .setVelZ(packet.getMotionZ())
-                        .setMetadata(Arrays.asList(packet.getMetadata()))
-        );
+                );
         return true;
     }
 
     @Override
-    public Class<ServerSpawnMobPacket> getPacketClass() {
-        return ServerSpawnMobPacket.class;
+    public Class<ServerSpawnObjectPacket> getPacketClass() {
+        return ServerSpawnObjectPacket.class;
     }
 }

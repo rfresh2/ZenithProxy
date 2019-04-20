@@ -48,7 +48,10 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityRemov
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityRotationHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntitySetPassengersHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityTeleportHandler;
-import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.SpawnMobHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnMobHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnObjectHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPaintingPacket;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPlayerHandler;
 import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
@@ -110,7 +113,11 @@ public interface Constants extends Logging {
             .registerInbound(new EntityRotationHandler())
             .registerInbound(new EntitySetPassengersHandler())
             .registerInbound(new EntityTeleportHandler())
+            //SPAWN
             .registerInbound(new SpawnMobHandler())
+            .registerInbound(new SpawnObjectHandler())
+            .registerInbound(new SpawnPaintingPacket())
+            .registerInbound(new SpawnPlayerHandler())
             .build();
 
     HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
