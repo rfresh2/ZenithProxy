@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -17,6 +17,7 @@
 package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUnloadChunkPacket;
+import lombok.NonNull;
 import net.daporkchop.lib.math.vector.i.Vec2i;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
@@ -26,7 +27,7 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
  */
 public class UnloadChunkHandler implements HandlerRegistry.IncomingHandler<ServerUnloadChunkPacket, PorkClientSession> {
     @Override
-    public boolean apply(ServerUnloadChunkPacket packet, PorkClientSession session) {
+    public boolean apply(@NonNull ServerUnloadChunkPacket packet, @NonNull PorkClientSession session) {
         CACHE.getChunkCache().remove(packet.getX(), packet.getZ());
         return true;
     }

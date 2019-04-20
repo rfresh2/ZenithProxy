@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -20,6 +20,7 @@ import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -42,11 +43,11 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
     }
 
     @Override
-    public boolean apply(LoginStartPacket packet, PorkServerConnection session) {
+    public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
         if (CONFIG.getBoolean("server.extra.whitelist.enable")) {
             List<String> whitelist = CONFIG.getList("server.extra.whitelist.enable", JsonElement::getAsString);
             if (!whitelist.contains(packet.getUsername())) {
-                System.out.printf("User %s [%s] tried to connect!\n", packet.getUsername(), session.getRemoteAddress());
+                logger.warn("User ${0} [${1}] tried to connect!", packet.getUsername(), session.getRemoteAddress());
                 session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg"));
             }
         }

@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -49,7 +49,7 @@ public class TabList implements Constants {
 
     public void remove(@NonNull PlayerListEntry entry) {
         if (this.entries.remove(entry.getProfile().getId()) == null && CONFIG.getBoolean("debug.server.cache.printunknownplayers")) {
-            System.out.printf("Could not remove player with UUID: %s\n", entry.getProfile().getId());
+            logger.error("Could not remove player with UUID: ${0}", entry.getProfile().getId());
         }
     }
 
@@ -57,7 +57,7 @@ public class TabList implements Constants {
         PlayerEntry e = this.entries.get(entry.getProfile().getId());
         if (e == null) {
             if (CONFIG.getBoolean("debug.server.cache.unknownplayers")) {
-                System.out.printf("Could not find player with UUID: %s\n", entry.getProfile().getId());
+                logger.error("Could not find player with UUID: ${0}", entry.getProfile().getId());
             }
             return new PlayerEntry("", entry.getProfile().getId());
         }

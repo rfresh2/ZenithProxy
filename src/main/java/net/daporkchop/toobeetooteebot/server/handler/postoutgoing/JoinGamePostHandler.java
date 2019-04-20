@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -20,6 +20,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePack
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.RefStrings;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
@@ -31,7 +32,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<ServerJoinGamePacket, PorkServerConnection> {
     @Override
-    public void accept(ServerJoinGamePacket packet, PorkServerConnection session) {
+    public void accept(@NonNull ServerJoinGamePacket packet, @NonNull PorkServerConnection session) {
         session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
 
         //send cached data
@@ -39,9 +40,9 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
             if (CONFIG.getBoolean("debug.server.cache.sendingmessages", true)) {
                 String msg = data.getSendingMessage();
                 if (msg == null)    {
-                    System.out.printf("Sending data for %s\n", data.getClass().getCanonicalName());
+                    logger.trace("Sending data for ${0}", data.getClass().getCanonicalName());
                 } else {
-                    System.out.println(msg);
+                    logger.trace(msg);
                 }
             }
             data.getPackets().forEach(session::send);

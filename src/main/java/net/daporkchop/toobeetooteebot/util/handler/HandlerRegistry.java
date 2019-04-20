@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -50,7 +50,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (DEBUG_INBOUND_PACKETS)  {
-            System.out.printf("Received packet: %s\n", packet.getClass().getCanonicalName());
+            logger.debug("Received packet: ${0}", packet.getClass());
         }
         ObjectObjectBooleanBiFunction<P, S> handler = (ObjectObjectBooleanBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
@@ -59,7 +59,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         if (DEBUG_OUTBOUND_PACKETS)  {
-            System.out.printf("About to send packet: %s\n", packet.getClass().getCanonicalName());
+            logger.debug("About to send packet: ${0}", packet.getClass());
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
@@ -68,7 +68,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (DEBUG_POSTOUTBOUND_PACKETS)  {
-            System.out.printf("Sent packet: %s\n", packet.getClass().getCanonicalName());
+            logger.debug("Sent packet: ${0}", packet.getClass());
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (handler != null) {

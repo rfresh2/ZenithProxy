@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -81,7 +81,9 @@ public class Bot implements Constants {
     private BufferedImage serverIcon;
 
     public static void main(String... args) {
-        System.out.printf("Starting Pork2b2tBot v%s...\n", VERSION);
+        logger.setLevel(CONFIG.getInt("debug.loglevel", 1));
+
+        logger.info("Starting Pork2b2tBot v${0}...", VERSION);
 
         Bot bot = new Bot();
         instance = bot;
@@ -106,7 +108,7 @@ public class Bot implements Constants {
             { //TODO: clean this up
                 Collection<Runnable> modules = new ArrayDeque<>();
                 if (CONFIG.getBoolean("client.extra.antiafk.enabled", true)) {
-                    System.out.println("Enabling AntiAFK");
+                    logger.trace("Enabling AntiAFK");
                     modules.add(() -> {
                         if (CONFIG.getBoolean("client.extra.antiafk.runEvenIfClientsConnected") || this.serverConnections.isEmpty()) {
                             boolean swingHand = CONFIG.getBoolean("client.extra.antiafk.actions.swingHand", true);
@@ -147,7 +149,7 @@ public class Bot implements Constants {
                 if (CONFIG.getBoolean("client.extra.spammer.enabled")) {
                     List<String> messages = CONFIG.getList("client.extra.spammer.messages", JsonElement::getAsString);
                     AtomicInteger i = new AtomicInteger(0);
-                    System.out.printf("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), CONFIG.getInt("client.extra.spammer.delaySeconds"));
+                    logger.trace("Enabling spammer with ${0} messages, choosing every ${1} seconds", messages.size(), CONFIG.getInt("client.extra.spammer.delaySeconds"));
                     modules.add(() -> {
                         if ((i.getAndIncrement() >> 1) == CONFIG.getInt("client.extra.spammer.delaySeconds")) {
                             i.set(0);
@@ -179,17 +181,16 @@ public class Bot implements Constants {
 
                 CONFIG.save();
                 //wait for client to disconnect before starting again
-                System.out.printf("Disconnected. Reason: %s\n", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
+                logger.info("Disconnected. Reason: ${0}", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
             } while (SHOULD_RECONNECT.get() && CACHE.reset(true) && this.delayBeforeReconnect());
         } catch (Exception e) {
-            System.out.println("Caught exception in main thread:");
-            e.printStackTrace(System.out);
+            logger.error(e);
         } finally {
-            System.out.println("Shutting down...");
+            logger.info("Shutting down...");
             if (this.server != null) {
-                System.out.println("Closing server...");
+                logger.trace("Closing server...");
                 this.server.close(true);
-                System.out.println("Server closed.");
+                logger.trace("Server closed.");
             }
             CONFIG.save();
         }
@@ -204,7 +205,7 @@ public class Bot implements Constants {
             String address = CONFIG.getString("client.server.address", "mc.example.com");
             int port = CONFIG.getInt("client.server.port", 25565);
 
-            System.out.printf("Connecting to %s:%d...\n", address, port);
+            logger.info("Connecting to ${0}:${1}...", address, port);
             this.client = new Client(address, port, this.protocol, this.sessionFactory);
             this.client.getSession().connect(true);
         }
@@ -230,7 +231,7 @@ public class Bot implements Constants {
                 String address = CONFIG.getString("server.bind.address", "0.0.0.0");
                 int port = CONFIG.getInt("server.bind.port", 25565);
 
-                System.out.printf("Starting server on %s:%d...\n", address, port);
+                logger.info("Starting server on ${0}:${1}...", address, port);
                 this.server = new Server(address, port, MinecraftProtocol.class, this.sessionFactory);
                 this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.getBoolean("server.verifyusers"));
@@ -267,7 +268,7 @@ public class Bot implements Constants {
 
     private void logIn() {
         if (this.protocol == null) {
-            System.out.println("Logging in...");
+            logger.info("Logging in...");
             if (CONFIG.getBoolean("authentication.doAuthentication")) {
                 try {
                     this.protocol = new MinecraftProtocol(
@@ -295,14 +296,14 @@ public class Bot implements Constants {
                 }, "Server icon downloader thread").start();
             }
             CACHE.getProfileCache().setProfile(this.protocol.getProfile());
-            System.out.println("Successfully logged in.");
+            logger.info("Successfully logged in.");
         }
     }
 
     private boolean delayBeforeReconnect() {
         try {
             for (int i = CONFIG.getInt("client.extra.autoreconnect.delay", 10); i > 0; i--) {
-                System.out.printf("Reconnecting in %d\n", i);
+                logger.info("Reconnecting in ${0}", i);
                 Thread.sleep(1000L);
             }
         } catch (InterruptedException e) {

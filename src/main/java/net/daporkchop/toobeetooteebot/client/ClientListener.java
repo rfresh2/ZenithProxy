@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -71,7 +71,7 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void connected(ConnectedEvent event) {
-        System.out.println("Connection complete!");
+        logger.debug("Connection complete!");
     }
 
     @Override
@@ -80,6 +80,6 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        System.out.printf("Disconnecting from server. Reason: %s\n", event.getReason());
+        logger.info("Disconnecting from server. Reason: ${0}", event.getReason());
     }
 }

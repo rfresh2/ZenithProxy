@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -43,18 +43,18 @@ public class DataCache implements Constants {
                 field.setAccessible(true);
                 if (CachedData.class.isAssignableFrom(field.getType())) {
                     if (CONFIG.getBoolean("debug.printDataFields")) {
-                        System.out.printf("Found data field: %s\n", field.getName());
+                        logger.debug("Found data field: ${0}", field.getName());
                     }
                     dataFields.add(field);
                 } else if (CONFIG.getBoolean("debug.printDataFields")) {
-                    System.out.printf("Class %s is not a valid data field.\n", field.getType().getCanonicalName());
+                    logger.debug("Class ${0} is not a valid data field.", field.getType().getCanonicalName());
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         if (CONFIG.getBoolean("debug.printDataFields")) {
-            System.out.printf("Found a total of %d data fields.\n", dataFields.size());
+            logger.debug("Found a total of ${0} data fields.", dataFields.size());
         }
     }
 
@@ -81,12 +81,12 @@ public class DataCache implements Constants {
     }
 
     public boolean reset(boolean full) {
-        System.out.println("Clearing cache...");
+        logger.debug("Clearing cache...");
 
         try {
             this.getAllData().forEach(d -> d.reset(full));
 
-            System.out.println("Cache cleared.");
+            logger.debug("Cache cleared.");
         } catch (Exception e) {
             throw new RuntimeException("Unable to clear cache", e);
         }

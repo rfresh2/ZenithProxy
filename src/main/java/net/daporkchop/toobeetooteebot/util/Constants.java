@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
@@ -49,7 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author DaPorkchop_
  */
-public interface Constants {
+public interface Constants extends Logging {
     String VERSION = "0.0.1";
 
     JsonParser JSON_PARSER = new JsonParser();
