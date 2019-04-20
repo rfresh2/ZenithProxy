@@ -18,7 +18,7 @@ package net.daporkchop.toobeetooteebot.util.cache;
 
 import lombok.Getter;
 import net.daporkchop.toobeetooteebot.util.Constants;
-import net.daporkchop.toobeetooteebot.util.cache.data.ChunkCache;
+import net.daporkchop.toobeetooteebot.util.cache.data.chunk.ChunkCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.PlayerCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.ServerProfileCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.bossbar.BossBarCache;

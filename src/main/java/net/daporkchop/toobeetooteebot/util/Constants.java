@@ -33,6 +33,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.RespawnHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.UpdateTileEntityHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.DestroyEntityHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityEquipmentHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.SpawnMobHandler;
@@ -81,6 +82,7 @@ public interface Constants extends Logging {
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())
+            .registerInbound(new UpdateTileEntityHandler())
             //ENTITY
             .registerInbound(new DestroyEntityHandler())
             .registerInbound(new EntityEquipmentHandler())

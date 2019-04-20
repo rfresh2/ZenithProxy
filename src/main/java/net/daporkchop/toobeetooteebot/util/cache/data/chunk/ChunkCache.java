@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -14,13 +14,19 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data;
+package net.daporkchop.toobeetooteebot.util.cache.data.chunk;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
+import com.github.steveice10.mc.protocol.data.game.world.block.UpdatedTileType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
+import com.github.steveice10.opennbt.tag.builtin.IntTag;
+import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
 import net.daporkchop.lib.math.vector.i.Vec2i;
+import net.daporkchop.lib.math.vector.i.Vec3i;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 
 import java.util.Map;
@@ -50,8 +56,10 @@ public class ChunkCache implements CachedData {
     }
 
     @Override
-    public void getPacketsSimple(Consumer<Packet> consumer) {
-        this.cache.values().stream().map(ServerChunkDataPacket::new).forEach(consumer);
+    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+        this.cache.values().stream()
+                .map(ServerChunkDataPacket::new)
+                .forEach(consumer);
     }
 
     @Override
