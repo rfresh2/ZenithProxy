@@ -14,29 +14,33 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data.entity;
+package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEffectPacket;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityEquipment;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.PotionEffect;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
-@Accessors(chain = true)
-@ToString
-public class PotionEffect {
-    @NonNull
-    public final Effect effect;
-    public int amplifier;
-    public int duration;
-    public boolean ambient;
-    public boolean showParticles;
+/**
+ * @author DaPorkchop_
+ */
+public class EntityEffectHandler implements HandlerRegistry.IncomingHandler<ServerEntityEffectPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerEntityEffectPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getEntityCache().<EntityEquipment>get(packet.getEntityId()).getPotionEffects().add(new PotionEffect(
+                packet.getEffect(),
+                packet.getAmplifier(),
+                packet.getDuration(),
+                packet.isAmbient(),
+                packet.getShowParticles()
+        ));
+        return true;
+    }
+
+    @Override
+    public Class<ServerEntityEffectPacket> getPacketClass() {
+        return ServerEntityEffectPacket.class;
+    }
 }

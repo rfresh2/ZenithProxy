@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -51,11 +51,11 @@ public abstract class EntityEquipment extends Entity {
     public void addPackets(Consumer<Packet> consumer) {
         this.potionEffects.forEach(effect -> consumer.accept(new ServerEntityEffectPacket(
                 this.entityId,
-                effect.effect,
-                effect.amplifier,
-                effect.duration,
-                effect.ambient,
-                effect.showParticles
+                effect.getEffect(),
+                effect.getAmplifier(),
+                effect.getDuration(),
+                effect.isAmbient(),
+                effect.isShowParticles()
         )));
         this.equipment.forEach((slot, stack) -> consumer.accept(new ServerEntityEquipmentPacket(this.entityId, slot, stack)));
         super.addPackets(consumer);

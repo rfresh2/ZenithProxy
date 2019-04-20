@@ -14,29 +14,29 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data.entity;
+package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
-@Accessors(chain = true)
-@ToString
-public class PotionEffect {
-    @NonNull
-    public final Effect effect;
-    public int amplifier;
-    public int duration;
-    public boolean ambient;
-    public boolean showParticles;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+/**
+ * @author DaPorkchop_
+ */
+public class EntitySetPassengersHandler implements HandlerRegistry.IncomingHandler<ServerEntitySetPassengersPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerEntitySetPassengersPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getEntityCache().get(packet.getEntityId()).setPassengerIds(Arrays.stream(packet.getPassengerIds()).boxed().collect(Collectors.toList()));
+        return true;
+    }
+
+    @Override
+    public Class<ServerEntitySetPassengersPacket> getPacketClass() {
+        return ServerEntitySetPassengersPacket.class;
+    }
 }

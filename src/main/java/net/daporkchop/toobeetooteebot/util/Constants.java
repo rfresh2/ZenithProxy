@@ -34,8 +34,20 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UpdateTileEntityHandler;
-import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.DestroyEntityHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityDestroyHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityAttachHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityCollectItemHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityEffectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityEquipmentHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityHeadLookHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityMetadataHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityPositionHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityPositionRotationHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityPropertiesHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityRemoveEffectListener;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityRotationHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntitySetPassengersHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityTeleportHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.SpawnMobHandler;
 import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
@@ -84,8 +96,20 @@ public interface Constants extends Logging {
             .registerInbound(new UnloadChunkHandler())
             .registerInbound(new UpdateTileEntityHandler())
             //ENTITY
-            .registerInbound(new DestroyEntityHandler())
+            .registerInbound(new EntityAttachHandler())
+            .registerInbound(new EntityCollectItemHandler())
+            .registerInbound(new EntityDestroyHandler())
+            .registerInbound(new EntityEffectHandler())
             .registerInbound(new EntityEquipmentHandler())
+            .registerInbound(new EntityHeadLookHandler())
+            .registerInbound(new EntityMetadataHandler())
+            .registerInbound(new EntityPositionHandler())
+            .registerInbound(new EntityPositionRotationHandler())
+            .registerInbound(new EntityPropertiesHandler())
+            .registerInbound(new EntityRemoveEffectListener())
+            .registerInbound(new EntityRotationHandler())
+            .registerInbound(new EntitySetPassengersHandler())
+            .registerInbound(new EntityTeleportHandler())
             .registerInbound(new SpawnMobHandler())
             .build();
 

@@ -14,29 +14,30 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data.entity;
+package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMovementPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
-@Accessors(chain = true)
-@ToString
-public class PotionEffect {
-    @NonNull
-    public final Effect effect;
-    public int amplifier;
-    public int duration;
-    public boolean ambient;
-    public boolean showParticles;
+/**
+ * @author DaPorkchop_
+ */
+public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<ServerEntityPositionPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        entity.setX(entity.getX() + packet.getMovementX());
+        entity.setY(entity.getY() + packet.getMovementY());
+        entity.setZ(entity.getZ() + packet.getMovementZ());
+        return true;
+    }
+
+    @Override
+    public Class<ServerEntityPositionPacket> getPacketClass() {
+        return ServerEntityPositionPacket.class;
+    }
 }

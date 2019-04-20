@@ -16,25 +16,27 @@
 
 package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRotationPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-public class DestroyEntityHandler implements HandlerRegistry.IncomingHandler<ServerEntityDestroyPacket, PorkClientSession> {
+public class EntityRotationHandler implements HandlerRegistry.IncomingHandler<ServerEntityRotationPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityDestroyPacket packet, @NonNull PorkClientSession session) {
-        for (int id : packet.getEntityIds())    {
-            CACHE.getEntityCache().remove(id);
-        }
+    public boolean apply(@NonNull ServerEntityRotationPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getEntityCache().get(packet.getEntityId())
+        .setYaw(packet.getYaw())
+        .setPitch(packet.getPitch());
         return true;
     }
 
     @Override
-    public Class<ServerEntityDestroyPacket> getPacketClass() {
-        return ServerEntityDestroyPacket.class;
+    public Class<ServerEntityRotationPacket> getPacketClass() {
+        return ServerEntityRotationPacket.class;
     }
 }

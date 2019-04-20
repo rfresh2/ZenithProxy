@@ -14,29 +14,34 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.util.cache.data.entity;
+package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRemoveEffectPacket;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityEquipment;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.PotionEffect;
+import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
-@Accessors(chain = true)
-@ToString
-public class PotionEffect {
-    @NonNull
-    public final Effect effect;
-    public int amplifier;
-    public int duration;
-    public boolean ambient;
-    public boolean showParticles;
+import java.util.Iterator;
+
+/**
+ * @author DaPorkchop_
+ */
+public class EntityRemoveEffectListener implements HandlerRegistry.IncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerEntityRemoveEffectPacket packet, @NonNull PorkClientSession session) {
+        for (Iterator<PotionEffect> iterator = CACHE.getEntityCache().<EntityEquipment>get(packet.getEntityId()).getPotionEffects().iterator(); iterator.hasNext(); ) {
+            if (iterator.next().effect == packet.getEffect()) {
+                iterator.remove();
+                break;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Class<ServerEntityRemoveEffectPacket> getPacketClass() {
+        return ServerEntityRemoveEffectPacket.class;
+    }
 }
