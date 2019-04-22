@@ -64,7 +64,7 @@ public class DataCache implements Constants {
     private final TabListCache tabListCache = new TabListCache();
     private final BossBarCache bossBarCache = new BossBarCache();
     private final EntityCache entityCache = new EntityCache();
-    private final PlayerCache playerCache = new PlayerCache(); //TODO: remove and cache player as entity
+    private final PlayerCache playerCache = new PlayerCache();
     private final ServerProfileCache profileCache = new ServerProfileCache();
 
     public Collection<CachedData> getAllData() {

@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -26,6 +26,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityPlayer;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
@@ -37,13 +38,6 @@ import java.util.function.Consumer;
 @Setter
 @Accessors(chain = true)
 public class PlayerCache implements CachedData {
-    private volatile double x;
-    private volatile double y;
-    private volatile double z;
-    private volatile float yaw;
-    private volatile float pitch;
-
-    private int entityId;
     private boolean hardcore;
     private boolean reducedDebugInfo;
     private int maxPlayers;
@@ -54,18 +48,20 @@ public class PlayerCache implements CachedData {
     private WorldType worldType;
     @NonNull
     private Difficulty difficulty;
+    
+    private EntityPlayer thePlayer = new EntityPlayer();
 
     @Override
     public void getPacketsSimple(Consumer<Packet> consumer) {
-        consumer.accept(new ServerPlayerPositionRotationPacket(this.x, this.y, this.z, this.yaw, this.pitch, ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
     }
 
     @Override
     public void reset(boolean full) {
         if (full)   {
-            this.x = this.y = this.z = this.yaw = this.pitch = 0.0f;
+            this.thePlayer = new EntityPlayer();
             this.hardcore = this.reducedDebugInfo = false;
-            this.entityId = this.maxPlayers = -1;
+            this.maxPlayers = -1;
         }
         this.dimension = Integer.MAX_VALUE;
         this.gameMode = null;
@@ -77,11 +73,65 @@ public class PlayerCache implements CachedData {
     public String getSendingMessage() {
         return String.format(
                 "Sending player position: (x=%.2f, y=%.2f, z=%.2f, yaw=%.2f, pitch=%.2f)",
-                this.x,
-                this.y,
-                this.z,
-                this.yaw,
-                this.pitch
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                this.getYaw(),
+                this.getPitch()
         );
+    }
+
+    public double getX()    {
+        return this.thePlayer.getX();
+    }
+
+    public PlayerCache setX(double x)    {
+        this.thePlayer.setX(x);
+        return this;
+    }
+
+    public double getY()    {
+        return this.thePlayer.getY();
+    }
+
+    public PlayerCache setY(double y)    {
+        this.thePlayer.setY(y);
+        return this;
+    }
+
+    public double getZ()    {
+        return this.thePlayer.getZ();
+    }
+
+    public PlayerCache setZ(double z)    {
+        this.thePlayer.setZ(z);
+        return this;
+    }
+
+    public float getYaw()    {
+        return this.thePlayer.getYaw();
+    }
+
+    public PlayerCache setYaw(float yaw)    {
+        this.thePlayer.setYaw(yaw);
+        return this;
+    }
+
+    public float getPitch()    {
+        return this.thePlayer.getPitch();
+    }
+
+    public PlayerCache setPitch(float pitch)    {
+        this.thePlayer.setPitch(pitch);
+        return this;
+    }
+
+    public int getEntityId()    {
+        return this.thePlayer.getEntityId();
+    }
+
+    public PlayerCache setEntityId(int id)  {
+        this.thePlayer.setEntityId(id);
+        return this;
     }
 }

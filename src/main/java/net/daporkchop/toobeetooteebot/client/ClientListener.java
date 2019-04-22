@@ -46,27 +46,43 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
-        if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
-            this.bot.getServerConnections().stream()
-                    .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
-                    .forEach(c -> c.send(event.getPacket()));
+        try {
+            if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
+                this.bot.getServerConnections()
+                        .stream()
+                        .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
+                        .forEach(c -> c.send(event.getPacket()));
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void packetSending(PacketSendingEvent event) {
-        Packet p1 = event.getPacket();
-        Packet p2 = CLIENT_HANDLERS.handleOutgoing(p1, this.session);
-        if (p2 == null) {
-            event.setCancelled(true);
-        } else if (p1 != p2)    {
-            event.setPacket(p2);
+        try {
+            Packet p1 = event.getPacket();
+            Packet p2 = CLIENT_HANDLERS.handleOutgoing(p1, this.session);
+            if (p2 == null) {
+                event.setCancelled(true);
+            } else if (p1 != p2) {
+                event.setPacket(p2);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void packetSent(PacketSentEvent event) {
-        CLIENT_HANDLERS.handlePostOutgoing(event.getPacket(), this.session);
+        try {
+            CLIENT_HANDLERS.handlePostOutgoing(event.getPacket(), this.session);
+        } catch (Exception e) {
+            logger.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

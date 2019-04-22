@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  * @author DaPorkchop_
  */
 public class EntityCache implements CachedData {
-    private final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive so i can get streams
+    private final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
 
     @Override
     public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
@@ -55,6 +55,10 @@ public class EntityCache implements CachedData {
 
     @SuppressWarnings("unchecked")
     public <E extends Entity> E get(int id)   {
-        return (E) this.cachedEntities.get(id);
+        if (id == CACHE.getPlayerCache().getEntityId()) {
+            return (E) CACHE.getPlayerCache().getThePlayer();
+        } else {
+            return (E) this.cachedEntities.get(id);
+        }
     }
 }
