@@ -37,7 +37,11 @@ public class EntityCache implements CachedData {
 
     @Override
     public void reset(boolean full) {
-        this.cachedEntities.clear();
+        if (full) {
+            this.cachedEntities.clear();
+        } else {
+            this.cachedEntities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
+        }
     }
 
     @Override
@@ -55,10 +59,6 @@ public class EntityCache implements CachedData {
 
     @SuppressWarnings("unchecked")
     public <E extends Entity> E get(int id)   {
-        if (id == CACHE.getPlayerCache().getEntityId()) {
-            return (E) CACHE.getPlayerCache().getThePlayer();
-        } else {
-            return (E) this.cachedEntities.get(id);
-        }
+        return (E) this.cachedEntities.get(id);
     }
 }

@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -19,7 +19,10 @@ package net.daporkchop.toobeetooteebot.util.cache.data.entity;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.packet.Packet;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -28,22 +31,28 @@ import java.util.function.Consumer;
 /**
  * @author DaPorkchop_
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Accessors(chain = true)
 public class EntityPlayer extends EntityEquipment {
+    protected boolean selfPlayer;
+
     @Override
-    public void addPackets(Consumer<Packet> consumer) {
-        consumer.accept(new ServerSpawnPlayerPacket(
-                this.entityId,
-                this.uuid,
-                this.x,
-                this.y,
-                this.z,
-                this.yaw,
-                this.pitch,
-                this.metadata.toArray(new EntityMetadata[0])
-        ));
+    public void addPackets(@NonNull Consumer<Packet> consumer) {
+        if (!this.selfPlayer) {
+            consumer.accept(new ServerSpawnPlayerPacket(
+                    this.entityId,
+                    this.uuid,
+                    this.x,
+                    this.y,
+                    this.z,
+                    this.yaw,
+                    this.pitch,
+                    this.metadata.toArray(new EntityMetadata[0])
+            ));
+        }
         super.addPackets(consumer);
     }
 }

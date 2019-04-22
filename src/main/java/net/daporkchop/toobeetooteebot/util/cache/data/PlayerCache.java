@@ -49,17 +49,17 @@ public class PlayerCache implements CachedData {
     @NonNull
     private Difficulty difficulty;
     
-    private EntityPlayer thePlayer = new EntityPlayer();
+    private EntityPlayer thePlayer;
 
     @Override
-    public void getPacketsSimple(Consumer<Packet> consumer) {
+    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
     }
 
     @Override
     public void reset(boolean full) {
         if (full)   {
-            this.thePlayer = new EntityPlayer();
+            this.thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;
         }
@@ -131,7 +131,11 @@ public class PlayerCache implements CachedData {
     }
 
     public PlayerCache setEntityId(int id)  {
+        if (this.thePlayer.getEntityId() != -1) {
+            CACHE.getEntityCache().remove(this.thePlayer.getEntityId());
+        }
         this.thePlayer.setEntityId(id);
+        CACHE.getEntityCache().add(this.thePlayer);
         return this;
     }
 }

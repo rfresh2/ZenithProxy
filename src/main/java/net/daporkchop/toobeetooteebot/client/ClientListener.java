@@ -53,6 +53,9 @@ public class ClientListener implements SessionListener, Constants {
                         .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                         .forEach(c -> c.send(event.getPacket()));
             }
+        } catch (RuntimeException e)    {
+            logger.error(e);
+            throw e;
         } catch (Exception e) {
             logger.error(e);
             throw new RuntimeException(e);

@@ -175,6 +175,7 @@ public class Bot implements Constants {
 
             this.logIn();
             this.startServer();
+            CACHE.reset(true);
             do {
                 this.logIn();
                 this.connect();
@@ -306,10 +307,9 @@ public class Bot implements Constants {
                 logger.info("Reconnecting in ${0}", i);
                 Thread.sleep(1000L);
             }
+            return true;
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        } finally {
-            return true;
         }
     }
 }

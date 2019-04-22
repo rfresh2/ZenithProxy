@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -23,6 +23,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDa
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
+import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 
 import java.util.function.Consumer;
@@ -35,7 +36,7 @@ public class TabListCache implements CachedData {
     private TabList tabList = new TabList();
 
     @Override
-    public void getPacketsSimple(Consumer<Packet> consumer) {
+    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerPlayerListDataPacket(this.tabList.getHeader(), this.tabList.getFooter()));
         consumer.accept(new ServerPlayerListEntryPacket(
                 PlayerListEntryAction.ADD_PLAYER,

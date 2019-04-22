@@ -46,17 +46,8 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                 }
             }
             data.getPackets().forEach(session::send);
+            data.getPackets().clear();
         });
-
-        //this packet spawns the player
-        /*session.send(new ServerPlayerPositionRotationPacket(
-                CACHE.getPlayerPos().getX(),
-                CACHE.getPlayerPos().getY(),
-                CACHE.getPlayerPos().getZ(),
-                0.0f,
-                0.0f,
-                ThreadLocalRandom.current().nextInt(16, 1024)
-        ));*/
     }
 
     @Override

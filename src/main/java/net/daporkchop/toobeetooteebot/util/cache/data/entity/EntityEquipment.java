@@ -22,6 +22,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -48,7 +49,7 @@ public abstract class EntityEquipment extends Entity {
     }
 
     @Override
-    public void addPackets(Consumer<Packet> consumer) {
+    public void addPackets(@NonNull Consumer<Packet> consumer) {
         this.potionEffects.forEach(effect -> consumer.accept(new ServerEntityEffectPacket(
                 this.entityId,
                 effect.getEffect(),
