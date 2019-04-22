@@ -166,7 +166,7 @@ public class Bot implements Constants {
                             }
                         }
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        Thread.currentThread().interrupt();
                     }
                 });
                 moduleRunnerThread.setDaemon(true);
@@ -309,7 +309,8 @@ public class Bot implements Constants {
             }
             return true;
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
+            return false;
         }
     }
 }

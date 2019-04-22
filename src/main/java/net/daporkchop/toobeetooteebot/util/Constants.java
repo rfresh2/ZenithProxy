@@ -28,6 +28,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.DisconnectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.JoinGameHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.LoginSuccessHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerHealthHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.RespawnHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
@@ -92,6 +93,7 @@ public interface Constants extends Logging {
             .registerInbound(new JoinGameHandler())
             .registerInbound(new LoginSuccessHandler())
             .registerInbound(new MultiBlockChangeHandler())
+            .registerInbound(new PlayerHealthHandler())
             .registerInbound(new PlayerPosRotHandler())
             .registerInbound(new RespawnHandler())
             .registerInbound(new TabListDataHandler())

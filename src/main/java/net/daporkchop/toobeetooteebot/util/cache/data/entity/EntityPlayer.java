@@ -17,12 +17,14 @@
 package net.daporkchop.toobeetooteebot.util.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -31,17 +33,27 @@ import java.util.function.Consumer;
 /**
  * @author DaPorkchop_
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Accessors(chain = true)
 public class EntityPlayer extends EntityEquipment {
+    @NonNull
     protected boolean selfPlayer;
+
+    protected int food;
+    protected float saturation;
 
     @Override
     public void addPackets(@NonNull Consumer<Packet> consumer) {
-        if (!this.selfPlayer) {
+        if (this.selfPlayer) {
+            consumer.accept(new ServerPlayerHealthPacket(
+                    this.health,
+                    this.food,
+                    this.saturation
+            ));
+        } else {
             consumer.accept(new ServerSpawnPlayerPacket(
                     this.entityId,
                     this.uuid,

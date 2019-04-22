@@ -40,7 +40,7 @@ import java.util.function.Consumer;
 public abstract class EntityEquipment extends Entity {
     protected ArrayList<PotionEffect> potionEffects = new ArrayList<>();
     protected Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
-    protected int health;
+    protected float health;
 
     {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
