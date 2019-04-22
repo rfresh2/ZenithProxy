@@ -42,6 +42,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.http.SimpleHTTP;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.gui.Gui;
 import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.PorkServerListener;
@@ -80,6 +81,8 @@ public class Bot implements Constants {
     @Setter
     private BufferedImage serverIcon;
 
+    protected final Gui gui = new Gui();
+
     public static void main(String... args) {
         logger.setLevel(CONFIG.getInt("debug.loglevel", 1));
 
@@ -92,6 +95,7 @@ public class Bot implements Constants {
 
     public void start() {
         try {
+            this.gui.start();
             {
                 Thread commandReaderThread = new Thread(() -> {
                     try (Scanner s = new Scanner(System.in)) {

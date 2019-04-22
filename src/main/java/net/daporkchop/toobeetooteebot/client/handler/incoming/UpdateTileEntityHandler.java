@@ -21,7 +21,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdate
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.IntTag;
 import lombok.NonNull;
-import net.daporkchop.lib.common.util.PUnsafe;
+import net.daporkchop.lib.unsafe.PUnsafe;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
