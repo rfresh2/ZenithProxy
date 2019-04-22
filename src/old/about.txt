@@ -1,1 +1,0 @@
-this folder contains the old code for the bot, for no purpose other than easy access from my IDE
