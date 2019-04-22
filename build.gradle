@@ -37,6 +37,7 @@ repositories {
 dependencies {
     compile 'com.github.steveice10:mcprotocollib:1.12.2-3-SNAPSHOT'
 
+    compile 'net.daporkchop.lib:gui:0.3.0-SNAPSHOT'
     compile 'net.daporkchop.lib:hash:0.3.0-SNAPSHOT'
     compile 'net.daporkchop.lib:http:0.3.0-SNAPSHOT'
     compile 'net.daporkchop.lib:logging:0.3.0-SNAPSHOT'
