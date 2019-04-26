@@ -30,6 +30,10 @@ public class EntityMetadataHandler implements HandlerRegistry.IncomingHandler<Se
     @Override
     public boolean apply(@NonNull ServerEntityMetadataPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity == null) {
+            CLIENT_LOG.warn("Received metadata update for unknown entity with id=%d", packet.getEntityId());
+            return true;
+        }
         MAINLOOP:
         for (EntityMetadata metadata : packet.getMetadata())    {
             for (int i = entity.getMetadata().size() - 1; i >= 0; i--)  {

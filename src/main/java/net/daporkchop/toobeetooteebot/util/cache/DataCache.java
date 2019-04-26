@@ -23,6 +23,7 @@ import net.daporkchop.toobeetooteebot.util.cache.data.PlayerCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.ServerProfileCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.bossbar.BossBarCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityCache;
+import net.daporkchop.toobeetooteebot.util.cache.data.stats.StatisticsCache;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabListCache;
 
 import java.lang.reflect.Field;
@@ -66,6 +67,7 @@ public class DataCache implements Constants {
     private final EntityCache entityCache = new EntityCache();
     private final PlayerCache playerCache = new PlayerCache();
     private final ServerProfileCache profileCache = new ServerProfileCache();
+    private final StatisticsCache statsCache = new StatisticsCache();
 
     public Collection<CachedData> getAllData() {
         Collection<CachedData> collection = this.dataCache.get();

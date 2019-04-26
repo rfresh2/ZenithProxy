@@ -22,6 +22,7 @@ import com.google.gson.JsonParser;
 import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.AdvancementsHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
@@ -33,6 +34,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHa
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerHealthHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.RespawnHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.StatisticsHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
@@ -97,6 +99,7 @@ public interface Constants {
             //
             // Inbound packets
             //
+            .registerInbound(new AdvancementsHandler())
             .registerInbound(new BlockChangeHandler())
             .registerInbound(new BossBarHandler())
             .registerInbound(new ChatHandler())
@@ -108,6 +111,7 @@ public interface Constants {
             .registerInbound(new PlayerHealthHandler())
             .registerInbound(new PlayerPosRotHandler())
             .registerInbound(new RespawnHandler())
+            .registerInbound(new StatisticsHandler())
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())

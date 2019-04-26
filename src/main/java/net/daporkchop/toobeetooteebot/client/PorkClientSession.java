@@ -22,6 +22,7 @@ import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import net.daporkchop.lib.unsafe.PUnsafe;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.client.ClientListener;
 import net.daporkchop.toobeetooteebot.util.Constants;
@@ -47,7 +48,8 @@ public class PorkClientSession extends TcpClientSession implements Constants {
         try {
             return this.disconnectFuture.get();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            PUnsafe.throwException(e);
+            return null;
         }
     }
 
