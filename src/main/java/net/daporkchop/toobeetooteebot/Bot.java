@@ -126,6 +126,7 @@ public class Bot implements Constants {
         try {
             this.gui.start();
             {
+                Thread mainThread = Thread.currentThread();
                 Thread commandReaderThread = new Thread(() -> {
                     try (Scanner s = new Scanner(System.in)) {
                         s.nextLine(); //TODO: command processing from CLI
@@ -134,6 +135,7 @@ public class Bot implements Constants {
                     if (this.isConnected()) {
                         this.client.getSession().disconnect("user disconnect");
                     }
+                    mainThread.interrupt();
                 }, "Pork2b2tBot command processor thread");
                 commandReaderThread.setDaemon(true);
                 commandReaderThread.start();
@@ -339,7 +341,7 @@ public class Bot implements Constants {
 
     private boolean delayBeforeReconnect() {
         try {
-            for (int i = CONFIG.getInt("client.extra.autoreconnect.delay", 10); i > 0; i--) {
+            for (int i = CONFIG.getInt("client.extra.autoreconnect.delay", 10); SHOULD_RECONNECT.get() && i > 0; i--) {
                 CLIENT_LOG.info("Reconnecting in %d", i);
                 Thread.sleep(1000L);
             }

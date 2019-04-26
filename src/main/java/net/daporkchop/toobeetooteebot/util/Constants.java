@@ -53,6 +53,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityRemov
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityRotationHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntitySetPassengersHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityTeleportHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnExperienceOrbHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnMobHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnObjectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPaintingPacket;
@@ -132,6 +133,7 @@ public interface Constants {
             .registerInbound(new EntitySetPassengersHandler())
             .registerInbound(new EntityTeleportHandler())
             //SPAWN
+            .registerInbound(new SpawnExperienceOrbHandler())
             .registerInbound(new SpawnMobHandler())
             .registerInbound(new SpawnObjectHandler())
             .registerInbound(new SpawnPaintingPacket())

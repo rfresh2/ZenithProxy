@@ -31,19 +31,19 @@ public class SpawnMobHandler implements HandlerRegistry.IncomingHandler<ServerSp
     @Override
     public boolean apply(@NonNull ServerSpawnMobPacket packet, @NonNull PorkClientSession session) {
         CACHE.getEntityCache().add(new EntityMob()
-                        .setMobType(packet.getType())
-                        .setEntityId(packet.getEntityId())
-                        .setUuid(packet.getUUID())
-                        .setX(packet.getX())
-                        .setY(packet.getY())
-                        .setZ(packet.getZ())
-                        .setYaw(packet.getYaw())
-                        .setPitch(packet.getPitch())
-                        .setHeadYaw(packet.getHeadYaw())
-                        .setVelX(packet.getMotionX())
-                        .setVelY(packet.getMotionY())
-                        .setVelZ(packet.getMotionZ())
-                        .setMetadata(Arrays.asList(packet.getMetadata()))
+                .setMobType(packet.getType())
+                .setEntityId(packet.getEntityId())
+                .setUuid(packet.getUUID())
+                .setX(packet.getX())
+                .setY(packet.getY())
+                .setZ(packet.getZ())
+                .setYaw(packet.getYaw())
+                .setPitch(packet.getPitch())
+                .setHeadYaw(packet.getHeadYaw())
+                .setVelX(packet.getMotionX())
+                .setVelY(packet.getMotionY())
+                .setVelZ(packet.getMotionZ())
+                .setMetadata(Arrays.asList(packet.getMetadata()))
         );
         return true;
     }

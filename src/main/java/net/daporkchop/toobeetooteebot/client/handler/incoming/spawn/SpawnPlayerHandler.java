@@ -22,7 +22,6 @@ import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityPlayer;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
