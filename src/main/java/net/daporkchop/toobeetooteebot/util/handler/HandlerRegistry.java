@@ -19,8 +19,12 @@ package net.daporkchop.toobeetooteebot.util.handler;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.primitive.function.bifunction.ObjectObjectBooleanBiFunction;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
@@ -47,10 +51,13 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @NonNull
     private final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
 
+    @NonNull
+    protected final Logger logger;
+
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (DEBUG_INBOUND_PACKETS)  {
-            logger.debug("Received packet: ${0}", packet.getClass());
+            this.logger.debug("Received packet: %s", packet.getClass());
         }
         ObjectObjectBooleanBiFunction<P, S> handler = (ObjectObjectBooleanBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
@@ -59,7 +66,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         if (DEBUG_OUTBOUND_PACKETS)  {
-            logger.debug("About to send packet: ${0}", packet.getClass());
+            this.logger.debug("About to send packet: %s", packet.getClass());
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
@@ -68,7 +75,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (DEBUG_POSTOUTBOUND_PACKETS)  {
-            logger.debug("Sent packet: ${0}", packet.getClass());
+            this.logger.debug("Sent packet: %s", packet.getClass());
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (handler != null) {
@@ -104,12 +111,18 @@ public class HandlerRegistry<S extends Session> implements Constants {
         Class<P> getPacketClass();
     }
 
+    @Getter
+    @Setter
+    @Accessors(chain = true)
     public static class Builder<S extends Session> {
         private final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
         private final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
 
         private final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
+
+        @NonNull
+        private Logger logger;
 
         public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull BiConsumer<P, S> handler) {
             return this.registerInbound(clazz, (packet, session) -> {
@@ -149,7 +162,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
         }
 
         public HandlerRegistry<S> build() {
-            return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers);
+            return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers, this.logger);
         }
     }
 }

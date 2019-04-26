@@ -18,8 +18,6 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import lombok.NonNull;
-import net.daporkchop.lib.minecraft.text.util.ChatUtils;
-import net.daporkchop.lib.minecraft.text.util.TextFormat;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -29,12 +27,7 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
-        String legacyColorCodes = ChatUtils.getOldText(packet.getMessage().toJsonString());
-        if (CONFIG.getBoolean("log.formatting", false)) {
-            logger.info(legacyColorCodes); //TODO: colored logging?
-        } else {
-            logger.info(TextFormat.clean(legacyColorCodes));
-        }
+        CHAT_LOG.info(packet.getMessage().toJsonString());
         return true;
     }
 

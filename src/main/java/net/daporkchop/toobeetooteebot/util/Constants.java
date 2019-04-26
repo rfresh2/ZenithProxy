@@ -19,7 +19,9 @@ package net.daporkchop.toobeetooteebot.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.logging.Logging;
+import net.daporkchop.lib.logging.impl.DefaultLogger;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
@@ -70,11 +72,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author DaPorkchop_
  */
-public interface Constants extends Logging {
+public interface Constants {
     String VERSION = "0.0.1";
 
     JsonParser JSON_PARSER = new JsonParser();
     Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    DefaultLogger DEFAULT_LOG = Logging.logger;
+    Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
+    Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
+    Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
+    Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
+    Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
+    Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
+    Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
 
     Config CONFIG = new Config("config.json");
     DataCache CACHE = new DataCache();
@@ -82,6 +93,7 @@ public interface Constants extends Logging {
     AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
 
     HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+            .setLogger(CLIENT_LOG)
             //
             // Inbound packets
             //
@@ -123,6 +135,7 @@ public interface Constants extends Logging {
             .build();
 
     HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+            .setLogger(SERVER_LOG)
             //
             // Inbound packets
             //

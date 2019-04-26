@@ -47,7 +47,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
         if (CONFIG.getBoolean("server.extra.whitelist.enable")) {
             List<String> whitelist = CONFIG.getList("server.extra.whitelist.enable", JsonElement::getAsString);
             if (!whitelist.contains(packet.getUsername())) {
-                logger.warn("User ${0} [${1}] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+                SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
                 session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg"));
             }
         }

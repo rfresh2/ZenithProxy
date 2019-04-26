@@ -29,7 +29,7 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
     @Override
     public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull PorkServerConnection session) {
-       logger.debug("User UUID: ${0}\nBot UUID: ${1}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+       SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
         return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
     }
 

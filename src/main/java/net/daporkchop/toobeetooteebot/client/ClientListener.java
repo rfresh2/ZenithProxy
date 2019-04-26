@@ -53,11 +53,11 @@ public class ClientListener implements SessionListener, Constants {
                         .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                         .forEach(c -> c.send(event.getPacket()));
             }
-        } catch (RuntimeException e)    {
-            logger.error(e);
+        } catch (RuntimeException e) {
+            CLIENT_LOG.alert(e);
             throw e;
         } catch (Exception e) {
-            logger.error(e);
+            CLIENT_LOG.alert(e);
             throw new RuntimeException(e);
         }
     }
@@ -73,7 +73,7 @@ public class ClientListener implements SessionListener, Constants {
                 event.setPacket(p2);
             }
         } catch (Exception e) {
-            logger.error(e);
+            CLIENT_LOG.alert(e);
             throw new RuntimeException(e);
         }
     }
@@ -83,22 +83,24 @@ public class ClientListener implements SessionListener, Constants {
         try {
             CLIENT_HANDLERS.handlePostOutgoing(event.getPacket(), this.session);
         } catch (Exception e) {
-            logger.error(e);
+            CLIENT_LOG.alert(e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void connected(ConnectedEvent event) {
-        logger.debug("Connection complete!");
+        CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());
     }
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
+        CLIENT_LOG.info("Disconnecting from server...")
+                .trace("Disconnect reason: %s", event.getReason());
     }
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        logger.info("Disconnecting from server. Reason: ${0}", event.getReason());
+        CLIENT_LOG.info("Disconnected.");
     }
 }

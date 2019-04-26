@@ -52,20 +52,21 @@ public class PorkServerListener implements ServerListener, Constants {
 
     @Override
     public void serverBound(ServerBoundEvent event) {
-        logger.info("Server started.");
+        SERVER_LOG.success("Server started.");
     }
 
     @Override
     public void serverClosing(ServerClosingEvent event) {
+        SERVER_LOG.info("Closing server...");
     }
 
     @Override
     public void serverClosed(ServerClosedEvent event) {
+        SERVER_LOG.success("Server closed.");
     }
 
     @Override
     public void sessionAdded(SessionAddedEvent event) {
-        logger.trace("Client connected: ${0}", event.getSession().getRemoteAddress());
         PorkServerConnection connection = new PorkServerConnection(this.bot, event.getSession());
         event.getSession().addListener(connection);
         this.bot.getServerConnections().add(connection);
@@ -75,7 +76,7 @@ public class PorkServerListener implements ServerListener, Constants {
 
     @Override
     public void sessionRemoved(SessionRemovedEvent event) {
-        logger.trace("Client disconnected: ${0}", this.addresses.remove(event.getSession()));
         this.bot.getServerConnections().remove(this.connections.remove(event.getSession()));
+        this.addresses.remove(event.getSession());
     }
 }

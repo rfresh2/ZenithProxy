@@ -1,6 +1,7 @@
 /.idea/
 *.iml
 /run/
+/log/
 /build/
 /config.json
 /.gradle/

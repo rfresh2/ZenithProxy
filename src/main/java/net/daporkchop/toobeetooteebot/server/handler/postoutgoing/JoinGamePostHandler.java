@@ -40,9 +40,9 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
             if (CONFIG.getBoolean("debug.server.cache.sendingmessages", true)) {
                 String msg = data.getSendingMessage();
                 if (msg == null)    {
-                    logger.trace("Sending data for ${0}", data.getClass().getCanonicalName());
+                    SERVER_LOG.debug("Sending data for %s", data.getClass().getCanonicalName());
                 } else {
-                    logger.trace(msg);
+                    SERVER_LOG.debug(msg);
                 }
             }
             data.getPackets().forEach(session::send);

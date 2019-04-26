@@ -32,9 +32,11 @@ import com.github.steveice10.packetlib.packet.PacketProtocol;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
+import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +46,15 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 @Getter
+@Setter
 public class PorkServerConnection implements Session, SessionListener, Constants {
     @NonNull
-    private final Bot bot;
+    protected final Bot bot;
 
     @NonNull
-    private final Session session;
+    protected final Session session;
+
+    protected boolean isPlayer = false;
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
@@ -76,7 +81,6 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void connected(ConnectedEvent event) {
-        logger.info("Player connected: ${0}", event.getSession().getRemoteAddress());
     }
 
     @Override
@@ -85,11 +89,11 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        if (event.getCause() == null)   {
-            logger.info("Player disconnected: ${0}", event.getSession().getRemoteAddress());
-        } else {
-            logger.error("Player disconnected: ${0}", event.getSession().getRemoteAddress());
-            logger.error(event.getCause());
+        if (event.getCause() != null && !(event.getCause() instanceof IOException && !this.isPlayer))   {
+            SERVER_LOG.error("Player disconnected: %s", event.getSession().getRemoteAddress());
+            SERVER_LOG.alert(event.getCause());
+        } else if (this.isPlayer) {
+            SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
         }
     }
 

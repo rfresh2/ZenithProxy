@@ -43,18 +43,18 @@ public class DataCache implements Constants {
                 field.setAccessible(true);
                 if (CachedData.class.isAssignableFrom(field.getType())) {
                     if (CONFIG.getBoolean("debug.printDataFields")) {
-                        logger.debug("Found data field: ${0}", field.getName());
+                        CACHE_LOG.debug("Found data field: %s", field.getName());
                     }
                     dataFields.add(field);
                 } else if (CONFIG.getBoolean("debug.printDataFields")) {
-                    logger.debug("Class ${0} is not a valid data field.", field.getType().getCanonicalName());
+                    CACHE_LOG.debug("Class %s is not a valid data field.", field.getType().getCanonicalName());
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         if (CONFIG.getBoolean("debug.printDataFields")) {
-            logger.debug("Found a total of ${0} data fields.", dataFields.size());
+            CACHE_LOG.debug("Found a total of %d data fields.", dataFields.size());
         }
     }
 
@@ -81,12 +81,12 @@ public class DataCache implements Constants {
     }
 
     public boolean reset(boolean full) {
-        logger.debug("Clearing cache...");
+        CACHE_LOG.debug("Clearing cache...");
 
         try {
             this.getAllData().forEach(d -> d.reset(full));
 
-            logger.debug("Cache cleared.");
+            CACHE_LOG.debug("Cache cleared.");
         } catch (Exception e) {
             throw new RuntimeException("Unable to clear cache", e);
         }

@@ -57,7 +57,7 @@ public class PorkClientSession extends TcpClientSession implements Constants {
         if (cause == null) {
             this.disconnectFuture.complete(reason);
         } else {
-            logger.error(cause);
+            CLIENT_LOG.alert(cause);
             this.disconnectFuture.completeExceptionally(cause);
         }
     }

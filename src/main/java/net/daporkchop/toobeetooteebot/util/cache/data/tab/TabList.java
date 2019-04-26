@@ -49,7 +49,7 @@ public class TabList implements Constants {
 
     public void remove(@NonNull PlayerListEntry entry) {
         if (this.entries.remove(entry.getProfile().getId()) == null && CONFIG.getBoolean("debug.server.cache.printunknownplayers")) {
-            logger.error("Could not remove player with UUID: ${0}", entry.getProfile().getId());
+            CACHE_LOG.error("Could not remove player with UUID: %s", entry.getProfile().getId());
         }
     }
 
@@ -57,7 +57,7 @@ public class TabList implements Constants {
         PlayerEntry e = this.entries.get(entry.getProfile().getId());
         if (e == null) {
             if (CONFIG.getBoolean("debug.server.cache.unknownplayers")) {
-                logger.error("Could not find player with UUID: ${0}", entry.getProfile().getId());
+                CACHE_LOG.error("Could not find player with UUID: %s", entry.getProfile().getId());
             }
             return new PlayerEntry("", entry.getProfile().getId());
         }
