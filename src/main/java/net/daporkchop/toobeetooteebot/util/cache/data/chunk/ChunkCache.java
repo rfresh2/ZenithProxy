@@ -51,7 +51,7 @@ public class ChunkCache implements CachedData {
 
     public void remove(int x, int z)    {
         if (this.cache.remove(new Vec2i(x, z)) == null) {
-            throw new IllegalStateException(String.format("Could not remove column (%d,%d)! this is probably a server issue", x, z));
+            CACHE_LOG.warn("Could not remove column (%d,%d)! this is probably a server issue", x, z);
         }
     }
 
