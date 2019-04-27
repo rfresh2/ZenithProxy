@@ -22,7 +22,6 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -30,6 +29,22 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
  * @author DaPorkchop_
  */
 public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerBlockChangePacket, PorkClientSession> {
+    static void handleChange(@NonNull BlockChangeRecord record) {
+        Position pos = record.getPosition();
+        if (pos.getY() < 0 || pos.getY() >= 256) {
+            CLIENT_LOG.trace("Received out-of-bounds block update: %s", record);
+            return;
+        }
+        Column column = CACHE.getChunkCache().get(pos.getX() >> 4, pos.getZ() >> 4);
+        if (column != null) {
+            Chunk chunk = column.getChunks()[pos.getY() >> 4];
+            if (chunk == null) {
+                chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(true);
+            }
+            chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+        }
+    }
+
     @Override
     public boolean apply(@NonNull ServerBlockChangePacket packet, @NonNull PorkClientSession session) {
         handleChange(packet.getRecord());
@@ -39,21 +54,5 @@ public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<Serve
     @Override
     public Class<ServerBlockChangePacket> getPacketClass() {
         return ServerBlockChangePacket.class;
-    }
-
-    static void handleChange(@NonNull BlockChangeRecord record) {
-        try {
-            Position pos = record.getPosition();
-            Column column = CACHE.getChunkCache().get(pos.getX() >> 4, pos.getZ() >> 4);
-            if (column != null) {
-                Chunk chunk = column.getChunks()[pos.getY() >> 4];
-                if (chunk == null) {
-                    chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(true);
-                }
-                chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
-            }
-        } catch (Exception e)   {
-            CLIENT_LOG.error("Exception while processing block change record: %s", record).error(e);
-        }
     }
 }

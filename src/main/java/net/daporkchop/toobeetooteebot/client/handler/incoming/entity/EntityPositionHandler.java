@@ -30,6 +30,10 @@ public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<Se
     @Override
     public boolean apply(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity == null) {
+            CLIENT_LOG.warn("Received position update for unknown entity with id=%d", packet.getEntityId());
+            return true;
+        }
         entity.setX(entity.getX() + packet.getMovementX());
         entity.setY(entity.getY() + packet.getMovementY());
         entity.setZ(entity.getZ() + packet.getMovementZ());
