@@ -27,7 +27,7 @@ public class StatisticsCache implements CachedData {
     protected final Map<String, Map<String, Long>> progress = Collections.synchronizedMap(new HashMap<>());
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerAdvancementsPacket(true, this.advancements, Collections.emptyList(), this.progress));
     }
 

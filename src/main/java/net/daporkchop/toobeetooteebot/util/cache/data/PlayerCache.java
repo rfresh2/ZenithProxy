@@ -52,7 +52,7 @@ public class PlayerCache implements CachedData {
     private EntityPlayer thePlayer;
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
     }
 

@@ -18,14 +18,10 @@ package net.daporkchop.toobeetooteebot.server.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.RefStrings;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author DaPorkchop_
@@ -45,9 +41,10 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                     SERVER_LOG.debug(msg);
                 }
             }
-            data.getPackets().forEach(session::send);
-            data.getPackets().clear();
+            data.getPackets(session::send);
         });
+
+        session.setLoggedIn(true);
     }
 
     @Override

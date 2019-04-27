@@ -55,10 +55,11 @@ public class PorkServerConnection implements Session, SessionListener, Constants
     protected final Session session;
 
     protected boolean isPlayer = false;
+    protected boolean isLoggedIn = false;
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
-        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
             this.bot.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }

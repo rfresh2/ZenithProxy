@@ -28,16 +28,7 @@ import java.util.function.Consumer;
  * @author DaPorkchop_
  */
 public interface CachedData extends Constants {
-    ThreadLocal<Collection<Packet>> ZZZ_collection_cache = ThreadLocal.withInitial(ArrayDeque::new);
-
-    default Collection<Packet> getPackets() {
-        Collection<Packet> collection = ZZZ_collection_cache.get();
-        collection.clear();
-        this.getPacketsSimple(collection::add);
-        return collection;
-    }
-
-    void getPacketsSimple(@NonNull Consumer<Packet> consumer);
+    void getPackets(@NonNull Consumer<Packet> consumer);
 
     void reset(boolean full);
 

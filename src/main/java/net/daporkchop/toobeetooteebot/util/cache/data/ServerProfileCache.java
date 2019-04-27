@@ -38,7 +38,7 @@ public class ServerProfileCache implements CachedData {
     private GameProfile profile;
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
     }
 
     @Override

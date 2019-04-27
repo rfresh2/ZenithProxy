@@ -36,7 +36,7 @@ public class TabListCache implements CachedData {
     private TabList tabList = new TabList();
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerPlayerListDataPacket(this.tabList.getHeader(), this.tabList.getFooter()));
         consumer.accept(new ServerPlayerListEntryPacket(
                 PlayerListEntryAction.ADD_PLAYER,

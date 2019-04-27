@@ -31,7 +31,7 @@ public class EntityCache implements CachedData {
     private final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cachedEntities.values().forEach(entity -> entity.addPackets(consumer));
     }
 

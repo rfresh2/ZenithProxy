@@ -33,7 +33,7 @@ public class BossBarCache implements CachedData {
     private final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cachedBossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer);
     }
 

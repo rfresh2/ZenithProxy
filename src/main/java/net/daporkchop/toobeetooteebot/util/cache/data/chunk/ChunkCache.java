@@ -56,7 +56,7 @@ public class ChunkCache implements CachedData {
     }
 
     @Override
-    public void getPacketsSimple(@NonNull Consumer<Packet> consumer) {
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cache.values().stream()
                 .map(ServerChunkDataPacket::new)
                 .forEach(consumer);
