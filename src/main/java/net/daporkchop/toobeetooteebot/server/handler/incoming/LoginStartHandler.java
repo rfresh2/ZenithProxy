@@ -45,7 +45,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
     @Override
     public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
         if (CONFIG.getBoolean("server.extra.whitelist.enable")) {
-            List<String> whitelist = CONFIG.getList("server.extra.whitelist.enable", JsonElement::getAsString);
+            List<String> whitelist = CONFIG.getList("server.extra.whitelist.allowedusers", JsonElement::getAsString);
             if (!whitelist.contains(packet.getUsername())) {
                 SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
                 session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg"));
