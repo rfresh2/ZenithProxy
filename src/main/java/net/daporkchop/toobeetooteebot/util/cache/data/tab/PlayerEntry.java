@@ -52,19 +52,19 @@ public class PlayerEntry {
     }
 
     @NonNull
-    private final String name;
+    protected final String name;
 
     @NonNull
-    private final UUID id;
+    protected final UUID id;
 
-    private final Map<GameProfile.TextureType, GameProfile.Texture> textures = new EnumMap<>(GameProfile.TextureType.class);
-    private List<GameProfile.Property> properties = new ArrayList<>();
+    protected final Map<GameProfile.TextureType, GameProfile.Texture> textures = new EnumMap<>(GameProfile.TextureType.class);
+    protected List<GameProfile.Property> properties = new ArrayList<>();
 
-    private Message displayName;
+    protected Message displayName;
 
-    private GameMode gameMode;
+    protected GameMode gameMode;
 
-    private int ping;
+    protected int ping;
 
     public PlayerListEntry toMCProtocolLibEntry()   {
         PlayerListEntry entry = new PlayerListEntry(

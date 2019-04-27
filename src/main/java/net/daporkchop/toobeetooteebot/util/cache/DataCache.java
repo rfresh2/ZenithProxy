@@ -36,7 +36,7 @@ import java.util.Collection;
  */
 @Getter
 public class DataCache implements Constants {
-    private static final Collection<Field> dataFields = new ArrayDeque<>();
+    protected static final Collection<Field> dataFields = new ArrayDeque<>();
 
     static {
         try {
@@ -59,15 +59,15 @@ public class DataCache implements Constants {
         }
     }
 
-    private final ThreadLocal<Collection<CachedData>> dataCache = ThreadLocal.withInitial(() -> new ArrayList<>(dataFields.size()));
+    protected final ThreadLocal<Collection<CachedData>> dataCache = ThreadLocal.withInitial(() -> new ArrayList<>(dataFields.size()));
 
-    private final ChunkCache chunkCache = new ChunkCache();
-    private final TabListCache tabListCache = new TabListCache();
-    private final BossBarCache bossBarCache = new BossBarCache();
-    private final EntityCache entityCache = new EntityCache();
-    private final PlayerCache playerCache = new PlayerCache();
-    private final ServerProfileCache profileCache = new ServerProfileCache();
-    private final StatisticsCache statsCache = new StatisticsCache();
+    protected final ChunkCache chunkCache = new ChunkCache();
+    protected final TabListCache tabListCache = new TabListCache();
+    protected final BossBarCache bossBarCache = new BossBarCache();
+    protected final EntityCache entityCache = new EntityCache();
+    protected final PlayerCache playerCache = new PlayerCache();
+    protected final ServerProfileCache profileCache = new ServerProfileCache();
+    protected final StatisticsCache statsCache = new StatisticsCache();
 
     public Collection<CachedData> getAllData() {
         Collection<CachedData> collection = this.dataCache.get();

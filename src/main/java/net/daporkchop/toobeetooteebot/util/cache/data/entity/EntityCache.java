@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  * @author DaPorkchop_
  */
 public class EntityCache implements CachedData {
-    private final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
+    protected final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {

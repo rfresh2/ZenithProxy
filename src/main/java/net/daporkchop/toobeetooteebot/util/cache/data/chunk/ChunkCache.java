@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  * @author DaPorkchop_
  */
 public class ChunkCache implements CachedData {
-    private final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
+    protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
 
     public void add(@NonNull Column column) {
         if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {

@@ -38,14 +38,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BossBar {
     @NonNull
-    private final UUID uuid;
+    protected final UUID uuid;
 
-    private Message title;
-    private float health;
-    private BossBarColor color;
-    private BossBarDivision division;
-    private boolean darkenSky;
-    private boolean dragonBar;
+    protected Message title;
+    protected float health;
+    protected BossBarColor color;
+    protected BossBarDivision division;
+    protected boolean darkenSky;
+    protected boolean dragonBar;
 
     public ServerBossBarPacket toMCProtocolLibPacket()  {
         return new ServerBossBarPacket(

@@ -39,10 +39,10 @@ import net.daporkchop.toobeetooteebot.util.Constants;
 @Getter
 public class ClientListener implements SessionListener, Constants {
     @NonNull
-    private final Bot bot;
+    protected final Bot bot;
 
     @NonNull
-    private final PorkClientSession session;
+    protected final PorkClientSession session;
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {

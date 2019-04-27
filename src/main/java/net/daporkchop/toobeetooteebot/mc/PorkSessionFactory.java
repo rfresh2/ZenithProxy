@@ -32,7 +32,7 @@ import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 @Getter
 public class PorkSessionFactory extends TcpSessionFactory {
     @NonNull
-    private final Bot bot;
+    protected final Bot bot;
 
     @Override
     public Session createClientSession(Client client) {

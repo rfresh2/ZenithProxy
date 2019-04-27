@@ -35,7 +35,7 @@ import java.util.function.Consumer;
 @Accessors(chain = true)
 public class ServerProfileCache implements CachedData {
     @NonNull
-    private GameProfile profile;
+    protected GameProfile profile;
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {

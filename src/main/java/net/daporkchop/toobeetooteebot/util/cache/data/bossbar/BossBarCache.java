@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  * @author DaPorkchop_
  */
 public class BossBarCache implements CachedData {
-    private final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
+    protected final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {

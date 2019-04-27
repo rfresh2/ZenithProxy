@@ -42,13 +42,13 @@ import java.util.Map;
 @Getter
 public class PorkServerListener implements ServerListener, Constants {
     @NonNull
-    private final Bot bot;
+    protected final Bot bot;
 
-    private final Map<Session, PorkServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
+    protected final Map<Session, PorkServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
 
     //this isn't really needed, but it lets me print the correct address to the log
     //TODO: ip-ban specific clients?
-    private final Map<Session, SocketAddress> addresses = Collections.synchronizedMap(new IdentityHashMap<>());
+    protected final Map<Session, SocketAddress> addresses = Collections.synchronizedMap(new IdentityHashMap<>());
 
     @Override
     public void serverBound(ServerBoundEvent event) {

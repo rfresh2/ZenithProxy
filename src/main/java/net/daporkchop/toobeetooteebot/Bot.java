@@ -78,15 +78,15 @@ import java.util.stream.Collectors;
 @Getter
 public class Bot implements Constants {
     @Getter
-    private static Bot instance;
+    protected static Bot instance;
 
-    private final SessionFactory sessionFactory = new PorkSessionFactory(this);
-    private final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private MinecraftProtocol protocol;
-    private Client client;
-    private Server server;
+    protected final SessionFactory sessionFactory = new PorkSessionFactory(this);
+    protected final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    protected MinecraftProtocol protocol;
+    protected Client client;
+    protected Server server;
     @Setter
-    private BufferedImage serverIcon;
+    protected BufferedImage serverIcon;
 
     protected final Gui gui = new Gui();
 
@@ -230,7 +230,7 @@ public class Bot implements Constants {
         }
     }
 
-    private void connect() {
+    protected void connect() {
         synchronized (this) {
             if (this.isConnected()) {
                 throw new IllegalStateException("Already connected!");
@@ -249,7 +249,7 @@ public class Bot implements Constants {
         return this.client != null && this.client.getSession() != null && this.client.getSession().isConnected();
     }
 
-    private void startServer() {
+    protected void startServer() {
         synchronized (this) {
             if (this.server != null) {
                 throw new IllegalStateException("Server already started!");
@@ -305,7 +305,7 @@ public class Bot implements Constants {
         }
     }
 
-    private void logIn() {
+    protected void logIn() {
         if (this.protocol == null) {
             AUTH_LOG.info("Logging in...");
             if (CONFIG.getBoolean("authentication.doAuthentication")) {
@@ -339,7 +339,7 @@ public class Bot implements Constants {
         }
     }
 
-    private boolean delayBeforeReconnect() {
+    protected boolean delayBeforeReconnect() {
         try {
             for (int i = CONFIG.getInt("client.extra.autoreconnect.delay", 10); SHOULD_RECONNECT.get() && i > 0; i--) {
                 CLIENT_LOG.info("Reconnecting in %d", i);

@@ -35,8 +35,8 @@ import java.util.concurrent.CompletableFuture;
 @Getter
 public class PorkClientSession extends TcpClientSession implements Constants {
     @Getter(AccessLevel.PRIVATE)
-    private final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
-    private final Bot bot;
+    protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
+    protected final Bot bot;
 
     public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Bot bot) {
         super(host, port, protocol, client, null);

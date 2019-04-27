@@ -45,12 +45,12 @@ import java.util.stream.StreamSupport;
  */
 public class Config implements Constants {
     @Getter
-    private final File file;
+    protected final File file;
 
-    private final JsonObject object;
-    private volatile boolean dirty;
+    protected final JsonObject object;
+    protected volatile boolean dirty;
 
-    private final Map<String, JsonElement> fastAccessCache = Collections.synchronizedMap(new Hashtable<>());
+    protected final Map<String, JsonElement> fastAccessCache = Collections.synchronizedMap(new Hashtable<>());
 
     public Config(@NonNull String path) {
         this(new File(".", path));

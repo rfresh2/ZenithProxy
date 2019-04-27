@@ -38,18 +38,18 @@ import java.util.function.BiFunction;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class HandlerRegistry<S extends Session> implements Constants {
-    private static final boolean DEBUG_INBOUND_PACKETS = CONFIG.getBoolean("debug.packet.received");
-    private static final boolean DEBUG_OUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.preSent");
-    private static final boolean DEBUG_POSTOUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.postSent");
+    protected static final boolean DEBUG_INBOUND_PACKETS = CONFIG.getBoolean("debug.packet.received");
+    protected static final boolean DEBUG_OUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.preSent");
+    protected static final boolean DEBUG_POSTOUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.postSent");
 
     @NonNull
-    private final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers;
+    protected final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers;
 
     @NonNull
-    private final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
+    protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
 
     @NonNull
-    private final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
+    protected final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
 
     @NonNull
     protected final Logger logger;
@@ -115,14 +115,14 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @Setter
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
-        private final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
-        private final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
 
-        private final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
 
         @NonNull
-        private Logger logger;
+        protected Logger logger;
 
         public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull BiConsumer<P, S> handler) {
             return this.registerInbound(clazz, (packet, session) -> {

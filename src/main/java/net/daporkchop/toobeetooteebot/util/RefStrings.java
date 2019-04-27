@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RefStrings implements Constants {
-    private static final String BRAND = String.format("Pork2b2tBot v%s", VERSION);
+    protected static final String BRAND = String.format("Pork2b2tBot v%s", VERSION);
     public static final byte[] BRAND_ENCODED;
 
     static {
@@ -39,7 +39,7 @@ public class RefStrings implements Constants {
         BRAND_ENCODED = buf.array();
     }
 
-    private static void writeUTF8(ByteBuf buf, String value) throws IOException {
+    protected static void writeUTF8(ByteBuf buf, String value) throws IOException {
         final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
         if (bytes.length >= Short.MAX_VALUE) {
             throw new IOException("Attempt to write a string with a length greater than Short.MAX_VALUE to ByteBuf!");
@@ -49,7 +49,7 @@ public class RefStrings implements Constants {
         buf.writeBytes(bytes);
     }
 
-    private static void writeVarInt(ByteBuf buf, int value) {
+    protected static void writeVarInt(ByteBuf buf, int value) {
         byte part;
         while (true) {
             part = (byte) (value & 0x7F);

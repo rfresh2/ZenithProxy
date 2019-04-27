@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  */
 @Getter
 public class TabListCache implements CachedData {
-    private TabList tabList = new TabList();
+    protected TabList tabList = new TabList();
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {

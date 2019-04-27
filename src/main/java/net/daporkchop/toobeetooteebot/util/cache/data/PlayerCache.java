@@ -38,18 +38,18 @@ import java.util.function.Consumer;
 @Setter
 @Accessors(chain = true)
 public class PlayerCache implements CachedData {
-    private boolean hardcore;
-    private boolean reducedDebugInfo;
-    private int maxPlayers;
-    private int dimension;
+    protected boolean hardcore;
+    protected boolean reducedDebugInfo;
+    protected int maxPlayers;
+    protected int dimension;
     @NonNull
-    private GameMode gameMode;
+    protected GameMode gameMode;
     @NonNull
-    private WorldType worldType;
+    protected WorldType worldType;
     @NonNull
-    private Difficulty difficulty;
+    protected Difficulty difficulty;
     
-    private EntityPlayer thePlayer;
+    protected EntityPlayer thePlayer;
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
