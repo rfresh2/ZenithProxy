@@ -27,7 +27,7 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
-        CHAT_LOG.info(packet.getMessage().toJsonString().trim());
+        CHAT_LOG.info(packet.getMessage());
         return true;
     }
 

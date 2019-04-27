@@ -16,6 +16,7 @@
 
 package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.MessageType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDisconnectPacket;
 import lombok.NonNull;
@@ -31,7 +32,7 @@ public class DisconnectHandler implements HandlerRegistry.IncomingHandler<Server
         //TODO: check if this packet actually makes it this far down the pipeline
         session.getBot().getServerConnections().forEach(con -> {
             con.send(new ServerChatPacket("\u00A7l\u00A7cDisconnected from server. Reason:"));
-            con.send(new ServerChatPacket(packet.getReason()));
+            con.send(new ServerChatPacket(packet.getReason().toJsonString(), MessageType.CHAT));
         });
         //don't forward on to clients
         return false;

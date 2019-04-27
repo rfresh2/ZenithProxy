@@ -53,7 +53,7 @@ public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<Serve
                 chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
             }
         } catch (Exception e)   {
-            CLIENT_LOG.error("Exception while processing block change record: %s").error(e);
+            CLIENT_LOG.error("Exception while processing block change record: %s", record).error(e);
         }
     }
 }
