@@ -237,7 +237,7 @@ public class Bot implements Constants {
                 throw new IllegalStateException("Already connected!");
             }
 
-            String address = CONFIG.getString("client.server.address", "mc.example.com");
+            String address = CONFIG.getString("client.server.address", "2b2t.org");
             int port = CONFIG.getInt("client.server.port", 25565);
 
             CLIENT_LOG.info("Connecting to %s:%d...", address, port);

@@ -35,7 +35,7 @@ import java.util.Deque;
  * @author DaPorkchop_
  */
 public class Gui implements Constants {
-    public static final boolean ENABLED = CONFIG.getBoolean("gui.enabled", true);
+    public static final boolean ENABLED = CONFIG.getBoolean("gui.enabled", false);
 
     protected static final PIcon ICON;
 
