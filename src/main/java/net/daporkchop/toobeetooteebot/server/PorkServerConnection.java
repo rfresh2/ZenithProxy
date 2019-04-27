@@ -38,6 +38,7 @@ import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        if (event.getCause() != null && !(event.getCause() instanceof IOException && !this.isPlayer))   {
+        if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
             SERVER_LOG.error("Player disconnected: %s", event.getSession().getRemoteAddress());
             SERVER_LOG.alert(event.getCause());
         } else if (this.isPlayer) {

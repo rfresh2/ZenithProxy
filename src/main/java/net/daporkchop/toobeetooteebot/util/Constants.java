@@ -39,6 +39,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.StatisticsHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.UnlockRecipesHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UpdateTileEntityHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityDestroyHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityAttachHandler;
@@ -119,6 +120,7 @@ public interface Constants {
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
             .registerInbound(new UnloadChunkHandler())
+            .registerInbound(new UnlockRecipesHandler())
             .registerInbound(new UpdateTileEntityHandler())
             //ENTITY
             .registerInbound(new EntityAttachHandler())
