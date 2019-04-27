@@ -21,7 +21,7 @@ plugins {
 }
 
 group 'net.daporkchop'
-version '0.2.0'
+version '0.2.0-1.12.2'
 
 sourceCompatibility = 1.8
 
