@@ -16,10 +16,12 @@
 
 package net.daporkchop.toobeetooteebot.util.cache.data;
 
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,6 +30,7 @@ import lombok.experimental.Accessors;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityPlayer;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
@@ -51,9 +54,12 @@ public class PlayerCache implements CachedData {
     
     protected EntityPlayer thePlayer;
 
+    protected final ItemStack[] inventory = new ItemStack[46];
+
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ServerWindowItemsPacket(0, this.inventory.clone()));
     }
 
     @Override
@@ -62,6 +68,7 @@ public class PlayerCache implements CachedData {
             this.thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;
+            Arrays.fill(this.inventory, null);
         }
         this.dimension = Integer.MAX_VALUE;
         this.gameMode = null;

@@ -35,6 +35,8 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHa
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerHealthHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.PlayerPosRotHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.RespawnHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.SetSlotHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.SetWindowItemsHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.StatisticsHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandler;
@@ -116,6 +118,8 @@ public interface Constants {
             .registerInbound(new PlayerHealthHandler())
             .registerInbound(new PlayerPosRotHandler())
             .registerInbound(new RespawnHandler())
+            .registerInbound(new SetSlotHandler())
+            .registerInbound(new SetWindowItemsHandler())
             .registerInbound(new StatisticsHandler())
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
