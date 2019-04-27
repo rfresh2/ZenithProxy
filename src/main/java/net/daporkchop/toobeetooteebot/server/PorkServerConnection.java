@@ -88,13 +88,13 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
-        if (this.isPlayer)  {
-            this.bot.getPlayerCounter().decrementAndGet();
-        }
     }
 
     @Override
     public void disconnected(DisconnectedEvent event) {
+        if (this.isPlayer)  {
+            this.bot.getPlayerCounter().decrementAndGet();
+        }
         if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
             SERVER_LOG.error("Player disconnected: %s", event.getSession().getRemoteAddress());
             SERVER_LOG.alert(event.getCause());

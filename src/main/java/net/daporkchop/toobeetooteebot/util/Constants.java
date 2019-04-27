@@ -29,6 +29,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ClientKeepaliveHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.DisconnectHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.GameStateHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.JoinGameHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.LoginSuccessHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.MultiBlockChangeHandler;
@@ -112,6 +113,7 @@ public interface Constants {
             .registerInbound(new ChunkDataHandler())
             .registerInbound(new ClientKeepaliveHandler())
             .registerInbound(new DisconnectHandler())
+            .registerInbound(new GameStateHandler())
             .registerInbound(new JoinGameHandler())
             .registerInbound(new LoginSuccessHandler())
             .registerInbound(new MultiBlockChangeHandler())
