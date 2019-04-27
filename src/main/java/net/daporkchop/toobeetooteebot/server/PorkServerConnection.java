@@ -41,6 +41,7 @@ import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author DaPorkchop_
@@ -87,6 +88,9 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
+        if (this.isPlayer)  {
+            this.bot.getPlayerCounter().decrementAndGet();
+        }
     }
 
     @Override

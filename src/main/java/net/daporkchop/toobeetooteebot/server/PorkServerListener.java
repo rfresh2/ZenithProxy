@@ -34,6 +34,7 @@ import java.net.SocketAddress;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author DaPorkchop_

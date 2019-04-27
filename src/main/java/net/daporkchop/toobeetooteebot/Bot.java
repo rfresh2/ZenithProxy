@@ -87,6 +87,7 @@ public class Bot implements Constants {
     protected Server server;
     @Setter
     protected BufferedImage serverIcon;
+    protected final AtomicInteger playerCounter = new AtomicInteger();
 
     protected final Gui gui = new Gui();
 
@@ -273,7 +274,7 @@ public class Bot implements Constants {
                         new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
                         new PlayerInfo(
                                 CONFIG.getInt("server.ping.maxplayers", Integer.MAX_VALUE),
-                                this.serverConnections.stream().filter(con -> ((MinecraftProtocol) con.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME).collect(Collectors.toList()).size(),
+                                this.playerCounter.get(),
                                 this.serverConnections.stream()
                                         .map(con -> (MinecraftProtocol) con.getSession().getPacketProtocol())
                                         .filter(p -> p.getSubProtocol() == SubProtocol.GAME)
@@ -284,6 +285,10 @@ public class Bot implements Constants {
                         this.serverIcon
                 ));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> {
+                    if (this.playerCounter.getAndUpdate(i -> i == 0 ? 1 : i) != 0)    {
+                        session.disconnect("§cA client is already connected to this bot!");
+                        return;
+                    }
                     session.send(new ServerJoinGamePacket(
                             CACHE.getPlayerCache().getEntityId(),
                             CACHE.getPlayerCache().isHardcore(),
