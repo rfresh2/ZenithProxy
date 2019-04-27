@@ -56,12 +56,15 @@ task sourceJar(type: Jar) {
 jar {
     from {
         configurations.compile.collect {
-            zipTree(it)
+            it.isDirectory() ? it : zipTree(it)
         }
     }{
         exclude "META-INF/*.SF"
         exclude "META-INF/*.DSA"
         exclude "META-INF/*.RSA"
+        exclude sourceSets.main.output.asFileTree.collect {
+            return it.getPath().split("java/main/").last()
+        }
     }
 
     manifest {
