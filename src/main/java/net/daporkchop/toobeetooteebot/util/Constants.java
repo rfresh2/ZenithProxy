@@ -27,6 +27,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChatHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.ChunkDataHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.ClientKeepaliveHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.DisconnectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.JoinGameHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.LoginSuccessHandler;
@@ -62,6 +63,7 @@ import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
+import net.daporkchop.toobeetooteebot.server.handler.incoming.ServerKeepaliveHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerPositionHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerPositionRotationHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerRotationHandler;
@@ -105,6 +107,7 @@ public interface Constants {
             .registerInbound(new BossBarHandler())
             .registerInbound(new ChatHandler())
             .registerInbound(new ChunkDataHandler())
+            .registerInbound(new ClientKeepaliveHandler())
             .registerInbound(new DisconnectHandler())
             .registerInbound(new JoinGameHandler())
             .registerInbound(new LoginSuccessHandler())
@@ -146,6 +149,7 @@ public interface Constants {
             // Inbound packets
             //
             .registerInbound(new LoginStartHandler())
+            .registerInbound(new ServerKeepaliveHandler())
             //PLAYER MOVEMENT
             .registerInbound(new PlayerPositionHandler())
             .registerInbound(new PlayerPositionRotationHandler())
