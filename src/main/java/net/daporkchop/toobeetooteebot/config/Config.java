@@ -71,7 +71,7 @@ public class Config implements Constants {
                 }
             }
             try (InputStream is = new FileInputStream(file)) {
-                this.object = JSON_PARSER.parse(new InputStreamReader(is)).getAsJsonObject();
+                this.object = JSON_PARSER.parse(new InputStreamReader(is, UTF8.utf8)).getAsJsonObject();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
