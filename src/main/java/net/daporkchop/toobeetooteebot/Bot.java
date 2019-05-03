@@ -93,7 +93,7 @@ public class Bot implements Constants {
 
     public static void main(String... args) {
         {
-            String date = new SimpleDateFormat("dd.MM.yyyy HH.mm.ss").format(Date.from(Instant.now()));
+            String date = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(Date.from(Instant.now()));
             LogAmount amount = LogAmount.valueOf(CONFIG.getString("debug.loglevel", LogAmount.SIMPLE.name()).toUpperCase());
             File logFolder = new File("./log/");
             if (!logFolder.exists())    {
