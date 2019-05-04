@@ -17,7 +17,6 @@
 package net.daporkchop.toobeetooteebot;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
@@ -42,7 +41,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.http.SimpleHTTP;
 import net.daporkchop.lib.logging.LogAmount;
-import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.minecraft.text.parser.MinecraftFormatParser;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.gui.Gui;
@@ -50,6 +48,7 @@ import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.PorkServerListener;
 import net.daporkchop.toobeetooteebot.util.Constants;
+import net.daporkchop.toobeetooteebot.util.LoggerInner;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -70,7 +69,6 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * @author DaPorkchop_
@@ -85,6 +83,7 @@ public class Bot implements Constants {
     protected MinecraftProtocol protocol;
     protected Client client;
     protected Server server;
+    protected LoggerInner loggerInner;
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicInteger playerCounter = new AtomicInteger();
@@ -311,37 +310,23 @@ public class Bot implements Constants {
     }
 
     protected void logIn() {
-        if (this.protocol == null) {
-            AUTH_LOG.info("Logging in...");
-            if (CONFIG.getBoolean("authentication.doAuthentication")) {
-                try {
-                    this.protocol = new MinecraftProtocol(
-                            CONFIG.getString("authentication.username", "john.doe@example.com"),
-                            CONFIG.getString("authentication.password", "hackme")
-                    );
-                } catch (RequestException e) {
-                    throw new RuntimeException(String.format(
-                            "Unable to log in using credentials %s:%s",
-                            CONFIG.getString("authentication.username"),
-                            CONFIG.getString("authentication.password")), e);
-                }
-            } else {
-                this.protocol = new MinecraftProtocol(CONFIG.getString("authentication.username", "Steve"));
-                CONFIG.getString("authentication.password", "hackme"); //add password field to config by default
-            }
-            if (CONFIG.getBoolean("server.enabled") && CONFIG.getBoolean("server.ping.favicon", true)) {
-                new Thread(() -> {
-                    try (InputStream is = new ByteArrayInputStream(SimpleHTTP.get(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId().toString())))) {
-                        this.serverIcon = ImageIO.read(is);
-                    } catch (IOException e) {
-                        System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
-                        e.printStackTrace();
-                    }
-                }, "Server icon downloader thread").start();
-            }
-            CACHE.getProfileCache().setProfile(this.protocol.getProfile());
-            AUTH_LOG.success("Logged in.");
+        AUTH_LOG.info("Logging in...");
+        if (this.loggerInner == null) {
+            this.loggerInner = new LoggerInner();
         }
+        this.protocol = this.loggerInner.handleRelog();
+        if (CONFIG.getBoolean("server.enabled") && CONFIG.getBoolean("server.ping.favicon", true)) {
+            new Thread(() -> {
+                try (InputStream is = new ByteArrayInputStream(SimpleHTTP.get(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId().toString())))) {
+                    this.serverIcon = ImageIO.read(is);
+                } catch (IOException e) {
+                    System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
+                    e.printStackTrace();
+                }
+            }, "Server icon downloader thread").start();
+        }
+        CACHE.getProfileCache().setProfile(this.protocol.getProfile());
+        AUTH_LOG.success("Logged in.");
     }
 
     protected boolean delayBeforeReconnect() {
