@@ -27,6 +27,7 @@ import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.client.ClientListener;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -58,6 +59,8 @@ public class PorkClientSession extends TcpClientSession implements Constants {
         super.disconnect(reason, cause, wait);
         if (cause == null) {
             this.disconnectFuture.complete(reason);
+        } else if (cause instanceof IOException)    {
+            this.disconnectFuture.complete(String.format("IOException: %s", cause.getMessage()));
         } else {
             CLIENT_LOG.alert(cause);
             this.disconnectFuture.completeExceptionally(cause);
