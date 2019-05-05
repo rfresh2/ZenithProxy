@@ -18,6 +18,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import lombok.NonNull;
+import net.daporkchop.lib.minecraft.text.parser.MinecraftFormatParser;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -25,9 +26,16 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
  * @author DaPorkchop_
  */
 public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPacket, PorkClientSession> {
+    protected final MinecraftFormatParser parser = new MinecraftFormatParser();
+
     @Override
     public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
         CHAT_LOG.info(packet.getMessage());
+        if ("2b2t.org".equals(CONFIG.getString("client.server.address"))
+                && this.parser.parse(packet.getMessage()).toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {
+            CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");
+            session.disconnect("heck");
+        }
         return true;
     }
 
