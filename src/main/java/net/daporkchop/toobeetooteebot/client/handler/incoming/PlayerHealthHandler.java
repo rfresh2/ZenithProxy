@@ -34,6 +34,9 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
                 .setFood(packet.getFood())
                 .setSaturation(packet.getSaturation())
                 .setHealth(packet.getHealth());
+        CACHE_LOG.debug("Player food: %d", packet.getFood())
+                .debug("Player saturation: %f", packet.getSaturation())
+                .debug("Player health: %f", packet.getHealth());
         if (packet.getHealth() <= 0 && CONFIG.getBoolean("client.extra.autorespawn.enabled"))  {
             new Thread(() -> {
                 try {

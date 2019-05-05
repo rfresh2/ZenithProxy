@@ -42,6 +42,8 @@ public class ChunkCache implements CachedData {
     public void add(@NonNull Column column) {
         if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {
             CACHE_LOG.warn("Chunk (%d,%d) is already cached! (this is probably a server issue)", column.getX(), column.getZ());
+        } else {
+            CACHE_LOG.debug("Caching chunk (%d, %d)", column.getX(), column.getX());
         }
     }
 
