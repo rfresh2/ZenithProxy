@@ -16,10 +16,17 @@
 
 package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
+import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
+import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @author DaPorkchop_
@@ -36,6 +43,15 @@ public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJo
                 .setHardcore(packet.getHardcore())
                 .setMaxPlayers(packet.getMaxPlayers())
                 .setReducedDebugInfo(packet.getReducedDebugInfo());
+
+        session.send(new ClientSettingsPacket(
+                "en_US",
+                8,
+                ChatVisibility.FULL,
+                true,
+                SkinPart.values(),
+                Hand.MAIN_HAND
+        ));
         return false;
     }
 

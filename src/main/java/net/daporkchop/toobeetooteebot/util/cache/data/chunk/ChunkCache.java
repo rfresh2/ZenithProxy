@@ -50,8 +50,19 @@ public class ChunkCache implements CachedData {
     }
 
     public void remove(int x, int z)    {
-        if (this.cache.remove(new Vec2i(x, z)) == null) {
+        if (false && this.cache.remove(new Vec2i(x, z)) == null) {
             CACHE_LOG.warn("Could not remove column (%d,%d)! this is probably a server issue", x, z);
+        }
+    }
+
+    public void tick(int playerChunkX, int playerChunkZ)    {
+        int oldSize = this.cache.size();
+        this.cache.keySet().removeIf(pos -> Math.max(
+                Math.abs(pos.getX() - playerChunkX),
+                Math.abs(pos.getY() - playerChunkZ)
+        ) > 8);
+        if (oldSize != this.cache.size())   {
+            CACHE_LOG.debug("Unloaded %d chunks!", oldSize - this.cache.size());
         }
     }
 
