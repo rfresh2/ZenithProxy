@@ -67,6 +67,7 @@ import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
+import net.daporkchop.toobeetooteebot.server.handler.incoming.ServerChatHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.ServerKeepaliveHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerPositionHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerPositionRotationHandler;
@@ -157,6 +158,7 @@ public interface Constants {
             // Inbound packets
             //
             .registerInbound(new LoginStartHandler())
+            .registerInbound(new ServerChatHandler())
             .registerInbound(new ServerKeepaliveHandler())
             //PLAYER MOVEMENT
             .registerInbound(new PlayerPositionHandler())

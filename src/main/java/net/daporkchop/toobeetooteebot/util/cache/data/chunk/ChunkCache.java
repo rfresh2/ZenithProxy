@@ -41,9 +41,9 @@ public class ChunkCache implements CachedData {
 
     public void add(@NonNull Column column) {
         if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {
-            CACHE_LOG.warn("Chunk (%d,%d) is already cached! (this is probably a server issue)", column.getX(), column.getZ());
+            CACHE_LOG.warn("Chunk (%d, %d) is already cached! (this is probably a server issue)", column.getX(), column.getZ());
         } else {
-            CACHE_LOG.debug("Caching chunk (%d, %d)", column.getX(), column.getX());
+            CACHE_LOG.debug("Caching chunk (%d, %d)", column.getX(), column.getZ());
         }
     }
 
@@ -52,19 +52,9 @@ public class ChunkCache implements CachedData {
     }
 
     public void remove(int x, int z)    {
-        if (false && this.cache.remove(new Vec2i(x, z)) == null) {
-            CACHE_LOG.warn("Could not remove column (%d,%d)! this is probably a server issue", x, z);
-        }
-    }
-
-    public void tick(int playerChunkX, int playerChunkZ)    {
-        int oldSize = this.cache.size();
-        this.cache.keySet().removeIf(pos -> Math.max(
-                Math.abs(pos.getX() - playerChunkX),
-                Math.abs(pos.getY() - playerChunkZ)
-        ) > 8);
-        if (oldSize != this.cache.size())   {
-            CACHE_LOG.debug("Unloaded %d chunks!", oldSize - this.cache.size());
+        CACHE_LOG.debug("Server telling us to uncache chunk (%d, %d)", x, z);
+        if (this.cache.remove(new Vec2i(x, z)) == null) {
+            CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);
         }
     }
 
