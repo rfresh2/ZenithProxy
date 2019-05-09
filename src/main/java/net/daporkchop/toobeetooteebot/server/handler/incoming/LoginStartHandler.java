@@ -21,6 +21,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import lombok.NonNull;
+import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -49,7 +50,11 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
             if (!whitelist.contains(packet.getUsername())) {
                 SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
                 session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg"));
+                return false;
             }
+        }
+        if (!Bot.getInstance().isConnected())   {
+            session.disconnect("Not connected to server!");
         }
         return false;
     }
