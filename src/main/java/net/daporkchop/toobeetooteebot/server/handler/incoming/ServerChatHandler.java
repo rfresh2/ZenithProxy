@@ -42,9 +42,12 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                     throw new RuntimeException(e);
                 }
                 return true;
-            } else if (packet.getMessage().equalsIgnoreCase("!resendchunks"))   {
-                CACHE.getChunkCache().getPackets(session::send);
-                session.send(new ServerChatPacket("§a§lResent all loaded chunks!"));
+            } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
+                session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
+                return false;
+            } else if ("!reboot".equalsIgnoreCase(packet.getMessage())) {
+                SHOULD_RECONNECT.set(false);
+                session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
             } else {
                 session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage())));
