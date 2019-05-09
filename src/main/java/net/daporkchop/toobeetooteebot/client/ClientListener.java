@@ -96,7 +96,9 @@ public class ClientListener implements SessionListener, Constants {
     @Override
     public void disconnecting(DisconnectingEvent event) {
         CLIENT_LOG.info("Disconnecting from server...")
-                .trace("Disconnect reason: %s", event.getReason());
+                  .trace("Disconnect reason: %s", event.getReason());
+
+        Bot.getInstance().getServerConnections().forEach(c -> c.disconnect(event.getReason()));
     }
 
     @Override
