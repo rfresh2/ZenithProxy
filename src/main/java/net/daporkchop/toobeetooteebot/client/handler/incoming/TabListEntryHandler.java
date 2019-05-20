@@ -41,13 +41,13 @@ public class TabListEntryHandler implements HandlerRegistry.IncomingHandler<Serv
                 consumer = CACHE.getTabListCache().getTabList()::remove;
                 break;
             case UPDATE_LATENCY:
-                consumer = entry -> CACHE.getTabListCache().getTabList().get(entry).setPing(entry.getPing());
+                consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setPing(entry.getPing()));
                 break;
             case UPDATE_DISPLAY_NAME:
-                consumer = entry -> CACHE.getTabListCache().getTabList().get(entry).setDisplayName(entry.getDisplayName());
+                consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setDisplayName(entry.getDisplayName()));
                 break;
             case UPDATE_GAMEMODE:
-                consumer = entry -> CACHE.getTabListCache().getTabList().get(entry).setGameMode(entry.getGameMode());
+                consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setGameMode(entry.getGameMode()));
                 break;
         }
         for (PlayerListEntry entry : packet.getEntries()) {

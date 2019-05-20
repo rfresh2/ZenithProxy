@@ -1,7 +1,7 @@
 <!--
   ~ Adapted from the Wizardry License
   ~
-  ~ Copyright (c) 2016-2018 DaPorkchop_
+  ~ Copyright (c) 2016-2019 DaPorkchop_
   ~
   ~ Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
   ~ Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -18,7 +18,6 @@
  <head>
   <title>toobeetootee</title>
   <link rel="stylesheet" type="text/css" href="stylesheet.css">
-  <script type="text/javascript" src="hash/sha.js"></script>
  </head>
  <body>
   <div id="tablist" style="background: rgba(0,0,0,0.25);">
@@ -31,22 +30,9 @@
     <pre id="tabfooter"></pre>
   </div>
 
-  <div style="height: 500px; width: 100%px; border: 0px; overflow: auto;background: rgba(0,0,0,0.45);" id="chat">
-      If you can see this, something is wrong. Please report to DaPorkchop_ ASAP!
+  <div style="height: 500px; width: 100%; border: 0px; overflow: auto;background: rgba(0,0,0,0.45);" id="chat">
   </div>
 
-  <input type="text" id="usernameinput" value="" style="height: 40px; width: 20%">
-  <input type="text" id="chatinput" value="" style="height: 40px; width: 69%">
-  <input type="submit" value="Send" style="height: 40px; width: 8%" onclick="sendChat()" id="chatsendbutton">
-
-  <div id="loggingintext" style="height: 40px; width: 99%"><br>Logging in...</div>
-  <input type="text" id="usernamein" value="" style="height: 40px; width: 45%">
-  <input type="password" id="passwordin" value="" style="height: 40px; width: 45%">
-  <input type="submit" value="Log in" style="height: 40px; width: 8%" onclick="login()" id="loginbutton">
-  <br>
-  <input type="submit" value="Request notification permission" style="height: 40px; width: 100%"
-         onclick="requestPerms()" id="requestpermsbutton">
-  
   <!-- js -->
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="mctext.js"></script>

@@ -45,7 +45,10 @@ public class TabList implements Constants {
 
     public void add(@NonNull PlayerListEntry entry) {
         CACHE_LOG.debug("Added %s (%s) to tab list", entry.getProfile().getName(), entry.getProfile().getId());
-        this.entries.put(entry.getProfile().getId(), PlayerEntry.fromMCProtocolLibEntry(entry));
+
+        PlayerEntry coolEntry = PlayerEntry.fromMCProtocolLibEntry(entry);
+        this.entries.put(entry.getProfile().getId(), coolEntry);
+        WEBSOCKET_SERVER.updatePlayer(coolEntry);
     }
 
     public void remove(@NonNull PlayerListEntry entry) {
@@ -54,6 +57,7 @@ public class TabList implements Constants {
             CACHE_LOG.error("Could not remove player with UUID: %s", entry.getProfile().getId());
         } else if (removed != null) {
             CACHE_LOG.debug("Removed %s (%s) from tab list", removed.name, removed.id);
+            WEBSOCKET_SERVER.removePlayer(removed.id);
         }
     }
 

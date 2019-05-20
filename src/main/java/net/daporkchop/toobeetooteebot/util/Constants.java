@@ -74,6 +74,7 @@ import net.daporkchop.toobeetooteebot.server.handler.outgoing.LoginSuccessOutgoi
 import net.daporkchop.toobeetooteebot.server.handler.postoutgoing.JoinGamePostHandler;
 import net.daporkchop.toobeetooteebot.util.cache.DataCache;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+import net.daporkchop.toobeetooteebot.websocket.WebSocketServer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -94,9 +95,11 @@ public interface Constants {
     Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
     Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
     Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
+    Logger WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
 
     Config CONFIG = new Config("config.json");
     DataCache CACHE = new DataCache();
+    WebSocketServer WEBSOCKET_SERVER = new WebSocketServer();
 
     AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
 

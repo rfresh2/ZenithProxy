@@ -226,6 +226,7 @@ public class Bot implements Constants {
             if (this.server != null) {
                 this.server.close(true);
             }
+            WEBSOCKET_SERVER.shutdown();
             CONFIG.save();
         }
     }

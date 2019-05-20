@@ -36,6 +36,7 @@ public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPa
             CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");
             session.disconnect("heck");
         }
+        WEBSOCKET_SERVER.fireChat(packet.getMessage());
         return true;
     }
 
