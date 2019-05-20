@@ -62,7 +62,6 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnMobHand
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnObjectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPaintingPacket;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPlayerHandler;
-import net.daporkchop.toobeetooteebot.config.Config;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
