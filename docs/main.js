@@ -17,9 +17,10 @@
 var chatCount = 0;
 var maxChatCount = 512;
 
+var autoScroll = true;
+
 function updateScroll() {
     var element = document.getElementById("chat");
-    element.scrollTop = element.scrollHeight;
 }
 
 function init() {
@@ -37,12 +38,11 @@ function init() {
 }
 
 function onOpen(evt) {
-    document.getElementById("chat").innerHTML = "";
 }
 
 function onClose(evt) {
-    addChat("");
-    addChat("");
+    addChat(" ");
+    addChat(" ");
     addChat("<span style=\"color:#f55\">Disconnected.</span>")
 }
 
@@ -61,10 +61,6 @@ function onMessage(evt) {
 }
 
 function onError(evt) {
-}
-
-function doSend(message) {
-    websocket.send(message);
 }
 
 function getIconFromPing(ping) {
@@ -93,19 +89,32 @@ function addChat(msg) {
     var chat = document.getElementById("chat");
 
     var id = chatCount++;
-    var atBottom = chat.scrollTop === 0 || chat.scrollTop + chat.offsetHeight === chat.scrollHeight;
 
-    var element = document.createElement("P");
-    element.classList.add("chat");
-    element.id = "chat-" + id;
+    var element;
+
+    if (id != 0) {
+        element = document.createElement("BR");
+        element.classList.add("chat-" + (id - 1));
+        chat.appendChild(element);
+    }
+
+    element = document.createElement("SPAN");
+    element.classList.add("chat", "chat-" + id);
     element.innerHTML = msg;
     chat.appendChild(element);
 
-    if (element = document.getElementById("chat-" + (id - maxChatCount))) {
-        chat.removeChild(element);
+
+    element = document.getElementsByClassName("chat-" + (id - maxChatCount));
+    while (element[0]) {
+        element[0].parentNode.removeChild(element[0]);
     }
 
-    if (atBottom)   {
-        chat.scrollTop = chat.scrollHeight - chat.offsetHeight;
+    if (autoScroll) {
+        chat.scrollTop = chat.scrollHeight;
     }
 }
+
+document.getElementById("chat").addEventListener('scroll', function(event) {
+    var element = event.target;
+    autoScroll = element.scrollHeight - element.scrollTop === element.clientHeight;
+});

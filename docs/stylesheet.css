@@ -28,21 +28,23 @@
     font-family: Minecraftia !important;
 }
 
-.chat {
-    line-height: 0;
-    margin: 0;
-    padding-top: 5px;
-    padding-left: 5px;
-}
-
 #chat {
+    white-space: nowrap;
+    overflow: scroll;
     height: 500px;
     width: 100%;
     border: 0;
-    overflow: auto;
     background: rgba(0, 0, 0, 0.45);
 }
 
-#chat > p:first-child {
-    margin-top: 10px;
+.chat {
+    display: inline-block;
+    margin-left: 5px;
+    clear: both;
+    line-height: 0;
+    margin-top: 5px;
+}
+
+#chat > span:first-child {
+    margin-top: 12px;
 }
