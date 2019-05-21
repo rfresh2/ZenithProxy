@@ -33,22 +33,18 @@ import java.util.UUID;
  */
 public class WebSocketServer extends org.java_websocket.server.WebSocketServer implements Constants {
     public static final boolean ENABLED = CONFIG.getBoolean("websocket.enable", false);
-    protected final String[] messages = ENABLED ? new String[CONFIG.getInt("websocket.client.maxChatCount", 512)] : null;
+    protected static final int MAX_CHAT_COUNT = CONFIG.getInt("websocket.client.maxChatCount", 512);
+    protected final String[] messages = ENABLED ? new String[MAX_CHAT_COUNT] : null;
 
     public WebSocketServer() {
         super(new InetSocketAddress(CONFIG.getString("websocket.bind.host", "0.0.0.0"), CONFIG.getInt("websocket.bind.port", 8080)));
-
-        if (ENABLED) {
-            WEBSOCKET_LOG.info("Starting WebSocket server...");
-            this.start();
-        }
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         conn.send(String.format(
                 "{\"command\":\"init\",\"maxChatCount\":%d}",
-                this.messages.length
+                MAX_CHAT_COUNT
         ));
         CACHE.getTabListCache().getTabList().getEntries().stream().map(this::getUpdatePlayerCommand).forEach(conn::send);
 
@@ -82,13 +78,13 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer i
         if (ENABLED) {
             message = String.format(
                     "{\"command\":\"chat\",\"chat\":%s}",
-                    message.replace("<", "&lt;").replace(">", "&gt;")
+                    message
             );
             synchronized (this.messages) {
-                for (int i = this.messages.length - 2; i >= 0; i--) {
-                    this.messages[i + 1] = this.messages[i];
+                for (int i = 1; i < MAX_CHAT_COUNT; i++) {
+                    this.messages[i - 1] = this.messages[i];
                 }
-                this.messages[0] = message;
+                this.messages[MAX_CHAT_COUNT - 1] = message;
                 this.broadcast(message);
             }
         }

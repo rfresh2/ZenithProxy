@@ -37,7 +37,7 @@ function init() {
 }
 
 function onOpen(evt) {
-    doSend("connectrequest");
+    document.getElementById("chat").innerHTML = "";
 }
 
 function onClose(evt) {
@@ -93,13 +93,19 @@ function addChat(msg) {
     var chat = document.getElementById("chat");
 
     var id = chatCount++;
+    var atBottom = chat.scrollTop === 0 || chat.scrollTop + chat.offsetHeight === chat.scrollHeight;
 
     var element = document.createElement("P");
+    element.classList.add("chat");
     element.id = "chat-" + id;
     element.innerHTML = msg;
     chat.appendChild(element);
 
     if (element = document.getElementById("chat-" + (id - maxChatCount))) {
         chat.removeChild(element);
+    }
+
+    if (atBottom)   {
+        chat.scrollTop = chat.scrollHeight - chat.offsetHeight;
     }
 }

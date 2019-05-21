@@ -49,6 +49,7 @@ import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.PorkServerListener;
 import net.daporkchop.toobeetooteebot.util.Constants;
 import net.daporkchop.toobeetooteebot.util.LoggerInner;
+import net.daporkchop.toobeetooteebot.websocket.WebSocketServer;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -116,6 +117,11 @@ public class Bot implements Constants {
         }
 
         DEFAULT_LOG.info("Starting Pork2b2tBot v%s...", VERSION);
+
+        if (WebSocketServer.ENABLED) {
+            WEBSOCKET_LOG.info("Starting WebSocket server...");
+            WEBSOCKET_SERVER.start();
+        }
 
         Bot bot = new Bot();
         instance = bot;

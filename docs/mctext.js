@@ -34,6 +34,11 @@ var MC_COLORS = {
     "white": "color:#FFFFFF; "
 };
 
+var REPLACEMENTS = {
+    "<": "&lt;",
+    ">": "&gt;"
+};
+
 function parseJsonText(msg) {
     return internal_parseStyle(JSON.parse(msg));
 }
@@ -42,33 +47,10 @@ function parseLoadedText(msg) {
     return internal_parseStyle(msg);
 }
 
-
-/*
-{
-  "extra": [
-    {
-      "text": "<ChatSpammer> "
-    },
-    {
-      "color": "green",
-      "text": "> Join the most well respected group "
-    },
-    {
-      "color": "green",
-      "clickEvent": {
-        "action": "open_url",
-        "value": "https://discord.gg/73C9bUs"
-      },
-      "text": "https://discord.gg/73C9bUs"
-    }
-  ],
-  "text": ""
-}
- */
 function internal_parseStyle(msg) {
     var text = "";
     var style = "";
-    if (typeof msg === 'string' || msg instanceof String) {
+    if (typeof msg === "string" || msg instanceof String) {
         text = msg;
     } else {
         if (msg["bold"] === true) {
@@ -87,11 +69,13 @@ function internal_parseStyle(msg) {
             style += MC_COLORS[msg.color];
         }
         if (msg["text"]) {
-            text = msg["text"];
+            text = msg["text"].replace(/[<>]/g, function (s) {
+                return REPLACEMENTS[s];
+            });
         }
     }
     var html = "<span style=\"" + style + "\">" + text + "</span>";
-    if (!(typeof msg === 'string' || msg instanceof String) && msg.extra) {
+    if (!(typeof msg === "string" || msg instanceof String) && msg.extra) {
         for (var i = 0; i < msg.extra.length; i++) {
             html += internal_parseStyle(msg.extra[i]);
         }
