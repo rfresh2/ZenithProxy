@@ -19,7 +19,6 @@ package net.daporkchop.toobeetooteebot.websocket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.util.Constants;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.PlayerEntry;
-import org.apache.commons.text.StringEscapeUtils;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 
@@ -51,6 +50,7 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer i
         synchronized (this.messages) {
             Arrays.stream(this.messages).filter(Objects::nonNull).forEachOrdered(conn::send);
         }
+        conn.send(this.getTabDataCommand());
     }
 
     @Override
@@ -66,6 +66,8 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer i
         WEBSOCKET_LOG.alert(ex);
         if (conn != null) {
             conn.close();
+        } else {
+            System.exit(1);
         }
     }
 
@@ -90,25 +92,33 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer i
         }
     }
 
-    public void updatePlayer(@NonNull PlayerEntry entry)    {
-        if (ENABLED)    {
+    public void firePlayerListUpdate() {
+        if (ENABLED) {
+            this.broadcast(this.getTabDataCommand());
+        }
+    }
+
+    public void updatePlayer(@NonNull PlayerEntry entry) {
+        if (ENABLED) {
             this.broadcast(this.getUpdatePlayerCommand(entry));
         }
     }
 
-    public void removePlayer(@NonNull UUID id)    {
-        if (ENABLED)    {
+    public void removePlayer(@NonNull UUID id) {
+        if (ENABLED) {
             this.broadcast(String.format("{\"command\":\"removePlayer\",\"uuid\":\"%s\"}", id.toString()));
         }
     }
 
-    public void shutdown()  {
-        if (ENABLED)    {
+    public void shutdown() {
+        if (ENABLED) {
+            WEBSOCKET_LOG.info("Shutting down...");
             try {
-                this.stop();
-            } catch (Exception e)   {
+                this.stop(5000);
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            WEBSOCKET_LOG.success("Shut down.");
         }
     }
 
@@ -118,6 +128,14 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer i
                 entry.getName(),
                 entry.getId().toString(),
                 entry.getPing()
+        );
+    }
+
+    protected String getTabDataCommand() {
+        return String.format(
+                "{\"command\":\"tabData\",\"header\":%s,\"footer\":%s}",
+                CACHE.getTabListCache().getTabList().getHeader(),
+                CACHE.getTabListCache().getTabList().getFooter()
         );
     }
 }

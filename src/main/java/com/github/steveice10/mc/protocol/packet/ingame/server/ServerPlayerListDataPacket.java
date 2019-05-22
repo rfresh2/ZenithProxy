@@ -14,28 +14,49 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.client.handler.incoming;
+package com.github.steveice10.mc.protocol.packet.ingame.server;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import lombok.NonNull;
-import net.daporkchop.toobeetooteebot.client.PorkClientSession;
-import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
+import com.github.steveice10.mc.protocol.data.message.Message;
+import com.github.steveice10.mc.protocol.packet.MinecraftPacket;
+import com.github.steveice10.packetlib.io.NetInput;
+import com.github.steveice10.packetlib.io.NetOutput;
+
+import java.io.IOException;
 
 /**
- * @author DaPorkchop_
+ * The real implementation of this class has issues parsing json messages, so I'm gonna override it and not parse chat messages at all here
  */
-public class TabListDataHandler implements HandlerRegistry.IncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
-    @Override
-    public boolean apply(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getTabListCache().getTabList()
-                .setHeader(packet.getHeader())
-                .setFooter(packet.getFooter());
-        WEBSOCKET_SERVER.firePlayerListUpdate();
-        return true;
+public class ServerPlayerListDataPacket extends MinecraftPacket {
+    private String header;
+    private String footer;
+
+    @SuppressWarnings("unused")
+    private ServerPlayerListDataPacket() {
+    }
+
+    public ServerPlayerListDataPacket(String header, String footer) {
+        this.header = header;
+        this.footer = footer;
+    }
+
+    public String getHeader() {
+        return this.header;
+    }
+
+    public String getFooter() {
+        return this.footer;
     }
 
     @Override
-    public Class<ServerPlayerListDataPacket> getPacketClass() {
-        return ServerPlayerListDataPacket.class;
+    public void read(NetInput in) throws IOException {
+        this.header = in.readString();
+        this.footer = in.readString();
+    }
+
+    @Override
+    public void write(NetOutput out) throws IOException {
+        out.writeString(this.header);
+        out.writeString(this.footer);
     }
 }
+

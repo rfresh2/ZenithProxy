@@ -38,6 +38,10 @@ function init() {
 }
 
 function onOpen(evt) {
+    document.getElementById("tabheader").innerHTML = "";
+    document.getElementById("tabfooter").innerHTML = "";
+    document.getElementById("players").innerHTML = "";
+    document.getElementById("chat").innerHTML = "";
 }
 
 function onClose(evt) {
@@ -58,12 +62,42 @@ function onMessage(evt) {
         }
         break;
         case "player": {
+            if (msg.name === "")    {
+                break;
+            }
+
             var element = document.getElementById("player-" + msg.uuid);
+            var name;
+            var ping;
+
             var existed = element;
-            if (!existed) {
+            if (existed) {
+                name = document.getElementById("name-" + msg.uuid);
+                ping = document.getElementById("ping-" + msg.uuid);
+            } else {
                 element = document.createElement("LI");
                 element.id = "player-" + msg.uuid;
-                element.innerHTML = "<img class=\"playericon\" src=\"https://crafatar.com/avatars/" + msg.uuid + "?overlay=true\" /><span id=\"name-" + msg.uuid + "\"></span><img class=\"ping\" id=\"ping-" + msg.uuid + "\" src=\"ping/1bar.png\" />";
+
+                name = document.createElement("SPAN");
+                name.id = ["name-", msg.uuid].join("");
+                element.appendChild(name);
+
+                var icon = document.createElement("IMG");
+                icon.classList.add("playericon");
+                icon.src = ["https://crafatar.com/avatars/", msg.uuid, "?overlay=true?size=32"].join("");
+                icon.onload = function () {
+                    icon.onload = null;
+                    document.getElementById(["player-", msg.uuid].join("")).insertBefore(icon, document.getElementById(["name-", msg.uuid].join("")));
+                };
+
+                ping = document.createElement("IMG");
+                ping.id = ["ping-", msg.uuid].join("");
+                ping.classList.add("ping");
+                ping.src = "ping/1bar.png";
+                ping.onload = function () {
+                    ping.onload = null;
+                    document.getElementById(["player-", msg.uuid].join("")).appendChild(ping);
+                };
             }
 
             var players = document.getElementById("players");
@@ -86,18 +120,8 @@ function onMessage(evt) {
                 players.appendChild(element);
             }
 
-            document.getElementById("name-" + msg.uuid).innerText = msg.name;
-            document.getElementById("ping-" + msg.uuid).src = getIconFromPing(msg.ping);
-
-            var maxWidth = 0;
-            var entries = players.children;
-            for (var i = 0; i < entries.length; i++) {
-                var width = getTextWidth(entries[i].innerText);
-                if (width > maxWidth)   {
-                    maxWidth = width;
-                }
-            }
-            players.style.columnWidth = (maxWidth + 32 + 5 + 5 + 32) + "px";
+            name.innerText = msg.name;
+            ping.src = getIconFromPing(msg.ping);
         }
         break;
         case "removePlayer": {
@@ -105,6 +129,16 @@ function onMessage(evt) {
             if (element)    {
                 element.parentElement.removeChild(element);
             }
+        }
+        break;
+        case "tabData": {
+            console.log("Tab data!");
+            document.getElementById("tabheader").innerHTML = parseLoadedText(msg.header);
+            document.getElementById("tabfooter").innerHTML = parseLoadedText(msg.footer);
+        }
+        break;
+        case "reset": {
+            onOpen(null);
         }
         break;
     }
@@ -172,3 +206,16 @@ function getTextWidth(text) {
     textSize.innerHTML = text;
     return textSize.clientWidth + 1;
 }
+
+setInterval(function () {
+    var players = document.getElementById("players");
+    var maxWidth = 0;
+    var entries = players.children;
+    for (var i = 0; i < entries.length; i++) {
+        var width = getTextWidth(entries[i].innerText);
+        if (width > maxWidth)   {
+            maxWidth = width;
+        }
+    }
+    players.style.columnWidth = (maxWidth + (32 + 5) + 10 +(5 + 32)) + "px";
+}, 1000);

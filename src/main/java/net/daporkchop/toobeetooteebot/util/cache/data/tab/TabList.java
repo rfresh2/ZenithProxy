@@ -36,12 +36,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter
 @Accessors(chain = true)
 public class TabList implements Constants {
-    protected static final Message EMPTY = Message.fromString("{\"text\":\"\"}");
     protected final Map<UUID, PlayerEntry> entries = new ConcurrentHashMap<>();
     @NonNull
-    protected Message header = EMPTY;
+    protected String header = "{\"text\":\"\"}";
     @NonNull
-    protected Message footer = EMPTY;
+    protected String footer = "{\"text\":\"\"}";
 
     public void add(@NonNull PlayerListEntry entry) {
         CACHE_LOG.debug("Added %s (%s) to tab list", entry.getProfile().getName(), entry.getProfile().getId());
