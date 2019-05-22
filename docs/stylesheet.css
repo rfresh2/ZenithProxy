@@ -28,6 +28,44 @@
     font-family: Minecraftia !important;
 }
 
+#tab {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+#players {
+    column-count: 8;
+    list-style: none;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#players li {
+    margin: 5px;
+    margin-top: 0px;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: white;
+}
+
+#players li .playericon {
+    display: inline-block;
+    max-height: 32px;
+    width: auto;
+    margin-right: 5px;
+}
+
+#players li span {
+    display: inline-block;
+    max-width: 136px;
+}
+
+#players li .ping {
+    display: inline-block;
+    max-width: 32px;
+    height: auto;
+    margin-right: 5px;
+    float:right;
+}
+
 #chat {
     white-space: nowrap;
     overflow: scroll;
@@ -41,10 +79,17 @@
     display: inline-block;
     margin-left: 5px;
     clear: both;
-    line-height: 0;
-    margin-top: 5px;
+    line-height: 100%;
 }
 
 #chat > span:first-child {
     margin-top: 12px;
+}
+
+#textSize {
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
 }

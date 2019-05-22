@@ -57,6 +57,56 @@ function onMessage(evt) {
             addChat(parseLoadedText(msg.chat));
         }
         break;
+        case "player": {
+            var element = document.getElementById("player-" + msg.uuid);
+            var existed = element;
+            if (!existed) {
+                element = document.createElement("LI");
+                element.id = "player-" + msg.uuid;
+                element.innerHTML = "<img class=\"playericon\" src=\"https://crafatar.com/avatars/" + msg.uuid + "?overlay=true\" /><span id=\"name-" + msg.uuid + "\"></span><img class=\"ping\" id=\"ping-" + msg.uuid + "\" src=\"ping/1bar.png\" />";
+            }
+
+            var players = document.getElementById("players");
+            var entries = players.children;
+            var added = false;
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].innerText > msg.name) {
+                    if (existed)    {
+                        element.parentElement.removeChild(element);
+                    }
+                    players.insertBefore(element, entries[i]);
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                if (existed)    {
+                    element.parentElement.removeChild(element);
+                }
+                players.appendChild(element);
+            }
+
+            document.getElementById("name-" + msg.uuid).innerText = msg.name;
+            document.getElementById("ping-" + msg.uuid).src = getIconFromPing(msg.ping);
+
+            var maxWidth = 0;
+            var entries = players.children;
+            for (var i = 0; i < entries.length; i++) {
+                var width = getTextWidth(entries[i].innerText);
+                if (width > maxWidth)   {
+                    maxWidth = width;
+                }
+            }
+            players.style.columnWidth = (maxWidth + 32 + 5 + 5 + 32) + "px";
+        }
+        break;
+        case "removePlayer": {
+            var element = document.getElementById("player-" + msg.uuid);
+            if (element)    {
+                element.parentElement.removeChild(element);
+            }
+        }
+        break;
     }
 }
 
@@ -65,15 +115,15 @@ function onError(evt) {
 
 function getIconFromPing(ping) {
     if (ping < 150) {
-        return "5bar.png";
+        return "ping/5bar.png";
     } else if (ping < 300) {
-        return "4bar.png";
+        return "ping/4bar.png";
     } else if (ping < 600) {
-        return "3bar.png";
+        return "ping/3bar.png";
     } else if (ping < 1000) {
-        return "2bar.png";
+        return "ping/2bar.png";
     } else {
-        return "1bar.png";
+        return "ping/1bar.png";
     }
 }
 
@@ -87,9 +137,7 @@ function get(name){
 
 function addChat(msg) {
     var chat = document.getElementById("chat");
-
     var id = chatCount++;
-
     var element;
 
     if (id != 0) {
@@ -118,3 +166,9 @@ document.getElementById("chat").addEventListener('scroll', function(event) {
     var element = event.target;
     autoScroll = element.scrollHeight - element.scrollTop === element.clientHeight;
 });
+
+function getTextWidth(text) {
+    var textSize = document.getElementById("textSize");
+    textSize.innerHTML = text;
+    return textSize.clientWidth + 1;
+}
