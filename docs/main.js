@@ -79,7 +79,7 @@ function onMessage(evt) {
 
                 var icon = document.createElement("IMG");
                 icon.classList.add("playericon");
-                icon.src = ["https://crafatar.com/avatars/", msg.uuid, "?overlay=true?size=32"].join("");
+                icon.src = ["https://crafatar.daporkchop.net/avatars/", msg.uuid, "?overlay=true?size=32"].join("");
                 icon.onload = function () {
                     icon.onload = null;
                     document.getElementById(["player-", msg.uuid].join("")).insertBefore(icon, document.getElementById(["name-", msg.uuid].join("")));
