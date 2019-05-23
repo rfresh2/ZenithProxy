@@ -19,22 +19,17 @@ var maxChatCount = 512;
 
 var autoScroll = true;
 
-function updateScroll() {
-    var element = document.getElementById("chat");
-}
-
 function init() {
     var address = get("address");
-    if (address) {
-        websocket = new WebSocket(address);
-        websocket.onopen = onOpen;
-        websocket.onclose = onClose;
-        websocket.onmessage = onMessage;
-        websocket.onerror = onError;
-        addChat("<span style=\"color:#5f5\">Connecting...</span>");
-    } else {
-        addChat("<span style=\"color:#f00\">Unable to find address!</span>");
+    if (!address)   {
+        address = "wss://daporkchop.net/2pork2bot-ws";
     }
+    var websocket = new WebSocket(address);
+    websocket.onopen = onOpen;
+    websocket.onclose = onClose;
+    websocket.onmessage = onMessage;
+    websocket.onerror = onError;
+    addChat("<span style=\"color:#5f5\">Connecting...</span>");
 }
 
 function onOpen(evt) {
