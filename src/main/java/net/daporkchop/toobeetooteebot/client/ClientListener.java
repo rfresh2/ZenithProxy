@@ -90,11 +90,13 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void connected(ConnectedEvent event) {
+        WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());
     }
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
+        WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.info("Disconnecting from server...")
                   .trace("Disconnect reason: %s", event.getReason());
 
@@ -103,6 +105,7 @@ public class ClientListener implements SessionListener, Constants {
 
     @Override
     public void disconnected(DisconnectedEvent event) {
+        WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.info("Disconnected.");
     }
 }
