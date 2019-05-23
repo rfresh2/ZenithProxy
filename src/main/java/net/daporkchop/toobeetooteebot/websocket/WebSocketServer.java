@@ -21,8 +21,17 @@ import net.daporkchop.toobeetooteebot.util.Constants;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.PlayerEntry;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.DefaultSSLWebSocketServerFactory;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.net.InetSocketAddress;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
@@ -35,8 +44,37 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer i
     protected static final int MAX_CHAT_COUNT = CONFIG.getInt("websocket.client.maxChatCount", 512);
     protected final String[] messages = ENABLED ? new String[MAX_CHAT_COUNT] : null;
 
+    static {
+        //load other values into config
+        CONFIG.getBoolean("websocket.ssl.enable", false);
+    }
+
     public WebSocketServer() {
         super(new InetSocketAddress(CONFIG.getString("websocket.bind.host", "0.0.0.0"), CONFIG.getInt("websocket.bind.port", 8080)));
+
+        if (CONFIG.getBoolean("websocket.ssl.enable"))  {
+            try {
+                TrustManager[] trustAllCerts = {
+                        new X509TrustManager() {
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[0];
+                            }
+                            public void checkClientTrusted(
+                                    X509Certificate[] certs, String authType) {
+                            }
+                            public void checkServerTrusted(
+                                    X509Certificate[] certs, String authType) {
+                            }
+                        }
+                };
+
+                SSLContext ctx = SSLContext.getInstance("SSL");
+                ctx.init(null, trustAllCerts, new SecureRandom());
+                this.setWebSocketFactory(new DefaultSSLWebSocketServerFactory(ctx));
+            } catch (Exception e)    {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
