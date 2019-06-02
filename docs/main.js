@@ -22,7 +22,7 @@ var autoScroll = true;
 function init() {
     var address = get("address");
     if (!address)   {
-        address = "wss://daporkchop.net/2pork2bot-ws";
+        address = "wss://ws.daporkchop.net/2pork2bot";
     }
     var websocket = new WebSocket(address);
     websocket.onopen = onOpen;
