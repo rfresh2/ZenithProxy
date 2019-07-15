@@ -18,7 +18,6 @@ package com.github.steveice10.mc.protocol.packet.ingame.server;
 
 import com.github.steveice10.mc.protocol.data.MagicValues;
 import com.github.steveice10.mc.protocol.data.game.MessageType;
-import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.packet.MinecraftPacket;
 import com.github.steveice10.packetlib.io.NetInput;
 import com.github.steveice10.packetlib.io.NetOutput;
@@ -27,10 +26,12 @@ import org.apache.commons.text.StringEscapeUtils;
 import java.io.IOException;
 
 /**
- * The real implementation of this class has issues parsing json messages, so I'm gonna override it and not parse chat messages at all here
+ * The real implementation of this class has issues parsing json messages, so I'm gonna override it and not parse messages at all.
+ * <p>
+ * PorkLib minecraft-text can do the parsing for me, and a lot better than MCProtocolLib.
  */
 public class ServerChatPacket extends MinecraftPacket {
-    private String message;
+    private String      message;
     private MessageType type;
 
     @SuppressWarnings("unused")

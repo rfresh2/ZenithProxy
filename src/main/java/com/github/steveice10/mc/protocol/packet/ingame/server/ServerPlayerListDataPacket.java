@@ -16,7 +16,6 @@
 
 package com.github.steveice10.mc.protocol.packet.ingame.server;
 
-import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.packet.MinecraftPacket;
 import com.github.steveice10.packetlib.io.NetInput;
 import com.github.steveice10.packetlib.io.NetOutput;
@@ -24,7 +23,9 @@ import com.github.steveice10.packetlib.io.NetOutput;
 import java.io.IOException;
 
 /**
- * The real implementation of this class has issues parsing json messages, so I'm gonna override it and not parse chat messages at all here
+ * The real implementation of this class has issues parsing json messages, so I'm gonna override it and not parse messages at all.
+ * <p>
+ * PorkLib minecraft-text can do the parsing for me, and a lot better than MCProtocolLib.
  */
 public class ServerPlayerListDataPacket extends MinecraftPacket {
     private String header;
