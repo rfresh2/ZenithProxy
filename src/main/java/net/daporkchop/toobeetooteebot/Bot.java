@@ -291,11 +291,7 @@ public class Bot implements Constants {
                         new PlayerInfo(
                                 CONFIG.getInt("server.ping.maxplayers", Integer.MAX_VALUE),
                                 this.playerCounter.get(),
-                                this.serverConnections.stream()
-                                        .map(con -> (MinecraftProtocol) con.getSession().getPacketProtocol())
-                                        .filter(p -> p.getSubProtocol() == SubProtocol.GAME)
-                                        .map(MinecraftProtocol::getProfile)
-                                        .toArray(GameProfile[]::new)
+                                new GameProfile[0]
                         ),
                         new TextMessage(String.format(CONFIG.getString("server.ping.motd", "\u00A7c%s"), this.protocol.getProfile().getName())),
                         this.serverIcon
