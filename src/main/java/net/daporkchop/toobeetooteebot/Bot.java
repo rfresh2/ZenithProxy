@@ -39,7 +39,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import lombok.Getter;
 import lombok.Setter;
-import net.daporkchop.lib.http.SimpleHTTP;
+import net.daporkchop.lib.http.Http;
 import net.daporkchop.lib.logging.LogAmount;
 import net.daporkchop.lib.minecraft.text.parser.MinecraftFormatParser;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
@@ -135,7 +135,17 @@ public class Bot implements Constants {
                 Thread mainThread = Thread.currentThread();
                 Thread commandReaderThread = new Thread(() -> {
                     try (Scanner s = new Scanner(System.in)) {
-                        s.nextLine(); //TODO: command processing from CLI
+                        long lastPress = 0L;
+                        while (true)    {
+                            s.nextLine(); //TODO: command processing from CLI
+                            long now = System.currentTimeMillis();
+                            if (lastPress + 10000L >= now)  {
+                                break;
+                            } else {
+                                DEFAULT_LOG.info("Are you sure you want to stop the bot? Press enter again to confirm.");
+                                lastPress = now;
+                            }
+                        }
                     }
                     SHOULD_RECONNECT.set(false);
                     if (this.isConnected()) {
@@ -324,7 +334,7 @@ public class Bot implements Constants {
         this.protocol = this.loggerInner.handleRelog();
         if (CONFIG.getBoolean("server.enabled") && CONFIG.getBoolean("server.ping.favicon", true)) {
             new Thread(() -> {
-                try (InputStream is = new ByteArrayInputStream(SimpleHTTP.get(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId().toString())))) {
+                try (InputStream is = new ByteArrayInputStream(Http.get(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId().toString())))) {
                     this.serverIcon = ImageIO.read(is);
                 } catch (IOException e) {
                     System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());

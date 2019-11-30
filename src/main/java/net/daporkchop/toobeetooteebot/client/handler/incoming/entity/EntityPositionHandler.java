@@ -16,7 +16,6 @@
 
 package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMovementPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
@@ -30,13 +29,13 @@ public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<Se
     @Override
     public boolean apply(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity == null) {
-            CLIENT_LOG.warn("Received position update for unknown entity with id=%d", packet.getEntityId());
-            return true;
+        if (entity != null) {
+            entity.setX(entity.getX() + packet.getMovementX())
+                    .setY(entity.getY() + packet.getMovementY())
+                    .setZ(entity.getZ() + packet.getMovementZ());
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityPositionPacket for invalid entity (id=%d)", packet.getEntityId());
         }
-        entity.setX(entity.getX() + packet.getMovementX());
-        entity.setY(entity.getY() + packet.getMovementY());
-        entity.setZ(entity.getZ() + packet.getMovementZ());
         return true;
     }
 

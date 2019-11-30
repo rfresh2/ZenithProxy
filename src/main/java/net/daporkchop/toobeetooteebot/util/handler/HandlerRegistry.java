@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.daporkchop.lib.logging.Logger;
-import net.daporkchop.lib.primitive.function.bifunction.ObjectObjectBooleanBiFunction;
+import net.daporkchop.lib.primitive.function.bifunction.ObjObjBoolBiFunction;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.util.IdentityHashMap;
@@ -43,7 +43,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     protected static final boolean DEBUG_POSTOUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.postSent");
 
     @NonNull
-    protected final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers;
+    protected final Map<Class<? extends Packet>, ObjObjBoolBiFunction<? extends Packet, S>> inboundHandlers;
 
     @NonNull
     protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
@@ -59,7 +59,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
         if (DEBUG_INBOUND_PACKETS)  {
             this.logger.debug("Received packet: %s", packet.getClass());
         }
-        ObjectObjectBooleanBiFunction<P, S> handler = (ObjectObjectBooleanBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
+        ObjObjBoolBiFunction<P, S> handler = (ObjObjBoolBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
     }
 
@@ -83,7 +83,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
         }
     }
 
-    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjectObjectBooleanBiFunction<P, S>, Constants {
+    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjObjBoolBiFunction<P, S>, Constants {
         /**
          * Handle a packet
          *
@@ -115,7 +115,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
     @Setter
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
-        protected final Map<Class<? extends Packet>, ObjectObjectBooleanBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, ObjObjBoolBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
         protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
 
@@ -131,7 +131,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
             });
         }
 
-        public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull ObjectObjectBooleanBiFunction<P, S> handler) {
+        public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull ObjObjBoolBiFunction<P, S> handler) {
             this.inboundHandlers.put(clazz, handler);
             return this;
         }

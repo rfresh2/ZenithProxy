@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 import java.util.Arrays;
@@ -31,7 +32,12 @@ import java.util.stream.StreamSupport;
 public class EntitySetPassengersHandler implements HandlerRegistry.IncomingHandler<ServerEntitySetPassengersPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntitySetPassengersPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().get(packet.getEntityId()).setPassengerIds(Arrays.stream(packet.getPassengerIds()).boxed().collect(Collectors.toList()));
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.setPassengerIds(Arrays.stream(packet.getPassengerIds()).boxed().collect(Collectors.toList()));
+        } else {
+            CLIENT_LOG.warn("Received ServerEntitySetPassengersPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
         return true;
     }
 

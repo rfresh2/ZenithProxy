@@ -21,7 +21,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
-import net.daporkchop.lib.binary.UTF8;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.io.File;
@@ -31,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
@@ -67,11 +67,11 @@ public class Config implements Constants {
                 throw new IllegalStateException(String.format("Could not create file: %s", file.getAbsolutePath()));
             } else {
                 try (OutputStream os = new FileOutputStream(file))  {
-                    os.write("{}".getBytes(UTF8.utf8));
+                    os.write("{}".getBytes(StandardCharsets.UTF_8));
                 }
             }
             try (InputStream is = new FileInputStream(file)) {
-                this.object = JSON_PARSER.parse(new InputStreamReader(is, UTF8.utf8)).getAsJsonObject();
+                this.object = JSON_PARSER.parse(new InputStreamReader(is, StandardCharsets.UTF_8)).getAsJsonObject();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -82,8 +82,8 @@ public class Config implements Constants {
         synchronized (this) {
             if (this.dirty) {
                 try (OutputStream os = new FileOutputStream(this.file)) {
-                    os.write(GSON.toJson(this.object).getBytes(UTF8.utf8));
-                    os.write("\n".getBytes(UTF8.utf8)); //need me newlines
+                    os.write(GSON.toJson(this.object).getBytes(StandardCharsets.UTF_8));
+                    os.write("\n".getBytes(StandardCharsets.UTF_8)); //need me newlines
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -29,13 +29,18 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class EntityEffectHandler implements HandlerRegistry.IncomingHandler<ServerEntityEffectPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityEffectPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().<EntityEquipment>get(packet.getEntityId()).getPotionEffects().add(new PotionEffect(
-                packet.getEffect(),
-                packet.getAmplifier(),
-                packet.getDuration(),
-                packet.isAmbient(),
-                packet.getShowParticles()
-        ));
+        EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.getPotionEffects().add(new PotionEffect(
+                    packet.getEffect(),
+                    packet.getAmplifier(),
+                    packet.getDuration(),
+                    packet.isAmbient(),
+                    packet.getShowParticles()
+            ));
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityEffectPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
         return true;
     }
 

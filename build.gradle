@@ -14,28 +14,35 @@
  *
  */
 
-plugins {
-    id "java"
-    id "io.franzbecker.gradle-lombok" version "1.14"
-    id "maven-publish"
-}
+apply plugin: "java"
+apply plugin: "maven-publish"
 
 ext {
-    programVersion = "0.2.0"
+    //general things
+    javaVersion = "1.8"
     minecraftVersion = "1.12.2"
+    programVersion = "0.2.1"
 
+    //dependency things
     apachecommonstextVersion = "1.3"
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
+    lombokVersion = "1.16.20"
     mcauthlibVersion = "1.1-SNAPSHOT"
     mcprotocollibVersion = "1.12.2-3-SNAPSHOT"
-    porklibVersion = "0.3.0-SNAPSHOT"
+    porklibVersion = "0.4.1"
 }
 
 group "net.daporkchop"
 version "$programVersion-$minecraftVersion"
 
-sourceCompatibility = 1.8
+compileJava {
+    sourceCompatibility = targetCompatibility = "$javaVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
 
 repositories {
     mavenLocal()
@@ -46,27 +53,37 @@ repositories {
     mavenCentral()
 }
 
-configurations.all {
-    resolutionStrategy {
-        force "com.github.steveice10:mcauthlib:$mcauthlibVersion"
+configurations {
+    shade
+    compile.extendsFrom shade
+
+    all {
+        resolutionStrategy {
+            force "com.github.steveice10:mcauthlib:$mcauthlibVersion"
+        }
     }
 }
 
 dependencies {
-    compile "net.daporkchop.lib:gui:$porklibVersion"
-    compile "net.daporkchop.lib:hash:$porklibVersion"
-    compile "net.daporkchop.lib:http:$porklibVersion"
-    compile "net.daporkchop.lib:logging:$porklibVersion"
-    compile "net.daporkchop.lib:primitive:$porklibVersion"
-    compile "net.daporkchop.lib:minecraft-text:$porklibVersion"
+    shade "net.daporkchop.lib:gui:$porklibVersion"
+    shade "net.daporkchop.lib:hash:$porklibVersion"
+    shade "net.daporkchop.lib:http:$porklibVersion"
+    shade "net.daporkchop.lib:logging:$porklibVersion"
+    shade "net.daporkchop.lib:primitive:$porklibVersion"
+    shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
-    compile "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
+    shade "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
 
-    compile "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
+    shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
-    compile "org.apache.commons:commons-text:$apachecommonstextVersion"
+    shade "org.apache.commons:commons-text:$apachecommonstextVersion"
 
     testCompile "junit:junit:$junitVersion"
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 task sourceJar(type: Jar) {
@@ -75,13 +92,11 @@ task sourceJar(type: Jar) {
 
 jar {
     from {
-        configurations.compile.collect {
+        configurations.shade.collect {
             it.isDirectory() ? it : zipTree(it)
         }
-    }{
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
+    } {
+        exclude "META-INF/**"
         exclude sourceSets.main.output.asFileTree.collect {
             return it.getPath().split("java/main/").last()
         }

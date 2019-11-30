@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRemoveEffectPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityEquipment;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.PotionEffect;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
@@ -31,11 +32,16 @@ import java.util.Iterator;
 public class EntityRemoveEffectListener implements HandlerRegistry.IncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityRemoveEffectPacket packet, @NonNull PorkClientSession session) {
-        for (Iterator<PotionEffect> iterator = CACHE.getEntityCache().<EntityEquipment>get(packet.getEntityId()).getPotionEffects().iterator(); iterator.hasNext(); ) {
-            if (iterator.next().effect == packet.getEffect()) {
-                iterator.remove();
-                break;
+        EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            for (Iterator<PotionEffect> iterator = entity.getPotionEffects().iterator(); iterator.hasNext(); ) {
+                if (iterator.next().effect == packet.getEffect()) {
+                    iterator.remove();
+                    break;
+                }
             }
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for invalid entity (id=%d)", packet.getEntityId());
         }
         return true;
     }

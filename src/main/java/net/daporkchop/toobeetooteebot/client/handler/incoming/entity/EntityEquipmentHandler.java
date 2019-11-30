@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityEquipment;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -28,7 +29,12 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class EntityEquipmentHandler implements HandlerRegistry.IncomingHandler<ServerEntityEquipmentPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityEquipmentPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().<EntityEquipment>get(packet.getEntityId()).getEquipment().put(packet.getSlot(), packet.getItem());
+        EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.getEquipment().put(packet.getSlot(), packet.getItem());
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
         return true;
     }
 

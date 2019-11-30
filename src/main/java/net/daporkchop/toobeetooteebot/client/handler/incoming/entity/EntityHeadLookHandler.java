@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
@@ -27,7 +28,12 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class EntityHeadLookHandler implements HandlerRegistry.IncomingHandler<ServerEntityHeadLookPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityHeadLookPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().get(packet.getEntityId()).setHeadYaw(packet.getHeadYaw());
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.setHeadYaw(packet.getHeadYaw());
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityHeadLookPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
         return true;
     }
 

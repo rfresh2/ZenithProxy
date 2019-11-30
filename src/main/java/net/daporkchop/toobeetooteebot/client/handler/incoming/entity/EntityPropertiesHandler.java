@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 /**
@@ -27,7 +28,12 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class EntityPropertiesHandler implements HandlerRegistry.IncomingHandler<ServerEntityPropertiesPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityPropertiesPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().get(packet.getEntityId()).setProperties(packet.getAttributes());
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.setProperties(packet.getAttributes());
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityPropertiesPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
         return true;
     }
 

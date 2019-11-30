@@ -28,14 +28,15 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class EntityAttachHandler implements HandlerRegistry.IncomingHandler<ServerEntityAttachPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityAttachPacket packet, @NonNull PorkClientSession session) {
-        if (packet.getAttachedToId() == -1) {
-            CACHE.getEntityCache().get(packet.getEntityId())
-                    .setLeashed(false)
-                    .setLeashedId(-1);
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            if (packet.getAttachedToId() == -1) {
+                entity.setLeashed(false).setLeashedId(-1);
+            } else {
+                entity.setLeashed(true).setLeashedId(packet.getAttachedToId());
+            }
         } else {
-            CACHE.getEntityCache().get(packet.getEntityId())
-                    .setLeashed(true)
-                    .setLeashedId(packet.getAttachedToId());
+            CLIENT_LOG.warn("Received ServerEntityAttachPacket for invalid entity (id=%d)", packet.getEntityId());
         }
         return true;
     }

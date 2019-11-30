@@ -18,10 +18,10 @@ package net.daporkchop.toobeetooteebot.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 
 /**
@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
  */
 public class ServerChatHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, PorkServerConnection> {
     @Override
-    public boolean apply(@Nonnull ClientChatPacket packet, @Nonnull PorkServerConnection session) {
+    public boolean apply(@NonNull ClientChatPacket packet, @NonNull PorkServerConnection session) {
         if (packet.getMessage().startsWith("!"))   {
             if (packet.getMessage().startsWith("!!"))   {
                 //allow sending ingame commands to bots or whatever

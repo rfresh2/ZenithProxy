@@ -29,9 +29,13 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 public class EntityRotationHandler implements HandlerRegistry.IncomingHandler<ServerEntityRotationPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityRotationPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().get(packet.getEntityId())
-        .setYaw(packet.getYaw())
-        .setPitch(packet.getPitch());
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.setYaw(packet.getYaw())
+                    .setPitch(packet.getPitch());
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityRotationPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
         return true;
     }
 
