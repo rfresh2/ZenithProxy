@@ -21,7 +21,7 @@ ext {
     //general things
     javaVersion = "1.8"
     minecraftVersion = "1.12.2"
-    programVersion = "0.2.1"
+    programVersion = "0.2.2"
 
     //dependency things
     apachecommonstextVersion = "1.3"
@@ -94,7 +94,7 @@ jar {
     from {
         configurations.shade.collect {
             it.isDirectory() ? it : zipTree(it)
-        }
+        }.unique()
     } {
         exclude "META-INF/**"
         exclude sourceSets.main.output.asFileTree.collect {
