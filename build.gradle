@@ -21,7 +21,7 @@ ext {
     //general things
     javaVersion = "1.8"
     minecraftVersion = "1.12.2"
-    programVersion = "0.2.3"
+    programVersion = "0.2.4"
 
     //dependency things
     apachecommonstextVersion = "1.3"
@@ -67,7 +67,6 @@ configurations {
 dependencies {
     shade "net.daporkchop.lib:gui:$porklibVersion"
     shade "net.daporkchop.lib:hash:$porklibVersion"
-    shade "net.daporkchop.lib:http:$porklibVersion"
     shade "net.daporkchop.lib:logging:$porklibVersion"
     shade "net.daporkchop.lib:primitive:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"

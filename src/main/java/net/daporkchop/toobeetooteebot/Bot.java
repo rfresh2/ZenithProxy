@@ -39,7 +39,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import lombok.Getter;
 import lombok.Setter;
-import net.daporkchop.lib.http.Http;
 import net.daporkchop.lib.logging.LogAmount;
 import net.daporkchop.lib.minecraft.text.parser.MinecraftFormatParser;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
@@ -58,6 +57,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayDeque;
@@ -330,8 +330,8 @@ public class Bot implements Constants {
         this.protocol = this.loggerInner.handleRelog();
         if (CONFIG.getBoolean("server.enabled") && CONFIG.getBoolean("server.ping.favicon", true)) {
             new Thread(() -> {
-                try (InputStream is = new ByteArrayInputStream(Http.get(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId().toString())))) {
-                    this.serverIcon = ImageIO.read(is);
+                try {
+                    this.serverIcon = ImageIO.read(new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId())));
                 } catch (IOException e) {
                     System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
                     e.printStackTrace();
