@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -70,6 +70,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author DaPorkchop_
@@ -87,7 +88,7 @@ public class Bot implements Constants {
     protected LoggerInner loggerInner;
     @Setter
     protected BufferedImage serverIcon;
-    protected final AtomicInteger playerCounter = new AtomicInteger();
+    protected final AtomicReference<PorkServerConnection> currentPlayer = new AtomicReference<>();
 
     protected final Gui gui = new Gui();
 
@@ -290,14 +291,18 @@ public class Bot implements Constants {
                         new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
                         new PlayerInfo(
                                 CONFIG.getInt("server.ping.maxplayers", Integer.MAX_VALUE),
-                                this.playerCounter.get(),
+                                this.currentPlayer.get() == null ? 0 : 1,
                                 new GameProfile[0]
                         ),
                         new TextMessage(String.format(CONFIG.getString("server.ping.motd", "\u00A7c%s"), this.protocol.getProfile().getName())),
                         this.serverIcon
                 ));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> {
-                    if (this.playerCounter.getAndUpdate(i -> i == 0 ? 1 : i) != 0)    {
+                    PorkServerConnection connection = ((PorkServerListener) this.server.getListeners().stream()
+                            .filter(PorkServerListener.class::isInstance)
+                            .findAny().orElseThrow(IllegalStateException::new))
+                            .getConnections().get(session);
+                    if (!this.currentPlayer.compareAndSet(null, connection))    {
                         session.disconnect("§cA client is already connected to this bot!");
                         return;
                     }
@@ -312,8 +317,7 @@ public class Bot implements Constants {
                             CACHE.getPlayerCache().isReducedDebugInfo()
                     ));
                     SERVER_LOG.info("Player connected: %s", session.getRemoteAddress());
-                    ((PorkServerListener) this.server.getListeners().stream().filter(l -> l instanceof PorkServerListener).findAny()
-                            .orElseThrow(IllegalStateException::new)).getConnections().get(session).setPlayer(true);
+                    connection.setPlayer(true);
                 });
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.getInt("server.compressionThreshold", 256));
                 this.server.addListener(new PorkServerListener(this));

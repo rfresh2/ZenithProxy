@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -41,7 +41,6 @@ import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author DaPorkchop_
@@ -92,12 +91,11 @@ public class PorkServerConnection implements Session, SessionListener, Constants
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        if (this.isPlayer)  {
-            this.bot.getPlayerCounter().decrementAndGet();
+        if (this.isPlayer && !this.bot.getCurrentPlayer().compareAndSet(this, null))  {
+            SERVER_LOG.alert("Connection is marked as player, but is not the current player?!?");
         }
         if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
-            SERVER_LOG.error("Player disconnected: %s", event.getSession().getRemoteAddress());
-            SERVER_LOG.alert(event.getCause());
+            SERVER_LOG.alert(String.format("Player disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
         } else if (this.isPlayer) {
             SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
         }

@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -21,10 +21,12 @@ import net.daporkchop.lib.graphics.bitmap.image.buffer.WrapperBufferedImage;
 import net.daporkchop.lib.gui.GuiEngine;
 import net.daporkchop.lib.gui.component.state.WindowState;
 import net.daporkchop.lib.gui.component.type.Window;
+import net.daporkchop.lib.gui.util.Alignment;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import javax.imageio.ImageIO;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +43,7 @@ public class Gui implements Constants {
 
     static {
         PIcon icon = null;
-        if (ENABLED)    {
+        if (ENABLED) {
             try (InputStream in = Gui.class.getResourceAsStream("/DaPorkchop_.png")) {
                 BufferedImage img = ImageIO.read(in);
                 icon = new WrapperBufferedImage(img);
@@ -56,16 +58,21 @@ public class Gui implements Constants {
 
     protected Window window;
 
-    public void start()   {
-        if (ENABLED)    {
+    public void start() {
+        if (ENABLED) {
             this.window = GuiEngine.swing().newWindow(512, 512)
                     .setTitle(String.format("Pork2b2tBot v%s", VERSION))
                     .setIcon(ICON)
-                    .addStateListener(WindowState.CLOSING, () -> {
+                    .label("notImplementedLbl", "GUI is currently unimplemented!", lbl -> lbl
+                            .orientRelative(0, 0, 1.0d, 1.0d)
+                            .setTextPos(Alignment.CENTER)
+                            .setTextColor(Color.RED))
+                    .addStateListener(WindowState.CLOSED, () -> {
                         SHOULD_RECONNECT.set(false);
                         if (Bot.getInstance().isConnected()) {
                             Bot.getInstance().getClient().getSession().disconnect("user disconnect");
                         }
+                        this.window.release();
                     })
                     .show();
         }

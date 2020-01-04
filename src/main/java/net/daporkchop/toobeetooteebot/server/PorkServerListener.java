@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -16,6 +16,8 @@
 
 package net.daporkchop.toobeetooteebot.server;
 
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.server.ServerBoundEvent;
 import com.github.steveice10.packetlib.event.server.ServerClosedEvent;
@@ -68,16 +70,20 @@ public class PorkServerListener implements ServerListener, Constants {
 
     @Override
     public void sessionAdded(SessionAddedEvent event) {
-        PorkServerConnection connection = new PorkServerConnection(this.bot, event.getSession());
-        event.getSession().addListener(connection);
-        this.bot.getServerConnections().add(connection);
-        this.connections.put(event.getSession(), connection);
-        this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
+        //SERVER_LOG.info("session added");
+        if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getSubProtocol() != SubProtocol.STATUS) {
+            PorkServerConnection connection = new PorkServerConnection(this.bot, event.getSession());
+            event.getSession().addListener(connection);
+            this.bot.getServerConnections().add(connection);
+            this.connections.put(event.getSession(), connection);
+            this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
+        }
     }
 
     @Override
     public void sessionRemoved(SessionRemovedEvent event) {
-        this.bot.getServerConnections().remove(this.connections.remove(event.getSession()));
-        this.addresses.remove(event.getSession());
+        if (this.addresses.remove(event.getSession()) != null) {
+            this.bot.getServerConnections().remove(this.connections.remove(event.getSession()));
+        }
     }
 }
