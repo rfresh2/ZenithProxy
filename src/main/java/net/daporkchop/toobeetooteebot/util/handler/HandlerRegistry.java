@@ -40,10 +40,6 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class HandlerRegistry<S extends Session> {
-    protected static final boolean DEBUG_INBOUND_PACKETS = CONFIG.getBoolean("debug.packet.received");
-    protected static final boolean DEBUG_OUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.preSent");
-    protected static final boolean DEBUG_POSTOUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.postSent");
-
     @NonNull
     protected final Map<Class<? extends Packet>, ObjObjBoolBiFunction<? extends Packet, S>> inboundHandlers;
 
@@ -58,7 +54,7 @@ public class HandlerRegistry<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
-        if (DEBUG_INBOUND_PACKETS)  {
+        if (CONFIG.debug.packet.received)  {
             this.logger.debug("Received packet: %s", packet.getClass());
         }
         ObjObjBoolBiFunction<P, S> handler = (ObjObjBoolBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
@@ -67,8 +63,8 @@ public class HandlerRegistry<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
-        if (DEBUG_OUTBOUND_PACKETS)  {
-            this.logger.debug("About to send packet: %s", packet.getClass());
+        if (CONFIG.debug.packet.preSent)  {
+            this.logger.debug("Sending packet: %s", packet.getClass());
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
@@ -76,7 +72,7 @@ public class HandlerRegistry<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
-        if (DEBUG_POSTOUTBOUND_PACKETS)  {
+        if (CONFIG.debug.packet.postSent)  {
             this.logger.debug("Sent packet: %s", packet.getClass());
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());

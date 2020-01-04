@@ -42,19 +42,17 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  * @author DaPorkchop_
  */
 public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
-    public static final boolean ENABLED = CONFIG.getBoolean("websocket.enable", false);
-    protected static final int MAX_CHAT_COUNT = CONFIG.getInt("websocket.client.maxChatCount", 512);
-    protected final String[] messages = ENABLED ? new String[MAX_CHAT_COUNT] : null;
+    protected final String[] messages = CONFIG.websocket.enable ? new String[CONFIG.websocket.client.maxChatCount] : null;
 
     public WebSocketServer() {
-        super(new InetSocketAddress(CONFIG.getString("websocket.bind.host", "0.0.0.0"), CONFIG.getInt("websocket.bind.port", 8080)));
+        super(new InetSocketAddress(CONFIG.websocket.bind.address, CONFIG.websocket.bind.port));
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         conn.send(String.format(
                 "{\"command\":\"init\",\"maxChatCount\":%d}",
-                MAX_CHAT_COUNT
+                CONFIG.websocket.client.maxChatCount
         ));
         CACHE.getTabListCache().getTabList().getEntries().stream().map(this::getUpdatePlayerCommand).forEach(conn::send);
 
@@ -88,47 +86,45 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
     }
 
     public void fireChat(@NonNull String message) {
-        if (ENABLED) {
+        if (CONFIG.websocket.enable) {
             message = String.format(
                     "{\"command\":\"chat\",\"chat\":%s}",
                     message
             );
             synchronized (this.messages) {
-                for (int i = 1; i < MAX_CHAT_COUNT; i++) {
-                    this.messages[i - 1] = this.messages[i];
-                }
-                this.messages[MAX_CHAT_COUNT - 1] = message;
+                System.arraycopy(this.messages, 1, this.messages, 0, this.messages.length - 1);
+                this.messages[this.messages.length - 1] = message;
                 this.broadcast(message);
             }
         }
     }
 
     public void fireReset() {
-        if (ENABLED)    {
+        if (CONFIG.websocket.enable)    {
             this.broadcast("{\"command\":\"reset\"}");
         }
     }
 
     public void firePlayerListUpdate() {
-        if (ENABLED) {
+        if (CONFIG.websocket.enable) {
             this.broadcast(this.getTabDataCommand());
         }
     }
 
     public void updatePlayer(@NonNull PlayerEntry entry) {
-        if (ENABLED) {
+        if (CONFIG.websocket.enable) {
             this.broadcast(this.getUpdatePlayerCommand(entry));
         }
     }
 
     public void removePlayer(@NonNull UUID id) {
-        if (ENABLED) {
+        if (CONFIG.websocket.enable) {
             this.broadcast(String.format("{\"command\":\"removePlayer\",\"uuid\":\"%s\"}", id.toString()));
         }
     }
 
     public void shutdown() {
-        if (ENABLED) {
+        if (CONFIG.websocket.enable) {
             WEBSOCKET_LOG.info("Shutting down...");
             try {
                 this.stop(5000);

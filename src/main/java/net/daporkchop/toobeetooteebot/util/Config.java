@@ -16,206 +16,162 @@
 
 package net.daporkchop.toobeetooteebot.util;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import lombok.Getter;
-import lombok.NonNull;
-import net.daporkchop.toobeetooteebot.util.Constants;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Hashtable;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
 /**
  * @author DaPorkchop_
  */
-public class Config {
-    @Getter
-    protected final File file;
+public final class Config {
+    public Authentication authentication = new Authentication();
+    public Client         client         = new Client();
+    public Debug          debug          = new Debug();
+    public Gui            gui            = new Gui();
+    public Log            log            = new Log();
+    public Server         server         = new Server();
+    public Websocket websocket = new Websocket();
 
-    protected final JsonObject object;
-    protected volatile boolean dirty;
-
-    protected final Map<String, JsonElement> fastAccessCache = Collections.synchronizedMap(new Hashtable<>());
-
-    public Config(@NonNull String path) {
-        this(new File(".", path));
+    public static final class Authentication {
+        public boolean doAuthentication = false;
+        public String email    = "john.doe@example.com";
+        public String password = "my_secure_password";
+        public String username = "Steve";
     }
 
-    public Config(@NonNull File file) {
-        this.file = file;
-        try {
-            if (file.exists()) {
-                if (!file.isFile()) {
-                    throw new IllegalArgumentException(String.format("%s is not a file!", file.getAbsolutePath()));
-                }
-            } else if (!file.createNewFile()) {
-                throw new IllegalStateException(String.format("Could not create file: %s", file.getAbsolutePath()));
-            } else {
-                try (OutputStream os = new FileOutputStream(file))  {
-                    os.write("{}".getBytes(StandardCharsets.UTF_8));
+    public static final class Client {
+        public Extra  extra  = new Extra();
+        public Server server = new Server();
+
+        public static final class Extra {
+            public AntiAFK       antiafk       = new AntiAFK();
+            public AutoReconnect autoReconnect = new AutoReconnect();
+            public AutoRespawn   autoRespawn   = new AutoRespawn();
+            public Spammer       spammer       = new Spammer();
+
+            public static final class AntiAFK {
+                public Actions actions                   = new Actions();
+                public boolean enabled                   = true;
+                public boolean runEvenIfClientsConnected = false;
+
+                public static final class Actions {
+                    public boolean rotate    = true;
+                    public boolean swingHand = true;
                 }
             }
-            try (InputStream is = new FileInputStream(file)) {
-                this.object = JSON_PARSER.parse(new InputStreamReader(is, StandardCharsets.UTF_8)).getAsJsonObject();
+
+            public static final class AutoReconnect {
+                public boolean enabled      = true;
+                public int     delaySeconds = 10;
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            public static final class AutoRespawn {
+                public boolean enabled     = false;
+                public int     delayMillis = 100;
+            }
+
+            public static final class Spammer {
+                public int          delaySeconds = 30;
+                public boolean      enabled      = false;
+                public List<String> messages     = Arrays.asList(
+                        "#TeamPepsi",
+                        "https://pepsi.team",
+                        "https://daporkchop.net"
+                );
+            }
+        }
+
+        public static final class Server {
+            public String address = "2b2t.org";
+            public int    port    = 25565;
         }
     }
 
-    public void save() {
-        synchronized (this) {
-            if (this.dirty) {
-                try (OutputStream os = new FileOutputStream(this.file)) {
-                    os.write(GSON.toJson(this.object).getBytes(StandardCharsets.UTF_8));
-                    os.write("\n".getBytes(StandardCharsets.UTF_8)); //need me newlines
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                this.dirty = false;
-            }
+    public static final class Debug {
+        public Packet packet = new Packet();
+        public boolean printDataFields = false;
+        public Server server = new Server();
+
+        public static final class Packet {
+            public boolean received = false;
+            public boolean preSent = false;
+            public boolean postSent = false;
         }
-    }
 
-    public JsonElement get(@NonNull String key) {
-        return this.fastAccessCache.computeIfAbsent(key, k -> {
-            JsonElement element = this.object;
-            for (String s : k.split("\\.")) {
-                if (element.getAsJsonObject().has(s))  {
-                    element = element.getAsJsonObject().get(s);
-                } else {
-                    return null;
-                }
-            }
-            return element;
-        });
-    }
+        public static final class Server {
+            public Cache cache = new Cache();
 
-    public JsonElement set(@NonNull String key, @NonNull Object val) {
-        synchronized (this.fastAccessCache) {
-            try {
-                JsonObject parent = null;
-                String name = null;
-                JsonElement element = this.object;
-                for (String s : key.split("\\.")) {
-                    if (element.getAsJsonObject().has(name = s))   {
-                        element = (parent = element.getAsJsonObject()).get(s);
-                    } else {
-                        JsonObject object = new JsonObject();
-                        element.getAsJsonObject().add(s, object);
-                        parent = element.getAsJsonObject();
-                        element = object;
-                    }
-                }
-                parent.remove(name);
-                if (val instanceof JsonElement) {
-                    parent.add(name, (JsonElement) val);
-                } else if (val instanceof String) {
-                    parent.addProperty(name, (String) val);
-                } else if (val instanceof Number) {
-                    parent.addProperty(name, (Number) val);
-                } else if (val instanceof Boolean) {
-                    parent.addProperty(name, (Boolean) val);
-                } else if (val instanceof Character) {
-                    parent.addProperty(name, (Character) val);
-                }
-                return parent.get(name);
-            } finally {
-                this.dirty = true;
-                this.fastAccessCache.remove(key);
+            public static final class Cache {
+                public boolean sendingmessages = true;
+                public boolean unknownplayers = false;
             }
         }
     }
 
-    public void remove(@NonNull String key) {
-        synchronized (this.fastAccessCache) {
-            try {
-                JsonObject parent = null;
-                String name = null;
-                JsonElement element = this.object;
-                for (String s : key.split("\\.")) {
-                    element = (parent = element.getAsJsonObject()).get(name = s);
-                }
-                parent.remove(name);
-            } finally {
-                this.dirty = true;
-                this.fastAccessCache.remove(key);
+    public static final class Gui {
+        public boolean enabled      = false;
+        public int     messageCount = 512;
+    }
+
+    public static final class Log {
+        public boolean storeDebug = true;
+    }
+
+    public static final class Server {
+        public Bind    bind                 = new Bind();
+        public int     compressionThreshold = 256;
+        public boolean enabled              = false;
+        public Extra   extra                = new Extra();
+        public Ping    ping                 = new Ping();
+        public boolean verifyUsers          = false;
+
+        public static final class Bind {
+            public String address = "0.0.0.0";
+            public int    port    = 25565;
+        }
+
+        public static final class Extra {
+            public Whitelist whitelist = new Whitelist();
+
+            public static final class Whitelist {
+                public boolean      enable       = false;
+                public List<String> allowedUsers = Arrays.asList(
+                        "DaPorkchop_",
+                        "Notch"
+                );
+                public String       kickmsg      = "get out of here you HECKING scrub";
             }
         }
-    }
 
-    public boolean getBoolean(String key)   {
-        return this.getBoolean(key, false);
-    }
-
-    public boolean getBoolean(String key, boolean def)   {
-        JsonElement element = this.get(key);
-        if (element == null)    {
-            return this.set(key, def).getAsBoolean();
-        } else {
-            return element.getAsBoolean();
+        public static final class Ping {
+            public boolean favicon    = true;
+            public int     maxPlayers = Integer.MAX_VALUE;
+            public String  motd       = "§c%s";
         }
     }
 
-    public int getInt(String key)   {
-        return this.getInt(key, 0);
-    }
+    public static final class Websocket {
+        public Bind bind = new Bind();
+        public Client client = new Client();
+        public boolean enable = false;
 
-    public int getInt(String key, int def)   {
-        JsonElement element = this.get(key);
-        if (element == null)    {
-            return this.set(key, def).getAsInt();
-        } else {
-            return element.getAsInt();
+        public static final class Bind {
+            public String address = "0.0.0.0";
+            public int port = 8080;
+        }
+
+        public static final class Client {
+            public int maxChatCount = 512;
         }
     }
 
-    public String getString(String key)   {
-        return this.getString(key, "");
-    }
+    private transient boolean donePostLoad = false;
 
-    public String getString(String key, @NonNull String def)   {
-        JsonElement element = this.get(key);
-        if (element == null)    {
-            return this.set(key, def).getAsString();
-        } else {
-            return element.getAsString();
+    public synchronized Config doPostLoad() {
+        if (this.donePostLoad) {
+            throw new IllegalStateException("Config post-load already done!");
         }
-    }
+        this.donePostLoad = true;
 
-    public JsonArray getArray(String key)   {
-        return this.getArray(key, new JsonArray());
-    }
-
-    public JsonArray getArray(String key, @NonNull JsonArray def)   {
-        JsonElement element = this.get(key);
-        if (element == null)    {
-            return this.set(key, def).getAsJsonArray();
-        } else {
-            return element.getAsJsonArray();
-        }
-    }
-
-    public <T> List<T> getList(String key, @NonNull Function<JsonElement, T> mappingFunction)   {
-        return StreamSupport.stream(this.getArray(key).spliterator(), false)
-                .map(mappingFunction)
-                .collect(Collectors.toList());
+        return this;
     }
 }

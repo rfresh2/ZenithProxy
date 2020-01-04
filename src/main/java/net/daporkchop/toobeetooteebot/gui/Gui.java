@@ -23,7 +23,6 @@ import net.daporkchop.lib.gui.component.state.WindowState;
 import net.daporkchop.lib.gui.component.type.Window;
 import net.daporkchop.lib.gui.util.Alignment;
 import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.util.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -39,13 +38,11 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  * @author DaPorkchop_
  */
 public class Gui {
-    public static final boolean ENABLED = CONFIG.getBoolean("gui.enabled", false);
-
     protected static final PIcon ICON;
 
     static {
         PIcon icon = null;
-        if (ENABLED) {
+        if (CONFIG.gui.enabled) {
             try (InputStream in = Gui.class.getResourceAsStream("/DaPorkchop_.png")) {
                 BufferedImage img = ImageIO.read(in);
                 icon = new WrapperBufferedImage(img);
@@ -56,27 +53,29 @@ public class Gui {
         ICON = icon;
     }
 
-    protected final Deque<String> messageQueue = ENABLED ? new ArrayDeque<>(CONFIG.getInt("gui.messageCount", 512)) : null;
+    protected final Deque<String> messageQueue = CONFIG.gui.enabled ? new ArrayDeque<>(CONFIG.gui.messageCount) : null;
 
     protected Window window;
 
     public void start() {
-        if (ENABLED) {
-            this.window = GuiEngine.swing().newWindow(512, 512)
-                    .setTitle(String.format("Pork2b2tBot v%s", VERSION))
-                    .setIcon(ICON)
-                    .label("notImplementedLbl", "GUI is currently unimplemented!", lbl -> lbl
-                            .orientRelative(0, 0, 1.0d, 1.0d)
-                            .setTextPos(Alignment.CENTER)
-                            .setTextColor(Color.RED))
-                    .addStateListener(WindowState.CLOSED, () -> {
-                        SHOULD_RECONNECT.set(false);
-                        if (Bot.getInstance().isConnected()) {
-                            Bot.getInstance().getClient().getSession().disconnect("user disconnect");
-                        }
-                        this.window.release();
-                    })
-                    .show();
+        if (!CONFIG.gui.enabled) {
+            return;
         }
+
+        this.window = GuiEngine.swing().newWindow(512, 512)
+                .setTitle(String.format("Pork2b2tBot v%s", VERSION))
+                .setIcon(ICON)
+                .label("notImplementedLbl", "GUI is currently unimplemented!", lbl -> lbl
+                        .orientRelative(0, 0, 1.0d, 1.0d)
+                        .setTextPos(Alignment.CENTER)
+                        .setTextColor(Color.RED))
+                .addStateListener(WindowState.CLOSED, () -> {
+                    SHOULD_RECONNECT = false;
+                    if (Bot.getInstance().isConnected()) {
+                        Bot.getInstance().getClient().getSession().disconnect("user disconnect");
+                    }
+                    this.window.release();
+                })
+                .show();
     }
 }

@@ -54,7 +54,7 @@ public class TabList {
 
     public void remove(@NonNull PlayerListEntry entry) {
         PlayerEntry removed = this.entries.remove(entry.getProfile().getId());
-        if (removed == null && CONFIG.getBoolean("debug.server.cache.printunknownplayers")) {
+        if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
             CACHE_LOG.error("Could not remove player with UUID: %s", entry.getProfile().getId());
         } else if (removed != null) {
             CACHE_LOG.debug("Removed %s (%s) from tab list", removed.name, removed.id);
@@ -65,7 +65,7 @@ public class TabList {
     public PlayerEntry get(@NonNull PlayerListEntry entry) {
         PlayerEntry e = this.entries.get(entry.getProfile().getId());
         if (e == null) {
-            if (CONFIG.getBoolean("debug.server.cache.unknownplayers")) {
+            if (CONFIG.debug.server.cache.unknownplayers) {
                 CACHE_LOG.error("Could not find player with UUID: %s", entry.getProfile().getId());
             }
             return new PlayerEntry("", entry.getProfile().getId());

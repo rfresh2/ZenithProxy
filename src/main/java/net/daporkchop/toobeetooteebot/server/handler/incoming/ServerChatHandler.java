@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.server.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import lombok.NonNull;
+import net.daporkchop.lib.unsafe.PUnsafe;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
@@ -30,25 +31,20 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  * @author DaPorkchop_
  */
 public class ServerChatHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, PorkServerConnection> {
+    protected static final long CLIENTCHATPACKET_MESSAGE_OFFSET = PUnsafe.pork_getOffset(ClientChatPacket.class, "message");
+
     @Override
     public boolean apply(@NonNull ClientChatPacket packet, @NonNull PorkServerConnection session) {
         if (packet.getMessage().startsWith("!"))   {
             if (packet.getMessage().startsWith("!!"))   {
                 //allow sending ingame commands to bots or whatever
-                try  {
-                    Field f = ClientChatPacket.class.getDeclaredField("message");
-                    f.setAccessible(true);
-                    f.set(packet, packet.getMessage().substring(1));
-                } catch (NoSuchFieldException
-                        | IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
+                PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, packet.getMessage().substring(1));
                 return true;
             } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
                 session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
             } else if ("!reboot".equalsIgnoreCase(packet.getMessage())) {
-                SHOULD_RECONNECT.set(false);
+                SHOULD_RECONNECT = false;
                 session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
             } else {

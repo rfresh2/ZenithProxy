@@ -36,10 +36,10 @@ public class LoggerInner {
     protected final AuthenticationService auth;
 
     public LoggerInner()    {
-        if (CONFIG.getBoolean("authentication.doAuthentication")) {
+        if (CONFIG.authentication.doAuthentication) {
             this.auth = new AuthenticationService(UUID.randomUUID().toString(), Proxy.NO_PROXY);
-            this.auth.setUsername(CONFIG.getString("authentication.email", "john.doe@example.com"));
-            this.auth.setPassword(CONFIG.getString("authentication.password", "hackme"));
+            this.auth.setUsername(CONFIG.authentication.email);
+            this.auth.setPassword(CONFIG.authentication.password);
         } else {
             this.auth = null;
         }
@@ -47,7 +47,7 @@ public class LoggerInner {
 
     public MinecraftProtocol handleRelog()  {
         if (this.auth == null)  {
-            return new MinecraftProtocol(CONFIG.getString("authentication.username", "Steve"));
+            return new MinecraftProtocol(CONFIG.authentication.username);
         } else {
             try {
                 this.auth.login();
@@ -58,9 +58,10 @@ public class LoggerInner {
                 );
             } catch (RequestException e)    {
                 throw new RuntimeException(String.format(
-                        "Unable to log in using credentials %s:%s",
-                        CONFIG.getString("authentication.username"),
-                        CONFIG.getString("authentication.password")), e);
+                        "Unable to log in using credentials %s:%s (%s)",
+                        CONFIG.authentication.email,
+                        CONFIG.authentication.password,
+                        CONFIG.authentication.username), e);
             }
         }
     }

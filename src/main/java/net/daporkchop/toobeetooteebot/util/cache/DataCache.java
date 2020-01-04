@@ -45,18 +45,18 @@ public class DataCache {
             for (Field field : DataCache.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 if (CachedData.class.isAssignableFrom(field.getType())) {
-                    if (CONFIG.getBoolean("debug.printDataFields")) {
+                    if (CONFIG.debug.printDataFields) {
                         CACHE_LOG.debug("Found data field: %s", field.getName());
                     }
                     dataFields.add(field);
-                } else if (CONFIG.getBoolean("debug.printDataFields")) {
+                } else if (CONFIG.debug.printDataFields) {
                     CACHE_LOG.debug("Class %s is not a valid data field.", field.getType().getCanonicalName());
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        if (CONFIG.getBoolean("debug.printDataFields")) {
+        if (CONFIG.debug.printDataFields) {
             CACHE_LOG.debug("Found a total of %d data fields.", dataFields.size());
         }
     }

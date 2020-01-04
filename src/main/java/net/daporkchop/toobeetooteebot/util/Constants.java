@@ -20,9 +20,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import lombok.experimental.UtilityClass;
+import net.daporkchop.lib.binary.oio.appendable.PAppendable;
+import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
+import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
+import net.daporkchop.lib.common.misc.file.PFiles;
+import net.daporkchop.lib.logging.LogAmount;
 import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
+import net.daporkchop.lib.minecraft.text.parser.MinecraftFormatParser;
+import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.AdvancementsHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BlockChangeHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.BossBarHandler;
@@ -44,9 +51,9 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.TabListEntryHandle
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnloadChunkHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UnlockRecipesHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.UpdateTileEntityHandler;
-import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityDestroyHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityAttachHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityCollectItemHandler;
+import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityDestroyHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityEffectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityEquipmentHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.EntityHeadLookHandler;
@@ -63,7 +70,6 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnMobHand
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnObjectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPaintingPacket;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPlayerHandler;
-import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.ServerChatHandler;
@@ -77,7 +83,12 @@ import net.daporkchop.toobeetooteebot.util.cache.DataCache;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 import net.daporkchop.toobeetooteebot.websocket.WebSocketServer;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * @author DaPorkchop_
@@ -87,23 +98,23 @@ public class Constants {
     public final String VERSION = "0.2.5";
 
     public final JsonParser JSON_PARSER = new JsonParser();
-    public final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public final Gson       GSON        = new GsonBuilder().setPrettyPrinting().create();
 
-    public final DefaultLogger DEFAULT_LOG = Logging.logger;
-    public final Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
-    public final Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
-    public final Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
-    public final Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
-    public final Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
-    public final Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
-    public final Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
-    public final Logger WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
+    public final DefaultLogger DEFAULT_LOG   = Logging.logger;
+    public final Logger        AUTH_LOG      = DEFAULT_LOG.channel("Auth");
+    public final Logger        CACHE_LOG     = DEFAULT_LOG.channel("Cache");
+    public final Logger        CLIENT_LOG    = DEFAULT_LOG.channel("Client");
+    public final Logger        CHAT_LOG      = DEFAULT_LOG.channel("Chat");
+    public final Logger        GUI_LOG       = DEFAULT_LOG.channel("GUI");
+    public final Logger        MODULE_LOG    = DEFAULT_LOG.channel("Module");
+    public final Logger        SERVER_LOG    = DEFAULT_LOG.channel("Server");
+    public final Logger        WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
 
-    public final Config CONFIG = new Config("config.json");
-    public final DataCache CACHE = new DataCache();
-    public final WebSocketServer WEBSOCKET_SERVER = new WebSocketServer();
+    public final File CONFIG_FILE = new File("config.json");
 
-    public final AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
+    public       Config          CONFIG;
+    public final DataCache       CACHE;
+    public final WebSocketServer WEBSOCKET_SERVER;
 
     public final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
@@ -175,4 +186,65 @@ public class Constants {
             //
             .registerPostOutbound(new JoinGamePostHandler())
             .build();
+
+    static {
+        String date = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(Date.from(Instant.now()));
+        File logFolder = PFiles.ensureDirectoryExists(new File("log"));
+        DEFAULT_LOG.addFile(new File(logFolder, String.format("%s.log", date)), LogAmount.NORMAL)
+                .enableANSI()
+                .setFormatParser(MinecraftFormatParser.getDefaultInstance())
+                .setLogAmount(LogAmount.NORMAL);
+
+        Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
+            DEFAULT_LOG.alert(String.format("Uncaught exception in thread \"%s\"!", thread), e);
+        });
+
+        loadConfig();
+
+        if (CONFIG.log.storeDebug) {
+            DEFAULT_LOG.addFile(new File(logFolder, String.format("%s-debug.log", date)), LogAmount.DEBUG);
+        }
+
+        SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
+
+        CACHE = new DataCache();
+        WEBSOCKET_SERVER = new WebSocketServer();
+    }
+
+    public volatile boolean SHOULD_RECONNECT;
+
+    public synchronized void loadConfig() {
+        DEFAULT_LOG.info("Loading config...");
+
+        Config config;
+        if (PFiles.checkFileExists(CONFIG_FILE)) {
+            try (Reader reader = new UTF8FileReader(CONFIG_FILE)) {
+                config = GSON.fromJson(reader, Config.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to load config!", e);
+            }
+        } else {
+            config = new Config();
+        }
+
+        CONFIG = config.doPostLoad();
+        DEFAULT_LOG.info("Config loaded.");
+    }
+
+    public synchronized void saveConfig() {
+        DEFAULT_LOG.info("Saving config...");
+
+        if (CONFIG == null) {
+            DEFAULT_LOG.warn("Config is not set, saving default config!");
+            CONFIG = new Config().doPostLoad();
+        }
+
+        try (PAppendable out = new UTF8FileWriter(PFiles.ensureFileExists(CONFIG_FILE))) {
+            GSON.toJson(CONFIG, out);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to save config!", e);
+        }
+
+        DEFAULT_LOG.info("Config saved.");
+    }
 }

@@ -20,6 +20,7 @@ import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import lombok.NonNull;
+import net.daporkchop.lib.common.util.PorkUtil;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
@@ -39,13 +40,9 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
         CACHE_LOG.debug("Player food: %d", packet.getFood())
                 .debug("Player saturation: %f", packet.getSaturation())
                 .debug("Player health: %f", packet.getHealth());
-        if (packet.getHealth() <= 0 && CONFIG.getBoolean("client.extra.autorespawn.enabled"))  {
+        if (packet.getHealth() <= 0 && CONFIG.client.extra.autoRespawn.enabled)  {
             new Thread(() -> {
-                try {
-                    Thread.sleep(CONFIG.getInt("client.extra.autorespawn.delay", 100));
-                } catch (InterruptedException e)    {
-                    Thread.currentThread().interrupt();
-                }
+                PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
                 if (Bot.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
                     CACHE.getChunkCache().reset(true); //i don't think this is needed, but it can't hurt
                     Bot.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));

@@ -17,15 +17,10 @@
 package net.daporkchop.toobeetooteebot.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
-
-import java.util.List;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
@@ -33,30 +28,15 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  * @author DaPorkchop_
  */
 public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, PorkServerConnection> {
-    //TODO: better way of doing this?
-    static {
-        //this just adds the default values to the config
-
-        CONFIG.getBoolean("server.extra.whitelist.enable");
-        JsonArray def = new JsonArray();
-        def.add(new JsonPrimitive("DaPorkchop_"));
-        //def.add(new JsonPrimitive("069a79f4-44e9-4726-a5be-fca90e38aaf5")); //TODO: support UUIDs in whitelist
-        CONFIG.getArray("server.extra.whitelist.allowedusers", def);
-        CONFIG.getString("server.extra.whitelist.kickmsg", "get out of here you HECKING scrub");
-    }
-
     @Override
     public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
         //SERVER_LOG.info("login start");
-        if (CONFIG.getBoolean("server.extra.whitelist.enable")) {
-            List<String> whitelist = CONFIG.getList("server.extra.whitelist.allowedusers", JsonElement::getAsString);
-            if (!whitelist.contains(packet.getUsername())) {
-                SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
-                session.disconnect(CONFIG.getString("server.extra.whitelist.kickmsg"));
-                return false;
-            }
+        if (CONFIG.server.extra.whitelist.enable && !CONFIG.server.extra.whitelist.allowedUsers.contains(packet.getUsername())) {
+            SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+            session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+            return false;
         }
-        if (!Bot.getInstance().isConnected())   {
+        if (!Bot.getInstance().isConnected()) {
             session.disconnect("Not connected to server!");
         }
         return false;
