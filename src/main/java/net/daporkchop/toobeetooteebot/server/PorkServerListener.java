@@ -38,12 +38,14 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
 @RequiredArgsConstructor
 @Getter
-public class PorkServerListener implements ServerListener, Constants {
+public class PorkServerListener implements ServerListener {
     @NonNull
     protected final Bot bot;
 

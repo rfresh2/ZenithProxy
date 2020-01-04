@@ -72,11 +72,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
 @Getter
-public class Bot implements Constants {
+public class Bot {
     @Getter
     protected static Bot instance;
 

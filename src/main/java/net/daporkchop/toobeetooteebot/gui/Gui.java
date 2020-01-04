@@ -33,10 +33,12 @@ import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
-public class Gui implements Constants {
+public class Gui {
     public static final boolean ENABLED = CONFIG.getBoolean("gui.enabled", false);
 
     protected static final PIcon ICON;

@@ -42,13 +42,15 @@ import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class PorkServerConnection implements Session, SessionListener, Constants {
+public class PorkServerConnection implements Session, SessionListener {
     @NonNull
     protected final Bot bot;
 

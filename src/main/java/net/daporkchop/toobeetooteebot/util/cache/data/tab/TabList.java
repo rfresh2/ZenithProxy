@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -29,13 +29,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class TabList implements Constants {
+public class TabList {
     protected final Map<UUID, PlayerEntry> entries = new ConcurrentHashMap<>();
     @NonNull
     protected String header = "{\"text\":\"\"}";

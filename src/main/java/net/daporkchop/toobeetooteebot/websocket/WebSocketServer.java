@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -36,10 +36,12 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
-public class WebSocketServer extends org.java_websocket.server.WebSocketServer implements Constants {
+public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
     public static final boolean ENABLED = CONFIG.getBoolean("websocket.enable", false);
     protected static final int MAX_CHAT_COUNT = CONFIG.getInt("websocket.client.maxChatCount", 512);
     protected final String[] messages = ENABLED ? new String[MAX_CHAT_COUNT] : null;

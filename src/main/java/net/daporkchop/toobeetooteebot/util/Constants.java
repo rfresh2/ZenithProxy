@@ -19,6 +19,7 @@ package net.daporkchop.toobeetooteebot.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import lombok.experimental.UtilityClass;
 import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
@@ -81,29 +82,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author DaPorkchop_
  */
-public interface Constants {
-    String VERSION = "0.2.5";
+@UtilityClass
+public class Constants {
+    public final String VERSION = "0.2.5";
 
-    JsonParser JSON_PARSER = new JsonParser();
-    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public final JsonParser JSON_PARSER = new JsonParser();
+    public final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    DefaultLogger DEFAULT_LOG = Logging.logger;
-    Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
-    Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
-    Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
-    Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
-    Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
-    Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
-    Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
-    Logger WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
+    public final DefaultLogger DEFAULT_LOG = Logging.logger;
+    public final Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
+    public final Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
+    public final Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
+    public final Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
+    public final Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
+    public final Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
+    public final Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
+    public final Logger WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
 
-    Config CONFIG = new Config("config.json");
-    DataCache CACHE = new DataCache();
-    WebSocketServer WEBSOCKET_SERVER = new WebSocketServer();
+    public final Config CONFIG = new Config("config.json");
+    public final DataCache CACHE = new DataCache();
+    public final WebSocketServer WEBSOCKET_SERVER = new WebSocketServer();
 
-    AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
+    public final AtomicBoolean SHOULD_RECONNECT = new AtomicBoolean(CONFIG.getBoolean("client.extra.autoreconnect.enabled", true));
 
-    HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+    public final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
             //
             // Inbound packets
@@ -152,7 +154,7 @@ public interface Constants {
             .registerInbound(new SpawnPlayerHandler())
             .build();
 
-    HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+    public final HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
             .setLogger(SERVER_LOG)
             //
             // Inbound packets

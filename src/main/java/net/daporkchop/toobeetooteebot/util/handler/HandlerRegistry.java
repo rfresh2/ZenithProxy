@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2019 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -33,11 +33,13 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class HandlerRegistry<S extends Session> implements Constants {
+public class HandlerRegistry<S extends Session> {
     protected static final boolean DEBUG_INBOUND_PACKETS = CONFIG.getBoolean("debug.packet.received");
     protected static final boolean DEBUG_OUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.preSent");
     protected static final boolean DEBUG_POSTOUTBOUND_PACKETS = CONFIG.getBoolean("debug.packet.postSent");
@@ -83,7 +85,7 @@ public class HandlerRegistry<S extends Session> implements Constants {
         }
     }
 
-    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjObjBoolBiFunction<P, S>, Constants {
+    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjObjBoolBiFunction<P, S> {
         /**
          * Handle a packet
          *
@@ -97,14 +99,14 @@ public class HandlerRegistry<S extends Session> implements Constants {
         Class<P> getPacketClass();
     }
 
-    public interface OutgoingHandler<P extends Packet, S extends Session> extends BiFunction<P, S, P>, Constants {
+    public interface OutgoingHandler<P extends Packet, S extends Session> extends BiFunction<P, S, P> {
         @Override
         P apply(P packet, S session);
 
         Class<P> getPacketClass();
     }
 
-    public interface PostOutgoingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S>, Constants {
+    public interface PostOutgoingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S> {
         @Override
         void accept(P packet, S session);
 

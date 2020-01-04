@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -20,14 +20,17 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RefStrings implements Constants {
-    protected static final String BRAND = String.format("Pork2b2tBot v%s", VERSION);
-    public static final byte[] BRAND_ENCODED;
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
+@UtilityClass
+public class RefStrings {
+    protected final String BRAND = String.format("Pork2b2tBot v%s", VERSION);
+    public final byte[] BRAND_ENCODED;
 
     static {
         ByteBuf buf = Unpooled.buffer(5 + BRAND.length());
@@ -39,7 +42,7 @@ public class RefStrings implements Constants {
         BRAND_ENCODED = buf.array();
     }
 
-    protected static void writeUTF8(ByteBuf buf, String value) throws IOException {
+    protected void writeUTF8(ByteBuf buf, String value) throws IOException {
         final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
         if (bytes.length >= Short.MAX_VALUE) {
             throw new IOException("Attempt to write a string with a length greater than Short.MAX_VALUE to ByteBuf!");
@@ -49,7 +52,7 @@ public class RefStrings implements Constants {
         buf.writeBytes(bytes);
     }
 
-    protected static void writeVarInt(ByteBuf buf, int value) {
+    protected void writeVarInt(ByteBuf buf, int value) {
         byte part;
         while (true) {
             part = (byte) (value & 0x7F);

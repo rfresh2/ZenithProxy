@@ -27,6 +27,8 @@ import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 import java.util.List;
 
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
