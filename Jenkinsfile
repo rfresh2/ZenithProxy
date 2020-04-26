@@ -8,6 +8,11 @@ String getDiscordMessage() {
         msg += "- no changes\n"
     }
 
+    msg += "\n**Artifacts:**\n"
+    currentBuild.rawBuild.getArtifacts().each {
+        msg += "- [" + it.getDisplayPath() + "](" + env.BUILD_URL + "artifact/" + it.getHref() + ")\n"
+    }
+
     return msg.length() > 2048 ? msg.substring(0, 2045) + "..." : msg
 }
 
@@ -56,7 +61,7 @@ pipeline {
                 }
             }
             steps {
-                sh "./gradlew publish --no-daemon"
+                sh "./gradlew publish -x publishToMavenLocal --no-daemon"
             }
         }
     }
@@ -66,7 +71,7 @@ pipeline {
             deleteDir()
 
             withCredentials([string(credentialsId: "daporkchop_discord_webhook", variable: "discordWebhook")]) {
-                discordSend thumbnail: "https://cloud.daporkchop.net/static/img/logo/128/minecraft-porkchop_raw.png",
+                discordSend thumbnail: "https://cdn.discordapp.com/attachments/431945309011050496/703921035648565318/face-104f192a0f3e41e3b574919cc931559a.png",
                         result: currentBuild.currentResult,
                         description: getDiscordMessage(),
                         link: env.BUILD_URL,

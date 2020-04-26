@@ -34,16 +34,20 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class EntityRemoveEffectListener implements HandlerRegistry.IncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityRemoveEffectPacket packet, @NonNull PorkClientSession session) {
-        EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity != null) {
-            for (Iterator<PotionEffect> iterator = entity.getPotionEffects().iterator(); iterator.hasNext(); ) {
-                if (iterator.next().effect == packet.getEffect()) {
-                    iterator.remove();
-                    break;
+        try {
+            EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+            if (entity != null) {
+                for (Iterator<PotionEffect> iterator = entity.getPotionEffects().iterator(); iterator.hasNext(); ) {
+                    if (iterator.next().effect == packet.getEffect()) {
+                        iterator.remove();
+                        break;
+                    }
                 }
+            } else {
+                CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for invalid entity (id=%d)", packet.getEntityId());
             }
-        } else {
-            CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for invalid entity (id=%d)", packet.getEntityId());
+        } catch (ClassCastException e)  {
+            CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
         }
         return true;
     }

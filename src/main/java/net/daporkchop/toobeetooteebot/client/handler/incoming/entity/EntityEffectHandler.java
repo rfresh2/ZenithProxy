@@ -31,17 +31,21 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class EntityEffectHandler implements HandlerRegistry.IncomingHandler<ServerEntityEffectPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityEffectPacket packet, @NonNull PorkClientSession session) {
-        EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity != null) {
-            entity.getPotionEffects().add(new PotionEffect(
-                    packet.getEffect(),
-                    packet.getAmplifier(),
-                    packet.getDuration(),
-                    packet.isAmbient(),
-                    packet.getShowParticles()
-            ));
-        } else {
-            CLIENT_LOG.warn("Received ServerEntityEffectPacket for invalid entity (id=%d)", packet.getEntityId());
+        try {
+            EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+            if (entity != null) {
+                entity.getPotionEffects().add(new PotionEffect(
+                        packet.getEffect(),
+                        packet.getAmplifier(),
+                        packet.getDuration(),
+                        packet.isAmbient(),
+                        packet.getShowParticles()
+                ));
+            } else {
+                CLIENT_LOG.warn("Received ServerEntityEffectPacket for invalid entity (id=%d)", packet.getEntityId());
+            }
+        } catch (ClassCastException e)  {
+            CLIENT_LOG.warn("Received ServerEntityEffectPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
         }
         return true;
     }

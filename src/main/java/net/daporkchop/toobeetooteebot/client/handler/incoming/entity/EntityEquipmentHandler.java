@@ -31,11 +31,15 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class EntityEquipmentHandler implements HandlerRegistry.IncomingHandler<ServerEntityEquipmentPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerEntityEquipmentPacket packet, @NonNull PorkClientSession session) {
-        EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity != null) {
-            entity.getEquipment().put(packet.getSlot(), packet.getItem());
-        } else {
-            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
+        try {
+            EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+            if (entity != null) {
+                entity.getEquipment().put(packet.getSlot(), packet.getItem());
+            } else {
+                CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
+            }
+        } catch (ClassCastException e)  {
+            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
         }
         return true;
     }
