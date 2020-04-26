@@ -32,7 +32,7 @@ public class SetWindowItemsHandler implements HandlerRegistry.IncomingHandler<Se
     public boolean apply(@NonNull ServerWindowItemsPacket packet, @NonNull PorkClientSession session) {
         if (packet.getWindowId() == 0)  { //player inventory
             ItemStack[] dst = CACHE.getPlayerCache().getInventory();
-            System.arraycopy(packet.getItems(), 0, dst, 0, dst.length);
+            System.arraycopy(packet.getItems(), 0, dst, 0, Math.min(dst.length, packet.getItems().length));
         }
         return true;
     }
