@@ -61,6 +61,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
@@ -184,6 +185,27 @@ public class Bot {
                 });
                 moduleRunnerThread.setDaemon(true);
                 moduleRunnerThread.start();
+            }
+            if (CONFIG.server.extra.timeout.enable){
+                long millis = CONFIG.server.extra.timeout.millis;
+                long interval = CONFIG.server.extra.timeout.interval;
+                Thread timeoutThread = new Thread(() -> {
+                    try {
+                        while (true)    {
+                            Thread.sleep(interval);
+                            if (this.isConnected() && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+                                Collection<PorkServerConnection> pendingDisconnects = this.serverConnections.stream()
+                                        .filter(c -> System.currentTimeMillis() - c.getLastPacket() >= millis)
+                                        .collect(Collectors.toList());
+                                pendingDisconnects.forEach(c -> c.disconnect("Timed out"));
+                            }
+                        }
+                    } catch (InterruptedException e)    {
+                        Thread.currentThread().interrupt();
+                    }
+                });
+                timeoutThread.setDaemon(true);
+                timeoutThread.start();
             }
 
             this.logIn();

@@ -24,55 +24,55 @@ import java.util.List;
  */
 public final class Config {
     public Authentication authentication = new Authentication();
-    public Client         client         = new Client();
-    public Debug          debug          = new Debug();
-    public Gui            gui            = new Gui();
-    public Log            log            = new Log();
-    public Server         server         = new Server();
+    public Client client = new Client();
+    public Debug debug = new Debug();
+    public Gui gui = new Gui();
+    public Log log = new Log();
+    public Server server = new Server();
     public Websocket websocket = new Websocket();
 
     public static final class Authentication {
         public boolean doAuthentication = false;
-        public String email    = "john.doe@example.com";
+        public String email = "john.doe@example.com";
         public String password = "my_secure_password";
         public String username = "Steve";
     }
 
     public static final class Client {
-        public Extra  extra  = new Extra();
+        public Extra extra = new Extra();
         public Server server = new Server();
 
         public static final class Extra {
-            public AntiAFK       antiafk       = new AntiAFK();
+            public AntiAFK antiafk = new AntiAFK();
             public AutoReconnect autoReconnect = new AutoReconnect();
-            public AutoRespawn   autoRespawn   = new AutoRespawn();
-            public Spammer       spammer       = new Spammer();
+            public AutoRespawn autoRespawn = new AutoRespawn();
+            public Spammer spammer = new Spammer();
 
             public static final class AntiAFK {
-                public Actions actions                   = new Actions();
-                public boolean enabled                   = true;
+                public Actions actions = new Actions();
+                public boolean enabled = true;
                 public boolean runEvenIfClientsConnected = false;
 
                 public static final class Actions {
-                    public boolean rotate    = true;
+                    public boolean rotate = true;
                     public boolean swingHand = true;
                 }
             }
 
             public static final class AutoReconnect {
-                public boolean enabled      = true;
-                public int     delaySeconds = 10;
+                public boolean enabled = true;
+                public int delaySeconds = 10;
             }
 
             public static final class AutoRespawn {
-                public boolean enabled     = false;
-                public int     delayMillis = 100;
+                public boolean enabled = false;
+                public int delayMillis = 100;
             }
 
             public static final class Spammer {
-                public int          delaySeconds = 30;
-                public boolean      enabled      = false;
-                public List<String> messages     = Arrays.asList(
+                public int delaySeconds = 30;
+                public boolean enabled = false;
+                public List<String> messages = Arrays.asList(
                         "#TeamPepsi",
                         "https://pepsi.team",
                         "https://daporkchop.net"
@@ -82,7 +82,7 @@ public final class Config {
 
         public static final class Server {
             public String address = "2b2t.org";
-            public int    port    = 25565;
+            public int port = 25565;
         }
     }
 
@@ -108,8 +108,8 @@ public final class Config {
     }
 
     public static final class Gui {
-        public boolean enabled      = false;
-        public int     messageCount = 512;
+        public boolean enabled = false;
+        public int messageCount = 512;
     }
 
     public static final class Log {
@@ -117,35 +117,42 @@ public final class Config {
     }
 
     public static final class Server {
-        public Bind    bind                 = new Bind();
-        public int     compressionThreshold = 256;
-        public boolean enabled              = false;
-        public Extra   extra                = new Extra();
-        public Ping    ping                 = new Ping();
-        public boolean verifyUsers          = false;
+        public Bind bind = new Bind();
+        public int compressionThreshold = 256;
+        public boolean enabled = false;
+        public Extra extra = new Extra();
+        public Ping ping = new Ping();
+        public boolean verifyUsers = false;
 
         public static final class Bind {
             public String address = "0.0.0.0";
-            public int    port    = 25565;
+            public int port = 25565;
         }
 
         public static final class Extra {
+            public Timeout timeout = new Timeout();
             public Whitelist whitelist = new Whitelist();
 
             public static final class Whitelist {
-                public boolean      enable       = false;
+                public boolean enable = false;
                 public List<String> allowedUsers = Arrays.asList(
                         "DaPorkchop_",
                         "Notch"
                 );
-                public String       kickmsg      = "get out of here you HECKING scrub";
+                public String kickmsg = "get out of here you HECKING scrub";
+            }
+
+            public static final class Timeout {
+                public boolean enable = true;
+                public long millis = 5000L;
+                public long interval = 100L;
             }
         }
 
         public static final class Ping {
-            public boolean favicon    = true;
-            public int     maxPlayers = Integer.MAX_VALUE;
-            public String  motd       = "§c%s";
+            public boolean favicon = true;
+            public int maxPlayers = Integer.MAX_VALUE;
+            public String motd = "§c%s";
         }
     }
 
