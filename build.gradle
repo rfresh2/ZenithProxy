@@ -109,6 +109,20 @@ jar {
 }
 
 publishing {
+    repositories {
+        if (project.hasProperty("daporkchopMavenUsername") && project.hasProperty("daporkchopMavenPassword")) {
+            maven {
+                credentials {
+                    username = "$daporkchopMavenUsername"
+                    password = "$daporkchopMavenPassword"
+                }
+
+                name = "DaPorkchop_"
+                url = version.endsWith("SNAPSHOT") ? "https://maven.daporkchop.net/snapshot/" : "https://maven.daporkchop.net/release/"
+            }
+        }
+    }
+
     publications {
         maven(MavenPublication) {
             groupId = project.group
@@ -124,4 +138,5 @@ publishing {
     }
 }
 
-build.dependsOn(publishToMavenLocal)
+publish.dependsOn(publishToMavenLocal)
+build.dependsOn(publish)
