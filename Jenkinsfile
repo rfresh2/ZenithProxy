@@ -41,6 +41,12 @@ pipeline {
             steps {
                 sh "./gradlew build -x publish --no-daemon"
             }
+            post {
+                success {
+                    sh "bash ./add_jar_suffix.sh " + sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true).substring(0, 8) + "-" + env.BRANCH_NAME.replaceAll("[^a-zA-Z0-9.]", "_")
+                    archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
+                }
+            }
         }
         stage("Publish") {
             when {

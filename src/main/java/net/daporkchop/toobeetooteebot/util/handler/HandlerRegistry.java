@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.daporkchop.lib.logging.Logger;
-import net.daporkchop.lib.primitive.function.bifunction.ObjObjBoolBiFunction;
+import net.daporkchop.lib.primitive.lambda.function.ObjObjBoolFunction;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.util.IdentityHashMap;
@@ -41,7 +41,7 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class HandlerRegistry<S extends Session> {
     @NonNull
-    protected final Map<Class<? extends Packet>, ObjObjBoolBiFunction<? extends Packet, S>> inboundHandlers;
+    protected final Map<Class<? extends Packet>, ObjObjBoolFunction<? extends Packet, S>> inboundHandlers;
 
     @NonNull
     protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
@@ -57,7 +57,7 @@ public class HandlerRegistry<S extends Session> {
         if (CONFIG.debug.packet.received)  {
             this.logger.debug("Received packet: %s", packet.getClass());
         }
-        ObjObjBoolBiFunction<P, S> handler = (ObjObjBoolBiFunction<P, S>) this.inboundHandlers.get(packet.getClass());
+        ObjObjBoolFunction<P, S> handler = (ObjObjBoolFunction<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
     }
 
@@ -81,7 +81,7 @@ public class HandlerRegistry<S extends Session> {
         }
     }
 
-    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjObjBoolBiFunction<P, S> {
+    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjObjBoolFunction<P, S> {
         /**
          * Handle a packet
          *
@@ -113,7 +113,7 @@ public class HandlerRegistry<S extends Session> {
     @Setter
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
-        protected final Map<Class<? extends Packet>, ObjObjBoolBiFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, ObjObjBoolFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
         protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
 
@@ -129,7 +129,7 @@ public class HandlerRegistry<S extends Session> {
             });
         }
 
-        public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull ObjObjBoolBiFunction<P, S> handler) {
+        public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull ObjObjBoolFunction<P, S> handler) {
             this.inboundHandlers.put(clazz, handler);
             return this;
         }

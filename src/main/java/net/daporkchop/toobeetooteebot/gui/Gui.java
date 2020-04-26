@@ -16,12 +16,13 @@
 
 package net.daporkchop.toobeetooteebot.gui;
 
-import net.daporkchop.lib.graphics.bitmap.icon.PIcon;
-import net.daporkchop.lib.graphics.bitmap.image.buffer.WrapperBufferedImage;
 import net.daporkchop.lib.gui.GuiEngine;
 import net.daporkchop.lib.gui.component.state.WindowState;
 import net.daporkchop.lib.gui.component.type.Window;
 import net.daporkchop.lib.gui.util.Alignment;
+import net.daporkchop.lib.imaging.bitmap.PIcon;
+import net.daporkchop.lib.imaging.bitmap.PImage;
+import net.daporkchop.lib.imaging.bitmap.icon.DirectIconARGB;
 import net.daporkchop.toobeetooteebot.Bot;
 
 import javax.imageio.ImageIO;
@@ -45,7 +46,13 @@ public class Gui {
         if (CONFIG.gui.enabled) {
             try (InputStream in = Gui.class.getResourceAsStream("/DaPorkchop_.png")) {
                 BufferedImage img = ImageIO.read(in);
-                icon = new WrapperBufferedImage(img);
+                icon = new DirectIconARGB(img.getWidth(), img.getHeight());
+                PImage mutable = icon.unsafeMutableView();
+                for (int x = 0; x < img.getWidth(); x++)    {
+                    for (int y = 0; y < img.getHeight(); y++)   {
+                        mutable.setARGB(x, y, img.getRGB(x, y));
+                    }
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

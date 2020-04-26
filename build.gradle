@@ -28,9 +28,9 @@ ext {
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
-    mcauthlibVersion = "1.1-SNAPSHOT"
-    mcprotocollibVersion = "1.12.2-3-SNAPSHOT"
-    porklibVersion = "0.5.0-SNAPSHOT"
+    mcauthlibVersion = "91b624ec36"
+    mcprotocollibVersion = "83221af168"
+    porklibVersion = "0.5.3-SNAPSHOT"
 }
 
 group "net.daporkchop"
@@ -45,12 +45,14 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
-    mavenLocal()
     maven {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
     }
-    mavenCentral()
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io/"
+    }
 }
 
 configurations {
@@ -71,7 +73,10 @@ dependencies {
     shade "net.daporkchop.lib:primitive:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
-    shade "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
+    shade ("com.github.Steveice10:MCProtocolLib:$mcprotocollibVersion") {
+        exclude module: "mcauthlib"
+    }
+    shade "com.github.Steveice10:MCAuthLib:$mcauthlibVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
