@@ -93,8 +93,11 @@ public final class Config {
 
         public static final class Packet {
             public boolean received = false;
+            public boolean receivedBody = false;
             public boolean preSent = false;
+            public boolean preSentBody = false;
             public boolean postSent = false;
+            public boolean postSentBody = false;
         }
 
         public static final class Server {
@@ -113,6 +116,7 @@ public final class Config {
     }
 
     public static final class Log {
+        public boolean printDebug = false;
         public boolean storeDebug = true;
     }
 

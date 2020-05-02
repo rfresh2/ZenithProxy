@@ -201,6 +201,9 @@ public class Constants {
 
         loadConfig();
 
+        if (CONFIG.log.printDebug)  {
+            DEFAULT_LOG.setLogAmount(LogAmount.DEBUG);
+        }
         if (CONFIG.log.storeDebug) {
             DEFAULT_LOG.addFile(new File(logFolder, String.format("%s-debug.log", date)), LogAmount.DEBUG);
         }

@@ -16,21 +16,17 @@
 
 package net.daporkchop.toobeetooteebot.util.cache.data.chunk;
 
+import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.block.UpdatedTileType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
-import com.github.steveice10.opennbt.tag.builtin.IntTag;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
 import net.daporkchop.lib.math.vector.i.Vec2i;
-import net.daporkchop.lib.math.vector.i.Vec3i;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -38,22 +34,45 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class ChunkCache implements CachedData {
+public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
     protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
 
     public void add(@NonNull Column column) {
-        if (this.cache.put(new Vec2i(column.getX(), column.getZ()), column) != null)    {
-            CACHE_LOG.warn("Chunk (%d, %d) is already cached! (this is probably a server issue)", column.getX(), column.getZ());
-        } else {
-            CACHE_LOG.debug("Caching chunk (%d, %d)", column.getX(), column.getZ());
-        }
+        this.cache.merge(new Vec2i(column.getX(), column.getZ()), column, this);
+        CACHE_LOG.debug("Cached chunk (%d, %d)", column.getX(), column.getZ());
     }
 
-    public Column get(int x, int z)   {
+    /**
+     * @deprecated do not call this directly!
+     */
+    @Override
+    @Deprecated
+    public Column apply(@NonNull Column existing, @NonNull Column add) {
+        CACHE_LOG.warn("Chunk (%d, %d) is already cached, merging with existing", add.getX(), add.getZ());
+        Chunk[] chunks = existing.getChunks().clone();
+        for (int chunkY = 0; chunkY < 16; chunkY++) {
+            Chunk addChunk = add.getChunks()[chunkY];
+            if (addChunk == null)   {
+                continue;
+            } else if (add.hasSkylight())   {
+                chunks[chunkY] = addChunk;
+            } else {
+                chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY].getSkyLight());
+            }
+        }
+
+        return new Column(
+                add.getX(), add.getZ(),
+                chunks,
+                add.hasBiomeData() ? add.getBiomeData() : existing.getBiomeData(),
+                add.getTileEntities());
+    }
+
+    public Column get(int x, int z) {
         return this.cache.get(new Vec2i(x, z));
     }
 
-    public void remove(int x, int z)    {
+    public void remove(int x, int z) {
         CACHE_LOG.debug("Server telling us to uncache chunk (%d, %d)", x, z);
         if (this.cache.remove(new Vec2i(x, z)) == null) {
             CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);

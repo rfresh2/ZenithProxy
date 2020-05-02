@@ -55,7 +55,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.received)  {
-            this.logger.debug("Received packet: %s", packet.getClass());
+            this.logger.debug("Received packet: %s@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         ObjObjBoolFunction<P, S> handler = (ObjObjBoolFunction<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
@@ -64,7 +64,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.preSent)  {
-            this.logger.debug("Sending packet: %s", packet.getClass());
+            this.logger.debug("Sending packet: %s@%08x", CONFIG.debug.packet.preSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         return handler == null ? packet : handler.apply(packet, session);
@@ -73,7 +73,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.postSent)  {
-            this.logger.debug("Sent packet: %s", packet.getClass());
+            this.logger.debug("Sent packet: %s@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (handler != null) {
