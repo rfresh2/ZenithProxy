@@ -28,8 +28,7 @@ ext {
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
-    mcauthlibVersion = "91b624ec36"
-    mcprotocollibVersion = "83221af168"
+    mcprotocollibVersion = "1.12.2-toobeetooteebot-SNAPSHOT"
     porklibVersion = "0.5.3-SNAPSHOT"
 }
 
@@ -58,12 +57,6 @@ repositories {
 configurations {
     shade
     compile.extendsFrom shade
-
-    all {
-        resolutionStrategy {
-            force "com.github.steveice10:mcauthlib:$mcauthlibVersion"
-        }
-    }
 }
 
 dependencies {
@@ -73,10 +66,7 @@ dependencies {
     shade "net.daporkchop.lib:primitive:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
-    shade ("com.github.Steveice10:MCProtocolLib:$mcprotocollibVersion") {
-        exclude module: "mcauthlib"
-    }
-    shade "com.github.Steveice10:MCAuthLib:$mcauthlibVersion"
+    shade "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 

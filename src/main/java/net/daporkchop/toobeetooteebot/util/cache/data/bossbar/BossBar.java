@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -19,7 +19,6 @@ package net.daporkchop.toobeetooteebot.util.cache.data.bossbar;
 import com.github.steveice10.mc.protocol.data.game.BossBarAction;
 import com.github.steveice10.mc.protocol.data.game.BossBarColor;
 import com.github.steveice10.mc.protocol.data.game.BossBarDivision;
-import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import lombok.Getter;
 import lombok.NonNull;
@@ -40,7 +39,7 @@ public class BossBar {
     @NonNull
     protected final UUID uuid;
 
-    protected Message title;
+    protected String title;
     protected float health;
     protected BossBarColor color;
     protected BossBarDivision division;
@@ -56,7 +55,8 @@ public class BossBar {
                 this.color,
                 this.division,
                 this.darkenSky,
-                this.dragonBar
+                this.dragonBar,
+                false
         );
     }
 }

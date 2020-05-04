@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2016-2018 DaPorkchop_
+ * Copyright (c) 2016-2020 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -19,7 +19,6 @@ package net.daporkchop.toobeetooteebot.util.cache.data.tab;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
-import com.github.steveice10.mc.protocol.data.message.Message;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -60,7 +58,7 @@ public class PlayerEntry {
     protected final Map<GameProfile.TextureType, GameProfile.Texture> textures = new EnumMap<>(GameProfile.TextureType.class);
     protected List<GameProfile.Property> properties = new ArrayList<>();
 
-    protected Message displayName;
+    protected String displayName;
 
     protected GameMode gameMode;
 
@@ -71,7 +69,8 @@ public class PlayerEntry {
                 new GameProfile(this.id, this.name),
                 this.gameMode,
                 this.ping,
-                this.displayName
+                this.displayName,
+                false
         );
         entry.getProfile().getTextures().putAll(this.textures);
         entry.getProfile().getProperties().addAll(this.properties);

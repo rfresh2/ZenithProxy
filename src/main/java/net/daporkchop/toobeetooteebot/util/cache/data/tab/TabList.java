@@ -17,12 +17,10 @@
 package net.daporkchop.toobeetooteebot.util.cache.data.tab;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.message.Message;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.util.Collection;
 import java.util.Map;

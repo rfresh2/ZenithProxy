@@ -22,7 +22,6 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.data.message.TextMessage;
 import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
 import com.github.steveice10.mc.protocol.data.status.VersionInfo;
@@ -42,7 +41,6 @@ import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.PorkServerListener;
 import net.daporkchop.toobeetooteebot.util.LoggerInner;
-import net.daporkchop.toobeetooteebot.websocket.WebSocketServer;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -277,8 +275,9 @@ public class Bot {
                                 this.currentPlayer.get() == null ? 0 : 1,
                                 new GameProfile[0]
                         ),
-                        new TextMessage(String.format(CONFIG.server.ping.motd, this.protocol.getProfile().getName())),
-                        this.serverIcon
+                        String.format(CONFIG.server.ping.motd, this.protocol.getProfile().getName()),
+                        this.serverIcon,
+                        true
                 ));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> {
                     PorkServerConnection connection = ((PorkServerListener) this.server.getListeners().stream()

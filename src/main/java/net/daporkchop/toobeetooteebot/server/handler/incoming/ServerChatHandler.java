@@ -48,7 +48,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
             } else {
-                session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage())));
+                session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage()), true));
                 return false;
             }
         }
