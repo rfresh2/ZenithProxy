@@ -28,13 +28,11 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  * @author DaPorkchop_
  */
 public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPacket, PorkClientSession> {
-    protected final MinecraftFormatParser parser = new MinecraftFormatParser();
-
     @Override
     public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
         CHAT_LOG.info(packet.getMessage());
         if ("2b2t.org".equals(CONFIG.client.server.address)
-                && this.parser.parse(packet.getMessage()).toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {
+                && MinecraftFormatParser.DEFAULT.parse(packet.getMessage()).toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {
             CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");
             session.disconnect("heck");
         }

@@ -192,7 +192,7 @@ public class Constants {
         File logFolder = PFiles.ensureDirectoryExists(new File("log"));
         DEFAULT_LOG.addFile(new File(logFolder, String.format("%s.log", date)), LogAmount.NORMAL)
                 .enableANSI()
-                .setFormatParser(MinecraftFormatParser.getDefaultInstance())
+                .setFormatParser(MinecraftFormatParser.DEFAULT)
                 .setLogAmount(LogAmount.NORMAL);
 
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
