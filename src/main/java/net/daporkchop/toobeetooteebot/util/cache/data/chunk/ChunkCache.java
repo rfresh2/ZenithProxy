@@ -48,16 +48,16 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Override
     @Deprecated
     public Column apply(@NonNull Column existing, @NonNull Column add) {
-        CACHE_LOG.warn("Chunk (%d, %d) is already cached, merging with existing", add.getX(), add.getZ());
+        CACHE_LOG.trace("Chunk (%d, %d) is already cached, merging with existing", add.getX(), add.getZ());
         Chunk[] chunks = existing.getChunks().clone();
         for (int chunkY = 0; chunkY < 16; chunkY++) {
             Chunk addChunk = add.getChunks()[chunkY];
-            if (addChunk == null)   {
+            if (addChunk == null) {
                 continue;
-            } else if (add.hasSkylight())   {
+            } else if (add.hasSkylight()) {
                 chunks[chunkY] = addChunk;
             } else {
-                chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY].getSkyLight());
+                chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY] == null ? null : chunks[chunkY].getSkyLight());
             }
         }
 
