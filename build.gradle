@@ -21,7 +21,7 @@ ext {
     //general things
     javaVersion = "1.8"
     minecraftVersion = "1.12.2"
-    programVersion = "0.2.7"
+    programVersion = "0.2.8"
 
     //dependency things
     apachecommonstextVersion = "1.3"

@@ -96,9 +96,6 @@ public class PorkServerConnection implements Session, SessionListener {
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        if (this.isPlayer && !this.bot.getCurrentPlayer().compareAndSet(this, null))  {
-            SERVER_LOG.alert("Connection is marked as player, but is not the current player?!?");
-        }
         if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
             SERVER_LOG.alert(String.format("Player disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
         } else if (this.isPlayer) {

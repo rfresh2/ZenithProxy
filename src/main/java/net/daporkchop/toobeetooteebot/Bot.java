@@ -72,7 +72,7 @@ public class Bot {
     protected static Bot instance;
 
     protected final SessionFactory sessionFactory = new PorkSessionFactory(this);
-    protected final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    //protected final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected MinecraftProtocol protocol;
     protected Client client;
     protected Server server;
@@ -129,7 +129,7 @@ public class Bot {
                 if (CONFIG.client.extra.antiafk.enabled) {
                     MODULE_LOG.trace("Enabling AntiAFK");
                     modules.add(() -> {
-                        if (CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.serverConnections.isEmpty()) {
+                        if (CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
                             boolean swingHand = CONFIG.client.extra.antiafk.actions.swingHand;
                             boolean rotate = CONFIG.client.extra.antiafk.actions.rotate;
 
@@ -191,11 +191,9 @@ public class Bot {
                     try {
                         while (true)    {
                             Thread.sleep(interval);
-                            if (this.isConnected() && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
-                                Collection<PorkServerConnection> pendingDisconnects = this.serverConnections.stream()
-                                        .filter(c -> System.currentTimeMillis() - c.getLastPacket() >= millis)
-                                        .collect(Collectors.toList());
-                                pendingDisconnects.forEach(c -> c.disconnect("Timed out"));
+                            PorkServerConnection currentPlayer = this.currentPlayer.get();
+                            if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis)  {
+                                currentPlayer.disconnect("Timed out");
                             }
                         }
                     } catch (InterruptedException e)    {
@@ -284,10 +282,17 @@ public class Bot {
                             .filter(PorkServerListener.class::isInstance)
                             .findAny().orElseThrow(IllegalStateException::new))
                             .getConnections().get(session);
-                    if (!this.currentPlayer.compareAndSet(null, connection))    {
-                        session.disconnect("§cA client is already connected to this bot!");
-                        return;
+                    if (!this.currentPlayer.compareAndSet(null, connection)) {
+                        if (CONFIG.server.kickPrevious) {
+                            this.currentPlayer.get().setPlayer(false);
+                            this.currentPlayer.get().disconnect("A new player has connected!");
+                            this.currentPlayer.set(connection);
+                        } else {
+                            connection.disconnect("§cA client is already connected to this bot!");
+                            return;
+                        }
                     }
+                    connection.setPlayer(true);
                     session.send(new ServerJoinGamePacket(
                             CACHE.getPlayerCache().getEntityId(),
                             CACHE.getPlayerCache().isHardcore(),
@@ -299,7 +304,9 @@ public class Bot {
                             CACHE.getPlayerCache().isReducedDebugInfo()
                     ));
                     SERVER_LOG.info("Player connected: %s", session.getRemoteAddress());
-                    connection.setPlayer(true);
+                    if (this.currentPlayer.get() != connection) {
+                        SERVER_LOG.alert("login handler fired when session wasn't set yet...");
+                    }
                 });
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.addListener(new PorkServerListener(this));

@@ -95,7 +95,7 @@ import java.util.Date;
  */
 @UtilityClass
 public class Constants {
-    public final String VERSION = "0.2.5";
+    public final String VERSION = "0.2.8";
 
     public final JsonParser JSON_PARSER = new JsonParser();
     public final Gson       GSON        = new GsonBuilder().setPrettyPrinting().create();

@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.toobeetooteebot.Bot;
+import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.Constants;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -50,10 +51,10 @@ public class ClientListener implements SessionListener {
     public void packetReceived(PacketReceivedEvent event) {
         try {
             if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
-                this.bot.getServerConnections()
-                        .stream()
-                        .filter(session -> ((MinecraftProtocol) session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
-                        .forEach(c -> c.send(event.getPacket()));
+                PorkServerConnection connection = this.bot.getCurrentPlayer().get();
+                if (connection != null && ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)    {
+                    connection.send(event.getPacket());
+                }
             }
         } catch (RuntimeException e) {
             CLIENT_LOG.alert(e);
@@ -102,7 +103,10 @@ public class ClientListener implements SessionListener {
         CLIENT_LOG.info("Disconnecting from server...")
                   .trace("Disconnect reason: %s", event.getReason());
 
-        Bot.getInstance().getServerConnections().forEach(c -> c.disconnect(event.getReason()));
+        PorkServerConnection connection = this.bot.getCurrentPlayer().get();
+        if (connection != null)    {
+            connection.disconnect(event.getReason());
+        }
     }
 
     @Override

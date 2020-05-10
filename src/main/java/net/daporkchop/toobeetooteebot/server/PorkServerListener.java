@@ -29,14 +29,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.util.Constants;
 
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
@@ -76,16 +73,17 @@ public class PorkServerListener implements ServerListener {
         if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getSubProtocol() != SubProtocol.STATUS) {
             PorkServerConnection connection = new PorkServerConnection(this.bot, event.getSession());
             event.getSession().addListener(connection);
-            this.bot.getServerConnections().add(connection);
-            this.connections.put(event.getSession(), connection);
             this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
+            this.connections.put(event.getSession(), connection);
         }
     }
 
     @Override
     public void sessionRemoved(SessionRemovedEvent event) {
-        if (this.addresses.remove(event.getSession()) != null) {
-            this.bot.getServerConnections().remove(this.connections.remove(event.getSession()));
+        this.addresses.remove(event.getSession());
+        PorkServerConnection connection = this.connections.remove(event.getSession());
+        if (connection != null) {
+            this.bot.getCurrentPlayer().compareAndSet(connection, null);
         }
     }
 }
