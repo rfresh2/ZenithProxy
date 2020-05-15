@@ -41,7 +41,7 @@ public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<Serve
         if (column != null) {
             Chunk chunk = column.getChunks()[pos.getY() >> 4];
             if (chunk == null) {
-                chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(true);
+                chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
             }
             chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
         }
