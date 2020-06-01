@@ -25,8 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.daporkchop.lib.logging.Logger;
-import net.daporkchop.lib.primitive.lambda.function.ObjObjBoolFunction;
-import net.daporkchop.toobeetooteebot.util.Constants;
+import net.daporkchop.toobeetooteebot.util.ObjObjBoolFunction;
 
 import java.util.IdentityHashMap;
 import java.util.Map;

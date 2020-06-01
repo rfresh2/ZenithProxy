@@ -59,7 +59,6 @@ dependencies {
     shade "net.daporkchop.lib:gui:$porklibVersion"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:logging:$porklibVersion"
-    shade "net.daporkchop.lib:primitive:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
     shade "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
