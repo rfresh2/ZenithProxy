@@ -18,29 +18,14 @@
  *
  */
 
-package net.daporkchop.toobeetooteebot.server.handler.incoming.movement;
-
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
-import lombok.NonNull;
-import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
-import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
-
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+package net.daporkchop.toobeetooteebot.util;
 
 /**
+ * {@link java.util.function.BiPredicate} but with a different name
+ *
  * @author DaPorkchop_
  */
-public class PlayerRotationHandler implements HandlerRegistry.IncomingHandler<ClientPlayerRotationPacket, PorkServerConnection> {
-    @Override
-    public boolean apply(@NonNull ClientPlayerRotationPacket packet, @NonNull PorkServerConnection session) {
-        CACHE.getPlayerCache()
-                .setYaw((float) packet.getYaw())
-                .setPitch((float) packet.getPitch());
-        return true;
-    }
-
-    @Override
-    public Class<ClientPlayerRotationPacket> getPacketClass() {
-        return ClientPlayerRotationPacket.class;
-    }
+@FunctionalInterface
+public interface ObjObjBoolFunction<A, B> {
+    boolean apply(A a, B b);
 }
