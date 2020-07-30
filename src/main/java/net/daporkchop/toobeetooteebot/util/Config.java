@@ -34,6 +34,16 @@ public final class Config {
     public Log log = new Log();
     public Server server = new Server();
     public Websocket websocket = new Websocket();
+    private transient boolean donePostLoad = false;
+
+    public synchronized Config doPostLoad() {
+        if (donePostLoad) {
+            throw new IllegalStateException("Config post-load already done!");
+        }
+        donePostLoad = true;
+
+        return this;
+    }
 
     public static final class Authentication {
         public boolean doAuthentication = false;
@@ -65,7 +75,8 @@ public final class Config {
 
             public static final class AutoReconnect {
                 public boolean enabled = true;
-                public int delaySeconds = 10;
+                public int delaySecondsOffline = 1;
+                public int delaySeconds = 30;
             }
 
             public static final class AutoRespawn {
@@ -178,16 +189,5 @@ public final class Config {
         public static final class Client {
             public int maxChatCount = 512;
         }
-    }
-
-    private transient boolean donePostLoad = false;
-
-    public synchronized Config doPostLoad() {
-        if (this.donePostLoad) {
-            throw new IllegalStateException("Config post-load already done!");
-        }
-        this.donePostLoad = true;
-
-        return this;
     }
 }
