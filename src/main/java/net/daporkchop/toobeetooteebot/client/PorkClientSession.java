@@ -44,33 +44,33 @@ public class PorkClientSession extends TcpClientSession {
     protected final Bot bot;
     protected boolean serverProbablyOff;
 
-    public PorkClientSession(final String host, final int port, final PacketProtocol protocol, final Client client, @NonNull final Bot bot) {
+    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Bot bot) {
         super(host, port, protocol, client, null);
         this.bot = bot;
-        addListener(new ClientListener(this.bot, this));
+        this.addListener(new ClientListener(this.bot, this));
     }
 
     public String getDisconnectReason() {
         try {
-            return disconnectFuture.get();
-        } catch (final Exception e) {
+            return this.disconnectFuture.get();
+        } catch (Exception e) {
             PUnsafe.throwException(e);
             return null;
         }
     }
 
     @Override
-    public void disconnect(final String reason, final Throwable cause, final boolean wait) {
+    public void disconnect(String reason, Throwable cause, boolean wait) {
         super.disconnect(reason, cause, wait);
         serverProbablyOff = false;
         if (cause == null) {
-            disconnectFuture.complete(reason);
-        } else if (cause instanceof IOException) {
             serverProbablyOff = true;
-            disconnectFuture.complete(String.format("IOException: %s", cause.getMessage()));
+            this.disconnectFuture.complete(reason);
+        } else if (cause instanceof IOException)    {
+            this.disconnectFuture.complete(String.format("IOException: %s", cause.getMessage()));
         } else {
             CLIENT_LOG.alert(cause);
-            disconnectFuture.completeExceptionally(cause);
+            this.disconnectFuture.completeExceptionally(cause);
         }
     }
 }
