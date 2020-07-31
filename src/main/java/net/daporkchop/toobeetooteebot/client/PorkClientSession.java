@@ -32,7 +32,7 @@ import net.daporkchop.toobeetooteebot.Bot;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.CLIENT_LOG;
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
 /**
  * @author DaPorkchop_
