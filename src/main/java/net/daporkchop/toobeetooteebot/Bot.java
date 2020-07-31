@@ -346,12 +346,10 @@ public class Bot {
             if (((PorkClientSession) client.getSession()).isServerProbablyOff()) {
                 countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
 
-                reconnectCounter = 0;
+                this.reconnectCounter = 0;
             } else {
                 countdown = CONFIG.client.extra.autoReconnect.delaySeconds
-                        + CONFIG.client.extra.autoReconnect.linearIncrease * reconnectCounter;
-
-                reconnectCounter++;
+                        + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
             }
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 CLIENT_LOG.info("Reconnecting in %d", i);
