@@ -28,6 +28,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
 import net.daporkchop.toobeetooteebot.Bot;
+import net.daporkchop.toobeetooteebot.client.ClientListener;
+import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
