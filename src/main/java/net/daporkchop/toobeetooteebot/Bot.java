@@ -79,6 +79,8 @@ public class Bot {
     @Setter
     protected BufferedImage serverIcon;
 
+    private int reconnectCounter;
+
     public static void main(final String... args) {
         DEFAULT_LOG.info("Starting Pork2b2tBot v%s...", VERSION);
 
@@ -333,9 +335,18 @@ public class Bot {
 
     protected boolean delayBeforeReconnect() {
         try {
-            for (int i = ((PorkClientSession) client.getSession()).isOffline() ?
-                    CONFIG.client.extra.autoReconnect.delaySecondsOffline :
-                    CONFIG.client.extra.autoReconnect.delaySeconds; SHOULD_RECONNECT && i > 0; i--) {
+            final int countdown;
+            if (((PorkClientSession) client.getSession()).isServerProbablyOff()) {
+                countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
+
+                reconnectCounter = 0;
+            } else {
+                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
+                        + CONFIG.client.extra.autoReconnect.linearIncrease * reconnectCounter;
+
+                reconnectCounter++;
+            }
+            for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 CLIENT_LOG.info("Reconnecting in %d", i);
                 Thread.sleep(1000L);
             }

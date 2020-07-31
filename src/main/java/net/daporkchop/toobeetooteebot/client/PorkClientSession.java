@@ -42,7 +42,7 @@ public class PorkClientSession extends TcpClientSession {
     @Getter(AccessLevel.PRIVATE)
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
     protected final Bot bot;
-    protected boolean offline;
+    protected boolean serverProbablyOff;
 
     public PorkClientSession(final String host, final int port, final PacketProtocol protocol, final Client client, @NonNull final Bot bot) {
         super(host, port, protocol, client, null);
@@ -62,11 +62,11 @@ public class PorkClientSession extends TcpClientSession {
     @Override
     public void disconnect(final String reason, final Throwable cause, final boolean wait) {
         super.disconnect(reason, cause, wait);
-        offline = false;
+        serverProbablyOff = false;
         if (cause == null) {
             disconnectFuture.complete(reason);
         } else if (cause instanceof IOException) {
-            offline = true;
+            serverProbablyOff = true;
             disconnectFuture.complete(String.format("IOException: %s", cause.getMessage()));
         } else {
             CLIENT_LOG.alert(cause);

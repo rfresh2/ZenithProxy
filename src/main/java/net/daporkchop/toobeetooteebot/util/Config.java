@@ -77,6 +77,8 @@ public final class Config {
                 public boolean enabled = true;
                 public int delaySecondsOffline = 1;
                 public int delaySeconds = 30;
+
+                public int linearIncrease = 4;
             }
 
             public static final class AutoRespawn {
