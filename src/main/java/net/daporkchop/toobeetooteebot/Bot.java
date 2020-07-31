@@ -85,6 +85,7 @@ public class Bot {
     protected BufferedImage serverIcon;
     protected final AtomicReference<PorkServerConnection> currentPlayer = new AtomicReference<>();
 
+    private int reconnectCounter;
     protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -341,7 +342,18 @@ public class Bot {
 
     protected boolean delayBeforeReconnect() {
         try {
-            for (int i = CONFIG.client.extra.autoReconnect.delaySeconds; SHOULD_RECONNECT && i > 0; i--) {
+            final int countdown;
+            if (((PorkClientSession) client.getSession()).isServerProbablyOff()) {
+                countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
+
+                reconnectCounter = 0;
+            } else {
+                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
+                        + CONFIG.client.extra.autoReconnect.linearIncrease * reconnectCounter;
+
+                reconnectCounter++;
+            }
+            for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 CLIENT_LOG.info("Reconnecting in %d", i);
                 Thread.sleep(1000L);
             }

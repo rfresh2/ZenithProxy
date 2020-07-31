@@ -65,7 +65,10 @@ public final class Config {
 
             public static final class AutoReconnect {
                 public boolean enabled = true;
-                public int delaySeconds = 10;
+                public int delaySecondsOffline = 1;
+                public int delaySeconds = 12;
+
+                public int linearIncrease = 4;
             }
 
             public static final class AutoRespawn {
