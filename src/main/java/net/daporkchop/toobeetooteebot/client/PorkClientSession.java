@@ -33,6 +33,7 @@ import net.daporkchop.toobeetooteebot.util.Constants;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
@@ -55,6 +56,8 @@ public class PorkClientSession extends TcpClientSession {
     public String getDisconnectReason() {
         try {
             return this.disconnectFuture.get();
+        } catch (ExecutionException e)  {
+            return e.toString();
         } catch (Exception e) {
             PUnsafe.throwException(e);
             return null;
