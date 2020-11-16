@@ -32,6 +32,7 @@ import net.daporkchop.lib.logging.LogAmount;
 import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import net.daporkchop.lib.minecraft.text.parser.MCFormatParser;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.AdvancementsHandler;
@@ -196,7 +197,7 @@ public class Constants {
         File logFolder = PFiles.ensureDirectoryExists(new File("log"));
         DEFAULT_LOG.addFile(new File(logFolder, String.format("%s.log", date)), LogAmount.NORMAL)
                 .enableANSI()
-                .setFormatParser(MCFormatParser.DEFAULT)
+                .setFormatParser(AutoMCFormatParser.DEFAULT)
                 .setLogAmount(LogAmount.NORMAL);
 
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
