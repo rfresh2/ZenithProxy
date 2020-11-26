@@ -49,6 +49,11 @@ public class EntityPlayer extends EntityEquipment {
     protected int food;
     protected float saturation;
 
+    {
+        //set health to maximum by default
+        this.health = 20.0f;
+    }
+
     @Override
     public void addPackets(@NonNull Consumer<Packet> consumer) {
         if (this.selfPlayer) {
