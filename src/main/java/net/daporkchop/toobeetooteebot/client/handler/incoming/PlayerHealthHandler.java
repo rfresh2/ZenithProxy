@@ -48,7 +48,6 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
             new Thread(() -> {
                 PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
                 if (Bot.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
-                    CACHE.getChunkCache().reset(true); //i don't think this is needed, but it can't hurt
                     Bot.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
                 }
             }).start();

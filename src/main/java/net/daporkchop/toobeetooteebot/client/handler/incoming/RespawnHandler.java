@@ -33,7 +33,9 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerRespawnPacket packet, @NonNull PorkClientSession session) {
-        CACHE.reset(false);
+        if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
+            CACHE.reset(false);
+        }
         CACHE.getPlayerCache()
                 .setDimension(packet.getDimension())
                 .setGameMode(packet.getGameMode())
