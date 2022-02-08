@@ -1,0 +1,1 @@
+call gradlew clean build

@@ -56,7 +56,6 @@ public final class Config {
                 public Actions actions = new Actions();
                 public boolean enabled = true;
                 public boolean runEvenIfClientsConnected = false;
-
                 public static final class Actions {
                     public boolean rotate = true;
                     public boolean swingHand = true;
@@ -78,11 +77,11 @@ public final class Config {
 
             public static final class Spammer {
                 public int delaySeconds = 30;
-                public boolean enabled = false;
+                public boolean enabled = true;
                 public List<String> messages = Arrays.asList(
-                        "#TeamPepsi",
-                        "https://pepsi.team",
-                        "https://daporkchop.net"
+                        "/stats",
+                        "/stats",
+                        "/stats"
                 );
             }
         }
