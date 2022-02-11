@@ -40,11 +40,11 @@ public class LoggerInner {
 
     public LoggerInner()    {
         if (CONFIG.authentication.doAuthentication) {
-            if (CONFIG.authentication.accountType == "mojang") {
+            if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
                 this.auth = new MojangAuthenticationService();
                 this.auth.setUsername(CONFIG.authentication.email);
                 this.auth.setPassword(CONFIG.authentication.password);
-            } else if (CONFIG.authentication.accountType == "msa") {
+            } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
                 this.auth = new MsaAuthenticationService("1b3f2c18-6aee-48bc-8aa8-636537d84925");
                 this.auth.setUsername(CONFIG.authentication.email);
                 this.auth.setPassword(CONFIG.authentication.password);
@@ -63,11 +63,11 @@ public class LoggerInner {
             try {
                 this.auth.login();
 
-                if (CONFIG.authentication.accountType == "mojang") {
+                if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
                     return new MinecraftProtocol(
                             auth.getSelectedProfile(), ((MojangAuthenticationService) auth).getClientToken(), auth.getAccessToken()
                     );
-                } else if (CONFIG.authentication.accountType == "msa") {
+                } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
                     return new MinecraftProtocol(
                             auth.getSelectedProfile(), ((MsaAuthenticationService) auth).getRefreshToken(), auth.getAccessToken()
                     );

@@ -70,7 +70,9 @@ dependencies {
     shade "net.daporkchop.lib:logging:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
-    shade "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
+    shade("com.github.steveice10:mcprotocollib:$mcprotocollibVersion") {
+        exclude group: 'com.github.steveice10', module: 'mcauthlib'
+    }
     shade "com.github.GeyserMC:MCAuthLib:$mcauthlibVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
