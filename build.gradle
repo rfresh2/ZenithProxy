@@ -34,9 +34,10 @@ ext {
     lombokVersion = "1.16.20"
     mcprotocollibVersion = "1.12.2-toobeetooteebot-SNAPSHOT"
     porklibVersion = "0.5.5-SNAPSHOT"
+    mcauthlibVersion = "3be04be9f1"
 }
 
-group "net.daporkchop"
+group "com.zenith"
 version "$programVersion-$minecraftVersion"
 
 compileJava {
@@ -48,6 +49,10 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
+    maven {
+        name = "jitpack.io"
+        url = "https://jitpack.io"
+    }
     maven {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
@@ -66,6 +71,7 @@ dependencies {
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
     shade "com.github.steveice10:mcprotocollib:$mcprotocollibVersion"
+    shade "com.github.GeyserMC:MCAuthLib:$mcauthlibVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
@@ -96,39 +102,6 @@ jar {
     manifest {
         attributes "Implementation-Title": "DaPorkchop_",
                 "Implementation-Version": version,
-                "Main-Class": "net.daporkchop.toobeetooteebot.Bot"
+                "Main-Class": "com.zenith.Bot"
     }
 }
-
-publishing {
-    repositories {
-        if (project.hasProperty("daporkchopMavenUsername") && project.hasProperty("daporkchopMavenPassword")) {
-            maven {
-                credentials {
-                    username = "$daporkchopMavenUsername"
-                    password = "$daporkchopMavenPassword"
-                }
-
-                name = "DaPorkchop_"
-                url = version.endsWith("SNAPSHOT") ? "https://maven.daporkchop.net/snapshot/" : "https://maven.daporkchop.net/release/"
-            }
-        }
-    }
-
-    publications {
-        maven(MavenPublication) {
-            groupId = project.group
-            artifactId = "toobeetooteebot"
-            version = project.version
-
-            from components.java
-
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
-    }
-}
-
-publish.dependsOn(publishToMavenLocal)
-build.dependsOn(publish)

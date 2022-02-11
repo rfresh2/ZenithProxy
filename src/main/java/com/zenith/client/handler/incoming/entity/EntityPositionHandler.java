@@ -18,5 +18,35 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming.entity;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.cache.data.entity.Entity;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<ServerEntityPositionPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null) {
+            entity.setX(entity.getX() + packet.getMovementX())
+                    .setY(entity.getY() + packet.getMovementY())
+                    .setZ(entity.getZ() + packet.getMovementZ());
+        } else {
+            CLIENT_LOG.warn("Received ServerEntityPositionPacket for invalid entity (id=%d)", packet.getEntityId());
+        }
+        return true;
+    }
+
+    @Override
+    public Class<ServerEntityPositionPacket> getPacketClass() {
+        return ServerEntityPositionPacket.class;
+    }
+}

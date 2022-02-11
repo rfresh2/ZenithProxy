@@ -18,5 +18,29 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming.entity;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class EntityDestroyHandler implements HandlerRegistry.IncomingHandler<ServerEntityDestroyPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerEntityDestroyPacket packet, @NonNull PorkClientSession session) {
+        for (int id : packet.getEntityIds())    {
+            CACHE.getEntityCache().remove(id);
+        }
+        return true;
+    }
+
+    @Override
+    public Class<ServerEntityDestroyPacket> getPacketClass() {
+        return ServerEntityDestroyPacket.class;
+    }
+}

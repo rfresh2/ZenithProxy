@@ -18,5 +18,28 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.mc;
 
+import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.Session;
+import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import com.zenith.Bot;
+import com.zenith.client.PorkClientSession;
+
+/**
+ * @author DaPorkchop_
+ */
+@RequiredArgsConstructor
+@Getter
+public class PorkSessionFactory extends TcpSessionFactory {
+    @NonNull
+    protected final Bot bot;
+
+    @Override
+    public Session createClientSession(Client client) {
+        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.bot);
+    }
+}

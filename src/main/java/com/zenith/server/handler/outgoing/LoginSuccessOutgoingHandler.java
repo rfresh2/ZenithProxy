@@ -18,5 +18,27 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.server.handler.outgoing;
 
+import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
+import lombok.NonNull;
+import com.zenith.server.PorkServerConnection;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
+    @Override
+    public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull PorkServerConnection session) {
+       SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+        return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+    }
+
+    @Override
+    public Class<LoginSuccessPacket> getPacketClass() {
+        return LoginSuccessPacket.class;
+    }
+}

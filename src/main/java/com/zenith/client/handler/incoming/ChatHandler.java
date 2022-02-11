@@ -18,5 +18,34 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import lombok.NonNull;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
+        CHAT_LOG.info(packet.getMessage());
+        if ("2b2t.org".equals(CONFIG.client.server.address)
+            && AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {
+            CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");
+            session.disconnect("heck");
+        }
+        WEBSOCKET_SERVER.fireChat(packet.getMessage());
+        return true;
+    }
+
+    @Override
+    public Class<ServerChatPacket> getPacketClass() {
+        return ServerChatPacket.class;
+    }
+}

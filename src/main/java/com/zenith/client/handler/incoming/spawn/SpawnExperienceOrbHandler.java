@@ -18,5 +18,34 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming.spawn;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnExpOrbPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.cache.data.entity.EntityExperienceOrb;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class SpawnExperienceOrbHandler implements HandlerRegistry.IncomingHandler<ServerSpawnExpOrbPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerSpawnExpOrbPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getEntityCache().add(new EntityExperienceOrb()
+                .setExp(packet.getExp())
+                .setEntityId(packet.getEntityId())
+                .setX(packet.getX())
+                .setY(packet.getY())
+                .setZ(packet.getZ())
+        );
+        return true;
+    }
+
+    @Override
+    public Class<ServerSpawnExpOrbPacket> getPacketClass() {
+        return ServerSpawnExpOrbPacket.class;
+    }
+}

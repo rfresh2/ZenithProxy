@@ -18,5 +18,36 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming.spawn;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.cache.data.entity.EntityPainting;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class SpawnPaintingPacket implements HandlerRegistry.IncomingHandler<ServerSpawnPaintingPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerSpawnPaintingPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getEntityCache().add(new EntityPainting()
+                .setDirection(packet.getDirection())
+                .setPaintingType(packet.getPaintingType())
+                .setEntityId(packet.getEntityId())
+                .setUuid(packet.getUUID())
+                .setX(packet.getPosition().getX())
+                .setY(packet.getPosition().getY())
+                .setZ(packet.getPosition().getZ())
+        );
+        return true;
+    }
+
+    @Override
+    public Class<ServerSpawnPaintingPacket> getPacketClass() {
+        return ServerSpawnPaintingPacket.class;
+    }
+}

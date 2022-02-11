@@ -18,5 +18,28 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMultiBlockChangePacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+/**
+ * @author DaPorkchop_
+ */
+public class MultiBlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerMultiBlockChangePacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerMultiBlockChangePacket packet, @NonNull PorkClientSession session) {
+        for (BlockChangeRecord record : packet.getRecords())    {
+            BlockChangeHandler.handleChange(record);
+        }
+        return true;
+    }
+
+    @Override
+    public Class<ServerMultiBlockChangePacket> getPacketClass() {
+        return ServerMultiBlockChangePacket.class;
+    }
+}

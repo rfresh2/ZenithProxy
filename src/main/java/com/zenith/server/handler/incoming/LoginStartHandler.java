@@ -18,5 +18,36 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.server.handler.incoming;
 
+import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
+import lombok.NonNull;
+import com.zenith.Bot;
+import com.zenith.server.PorkServerConnection;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, PorkServerConnection> {
+    @Override
+    public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
+        //SERVER_LOG.info("login start");
+        if (CONFIG.server.extra.whitelist.enable && !CONFIG.server.extra.whitelist.allowedUsers.contains(packet.getUsername())) {
+            SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+            session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+            return false;
+        }
+        if (!Bot.getInstance().isConnected()) {
+            session.disconnect("Not connected to server!");
+        }
+        return false;
+    }
+
+    @Override
+    public Class<LoginStartPacket> getPacketClass() {
+        return LoginStartPacket.class;
+    }
+}

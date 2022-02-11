@@ -18,5 +18,27 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class LoginSuccessHandler implements HandlerRegistry.IncomingHandler<LoginSuccessPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull LoginSuccessPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getProfileCache().setProfile(packet.getProfile());
+        return false;
+    }
+
+    @Override
+    public Class<LoginSuccessPacket> getPacketClass() {
+        return LoginSuccessPacket.class;
+    }
+}

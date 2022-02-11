@@ -18,5 +18,30 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class TabListDataHandler implements HandlerRegistry.IncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
+        CACHE.getTabListCache().getTabList()
+                .setHeader(packet.getHeader())
+                .setFooter(packet.getFooter());
+        WEBSOCKET_SERVER.firePlayerListUpdate();
+        return true;
+    }
+
+    @Override
+    public Class<ServerPlayerListDataPacket> getPacketClass() {
+        return ServerPlayerListDataPacket.class;
+    }
+}

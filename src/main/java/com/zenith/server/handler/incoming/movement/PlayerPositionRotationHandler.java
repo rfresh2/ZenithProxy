@@ -18,5 +18,32 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.server.handler.incoming.movement;
 
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
+import lombok.NonNull;
+import com.zenith.server.PorkServerConnection;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class PlayerPositionRotationHandler implements HandlerRegistry.IncomingHandler<ClientPlayerPositionRotationPacket, PorkServerConnection> {
+    @Override
+    public boolean apply(@NonNull ClientPlayerPositionRotationPacket packet, @NonNull PorkServerConnection session) {
+        CACHE.getPlayerCache()
+                .setX(packet.getX())
+                .setY(packet.getY())
+                .setZ(packet.getZ())
+                .setYaw((float) packet.getYaw())
+                .setPitch((float) packet.getPitch());
+        return true;
+    }
+
+    @Override
+    public Class<ClientPlayerPositionRotationPacket> getPacketClass() {
+        return ClientPlayerPositionRotationPacket.class;
+    }
+}

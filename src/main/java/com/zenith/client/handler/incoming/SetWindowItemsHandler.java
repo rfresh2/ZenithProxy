@@ -18,5 +18,31 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class SetWindowItemsHandler implements HandlerRegistry.IncomingHandler<ServerWindowItemsPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerWindowItemsPacket packet, @NonNull PorkClientSession session) {
+        if (packet.getWindowId() == 0)  { //player inventory
+            ItemStack[] dst = CACHE.getPlayerCache().getInventory();
+            System.arraycopy(packet.getItems(), 0, dst, 0, Math.min(dst.length, packet.getItems().length));
+        }
+        return true;
+    }
+
+    @Override
+    public Class<ServerWindowItemsPacket> getPacketClass() {
+        return ServerWindowItemsPacket.class;
+    }
+}

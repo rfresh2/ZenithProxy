@@ -18,5 +18,14 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.util;
 
+/**
+ * {@link java.util.function.BiPredicate} but with a different name
+ *
+ * @author DaPorkchop_
+ */
+@FunctionalInterface
+public interface ObjObjBoolFunction<A, B> {
+    boolean apply(A a, B b);
+}

@@ -18,5 +18,36 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.util.cache.data;
 
+import com.github.steveice10.mc.auth.data.GameProfile;
+import com.github.steveice10.packetlib.packet.Packet;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import com.zenith.util.cache.CachedData;
+
+import java.util.function.Consumer;
+
+/**
+ * @author DaPorkchop_
+ */
+@Getter
+@Setter
+@Accessors(chain = true)
+public class ServerProfileCache implements CachedData {
+    @NonNull
+    protected GameProfile profile;
+
+    @Override
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
+    }
+
+    @Override
+    public void reset(boolean full) {
+        if (full)   {
+            this.profile = null;
+        }
+    }
+}

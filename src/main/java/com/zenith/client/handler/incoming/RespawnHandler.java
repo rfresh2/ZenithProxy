@@ -18,5 +18,34 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+import static com.zenith.util.Constants.*;
+
+/**
+ * @author DaPorkchop_
+ */
+public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerRespawnPacket packet, @NonNull PorkClientSession session) {
+        if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
+            CACHE.reset(false);
+        }
+        CACHE.getPlayerCache()
+                .setDimension(packet.getDimension())
+                .setGameMode(packet.getGameMode())
+                .setWorldType(packet.getWorldType())
+                .setDifficulty(packet.getDifficulty());
+        return true;
+    }
+
+    @Override
+    public Class<ServerRespawnPacket> getPacketClass() {
+        return ServerRespawnPacket.class;
+    }
+}

@@ -18,5 +18,24 @@
  *
  */
 
-rootProject.name = 'ZenithProxy'
+package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerKeepAlivePacket;
+import lombok.NonNull;
+import com.zenith.client.PorkClientSession;
+import com.zenith.util.handler.HandlerRegistry;
+
+/**
+ * @author DaPorkchop_
+ */
+public class ClientKeepaliveHandler implements HandlerRegistry.IncomingHandler<ServerKeepAlivePacket, PorkClientSession> {
+    @Override
+    public boolean apply(@NonNull ServerKeepAlivePacket packet, @NonNull PorkClientSession session) {
+        return false;
+    }
+
+    @Override
+    public Class<ServerKeepAlivePacket> getPacketClass() {
+        return ServerKeepAlivePacket.class;
+    }
+}

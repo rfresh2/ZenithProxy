@@ -90,7 +90,7 @@ pipeline {
                         result: currentBuild.currentResult,
                         description: getDiscordMessage(),
                         link: env.BUILD_URL,
-                        title: "Pork2b2tBot/${BRANCH_NAME} #${BUILD_NUMBER}",
+                        title: "ZenithProxy/${BRANCH_NAME} #${BUILD_NUMBER}",
                         webhookURL: "${discordWebhook}"
             }
         }
