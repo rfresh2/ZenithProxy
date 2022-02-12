@@ -32,9 +32,8 @@ ext {
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
-    mcprotocollibVersion = "1.12.2-toobeetooteebot-SNAPSHOT"
+    mcprotocollibVersion = "3f51873bdc"
     porklibVersion = "0.5.5-SNAPSHOT"
-    mcauthlibVersion = "3be04be9f1"
 }
 
 group "com.zenith"
@@ -57,6 +56,10 @@ repositories {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
     }
+    maven {
+        name = "maven central"
+        url = "https://repo1.maven.org/maven2/"
+    }
 }
 
 configurations {
@@ -70,10 +73,7 @@ dependencies {
     shade "net.daporkchop.lib:logging:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
-    shade("com.github.steveice10:mcprotocollib:$mcprotocollibVersion") {
-        exclude group: 'com.github.steveice10', module: 'mcauthlib'
-    }
-    shade "com.github.GeyserMC:MCAuthLib:$mcauthlibVersion"
+    shade "com.github.5cmc:mcprotocollib:$mcprotocollibVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
