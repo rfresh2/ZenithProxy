@@ -37,7 +37,7 @@ public final class Config {
 
     public static final class Authentication {
         public boolean doAuthentication = false;
-        public String accountType = "mojang";
+        public String accountType = "msa";
         public String email = "john.doe@example.com";
         public String password = "my_secure_password";
         public String username = "Steve";
@@ -78,7 +78,7 @@ public final class Config {
 
             public static final class Spammer {
                 public int delaySeconds = 30;
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public List<String> messages = Arrays.asList(
                         "/stats",
                         "/stats",
@@ -130,7 +130,7 @@ public final class Config {
     public static final class Server {
         public Bind bind = new Bind();
         public int compressionThreshold = 256;
-        public boolean enabled = false;
+        public boolean enabled = true;
         public Extra extra = new Extra();
         public Ping ping = new Ping();
         public boolean verifyUsers = false;
@@ -148,8 +148,12 @@ public final class Config {
             public static final class Whitelist {
                 public boolean enable = false;
                 public List<String> allowedUsers = Arrays.asList(
-                        "DaPorkchop_",
-                        "Notch"
+                        "rfresh2",
+                        "rfresh",
+                        "orsond",
+                        "orsondmc",
+                        "odpay",
+                        "0dpay"
                 );
                 public String kickmsg = "get out of here you HECKING scrub";
             }

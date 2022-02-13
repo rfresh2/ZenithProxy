@@ -39,26 +39,38 @@ public class LoggerInner {
     protected final AuthenticationService auth;
 
     public LoggerInner()    {
+        this.auth = setAuth();
+    }
+
+    private AuthenticationService setAuth() {
+        AuthenticationService auth;
         if (CONFIG.authentication.doAuthentication) {
             if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
-                this.auth = new MojangAuthenticationService();
-                this.auth.setUsername(CONFIG.authentication.email);
-                this.auth.setPassword(CONFIG.authentication.password);
+                auth = new MojangAuthenticationService();
+                auth.setUsername(CONFIG.authentication.email);
+                auth.setPassword(CONFIG.authentication.password);
             } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
-                this.auth = new MsaAuthenticationService("1b3f2c18-6aee-48bc-8aa8-636537d84925");
-                this.auth.setUsername(CONFIG.authentication.email);
-                this.auth.setPassword(CONFIG.authentication.password);
+                try
+                {
+                    auth = new MsaAuthenticationService("1b3f2c18-6aee-48bc-8aa8-636537d84925");
+                    auth.setUsername(CONFIG.authentication.email);
+                    auth.setPassword(CONFIG.authentication.password);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 throw new RuntimeException("No valid account type set. Must set either mojang or msa");
             }
         } else {
-            this.auth = null;
+            auth = null;
         }
+        return auth;
     }
 
     public MinecraftProtocol handleRelog()  {
         if (this.auth == null)  {
-            return new MinecraftProtocol(CONFIG.authentication.username);
+            AuthenticationService authenticationService = setAuth();
+            return new MinecraftProtocol(authenticationService.getSelectedProfile(), "", authenticationService.getAccessToken());
         } else {
             try {
                 this.auth.login();
@@ -69,7 +81,7 @@ public class LoggerInner {
                     );
                 } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
                     return new MinecraftProtocol(
-                            auth.getSelectedProfile(), ((MsaAuthenticationService) auth).getRefreshToken(), auth.getAccessToken()
+                            auth.getSelectedProfile(), "", auth.getAccessToken()
                     );
                 } else {
                     throw new RuntimeException("No valid account type set. Must set either mojang or msa");

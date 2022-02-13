@@ -32,7 +32,7 @@ ext {
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
-    mcprotocollibVersion = "3f51873bdc"
+    mcprotocollibVersion = "74b61d992b"
     porklibVersion = "0.5.5-SNAPSHOT"
 }
 

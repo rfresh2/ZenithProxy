@@ -206,7 +206,6 @@ public class Bot {
                 timeoutThread.start();
             }
 
-            this.logIn();
             this.startServer();
             CACHE.reset(true);
             do {
