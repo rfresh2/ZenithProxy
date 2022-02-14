@@ -126,6 +126,8 @@ public class DiscordBot {
                         .title("ZenithProxy Connection " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
                         .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
                         .image(this.proxy.getAvatarURL().toString())
+                        .addField("Server", CONFIG.client.server.address, true)
+                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
                         .build())
                 .build().asRequest();
     }
@@ -136,6 +138,7 @@ public class DiscordBot {
                         .title("ZenithProxy Disconnect " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
                         .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
                         .image(this.proxy.getAvatarURL().toString())
+                        .addField("Server", CONFIG.client.server.address, true)
                         .build())
                 .build().asRequest();
     }
@@ -146,7 +149,9 @@ public class DiscordBot {
                         .title("ZenithProxy Status" + " : " + CONFIG.authentication.username)
                         .color(Color.CYAN)
                         .addField("Status", proxy.isConnected() ? "Connected" : "Disconnected", true)
+                        .addField("Server", CONFIG.client.server.address, true)
                         .addField("Queue Position", proxy.isInQueue() ? "" + proxy.getQueuePosition() : "N/A", true)
+                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
                         .image(this.proxy.getAvatarURL().toString())
                         .build())
                 .build().asRequest();
