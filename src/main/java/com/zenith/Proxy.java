@@ -51,6 +51,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
@@ -95,6 +97,7 @@ public class Proxy {
 
     private int reconnectCounter;
     private boolean inQueue = false;
+    private int queuePosition = 0;
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -310,7 +313,7 @@ public class Proxy {
         if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
             new Thread(() -> {
                 try {
-                    this.serverIcon = ImageIO.read(new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId())));
+                    this.serverIcon = ImageIO.read(getAvatarURL());
                 } catch (IOException e) {
                     System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
                     e.printStackTrace();
@@ -319,6 +322,15 @@ public class Proxy {
         }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
         AUTH_LOG.success("Logged in.");
+    }
+
+    public URL getAvatarURL() {
+        try {
+            return new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId()));
+        } catch (MalformedURLException e) {
+            SERVER_LOG.error("Failed to get avatar");
+            throw new UncheckedIOException(e);
+        }
     }
 
     public boolean delayBeforeReconnect() {
@@ -343,8 +355,13 @@ public class Proxy {
         }
     }
 
-    public void setQueueMotd(String position) {
+    public void setQueue(String position) {
         this.inQueue = true;
+        try {
+            this.queuePosition = Integer.parseInt(position);
+        } catch (final Exception e) {
+            this.queuePosition = Integer.MAX_VALUE;
+        }
         this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
                 new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
                 new PlayerInfo(
@@ -352,7 +369,7 @@ public class Proxy {
                         this.currentPlayer.get() == null ? 0 : 1,
                         new GameProfile[0]
                 ),
-                String.format(position, this.protocol.getProfile().getName()),
+                String.format(CONFIG.server.ping.motd, "Queue: " + position),
                 this.serverIcon,
                 true
         ));

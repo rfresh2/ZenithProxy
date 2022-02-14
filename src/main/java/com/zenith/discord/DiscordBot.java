@@ -5,9 +5,14 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
+import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
+import discord4j.rest.util.Color;
+import discord4j.rest.util.MultipartRequest;
 import reactor.core.publisher.Mono;
 
 import static com.zenith.util.Constants.CONFIG;
@@ -88,9 +93,9 @@ public class DiscordBot {
             try {
                 userAllowed(event);
                 this.proxy.connect();
-                restChannel.createMessage("Connected!").block();
+                restChannel.createMessage(getConnectMessageCreateRequest(true)).block();
             } catch (final Exception e) {
-                restChannel.createMessage("Failed to connect: " + e.getMessage()).block();
+                restChannel.createMessage(getConnectMessageCreateRequest(false)).block();
                 DISCORD_LOG.error("Failed to connect", e);
             }
         });
@@ -101,17 +106,50 @@ public class DiscordBot {
             try {
                 userAllowed(event);
                 this.proxy.disconnect();
-                restChannel.createMessage("Disconnected!").block();
+                restChannel.createMessage(getDisconnectMessageCreateRequest(true)).block();
             } catch (final Exception e) {
-                restChannel.createMessage("Failed to disconnect: " + e.getMessage()).block();
+                restChannel.createMessage(getDisconnectMessageCreateRequest(false)).block();
                 DISCORD_LOG.error("Failed to disconnect", e);
             }
         });
     }
 
     private Mono<Void> handleStatusCommand(ApplicationCommandInteractionEvent event, RestChannel restChannel) {
-        return event.reply("Player: " + CONFIG.authentication.username
-                + " is " + (this.proxy.isConnected() ? "connected" : "disconnected"));
+        return event.reply("Getting Status...").doOnSuccess(unused -> {
+            restChannel.createMessage(getStatusMessageCreateRequest()).block();
+        });
+    }
+
+    private MultipartRequest<MessageCreateRequest> getConnectMessageCreateRequest(boolean success) {
+        return MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("ZenithProxy Connection " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
+                        .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
+                        .image(this.proxy.getAvatarURL().toString())
+                        .build())
+                .build().asRequest();
+    }
+
+    private MultipartRequest<MessageCreateRequest> getDisconnectMessageCreateRequest(boolean success) {
+        return MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("ZenithProxy Disconnect " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
+                        .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
+                        .image(this.proxy.getAvatarURL().toString())
+                        .build())
+                .build().asRequest();
+    }
+
+    private MultipartRequest<MessageCreateRequest> getStatusMessageCreateRequest() {
+        return MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("ZenithProxy Status" + " : " + CONFIG.authentication.username)
+                        .color(Color.CYAN)
+                        .addField("Status", proxy.isConnected() ? "Connected" : "Disconnected", true)
+                        .addField("Queue Position", proxy.isInQueue() ? "" + proxy.getQueuePosition() : "N/A", true)
+                        .image(this.proxy.getAvatarURL().toString())
+                        .build())
+                .build().asRequest();
     }
 
     private void userAllowed(ApplicationCommandInteractionEvent event) {
