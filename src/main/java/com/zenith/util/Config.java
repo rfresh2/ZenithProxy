@@ -23,6 +23,8 @@ package com.zenith.util;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 /**
  * @author DaPorkchop_
  */
@@ -80,7 +82,7 @@ public final class Config {
             public static final class Spammer {
                 public int delaySeconds = 30;
                 public boolean enabled = false;
-                public List<String> messages = Arrays.asList(
+                public List<String> messages = asList(
                         "/stats",
                         "/stats",
                         "/stats"
@@ -148,7 +150,7 @@ public final class Config {
 
             public static final class Whitelist {
                 public boolean enable = false;
-                public List<String> allowedUsers = Arrays.asList(
+                public List<String> allowedUsers = asList(
                         "rfresh2",
                         "rfresh",
                         "orsond",
@@ -192,6 +194,9 @@ public final class Config {
         public String token = "";
         public String guildId = "";
         public boolean enable = false;
+        public List<String> allowedUsers = asList(
+                "177895753195192321"
+        );
     }
 
     private transient boolean donePostLoad = false;

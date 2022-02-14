@@ -86,6 +86,7 @@ public class DiscordBot {
     private Mono<Void> handleConnectCommand(ApplicationCommandInteractionEvent event, RestChannel restChannel) {
         return event.reply("Connecting...").doOnSuccess(unused -> {
             try {
+                userAllowed(event);
                 this.proxy.connect();
                 restChannel.createMessage("Connected!").block();
             } catch (final Exception e) {
@@ -98,6 +99,7 @@ public class DiscordBot {
     private Mono<Void> handleDisconnectCommand(ApplicationCommandInteractionEvent event, RestChannel restChannel) {
         return event.reply("Disconnecting...").doOnSuccess(unused -> {
             try {
+                userAllowed(event);
                 this.proxy.disconnect();
                 restChannel.createMessage("Disconnected!").block();
             } catch (final Exception e) {
@@ -112,4 +114,10 @@ public class DiscordBot {
                 + " is " + (this.proxy.isConnected() ? "connected" : "disconnected"));
     }
 
+    private void userAllowed(ApplicationCommandInteractionEvent event) {
+        String id = event.getInteraction().getMember().get().getId().asString();
+        if (!CONFIG.discord.allowedUsers.contains(id) && !CONFIG.discord.allowedUsers.isEmpty()) {
+            throw new RuntimeException("Not an allowed user");
+        }
+    }
 }
