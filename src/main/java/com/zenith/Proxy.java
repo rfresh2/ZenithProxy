@@ -52,10 +52,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -97,6 +94,7 @@ public class Proxy {
     protected final ScheduledExecutorService clientTimeoutExecutorService;
 
     private int reconnectCounter;
+    private boolean inQueue = false;
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -342,6 +340,38 @@ public class Proxy {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return false;
+        }
+    }
+
+    public void setQueueMotd(String position) {
+        this.inQueue = true;
+        this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
+                new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
+                new PlayerInfo(
+                        CONFIG.server.ping.maxPlayers,
+                        this.currentPlayer.get() == null ? 0 : 1,
+                        new GameProfile[0]
+                ),
+                String.format(position, this.protocol.getProfile().getName()),
+                this.serverIcon,
+                true
+        ));
+    }
+
+    public void setDefaultMotd() {
+        if (inQueue) {
+            this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
+                    new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
+                    new PlayerInfo(
+                            CONFIG.server.ping.maxPlayers,
+                            this.currentPlayer.get() == null ? 0 : 1,
+                            new GameProfile[0]
+                    ),
+                    String.format(CONFIG.server.ping.motd, this.protocol.getProfile().getName()),
+                    this.serverIcon,
+                    true
+            ));
+            this.inQueue = false;
         }
     }
 }

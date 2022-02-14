@@ -3,7 +3,7 @@
 /run/
 /log/
 /build/
-/config.json
+/config*.json
 /.gradle/
 *.class
 *.jar

@@ -22,6 +22,8 @@ package com.zenith.client;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectingEvent;
@@ -30,11 +32,15 @@ import com.github.steveice10.packetlib.event.session.PacketSendingEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.util.Constants;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import com.zenith.Proxy;
 import com.zenith.server.PorkServerConnection;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
 
@@ -52,6 +58,9 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
+        if (event.getPacket() instanceof ServerPlayerListDataPacket) {
+            parse2bQueue(((ServerPlayerListDataPacket) event.getPacket()).getHeader());
+        }
         try {
             if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
                 PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
@@ -65,6 +74,18 @@ public class ClientListener implements SessionListener {
         } catch (Exception e) {
             CLIENT_LOG.alert(e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private void parse2bQueue(String header) {
+        final Optional<String> position = Arrays.stream(header.split("\\\\n"))
+                .map(m -> m.trim())
+                .filter(m -> m.contains("queue"))
+                .findFirst();
+        if (position.isPresent()) {
+            this.proxy.setQueueMotd(position.get());
+        } else {
+            this.proxy.setDefaultMotd();
         }
     }
 
