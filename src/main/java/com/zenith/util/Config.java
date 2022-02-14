@@ -34,6 +34,7 @@ public final class Config {
     public Log log = new Log();
     public Server server = new Server();
     public Websocket websocket = new Websocket();
+    public Discord discord = new Discord();
 
     public static final class Authentication {
         public boolean doAuthentication = false;
@@ -185,6 +186,12 @@ public final class Config {
         public static final class Client {
             public int maxChatCount = 512;
         }
+    }
+
+    public static final class Discord {
+        public String token = "";
+        public String guildId = "";
+        public boolean enable = false;
     }
 
     private transient boolean donePostLoad = false;

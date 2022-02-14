@@ -22,7 +22,7 @@ package com.zenith.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
 import lombok.NonNull;
-import com.zenith.Bot;
+import com.zenith.Proxy;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -40,7 +40,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
             session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
             return false;
         }
-        if (!Bot.getInstance().isConnected()) {
+        if (!Proxy.getInstance().isConnected()) {
             session.disconnect("Not connected to server!");
         }
         return false;

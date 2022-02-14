@@ -43,11 +43,11 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, packet.getMessage().substring(1));
                 return true;
             } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
-                session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
+                session.getProxy().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
             } else if ("!reboot".equalsIgnoreCase(packet.getMessage())) {
                 SHOULD_RECONNECT = false;
-                session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
+                session.getProxy().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
             } else {
                 session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage()), true));

@@ -23,11 +23,11 @@ package com.zenith.client;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
+import com.zenith.Proxy;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
-import com.zenith.Bot;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -42,13 +42,13 @@ import static com.zenith.util.Constants.*;
 public class PorkClientSession extends TcpClientSession {
     @Getter(AccessLevel.PRIVATE)
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
-    protected final Bot bot;
+    protected final Proxy proxy;
     protected boolean serverProbablyOff;
 
-    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Bot bot) {
+    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Proxy proxy) {
         super(host, port, protocol, client, null);
-        this.bot = bot;
-        this.addListener(new ClientListener(this.bot, this));
+        this.proxy = proxy;
+        this.addListener(new ClientListener(this.proxy, this));
     }
 
     public String getDisconnectReason() {

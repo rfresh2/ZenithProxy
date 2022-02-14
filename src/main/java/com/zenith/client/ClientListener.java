@@ -33,7 +33,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import com.zenith.Bot;
+import com.zenith.Proxy;
 import com.zenith.server.PorkServerConnection;
 
 import static com.zenith.util.Constants.*;
@@ -45,7 +45,7 @@ import static com.zenith.util.Constants.*;
 @Getter
 public class ClientListener implements SessionListener {
     @NonNull
-    protected final Bot bot;
+    protected final Proxy proxy;
 
     @NonNull
     protected final PorkClientSession session;
@@ -54,7 +54,7 @@ public class ClientListener implements SessionListener {
     public void packetReceived(PacketReceivedEvent event) {
         try {
             if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
-                PorkServerConnection connection = this.bot.getCurrentPlayer().get();
+                PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
                 if (connection != null && ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)    {
                     connection.send(event.getPacket());
                 }
@@ -106,7 +106,7 @@ public class ClientListener implements SessionListener {
         CLIENT_LOG.info("Disconnecting from server...")
                   .trace("Disconnect reason: %s", event.getReason());
 
-        PorkServerConnection connection = this.bot.getCurrentPlayer().get();
+        PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
         if (connection != null)    {
             connection.disconnect(event.getReason());
         }

@@ -23,6 +23,7 @@ package com.zenith.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.zenith.discord.DiscordBot;
 import lombok.experimental.UtilityClass;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
@@ -97,30 +98,31 @@ import java.util.Date;
 /**
  * @author DaPorkchop_
  */
-@UtilityClass
 public class Constants {
-    public final String VERSION = "0.2.8";
+    public static final String VERSION = "0.2.8";
 
-    public final JsonParser JSON_PARSER = new JsonParser();
-    public final Gson       GSON        = new GsonBuilder().setPrettyPrinting().create();
+    public static final JsonParser JSON_PARSER = new JsonParser();
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public final DefaultLogger DEFAULT_LOG   = Logging.logger;
-    public final Logger        AUTH_LOG      = DEFAULT_LOG.channel("Auth");
-    public final Logger        CACHE_LOG     = DEFAULT_LOG.channel("Cache");
-    public final Logger        CLIENT_LOG    = DEFAULT_LOG.channel("Client");
-    public final Logger        CHAT_LOG      = DEFAULT_LOG.channel("Chat");
-    public final Logger        GUI_LOG       = DEFAULT_LOG.channel("GUI");
-    public final Logger        MODULE_LOG    = DEFAULT_LOG.channel("Module");
-    public final Logger        SERVER_LOG    = DEFAULT_LOG.channel("Server");
-    public final Logger        WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
+    public static final DefaultLogger DEFAULT_LOG   = Logging.logger;
+    public static final Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
+    public static final Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
+    public static final Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
+    public static final Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
+    public static final Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
+    public static final Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
+    public static final Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
+    public static final Logger WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
+    public static final Logger DISCORD_LOG = DEFAULT_LOG.channel("Discord");
 
-    public final File CONFIG_FILE = new File("config.json");
+    public static final File CONFIG_FILE = new File("config.json");
 
-    public       Config          CONFIG;
-    public final DataCache       CACHE;
-    public final WebSocketServer WEBSOCKET_SERVER;
+    public static Config CONFIG;
+    public static final DataCache CACHE;
+    public static final WebSocketServer WEBSOCKET_SERVER;
+    public static final DiscordBot DISCORD_BOT;
 
-    public final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+    public static final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
             //
             // Inbound packets
@@ -169,7 +171,7 @@ public class Constants {
             .registerInbound(new SpawnPlayerHandler())
             .build();
 
-    public final HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+    public static final HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
             .setLogger(SERVER_LOG)
             //
             // Inbound packets
@@ -216,11 +218,12 @@ public class Constants {
 
         CACHE = new DataCache();
         WEBSOCKET_SERVER = new WebSocketServer();
+        DISCORD_BOT = new DiscordBot();
     }
 
-    public volatile boolean SHOULD_RECONNECT;
+    public static volatile boolean SHOULD_RECONNECT;
 
-    public synchronized void loadConfig() {
+    public static synchronized void loadConfig() {
         DEFAULT_LOG.info("Loading config...");
 
         Config config;
@@ -238,7 +241,7 @@ public class Constants {
         DEFAULT_LOG.info("Config loaded.");
     }
 
-    public synchronized void saveConfig() {
+    public static synchronized void saveConfig() {
         DEFAULT_LOG.info("Saving config...");
 
         if (CONFIG == null) {

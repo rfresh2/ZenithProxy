@@ -37,40 +37,54 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePack
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
 import com.github.steveice10.packetlib.SessionFactory;
-import lombok.Getter;
-import lombok.Setter;
 import com.zenith.client.PorkClientSession;
-import com.zenith.gui.Gui;
 import com.zenith.mc.PorkSessionFactory;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
 import com.zenith.util.LoggerInner;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.AUTH_LOG;
+import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DEFAULT_LOG;
+import static com.zenith.util.Constants.DISCORD_BOT;
+import static com.zenith.util.Constants.DISCORD_LOG;
+import static com.zenith.util.Constants.MODULE_LOG;
+import static com.zenith.util.Constants.SERVER_LOG;
+import static com.zenith.util.Constants.SHOULD_RECONNECT;
+import static com.zenith.util.Constants.VERSION;
+import static com.zenith.util.Constants.WEBSOCKET_LOG;
+import static com.zenith.util.Constants.WEBSOCKET_SERVER;
+import static com.zenith.util.Constants.saveConfig;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
  */
 @Getter
-public class Bot {
+public class Proxy {
     @Getter
-    protected static Bot instance;
+    protected static Proxy instance;
 
     protected final SessionFactory sessionFactory = new PorkSessionFactory(this);
     //protected final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -81,139 +95,56 @@ public class Bot {
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<PorkServerConnection> currentPlayer = new AtomicReference<>();
+    protected final ScheduledExecutorService moduleExecutorService;
+    protected final ScheduledExecutorService clientTimeoutExecutorService;
 
     private int reconnectCounter;
-    protected final Gui gui = new Gui();
+//    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
-        DEFAULT_LOG.info("Starting Zenith Bot v%s...", VERSION);
+        DEFAULT_LOG.info("Starting Zenith Proxy v%s...", VERSION);
 
         if (CONFIG.websocket.enable) {
             WEBSOCKET_LOG.info("Starting WebSocket server...");
             WEBSOCKET_SERVER.start();
         }
 
-        Bot bot = new Bot();
-        instance = bot;
-        bot.start();
+        instance = new Proxy();
+
+        if (CONFIG.discord.enable) {
+            DISCORD_LOG.info("Starting discord bot...");
+            DISCORD_BOT.start(instance);
+        }
+
+
+        instance.start();
+    }
+
+    public Proxy() {
+        this.moduleExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
     }
 
     public void start() {
         try {
-            this.gui.start();
-            {
-                Thread mainThread = Thread.currentThread();
-                Thread commandReaderThread = new Thread(() -> {
-                    try (Scanner s = new Scanner(System.in)) {
-                        long lastPress = 0L;
-                        while (true)    {
-                            s.nextLine(); //TODO: command processing from CLI
-                            long now = System.currentTimeMillis();
-                            if (lastPress + 10000L >= now)  {
-                                break;
-                            } else {
-                                DEFAULT_LOG.info("Are you sure you want to stop the bot? Press enter again to confirm.");
-                                lastPress = now;
-                            }
-                        }
-                    }
-                    SHOULD_RECONNECT = false;
-                    if (this.isConnected()) {
-                        this.client.getSession().disconnect("user disconnect");
-                    }
-                    mainThread.interrupt();
-                }, "ZenithProxy command processor thread");
-                commandReaderThread.setDaemon(true);
-                commandReaderThread.start();
-            }
-            { //TODO: clean this up
-                Collection<Runnable> modules = new ArrayDeque<>();
-                if (CONFIG.client.extra.antiafk.enabled) {
-                    MODULE_LOG.trace("Enabling AntiAFK");
-                    modules.add(() -> {
-                        if (CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
-                            boolean swingHand = CONFIG.client.extra.antiafk.actions.swingHand;
-                            boolean rotate = CONFIG.client.extra.antiafk.actions.rotate;
-
-                            int action = -1;
-                            if (swingHand && rotate) {
-                                action = ThreadLocalRandom.current().nextInt(2);
-                            } else if (swingHand) {
-                                action = 0;
-                            } else if (rotate) {
-                                action = 1;
-                            }
-                            switch (action) {
-                                case 0:
-                                    this.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
-                                    break;
-                                case 1:
-                                    this.client.getSession().send(new ClientPlayerRotationPacket(
-                                            true,
-                                            -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat(),
-                                            -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat()
-                                    ));
-                                    break;
-                            }
-                        }
-                    });
-                }
-
-                if (CONFIG.client.extra.spammer.enabled) {
-                    List<String> messages = CONFIG.client.extra.spammer.messages;
-                    int delaySeconds = CONFIG.client.extra.spammer.delaySeconds;
-                    AtomicInteger i = new AtomicInteger(0);
-                    MODULE_LOG.trace("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), delaySeconds);
-                    modules.add(() -> {
-                        if ((i.getAndIncrement() >> 1) == delaySeconds) {
-                            i.set(0);
-                            this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
-                        }
-                    });
-                }
-                Thread moduleRunnerThread = new Thread(() -> {
-                    try {
-                        while (true) {
-                            Thread.sleep(500L);
-                            if (this.isConnected() && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
-                                modules.forEach(Runnable::run);
-                            }
-                        }
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                });
-                moduleRunnerThread.setDaemon(true);
-                moduleRunnerThread.start();
-            }
-            if (CONFIG.server.extra.timeout.enable){
+            saveConfig();
+            registerModules();
+            if (CONFIG.server.extra.timeout.enable) {
                 long millis = CONFIG.server.extra.timeout.millis;
                 long interval = CONFIG.server.extra.timeout.interval;
-                Thread timeoutThread = new Thread(() -> {
-                    try {
-                        while (true)    {
-                            Thread.sleep(interval);
-                            PorkServerConnection currentPlayer = this.currentPlayer.get();
-                            if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis)  {
-                                currentPlayer.disconnect("Timed out");
-                            }
-                        }
-                    } catch (InterruptedException e)    {
-                        Thread.currentThread().interrupt();
+                clientTimeoutExecutorService.scheduleAtFixedRate(() -> {
+                    PorkServerConnection currentPlayer = this.currentPlayer.get();
+                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis)  {
+                        currentPlayer.disconnect("Timed out");
                     }
-                });
-                timeoutThread.setDaemon(true);
-                timeoutThread.start();
+                }, 0, interval, TimeUnit.MILLISECONDS);
             }
 
             this.startServer();
             CACHE.reset(true);
             do {
-                this.logIn();
                 this.connect();
-
-                saveConfig();
-                //wait for client to disconnect before starting again
+                // wait for client to disconnect before starting again
                 CLIENT_LOG.info("Disconnected. Reason: %s", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
             } while (SHOULD_RECONNECT && CACHE.reset(true) && this.delayBeforeReconnect());
         } catch (Exception e) {
@@ -228,7 +159,69 @@ public class Bot {
         }
     }
 
-    protected void connect() {
+    public void disconnect() {
+        CACHE.reset(true);
+        this.client.getSession().disconnect("Disconnected");
+    }
+
+    void registerModules() {
+        Collection<Runnable> modules = new ArrayDeque<>();
+        if (CONFIG.client.extra.antiafk.enabled) {
+            MODULE_LOG.trace("Enabling AntiAFK");
+            modules.add(() -> {
+                if (CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
+                    boolean swingHand = CONFIG.client.extra.antiafk.actions.swingHand;
+                    boolean rotate = CONFIG.client.extra.antiafk.actions.rotate;
+
+                    int action = -1;
+                    if (swingHand && rotate) {
+                        action = ThreadLocalRandom.current().nextInt(2);
+                    } else if (swingHand) {
+                        action = 0;
+                    } else if (rotate) {
+                        action = 1;
+                    }
+                    switch (action) {
+                        case 0:
+                            this.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+                            break;
+                        case 1:
+                            this.client.getSession().send(new ClientPlayerRotationPacket(
+                                    true,
+                                    -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat(),
+                                    -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat()
+                            ));
+                            break;
+                    }
+                }
+            });
+        }
+
+        if (CONFIG.client.extra.spammer.enabled) {
+            List<String> messages = CONFIG.client.extra.spammer.messages;
+            int delaySeconds = CONFIG.client.extra.spammer.delaySeconds;
+            AtomicInteger i = new AtomicInteger(0);
+            MODULE_LOG.trace("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), delaySeconds);
+            modules.add(() -> {
+                if ((i.getAndIncrement() >> 1) == delaySeconds) {
+                    i.set(0);
+                    this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
+                }
+            });
+        }
+
+        moduleExecutorService.scheduleAtFixedRate(() -> {
+            if (this.isConnected()
+                    && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                    && isNull(this.currentPlayer.get())) {
+                modules.forEach(Runnable::run);
+            }
+        }, 0, 500L, TimeUnit.MILLISECONDS);
+
+    }
+
+    public void connect() {
+        this.logIn();
         synchronized (this) {
             if (this.isConnected()) {
                 throw new IllegalStateException("Already connected!");
@@ -247,7 +240,7 @@ public class Bot {
         return this.client != null && this.client.getSession() != null && this.client.getSession().isConnected();
     }
 
-    protected void startServer() {
+    public void startServer() {
         synchronized (this) {
             if (this.server != null) {
                 throw new IllegalStateException("Server already started!");
@@ -265,7 +258,7 @@ public class Bot {
 
                 SERVER_LOG.info("Starting server on %s:%d...", address, port);
                 this.server = new Server(address, port, MinecraftProtocol.class, this.sessionFactory);
-                this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
+                this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, java.net.Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
                         new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
@@ -316,7 +309,7 @@ public class Bot {
         }
     }
 
-    protected void logIn() {
+    public void logIn() {
         AUTH_LOG.info("Logging in...");
         if (this.loggerInner == null) {
             this.loggerInner = new LoggerInner();
@@ -336,7 +329,7 @@ public class Bot {
         AUTH_LOG.success("Logged in.");
     }
 
-    protected boolean delayBeforeReconnect() {
+    public boolean delayBeforeReconnect() {
         try {
             final int countdown;
             if (((PorkClientSession) client.getSession()).isServerProbablyOff()) {

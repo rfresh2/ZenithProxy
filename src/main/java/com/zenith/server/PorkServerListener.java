@@ -29,10 +29,10 @@ import com.github.steveice10.packetlib.event.server.ServerClosingEvent;
 import com.github.steveice10.packetlib.event.server.ServerListener;
 import com.github.steveice10.packetlib.event.server.SessionAddedEvent;
 import com.github.steveice10.packetlib.event.server.SessionRemovedEvent;
+import com.zenith.Proxy;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import com.zenith.Bot;
 
 import java.net.SocketAddress;
 import java.util.Collections;
@@ -48,7 +48,7 @@ import static com.zenith.util.Constants.*;
 @Getter
 public class PorkServerListener implements ServerListener {
     @NonNull
-    protected final Bot bot;
+    protected final Proxy proxy;
 
     protected final Map<Session, PorkServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
 
@@ -75,7 +75,7 @@ public class PorkServerListener implements ServerListener {
     public void sessionAdded(SessionAddedEvent event) {
         //SERVER_LOG.info("session added");
         if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getSubProtocol() != SubProtocol.STATUS) {
-            PorkServerConnection connection = new PorkServerConnection(this.bot, event.getSession());
+            PorkServerConnection connection = new PorkServerConnection(this.proxy, event.getSession());
             event.getSession().addListener(connection);
             this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
             this.connections.put(event.getSession(), connection);
@@ -87,7 +87,7 @@ public class PorkServerListener implements ServerListener {
         this.addresses.remove(event.getSession());
         PorkServerConnection connection = this.connections.remove(event.getSession());
         if (connection != null) {
-            this.bot.getCurrentPlayer().compareAndSet(connection, null);
+            this.proxy.getCurrentPlayer().compareAndSet(connection, null);
         }
     }
 }

@@ -20,6 +20,7 @@
 
 package com.zenith.gui;
 
+import com.zenith.Proxy;
 import net.daporkchop.lib.gui.GuiEngine;
 import net.daporkchop.lib.gui.component.state.WindowState;
 import net.daporkchop.lib.gui.component.type.Window;
@@ -27,7 +28,6 @@ import net.daporkchop.lib.gui.util.Alignment;
 import net.daporkchop.lib.imaging.bitmap.PIcon;
 import net.daporkchop.lib.imaging.bitmap.PImage;
 import net.daporkchop.lib.imaging.bitmap.icon.DirectIconARGB;
-import com.zenith.Bot;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -82,8 +82,8 @@ public class Gui {
                         .setTextColor(Color.RED))
                 .addStateListener(WindowState.CLOSED, () -> {
                     SHOULD_RECONNECT = false;
-                    if (Bot.getInstance().isConnected()) {
-                        Bot.getInstance().getClient().getSession().disconnect("user disconnect");
+                    if (Proxy.getInstance().isConnected()) {
+                        Proxy.getInstance().getClient().getSession().disconnect("user disconnect");
                     }
                     this.window.release();
                 })

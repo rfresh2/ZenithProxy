@@ -26,7 +26,7 @@ import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import com.zenith.Bot;
+import com.zenith.Proxy;
 import com.zenith.client.PorkClientSession;
 
 /**
@@ -36,10 +36,10 @@ import com.zenith.client.PorkClientSession;
 @Getter
 public class PorkSessionFactory extends TcpSessionFactory {
     @NonNull
-    protected final Bot bot;
+    protected final Proxy proxy;
 
     @Override
     public Session createClientSession(Client client) {
-        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.bot);
+        return new PorkClientSession(client.getHost(), client.getPort(), client.getPacketProtocol(), client, this.proxy);
     }
 }

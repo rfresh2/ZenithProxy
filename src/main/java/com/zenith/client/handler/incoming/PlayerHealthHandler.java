@@ -23,9 +23,9 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
+import com.zenith.Proxy;
 import lombok.NonNull;
 import net.daporkchop.lib.common.util.PorkUtil;
-import com.zenith.Bot;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -47,8 +47,8 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
         if (packet.getHealth() <= 0 && CONFIG.client.extra.autoRespawn.enabled)  {
             new Thread(() -> {
                 PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
-                if (Bot.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
-                    Bot.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
+                    Proxy.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
                 }
             }).start();
         }

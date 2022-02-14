@@ -33,11 +33,11 @@ import com.github.steveice10.packetlib.event.session.SessionEvent;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
+import com.zenith.Proxy;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import com.zenith.Bot;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -55,7 +55,7 @@ import static com.zenith.util.Constants.*;
 @Setter
 public class PorkServerConnection implements Session, SessionListener {
     @NonNull
-    protected final Bot bot;
+    protected final Proxy proxy;
 
     @NonNull
     protected final Session session;
@@ -69,7 +69,7 @@ public class PorkServerConnection implements Session, SessionListener {
     public void packetReceived(PacketReceivedEvent event) {
         this.lastPacket = System.currentTimeMillis();
         if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
-            this.bot.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+            this.proxy.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
 
