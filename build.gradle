@@ -74,7 +74,9 @@ dependencies {
     shade "net.daporkchop.lib:logging:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
 
-    shade "com.github.5cmc:mcprotocollib:$mcprotocollibVersion"
+    shade ("com.github.5cmc:mcprotocollib:$mcprotocollibVersion") {
+        exclude group: "io.netty", module: "netty-all"
+    }
     shade "com.discord4j:discord4j-core:$discord4jVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
