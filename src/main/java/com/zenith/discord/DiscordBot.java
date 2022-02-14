@@ -69,7 +69,7 @@ public class DiscordBot {
                     break;
             }
             return event.reply("unhandled command");
-        });
+        }).blockLast();
     }
 
     private void registerCommand(ApplicationCommandRequest findCommand, long applicationId) {
@@ -87,9 +87,9 @@ public class DiscordBot {
         return event.reply("Connecting...").doOnSuccess(unused -> {
             try {
                 this.proxy.connect();
-                restChannel.createMessage("Connected!");
+                restChannel.createMessage("Connected!").block();
             } catch (final Exception e) {
-                restChannel.createMessage("Failed to connect: " + e.getMessage());
+                restChannel.createMessage("Failed to connect: " + e.getMessage()).block();
                 DISCORD_LOG.error("Failed to connect", e);
             }
         });
@@ -99,9 +99,9 @@ public class DiscordBot {
         return event.reply("Disconnecting...").doOnSuccess(unused -> {
             try {
                 this.proxy.disconnect();
-                restChannel.createMessage("Disconnected!");
+                restChannel.createMessage("Disconnected!").block();
             } catch (final Exception e) {
-                restChannel.createMessage("Failed to disconnect: " + e.getMessage());
+                restChannel.createMessage("Failed to disconnect: " + e.getMessage()).block();
                 DISCORD_LOG.error("Failed to disconnect", e);
             }
         });

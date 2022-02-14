@@ -42,6 +42,7 @@ import com.zenith.mc.PorkSessionFactory;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
 import com.zenith.util.LoggerInner;
+import com.zenith.util.Wait;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -55,10 +56,7 @@ import java.util.ArrayDeque;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -113,9 +111,8 @@ public class Proxy {
 
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
-            DISCORD_BOT.start(instance);
+            ForkJoinPool.commonPool().submit(() -> DISCORD_BOT.start(instance));
         }
-
 
         instance.start();
     }
@@ -139,14 +136,10 @@ public class Proxy {
                     }
                 }, 0, interval, TimeUnit.MILLISECONDS);
             }
-
+            this.logIn();
             this.startServer();
             CACHE.reset(true);
-            do {
-                this.connect();
-                // wait for client to disconnect before starting again
-                CLIENT_LOG.info("Disconnected. Reason: %s", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
-            } while (SHOULD_RECONNECT && CACHE.reset(true) && this.delayBeforeReconnect());
+            Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
         } finally {
@@ -161,7 +154,9 @@ public class Proxy {
 
     public void disconnect() {
         CACHE.reset(true);
-        this.client.getSession().disconnect("Disconnected");
+        if (this.isConnected()) {
+            this.client.getSession().disconnect("Disconnected");
+        }
     }
 
     void registerModules() {
@@ -221,7 +216,6 @@ public class Proxy {
     }
 
     public void connect() {
-        this.logIn();
         synchronized (this) {
             if (this.isConnected()) {
                 throw new IllegalStateException("Already connected!");
