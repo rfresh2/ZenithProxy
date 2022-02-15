@@ -101,6 +101,7 @@ public class Proxy {
     private int queuePosition = 0;
     private int lastQueueWarningPosition = Integer.MAX_VALUE;
     private Instant connectTime;
+    private boolean sentOnlineMessage = false;
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -161,6 +162,11 @@ public class Proxy {
         if (this.isConnected()) {
             this.client.getSession().disconnect("Disconnected");
         }
+        this.sentOnlineMessage = false;
+        this.lastQueueWarningPosition = Integer.MAX_VALUE;
+        this.inQueue = false;
+        this.queuePosition = 0;
+        this.connectTime = Instant.MAX;
     }
 
     void registerModules() {
@@ -385,7 +391,7 @@ public class Proxy {
             DISCORD_BOT.sendQueueWarning(this.queuePosition);
         }
 
-        // always warn at 1 in queue
+        // always warn at 3 in queue
         if (this.queuePosition < this.lastQueueWarningPosition && this.queuePosition == 3) {
             lastQueueWarningPosition = this.queuePosition;
             DISCORD_BOT.sendQueueWarning(this.queuePosition);
@@ -407,7 +413,10 @@ public class Proxy {
                     true
             ));
             this.inQueue = false;
-            DISCORD_BOT.sendDoneQueueing();
+        }
+        if (!this.sentOnlineMessage) {
+            this.sentOnlineMessage = true;
+            DISCORD_BOT.sendOnline();
         }
     }
 }

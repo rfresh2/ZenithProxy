@@ -70,11 +70,11 @@ public class DiscordBot {
                 .build().asRequest()).block();
     }
 
-    public void sendDoneQueueing() {
+    public void sendOnline() {
         RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         restChannel.createMessage(MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Queue Complete" + " : " + CONFIG.authentication.username)
+                        .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
                         .color(Color.CYAN)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)

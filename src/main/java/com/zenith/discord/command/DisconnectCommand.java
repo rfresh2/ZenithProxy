@@ -31,9 +31,8 @@ public class DisconnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getDisconnectMessageCreateRequest(boolean success) {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Disconnect " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
+                        .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
                         .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
-                        .addField("Server", CONFIG.client.server.address, true)
                         .build())
                 .build().asRequest();
     }
