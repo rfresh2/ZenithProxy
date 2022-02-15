@@ -29,7 +29,7 @@ public class StatusCommand extends Command {
                                         : "Online")
                                 : "Disconnected", true)
                         .addField("Server", CONFIG.client.server.address, true)
-                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .build())
                 .build().asRequest();
     }

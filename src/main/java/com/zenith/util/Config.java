@@ -139,6 +139,7 @@ public final class Config {
         public boolean verifyUsers = true;
         public boolean kickPrevious = false;
         public int queueWarning = 10; // Queue position to send warning message at
+        public String proxyIP = "localhost";
 
         public static final class Bind {
             public String address = "0.0.0.0";
@@ -173,6 +174,10 @@ public final class Config {
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public String motd = "§c%s";
+        }
+
+        public String getProxyAddress() {
+            return this.proxyIP + ":" + this.bind.port;
         }
     }
 

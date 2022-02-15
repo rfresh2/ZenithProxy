@@ -65,7 +65,7 @@ public class DiscordBot {
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Queue Position", queuePosition + " / " + Queue.getQueueStatus().regular, false)
-                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .build())
                 .build().asRequest()).block();
     }
@@ -77,7 +77,7 @@ public class DiscordBot {
                         .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
                         .color(Color.CYAN)
                         .addField("Server", CONFIG.client.server.address, true)
-                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .build())
                 .build().asRequest()).block();
     }
@@ -89,7 +89,7 @@ public class DiscordBot {
                         .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
                         .color(Color.CYAN)
                         .addField("Queue Position", Queue.getQueueStatus().regular + " / " + Queue.getQueueStatus().regular, false)
-                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .build())
                 .build().asRequest()).block();
     }

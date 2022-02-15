@@ -39,7 +39,7 @@ public class ConnectCommand extends Command {
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Queue", ""+Queue.getQueueStatus().regular, true)
                         .addField("Priority", ""+Queue.getQueueStatus().prio, true)
-                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .build())
                 .build().asRequest();
     }
