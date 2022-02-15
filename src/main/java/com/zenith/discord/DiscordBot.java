@@ -6,8 +6,11 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
+import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,4 +56,30 @@ public class DiscordBot {
         });
     }
 
+    public void sendQueueWarning(final int queuePosition) {
+        RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
+        restChannel.createMessage(MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
+                        .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
+                        .addField("Server", CONFIG.client.server.address, true)
+                        .addField("Queue Position", "" + queuePosition, true)
+                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .image(this.proxy.getAvatarURL().toString())
+                        .build())
+                .build().asRequest()).block();
+    }
+
+    public void sendDoneQueueing() {
+        RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
+        restChannel.createMessage(MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("ZenithProxy Queue Complete" + " : " + CONFIG.authentication.username)
+                        .color(Color.CYAN)
+                        .addField("Server", CONFIG.client.server.address, true)
+                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
+                        .image(this.proxy.getAvatarURL().toString())
+                        .build())
+                .build().asRequest()).block();
+    }
 }

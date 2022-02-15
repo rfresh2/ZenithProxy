@@ -54,6 +54,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -98,6 +99,8 @@ public class Proxy {
     private int reconnectCounter;
     private boolean inQueue = false;
     private int queuePosition = 0;
+    private int lastQueueWarningPosition = Integer.MAX_VALUE;
+    private Instant connectTime;
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -228,6 +231,7 @@ public class Proxy {
             CLIENT_LOG.info("Connecting to %s:%d...", address, port);
             this.client = new Client(address, port, this.protocol, this.sessionFactory);
             this.client.getSession().connect(true);
+            this.connectTime = Instant.now();
         }
     }
 
@@ -369,10 +373,21 @@ public class Proxy {
                         this.currentPlayer.get() == null ? 0 : 1,
                         new GameProfile[0]
                 ),
-                String.format(CONFIG.server.ping.motd, "Queue: " + position),
+                String.format(CONFIG.server.ping.motd, "Online forQueue: " + position),
                 this.serverIcon,
                 true
         ));
+        if (this.queuePosition < this.lastQueueWarningPosition && this.queuePosition == CONFIG.server.queueWarning) {
+            lastQueueWarningPosition = this.queuePosition;
+            DISCORD_BOT.sendQueueWarning(this.queuePosition);
+        }
+
+        // always warn at 1 in queue
+        if (this.queuePosition < this.lastQueueWarningPosition && this.queuePosition == 3) {
+            lastQueueWarningPosition = this.queuePosition;
+            DISCORD_BOT.sendQueueWarning(this.queuePosition);
+        }
+
     }
 
     public void setDefaultMotd() {
@@ -389,6 +404,7 @@ public class Proxy {
                     true
             ));
             this.inQueue = false;
+            DISCORD_BOT.sendDoneQueueing();
         }
     }
 }

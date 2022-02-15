@@ -136,8 +136,9 @@ public final class Config {
         public boolean enabled = true;
         public Extra extra = new Extra();
         public Ping ping = new Ping();
-        public boolean verifyUsers = false;
+        public boolean verifyUsers = true;
         public boolean kickPrevious = false;
+        public int queueWarning = 10; // Queue position to send warning message at
 
         public static final class Bind {
             public String address = "0.0.0.0";
