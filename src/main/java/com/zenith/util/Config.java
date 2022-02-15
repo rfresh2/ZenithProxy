@@ -193,7 +193,9 @@ public final class Config {
     public static final class Discord {
         public String token = "";
         public String guildId = "876085918669352990";
+        public String channelId = "942621538115551322";
         public boolean enable = false;
+        public String prefix = ".";
         public List<String> allowedUsers = asList(
                 "177895753195192321" // rfresh#2222
         );
