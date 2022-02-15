@@ -141,7 +141,6 @@ public class Proxy {
                     }
                 }, 0, interval, TimeUnit.MILLISECONDS);
             }
-            this.logIn();
             this.startServer();
             CACHE.reset(true);
             Wait.waitSpinLoop();
@@ -227,6 +226,7 @@ public class Proxy {
 
     public void connect() {
         synchronized (this) {
+            this.logIn();
             if (this.isConnected()) {
                 throw new IllegalStateException("Already connected!");
             }

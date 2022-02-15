@@ -34,7 +34,7 @@ public class ConnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getConnectMessageCreateRequest(boolean success) {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Connected! " + " : " + CONFIG.authentication.username)
+                        .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
                         .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Queue", ""+Queue.getQueueStatus().regular, true)

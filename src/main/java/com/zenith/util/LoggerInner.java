@@ -36,13 +36,13 @@ import static com.zenith.util.Constants.*;
  */
 @Getter
 public class LoggerInner {
-    protected final AuthenticationService auth;
+    protected AuthenticationService auth;
 
     public LoggerInner()    {
-        this.auth = setAuth();
+
     }
 
-    private AuthenticationService setAuth() {
+    private AuthenticationService getAuth() {
         AuthenticationService auth;
         if (CONFIG.authentication.doAuthentication) {
             if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
@@ -62,38 +62,33 @@ public class LoggerInner {
                 throw new RuntimeException("No valid account type set. Must set either mojang or msa");
             }
         } else {
-            auth = null;
+            auth = new MojangAuthenticationService();
         }
         return auth;
     }
 
     public MinecraftProtocol handleRelog()  {
-        if (this.auth == null)  {
-            AuthenticationService authenticationService = setAuth();
-            return new MinecraftProtocol(authenticationService.getSelectedProfile(), "", authenticationService.getAccessToken());
-        } else {
-            try {
-                this.auth.login();
-
-                if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
-                    return new MinecraftProtocol(
-                            auth.getSelectedProfile(), ((MojangAuthenticationService) auth).getClientToken(), auth.getAccessToken()
-                    );
-                } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
-                    return new MinecraftProtocol(
-                            auth.getSelectedProfile(), "", auth.getAccessToken()
-                    );
-                } else {
-                    throw new RuntimeException("No valid account type set. Must set either mojang or msa");
-                }
-
-            } catch (RequestException e)    {
-                throw new RuntimeException(String.format(
-                        "Unable to log in using credentials %s:%s (%s)",
-                        CONFIG.authentication.email,
-                        CONFIG.authentication.password,
-                        CONFIG.authentication.username), e);
+        this.auth = this.getAuth();
+        try {
+            this.auth.login();
+            if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
+                return new MinecraftProtocol(
+                        auth.getSelectedProfile(), ((MojangAuthenticationService) auth).getClientToken(), auth.getAccessToken()
+                );
+            } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
+                return new MinecraftProtocol(
+                        auth.getSelectedProfile(), "", auth.getAccessToken()
+                );
+            } else {
+                throw new RuntimeException("No valid account type set. Must set either mojang or msa");
             }
+
+        } catch (RequestException e)    {
+            throw new RuntimeException(String.format(
+                    "Unable to log in using credentials %s:%s (%s)",
+                    CONFIG.authentication.email,
+                    CONFIG.authentication.password,
+                    CONFIG.authentication.username), e);
         }
     }
 }
