@@ -1,6 +1,8 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
+import com.zenith.util.Queue;
+import com.zenith.util.QueueStatus;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -32,10 +34,11 @@ public class ConnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getConnectMessageCreateRequest(boolean success) {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Connection " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
+                        .title("ZenithProxy Connected! " + " : " + CONFIG.authentication.username)
                         .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
-                        .image(this.proxy.getAvatarURL().toString())
                         .addField("Server", CONFIG.client.server.address, true)
+                        .addField("Queue", ""+Queue.getQueueStatus().regular, true)
+                        .addField("Priority", ""+Queue.getQueueStatus().prio, true)
                         .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
                         .build())
                 .build().asRequest();

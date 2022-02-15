@@ -13,4 +13,14 @@ public class QueueStatus {
     public Long timems;
     @JsonProperty("msg")
     public String msg;
+
+    public QueueStatus() {}
+
+    public QueueStatus(Integer prio, Integer regular, Integer total, Long timems, String msg) {
+        this.prio = prio;
+        this.regular = regular;
+        this.total = total;
+        this.timems = timems;
+        this.msg = msg;
+    }
 }

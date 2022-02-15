@@ -2,6 +2,7 @@ package com.zenith.discord;
 
 import com.zenith.Proxy;
 import com.zenith.discord.command.*;
+import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
@@ -63,9 +64,8 @@ public class DiscordBot {
                         .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                         .addField("Server", CONFIG.client.server.address, true)
-                        .addField("Queue Position", "" + queuePosition, true)
+                        .addField("Queue Position", queuePosition + " / " + Queue.getQueueStatus().regular, false)
                         .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
-                        .image(this.proxy.getAvatarURL().toString())
                         .build())
                 .build().asRequest()).block();
     }
@@ -78,7 +78,18 @@ public class DiscordBot {
                         .color(Color.CYAN)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
-                        .image(this.proxy.getAvatarURL().toString())
+                        .build())
+                .build().asRequest()).block();
+    }
+
+    public void sendStartQueueing() {
+        RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
+        restChannel.createMessage(MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
+                        .color(Color.CYAN)
+                        .addField("Queue Position", Queue.getQueueStatus().regular + " / " + Queue.getQueueStatus().regular, false)
+                        .addField("Proxy IP", "todo:" + CONFIG.server.bind.port, false)
                         .build())
                 .build().asRequest()).block();
     }

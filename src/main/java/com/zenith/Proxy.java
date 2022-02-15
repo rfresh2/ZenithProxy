@@ -360,6 +360,9 @@ public class Proxy {
     }
 
     public void setQueue(String position) {
+        if (!this.inQueue) {
+            DISCORD_BOT.sendStartQueueing();
+        }
         this.inQueue = true;
         try {
             this.queuePosition = Integer.parseInt(position);

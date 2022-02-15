@@ -33,7 +33,6 @@ public class DisconnectCommand extends Command {
                 .addEmbed(EmbedCreateSpec.builder()
                         .title("ZenithProxy Disconnect " + (success ? "Succeeded" : "Failed") + " : " + CONFIG.authentication.username)
                         .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
-                        .image(this.proxy.getAvatarURL().toString())
                         .addField("Server", CONFIG.client.server.address, true)
                         .build())
                 .build().asRequest();
