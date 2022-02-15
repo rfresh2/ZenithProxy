@@ -26,6 +26,7 @@ import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.util.Queue;
 
 import static com.zenith.util.Constants.*;
 
@@ -49,6 +50,8 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 SHOULD_RECONNECT = false;
                 session.getProxy().getClient().getSession().disconnect("User forced disconnect", false);
                 return false;
+            } else if ("!q".equalsIgnoreCase(packet.getMessage())) {
+                session.send(new ServerChatPacket(String.format("§7[§5Zenith§9Proxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, packet.getMessage()), true));
             } else {
                 session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage()), true));
                 return false;
