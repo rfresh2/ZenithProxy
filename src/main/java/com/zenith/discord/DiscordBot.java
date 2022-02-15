@@ -58,39 +58,37 @@ public class DiscordBot {
     }
 
     public void sendQueueWarning(final int queuePosition) {
-        RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
-        restChannel.createMessage(MessageCreateSpec.builder()
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
-                        .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
-                        .addField("Server", CONFIG.client.server.address, true)
-                        .addField("Queue Position", queuePosition + " / " + Queue.getQueueStatus().regular, false)
-                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-                        .build())
-                .build().asRequest()).block();
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
+                .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
+                .addField("Server", CONFIG.client.server.address, true)
+                .addField("Queue Position", queuePosition + " / " + Queue.getQueueStatus().regular, false)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+                .build());
     }
 
     public void sendOnline() {
-        RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
-        restChannel.createMessage(MessageCreateSpec.builder()
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
-                        .color(Color.CYAN)
-                        .addField("Server", CONFIG.client.server.address, true)
-                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-                        .build())
-                .build().asRequest()).block();
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
+                .color(Color.CYAN)
+                .addField("Server", CONFIG.client.server.address, true)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+                .build());
     }
 
     public void sendStartQueueing() {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
+                .color(Color.CYAN)
+                .addField("Queue Position", Queue.getQueueStatus().regular + " / " + Queue.getQueueStatus().regular, false)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+                .build());
+    }
+
+    private void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
         RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         restChannel.createMessage(MessageCreateSpec.builder()
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
-                        .color(Color.CYAN)
-                        .addField("Queue Position", Queue.getQueueStatus().regular + " / " + Queue.getQueueStatus().regular, false)
-                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-                        .build())
+                .addEmbed(embedCreateSpec)
                 .build().asRequest()).block();
     }
 }
