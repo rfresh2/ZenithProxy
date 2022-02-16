@@ -52,7 +52,7 @@ public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJo
                 8,
                 ChatVisibility.FULL,
                 true,
-                SkinPart.values(),
+                new SkinPart[0],
                 Hand.MAIN_HAND
         ));
         return false;

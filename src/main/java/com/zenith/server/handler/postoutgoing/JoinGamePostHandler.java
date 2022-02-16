@@ -22,10 +22,10 @@ package com.zenith.server.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
-import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.RefStrings;
 import com.zenith.util.handler.HandlerRegistry;
+import lombok.NonNull;
 
 import static com.zenith.util.Constants.*;
 
