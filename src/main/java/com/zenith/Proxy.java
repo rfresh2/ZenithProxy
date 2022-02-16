@@ -41,6 +41,7 @@ import com.zenith.client.PorkClientSession;
 import com.zenith.mc.PorkSessionFactory;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
+import com.zenith.util.Constants;
 import com.zenith.util.LoggerInner;
 import com.zenith.util.Wait;
 import lombok.Getter;
@@ -102,6 +103,7 @@ public class Proxy {
     private int lastQueueWarningPosition = Integer.MAX_VALUE;
     private Instant connectTime;
     private boolean sentOnlineMessage = false;
+    public boolean shouldReconnect = false;
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -143,6 +145,9 @@ public class Proxy {
             }
             this.startServer();
             CACHE.reset(true);
+            if (CONFIG.client.autoConnect) {
+                connect();
+            }
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
@@ -156,10 +161,23 @@ public class Proxy {
         }
     }
 
+    private void connectLoop() {
+        // waits on future indefinitely
+        String disconnectReason = ((PorkClientSession) this.client.getSession()).getDisconnectReason();
+        disconnect(); // reset state
+        // todo: use events or something so we don't have infinite recursive stack being built here
+        // only autoreconnect on server disconnects and if we have the config enabled
+        if (!disconnectReason.equals(Constants.MANUAL_DISCONNECT)
+                && CONFIG.client.extra.autoReconnect.enabled) {
+            Wait.waitALittle(CONFIG.client.extra.autoReconnect.delaySeconds);
+            connect();
+        }
+    }
+
     public void disconnect() {
         CACHE.reset(true);
         if (this.isConnected()) {
-            this.client.getSession().disconnect("Disconnected");
+            this.client.getSession().disconnect(Constants.MANUAL_DISCONNECT);
         }
         this.sentOnlineMessage = false;
         this.lastQueueWarningPosition = Integer.MAX_VALUE;
@@ -239,6 +257,7 @@ public class Proxy {
             this.client.getSession().connect(true);
             this.connectTime = Instant.now();
         }
+        connectLoop();
     }
 
     public boolean isConnected() {

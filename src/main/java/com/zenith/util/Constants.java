@@ -122,6 +122,8 @@ public class Constants {
     public static final WebSocketServer WEBSOCKET_SERVER;
     public static final DiscordBot DISCORD_BOT;
 
+    public static final String MANUAL_DISCONNECT = "Manual Disconnect";
+
     public static final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
             //
