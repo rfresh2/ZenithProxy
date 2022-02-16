@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DISCORD_LOG;
 
 public class DiscordBot {
 
@@ -38,6 +39,7 @@ public class DiscordBot {
         commands.add(new DisconnectCommand(this.proxy));
         commands.add(new StatusCommand(this.proxy));
         commands.add(new HelpCommand(this.proxy, this.commands));
+        commands.add(new WhitelistCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
@@ -51,9 +53,15 @@ public class DiscordBot {
             commands.stream()
                     .filter(command -> message.startsWith(CONFIG.discord.prefix + command.getName()))
                     .findFirst()
-                    .ifPresent(command -> restChannel.createMessage(
-                            command.execute(event, restChannel))
-                            .block());
+                    .ifPresent(command -> {
+                        try {
+                            restChannel.createMessage(
+                                    command.execute(event, restChannel))
+                                    .block();
+                        } catch (final Exception e) {
+                            DISCORD_LOG.error("Error executing discord command: " + command, e);
+                        }
+                    });
         });
     }
 

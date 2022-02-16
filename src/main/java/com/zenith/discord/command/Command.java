@@ -1,7 +1,6 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
-import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
@@ -30,8 +29,12 @@ public abstract class Command {
         return description;
     }
 
-    private void userAllowed(ApplicationCommandInteractionEvent event) {
-        String id = event.getInteraction().getMember().get().getId().asString();
+    /**
+     * Call this in execute for child classes to validate discrd user permissions
+     * @param event
+     */
+    void userAllowed(MessageCreateEvent event) {
+        String id = event.getMember().get().getId().asString();
         if (!CONFIG.discord.allowedUsers.contains(id) && !CONFIG.discord.allowedUsers.isEmpty()) {
             throw new RuntimeException("Not an allowed user");
         }
