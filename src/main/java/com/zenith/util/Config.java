@@ -49,7 +49,6 @@ public final class Config {
     public static final class Client {
         public Extra extra = new Extra();
         public Server server = new Server();
-        public boolean autoConnect = false;
 
         public static final class Extra {
             public AntiAFK antiafk = new AntiAFK();
@@ -62,7 +61,7 @@ public final class Config {
                 public boolean enabled = true;
                 public boolean runEvenIfClientsConnected = false;
                 public static final class Actions {
-                    public boolean rotate = false;
+                    public boolean rotate = true;
                     public boolean swingHand = true;
                 }
             }
@@ -76,8 +75,8 @@ public final class Config {
             }
 
             public static final class AutoRespawn {
-                public boolean enabled = true;
-                public int delayMillis = 300;
+                public boolean enabled = false;
+                public int delayMillis = 100;
             }
 
             public static final class Spammer {
