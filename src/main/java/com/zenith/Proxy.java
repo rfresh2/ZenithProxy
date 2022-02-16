@@ -272,7 +272,7 @@ public class Proxy {
                                 this.currentPlayer.get() == null ? 0 : 1,
                                 new GameProfile[0]
                         ),
-                        String.format(CONFIG.server.ping.motd, this.protocol.getProfile().getName()),
+                        String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username),
                         this.serverIcon,
                         true
                 ));
