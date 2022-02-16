@@ -2,7 +2,6 @@ package com.zenith.discord.command;
 
 import com.zenith.Proxy;
 import com.zenith.util.Queue;
-import com.zenith.util.QueueStatus;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;

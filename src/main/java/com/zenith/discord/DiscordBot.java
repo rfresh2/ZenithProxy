@@ -26,7 +26,7 @@ public class DiscordBot {
 
     private RestClient restClient;
     private Proxy proxy;
-    private List<Command> commands = new ArrayList<>();
+    public List<Command> commands = new ArrayList<>();
 
     public DiscordBot() {
     }

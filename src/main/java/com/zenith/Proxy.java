@@ -237,6 +237,18 @@ public class Proxy {
             CLIENT_LOG.info("Connecting to %s:%d...", address, port);
             this.client = new Client(address, port, this.protocol, this.sessionFactory);
             this.client.getSession().connect(true);
+            this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
+                    new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
+                    new PlayerInfo(
+                            CONFIG.server.ping.maxPlayers,
+                            this.currentPlayer.get() == null ? 0 : 1,
+                            new GameProfile[0]
+                    ),
+                    String.format(CONFIG.server.ping.motd, this.protocol.getProfile().getName()),
+                    this.serverIcon,
+                    true
+            ));
+            this.inQueue = false;
             this.connectTime = Instant.now();
         }
     }
