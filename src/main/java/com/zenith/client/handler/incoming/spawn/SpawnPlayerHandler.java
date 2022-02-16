@@ -21,6 +21,7 @@
 package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import com.zenith.util.cache.data.entity.Entity;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.EntityPlayer;
@@ -36,7 +37,7 @@ import static com.zenith.util.Constants.*;
 public class SpawnPlayerHandler implements HandlerRegistry.IncomingHandler<ServerSpawnPlayerPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerSpawnPlayerPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().add(new EntityPlayer()
+        Entity entity = new EntityPlayer()
                 .setEntityId(packet.getEntityId())
                 .setUuid(packet.getUUID())
                 .setX(packet.getX())
@@ -44,8 +45,9 @@ public class SpawnPlayerHandler implements HandlerRegistry.IncomingHandler<Serve
                 .setZ(packet.getZ())
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch())
-                .setMetadata(Arrays.asList(packet.getMetadata()))
-        );
+                .setMetadata(Arrays.asList(packet.getMetadata()));
+        CACHE.getEntityCache().add(entity);
+        DISCORD_BOT.sendNewPlayerInVisualRange(entity);
         return true;
     }
 

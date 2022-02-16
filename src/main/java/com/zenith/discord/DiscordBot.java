@@ -3,6 +3,8 @@ package com.zenith.discord;
 import com.zenith.Proxy;
 import com.zenith.discord.command.*;
 import com.zenith.util.Queue;
+import com.zenith.util.cache.data.entity.Entity;
+import com.zenith.util.cache.data.tab.PlayerEntry;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
@@ -15,9 +17,10 @@ import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DISCORD_LOG;
+import static com.zenith.discord.command.StatusCommand.getCoordinates;
+import static com.zenith.util.Constants.*;
 
 public class DiscordBot {
 
@@ -93,10 +96,34 @@ public class DiscordBot {
                 .build());
     }
 
+    public void sendDeath() {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Player Death!" + " : " + CONFIG.authentication.username)
+                .color(Color.RUBY)
+                .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), false)
+                .build());
+    }
+
+    public void sendNewPlayerInVisualRange(Entity entity) {
+        Optional<PlayerEntry> playerEntry = CACHE.getTabListCache().getTabList().getEntries().stream()
+                .filter(e -> e.getId().equals(entity.getUuid()))
+                .findFirst();
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Player In Visual Range")
+                .addField("Player Name", playerEntry.map(pe -> pe.getDisplayName()).orElse("Unknown"), true)
+                .addField("Player UUID", playerEntry.map(pe -> pe.getId().toString()).orElse("Unknown"), true)
+                .build());
+    }
+
     private void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
-        RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
-        restChannel.createMessage(MessageCreateSpec.builder()
-                .addEmbed(embedCreateSpec)
-                .build().asRequest()).block();
+        try {
+            RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
+            restChannel.createMessage(MessageCreateSpec.builder()
+                    .addEmbed(embedCreateSpec)
+                    .build().asRequest()).block();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+
     }
 }

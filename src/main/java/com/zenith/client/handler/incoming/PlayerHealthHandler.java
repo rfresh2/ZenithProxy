@@ -46,6 +46,7 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
                 .debug("Player health: %f", packet.getHealth());
         if (packet.getHealth() <= 0 && CONFIG.client.extra.autoRespawn.enabled)  {
             new Thread(() -> {
+                DISCORD_BOT.sendDeath();
                 PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
                 if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
                     Proxy.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
