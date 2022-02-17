@@ -94,7 +94,6 @@ public class Proxy {
     private boolean inQueue = false;
     private int queuePosition = 0;
     private Instant connectTime;
-    private boolean sentOnlineMessage = false;
     private Optional<Boolean> isPrio;
 
 //    protected final Gui gui = new Gui();
@@ -157,7 +156,6 @@ public class Proxy {
         if (this.isConnected()) {
             this.client.getSession().disconnect("Disconnected");
         }
-        this.sentOnlineMessage = false;
         this.inQueue = false;
         this.queuePosition = 0;
         this.connectTime = Instant.MAX;
