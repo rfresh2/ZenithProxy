@@ -345,6 +345,7 @@ public class Proxy {
 
     @Subscribe(value = Preference.CALLER)
     public void handleDisconnectEvent(DisconnectEvent event) {
+        CACHE.reset(true);
         this.inQueue = false;
         this.queuePosition = 0;
         setServerMotd(String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username));
