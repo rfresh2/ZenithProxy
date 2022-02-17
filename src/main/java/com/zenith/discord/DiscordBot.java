@@ -19,6 +19,7 @@ import discord4j.rest.util.MultipartRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
@@ -151,7 +152,7 @@ public class DiscordBot {
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Player In Visual Range")
-                .addField("Player Name", event.playerEntry.getDisplayName(), true)
+                .addField("Player Name", Optional.ofNullable(event.playerEntry.getDisplayName()).orElse("Unknown"), true)
                 .addField("Player UUID", event.playerEntry.getId().toString(), true)
                 .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                 .build());
