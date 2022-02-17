@@ -25,11 +25,7 @@ public class StatusCommand extends Command {
                 .addEmbed(EmbedCreateSpec.builder()
                         .title("ZenithProxy Status" + " : " + CONFIG.authentication.username)
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
-                        .addField("Status", proxy.isConnected() ?
-                                (this.proxy.isInQueue()
-                                        ? "Queueing [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]"
-                                        : "Online")
-                                : "Disconnected", true)
+                        .addField("Status", getStatus(), true)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .addField("Dimension",
@@ -39,6 +35,26 @@ public class StatusCommand extends Command {
                         .addField("Health", ""+CACHE.getPlayerCache().getThePlayer().getHealth(), false)
                         .build())
                 .build().asRequest();
+    }
+
+    private String getStatus() {
+        if (proxy.isConnected()) {
+            if (proxy.isInQueue()) {
+                if (proxy.getIsPrio().isPresent()) {
+                    if (proxy.getIsPrio().get()) {
+                        return "Queueing [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]";
+                    } else {
+                        return "Queueing [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]";
+                    }
+                } else {
+                    return "Queueing";
+                }
+            } else {
+                return "Online";
+            }
+        } else {
+            return "Disconnected";
+        }
     }
 
     private String dimensionIdToString(final int dimension) {

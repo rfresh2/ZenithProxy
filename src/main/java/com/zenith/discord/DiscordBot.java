@@ -1,23 +1,24 @@
 package com.zenith.discord;
 
+import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.discord.command.*;
+import com.zenith.event.*;
 import com.zenith.util.Queue;
-import com.zenith.util.cache.data.entity.Entity;
-import com.zenith.util.cache.data.tab.PlayerEntry;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
+import discord4j.rest.util.MultipartRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
@@ -29,6 +30,7 @@ public class DiscordBot {
     public List<Command> commands = new ArrayList<>();
 
     public DiscordBot() {
+
     }
 
     public void start(Proxy proxy) {
@@ -36,6 +38,8 @@ public class DiscordBot {
         GatewayDiscordClient client = DiscordClient.create(CONFIG.discord.token)
                 .login()
                 .block();
+        EVENT_BUS.subscribe(this);
+
         restClient = client.getRestClient();
 
         commands.add(new ConnectCommand(this.proxy));
@@ -58,9 +62,10 @@ public class DiscordBot {
                     .findFirst()
                     .ifPresent(command -> {
                         try {
-                            restChannel.createMessage(
-                                    command.execute(event, restChannel))
-                                    .block();
+                            MultipartRequest<MessageCreateRequest> m = command.execute(event, restChannel);
+                            if (m != null) {
+                                restChannel.createMessage(m).block();
+                            }
                         } catch (final Exception e) {
                             DISCORD_LOG.error("Error executing discord command: " + command, e);
                         }
@@ -68,17 +73,20 @@ public class DiscordBot {
         });
     }
 
-    public void sendQueueWarning(final int queuePosition) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
-                .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
-                .addField("Server", CONFIG.client.server.address, true)
-                .addField("Queue Position", queuePosition + " / " + Queue.getQueueStatus().regular, false)
-                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-                .build());
+    @Subscribe
+    public void handleConnectEvent(ConnectEvent event) {
+       sendEmbedMessage(EmbedCreateSpec.builder()
+               .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
+               .color(Color.CYAN)
+               .addField("Server", CONFIG.client.server.address, true)
+               .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
+               .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
+               .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+               .build());
     }
 
-    public void sendOnline() {
+    @Subscribe
+    public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
@@ -87,16 +95,50 @@ public class DiscordBot {
                 .build());
     }
 
-    public void sendStartQueueing() {
+    @Subscribe
+    public void handleDisconnectEvent(DisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
+                .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
-                .addField("Queue Position", Queue.getQueueStatus().regular + " / " + Queue.getQueueStatus().regular, false)
+                .build());
+    }
+
+    @Subscribe
+    public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
+        if (event.position == CONFIG.server.queueWarning) {
+            sendQueueWarning(event.position);
+        } else if (event.position <= 3) {
+            sendQueueWarning(event.position);
+        }
+    }
+
+    private void sendQueueWarning(int position) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
+                .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
+                .addField("Server", CONFIG.client.server.address, true)
+                .addField("Queue Position", position + " / " + Queue.getQueueStatus().regular, false)
                 .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
     }
 
-    public void sendDeath() {
+    @Subscribe
+    public void handleQueueCompleteEvent(QueueCompleteEvent event) {
+
+    }
+
+    @Subscribe
+    public void handleStartQueueEvent(StartQueueEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
+                .color(Color.CYAN)
+                .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
+                .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
+                .build());
+    }
+
+    @Subscribe
+    public void handleDeathEvent(DeathEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Player Death!" + " : " + CONFIG.authentication.username)
                 .color(Color.RUBY)
@@ -104,14 +146,12 @@ public class DiscordBot {
                 .build());
     }
 
-    public void sendNewPlayerInVisualRange(Entity entity) {
-        Optional<PlayerEntry> playerEntry = CACHE.getTabListCache().getTabList().getEntries().stream()
-                .filter(e -> e.getId().equals(entity.getUuid()))
-                .findFirst();
+    @Subscribe
+    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Player In Visual Range")
-                .addField("Player Name", playerEntry.map(pe -> pe.getDisplayName()).orElse("Unknown"), true)
-                .addField("Player UUID", playerEntry.map(pe -> pe.getId().toString()).orElse("Unknown"), true)
+                .addField("Player Name", event.playerEntry.getDisplayName(), true)
+                .addField("Player UUID", event.playerEntry.getId().toString(), true)
                 .build());
     }
 

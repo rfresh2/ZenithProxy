@@ -1,1 +1,1 @@
-java -server -Xmx180M -XX:NewSize=80M -XX:+UseSerialGC -jar build/libs/ZenithProxy-0.2.8-1.12.2.jar
+java -server -Xmx180M -XX:NewSize=80M -XX:+UseSerialGC -Djava.util.concurrent.ForkJoinPool.common.parallelism=16 -jar build/libs/ZenithProxy.jar

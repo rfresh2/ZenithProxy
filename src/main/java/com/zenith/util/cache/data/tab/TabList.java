@@ -28,6 +28,7 @@ import lombok.experimental.Accessors;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -73,6 +74,10 @@ public class TabList {
             return new PlayerEntry("", entry.getProfile().getId());
         }
         return e;
+    }
+
+    public Optional<PlayerEntry> get(UUID uuid) {
+        return Optional.ofNullable(this.entries.get(uuid));
     }
 
     public Collection<PlayerEntry> getEntries() {

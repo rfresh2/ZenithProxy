@@ -21,6 +21,7 @@
 package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import com.zenith.event.NewPlayerInVisualRangeEvent;
 import com.zenith.util.cache.data.entity.Entity;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
@@ -47,7 +48,8 @@ public class SpawnPlayerHandler implements HandlerRegistry.IncomingHandler<Serve
                 .setPitch(packet.getPitch())
                 .setMetadata(Arrays.asList(packet.getMetadata()));
         CACHE.getEntityCache().add(entity);
-        DISCORD_BOT.sendNewPlayerInVisualRange(entity);
+        CACHE.getTabListCache().getTabList().get(packet.getUUID())
+                        .ifPresent(playerEntry -> EVENT_BUS.dispatch(new NewPlayerInVisualRangeEvent(playerEntry, entity)));
         return true;
     }
 

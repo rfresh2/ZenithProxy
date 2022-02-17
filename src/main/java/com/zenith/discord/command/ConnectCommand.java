@@ -23,21 +23,19 @@ public class ConnectCommand extends Command {
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         try {
             this.proxy.connect();
-            return getConnectMessageCreateRequest(true);
+            return null;
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to connect", e);
-            return getConnectMessageCreateRequest(false);
+            return getFailedConnectionMessage();
         }
     }
 
-    private MultipartRequest<MessageCreateRequest> getConnectMessageCreateRequest(boolean success) {
+    private MultipartRequest<MessageCreateRequest> getFailedConnectionMessage() {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
-                        .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
+                        .title("ZenithProxy Failed to Connect!" + " : " + CONFIG.authentication.username)
+                        .color(Color.RED)
                         .addField("Server", CONFIG.client.server.address, true)
-                        .addField("Queue", ""+Queue.getQueueStatus().regular, true)
-                        .addField("Priority", ""+Queue.getQueueStatus().prio, true)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .build())
                 .build().asRequest();

@@ -20,6 +20,7 @@
 
 package com.zenith.util;
 
+import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -104,7 +105,7 @@ public class Constants {
     public static final JsonParser JSON_PARSER = new JsonParser();
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public static final DefaultLogger DEFAULT_LOG   = Logging.logger;
+    public static final DefaultLogger DEFAULT_LOG = Logging.logger;
     public static final Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
     public static final Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
     public static final Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
@@ -121,6 +122,7 @@ public class Constants {
     public static final DataCache CACHE;
     public static final WebSocketServer WEBSOCKET_SERVER;
     public static final DiscordBot DISCORD_BOT;
+    public static final EventBus EVENT_BUS;
 
     public static final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
@@ -219,6 +221,7 @@ public class Constants {
         CACHE = new DataCache();
         WEBSOCKET_SERVER = new WebSocketServer();
         DISCORD_BOT = new DiscordBot();
+        EVENT_BUS = new EventBus(Runnable::run);
     }
 
     public static volatile boolean SHOULD_RECONNECT;

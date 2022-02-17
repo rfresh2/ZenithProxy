@@ -6,11 +6,9 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
-import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DISCORD_LOG;
+import static com.zenith.util.Constants.*;
 
 public class DisconnectCommand extends Command {
     public DisconnectCommand(Proxy proxy) {
@@ -21,18 +19,17 @@ public class DisconnectCommand extends Command {
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         try {
             this.proxy.disconnect();
-            return getDisconnectMessageCreateRequest(true);
+            return null;
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to disconnect", e);
-            return getDisconnectMessageCreateRequest(false);
+            return getFailedToDisconnectMessage();
         }
     }
 
-    private MultipartRequest<MessageCreateRequest> getDisconnectMessageCreateRequest(boolean success) {
+    private MultipartRequest<MessageCreateRequest> getFailedToDisconnectMessage() {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
-                        .color((success ? Color.LIGHT_SEA_GREEN : Color.RED))
+                        .title("ZenithProxy Failed to Disconnect : " + CONFIG.authentication.username)
                         .build())
                 .build().asRequest();
     }

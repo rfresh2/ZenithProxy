@@ -24,6 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.zenith.Proxy;
+import com.zenith.event.DeathEvent;
 import lombok.NonNull;
 import net.daporkchop.lib.common.util.PorkUtil;
 import com.zenith.client.PorkClientSession;
@@ -35,6 +36,10 @@ import static com.zenith.util.Constants.*;
  * @author DaPorkchop_
  */
 public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<ServerPlayerHealthPacket, PorkClientSession> {
+
+    // variable to provide idempotence on this event
+    private boolean playerDead = false;
+
     @Override
     public boolean apply(@NonNull ServerPlayerHealthPacket packet, @NonNull PorkClientSession session) {
         CACHE.getPlayerCache().getThePlayer()
@@ -44,15 +49,16 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
         CACHE_LOG.debug("Player food: %d", packet.getFood())
                 .debug("Player saturation: %f", packet.getSaturation())
                 .debug("Player health: %f", packet.getHealth());
-        if (packet.getHealth() <= 0 && CONFIG.client.extra.autoRespawn.enabled)  {
-            new Thread(() -> {
-                DISCORD_BOT.sendDeath();
-                PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
-                if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
-                    Proxy.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
-                }
-            }).start();
+        boolean dead = packet.getHealth() <= 0;
+        if (dead) {
+            if (!playerDead) {
+                playerDead = true;
+                EVENT_BUS.dispatch(new DeathEvent());
+            }
+        } else {
+            playerDead = false;
         }
+
         return true;
     }
 

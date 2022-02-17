@@ -35,10 +35,10 @@ ext {
     mcprotocollibVersion = "a275d2c0d6"
     porklibVersion = "0.5.5-SNAPSHOT"
     discord4jVersion = "3.2.1"
+    pounceVersion = "main-SNAPSHOT"
 }
 
 group "com.zenith"
-version "$programVersion-$minecraftVersion"
 
 compileJava {
     sourceCompatibility = targetCompatibility = "$javaVersion"
@@ -81,6 +81,8 @@ dependencies {
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
+    shade "com.github.collarmc:Pounce:$pounceVersion"
+
     testCompile "junit:junit:$junitVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -107,7 +109,6 @@ jar {
 
     manifest {
         attributes "Implementation-Title": "ZenithProxy",
-                "Implementation-Version": version,
                 "Main-Class": "com.zenith.Proxy"
     }
 }

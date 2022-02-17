@@ -24,6 +24,8 @@ import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.zenith.Proxy;
+import com.zenith.event.ConnectEvent;
+import com.zenith.event.DisconnectEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -33,7 +35,8 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.util.Constants.EVENT_BUS;
 
 /**
  * @author DaPorkchop_
@@ -44,6 +47,7 @@ public class PorkClientSession extends TcpClientSession {
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
+    private boolean disconnected = true;
 
     public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Proxy proxy) {
         super(host, port, protocol, client, null);
@@ -75,5 +79,17 @@ public class PorkClientSession extends TcpClientSession {
             CLIENT_LOG.alert(cause);
             this.disconnectFuture.completeExceptionally(cause);
         }
+        if (!disconnected) {
+            disconnected = true;
+            EVENT_BUS.dispatch(new DisconnectEvent());
+        }
+
+    }
+
+    @Override
+    public void connect(boolean wait) {
+        super.connect(wait);
+        disconnected = false;
+        EVENT_BUS.dispatch(new ConnectEvent());
     }
 }

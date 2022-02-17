@@ -31,6 +31,10 @@ import com.github.steveice10.packetlib.event.session.PacketSendingEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.event.PlayerOnlineEvent;
+import com.zenith.event.QueueCompleteEvent;
+import com.zenith.event.QueuePositionUpdateEvent;
+import com.zenith.event.StartQueueEvent;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +58,11 @@ public class ClientListener implements SessionListener {
     @NonNull
     protected final PorkClientSession session;
 
+    private boolean inQueue = false;
+    private int lastQueuePosition = Integer.MAX_VALUE;
+    // in game
+    private boolean online = false;
+
     @Override
     public void packetReceived(PacketReceivedEvent event) {
         if (event.getPacket() instanceof ServerPlayerListDataPacket) {
@@ -76,16 +85,37 @@ public class ClientListener implements SessionListener {
     }
 
     private void parse2bQueue(String header) {
-        final Optional<String> position = Arrays.stream(header.split("\\\\n"))
+        final Optional<Integer> position = Arrays.stream(header.split("\\\\n"))
                 .map(m -> m.trim())
                 .filter(m -> m.contains("queue"))
                 .map(m -> m.split(":")[1])
                 .map(m -> m.substring(3))
+                .map(m -> {
+                    try {
+                        return Integer.parseInt(m);
+                    } catch (final Exception e) {
+                        // when you first join queue, oftentimes the position = "None"
+                        // we're using Integer.MAX_VALUE to refer to this state
+                        return Integer.MAX_VALUE;
+                    }
+                })
                 .findFirst();
         if (position.isPresent()) {
-            this.proxy.setQueue(position.get());
-        } else {
-            this.proxy.setDefaultMotd();
+            if (!inQueue) {
+                EVENT_BUS.dispatch(new StartQueueEvent(position.get()));
+            }
+            inQueue = true;
+            if (position.get() != lastQueuePosition) {
+                EVENT_BUS.dispatch(new QueuePositionUpdateEvent(position.get()));
+            }
+            lastQueuePosition = position.get();
+        } else if (inQueue) {
+            inQueue = false;
+            lastQueuePosition = Integer.MAX_VALUE;
+            EVENT_BUS.dispatch(new QueueCompleteEvent());
+        } else if (!online) {
+            online = true;
+            EVENT_BUS.dispatch(new PlayerOnlineEvent());
         }
     }
 
