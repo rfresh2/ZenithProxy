@@ -25,6 +25,7 @@ TODO:
 * Multi-client support
   * Incl. built in headless client to use for antiafk or movement with baritone
   * Multi-client connect with players switching from spectator to control
-
+* Autodisconnect on health reaching certain level
+* Active hours - set times when you want to play 2b2t, bot auto connects to be online during those times (including queue time calc)
 
 *forked from daporkchop's proxy*
