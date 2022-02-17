@@ -315,7 +315,7 @@ public class Proxy {
 
     public URL getAvatarURL(UUID uuid) {
         try {
-            return new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", uuid));
+            return new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", uuid.toString()));
         } catch (MalformedURLException e) {
             SERVER_LOG.error("Failed to get avatar");
             throw new UncheckedIOException(e);

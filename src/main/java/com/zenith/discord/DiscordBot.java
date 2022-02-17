@@ -153,6 +153,7 @@ public class DiscordBot {
                 .title("Player In Visual Range")
                 .addField("Player Name", event.playerEntry.getDisplayName(), true)
                 .addField("Player UUID", event.playerEntry.getId().toString(), true)
+                .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                 .build());
     }
 
