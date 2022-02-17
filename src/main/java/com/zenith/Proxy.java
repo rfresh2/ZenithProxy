@@ -156,9 +156,6 @@ public class Proxy {
         if (this.isConnected()) {
             this.client.getSession().disconnect("Disconnected");
         }
-        this.inQueue = false;
-        this.queuePosition = 0;
-        this.connectTime = Instant.MAX;
     }
 
     void registerModules() {
@@ -230,8 +227,6 @@ public class Proxy {
             CLIENT_LOG.info("Connecting to %s:%d...", address, port);
             this.client = new Client(address, port, this.protocol, this.sessionFactory);
             this.client.getSession().connect(true);
-            this.inQueue = false;
-            this.connectTime = Instant.now();
         }
     }
 
@@ -351,18 +346,21 @@ public class Proxy {
 
     @Subscribe(value = Preference.CALLER)
     public void handleDisconnectEvent(DisconnectEvent event) {
+        this.inQueue = false;
+        this.queuePosition = 0;
         setServerMotd(String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username));
     }
 
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
+        this.connectTime = Instant.now();
         setServerMotd(String.format(CONFIG.server.ping.motd, CONFIG.authentication.username + " Online on " + CONFIG.client.server.address + "!"));
     }
 
     @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
-        setServerMotd(String.format(CONFIG.server.ping.motd, CONFIG.authentication.username + " Queueing..."));
         this.inQueue = true;
+        setServerMotd(String.format(CONFIG.server.ping.motd, CONFIG.authentication.username + " Queueing..."));
     }
 
     @Subscribe
