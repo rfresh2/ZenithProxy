@@ -22,6 +22,7 @@ package com.zenith.util.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -66,12 +67,23 @@ public abstract class Entity {
         if (!this.passengerIds.isEmpty())   {
             consumer.accept(new ServerEntitySetPassengersPacket(this.entityId, this.getPassengerIdsAsArray()));
         }
+        if (!this.metadata.isEmpty()) {
+            consumer.accept(new ServerEntityMetadataPacket(this.entityId, this.getEntityMetadataAsArray()));
+        }
     }
 
     public int[] getPassengerIdsAsArray()  {
         int[] arr = new int[this.passengerIds.size()];
         for (int i = 0; i < arr.length; i++)    {
             arr[i] = this.passengerIds.get(i);
+        }
+        return arr;
+    }
+
+    public EntityMetadata[] getEntityMetadataAsArray() {
+        EntityMetadata[] arr = new EntityMetadata[this.metadata.size()];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = this.metadata.get(i);
         }
         return arr;
     }
