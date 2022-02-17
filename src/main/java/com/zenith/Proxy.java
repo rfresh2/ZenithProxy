@@ -302,7 +302,7 @@ public class Proxy {
         if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
             ForkJoinPool.commonPool().execute(() -> {
                 try {
-                    this.serverIcon = ImageIO.read(getAvatarURL());
+                    this.serverIcon = ImageIO.read(getAvatarURL(this.protocol.getProfile().getId()));
                 } catch (IOException e) {
                     System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
                     e.printStackTrace();
@@ -313,9 +313,9 @@ public class Proxy {
         AUTH_LOG.success("Logged in.");
     }
 
-    public URL getAvatarURL() {
+    public URL getAvatarURL(UUID uuid) {
         try {
-            return new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", this.protocol.getProfile().getId()));
+            return new URL(String.format("https://crafatar.com/avatars/%s?size=64&overlay&default=MHF_Steve", uuid));
         } catch (MalformedURLException e) {
             SERVER_LOG.error("Failed to get avatar");
             throw new UncheckedIOException(e);
