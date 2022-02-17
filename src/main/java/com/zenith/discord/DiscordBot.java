@@ -99,6 +99,7 @@ public class DiscordBot {
     public void handleDisconnectEvent(DisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
+                .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
     }
