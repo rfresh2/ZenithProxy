@@ -47,7 +47,6 @@ public class PorkClientSession extends TcpClientSession {
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
-    private boolean disconnected = true;
 
     public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Proxy proxy) {
         super(host, port, protocol, client, null);
@@ -68,7 +67,7 @@ public class PorkClientSession extends TcpClientSession {
 
     @Override
     public void disconnect(String reason, Throwable cause, boolean wait) {
-        super.disconnect(reason, cause, wait);
+        super.disconnect(reason, cause, true);
         serverProbablyOff = false;
         if (cause == null) {
             serverProbablyOff = true;
@@ -79,17 +78,10 @@ public class PorkClientSession extends TcpClientSession {
             CLIENT_LOG.alert(cause);
             this.disconnectFuture.completeExceptionally(cause);
         }
-        if (!disconnected) {
-            disconnected = true;
-            EVENT_BUS.dispatch(new DisconnectEvent(reason));
-        }
-
     }
 
     @Override
     public void connect(boolean wait) {
         super.connect(wait);
-        disconnected = false;
-        EVENT_BUS.dispatch(new ConnectEvent());
     }
 }

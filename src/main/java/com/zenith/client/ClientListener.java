@@ -31,10 +31,7 @@ import com.github.steveice10.packetlib.event.session.PacketSendingEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
-import com.zenith.event.PlayerOnlineEvent;
-import com.zenith.event.QueueCompleteEvent;
-import com.zenith.event.QueuePositionUpdateEvent;
-import com.zenith.event.StartQueueEvent;
+import com.zenith.event.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +59,7 @@ public class ClientListener implements SessionListener {
     private int lastQueuePosition = Integer.MAX_VALUE;
     // in game
     private boolean online = false;
+    private boolean disconnected = true;
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
@@ -149,6 +147,8 @@ public class ClientListener implements SessionListener {
     public void connected(ConnectedEvent event) {
         WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());
+        disconnected = false;
+        EVENT_BUS.dispatch(new ConnectEvent());
     }
 
     @Override
@@ -167,5 +167,9 @@ public class ClientListener implements SessionListener {
     public void disconnected(DisconnectedEvent event) {
         WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.info("Disconnected.");
+        if (!disconnected) {
+            disconnected = true;
+            EVENT_BUS.dispatch(new DisconnectEvent(event.getReason()));
+        }
     }
 }
