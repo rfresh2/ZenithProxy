@@ -349,6 +349,10 @@ public class Proxy {
         this.inQueue = false;
         this.queuePosition = 0;
         setServerMotd(String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username));
+        if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
+            delayBeforeReconnect();
+            this.connect();
+        }
     }
 
     @Subscribe

@@ -81,7 +81,7 @@ public class PorkClientSession extends TcpClientSession {
         }
         if (!disconnected) {
             disconnected = true;
-            EVENT_BUS.dispatch(new DisconnectEvent());
+            EVENT_BUS.dispatch(new DisconnectEvent(reason));
         }
 
     }

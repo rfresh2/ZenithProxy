@@ -117,6 +117,7 @@ public class Constants {
     public static final Logger DISCORD_LOG = DEFAULT_LOG.channel("Discord");
 
     public static final File CONFIG_FILE = new File("config.json");
+    public static final String MANUAL_DISCONNECT = "Manual Disconnect";
 
     public static Config CONFIG;
     public static final DataCache CACHE;

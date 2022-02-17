@@ -22,6 +22,10 @@ package com.zenith.server;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
+import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
+import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
@@ -104,6 +108,14 @@ public class PorkServerConnection implements Session, SessionListener {
         } else if (this.isPlayer) {
             SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
         }
+        this.proxy.getClient().getSession().send(new ClientSettingsPacket(
+                "en_US",
+                8,
+                ChatVisibility.FULL,
+                true,
+                new SkinPart[0],
+                Hand.MAIN_HAND
+        ));
     }
 
     public void send(@NonNull Packet packet) {
