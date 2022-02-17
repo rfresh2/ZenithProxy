@@ -335,11 +335,10 @@ public class Proxy {
             }
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 CLIENT_LOG.info("Reconnecting in %d", i);
-                Thread.sleep(1000L);
+                Wait.waitALittle(1);
             }
             return true;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        } catch (Exception e) {
             return false;
         }
     }

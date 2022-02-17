@@ -166,7 +166,7 @@ public class ClientListener implements SessionListener {
     @Override
     public void disconnected(DisconnectedEvent event) {
         WEBSOCKET_SERVER.fireReset();
-        CLIENT_LOG.info("Disconnected.");
+        CLIENT_LOG.info("Disconnected: " + event.getReason());
         if (!disconnected) {
             disconnected = true;
             EVENT_BUS.dispatch(new DisconnectEvent(event.getReason()));
