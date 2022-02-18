@@ -67,7 +67,7 @@ public class PorkClientSession extends TcpClientSession {
 
     @Override
     public void disconnect(String reason, Throwable cause, boolean wait) {
-        super.disconnect(reason, cause, true);
+        super.disconnect(reason, cause, wait);
         serverProbablyOff = false;
         if (cause == null) {
             serverProbablyOff = true;

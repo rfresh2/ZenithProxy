@@ -161,9 +161,9 @@ public class Proxy {
     }
 
     public void disconnect() {
-        CACHE.reset(true);
+        CACHE.reset(false);
         if (this.isConnected()) {
-            this.client.getSession().disconnect("Disconnected");
+            this.client.getSession().disconnect(MANUAL_DISCONNECT, false);
         }
     }
 
@@ -320,7 +320,7 @@ public class Proxy {
 
     @Subscribe(value = Preference.CALLER)
     public void handleDisconnectEvent(DisconnectEvent event) {
-        CACHE.reset(true);
+        CACHE.reset(false);
         this.inQueue = false;
         this.queuePosition = 0;
         setServerMotd(String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username));
