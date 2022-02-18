@@ -152,7 +152,7 @@ public class DiscordBot {
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Player In Visual Range")
-                .addField("Player Name", Optional.ofNullable(event.playerEntry.getDisplayName()).orElse("Unknown"), true)
+                .addField("Player Name", Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown"), true)
                 .addField("Player UUID", event.playerEntry.getId().toString(), true)
                 .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                 .build());
