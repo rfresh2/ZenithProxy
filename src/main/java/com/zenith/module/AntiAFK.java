@@ -41,7 +41,7 @@ public class AntiAFK extends Module {
             walkTickTimer.reset();
         }
         if (shouldWalk) {
-            if (walkTickTimer.tick(50L, true)) {
+            if (walkTickTimer.tick(100L, true)) {
                 shouldWalk = false;
                 xDirectionMultiplier *= -1.0;
             } else {
