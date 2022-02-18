@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.zenith.discord.DiscordBot;
-import lombok.experimental.UtilityClass;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
 import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
@@ -95,6 +94,8 @@ import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * @author DaPorkchop_
@@ -124,6 +125,8 @@ public class Constants {
     public static final WebSocketServer WEBSOCKET_SERVER;
     public static final DiscordBot DISCORD_BOT;
     public static final EventBus EVENT_BUS;
+    public static final ExecutorService MODULE_EXECUTOR_SERVICE;
+
 
     public static final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
@@ -223,6 +226,7 @@ public class Constants {
         WEBSOCKET_SERVER = new WebSocketServer();
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
+        MODULE_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1);
     }
 
     public static volatile boolean SHOULD_RECONNECT;

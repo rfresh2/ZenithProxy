@@ -28,15 +28,11 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
-import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
 import com.github.steveice10.mc.protocol.data.status.VersionInfo;
 import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.Server;
@@ -44,6 +40,8 @@ import com.github.steveice10.packetlib.SessionFactory;
 import com.zenith.client.PorkClientSession;
 import com.zenith.event.*;
 import com.zenith.mc.PorkSessionFactory;
+import com.zenith.module.AntiAFK;
+import com.zenith.module.Module;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
 import com.zenith.util.LoggerInner;
@@ -62,12 +60,15 @@ import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
 /**
@@ -87,8 +88,9 @@ public class Proxy {
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<PorkServerConnection> currentPlayer = new AtomicReference<>();
-    protected final ScheduledExecutorService moduleExecutorService;
+    protected final ScheduledExecutorService clientTickExecutorService;
     protected final ScheduledExecutorService clientTimeoutExecutorService;
+    protected List<Module> modules;
 
     private int reconnectCounter;
     private boolean inQueue = false;
@@ -117,7 +119,7 @@ public class Proxy {
     }
 
     public Proxy() {
-        this.moduleExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
         this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
         EVENT_BUS.subscribe(this);
     }
@@ -138,6 +140,13 @@ public class Proxy {
             }
             this.startServer();
             CACHE.reset(true);
+            clientTickExecutorService.scheduleAtFixedRate(() -> {
+                if (this.isConnected()
+                        && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && isNull(this.currentPlayer.get())) {
+                    MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(new ClientTickEvent()));
+                }
+            }, 0, 50L, TimeUnit.MILLISECONDS);
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
@@ -159,59 +168,25 @@ public class Proxy {
     }
 
     void registerModules() {
-        Collection<Runnable> modules = new ArrayDeque<>();
-        if (CONFIG.client.extra.antiafk.enabled) {
-            MODULE_LOG.trace("Enabling AntiAFK");
-            modules.add(() -> {
-                if (CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
-                    boolean swingHand = CONFIG.client.extra.antiafk.actions.swingHand;
-                    boolean rotate = CONFIG.client.extra.antiafk.actions.rotate;
+        // todo: do some reflection magic to auto-register modules in the package
+        this.modules = asList(
+                new AntiAFK(this)
+        );
 
-                    int action = -1;
-                    if (swingHand && rotate) {
-                        action = ThreadLocalRandom.current().nextInt(2);
-                    } else if (swingHand) {
-                        action = 0;
-                    } else if (rotate) {
-                        action = 1;
-                    }
-                    switch (action) {
-                        case 0:
-                            this.client.getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
-                            break;
-                        case 1:
-                            this.client.getSession().send(new ClientPlayerRotationPacket(
-                                    true,
-                                    -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat(),
-                                    -90 + (90 - -90) * ThreadLocalRandom.current().nextFloat()
-                            ));
-                            break;
-                    }
-                }
-            });
-        }
-
-        if (CONFIG.client.extra.spammer.enabled) {
-            List<String> messages = CONFIG.client.extra.spammer.messages;
-            int delaySeconds = CONFIG.client.extra.spammer.delaySeconds;
-            AtomicInteger i = new AtomicInteger(0);
-            MODULE_LOG.trace("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), delaySeconds);
-            modules.add(() -> {
-                if ((i.getAndIncrement() >> 1) == delaySeconds) {
-                    i.set(0);
-                    this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
-                }
-            });
-        }
-
-        moduleExecutorService.scheduleAtFixedRate(() -> {
-            if (this.isConnected()
-                    && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                    && isNull(this.currentPlayer.get())) {
-                modules.forEach(Runnable::run);
-            }
-        }, 0, 500L, TimeUnit.MILLISECONDS);
-
+        // todo: make this into a module
+        //  too lazy to do this rn bc this is not very useful
+//        if (CONFIG.client.extra.spammer.enabled) {
+//            List<String> messages = CONFIG.client.extra.spammer.messages;
+//            int delaySeconds = CONFIG.client.extra.spammer.delaySeconds;
+//            AtomicInteger i = new AtomicInteger(0);
+//            MODULE_LOG.trace("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), delaySeconds);
+//            modules.add(() -> {
+//                if ((i.getAndIncrement() >> 1) == delaySeconds) {
+//                    i.set(0);
+//                    this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
+//                }
+//            });
+//        }
     }
 
     public void connect() {

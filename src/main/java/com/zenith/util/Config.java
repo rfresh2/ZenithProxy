@@ -59,9 +59,8 @@ public final class Config {
             public static final class AntiAFK {
                 public Actions actions = new Actions();
                 public boolean enabled = true;
-                public boolean runEvenIfClientsConnected = false;
                 public static final class Actions {
-                    public boolean rotate = true;
+                    public boolean walk = true;
                     public boolean swingHand = true;
                 }
             }
