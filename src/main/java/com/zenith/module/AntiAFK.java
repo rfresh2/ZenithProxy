@@ -8,8 +8,7 @@ import com.zenith.Proxy;
 import com.zenith.event.ClientTickEvent;
 import com.zenith.util.TickTimer;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
@@ -47,13 +46,15 @@ public class AntiAFK extends Module {
                 xDirectionMultiplier *= -1.0;
             } else {
                 // calculate a walk, to keep things simple let's just walk +x and -x
-                double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
+                double newX = CACHE.getPlayerCache().getX() + (0.1 * xDirectionMultiplier);
+                CLIENT_LOG.debug("Walking to new X: " + newX);
                 this.proxy.getClient().getSession().send(
                         new ClientPlayerPositionPacket(
                                 true,
                                 newX,
                                 CACHE.getPlayerCache().getY(),
                                 CACHE.getPlayerCache().getZ()));
+                CACHE.getPlayerCache().setX(newX);
             }
         }
     }
