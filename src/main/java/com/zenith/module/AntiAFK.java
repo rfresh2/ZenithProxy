@@ -46,7 +46,7 @@ public class AntiAFK extends Module {
                 xDirectionMultiplier *= -1.0;
             } else {
                 // calculate a walk, to keep things simple let's just walk +x and -x
-                double newX = CACHE.getPlayerCache().getX() + (0.1 * xDirectionMultiplier);
+                double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
                 CLIENT_LOG.debug("Walking to new X: " + newX);
                 this.proxy.getClient().getSession().send(
                         new ClientPlayerPositionPacket(
