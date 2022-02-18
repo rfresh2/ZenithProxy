@@ -22,6 +22,7 @@ package com.zenith.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.zenith.util.Constants;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
 import com.zenith.server.PorkServerConnection;
@@ -44,11 +45,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, packet.getMessage().substring(1));
                 return true;
             } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
-                session.getProxy().getClient().getSession().disconnect("User forced disconnect", false);
-                return false;
-            } else if ("!reboot".equalsIgnoreCase(packet.getMessage())) {
-                SHOULD_RECONNECT = false;
-                session.getProxy().getClient().getSession().disconnect("User forced disconnect", false);
+                session.getProxy().getClient().getSession().disconnect(MANUAL_DISCONNECT, false);
                 return false;
             } else if ("!q".equalsIgnoreCase(packet.getMessage())) {
                 session.send(new ServerChatPacket(String.format("§7[§5Zenith§9Proxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, packet.getMessage()), true));
