@@ -49,10 +49,12 @@ public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJo
 
         session.send(new ClientSettingsPacket(
                 "en_US",
-                8,
+                // todo: maybe set this to a config.
+                //  or figure out how we don't overwrite this for clients when they connect due to metadata cache
+                25,
                 ChatVisibility.FULL,
                 true,
-                new SkinPart[0],
+                SkinPart.values(),
                 Hand.MAIN_HAND
         ));
         return false;

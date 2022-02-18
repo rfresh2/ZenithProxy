@@ -108,14 +108,6 @@ public class PorkServerConnection implements Session, SessionListener {
         } else if (this.isPlayer) {
             SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
         }
-        this.proxy.getClient().getSession().send(new ClientSettingsPacket(
-                "en_US",
-                8,
-                ChatVisibility.FULL,
-                true,
-                new SkinPart[0],
-                Hand.MAIN_HAND
-        ));
     }
 
     public void send(@NonNull Packet packet) {
