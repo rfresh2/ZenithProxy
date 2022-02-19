@@ -21,7 +21,7 @@
 package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
-import com.zenith.event.NewPlayerInVisualRangeEvent;
+import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.util.cache.data.entity.Entity;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;

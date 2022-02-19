@@ -52,6 +52,7 @@ public final class Config {
 
         public static final class Extra {
             public AntiAFK antiafk = new AntiAFK();
+            public Utility utility = new Utility();
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
@@ -62,6 +63,19 @@ public final class Config {
                 public static final class Actions {
                     public boolean walk = true;
                     public boolean swingHand = true;
+                }
+            }
+
+            public static final class Utility {
+                public Actions actions = new Actions();
+
+                public static final class Actions {
+                    public AutoDisconnect autoDisconnect = new AutoDisconnect();
+                }
+
+                public static final class AutoDisconnect {
+                    public boolean enabled = false;
+                    public int health = 5;
                 }
             }
 

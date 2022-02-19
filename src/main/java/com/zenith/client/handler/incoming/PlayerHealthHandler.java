@@ -20,13 +20,10 @@
 
 package com.zenith.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.ClientRequest;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
-import com.zenith.Proxy;
-import com.zenith.event.DeathEvent;
+import com.zenith.event.module.PlayerHealthChangedEvent;
+import com.zenith.event.proxy.DeathEvent;
 import lombok.NonNull;
-import net.daporkchop.lib.common.util.PorkUtil;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -42,6 +39,11 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
 
     @Override
     public boolean apply(@NonNull ServerPlayerHealthPacket packet, @NonNull PorkClientSession session) {
+        if (packet.getHealth() != CACHE.getPlayerCache().getThePlayer().getHealth()) {
+            MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(
+                    new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth())));
+        }
+
         CACHE.getPlayerCache().getThePlayer()
                 .setFood(packet.getFood())
                 .setSaturation(packet.getSaturation())

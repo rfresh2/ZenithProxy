@@ -24,8 +24,6 @@ import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.zenith.Proxy;
-import com.zenith.event.ConnectEvent;
-import com.zenith.event.DisconnectEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -36,7 +34,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static com.zenith.util.Constants.CLIENT_LOG;
-import static com.zenith.util.Constants.EVENT_BUS;
 
 /**
  * @author DaPorkchop_

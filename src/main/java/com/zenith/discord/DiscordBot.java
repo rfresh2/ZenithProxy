@@ -3,7 +3,7 @@ package com.zenith.discord;
 import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.discord.command.*;
-import com.zenith.event.*;
+import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;

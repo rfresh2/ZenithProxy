@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.zenith.Proxy;
-import com.zenith.event.ClientTickEvent;
+import com.zenith.event.module.ClientTickEvent;
 import com.zenith.util.TickTimer;
 
 import static com.zenith.util.Constants.*;
