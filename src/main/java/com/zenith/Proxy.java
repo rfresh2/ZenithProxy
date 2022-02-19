@@ -22,16 +22,11 @@ package com.zenith;
 
 import com.collarmc.pounce.Preference;
 import com.collarmc.pounce.Subscribe;
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
-import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
-import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
-import com.github.steveice10.mc.protocol.data.status.VersionInfo;
-import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.packetlib.Client;
@@ -43,6 +38,7 @@ import com.zenith.event.proxy.*;
 import com.zenith.mc.PorkSessionFactory;
 import com.zenith.module.AntiAFK;
 import com.zenith.module.Module;
+import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
 import com.zenith.util.LoggerInner;
@@ -65,7 +61,10 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.zenith.util.Constants.*;
@@ -230,7 +229,7 @@ public class Proxy {
                 this.server = new Server(address, port, MinecraftProtocol.class, this.sessionFactory);
                 this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, java.net.Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
-                setServerMotd(String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username));
+                this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> {
                     PorkServerConnection connection = ((PorkServerListener) this.server.getListeners().stream()
                             .filter(PorkServerListener.class::isInstance)
@@ -324,7 +323,6 @@ public class Proxy {
         CACHE.reset(false);
         this.inQueue = false;
         this.queuePosition = 0;
-        setServerMotd(String.format(CONFIG.server.ping.motd, "Disconnected: " + CONFIG.authentication.username));
         if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
             delayBeforeReconnect();
             this.connect();
@@ -334,22 +332,11 @@ public class Proxy {
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
-        setServerMotd(
-                "  [§6" + CONFIG.authentication.username + "§r] - "
-                + "Online [§6" + getOnlineTime() + "§r]"
-        );
-    }
-
-    private String getOnlineTime() {
-        long milliOnline = Instant.now().toEpochMilli() - connectTime.toEpochMilli();
-        // hours:minutes
-        return (milliOnline / 3600000) + ":" + (milliOnline / 60000);
     }
 
     @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
-        setServerMotd(String.format(CONFIG.server.ping.motd, CONFIG.authentication.username + " Queueing..."));
     }
 
     @Subscribe
@@ -364,16 +351,11 @@ public class Proxy {
                 this.isPrio = Optional.of(false);
             }
         }
-        setServerMotd(
-                "  [§6" + CONFIG.authentication.username + "§r] - "
-                + "In Queue [§6" + (event.position == Integer.MAX_VALUE ? "Unknown" : event.position) + "§r]"
-        );
         this.queuePosition = event.position;
     }
 
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
-        setServerMotd(String.format(CONFIG.server.ping.motd, CONFIG.authentication.username + " Online on " + CONFIG.client.server.address + "!"));
         this.inQueue = false;
     }
 
@@ -387,19 +369,5 @@ public class Proxy {
                 }
             });
         }
-    }
-
-    public void setServerMotd(final String motd) {
-        this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, (ServerInfoBuilder) session -> new ServerStatusInfo(
-                new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
-                new PlayerInfo(
-                        CONFIG.server.ping.maxPlayers,
-                        this.currentPlayer.get() == null ? 0 : 1,
-                        new GameProfile[0]
-                ),
-                motd,
-                this.serverIcon,
-                true
-        ));
     }
 }
