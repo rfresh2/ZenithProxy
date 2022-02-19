@@ -48,6 +48,7 @@ public class DiscordBot {
         commands.add(new StatusCommand(this.proxy));
         commands.add(new HelpCommand(this.proxy, this.commands));
         commands.add(new WhitelistCommand(this.proxy));
+        commands.add(new AutoDisconnectCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
@@ -155,6 +156,15 @@ public class DiscordBot {
                 .addField("Player Name", Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown"), true)
                 .addField("Player UUID", event.playerEntry.getId().toString(), true)
                 .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                .build());
+    }
+
+    @Subscribe
+    public void handleAutoDisconnectEvent(AutoDisconnectEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("ZenithProxy AutoDisconnect Triggered!" + " : " + CONFIG.authentication.username)
+                .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                .color(Color.CYAN)
                 .build());
     }
 

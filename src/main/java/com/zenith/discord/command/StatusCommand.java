@@ -32,7 +32,10 @@ public class StatusCommand extends Command {
                                 dimensionIdToString(CACHE.getPlayerCache().getDimension()),
                                 true)
                         .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true)
-                        .addField("Health", ""+CACHE.getPlayerCache().getThePlayer().getHealth(), false)
+                        .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), false)
+                        .addField("AutoDisconnect",
+                                (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
+                                        + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", false)
                         .build())
                 .build().asRequest();
     }

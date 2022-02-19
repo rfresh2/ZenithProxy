@@ -166,7 +166,7 @@ public final class Config {
             public Whitelist whitelist = new Whitelist();
 
             public static final class Whitelist {
-                public boolean enable = false;
+                public boolean enable = true;
                 public List<String> allowedUsers = asList(
                         "rfresh2",
                         "rfresh",
