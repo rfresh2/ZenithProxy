@@ -345,11 +345,14 @@ public class Proxy {
 
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
-        if (event.position > Queue.getQueueStatus().prio) {
-            this.isPrio = Optional.of(false);
+        // bounds here are mainly to catch when queue size changes very frequently
+        if (event.position >= Queue.getQueueStatus().prio - 50
+                && event.position <= Queue.getQueueStatus().prio + 50
+                && !this.isPrio.isPresent()) {
+            this.isPrio = Optional.of(true);
         } else {
             if (!this.isPrio.isPresent()) {
-                this.isPrio = Optional.of(true);
+                this.isPrio = Optional.of(false);
             }
         }
         setServerMotd(String.format(CONFIG.server.ping.motd,
