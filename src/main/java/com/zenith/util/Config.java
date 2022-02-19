@@ -89,7 +89,7 @@ public final class Config {
             }
 
             public static final class AutoRespawn {
-                public boolean enabled = false;
+                public boolean enabled = true;
                 public int delayMillis = 100;
             }
 
