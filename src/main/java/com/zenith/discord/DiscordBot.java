@@ -49,6 +49,7 @@ public class DiscordBot {
         commands.add(new HelpCommand(this.proxy, this.commands));
         commands.add(new WhitelistCommand(this.proxy));
         commands.add(new AutoDisconnectCommand(this.proxy));
+        commands.add(new AutoReconnectCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
