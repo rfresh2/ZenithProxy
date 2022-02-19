@@ -154,6 +154,7 @@ public final class Config {
         public boolean kickPrevious = false;
         public int queueWarning = 10; // Queue position to send warning message at
         public String proxyIP = "localhost";
+        public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
 
         public static final class Bind {
             public String address = "0.0.0.0";
