@@ -334,7 +334,16 @@ public class Proxy {
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
-        setServerMotd(String.format(CONFIG.server.ping.motd, CONFIG.authentication.username + " Online on " + CONFIG.client.server.address + "!"));
+        setServerMotd(
+                "  [§6" + CONFIG.authentication.username + "§r] - "
+                + "Online [§6" + getOnlineTime() + "§r]"
+        );
+    }
+
+    private String getOnlineTime() {
+        long milliOnline = Instant.now().toEpochMilli() - connectTime.toEpochMilli();
+        // hours:minutes
+        return (milliOnline / 3600000) + ":" + (milliOnline / 60000);
     }
 
     @Subscribe
@@ -355,8 +364,10 @@ public class Proxy {
                 this.isPrio = Optional.of(false);
             }
         }
-        setServerMotd(String.format(CONFIG.server.ping.motd,
-                CONFIG.authentication.username + " In Queue: " + (event.position == Integer.MAX_VALUE ? "Unknown" : event.position)));
+        setServerMotd(
+                "  [§6" + CONFIG.authentication.username + "§r] - "
+                + "In Queue [§6" + (event.position == Integer.MAX_VALUE ? "Unknown" : event.position) + "§r]"
+        );
         this.queuePosition = event.position;
     }
 
