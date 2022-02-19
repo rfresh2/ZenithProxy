@@ -34,14 +34,14 @@ import static com.zenith.util.Constants.*;
  */
 public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<ServerPlayerHealthPacket, PorkClientSession> {
 
-    // variable to provide idempotence on this event
-    private boolean playerDead = false;
-
     @Override
     public boolean apply(@NonNull ServerPlayerHealthPacket packet, @NonNull PorkClientSession session) {
         if (packet.getHealth() != CACHE.getPlayerCache().getThePlayer().getHealth()) {
             MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(
                     new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth())));
+            if (packet.getHealth() <= 0) {
+                EVENT_BUS.dispatch(new DeathEvent());
+            }
         }
 
         CACHE.getPlayerCache().getThePlayer()
@@ -51,16 +51,6 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
         CACHE_LOG.debug("Player food: %d", packet.getFood())
                 .debug("Player saturation: %f", packet.getSaturation())
                 .debug("Player health: %f", packet.getHealth());
-        boolean dead = packet.getHealth() <= 0;
-        if (dead) {
-            if (!playerDead) {
-                playerDead = true;
-                EVENT_BUS.dispatch(new DeathEvent());
-            }
-        } else {
-            playerDead = false;
-        }
-
         return true;
     }
 
