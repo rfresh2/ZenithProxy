@@ -42,6 +42,8 @@ public class StatusCommand extends Command {
                         .addField("AutoRespawn",
                                 (CONFIG.client.extra.autoRespawn.enabled ? "Enabled" : "Disabled")
                                         + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
+                        .addField("AntiAFK",
+                                (CONFIG.client.extra.antiafk.enabled ? "Enabled" : "Disabled"), true)
                         .build())
                 .build().asRequest();
     }
