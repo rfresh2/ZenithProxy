@@ -63,6 +63,7 @@ public final class Config {
                 public static final class Actions {
                     public boolean walk = true;
                     public boolean swingHand = true;
+                    public boolean rotate = true;
                 }
             }
 

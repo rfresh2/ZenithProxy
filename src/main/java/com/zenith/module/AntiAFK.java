@@ -3,10 +3,13 @@ package com.zenith.module;
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.util.TickTimer;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
@@ -15,6 +18,7 @@ public class AntiAFK extends Module {
     private final TickTimer swingTickTimer = new TickTimer();
     private final TickTimer startWalkTickTimer = new TickTimer();
     private final TickTimer walkTickTimer = new TickTimer();
+    private final TickTimer rotateTimer = new TickTimer();
     private boolean shouldWalk = false;
     // toggle this between 1 and -1
     private double xDirectionMultiplier = 1.0;
@@ -32,6 +36,19 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
             }
+            if (CONFIG.client.extra.antiafk.actions.rotate) {
+                rotateTick();
+            }
+        }
+    }
+
+    private void rotateTick() {
+        if (rotateTimer.tick(1500L, true)) {
+            this.proxy.getClient().getSession().send(new ClientPlayerRotationPacket(
+                    true,
+                    -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat(),
+                    -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat()
+            ));
         }
     }
 
