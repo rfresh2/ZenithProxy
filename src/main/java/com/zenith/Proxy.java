@@ -324,6 +324,7 @@ public class Proxy {
         this.queuePosition = 0;
         if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
             this.autoReconnectExecutorService.submit(() -> {
+                DISCORD_BOT.sendAutoReconnectMessage();
                 delayBeforeReconnect();
                 this.connect();
             });

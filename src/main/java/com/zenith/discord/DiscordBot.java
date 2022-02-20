@@ -185,6 +185,13 @@ public class DiscordBot {
                 .build());
     }
 
+    public void sendAutoReconnectMessage() {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("AutoReconnecting in " + CONFIG.client.extra.autoReconnect.delaySeconds + "s")
+                .color(Color.CYAN)
+                .build());
+    }
+
     private void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
         try {
             RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
