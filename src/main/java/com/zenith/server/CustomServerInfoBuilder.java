@@ -67,8 +67,8 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     public String getOnlineTime() {
         long milliOnline = Instant.now().toEpochMilli() - this.proxy.getConnectTime().toEpochMilli();
-        // hours:minutes
-        return (milliOnline / 3600000) + " : " + (milliOnline / 60000) + " : " + (milliOnline / 1000);
+        // hours:minutes:seconds
+        return (milliOnline / 3600000) + " : " + ((milliOnline / 60000) % 60) + " : " + ((milliOnline / 1000) % 60);
     }
 
 }

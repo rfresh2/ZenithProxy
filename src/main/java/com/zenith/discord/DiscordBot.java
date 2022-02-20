@@ -123,9 +123,22 @@ public class DiscordBot {
                 .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Server", CONFIG.client.server.address, true)
-                .addField("Queue Position", position + " / " + Queue.getQueueStatus().regular, false)
+                .addField("Queue Position", "[" + queuePositionStr() + "]", false)
                 .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
+
+    }
+
+    private String queuePositionStr() {
+        if (proxy.getIsPrio().isPresent()) {
+            if (proxy.getIsPrio().get()) {
+                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio;
+            } else {
+                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular;
+            }
+        } else {
+            return "?";
+        }
     }
 
     @Subscribe

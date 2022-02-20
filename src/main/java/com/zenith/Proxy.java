@@ -61,10 +61,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.zenith.util.Constants.*;
@@ -90,6 +87,7 @@ public class Proxy {
     protected final AtomicReference<PorkServerConnection> currentPlayer = new AtomicReference<>();
     protected final ScheduledExecutorService clientTickExecutorService;
     protected final ScheduledExecutorService clientTimeoutExecutorService;
+    protected ScheduledExecutorService autoReconnectExecutorService;
     protected List<Module> modules;
 
     private int reconnectCounter;
@@ -121,6 +119,7 @@ public class Proxy {
     public Proxy() {
         this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
         this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         EVENT_BUS.subscribe(this);
     }
 
@@ -324,14 +323,18 @@ public class Proxy {
         this.inQueue = false;
         this.queuePosition = 0;
         if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
-            delayBeforeReconnect();
-            this.connect();
+            this.autoReconnectExecutorService.submit(() -> {
+                delayBeforeReconnect();
+                this.connect();
+            });
         }
     }
 
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
+        this.autoReconnectExecutorService.shutdownNow();
+        this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
     }
 
     @Subscribe
