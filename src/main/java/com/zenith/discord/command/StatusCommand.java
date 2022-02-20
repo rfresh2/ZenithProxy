@@ -34,8 +34,14 @@ public class StatusCommand extends Command {
                         .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true)
                         .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), false)
                         .addField("AutoDisconnect",
-                                (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
+                                (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "Enabled" : "Disabled")
                                         + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", false)
+                        .addField("AutoReconnect",
+                                (CONFIG.client.extra.autoReconnect.enabled ? "Enabled" : "Disabled")
+                                        + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", false)
+                        .addField("AutoRespawn",
+                                (CONFIG.client.extra.autoRespawn.enabled ? "Enabled" : "Disabled")
+                                        + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", false)
                         .build())
                 .build().asRequest();
     }
@@ -45,9 +51,9 @@ public class StatusCommand extends Command {
             if (proxy.isInQueue()) {
                 if (proxy.getIsPrio().isPresent()) {
                     if (proxy.getIsPrio().get()) {
-                        return "Queueing [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]";
+                        return "In Priority Queue [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]";
                     } else {
-                        return "Queueing [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]";
+                        return "In Regular Queue [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]";
                     }
                 } else {
                     return "Queueing";

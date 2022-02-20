@@ -96,7 +96,7 @@ public class Proxy {
     private boolean inQueue = false;
     private int queuePosition = 0;
     private Instant connectTime;
-    private Optional<Boolean> isPrio;
+    private Optional<Boolean> isPrio = Optional.empty();
 
 //    protected final Gui gui = new Gui();
 
