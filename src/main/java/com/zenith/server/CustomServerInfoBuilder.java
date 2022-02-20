@@ -53,7 +53,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
                     ? (this.proxy.getIsPrio().get()
                     ? "§cIn Prio Queue§r"
                     : "§cIn Queue§r")
-                    + "§f[§r§b"
+                    + " §f[§r§b"
                         + (this.proxy.getQueuePosition() != Integer.MAX_VALUE
                             ? this.proxy.getQueuePosition() + " / "
                                 + (this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular)

@@ -38,10 +38,10 @@ public class StatusCommand extends Command {
                                         + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", false)
                         .addField("AutoReconnect",
                                 (CONFIG.client.extra.autoReconnect.enabled ? "Enabled" : "Disabled")
-                                        + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", false)
+                                        + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
                         .addField("AutoRespawn",
                                 (CONFIG.client.extra.autoRespawn.enabled ? "Enabled" : "Disabled")
-                                        + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", false)
+                                        + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
                         .build())
                 .build().asRequest();
     }
