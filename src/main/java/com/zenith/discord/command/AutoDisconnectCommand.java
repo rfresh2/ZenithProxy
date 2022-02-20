@@ -39,7 +39,7 @@ public class AutoDisconnectCommand extends Command {
                     .title("AutoDisconnect Enabled!")
                     .addField("Health", ""+CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
                     .color(Color.CYAN);
-        } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
+        } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.utility.actions.autoDisconnect.enabled = false;
             embedBuilder
                     .title("AutoDisconnect Disabled!")
@@ -65,6 +65,11 @@ public class AutoDisconnectCommand extends Command {
                        .addField("Usage", this.description, false)
                        .color(Color.RUBY);
            }
+        } else {
+            embedBuilder
+                    .title("Invalid command usage")
+                    .addField("Usage", this.description, false)
+                    .color(Color.RUBY);
         }
 
         saveConfig();

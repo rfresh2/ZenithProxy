@@ -39,7 +39,7 @@ public class AutoRespawnCommand extends Command {
                     .title("AutoRespawn Enabled!")
                     .addField("Delay", ""+CONFIG.client.extra.autoRespawn.enabled, false)
                     .color(Color.CYAN);
-        } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
+        } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.autoRespawn.enabled = false;
             embedBuilder
                     .title("AutoRespawn Disabled!")
@@ -65,6 +65,11 @@ public class AutoRespawnCommand extends Command {
                         .addField("Usage", this.description, false)
                         .color(Color.RUBY);
             }
+        } else {
+            embedBuilder
+                    .title("Invalid command usage")
+                    .addField("Usage", this.description, false)
+                    .color(Color.RUBY);
         }
 
         saveConfig();

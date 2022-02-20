@@ -39,11 +39,11 @@ public class AutoReconnectCommand extends Command {
                     .title("AutoReconnect Enabled!")
                     .addField("Delay", ""+CONFIG.client.extra.autoReconnect.enabled, false)
                     .color(Color.CYAN);
-        } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
+        } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.autoReconnect.enabled = false;
             embedBuilder
                     .title("AutoReconnect Disabled!")
-                    .addField("Delay", ""+CONFIG.client.extra.autoReconnect.enabled, false)
+                    .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, false)
                     .color(Color.CYAN);
         } else if (commandArgs.size() < 2) {
             embedBuilder
@@ -65,6 +65,11 @@ public class AutoReconnectCommand extends Command {
                         .addField("Usage", this.description, false)
                         .color(Color.RUBY);
             }
+        } else {
+            embedBuilder
+                    .title("Invalid command usage")
+                    .addField("Usage", this.description, false)
+                    .color(Color.RUBY);
         }
 
         saveConfig();
