@@ -35,7 +35,7 @@ public class StatusCommand extends Command {
                         .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), false)
                         .addField("AutoDisconnect",
                                 (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "Enabled" : "Disabled")
-                                        + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", false)
+                                        + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", true)
                         .addField("AutoReconnect",
                                 (CONFIG.client.extra.autoReconnect.enabled ? "Enabled" : "Disabled")
                                         + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
