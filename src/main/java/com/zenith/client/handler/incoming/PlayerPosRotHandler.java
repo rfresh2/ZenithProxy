@@ -29,6 +29,7 @@ import com.zenith.util.cache.data.PlayerCache;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
@@ -43,7 +44,9 @@ public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<Serv
                 .setZ((packet.getRelativeElements().contains(PositionElement.Z) ? cache.getZ() : 0.0d) + packet.getZ())
                 .setYaw((packet.getRelativeElements().contains(PositionElement.YAW) ? cache.getYaw() : 0.0f) + packet.getYaw())
                 .setPitch((packet.getRelativeElements().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
-        session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
+        if (isNull(session.getProxy().getCurrentPlayer().get())) {
+            session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
+        }
         return true;
     }
 
