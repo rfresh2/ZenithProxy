@@ -9,6 +9,9 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.presence.ClientActivity;
+import discord4j.core.object.presence.ClientPresence;
+import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.MessageCreateRequest;
@@ -37,6 +40,8 @@ public class DiscordBot {
     public void start(Proxy proxy) {
         this.proxy = proxy;
         GatewayDiscordClient client = DiscordClient.create(CONFIG.discord.token)
+                .gateway()
+                .setInitialPresence(shardInfo -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing(CONFIG.client.server.address)))
                 .login()
                 .block();
         EVENT_BUS.subscribe(this);
