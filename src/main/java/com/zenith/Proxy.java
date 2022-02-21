@@ -360,6 +360,7 @@ public class Proxy {
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
         this.inQueue = false;
+        this.connectTime = Instant.now();
     }
 
     @Subscribe

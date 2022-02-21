@@ -97,7 +97,7 @@ public class DiscordBot {
                 .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
                 .addField("Server", CONFIG.client.server.address, true)
-                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+//                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
     }
 
@@ -125,7 +125,7 @@ public class DiscordBot {
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)
-                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+//                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
 
     }
