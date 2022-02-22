@@ -73,15 +73,13 @@ public class StatisticsCache implements CachedData {
 
     @Override
     public void reset(boolean full) {
-        if (full)   {
-            this.statistics.clear();
+        this.statistics.clear();
 
-            this.advancements.clear();
-            this.progress.clear();
+        this.advancements.clear();
+        this.progress.clear();
 
-            this.openCraftingBook = this.activateFiltering = false;
-            this.recipes.clear();
-            this.alreadyKnownRecipes.clear();
-        }
+        this.openCraftingBook = this.activateFiltering = false;
+        this.recipes.clear();
+        this.alreadyKnownRecipes.clear();
     }
 }
