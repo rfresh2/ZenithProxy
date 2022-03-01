@@ -56,6 +56,7 @@ public final class Config {
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
+            public boolean visualRangeAlert = true;
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();
