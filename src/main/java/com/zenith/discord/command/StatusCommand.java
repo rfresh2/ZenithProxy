@@ -81,10 +81,14 @@ public class StatusCommand extends Command {
     }
 
     public static String getCoordinates(final PlayerCache playerCache) {
-        return "["
-                + (int) playerCache.getX() + ", "
-                + (int) playerCache.getY() + ", "
-                + (int) playerCache.getZ()
-                + "]";
+        if (CONFIG.discord.reportCoords) {
+            return "["
+                    + (int) playerCache.getX() + ", "
+                    + (int) playerCache.getY() + ", "
+                    + (int) playerCache.getZ()
+                    + "]";
+        } else {
+            return "Coords disabled";
+        }
     }
 }

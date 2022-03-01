@@ -220,6 +220,7 @@ public final class Config {
         public List<String> allowedUsers = asList(
                 "177895753195192321" // rfresh#2222
         );
+        public boolean reportCoords = true;
     }
 
     private transient boolean donePostLoad = false;
