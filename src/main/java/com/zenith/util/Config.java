@@ -169,14 +169,7 @@ public final class Config {
 
             public static final class Whitelist {
                 public boolean enable = true;
-                public List<String> allowedUsers = asList(
-                        "rfresh2",
-                        "rfresh",
-                        "orsond",
-                        "orsondmc",
-                        "odpay",
-                        "0dpay"
-                );
+                public List<String> allowedUsers = asList();
                 public String kickmsg = "get out of here you HECKING scrub";
             }
 
@@ -215,12 +208,10 @@ public final class Config {
 
     public static final class Discord {
         public String token = "";
-        public String channelId = "942621538115551322";
+        public String channelId = "";
+        public String accountOwnerRoleId = "";
         public boolean enable = false;
         public String prefix = ".";
-        public List<String> allowedUsers = asList(
-                "177895753195192321" // rfresh#2222
-        );
         public boolean reportCoords = true;
     }
 

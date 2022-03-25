@@ -1,10 +1,13 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.MultipartRequest;
+
+import java.util.Optional;
 
 import static com.zenith.util.Constants.CONFIG;
 
@@ -33,10 +36,13 @@ public abstract class Command {
      * Call this in execute for child classes to validate discrd user permissions
      * @param event
      */
-    void userAllowed(MessageCreateEvent event) {
-        String id = event.getMember().get().getId().asString();
-        if (!CONFIG.discord.allowedUsers.contains(id) && !CONFIG.discord.allowedUsers.isEmpty()) {
-            throw new RuntimeException("Not an allowed user");
+    void validateUserHasAccountOwnerRole(MessageCreateEvent event) {
+        Optional<String> roleContainsOptional = event.getMember().get().getRoleIds().stream()
+                .map(Snowflake::asString)
+                .filter(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId))
+                .findAny();
+        if (!roleContainsOptional.isPresent()) {
+            throw new RuntimeException("User: " + event.getMember().get().getUsername() + "#" + event.getMember().get().getDiscriminator() + " is not an account owner!");
         }
     }
 }

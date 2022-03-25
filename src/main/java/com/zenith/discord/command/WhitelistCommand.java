@@ -17,11 +17,12 @@ import static com.zenith.util.Constants.*;
 
 public class WhitelistCommand extends Command {
     public WhitelistCommand(Proxy proxy) {
-        super(proxy, "whitelist", "Manage the proxy's whitelist.\nUsage: whitelist add/del/list <username>");
+        super(proxy, "whitelist", "Manage the proxy's whitelist. Only usable by users with the account owner role. \nUsage: whitelist add/del/list <username>");
     }
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
+        this.validateUserHasAccountOwnerRole(event);
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
