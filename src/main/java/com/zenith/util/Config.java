@@ -183,7 +183,6 @@ public final class Config {
         public static final class Ping {
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
-            public String motd = "§c%s";
         }
 
         public String getProxyAddress() {
