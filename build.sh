@@ -2,4 +2,3 @@
 
 git pull
 ./gradlew clean build
-./start.sh
