@@ -30,8 +30,11 @@ import static com.zenith.util.Constants.*;
 public class DiscordBot {
 
     private RestClient restClient;
+    private GatewayDiscordClient client;
     private Proxy proxy;
     public List<Command> commands = new ArrayList<>();
+    private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
+    private static final ClientPresence CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
 
     public DiscordBot() {
 
@@ -39,9 +42,9 @@ public class DiscordBot {
 
     public void start(Proxy proxy) {
         this.proxy = proxy;
-        GatewayDiscordClient client = DiscordClient.create(CONFIG.discord.token)
+        this.client = DiscordClient.create(CONFIG.discord.token)
                 .gateway()
-                .setInitialPresence(shardInfo -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing(CONFIG.client.server.address)))
+                .setInitialPresence(shardInfo -> DISCONNECTED_PRESENCE)
                 .login()
                 .block();
         EVENT_BUS.subscribe(this);
@@ -87,6 +90,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
+        this.client.updatePresence(CONNECTED_PRESENCE);
        sendEmbedMessage(EmbedCreateSpec.builder()
                .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
                .color(Color.CYAN)
@@ -109,6 +113,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleDisconnectEvent(DisconnectEvent event) {
+        this.client.updatePresence(DISCONNECTED_PRESENCE);
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
                 .addField("Reason", event.reason, true)
@@ -118,6 +123,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
+        this.client.updatePresence(getQueuePresence());
         if (event.position == CONFIG.server.queueWarning) {
             sendQueueWarning(event.position);
         } else if (event.position <= 3) {
@@ -150,11 +156,12 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
-
+        this.client.updatePresence(CONNECTED_PRESENCE);
     }
 
     @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
+        this.client.updatePresence(getQueuePresence());
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
@@ -209,6 +216,9 @@ public class DiscordBot {
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }
+    }
 
+    private ClientPresence getQueuePresence() {
+        return ClientPresence.of(Status.IDLE, ClientActivity.watching(queuePositionStr()));
     }
 }
