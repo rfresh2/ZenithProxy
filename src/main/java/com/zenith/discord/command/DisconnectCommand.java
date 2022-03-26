@@ -19,6 +19,9 @@ public class DisconnectCommand extends Command {
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         try {
             this.proxy.disconnect();
+            if (this.proxy.cancelAutoReconnect()) {
+                return getAutoReconnectCancelledMessage();
+            }
             return null;
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to disconnect", e);
@@ -30,6 +33,14 @@ public class DisconnectCommand extends Command {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
                         .title("ZenithProxy Failed to Disconnect : " + CONFIG.authentication.username)
+                        .build())
+                .build().asRequest();
+    }
+
+    private MultipartRequest<MessageCreateRequest> getAutoReconnectCancelledMessage() {
+        return MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("AutoReconnect Cancelled")
                         .build())
                 .build().asRequest();
     }

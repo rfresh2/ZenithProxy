@@ -95,6 +95,7 @@ public class Proxy {
     private int queuePosition = 0;
     private Instant connectTime;
     private Optional<Boolean> isPrio = Optional.empty();
+    private Future<?> autoReconnectFuture;
 
 //    protected final Gui gui = new Gui();
 
@@ -296,6 +297,35 @@ public class Proxy {
         }
     }
 
+    public boolean cancelAutoReconnect() {
+        if (autoReconnectIsInProgress()) {
+            this.autoReconnectFuture.cancel(true);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean autoReconnectIsInProgress() {
+        return !isNull(autoReconnectFuture) && autoReconnectFuture.isDone();
+    }
+
+    @Subscribe(value = Preference.CALLER)
+    public void handleDisconnectEvent(DisconnectEvent event) {
+        CACHE.reset(false);
+        this.inQueue = false;
+        this.queuePosition = 0;
+        if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
+            if (autoReconnectIsInProgress()) {
+                return;
+            }
+            this.autoReconnectFuture = this.autoReconnectExecutorService.submit(() -> {
+                DISCORD_BOT.sendAutoReconnectMessage();
+                delayBeforeReconnect();
+                this.connect();
+            });
+        }
+    }
+
     public boolean delayBeforeReconnect() {
         try {
             final int countdown;
@@ -317,25 +347,10 @@ public class Proxy {
         }
     }
 
-    @Subscribe(value = Preference.CALLER)
-    public void handleDisconnectEvent(DisconnectEvent event) {
-        CACHE.reset(false);
-        this.inQueue = false;
-        this.queuePosition = 0;
-        if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
-            this.autoReconnectExecutorService.submit(() -> {
-                DISCORD_BOT.sendAutoReconnectMessage();
-                delayBeforeReconnect();
-                this.connect();
-            });
-        }
-    }
-
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
-        this.autoReconnectExecutorService.shutdownNow();
-        this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
+        cancelAutoReconnect();
     }
 
     @Subscribe
