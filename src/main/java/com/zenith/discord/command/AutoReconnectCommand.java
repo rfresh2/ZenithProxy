@@ -36,13 +36,13 @@ public class AutoReconnectCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             CONFIG.client.extra.autoReconnect.enabled = true;
             embedBuilder
-                    .title("AutoReconnect Enabled!")
+                    .title("AutoReconnect On!")
                     .addField("Delay", ""+CONFIG.client.extra.autoReconnect.enabled, false)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.autoReconnect.enabled = false;
             embedBuilder
-                    .title("AutoReconnect Disabled!")
+                    .title("AutoReconnect Off!")
                     .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, false)
                     .color(Color.CYAN);
         } else if (commandArgs.size() < 2) {
@@ -56,7 +56,7 @@ public class AutoReconnectCommand extends Command {
                 CONFIG.client.extra.autoReconnect.delaySeconds = delay;
                 embedBuilder
                         .title("AutoReconnect Delay Updated!")
-                        .addField("Enabled", String.valueOf(CONFIG.client.extra.autoReconnect.enabled), false)
+                        .addField("Status", (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off"), false)
                         .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, false)
                         .color(Color.CYAN);
             } catch (final Exception e) {

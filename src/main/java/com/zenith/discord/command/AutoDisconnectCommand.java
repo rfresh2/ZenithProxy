@@ -36,13 +36,13 @@ public class AutoDisconnectCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             CONFIG.client.extra.utility.actions.autoDisconnect.enabled = true;
             embedBuilder
-                    .title("AutoDisconnect Enabled!")
+                    .title("AutoDisconnect On!")
                     .addField("Health", ""+CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.utility.actions.autoDisconnect.enabled = false;
             embedBuilder
-                    .title("AutoDisconnect Disabled!")
+                    .title("AutoDisconnect Off!")
                     .addField("Health", ""+CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
                     .color(Color.CYAN);
         } else if (commandArgs.size() < 2) {
@@ -56,7 +56,7 @@ public class AutoDisconnectCommand extends Command {
                CONFIG.client.extra.utility.actions.autoDisconnect.health = health;
                embedBuilder
                        .title("AutoDisconnect Health Updated!")
-                       .addField("Enabled", String.valueOf(CONFIG.client.extra.utility.actions.autoDisconnect.enabled), false)
+                       .addField("Status", (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off"), false)
                        .addField("Health", ""+CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
                        .color(Color.CYAN);
            } catch (final Exception e) {

@@ -34,16 +34,17 @@ public class StatusCommand extends Command {
                         .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true)
                         .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), false)
                         .addField("AutoDisconnect",
-                                (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "Enabled" : "Disabled")
+                                (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
                                         + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", true)
                         .addField("AutoReconnect",
-                                (CONFIG.client.extra.autoReconnect.enabled ? "Enabled" : "Disabled")
+                                (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
                                         + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
                         .addField("AutoRespawn",
-                                (CONFIG.client.extra.autoRespawn.enabled ? "Enabled" : "Disabled")
+                                (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off")
                                         + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
                         .addField("AntiAFK",
-                                (CONFIG.client.extra.antiafk.enabled ? "Enabled" : "Disabled"), true)
+                                (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
+                        .addField("VisualRange", (CONFIG.client.extra.visualRangeAlert ? "on" : "off"), true)
                         .build())
                 .build().asRequest();
     }

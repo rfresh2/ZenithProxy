@@ -36,12 +36,12 @@ public class VisualRangeCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             CONFIG.client.extra.visualRangeAlert = true;
             embedBuilder
-                    .title("VisualRange Enabled!")
+                    .title("VisualRange On!")
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.visualRangeAlert = false;
             embedBuilder
-                    .title("VisualRange Disabled!")
+                    .title("VisualRange Off!")
                     .color(Color.CYAN);
         } else {
             embedBuilder

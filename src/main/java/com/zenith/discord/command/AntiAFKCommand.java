@@ -36,12 +36,12 @@ public class AntiAFKCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             CONFIG.client.extra.antiafk.enabled = true;
             embedBuilder
-                    .title("AntiAFK Enabled!")
+                    .title("AntiAFK On!")
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.antiafk.enabled = false;
             embedBuilder
-                    .title("AntiAFK Disabled!")
+                    .title("AntiAFK Off!")
                     .color(Color.CYAN);
         } else {
             embedBuilder

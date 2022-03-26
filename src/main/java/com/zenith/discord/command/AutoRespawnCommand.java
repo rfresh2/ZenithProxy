@@ -36,13 +36,13 @@ public class AutoRespawnCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             CONFIG.client.extra.autoRespawn.enabled = true;
             embedBuilder
-                    .title("AutoRespawn Enabled!")
+                    .title("AutoRespawn On!")
                     .addField("Delay", ""+CONFIG.client.extra.autoRespawn.enabled, false)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.autoRespawn.enabled = false;
             embedBuilder
-                    .title("AutoRespawn Disabled!")
+                    .title("AutoRespawn Off!")
                     .addField("Delay", ""+CONFIG.client.extra.autoRespawn.enabled, false)
                     .color(Color.CYAN);
         } else if (commandArgs.size() < 2) {
@@ -56,7 +56,7 @@ public class AutoRespawnCommand extends Command {
                 CONFIG.client.extra.autoRespawn.delayMillis = delay;
                 embedBuilder
                         .title("AutoRespawn Delay Updated!")
-                        .addField("Enabled", String.valueOf(CONFIG.client.extra.autoRespawn.enabled), false)
+                        .addField("Status", (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off"), false)
                         .addField("Delay", ""+CONFIG.client.extra.autoRespawn.delayMillis, false)
                         .color(Color.CYAN);
             } catch (final Exception e) {
