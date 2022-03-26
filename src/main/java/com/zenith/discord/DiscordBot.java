@@ -90,7 +90,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
-        this.client.updatePresence(CONNECTED_PRESENCE);
+        this.client.updatePresence(CONNECTED_PRESENCE).subscribe();
        sendEmbedMessage(EmbedCreateSpec.builder()
                .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
                .color(Color.CYAN)
@@ -113,7 +113,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleDisconnectEvent(DisconnectEvent event) {
-        this.client.updatePresence(DISCONNECTED_PRESENCE);
+        this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
                 .addField("Reason", event.reason, true)
@@ -123,7 +123,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
-        this.client.updatePresence(getQueuePresence());
+        this.client.updatePresence(getQueuePresence()).subscribe();
         if (event.position == CONFIG.server.queueWarning) {
             sendQueueWarning(event.position);
         } else if (event.position <= 3) {
@@ -156,12 +156,12 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
-        this.client.updatePresence(CONNECTED_PRESENCE);
+        this.client.updatePresence(CONNECTED_PRESENCE).subscribe();
     }
 
     @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
-        this.client.updatePresence(getQueuePresence());
+        this.client.updatePresence(getQueuePresence()).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
