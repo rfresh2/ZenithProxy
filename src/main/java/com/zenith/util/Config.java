@@ -212,6 +212,8 @@ public final class Config {
         public boolean enable = false;
         public String prefix = ".";
         public boolean reportCoords = true;
+        // internal use for update command state persistence
+        public boolean isUpdating = false;
     }
 
     private transient boolean donePostLoad = false;

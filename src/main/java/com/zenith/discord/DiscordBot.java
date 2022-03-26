@@ -86,6 +86,23 @@ public class DiscordBot {
                         }
                     });
         });
+
+        if (CONFIG.discord.isUpdating) {
+            handleProxyUpdateComplete();
+        }
+    }
+
+    private void handleProxyUpdateComplete() {
+        CONFIG.discord.isUpdating = false;
+        saveConfig();
+        restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)).createMessage(
+                MessageCreateSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Update complete!")
+                                .color(Color.CYAN)
+                                .build())
+                        .build().asRequest())
+                .subscribe();
     }
 
     @Subscribe

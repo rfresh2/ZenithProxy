@@ -67,6 +67,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
@@ -158,6 +159,16 @@ public class Proxy {
             WEBSOCKET_SERVER.shutdown();
             saveConfig();
         }
+    }
+
+    public void stop() {
+        DEFAULT_LOG.info("Shutting Down...");
+        if (nonNull(this.server)) {
+            this.server.close(true);
+        }
+        WEBSOCKET_SERVER.shutdown();
+        saveConfig();
+        System.exit(0);
     }
 
     public void disconnect() {
