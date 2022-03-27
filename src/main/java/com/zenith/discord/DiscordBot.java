@@ -163,13 +163,18 @@ public class DiscordBot {
     private String queuePositionStr() {
         if (proxy.getIsPrio().isPresent()) {
             if (proxy.getIsPrio().get()) {
-                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio;
+                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + " - ETA: " + getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
             } else {
-                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular;
+                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + " - ETA: " + getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
             }
         } else {
             return "?";
         }
+    }
+
+    private String getQueueEta(final Integer queueLength, final Integer queuePos) {
+        double seconds = Queue.getQueueWait(queueLength, queuePos);
+        return (seconds / 3600) + " : " + ((seconds / 60) % 60) + " : " + (seconds % 60);
     }
 
     @Subscribe

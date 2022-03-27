@@ -54,9 +54,9 @@ public class StatusCommand extends Command {
             if (proxy.isInQueue()) {
                 if (proxy.getIsPrio().isPresent()) {
                     if (proxy.getIsPrio().get()) {
-                        return "In Priority Queue [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]";
+                        return "In Priority Queue [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "] - ETA: " + getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
                     } else {
-                        return "In Regular Queue [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]";
+                        return "In Regular Queue [ " + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "] - ETA: " + getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
                     }
                 } else {
                     return "Queueing";
@@ -91,5 +91,10 @@ public class StatusCommand extends Command {
         } else {
             return "Coords disabled";
         }
+    }
+
+    public String getQueueEta(final Integer queueLength, final Integer queuePos) {
+        double seconds = Queue.getQueueWait(queueLength, queuePos);
+        return (seconds / 3600) + " : " + ((seconds / 60) % 60) + " : " + (seconds % 60);
     }
 }

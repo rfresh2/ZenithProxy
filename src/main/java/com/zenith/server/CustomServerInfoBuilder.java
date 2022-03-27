@@ -51,14 +51,17 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         if (this.proxy.isInQueue()) {
             return (this.proxy.getIsPrio().isPresent()
                     ? (this.proxy.getIsPrio().get()
-                    ? "§cIn Prio Queue§r"
-                    : "§cIn Queue§r")
-                    + " §f[§r§b"
-                        + (this.proxy.getQueuePosition() != Integer.MAX_VALUE
-                            ? this.proxy.getQueuePosition() + " / "
-                                + (this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular)
-                            : "Queueing")
-                    + "§r§f]§r"
+                            ? "§cIn Prio Queue§r"
+                            : "§cIn Queue§r")
+                        + " §f[§r§b"
+                          + (this.proxy.getQueuePosition() != Integer.MAX_VALUE
+                                ? this.proxy.getQueuePosition() + " / "
+                                    + (this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular)
+                                : "Queueing")
+                        + "§r§f]§r"
+                        + ((this.proxy.getQueuePosition() != Integer.MAX_VALUE)
+                            ? " - §cETA§r §f[§r§b" + getQueueEta() + "§r§f]§r"
+                            : "")
                     : "§cQueuing§r");
         } else {
             return "§aIn Game§r";
@@ -69,6 +72,11 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         long milliOnline = Instant.now().toEpochMilli() - this.proxy.getConnectTime().toEpochMilli();
         // hours:minutes:seconds
         return (milliOnline / 3600000) + " : " + ((milliOnline / 60000) % 60) + " : " + ((milliOnline / 1000) % 60);
+    }
+
+    public String getQueueEta() {
+        double seconds = Queue.getQueueWait((this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular), this.proxy.getQueuePosition());
+        return (seconds / 3600) + " : " + ((seconds / 60) % 60) + " : " + (seconds % 60);
     }
 
 }
