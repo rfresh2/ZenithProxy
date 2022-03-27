@@ -95,6 +95,6 @@ public class StatusCommand extends Command {
 
     public String getQueueEta(final Integer queueLength, final Integer queuePos) {
         double seconds = Queue.getQueueWait(queueLength, queuePos);
-        return (int)(seconds / 3600) + " : " + (int)((seconds / 60) % 60) + " : " + (int)(seconds % 60);
+        return (int)(seconds / 3600) + ":" + (int)((seconds / 60) % 60) + ":" + (int)(seconds % 60);
     }
 }
