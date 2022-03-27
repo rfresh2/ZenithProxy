@@ -22,6 +22,7 @@ import discord4j.rest.util.MultipartRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
@@ -74,7 +75,7 @@ public class DiscordBot {
             }
             RestChannel restChannel = restClient.getChannelById(event.getMessage().getChannelId());
             commands.stream()
-                    .filter(command -> message.startsWith(CONFIG.discord.prefix + command.getName()))
+                    .filter(command -> message.toLowerCase(Locale.ROOT).startsWith(CONFIG.discord.prefix + command.getName().toLowerCase(Locale.ROOT)))
                     .findFirst()
                     .ifPresent(command -> {
                         try {
