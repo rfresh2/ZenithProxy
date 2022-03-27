@@ -76,7 +76,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     public String getQueueEta() {
         double seconds = Queue.getQueueWait((this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular), this.proxy.getQueuePosition());
-        return (seconds / 3600) + " : " + ((seconds / 60) % 60) + " : " + (seconds % 60);
+        return (int)(seconds / 3600) + " : " + (int)((seconds / 60) % 60) + " : " + (int)(seconds % 60);
     }
 
 }

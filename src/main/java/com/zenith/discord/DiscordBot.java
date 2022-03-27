@@ -175,7 +175,7 @@ public class DiscordBot {
 
     private String getQueueEta(final Integer queueLength, final Integer queuePos) {
         double seconds = Queue.getQueueWait(queueLength, queuePos);
-        return (seconds / 3600) + " : " + ((seconds / 60) % 60) + " : " + (seconds % 60);
+        return (int)(seconds / 3600) + " : " + (int)((seconds / 60) % 60) + " : " + (int)(seconds % 60);
     }
 
     @Subscribe
