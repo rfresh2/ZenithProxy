@@ -54,9 +54,9 @@ public class StatusCommand extends Command {
             if (proxy.isInQueue()) {
                 if (proxy.getIsPrio().isPresent()) {
                     if (proxy.getIsPrio().get()) {
-                        return "In Priority Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "] - ETA: " + getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
+                        return "In Priority Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
                     } else {
-                        return "In Regular Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "] - ETA: " + getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
+                        return "In Regular Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
                     }
                 } else {
                     return "Queueing";
