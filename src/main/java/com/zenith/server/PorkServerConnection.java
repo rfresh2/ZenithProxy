@@ -95,10 +95,11 @@ public class PorkServerConnection implements Session, SessionListener {
     public void disconnected(DisconnectedEvent event) {
         if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
             SERVER_LOG.alert(String.format("Player disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
+            EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
         } else if (this.isPlayer) {
             SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
+            EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
         }
-        EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
     }
 
     public void send(@NonNull Packet packet) {
