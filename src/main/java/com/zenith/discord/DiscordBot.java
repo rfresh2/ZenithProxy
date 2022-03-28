@@ -258,7 +258,7 @@ public class DiscordBot {
             RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
             restChannel.createMessage(MessageCreateSpec.builder()
                     .addEmbed(embedCreateSpec)
-                    .build().asRequest()).block();
+                    .build().asRequest()).subscribe();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }
