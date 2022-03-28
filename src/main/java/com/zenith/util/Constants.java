@@ -24,6 +24,7 @@ import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.discord.DiscordBot;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
@@ -56,20 +57,6 @@ import com.zenith.client.handler.incoming.TabListEntryHandler;
 import com.zenith.client.handler.incoming.UnloadChunkHandler;
 import com.zenith.client.handler.incoming.UnlockRecipesHandler;
 import com.zenith.client.handler.incoming.UpdateTileEntityHandler;
-import com.zenith.client.handler.incoming.entity.EntityAttachHandler;
-import com.zenith.client.handler.incoming.entity.EntityCollectItemHandler;
-import com.zenith.client.handler.incoming.entity.EntityDestroyHandler;
-import com.zenith.client.handler.incoming.entity.EntityEffectHandler;
-import com.zenith.client.handler.incoming.entity.EntityEquipmentHandler;
-import com.zenith.client.handler.incoming.entity.EntityHeadLookHandler;
-import com.zenith.client.handler.incoming.entity.EntityMetadataHandler;
-import com.zenith.client.handler.incoming.entity.EntityPositionHandler;
-import com.zenith.client.handler.incoming.entity.EntityPositionRotationHandler;
-import com.zenith.client.handler.incoming.entity.EntityPropertiesHandler;
-import com.zenith.client.handler.incoming.entity.EntityRemoveEffectListener;
-import com.zenith.client.handler.incoming.entity.EntityRotationHandler;
-import com.zenith.client.handler.incoming.entity.EntitySetPassengersHandler;
-import com.zenith.client.handler.incoming.entity.EntityTeleportHandler;
 import com.zenith.client.handler.incoming.spawn.SpawnExperienceOrbHandler;
 import com.zenith.client.handler.incoming.spawn.SpawnMobHandler;
 import com.zenith.client.handler.incoming.spawn.SpawnObjectHandler;
@@ -159,6 +146,7 @@ public class Constants {
             .registerInbound(new EntityCollectItemHandler())
             .registerInbound(new EntityDestroyHandler())
             .registerInbound(new EntityEffectHandler())
+            .registerInbound(new EntityRemoveEffectHandler())
             .registerInbound(new EntityEquipmentHandler())
             .registerInbound(new EntityHeadLookHandler())
             .registerInbound(new EntityMetadataHandler())

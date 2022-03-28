@@ -32,6 +32,7 @@ import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -42,7 +43,7 @@ import java.util.function.Consumer;
 @Setter
 @Accessors(chain = true)
 public abstract class EntityEquipment extends Entity {
-    protected ArrayList<PotionEffect> potionEffects = new ArrayList<>();
+    protected List<PotionEffect> potionEffects = new ArrayList<>();
     protected Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
     protected float health;
 
