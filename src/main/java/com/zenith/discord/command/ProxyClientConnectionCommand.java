@@ -15,12 +15,12 @@ import java.util.List;
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
 
-public class VisualRangeCommand extends Command {
+public class ProxyClientConnectionCommand extends Command {
 
-    public VisualRangeCommand(Proxy proxy) {
-        super(proxy, "visualRange", "Configure the VisualRange notification feature"
+    public ProxyClientConnectionCommand(final Proxy proxy) {
+        super(proxy, "clientConnectionMessages", "Send notification messages when a client connects to the proxy"
                 + "\nUsage:"
-                + "\n  " + CONFIG.discord.prefix + "visualRange on/off");
+                + "\n  " + CONFIG.discord.prefix + "clientConnectionMessages on/off");
     }
 
     @Override
@@ -34,14 +34,14 @@ public class VisualRangeCommand extends Command {
                     .addField("Usage", this.description, false)
                     .color(Color.RUBY);
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
-            CONFIG.client.extra.visualRangeAlert = true;
+            CONFIG.client.extra.clientConnectionMessages = true;
             embedBuilder
-                    .title("VisualRange On!")
+                    .title("Client connection messages On!")
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
-            CONFIG.client.extra.visualRangeAlert = false;
+            CONFIG.client.extra.clientConnectionMessages = false;
             embedBuilder
-                    .title("VisualRange Off!")
+                    .title("Client connection messages Off!")
                     .color(Color.CYAN);
         } else {
             embedBuilder

@@ -44,7 +44,8 @@ public class StatusCommand extends Command {
                                         + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
                         .addField("AntiAFK",
                                 (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
-                        .addField("VisualRange", (CONFIG.client.extra.visualRangeAlert ? "on" : "off"), true)
+                        .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off"), true)
+                        .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
                         .build())
                 .build().asRequest();
     }

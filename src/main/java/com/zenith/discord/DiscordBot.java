@@ -64,6 +64,7 @@ public class DiscordBot {
         commands.add(new AntiAFKCommand(this.proxy));
         commands.add(new VisualRangeCommand(this.proxy));
         commands.add(new UpdateCommand(this.proxy));
+        commands.add(new ProxyClientConnectionCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
@@ -222,6 +223,27 @@ public class DiscordBot {
                 .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .color(Color.CYAN)
                 .build());
+    }
+
+    @Subscribe
+    public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
+        if (CONFIG.client.extra.clientConnectionMessages) {
+            sendEmbedMessage(EmbedCreateSpec.builder()
+                    .title("Client Connected")
+                    .addField("Username", event.clientGameProfile.getName(), true)
+                    .color(Color.CYAN)
+                    .build());
+        }
+    }
+
+    @Subscribe
+    public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
+        if (CONFIG.client.extra.clientConnectionMessages) {
+            sendEmbedMessage(EmbedCreateSpec.builder()
+                    .title("Client Disconnected")
+                    .color(Color.RUBY)
+                    .build());
+        }
     }
 
     public void sendAutoReconnectMessage() {

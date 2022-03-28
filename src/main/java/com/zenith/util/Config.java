@@ -20,7 +20,6 @@
 
 package com.zenith.util;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -57,6 +56,7 @@ public final class Config {
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
             public boolean visualRangeAlert = true;
+            public boolean clientConnectionMessages = true;
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();

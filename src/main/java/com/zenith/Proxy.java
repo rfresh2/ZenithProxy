@@ -22,6 +22,7 @@ package com.zenith;
 
 import com.collarmc.pounce.Preference;
 import com.collarmc.pounce.Subscribe;
+import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
@@ -242,6 +243,7 @@ public class Proxy {
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> {
+                    // todo: extract this to its own class implementing ServerLoginHandler
                     PorkServerConnection connection = ((PorkServerListener) this.server.getListeners().stream()
                             .filter(PorkServerListener.class::isInstance)
                             .findAny().orElseThrow(IllegalStateException::new))
@@ -271,6 +273,8 @@ public class Proxy {
                     if (this.currentPlayer.get() != connection) {
                         SERVER_LOG.alert("login handler fired when session wasn't set yet...");
                     }
+                    GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
+                    EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile));
                 });
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.addListener(new PorkServerListener(this));
