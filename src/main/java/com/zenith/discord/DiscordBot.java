@@ -65,6 +65,7 @@ public class DiscordBot {
         commands.add(new VisualRangeCommand(this.proxy));
         commands.add(new UpdateCommand(this.proxy));
         commands.add(new ProxyClientConnectionCommand(this.proxy));
+        commands.add(new ActiveHoursCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
@@ -245,6 +246,14 @@ public class DiscordBot {
                     .color(Color.RUBY)
                     .build());
         }
+    }
+
+    @Subscribe
+    public void handleActiveHoursConnectEvent(ActiveHoursConnectEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Active Hours Connect Triggered")
+                .color(Color.CYAN)
+                .build());
     }
 
     public void sendAutoReconnectMessage() {

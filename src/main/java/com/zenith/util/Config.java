@@ -43,6 +43,7 @@ public final class Config {
         public String email = "john.doe@example.com";
         public String password = "my_secure_password";
         public String username = "Steve";
+        public boolean prio = false;
     }
 
     public static final class Client {
@@ -73,11 +74,18 @@ public final class Config {
 
                 public static final class Actions {
                     public AutoDisconnect autoDisconnect = new AutoDisconnect();
+                    public ActiveHours activeHours = new ActiveHours();
                 }
 
                 public static final class AutoDisconnect {
                     public boolean enabled = false;
                     public int health = 5;
+                }
+
+                public static final class ActiveHours {
+                    public boolean enabled = false;
+                    public String timeZoneId = "UTC";
+                    public List<String> activeTimes = asList();
                 }
             }
 

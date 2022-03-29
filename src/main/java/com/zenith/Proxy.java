@@ -42,6 +42,7 @@ import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
+import com.zenith.util.Config;
 import com.zenith.util.LoggerInner;
 import com.zenith.util.Queue;
 import com.zenith.util.Wait;
@@ -57,13 +58,15 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Instant;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
@@ -90,6 +93,7 @@ public class Proxy {
     protected final ScheduledExecutorService clientTickExecutorService;
     protected final ScheduledExecutorService clientTimeoutExecutorService;
     protected ScheduledExecutorService autoReconnectExecutorService;
+    protected ScheduledExecutorService activeHoursExecutorService;
     protected List<Module> modules;
 
     private int reconnectCounter;
@@ -123,6 +127,7 @@ public class Proxy {
         this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
         this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
         this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.activeHoursExecutorService = new ScheduledThreadPoolExecutor(1);
         EVENT_BUS.subscribe(this);
     }
 
@@ -149,6 +154,7 @@ public class Proxy {
                     MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(new ClientTickEvent()));
                 }
             }, 0, 50L, TimeUnit.MILLISECONDS);
+            activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
@@ -362,6 +368,42 @@ public class Proxy {
         }
     }
 
+    private void handleActiveHoursTick() {
+        Config.Client.Extra.Utility.ActiveHours activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
+        if (activeHoursConfig.enabled
+                // prevent rapid reconnects
+                && (isNull(this.connectTime) || this.connectTime.isBefore(Instant.now().minus(10L, ChronoUnit.MINUTES)))) {
+            // get current queue wait time
+            Integer queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular);
+            double queueWaitSeconds = Queue.getQueueWait(queueLength, queueLength);
+            // get all active hours and convert to Instant
+            // get LocalDateTimes for each active hours for today and tomorrow (to catch rollover to next day)
+            // if queueWait + now is within X bounds for any active hours LocalDateTime then trigger
+
+            activeHoursConfig.activeTimes.stream()
+                    .flatMap(activeTime -> {
+                        String[] split = activeTime.split(":");
+                        int hour = Integer.parseInt(split[0]);
+                        int min = Integer.parseInt(split[1]);
+                        ZonedDateTime activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(hour, min), ZoneId.of(activeHoursConfig.timeZoneId));
+                        ZonedDateTime activeHourTomorrow = activeHourToday.plusDays(1L);
+                        return Stream.of(activeHourToday, activeHourTomorrow);
+                    })
+                    .filter(activeHourDateTime -> {
+                        // active hour within 8 mins range of now
+                        Long nowPlusQueueWaitEpoch = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId)).plusSeconds((long)queueWaitSeconds).atZone(ZoneId.of(activeHoursConfig.timeZoneId)).toEpochSecond();
+                        Long activeHoursEpoch = activeHourDateTime.toEpochSecond();
+                        return nowPlusQueueWaitEpoch > activeHoursEpoch - 240 && nowPlusQueueWaitEpoch < activeHoursEpoch + 240;
+                    })
+                    .findAny()
+                    .ifPresent(t -> {
+                        EVENT_BUS.dispatch(new ActiveHoursConnectEvent());
+                        disconnect();
+                        connect();
+                    });
+        }
+    }
+
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
@@ -380,9 +422,11 @@ public class Proxy {
                 && event.position <= Queue.getQueueStatus().prio + 50
                 && !this.isPrio.isPresent()) {
             this.isPrio = Optional.of(true);
+            CONFIG.authentication.prio = true;
         } else {
             if (!this.isPrio.isPresent()) {
                 this.isPrio = Optional.of(false);
+                CONFIG.authentication.prio = false;
             }
         }
         this.queuePosition = event.position;
@@ -392,6 +436,15 @@ public class Proxy {
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
         this.inQueue = false;
         this.connectTime = Instant.now();
+    }
+
+    @Subscribe
+    public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
+        if (!this.isPrio.isPresent()) {
+            // assume we are prio if we skipped queuing
+            this.isPrio = Optional.of(true);
+            CONFIG.authentication.prio = true;
+        }
     }
 
     @Subscribe
