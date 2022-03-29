@@ -24,6 +24,7 @@ import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.discord.DiscordBot;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
@@ -36,27 +37,6 @@ import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import com.zenith.client.PorkClientSession;
-import com.zenith.client.handler.incoming.AdvancementsHandler;
-import com.zenith.client.handler.incoming.BlockChangeHandler;
-import com.zenith.client.handler.incoming.BossBarHandler;
-import com.zenith.client.handler.incoming.ChatHandler;
-import com.zenith.client.handler.incoming.ChunkDataHandler;
-import com.zenith.client.handler.incoming.ClientKeepaliveHandler;
-import com.zenith.client.handler.incoming.GameStateHandler;
-import com.zenith.client.handler.incoming.JoinGameHandler;
-import com.zenith.client.handler.incoming.LoginSuccessHandler;
-import com.zenith.client.handler.incoming.MultiBlockChangeHandler;
-import com.zenith.client.handler.incoming.PlayerHealthHandler;
-import com.zenith.client.handler.incoming.PlayerPosRotHandler;
-import com.zenith.client.handler.incoming.RespawnHandler;
-import com.zenith.client.handler.incoming.SetSlotHandler;
-import com.zenith.client.handler.incoming.SetWindowItemsHandler;
-import com.zenith.client.handler.incoming.StatisticsHandler;
-import com.zenith.client.handler.incoming.TabListDataHandler;
-import com.zenith.client.handler.incoming.TabListEntryHandler;
-import com.zenith.client.handler.incoming.UnloadChunkHandler;
-import com.zenith.client.handler.incoming.UnlockRecipesHandler;
-import com.zenith.client.handler.incoming.UpdateTileEntityHandler;
 import com.zenith.client.handler.incoming.spawn.SpawnExperienceOrbHandler;
 import com.zenith.client.handler.incoming.spawn.SpawnMobHandler;
 import com.zenith.client.handler.incoming.spawn.SpawnObjectHandler;
@@ -141,6 +121,7 @@ public class Constants {
             .registerInbound(new UnloadChunkHandler())
             .registerInbound(new UnlockRecipesHandler())
             .registerInbound(new UpdateTileEntityHandler())
+            .registerInbound(new ServerCombatHandler())
             //ENTITY
             .registerInbound(new EntityAttachHandler())
             .registerInbound(new EntityCollectItemHandler())

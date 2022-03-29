@@ -21,11 +21,10 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
-import com.zenith.event.module.PlayerHealthChangedEvent;
-import com.zenith.event.proxy.DeathEvent;
-import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
+import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.util.handler.HandlerRegistry;
+import lombok.NonNull;
 
 import static com.zenith.util.Constants.*;
 
@@ -39,9 +38,6 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
         if (packet.getHealth() != CACHE.getPlayerCache().getThePlayer().getHealth()) {
             MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(
                     new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth())));
-            if (packet.getHealth() <= 0) {
-                EVENT_BUS.dispatch(new DeathEvent());
-            }
         }
 
         CACHE.getPlayerCache().getThePlayer()
