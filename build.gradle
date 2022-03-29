@@ -33,7 +33,7 @@ ext {
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
     mcprotocollibVersion = "a275d2c0d6"
-    porklibVersion = "0.5.5-SNAPSHOT"
+    porklibVersion = "0.5.7-SNAPSHOT"
     discord4jVersion = "3.2.1"
     pounceVersion = "main-SNAPSHOT"
 }

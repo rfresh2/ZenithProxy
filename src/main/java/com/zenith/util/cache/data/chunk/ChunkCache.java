@@ -25,7 +25,7 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
-import net.daporkchop.lib.math.vector.i.Vec2i;
+import net.daporkchop.lib.math.vector.Vec2i;
 import com.zenith.util.cache.CachedData;
 
 import java.util.Map;
@@ -42,7 +42,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
 
     public void add(@NonNull Column column) {
-        this.cache.merge(new Vec2i(column.getX(), column.getZ()), column, this);
+        this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
         CACHE_LOG.debug("Cached chunk (%d, %d)", column.getX(), column.getZ());
     }
 
@@ -73,12 +73,12 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public Column get(int x, int z) {
-        return this.cache.get(new Vec2i(x, z));
+        return this.cache.get(Vec2i.of(x, z));
     }
 
     public void remove(int x, int z) {
         CACHE_LOG.debug("Server telling us to uncache chunk (%d, %d)", x, z);
-        if (this.cache.remove(new Vec2i(x, z)) == null) {
+        if (this.cache.remove(Vec2i.of(x, z)) == null) {
             CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);
         }
     }
