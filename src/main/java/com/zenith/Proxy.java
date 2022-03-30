@@ -372,14 +372,12 @@ public class Proxy {
         Config.Client.Extra.Utility.ActiveHours activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
         if (activeHoursConfig.enabled
                 // prevent rapid reconnects
-                && (isNull(this.connectTime) || this.connectTime.isBefore(Instant.now().minus(10L, ChronoUnit.MINUTES)))) {
+                && (isNull(this.connectTime) || this.connectTime.isBefore(Instant.now().minus(10L, ChronoUnit.MINUTES)))
+                // only force reconnect an active session if config enabled
+                && (this.currentPlayer.get().isConnected() && activeHoursConfig.forceReconnect) || !this.currentPlayer.get().isConnected()) {
             // get current queue wait time
             Integer queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular);
             double queueWaitSeconds = Queue.getQueueWait(queueLength, queueLength);
-            // get all active hours and convert to Instant
-            // get LocalDateTimes for each active hours for today and tomorrow (to catch rollover to next day)
-            // if queueWait + now is within X bounds for any active hours LocalDateTime then trigger
-
             activeHoursConfig.activeTimes.stream()
                     .flatMap(activeTime -> {
                         String[] split = activeTime.split(":");
@@ -390,9 +388,9 @@ public class Proxy {
                         return Stream.of(activeHourToday, activeHourTomorrow);
                     })
                     .filter(activeHourDateTime -> {
+                        long nowPlusQueueWaitEpoch = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId)).plusSeconds((long)queueWaitSeconds).atZone(ZoneId.of(activeHoursConfig.timeZoneId)).toEpochSecond();
+                        long activeHoursEpoch = activeHourDateTime.toEpochSecond();
                         // active hour within 8 mins range of now
-                        Long nowPlusQueueWaitEpoch = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId)).plusSeconds((long)queueWaitSeconds).atZone(ZoneId.of(activeHoursConfig.timeZoneId)).toEpochSecond();
-                        Long activeHoursEpoch = activeHourDateTime.toEpochSecond();
                         return nowPlusQueueWaitEpoch > activeHoursEpoch - 240 && nowPlusQueueWaitEpoch < activeHoursEpoch + 240;
                     })
                     .findAny()

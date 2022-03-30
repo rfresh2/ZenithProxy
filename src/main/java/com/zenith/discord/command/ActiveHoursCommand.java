@@ -29,9 +29,11 @@ public class ActiveHoursCommand extends Command {
                 + "\n  " + CONFIG.discord.prefix + "activeHours on/off"
                 + "\n  " + CONFIG.discord.prefix + "activeHours timezone <timezone ID>"
                 + "\n  " + CONFIG.discord.prefix + "activeHours <add/del> <time>"
-                + "\n  " + CONFIG.discord.prefix + "activeHours list"
-                + "\n  Time zone Ids: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
-                + "\n  Time format: XX:XX, e.g.: 1:42, 14:42, 14:01");
+                + "\n  " + CONFIG.discord.prefix + "activeHours status"
+                + "\n  " + CONFIG.discord.prefix + "activeHours forceReconnect on/off"
+                + "\n " + "If forceReconnect is on, the proxy will connect even if a client is already connected to the proxy"
+                + "\n Time zone Ids: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+                + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01");
     }
 
     @Override
@@ -44,15 +46,16 @@ public class ActiveHoursCommand extends Command {
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)
                     .color(Color.RUBY);
-        } else if (commandArgs.get(1).equalsIgnoreCase("list")) {
+        } else if (commandArgs.get(1).equalsIgnoreCase("status")) {
             embedBuilder
                     .title("Active Hours List")
                     .color(Color.CYAN)
                     .addField("Time Zone", activeHoursConfig.timeZoneId, false)
                     .addField("Active Hours", activeHoursConfig.activeTimes.stream()
                                     .collect(Collectors.joining(", ")),
-                            false);
-        }else if (commandArgs.get(1).equalsIgnoreCase("on")) {
+                            false)
+                    .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
+        } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             activeHoursConfig.enabled = true;
             embedBuilder
                     .title("Active Hours On!")
@@ -116,6 +119,23 @@ public class ActiveHoursCommand extends Command {
                                         .collect(Collectors.joining(", ")),
                                 false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
+            }
+        }  else if (commandArgs.get(1).equalsIgnoreCase("forceReconnect")) {
+            if (commandArgs.get(2).equalsIgnoreCase("on")) {
+                activeHoursConfig.forceReconnect = true;
+                embedBuilder
+                        .title("Force Reconnect On!")
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
+                activeHoursConfig.forceReconnect = false;
+                embedBuilder
+                        .title("Force Reconnect Off!")
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
             }
         }
 

@@ -46,6 +46,7 @@ public class StatusCommand extends Command {
                                 (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
                         .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off"), true)
                         .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
+                        .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), false)
                         .build())
                 .build().asRequest();
     }
