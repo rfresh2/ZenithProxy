@@ -6,6 +6,5 @@
 /config*.json
 /.gradle/
 *.class
-*.jar
 *.ipr
 /out/
