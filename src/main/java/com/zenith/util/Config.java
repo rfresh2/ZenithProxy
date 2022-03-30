@@ -186,7 +186,7 @@ public final class Config {
         }
 
         public String getProxyAddress() {
-            return this.proxyIP + ":" + this.bind.port;
+            return this.proxyIP;
         }
     }
 
