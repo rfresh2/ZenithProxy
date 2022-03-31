@@ -51,8 +51,8 @@ public class ActiveHoursCommand extends Command {
                     .title("Active Hours List")
                     .color(Color.CYAN)
                     .addField("Time Zone", activeHoursConfig.timeZoneId, false)
-                    .addField("Active Hours", activeHoursConfig.activeTimes.stream()
-                                    .collect(Collectors.joining(", ")),
+                    .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
+                                    .collect(Collectors.joining(", "))),
                             false)
                     .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
@@ -83,8 +83,8 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Added time: " + commandArgs.get(2))
                         .color(Color.CYAN)
-                        .addField("Active Hours", activeHoursConfig.activeTimes.stream()
-                                        .collect(Collectors.joining(", ")),
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
+                                        .collect(Collectors.joining(", "))),
                                 false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
@@ -99,8 +99,8 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Removed time: " + commandArgs.get(2))
                         .color(Color.CYAN)
-                        .addField("Active Hours", activeHoursConfig.activeTimes.stream()
-                                        .collect(Collectors.joining(", ")),
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
+                                        .collect(Collectors.joining(", "))),
                                 false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
@@ -115,8 +115,8 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Set timezone: " + commandArgs.get(2))
                         .color(Color.CYAN)
-                        .addField("Active Hours", activeHoursConfig.activeTimes.stream()
-                                        .collect(Collectors.joining(", ")),
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
+                                        .collect(Collectors.joining(", "))),
                                 false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
