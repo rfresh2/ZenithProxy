@@ -10,9 +10,9 @@ import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -105,13 +105,13 @@ public class ActiveHoursCommand extends Command {
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("timezone")) {
-            if (Arrays.stream(TimeZone.getAvailableIDs()).noneMatch(id -> id.equals(commandArgs.get(2)))) {
+            if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(commandArgs.get(2)))) {
                 embedBuilder
                         .title("Invalid command usage")
                         .addField("Usage", this.description, false)
                         .color(Color.RUBY);
             } else {
-                activeHoursConfig.timeZoneId = TimeZone.getTimeZone(commandArgs.get(2)).getID();
+                activeHoursConfig.timeZoneId = ZoneId.of(commandArgs.get(2)).getId();
                 embedBuilder
                         .title("Set timezone: " + commandArgs.get(2))
                         .color(Color.CYAN)
