@@ -47,6 +47,7 @@ public class StatusCommand extends Command {
                         .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off"), true)
                         .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
                         .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), false)
+                        .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), false)
                         .build())
                 .build().asRequest();
     }

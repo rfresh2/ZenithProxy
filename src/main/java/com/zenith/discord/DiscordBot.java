@@ -66,6 +66,7 @@ public class DiscordBot {
         commands.add(new UpdateCommand(this.proxy));
         commands.add(new ProxyClientConnectionCommand(this.proxy));
         commands.add(new ActiveHoursCommand(this.proxy));
+        commands.add(new DisplayCoordsCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
