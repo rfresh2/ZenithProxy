@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
@@ -81,9 +80,7 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Added time: " + commandArgs.get(2))
                         .color(Color.CYAN)
-                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
-                                        .collect(Collectors.joining(", "))),
-                                false)
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
@@ -97,9 +94,7 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Removed time: " + commandArgs.get(2))
                         .color(Color.CYAN)
-                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
-                                        .collect(Collectors.joining(", "))),
-                                false)
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("timezone")) {
@@ -113,9 +108,7 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Set timezone: " + commandArgs.get(2))
                         .color(Color.CYAN)
-                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
-                                        .collect(Collectors.joining(", "))),
-                                false)
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
                         .addField("Timezone", activeHoursConfig.timeZoneId, false);
             }
         }  else if (commandArgs.get(1).equalsIgnoreCase("forceReconnect")) {
