@@ -11,6 +11,8 @@ import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 
+import java.time.Instant;
+
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CONFIG;
 
@@ -26,6 +28,7 @@ public class StatusCommand extends Command {
                         .title("ZenithProxy Status" + " : " + CONFIG.authentication.username)
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                         .addField("Status", getStatus(), true)
+                        .addField("Online Time", getOnlineTime(), true)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .addField("Dimension",
@@ -99,5 +102,15 @@ public class StatusCommand extends Command {
     public String getQueueEta(final Integer queueLength, final Integer queuePos) {
         double seconds = Queue.getQueueWait(queueLength, queuePos);
         return (int)(seconds / 3600) + ":" + (int)((seconds / 60) % 60) + ":" + (int)(seconds % 60);
+    }
+
+    public String getOnlineTime() {
+        if (this.proxy.isConnected()) {
+            long milliOnline = Instant.now().toEpochMilli() - this.proxy.getConnectTime().toEpochMilli();
+            // hours:minutes:seconds
+            return (milliOnline / 3600000) + ":" + ((milliOnline / 60000) % 60) + ":" + ((milliOnline / 1000) % 60);
+        } else {
+            return "Not Online!";
+        }
     }
 }
