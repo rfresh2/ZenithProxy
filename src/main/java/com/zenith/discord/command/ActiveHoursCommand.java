@@ -20,7 +20,7 @@ import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
 
 public class ActiveHoursCommand extends Command {
-    private static final Pattern TIME_PATTERN = Pattern.compile("[0-24]{1,2}:[0-60]{2}");
+    private static final Pattern TIME_PATTERN = Pattern.compile("[0-9]{1,2}:[0-9]{2}");
 
     public ActiveHoursCommand(final Proxy proxy) {
         super(proxy, "activeHours", "Set active hours for the proxy to automatically be logged in at"
@@ -139,6 +139,12 @@ public class ActiveHoursCommand extends Command {
 
     private boolean timeMatchesRegex(final String arg) {
         final Matcher matcher = TIME_PATTERN.matcher(arg);
-        return matcher.matches();
+        boolean matchesRegex = matcher.matches();
+        if (!matchesRegex) return false;
+
+        final String[] split = arg.split(":");
+        final int hour = Integer.parseInt(split[0]);
+        final int minute = Integer.parseInt(split[1]);
+        return hour <= 24 && minute <= 59;
     }
 }
