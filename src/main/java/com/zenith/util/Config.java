@@ -85,7 +85,7 @@ public final class Config {
                 public static final class ActiveHours {
                     public boolean enabled = false;
                     public boolean forceReconnect = false;
-                    public String timeZoneId = "UTC";
+                    public String timeZoneId = "Universal";
                     public List<String> activeTimes = asList();
                 }
             }
