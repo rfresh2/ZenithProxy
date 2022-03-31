@@ -113,7 +113,7 @@ public class DiscordBot {
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
         this.client.updatePresence(CONNECTED_PRESENCE).subscribe();
-       sendEmbedMessage(EmbedCreateSpec.builder()
+        sendEmbedMessage(EmbedCreateSpec.builder()
                .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
                .color(Color.CYAN)
                .addField("Server", CONFIG.client.server.address, true)

@@ -25,7 +25,7 @@ public class DisplayCoordsCommand extends Command {
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
-        validateUserHasAccountOwnerRole(event);
+        validateUserHasAccountOwnerRole(event, restChannel);
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
