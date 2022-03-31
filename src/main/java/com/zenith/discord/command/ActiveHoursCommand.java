@@ -51,9 +51,7 @@ public class ActiveHoursCommand extends Command {
                     .title("Active Hours Status")
                     .color(Color.CYAN)
                     .addField("Time Zone", activeHoursConfig.timeZoneId, false)
-//                    .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeHoursConfig.activeTimes.stream()
-//                                    .collect(Collectors.joining(", "))),
-//                            false)
+                    .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
                     .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             activeHoursConfig.enabled = true;
