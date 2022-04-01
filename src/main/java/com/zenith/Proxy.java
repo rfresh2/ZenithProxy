@@ -374,7 +374,7 @@ public class Proxy {
                 // prevent rapid reconnects
                 && (isNull(this.connectTime) || this.connectTime.isBefore(Instant.now().minus(10L, ChronoUnit.MINUTES)))
                 // only force reconnect an active session if config enabled
-                && (nonNull(this.currentPlayer.get()) && this.currentPlayer.get().isConnected() && activeHoursConfig.forceReconnect) || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected())) {
+                && ((nonNull(this.currentPlayer.get()) && this.currentPlayer.get().isConnected() && activeHoursConfig.forceReconnect) || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected()))) {
             // get current queue wait time
             Integer queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular);
             double queueWaitSeconds = Queue.getQueueWait(queueLength, queueLength);
