@@ -20,7 +20,9 @@
 
 package com.zenith.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Arrays.asList;
 
@@ -86,7 +88,41 @@ public final class Config {
                     public boolean enabled = false;
                     public boolean forceReconnect = false;
                     public String timeZoneId = "Universal";
-                    public List<String> activeTimes = asList();
+                    public List<ActiveTime> activeTimes = new ArrayList<>();
+
+                    public static class ActiveTime {
+                        public int hour;
+                        public int minute;
+
+                        public static ActiveTime fromString(final String arg) {
+                            final String[] split = arg.split(":");
+                            final int hour = Integer.parseInt(split[0]);
+                            final int minute = Integer.parseInt(split[1]);
+                            ActiveTime activeTime = new ActiveTime();
+                            activeTime.hour = hour;
+                            activeTime.minute = minute;
+                            return activeTime;
+                        }
+
+                        @Override
+                        public String toString() {
+                            return hour + ":" + minute;
+                        }
+
+                        @Override
+                        public boolean equals(Object o) {
+                            if (this == o) return true;
+                            if (o == null || getClass() != o.getClass()) return false;
+                            ActiveTime that = (ActiveTime) o;
+                            return hour == that.hour && minute == that.minute;
+                        }
+
+                        @Override
+                        public int hashCode() {
+                            return Objects.hash(hour, minute);
+                        }
+
+                    }
                 }
             }
 

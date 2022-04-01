@@ -382,10 +382,7 @@ public class Proxy {
             double queueWaitSeconds = Queue.getQueueWait(queueLength, queueLength);
             activeHoursConfig.activeTimes.stream()
                     .flatMap(activeTime -> {
-                        String[] split = activeTime.split(":");
-                        int hour = Integer.parseInt(split[0]);
-                        int min = Integer.parseInt(split[1]);
-                        ZonedDateTime activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(hour, min), ZoneId.of(activeHoursConfig.timeZoneId));
+                        ZonedDateTime activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(activeTime.hour, activeTime.minute), ZoneId.of(activeHoursConfig.timeZoneId));
                         ZonedDateTime activeHourTomorrow = activeHourToday.plusDays(1L);
                         return Stream.of(activeHourToday, activeHourTomorrow);
                     })

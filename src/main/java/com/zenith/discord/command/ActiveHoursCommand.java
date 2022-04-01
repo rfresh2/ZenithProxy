@@ -2,6 +2,7 @@ package com.zenith.discord.command;
 
 import com.zenith.Proxy;
 import com.zenith.util.Config.Client.Extra.Utility.ActiveHours;
+import com.zenith.util.Config.Client.Extra.Utility.ActiveHours.ActiveTime;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
@@ -31,7 +33,7 @@ public class ActiveHoursCommand extends Command {
                 + "\n  " + CONFIG.discord.prefix + "activeHours status"
                 + "\n  " + CONFIG.discord.prefix + "activeHours forceReconnect on/off"
                 + "\n " + "If forceReconnect is on, the proxy will connect even if a client is already connected to the proxy"
-                + "\n Time zone Ids: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+                + "\n Time zone Ids (\"TZ database name\" column): https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
                 + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01");
     }
 
@@ -50,7 +52,7 @@ public class ActiveHoursCommand extends Command {
                     .title("Active Hours Status")
                     .color(Color.CYAN)
                     .addField("Time Zone", activeHoursConfig.timeZoneId, false)
-                    .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
+                    .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(activeHoursConfig.activeTimes)), false)
                     .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
             activeHoursConfig.enabled = true;
@@ -74,14 +76,15 @@ public class ActiveHoursCommand extends Command {
                         .addField("Usage", this.description, false)
                         .color(Color.RUBY);
             } else {
-                if (!activeHoursConfig.activeTimes.contains(commandArgs.get(2))) {
-                    activeHoursConfig.activeTimes.add(commandArgs.get(2));
+                ActiveTime activeTime = ActiveTime.fromString(commandArgs.get(2));
+                if (!activeHoursConfig.activeTimes.contains(activeTime)) {
+                    activeHoursConfig.activeTimes.add(activeTime);
                 }
                 embedBuilder
                         .title("Added time: " + commandArgs.get(2))
                         .color(Color.CYAN)
                         .addField("Time Zone", activeHoursConfig.timeZoneId, false)
-                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(activeHoursConfig.activeTimes)), false)
                         .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
@@ -91,12 +94,13 @@ public class ActiveHoursCommand extends Command {
                         .addField("Usage", this.description, false)
                         .color(Color.RUBY);
             } else {
-                activeHoursConfig.activeTimes.removeIf(s -> s.equalsIgnoreCase(commandArgs.get(2)));
+                ActiveTime activeTime = ActiveTime.fromString(commandArgs.get(2));
+                activeHoursConfig.activeTimes.removeIf(s -> s.equals(activeTime));
                 embedBuilder
                         .title("Removed time: " + commandArgs.get(2))
                         .color(Color.CYAN)
                         .addField("Time Zone", activeHoursConfig.timeZoneId, false)
-                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(activeHoursConfig.activeTimes)), false)
                         .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("timezone")) {
@@ -111,7 +115,7 @@ public class ActiveHoursCommand extends Command {
                         .title("Set timezone: " + commandArgs.get(2))
                         .color(Color.CYAN)
                         .addField("Time Zone", activeHoursConfig.timeZoneId, false)
-                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
+                        .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(activeHoursConfig.activeTimes)), false)
                         .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
             }
         }  else if (commandArgs.get(1).equalsIgnoreCase("forceReconnect")) {
@@ -144,10 +148,13 @@ public class ActiveHoursCommand extends Command {
         final Matcher matcher = TIME_PATTERN.matcher(arg);
         boolean matchesRegex = matcher.matches();
         if (!matchesRegex) return false;
+        final ActiveTime activeTime = ActiveTime.fromString(arg);
+        return activeTime.hour <= 24 && activeTime.minute <= 59;
+    }
 
-        final String[] split = arg.split(":");
-        final int hour = Integer.parseInt(split[0]);
-        final int minute = Integer.parseInt(split[1]);
-        return hour <= 24 && minute <= 59;
+    private String activeTimeListToString(final List<ActiveTime> activeTimes) {
+        return activeTimes.stream()
+                .map(ActiveTime::toString)
+                .collect(Collectors.joining(", "));
     }
 }
