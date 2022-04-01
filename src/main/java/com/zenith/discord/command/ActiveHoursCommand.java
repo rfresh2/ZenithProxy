@@ -80,8 +80,9 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Added time: " + commandArgs.get(2))
                         .color(Color.CYAN)
+                        .addField("Time Zone", activeHoursConfig.timeZoneId, false)
                         .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
-                        .addField("Timezone", activeHoursConfig.timeZoneId, false);
+                        .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
             if (!timeMatchesRegex(commandArgs.get(2))) {
@@ -94,8 +95,9 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Removed time: " + commandArgs.get(2))
                         .color(Color.CYAN)
+                        .addField("Time Zone", activeHoursConfig.timeZoneId, false)
                         .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
-                        .addField("Timezone", activeHoursConfig.timeZoneId, false);
+                        .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
             }
         } else if (commandArgs.get(1).equalsIgnoreCase("timezone")) {
             if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(commandArgs.get(2)))) {
@@ -108,8 +110,9 @@ public class ActiveHoursCommand extends Command {
                 embedBuilder
                         .title("Set timezone: " + commandArgs.get(2))
                         .color(Color.CYAN)
+                        .addField("Time Zone", activeHoursConfig.timeZoneId, false)
                         .addField("Active Hours", (activeHoursConfig.activeTimes.isEmpty() ? "None set!" : String.join(", ", activeHoursConfig.activeTimes)), false)
-                        .addField("Timezone", activeHoursConfig.timeZoneId, false);
+                        .addField("Force Reconnect", (activeHoursConfig.forceReconnect ? "on" : "off"), false);
             }
         }  else if (commandArgs.get(1).equalsIgnoreCase("forceReconnect")) {
             if (commandArgs.get(2).equalsIgnoreCase("on")) {
