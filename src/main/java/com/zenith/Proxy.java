@@ -102,6 +102,7 @@ public class Proxy {
     private Instant connectTime;
     private Optional<Boolean> isPrio = Optional.empty();
     private Future<?> autoReconnectFuture;
+    private Instant lastActiveHoursConnect = Instant.EPOCH;
 
 //    protected final Gui gui = new Gui();
 
@@ -372,9 +373,10 @@ public class Proxy {
         Config.Client.Extra.Utility.ActiveHours activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
         if (activeHoursConfig.enabled
                 // prevent rapid reconnects
-                && (isNull(this.connectTime) || this.connectTime.isBefore(Instant.now().minus(10L, ChronoUnit.MINUTES)))
+                && this.lastActiveHoursConnect.isBefore(Instant.now().minus(1L, ChronoUnit.HOURS))
                 // only force reconnect an active session if config enabled
-                && ((nonNull(this.currentPlayer.get()) && this.currentPlayer.get().isConnected() && activeHoursConfig.forceReconnect) || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected()))) {
+                && ((nonNull(this.currentPlayer.get()) && this.currentPlayer.get().isConnected() && activeHoursConfig.forceReconnect)
+                            || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected()))) {
             // get current queue wait time
             Integer queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular);
             double queueWaitSeconds = Queue.getQueueWait(queueLength, queueLength);
@@ -396,6 +398,7 @@ public class Proxy {
                     .findAny()
                     .ifPresent(t -> {
                         EVENT_BUS.dispatch(new ActiveHoursConnectEvent());
+                        this.lastActiveHoursConnect = Instant.now();
                         disconnect();
                         connect();
                     });
