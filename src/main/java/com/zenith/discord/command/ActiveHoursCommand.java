@@ -154,6 +154,13 @@ public class ActiveHoursCommand extends Command {
 
     private String activeTimeListToString(final List<ActiveTime> activeTimes) {
         return activeTimes.stream()
+                .sorted((a, b) -> {
+                    if (a.hour == b.hour) {
+                        return a.minute - b.minute;
+                    } else {
+                        return a.hour - b.hour;
+                    }
+                })
                 .map(ActiveTime::toString)
                 .collect(Collectors.joining(", "));
     }
