@@ -21,6 +21,7 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.zenith.event.proxy.DeathEvent;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import com.zenith.client.PorkClientSession;
@@ -36,6 +37,14 @@ public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPa
     public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
         try {
             CHAT_LOG.info(packet.getMessage());
+            String messageString = AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString();
+            if (CACHE.getPlayerCache().getThePlayer().getHealth() <= 0) {
+                if (messageString.contains(CONFIG.authentication.username)) {
+                    // probable death message
+                    EVENT_BUS.dispatch(new DeathEvent(messageString));
+                }
+            }
+
             if ("2b2t.org".equals(CONFIG.client.server.address)
                     && AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {
                 CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");

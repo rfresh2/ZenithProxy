@@ -88,7 +88,7 @@ public class DataCache {
     }
 
     public boolean reset(boolean full) {
-        CACHE_LOG.debug("Clearing cache...");
+        CACHE_LOG.debug("Clearing " + (full ? "full" : "partial") +" cache...");
 
         try {
             this.getAllData().forEach(d -> d.reset(full));
