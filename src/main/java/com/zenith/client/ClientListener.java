@@ -23,20 +23,15 @@ package com.zenith.client;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.packetlib.event.session.ConnectedEvent;
-import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
-import com.github.steveice10.packetlib.event.session.DisconnectingEvent;
-import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
-import com.github.steveice10.packetlib.event.session.PacketSendingEvent;
-import com.github.steveice10.packetlib.event.session.PacketSentEvent;
-import com.github.steveice10.packetlib.event.session.SessionListener;
+import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.*;
+import com.zenith.server.PorkServerConnection;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import com.zenith.Proxy;
-import com.zenith.server.PorkServerConnection;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -169,7 +164,7 @@ public class ClientListener implements SessionListener {
         CLIENT_LOG.info("Disconnected: " + event.getReason());
         if (!disconnected) {
             disconnected = true;
-            EVENT_BUS.dispatch(new DisconnectEvent(event.getReason()));
+            EVENT_BUS.dispatch(new DisconnectEvent(AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString()));
         }
     }
 }

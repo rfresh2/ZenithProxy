@@ -37,7 +37,7 @@ public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPa
     public boolean apply(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
         try {
             CHAT_LOG.info(packet.getMessage());
-            String messageString = AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString();
+            final String messageString = AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString();
             if (CACHE.getPlayerCache().getThePlayer().getHealth() <= 0) {
                 if (messageString.contains(CONFIG.authentication.username)) {
                     // probable death message
