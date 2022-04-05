@@ -106,7 +106,7 @@ public final class Config {
 
                         @Override
                         public String toString() {
-                            return hour + ":" + minute;
+                            return (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
                         }
 
                         @Override
