@@ -328,7 +328,7 @@ public class Proxy {
     }
 
     private boolean autoReconnectIsInProgress() {
-        return !isNull(autoReconnectFuture) && autoReconnectFuture.isDone();
+        return nonNull(autoReconnectFuture) && !autoReconnectFuture.isDone();
     }
 
     @Subscribe(value = Preference.CALLER)
