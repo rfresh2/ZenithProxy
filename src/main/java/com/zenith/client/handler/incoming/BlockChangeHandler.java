@@ -25,9 +25,9 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
+import lombok.NonNull;
 
 import static com.zenith.util.Constants.*;
 
@@ -46,7 +46,6 @@ public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<Serve
             Chunk chunk = column.getChunks()[pos.getY() >> 4];
             if (chunk == null) {
                 chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
-            } else {
                 SERVER_LOG.warn("No Chunk found for block update with position: " + pos);
             }
             chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
