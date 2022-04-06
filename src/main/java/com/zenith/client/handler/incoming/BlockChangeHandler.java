@@ -46,8 +46,11 @@ public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<Serve
             Chunk chunk = column.getChunks()[pos.getY() >> 4];
             if (chunk == null) {
                 chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
+            } else {
+                SERVER_LOG.warn("No Chunk found for block update with position: " + pos);
             }
             chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+            SERVER_LOG.debug("Updating block: [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "] Id: " + record.getBlock().getId() + ", data: " + record.getBlock().getData());
         } else {
             SERVER_LOG.error("Received block update for uncached chunk with position: " + pos);
         }
