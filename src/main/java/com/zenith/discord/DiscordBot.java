@@ -251,8 +251,15 @@ public class DiscordBot {
 
     @Subscribe
     public void handleActiveHoursConnectEvent(ActiveHoursConnectEvent event) {
+        int queueLength;
+        if (proxy.getIsPrio().orElse(false)) {
+            queueLength = Queue.getQueueStatus().prio;
+        } else {
+            queueLength = Queue.getQueueStatus().regular;
+        }
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Active Hours Connect Triggered")
+                .addField("ETA", getQueueEta(queueLength, queueLength), false)
                 .color(Color.CYAN)
                 .build());
     }
