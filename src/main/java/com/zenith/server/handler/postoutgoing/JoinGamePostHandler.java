@@ -38,7 +38,7 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
         session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
 
         //send cached data
-        CACHE.getAllData().forEach(data -> {
+        CACHE.getAllData().parallelStream().forEach(data -> {
             if (CONFIG.debug.server.cache.sendingmessages) {
                 String msg = data.getSendingMessage();
                 if (msg == null)    {

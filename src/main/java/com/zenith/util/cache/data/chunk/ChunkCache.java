@@ -85,7 +85,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        this.cache.values().stream()
+        this.cache.values().parallelStream()
                 .map(ServerChunkDataPacket::new)
                 .forEach(consumer);
     }
