@@ -21,6 +21,7 @@
 package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.EntityMob;
@@ -49,7 +50,7 @@ public class SpawnMobHandler implements HandlerRegistry.IncomingHandler<ServerSp
                 .setVelX(packet.getMotionX())
                 .setVelY(packet.getMotionY())
                 .setVelZ(packet.getMotionZ())
-                .setMetadata(Arrays.asList(packet.getMetadata()))
+                .setMetadata(Lists.newArrayList(packet.getMetadata()))
         );
         return true;
     }

@@ -21,6 +21,7 @@
 package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import com.google.common.collect.Lists;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.util.cache.data.entity.Entity;
 import lombok.NonNull;
@@ -46,7 +47,7 @@ public class SpawnPlayerHandler implements HandlerRegistry.IncomingHandler<Serve
                 .setZ(packet.getZ())
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch())
-                .setMetadata(Arrays.asList(packet.getMetadata()));
+                .setMetadata(Lists.newArrayList(packet.getMetadata()));
         CACHE.getEntityCache().add(entity);
         CACHE.getTabListCache().getTabList().get(packet.getUUID())
                         .ifPresent(playerEntry -> EVENT_BUS.dispatch(new NewPlayerInVisualRangeEvent(playerEntry, entity)));
