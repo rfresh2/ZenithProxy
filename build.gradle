@@ -18,8 +18,20 @@
  *
  */
 
+buildscript {
+    repositories {
+        maven {
+            name = "Gradle"
+            url = "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.0"
+    }
+}
+
 apply plugin: "java"
-apply plugin: "maven-publish"
+apply plugin: "com.github.johnrengelman.shadow"
 
 ext {
     //general things
@@ -65,7 +77,7 @@ repositories {
 
 configurations {
     shade
-    compile.extendsFrom shade
+    implementation.extendsFrom shade
 }
 
 dependencies {
@@ -85,7 +97,7 @@ dependencies {
 
     shade "com.github.collarmc:Pounce:$pounceVersion"
 
-    testCompile "junit:junit:$junitVersion"
+    testImplementation "junit:junit:$junitVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -93,24 +105,27 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
+//disable regular unshaded jar
+jar.enabled = false
+
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-jar {
-    from {
-        configurations.shade.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }.unique()
-    } {
-        exclude "META-INF/**"
-        exclude sourceSets.main.output.asFileTree.collect {
-            return it.getPath().split("java/main/").last()
-        }
-    }
+shadowJar {
+    String branchName = System.getenv("BRANCH_NAME")
+    branchName = branchName != null && !branchName.isEmpty() && !"master".equals(branchName) ? '-' + branchName.replaceAll("[^a-zA-Z0-9.-]", "_") : "";
+    archiveName "${project.name}-${project.version}${branchName}.jar"
+
+    configurations = [project.configurations.shade]
+
+    exclude 'module-info.class'
 
     manifest {
         attributes "Implementation-Title": "Proxy",
-                "Main-Class": "com.zenith.Proxy"
+                "Implementation-Version": project.version,
+                "Main-Class": "net.daporkchop.toobeetooteebot.Bot"
     }
 }
+
+build.dependsOn(shadowJar)
