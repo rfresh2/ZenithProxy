@@ -113,9 +113,7 @@ task sourceJar(type: Jar) {
 }
 
 shadowJar {
-    String branchName = System.getenv("BRANCH_NAME")
-    branchName = branchName != null && !branchName.isEmpty() && !"master".equals(branchName) ? '-' + branchName.replaceAll("[^a-zA-Z0-9.-]", "_") : "";
-    archiveName "${project.name}-${project.version}${branchName}.jar"
+    archiveName "${project.name}.jar"
 
     configurations = [project.configurations.shade]
 
@@ -124,7 +122,7 @@ shadowJar {
     manifest {
         attributes "Implementation-Title": "Proxy",
                 "Implementation-Version": project.version,
-                "Main-Class": "net.daporkchop.toobeetooteebot.Bot"
+                "Main-Class": "com.zenith.Proxy"
     }
 }
 
