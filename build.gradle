@@ -110,7 +110,7 @@ jar {
     }
 
     manifest {
-        attributes "Implementation-Title": "ZenithProxy",
+        attributes "Implementation-Title": "Proxy",
                 "Main-Class": "com.zenith.Proxy"
     }
 }

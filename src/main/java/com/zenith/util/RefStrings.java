@@ -31,7 +31,7 @@ import static com.zenith.util.Constants.*;
 
 @UtilityClass
 public class RefStrings {
-    protected final String BRAND = String.format("ZenithProxy v%s", VERSION);
+    protected final String BRAND = String.format("Proxy v%s", VERSION);
     public final byte[] BRAND_ENCODED;
 
     static {

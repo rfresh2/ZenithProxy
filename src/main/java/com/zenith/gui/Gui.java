@@ -74,7 +74,7 @@ public class Gui {
         }
 
         this.window = GuiEngine.swing().newWindow(512, 512)
-                .setTitle(String.format("ZenithProxy v%s", VERSION))
+                .setTitle(String.format("Proxy v%s", VERSION))
                 .setIcon(ICON)
                 .label("notImplementedLbl", "GUI is currently unimplemented!", lbl -> lbl
                         .orientRelative(0, 0, 1.0d, 1.0d)

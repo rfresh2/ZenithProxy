@@ -32,7 +32,7 @@ public class DisconnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getFailedToDisconnectMessage() {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Failed to Disconnect : " + CONFIG.authentication.username)
+                        .title("Proxy Failed to Disconnect : " + CONFIG.authentication.username)
                         .build())
                 .build().asRequest();
     }

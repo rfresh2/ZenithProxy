@@ -40,7 +40,7 @@ public class HelpCommand extends Command {
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
-                .title("ZenithProxy Help")
+                .title("Proxy Help")
                 .color(Color.CYAN);
         this.commands.stream()
                 .forEach(command -> {

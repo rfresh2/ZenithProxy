@@ -25,7 +25,7 @@ public class StatusCommand extends Command {
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Status" + " : " + CONFIG.authentication.username)
+                        .title("Proxy Status" + " : " + CONFIG.authentication.username)
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                         .addField("Status", getStatus(), true)
                         .addField("Online Time", getOnlineTime(), true)

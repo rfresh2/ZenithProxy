@@ -114,7 +114,7 @@ public class DiscordBot {
     public void handleConnectEvent(ConnectEvent event) {
         this.client.updatePresence(CONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-               .title("ZenithProxy Connected!" + " : " + CONFIG.authentication.username)
+               .title("Proxy Connected!" + " : " + CONFIG.authentication.username)
                .color(Color.CYAN)
                .addField("Server", CONFIG.client.server.address, true)
                .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
@@ -126,7 +126,7 @@ public class DiscordBot {
     @Subscribe
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy Online!" + " : " + CONFIG.authentication.username)
+                .title("Proxy Online!" + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
                 .addField("Server", CONFIG.client.server.address, true)
 //                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
@@ -137,7 +137,7 @@ public class DiscordBot {
     public void handleDisconnectEvent(DisconnectEvent event) {
         this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy Disconnected" + " : " + CONFIG.authentication.username)
+                .title("Proxy Disconnected" + " : " + CONFIG.authentication.username)
                 .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
@@ -155,7 +155,7 @@ public class DiscordBot {
 
     private void sendQueueWarning(int position) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy Queue Warning" + " : " + CONFIG.authentication.username)
+                .title("Proxy Queue Warning" + " : " + CONFIG.authentication.username)
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)
@@ -190,7 +190,7 @@ public class DiscordBot {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.client.updatePresence(getQueuePresence()).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy Started Queuing..." + " : " + CONFIG.authentication.username)
+                .title("Proxy Started Queuing..." + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
                 .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
                 .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
@@ -222,7 +222,7 @@ public class DiscordBot {
     @Subscribe
     public void handleAutoDisconnectEvent(AutoDisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("ZenithProxy AutoDisconnect Triggered!" + " : " + CONFIG.authentication.username)
+                .title("Proxy AutoDisconnect Triggered!" + " : " + CONFIG.authentication.username)
                 .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .color(Color.CYAN)
                 .build());

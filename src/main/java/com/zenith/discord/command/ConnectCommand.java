@@ -33,7 +33,7 @@ public class ConnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getFailedConnectionMessage() {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("ZenithProxy Failed to Connect!" + " : " + CONFIG.authentication.username)
+                        .title("Proxy Failed to Connect!" + " : " + CONFIG.authentication.username)
                         .color(Color.RED)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
