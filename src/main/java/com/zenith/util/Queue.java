@@ -38,7 +38,7 @@ public class Queue {
             0.9999337457796981f, 0.9999279556964097f).stream()
             .mapToDouble(i -> i)
             .toArray();
-    private static final double CONSTANT_FACTOR = 130;
+    private static final double CONSTANT_FACTOR = 250;
 
     static {
         refreshExecutorService.scheduleAtFixedRate(
