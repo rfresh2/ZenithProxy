@@ -35,6 +35,7 @@ public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRes
     public boolean apply(@NonNull ServerRespawnPacket packet, @NonNull PorkClientSession session) {
         if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
             CACHE.reset(false);
+            // only partial reset chunk and entity cache?
         }
         CACHE.getPlayerCache()
                 .setDimension(packet.getDimension())

@@ -49,7 +49,9 @@ public class TabListCache implements CachedData {
 
     @Override
     public void reset(boolean full) {
-        this.tabList = new TabList();
+        if (full) {
+            this.tabList = new TabList();
+        }
     }
 
     @Override

@@ -180,7 +180,7 @@ public class Proxy {
     }
 
     public void disconnect() {
-        CACHE.reset(false);
+        CACHE.reset(true);
         if (this.isConnected()) {
             this.client.getSession().disconnect(MANUAL_DISCONNECT, false);
         }
@@ -337,7 +337,7 @@ public class Proxy {
 
     @Subscribe(value = Preference.CALLER)
     public void handleDisconnectEvent(DisconnectEvent event) {
-        CACHE.reset(false);
+        CACHE.reset(true);
         this.inQueue = false;
         this.queuePosition = 0;
         if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
