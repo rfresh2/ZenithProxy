@@ -202,8 +202,16 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Player Death!" + " : " + CONFIG.authentication.username)
                 .color(Color.RUBY)
-                .addField("Death Message", event.message, false)
                 .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), false)
+                .build());
+    }
+
+    @Subscribe
+    public void handleDeathMessageEvent(DeathMessageEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Death Message")
+                .color(Color.RUBY)
+                .addField("Message", event.message, false)
                 .build());
     }
 

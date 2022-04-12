@@ -3,9 +3,11 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.data.game.entity.player.CombatState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerCombatPacket;
 import com.zenith.client.PorkClientSession;
+import com.zenith.event.proxy.DeathEvent;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.EVENT_BUS;
 
 public class ServerCombatHandler implements HandlerRegistry.IncomingHandler<ServerCombatPacket, PorkClientSession> {
 
@@ -13,8 +15,9 @@ public class ServerCombatHandler implements HandlerRegistry.IncomingHandler<Serv
     public boolean apply(ServerCombatPacket packet, PorkClientSession session) {
         if (packet.getPlayerId() == CACHE.getPlayerCache().getEntityId()) {
             if (packet.getCombatState() == CombatState.ENTITY_DEAD) {
-//                EVENT_BUS.dispatch(new DeathEvent(packet.getMessage()));
-                // moved this dispatch to ChatHandler to grab actual death message
+                // packet.message() value is basically garbage on 2b2t, same message on any death, might have more info on other servers
+                // see ChatHandler for how we try to grab the actual informative death message
+                EVENT_BUS.dispatch(new DeathEvent());
             }
         }
         return true;

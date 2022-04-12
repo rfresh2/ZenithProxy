@@ -22,10 +22,13 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.event.proxy.DeathEvent;
+import com.zenith.event.proxy.DeathMessageEvent;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
+
+import java.util.Locale;
 
 import static com.zenith.util.Constants.*;
 
@@ -39,9 +42,9 @@ public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPa
             CHAT_LOG.info(packet.getMessage());
             final String messageString = AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString();
             if (CACHE.getPlayerCache().getThePlayer().getHealth() <= 0) {
-                if (messageString.contains(CONFIG.authentication.username)) {
+                if (!messageString.startsWith("<") && messageString.toLowerCase(Locale.ROOT).contains(CONFIG.authentication.username.toLowerCase(Locale.ROOT))) {
                     // probable death message
-                    EVENT_BUS.dispatch(new DeathEvent(messageString));
+                    EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
                 }
             }
 
