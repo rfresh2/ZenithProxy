@@ -4,6 +4,7 @@ package com.zenith.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.exception.OutOfRangeException;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -13,8 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.SERVER_LOG;
+import static com.zenith.util.Constants.*;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.Objects.isNull;
 
@@ -72,11 +72,14 @@ public class Queue {
     // probably only valid for regular queue, prio seems to move a lot faster
     // returns double representing seconds until estimated queue completion time.
     public static double getQueueWait(final Integer queueLength, final Integer queuePos) {
-        double value = LINEAR_INTERPOLATOR.interpolate(QUEUE_PLACEMENT_DATA, QUEUE_FACTOR_DATA).value(queueLength);
-        return Math.log((new Integer(queueLength - queuePos).doubleValue() + CONSTANT_FACTOR)
-                            / (queueLength.doubleValue() + CONSTANT_FACTOR))
-                /  Math.log(value);
+        try {
+            double value = LINEAR_INTERPOLATOR.interpolate(QUEUE_PLACEMENT_DATA, QUEUE_FACTOR_DATA).value(queueLength);
+            return Math.log((new Integer(queueLength - queuePos).doubleValue() + CONSTANT_FACTOR)
+                    / (queueLength.doubleValue() + CONSTANT_FACTOR))
+                    /  Math.log(value);
+        } catch (OutOfRangeException e) {
+            CLIENT_LOG.warn(e);
+            return 0;
+        }
     }
-
-
 }
