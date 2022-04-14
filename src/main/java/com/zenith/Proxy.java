@@ -101,7 +101,7 @@ public class Proxy {
     private int queuePosition = 0;
     private Instant connectTime;
     private Optional<Boolean> isPrio = Optional.empty();
-    private Future<?> autoReconnectFuture;
+    private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
 //    protected final Gui gui = new Gui();
@@ -321,18 +321,15 @@ public class Proxy {
 
     public boolean cancelAutoReconnect() {
         if (autoReconnectIsInProgress()) {
-            this.autoReconnectFuture.cancel(true);
+            this.autoReconnectFuture.ifPresent(future -> future.cancel(true));
+            this.autoReconnectFuture = Optional.empty();
             return true;
         }
         return false;
     }
 
     private boolean autoReconnectIsInProgress() {
-        if (nonNull(autoReconnectFuture)) {
-            return autoReconnectFuture.isDone();
-        } else {
-            return false;
-        }
+        return this.autoReconnectFuture.isPresent();
     }
 
     @Subscribe(value = Preference.CALLER)
@@ -344,11 +341,12 @@ public class Proxy {
             if (autoReconnectIsInProgress()) {
                 return;
             }
-            this.autoReconnectFuture = this.autoReconnectExecutorService.submit(() -> {
+            this.autoReconnectFuture = Optional.of(this.autoReconnectExecutorService.submit(() -> {
                 DISCORD_BOT.sendAutoReconnectMessage();
                 delayBeforeReconnect();
+                this.autoReconnectFuture = Optional.empty();
                 this.connect();
-            });
+            }));
         }
     }
 
@@ -364,7 +362,7 @@ public class Proxy {
                         + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
             }
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
-                CLIENT_LOG.info("Reconnecting in %d", i);
+                if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in %d", i);
                 Wait.waitALittle(1);
             }
             return true;
