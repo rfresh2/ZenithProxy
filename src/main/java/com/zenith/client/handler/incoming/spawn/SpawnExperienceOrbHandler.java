@@ -31,9 +31,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SpawnExperienceOrbHandler implements HandlerRegistry.IncomingHandler<ServerSpawnExpOrbPacket, PorkClientSession> {
+public class SpawnExperienceOrbHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnExpOrbPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerSpawnExpOrbPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerSpawnExpOrbPacket packet, @NonNull PorkClientSession session) {
         CACHE.getEntityCache().add(new EntityExperienceOrb()
                 .setExp(packet.getExp())
                 .setEntityId(packet.getEntityId())
@@ -41,7 +41,6 @@ public class SpawnExperienceOrbHandler implements HandlerRegistry.IncomingHandle
                 .setY(packet.getY())
                 .setZ(packet.getZ())
         );
-        return true;
     }
 
     @Override

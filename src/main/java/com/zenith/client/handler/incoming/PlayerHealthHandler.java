@@ -31,10 +31,10 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<ServerPlayerHealthPacket, PorkClientSession> {
+public class PlayerHealthHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerHealthPacket, PorkClientSession> {
 
     @Override
-    public boolean apply(@NonNull ServerPlayerHealthPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerPlayerHealthPacket packet, @NonNull PorkClientSession session) {
         if (packet.getHealth() != CACHE.getPlayerCache().getThePlayer().getHealth()) {
             MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(
                     new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth())));
@@ -47,7 +47,6 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
         CACHE_LOG.debug("Player food: %d", packet.getFood())
                 .debug("Player saturation: %f", packet.getSaturation())
                 .debug("Player health: %f", packet.getHealth());
-        return true;
     }
 
     @Override

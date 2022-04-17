@@ -36,9 +36,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SpawnPlayerHandler implements HandlerRegistry.IncomingHandler<ServerSpawnPlayerPacket, PorkClientSession> {
+public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPlayerPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerSpawnPlayerPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerSpawnPlayerPacket packet, @NonNull PorkClientSession session) {
         Entity entity = new EntityPlayer()
                 .setEntityId(packet.getEntityId())
                 .setUuid(packet.getUUID())
@@ -51,7 +51,6 @@ public class SpawnPlayerHandler implements HandlerRegistry.IncomingHandler<Serve
         CACHE.getEntityCache().add(entity);
         CACHE.getTabListCache().getTabList().get(packet.getUUID())
                         .ifPresent(playerEntry -> EVENT_BUS.dispatch(new NewPlayerInVisualRangeEvent(playerEntry, entity)));
-        return true;
     }
 
     @Override

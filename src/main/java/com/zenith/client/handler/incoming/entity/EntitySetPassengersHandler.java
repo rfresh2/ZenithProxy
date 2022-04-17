@@ -34,16 +34,15 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntitySetPassengersHandler implements HandlerRegistry.IncomingHandler<ServerEntitySetPassengersPacket, PorkClientSession> {
+public class EntitySetPassengersHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntitySetPassengersPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntitySetPassengersPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntitySetPassengersPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setPassengerIds(Arrays.stream(packet.getPassengerIds()).boxed().collect(Collectors.toList()));
         } else {
             CLIENT_LOG.warn("Received ServerEntitySetPassengersPacket for invalid entity (id=%d)", packet.getEntityId());
         }
-        return true;
     }
 
     @Override

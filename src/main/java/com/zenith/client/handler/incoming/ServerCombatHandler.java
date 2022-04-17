@@ -9,10 +9,10 @@ import com.zenith.util.handler.HandlerRegistry;
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.EVENT_BUS;
 
-public class ServerCombatHandler implements HandlerRegistry.IncomingHandler<ServerCombatPacket, PorkClientSession> {
+public class ServerCombatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerCombatPacket, PorkClientSession> {
 
     @Override
-    public boolean apply(ServerCombatPacket packet, PorkClientSession session) {
+    public void applyAsync(ServerCombatPacket packet, PorkClientSession session) {
         if (packet.getPlayerId() == CACHE.getPlayerCache().getEntityId()) {
             if (packet.getCombatState() == CombatState.ENTITY_DEAD) {
                 // packet.message() value is basically garbage on 2b2t, same message on any death, might have more info on other servers
@@ -20,7 +20,6 @@ public class ServerCombatHandler implements HandlerRegistry.IncomingHandler<Serv
                 EVENT_BUS.dispatch(new DeathEvent());
             }
         }
-        return true;
     }
 
     @Override

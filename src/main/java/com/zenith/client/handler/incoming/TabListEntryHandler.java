@@ -33,9 +33,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class TabListEntryHandler implements HandlerRegistry.IncomingHandler<ServerPlayerListEntryPacket, PorkClientSession> {
+public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListEntryPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerPlayerListEntryPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerPlayerListEntryPacket packet, @NonNull PorkClientSession session) {
         Consumer<PlayerListEntry> consumer = entry -> {
             throw new IllegalStateException();
         };
@@ -59,7 +59,6 @@ public class TabListEntryHandler implements HandlerRegistry.IncomingHandler<Serv
         for (PlayerListEntry entry : packet.getEntries()) {
             consumer.accept(entry);
         }
-        return true;
     }
 
     @Override

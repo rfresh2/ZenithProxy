@@ -22,6 +22,7 @@ package com.zenith.util.handler;
 
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.util.PacketHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -29,10 +30,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.daporkchop.lib.logging.Logger;
-import com.zenith.util.ObjObjBoolFunction;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -44,7 +46,7 @@ import static com.zenith.util.Constants.*;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class HandlerRegistry<S extends Session> {
     @NonNull
-    protected final Map<Class<? extends Packet>, ObjObjBoolFunction<? extends Packet, S>> inboundHandlers;
+    protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
 
     @NonNull
     protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
@@ -55,12 +57,14 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     protected final Logger logger;
 
+    protected static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newFixedThreadPool(10); // idk 10 seems reasonable but might need to adjust
+
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.received)  {
             this.logger.debug("Received packet: %s@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
-        ObjObjBoolFunction<P, S> handler = (ObjObjBoolFunction<P, S>) this.inboundHandlers.get(packet.getClass());
+        PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
         return handler == null || handler.apply(packet, session);
     }
 
@@ -84,7 +88,7 @@ public class HandlerRegistry<S extends Session> {
         }
     }
 
-    public interface IncomingHandler<P extends Packet, S extends Session> extends ObjObjBoolFunction<P, S> {
+    public interface IncomingHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
         /**
          * Handle a packet
          *
@@ -92,8 +96,31 @@ public class HandlerRegistry<S extends Session> {
          * @param session the session the packet was received on
          * @return whether or not the packet should be forwarded
          */
-        @Override
         boolean apply(P packet, S session);
+
+        Class<P> getPacketClass();
+    }
+
+    public interface AsyncIncomingHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
+
+        /**
+         * Call async (non-cancellable)
+         * @param packet packet to handle
+         * @param session Session the packet was received on
+         */
+        @Override
+        default boolean apply(P packet, S session) {
+            ASYNC_EXECUTOR_SERVICE.submit(() -> {
+                try {
+                    applyAsync(packet, session);
+                } catch (final Throwable e) {
+                    CLIENT_LOG.error("Async handler error", e);
+                }
+            });
+            return true;
+        }
+
+        void applyAsync(P packet, S session);
 
         Class<P> getPacketClass();
     }
@@ -116,7 +143,8 @@ public class HandlerRegistry<S extends Session> {
     @Setter
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
-        protected final Map<Class<? extends Packet>, ObjObjBoolFunction<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
+
+        protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
         protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
 
@@ -132,12 +160,17 @@ public class HandlerRegistry<S extends Session> {
             });
         }
 
-        public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull ObjObjBoolFunction<P, S> handler) {
+        public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull PacketHandler<P, S> handler) {
             this.inboundHandlers.put(clazz, handler);
             return this;
         }
 
         public Builder<S> registerInbound(@NonNull IncomingHandler<? extends Packet, S> handler) {
+            this.inboundHandlers.put(handler.getPacketClass(), handler);
+            return this;
+        }
+
+        public Builder<S> registerInbound(@NonNull AsyncIncomingHandler<? extends Packet, S> handler) {
             this.inboundHandlers.put(handler.getPacketClass(), handler);
             return this;
         }

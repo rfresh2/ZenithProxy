@@ -31,14 +31,13 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SetWindowItemsHandler implements HandlerRegistry.IncomingHandler<ServerWindowItemsPacket, PorkClientSession> {
+public class SetWindowItemsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerWindowItemsPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerWindowItemsPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerWindowItemsPacket packet, @NonNull PorkClientSession session) {
         if (packet.getWindowId() == 0)  { //player inventory
             ItemStack[] dst = CACHE.getPlayerCache().getInventory();
             System.arraycopy(packet.getItems(), 0, dst, 0, Math.min(dst.length, packet.getItems().length));
         }
-        return true;
     }
 
     @Override

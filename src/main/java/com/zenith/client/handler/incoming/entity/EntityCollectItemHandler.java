@@ -30,11 +30,10 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityCollectItemHandler implements HandlerRegistry.IncomingHandler<ServerEntityCollectItemPacket, PorkClientSession> {
+public class EntityCollectItemHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityCollectItemPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityCollectItemPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityCollectItemPacket packet, @NonNull PorkClientSession session) {
         CACHE.getEntityCache().remove(packet.getCollectedEntityId());
-        return true;
     }
 
     @Override

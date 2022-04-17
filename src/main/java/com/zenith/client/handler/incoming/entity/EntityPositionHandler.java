@@ -31,9 +31,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<ServerEntityPositionPacket, PorkClientSession> {
+public class EntityPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityPositionPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setX(entity.getX() + packet.getMovementX())
@@ -42,7 +42,6 @@ public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<Se
         } else {
             CLIENT_LOG.warn("Received ServerEntityPositionPacket for invalid entity (id=%d)", packet.getEntityId());
         }
-        return true;
     }
 
     @Override

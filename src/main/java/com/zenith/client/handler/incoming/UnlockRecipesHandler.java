@@ -30,9 +30,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class UnlockRecipesHandler implements HandlerRegistry.IncomingHandler<ServerUnlockRecipesPacket, PorkClientSession> {
+public class UnlockRecipesHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnlockRecipesPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerUnlockRecipesPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerUnlockRecipesPacket packet, @NonNull PorkClientSession session) {
         CACHE.getStatsCache()
                 .setActivateFiltering(packet.getActivateFiltering())
                 .setOpenCraftingBook(packet.getOpenCraftingBook());
@@ -50,8 +50,6 @@ public class UnlockRecipesHandler implements HandlerRegistry.IncomingHandler<Ser
                 CACHE.getStatsCache().getAlreadyKnownRecipes().removeAll(packet.getRecipes());
                 break;
         }
-
-        return true;
     }
 
     @Override

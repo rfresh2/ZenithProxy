@@ -31,9 +31,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityRotationHandler implements HandlerRegistry.IncomingHandler<ServerEntityRotationPacket, PorkClientSession> {
+public class EntityRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRotationPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityRotationPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityRotationPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setYaw(packet.getYaw())
@@ -41,7 +41,6 @@ public class EntityRotationHandler implements HandlerRegistry.IncomingHandler<Se
         } else {
             CLIENT_LOG.warn("Received ServerEntityRotationPacket for invalid entity (id=%d)", packet.getEntityId());
         }
-        return true;
     }
 
     @Override

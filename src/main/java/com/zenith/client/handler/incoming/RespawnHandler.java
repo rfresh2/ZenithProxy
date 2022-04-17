@@ -31,9 +31,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, PorkClientSession> {
+public class RespawnHandler implements HandlerRegistry.AsyncIncomingHandler<ServerRespawnPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerRespawnPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerRespawnPacket packet, @NonNull PorkClientSession session) {
         if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
             CACHE.reset(false);
             // only partial reset chunk and entity cache?
@@ -43,7 +43,6 @@ public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRes
                 .setGameMode(packet.getGameMode())
                 .setWorldType(packet.getWorldType())
                 .setDifficulty(packet.getDifficulty());
-        return true;
     }
 
     @Override

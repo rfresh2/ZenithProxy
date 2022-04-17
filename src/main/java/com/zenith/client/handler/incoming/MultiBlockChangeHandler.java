@@ -29,13 +29,12 @@ import com.zenith.util.handler.HandlerRegistry;
 /**
  * @author DaPorkchop_
  */
-public class MultiBlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerMultiBlockChangePacket, PorkClientSession> {
+public class MultiBlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<ServerMultiBlockChangePacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerMultiBlockChangePacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerMultiBlockChangePacket packet, @NonNull PorkClientSession session) {
         for (BlockChangeRecord record : packet.getRecords())    {
             BlockChangeHandler.handleChange(record);
         }
-        return true;
     }
 
     @Override

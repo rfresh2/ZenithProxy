@@ -30,14 +30,13 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class PlayerPositionHandler implements HandlerRegistry.IncomingHandler<ClientPlayerPositionPacket, PorkServerConnection> {
+public class PlayerPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionPacket, PorkServerConnection> {
     @Override
-    public boolean apply(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
+    public void applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
         CACHE.getPlayerCache()
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ());
-        return true;
     }
 
     @Override

@@ -34,9 +34,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SpawnMobHandler implements HandlerRegistry.IncomingHandler<ServerSpawnMobPacket, PorkClientSession> {
+public class SpawnMobHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnMobPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerSpawnMobPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerSpawnMobPacket packet, @NonNull PorkClientSession session) {
         CACHE.getEntityCache().add(new EntityMob()
                 .setMobType(packet.getType())
                 .setEntityId(packet.getEntityId())
@@ -52,7 +52,6 @@ public class SpawnMobHandler implements HandlerRegistry.IncomingHandler<ServerSp
                 .setVelZ(packet.getMotionZ())
                 .setMetadata(Lists.newArrayList(packet.getMetadata()))
         );
-        return true;
     }
 
     @Override

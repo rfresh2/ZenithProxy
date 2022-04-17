@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityEffectHandler implements HandlerRegistry.IncomingHandler<ServerEntityEffectPacket, PorkClientSession> {
+public class EntityEffectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityEffectPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityEffectPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityEffectPacket packet, @NonNull PorkClientSession session) {
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
@@ -51,7 +51,6 @@ public class EntityEffectHandler implements HandlerRegistry.IncomingHandler<Serv
         } catch (ClassCastException e)  {
             CLIENT_LOG.warn("Received ServerEntityEffectPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
         }
-        return true;
     }
 
     @Override

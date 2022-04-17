@@ -30,14 +30,13 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class TabListDataHandler implements HandlerRegistry.IncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
+public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
         WEBSOCKET_SERVER.firePlayerListUpdate();
-        return true;
     }
 
     @Override

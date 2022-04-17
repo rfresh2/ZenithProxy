@@ -31,16 +31,15 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityHeadLookHandler implements HandlerRegistry.IncomingHandler<ServerEntityHeadLookPacket, PorkClientSession> {
+public class EntityHeadLookHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityHeadLookPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityHeadLookPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityHeadLookPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setHeadYaw(packet.getHeadYaw());
         } else {
             CLIENT_LOG.warn("Received ServerEntityHeadLookPacket for invalid entity (id=%d)", packet.getEntityId());
         }
-        return true;
     }
 
     @Override

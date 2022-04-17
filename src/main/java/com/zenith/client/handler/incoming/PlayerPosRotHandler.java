@@ -34,9 +34,9 @@ import static java.util.Objects.isNull;
 /**
  * @author DaPorkchop_
  */
-public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<ServerPlayerPositionRotationPacket, PorkClientSession> {
+public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerPositionRotationPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerPlayerPositionRotationPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerPlayerPositionRotationPacket packet, @NonNull PorkClientSession session) {
         PlayerCache cache = CACHE.getPlayerCache();
         cache
                 .setX((packet.getRelativeElements().contains(PositionElement.X) ? cache.getX() : 0.0d) + packet.getX())
@@ -47,7 +47,6 @@ public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<Serv
         if (isNull(session.getProxy().getCurrentPlayer().get())) {
             session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
         }
-        return true;
     }
 
     @Override

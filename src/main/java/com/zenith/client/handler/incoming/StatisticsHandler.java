@@ -33,14 +33,13 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class StatisticsHandler implements HandlerRegistry.IncomingHandler<ServerStatisticsPacket, PorkClientSession> {
+public class StatisticsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerStatisticsPacket, PorkClientSession> {
     protected static final long PACKET_STATISTICS_OFFSET = PUnsafe.pork_getOffset(ServerStatisticsPacket.class, "statistics");
 
     @Override
-    public boolean apply(@NonNull ServerStatisticsPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerStatisticsPacket packet, @NonNull PorkClientSession session) {
         CACHE.getStatsCache().getStatistics().putAll(packet.getStatistics()); //cache all locally
         PUnsafe.putObject(packet, PACKET_STATISTICS_OFFSET, new HashMap<>(CACHE.getStatsCache().getStatistics())); //replace statistics packet with copy of local
-        return true;
     }
 
     @Override

@@ -30,13 +30,12 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SetSlotHandler implements HandlerRegistry.IncomingHandler<ServerSetSlotPacket, PorkClientSession> {
+public class SetSlotHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSetSlotPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerSetSlotPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerSetSlotPacket packet, @NonNull PorkClientSession session) {
         if (packet.getWindowId() == 0 && packet.getSlot() >= 0) {
             CACHE.getPlayerCache().getInventory()[packet.getSlot()] = packet.getItem();
         }
-        return true;
     }
 
     @Override

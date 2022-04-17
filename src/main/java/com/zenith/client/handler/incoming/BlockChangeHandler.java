@@ -34,7 +34,7 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<ServerBlockChangePacket, PorkClientSession> {
+public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBlockChangePacket, PorkClientSession> {
     static void handleChange(@NonNull BlockChangeRecord record) {
         Position pos = record.getPosition();
         if (pos.getY() < 0 || pos.getY() >= 256) {
@@ -56,9 +56,8 @@ public class BlockChangeHandler implements HandlerRegistry.IncomingHandler<Serve
     }
 
     @Override
-    public boolean apply(@NonNull ServerBlockChangePacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerBlockChangePacket packet, @NonNull PorkClientSession session) {
         handleChange(packet.getRecord());
-        return true;
     }
 
     @Override

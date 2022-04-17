@@ -30,13 +30,12 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityDestroyHandler implements HandlerRegistry.IncomingHandler<ServerEntityDestroyPacket, PorkClientSession> {
+public class EntityDestroyHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityDestroyPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityDestroyPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityDestroyPacket packet, @NonNull PorkClientSession session) {
         for (int id : packet.getEntityIds())    {
             CACHE.getEntityCache().remove(id);
         }
-        return true;
     }
 
     @Override

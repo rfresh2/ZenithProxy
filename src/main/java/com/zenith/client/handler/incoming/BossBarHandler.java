@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class BossBarHandler implements HandlerRegistry.IncomingHandler<ServerBossBarPacket, PorkClientSession> {
+public class BossBarHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBossBarPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerBossBarPacket pck, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerBossBarPacket pck, @NonNull PorkClientSession session) {
         Consumer<ServerBossBarPacket> consumer = packet -> {
             throw new IllegalStateException();
         };
@@ -59,7 +59,6 @@ public class BossBarHandler implements HandlerRegistry.IncomingHandler<ServerBos
                 break;
         }
         consumer.accept(pck);
-        return true;
     }
 
     @Override

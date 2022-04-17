@@ -33,7 +33,7 @@ import static com.zenith.util.Constants.*;
 public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
     @Override
     public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull PorkServerConnection session) {
-       SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+        SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
         return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
     }
 

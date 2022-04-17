@@ -34,9 +34,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityRemoveEffectListener implements HandlerRegistry.IncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
+public class EntityRemoveEffectListener implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityRemoveEffectPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityRemoveEffectPacket packet, @NonNull PorkClientSession session) {
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
@@ -52,7 +52,6 @@ public class EntityRemoveEffectListener implements HandlerRegistry.IncomingHandl
         } catch (ClassCastException e)  {
             CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
         }
-        return true;
     }
 
     @Override

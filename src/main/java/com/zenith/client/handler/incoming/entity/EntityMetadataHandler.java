@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityMetadataHandler implements HandlerRegistry.IncomingHandler<ServerEntityMetadataPacket, PorkClientSession> {
+public class EntityMetadataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityMetadataPacket, PorkClientSession> {
     @Override
-    public boolean apply(@NonNull ServerEntityMetadataPacket packet, @NonNull PorkClientSession session) {
+    public void applyAsync(@NonNull ServerEntityMetadataPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             MAINLOOP:
@@ -51,7 +51,6 @@ public class EntityMetadataHandler implements HandlerRegistry.IncomingHandler<Se
         } else {
             CLIENT_LOG.warn("Received ServerEntityMetadataPacket for invalid entity (id=%d)", packet.getEntityId());
         }
-        return true;
     }
 
     @Override
