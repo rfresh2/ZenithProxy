@@ -185,7 +185,7 @@ public class Proxy {
     public void disconnect() {
         CACHE.reset(true);
         if (this.isConnected()) {
-            this.client.getSession().disconnect(MANUAL_DISCONNECT, false);
+            this.client.getSession().disconnect(MANUAL_DISCONNECT);
         }
     }
 

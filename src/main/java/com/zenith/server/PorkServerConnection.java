@@ -165,6 +165,11 @@ public class PorkServerConnection implements Session, SessionListener {
     }
 
     @Override
+    public <T> T getFlag(String key, T def) {
+        return this.session.getFlag(key, def);
+    }
+
+    @Override
     public void setFlag(String key, Object value) {
         this.session.setFlag(key, value);
     }
@@ -240,17 +245,7 @@ public class PorkServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void disconnect(String reason, boolean wait) {
-        this.session.disconnect(reason, wait);
-    }
-
-    @Override
     public void disconnect(String reason, Throwable cause) {
         this.session.disconnect(reason, cause);
-    }
-
-    @Override
-    public void disconnect(String reason, Throwable cause, boolean wait) {
-        this.session.disconnect(reason, cause, wait);
     }
 }

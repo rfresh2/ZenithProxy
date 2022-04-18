@@ -92,7 +92,7 @@ dependencies {
         exclude group: "io.netty", module: "netty-all"
         exclude group: "com.github.steveice10", module: "packetlib"
     }
-    shade ('com.github.GeyserMC:PacketLib:1.4') {
+    shade ('com.github.GeyserMC:PacketLib:1.5') {
         exclude group: "io.netty", module: "netty-all"
     }
 
