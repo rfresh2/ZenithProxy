@@ -23,8 +23,6 @@ package com.zenith.server;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.crypt.PacketEncryption;
-import com.github.steveice10.packetlib.event.server.ServerListener;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
@@ -49,7 +47,7 @@ import static com.zenith.util.Constants.*;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class PorkServerConnection implements SessionListener, Session {
+public class PorkServerConnection implements Session, SessionListener {
     @NonNull
     protected final Proxy proxy;
 
@@ -62,10 +60,10 @@ public class PorkServerConnection implements SessionListener, Session {
     protected boolean isLoggedIn = false;
 
     @Override
-    public void packetReceived(Session session, Packet packet) {
+    public void packetReceived(PacketReceivedEvent event) {
         this.lastPacket = System.currentTimeMillis();
-        if (SERVER_HANDLERS.handleInbound(packet, this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
-            this.proxy.getClient().send(packet); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
+            this.proxy.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
 
@@ -81,13 +79,8 @@ public class PorkServerConnection implements SessionListener, Session {
     }
 
     @Override
-    public void packetSent(Session session, Packet packet) {
-        SERVER_HANDLERS.handlePostOutgoing(packet, this);
-    }
-
-    @Override
-    public void packetError(PacketErrorEvent event) {
-
+    public void packetSent(PacketSentEvent event) {
+        SERVER_HANDLERS.handlePostOutgoing(event.getPacket(), this);
     }
 
     @Override
@@ -172,11 +165,6 @@ public class PorkServerConnection implements SessionListener, Session {
     }
 
     @Override
-    public <T> T getFlag(String key, T def) {
-        return this.session.getFlag(key, def);
-    }
-
-    @Override
     public void setFlag(String key, Object value) {
         this.session.setFlag(key, value);
     }
@@ -202,28 +190,13 @@ public class PorkServerConnection implements SessionListener, Session {
     }
 
     @Override
-    public void callPacketReceived(Packet packet) {
-        this.session.callPacketReceived(packet);
-    }
-
-    @Override
-    public void callPacketSent(Packet packet) {
-        this.session.callPacketSent(packet);
-    }
-
-    @Override
     public int getCompressionThreshold() {
         return this.session.getCompressionThreshold();
     }
 
     @Override
-    public void setCompressionThreshold(int threshold, boolean validateCompression) {
-        this.session.setCompressionThreshold(threshold, validateCompression);
-    }
-
-    @Override
-    public void enableEncryption(PacketEncryption encryption) {
-        this.session.enableEncryption(encryption);
+    public void setCompressionThreshold(int threshold) {
+        this.session.setCompressionThreshold(threshold);
     }
 
     @Override
@@ -267,7 +240,17 @@ public class PorkServerConnection implements SessionListener, Session {
     }
 
     @Override
+    public void disconnect(String reason, boolean wait) {
+        this.session.disconnect(reason, wait);
+    }
+
+    @Override
     public void disconnect(String reason, Throwable cause) {
         this.session.disconnect(reason, cause);
+    }
+
+    @Override
+    public void disconnect(String reason, Throwable cause, boolean wait) {
+        this.session.disconnect(reason, cause, wait);
     }
 }

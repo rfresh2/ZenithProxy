@@ -20,22 +20,16 @@
 
 package com.zenith.client;
 
+import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
-import com.github.steveice10.packetlib.tcp.*;
+import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.zenith.Proxy;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.oio.OioEventLoopGroup;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
 
-import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -51,8 +45,8 @@ public class PorkClientSession extends TcpClientSession {
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
 
-    public PorkClientSession(String host, int port, PacketProtocol protocol, TcpClientSession client, @NonNull Proxy proxy) {
-        super(host, port, protocol);
+    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Proxy proxy) {
+        super(host, port, protocol, client, null);
         this.proxy = proxy;
         this.addListener(new ClientListener(this.proxy, this));
     }
@@ -69,8 +63,8 @@ public class PorkClientSession extends TcpClientSession {
     }
 
     @Override
-    public void disconnect(String reason, Throwable cause) {
-        super.disconnect(reason, cause);
+    public void disconnect(String reason, Throwable cause, boolean wait) {
+        super.disconnect(reason, cause, wait);
         serverProbablyOff = false;
         if (cause == null) {
             serverProbablyOff = true;
