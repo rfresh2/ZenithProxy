@@ -90,7 +90,9 @@ dependencies {
 
     shade ("com.github.5cmc:mcprotocollib:$mcprotocollibVersion") {
         exclude group: "io.netty", module: "netty-all"
+        exclude group: "com.github.steveice10", module: "packetlib"
     }
+    shade 'com.github.GeyserMC:PacketLib:1.4'
     shade "com.discord4j:discord4j-core:$discord4jVersion"
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
