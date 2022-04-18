@@ -83,7 +83,7 @@ public class Gui {
                 .addStateListener(WindowState.CLOSED, () -> {
                     SHOULD_RECONNECT = false;
                     if (Proxy.getInstance().isConnected()) {
-                        Proxy.getInstance().getClient().getSession().disconnect("user disconnect");
+                        Proxy.getInstance().getClient().disconnect("user disconnect");
                     }
                     this.window.release();
                 })

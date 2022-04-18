@@ -45,7 +45,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, packet.getMessage().substring(1));
                 return true;
             } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
-                session.getProxy().getClient().getSession().disconnect(MANUAL_DISCONNECT);
+                session.getProxy().getClient().disconnect(MANUAL_DISCONNECT);
                 return false;
             } else if ("!q".equalsIgnoreCase(packet.getMessage())) {
                 session.send(new ServerChatPacket(String.format("§7[§5Zenith§9Proxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, packet.getMessage()), true));

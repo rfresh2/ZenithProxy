@@ -44,7 +44,7 @@ public class AntiAFK extends Module {
 
     private void rotateTick() {
         if (rotateTimer.tick(1500L, true)) {
-            this.proxy.getClient().getSession().send(new ClientPlayerRotationPacket(
+            this.proxy.getClient().send(new ClientPlayerRotationPacket(
                     true,
                     -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat(),
                     -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat()
@@ -65,7 +65,7 @@ public class AntiAFK extends Module {
                 // calculate a walk, to keep things simple let's just walk +x and -x
                 double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
                 CLIENT_LOG.debug("Walking to new X: " + newX);
-                this.proxy.getClient().getSession().send(
+                this.proxy.getClient().send(
                         new ClientPlayerPositionPacket(
                                 true,
                                 newX,
@@ -78,7 +78,7 @@ public class AntiAFK extends Module {
 
     private void swingTick() {
         if (swingTickTimer.tick(3000L, true)) {
-            this.proxy.getClient().getSession().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+            this.proxy.getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
         }
     }
 }

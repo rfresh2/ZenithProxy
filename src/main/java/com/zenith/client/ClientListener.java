@@ -139,6 +139,11 @@ public class ClientListener implements SessionListener {
     }
 
     @Override
+    public void packetError(PacketErrorEvent event) {
+        CLIENT_LOG.error(event.getCause());
+    }
+
+    @Override
     public void connected(ConnectedEvent event) {
         WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());

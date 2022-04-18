@@ -2,6 +2,7 @@ package com.zenith.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
+import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
 import com.github.steveice10.mc.protocol.data.status.VersionInfo;
@@ -30,9 +31,8 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
                         this.proxy.getCurrentPlayer().get() == null ? 0 : 1,
                         new GameProfile[0]
                 ),
-                getMotd(),
-                this.proxy.getServerIcon(),
-                true
+                Message.fromString(getMotd()),
+                this.proxy.getServerIcon()
         );
     }
 

@@ -44,7 +44,7 @@ ext {
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
-    mcprotocollibVersion = "a275d2c0d6"
+    mcprotocollibVersion = "1.12.2-3-5cmc-SNAPSHOT"
     porklibVersion = "0.5.7-SNAPSHOT"
     discord4jVersion = "3.2.1"
     pounceVersion = "main-SNAPSHOT"
@@ -73,6 +73,7 @@ repositories {
         name = "maven central"
         url = "https://repo1.maven.org/maven2/"
     }
+    mavenLocal()
 }
 
 configurations {
@@ -90,11 +91,9 @@ dependencies {
 
     shade ("com.github.5cmc:mcprotocollib:$mcprotocollibVersion") {
         exclude group: "io.netty", module: "netty-all"
-        exclude group: "com.github.steveice10", module: "packetlib"
     }
-    shade ('com.github.GeyserMC:PacketLib:1.5') {
-        exclude group: "io.netty", module: "netty-all"
-    }
+
+    shade 'io.netty:netty-codec-haproxy:4.1.70.Final'
 
     shade "com.discord4j:discord4j-core:$discord4jVersion"
 

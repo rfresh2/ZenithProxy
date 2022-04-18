@@ -63,7 +63,7 @@ public class PorkServerConnection implements Session, SessionListener {
     public void packetReceived(PacketReceivedEvent event) {
         this.lastPacket = System.currentTimeMillis();
         if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
-            this.proxy.getClient().getSession().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+            this.proxy.getClient().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
 
@@ -81,6 +81,11 @@ public class PorkServerConnection implements Session, SessionListener {
     @Override
     public void packetSent(PacketSentEvent event) {
         SERVER_HANDLERS.handlePostOutgoing(event.getPacket(), this);
+    }
+
+    @Override
+    public void packetError(PacketErrorEvent event) {
+        SERVER_LOG.error(event.getCause());
     }
 
     @Override

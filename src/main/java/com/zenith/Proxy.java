@@ -30,13 +30,12 @@ import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import com.github.steveice10.packetlib.Client;
-import com.github.steveice10.packetlib.Server;
-import com.github.steveice10.packetlib.SessionFactory;
+import com.github.steveice10.packetlib.BuiltinFlags;
+import com.github.steveice10.packetlib.tcp.TcpClientSession;
+import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.PorkClientSession;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
-import com.zenith.mc.PorkSessionFactory;
 import com.zenith.module.AntiAFK;
 import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
@@ -78,11 +77,10 @@ public class Proxy {
     @Getter
     protected static Proxy instance;
 
-    protected final SessionFactory sessionFactory = new PorkSessionFactory(this);
     //protected final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected MinecraftProtocol protocol;
-    protected Client client;
-    protected Server server;
+    protected TcpClientSession client;
+    protected TcpServer server;
     protected LoggerInner loggerInner;
     @Setter
     protected BufferedImage serverIcon;
@@ -153,12 +151,13 @@ public class Proxy {
             CACHE.reset(true);
             clientTickExecutorService.scheduleAtFixedRate(() -> {
                 if (this.isConnected()
-                        && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && ((MinecraftProtocol) this.client.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
                         && isNull(this.currentPlayer.get())) {
                     MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(new ClientTickEvent()));
                 }
             }, 0, 50L, TimeUnit.MILLISECONDS);
             activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
+            this.connect();
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
@@ -185,7 +184,7 @@ public class Proxy {
     public void disconnect() {
         CACHE.reset(true);
         if (this.isConnected()) {
-            this.client.getSession().disconnect(MANUAL_DISCONNECT);
+            this.client.disconnect(MANUAL_DISCONNECT);
         }
     }
 
@@ -222,13 +221,14 @@ public class Proxy {
             int port = CONFIG.client.server.port;
 
             CLIENT_LOG.info("Connecting to %s:%d...", address, port);
-            this.client = new Client(address, port, this.protocol, this.sessionFactory);
-            this.client.getSession().connect(true);
+            this.client = new PorkClientSession(address, port, this.protocol, this);
+            this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
+            this.client.connect(true);
         }
     }
 
     public boolean isConnected() {
-        return this.client != null && this.client.getSession() != null && this.client.getSession().isConnected();
+        return this.client != null && this.client.isConnected();
     }
 
     public void startServer() {
@@ -248,7 +248,7 @@ public class Proxy {
                 int port = CONFIG.server.bind.port;
 
                 SERVER_LOG.info("Starting server on %s:%d...", address, port);
-                this.server = new Server(address, port, MinecraftProtocol.class, this.sessionFactory);
+                this.server = new TcpServer(address, port, MinecraftProtocol.class);
                 this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, java.net.Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
@@ -356,7 +356,7 @@ public class Proxy {
     public boolean delayBeforeReconnect() {
         try {
             final int countdown;
-            if (((PorkClientSession) client.getSession()).isServerProbablyOff()) {
+            if (((PorkClientSession) client).isServerProbablyOff()) {
                 countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
 
                 this.reconnectCounter = 0;
@@ -456,7 +456,7 @@ public class Proxy {
             ForkJoinPool.commonPool().execute(() -> {
                 PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
                 if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
-                    Proxy.getInstance().getClient().getSession().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                    Proxy.getInstance().getClient().send(new ClientRequestPacket(ClientRequest.RESPAWN));
                 }
             });
         }

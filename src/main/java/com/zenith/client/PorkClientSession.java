@@ -20,7 +20,6 @@
 
 package com.zenith.client;
 
-import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.zenith.Proxy;
@@ -45,8 +44,8 @@ public class PorkClientSession extends TcpClientSession {
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
 
-    public PorkClientSession(String host, int port, PacketProtocol protocol, Client client, @NonNull Proxy proxy) {
-        super(host, port, protocol, client, null);
+    public PorkClientSession(String host, int port, PacketProtocol protocol, @NonNull Proxy proxy) {
+        super(host, port, protocol);
         this.proxy = proxy;
         this.addListener(new ClientListener(this.proxy, this));
     }
