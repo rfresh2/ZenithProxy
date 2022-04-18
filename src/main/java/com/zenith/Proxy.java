@@ -42,10 +42,7 @@ import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
-import com.zenith.util.Config;
-import com.zenith.util.LoggerInner;
-import com.zenith.util.Queue;
-import com.zenith.util.Wait;
+import com.zenith.util.*;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.common.util.PorkUtil;
@@ -118,7 +115,13 @@ public class Proxy {
 
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
-            ForkJoinPool.commonPool().submit(() -> DISCORD_BOT.start(instance));
+            ForkJoinPool.commonPool().submit(() -> {
+                try {
+                    DISCORD_BOT.start(instance);
+                } catch (final Throwable e) {
+                    DISCORD_LOG.error(e);
+                }
+            });
         }
 
         instance.start();
