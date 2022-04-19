@@ -34,7 +34,7 @@ public class SetSlotHandler implements HandlerRegistry.AsyncIncomingHandler<Serv
     @Override
     public boolean applyAsync(@NonNull ServerSetSlotPacket packet, @NonNull PorkClientSession session) {
         if (packet.getWindowId() == 0 && packet.getSlot() >= 0) {
-            CACHE.getPlayerCache().getInventory()[packet.getSlot()] = packet.getItem();
+            CACHE.getPlayerCache().setInventorySlot(packet.getItem(), packet.getSlot());
         }
         return true;
     }

@@ -20,6 +20,7 @@
 
 package com.zenith.util.cache.data;
 
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
@@ -35,6 +36,8 @@ import com.zenith.util.cache.CachedData;
 import com.zenith.util.cache.data.entity.EntityPlayer;
 
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
@@ -92,6 +95,40 @@ public class PlayerCache implements CachedData {
                 this.getYaw(),
                 this.getPitch()
         );
+    }
+
+    public void setInventory(ItemStack[] newInventory) {
+        System.arraycopy(newInventory, 0, this.inventory, 0, Math.min(this.inventory.length, newInventory.length));
+        final Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
+        equipment.put(EquipmentSlot.HELMET, this.inventory[5]);
+        equipment.put(EquipmentSlot.CHESTPLATE, this.inventory[6]);
+        equipment.put(EquipmentSlot.LEGGINGS, this.inventory[7]);
+        equipment.put(EquipmentSlot.BOOTS, this.inventory[8]);
+        equipment.put(EquipmentSlot.OFF_HAND, this.inventory[9]);
+        this.getThePlayer().setEquipment(equipment);
+    }
+
+    public void setInventorySlot(ItemStack newItemStack, int slot) {
+        this.inventory[slot] = newItemStack;
+        if (slot >=5 && slot <= 9) {
+            switch (slot) {
+                case 5:
+                    this.getThePlayer().getEquipment().put(EquipmentSlot.HELMET, newItemStack);
+                    break;
+                case 6:
+                    this.getThePlayer().getEquipment().put(EquipmentSlot.CHESTPLATE, newItemStack);
+                    break;
+                case 7:
+                    this.getThePlayer().getEquipment().put(EquipmentSlot.LEGGINGS, newItemStack);
+                    break;
+                case 8:
+                    this.getThePlayer().getEquipment().put(EquipmentSlot.BOOTS, newItemStack);
+                    break;
+                case 9:
+                    this.getThePlayer().getEquipment().put(EquipmentSlot.OFF_HAND, newItemStack);
+                    break;
+            }
+        }
     }
 
     public double getX()    {

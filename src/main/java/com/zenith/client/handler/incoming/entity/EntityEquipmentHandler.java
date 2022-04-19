@@ -40,6 +40,7 @@ public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHand
                 entity.getEquipment().put(packet.getSlot(), packet.getItem());
             } else {
                 CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
+                return false;
             }
             return true;
         } catch (ClassCastException e)  {
