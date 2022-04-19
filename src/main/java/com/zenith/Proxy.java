@@ -157,7 +157,6 @@ public class Proxy {
                 }
             }, 0, 50L, TimeUnit.MILLISECONDS);
             activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
-            this.connect();
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
