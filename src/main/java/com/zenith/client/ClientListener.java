@@ -23,6 +23,7 @@ package com.zenith.client;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
@@ -57,15 +58,15 @@ public class ClientListener implements SessionListener {
     private boolean disconnected = true;
 
     @Override
-    public void packetReceived(PacketReceivedEvent event) {
-        if (event.getPacket() instanceof ServerPlayerListDataPacket) {
-            parse2bQueue(((ServerPlayerListDataPacket) event.getPacket()).getHeader());
+    public void packetReceived(Session session, Packet packet) {
+        if (packet instanceof ServerPlayerListDataPacket) {
+            parse2bQueue(((ServerPlayerListDataPacket) packet).getHeader());
         }
         try {
-            if (CLIENT_HANDLERS.handleInbound(event.getPacket(), this.session)) {
+            if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
                 PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
                 if (connection != null && ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)    {
-                    connection.send(event.getPacket());
+                    connection.send(packet);
                 }
             }
         } catch (RuntimeException e) {
@@ -129,9 +130,9 @@ public class ClientListener implements SessionListener {
     }
 
     @Override
-    public void packetSent(PacketSentEvent event) {
+    public void packetSent(Session session, Packet packet) {
         try {
-            CLIENT_HANDLERS.handlePostOutgoing(event.getPacket(), this.session);
+            CLIENT_HANDLERS.handlePostOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.alert(e);
             throw new RuntimeException(e);

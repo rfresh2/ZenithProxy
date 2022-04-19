@@ -21,12 +21,14 @@
 package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
+import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
@@ -34,12 +36,22 @@ import static com.zenith.util.Constants.*;
 public class EntityPropertiesHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityPropertiesPacket, PorkClientSession> {
     @Override
     public void applyAsync(@NonNull ServerEntityPropertiesPacket packet, @NonNull PorkClientSession session) {
-        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity != null) {
-            entity.setProperties(packet.getAttributes());
-        } else {
-            CLIENT_LOG.warn("Received ServerEntityPropertiesPacket for invalid entity (id=%d)", packet.getEntityId());
+        int iterCount = 0;
+        while (!updateEntity(packet)) {
+            Wait.waitALittleMs(50);
+            iterCount++;
+            if (iterCount > 3) {
+                CLIENT_LOG.warn("Received ServerEntityPropertiesPacket for invalid entity (id=%d)", packet.getEntityId());
+                break;
+            }
         }
+    }
+
+    private boolean updateEntity(ServerEntityPropertiesPacket packet) {
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (isNull(entity)) return false;
+        entity.setProperties(packet.getAttributes());
+        return true;
     }
 
     @Override

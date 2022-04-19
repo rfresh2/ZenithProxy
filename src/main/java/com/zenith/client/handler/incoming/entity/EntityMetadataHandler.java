@@ -22,12 +22,14 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
+import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
@@ -35,22 +37,32 @@ import static com.zenith.util.Constants.*;
 public class EntityMetadataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityMetadataPacket, PorkClientSession> {
     @Override
     public void applyAsync(@NonNull ServerEntityMetadataPacket packet, @NonNull PorkClientSession session) {
-        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity != null) {
-            MAINLOOP:
-            for (EntityMetadata metadata : packet.getMetadata())    {
-                for (int i = entity.getMetadata().size() - 1; i >= 0; i--)  {
-                    EntityMetadata old = entity.getMetadata().get(i);
-                    if (old.getId() == metadata.getId())    {
-                        entity.getMetadata().set(i, metadata);
-                        continue MAINLOOP;
-                    }
-                }
-                entity.getMetadata().add(metadata);
+        int iterCount = 0;
+        while (!updateCache(packet)) {
+            Wait.waitALittleMs(50);
+            iterCount++;
+            if (iterCount > 3) {
+                CLIENT_LOG.warn("Received EntityMetadataPacket for invalid entity: " + packet.getEntityId());
+                break;
             }
-        } else {
-            CLIENT_LOG.warn("Received ServerEntityMetadataPacket for invalid entity (id=%d)", packet.getEntityId());
         }
+    }
+
+    final boolean updateCache(ServerEntityMetadataPacket packet) {
+        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (isNull(entity)) return false;
+        MAINLOOP:
+        for (EntityMetadata metadata : packet.getMetadata())    {
+            for (int i = entity.getMetadata().size() - 1; i >= 0; i--)  {
+                EntityMetadata old = entity.getMetadata().get(i);
+                if (old.getId() == metadata.getId())    {
+                    entity.getMetadata().set(i, metadata);
+                    continue MAINLOOP;
+                }
+            }
+            entity.getMetadata().add(metadata);
+        }
+        return true;
     }
 
     @Override

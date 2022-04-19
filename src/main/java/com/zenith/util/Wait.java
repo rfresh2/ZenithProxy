@@ -11,6 +11,14 @@ public class Wait {
         }
     }
 
+    public static void waitALittleMs(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void waitSpinLoop() {
         while (true) {
             try {

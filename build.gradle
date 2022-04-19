@@ -44,7 +44,7 @@ ext {
     javawebsocketVersion = "1.4.0"
     junitVersion = "4.12"
     lombokVersion = "1.16.20"
-    mcprotocollibVersion = "1.12.2-3-5cmc-SNAPSHOT"
+    mcprotocollibVersion = "1.12.2-SNAPSHOT"
     porklibVersion = "0.5.7-SNAPSHOT"
     discord4jVersion = "3.2.1"
     pounceVersion = "main-SNAPSHOT"

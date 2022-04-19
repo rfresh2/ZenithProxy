@@ -22,7 +22,14 @@ package com.zenith.server;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientPluginMessagePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.packetlib.Session;
+import com.github.steveice10.packetlib.crypt.PacketEncryption;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
@@ -60,10 +67,10 @@ public class PorkServerConnection implements Session, SessionListener {
     protected boolean isLoggedIn = false;
 
     @Override
-    public void packetReceived(PacketReceivedEvent event) {
+    public void packetReceived(Session session, Packet packet) {
         this.lastPacket = System.currentTimeMillis();
-        if (SERVER_HANDLERS.handleInbound(event.getPacket(), this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
-            this.proxy.getClient().send(event.getPacket()); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+        if (SERVER_HANDLERS.handleInbound(packet, this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
+            this.proxy.getClient().send(packet); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
         }
     }
 
@@ -79,8 +86,8 @@ public class PorkServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void packetSent(PacketSentEvent event) {
-        SERVER_HANDLERS.handlePostOutgoing(event.getPacket(), this);
+    public void packetSent(Session session, Packet packet) {
+        SERVER_HANDLERS.handlePostOutgoing(packet, this);
     }
 
     @Override
@@ -200,13 +207,28 @@ public class PorkServerConnection implements Session, SessionListener {
     }
 
     @Override
+    public void callPacketReceived(Packet packet) {
+        this.session.callPacketReceived(packet);
+    }
+
+    @Override
+    public void callPacketSent(Packet packet) {
+        this.session.callPacketSent(packet);
+    }
+
+    @Override
     public int getCompressionThreshold() {
         return this.session.getCompressionThreshold();
     }
 
     @Override
-    public void setCompressionThreshold(int threshold) {
-        this.session.setCompressionThreshold(threshold);
+    public void setCompressionThreshold(int threshold, boolean validateCompression) {
+        this.session.setCompressionThreshold(threshold, validateCompression);
+    }
+
+    @Override
+    public void enableEncryption(PacketEncryption encryption) {
+        this.session.enableEncryption(encryption);
     }
 
     @Override

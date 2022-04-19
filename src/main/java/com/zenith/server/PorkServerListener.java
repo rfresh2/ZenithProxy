@@ -73,7 +73,6 @@ public class PorkServerListener implements ServerListener {
 
     @Override
     public void sessionAdded(SessionAddedEvent event) {
-        //SERVER_LOG.info("session added");
         if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getSubProtocol() != SubProtocol.STATUS) {
             PorkServerConnection connection = new PorkServerConnection(this.proxy, event.getSession());
             event.getSession().addListener(connection);
