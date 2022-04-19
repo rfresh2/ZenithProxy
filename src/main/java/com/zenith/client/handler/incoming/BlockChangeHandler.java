@@ -35,11 +35,11 @@ import static com.zenith.util.Constants.*;
  * @author DaPorkchop_
  */
 public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBlockChangePacket, PorkClientSession> {
-    static void handleChange(@NonNull BlockChangeRecord record) {
+    static boolean handleChange(@NonNull BlockChangeRecord record) {
         Position pos = record.getPosition();
         if (pos.getY() < 0 || pos.getY() >= 256) {
             CLIENT_LOG.error("Received out-of-bounds block update: %s", record);
-            return;
+            return true;
         }
         Column column = CACHE.getChunkCache().get(pos.getX() >> 4, pos.getZ() >> 4);
         if (column != null) {
@@ -47,17 +47,20 @@ public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<
             if (chunk == null) {
                 chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
                 SERVER_LOG.warn("No Chunk found for block update with position: " + pos);
+                return false;
             }
             chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
             SERVER_LOG.debug("Updating block: [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "] Id: " + record.getBlock().getId() + ", data: " + record.getBlock().getData());
+            return true;
         } else {
             SERVER_LOG.error("Received block update for uncached chunk with position: " + pos);
+            return false;
         }
     }
 
     @Override
-    public void applyAsync(@NonNull ServerBlockChangePacket packet, @NonNull PorkClientSession session) {
-        handleChange(packet.getRecord());
+    public boolean applyAsync(@NonNull ServerBlockChangePacket packet, @NonNull PorkClientSession session) {
+        return handleChange(packet.getRecord());
     }
 
     @Override

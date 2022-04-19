@@ -21,27 +21,27 @@
 package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
+import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
  */
 public class EntityPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityPositionPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
-        if (entity != null) {
-            entity.setX(entity.getX() + packet.getMovementX())
-                    .setY(entity.getY() + packet.getMovementY())
-                    .setZ(entity.getZ() + packet.getMovementZ());
-        } else {
-            CLIENT_LOG.warn("Received ServerEntityPositionPacket for invalid entity (id=%d)", packet.getEntityId());
-        }
+        if (isNull(entity)) return false;
+        entity.setX(entity.getX() + packet.getMovementX())
+                .setY(entity.getY() + packet.getMovementY())
+                .setZ(entity.getZ() + packet.getMovementZ());
+        return true;
     }
 
     @Override

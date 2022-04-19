@@ -34,7 +34,7 @@ import static com.zenith.util.Constants.*;
 public class EntityAttachHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityAttachPacket, PorkClientSession> {
 
     @Override
-    public void applyAsync(ServerEntityAttachPacket packet, PorkClientSession session) {
+    public boolean applyAsync(ServerEntityAttachPacket packet, PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             if (packet.getAttachedToId() == -1) {
@@ -42,8 +42,10 @@ public class EntityAttachHandler implements HandlerRegistry.AsyncIncomingHandler
             } else {
                 entity.setLeashed(true).setLeashedId(packet.getAttachedToId());
             }
+            return true;
         } else {
             CLIENT_LOG.warn("Received ServerEntityAttachPacket for invalid entity (id=%d)", packet.getEntityId());
+            return false;
         }
     }
 

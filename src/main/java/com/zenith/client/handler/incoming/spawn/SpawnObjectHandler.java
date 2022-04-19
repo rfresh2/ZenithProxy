@@ -33,7 +33,7 @@ import static com.zenith.util.Constants.*;
  */
 public class SpawnObjectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnObjectPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerSpawnObjectPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerSpawnObjectPacket packet, @NonNull PorkClientSession session) {
         CACHE.getEntityCache().add(new EntityObject()
                 .setObjectType(packet.getType())
                 .setData(packet.getData())
@@ -48,6 +48,7 @@ public class SpawnObjectHandler implements HandlerRegistry.AsyncIncomingHandler<
                 .setVelY(packet.getMotionY())
                 .setVelZ(packet.getMotionZ())
         );
+        return true;
     }
 
     @Override

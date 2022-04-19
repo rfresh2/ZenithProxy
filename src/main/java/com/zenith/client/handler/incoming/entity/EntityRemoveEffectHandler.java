@@ -14,7 +14,7 @@ import static java.util.Objects.nonNull;
 public class EntityRemoveEffectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
 
     @Override
-    public void applyAsync(ServerEntityRemoveEffectPacket packet, PorkClientSession session) {
+    public boolean applyAsync(ServerEntityRemoveEffectPacket packet, PorkClientSession session) {
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (nonNull(entity)) {
@@ -23,10 +23,12 @@ public class EntityRemoveEffectHandler implements HandlerRegistry.AsyncIncomingH
                         .collect(Collectors.toList()));
             } else {
                 CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for invalid entity (id=%d)", packet.getEntityId());
+                return false;
             }
         } catch (ClassCastException e) {
             CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
         }
+        return true;
     }
 
     @Override

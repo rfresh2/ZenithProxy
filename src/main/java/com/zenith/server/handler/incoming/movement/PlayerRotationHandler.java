@@ -32,10 +32,11 @@ import static com.zenith.util.Constants.*;
  */
 public class PlayerRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerRotationPacket, PorkServerConnection> {
     @Override
-    public void applyAsync(@NonNull ClientPlayerRotationPacket packet, @NonNull PorkServerConnection session) {
+    public boolean applyAsync(@NonNull ClientPlayerRotationPacket packet, @NonNull PorkServerConnection session) {
         CACHE.getPlayerCache()
                 .setYaw((float) packet.getYaw())
                 .setPitch((float) packet.getPitch());
+        return true;
     }
 
     @Override

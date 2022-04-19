@@ -32,11 +32,12 @@ import static com.zenith.util.Constants.*;
  */
 public class PlayerPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionPacket, PorkServerConnection> {
     @Override
-    public void applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
+    public boolean applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
         CACHE.getPlayerCache()
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ());
+        return true;
     }
 
     @Override

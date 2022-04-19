@@ -32,11 +32,12 @@ import static com.zenith.util.Constants.*;
  */
 public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
         WEBSOCKET_SERVER.firePlayerListUpdate();
+        return true;
     }
 
     @Override

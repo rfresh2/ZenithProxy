@@ -37,7 +37,7 @@ import static com.zenith.util.Constants.*;
  */
 public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerChatPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
         try {
             CHAT_LOG.info(packet.getMessage());
             final String messageString = AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString();
@@ -57,6 +57,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);
         }
+        return true;
     }
 
     @Override

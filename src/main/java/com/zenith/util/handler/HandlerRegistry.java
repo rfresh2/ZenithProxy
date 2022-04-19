@@ -23,6 +23,7 @@ package com.zenith.util.handler;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.util.PacketHandler;
+import com.zenith.util.Wait;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -112,7 +113,14 @@ public class HandlerRegistry<S extends Session> {
         default boolean apply(P packet, S session) {
             ASYNC_EXECUTOR_SERVICE.submit(() -> {
                 try {
-                    applyAsync(packet, session);
+                    int iterCount = 0;
+                    while (!applyAsync(packet, session)) {
+                        Wait.waitALittleMs(50);
+                        if (iterCount++ > 3) {
+                            CLIENT_LOG.warn("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
+                            break;
+                        }
+                    }
                 } catch (final Throwable e) {
                     CLIENT_LOG.error("Async handler error", e);
                 }
@@ -120,7 +128,7 @@ public class HandlerRegistry<S extends Session> {
             return true;
         }
 
-        void applyAsync(P packet, S session);
+        boolean applyAsync(P packet, S session);
 
         Class<P> getPacketClass();
     }

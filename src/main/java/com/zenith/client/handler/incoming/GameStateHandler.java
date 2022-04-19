@@ -34,10 +34,11 @@ import static com.zenith.util.Constants.*;
  */
 public class GameStateHandler implements HandlerRegistry.AsyncIncomingHandler<ServerNotifyClientPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerNotifyClientPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerNotifyClientPacket packet, @NonNull PorkClientSession session) {
         if (packet.getNotification() == ClientNotification.CHANGE_GAMEMODE) {
             CACHE.getPlayerCache().setGameMode((GameMode) packet.getValue());
         }
+        return true;
     }
 
     @Override

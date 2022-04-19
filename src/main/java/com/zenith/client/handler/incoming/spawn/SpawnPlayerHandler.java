@@ -38,7 +38,7 @@ import static com.zenith.util.Constants.*;
  */
 public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPlayerPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerSpawnPlayerPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerSpawnPlayerPacket packet, @NonNull PorkClientSession session) {
         Entity entity = new EntityPlayer()
                 .setEntityId(packet.getEntityId())
                 .setUuid(packet.getUUID())
@@ -51,6 +51,7 @@ public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<
         CACHE.getEntityCache().add(entity);
         CACHE.getTabListCache().getTabList().get(packet.getUUID())
                         .ifPresent(playerEntry -> EVENT_BUS.dispatch(new NewPlayerInVisualRangeEvent(playerEntry, entity)));
+        return true;
     }
 
     @Override

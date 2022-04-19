@@ -34,7 +34,7 @@ import static com.zenith.util.Constants.*;
  */
 public class AdvancementsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerAdvancementsPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerAdvancementsPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerAdvancementsPacket packet, @NonNull PorkClientSession session) {
         if (packet.doesReset()) {
             CACHE.getStatsCache().getAdvancements().clear();
             CACHE.getStatsCache().getProgress().clear();
@@ -42,6 +42,7 @@ public class AdvancementsHandler implements HandlerRegistry.AsyncIncomingHandler
         CACHE.getStatsCache().getAdvancements().addAll(packet.getAdvancements());
         CACHE.getStatsCache().getAdvancements().removeIf(advancement -> packet.getRemovedAdvancements().contains(advancement.getId()));
         packet.getProgress().forEach((id, criterions) -> CACHE.getStatsCache().getProgress().computeIfAbsent(id, s -> new HashMap<>()).putAll(criterions));
+        return true;
     }
 
     @Override

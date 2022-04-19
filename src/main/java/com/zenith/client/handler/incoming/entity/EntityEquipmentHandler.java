@@ -33,7 +33,7 @@ import static com.zenith.util.Constants.*;
  */
 public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityEquipmentPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerEntityEquipmentPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityEquipmentPacket packet, @NonNull PorkClientSession session) {
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
@@ -41,8 +41,10 @@ public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHand
             } else {
                 CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
             }
+            return true;
         } catch (ClassCastException e)  {
             CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
+            return false;
         }
     }
 

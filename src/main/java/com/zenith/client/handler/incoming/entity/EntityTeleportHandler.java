@@ -33,7 +33,7 @@ import static com.zenith.util.Constants.*;
  */
 public class EntityTeleportHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityTeleportPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerEntityTeleportPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityTeleportPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setX(packet.getX())
@@ -41,8 +41,10 @@ public class EntityTeleportHandler implements HandlerRegistry.AsyncIncomingHandl
                     .setZ(packet.getZ())
                     .setYaw(packet.getYaw())
                     .setPitch(packet.getPitch());
+            return true;
         } else {
             CLIENT_LOG.warn("Received ServerEntityTeleportPacket for invalid entity (id=%d)", packet.getEntityId());
+            return false;
         }
     }
 

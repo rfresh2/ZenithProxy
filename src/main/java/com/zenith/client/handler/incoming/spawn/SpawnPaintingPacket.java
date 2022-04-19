@@ -33,7 +33,7 @@ import static com.zenith.util.Constants.*;
  */
 public class SpawnPaintingPacket implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPaintingPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerSpawnPaintingPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerSpawnPaintingPacket packet, @NonNull PorkClientSession session) {
         CACHE.getEntityCache().add(new EntityPainting()
                 .setDirection(packet.getDirection())
                 .setPaintingType(packet.getPaintingType())
@@ -43,6 +43,7 @@ public class SpawnPaintingPacket implements HandlerRegistry.AsyncIncomingHandler
                 .setY(packet.getPosition().getY())
                 .setZ(packet.getPosition().getZ())
         );
+        return true;
     }
 
     @Override

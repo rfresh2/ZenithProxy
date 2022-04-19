@@ -38,7 +38,7 @@ public class UpdateTileEntityHandler implements HandlerRegistry.AsyncIncomingHan
     protected static final long COLUMN_TILEENTITIES_OFFSET = PUnsafe.pork_getOffset(Column.class, "tileEntities");
 
     @Override
-    public void applyAsync(@NonNull ServerUpdateTileEntityPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerUpdateTileEntityPacket packet, @NonNull PorkClientSession session) {
         Column column = CACHE.getChunkCache().get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
         CompoundTag[] oldArray = column.getTileEntities();
         int index = -1;
@@ -73,6 +73,7 @@ public class UpdateTileEntityHandler implements HandlerRegistry.AsyncIncomingHan
             packet.getNBT().put(new IntTag("z", packet.getPosition().getZ()));
         }
         PUnsafe.putObject(column, COLUMN_TILEENTITIES_OFFSET, newArray);
+        return true;
     }
 
     @Override

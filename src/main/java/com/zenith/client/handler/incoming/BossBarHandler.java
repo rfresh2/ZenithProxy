@@ -28,37 +28,44 @@ import com.zenith.util.handler.HandlerRegistry;
 import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
  */
 public class BossBarHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBossBarPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerBossBarPacket pck, @NonNull PorkClientSession session) {
-        Consumer<ServerBossBarPacket> consumer = packet -> {
+    public boolean applyAsync(@NonNull ServerBossBarPacket packet, @NonNull PorkClientSession session) {
+        Consumer<ServerBossBarPacket> consumer = pck -> {
             throw new IllegalStateException();
         };
-        switch (pck.getAction())    {
+        switch (packet.getAction())    {
             case ADD:
                 consumer = CACHE.getBossBarCache()::add;
                 break;
             case REMOVE:
+                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
                 consumer = CACHE.getBossBarCache()::remove;
                 break;
             case UPDATE_HEALTH:
-                consumer = packet -> CACHE.getBossBarCache().get(packet).setHealth(packet.getHealth());
+                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
+                consumer = pck -> CACHE.getBossBarCache().get(pck).setHealth(pck.getHealth());
                 break;
             case UPDATE_TITLE:
-                consumer = packet -> CACHE.getBossBarCache().get(packet).setTitle(packet.getTitle());
+                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
+                consumer = pck -> CACHE.getBossBarCache().get(pck).setTitle(pck.getTitle());
                 break;
             case UPDATE_STYLE:
-                consumer = packet -> CACHE.getBossBarCache().get(packet).setColor(packet.getColor()).setDivision(packet.getDivision());
+                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
+                consumer = pck -> CACHE.getBossBarCache().get(pck).setColor(pck.getColor()).setDivision(pck.getDivision());
                 break;
             case UPDATE_FLAGS:
-                consumer = packet -> CACHE.getBossBarCache().get(packet).setDarkenSky(packet.getDarkenSky()).setDragonBar(packet.isDragonBar());
+                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
+                consumer = pck -> CACHE.getBossBarCache().get(pck).setDarkenSky(pck.getDarkenSky()).setDragonBar(pck.isDragonBar());
                 break;
         }
-        consumer.accept(pck);
+        consumer.accept(packet);
+        return true;
     }
 
     @Override

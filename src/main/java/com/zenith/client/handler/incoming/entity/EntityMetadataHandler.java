@@ -36,19 +36,7 @@ import static java.util.Objects.isNull;
  */
 public class EntityMetadataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityMetadataPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerEntityMetadataPacket packet, @NonNull PorkClientSession session) {
-        int iterCount = 0;
-        while (!updateCache(packet)) {
-            Wait.waitALittleMs(50);
-            iterCount++;
-            if (iterCount > 3) {
-                CLIENT_LOG.warn("Received EntityMetadataPacket for invalid entity: " + packet.getEntityId());
-                break;
-            }
-        }
-    }
-
-    final boolean updateCache(ServerEntityMetadataPacket packet) {
+    public boolean applyAsync(@NonNull ServerEntityMetadataPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (isNull(entity)) return false;
         MAINLOOP:

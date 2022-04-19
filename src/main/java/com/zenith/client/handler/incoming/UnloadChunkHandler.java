@@ -32,8 +32,9 @@ import static com.zenith.util.Constants.*;
  */
 public class UnloadChunkHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnloadChunkPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerUnloadChunkPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerUnloadChunkPacket packet, @NonNull PorkClientSession session) {
         CACHE.getChunkCache().remove(packet.getX(), packet.getZ());
+        return true;
     }
 
     @Override

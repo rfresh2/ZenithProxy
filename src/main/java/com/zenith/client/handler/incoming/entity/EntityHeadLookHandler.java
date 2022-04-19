@@ -35,19 +35,7 @@ import static java.util.Objects.isNull;
  */
 public class EntityHeadLookHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityHeadLookPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerEntityHeadLookPacket packet, @NonNull PorkClientSession session) {
-        int iterCount = 0;
-        while(!updateEntity(packet)) {
-            Wait.waitALittleMs(50);
-            iterCount++;
-            if (iterCount > 3) {
-                CLIENT_LOG.warn("Received ServerEntityHeadLookPacket for invalid entity (id=%d)", packet.getEntityId());
-                break;
-            }
-        }
-    }
-
-    private boolean updateEntity(ServerEntityHeadLookPacket packet) {
+    public boolean applyAsync(@NonNull ServerEntityHeadLookPacket packet, @NonNull PorkClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (isNull(entity)) return false;
         entity.setHeadYaw(packet.getHeadYaw());

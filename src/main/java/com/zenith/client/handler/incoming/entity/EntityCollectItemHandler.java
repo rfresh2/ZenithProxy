@@ -26,14 +26,19 @@ import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
  */
 public class EntityCollectItemHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityCollectItemPacket, PorkClientSession> {
     @Override
-    public void applyAsync(@NonNull ServerEntityCollectItemPacket packet, @NonNull PorkClientSession session) {
-        CACHE.getEntityCache().remove(packet.getCollectedEntityId());
+    public boolean applyAsync(@NonNull ServerEntityCollectItemPacket packet, @NonNull PorkClientSession session) {
+        if (nonNull(CACHE.getEntityCache().get(packet.getCollectedEntityId()))) {
+            CACHE.getEntityCache().remove(packet.getCollectedEntityId());
+            return true;
+        }
+        return false;
     }
 
     @Override

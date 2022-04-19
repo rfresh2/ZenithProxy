@@ -37,9 +37,10 @@ public class StatisticsHandler implements HandlerRegistry.AsyncIncomingHandler<S
     protected static final long PACKET_STATISTICS_OFFSET = PUnsafe.pork_getOffset(ServerStatisticsPacket.class, "statistics");
 
     @Override
-    public void applyAsync(@NonNull ServerStatisticsPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerStatisticsPacket packet, @NonNull PorkClientSession session) {
         CACHE.getStatsCache().getStatistics().putAll(packet.getStatistics()); //cache all locally
         PUnsafe.putObject(packet, PACKET_STATISTICS_OFFSET, new HashMap<>(CACHE.getStatsCache().getStatistics())); //replace statistics packet with copy of local
+        return true;
     }
 
     @Override
