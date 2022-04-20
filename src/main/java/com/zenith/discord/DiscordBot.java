@@ -75,7 +75,7 @@ public class DiscordBot {
         commands.add(new ChatRelayCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
-            if (event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
+            if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
                     EVENT_BUS.dispatch(new DiscordMessageSentEvent(event.getMessage().getContent()));
                     return;
@@ -286,7 +286,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
-        if (CONFIG.discord.chatRelay.enable) {
+        if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
                 relayRestChannel.get().createMessage(event.message).subscribe();
