@@ -1,6 +1,9 @@
 package com.zenith.discord;
 
 import com.collarmc.pounce.Subscribe;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.discord.command.*;
 import com.zenith.event.proxy.*;
@@ -31,6 +34,8 @@ import static com.zenith.util.Constants.*;
 public class DiscordBot {
 
     private RestClient restClient;
+    private Supplier<RestChannel> mainRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)));
+    private Supplier<RestChannel> relayRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId)));
     private GatewayDiscordClient client;
     private Proxy proxy;
     public List<Command> commands = new ArrayList<>();
@@ -67,8 +72,15 @@ public class DiscordBot {
         commands.add(new ProxyClientConnectionCommand(this.proxy));
         commands.add(new ActiveHoursCommand(this.proxy));
         commands.add(new DisplayCoordsCommand(this.proxy));
+        commands.add(new ChatRelayCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
+            if (event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
+                if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
+                    EVENT_BUS.dispatch(new DiscordMessageSentEvent(event.getMessage().getContent()));
+                    return;
+                }
+            }
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
                 return;
             }
@@ -272,6 +284,27 @@ public class DiscordBot {
                 .build());
     }
 
+    @Subscribe
+    public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
+        if (CONFIG.discord.chatRelay.enable) {
+            if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
+            try {
+                relayRestChannel.get().createMessage(event.message).subscribe();
+            } catch (final Throwable e) {
+                DISCORD_LOG.error(e);
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
+        if (CONFIG.discord.chatRelay.enable) {
+            if (this.proxy.isConnected()) {
+                this.proxy.getClient().send(new ClientChatPacket(event.message));
+            }
+        }
+    }
+
     public void sendAutoReconnectMessage() {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("AutoReconnecting in " + CONFIG.client.extra.autoReconnect.delaySeconds + "s")
@@ -281,8 +314,7 @@ public class DiscordBot {
 
     private void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
         try {
-            RestChannel restChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
-            restChannel.createMessage(MessageCreateSpec.builder()
+            mainRestChannel.get().createMessage(MessageCreateSpec.builder()
                     .addEmbed(embedCreateSpec)
                     .build().asRequest()).subscribe();
         } catch (final Exception e) {

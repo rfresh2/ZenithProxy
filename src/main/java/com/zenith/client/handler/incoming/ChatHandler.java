@@ -23,6 +23,7 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.event.proxy.DeathMessageEvent;
+import com.zenith.event.proxy.ServerChatReceivedEvent;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import com.zenith.client.PorkClientSession;
@@ -54,6 +55,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
                 session.disconnect("heck");
             }
             WEBSOCKET_SERVER.fireChat(packet.getMessage());
+            EVENT_BUS.dispatch(new ServerChatReceivedEvent(messageString));
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);
         }

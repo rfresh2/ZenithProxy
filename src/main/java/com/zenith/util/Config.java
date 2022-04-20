@@ -51,6 +51,9 @@ public final class Config {
     public static final class Client {
         public Extra extra = new Extra();
         public Server server = new Server();
+        // auto-connect proxy on process start
+        // todo: might make discord command to configure this
+        public boolean autoConnect = false;
 
         public static final class Extra {
             public AntiAFK antiafk = new AntiAFK();
@@ -256,9 +259,16 @@ public final class Config {
         public String accountOwnerRoleId = "";
         public boolean enable = false;
         public String prefix = ".";
-        public boolean reportCoords = true;
+        public boolean reportCoords = false;
         // internal use for update command state persistence
         public boolean isUpdating = false;
+        public ChatRelay chatRelay = new ChatRelay();
+
+        public static class ChatRelay {
+            public boolean enable = false;
+            public boolean ignoreQueue = true;
+            public String channelId = "";
+        }
     }
 
     private transient boolean donePostLoad = false;
