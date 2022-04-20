@@ -55,7 +55,7 @@ public class TabList {
         WEBSOCKET_SERVER.updatePlayer(coolEntry);
     }
 
-    public void remove(@NonNull PlayerListEntry entry) {
+    public Optional<PlayerEntry> remove(@NonNull PlayerListEntry entry) {
         PlayerEntry removed = this.entries.remove(entry.getProfile().getId());
         if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
             CACHE_LOG.error("Could not remove player with UUID: %s", entry.getProfile().getId());
@@ -63,6 +63,7 @@ public class TabList {
             CACHE_LOG.debug("Removed %s (%s) from tab list", removed.name, removed.id);
             WEBSOCKET_SERVER.removePlayer(removed.id);
         }
+        return Optional.ofNullable(removed);
     }
 
     public PlayerEntry get(@NonNull PlayerListEntry entry) {

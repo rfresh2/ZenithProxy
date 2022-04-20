@@ -24,12 +24,14 @@ import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
+import com.zenith.util.cache.data.tab.PlayerEntry;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.*;
@@ -55,8 +57,8 @@ public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler
                 break;
             case REMOVE_PLAYER:
                 consumer = entry -> {
-                    CACHE.getTabListCache().getTabList().remove(entry);
-                    EVENT_BUS.dispatch(new ServerPlayerDisconnectedEvent(entry.getProfile().getName()));
+                    Optional<PlayerEntry> playerEntry = CACHE.getTabListCache().getTabList().remove(entry);
+                    playerEntry.ifPresent(e -> EVENT_BUS.dispatch(new ServerPlayerDisconnectedEvent(e.getName())));
                 };
                 break;
             case UPDATE_LATENCY:
