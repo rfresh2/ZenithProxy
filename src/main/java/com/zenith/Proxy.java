@@ -96,7 +96,7 @@ public class Proxy {
     private int queuePosition = 0;
     private Instant connectTime;
     private Optional<Boolean> isPrio = Optional.empty();
-    private Optional<Future<?>> autoReconnectFuture = Optional.empty();
+    volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
 //    protected final Gui gui = new Gui();
@@ -322,10 +322,13 @@ public class Proxy {
     }
 
     public boolean cancelAutoReconnect() {
-        if (autoReconnectIsInProgress()) {
-            this.autoReconnectFuture.ifPresent(future -> future.cancel(true));
-            this.autoReconnectFuture = Optional.empty();
-            return true;
+        synchronized (this.autoReconnectFuture) {
+            if (autoReconnectIsInProgress()) {
+                Future<?> future = this.autoReconnectFuture.get();
+                this.autoReconnectFuture = Optional.empty();
+                future.cancel(true);
+                return true;
+            }
         }
         return false;
     }
@@ -346,8 +349,10 @@ public class Proxy {
             this.autoReconnectFuture = Optional.of(this.autoReconnectExecutorService.submit(() -> {
                 DISCORD_BOT.sendAutoReconnectMessage();
                 delayBeforeReconnect();
-                this.autoReconnectFuture = Optional.empty();
-                this.connect();
+                synchronized (this.autoReconnectFuture) {
+                    if (this.autoReconnectFuture.isPresent()) this.connect();
+                    this.autoReconnectFuture = Optional.empty();
+                }
             }));
         }
     }
