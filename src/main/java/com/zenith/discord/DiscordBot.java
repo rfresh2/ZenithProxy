@@ -295,7 +295,7 @@ public class DiscordBot {
                     if (!message.startsWith("<")) {
                         String[] split = message.split(" ");
                         if (split.length > 2 && split[1].startsWith("whispers")) {
-                            message = "<@&" + CONFIG.discord.accountOwnerRoleId + ">" + message;
+                            message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
                         }
                     }
                 }
