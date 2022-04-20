@@ -63,7 +63,12 @@ public abstract class EntityEquipment extends Entity {
                 effect.isAmbient(),
                 effect.isShowParticles()
         )));
-        this.equipment.forEach((slot, stack) -> consumer.accept(new ServerEntityEquipmentPacket(this.entityId, slot, stack)));
+        if (this instanceof EntityPlayer) {
+            if (!((EntityPlayer) this).isSelfPlayer()) {
+                // skip sending equipment packets for current player because we already send this in SetWindowsItem packet
+                this.equipment.forEach((slot, stack) -> consumer.accept(new ServerEntityEquipmentPacket(this.entityId, slot, stack)));
+            }
+        }
         super.addPackets(consumer);
     }
 }
