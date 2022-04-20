@@ -294,7 +294,7 @@ public class DiscordBot {
                 if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
                     if (!message.startsWith("<")) {
                         String[] split = message.split(" ");
-                        if (split.length > 2 && split[1].equals("whispers")) {
+                        if (split.length > 2 && split[1].startsWith("whispers")) {
                             message = "<@&" + CONFIG.discord.accountOwnerRoleId + ">" + message;
                         }
                     }
