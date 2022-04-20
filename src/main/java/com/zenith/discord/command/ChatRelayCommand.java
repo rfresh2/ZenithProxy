@@ -19,7 +19,9 @@ public class ChatRelayCommand extends Command {
     public ChatRelayCommand(Proxy proxy) {
         super(proxy, "chatRelay", "Configure the ChatRelay feature"
                 + "\nUsage:"
-                + "\n  " + CONFIG.discord.prefix + "chatRelay on/off");
+                + "\n  " + CONFIG.discord.prefix + "chatRelay on/off"
+                + "\n  " + CONFIG.discord.prefix + "chatRelay connectionMessages on/off"
+                + "\n  " + CONFIG.discord.prefix + "chatRelay whisperMentions on/off");
     }
 
     @Override
@@ -42,13 +44,51 @@ public class ChatRelayCommand extends Command {
             embedBuilder
                     .title("Chat Relay Off!")
                     .color(Color.CYAN);
+        } else if (commandArgs.size() < 2) {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+        } else if (commandArgs.get(1).equalsIgnoreCase("connectionMessages")) {
+            if (commandArgs.get(2).equalsIgnoreCase("on")) {
+                CONFIG.discord.chatRelay.connectionMessages = true;
+                embedBuilder
+                        .title("Connection Messages Relay On!")
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
+                CONFIG.discord.chatRelay.connectionMessages = false;
+                embedBuilder
+                        .title("Connection Messages Relay Off!")
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            }
+        } else if (commandArgs.get(1).equalsIgnoreCase("whisperMentions")) {
+            if (commandArgs.get(2).equalsIgnoreCase("on")) {
+                CONFIG.discord.chatRelay.mentionRoleOnWhisper = true;
+                embedBuilder
+                        .title("Whisper Mentions Relay On!")
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
+                CONFIG.discord.chatRelay.mentionRoleOnWhisper = false;
+                embedBuilder
+                        .title("Whisper Mentions Relay Off!")
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            }
         } else {
             embedBuilder
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)
                     .color(Color.RUBY);
         }
-
         saveConfig();
         return MessageCreateSpec.builder()
                 .addEmbed(embedBuilder

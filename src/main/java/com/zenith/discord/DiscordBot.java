@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
@@ -289,7 +290,40 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(event.message).subscribe();
+                String message = event.message;
+                if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
+                    if (!message.startsWith("<")) {
+                        String[] split = message.split(" ");
+                        if (split.length > 2 && split[1].equals("whispers")) {
+                            message = "<@&" + CONFIG.discord.accountOwnerRoleId + ">" + message;
+                        }
+                    }
+                }
+                relayRestChannel.get().createMessage(message).subscribe();
+            } catch (final Throwable e) {
+                DISCORD_LOG.error(e);
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
+        if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
+            if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
+            try {
+                relayRestChannel.get().createMessage(event.playerName + " connected").subscribe();
+            } catch (final Throwable e) {
+                DISCORD_LOG.error(e);
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
+        if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
+            if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
+            try {
+                relayRestChannel.get().createMessage(event.playerName + " disconnected").subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error(e);
             }

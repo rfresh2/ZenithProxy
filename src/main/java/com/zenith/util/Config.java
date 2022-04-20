@@ -267,6 +267,8 @@ public final class Config {
         public static class ChatRelay {
             public boolean enable = false;
             public boolean ignoreQueue = true;
+            public boolean mentionRoleOnWhisper = false;
+            public boolean connectionMessages = false;
             public String channelId = "";
         }
     }

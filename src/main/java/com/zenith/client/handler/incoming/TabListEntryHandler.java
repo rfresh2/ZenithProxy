@@ -22,10 +22,14 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.zenith.event.proxy.ServerPlayerConnectedEvent;
+import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.*;
@@ -41,10 +45,19 @@ public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler
         };
         switch (packet.getAction()) {
             case ADD_PLAYER:
-                consumer = CACHE.getTabListCache().getTabList()::add;
+                consumer = entry -> {
+                    CACHE.getTabListCache().getTabList().add(entry);
+                    // prevent mass spam on initial join
+                    if (session.getProxy().getConnectTime().isBefore(Instant.now().minus(3L, ChronoUnit.SECONDS))) {
+                        EVENT_BUS.dispatch(new ServerPlayerConnectedEvent(entry.getProfile().getName()));
+                    }
+                };
                 break;
             case REMOVE_PLAYER:
-                consumer = CACHE.getTabListCache().getTabList()::remove;
+                consumer = entry -> {
+                    CACHE.getTabListCache().getTabList().remove(entry);
+                    EVENT_BUS.dispatch(new ServerPlayerDisconnectedEvent(entry.getProfile().getName()));
+                };
                 break;
             case UPDATE_LATENCY:
                 consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setPing(entry.getPing()));
