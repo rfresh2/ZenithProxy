@@ -12,8 +12,7 @@ import discord4j.rest.util.MultipartRequest;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.saveConfig;
+import static com.zenith.util.Constants.*;
 
 public class ServerCommand extends Command {
     public ServerCommand(Proxy proxy) {
@@ -28,14 +27,14 @@ public class ServerCommand extends Command {
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
-        if (commandArgs.size() < 1 || commandArgs.size() > 2) {
+        if (commandArgs.size() < 1 || commandArgs.size() > 3) {
             embedBuilder
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)
                     .color(Color.RUBY);
         } else {
             try {
-                if (commandArgs.size() == 2) {
+                if (commandArgs.size() == 3) {
                     CONFIG.client.server.port = Integer.parseInt(commandArgs.get(2));
                 }
                 CONFIG.client.server.address = commandArgs.get(1);
@@ -45,6 +44,7 @@ public class ServerCommand extends Command {
                         .addField("Port", "" + CONFIG.client.server.port, true)
                         .color(Color.CYAN);
             } catch (final Exception e) {
+                DISCORD_LOG.error(e);
                 embedBuilder
                         .title("Invalid command usage")
                         .addField("Usage", this.description, false)
