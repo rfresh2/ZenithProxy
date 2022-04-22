@@ -290,7 +290,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                String message = event.message;
+                String message = escape(event.message);
                 if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
                     if (!message.startsWith("<")) {
                         String[] split = message.split(" ");
@@ -311,7 +311,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(event.playerName + " connected").subscribe();
+                relayRestChannel.get().createMessage(escape(event.playerName + " connected")).subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error(e);
             }
@@ -323,7 +323,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(event.playerName + " disconnected").subscribe();
+                relayRestChannel.get().createMessage(escape(event.playerName + " disconnected")).subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error(e);
             }
@@ -358,5 +358,9 @@ public class DiscordBot {
 
     private ClientPresence getQueuePresence() {
         return ClientPresence.of(Status.IDLE, ClientActivity.watching(queuePositionStr()));
+    }
+
+    public static String escape(String message) {
+        return message.replaceAll("_", "\\\\_");
     }
 }
