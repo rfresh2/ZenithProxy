@@ -36,6 +36,8 @@ public class ServerCommand extends Command {
             try {
                 if (commandArgs.size() == 3) {
                     CONFIG.client.server.port = Integer.parseInt(commandArgs.get(2));
+                } else {
+                    CONFIG.client.server.port = 25565;
                 }
                 CONFIG.client.server.address = commandArgs.get(1);
                 embedBuilder
