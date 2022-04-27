@@ -48,10 +48,10 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 session.getProxy().getClient().disconnect(MANUAL_DISCONNECT);
                 return false;
             } else if ("!q".equalsIgnoreCase(packet.getMessage())) {
-                session.send(new ServerChatPacket(String.format("§7[§5Zenith§9Proxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, packet.getMessage()), true));
+                session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, packet.getMessage()), true));
                 return false;
             } else {
-                session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage()), true));
+                session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §cUnknown command: §o%s", packet.getMessage()), true));
                 return false;
             }
         }

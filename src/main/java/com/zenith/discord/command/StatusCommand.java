@@ -30,6 +30,7 @@ public class StatusCommand extends Command {
                         .addField("Status", getStatus(), true)
                         .addField("Online Time", getOnlineTime(), true)
                         .addField("Server", CONFIG.client.server.address, true)
+                        .addField("2b2t Queue", getQueueStatus(), false)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .addField("Dimension",
                                 dimensionIdToString(CACHE.getPlayerCache().getDimension()),
@@ -74,6 +75,11 @@ public class StatusCommand extends Command {
         } else {
             return "Disconnected";
         }
+    }
+
+    private String getQueueStatus() {
+        return "Priority: " + Queue.getQueueStatus().prio + " [" + getQueueEta(Queue.getQueueStatus().prio, Queue.getQueueStatus().prio) + "]"
+                + "\nRegular: " + Queue.getQueueStatus().regular + " [" + getQueueEta(Queue.getQueueStatus().regular, Queue.getQueueStatus().regular) + "]";
     }
 
     private String dimensionIdToString(final int dimension) {

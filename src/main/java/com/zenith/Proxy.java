@@ -102,7 +102,7 @@ public class Proxy {
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
-        DEFAULT_LOG.info("Starting Zenith Proxy v%s...", VERSION);
+        DEFAULT_LOG.info("Starting Proxy v%s...", VERSION);
 
         if (CONFIG.websocket.enable) {
             WEBSOCKET_LOG.info("Starting WebSocket server...");
