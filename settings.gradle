@@ -18,5 +18,5 @@
  *
  */
 
-rootProject.name = 'Proxy'
+rootProject.name = 'mc-proxy'
 

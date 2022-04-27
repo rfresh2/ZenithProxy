@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 public class DiscordBot {
 
@@ -263,9 +264,13 @@ public class DiscordBot {
     @Subscribe
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.clientConnectionMessages) {
-            sendEmbedMessage(EmbedCreateSpec.builder()
+            EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                     .title("Client Disconnected")
-                    .color(Color.RUBY)
+                    .color(Color.RUBY);
+            if (nonNull(event.message)) {
+                builder = builder.addField("Message", event.message, false);
+            }
+            sendEmbedMessage(builder
                     .build());
         }
     }

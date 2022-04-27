@@ -21,6 +21,8 @@
 package com.zenith.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
+import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import lombok.NonNull;
 import com.zenith.Proxy;
 import com.zenith.server.PorkServerConnection;
@@ -37,6 +39,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
         //SERVER_LOG.info("login start");
         if (CONFIG.server.extra.whitelist.enable && !CONFIG.server.extra.whitelist.allowedUsers.contains(packet.getUsername())) {
             SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+            EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));
             session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
             return false;
         }

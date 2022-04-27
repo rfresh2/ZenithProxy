@@ -20,6 +20,8 @@
 
 package com.zenith.server;
 
+import com.github.steveice10.mc.auth.data.GameProfile;
+import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientPluginMessagePacket;
@@ -106,11 +108,17 @@ public class PorkServerConnection implements Session, SessionListener {
     @Override
     public void disconnected(DisconnectedEvent event) {
         if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
-            SERVER_LOG.alert(String.format("Player disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
-            EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
+            // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
+            SERVER_LOG.warn(String.format("Connection disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
         } else if (this.isPlayer) {
             SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
-            EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
+            try {
+                GameProfile gameProfile = event.getSession().getFlag(MinecraftConstants.PROFILE_KEY);
+                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(gameProfile.getName()));
+            } catch (final Throwable e) {
+                SERVER_LOG.info("Could not get game profile of disconnecting player");
+                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
+            }
         }
     }
 
