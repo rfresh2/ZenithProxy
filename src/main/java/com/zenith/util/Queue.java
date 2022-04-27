@@ -27,10 +27,11 @@ public class Queue {
     private static final LinearInterpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
     // for queue wait time estimation maths
     // shamelessly ripped from 2bored2wait
-    private static final double[] QUEUE_PLACEMENT_DATA = ImmutableList.of(93, 207, 231, 257, 412, 418, 486, 506, 550, 586, 666, 758, 789, 826).stream()
+    private static final double[] QUEUE_PLACEMENT_DATA = ImmutableList.of(0, 93, 207, 231, 257, 412, 418, 486, 506, 550, 586, 666, 758, 789, 826).stream()
             .mapToDouble(i -> i)
             .toArray();
     private static final double[] QUEUE_FACTOR_DATA = ImmutableList.of(
+            0.9996f,
             0.9998618838664679f, 0.9999220416881794f, 0.9999234240704379f,
             0.9999291667668093f, 0.9999410569845172f, 0.9999168965649361f,
             0.9999440195022513f, 0.9999262577896301f, 0.9999462301738332f,
