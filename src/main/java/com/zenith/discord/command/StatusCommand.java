@@ -29,7 +29,7 @@ public class StatusCommand extends Command {
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                         .addField("Status", getStatus(), true)
                         .addField("Online Time", getOnlineTime(), true)
-                        .addField("Server", CONFIG.client.server.address, true)
+                        .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
                         .addField("2b2t Queue", getQueueStatus(), false)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .addField("Dimension",
