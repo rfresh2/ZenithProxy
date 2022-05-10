@@ -35,8 +35,7 @@ public class WhitelistCommand extends Command {
             embedBuilder
                     .title("Whitelist List")
                     .color(Color.CYAN)
-                    .addField("Whitelist", CONFIG.server.extra.whitelist.allowedUsers.stream()
-                                    .collect(Collectors.joining(", ")),
+                    .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
                             false);
         } else if (commandArgs.size() < 3) {
             embedBuilder
@@ -50,16 +49,14 @@ public class WhitelistCommand extends Command {
             embedBuilder
                     .title("Added user: " + commandArgs.get(2) + " To Whitelist")
                     .color(Color.CYAN)
-                    .addField("Whitelist", CONFIG.server.extra.whitelist.allowedUsers.stream()
-                                    .collect(Collectors.joining(", ")),
+                    .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
                             false);
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
             CONFIG.server.extra.whitelist.allowedUsers.removeIf(s -> s.equalsIgnoreCase(commandArgs.get(2)));
             embedBuilder
                     .title("Removed user: " + commandArgs.get(2) + " From Whitelist")
                     .color(Color.CYAN)
-                    .addField("Whitelist", CONFIG.server.extra.whitelist.allowedUsers.stream()
-                                    .collect(Collectors.joining(", ")),
+                    .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
                             false);
         }
 
