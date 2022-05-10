@@ -33,17 +33,19 @@ public class AutoReconnectCommand extends Command {
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)
                     .color(Color.RUBY);
-        } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
+        } else if (commandArgs.get(1).equalsIgnoreCase("on")) { // this breaks if 0 args
             CONFIG.client.extra.autoReconnect.enabled = true;
             embedBuilder
                     .title("AutoReconnect On!")
-                    .addField("Delay", ""+CONFIG.client.extra.autoReconnect.enabled, false)
+                    .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, true)
+                    .addField("DelayOffline", ""+CONFIG.client.extra.autoReconnect.delaySecondsOffline, true)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.autoReconnect.enabled = false;
             embedBuilder
                     .title("AutoReconnect Off!")
-                    .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, false)
+                    .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, true)
+                    .addField("DelayOffline", ""+CONFIG.client.extra.autoReconnect.delaySecondsOffline, true)
                     .color(Color.CYAN);
         } else if (commandArgs.size() < 2) {
             embedBuilder
@@ -57,7 +59,8 @@ public class AutoReconnectCommand extends Command {
                 embedBuilder
                         .title("AutoReconnect Delay Updated!")
                         .addField("Status", (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off"), false)
-                        .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, false)
+                        .addField("Delay", ""+CONFIG.client.extra.autoReconnect.delaySeconds, true)
+                        .addField("DelayOffline", ""+CONFIG.client.extra.autoReconnect.delaySecondsOffline, true)
                         .color(Color.CYAN);
             } catch (final Exception e) {
                 embedBuilder
