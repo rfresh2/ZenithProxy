@@ -85,9 +85,7 @@ public class LoggerInner {
 
         } catch (RequestException e)    {
             throw new RuntimeException(String.format(
-                    "Unable to log in using credentials %s:%s (%s)",
-                    CONFIG.authentication.email,
-                    CONFIG.authentication.password,
+                    "Unable to log in using credentials (%s)",
                     CONFIG.authentication.username), e);
         }
     }
