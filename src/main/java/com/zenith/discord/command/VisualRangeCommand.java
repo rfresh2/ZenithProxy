@@ -28,7 +28,7 @@ public class VisualRangeCommand extends Command {
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
-        if (commandArgs.size() < 1) {
+        if (commandArgs.size() < 2) {
             embedBuilder
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)

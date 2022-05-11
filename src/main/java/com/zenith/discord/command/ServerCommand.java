@@ -27,7 +27,7 @@ public class ServerCommand extends Command {
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
-        if (commandArgs.size() < 1 || commandArgs.size() > 3) {
+        if (commandArgs.size() < 2 || commandArgs.size() > 3) {
             embedBuilder
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)

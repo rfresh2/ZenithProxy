@@ -28,7 +28,7 @@ public class AutoDisconnectCommand extends Command {
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
-        if (commandArgs.size() < 1) {
+        if (commandArgs.size() < 2) {
             embedBuilder
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)
@@ -45,7 +45,7 @@ public class AutoDisconnectCommand extends Command {
                     .title("AutoDisconnect Off!")
                     .addField("Health", ""+CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
                     .color(Color.CYAN);
-        } else if (commandArgs.size() < 2) {
+        } else if (commandArgs.size() < 3) {
             embedBuilder
                     .title("Invalid command usage")
                     .addField("Usage", this.description, false)
