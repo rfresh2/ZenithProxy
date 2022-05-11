@@ -22,6 +22,7 @@ package com.zenith.util.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
@@ -47,6 +48,9 @@ public class EntityPlayer extends EntityEquipment {
 
     protected int food;
     protected float saturation;
+    protected int totalExperience;
+    protected int level;
+    protected float experience;
 
     {
         //set health to maximum by default
@@ -61,6 +65,7 @@ public class EntityPlayer extends EntityEquipment {
                     this.food,
                     this.saturation
             ));
+            consumer.accept(new ServerPlayerSetExperiencePacket(experience, level, totalExperience));
         } else {
             consumer.accept(new ServerSpawnPlayerPacket(
                     this.entityId,

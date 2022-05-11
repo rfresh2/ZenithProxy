@@ -112,6 +112,7 @@ public class Constants {
             .registerInbound(new MultiBlockChangeHandler())
             .registerInbound(new PlayerHealthHandler())
             .registerInbound(new PlayerPosRotHandler())
+            .registerInbound(new PlayerSetExperienceHandler())
             .registerInbound(new RespawnHandler())
             .registerInbound(new SetSlotHandler())
             .registerInbound(new SetWindowItemsHandler())
