@@ -63,6 +63,7 @@ public final class Config {
             public Spammer spammer = new Spammer();
             public boolean visualRangeAlert = true;
             public boolean clientConnectionMessages = true;
+            public boolean autoConnectOnLogin = true;
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();

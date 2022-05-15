@@ -21,8 +21,8 @@
 package com.zenith.server.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
-import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
+import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.Proxy;
 import com.zenith.server.PorkServerConnection;
@@ -44,7 +44,12 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
             return false;
         }
         if (!Proxy.getInstance().isConnected()) {
-            session.disconnect("Not connected to server!");
+            if (CONFIG.client.extra.autoConnectOnLogin) {
+                Proxy.getInstance().connect();
+                Wait.waitALittleMs(3000);
+            } else {
+                session.disconnect("Not connected to server!");
+            }
         }
         return false;
     }
