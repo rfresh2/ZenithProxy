@@ -20,6 +20,7 @@
 
 package com.zenith.util.cache;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import com.zenith.util.cache.data.chunk.ChunkCache;
 import com.zenith.util.cache.data.PlayerCache;
@@ -30,9 +31,7 @@ import com.zenith.util.cache.data.stats.StatisticsCache;
 import com.zenith.util.cache.data.tab.TabListCache;
 
 import java.lang.reflect.Field;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import static com.zenith.util.Constants.*;
 
@@ -63,9 +62,6 @@ public class DataCache {
             CACHE_LOG.debug("Found a total of %d data fields.", dataFields.size());
         }
     }
-
-    protected final ThreadLocal<Collection<CachedData>> dataCache = ThreadLocal.withInitial(() -> new ArrayList<>(dataFields.size()));
-
     protected final ChunkCache chunkCache = new ChunkCache();
     protected final TabListCache tabListCache = new TabListCache();
     protected final BossBarCache bossBarCache = new BossBarCache();
@@ -75,16 +71,7 @@ public class DataCache {
     protected final StatisticsCache statsCache = new StatisticsCache();
 
     public Collection<CachedData> getAllData() {
-        Collection<CachedData> collection = this.dataCache.get();
-        collection.clear();
-        dataFields.forEach(field -> {
-            try {
-                collection.add((CachedData) field.get(this));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        return collection;
+        return Arrays.asList(profileCache, chunkCache, statsCache, tabListCache, bossBarCache,  entityCache, playerCache);
     }
 
     public boolean reset(boolean full) {
