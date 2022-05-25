@@ -62,9 +62,9 @@ public class StatusCommand extends Command {
             if (proxy.isInQueue()) {
                 if (proxy.getIsPrio().isPresent()) {
                     if (proxy.getIsPrio().get()) {
-                        return "In Priority Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
+                        return "In Priority Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + Queue.getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
                     } else {
-                        return "In Regular Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
+                        return "In Regular Queue [" + this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + Queue.getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
                     }
                 } else {
                     return "Queueing";
@@ -78,8 +78,8 @@ public class StatusCommand extends Command {
     }
 
     private String getQueueStatus() {
-        return "Priority: " + Queue.getQueueStatus().prio + " [" + getQueueEta(Queue.getQueueStatus().prio, Queue.getQueueStatus().prio) + "]"
-                + "\nRegular: " + Queue.getQueueStatus().regular + " [" + getQueueEta(Queue.getQueueStatus().regular, Queue.getQueueStatus().regular) + "]";
+        return "Priority: " + Queue.getQueueStatus().prio + " [" + Queue.getQueueEta(Queue.getQueueStatus().prio, Queue.getQueueStatus().prio) + "]"
+                + "\nRegular: " + Queue.getQueueStatus().regular + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular, Queue.getQueueStatus().regular) + "]";
     }
 
     private String dimensionIdToString(final int dimension) {
@@ -104,11 +104,6 @@ public class StatusCommand extends Command {
         } else {
             return "Coords disabled";
         }
-    }
-
-    public String getQueueEta(final Integer queueLength, final Integer queuePos) {
-        double seconds = Queue.getQueueWait(queueLength, queuePos);
-        return (int)(seconds / 3600) + ":" + (int)((seconds / 60) % 60) + ":" + (int)(seconds % 60);
     }
 
     public String getOnlineTime() {

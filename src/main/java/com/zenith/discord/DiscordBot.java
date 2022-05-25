@@ -181,18 +181,13 @@ public class DiscordBot {
     private String queuePositionStr() {
         if (proxy.getIsPrio().isPresent()) {
             if (proxy.getIsPrio().get()) {
-                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + " - ETA: " + getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
+                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + " - ETA: " + Queue.getQueueEta(Queue.getQueueStatus().prio, this.proxy.getQueuePosition());
             } else {
-                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + " - ETA: " + getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
+                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + " - ETA: " + Queue.getQueueEta(Queue.getQueueStatus().regular, this.proxy.getQueuePosition());
             }
         } else {
             return "?";
         }
-    }
-
-    private String getQueueEta(final Integer queueLength, final Integer queuePos) {
-        double seconds = Queue.getQueueWait(queueLength, queuePos);
-        return (int)(seconds / 3600) + ":" + (int)((seconds / 60) % 60) + ":" + (int)(seconds % 60);
     }
 
     @Subscribe
@@ -285,7 +280,7 @@ public class DiscordBot {
         }
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Active Hours Connect Triggered")
-                .addField("ETA", getQueueEta(queueLength, queueLength), false)
+                .addField("ETA", Queue.getQueueEta(queueLength, queueLength), false)
                 .color(Color.CYAN)
                 .build());
     }

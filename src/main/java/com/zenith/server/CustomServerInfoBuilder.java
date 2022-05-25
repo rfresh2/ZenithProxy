@@ -60,7 +60,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
                                 : "Queueing")
                         + "§r§f]§r"
                         + ((this.proxy.getQueuePosition() != Integer.MAX_VALUE)
-                            ? " - §cETA§r §f[§r§b" + getQueueEta() + "§r§f]§r"
+                            ? " - §cETA§r §f[§r§b" + Queue.getQueueEta((this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular), this.proxy.getQueuePosition()) + "§r§f]§r"
                             : "")
                     : "§cQueuing§r");
         } else {
@@ -72,11 +72,6 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         long milliOnline = Instant.now().toEpochMilli() - this.proxy.getConnectTime().toEpochMilli();
         // hours:minutes:seconds
         return (milliOnline / 3600000) + ":" + ((milliOnline / 60000) % 60) + ":" + ((milliOnline / 1000) % 60);
-    }
-
-    public String getQueueEta() {
-        double seconds = Queue.getQueueWait((this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular), this.proxy.getQueuePosition());
-        return (int)(seconds / 3600) + ":" + (int)((seconds / 60) % 60) + ":" + (int)(seconds % 60);
     }
 
 }
