@@ -20,9 +20,13 @@
 
 package com.zenith.client;
 
+import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.data.game.TitleAction;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerTitlePacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -59,8 +63,11 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void packetReceived(Session session, Packet packet) {
+        if (packet instanceof ServerTitlePacket) {
+            parse2bQueuePos(((ServerTitlePacket) packet));
+        }
         if (packet instanceof ServerPlayerListDataPacket) {
-            parse2bQueue(((ServerPlayerListDataPacket) packet).getHeader());
+            parse2bQueueState((ServerPlayerListDataPacket) packet);
         }
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
@@ -78,31 +85,16 @@ public class ClientListener implements SessionListener {
         }
     }
 
-    private void parse2bQueue(String header) {
-        final Optional<Integer> position = Arrays.stream(header.split("\\\\n"))
+    private void parse2bQueueState(ServerPlayerListDataPacket packet) {
+        Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
                 .map(m -> m.trim())
-                .filter(m -> m.contains("queue"))
-                .map(m -> m.split(":")[1])
-                .map(m -> m.substring(3))
-                .map(m -> {
-                    try {
-                        return Integer.parseInt(m);
-                    } catch (final Exception e) {
-                        // when you first join queue, oftentimes the position = "None"
-                        // we're using Integer.MAX_VALUE to refer to this state
-                        return Integer.MAX_VALUE;
-                    }
-                })
-                .findFirst();
-        if (position.isPresent()) {
+                .filter(m -> m.contains("2b2t is full"))
+                .findAny();
+        if (queueHeader.isPresent()) {
             if (!inQueue) {
-                EVENT_BUS.dispatch(new StartQueueEvent(position.get()));
+                EVENT_BUS.dispatch(new StartQueueEvent());
             }
             inQueue = true;
-            if (position.get() != lastQueuePosition) {
-                EVENT_BUS.dispatch(new QueuePositionUpdateEvent(position.get()));
-            }
-            lastQueuePosition = position.get();
         } else if (inQueue) {
             inQueue = false;
             lastQueuePosition = Integer.MAX_VALUE;
@@ -110,6 +102,25 @@ public class ClientListener implements SessionListener {
         } else if (!online) {
             online = true;
             EVENT_BUS.dispatch(new PlayerOnlineEvent());
+        }
+    }
+
+    private void parse2bQueuePos(ServerTitlePacket serverTitlePacket) {
+        try {
+            Optional<Integer> position = Optional.of(serverTitlePacket)
+                    .filter(packet -> packet.getAction().equals(TitleAction.TITLE))
+                    .map(ServerTitlePacket::getTitle)
+                    .map(title -> AutoMCFormatParser.DEFAULT.parse(title).toRawString())
+                    .map(text -> text.split(":")[1].trim())
+                    .map(Integer::parseInt);
+            if (position.isPresent()) {
+                if (position.get() != lastQueuePosition) {
+                    EVENT_BUS.dispatch(new QueuePositionUpdateEvent(position.get()));
+                }
+                lastQueuePosition = position.get();
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.warn("Error parsing queue position from title packet", e);
         }
     }
 
