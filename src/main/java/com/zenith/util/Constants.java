@@ -135,7 +135,6 @@ public class Constants {
             .registerInbound(new EntityPositionHandler())
             .registerInbound(new EntityPositionRotationHandler())
             .registerInbound(new EntityPropertiesHandler())
-            .registerInbound(new EntityRemoveEffectListener())
             .registerInbound(new EntityRotationHandler())
             .registerInbound(new EntitySetPassengersHandler())
             .registerInbound(new EntityTeleportHandler())
