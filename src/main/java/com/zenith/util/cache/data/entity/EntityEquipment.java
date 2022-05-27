@@ -55,16 +55,19 @@ public abstract class EntityEquipment extends Entity {
 
     @Override
     public void addPackets(@NonNull Consumer<Packet> consumer) {
-        this.potionEffects.forEach(effect -> consumer.accept(new ServerEntityEffectPacket(
-                this.entityId,
-                effect.getEffect(),
-                effect.getAmplifier(),
-                effect.getDuration(),
-                effect.isAmbient(),
-                effect.isShowParticles()
-        )));
         if (this instanceof EntityPlayer) {
             if (!((EntityPlayer) this).isSelfPlayer()) {
+                // skip sending potion effects for self player out of precaution for potential cache desync
+                // todo: come back and fix this
+                this.potionEffects.forEach(effect -> consumer.accept(new ServerEntityEffectPacket(
+                        this.entityId,
+                        effect.getEffect(),
+                        effect.getAmplifier(),
+                        effect.getDuration(),
+                        effect.isAmbient(),
+                        effect.isShowParticles()
+                )));
+
                 // skip sending equipment packets for current player because we already send this in SetWindowsItem packet
                 this.equipment.forEach((slot, stack) -> consumer.accept(new ServerEntityEquipmentPacket(this.entityId, slot, stack)));
             }
