@@ -84,7 +84,7 @@ public class Queue {
         }
     }
 
-    public static String getQueueEta(final double totalSeconds) {
+    public static String getEtaStringFromSeconds(final double totalSeconds) {
         final int hour = (int)(totalSeconds / 3600);
         final int minutes = (int)((totalSeconds / 60) % 60);
         final int seconds = (int)(totalSeconds % 60);
@@ -95,6 +95,6 @@ public class Queue {
     }
 
     public static String getQueueEta(final Integer queueLength, final Integer queuePos) {
-        return getQueueEta(getQueueWait(queueLength, queuePos));
+        return getEtaStringFromSeconds(getQueueWait(queueLength, queuePos));
     }
 }

@@ -108,9 +108,9 @@ public class StatusCommand extends Command {
 
     public String getOnlineTime() {
         if (this.proxy.isConnected()) {
-            long milliOnline = Instant.now().toEpochMilli() - this.proxy.getConnectTime().toEpochMilli();
+            long secondsOnline = Instant.now().getEpochSecond() - this.proxy.getConnectTime().getEpochSecond();
             // hours:minutes:seconds
-            return (milliOnline / 3600000) + ":" + ((milliOnline / 60000) % 60) + ":" + ((milliOnline / 1000) % 60);
+            return Queue.getEtaStringFromSeconds(secondsOnline);
         } else {
             return "Not Online!";
         }
