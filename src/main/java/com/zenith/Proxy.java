@@ -42,6 +42,7 @@ import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
 import com.zenith.util.*;
+import com.zenith.util.Queue;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.common.util.PorkUtil;
@@ -56,10 +57,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -236,6 +234,9 @@ public class Proxy {
 
             CLIENT_LOG.info("Connecting to %s:%d...", address, port);
             this.client = new PorkClientSession(address, port, this.protocol, this);
+            if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
+                this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
+            }
             this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
             this.client.connect(true);
         }
