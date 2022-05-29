@@ -89,6 +89,7 @@ public class Proxy {
     protected final ScheduledExecutorService clientTimeoutExecutorService;
     protected ScheduledExecutorService autoReconnectExecutorService;
     protected ScheduledExecutorService activeHoursExecutorService;
+    protected ScheduledExecutorService reconnectExecutorService;
     protected List<Module> modules;
 
     private int reconnectCounter;
@@ -130,6 +131,7 @@ public class Proxy {
         this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
         this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         this.activeHoursExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.reconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         EVENT_BUS.subscribe(this);
     }
 
@@ -157,6 +159,16 @@ public class Proxy {
                 }
             }, 0, 50L, TimeUnit.MILLISECONDS);
             activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
+            reconnectExecutorService.scheduleAtFixedRate(() -> {
+                if (this.isConnected() && !inQueue && nonNull(connectTime)) {
+                    long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
+                    if (onlineSeconds > (21600 - 100)) {
+                        this.disconnect();
+                        this.cancelAutoReconnect();
+                        this.connect();
+                    }
+                }
+            }, 0, 200L, TimeUnit.MILLISECONDS);
             if (CONFIG.client.autoConnect) {
                 this.connect();
             }
