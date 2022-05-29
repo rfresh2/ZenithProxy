@@ -75,6 +75,7 @@ public class DiscordBot {
         commands.add(new ActiveHoursCommand(this.proxy));
         commands.add(new DisplayCoordsCommand(this.proxy));
         commands.add(new ChatRelayCommand(this.proxy));
+        commands.add(new ReconnectCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
