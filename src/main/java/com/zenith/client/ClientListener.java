@@ -39,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
@@ -88,7 +89,7 @@ public class ClientListener implements SessionListener {
     private void parse2bQueueState(ServerPlayerListDataPacket packet) {
         Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
                 .map(m -> m.trim())
-                .filter(m -> m.contains("2b2t is full"))
+                .filter(m -> m.contains("2b2t is full") || m.toLowerCase(Locale.ROOT).contains("pending"))
                 .findAny();
         if (queueHeader.isPresent()) {
             if (!inQueue) {
@@ -109,7 +110,7 @@ public class ClientListener implements SessionListener {
         try {
             Optional<Integer> position = Optional.of(serverTitlePacket)
                     .filter(packet -> packet.getAction().equals(TitleAction.TITLE))
-                    .map(ServerTitlePacket::getTitle)
+                    .map(ServerTitlePacket::getSubtitle)
                     .map(title -> AutoMCFormatParser.DEFAULT.parse(title).toRawString())
                     .map(text -> text.split(":")[1].trim())
                     .map(Integer::parseInt);
