@@ -109,7 +109,7 @@ public class ClientListener implements SessionListener {
     private void parse2bQueuePos(ServerTitlePacket serverTitlePacket) {
         try {
             Optional<Integer> position = Optional.of(serverTitlePacket)
-                    .filter(packet -> packet.getAction().equals(TitleAction.TITLE))
+                    .filter(packet -> packet.getAction().equals(TitleAction.SUBTITLE))
                     .map(ServerTitlePacket::getSubtitle)
                     .map(title -> AutoMCFormatParser.DEFAULT.parse(title).toRawString())
                     .map(text -> text.split(":")[1].trim())
