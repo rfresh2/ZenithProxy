@@ -8,3 +8,4 @@
 *.class
 *.ipr
 /out/
+.DS_Store
