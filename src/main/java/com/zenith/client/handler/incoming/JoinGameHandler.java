@@ -57,7 +57,7 @@ public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJo
                 SkinPart.values(),
                 Hand.MAIN_HAND
         ));
-        return false;
+        return true;
     }
 
     @Override
