@@ -38,8 +38,9 @@ public class StatusCommand extends Command {
                         .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true)
                         .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), false)
                         .addField("AutoDisconnect",
-                                (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
-                                        + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]", true)
+                                "Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
+                                        + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]"
+                                        + "\nAutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), true)
                         .addField("AutoReconnect",
                                 (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
                                         + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
@@ -49,7 +50,7 @@ public class StatusCommand extends Command {
                         .addField("AntiAFK",
                                 (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
                         .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
-                                + " [Mention " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
+                                + " [Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
                         .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
                         .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), false)
                         .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), false)

@@ -19,7 +19,8 @@ public class AutoDisconnectCommand extends Command {
     public AutoDisconnectCommand(Proxy proxy) {
         super(proxy, "autoDisconnect", "Auto disconnect on health reaching a certain level"
                 + "\nUsage: "
-                + "\n " + CONFIG.discord.prefix + "autoDisconnect on/off"
+                + "\n " + CONFIG.discord.prefix + "autoDisconnect on/off  (Health disconnect)"
+                + "\n " + CONFIG.discord.prefix + "autoDisconnect autoClientDisconnect on/off"
                 + "\n " + CONFIG.discord.prefix + "autoDisconnect health <Integer>");
     }
 
@@ -45,11 +46,28 @@ public class AutoDisconnectCommand extends Command {
                     .title("AutoDisconnect Off!")
                     .addField("Health", ""+CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
                     .color(Color.CYAN);
-        } else if (commandArgs.size() < 3) {
-            embedBuilder
-                    .title("Invalid command usage")
-                    .addField("Usage", this.description, false)
-                    .color(Color.RUBY);
+        } else if (commandArgs.get(1).equalsIgnoreCase("autoClientDisconnect")) {
+            if (commandArgs.size() < 3) {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            } else if (commandArgs.get(2).equalsIgnoreCase("on")) {
+                CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = true;
+                embedBuilder
+                        .title("AutoDisconnect AutoClientDisconnect On!")
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
+                CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = false;
+                embedBuilder
+                        .title("AutoDisconnect AutoClientDisconnect On!")
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            }
         } else if (commandArgs.get(1).equalsIgnoreCase("health")) {
            try {
                int health = Integer.parseInt(commandArgs.get(2));

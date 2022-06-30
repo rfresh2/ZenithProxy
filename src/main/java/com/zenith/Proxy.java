@@ -481,4 +481,11 @@ public class Proxy {
             });
         }
     }
+
+    @Subscribe
+    public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
+        if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
+            disconnect();
+        }
+    }
 }

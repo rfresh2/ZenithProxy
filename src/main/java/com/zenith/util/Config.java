@@ -87,6 +87,7 @@ public final class Config {
 
                 public static final class AutoDisconnect {
                     public boolean enabled = false;
+                    public boolean autoClientDisconnect = false;
                     public int health = 5;
                 }
 
