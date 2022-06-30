@@ -23,10 +23,14 @@ import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
@@ -41,10 +45,11 @@ public class DiscordBot {
     private Proxy proxy;
     public List<Command> commands = new ArrayList<>();
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
-    private static final ClientPresence CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
+    private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
+    private final ScheduledExecutorService presenceExecutorService;
 
     public DiscordBot() {
-
+        this.presenceExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     public void start(Proxy proxy) {
@@ -109,6 +114,24 @@ public class DiscordBot {
         if (CONFIG.discord.isUpdating) {
             handleProxyUpdateComplete();
         }
+        presenceExecutorService.scheduleAtFixedRate(this::updatePresence, 0L,
+                15L, // discord rate limit
+                TimeUnit.SECONDS);
+    }
+
+    private void updatePresence() {
+        if (this.proxy.isInQueue()) {
+            this.client.updatePresence(getQueuePresence()).subscribe();
+        } else if (this.proxy.isConnected()) {
+            this.client.updatePresence(getOnlinePresence()).subscribe();
+        } else {
+            this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
+        }
+    }
+
+    private ClientPresence getOnlinePresence() {
+        long onlineSeconds = Instant.now().getEpochSecond() - this.proxy.getConnectTime().getEpochSecond();
+        return ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
     }
 
     private void handleProxyUpdateComplete() {
@@ -126,7 +149,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
-        this.client.updatePresence(CONNECTED_PRESENCE).subscribe();
+        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
                .title("Proxy Connected!" + " : " + CONFIG.authentication.username)
                .color(Color.CYAN)
@@ -192,7 +215,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
-        this.client.updatePresence(CONNECTED_PRESENCE).subscribe();
+        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).subscribe();
     }
 
     @Subscribe
