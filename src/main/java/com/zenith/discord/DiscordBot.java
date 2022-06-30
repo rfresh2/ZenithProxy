@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
@@ -228,12 +227,30 @@ public class DiscordBot {
     @Subscribe
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (CONFIG.client.extra.visualRangeAlert) {
-            sendEmbedMessage(EmbedCreateSpec.builder()
+            EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
                     .title("Player In Visual Range")
                     .addField("Player Name", Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown"), true)
                     .addField("Player UUID", event.playerEntry.getId().toString(), true)
-                    .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
-                    .build());
+                    .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
+            if (CONFIG.client.extra.visualRangeAlertMention) {
+                boolean notFriend = CONFIG.client.extra.friendList.stream()
+                        .noneMatch(friend -> friend.equalsIgnoreCase(Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown")));
+                if (notFriend) {
+                    if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
+                        embedCreateSpec = embedCreateSpec.description("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">");
+                    } else {
+                        embedCreateSpec = embedCreateSpec.description("<@&" + CONFIG.discord.accountOwnerRoleId + ">");
+                    }
+                }
+            }
+            if (CONFIG.discord.reportCoords) {
+                embedCreateSpec.addField("Coordinates", "["
+                        + (int) event.playerEntity.getX() + ", "
+                        + (int) event.playerEntity.getY() + ", "
+                        + (int) event.playerEntity.getZ()
+                        + "]", false);
+            }
+            sendEmbedMessage(embedCreateSpec.build());
         }
     }
 

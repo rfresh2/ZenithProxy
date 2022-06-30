@@ -62,6 +62,8 @@ public final class Config {
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
             public boolean visualRangeAlert = true;
+            public boolean visualRangeAlertMention = false;
+            public List<String> friendList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
 
@@ -258,6 +260,7 @@ public final class Config {
         public String token = "";
         public String channelId = "";
         public String accountOwnerRoleId = "";
+        public String visualRangeMentionRoleId = "";
         public boolean enable = false;
         public String prefix = ".";
         public boolean reportCoords = false;

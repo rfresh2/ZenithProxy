@@ -11,6 +11,7 @@ import discord4j.rest.util.MultipartRequest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
@@ -20,7 +21,9 @@ public class VisualRangeCommand extends Command {
     public VisualRangeCommand(Proxy proxy) {
         super(proxy, "visualRange", "Configure the VisualRange notification feature"
                 + "\nUsage:"
-                + "\n  " + CONFIG.discord.prefix + "visualRange on/off");
+                + "\n  " + CONFIG.discord.prefix + "visualRange on/off"
+                + "\n  " + CONFIG.discord.prefix + "visualRange mention on/off"
+                + "\n  " + CONFIG.discord.prefix + "visualRange friend add/del <username>");
     }
 
     @Override
@@ -43,6 +46,55 @@ public class VisualRangeCommand extends Command {
             embedBuilder
                     .title("VisualRange Off!")
                     .color(Color.CYAN);
+        } else if (commandArgs.get(1).equalsIgnoreCase("friend")) {
+            if (commandArgs.size() < 4) {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            } else if (commandArgs.get(2).equalsIgnoreCase("add")) {
+                if (!CONFIG.client.extra.friendList.contains(commandArgs.get(3))) {
+                    CONFIG.client.extra.friendList.add(commandArgs.get(3));
+                }
+                embedBuilder
+                        .title("Friend added")
+                        .addField("Friend List", friendListString(), false)
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("del")) {
+                CONFIG.client.extra.friendList.removeIf(friend -> friend.equalsIgnoreCase(commandArgs.get(3)));
+                embedBuilder
+                        .title("Friend deleted")
+                        .addField("Friend List", friendListString(), false)
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            }
+        } else if (commandArgs.get(1).equalsIgnoreCase("mention")) {
+            if (commandArgs.size() < 3) {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            } else if (commandArgs.get(2).equalsIgnoreCase("on")) {
+                CONFIG.client.extra.visualRangeAlertMention = true;
+                embedBuilder
+                        .title("VisualRange Mentions On!")
+                        .addField("Friend List", friendListString(), false)
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
+                CONFIG.client.extra.visualRangeAlertMention = false;
+                embedBuilder
+                        .title("VisualRange Mentions Off!")
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            }
         } else {
             embedBuilder
                     .title("Invalid command usage")
@@ -55,5 +107,9 @@ public class VisualRangeCommand extends Command {
                 .addEmbed(embedBuilder
                         .build())
                 .build().asRequest();
+    }
+
+    private String friendListString() {
+        return (CONFIG.client.extra.friendList.size() > 0 ? String.join(", ", CONFIG.client.extra.friendList) : "Friend List is empty");
     }
 }

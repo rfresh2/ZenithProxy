@@ -17,7 +17,8 @@ import static com.zenith.util.Constants.*;
 
 public class WhitelistCommand extends Command {
     public WhitelistCommand(Proxy proxy) {
-        super(proxy, "whitelist", "Manage the proxy's whitelist. Only usable by users with the account owner role. \nUsage: whitelist add/del/list <username>");
+        super(proxy, "whitelist", "Manage the proxy's whitelist. Only usable by users with the account owner role."
+                + "\nUsage: whitelist add/del/list <username>");
     }
 
     @Override
@@ -58,6 +59,11 @@ public class WhitelistCommand extends Command {
                     .color(Color.CYAN)
                     .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
                             false);
+        } else {
+            embedBuilder
+                    .title("Invalid command usage")
+                    .addField("Usage", this.description, false)
+                    .color(Color.RUBY);
         }
 
         saveConfig();
