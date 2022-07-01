@@ -255,17 +255,7 @@ public class DiscordBot {
                     .addField("Player Name", Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown"), true)
                     .addField("Player UUID", event.playerEntry.getId().toString(), true)
                     .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
-            if (CONFIG.client.extra.visualRangeAlertMention) {
-                boolean notFriend = CONFIG.client.extra.friendList.stream()
-                        .noneMatch(friend -> friend.equalsIgnoreCase(Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown")));
-                if (notFriend) {
-                    if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                        embedCreateSpec = embedCreateSpec.description("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">");
-                    } else {
-                        embedCreateSpec = embedCreateSpec.description("<@&" + CONFIG.discord.accountOwnerRoleId + ">");
-                    }
-                }
-            }
+
             if (CONFIG.discord.reportCoords) {
                 embedCreateSpec.addField("Coordinates", "["
                         + (int) event.playerEntity.getX() + ", "
@@ -273,7 +263,19 @@ public class DiscordBot {
                         + (int) event.playerEntity.getZ()
                         + "]", false);
             }
-            sendEmbedMessage(embedCreateSpec.build());
+            if (CONFIG.client.extra.visualRangeAlertMention) {
+                boolean notFriend = CONFIG.client.extra.friendList.stream()
+                        .noneMatch(friend -> friend.equalsIgnoreCase(Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown")));
+                if (notFriend) {
+                    if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
+                        sendEmbedMessage("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build());
+                    } else {
+                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
+                    }
+                }
+            } else {
+                sendEmbedMessage(embedCreateSpec.build());
+            }
         }
     }
 
@@ -390,6 +392,17 @@ public class DiscordBot {
     private void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
         try {
             mainRestChannel.get().createMessage(MessageCreateSpec.builder()
+                    .addEmbed(embedCreateSpec)
+                    .build().asRequest()).subscribe();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
+        try {
+            mainRestChannel.get().createMessage(MessageCreateSpec.builder()
+                    .content(message)
                     .addEmbed(embedCreateSpec)
                     .build().asRequest()).subscribe();
         } catch (final Exception e) {
