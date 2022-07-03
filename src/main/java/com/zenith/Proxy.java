@@ -194,10 +194,10 @@ public class Proxy {
     }
 
     public void disconnect() {
-        CACHE.reset(true);
         if (this.isConnected()) {
             this.client.disconnect(MANUAL_DISCONNECT);
         }
+        CACHE.reset(true);
     }
 
     void registerModules() {
