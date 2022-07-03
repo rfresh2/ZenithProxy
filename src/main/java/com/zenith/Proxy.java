@@ -358,18 +358,21 @@ public class Proxy {
         CACHE.reset(true);
         this.inQueue = false;
         this.queuePosition = 0;
-        if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
-            if (autoReconnectIsInProgress()) {
-                return;
-            }
-            this.autoReconnectFuture = Optional.of(this.autoReconnectExecutorService.submit(() -> {
-                DISCORD_BOT.sendAutoReconnectMessage();
-                delayBeforeReconnect();
-                synchronized (this.autoReconnectFuture) {
-                    if (this.autoReconnectFuture.isPresent()) this.connect();
-                    this.autoReconnectFuture = Optional.empty();
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
+            // skip autoreconnect when we want to sync client disconnect
+            if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
+                if (autoReconnectIsInProgress()) {
+                    return;
                 }
-            }));
+                this.autoReconnectFuture = Optional.of(this.autoReconnectExecutorService.submit(() -> {
+                    DISCORD_BOT.sendAutoReconnectMessage();
+                    delayBeforeReconnect();
+                    synchronized (this.autoReconnectFuture) {
+                        if (this.autoReconnectFuture.isPresent()) this.connect();
+                        this.autoReconnectFuture = Optional.empty();
+                    }
+                }));
+            }
         }
     }
 
