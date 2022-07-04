@@ -36,8 +36,7 @@ import static com.zenith.util.Constants.*;
 public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, PorkServerConnection> {
     @Override
     public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
-        //SERVER_LOG.info("login start");
-        if (CONFIG.server.extra.whitelist.enable && !CONFIG.server.extra.whitelist.allowedUsers.contains(packet.getUsername())) {
+        if (CONFIG.server.extra.whitelist.enable && !isUserWhitelisted(packet.getUsername())) {
             SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
             EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));
             session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
@@ -52,6 +51,11 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
             }
         }
         return false;
+    }
+
+    public boolean isUserWhitelisted(String loggingInUser) {
+        return CONFIG.server.extra.whitelist.allowedUsers.stream()
+                .anyMatch(user -> user.equalsIgnoreCase(loggingInUser));
     }
 
     @Override
