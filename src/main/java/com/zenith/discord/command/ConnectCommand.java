@@ -21,6 +21,13 @@ public class ConnectCommand extends Command {
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
+        if (this.proxy.isConnected()) {
+            return MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .title("Already Connected!")
+                            .build())
+                    .build().asRequest();
+        }
         try {
             this.proxy.connect();
             return null;

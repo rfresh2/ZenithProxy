@@ -17,12 +17,19 @@ public class DisconnectCommand extends Command {
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
+        if (!this.proxy.isConnected()) {
+            return MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .title("Already Disconnected!")
+                            .build())
+                    .build().asRequest();
+        }
         try {
             this.proxy.disconnect();
             if (this.proxy.cancelAutoReconnect()) {
                 return getAutoReconnectCancelledMessage();
             }
-            return null;
+            return null; // disconnect event will trigger another embed
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to disconnect", e);
             return getFailedToDisconnectMessage();
