@@ -66,6 +66,7 @@ public final class Config {
             public List<String> friendList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
+            public boolean sixHourReconnect = false;
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();

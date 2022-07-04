@@ -21,6 +21,7 @@
 package com.zenith.server.handler.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
+import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
@@ -33,8 +34,19 @@ import static com.zenith.util.Constants.*;
 public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
     @Override
     public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull PorkServerConnection session) {
-        SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-        return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+        // profile could be null at this point?
+        int tryCount = 0;
+        while (tryCount < 3 && CACHE.getProfileCache().getProfile() == null) {
+            Wait.waitALittleMs(100);
+            tryCount++;
+        }
+        if (CACHE.getProfileCache().getProfile() == null) {
+            session.disconnect(MANUAL_DISCONNECT);
+            return null;
+        } else {
+            SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+            return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+        }
     }
 
     @Override

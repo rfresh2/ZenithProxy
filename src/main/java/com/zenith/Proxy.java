@@ -157,16 +157,18 @@ public class Proxy {
                 }
             }, 0, 50L, TimeUnit.MILLISECONDS);
             activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
-            reconnectExecutorService.scheduleAtFixedRate(() -> {
-                if (this.isConnected() && !inQueue && nonNull(connectTime)) {
-                    long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                    if (onlineSeconds > (21600 - 100)) {
-                        this.disconnect();
-                        this.cancelAutoReconnect();
-                        this.connect();
+            if (CONFIG.client.extra.sixHourReconnect) {
+                reconnectExecutorService.scheduleAtFixedRate(() -> {
+                    if (this.isConnected() && !inQueue && nonNull(connectTime)) {
+                        long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
+                        if (onlineSeconds > (21600 - 30)) { // 6 hrs - 30 seconds padding
+                            this.disconnect();
+                            this.cancelAutoReconnect();
+                            this.connect();
+                        }
                     }
-                }
-            }, 0, 200L, TimeUnit.MILLISECONDS);
+                }, 0, 200L, TimeUnit.MILLISECONDS);
+            }
             if (CONFIG.client.autoConnect) {
                 this.connect();
             }
