@@ -18,6 +18,9 @@ public class DisconnectCommand extends Command {
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         if (!this.proxy.isConnected()) {
+            if (this.proxy.cancelAutoReconnect()) {
+                return getAutoReconnectCancelledMessage();
+            }
             return MessageCreateSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()
                             .title("Already Disconnected!")
