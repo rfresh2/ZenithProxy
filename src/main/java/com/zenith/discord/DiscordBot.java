@@ -272,6 +272,8 @@ public class DiscordBot {
                     } else {
                         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
                     }
+                } else {
+                    sendEmbedMessage(embedCreateSpec.build());
                 }
             } else {
                 sendEmbedMessage(embedCreateSpec.build());
