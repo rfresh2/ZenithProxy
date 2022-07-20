@@ -24,16 +24,28 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     @Override
     public ServerStatusInfo buildInfo(Session session) {
+
         return new ServerStatusInfo(
                 new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
                 new PlayerInfo(
                         CONFIG.server.ping.maxPlayers,
                         this.proxy.getCurrentPlayer().get() == null ? 0 : 1,
-                        new GameProfile[0]
+                        getOnlinePlayerProfiles()
                 ),
                 Message.fromString(getMotd()),
                 this.proxy.getServerIcon()
         );
+    }
+
+    private GameProfile[] getOnlinePlayerProfiles() {
+        try {
+            if (this.proxy.getConnectedClientGameProfile().isPresent()) {
+                return new GameProfile[]{this.proxy.getConnectedClientGameProfile().get()};
+            }
+        } catch (final RuntimeException e) {
+            // do nothing, failsafe if we get some race condition
+        }
+        return new GameProfile[0];
     }
 
     private String getMotd() {

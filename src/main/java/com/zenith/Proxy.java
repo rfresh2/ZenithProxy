@@ -98,6 +98,8 @@ public class Proxy {
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
+    private Optional<GameProfile> connectedClientGameProfile = Optional.empty();
+
 //    protected final Gui gui = new Gui();
 
     public static void main(String... args) {
@@ -492,5 +494,11 @@ public class Proxy {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             disconnect();
         }
+        connectedClientGameProfile = Optional.empty();
+    }
+
+    @Subscribe
+    public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
+        connectedClientGameProfile = Optional.ofNullable(event.clientGameProfile);
     }
 }
