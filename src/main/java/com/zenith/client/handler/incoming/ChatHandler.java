@@ -42,11 +42,12 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
         try {
             CHAT_LOG.info(packet.getMessage());
             final String messageString = AutoMCFormatParser.DEFAULT.parse(packet.getMessage()).toRawString();
-            if (CACHE.getPlayerCache().getThePlayer().getHealth() <= 0) {
-                if (!messageString.startsWith("<") && messageString.toLowerCase(Locale.ROOT).contains(CONFIG.authentication.username.toLowerCase(Locale.ROOT))) {
-                    // probable death message
-                    EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
-                }
+            if (!messageString.startsWith("<") // normal chat msg
+                    && !messageString.startsWith("to ") // outgoing whisper
+                    && !messageString.toLowerCase(Locale.ROOT).contains("whispers") //incoming whisper
+                    && messageString.toLowerCase(Locale.ROOT).contains(CONFIG.authentication.username.toLowerCase(Locale.ROOT))) {
+                // probable death message
+                EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
             }
 
             if ("2b2t.org".equals(CONFIG.client.server.address)
