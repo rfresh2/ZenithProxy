@@ -1,6 +1,7 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
+import com.zenith.event.proxy.UpdateStartEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -21,7 +22,7 @@ public class UpdateCommand extends Command {
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         validateUserHasAccountOwnerRole(event, restChannel);
         try {
-            restChannel.createMessage(getUpdateMessage()).block();
+            EVENT_BUS.dispatch(new UpdateStartEvent());
             CONFIG.discord.isUpdating = true;
             this.proxy.stop();
         } catch (final Exception e) {
@@ -31,15 +32,6 @@ public class UpdateCommand extends Command {
             return getFailedUpdateMessage();
         }
         return null;
-    }
-
-    private MultipartRequest<MessageCreateRequest> getUpdateMessage() {
-        return MessageCreateSpec.builder()
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title("Updating and restarting...")
-                        .color(Color.CYAN)
-                        .build())
-                .build().asRequest();
     }
 
     private MultipartRequest<MessageCreateRequest> getFailedUpdateMessage() {

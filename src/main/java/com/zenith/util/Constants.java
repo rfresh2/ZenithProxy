@@ -85,7 +85,12 @@ public class Constants {
     public static final Logger DISCORD_LOG = DEFAULT_LOG.channel("Discord");
 
     public static final File CONFIG_FILE = new File("config.json");
+    public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
+
+    public static boolean isReconnectableDisconnect(final String reason) {
+        return !(reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT));
+    }
 
     public static Config CONFIG;
     public static final DataCache CACHE;

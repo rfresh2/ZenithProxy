@@ -53,8 +53,9 @@ public class StatusCommand extends Command {
                                 + " [Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
                         .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
                         .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), false)
-                        .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), false)
+                        .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
                         .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured"), false)
+                        .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), true)
                         .build())
                 .build().asRequest();
     }

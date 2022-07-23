@@ -80,6 +80,7 @@ public class DiscordBot {
         commands.add(new DisplayCoordsCommand(this.proxy));
         commands.add(new ChatRelayCommand(this.proxy));
         commands.add(new ReconnectCommand(this.proxy));
+        commands.add(new AutoUpdateCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
@@ -384,6 +385,19 @@ public class DiscordBot {
         }
     }
 
+    @Subscribe
+    public void handleUpdateStartEvent(UpdateStartEvent event) {
+        sendEmbedMessageAndBlock(getUpdateMessage());
+    }
+
+    private EmbedCreateSpec getUpdateMessage() {
+        return EmbedCreateSpec.builder()
+                .title("Updating and restarting...")
+                .color(Color.CYAN)
+                .build();
+    }
+
+
     public void sendAutoReconnectMessage() {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("AutoReconnecting in " + CONFIG.client.extra.autoReconnect.delaySeconds + "s")
@@ -396,6 +410,16 @@ public class DiscordBot {
             mainRestChannel.get().createMessage(MessageCreateSpec.builder()
                     .addEmbed(embedCreateSpec)
                     .build().asRequest()).subscribe();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private void sendEmbedMessageAndBlock(EmbedCreateSpec embedCreateSpec) {
+        try {
+            mainRestChannel.get().createMessage(MessageCreateSpec.builder()
+                    .addEmbed(embedCreateSpec)
+                    .build().asRequest()).block();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }

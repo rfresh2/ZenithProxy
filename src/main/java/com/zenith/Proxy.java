@@ -37,6 +37,7 @@ import com.zenith.client.PorkClientSession;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.module.AntiAFK;
+import com.zenith.module.AutoDisconnect;
 import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.PorkServerConnection;
@@ -49,10 +50,7 @@ import net.daporkchop.lib.common.util.PorkUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.*;
@@ -97,8 +95,8 @@ public class Proxy {
     private Optional<Boolean> isPrio = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
-
     private Optional<GameProfile> connectedClientGameProfile = Optional.empty();
+    public static AutoUpdater autoUpdater;
 
 //    protected final Gui gui = new Gui();
 
@@ -111,7 +109,7 @@ public class Proxy {
         }
 
         instance = new Proxy();
-
+        autoUpdater = new AutoUpdater(instance);
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
             ForkJoinPool.commonPool().submit(() -> {
@@ -164,7 +162,7 @@ public class Proxy {
                     if (this.isConnected() && !inQueue && nonNull(connectTime)) {
                         long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
                         if (onlineSeconds > (21600 - 30)) { // 6 hrs - 30 seconds padding
-                            this.disconnect();
+                            this.disconnect(SYSTEM_DISCONNECT);
                             this.cancelAutoReconnect();
                             this.connect();
                         }
@@ -173,6 +171,14 @@ public class Proxy {
             }
             if (CONFIG.client.autoConnect) {
                 this.connect();
+            }
+            if (CONFIG.autoUpdate) {
+                autoUpdater.start();
+            }
+            if (CONFIG.shouldReconnectAfterAutoUpdate) {
+                this.connect();
+                CONFIG.shouldReconnectAfterAutoUpdate = false;
+                saveConfig();
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
@@ -198,8 +204,12 @@ public class Proxy {
     }
 
     public void disconnect() {
+        disconnect(MANUAL_DISCONNECT);
+    }
+
+    public void disconnect(final String reason) {
         if (this.isConnected()) {
-            this.client.disconnect(MANUAL_DISCONNECT);
+            this.client.disconnect(reason);
         }
         CACHE.reset(true);
     }
@@ -207,7 +217,8 @@ public class Proxy {
     void registerModules() {
         // todo: do some reflection magic to auto-register modules in the package
         this.modules = asList(
-                new AntiAFK(this)
+                new AntiAFK(this),
+                new AutoDisconnect(this)
         );
 
         // todo: make this into a module
@@ -364,7 +375,7 @@ public class Proxy {
         this.queuePosition = 0;
         if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             // skip autoreconnect when we want to sync client disconnect
-            if (CONFIG.client.extra.autoReconnect.enabled && !event.manualDisconnect) {
+            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason)) {
                 if (autoReconnectIsInProgress()) {
                     return;
                 }
@@ -428,7 +439,7 @@ public class Proxy {
                     .ifPresent(t -> {
                         EVENT_BUS.dispatch(new ActiveHoursConnectEvent());
                         this.lastActiveHoursConnect = Instant.now();
-                        disconnect();
+                        disconnect(SYSTEM_DISCONNECT);
                         connect();
                     });
         }

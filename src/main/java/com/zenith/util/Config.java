@@ -38,6 +38,9 @@ public final class Config {
     public Server server = new Server();
     public Websocket websocket = new Websocket();
     public Discord discord = new Discord();
+    public boolean autoUpdate = true;
+    public int autoUpdateCheckIntervalSeconds = 60;
+    public boolean shouldReconnectAfterAutoUpdate = false;
 
     public static final class Authentication {
         public boolean doAuthentication = false;
