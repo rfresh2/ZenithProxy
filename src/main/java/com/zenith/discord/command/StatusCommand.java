@@ -28,6 +28,7 @@ public class StatusCommand extends Command {
                         .title("Proxy Status" + " : " + CONFIG.authentication.username)
                         .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                         .addField("Status", getStatus(), true)
+                        .addField("Connected User", getUserName(), true)
                         .addField("Online Time", getOnlineTime(), true)
                         .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
                         .addField("2b2t Queue", getQueueStatus(), false)
@@ -59,6 +60,14 @@ public class StatusCommand extends Command {
                         .build())
                 .build().asRequest();
     }
+
+    private String getUserName() {
+        if (this.proxy.getConnectedClientGameProfile().isPresent()) {
+            return this.proxy.getConnectedClientGameProfile().get().getName();
+        } else {
+            return "None";
+        }
+    };
 
     private String getStatus() {
         if (proxy.isConnected()) {
