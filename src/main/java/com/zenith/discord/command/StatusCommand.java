@@ -99,11 +99,11 @@ public class StatusCommand extends Command {
 
     public static String getCoordinates(final PlayerCache playerCache) {
         if (CONFIG.discord.reportCoords) {
-            return "["
+            return "||["
                     + (int) playerCache.getX() + ", "
                     + (int) playerCache.getY() + ", "
                     + (int) playerCache.getZ()
-                    + "]";
+                    + "]||";
         } else {
             return "Coords disabled";
         }

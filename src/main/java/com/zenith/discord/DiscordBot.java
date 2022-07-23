@@ -258,11 +258,11 @@ public class DiscordBot {
                     .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
 
             if (CONFIG.discord.reportCoords) {
-                embedCreateSpec.addField("Coordinates", "["
+                embedCreateSpec.addField("Coordinates", "||["
                         + (int) event.playerEntity.getX() + ", "
                         + (int) event.playerEntity.getY() + ", "
                         + (int) event.playerEntity.getZ()
-                        + "]", false);
+                        + "]||", false);
             }
             if (CONFIG.client.extra.visualRangeAlertMention) {
                 boolean notFriend = CONFIG.client.extra.friendList.stream()
