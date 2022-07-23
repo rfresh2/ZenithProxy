@@ -1,6 +1,7 @@
-package com.zenith;
+package com.zenith.util;
 
 import com.collarmc.pounce.Subscribe;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
 import org.eclipse.jgit.api.Git;
