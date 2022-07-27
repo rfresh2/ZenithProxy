@@ -159,13 +159,17 @@ public class Proxy {
             activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             if (CONFIG.client.extra.sixHourReconnect) {
                 reconnectExecutorService.scheduleAtFixedRate(() -> {
-                    if (this.isConnected() && !inQueue && nonNull(connectTime)) {
-                        long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                        if (onlineSeconds > (21600 - 30)) { // 6 hrs - 30 seconds padding
-                            this.disconnect(SYSTEM_DISCONNECT);
-                            this.cancelAutoReconnect();
-                            this.connect();
+                    try {
+                        if (this.isConnected() && !inQueue && nonNull(connectTime)) {
+                            long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
+                            if (onlineSeconds > (21600 - 60)) { // 6 hrs - 60 seconds padding
+                                this.disconnect(SYSTEM_DISCONNECT);
+                                this.cancelAutoReconnect();
+                                this.connect();
+                            }
                         }
+                    } catch (final Throwable e) {
+                        DEFAULT_LOG.error("Error in reconnect executor service", e);
                     }
                 }, 0, 200L, TimeUnit.MILLISECONDS);
             }

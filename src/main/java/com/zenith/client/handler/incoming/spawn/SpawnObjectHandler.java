@@ -34,6 +34,7 @@ import static com.zenith.util.Constants.*;
 public class SpawnObjectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnObjectPacket, PorkClientSession> {
     @Override
     public boolean applyAsync(@NonNull ServerSpawnObjectPacket packet, @NonNull PorkClientSession session) {
+        // todo: handle armor stand as equipment entity
         CACHE.getEntityCache().add(new EntityObject()
                 .setObjectType(packet.getType())
                 .setData(packet.getData())
