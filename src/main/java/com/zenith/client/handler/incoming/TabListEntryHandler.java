@@ -51,14 +51,14 @@ public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler
                     CACHE.getTabListCache().getTabList().add(entry);
                     // prevent mass spam on initial join
                     if (session.getProxy().getConnectTime().isBefore(Instant.now().minus(3L, ChronoUnit.SECONDS))) {
-                        EVENT_BUS.dispatch(new ServerPlayerConnectedEvent(entry.getProfile().getName()));
+                        EVENT_BUS.dispatch(new ServerPlayerConnectedEvent(CACHE.getTabListCache().getTabList().get(entry)));
                     }
                 };
                 break;
             case REMOVE_PLAYER:
                 consumer = entry -> {
                     Optional<PlayerEntry> playerEntry = CACHE.getTabListCache().getTabList().remove(entry);
-                    playerEntry.ifPresent(e -> EVENT_BUS.dispatch(new ServerPlayerDisconnectedEvent(e.getName())));
+                    playerEntry.ifPresent(e -> EVENT_BUS.dispatch(new ServerPlayerDisconnectedEvent(e)));
                 };
                 break;
             case UPDATE_LATENCY:

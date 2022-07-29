@@ -2,11 +2,12 @@ package com.zenith.event.proxy;
 
 import com.collarmc.pounce.EventInfo;
 import com.collarmc.pounce.Preference;
+import com.zenith.util.cache.data.tab.PlayerEntry;
 
 @EventInfo(preference = Preference.POOL)
 public class ServerPlayerConnectedEvent {
-    public final String playerName;
-    public ServerPlayerConnectedEvent(final String playerName) {
-        this.playerName = playerName;
+    public final PlayerEntry playerEntry;
+    public ServerPlayerConnectedEvent(final PlayerEntry playerEntry) {
+        this.playerEntry = playerEntry;
     }
 }

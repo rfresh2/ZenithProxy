@@ -81,6 +81,7 @@ public class DiscordBot {
         commands.add(new ChatRelayCommand(this.proxy));
         commands.add(new ReconnectCommand(this.proxy));
         commands.add(new AutoUpdateCommand(this.proxy));
+        commands.add(new StalkCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
@@ -357,10 +358,23 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(escape(event.playerName + " connected")).subscribe();
+                relayRestChannel.get().createMessage(escape(event.playerEntry.getName() + " connected")).subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error(e);
             }
+        }
+        if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
+            CONFIG.client.extra.stalk.stalkList.stream()
+                    .map(s -> s.toLowerCase(Locale.ROOT))
+                    .filter(s -> s.equalsIgnoreCase(event.playerEntry.getName()))
+                    .findFirst()
+                    .ifPresent(player -> {
+                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">",  EmbedCreateSpec.builder()
+                                .title("Stalked Player Online!")
+                                .addField("Player Name", event.playerEntry.getName(), true)
+                                .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                                .build());
+                    });
         }
     }
 
@@ -369,10 +383,23 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(escape(event.playerName + " disconnected")).subscribe();
+                relayRestChannel.get().createMessage(escape(event.playerEntry.getName()) + " disconnected").subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error(e);
             }
+        }
+        if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
+            CONFIG.client.extra.stalk.stalkList.stream()
+                    .map(s -> s.toLowerCase(Locale.ROOT))
+                    .filter(s -> s.equalsIgnoreCase(event.playerEntry.getName()))
+                    .findFirst()
+                    .ifPresent(player -> {
+                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">",  EmbedCreateSpec.builder()
+                                .title("Stalked Player Offline!")
+                                .addField("Player Name", event.playerEntry.getName(), true)
+                                .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                                .build());
+                    });
         }
     }
 

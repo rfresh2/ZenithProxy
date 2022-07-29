@@ -64,12 +64,18 @@ public final class Config {
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
+            public Stalk stalk = new Stalk();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
             public List<String> friendList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = false;
+
+            public static final class Stalk {
+                public boolean enabled = false;
+                public List<String> stalkList = new ArrayList<>();
+            }
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();
