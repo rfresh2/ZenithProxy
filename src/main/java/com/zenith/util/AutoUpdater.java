@@ -9,6 +9,8 @@ import org.eclipse.jgit.transport.FetchResult;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -49,9 +51,11 @@ public class AutoUpdater {
 
             final FetchResult fetchResult = git.fetch().setCheckFetchedObjects(true).setDryRun(true).call();
             if (fetchResult.getTrackingRefUpdates().size() > 0) {
-                DEFAULT_LOG.info("New update found!");
+                if (!updateAvailable) DEFAULT_LOG.info("New update found!"); // only log on first detection
                 updateAvailable = true;
-                if (!proxy.isConnected()) {
+                if (!proxy.isConnected()
+                        // adding some delay here to prefer disconnect event updates if times happen to align
+                        && proxy.getDisconnectTime().isBefore(Instant.now().minus(60L, ChronoUnit.SECONDS))) {
                     update();
                 }
             }
@@ -72,6 +76,7 @@ public class AutoUpdater {
         if (CONFIG.autoUpdate && updateAvailable) {
             if (!event.reason.equals(MANUAL_DISCONNECT)) {
                 CONFIG.shouldReconnectAfterAutoUpdate = true;
+                saveConfig();
             }
             update();
         }

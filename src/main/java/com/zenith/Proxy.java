@@ -92,6 +92,7 @@ public class Proxy {
     private boolean inQueue = false;
     private int queuePosition = 0;
     private Instant connectTime;
+    private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
@@ -180,9 +181,9 @@ public class Proxy {
                 autoUpdater.start();
             }
             if (CONFIG.shouldReconnectAfterAutoUpdate) {
-                this.connect();
                 CONFIG.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
+                this.connect();
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
@@ -375,6 +376,7 @@ public class Proxy {
     @Subscribe(value = Preference.CALLER)
     public void handleDisconnectEvent(DisconnectEvent event) {
         CACHE.reset(true);
+        this.disconnectTime = Instant.now();
         this.inQueue = false;
         this.queuePosition = 0;
         if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
