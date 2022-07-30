@@ -5,8 +5,6 @@ import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.EntityEquipment;
 import com.zenith.util.handler.HandlerRegistry;
 
-import java.util.stream.Collectors;
-
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CLIENT_LOG;
 import static java.util.Objects.nonNull;
@@ -18,8 +16,13 @@ public class EntityRemoveEffectHandler implements HandlerRegistry.AsyncIncomingH
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (nonNull(entity)) {
-                entity.getPotionEffects()
-                        .removeIf(entityPotionEffect -> !entityPotionEffect.getEffect().equals(packet.getEffect()));
+                try {
+                    entity.getPotionEffects()
+                            .removeIf(entityPotionEffect -> !entityPotionEffect.getEffect().equals(packet.getEffect()));
+                } catch (final Exception e) {
+                    CLIENT_LOG.warn("Failed removing entity effects", e);
+                    return false;
+                }
             } else {
                 CLIENT_LOG.warn("Received ServerEntityRemoveEffectPacket for invalid entity (id=%d)", packet.getEntityId());
                 return false;

@@ -112,7 +112,14 @@ public class ClientListener implements SessionListener {
                     .filter(packet -> packet.getAction().equals(TitleAction.SUBTITLE))
                     .map(ServerTitlePacket::getSubtitle)
                     .map(title -> AutoMCFormatParser.DEFAULT.parse(title).toRawString())
-                    .map(text -> text.split(":")[1].trim())
+                    .map(text -> {
+                        String[] split = text.split(":");
+                        if (split.length > 1) {
+                            return split[1].trim();
+                        } else {
+                            return ""+Integer.MAX_VALUE; // some arbitrarily non-zero value
+                        }
+                    })
                     .map(Integer::parseInt);
             if (position.isPresent()) {
                 if (position.get() != lastQueuePosition) {
