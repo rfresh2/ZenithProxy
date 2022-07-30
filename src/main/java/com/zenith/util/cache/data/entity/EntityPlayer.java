@@ -21,6 +21,8 @@
 package com.zenith.util.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.player.CombatState;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerCombatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
@@ -66,6 +68,10 @@ public class EntityPlayer extends EntityEquipment {
                     this.saturation
             ));
             consumer.accept(new ServerPlayerSetExperiencePacket(experience, level, totalExperience));
+            if (this.health == 0.0f) {
+                // indicates respawn screen should be shown
+                consumer.accept(new ServerCombatPacket(this.entityId, -1, "", false));
+            }
         } else {
             consumer.accept(new ServerSpawnPlayerPacket(
                     this.entityId,
