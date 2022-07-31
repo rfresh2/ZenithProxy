@@ -94,14 +94,22 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
             if (this.cache.remove(Vec2i.of(x, z)) == null) {
                 CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);
             }
+
+            final int xLow = x * 16;
+            final int xHigh = xLow + 16; //exclusive
+            final int zLow = z * 16;
+            final int zHigh = zLow + 16; //exclusive
+
             List<Vec3i> blockUpdateKeysToRemove = this.blockUpdates.keySet().stream()
-                    .filter(k -> k.x() == x && k.z() == z)
+                    .filter(k -> (k.x() >= xLow && k.x() < xHigh)
+                            && (k.z() >= zLow && k.z() < zHigh))
                     .collect(Collectors.toList());
             for (Vec3i key : blockUpdateKeysToRemove) {
                 this.blockUpdates.remove(key);
             }
             List<Vec3i> tileEntityUpdateKeysToRemove = this.tileEntityUpdates.keySet().stream()
-                    .filter(k -> k.x() == x && k.z() == z)
+                    .filter(k -> (k.x() >= xLow && k.x() < xHigh)
+                            && (k.z() >= zLow && k.z() < zHigh))
                     .collect(Collectors.toList());
             for (Vec3i key : tileEntityUpdateKeysToRemove) {
                 this.tileEntityUpdates.remove(key);
