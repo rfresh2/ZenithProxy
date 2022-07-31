@@ -3,12 +3,12 @@ package com.zenith.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.exception.OutOfRangeException;
+import reactor.netty.http.client.HttpClient;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -20,6 +20,10 @@ import static java.util.Objects.isNull;
 
 public class Queue {
     private static final String apiUrl = "https://2bqueue.info/queue";
+    private static final HttpClient httpClient = HttpClient.create()
+            .secure()
+            .baseUrl(apiUrl)
+            .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON));
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Duration refreshPeriod = Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES);
     private static QueueStatus queueStatus;
@@ -43,7 +47,7 @@ public class Queue {
 
     static {
         refreshExecutorService.scheduleAtFixedRate(
-                () -> updateQueueStatus(),
+                Queue::updateQueueStatus,
                 0,
                 refreshPeriod.toMillis(),
                 TimeUnit.MILLISECONDS);
@@ -58,10 +62,13 @@ public class Queue {
 
     private static void updateQueueStatus() {
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
-            connection.setRequestProperty("accept", "application/json");
-            InputStream responseStream = connection.getInputStream();
-            queueStatus = mapper.readValue(responseStream, QueueStatus.class);
+            final String response = httpClient
+                    .get()
+                    .responseContent()
+                    .aggregate()
+                    .asString()
+                    .block();
+            queueStatus = mapper.readValue(response, QueueStatus.class);
         } catch (Exception e) {
             SERVER_LOG.error("Failed updating queue status", e);
             if (isNull(queueStatus)) {
