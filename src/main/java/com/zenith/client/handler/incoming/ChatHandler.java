@@ -23,6 +23,7 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
+import com.zenith.event.proxy.ServerRestartingEvent;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
@@ -43,7 +44,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
             CHAT_LOG.info(packet.getMessage());
             MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
             final String messageString = mcTextRoot.toRawString();
-            /**
+            /*
              * example death message:
              * {"extra":[{"text":""},{"color":"dark_aqua","text":""},
              * {"color":"dark_aqua","clickEvent":{"action":"suggest_command","value":"/w DCI5135 "},
@@ -53,15 +54,22 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
              * {"color":"dark_aqua","text":" "},
              * {"color":"dark_red","text":"died inside lava somehow."}],"text":""}
              */
-            if (!messageString.startsWith("<") // normal chat msg
-                    // death message color on 2b
-                    && mcTextRoot.getChildren().stream().anyMatch(child -> child.getColor().equals(new Color(170, 0, 0)))
-                    // we should find ourselves in the death message
-                    && mcTextRoot.getChildren().stream().anyMatch(child -> child.getText().equals(CONFIG.authentication.username))) {
+            if (!messageString.startsWith("<")) { // normal chat msg
+                // death message color on 2b
+                if (mcTextRoot.getChildren().stream().anyMatch(child -> child.getColor().equals(new Color(170, 0, 0)))
+                        // we should find ourselves in the death message
+                        && mcTextRoot.getChildren().stream().anyMatch(child -> child.getText().equals(CONFIG.authentication.username))) {
                     // todo: known oversight: also detects when we kill someone else
-                // probable death message
-                EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
+                    // probable death message
+                    EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
+                } else if (messageString.startsWith(("[SERVER]"))) { // server message
+                    System.out.println(messageString);
+                    if (messageString.startsWith("[SERVER] Server restarting in 15 minutes...")) { // todo: include time till restart in event
+                        EVENT_BUS.dispatch(new ServerRestartingEvent());
+                    }
+                }
             }
+
 
             if ("2b2t.org".equals(CONFIG.client.server.address)
                     && mcTextRoot.toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {

@@ -85,6 +85,7 @@ public class Constants {
     public static final Logger DISCORD_LOG = DEFAULT_LOG.channel("Discord");
 
     public static final File CONFIG_FILE = new File("config.json");
+    public static final String SERVER_RESTARTING = "Server restarting";
     public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
 

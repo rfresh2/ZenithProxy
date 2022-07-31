@@ -418,6 +418,16 @@ public class DiscordBot {
         sendEmbedMessageAndBlock(getUpdateMessage());
     }
 
+    @Subscribe
+    public void handleServerRestartingEvent(ServerRestartingEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Server Restarting!" + " : " + CONFIG.authentication.username)
+                .color(Color.CYAN)
+                .addField("Message", "restarting in 15 minutes...", true)
+                .addField("Server", CONFIG.client.server.address, false)
+                .build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")

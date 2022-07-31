@@ -212,6 +212,13 @@ public class Proxy {
         disconnect(MANUAL_DISCONNECT);
     }
 
+    public void disconnect(final String reason, final Throwable cause) {
+        if (this.isConnected()) {
+            this.client.disconnect(reason, cause);
+        }
+        CACHE.reset(true);
+    }
+
     public void disconnect(final String reason) {
         if (this.isConnected()) {
             this.client.disconnect(reason);
@@ -517,5 +524,12 @@ public class Proxy {
     @Subscribe
     public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
         connectedClientGameProfile = Optional.ofNullable(event.clientGameProfile);
+    }
+
+    @Subscribe
+    public void handleServerRestartingEvent(ServerRestartingEvent event) {
+        if (!CONFIG.authentication.prio && isNull(getCurrentPlayer().get())) {
+            disconnect(SERVER_RESTARTING, new Exception());
+        }
     }
 }
