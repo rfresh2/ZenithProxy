@@ -12,6 +12,7 @@ import discord4j.rest.util.MultipartRequest;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
 
@@ -48,7 +49,7 @@ public class StalkCommand extends Command {
                     .title("Stalk List")
                     .color(Color.CYAN)
                     .addField("Players", ((CONFIG.client.extra.stalk.stalkList.size() > 0)
-                                    ? String.join(", ", CONFIG.client.extra.stalk.stalkList)
+                                    ? escape(String.join(", ", CONFIG.client.extra.stalk.stalkList))
                                     : "Stalk list is empty"),
                             false);
         } else if (commandArgs.size() < 3) {
@@ -64,7 +65,7 @@ public class StalkCommand extends Command {
                     .title("Added player: " + commandArgs.get(2) + " To Stalk List")
                     .color(Color.CYAN)
                     .addField("Players", ((CONFIG.client.extra.stalk.stalkList.size() > 0)
-                                    ? String.join(", ", CONFIG.client.extra.stalk.stalkList)
+                                    ? escape(String.join(", ", CONFIG.client.extra.stalk.stalkList))
                                     : "Stalk list is empty"),
                             false);
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
@@ -73,7 +74,7 @@ public class StalkCommand extends Command {
                     .title("Removed player: " + commandArgs.get(2) + " From Stalk List")
                     .color(Color.CYAN)
                     .addField("Players", ((CONFIG.client.extra.stalk.stalkList.size() > 0)
-                                    ? String.join(", ", CONFIG.client.extra.stalk.stalkList)
+                                    ? escape(String.join(", ", CONFIG.client.extra.stalk.stalkList))
                                     : "Stalk list is empty"),
                             false);
         } else {

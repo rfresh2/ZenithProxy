@@ -20,7 +20,9 @@
 
 package com.zenith.client.handler.incoming.spawn;
 
+import com.github.steveice10.mc.protocol.data.game.entity.type.object.ObjectType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
+import com.zenith.util.cache.data.entity.EntityArmorStand;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.EntityObject;
@@ -34,8 +36,13 @@ import static com.zenith.util.Constants.*;
 public class SpawnObjectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnObjectPacket, PorkClientSession> {
     @Override
     public boolean applyAsync(@NonNull ServerSpawnObjectPacket packet, @NonNull PorkClientSession session) {
-        // todo: handle armor stand as equipment entity
-        CACHE.getEntityCache().add(new EntityObject()
+        EntityObject entity;
+        if (packet.getType() == ObjectType.ARMOR_STAND) {
+            entity = new EntityArmorStand();
+        } else {
+            entity = new EntityObject();
+        }
+        CACHE.getEntityCache().add(entity
                 .setObjectType(packet.getType())
                 .setData(packet.getData())
                 .setEntityId(packet.getEntityId())

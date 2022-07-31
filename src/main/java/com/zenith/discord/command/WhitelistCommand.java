@@ -11,8 +11,8 @@ import discord4j.rest.util.MultipartRequest;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.Constants.*;
 
 public class WhitelistCommand extends Command {
@@ -36,7 +36,7 @@ public class WhitelistCommand extends Command {
             embedBuilder
                     .title("Whitelist List")
                     .color(Color.CYAN)
-                    .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
+                    .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                             false);
         } else if (commandArgs.size() < 3) {
             embedBuilder
@@ -50,14 +50,14 @@ public class WhitelistCommand extends Command {
             embedBuilder
                     .title("Added user: " + commandArgs.get(2) + " To Whitelist")
                     .color(Color.CYAN)
-                    .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
+                    .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                             false);
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
             CONFIG.server.extra.whitelist.allowedUsers.removeIf(s -> s.equalsIgnoreCase(commandArgs.get(2)));
             embedBuilder
                     .title("Removed user: " + commandArgs.get(2) + " From Whitelist")
                     .color(Color.CYAN)
-                    .addField("Whitelisted", ((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty"),
+                    .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                             false);
         } else {
             embedBuilder

@@ -60,7 +60,7 @@ public class AutoDisconnectCommand extends Command {
             } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
                 CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = false;
                 embedBuilder
-                        .title("AutoDisconnect AutoClientDisconnect On!")
+                        .title("AutoDisconnect AutoClientDisconnect Off!")
                         .color(Color.CYAN);
             } else {
                 embedBuilder

@@ -37,13 +37,11 @@ public class AutoRespawnCommand extends Command {
             CONFIG.client.extra.autoRespawn.enabled = true;
             embedBuilder
                     .title("AutoRespawn On!")
-                    .addField("Delay", ""+CONFIG.client.extra.autoRespawn.enabled, false)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
             CONFIG.client.extra.autoRespawn.enabled = false;
             embedBuilder
                     .title("AutoRespawn Off!")
-                    .addField("Delay", ""+CONFIG.client.extra.autoRespawn.enabled, false)
                     .color(Color.CYAN);
         } else if (commandArgs.size() < 3) {
             embedBuilder

@@ -21,6 +21,8 @@
 package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
+import com.zenith.util.cache.data.entity.Entity;
+import com.zenith.util.cache.data.entity.EntityArmorStand;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.cache.data.entity.EntityEquipment;
@@ -35,9 +37,13 @@ public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHand
     @Override
     public boolean applyAsync(@NonNull ServerEntityEquipmentPacket packet, @NonNull PorkClientSession session) {
         try {
-            EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
+            Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
-                entity.getEquipment().put(packet.getSlot(), packet.getItem());
+                if (entity instanceof EntityEquipment) {
+                    ((EntityEquipment) entity).getEquipment().put(packet.getSlot(), packet.getItem());
+                } else if (entity instanceof EntityArmorStand) {
+                    ((EntityArmorStand) entity).getEquipment().put(packet.getSlot(), packet.getItem());
+                }
             } else {
                 CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
                 return false;

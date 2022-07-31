@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
 
@@ -110,6 +111,6 @@ public class VisualRangeCommand extends Command {
     }
 
     private String friendListString() {
-        return (CONFIG.client.extra.friendList.size() > 0 ? String.join(", ", CONFIG.client.extra.friendList) : "Friend List is empty");
+        return escape((CONFIG.client.extra.friendList.size() > 0 ? String.join(", ", CONFIG.client.extra.friendList) : "Friend List is empty"));
     }
 }
