@@ -22,28 +22,40 @@ package com.zenith.util.cache.data.chunk;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
+import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMultiBlockChangePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
 import net.daporkchop.lib.math.vector.Vec2i;
 import com.zenith.util.cache.CachedData;
+import net.daporkchop.lib.math.vector.Vec3i;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
  */
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
     protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
+    protected final Map<Vec3i, ServerBlockChangePacket> blockUpdates = new ConcurrentHashMap<>();
+    protected final Map<Vec3i, ServerUpdateTileEntityPacket> tileEntityUpdates = new ConcurrentHashMap<>();
 
     public void add(@NonNull Column column) {
-        this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
-        CACHE_LOG.debug("Cached chunk (%d, %d)", column.getX(), column.getZ());
+        synchronized (this) {
+            this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
+            CACHE_LOG.debug("Cached chunk (%d, %d)", column.getX(), column.getZ());
+        }
     }
 
     /**
@@ -77,9 +89,53 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public void remove(int x, int z) {
-        CACHE_LOG.debug("Server telling us to uncache chunk (%d, %d)", x, z);
-        if (this.cache.remove(Vec2i.of(x, z)) == null) {
-            CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);
+        synchronized (this) {
+            CACHE_LOG.debug("Server telling us to uncache chunk (%d, %d)", x, z);
+            if (this.cache.remove(Vec2i.of(x, z)) == null) {
+                CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);
+            }
+            List<Vec3i> blockUpdateKeysToRemove = this.blockUpdates.keySet().stream()
+                    .filter(k -> k.x() == x && k.z() == z)
+                    .collect(Collectors.toList());
+            for (Vec3i key : blockUpdateKeysToRemove) {
+                this.blockUpdates.remove(key);
+            }
+            List<Vec3i> tileEntityUpdateKeysToRemove = this.tileEntityUpdates.keySet().stream()
+                    .filter(k -> k.x() == x && k.z() == z)
+                    .collect(Collectors.toList());
+            for (Vec3i key : tileEntityUpdateKeysToRemove) {
+                this.tileEntityUpdates.remove(key);
+            }
+        }
+    }
+
+    public void updateBlock(ServerBlockChangePacket packet) {
+        synchronized (this) {
+            Position pos = packet.getRecord().getPosition();
+            if (pos.getY() < 0 || pos.getY() >= 256) {
+                CLIENT_LOG.error("Received out-of-bounds block update: %s", packet.getRecord());
+                return;
+            }
+            final int x = pos.getX();
+            final int y = pos.getY();
+            final int z = pos.getZ();
+            final Vec3i changeKey = Vec3i.of(x, y, z);
+            this.blockUpdates.put(changeKey, packet);
+        }
+    }
+
+    public void updateTileEntity(final ServerUpdateTileEntityPacket packet) {
+        synchronized (this) {
+            Position pos = packet.getPosition();
+            if (pos.getY() < 0 || pos.getY() >= 256) {
+                CLIENT_LOG.error("Received out-of-bounds tile entity update: %s", pos);
+                return;
+            }
+            final int x = pos.getX();
+            final int y = pos.getY();
+            final int z = pos.getZ();
+            final Vec3i changeKey = Vec3i.of(x, y, z);
+            this.tileEntityUpdates.put(changeKey, packet);
         }
     }
 
@@ -87,6 +143,10 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cache.values().parallelStream()
                 .map(ServerChunkDataPacket::new)
+                .forEach(consumer);
+        this.blockUpdates.values()
+                .forEach(consumer);
+        this.tileEntityUpdates.values()
                 .forEach(consumer);
     }
 

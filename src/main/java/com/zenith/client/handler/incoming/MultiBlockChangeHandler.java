@@ -26,6 +26,9 @@ import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
+import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.util.Constants.DEFAULT_LOG;
+
 /**
  * @author DaPorkchop_
  */
@@ -33,7 +36,7 @@ public class MultiBlockChangeHandler implements HandlerRegistry.AsyncIncomingHan
     @Override
     public boolean applyAsync(@NonNull ServerMultiBlockChangePacket packet, @NonNull PorkClientSession session) {
         for (BlockChangeRecord record : packet.getRecords())    {
-            return BlockChangeHandler.handleChange(record);
+            BlockChangeHandler.handleChange(record);
         }
         return true;
     }

@@ -22,10 +22,16 @@ package com.zenith.server.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.RefStrings;
+import com.zenith.util.Wait;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
+
+import java.util.concurrent.ForkJoinPool;
 
 import static com.zenith.util.Constants.*;
 
@@ -47,7 +53,25 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                     SERVER_LOG.debug(msg);
                 }
             }
-            data.getPackets(session::send);
+            data.getPackets(p -> {
+                if (p instanceof ServerBlockChangePacket || p instanceof ServerUpdateTileEntityPacket) {
+                    return;
+                }
+                session.send(p);
+            });
+            ForkJoinPool.commonPool().submit(() -> {
+                // client needs to receive chunks first.
+                // this wait is kinda arbitrary and may be too short or long for some clients
+                // likely dependent on client net speed
+                // we don't have a good hook into when the client is done receiving chunks though.
+                // waiting too long will appear as though chunks are visibly updating for client during play
+                Wait.waitALittle(1);
+                data.getPackets(p -> {
+                    if (p instanceof ServerBlockChangePacket || p instanceof ServerUpdateTileEntityPacket) {
+                        session.send(p);
+                    }
+                });
+            });
         });
 
         session.setLoggedIn(true);

@@ -20,9 +20,6 @@
 
 package com.zenith.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.zenith.client.PorkClientSession;
@@ -36,26 +33,13 @@ import static com.zenith.util.Constants.*;
  */
 public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBlockChangePacket, PorkClientSession> {
     static boolean handleChange(@NonNull BlockChangeRecord record) {
-        Position pos = record.getPosition();
-        if (pos.getY() < 0 || pos.getY() >= 256) {
-            CLIENT_LOG.error("Received out-of-bounds block update: %s", record);
-            return true;
+        try {
+            CLIENT_LOG.debug("Handling block update: pos: [" + record.getPosition().getX() + ", " + record.getPosition().getY() + ", " + record.getPosition().getZ() + "], id: " + record.getBlock().getId() + ", data: " + record.getBlock().getData());
+            CACHE.getChunkCache().updateBlock(new ServerBlockChangePacket(record));
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error applying block update", e);
         }
-        Column column = CACHE.getChunkCache().get(pos.getX() >> 4, pos.getZ() >> 4);
-        if (column != null) {
-            Chunk chunk = column.getChunks()[pos.getY() >> 4];
-            if (chunk == null) {
-                chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
-                SERVER_LOG.warn("No Chunk found for block update with position: " + pos);
-                return false;
-            }
-            chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
-            SERVER_LOG.debug("Updating block: [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "] Id: " + record.getBlock().getId() + ", data: " + record.getBlock().getData());
-            return true;
-        } else {
-            SERVER_LOG.error("Received block update for uncached chunk with position: " + pos);
-            return false;
-        }
+        return true;
     }
 
     @Override
