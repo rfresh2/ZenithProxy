@@ -31,6 +31,7 @@ public class StatusCommand extends Command {
                         .addField("Connected User", getUserName(), true)
                         .addField("Online Time", getOnlineTime(), true)
                         .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
+                        .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no"), true)
                         .addField("2b2t Queue", getQueueStatus(), false)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                         .addField("Dimension",

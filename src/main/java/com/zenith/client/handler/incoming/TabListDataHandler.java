@@ -21,9 +21,12 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.zenith.event.proxy.PrioStatusUpdateEvent;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;
+import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import static com.zenith.util.Constants.*;
 
@@ -37,6 +40,19 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
         WEBSOCKET_SERVER.firePlayerListUpdate();
+
+        MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getFooter());
+        final String messageString = mcTextRoot.toRawString().replace("\n", "");
+        /**
+         * non prio:
+         * "You can purchase priority queue status to join the server faster, visit shop.2b2t.org"
+         *
+         * prio:
+         * "This account has priority status and will be placed in a shorter queue."
+         */
+        if (messageString.contains("priority")) {
+            EVENT_BUS.dispatch(new PrioStatusUpdateEvent(!messageString.contains("shop.2b2t.org")));
+        }
         return true;
     }
 

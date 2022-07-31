@@ -56,7 +56,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
              */
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
-                if (mcTextRoot.getChildren().stream().anyMatch(child -> child.getColor().equals(new Color(170, 0, 0)))
+                if (mcTextRoot.getChildren().stream().anyMatch(child -> child.getColor().equals(new Color(170, 0, 0))) //throws a nullpointer exception for queue messages, will fix later
                         // we should find ourselves in the death message
                         && mcTextRoot.getChildren().stream().anyMatch(child -> child.getText().equals(CONFIG.authentication.username))) {
                     // todo: known oversight: also detects when we kill someone else

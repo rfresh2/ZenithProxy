@@ -472,17 +472,17 @@ public class Proxy {
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         // bounds here are mainly to catch when queue size changes very frequently
-        if (event.position >= Queue.getQueueStatus().prio - 50
-                && event.position <= Queue.getQueueStatus().prio + 50
-                && !this.isPrio.isPresent()) {
-            this.isPrio = Optional.of(true);
-            CONFIG.authentication.prio = true;
-        } else {
-            if (!this.isPrio.isPresent()) {
-                this.isPrio = Optional.of(false);
-                CONFIG.authentication.prio = false;
-            }
-        }
+//        if (event.position >= Queue.getQueueStatus().prio - 50
+//                && event.position <= Queue.getQueueStatus().prio + 50
+//                && !this.isPrio.isPresent()) {
+//            this.isPrio = Optional.of(true);
+//            CONFIG.authentication.prio = true;
+//        } else {
+//            if (!this.isPrio.isPresent()) {
+//                this.isPrio = Optional.of(false);
+//                CONFIG.authentication.prio = false;
+//            }
+//        }
         this.queuePosition = event.position;
     }
 
@@ -496,8 +496,7 @@ public class Proxy {
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         if (!this.isPrio.isPresent()) {
             // assume we are prio if we skipped queuing
-            this.isPrio = Optional.of(true);
-            CONFIG.authentication.prio = true;
+            EVENT_BUS.dispatch(new PrioStatusUpdateEvent(true));
         }
     }
 
@@ -530,6 +529,21 @@ public class Proxy {
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         if (!CONFIG.authentication.prio && isNull(getCurrentPlayer().get())) {
             disconnect(SERVER_RESTARTING, new Exception());
+        }
+    }
+
+    @Subscribe
+    public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
+        if (!this.isPrio.isPresent()) {
+            this.isPrio = Optional.of(event.prio);
+            CONFIG.authentication.prio = event.prio;
+            saveConfig();
+            CLIENT_LOG.info("Prio Detected: " + event.prio);
+        } else if (event.prio != this.isPrio.get()) {
+            this.isPrio = Optional.of(event.prio);
+            CONFIG.authentication.prio = event.prio;
+            saveConfig();
+            CLIENT_LOG.info("Prio Change Detected: " + event.prio);
         }
     }
 }
