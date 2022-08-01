@@ -249,25 +249,24 @@ public class Proxy {
 //        }
     }
 
-    public void connect() {
-        synchronized (this) {
-            this.logIn();
-            if (this.isConnected()) {
-                throw new IllegalStateException("Already connected!");
-            }
-
-            String address = CONFIG.client.server.address;
-            int port = CONFIG.client.server.port;
-
-            CLIENT_LOG.info("Connecting to %s:%d...", address, port);
-            this.client = new PorkClientSession(address, port, this.protocol, this);
-            if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
-                this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
-            }
-            this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
-            this.client.connect(true);
+    public synchronized void connect() {
+        this.logIn();
+        if (this.isConnected()) {
+            throw new IllegalStateException("Already connected!");
         }
+
+        String address = CONFIG.client.server.address;
+        int port = CONFIG.client.server.port;
+
+        CLIENT_LOG.info("Connecting to %s:%d...", address, port);
+        this.client = new PorkClientSession(address, port, this.protocol, this);
+        if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
+            this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
+        }
+        this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
+        this.client.connect(true);
     }
+
 
     public boolean isConnected() {
         return this.client != null && this.client.isConnected();
@@ -340,7 +339,15 @@ public class Proxy {
         if (this.loggerInner == null) {
             this.loggerInner = new LoggerInner();
         }
-        this.protocol = this.loggerInner.handleRelog();
+        int tries = 0;
+        while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
+            tries++;
+            AUTH_LOG.warn("Failed login attempt " + tries);
+        }
+        if (tries == 3) {
+            this.client.disconnect("Auth failed");
+            return;
+        }
         if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
             ForkJoinPool.commonPool().execute(() -> {
                 try {
@@ -353,6 +360,27 @@ public class Proxy {
         }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
         AUTH_LOG.success("Logged in.");
+    }
+
+    public Future<Boolean> loginTask() {
+        return ForkJoinPool.commonPool().submit(() -> {
+            try {
+                this.protocol = this.loggerInner.handleRelog();
+                return true;
+            } catch (final Exception e) {
+                CLIENT_LOG.error(e);
+                return false;
+            }
+        });
+    }
+
+    public boolean retrieveLoginTaskResult(Future<Boolean> loginTask) {
+        try {
+            return loginTask().get(10L, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            loginTask.cancel(true);
+            return false;
+        }
     }
 
     public URL getAvatarURL(UUID uuid) {
