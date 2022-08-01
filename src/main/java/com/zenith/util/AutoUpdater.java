@@ -6,14 +6,18 @@ import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.FetchResult;
+import org.eclipse.jgit.transport.TrackingRefUpdate;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
@@ -48,9 +52,17 @@ public class AutoUpdater {
 
     private void updateCheck() {
         try {
-
             final FetchResult fetchResult = git.fetch().setCheckFetchedObjects(true).setDryRun(true).call();
-            if (fetchResult.getTrackingRefUpdates().size() > 0) {
+            List<TrackingRefUpdate> localBranchUpdates = fetchResult.getTrackingRefUpdates().stream()
+                    .filter(trackingRefUpdate -> {
+                        try {
+                            return Objects.equals(trackingRefUpdate.getRemoteName(), git.getRepository().getFullBranch());
+                        } catch (IOException e) {
+                            return false;
+                        }
+                    })
+                    .collect(Collectors.toList());
+            if (localBranchUpdates.size() > 0) {
                 if (!updateAvailable) DEFAULT_LOG.info("New update found!"); // only log on first detection
                 updateAvailable = true;
                 if (!proxy.isConnected()

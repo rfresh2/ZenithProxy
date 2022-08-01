@@ -174,9 +174,13 @@ public class ClientListener implements SessionListener {
     @Override
     public void disconnecting(DisconnectingEvent event) {
         WEBSOCKET_SERVER.fireReset();
-        CLIENT_LOG.info("Disconnecting from server...")
-                  .trace("Disconnect reason: %s", event.getReason());
-
+        try {
+            CLIENT_LOG.info("Disconnecting from server...")
+                    .trace("Disconnect reason: %s", event.getReason());
+            // reason can be malformed for MC parser the logger uses
+        } catch (final Exception e) {
+            // fall through
+        }
         PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
         if (connection != null)    {
             connection.disconnect(event.getReason());
