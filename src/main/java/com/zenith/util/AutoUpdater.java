@@ -70,12 +70,14 @@ public class AutoUpdater {
                         && proxy.getDisconnectTime().isBefore(Instant.now().minus(60L, ChronoUnit.SECONDS))) {
                     update();
                 }
+            } else {
+                updateAvailable = false;
             }
         } catch (final Exception e) {
             DEFAULT_LOG.error("Error checking for updates.", e);
             // fall through
+            updateAvailable = false;
         }
-        updateAvailable = false;
     }
 
     public void stop() {
