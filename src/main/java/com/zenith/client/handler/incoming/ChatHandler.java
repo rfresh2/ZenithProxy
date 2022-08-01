@@ -33,6 +33,7 @@ import com.zenith.util.handler.HandlerRegistry;
 import java.awt.*;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
@@ -56,9 +57,9 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
              */
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
-                if (mcTextRoot.getChildren().stream().anyMatch(child -> child.getColor().equals(new Color(170, 0, 0))) //throws a nullpointer exception for queue messages, will fix later
+                if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)))
                         // we should find ourselves in the death message
-                        && mcTextRoot.getChildren().stream().anyMatch(child -> child.getText().equals(CONFIG.authentication.username))) {
+                        && mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getText()) && child.getText().equals(CONFIG.authentication.username))) {
                     // todo: known oversight: also detects when we kill someone else
                     // probable death message
                     EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
