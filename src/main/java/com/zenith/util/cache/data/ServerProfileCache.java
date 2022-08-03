@@ -30,18 +30,24 @@ import com.zenith.util.cache.CachedData;
 
 import java.util.function.Consumer;
 
-/**
- * @author DaPorkchop_
- */
-@Getter
-@Setter
-@Accessors(chain = true)
 public class ServerProfileCache implements CachedData {
 
     protected GameProfile profile;
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
+    }
+
+    public GameProfile getProfile() {
+        synchronized (this) {
+            return profile;
+        }
+    }
+
+    public void setProfile(final GameProfile profile) {
+        synchronized (this) {
+            this.profile = profile;
+        }
     }
 
     @Override

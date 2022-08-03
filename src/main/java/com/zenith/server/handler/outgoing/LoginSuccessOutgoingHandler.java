@@ -37,7 +37,7 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
         // profile could be null at this point?
         int tryCount = 0;
         while (tryCount < 3 && CACHE.getProfileCache().getProfile() == null) {
-            Wait.waitALittleMs(100);
+            Wait.waitALittleMs(500);
             tryCount++;
         }
         if (CACHE.getProfileCache().getProfile() == null) {
