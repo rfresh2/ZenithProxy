@@ -376,7 +376,7 @@ public class Proxy {
 
     public boolean retrieveLoginTaskResult(Future<Boolean> loginTask) {
         try {
-            return loginTask().get(10L, TimeUnit.SECONDS);
+            return loginTask.get(10L, TimeUnit.SECONDS);
         } catch (Exception e) {
             loginTask.cancel(true);
             return false;
