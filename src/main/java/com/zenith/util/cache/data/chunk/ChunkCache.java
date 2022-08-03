@@ -23,10 +23,8 @@ package com.zenith.util.cache.data.chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMultiBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
@@ -41,7 +39,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.*;
-import static java.util.Objects.isNull;
 
 /**
  * @author DaPorkchop_
@@ -161,6 +158,8 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Override
     public void reset(boolean full) {
         this.cache.clear();
+        this.blockUpdates.clear();
+        this.tileEntityUpdates.clear();
     }
 
     @Override
