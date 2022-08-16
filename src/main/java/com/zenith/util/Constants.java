@@ -26,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
+import com.zenith.client.handler.incoming.spawn.*;
 import com.zenith.discord.DiscordBot;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
@@ -37,11 +38,6 @@ import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import com.zenith.client.PorkClientSession;
-import com.zenith.client.handler.incoming.spawn.SpawnExperienceOrbHandler;
-import com.zenith.client.handler.incoming.spawn.SpawnMobHandler;
-import com.zenith.client.handler.incoming.spawn.SpawnObjectHandler;
-import com.zenith.client.handler.incoming.spawn.SpawnPaintingPacket;
-import com.zenith.client.handler.incoming.spawn.SpawnPlayerHandler;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.handler.incoming.LoginStartHandler;
 import com.zenith.server.handler.incoming.ServerChatHandler;
@@ -51,7 +47,7 @@ import com.zenith.server.handler.incoming.movement.PlayerPositionRotationHandler
 import com.zenith.server.handler.incoming.movement.PlayerRotationHandler;
 import com.zenith.server.handler.outgoing.LoginSuccessOutgoingHandler;
 import com.zenith.server.handler.postoutgoing.JoinGamePostHandler;
-import com.zenith.util.cache.DataCache;
+import com.zenith.cache.DataCache;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.websocket.WebSocketServer;
 

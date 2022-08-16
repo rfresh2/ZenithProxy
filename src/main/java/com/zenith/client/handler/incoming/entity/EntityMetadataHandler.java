@@ -22,10 +22,9 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
-import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
-import com.zenith.util.cache.data.entity.Entity;
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;

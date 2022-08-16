@@ -18,11 +18,12 @@
  *
  */
 
-package com.zenith.util.cache.data.entity;
+package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
+import com.github.steveice10.mc.protocol.data.game.entity.type.PaintingType;
+import com.github.steveice10.mc.protocol.data.game.entity.type.object.HangingDirection;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,31 +31,30 @@ import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
 
+import static net.daporkchop.lib.common.math.PMath.*;
+
 /**
  * @author DaPorkchop_
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class EntityMob extends EntityEquipment {
-    protected MobType mobType;
+public class EntityPainting extends Entity {
+    protected PaintingType paintingType;
+    protected HangingDirection direction;
 
     @Override
     public void addPackets(Consumer<Packet> consumer) {
-        consumer.accept(new ServerSpawnMobPacket(
+        consumer.accept(new ServerSpawnPaintingPacket(
                 this.entityId,
                 this.uuid,
-                this.mobType,
-                this.x,
-                this.y,
-                this.z,
-                this.yaw,
-                this.pitch,
-                this.headYaw,
-                this.velX,
-                this.velY,
-                this.velZ,
-                this.metadata.toArray(new EntityMetadata[0])
+                this.paintingType,
+                new Position(
+                        floorI(this.x),
+                        floorI(this.y),
+                        floorI(this.z)
+                ),
+                this.direction
         ));
         super.addPackets(consumer);
     }

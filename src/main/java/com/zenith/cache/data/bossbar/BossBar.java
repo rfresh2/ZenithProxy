@@ -18,42 +18,49 @@
  *
  */
 
-package com.zenith.util.cache.data;
+package com.zenith.cache.data.bossbar;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.packetlib.packet.Packet;
+import com.github.steveice10.mc.protocol.data.game.BossBarAction;
+import com.github.steveice10.mc.protocol.data.game.BossBarColor;
+import com.github.steveice10.mc.protocol.data.game.BossBarDivision;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import com.zenith.util.cache.CachedData;
 
-import java.util.function.Consumer;
+import java.util.UUID;
 
-public class ServerProfileCache implements CachedData {
+/**
+ * @author DaPorkchop_
+ */
+@Getter
+@Setter
+@Accessors(chain = true)
+@RequiredArgsConstructor
+public class BossBar {
+    @NonNull
+    protected final UUID uuid;
 
-    protected GameProfile profile;
+    protected String title;
+    protected float health;
+    protected BossBarColor color;
+    protected BossBarDivision division;
+    protected boolean darkenSky;
+    protected boolean dragonBar;
 
-    @Override
-    public void getPackets(@NonNull Consumer<Packet> consumer) {
-    }
-
-    public GameProfile getProfile() {
-        synchronized (this) {
-            return profile;
-        }
-    }
-
-    public void setProfile(final GameProfile profile) {
-        synchronized (this) {
-            this.profile = profile;
-        }
-    }
-
-    @Override
-    public void reset(boolean full) {
-        if (full)   {
-            this.profile = null;
-        }
+    public ServerBossBarPacket toMCProtocolLibPacket()  {
+        return new ServerBossBarPacket(
+                this.uuid,
+                BossBarAction.ADD,
+                this.title,
+                this.health,
+                this.color,
+                this.division,
+                this.darkenSky,
+                this.dragonBar,
+                false
+        );
     }
 }

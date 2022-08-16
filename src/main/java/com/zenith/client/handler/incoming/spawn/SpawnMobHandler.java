@@ -24,10 +24,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
-import com.zenith.util.cache.data.entity.EntityMob;
+import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.util.handler.HandlerRegistry;
-
-import java.util.Arrays;
 
 import static com.zenith.util.Constants.*;
 

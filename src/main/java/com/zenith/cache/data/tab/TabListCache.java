@@ -18,22 +18,44 @@
  *
  */
 
-package com.zenith.util.cache;
+package com.zenith.cache.data.tab;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.packetlib.packet.Packet;
+import lombok.Getter;
 import lombok.NonNull;
+import com.zenith.cache.CachedData;
 
 import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-public interface CachedData {
-    void getPackets(@NonNull Consumer<Packet> consumer);
+@Getter
+public class TabListCache implements CachedData {
+    protected TabList tabList = new TabList();
 
-    void reset(boolean full);
+    @Override
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
+        consumer.accept(new ServerPlayerListDataPacket(this.tabList.getHeader(), this.tabList.getFooter(), false));
+        consumer.accept(new ServerPlayerListEntryPacket(
+                PlayerListEntryAction.ADD_PLAYER,
+                this.tabList.getEntries().stream().map(PlayerEntry::toMCProtocolLibEntry).toArray(PlayerListEntry[]::new)
+        ));
+    }
 
-    default String getSendingMessage()  {
-        return null;
+    @Override
+    public void reset(boolean full) {
+        if (full) {
+            this.tabList = new TabList();
+        }
+    }
+
+    @Override
+    public String getSendingMessage() {
+        return "Sending tab list";
     }
 }

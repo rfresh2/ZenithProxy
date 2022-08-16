@@ -18,18 +18,18 @@
  *
  */
 
-package com.zenith.util.cache.data.stats;
+package com.zenith.cache.data.stats;
 
 import com.github.steveice10.mc.protocol.data.game.advancement.Advancement;
 import com.github.steveice10.mc.protocol.data.game.statistic.Statistic;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerAdvancementsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerUnlockRecipesPacket;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.cache.CachedData;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import com.zenith.util.cache.CachedData;
 
 import java.util.ArrayList;
 import java.util.Collections;

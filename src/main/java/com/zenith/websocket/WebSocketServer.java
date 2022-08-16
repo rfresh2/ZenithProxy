@@ -21,7 +21,7 @@
 package com.zenith.websocket;
 
 import lombok.NonNull;
-import com.zenith.util.cache.data.tab.PlayerEntry;
+import com.zenith.cache.data.tab.PlayerEntry;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 

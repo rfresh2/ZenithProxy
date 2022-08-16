@@ -18,17 +18,16 @@
  *
  */
 
-package com.zenith.util.cache;
+package com.zenith.cache;
 
-import com.google.common.collect.Lists;
+import com.zenith.cache.data.PlayerCache;
+import com.zenith.cache.data.ServerProfileCache;
+import com.zenith.cache.data.bossbar.BossBarCache;
+import com.zenith.cache.data.chunk.ChunkCache;
+import com.zenith.cache.data.entity.EntityCache;
+import com.zenith.cache.data.stats.StatisticsCache;
+import com.zenith.cache.data.tab.TabListCache;
 import lombok.Getter;
-import com.zenith.util.cache.data.chunk.ChunkCache;
-import com.zenith.util.cache.data.PlayerCache;
-import com.zenith.util.cache.data.ServerProfileCache;
-import com.zenith.util.cache.data.bossbar.BossBarCache;
-import com.zenith.util.cache.data.entity.EntityCache;
-import com.zenith.util.cache.data.stats.StatisticsCache;
-import com.zenith.util.cache.data.tab.TabListCache;
 
 import java.lang.reflect.Field;
 import java.util.*;

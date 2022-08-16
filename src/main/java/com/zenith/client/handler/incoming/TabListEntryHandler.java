@@ -24,7 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
-import com.zenith.util.cache.data.tab.PlayerEntry;
+import com.zenith.cache.data.tab.PlayerEntry;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
 import com.zenith.util.handler.HandlerRegistry;

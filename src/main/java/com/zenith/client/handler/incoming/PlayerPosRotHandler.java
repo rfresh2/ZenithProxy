@@ -25,7 +25,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTelepo
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
-import com.zenith.util.cache.data.PlayerCache;
+import com.zenith.cache.data.PlayerCache;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;

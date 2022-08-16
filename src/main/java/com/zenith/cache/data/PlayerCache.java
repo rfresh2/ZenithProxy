@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.util.cache.data;
+package com.zenith.cache.data;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
@@ -28,12 +28,12 @@ import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.cache.CachedData;
+import com.zenith.cache.data.entity.EntityPlayer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import com.zenith.util.cache.CachedData;
-import com.zenith.util.cache.data.entity.EntityPlayer;
 
 import java.util.Arrays;
 import java.util.EnumMap;

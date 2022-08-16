@@ -23,7 +23,7 @@ package com.zenith.client.handler.incoming.spawn;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnExpOrbPacket;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
-import com.zenith.util.cache.data.entity.EntityExperienceOrb;
+import com.zenith.cache.data.entity.EntityExperienceOrb;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;

@@ -18,35 +18,39 @@
  *
  */
 
-package com.zenith.util.cache.data.entity;
+package com.zenith.cache.data;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnExpOrbPacket;
+import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.packetlib.packet.Packet;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import com.zenith.cache.CachedData;
 
 import java.util.function.Consumer;
 
-/**
- * @author DaPorkchop_
- */
-@Getter
-@Setter
-@Accessors(chain = true)
-public class EntityExperienceOrb extends Entity {
-    protected int exp;
+public class ServerProfileCache implements CachedData {
+
+    protected GameProfile profile;
 
     @Override
-    public void addPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ServerSpawnExpOrbPacket(
-                this.getEntityId(),
-                this.getX(),
-                this.getY(),
-                this.getZ(),
-                this.exp
-        ));
-        super.addPackets(consumer);
+    public void getPackets(@NonNull Consumer<Packet> consumer) {
+    }
+
+    public GameProfile getProfile() {
+        synchronized (this) {
+            return profile;
+        }
+    }
+
+    public void setProfile(final GameProfile profile) {
+        synchronized (this) {
+            this.profile = profile;
+        }
+    }
+
+    @Override
+    public void reset(boolean full) {
+        if (full)   {
+            this.profile = null;
+        }
     }
 }

@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.util.cache.data.entity;
+package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;

@@ -18,44 +18,61 @@
  *
  */
 
-package com.zenith.util.cache.data.tab;
+package com.zenith.cache.data.bossbar;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import lombok.Getter;
 import lombok.NonNull;
-import com.zenith.util.cache.CachedData;
+import com.zenith.cache.CachedData;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
  */
-@Getter
-public class TabListCache implements CachedData {
-    protected TabList tabList = new TabList();
+public class BossBarCache implements CachedData {
+    protected final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ServerPlayerListDataPacket(this.tabList.getHeader(), this.tabList.getFooter(), false));
-        consumer.accept(new ServerPlayerListEntryPacket(
-                PlayerListEntryAction.ADD_PLAYER,
-                this.tabList.getEntries().stream().map(PlayerEntry::toMCProtocolLibEntry).toArray(PlayerListEntry[]::new)
-        ));
+        this.cachedBossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer);
     }
 
     @Override
     public void reset(boolean full) {
-        if (full) {
-            this.tabList = new TabList();
-        }
+        this.cachedBossBars.clear();
     }
 
     @Override
     public String getSendingMessage() {
-        return "Sending tab list";
+        return String.format("Sending %d boss bars", this.cachedBossBars.size());
+    }
+
+    public void add(@NonNull ServerBossBarPacket packet) {
+        this.cachedBossBars.put(
+                packet.getUUID(),
+                new BossBar(packet.getUUID())
+                        .setTitle(packet.getTitle())
+                        .setHealth(packet.getHealth())
+                        .setColor(packet.getColor())
+                        .setDivision(packet.getDivision())
+                        .setDarkenSky(packet.getDarkenSky())
+                        .setDragonBar(packet.isDragonBar())
+        );
+    }
+
+    public void remove(@NonNull ServerBossBarPacket packet) {
+        this.cachedBossBars.remove(packet.getUUID());
+    }
+
+    public BossBar get(@NonNull ServerBossBarPacket packet) {
+        BossBar bossBar = this.cachedBossBars.get(packet.getUUID());
+        if (bossBar == null)    {
+            return new BossBar(packet.getUUID());
+        }
+        return bossBar;
     }
 }

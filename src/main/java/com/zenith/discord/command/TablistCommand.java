@@ -2,7 +2,7 @@ package com.zenith.discord.command;
 
 import com.google.common.collect.Lists;
 import com.zenith.Proxy;
-import com.zenith.util.cache.data.tab.PlayerEntry;
+import com.zenith.cache.data.tab.PlayerEntry;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;

@@ -21,11 +21,11 @@
 package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
-import com.zenith.util.cache.data.entity.Entity;
-import com.zenith.util.cache.data.entity.EntityArmorStand;
+import com.zenith.cache.data.entity.Entity;
+import com.zenith.cache.data.entity.EntityArmorStand;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
-import com.zenith.util.cache.data.entity.EntityEquipment;
+import com.zenith.cache.data.entity.EntityEquipment;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;

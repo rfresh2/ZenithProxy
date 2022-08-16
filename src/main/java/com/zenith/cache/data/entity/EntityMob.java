@@ -18,19 +18,17 @@
  *
  */
 
-package com.zenith.util.cache.data.bossbar;
+package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.BossBarAction;
-import com.github.steveice10.mc.protocol.data.game.BossBarColor;
-import com.github.steveice10.mc.protocol.data.game.BossBarDivision;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * @author DaPorkchop_
@@ -38,29 +36,26 @@ import java.util.UUID;
 @Getter
 @Setter
 @Accessors(chain = true)
-@RequiredArgsConstructor
-public class BossBar {
-    @NonNull
-    protected final UUID uuid;
+public class EntityMob extends EntityEquipment {
+    protected MobType mobType;
 
-    protected String title;
-    protected float health;
-    protected BossBarColor color;
-    protected BossBarDivision division;
-    protected boolean darkenSky;
-    protected boolean dragonBar;
-
-    public ServerBossBarPacket toMCProtocolLibPacket()  {
-        return new ServerBossBarPacket(
+    @Override
+    public void addPackets(Consumer<Packet> consumer) {
+        consumer.accept(new ServerSpawnMobPacket(
+                this.entityId,
                 this.uuid,
-                BossBarAction.ADD,
-                this.title,
-                this.health,
-                this.color,
-                this.division,
-                this.darkenSky,
-                this.dragonBar,
-                false
-        );
+                this.mobType,
+                this.x,
+                this.y,
+                this.z,
+                this.yaw,
+                this.pitch,
+                this.headYaw,
+                this.velX,
+                this.velY,
+                this.velZ,
+                this.metadata.toArray(new EntityMetadata[0])
+        ));
+        super.addPackets(consumer);
     }
 }

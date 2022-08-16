@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.util.cache.data.tab;
+package com.zenith.cache.data.tab;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import lombok.Getter;

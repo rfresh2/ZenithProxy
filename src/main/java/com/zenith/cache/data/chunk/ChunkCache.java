@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.util.cache.data.chunk;
+package com.zenith.cache.data.chunk;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
@@ -29,7 +29,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdate
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
 import net.daporkchop.lib.math.vector.Vec2i;
-import com.zenith.util.cache.CachedData;
+import com.zenith.cache.CachedData;
 import net.daporkchop.lib.math.vector.Vec3i;
 
 import java.util.*;

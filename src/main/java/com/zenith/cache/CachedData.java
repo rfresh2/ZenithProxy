@@ -18,28 +18,22 @@
  *
  */
 
-package com.zenith.util.cache.data.entity;
+package com.zenith.cache;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
-@Accessors(chain = true)
-@ToString
-public class PotionEffect {
-    @NonNull
-    public final Effect effect;
-    public int amplifier;
-    public int duration;
-    public boolean ambient;
-    public boolean showParticles;
+import java.util.function.Consumer;
+
+/**
+ * @author DaPorkchop_
+ */
+public interface CachedData {
+    void getPackets(@NonNull Consumer<Packet> consumer);
+
+    void reset(boolean full);
+
+    default String getSendingMessage()  {
+        return null;
+    }
 }

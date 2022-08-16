@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.util.cache.data.tab;
+package com.zenith.cache.data.tab;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.auth.exception.property.PropertyException;

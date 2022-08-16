@@ -18,10 +18,9 @@
  *
  */
 
-package com.zenith.util.cache.data.entity;
+package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.player.CombatState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerCombatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;

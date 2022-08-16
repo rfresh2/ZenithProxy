@@ -18,61 +18,53 @@
  *
  */
 
-package com.zenith.util.cache.data.bossbar;
+package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
-import com.zenith.util.cache.CachedData;
+import com.zenith.cache.CachedData;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+
+import static com.zenith.util.Constants.*;
 
 /**
  * @author DaPorkchop_
  */
-public class BossBarCache implements CachedData {
-    protected final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
+public class EntityCache implements CachedData {
+    protected final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        this.cachedBossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer);
+        this.cachedEntities.values().forEach(entity -> entity.addPackets(consumer));
     }
 
     @Override
     public void reset(boolean full) {
-        this.cachedBossBars.clear();
+        if (full) {
+            this.cachedEntities.clear();
+        } else {
+            this.cachedEntities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
+        }
     }
 
     @Override
     public String getSendingMessage() {
-        return String.format("Sending %d boss bars", this.cachedBossBars.size());
+        return String.format("Sending %d entities", this.cachedEntities.size());
     }
 
-    public void add(@NonNull ServerBossBarPacket packet) {
-        this.cachedBossBars.put(
-                packet.getUUID(),
-                new BossBar(packet.getUUID())
-                        .setTitle(packet.getTitle())
-                        .setHealth(packet.getHealth())
-                        .setColor(packet.getColor())
-                        .setDivision(packet.getDivision())
-                        .setDarkenSky(packet.getDarkenSky())
-                        .setDragonBar(packet.isDragonBar())
-        );
+    public void add(@NonNull Entity entity) {
+        this.cachedEntities.put(entity.getEntityId(), entity);
     }
 
-    public void remove(@NonNull ServerBossBarPacket packet) {
-        this.cachedBossBars.remove(packet.getUUID());
+    public void remove(int id)  {
+        this.cachedEntities.remove(id);
     }
 
-    public BossBar get(@NonNull ServerBossBarPacket packet) {
-        BossBar bossBar = this.cachedBossBars.get(packet.getUUID());
-        if (bossBar == null)    {
-            return new BossBar(packet.getUUID());
-        }
-        return bossBar;
+    @SuppressWarnings("unchecked")
+    public <E extends Entity> E get(int id)   {
+        return (E) this.cachedEntities.get(id);
     }
 }

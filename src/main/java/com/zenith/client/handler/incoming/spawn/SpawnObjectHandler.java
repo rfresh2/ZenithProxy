@@ -22,10 +22,10 @@ package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.data.game.entity.type.object.ObjectType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
-import com.zenith.util.cache.data.entity.EntityArmorStand;
+import com.zenith.cache.data.entity.EntityArmorStand;
 import lombok.NonNull;
 import com.zenith.client.PorkClientSession;
-import com.zenith.util.cache.data.entity.EntityObject;
+import com.zenith.cache.data.entity.EntityObject;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
