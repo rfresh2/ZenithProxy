@@ -146,6 +146,7 @@ public class Constants {
             .registerInbound(new SpawnObjectHandler())
             .registerInbound(new SpawnPaintingPacket())
             .registerInbound(new SpawnPlayerHandler())
+            .registerInbound(new SpawnPositionHandler())
             .build();
 
     public static final HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()

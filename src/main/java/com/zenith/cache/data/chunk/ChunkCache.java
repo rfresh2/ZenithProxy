@@ -25,6 +25,7 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerSpawnPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
@@ -44,10 +45,11 @@ import static com.zenith.util.Constants.*;
  * @author DaPorkchop_
  */
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
+    private static final Position DEFAULT_SPAWN_POSITION = new Position(8, 64, 8);
     protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
     protected final Map<Vec3i, ServerBlockChangePacket> blockUpdates = new ConcurrentHashMap<>();
     protected final Map<Vec3i, ServerUpdateTileEntityPacket> tileEntityUpdates = new ConcurrentHashMap<>();
-
+    protected Position spawnPosition = DEFAULT_SPAWN_POSITION;
     public void add(@NonNull Column column) {
         synchronized (this) {
             this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
@@ -144,6 +146,10 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         }
     }
 
+    public void setSpawnPosition(final Position position) {
+        this.spawnPosition = position;
+    }
+
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cache.values().parallelStream()
@@ -153,6 +159,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                 .forEach(consumer);
         this.tileEntityUpdates.values()
                 .forEach(consumer);
+        consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
     }
 
     @Override
@@ -160,10 +167,17 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         this.cache.clear();
         this.blockUpdates.clear();
         this.tileEntityUpdates.clear();
+        this.spawnPosition = DEFAULT_SPAWN_POSITION;
     }
 
     @Override
     public String getSendingMessage() {
-        return String.format("Sending %d chunks", this.cache.size());
+        return String.format("Sending %d chunks, %d block updates, %d tile entity updates, world spawn position [%d, %d, %d]",
+                this.cache.size(),
+                this.blockUpdates.size(),
+                this.tileEntityUpdates.size(),
+                this.spawnPosition.getX(),
+                this.spawnPosition.getY(),
+                this.spawnPosition.getZ());
     }
 }
