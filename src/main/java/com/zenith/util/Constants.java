@@ -28,6 +28,7 @@ import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.client.handler.incoming.spawn.*;
 import com.zenith.discord.DiscordBot;
+import com.zenith.server.handler.spectator.incoming.ServerSpectatorChatHandler;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
 import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
@@ -39,14 +40,14 @@ import net.daporkchop.lib.logging.impl.DefaultLogger;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import com.zenith.client.PorkClientSession;
 import com.zenith.server.PorkServerConnection;
-import com.zenith.server.handler.incoming.LoginStartHandler;
-import com.zenith.server.handler.incoming.ServerChatHandler;
-import com.zenith.server.handler.incoming.ServerKeepaliveHandler;
-import com.zenith.server.handler.incoming.movement.PlayerPositionHandler;
-import com.zenith.server.handler.incoming.movement.PlayerPositionRotationHandler;
-import com.zenith.server.handler.incoming.movement.PlayerRotationHandler;
-import com.zenith.server.handler.outgoing.LoginSuccessOutgoingHandler;
-import com.zenith.server.handler.postoutgoing.JoinGamePostHandler;
+import com.zenith.server.handler.shared.incoming.LoginStartHandler;
+import com.zenith.server.handler.player.incoming.ServerChatHandler;
+import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
+import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
+import com.zenith.server.handler.shared.postoutgoing.JoinGamePostHandler;
 import com.zenith.cache.DataCache;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.websocket.WebSocketServer;
@@ -99,6 +100,7 @@ public class Constants {
 
     public static final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
+            .allowUnhandled(true)
             //
             // Inbound packets
             //
@@ -149,8 +151,9 @@ public class Constants {
             .registerInbound(new SpawnPositionHandler())
             .build();
 
-    public static final HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+    public static final HandlerRegistry<PorkServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
             .setLogger(SERVER_LOG)
+            .allowUnhandled(true)
             //
             // Inbound packets
             //
@@ -168,6 +171,19 @@ public class Constants {
             //
             // Post-outbound packets
             //
+            .registerPostOutbound(new JoinGamePostHandler())
+            .build();
+
+    public static final HandlerRegistry<PorkServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+            .setLogger(SERVER_LOG)
+            .allowUnhandled(false)
+
+            .registerInbound(new LoginStartHandler())
+            .registerInbound(new ServerKeepaliveHandler())
+            .registerInbound(new ServerSpectatorChatHandler())
+
+            .registerOutbound(new LoginSuccessOutgoingHandler())
+
             .registerPostOutbound(new JoinGamePostHandler())
             .build();
 

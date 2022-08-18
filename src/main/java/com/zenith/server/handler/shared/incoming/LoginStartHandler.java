@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.server.handler.incoming;
+package com.zenith.server.handler.shared.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;

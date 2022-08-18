@@ -18,9 +18,9 @@
  *
  */
 
-package com.zenith.server.handler.incoming.movement;
+package com.zenith.server.handler.player.incoming.movement;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
@@ -30,18 +30,17 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class PlayerPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionPacket, PorkServerConnection> {
+public class PlayerRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerRotationPacket, PorkServerConnection> {
     @Override
-    public boolean applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
+    public boolean applyAsync(@NonNull ClientPlayerRotationPacket packet, @NonNull PorkServerConnection session) {
         CACHE.getPlayerCache()
-                .setX(packet.getX())
-                .setY(packet.getY())
-                .setZ(packet.getZ());
+                .setYaw((float) packet.getYaw())
+                .setPitch((float) packet.getPitch());
         return true;
     }
 
     @Override
-    public Class<ClientPlayerPositionPacket> getPacketClass() {
-        return ClientPlayerPositionPacket.class;
+    public Class<ClientPlayerRotationPacket> getPacketClass() {
+        return ClientPlayerRotationPacket.class;
     }
 }

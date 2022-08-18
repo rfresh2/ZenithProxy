@@ -40,6 +40,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
@@ -58,6 +60,8 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     protected final Logger logger;
 
+    protected final boolean allowUnhandled;
+
     protected static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newFixedThreadPool(10); // idk 10 seems reasonable but might need to adjust
 
     @SuppressWarnings("unchecked")
@@ -66,7 +70,11 @@ public class HandlerRegistry<S extends Session> {
             this.logger.debug("Received packet: %s@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
-        return handler == null || handler.apply(packet, session);
+        if (isNull(handler)) {
+            return allowUnhandled;
+        } else {
+            return handler.apply(packet, session);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +83,12 @@ public class HandlerRegistry<S extends Session> {
             this.logger.debug("Sending packet: %s@%08x", CONFIG.debug.packet.preSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
-        return handler == null ? packet : handler.apply(packet, session);
+        if (isNull(handler)) {
+            // allowUnhandled has no effect here
+            return packet;
+        } else {
+            return handler.apply(packet, session);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -84,7 +97,7 @@ public class HandlerRegistry<S extends Session> {
             this.logger.debug("Sent packet: %s@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
-        if (handler != null) {
+        if (nonNull(handler)) {
             handler.accept(packet, session);
         }
     }
@@ -161,6 +174,8 @@ public class HandlerRegistry<S extends Session> {
         @NonNull
         protected Logger logger;
 
+        protected boolean allowUnhandled = true;
+
         public <P extends Packet> Builder<S> registerInbound(@NonNull Class<P> clazz, @NonNull BiConsumer<P, S> handler) {
             return this.registerInbound(clazz, (packet, session) -> {
                 handler.accept(packet, session);
@@ -203,8 +218,13 @@ public class HandlerRegistry<S extends Session> {
             return this;
         }
 
+        public Builder<S> allowUnhandled(final boolean allowUnhandled) {
+            this.allowUnhandled = allowUnhandled;
+            return this;
+        }
+
         public HandlerRegistry<S> build() {
-            return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers, this.logger);
+            return new HandlerRegistry<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers, this.logger, this.allowUnhandled);
         }
     }
 }

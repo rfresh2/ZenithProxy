@@ -72,10 +72,9 @@ public class ClientListener implements SessionListener {
         }
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
-                PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
-                if (connection != null && ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)    {
-                    connection.send(packet);
-                }
+                this.proxy.getServerConnections().stream()
+                        .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
+                        .forEach(connection -> connection.send(packet));
             }
         } catch (RuntimeException e) {
             CLIENT_LOG.alert(e);
@@ -181,10 +180,7 @@ public class ClientListener implements SessionListener {
         } catch (final Exception e) {
             // fall through
         }
-        PorkServerConnection connection = this.proxy.getCurrentPlayer().get();
-        if (connection != null)    {
-            connection.disconnect(event.getReason());
-        }
+        this.proxy.getServerConnections().forEach(connection -> connection.disconnect(event.getReason()));
     }
 
     @Override

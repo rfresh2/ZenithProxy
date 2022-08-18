@@ -24,12 +24,6 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientPluginMessagePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.crypt.PacketEncryption;
 import com.github.steveice10.packetlib.event.session.*;
@@ -47,6 +41,8 @@ import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 import static com.zenith.util.Constants.*;
 
@@ -68,18 +64,35 @@ public class PorkServerConnection implements Session, SessionListener {
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
 
+    protected int spectatorEntityId = 2147483647;
+
     @Override
     public void packetReceived(Session session, Packet packet) {
-        this.lastPacket = System.currentTimeMillis();
-        if (SERVER_HANDLERS.handleInbound(packet, this) && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME && this.isLoggedIn) {
-            this.proxy.getClient().send(packet); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+        if (isActivePlayer()) {
+            this.lastPacket = System.currentTimeMillis();
+            if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)
+                    && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                    && this.isLoggedIn) {
+                this.proxy.getClient().send(packet); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+            }
+        } else {
+            if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)
+                    && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                    && this.isLoggedIn) {
+                this.proxy.getClient().send(packet);
+            }
         }
     }
 
     @Override
     public void packetSending(PacketSendingEvent event) {
         Packet p1 = event.getPacket();
-        Packet p2 = SERVER_HANDLERS.handleOutgoing(p1, this);
+        Packet p2;
+        if (isActivePlayer()) {
+            p2 = SERVER_PLAYER_HANDLERS.handleOutgoing(p1, this);
+        } else {
+            p2 = SERVER_SPECTATOR_HANDLERS.handleOutgoing(p1, this);
+        }
         if (p2 == null) {
             event.setCancelled(true);
         } else if (p1 != p2) {
@@ -89,7 +102,11 @@ public class PorkServerConnection implements Session, SessionListener {
 
     @Override
     public void packetSent(Session session, Packet packet) {
-        SERVER_HANDLERS.handlePostOutgoing(packet, this);
+        if (isActivePlayer()) {
+            SERVER_PLAYER_HANDLERS.handlePostOutgoing(packet, this);
+        } else {
+            SERVER_SPECTATOR_HANDLERS.handlePostOutgoing(packet, this);
+        }
     }
 
     @Override
@@ -124,6 +141,10 @@ public class PorkServerConnection implements Session, SessionListener {
 
     public void send(@NonNull Packet packet) {
         this.session.send(packet);
+    }
+
+    public boolean isActivePlayer() {
+        return Objects.equals(this.proxy.getCurrentPlayer().get(), this);
     }
 
     //

@@ -25,11 +25,10 @@ import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.github.steveice10.packetlib.tcp.TcpServer;
@@ -42,6 +41,7 @@ import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
+import com.zenith.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.*;
 import com.zenith.util.Queue;
 import lombok.Getter;
@@ -58,6 +58,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zenith.util.Constants.*;
@@ -293,40 +294,7 @@ public class Proxy {
                 this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, java.net.Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
-                this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, (ServerLoginHandler) session -> {
-                    // todo: extract this to its own class implementing ServerLoginHandler
-                    PorkServerConnection connection = ((PorkServerListener) this.server.getListeners().stream()
-                            .filter(PorkServerListener.class::isInstance)
-                            .findAny().orElseThrow(IllegalStateException::new))
-                            .getConnections().get(session);
-                    if (!this.currentPlayer.compareAndSet(null, connection)) {
-                        if (CONFIG.server.kickPrevious) {
-                            this.currentPlayer.get().setPlayer(false);
-                            this.currentPlayer.get().disconnect("A new player has connected!");
-                            this.currentPlayer.set(connection);
-                        } else {
-                            connection.disconnect("§cA client is already connected to this bot!");
-                            return;
-                        }
-                    }
-                    connection.setPlayer(true);
-                    session.send(new ServerJoinGamePacket(
-                            CACHE.getPlayerCache().getEntityId(),
-                            CACHE.getPlayerCache().isHardcore(),
-                            CACHE.getPlayerCache().getGameMode(),
-                            CACHE.getPlayerCache().getDimension(),
-                            CACHE.getPlayerCache().getDifficulty(),
-                            CACHE.getPlayerCache().getMaxPlayers(),
-                            CACHE.getPlayerCache().getWorldType(),
-                            CACHE.getPlayerCache().isReducedDebugInfo()
-                    ));
-                    SERVER_LOG.info("Player connected: %s", session.getRemoteAddress());
-                    if (this.currentPlayer.get() != connection) {
-                        SERVER_LOG.alert("login handler fired when session wasn't set yet...");
-                    }
-                    GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-                    EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile));
-                });
+                this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.addListener(new PorkServerListener(this));
                 this.server.bind(false);
@@ -406,6 +374,25 @@ public class Proxy {
 
     private boolean autoReconnectIsInProgress() {
         return this.autoReconnectFuture.isPresent();
+    }
+
+    public Collection<PorkServerConnection> getServerConnections() {
+        return ((PorkServerListener) this.server.getListeners().stream()
+                .filter(PorkServerListener.class::isInstance)
+                .findAny().orElseThrow(IllegalStateException::new))
+                .getConnections()
+                .values();
+    }
+
+    public List<PorkServerConnection> getSpectatorConnections() {
+        return ((PorkServerListener) this.server.getListeners().stream()
+                .filter(PorkServerListener.class::isInstance)
+                .findAny().orElseThrow(IllegalStateException::new))
+                .getConnections()
+                .values()
+                .stream()
+                .filter(connection -> Objects.equals(connection, this.getCurrentPlayer().get()))
+                .collect(Collectors.toList());
     }
 
     @Subscribe(value = Preference.CALLER)

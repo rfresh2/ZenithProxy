@@ -18,24 +18,42 @@
  *
  */
 
-package com.zenith.server.handler.incoming;
+package com.zenith.server.handler.player.incoming.movement;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientKeepAlivePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMovementPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
+import static com.zenith.util.Constants.*;
+
 /**
  * @author DaPorkchop_
  */
-public class ServerKeepaliveHandler implements HandlerRegistry.IncomingHandler<ClientKeepAlivePacket, PorkServerConnection> {
+public class PlayerPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionPacket, PorkServerConnection> {
     @Override
-    public boolean apply(@NonNull ClientKeepAlivePacket packet, @NonNull PorkServerConnection session) {
-        return false;
+    public boolean applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
+        CACHE.getPlayerCache()
+                .setX(packet.getX())
+                .setY(packet.getY())
+                .setZ(packet.getZ());
+        // todo
+//        session.getProxy().getServerConnections()
+//                .forEach(connection -> {
+//                    connection.send(new ServerEntityPositionPacket(
+//                            connection.getSpectatorEntityId(),
+//                            pa
+//                            packet.isOnGround(),
+//                            con
+//                    ));
+//                });
+        return true;
     }
 
     @Override
-    public Class<ClientKeepAlivePacket> getPacketClass() {
-        return ClientKeepAlivePacket.class;
+    public Class<ClientPlayerPositionPacket> getPacketClass() {
+        return ClientPlayerPositionPacket.class;
     }
 }

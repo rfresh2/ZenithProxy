@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.server.handler.incoming;
+package com.zenith.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;

@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.server.handler.outgoing;
+package com.zenith.server.handler.shared.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.zenith.util.Wait;
