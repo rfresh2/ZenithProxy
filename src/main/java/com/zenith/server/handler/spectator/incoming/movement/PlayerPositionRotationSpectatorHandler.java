@@ -42,19 +42,23 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                 .setZ(packet.getZ())
                 .setYaw((float) packet.getYaw())
                 .setPitch((float) packet.getPitch());
-        session.getProxy().getCurrentPlayer().get().send(new ServerEntityTeleportPacket(
-                session.getSpectatorEntityId(),
-                session.getSpectatorPlayerCache().getX(),
-                session.getSpectatorPlayerCache().getY(),
-                session.getSpectatorPlayerCache().getZ(),
-                session.getSpectatorPlayerCache().getYaw(),
-                session.getSpectatorPlayerCache().getPitch(),
-                false
-            ));
-        session.getProxy().getCurrentPlayer().get().send(new ServerEntityHeadLookPacket(
-                session.getSpectatorEntityId(),
-                session.getSpectatorPlayerCache().getYaw()
-        ));
+        session.getProxy().getServerConnections().stream()
+                .filter(connection -> !connection.equals(session))
+                .forEach(connection -> {
+                    connection.send(new ServerEntityTeleportPacket(
+                            session.getSpectatorEntityId(),
+                            session.getSpectatorPlayerCache().getX(),
+                            session.getSpectatorPlayerCache().getY(),
+                            session.getSpectatorPlayerCache().getZ(),
+                            session.getSpectatorPlayerCache().getYaw(),
+                            session.getSpectatorPlayerCache().getPitch(),
+                            false
+                    ));
+                    connection.send(new ServerEntityHeadLookPacket(
+                            session.getSpectatorEntityId(),
+                            session.getSpectatorPlayerCache().getYaw()
+                    ));
+                });
         return false;
     }
 
