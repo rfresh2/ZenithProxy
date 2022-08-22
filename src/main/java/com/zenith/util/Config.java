@@ -219,6 +219,7 @@ public final class Config {
         public int queueWarning = 10; // Queue position to send warning message at
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
+        public boolean allowSpectator = true;
 
         public static final class Bind {
             public String address = "0.0.0.0";

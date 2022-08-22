@@ -44,7 +44,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getWorldType(),
                     CACHE.getPlayerCache().isReducedDebugInfo()
             ));
-        } else {
+        } else if (CONFIG.server.allowSpectator) {
             // if we have a current player, allow login but put in spectator
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile, false));
@@ -58,6 +58,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getWorldType(),
                     CACHE.getPlayerCache().isReducedDebugInfo()
             ));
+        } else {
+            connection.disconnect("§cA client is already connected to this bot!");
         }
     }
 }
