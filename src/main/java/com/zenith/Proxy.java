@@ -381,7 +381,10 @@ public class Proxy {
                 .filter(PorkServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections()
-                .values();
+                .values()
+                .stream()
+                .filter(connection -> ((MinecraftProtocol)connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
+                .collect(Collectors.toList());
     }
 
     public List<PorkServerConnection> getSpectatorConnections() {

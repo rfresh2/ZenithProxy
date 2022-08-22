@@ -1,5 +1,7 @@
 package com.zenith.server.handler.spectator.postoutgoing;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
@@ -7,6 +9,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
@@ -101,21 +104,47 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
             });
         });
         try {
-            session.send(new ServerSpawnPlayerPacket(
-                    CACHE.getPlayerCache().getEntityId(),
-                    CACHE.getProfileCache().getProfile().getId(),
-                    CACHE.getPlayerCache().getX(),
-                    CACHE.getPlayerCache().getY(),
-                    CACHE.getPlayerCache().getZ(),
-                    CACHE.getPlayerCache().getYaw(),
-                    CACHE.getPlayerCache().getPitch(),
-                    CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
             session.send(new ServerChatPacket(
                     "Send private messages: \"!m <message>\"", true
             ));
             session.getProxy().getServerConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
+                    if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
+                        session.send(new ServerSpawnPlayerPacket(
+                                CACHE.getPlayerCache().getEntityId(),
+                                CACHE.getProfileCache().getProfile().getId(),
+                                CACHE.getPlayerCache().getX(),
+                                CACHE.getPlayerCache().getY(),
+                                CACHE.getPlayerCache().getZ(),
+                                CACHE.getPlayerCache().getYaw(),
+                                CACHE.getPlayerCache().getPitch(),
+                                CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+                    } else {
+                        session.send(new ServerPlayerListEntryPacket(
+                                PlayerListEntryAction.ADD_PLAYER,
+                                new PlayerListEntry[]{new PlayerListEntry(
+                                        connection.getProfileCache().getProfile(),
+                                        SPECTATOR
+                                )}
+                        ));
+                        session.send(new ServerSpawnPlayerPacket(
+                                connection.getSpectatorEntityId(),
+                                connection.getProfileCache().getProfile().getId(),
+                                CACHE.getPlayerCache().getX(),
+                                CACHE.getPlayerCache().getY(),
+                                CACHE.getPlayerCache().getZ(),
+                                CACHE.getPlayerCache().getYaw(),
+                                CACHE.getPlayerCache().getPitch(),
+                                CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+                    }
+                    connection.send(new ServerPlayerListEntryPacket(
+                            PlayerListEntryAction.ADD_PLAYER,
+                            new PlayerListEntry[]{new PlayerListEntry(
+                                    session.getProfileCache().getProfile(),
+                                    SPECTATOR
+                            )}
+                    ));
                     connection.send(new ServerChatPacket(
                             session.getProfileCache().getProfile().getName() + " connected!", true
                     ));
