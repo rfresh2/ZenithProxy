@@ -18,51 +18,45 @@
  *
  */
 
-package com.zenith.server.handler.player.incoming.movement;
+package com.zenith.server.handler.spectator.incoming.movement;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
-import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
+import lombok.NonNull;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CACHE;
 
 /**
  * @author DaPorkchop_
  */
-public class PlayerPositionRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionRotationPacket, PorkServerConnection> {
+public class PlayerRotationSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerRotationPacket, PorkServerConnection> {
     @Override
-    public boolean applyAsync(@NonNull ClientPlayerPositionRotationPacket packet, @NonNull PorkServerConnection session) {
-        CACHE.getPlayerCache()
-                .setX(packet.getX())
-                .setY(packet.getY())
-                .setZ(packet.getZ())
+    public boolean apply(@NonNull ClientPlayerRotationPacket packet, @NonNull PorkServerConnection session) {
+        session.getSpectatorPlayerCache()
                 .setYaw((float) packet.getYaw())
                 .setPitch((float) packet.getPitch());
-        session.getProxy().getSpectatorConnections()
-                .forEach(connection -> {
-                    connection.send(new ServerEntityTeleportPacket(
-                            CACHE.getPlayerCache().getEntityId(),
-                            CACHE.getPlayerCache().getX(),
-                            CACHE.getPlayerCache().getY(),
-                            CACHE.getPlayerCache().getZ(),
-                            CACHE.getPlayerCache().getYaw(),
-                            CACHE.getPlayerCache().getPitch(),
-                            packet.isOnGround()
-                    ));
-                    connection.send(new ServerEntityHeadLookPacket(
-                            CACHE.getPlayerCache().getEntityId(),
-                            CACHE.getPlayerCache().getYaw()
-                    ));
-                });
-        return true;
+        session.getProxy().getCurrentPlayer().get().send(new ServerEntityTeleportPacket(
+                session.getSpectatorEntityId(),
+                session.getSpectatorPlayerCache().getX(),
+                session.getSpectatorPlayerCache().getY(),
+                session.getSpectatorPlayerCache().getZ(),
+                session.getSpectatorPlayerCache().getYaw(),
+                session.getSpectatorPlayerCache().getPitch(),
+                false
+        ));
+        session.getProxy().getCurrentPlayer().get().send(new ServerEntityHeadLookPacket(
+                session.getSpectatorEntityId(),
+                session.getSpectatorPlayerCache().getYaw()
+        ));
+        return false;
     }
 
     @Override
-    public Class<ClientPlayerPositionRotationPacket> getPacketClass() {
-        return ClientPlayerPositionRotationPacket.class;
+    public Class<ClientPlayerRotationPacket> getPacketClass() {
+        return ClientPlayerRotationPacket.class;
     }
 }

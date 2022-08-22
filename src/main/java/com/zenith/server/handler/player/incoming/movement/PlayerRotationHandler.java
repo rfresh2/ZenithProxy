@@ -21,6 +21,9 @@
 package com.zenith.server.handler.player.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
@@ -36,6 +39,22 @@ public class PlayerRotationHandler implements HandlerRegistry.AsyncIncomingHandl
         CACHE.getPlayerCache()
                 .setYaw((float) packet.getYaw())
                 .setPitch((float) packet.getPitch());
+        session.getProxy().getSpectatorConnections()
+                .forEach(connection -> {
+                    connection.send(new ServerEntityTeleportPacket(
+                            CACHE.getPlayerCache().getEntityId(),
+                            CACHE.getPlayerCache().getX(),
+                            CACHE.getPlayerCache().getY(),
+                            CACHE.getPlayerCache().getZ(),
+                            CACHE.getPlayerCache().getYaw(),
+                            CACHE.getPlayerCache().getPitch(),
+                            packet.isOnGround()
+                    ));
+                    connection.send(new ServerEntityHeadLookPacket(
+                            CACHE.getPlayerCache().getEntityId(),
+                            CACHE.getPlayerCache().getYaw()
+                    ));
+                });
         return true;
     }
 

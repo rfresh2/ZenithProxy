@@ -391,7 +391,8 @@ public class Proxy {
                 .getConnections()
                 .values()
                 .stream()
-                .filter(connection -> Objects.equals(connection, this.getCurrentPlayer().get()))
+                .filter(connection -> !Objects.equals(connection, this.getCurrentPlayer().get()))
+                .filter(connection -> ((MinecraftProtocol)connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                 .collect(Collectors.toList());
     }
 
@@ -537,7 +538,7 @@ public class Proxy {
 
     @Subscribe
     public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
-        connectedClientGameProfile = Optional.ofNullable(event.clientGameProfile);
+        if (event.isPlayer) connectedClientGameProfile = Optional.ofNullable(event.clientGameProfile);
     }
 
     @Subscribe

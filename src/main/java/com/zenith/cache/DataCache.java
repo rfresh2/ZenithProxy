@@ -65,7 +65,7 @@ public class DataCache {
     protected final TabListCache tabListCache = new TabListCache();
     protected final BossBarCache bossBarCache = new BossBarCache();
     protected final EntityCache entityCache = new EntityCache();
-    protected final PlayerCache playerCache = new PlayerCache();
+    protected final PlayerCache playerCache = new PlayerCache(entityCache);
     protected final ServerProfileCache profileCache = new ServerProfileCache();
     protected final StatisticsCache statsCache = new StatisticsCache();
 

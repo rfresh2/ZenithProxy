@@ -24,12 +24,16 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.crypt.PacketEncryption;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.zenith.Proxy;
+import com.zenith.cache.data.PlayerCache;
+import com.zenith.cache.data.ServerProfileCache;
+import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import lombok.Getter;
 import lombok.NonNull;
@@ -64,7 +68,9 @@ public class PorkServerConnection implements Session, SessionListener {
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
 
-    protected int spectatorEntityId = 2147483647;
+    protected int spectatorEntityId = 2147483647 - this.hashCode();
+    protected ServerProfileCache profileCache = new ServerProfileCache();
+    protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
 
     @Override
     public void packetReceived(Session session, Packet packet) {
@@ -136,6 +142,9 @@ public class PorkServerConnection implements Session, SessionListener {
                 SERVER_LOG.info("Could not get game profile of disconnecting player");
                 EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
             }
+        }
+        if (!isActivePlayer()) {
+            proxy.getCurrentPlayer().get().send(new ServerEntityDestroyPacket(this.spectatorEntityId));
         }
     }
 

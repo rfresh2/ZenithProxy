@@ -29,6 +29,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.Serv
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
+import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.entity.EntityPlayer;
 import lombok.Getter;
 import lombok.NonNull;
@@ -64,6 +65,12 @@ public class PlayerCache implements CachedData {
     protected EntityPlayer thePlayer;
 
     protected final ItemStack[] inventory = new ItemStack[46];
+
+    protected final EntityCache entityCache;
+
+    public PlayerCache(final EntityCache entityCache) {
+        this.entityCache = entityCache;
+    }
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
@@ -182,10 +189,10 @@ public class PlayerCache implements CachedData {
 
     public PlayerCache setEntityId(int id)  {
         if (this.thePlayer.getEntityId() != -1) {
-            CACHE.getEntityCache().remove(this.thePlayer.getEntityId());
+            this.entityCache.remove(this.thePlayer.getEntityId());
         }
         this.thePlayer.setEntityId(id);
-        CACHE.getEntityCache().add(this.thePlayer);
+        this.entityCache.add(this.thePlayer);
         return this;
     }
 }

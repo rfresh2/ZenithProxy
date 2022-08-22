@@ -18,12 +18,11 @@
  *
  */
 
-package com.zenith.server.handler.shared.postoutgoing;
+package com.zenith.server.handler.player.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.util.RefStrings;

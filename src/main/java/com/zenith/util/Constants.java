@@ -24,11 +24,30 @@ import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.zenith.cache.DataCache;
+import com.zenith.client.PorkClientSession;
 import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.client.handler.incoming.spawn.*;
 import com.zenith.discord.DiscordBot;
+import com.zenith.server.PorkServerConnection;
+import com.zenith.server.handler.player.incoming.PlayerSwingArmPacketHandler;
+import com.zenith.server.handler.player.incoming.ServerChatHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
+import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
+import com.zenith.server.handler.shared.incoming.LoginStartHandler;
+import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
+import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
 import com.zenith.server.handler.spectator.incoming.ServerSpectatorChatHandler;
+import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
+import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
+import com.zenith.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
+import com.zenith.server.handler.spectator.outgoing.ServerOpenWindowSpectatorOutgoingHandler;
+import com.zenith.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
+import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.websocket.WebSocketServer;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
 import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
@@ -38,19 +57,6 @@ import net.daporkchop.lib.logging.Logger;
 import net.daporkchop.lib.logging.Logging;
 import net.daporkchop.lib.logging.impl.DefaultLogger;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
-import com.zenith.client.PorkClientSession;
-import com.zenith.server.PorkServerConnection;
-import com.zenith.server.handler.shared.incoming.LoginStartHandler;
-import com.zenith.server.handler.player.incoming.ServerChatHandler;
-import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
-import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
-import com.zenith.server.handler.shared.postoutgoing.JoinGamePostHandler;
-import com.zenith.cache.DataCache;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.websocket.WebSocketServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -164,6 +170,7 @@ public class Constants {
             .registerInbound(new PlayerPositionHandler())
             .registerInbound(new PlayerPositionRotationHandler())
             .registerInbound(new PlayerRotationHandler())
+            .registerInbound(new PlayerSwingArmPacketHandler())
             //
             // Outbound packets
             //
@@ -181,10 +188,15 @@ public class Constants {
             .registerInbound(new LoginStartHandler())
             .registerInbound(new ServerKeepaliveHandler())
             .registerInbound(new ServerSpectatorChatHandler())
+            .registerInbound(new PlayerPositionRotationSpectatorHandler())
+            .registerInbound(new PlayerPositionSpectatorHandler())
+            .registerInbound(new PlayerRotationSpectatorHandler())
+            .registerInbound(new ServerSpectatorChatHandler())
 
             .registerOutbound(new LoginSuccessOutgoingHandler())
+            .registerOutbound(new ServerOpenWindowSpectatorOutgoingHandler())
 
-            .registerPostOutbound(new JoinGamePostHandler())
+            .registerPostOutbound(new JoinGameSpectatorPostHandler())
             .build();
 
     static {

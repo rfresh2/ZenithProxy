@@ -21,10 +21,10 @@
 package com.zenith.server.handler.shared.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
-import com.zenith.util.Wait;
-import lombok.NonNull;
 import com.zenith.server.PorkServerConnection;
+import com.zenith.util.Wait;
 import com.zenith.util.handler.HandlerRegistry;
+import lombok.NonNull;
 
 import static com.zenith.util.Constants.*;
 
@@ -45,6 +45,7 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
             return null;
         } else {
             SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+            session.getProfileCache().setProfile(packet.getProfile());
             return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
         }
     }
