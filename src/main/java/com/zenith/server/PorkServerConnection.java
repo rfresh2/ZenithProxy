@@ -144,7 +144,9 @@ public class PorkServerConnection implements Session, SessionListener {
             }
         }
         if (!isActivePlayer()) {
-            proxy.getCurrentPlayer().get().send(new ServerEntityDestroyPacket(this.spectatorEntityId));
+            proxy.getServerConnections().forEach(connection -> {
+                connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
+            });
         }
     }
 
