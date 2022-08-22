@@ -73,6 +73,10 @@ public class DataCache {
         return Arrays.asList(profileCache, chunkCache, statsCache, tabListCache, bossBarCache,  entityCache, playerCache);
     }
 
+    public Collection<CachedData> getAllDataSpectator(final PlayerCache spectatorPlayerCache) {
+        return Arrays.asList(chunkCache, tabListCache, bossBarCache, entityCache, spectatorPlayerCache);
+    }
+
     public boolean reset(boolean full) {
         CACHE_LOG.debug("Clearing " + (full ? "full" : "partial") +" cache...");
 
