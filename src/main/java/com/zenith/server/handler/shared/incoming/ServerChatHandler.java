@@ -18,18 +18,17 @@
  *
  */
 
-package com.zenith.server.handler.player.incoming;
+package com.zenith.server.handler.shared.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.zenith.util.Constants;
+import com.zenith.server.PorkServerConnection;
+import com.zenith.util.Queue;
+import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
-import com.zenith.server.PorkServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.Queue;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.MANUAL_DISCONNECT;
 
 /**
  * @author DaPorkchop_
@@ -49,6 +48,11 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 return false;
             } else if ("!q".equalsIgnoreCase(packet.getMessage())) {
                 session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, packet.getMessage()), true));
+                return false;
+            } else if (packet.getMessage().startsWith("!m")) {
+                session.getProxy().getServerConnections().forEach(connection -> {
+                            connection.send(new ServerChatPacket("§c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage().substring(2).trim() + "§r", true));
+                        });
                 return false;
             } else {
                 session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §cUnknown command: §o%s", packet.getMessage()), true));

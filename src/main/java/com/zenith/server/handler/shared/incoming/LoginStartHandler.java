@@ -38,6 +38,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
     public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
         if (CONFIG.server.extra.whitelist.enable && !isUserWhitelisted(packet.getUsername())) {
             SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+            // todo: this will make an existing user disconnect if autoClientDisconnect is on
             EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));
             session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
             return false;

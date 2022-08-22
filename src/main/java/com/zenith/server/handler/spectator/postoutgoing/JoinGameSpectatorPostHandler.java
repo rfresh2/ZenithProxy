@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
@@ -109,8 +110,19 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                     CACHE.getPlayerCache().getYaw(),
                     CACHE.getPlayerCache().getPitch(),
                     CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
-            session.getProxy().getCurrentPlayer().get().send(
-                    new ServerSpawnPlayerPacket(
+            session.send(new ServerChatPacket(
+                    "Send private messages: \"!m <message>\"", true
+            ));
+            session.getProxy().getServerConnections().stream()
+                .filter(connection -> !connection.equals(session))
+                .forEach(connection -> {
+                    connection.send(new ServerChatPacket(
+                            session.getProfileCache().getProfile().getName() + " connected!", true
+                    ));
+                    connection.send(new ServerChatPacket(
+                            "Send private messages: \"!m <message>\"", true
+                    ));
+                    connection.send(new ServerSpawnPlayerPacket(
                             session.getSpectatorEntityId(),
                             session.getProfileCache().getProfile().getId(),
                             CACHE.getPlayerCache().getX(),
@@ -119,6 +131,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                             CACHE.getPlayerCache().getYaw(),
                             CACHE.getPlayerCache().getPitch(),
                             CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+                });
             session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, SPECTATOR));
             session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
             session.send(new ServerEntityMetadataPacket(session.getSpectatorEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));

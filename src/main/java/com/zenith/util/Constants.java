@@ -32,15 +32,14 @@ import com.zenith.client.handler.incoming.spawn.*;
 import com.zenith.discord.DiscordBot;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.handler.player.incoming.PlayerSwingArmPacketHandler;
-import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
 import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
 import com.zenith.server.handler.shared.incoming.LoginStartHandler;
+import com.zenith.server.handler.shared.incoming.ServerChatHandler;
 import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
 import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
-import com.zenith.server.handler.spectator.incoming.ServerSpectatorChatHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
@@ -187,11 +186,10 @@ public class Constants {
 
             .registerInbound(new LoginStartHandler())
             .registerInbound(new ServerKeepaliveHandler())
-            .registerInbound(new ServerSpectatorChatHandler())
             .registerInbound(new PlayerPositionRotationSpectatorHandler())
             .registerInbound(new PlayerPositionSpectatorHandler())
             .registerInbound(new PlayerRotationSpectatorHandler())
-            .registerInbound(new ServerSpectatorChatHandler())
+            .registerInbound(new ServerChatHandler())
 
             .registerOutbound(new LoginSuccessOutgoingHandler())
             .registerOutbound(new ServerOpenWindowSpectatorOutgoingHandler())
