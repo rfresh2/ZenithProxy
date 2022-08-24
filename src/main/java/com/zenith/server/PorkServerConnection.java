@@ -20,8 +20,6 @@
 
 package com.zenith.server;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
@@ -72,7 +70,8 @@ public class PorkServerConnection implements Session, SessionListener {
     protected boolean isLoggedIn = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     protected int spectatorEntityId = 2147483647 - this.hashCode();
-    protected UUID spectatorFakeUUID = UUID.randomUUID();
+    protected int spectatorSelfCatEntityId = spectatorEntityId - 1;
+    protected UUID spectatorCatUUID = UUID.randomUUID();
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
 

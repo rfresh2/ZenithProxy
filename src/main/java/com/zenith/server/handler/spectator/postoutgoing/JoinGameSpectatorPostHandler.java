@@ -5,7 +5,6 @@ import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
-import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
@@ -15,7 +14,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.Serv
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerNotifyClientPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.cache.data.entity.EntityPlayer;
@@ -35,6 +33,24 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
     @Override
     public void accept(@NonNull ServerJoinGamePacket packet, @NonNull PorkServerConnection session) {
         session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
+        session.send(new ServerPlayerListEntryPacket(
+                PlayerListEntryAction.ADD_PLAYER,
+                new PlayerListEntry[]{new PlayerListEntry(session.getProfileCache().getProfile(), SPECTATOR)}
+        ));
+        session.send(new ServerSpawnMobPacket(
+                session.getSpectatorSelfCatEntityId(),
+                session.getSpectatorCatUUID(),
+                MobType.OCELOT,
+                CACHE.getPlayerCache().getX(),
+                CACHE.getPlayerCache().getY(),
+                CACHE.getPlayerCache().getZ(),
+                CACHE.getPlayerCache().getYaw(),
+                CACHE.getPlayerCache().getPitch(),
+                CACHE.getPlayerCache().getYaw(),
+                0f,
+                0f,
+                0f,
+                session.getSpectatorCatEntityMetadata()));
         EntityPlayer spectatorEntityPlayer = new EntityPlayer();
         spectatorEntityPlayer.setUuid(session.getProfileCache().getProfile().getId());
         spectatorEntityPlayer.setSelfPlayer(true);
@@ -47,8 +63,8 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
         final CompoundTag emptyNbtTag = new CompoundTag("");
         emptyNbtTag.clear();
         spectatorEntityPlayer.setMetadata(asList(
-                new EntityMetadata(0, MetadataType.BYTE, (byte)0),
-                new EntityMetadata(1, MetadataType.INT, 300),
+                new EntityMetadata(0, MetadataType.BYTE, (byte) (((byte) 0) | 0x20)),
+                new EntityMetadata(1, MetadataType.INT, 0),
                 new EntityMetadata(2, MetadataType.STRING, ""),
                 new EntityMetadata(3, MetadataType.BOOLEAN, false),
                 new EntityMetadata(4, MetadataType.BOOLEAN, false),
@@ -144,7 +160,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                     ));
                     connection.send(new ServerSpawnMobPacket(
                             session.getSpectatorEntityId(),
-                            session.getSpectatorFakeUUID(),
+                            session.getSpectatorCatUUID(),
                             MobType.OCELOT,
                             CACHE.getPlayerCache().getX(),
                             CACHE.getPlayerCache().getY(),
@@ -157,7 +173,6 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                             0f,
                             session.getSpectatorCatEntityMetadata()));
                 });
-            session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, SPECTATOR));
             session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
             session.send(new ServerEntityMetadataPacket(session.getSpectatorEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
             session.setLoggedIn(true);

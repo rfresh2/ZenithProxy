@@ -59,6 +59,19 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                             session.getSpectatorPlayerCache().getYaw()
                     ));
                 });
+        session.send(new ServerEntityTeleportPacket(
+                session.getSpectatorSelfCatEntityId(),
+                session.getSpectatorPlayerCache().getX(),
+                session.getSpectatorPlayerCache().getY(),
+                session.getSpectatorPlayerCache().getZ(),
+                session.getSpectatorPlayerCache().getYaw(),
+                session.getSpectatorPlayerCache().getPitch(),
+                false
+        ));
+        session.send(new ServerEntityHeadLookPacket(
+                session.getSpectatorSelfCatEntityId(),
+                session.getSpectatorPlayerCache().getYaw()
+        ));
         return false;
     }
 
