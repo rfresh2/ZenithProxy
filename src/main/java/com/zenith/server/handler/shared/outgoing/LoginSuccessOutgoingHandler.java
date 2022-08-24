@@ -27,6 +27,7 @@ import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
@@ -46,7 +47,12 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
         } else {
             SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(packet.getProfile());
-            return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+            if (nonNull(session.getProxy().getCurrentPlayer().get()))
+            {
+                return new LoginSuccessPacket(CACHE.getProfileCache().getProfile());
+            } else {
+                return new LoginSuccessPacket(session.getProfileCache().getProfile());
+            }
         }
     }
 

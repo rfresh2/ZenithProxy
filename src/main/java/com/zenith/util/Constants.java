@@ -43,7 +43,7 @@ import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
-import com.zenith.server.handler.spectator.outgoing.ServerOpenWindowSpectatorOutgoingHandler;
+import com.zenith.server.handler.spectator.outgoing.*;
 import com.zenith.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.websocket.WebSocketServer;
@@ -192,7 +192,20 @@ public class Constants {
             .registerInbound(new ServerChatHandler())
 
             .registerOutbound(new LoginSuccessOutgoingHandler())
+
+            .registerOutbound(new ServerCloseWindowSpectatorOutgoingHandler())
+            .registerOutbound(new ServerConfirmTransactionSpectatorOutgoingHandler())
+            .registerOutbound(new ServerOpenTileEntityEditorSpectatorOutgoingHandler())
             .registerOutbound(new ServerOpenWindowSpectatorOutgoingHandler())
+            .registerOutbound(new ServerPlayerChangeHeldItemSpectatorOutgoingHandler())
+            .registerOutbound(new ServerPlayerHealthSpectatorOutgoingHandler())
+            .registerOutbound(new ServerPlayerPositionRotationSpectatorOutgoingHandler())
+            .registerOutbound(new ServerPlayerSetExperienceSpectatorOutgoingHandler())
+            .registerOutbound(new ServerPreparedCraftingGridSpectatorOutgoingHandler())
+            .registerOutbound(new ServerSetSlotSpectatorOutgoingHandler())
+            .registerOutbound(new ServerVehicleMoveSpectatorOutgoingHandler())
+            .registerOutbound(new ServerWindowItemsSpectatorOutgoingHandler())
+            .registerOutbound(new ServerWindowPropertySpectatorOutgoingHandler())
 
             .registerPostOutbound(new JoinGameSpectatorPostHandler())
             .build();

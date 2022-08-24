@@ -67,7 +67,7 @@ public class PorkServerConnection implements Session, SessionListener {
 
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
-
+    protected boolean allowSpectatorServerPlayerPosRotate = true;
     protected int spectatorEntityId = 2147483647 - this.hashCode();
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
