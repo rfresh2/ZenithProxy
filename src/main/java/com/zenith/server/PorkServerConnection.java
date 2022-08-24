@@ -24,6 +24,8 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.crypt.PacketEncryption;
@@ -69,8 +71,31 @@ public class PorkServerConnection implements Session, SessionListener {
     protected boolean isLoggedIn = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     protected int spectatorEntityId = 2147483647 - this.hashCode();
+    protected UUID spectatorFakeUUID = UUID.randomUUID();
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
+
+    public final EntityMetadata[] getSpectatorCatEntityMetadata() {
+        // https://c4k3.github.io/wiki.vg/Entities.html#Entity
+        return new EntityMetadata[]{
+                new EntityMetadata(0, MetadataType.BYTE, (byte)0),
+                new EntityMetadata(1, MetadataType.INT, 0),
+                new EntityMetadata(2, MetadataType.STRING, this.getProfileCache().getProfile().getName()),
+                new EntityMetadata(3, MetadataType.BOOLEAN, true),
+                new EntityMetadata(4, MetadataType.BOOLEAN, false),
+                new EntityMetadata(5, MetadataType.BOOLEAN, false),
+                new EntityMetadata(6, MetadataType.BYTE, (byte)0),
+                new EntityMetadata(7, MetadataType.FLOAT, 10.0f),
+                new EntityMetadata(8, MetadataType.INT, 0),
+                new EntityMetadata(9, MetadataType.BOOLEAN, false),
+                new EntityMetadata(10, MetadataType.INT, 0),
+                new EntityMetadata(11, MetadataType.BYTE, (byte)0),
+                new EntityMetadata(12, MetadataType.BOOLEAN, false),
+                new EntityMetadata(13, MetadataType.BYTE, (byte)4),
+//                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
+                new EntityMetadata(15, MetadataType.INT, (spectatorEntityId % 3) + 1) // cat texture variant
+        };
+    }
 
     @Override
     public void packetReceived(Session session, Packet packet) {

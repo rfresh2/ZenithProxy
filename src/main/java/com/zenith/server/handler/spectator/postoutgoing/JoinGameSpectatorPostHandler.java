@@ -3,9 +3,8 @@ package com.zenith.server.handler.spectator.postoutgoing;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
+import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
@@ -13,7 +12,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEn
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerNotifyClientPacket;
@@ -30,7 +29,6 @@ import java.util.concurrent.ForkJoinPool;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.util.Constants.*;
-import static com.zenith.util.Constants.SERVER_LOG;
 import static java.util.Arrays.asList;
 
 public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoingHandler<ServerJoinGamePacket, PorkServerConnection> {
@@ -138,33 +136,32 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                                 CACHE.getPlayerCache().getPitch(),
                                 CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
                     }
-                    connection.send(new ServerPlayerListEntryPacket(
-                            PlayerListEntryAction.ADD_PLAYER,
-                            new PlayerListEntry[]{new PlayerListEntry(
-                                    session.getProfileCache().getProfile(),
-                                    SPECTATOR
-                            )}
-                    ));
                     connection.send(new ServerChatPacket(
                             session.getProfileCache().getProfile().getName() + " connected!", true
                     ));
                     connection.send(new ServerChatPacket(
                             "Send private messages: \"!m <message>\"", true
                     ));
-                    connection.send(new ServerSpawnPlayerPacket(
+                    connection.send(new ServerSpawnMobPacket(
                             session.getSpectatorEntityId(),
-                            session.getProfileCache().getProfile().getId(),
+                            session.getSpectatorFakeUUID(),
+                            MobType.OCELOT,
                             CACHE.getPlayerCache().getX(),
                             CACHE.getPlayerCache().getY(),
                             CACHE.getPlayerCache().getZ(),
                             CACHE.getPlayerCache().getYaw(),
                             CACHE.getPlayerCache().getPitch(),
-                            CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+                            CACHE.getPlayerCache().getYaw(),
+                            0f,
+                            0f,
+                            0f,
+                            session.getSpectatorCatEntityMetadata()));
                 });
             session.send(new ServerNotifyClientPacket(ClientNotification.CHANGE_GAMEMODE, SPECTATOR));
             session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
             session.send(new ServerEntityMetadataPacket(session.getSpectatorEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
             session.setLoggedIn(true);
+            session.setAllowSpectatorServerPlayerPosRotate(false);
         } catch (final Exception e) {
             SERVER_LOG.error(e);
         }
