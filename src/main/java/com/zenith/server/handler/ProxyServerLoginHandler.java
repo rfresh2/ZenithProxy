@@ -8,6 +8,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePack
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
+import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.server.PorkServerConnection;
 import com.zenith.server.PorkServerListener;
 
@@ -33,7 +34,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         if (this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
             // if we don't have a current player, set player
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-            EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile, true));
+            EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().isHardcore(),
@@ -47,7 +48,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         } else if (CONFIG.server.allowSpectator) {
             // if we have a current player, allow login but put in spectator
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-            EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile, false));
+            EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(
                     connection.getSpectatorEntityId(),
                     CACHE.getPlayerCache().isHardcore(),

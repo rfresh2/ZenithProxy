@@ -37,6 +37,7 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
+import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -158,20 +159,20 @@ public class PorkServerConnection implements Session, SessionListener {
         if (event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer))   {
             // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
             SERVER_LOG.warn(String.format("Connection disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
-        } else if (this.isPlayer) {
+        }
+        if (isActivePlayer()) {
             SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
             try {
-                GameProfile gameProfile = event.getSession().getFlag(MinecraftConstants.PROFILE_KEY);
-                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(gameProfile.getName()));
+                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
             } catch (final Throwable e) {
                 SERVER_LOG.info("Could not get game profile of disconnecting player");
-                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent());
+                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason()));
             }
-        }
-        if (!isActivePlayer()) {
+        } else {
             proxy.getServerConnections().forEach(connection -> {
                 connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
             });
+            EVENT_BUS.dispatch(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
         }
     }
 

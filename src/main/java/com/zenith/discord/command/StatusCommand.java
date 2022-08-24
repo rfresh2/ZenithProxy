@@ -1,6 +1,7 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
+import com.zenith.server.PorkServerConnection;
 import com.zenith.util.Queue;
 import com.zenith.cache.data.PlayerCache;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -12,9 +13,12 @@ import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CONFIG;
+import static java.util.Objects.nonNull;
 
 public class StatusCommand extends Command {
     public StatusCommand(Proxy proxy) {
@@ -23,53 +27,64 @@ public class StatusCommand extends Command {
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
+        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
+                .title("Proxy Status" + " : " + CONFIG.authentication.username)
+                .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
+                .addField("Status", getStatus(), true)
+                .addField("Connected User", getCurrentClientUserName(), true)
+                .addField("Online Time", getOnlineTime(), true)
+                .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
+                .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no"), true);
+                if (!getSpectatorUserNames().isEmpty()) {
+                    builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), false);
+                }
+                builder.addField("2b2t Queue", getQueueStatus(), false)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+                .addField("Dimension",
+                        dimensionIdToString(CACHE.getPlayerCache().getDimension()),
+                        true)
+                .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true)
+                .addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), false)
+                .addField("AutoDisconnect",
+                        "Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
+                                + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]"
+                                + "\nAutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), true)
+                .addField("AutoReconnect",
+                        (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
+                                + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
+                .addField("AutoRespawn",
+                        (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off")
+                                + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
+                .addField("AntiAFK",
+                        (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
+                .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
+                        + " [Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
+                .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
+                .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), false)
+                .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
+                .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
+                .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured"), false)
+                .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), true);
+
         return MessageCreateSpec.builder()
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title("Proxy Status" + " : " + CONFIG.authentication.username)
-                        .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
-                        .addField("Status", getStatus(), true)
-                        .addField("Connected User", getUserName(), true)
-                        .addField("Online Time", getOnlineTime(), true)
-                        .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
-                        .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no"), true)
-                        .addField("2b2t Queue", getQueueStatus(), false)
-                        .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-                        .addField("Dimension",
-                                dimensionIdToString(CACHE.getPlayerCache().getDimension()),
-                                true)
-                        .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true)
-                        .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), false)
-                        .addField("AutoDisconnect",
-                                "Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
-                                        + " [" + CONFIG.client.extra.utility.actions.autoDisconnect.health + "]"
-                                        + "\nAutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), true)
-                        .addField("AutoReconnect",
-                                (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
-                                        + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
-                        .addField("AutoRespawn",
-                                (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off")
-                                        + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
-                        .addField("AntiAFK",
-                                (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
-                        .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
-                                + " [Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
-                        .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
-                        .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), false)
-                        .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
-                        .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
-                        .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured"), false)
-                        .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), true)
-                        .build())
+                .addEmbed(builder.build())
                 .build().asRequest();
     }
 
-    private String getUserName() {
-        if (this.proxy.getConnectedClientGameProfile().isPresent()) {
-            return this.proxy.getConnectedClientGameProfile().get().getName();
+    private String getCurrentClientUserName() {
+        PorkServerConnection currentConnection = this.proxy.getCurrentPlayer().get();
+        if (nonNull(currentConnection)) {
+            return currentConnection.getProfileCache().getProfile().getName();
         } else {
             return "None";
         }
-    };
+    }
+
+    private List<String> getSpectatorUserNames() {
+        return this.proxy.getSpectatorConnections().stream()
+                .map(connection -> connection.getProfileCache().getProfile().getName())
+                .collect(Collectors.toList());
+    }
 
     private String getStatus() {
         if (proxy.isConnected()) {

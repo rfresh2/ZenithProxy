@@ -12,6 +12,7 @@ import com.zenith.Proxy;
 import com.zenith.util.Queue;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.CONFIG;
 
@@ -29,7 +30,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
                 new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
                 new PlayerInfo(
                         CONFIG.server.ping.maxPlayers,
-                        this.proxy.getCurrentPlayer().get() == null ? 0 : 1,
+                        this.proxy.getServerConnections().size(),
                         getOnlinePlayerProfiles()
                 ),
                 Message.fromString(getMotd()),
@@ -39,9 +40,9 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     private GameProfile[] getOnlinePlayerProfiles() {
         try {
-            if (this.proxy.getConnectedClientGameProfile().isPresent()) {
-                return new GameProfile[]{this.proxy.getConnectedClientGameProfile().get()};
-            }
+            return this.proxy.getServerConnections().stream()
+                    .map(connection -> connection.profileCache.getProfile())
+                    .collect(Collectors.toList()).toArray(new GameProfile[0]);
         } catch (final RuntimeException e) {
             // do nothing, failsafe if we get some race condition
         }

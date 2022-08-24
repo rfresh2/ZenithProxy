@@ -306,13 +306,41 @@ public class DiscordBot {
     }
 
     @Subscribe
+    public void handleProxySpectatorConnectedEvent(ProxySpectatorConnectedEvent event) {
+        if (CONFIG.client.extra.clientConnectionMessages) {
+            sendEmbedMessage(EmbedCreateSpec.builder()
+                    .title("Spectator Connected")
+                    .addField("Username", event.clientGameProfile.getName(), true)
+                    .color(Color.CYAN)
+                    .build());
+        }
+    }
+
+    @Subscribe
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.clientConnectionMessages) {
             EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                     .title("Client Disconnected")
                     .color(Color.RUBY);
-            if (nonNull(event.message)) {
-                builder = builder.addField("Message", event.message, false);
+            if (nonNull(event.clientGameProfile)) {
+                builder = builder.addField("Username", event.clientGameProfile.getName(), false);
+            }
+            if (nonNull(event.reason)) {
+                builder = builder.addField("Message", event.reason, false);
+            }
+            sendEmbedMessage(builder
+                    .build());
+        }
+    }
+
+    @Subscribe
+    public void handleProxySpectatorDisconnectedEvent(ProxySpectatorDisconnectedEvent event) {
+        if (CONFIG.client.extra.clientConnectionMessages) {
+            EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
+                    .title("Spectator Disconnected")
+                    .color(Color.RUBY);
+            if (nonNull(event.clientGameProfile)) {
+                builder = builder.addField("Username", event.clientGameProfile.getName(), false);
             }
             sendEmbedMessage(builder
                     .build());

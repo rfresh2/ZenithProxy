@@ -99,7 +99,6 @@ public class Proxy {
     private Optional<Boolean> isPrio = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
-    private Optional<GameProfile> connectedClientGameProfile = Optional.empty();
     public static AutoUpdater autoUpdater;
 
 //    protected final Gui gui = new Gui();
@@ -546,12 +545,6 @@ public class Proxy {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             disconnect();
         }
-        connectedClientGameProfile = Optional.empty();
-    }
-
-    @Subscribe
-    public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
-        if (event.isPlayer) connectedClientGameProfile = Optional.ofNullable(event.clientGameProfile);
     }
 
     @Subscribe
