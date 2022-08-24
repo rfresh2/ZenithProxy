@@ -47,11 +47,13 @@ import com.zenith.util.Queue;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.common.util.PorkUtil;
+import reactor.netty.http.client.HttpClient;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -319,8 +321,16 @@ public class Proxy {
         if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
             ForkJoinPool.commonPool().execute(() -> {
                 try {
-                    this.serverIcon = ImageIO.read(getAvatarURL(this.protocol.getProfile().getId()));
-                } catch (IOException e) {
+                    InputStream netInputStream = HttpClient.create()
+                            .secure()
+                            .get()
+                            .uri(getAvatarURL(this.protocol.getProfile().getId()).toURI())
+                            .responseContent()
+                            .aggregate()
+                            .asInputStream()
+                            .block();
+                    this.serverIcon = ImageIO.read(netInputStream);
+                } catch (IOException | URISyntaxException | IllegalArgumentException e) {
                     System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
                     e.printStackTrace();
                 }
