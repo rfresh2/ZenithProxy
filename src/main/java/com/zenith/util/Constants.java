@@ -17,10 +17,11 @@ import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotation
 import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
 import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
 import com.zenith.server.handler.shared.incoming.LoginStartHandler;
-import com.zenith.server.handler.shared.incoming.ServerChatHandler;
+import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
 import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
 import com.zenith.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
+import com.zenith.server.handler.spectator.incoming.ServerChatSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
@@ -170,7 +171,7 @@ public class Constants {
             .registerInbound(new PlayerPositionRotationSpectatorHandler())
             .registerInbound(new PlayerPositionSpectatorHandler())
             .registerInbound(new PlayerRotationSpectatorHandler())
-            .registerInbound(new ServerChatHandler())
+            .registerInbound(new ServerChatSpectatorHandler())
             .registerInbound(new PlayerStateSpectatorHandler())
 
             .registerOutbound(new LoginSuccessOutgoingHandler())

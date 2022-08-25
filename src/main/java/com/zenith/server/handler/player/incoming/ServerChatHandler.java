@@ -18,7 +18,7 @@
  *
  */
 
-package com.zenith.server.handler.shared.incoming;
+package com.zenith.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
@@ -52,7 +52,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
             } else if (packet.getMessage().startsWith("!m")) {
                 session.getProxy().getServerConnections().forEach(connection -> {
                             connection.send(new ServerChatPacket("§c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage().substring(2).trim() + "§r", true));
-                        });
+                });
                 return false;
             } else {
                 session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §cUnknown command: §o%s", packet.getMessage()), true));

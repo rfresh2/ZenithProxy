@@ -104,7 +104,7 @@ public class PorkServerConnection implements Session, SessionListener {
             if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)
                     && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
                     && this.isLoggedIn) {
-                this.proxy.getClient().send(packet); //TODO: handle multi-client correctly (i.e. only allow one client to send packets at a time)
+                this.proxy.getClient().send(packet);
             }
         } else {
             if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)

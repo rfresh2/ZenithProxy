@@ -76,7 +76,6 @@ public class Proxy {
     @Getter
     protected static Proxy instance;
 
-    //protected final Collection<PorkServerConnection> serverConnections = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected MinecraftProtocol protocol;
     protected TcpClientSession client;
     protected TcpServer server;

@@ -118,12 +118,12 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
             });
         });
         try {
-            session.send(new ServerChatPacket(
-                    "Send private messages: \"!m <message>\"", true
-            ));
             session.getProxy().getServerConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
+                    connection.send(new ServerChatPacket(
+                            "§9" + session.getProfileCache().getProfile().getName() + " connected!§r", true
+                    ));
                     if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
                         session.send(new ServerSpawnPlayerPacket(
                                 CACHE.getPlayerCache().getEntityId(),
@@ -134,6 +134,9 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                                 CACHE.getPlayerCache().getYaw(),
                                 CACHE.getPlayerCache().getPitch(),
                                 CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+                        connection.send(new ServerChatPacket(
+                                "§9Send private messages: \"!m <message>\"§r", true
+                        ));
                     } else {
                         session.send(new ServerPlayerListEntryPacket(
                                 PlayerListEntryAction.ADD_PLAYER,
@@ -152,12 +155,6 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                                 CACHE.getPlayerCache().getPitch(),
                                 CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
                     }
-                    connection.send(new ServerChatPacket(
-                            session.getProfileCache().getProfile().getName() + " connected!", true
-                    ));
-                    connection.send(new ServerChatPacket(
-                            "Send private messages: \"!m <message>\"", true
-                    ));
                     connection.send(new ServerSpawnMobPacket(
                             session.getSpectatorEntityId(),
                             session.getSpectatorCatUUID(),
