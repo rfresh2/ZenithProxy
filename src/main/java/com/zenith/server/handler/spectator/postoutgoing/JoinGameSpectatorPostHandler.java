@@ -90,22 +90,20 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                     "§9Send private messages: \"!m <message>\"§r", true
             ));
         } else {
-            selfSession.send(new ServerPlayerListEntryPacket(
-                    PlayerListEntryAction.ADD_PLAYER,
-                    new PlayerListEntry[]{new PlayerListEntry(
-                            connection.getProfileCache().getProfile(),
-                            SPECTATOR
-                    )}
-            ));
-            selfSession.send(new ServerSpawnPlayerPacket(
+            selfSession.send(new ServerSpawnMobPacket(
                     connection.getSpectatorEntityId(),
-                    connection.getProfileCache().getProfile().getId(),
-                    CACHE.getPlayerCache().getX(),
-                    CACHE.getPlayerCache().getY(),
-                    CACHE.getPlayerCache().getZ(),
-                    CACHE.getPlayerCache().getYaw(),
-                    CACHE.getPlayerCache().getPitch(),
-                    CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+                    connection.getSpectatorCatUUID(),
+                    MobType.OCELOT,
+                    connection.getSpectatorPlayerCache().getX(),
+                    connection.getSpectatorPlayerCache().getY(),
+                    connection.getSpectatorPlayerCache().getZ(),
+                    connection.getSpectatorPlayerCache().getYaw(),
+                    connection.getSpectatorPlayerCache().getPitch(),
+                    connection.getSpectatorPlayerCache().getYaw(),
+                    0f,
+                    0f,
+                    0f,
+                    connection.getSpectatorCatEntityMetadata(false)));
         }
         connection.send(new ServerSpawnMobPacket(
                 selfSession.getSpectatorEntityId(),
