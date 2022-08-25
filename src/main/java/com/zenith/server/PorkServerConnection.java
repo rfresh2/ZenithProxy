@@ -75,13 +75,13 @@ public class PorkServerConnection implements Session, SessionListener {
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
 
-    public final EntityMetadata[] getSpectatorCatEntityMetadata() {
+    public final EntityMetadata[] getSpectatorCatEntityMetadata(boolean self) {
         // https://c4k3.github.io/wiki.vg/Entities.html#Entity
         return new EntityMetadata[]{
                 new EntityMetadata(0, MetadataType.BYTE, (byte)0),
                 new EntityMetadata(1, MetadataType.INT, 0),
                 new EntityMetadata(2, MetadataType.STRING, this.getProfileCache().getProfile().getName()),
-                new EntityMetadata(3, MetadataType.BOOLEAN, true),
+                new EntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
                 new EntityMetadata(4, MetadataType.BOOLEAN, false),
                 new EntityMetadata(5, MetadataType.BOOLEAN, false),
                 new EntityMetadata(6, MetadataType.BYTE, (byte)0),

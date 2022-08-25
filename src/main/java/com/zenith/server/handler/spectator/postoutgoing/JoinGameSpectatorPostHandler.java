@@ -50,7 +50,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                 0f,
                 0f,
                 0f,
-                session.getSpectatorCatEntityMetadata()));
+                session.getSpectatorCatEntityMetadata(true)));
         EntityPlayer spectatorEntityPlayer = new EntityPlayer();
         spectatorEntityPlayer.setUuid(session.getProfileCache().getProfile().getId());
         spectatorEntityPlayer.setSelfPlayer(true);
@@ -168,7 +168,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                             0f,
                             0f,
                             0f,
-                            session.getSpectatorCatEntityMetadata()));
+                            session.getSpectatorCatEntityMetadata(false)));
                 });
             session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
             session.send(new ServerEntityMetadataPacket(session.getSpectatorEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
