@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import java.util.function.Consumer;
@@ -33,9 +33,9 @@ import static java.util.Objects.isNull;
 /**
  * @author DaPorkchop_
  */
-public class BossBarHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBossBarPacket, PorkClientSession> {
+public class BossBarHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBossBarPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerBossBarPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerBossBarPacket packet, @NonNull ClientSession session) {
         Consumer<ServerBossBarPacket> consumer = pck -> {
             throw new IllegalStateException();
         };

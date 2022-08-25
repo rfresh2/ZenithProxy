@@ -24,7 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.type.object.ObjectType
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
 import com.zenith.cache.data.entity.EntityArmorStand;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.EntityObject;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -33,9 +33,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SpawnObjectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnObjectPacket, PorkClientSession> {
+public class SpawnObjectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnObjectPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerSpawnObjectPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerSpawnObjectPacket packet, @NonNull ClientSession session) {
         EntityObject entity;
         if (packet.getType() == ObjectType.ARMOR_STAND) {
             entity = new EntityArmorStand();

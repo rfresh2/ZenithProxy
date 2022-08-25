@@ -21,7 +21,7 @@
 package com.zenith.server.handler.shared.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.Wait;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
@@ -32,9 +32,9 @@ import static java.util.Objects.isNull;
 /**
  * @author DaPorkchop_
  */
-public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, PorkServerConnection> {
+public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, ServerConnection> {
     @Override
-    public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull PorkServerConnection session) {
+    public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull ServerConnection session) {
         // profile could be null at this point?
         int tryCount = 0;
         while (tryCount < 3 && CACHE.getProfileCache().getProfile() == null) {

@@ -57,7 +57,7 @@ import static com.zenith.util.Constants.*;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class PorkServerConnection implements Session, SessionListener {
+public class ServerConnection implements Session, SessionListener {
     @NonNull
     protected final Proxy proxy;
 
@@ -99,44 +99,56 @@ public class PorkServerConnection implements Session, SessionListener {
 
     @Override
     public void packetReceived(Session session, Packet packet) {
-        if (isActivePlayer()) {
-            this.lastPacket = System.currentTimeMillis();
-            if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)
-                    && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                    && this.isLoggedIn) {
-                this.proxy.getClient().send(packet);
+        try {
+            if (isActivePlayer()) {
+                this.lastPacket = System.currentTimeMillis();
+                if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)
+                        && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && this.isLoggedIn) {
+                    this.proxy.getClient().send(packet);
+                }
+            } else {
+                if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)
+                        && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && this.isLoggedIn) {
+                    this.proxy.getClient().send(packet);
+                }
             }
-        } else {
-            if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)
-                    && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                    && this.isLoggedIn) {
-                this.proxy.getClient().send(packet);
-            }
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed handling Received packet: " + packet.getClass().getSimpleName(), e);
         }
     }
 
     @Override
     public void packetSending(PacketSendingEvent event) {
-        Packet p1 = event.getPacket();
-        Packet p2;
-        if (isActivePlayer()) {
-            p2 = SERVER_PLAYER_HANDLERS.handleOutgoing(p1, this);
-        } else {
-            p2 = SERVER_SPECTATOR_HANDLERS.handleOutgoing(p1, this);
-        }
-        if (p2 == null) {
-            event.setCancelled(true);
-        } else if (p1 != p2) {
-            event.setPacket(p2);
+        try {
+            Packet p1 = event.getPacket();
+            Packet p2;
+            if (isActivePlayer()) {
+                p2 = SERVER_PLAYER_HANDLERS.handleOutgoing(p1, this);
+            } else {
+                p2 = SERVER_SPECTATOR_HANDLERS.handleOutgoing(p1, this);
+            }
+            if (p2 == null) {
+                event.setCancelled(true);
+            } else if (p1 != p2) {
+                event.setPacket(p2);
+            }
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed handling Sending packet: " + event.getPacket().getClass().getSimpleName(), e);
         }
     }
 
     @Override
     public void packetSent(Session session, Packet packet) {
-        if (isActivePlayer()) {
-            SERVER_PLAYER_HANDLERS.handlePostOutgoing(packet, this);
-        } else {
-            SERVER_SPECTATOR_HANDLERS.handlePostOutgoing(packet, this);
+        try {
+            if (isActivePlayer()) {
+                SERVER_PLAYER_HANDLERS.handlePostOutgoing(packet, this);
+            } else {
+                SERVER_SPECTATOR_HANDLERS.handlePostOutgoing(packet, this);
+            }
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed handling PostOutgoing packet: " + packet.getClass().getSimpleName(), e);
         }
     }
 

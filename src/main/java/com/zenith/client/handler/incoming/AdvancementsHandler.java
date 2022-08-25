@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerAdvancementsPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import java.util.HashMap;
@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class AdvancementsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerAdvancementsPacket, PorkClientSession> {
+public class AdvancementsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerAdvancementsPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerAdvancementsPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerAdvancementsPacket packet, @NonNull ClientSession session) {
         if (packet.doesReset()) {
             CACHE.getStatsCache().getAdvancements().clear();
             CACHE.getStatsCache().getProgress().clear();

@@ -22,10 +22,9 @@ package com.zenith.server.handler.player.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import lombok.NonNull;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -33,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class PlayerRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerRotationPacket, PorkServerConnection> {
+public class PlayerRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerRotationPacket, ServerConnection> {
     @Override
-    public boolean applyAsync(@NonNull ClientPlayerRotationPacket packet, @NonNull PorkServerConnection session) {
+    public boolean applyAsync(@NonNull ClientPlayerRotationPacket packet, @NonNull ServerConnection session) {
         CACHE.getPlayerCache()
                 .setYaw((float) packet.getYaw())
                 .setPitch((float) packet.getPitch());

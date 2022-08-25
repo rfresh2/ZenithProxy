@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -32,9 +32,9 @@ import static java.util.Objects.isNull;
 /**
  * @author DaPorkchop_
  */
-public class EntityPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityPositionPacket, PorkClientSession> {
+public class EntityPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityPositionPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityPositionPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityPositionPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (isNull(entity)) return false;
         entity.setX(entity.getX() + packet.getMovementX())

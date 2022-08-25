@@ -23,7 +23,7 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
 import com.zenith.event.proxy.PrioStatusUpdateEvent;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
@@ -33,9 +33,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
+public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListDataPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerPlayerListDataPacket packet, @NonNull ClientSession session) {
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());

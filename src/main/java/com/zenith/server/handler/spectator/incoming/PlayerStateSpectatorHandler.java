@@ -5,16 +5,16 @@ import com.github.steveice10.mc.protocol.data.game.world.sound.BuiltinSound;
 import com.github.steveice10.mc.protocol.data.game.world.sound.SoundCategory;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerStatePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerPlayBuiltinSoundPacket;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
 import java.util.Random;
 
-public class PlayerStateSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerStatePacket, PorkServerConnection> {
+public class PlayerStateSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerStatePacket, ServerConnection> {
     private final Random rand = new Random();
 
     @Override
-    public boolean apply(ClientPlayerStatePacket packet, PorkServerConnection session) {
+    public boolean apply(ClientPlayerStatePacket packet, ServerConnection session) {
         if (packet.getState() == PlayerState.START_SNEAKING || packet.getState() == PlayerState.START_SPRINTING) {
             final float randFloat = rand.nextFloat();
             final int randInt = rand.nextInt(4);

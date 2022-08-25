@@ -46,11 +46,11 @@ import static com.zenith.util.Constants.*;
  */
 @RequiredArgsConstructor
 @Getter
-public class PorkServerListener implements ServerListener {
+public class ProxyServerListener implements ServerListener {
     @NonNull
     protected final Proxy proxy;
 
-    protected final Map<Session, PorkServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
+    protected final Map<Session, ServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
 
     //this isn't really needed, but it lets me print the correct address to the log
     //TODO: ip-ban specific clients?
@@ -74,7 +74,7 @@ public class PorkServerListener implements ServerListener {
     @Override
     public void sessionAdded(SessionAddedEvent event) {
         if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getSubProtocol() != SubProtocol.STATUS) {
-            PorkServerConnection connection = new PorkServerConnection(this.proxy, event.getSession());
+            ServerConnection connection = new ServerConnection(this.proxy, event.getSession());
             event.getSession().addListener(connection);
             this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
             this.connections.put(event.getSession(), connection);
@@ -84,7 +84,7 @@ public class PorkServerListener implements ServerListener {
     @Override
     public void sessionRemoved(SessionRemovedEvent event) {
         this.addresses.remove(event.getSession());
-        PorkServerConnection connection = this.connections.remove(event.getSession());
+        ServerConnection connection = this.connections.remove(event.getSession());
         if (connection != null) {
             this.proxy.getCurrentPlayer().compareAndSet(connection, null);
         }

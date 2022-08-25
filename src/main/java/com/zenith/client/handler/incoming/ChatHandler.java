@@ -27,7 +27,7 @@ import com.zenith.event.proxy.ServerRestartingEvent;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import java.awt.*;
@@ -38,9 +38,9 @@ import static java.util.Objects.nonNull;
 /**
  * @author DaPorkchop_
  */
-public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerChatPacket, PorkClientSession> {
+public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerChatPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
         try {
             CHAT_LOG.info(packet.getMessage());
             MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());

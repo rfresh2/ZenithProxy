@@ -1,7 +1,7 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.Queue;
 import com.zenith.cache.data.PlayerCache;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -72,7 +72,7 @@ public class StatusCommand extends Command {
     }
 
     private String getCurrentClientUserName() {
-        PorkServerConnection currentConnection = this.proxy.getCurrentPlayer().get();
+        ServerConnection currentConnection = this.proxy.getCurrentPlayer().get();
         if (nonNull(currentConnection)) {
             return currentConnection.getProfileCache().getProfile().getName();
         } else {

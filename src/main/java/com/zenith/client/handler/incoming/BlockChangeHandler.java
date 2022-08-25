@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
@@ -31,7 +31,7 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBlockChangePacket, PorkClientSession> {
+public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBlockChangePacket, ClientSession> {
     static boolean handleChange(@NonNull BlockChangeRecord record) {
         try {
             CLIENT_LOG.debug("Handling block update: pos: [" + record.getPosition().getX() + ", " + record.getPosition().getY() + ", " + record.getPosition().getZ() + "], id: " + record.getBlock().getId() + ", data: " + record.getBlock().getData());
@@ -43,7 +43,7 @@ public class BlockChangeHandler implements HandlerRegistry.AsyncIncomingHandler<
     }
 
     @Override
-    public boolean applyAsync(@NonNull ServerBlockChangePacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerBlockChangePacket packet, @NonNull ClientSession session) {
         return handleChange(packet.getRecord());
     }
 

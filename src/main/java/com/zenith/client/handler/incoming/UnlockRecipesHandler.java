@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerUnlockRecipesPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -30,9 +30,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class UnlockRecipesHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnlockRecipesPacket, PorkClientSession> {
+public class UnlockRecipesHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnlockRecipesPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerUnlockRecipesPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerUnlockRecipesPacket packet, @NonNull ClientSession session) {
         CACHE.getStatsCache()
                 .setActivateFiltering(packet.getActivateFiltering())
                 .setOpenCraftingBook(packet.getOpenCraftingBook());

@@ -20,19 +20,16 @@
 
 package com.zenith.client;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.TitleAction;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerTitlePacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.*;
-import com.zenith.server.PorkServerConnection;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +51,7 @@ public class ClientListener implements SessionListener {
     protected final Proxy proxy;
 
     @NonNull
-    protected final PorkClientSession session;
+    protected final ClientSession session;
 
     private boolean inQueue = false;
     private int lastQueuePosition = Integer.MAX_VALUE;

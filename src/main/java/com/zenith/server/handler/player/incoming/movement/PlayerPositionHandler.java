@@ -22,11 +22,9 @@ package com.zenith.server.handler.player.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMovementPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import lombok.NonNull;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -34,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class PlayerPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionPacket, PorkServerConnection> {
+public class PlayerPositionHandler implements HandlerRegistry.AsyncIncomingHandler<ClientPlayerPositionPacket, ServerConnection> {
     @Override
-    public boolean applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull PorkServerConnection session) {
+    public boolean applyAsync(@NonNull ClientPlayerPositionPacket packet, @NonNull ServerConnection session) {
         CACHE.getPlayerCache()
                 .setX(packet.getX())
                 .setY(packet.getY())

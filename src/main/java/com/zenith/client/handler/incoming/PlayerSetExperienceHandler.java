@@ -1,14 +1,14 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.CACHE;
 
-public class PlayerSetExperienceHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerSetExperiencePacket, PorkClientSession> {
+public class PlayerSetExperienceHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerSetExperiencePacket, ClientSession> {
     @Override
-    public boolean applyAsync(ServerPlayerSetExperiencePacket packet, PorkClientSession session) {
+    public boolean applyAsync(ServerPlayerSetExperiencePacket packet, ClientSession session) {
         CACHE.getPlayerCache().getThePlayer()
                 .setTotalExperience(packet.getTotalExperience())
                 .setLevel(packet.getLevel())

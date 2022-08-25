@@ -26,7 +26,7 @@ import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 import com.zenith.cache.data.tab.PlayerEntry;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import java.time.Instant;
@@ -39,9 +39,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListEntryPacket, PorkClientSession> {
+public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListEntryPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerPlayerListEntryPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerPlayerListEntryPacket packet, @NonNull ClientSession session) {
         Consumer<PlayerListEntry> consumer = entry -> {
             throw new IllegalStateException();
         };

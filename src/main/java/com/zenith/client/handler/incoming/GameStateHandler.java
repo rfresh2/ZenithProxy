@@ -24,7 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerNotifyClientPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class GameStateHandler implements HandlerRegistry.AsyncIncomingHandler<ServerNotifyClientPacket, PorkClientSession> {
+public class GameStateHandler implements HandlerRegistry.AsyncIncomingHandler<ServerNotifyClientPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerNotifyClientPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerNotifyClientPacket packet, @NonNull ClientSession session) {
         if (packet.getNotification() == ClientNotification.CHANGE_GAMEMODE) {
             CACHE.getPlayerCache().setGameMode((GameMode) packet.getValue());
         }

@@ -38,13 +38,13 @@ import static com.zenith.util.Constants.CLIENT_LOG;
  * @author DaPorkchop_
  */
 @Getter
-public class PorkClientSession extends TcpClientSession {
+public class ClientSession extends TcpClientSession {
     @Getter(AccessLevel.PRIVATE)
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
 
-    public PorkClientSession(String host, int port, PacketProtocol protocol, @NonNull Proxy proxy) {
+    public ClientSession(String host, int port, PacketProtocol protocol, @NonNull Proxy proxy) {
         super(host, port, protocol);
         this.proxy = proxy;
         this.addListener(new ClientListener(this.proxy, this));

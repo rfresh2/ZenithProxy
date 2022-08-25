@@ -23,7 +23,7 @@ package com.zenith.client.handler.incoming.spawn;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SpawnMobHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnMobPacket, PorkClientSession> {
+public class SpawnMobHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnMobPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerSpawnMobPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerSpawnMobPacket packet, @NonNull ClientSession session) {
         CACHE.getEntityCache().add(new EntityMob()
                 .setMobType(packet.getType())
                 .setEntityId(packet.getEntityId())

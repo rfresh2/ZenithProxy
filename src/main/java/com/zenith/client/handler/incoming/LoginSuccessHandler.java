@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -30,9 +30,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class LoginSuccessHandler implements HandlerRegistry.IncomingHandler<LoginSuccessPacket, PorkClientSession> {
+public class LoginSuccessHandler implements HandlerRegistry.IncomingHandler<LoginSuccessPacket, ClientSession> {
     @Override
-    public boolean apply(@NonNull LoginSuccessPacket packet, @NonNull PorkClientSession session) {
+    public boolean apply(@NonNull LoginSuccessPacket packet, @NonNull ClientSession session) {
         CACHE.getProfileCache().setProfile(packet.getProfile());
         return false;
     }

@@ -25,7 +25,7 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.util.Wait;
 import lombok.NonNull;
 import com.zenith.Proxy;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -33,9 +33,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, PorkServerConnection> {
+public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginStartPacket, ServerConnection> {
     @Override
-    public boolean apply(@NonNull LoginStartPacket packet, @NonNull PorkServerConnection session) {
+    public boolean apply(@NonNull LoginStartPacket packet, @NonNull ServerConnection session) {
         if (CONFIG.server.extra.whitelist.enable && !isUserWhitelisted(packet.getUsername())) {
             SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
             EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));

@@ -22,15 +22,15 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerKeepAlivePacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 /**
  * @author DaPorkchop_
  */
-public class ClientKeepaliveHandler implements HandlerRegistry.IncomingHandler<ServerKeepAlivePacket, PorkClientSession> {
+public class ClientKeepaliveHandler implements HandlerRegistry.IncomingHandler<ServerKeepAlivePacket, ClientSession> {
     @Override
-    public boolean apply(@NonNull ServerKeepAlivePacket packet, @NonNull PorkClientSession session) {
+    public boolean apply(@NonNull ServerKeepAlivePacket packet, @NonNull ClientSession session) {
         return false;
     }
 

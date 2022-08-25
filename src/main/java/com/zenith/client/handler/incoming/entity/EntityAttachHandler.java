@@ -21,7 +21,7 @@
 package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityAttachPacket;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -30,10 +30,10 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityAttachHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityAttachPacket, PorkClientSession> {
+public class EntityAttachHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityAttachPacket, ClientSession> {
 
     @Override
-    public boolean applyAsync(ServerEntityAttachPacket packet, PorkClientSession session) {
+    public boolean applyAsync(ServerEntityAttachPacket packet, ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             if (packet.getAttachedToId() == -1) {

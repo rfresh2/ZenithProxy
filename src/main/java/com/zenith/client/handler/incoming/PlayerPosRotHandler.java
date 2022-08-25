@@ -24,7 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -34,9 +34,9 @@ import static java.util.Objects.isNull;
 /**
  * @author DaPorkchop_
  */
-public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerPositionRotationPacket, PorkClientSession> {
+public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerPositionRotationPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerPlayerPositionRotationPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerPlayerPositionRotationPacket packet, @NonNull ClientSession session) {
         PlayerCache cache = CACHE.getPlayerCache();
         cache
                 .setX((packet.getRelativeElements().contains(PositionElement.X) ? cache.getX() : 0.0d) + packet.getX())

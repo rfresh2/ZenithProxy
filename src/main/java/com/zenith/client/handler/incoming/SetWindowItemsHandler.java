@@ -20,10 +20,9 @@
 
 package com.zenith.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -31,9 +30,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SetWindowItemsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerWindowItemsPacket, PorkClientSession> {
+public class SetWindowItemsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerWindowItemsPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerWindowItemsPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerWindowItemsPacket packet, @NonNull ClientSession session) {
         if (packet.getWindowId() == 0)  { //player inventory
             CACHE.getPlayerCache().setInventory(packet.getItems());
         }

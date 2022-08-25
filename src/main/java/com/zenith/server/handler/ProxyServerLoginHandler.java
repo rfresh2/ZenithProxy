@@ -9,8 +9,8 @@ import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
-import com.zenith.server.PorkServerConnection;
-import com.zenith.server.PorkServerListener;
+import com.zenith.server.ServerConnection;
+import com.zenith.server.ProxyServerListener;
 
 import static com.zenith.util.Constants.*;
 
@@ -23,8 +23,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
 
     @Override
     public void loggedIn(Session session) {
-        PorkServerConnection connection = ((PorkServerListener) this.proxy.getServer().getListeners().stream()
-                .filter(PorkServerListener.class::isInstance)
+        ServerConnection connection = ((ProxyServerListener) this.proxy.getServer().getListeners().stream()
+                .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections().get(session);
 

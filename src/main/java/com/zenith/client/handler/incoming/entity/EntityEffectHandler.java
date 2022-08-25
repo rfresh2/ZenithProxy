@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEffectPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.EntityEquipment;
 import com.zenith.cache.data.entity.PotionEffect;
 import com.zenith.util.handler.HandlerRegistry;
@@ -32,9 +32,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityEffectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityEffectPacket, PorkClientSession> {
+public class EntityEffectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityEffectPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityEffectPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityEffectPacket packet, @NonNull ClientSession session) {
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {

@@ -2,13 +2,13 @@ package com.zenith.server.handler.spectator.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 
-public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, PorkServerConnection> {
+public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, ServerConnection> {
 
     @Override
-    public boolean apply(ClientChatPacket packet, PorkServerConnection session) {
+    public boolean apply(ClientChatPacket packet, ServerConnection session) {
         if (packet.getMessage().startsWith("!m")) {
             session.getProxy().getClient().send(new ClientChatPacket(packet.getMessage().substring(2).trim()));
         } else {

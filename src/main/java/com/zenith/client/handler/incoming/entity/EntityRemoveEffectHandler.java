@@ -1,7 +1,7 @@
 package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRemoveEffectPacket;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.EntityEquipment;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -9,10 +9,10 @@ import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
-public class EntityRemoveEffectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRemoveEffectPacket, PorkClientSession> {
+public class EntityRemoveEffectHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRemoveEffectPacket, ClientSession> {
 
     @Override
-    public boolean applyAsync(ServerEntityRemoveEffectPacket packet, PorkClientSession session) {
+    public boolean applyAsync(ServerEntityRemoveEffectPacket packet, ClientSession session) {
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (nonNull(entity)) {

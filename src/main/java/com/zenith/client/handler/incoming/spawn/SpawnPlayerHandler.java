@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.cache.data.entity.Entity;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -34,9 +34,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPlayerPacket, PorkClientSession> {
+public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPlayerPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerSpawnPlayerPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerSpawnPlayerPacket packet, @NonNull ClientSession session) {
         Entity entity = new EntityPlayer()
                 .setEntityId(packet.getEntityId())
                 .setUuid(packet.getUUID())

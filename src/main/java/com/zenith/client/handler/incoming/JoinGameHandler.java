@@ -26,7 +26,7 @@ import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -34,9 +34,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJoinGamePacket, PorkClientSession> {
+public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJoinGamePacket, ClientSession> {
     @Override
-    public boolean apply(@NonNull ServerJoinGamePacket packet, @NonNull PorkClientSession session) {
+    public boolean apply(@NonNull ServerJoinGamePacket packet, @NonNull ClientSession session) {
         CACHE.getPlayerCache()
                 .setEntityId(packet.getEntityId())
                 .setDimension(packet.getDimension())

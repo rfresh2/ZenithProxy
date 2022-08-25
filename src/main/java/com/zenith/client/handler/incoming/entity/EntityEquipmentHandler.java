@@ -24,7 +24,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityArmorStand;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.EntityEquipment;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -33,9 +33,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityEquipmentPacket, PorkClientSession> {
+public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityEquipmentPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityEquipmentPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityEquipmentPacket packet, @NonNull ClientSession session) {
         try {
             Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {

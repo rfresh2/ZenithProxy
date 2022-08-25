@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRotationPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -31,9 +31,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRotationPacket, PorkClientSession> {
+public class EntityRotationHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityRotationPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityRotationPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityRotationPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setYaw(packet.getYaw())

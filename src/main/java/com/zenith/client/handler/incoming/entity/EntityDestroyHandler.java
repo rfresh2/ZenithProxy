@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -30,9 +30,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityDestroyHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityDestroyPacket, PorkClientSession> {
+public class EntityDestroyHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityDestroyPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityDestroyPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityDestroyPacket packet, @NonNull ClientSession session) {
         for (int id : packet.getEntityIds()) {
             CACHE.getEntityCache().remove(id);
         }

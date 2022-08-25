@@ -5,12 +5,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.zenith.cache.DataCache;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.client.handler.incoming.spawn.*;
 import com.zenith.discord.DiscordBot;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.player.incoming.PlayerSwingArmPacketHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
@@ -85,7 +85,7 @@ public class Constants {
     public static final ExecutorService MODULE_EXECUTOR_SERVICE;
 
 
-    public static final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
+    public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
             .setLogger(CLIENT_LOG)
             .allowUnhandled(true)
             //
@@ -138,7 +138,7 @@ public class Constants {
             .registerInbound(new SpawnPositionHandler())
             .build();
 
-    public static final HandlerRegistry<PorkServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+    public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(true)
             //
@@ -162,7 +162,7 @@ public class Constants {
             .registerPostOutbound(new JoinGamePostHandler())
             .build();
 
-    public static final HandlerRegistry<PorkServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
+    public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(false)
 

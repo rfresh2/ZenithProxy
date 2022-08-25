@@ -21,7 +21,7 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
@@ -31,10 +31,10 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class PlayerHealthHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerHealthPacket, PorkClientSession> {
+public class PlayerHealthHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerHealthPacket, ClientSession> {
 
     @Override
-    public boolean applyAsync(@NonNull ServerPlayerHealthPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerPlayerHealthPacket packet, @NonNull ClientSession session) {
         if (packet.getHealth() != CACHE.getPlayerCache().getThePlayer().getHealth()) {
             MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(
                     new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth())));

@@ -2,17 +2,17 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.CombatState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerCombatPacket;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.EVENT_BUS;
 
-public class ServerCombatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerCombatPacket, PorkClientSession> {
+public class ServerCombatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerCombatPacket, ClientSession> {
 
     @Override
-    public boolean applyAsync(ServerCombatPacket packet, PorkClientSession session) {
+    public boolean applyAsync(ServerCombatPacket packet, ClientSession session) {
         if (packet.getPlayerId() == CACHE.getPlayerCache().getEntityId()) {
             if (packet.getCombatState() == CombatState.ENTITY_DEAD) {
                 // packet.message() value is basically garbage on 2b2t, same message on any death, might have more info on other servers

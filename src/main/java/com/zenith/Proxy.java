@@ -22,25 +22,23 @@ package com.zenith;
 
 import com.collarmc.pounce.Preference;
 import com.collarmc.pounce.Subscribe;
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.github.steveice10.packetlib.tcp.TcpServer;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.module.AntiAFK;
 import com.zenith.module.AutoDisconnect;
 import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
-import com.zenith.server.PorkServerConnection;
-import com.zenith.server.PorkServerListener;
+import com.zenith.server.ServerConnection;
+import com.zenith.server.ProxyServerListener;
 import com.zenith.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.*;
 import com.zenith.util.Queue;
@@ -82,7 +80,7 @@ public class Proxy {
     protected LoggerInner loggerInner;
     @Setter
     protected BufferedImage serverIcon;
-    protected final AtomicReference<PorkServerConnection> currentPlayer = new AtomicReference<>();
+    protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
     protected final ScheduledExecutorService clientTickExecutorService;
     protected final ScheduledExecutorService clientTimeoutExecutorService;
     protected ScheduledExecutorService autoReconnectExecutorService;
@@ -143,7 +141,7 @@ public class Proxy {
                 long millis = CONFIG.server.extra.timeout.millis;
                 long interval = CONFIG.server.extra.timeout.interval;
                 clientTimeoutExecutorService.scheduleAtFixedRate(() -> {
-                    PorkServerConnection currentPlayer = this.currentPlayer.get();
+                    ServerConnection currentPlayer = this.currentPlayer.get();
                     if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis)  {
                         currentPlayer.disconnect("Timed out");
                     }
@@ -260,7 +258,7 @@ public class Proxy {
         int port = CONFIG.client.server.port;
 
         CLIENT_LOG.info("Connecting to %s:%d...", address, port);
-        this.client = new PorkClientSession(address, port, this.protocol, this);
+        this.client = new ClientSession(address, port, this.protocol, this);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
@@ -296,7 +294,7 @@ public class Proxy {
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
-                this.server.addListener(new PorkServerListener(this));
+                this.server.addListener(new ProxyServerListener(this));
                 this.server.bind(false);
             }
         }
@@ -384,9 +382,9 @@ public class Proxy {
         return this.autoReconnectFuture.isPresent();
     }
 
-    public Collection<PorkServerConnection> getServerConnections() {
-        return ((PorkServerListener) this.server.getListeners().stream()
-                .filter(PorkServerListener.class::isInstance)
+    public Collection<ServerConnection> getServerConnections() {
+        return ((ProxyServerListener) this.server.getListeners().stream()
+                .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections()
                 .values()
@@ -395,9 +393,9 @@ public class Proxy {
                 .collect(Collectors.toList());
     }
 
-    public List<PorkServerConnection> getSpectatorConnections() {
-        return ((PorkServerListener) this.server.getListeners().stream()
-                .filter(PorkServerListener.class::isInstance)
+    public List<ServerConnection> getSpectatorConnections() {
+        return ((ProxyServerListener) this.server.getListeners().stream()
+                .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections()
                 .values()
@@ -434,7 +432,7 @@ public class Proxy {
     public boolean delayBeforeReconnect() {
         try {
             final int countdown;
-            if (((PorkClientSession) client).isServerProbablyOff()) {
+            if (((ClientSession) client).isServerProbablyOff()) {
                 countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
 
                 this.reconnectCounter = 0;
@@ -542,7 +540,7 @@ public class Proxy {
     @Subscribe
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            PorkServerConnection currentConnection = this.getCurrentPlayer().get();
+            ServerConnection currentConnection = this.getCurrentPlayer().get();
             if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile))
             {
                 disconnect();

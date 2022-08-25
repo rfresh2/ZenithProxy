@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityCollectItemPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -31,9 +31,9 @@ import static java.util.Objects.nonNull;
 /**
  * @author DaPorkchop_
  */
-public class EntityCollectItemHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityCollectItemPacket, PorkClientSession> {
+public class EntityCollectItemHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityCollectItemPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityCollectItemPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityCollectItemPacket packet, @NonNull ClientSession session) {
         if (nonNull(CACHE.getEntityCache().get(packet.getCollectedEntityId()))) {
             CACHE.getEntityCache().remove(packet.getCollectedEntityId());
             return true;

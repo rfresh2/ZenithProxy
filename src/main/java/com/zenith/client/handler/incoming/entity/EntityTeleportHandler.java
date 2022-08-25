@@ -22,7 +22,7 @@ package com.zenith.client.handler.incoming.entity;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.util.handler.HandlerRegistry;
 
@@ -31,9 +31,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class EntityTeleportHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityTeleportPacket, PorkClientSession> {
+public class EntityTeleportHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityTeleportPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityTeleportPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerEntityTeleportPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setX(packet.getX())

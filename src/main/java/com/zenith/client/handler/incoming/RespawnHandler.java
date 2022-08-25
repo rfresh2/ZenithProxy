@@ -21,9 +21,8 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
-import com.zenith.event.proxy.DeathEvent;
 import lombok.NonNull;
-import com.zenith.client.PorkClientSession;
+import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
 import static com.zenith.util.Constants.*;
@@ -31,9 +30,9 @@ import static com.zenith.util.Constants.*;
 /**
  * @author DaPorkchop_
  */
-public class RespawnHandler implements HandlerRegistry.AsyncIncomingHandler<ServerRespawnPacket, PorkClientSession> {
+public class RespawnHandler implements HandlerRegistry.AsyncIncomingHandler<ServerRespawnPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerRespawnPacket packet, @NonNull PorkClientSession session) {
+    public boolean applyAsync(@NonNull ServerRespawnPacket packet, @NonNull ClientSession session) {
         if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
             CACHE.reset(false);
             // only partial reset chunk and entity cache?
@@ -57,7 +56,7 @@ public class RespawnHandler implements HandlerRegistry.AsyncIncomingHandler<Serv
 
     // todo: handle this situation without disconnecting spectators
     //  on next PlayerPositionRotation we need to spawn spectators back both on their side and current player side
-    private void disconnectSpectators(PorkClientSession clientSession, final String reason)
+    private void disconnectSpectators(ClientSession clientSession, final String reason)
     {
         clientSession.getProxy().getSpectatorConnections().forEach(connection -> {
             connection.disconnect(reason);

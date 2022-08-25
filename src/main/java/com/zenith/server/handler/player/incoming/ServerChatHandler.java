@@ -22,7 +22,7 @@ package com.zenith.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.zenith.server.PorkServerConnection;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.Queue;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
@@ -33,11 +33,11 @@ import static com.zenith.util.Constants.MANUAL_DISCONNECT;
 /**
  * @author DaPorkchop_
  */
-public class ServerChatHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, PorkServerConnection> {
+public class ServerChatHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, ServerConnection> {
     protected static final long CLIENTCHATPACKET_MESSAGE_OFFSET = PUnsafe.pork_getOffset(ClientChatPacket.class, "message");
 
     @Override
-    public boolean apply(@NonNull ClientChatPacket packet, @NonNull PorkServerConnection session) {
+    public boolean apply(@NonNull ClientChatPacket packet, @NonNull ServerConnection session) {
         if (packet.getMessage().startsWith("!"))   {
             if (packet.getMessage().startsWith("!!"))   {
                 //allow sending ingame commands to bots or whatever
