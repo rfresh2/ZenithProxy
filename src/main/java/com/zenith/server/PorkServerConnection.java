@@ -160,19 +160,21 @@ public class PorkServerConnection implements Session, SessionListener {
             SERVER_LOG.warn(String.format("Connection disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
             return;
         }
-        if (isActivePlayer()) {
-            SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
-            try {
-                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
-            } catch (final Throwable e) {
-                SERVER_LOG.info("Could not get game profile of disconnecting player");
-                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason()));
+        if (this.isPlayer) {
+            if (isActivePlayer()) {
+                SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
+                try {
+                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
+                } catch (final Throwable e) {
+                    SERVER_LOG.info("Could not get game profile of disconnecting player");
+                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason()));
+                }
+            } else {
+                proxy.getServerConnections().forEach(connection -> {
+                    connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
+                });
+                EVENT_BUS.dispatch(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
-        } else {
-            proxy.getServerConnections().forEach(connection -> {
-                connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
-            });
-            EVENT_BUS.dispatch(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
         }
     }
 
