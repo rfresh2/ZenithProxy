@@ -24,6 +24,7 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.crypt.PacketEncryption;
@@ -184,6 +185,7 @@ public class ServerConnection implements Session, SessionListener {
             } else {
                 proxy.getServerConnections().forEach(connection -> {
                     connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
+                    connection.send(new ServerChatPacket("§9" + profileCache.getProfile().getName() + " disconnected§r", true));
                 });
                 EVENT_BUS.dispatch(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
