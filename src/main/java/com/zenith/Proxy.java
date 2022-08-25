@@ -543,7 +543,11 @@ public class Proxy {
     @Subscribe
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            disconnect();
+            PorkServerConnection currentConnection = this.getCurrentPlayer().get();
+            if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile))
+            {
+                disconnect();
+            }
         }
     }
 
