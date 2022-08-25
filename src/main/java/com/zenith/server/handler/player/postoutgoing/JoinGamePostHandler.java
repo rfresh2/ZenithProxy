@@ -20,11 +20,10 @@
 
 package com.zenith.server.handler.player.postoutgoing;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
+import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.zenith.cache.DataCache;
 import com.zenith.server.ServerConnection;
@@ -32,8 +31,7 @@ import com.zenith.util.RefStrings;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CACHE;
 
 /**
  * @author DaPorkchop_
@@ -50,13 +48,6 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
         session.getProxy().getServerConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
-                    session.send(new ServerPlayerListEntryPacket(
-                            PlayerListEntryAction.ADD_PLAYER,
-                            new PlayerListEntry[]{new PlayerListEntry(
-                                    connection.getProfileCache().getProfile(),
-                                    SPECTATOR
-                            )}
-                    ));
                     session.send(new ServerSpawnPlayerPacket(
                             connection.getSpectatorEntityId(),
                             connection.getProfileCache().getProfile().getId(),
@@ -66,6 +57,21 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                             CACHE.getPlayerCache().getYaw(),
                             CACHE.getPlayerCache().getPitch(),
                             CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
+
+                    session.send(new ServerSpawnMobPacket(
+                            connection.getSpectatorEntityId(),
+                            connection.getSpectatorCatUUID(),
+                            MobType.OCELOT,
+                            CACHE.getPlayerCache().getX(),
+                            CACHE.getPlayerCache().getY(),
+                            CACHE.getPlayerCache().getZ(),
+                            CACHE.getPlayerCache().getYaw(),
+                            CACHE.getPlayerCache().getPitch(),
+                            CACHE.getPlayerCache().getYaw(),
+                            0f,
+                            0f,
+                            0f,
+                            connection.getSpectatorCatEntityMetadata(false)));
                 });
 
         session.setLoggedIn(true);
