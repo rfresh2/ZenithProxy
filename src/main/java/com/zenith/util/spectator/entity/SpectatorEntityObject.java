@@ -29,18 +29,4 @@ public abstract class SpectatorEntityObject extends SpectatorEntity {
                 playerCache.getPitch());
     }
 
-    @Override
-    public Packet getSelfSpawnPacket(final int entityId, final UUID uuid, final PlayerCache playerCache, final GameProfile gameProfile) {
-        return new ServerSpawnObjectPacket(
-                entityId,
-                uuid,
-                getObjectType(),
-                getObjectData(),
-                playerCache.getX(),
-                playerCache.getY(),
-                playerCache.getZ(),
-                playerCache.getYaw(),
-                playerCache.getPitch());
-    }
-
 }

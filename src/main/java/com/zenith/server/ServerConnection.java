@@ -188,20 +188,16 @@ public class ServerConnection implements Session, SessionListener {
 
     // Spectator helper methods
 
-    public Packet getSelfSpawnPacket() {
-        return spectatorEntity.getSelfSpawnPacket(spectatorSelfEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
-    }
-
     public Packet getSpawnPacket() {
         return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
     }
 
     public ServerEntityMetadataPacket getSelfEntityMetadataPacket() {
-        return new ServerEntityMetadataPacket(spectatorSelfEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorSelfEntityId));
+        return new ServerEntityMetadataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorEntityId));
     }
 
     public ServerEntityMetadataPacket getEntityMetadataPacket() {
-        return new ServerEntityMetadataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorEntityId));
+        return new ServerEntityMetadataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(profileCache.getProfile(), spectatorEntityId));
     }
 
     public Optional<Packet> getSoundPacket() {

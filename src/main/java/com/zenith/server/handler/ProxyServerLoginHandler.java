@@ -50,7 +50,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(
-                    connection.getSpectatorEntityId(),
+                    connection.getSpectatorSelfEntityId(),
                     CACHE.getPlayerCache().isHardcore(),
                     GameMode.SPECTATOR,
                     CACHE.getPlayerCache().getDimension(),

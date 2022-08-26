@@ -20,9 +20,9 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                 // respawn entity on all connections
                 session.getProxy().getServerConnections().forEach(connection -> {
                     if (connection.equals(session)) {
-                        session.send(new ServerEntityDestroyPacket(session.getSpectatorSelfEntityId()));
-                        session.send(session.getSelfSpawnPacket());
-                        session.send(session.getSelfEntityMetadataPacket());
+                        session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
+                        session.send(session.getSpawnPacket());
+                        session.send(session.getEntityMetadataPacket());
                     } else {
                         connection.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
                         connection.send(session.getSpawnPacket());

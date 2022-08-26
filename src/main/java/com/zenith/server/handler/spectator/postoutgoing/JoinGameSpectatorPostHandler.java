@@ -39,7 +39,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                 .setDifficulty(CACHE.getPlayerCache().getDifficulty())
                 .setHardcore(false)
                 .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
-        session.send(session.getSelfSpawnPacket());
+        session.send(session.getSpawnPacket());
         session.send(session.getSelfEntityMetadataPacket());
         //send cached data
         DataCache.sendCacheData(CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()), session);
@@ -47,7 +47,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
             .filter(connection -> !connection.equals(session))
             .forEach(connection -> sendInitPackets(connection, session));
         session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
-        session.send(new ServerEntityMetadataPacket(session.getSpectatorEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
+        session.send(new ServerEntityMetadataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
         session.send(new ServerChatPacket("§9Change your entity: \"!e <entity>\"§r", true));
         session.setLoggedIn(true);
         session.setAllowSpectatorServerPlayerPosRotate(false);
@@ -78,6 +78,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
             ));
         } else {
             selfSession.send(connection.getSpawnPacket());
+            selfSession.send(connection.getEntityMetadataPacket());
         }
         connection.send(selfSession.getSpawnPacket());
         connection.send(selfSession.getEntityMetadataPacket());
@@ -90,7 +91,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
         spectatorEntityPlayer.setX(CACHE.getPlayerCache().getX());
         spectatorEntityPlayer.setY(CACHE.getPlayerCache().getY());
         spectatorEntityPlayer.setZ(CACHE.getPlayerCache().getZ());
-        spectatorEntityPlayer.setEntityId(session.getSpectatorEntityId());
+        spectatorEntityPlayer.setEntityId(session.getSpectatorSelfEntityId());
         spectatorEntityPlayer.setYaw(CACHE.getPlayerCache().getYaw());
         spectatorEntityPlayer.setPitch(CACHE.getPlayerCache().getPitch());
         final CompoundTag emptyNbtTag = new CompoundTag("");

@@ -67,7 +67,7 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                     ));
                 });
         selfSession.send(new ServerEntityTeleportPacket(
-                selfSession.getSpectatorSelfEntityId(),
+                selfSession.getSpectatorEntityId(),
                 selfSession.getSpectatorPlayerCache().getX(),
                 selfSession.getSpectatorPlayerCache().getY(),
                 selfSession.getSpectatorPlayerCache().getZ(),
@@ -76,7 +76,7 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                 false
         ));
         selfSession.send(new ServerEntityHeadLookPacket(
-                selfSession.getSpectatorSelfEntityId(),
+                selfSession.getSpectatorEntityId(),
                 yaw
         ));
     }
