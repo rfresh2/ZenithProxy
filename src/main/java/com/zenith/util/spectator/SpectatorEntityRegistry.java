@@ -18,6 +18,7 @@ public final class SpectatorEntityRegistry {
         spectatorEntityMap.put("dog", new SpectatorDogEntity());
         spectatorEntityMap.put("bat", new SpectatorBatEntity());
         spectatorEntityMap.put("crystal", new SpectatorEntityEndCrystal());
+        spectatorEntityMap.put("dragon", new SpectatorEntityEnderDragon());
     }
 
     public static SpectatorEntity getSpectatorEntityWithDefault(final String identifier) {

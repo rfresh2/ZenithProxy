@@ -25,6 +25,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.util.spectator.entity.SpectatorEntityEnderDragon;
 import lombok.NonNull;
 
 public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerPositionRotationPacket, ServerConnection> {
@@ -47,6 +48,7 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
 
     // might move this elsewhere, kinda awkward being here
     public static void updateSpectatorPosition(final ServerConnection selfSession) {
+        float yaw = getYaw(selfSession);
         selfSession.getProxy().getServerConnections().stream()
                 .filter(connection -> !connection.equals(selfSession))
                 .forEach(connection -> {
@@ -55,13 +57,13 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                             selfSession.getSpectatorPlayerCache().getX(),
                             selfSession.getSpectatorPlayerCache().getY(),
                             selfSession.getSpectatorPlayerCache().getZ(),
-                            selfSession.getSpectatorPlayerCache().getYaw(),
+                            yaw,
                             selfSession.getSpectatorPlayerCache().getPitch(),
                             false
                     ));
                     connection.send(new ServerEntityHeadLookPacket(
                             selfSession.getSpectatorEntityId(),
-                            selfSession.getSpectatorPlayerCache().getYaw()
+                            yaw
                     ));
                 });
         selfSession.send(new ServerEntityTeleportPacket(
@@ -69,13 +71,22 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                 selfSession.getSpectatorPlayerCache().getX(),
                 selfSession.getSpectatorPlayerCache().getY(),
                 selfSession.getSpectatorPlayerCache().getZ(),
-                selfSession.getSpectatorPlayerCache().getYaw(),
+                yaw,
                 selfSession.getSpectatorPlayerCache().getPitch(),
                 false
         ));
         selfSession.send(new ServerEntityHeadLookPacket(
                 selfSession.getSpectatorSelfEntityId(),
-                selfSession.getSpectatorPlayerCache().getYaw()
+                yaw
         ));
+    }
+
+    public static float getYaw(final ServerConnection serverConnection) {
+        // idk why but dragon is 180 degrees off from what you'd expect
+        if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityEnderDragon) {
+            return serverConnection.getSpectatorPlayerCache().getYaw() - 180f;
+        } else {
+            return serverConnection.getSpectatorPlayerCache().getYaw();
+        }
     }
 }
