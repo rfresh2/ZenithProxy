@@ -58,20 +58,7 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                             CACHE.getPlayerCache().getPitch(),
                             CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
 
-                    session.send(new ServerSpawnMobPacket(
-                            connection.getSpectatorEntityId(),
-                            connection.getSpectatorCatUUID(),
-                            MobType.OCELOT,
-                            CACHE.getPlayerCache().getX(),
-                            CACHE.getPlayerCache().getY(),
-                            CACHE.getPlayerCache().getZ(),
-                            CACHE.getPlayerCache().getYaw(),
-                            CACHE.getPlayerCache().getPitch(),
-                            CACHE.getPlayerCache().getYaw(),
-                            0f,
-                            0f,
-                            0f,
-                            connection.getSpectatorCatEntityMetadata(false)));
+                    session.send(connection.getSpawnPacket());
                 });
 
         session.setLoggedIn(true);

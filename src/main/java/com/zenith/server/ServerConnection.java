@@ -22,8 +22,6 @@ package com.zenith.server;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
 import com.github.steveice10.packetlib.Session;
@@ -37,6 +35,8 @@ import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
+import com.zenith.util.spectator.entity.SpectatorCatEntity;
+import com.zenith.util.spectator.entity.SpectatorEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -71,32 +71,12 @@ public class ServerConnection implements Session, SessionListener {
     protected boolean isLoggedIn = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     protected int spectatorEntityId = 2147483647 - this.hashCode();
-    protected int spectatorSelfCatEntityId = spectatorEntityId - 1;
-    protected UUID spectatorCatUUID = UUID.randomUUID();
+    protected int spectatorSelfEntityId = spectatorEntityId - 1;
+    protected UUID spectatorEntityUUID = UUID.randomUUID();
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
-
-    public final EntityMetadata[] getSpectatorCatEntityMetadata(boolean self) {
-        // https://c4k3.github.io/wiki.vg/Entities.html#Entity
-        return new EntityMetadata[]{
-                new EntityMetadata(0, MetadataType.BYTE, (byte)0),
-                new EntityMetadata(1, MetadataType.INT, 0),
-                new EntityMetadata(2, MetadataType.STRING, this.getProfileCache().getProfile().getName()),
-                new EntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
-                new EntityMetadata(4, MetadataType.BOOLEAN, false),
-                new EntityMetadata(5, MetadataType.BOOLEAN, false),
-                new EntityMetadata(6, MetadataType.BYTE, (byte)0),
-                new EntityMetadata(7, MetadataType.FLOAT, 10.0f),
-                new EntityMetadata(8, MetadataType.INT, 0),
-                new EntityMetadata(9, MetadataType.BOOLEAN, false),
-                new EntityMetadata(10, MetadataType.INT, 0),
-                new EntityMetadata(11, MetadataType.BYTE, (byte)0),
-                new EntityMetadata(12, MetadataType.BOOLEAN, false),
-                new EntityMetadata(13, MetadataType.BYTE, (byte)4),
-//                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
-                new EntityMetadata(15, MetadataType.INT, (spectatorEntityId % 3) + 1) // cat texture variant
-        };
-    }
+    // todo: move default entity to Config
+    protected SpectatorEntity spectatorEntity = new SpectatorCatEntity();
 
     @Override
     public void packetReceived(Session session, Packet packet) {
@@ -198,6 +178,16 @@ public class ServerConnection implements Session, SessionListener {
 
     public boolean isActivePlayer() {
         return Objects.equals(this.proxy.getCurrentPlayer().get(), this);
+    }
+
+    // Spectator helper methods
+
+    public Packet getSelfSpawnPacket() {
+        return spectatorEntity.getSelfSpawnPacket(spectatorSelfEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
+    }
+
+    public Packet getSpawnPacket() {
+        return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
     }
 
     //

@@ -4,14 +4,12 @@ import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.cache.DataCache;
@@ -33,20 +31,6 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                 PlayerListEntryAction.ADD_PLAYER,
                 new PlayerListEntry[]{new PlayerListEntry(session.getProfileCache().getProfile(), SPECTATOR)}
         ));
-        session.send(new ServerSpawnMobPacket(
-                session.getSpectatorSelfCatEntityId(),
-                session.getSpectatorCatUUID(),
-                MobType.OCELOT,
-                CACHE.getPlayerCache().getX(),
-                CACHE.getPlayerCache().getY(),
-                CACHE.getPlayerCache().getZ(),
-                CACHE.getPlayerCache().getYaw(),
-                CACHE.getPlayerCache().getPitch(),
-                CACHE.getPlayerCache().getYaw(),
-                0f,
-                0f,
-                0f,
-                session.getSpectatorCatEntityMetadata(true)));
         EntityPlayer spectatorEntityPlayer = getSpectatorPlayerEntity(session);
         session.getSpectatorPlayerCache()
                 .setThePlayer(spectatorEntityPlayer)
@@ -55,6 +39,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                 .setDifficulty(CACHE.getPlayerCache().getDifficulty())
                 .setHardcore(false)
                 .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
+        session.send(session.getSelfSpawnPacket());
         //send cached data
         DataCache.sendCacheData(CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()), session);
         session.getProxy().getServerConnections().stream()
@@ -90,35 +75,9 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                     "§9Send private messages: \"!m <message>\"§r", true
             ));
         } else {
-            selfSession.send(new ServerSpawnMobPacket(
-                    connection.getSpectatorEntityId(),
-                    connection.getSpectatorCatUUID(),
-                    MobType.OCELOT,
-                    connection.getSpectatorPlayerCache().getX(),
-                    connection.getSpectatorPlayerCache().getY(),
-                    connection.getSpectatorPlayerCache().getZ(),
-                    connection.getSpectatorPlayerCache().getYaw(),
-                    connection.getSpectatorPlayerCache().getPitch(),
-                    connection.getSpectatorPlayerCache().getYaw(),
-                    0f,
-                    0f,
-                    0f,
-                    connection.getSpectatorCatEntityMetadata(false)));
+            selfSession.send(connection.getSpawnPacket());
         }
-        connection.send(new ServerSpawnMobPacket(
-                selfSession.getSpectatorEntityId(),
-                selfSession.getSpectatorCatUUID(),
-                MobType.OCELOT,
-                CACHE.getPlayerCache().getX(),
-                CACHE.getPlayerCache().getY(),
-                CACHE.getPlayerCache().getZ(),
-                CACHE.getPlayerCache().getYaw(),
-                CACHE.getPlayerCache().getPitch(),
-                CACHE.getPlayerCache().getYaw(),
-                0f,
-                0f,
-                0f,
-                selfSession.getSpectatorCatEntityMetadata(false)));
+        connection.send(selfSession.getSpawnPacket());
     }
 
     private EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {
