@@ -1,11 +1,11 @@
 package com.zenith.util.spectator;
 
+import com.zenith.util.spectator.entity.SpectatorBatEntity;
 import com.zenith.util.spectator.entity.SpectatorCatEntity;
 import com.zenith.util.spectator.entity.SpectatorDogEntity;
 import com.zenith.util.spectator.entity.SpectatorEntity;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.SERVER_LOG;
 import static java.util.Objects.isNull;
@@ -19,6 +19,7 @@ public final class SpectatorEntityRegistry {
     static {
         spectatorEntityMap.put("cat", new SpectatorCatEntity());
         spectatorEntityMap.put("dog", new SpectatorDogEntity());
+        spectatorEntityMap.put("bat", new SpectatorBatEntity());
     }
 
     public static SpectatorEntity getSpectatorEntityWithDefault(final String identifier) {
