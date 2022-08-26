@@ -115,13 +115,11 @@ public class Proxy {
         autoUpdater = new AutoUpdater(instance);
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
-            ForkJoinPool.commonPool().submit(() -> {
-                try {
-                    DISCORD_BOT.start(instance);
-                } catch (final Throwable e) {
-                    DISCORD_LOG.error(e);
-                }
-            });
+            try {
+                DISCORD_BOT.start(instance);
+            } catch (final Throwable e) {
+                DISCORD_LOG.error(e);
+            }
         }
 
         instance.start();
