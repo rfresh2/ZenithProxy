@@ -24,10 +24,14 @@ public class UpdateCommand extends Command {
         try {
             EVENT_BUS.dispatch(new UpdateStartEvent());
             CONFIG.discord.isUpdating = true;
+            if (this.proxy.isConnected()) {
+                CONFIG.shouldReconnectAfterAutoUpdate = true;
+            }
             this.proxy.stop();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to update", e);
             CONFIG.discord.isUpdating = false;
+            CONFIG.shouldReconnectAfterAutoUpdate = false;
             saveConfig();
             return getFailedUpdateMessage();
         }
