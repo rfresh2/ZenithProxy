@@ -499,18 +499,6 @@ public class Proxy {
 
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
-        // bounds here are mainly to catch when queue size changes very frequently
-//        if (event.position >= Queue.getQueueStatus().prio - 50
-//                && event.position <= Queue.getQueueStatus().prio + 50
-//                && !this.isPrio.isPresent()) {
-//            this.isPrio = Optional.of(true);
-//            CONFIG.authentication.prio = true;
-//        } else {
-//            if (!this.isPrio.isPresent()) {
-//                this.isPrio = Optional.of(false);
-//                CONFIG.authentication.prio = false;
-//            }
-//        }
         this.queuePosition = event.position;
     }
 

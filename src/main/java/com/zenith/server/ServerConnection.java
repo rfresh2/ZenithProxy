@@ -70,6 +70,12 @@ public class ServerConnection implements Session, SessionListener {
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
+    // todo: make these entity id's used more logically.
+    //  the spectator entity should always use this var
+    //  self entity id should be this connection's spectator player
+    //  right now this is inconsistent:
+    //      for other players: this is the entity
+    //      for self: this is the spectator player
     protected int spectatorEntityId = 2147483647 - this.hashCode();
     protected int spectatorSelfEntityId = spectatorEntityId - 1;
     protected UUID spectatorEntityUUID = UUID.randomUUID();
