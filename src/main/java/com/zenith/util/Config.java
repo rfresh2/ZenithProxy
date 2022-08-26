@@ -220,6 +220,7 @@ public final class Config {
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
         public boolean allowSpectator = true;
+        public String spectatorEntity = "cat";
 
         public static final class Bind {
             public String address = "0.0.0.0";
