@@ -6,10 +6,10 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.data.PlayerCache;
 
+import java.util.Random;
 import java.util.UUID;
 
 public abstract class SpectatorMob extends SpectatorEntity {
-
     abstract MobType getMobType();
 
     @Override

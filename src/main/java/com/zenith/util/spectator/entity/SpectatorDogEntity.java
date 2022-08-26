@@ -11,16 +11,15 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
-import java.util.Random;
 
-public class SpectatorCatEntity extends SpectatorMob {
+public class SpectatorDogEntity extends SpectatorMob {
     @Override
-    EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
+    EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
     }
 
     @Override
-    EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
+    EntityMetadata[] getEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, false);
     }
 
@@ -41,13 +40,15 @@ public class SpectatorCatEntity extends SpectatorMob {
                 new EntityMetadata(12, MetadataType.BOOLEAN, false),
                 new EntityMetadata(13, MetadataType.BYTE, (byte) 4),
 //                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
-                new EntityMetadata(15, MetadataType.INT, (spectatorEntityId % 3) + 1) // cat texture variant
+                new EntityMetadata(15, MetadataType.FLOAT, 1.0f), // damage taken/tail rotation (?)
+                new EntityMetadata(16, MetadataType.BOOLEAN, false), // begging, i think this tilts the head
+                new EntityMetadata(17, MetadataType.INT, (spectatorEntityId % 16)) // collar color
         };
     }
 
     @Override
     MobType getMobType() {
-        return MobType.OCELOT;
+        return MobType.WOLF;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class SpectatorCatEntity extends SpectatorMob {
         final float randFloat = rand.nextFloat();
         final int randInt = rand.nextInt(4);
         return Optional.of(new ServerPlayBuiltinSoundPacket(
-                randInt == 0 ? BuiltinSound.ENTITY_CAT_PURREOW : BuiltinSound.ENTITY_CAT_AMBIENT,
+                randInt == 0 ? BuiltinSound.ENTITY_WOLF_WHINE : BuiltinSound.ENTITY_WOLF_AMBIENT,
                 SoundCategory.AMBIENT,
                 playerCache.getX(),
                 playerCache.getY(),
@@ -64,5 +65,4 @@ public class SpectatorCatEntity extends SpectatorMob {
                 1.0f + (randFloat / 10f) // slight pitch variations
         ));
     }
-
 }
