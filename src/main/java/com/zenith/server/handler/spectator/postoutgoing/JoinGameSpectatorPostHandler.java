@@ -40,6 +40,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                 .setHardcore(false)
                 .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
         session.send(session.getSelfSpawnPacket());
+        session.send(session.getSelfEntityMetadataPacket());
         //send cached data
         DataCache.sendCacheData(CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()), session);
         session.getProxy().getServerConnections().stream()
@@ -79,6 +80,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
             selfSession.send(connection.getSpawnPacket());
         }
         connection.send(selfSession.getSpawnPacket());
+        connection.send(selfSession.getEntityMetadataPacket());
     }
 
     private EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {

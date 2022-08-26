@@ -14,12 +14,12 @@ import java.util.Optional;
 
 public class SpectatorBatEntity extends SpectatorMob {
     @Override
-    EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
+    public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
     }
 
     @Override
-    EntityMetadata[] getEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
+    public EntityMetadata[] getEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, false);
     }
 

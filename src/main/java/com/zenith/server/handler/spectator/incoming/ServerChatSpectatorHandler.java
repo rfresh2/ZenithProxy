@@ -22,9 +22,11 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                     if (connection.equals(session)) {
                         session.send(new ServerEntityDestroyPacket(session.getSpectatorSelfEntityId()));
                         session.send(session.getSelfSpawnPacket());
+                        session.send(session.getSelfEntityMetadataPacket());
                     } else {
                         connection.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
                         connection.send(session.getSpawnPacket());
+                        connection.send(session.getEntityMetadataPacket());
                     }
                 });
                 session.send(new ServerChatPacket("§9Updated entity to: " + entityId + "§r", true));

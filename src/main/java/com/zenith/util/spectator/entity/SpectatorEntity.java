@@ -12,9 +12,9 @@ import java.util.UUID;
 public abstract class SpectatorEntity {
     final Random rand = new Random();
 
-    abstract EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
+    public abstract EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
 
-    abstract EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
+    public abstract EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
 
     public abstract Packet getSelfSpawnPacket(final int entityId, final UUID uuid, final PlayerCache playerCache, final GameProfile gameProfile);
     public abstract Packet getSpawnPacket(final int entityId, final UUID uuid, final PlayerCache playerCache, final GameProfile gameProfile);

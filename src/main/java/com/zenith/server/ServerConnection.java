@@ -24,6 +24,7 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.crypt.PacketEncryption;
 import com.github.steveice10.packetlib.event.session.*;
@@ -193,6 +194,14 @@ public class ServerConnection implements Session, SessionListener {
 
     public Packet getSpawnPacket() {
         return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
+    }
+
+    public ServerEntityMetadataPacket getSelfEntityMetadataPacket() {
+        return new ServerEntityMetadataPacket(spectatorSelfEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorSelfEntityId));
+    }
+
+    public ServerEntityMetadataPacket getEntityMetadataPacket() {
+        return new ServerEntityMetadataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorEntityId));
     }
 
     public Optional<Packet> getSoundPacket() {

@@ -15,12 +15,12 @@ import java.util.Random;
 
 public class SpectatorCatEntity extends SpectatorMob {
     @Override
-    EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
+    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
     }
 
     @Override
-    EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
+    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, false);
     }
 

@@ -3,7 +3,8 @@ package com.zenith.util.spectator.entity;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
+import com.github.steveice10.mc.protocol.data.game.entity.type.object.ObjectData;
+import com.github.steveice10.mc.protocol.data.game.entity.type.object.ObjectType;
 import com.github.steveice10.mc.protocol.data.game.world.sound.BuiltinSound;
 import com.github.steveice10.mc.protocol.data.game.world.sound.SoundCategory;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerPlayBuiltinSoundPacket;
@@ -12,7 +13,7 @@ import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
 
-public class SpectatorDogEntity extends SpectatorMob {
+public class SpectatorEntityEndCrystal extends SpectatorEntityObject {
     @Override
     public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
@@ -31,32 +32,15 @@ public class SpectatorDogEntity extends SpectatorMob {
                 new EntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
                 new EntityMetadata(4, MetadataType.BOOLEAN, false),
                 new EntityMetadata(5, MetadataType.BOOLEAN, false),
-                new EntityMetadata(6, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(7, MetadataType.FLOAT, 10.0f),
-                new EntityMetadata(8, MetadataType.INT, 0),
-                new EntityMetadata(9, MetadataType.BOOLEAN, false),
-                new EntityMetadata(10, MetadataType.INT, 0),
-                new EntityMetadata(11, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(12, MetadataType.BOOLEAN, false),
-                new EntityMetadata(13, MetadataType.BYTE, (byte) 4),
-//                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
-                new EntityMetadata(15, MetadataType.FLOAT, 1.0f), // damage taken/tail rotation (?)
-                new EntityMetadata(16, MetadataType.BOOLEAN, false), // begging, i think this tilts the head
-                new EntityMetadata(17, MetadataType.INT, (spectatorEntityId % 16)) // collar color
+//                new EntityMetadata(6, MetadataType.OPTIONAL_POSITION, (byte) 0), // beam target
+                new EntityMetadata(7, MetadataType.BOOLEAN, false) // show bottom
         };
     }
 
-    @Override
-    MobType getMobType() {
-        return MobType.WOLF;
-    }
-
-    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = rand.nextFloat();
-        final int randInt = rand.nextInt(4);
         return Optional.of(new ServerPlayBuiltinSoundPacket(
-                randInt == 0 ? BuiltinSound.ENTITY_WOLF_WHINE : BuiltinSound.ENTITY_WOLF_AMBIENT,
+                BuiltinSound.ENTITY_GENERIC_EXPLODE,
                 SoundCategory.AMBIENT,
                 playerCache.getX(),
                 playerCache.getY(),
@@ -65,4 +49,16 @@ public class SpectatorDogEntity extends SpectatorMob {
                 1.0f + (randFloat / 10f) // slight pitch variations
         ));
     }
+
+
+    @Override
+    public ObjectType getObjectType() {
+        return ObjectType.ENDER_CRYSTAL;
+    }
+
+    @Override
+    public ObjectData getObjectData() {
+        return null;
+    }
+
 }
