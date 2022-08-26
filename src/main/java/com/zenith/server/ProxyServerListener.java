@@ -23,12 +23,7 @@ package com.zenith.server;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.event.server.ServerBoundEvent;
-import com.github.steveice10.packetlib.event.server.ServerClosedEvent;
-import com.github.steveice10.packetlib.event.server.ServerClosingEvent;
-import com.github.steveice10.packetlib.event.server.ServerListener;
-import com.github.steveice10.packetlib.event.server.SessionAddedEvent;
-import com.github.steveice10.packetlib.event.server.SessionRemovedEvent;
+import com.github.steveice10.packetlib.event.server.*;
 import com.zenith.Proxy;
 import lombok.Getter;
 import lombok.NonNull;
@@ -39,7 +34,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.SERVER_LOG;
 
 /**
  * @author DaPorkchop_

@@ -35,35 +35,35 @@ import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
-import com.zenith.util.spectator.entity.SpectatorCatEntity;
+import com.zenith.util.spectator.SpectatorEntityRegistry;
 import com.zenith.util.spectator.entity.SpectatorEntity;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static com.zenith.util.Constants.*;
 
 /**
  * @author DaPorkchop_
  */
-@RequiredArgsConstructor
 @Getter
 @Setter
 public class ServerConnection implements Session, SessionListener {
-    @NonNull
+
     protected final Proxy proxy;
 
-    @NonNull
     protected final Session session;
+
+    public ServerConnection(final Proxy proxy, final Session session) {
+        this.proxy = proxy;
+        this.session = session;
+        initSpectatorEntity();
+    }
 
     protected long lastPacket = System.currentTimeMillis();
 
@@ -75,8 +75,7 @@ public class ServerConnection implements Session, SessionListener {
     protected UUID spectatorEntityUUID = UUID.randomUUID();
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
-    // todo: move default entity to Config
-    protected SpectatorEntity spectatorEntity = new SpectatorCatEntity();
+    protected SpectatorEntity spectatorEntity;
 
     @Override
     public void packetReceived(Session session, Packet packet) {
@@ -188,6 +187,25 @@ public class ServerConnection implements Session, SessionListener {
 
     public Packet getSpawnPacket() {
         return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
+    }
+
+    public Optional<Packet> getSoundPacket() {
+        return spectatorEntity.getSoundPacket(spectatorPlayerCache);
+    }
+
+    public void initSpectatorEntity() {
+        this.spectatorEntity = SpectatorEntityRegistry.getSpectatorEntityWithDefault(CONFIG.server.spectatorEntity);
+    }
+
+    // todo: might rework this to handle respawns in some central place
+    public boolean setSpectatorEntity(final String identifier) {
+        Optional<SpectatorEntity> entity = SpectatorEntityRegistry.getSpectatorEntity(identifier);
+        if (entity.isPresent()) {
+            this.spectatorEntity = entity.get();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //
