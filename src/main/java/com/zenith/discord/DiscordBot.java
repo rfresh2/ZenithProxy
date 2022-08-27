@@ -325,9 +325,6 @@ public class DiscordBot {
             if (nonNull(event.clientGameProfile)) {
                 builder = builder.addField("Username", event.clientGameProfile.getName(), false);
             }
-            if (nonNull(event.reason)) {
-                builder = builder.addField("Message", event.reason, false);
-            }
             sendEmbedMessage(builder
                     .build());
         }

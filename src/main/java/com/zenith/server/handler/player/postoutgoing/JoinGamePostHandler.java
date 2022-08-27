@@ -47,18 +47,10 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
         // init any active spectators
         session.getProxy().getServerConnections().stream()
                 .filter(connection -> !connection.equals(session))
+                .filter(connection -> !connection.isPlayerCam())
                 .forEach(connection -> {
-                    session.send(new ServerSpawnPlayerPacket(
-                            connection.getSpectatorEntityId(),
-                            connection.getProfileCache().getProfile().getId(),
-                            CACHE.getPlayerCache().getX(),
-                            CACHE.getPlayerCache().getY(),
-                            CACHE.getPlayerCache().getZ(),
-                            CACHE.getPlayerCache().getYaw(),
-                            CACHE.getPlayerCache().getPitch(),
-                            CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
-
                     session.send(connection.getSpawnPacket());
+                    session.send(connection.getEntityMetadataPacket());
                 });
 
         session.setLoggedIn(true);

@@ -48,6 +48,9 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
 
     // might move this elsewhere, kinda awkward being here
     public static void updateSpectatorPosition(final ServerConnection selfSession) {
+        if (selfSession.isPlayerCam()) {
+            return;
+        }
         float yaw = getYaw(selfSession);
         selfSession.getProxy().getServerConnections().stream()
                 .filter(connection -> !connection.equals(selfSession))
