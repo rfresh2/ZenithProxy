@@ -17,6 +17,14 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
     public boolean apply(ClientChatPacket packet, ServerConnection session) {
         if (packet.getMessage().startsWith("!m")) {
             session.getProxy().getClient().send(new ClientChatPacket(packet.getMessage().substring(2).trim()));
+        } else if (packet.getMessage().toLowerCase().startsWith("!etoggle")) {
+            session.setShowSelfEntity(!session.isShowSelfEntity());
+            if (session.isShowSelfEntity()) {
+                session.send(session.getSpawnPacket());
+                session.send(session.getEntityMetadataPacket());
+            } else {
+                session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
+            }
         } else if (packet.getMessage().startsWith("!e")) {
             String entityId = packet.getMessage().substring(2).trim();
             boolean spectatorEntitySet = session.setSpectatorEntity(entityId);

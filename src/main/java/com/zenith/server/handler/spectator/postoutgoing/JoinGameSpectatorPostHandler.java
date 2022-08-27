@@ -49,6 +49,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
         session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
         session.send(new ServerEntityMetadataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
         session.send(new ServerChatPacket("§9Enter playercam: \"!playercam\"§r", true));
+        session.send(new ServerChatPacket("§9Hide your entity from yourself: \"!etoggle\"§r", true));
         session.send(new ServerChatPacket("§9Change your entity: \"!e <entity>\"§r", true));
         session.setLoggedIn(true);
         session.setAllowSpectatorServerPlayerPosRotate(false);

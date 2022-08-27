@@ -74,6 +74,7 @@ public class ServerConnection implements Session, SessionListener {
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
     protected boolean playerCam = false;
+    protected boolean showSelfEntity = true;
     protected int spectatorEntityId = 2147483647 - this.hashCode();
     protected int spectatorSelfEntityId = spectatorEntityId - 1;
     protected UUID spectatorEntityUUID = UUID.randomUUID();
