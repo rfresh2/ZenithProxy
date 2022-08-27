@@ -310,6 +310,7 @@ public class Proxy {
         while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
             tries++;
             AUTH_LOG.warn("Failed login attempt " + tries);
+            Wait.waitALittle(tries);
         }
         if (tries == 3) {
             this.client.disconnect("Auth failed");
@@ -390,19 +391,14 @@ public class Proxy {
                 .getConnections()
                 .values()
                 .stream()
-                .filter(connection -> ((MinecraftProtocol)connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
+                .filter(ServerConnection::isPlayer)
+                .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                 .collect(Collectors.toList());
     }
 
     public List<ServerConnection> getSpectatorConnections() {
-        return ((ProxyServerListener) this.server.getListeners().stream()
-                .filter(ProxyServerListener.class::isInstance)
-                .findAny().orElseThrow(IllegalStateException::new))
-                .getConnections()
-                .values()
-                .stream()
+        return getServerConnections().stream()
                 .filter(connection -> !Objects.equals(connection, this.getCurrentPlayer().get()))
-                .filter(connection -> ((MinecraftProtocol)connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                 .collect(Collectors.toList());
     }
 

@@ -69,9 +69,7 @@ public class ClientListener implements SessionListener {
         }
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
-                this.proxy.getServerConnections().stream()
-                        .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
-                        .forEach(connection -> connection.send(packet));
+                this.proxy.getServerConnections().forEach(connection -> connection.send(packet));
             }
         } catch (RuntimeException e) {
             CLIENT_LOG.alert(e);
@@ -84,7 +82,7 @@ public class ClientListener implements SessionListener {
 
     private void parse2bQueueState(ServerPlayerListDataPacket packet) {
         Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
-                .map(m -> m.trim())
+                .map(String::trim)
                 .filter(m -> m.contains("2b2t is full") || m.toLowerCase(Locale.ROOT).contains("pending"))
                 .findAny();
         if (queueHeader.isPresent()) {
