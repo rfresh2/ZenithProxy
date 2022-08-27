@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public abstract class SpectatorEntity {
-    final Random rand = new Random();
+    public final Random rand = new Random();
 
     public abstract EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
 

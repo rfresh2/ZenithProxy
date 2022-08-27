@@ -1,4 +1,4 @@
-package com.zenith.util.spectator.entity;
+package com.zenith.util.spectator.entity.object;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;

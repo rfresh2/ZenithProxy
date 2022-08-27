@@ -25,7 +25,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.spectator.entity.SpectatorEntityEnderDragon;
+import com.zenith.util.spectator.entity.mob.SpectatorEntityEnderDragon;
 import lombok.NonNull;
 
 public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerPositionRotationPacket, ServerConnection> {

@@ -1,4 +1,4 @@
-package com.zenith.util.spectator.entity;
+package com.zenith.util.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
@@ -12,7 +12,7 @@ import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
 
-public class SpectatorBatEntity extends SpectatorMob {
+public class SpectatorEntityVex extends SpectatorMob {
     @Override
     public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
@@ -37,20 +37,21 @@ public class SpectatorBatEntity extends SpectatorMob {
                 new EntityMetadata(9, MetadataType.BOOLEAN, false),
                 new EntityMetadata(10, MetadataType.INT, 0),
                 new EntityMetadata(11, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(12, MetadataType.BYTE, (byte) 0), // is hanging
+                new EntityMetadata(12, MetadataType.BYTE, (byte) 0) // is in attack mode (0x01 flag)
         };
     }
 
     @Override
     MobType getMobType() {
-        return MobType.BAT;
+        return MobType.VEX;
     }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = rand.nextFloat();
+        final int randInt = rand.nextInt(4);
         return Optional.of(new ServerPlayBuiltinSoundPacket(
-                BuiltinSound.ENTITY_BAT_AMBIENT,
+                randInt == 0 ? BuiltinSound.ENTITY_VEX_CHARGE : BuiltinSound.ENTITY_VEX_AMBIENT,
                 SoundCategory.AMBIENT,
                 playerCache.getX(),
                 playerCache.getY(),

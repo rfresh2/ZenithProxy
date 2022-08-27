@@ -1,6 +1,9 @@
 package com.zenith.util.spectator;
 
 import com.zenith.util.spectator.entity.*;
+import com.zenith.util.spectator.entity.mob.*;
+import com.zenith.util.spectator.entity.object.SpectatorEntityEgg;
+import com.zenith.util.spectator.entity.object.SpectatorEntityEndCrystal;
 
 import java.util.*;
 
@@ -14,11 +17,17 @@ public final class SpectatorEntityRegistry {
     static final Map<String, SpectatorEntity> spectatorEntityMap = new HashMap<>();
 
     static {
-        spectatorEntityMap.put("cat", new SpectatorCatEntity());
-        spectatorEntityMap.put("dog", new SpectatorDogEntity());
-        spectatorEntityMap.put("bat", new SpectatorBatEntity());
+        spectatorEntityMap.put("cat", new SpectatorEntityCat());
+        spectatorEntityMap.put("dog", new SpectatorEntityDog());
+        spectatorEntityMap.put("bat", new SpectatorEntityBat());
         spectatorEntityMap.put("crystal", new SpectatorEntityEndCrystal());
         spectatorEntityMap.put("dragon", new SpectatorEntityEnderDragon());
+        spectatorEntityMap.put("egg", new SpectatorEntityEgg());
+        spectatorEntityMap.put("creeper", new SpectatorEntityCreeper());
+        spectatorEntityMap.put("vex", new SpectatorEntityVex());
+        spectatorEntityMap.put("chicken", new SpectatorEntityChicken());
+        spectatorEntityMap.put("parrot", new SpectatorEntityParrot());
+        spectatorEntityMap.put("ghast", new SpectatorEntityGhast());
     }
 
     public static SpectatorEntity getSpectatorEntityWithDefault(final String identifier) {

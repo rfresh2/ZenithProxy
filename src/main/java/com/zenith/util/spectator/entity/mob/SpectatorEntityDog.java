@@ -1,4 +1,4 @@
-package com.zenith.util.spectator.entity;
+package com.zenith.util.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
@@ -12,7 +12,7 @@ import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
 
-public class SpectatorDogEntity extends SpectatorMob {
+public class SpectatorEntityDog extends SpectatorMob {
     @Override
     public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
@@ -37,8 +37,8 @@ public class SpectatorDogEntity extends SpectatorMob {
                 new EntityMetadata(9, MetadataType.BOOLEAN, false),
                 new EntityMetadata(10, MetadataType.INT, 0),
                 new EntityMetadata(11, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(12, MetadataType.BOOLEAN, false),
-                new EntityMetadata(13, MetadataType.BYTE, (byte) 4),
+                new EntityMetadata(12, MetadataType.BOOLEAN, false), // is baby
+                new EntityMetadata(13, MetadataType.BYTE, (byte) 0),
 //                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
                 new EntityMetadata(15, MetadataType.FLOAT, 1.0f), // damage taken/tail rotation (?)
                 new EntityMetadata(16, MetadataType.BOOLEAN, false), // begging, i think this tilts the head

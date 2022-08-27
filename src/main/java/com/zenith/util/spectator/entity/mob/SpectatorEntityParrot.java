@@ -1,4 +1,4 @@
-package com.zenith.util.spectator.entity;
+package com.zenith.util.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
@@ -12,7 +12,7 @@ import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
 
-public class SpectatorEntityEnderDragon extends SpectatorMob {
+public class SpectatorEntityParrot extends SpectatorMob {
     @Override
     public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
@@ -37,21 +37,23 @@ public class SpectatorEntityEnderDragon extends SpectatorMob {
                 new EntityMetadata(9, MetadataType.BOOLEAN, false),
                 new EntityMetadata(10, MetadataType.INT, 0),
                 new EntityMetadata(11, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(12, MetadataType.INT, 10)
+                new EntityMetadata(12, MetadataType.BOOLEAN, false), // is baby
+                new EntityMetadata(13, MetadataType.BYTE, (byte) 0), // 0x04 = is tamed
+//                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
+                new EntityMetadata(15, MetadataType.INT, (spectatorEntityId % 5)) // variant
         };
     }
 
     @Override
     MobType getMobType() {
-        return MobType.ENDER_DRAGON;
+        return MobType.PARROT;
     }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = rand.nextFloat();
-        final int randInt = rand.nextInt(4);
         return Optional.of(new ServerPlayBuiltinSoundPacket(
-                randInt == 0 ? BuiltinSound.ENTITY_ENDERDRAGON_GROWL : BuiltinSound.ENTITY_ENDERDRAGON_AMBIENT,
+                BuiltinSound.ENTITY_PARROT_AMBIENT,
                 SoundCategory.AMBIENT,
                 playerCache.getX(),
                 playerCache.getY(),

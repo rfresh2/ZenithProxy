@@ -1,4 +1,4 @@
-package com.zenith.util.spectator.entity;
+package com.zenith.util.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
@@ -11,16 +11,15 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
-import java.util.Random;
 
-public class SpectatorCatEntity extends SpectatorMob {
+public class SpectatorEntityCreeper extends SpectatorMob {
     @Override
-    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
+    public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
     }
 
     @Override
-    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
+    public EntityMetadata[] getEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorProfile, spectatorEntityId, false);
     }
 
@@ -38,24 +37,22 @@ public class SpectatorCatEntity extends SpectatorMob {
                 new EntityMetadata(9, MetadataType.BOOLEAN, false),
                 new EntityMetadata(10, MetadataType.INT, 0),
                 new EntityMetadata(11, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(12, MetadataType.BOOLEAN, false),
-                new EntityMetadata(13, MetadataType.BYTE, (byte) 4),
-//                new EntityMetadata(14, MetadataType.OPTIONAL_UUID, this.getProfileCache().getProfile().getId()), // mob owner
-                new EntityMetadata(15, MetadataType.INT, (spectatorEntityId % 3) + 1) // cat texture variant
+                new EntityMetadata(12, MetadataType.INT, -1), // -1 = idle, 1 = fuse
+                new EntityMetadata(13, MetadataType.BOOLEAN, false), // is charged
+                new EntityMetadata(14, MetadataType.BOOLEAN, false) // is ignited
         };
     }
 
     @Override
     MobType getMobType() {
-        return MobType.OCELOT;
+        return MobType.CREEPER;
     }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = rand.nextFloat();
-        final int randInt = rand.nextInt(4);
         return Optional.of(new ServerPlayBuiltinSoundPacket(
-                randInt == 0 ? BuiltinSound.ENTITY_CAT_PURREOW : BuiltinSound.ENTITY_CAT_AMBIENT,
+                BuiltinSound.ENTITY_CREEPER_PRIMED,
                 SoundCategory.AMBIENT,
                 playerCache.getX(),
                 playerCache.getY(),
@@ -64,5 +61,4 @@ public class SpectatorCatEntity extends SpectatorMob {
                 1.0f + (randFloat / 10f) // slight pitch variations
         ));
     }
-
 }
