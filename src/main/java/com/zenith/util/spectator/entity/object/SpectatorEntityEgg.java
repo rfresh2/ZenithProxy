@@ -24,7 +24,7 @@ public class SpectatorEntityEgg extends SpectatorEntityObject {
                 new EntityMetadata(2, MetadataType.STRING, spectatorProfile.getName()),
                 new EntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
                 new EntityMetadata(4, MetadataType.BOOLEAN, false),
-                new EntityMetadata(5, MetadataType.BOOLEAN, false)
+                new EntityMetadata(5, MetadataType.BOOLEAN, true) // no gravity
         };
     }
 
