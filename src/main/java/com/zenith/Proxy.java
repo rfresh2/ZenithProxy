@@ -174,6 +174,21 @@ public class Proxy {
                     }
                 }, 0, 200L, TimeUnit.MILLISECONDS);
             }
+            if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
+                try {
+                    InputStream netInputStream = HttpClient.create()
+                            .secure()
+                            .get()
+                            .uri(getAvatarURL(CONFIG.authentication.username).toURI())
+                            .responseContent()
+                            .aggregate()
+                            .asInputStream()
+                            .block();
+                    this.serverIcon = ImageIO.read(netInputStream);
+                } catch (IOException | URISyntaxException | IllegalArgumentException e) {
+                    SERVER_LOG.error("Unable to download server icon for \"%s\":\n", CONFIG.authentication.username, e);
+                }
+            }
             if (CONFIG.client.autoConnect) {
                 this.connect();
             }
@@ -316,24 +331,6 @@ public class Proxy {
             this.client.disconnect("Auth failed");
             return;
         }
-        if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
-            ForkJoinPool.commonPool().execute(() -> {
-                try {
-                    InputStream netInputStream = HttpClient.create()
-                            .secure()
-                            .get()
-                            .uri(getAvatarURL(this.protocol.getProfile().getId()).toURI())
-                            .responseContent()
-                            .aggregate()
-                            .asInputStream()
-                            .block();
-                    this.serverIcon = ImageIO.read(netInputStream);
-                } catch (IOException | URISyntaxException | IllegalArgumentException e) {
-                    System.err.printf("Unable to download server icon for \"%s\":\n", this.protocol.getProfile().getName());
-                    e.printStackTrace();
-                }
-            });
-        }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
         AUTH_LOG.success("Logged in.");
     }
@@ -360,8 +357,12 @@ public class Proxy {
     }
 
     public URL getAvatarURL(UUID uuid) {
+        return getAvatarURL(uuid.toString().replace("-", ""));
+    }
+
+    public URL getAvatarURL(String playerName) {
         try {
-            return new URL(String.format("https://minotar.net/helm/%s/64", uuid.toString().replace("-", "")));
+            return new URL(String.format("https://minotar.net/helm/%s/64", playerName));
         } catch (MalformedURLException e) {
             SERVER_LOG.error("Failed to get avatar");
             throw new UncheckedIOException(e);
