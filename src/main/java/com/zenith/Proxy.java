@@ -185,7 +185,7 @@ public class Proxy {
                             .asInputStream()
                             .block();
                     this.serverIcon = ImageIO.read(netInputStream);
-                } catch (IOException | URISyntaxException | IllegalArgumentException e) {
+                } catch (Exception e) {
                     SERVER_LOG.error("Unable to download server icon for \"%s\":\n", CONFIG.authentication.username, e);
                 }
             }

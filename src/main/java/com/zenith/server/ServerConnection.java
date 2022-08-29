@@ -22,8 +22,10 @@ package com.zenith.server;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.crypt.PacketEncryption;
@@ -34,6 +36,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.entity.EntityCache;
+import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.util.spectator.SpectatorEntityRegistry;

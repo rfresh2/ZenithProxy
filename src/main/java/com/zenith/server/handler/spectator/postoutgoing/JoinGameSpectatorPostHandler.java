@@ -8,6 +8,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
@@ -17,6 +18,7 @@ import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.RefStrings;
 import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
@@ -84,6 +86,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
         }
         connection.send(selfSession.getSpawnPacket());
         connection.send(selfSession.getEntityMetadataPacket());
+        SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache(selfSession.getProxy());
     }
 
     private EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {

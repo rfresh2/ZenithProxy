@@ -15,6 +15,7 @@ import com.zenith.server.handler.player.incoming.PlayerSwingArmPacketHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
+import com.zenith.server.handler.player.postoutgoing.HeldItemChangePostHandler;
 import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
 import com.zenith.server.handler.shared.incoming.LoginStartHandler;
 import com.zenith.server.handler.player.incoming.ServerChatHandler;
@@ -114,6 +115,7 @@ public class Constants {
             .registerInbound(new UnlockRecipesHandler())
             .registerInbound(new UpdateTileEntityHandler())
             .registerInbound(new ServerCombatHandler())
+            .registerInbound(new PlayerChangeHeldItemHandler())
             //ENTITY
             .registerInbound(new EntityAttachHandler())
             .registerInbound(new EntityCollectItemHandler())
@@ -160,6 +162,7 @@ public class Constants {
             // Post-outbound packets
             //
             .registerPostOutbound(new JoinGamePostHandler())
+            .registerInbound(new HeldItemChangePostHandler())
             .build();
 
     public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()

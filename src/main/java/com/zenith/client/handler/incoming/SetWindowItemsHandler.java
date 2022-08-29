@@ -20,7 +20,10 @@
 
 package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
+import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;
 import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
@@ -36,6 +39,7 @@ public class SetWindowItemsHandler implements HandlerRegistry.AsyncIncomingHandl
         if (packet.getWindowId() == 0)  { //player inventory
             CACHE.getPlayerCache().setInventory(packet.getItems());
         }
+        SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache(session.getProxy());
         return true;
     }
 

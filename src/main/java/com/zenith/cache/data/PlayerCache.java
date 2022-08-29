@@ -42,8 +42,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.*;
-
 /**
  * @author DaPorkchop_
  */
@@ -111,7 +109,7 @@ public class PlayerCache implements CachedData {
         equipment.put(EquipmentSlot.CHESTPLATE, this.inventory[6]);
         equipment.put(EquipmentSlot.LEGGINGS, this.inventory[7]);
         equipment.put(EquipmentSlot.BOOTS, this.inventory[8]);
-        equipment.put(EquipmentSlot.OFF_HAND, this.inventory[9]);
+        equipment.put(EquipmentSlot.OFF_HAND, this.inventory[45]);
         this.getThePlayer().setEquipment(equipment);
     }
 
