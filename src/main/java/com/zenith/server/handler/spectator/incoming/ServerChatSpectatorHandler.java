@@ -15,7 +15,15 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
 
     @Override
     public boolean apply(ClientChatPacket packet, ServerConnection session) {
-        if (packet.getMessage().startsWith("!m")) {
+        if (packet.getMessage().startsWith("!help")) {
+            session.send(new ServerChatPacket("§9§lSpectator commands:", true));
+            session.send(new ServerChatPacket("§2Prefix : \"!\"", true));
+            session.send(new ServerChatPacket("", true));
+            session.send(new ServerChatPacket("§7§chelp §7- §8Display help menu", true));
+            session.send(new ServerChatPacket("§7§cplayercam §7- §8Set camera to the player", true));
+            session.send(new ServerChatPacket("§7§cetoggle §7- §8Hide your entity from yourself", true));
+            session.send(new ServerChatPacket("§7§ce §7- §8List spectator entities. Change with \"!e <entity>\"", true));
+        } else if (packet.getMessage().startsWith("!m")) {
             session.getProxy().getClient().send(new ClientChatPacket(packet.getMessage().substring(2).trim()));
         } else if (packet.getMessage().toLowerCase().startsWith("!etoggle")) {
             session.setShowSelfEntity(!session.isShowSelfEntity());
