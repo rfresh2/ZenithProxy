@@ -7,6 +7,7 @@ import com.zenith.event.proxy.AutoDisconnectEvent;
 import com.zenith.util.Constants;
 
 import static com.zenith.util.Constants.EVENT_BUS;
+import static java.util.Objects.isNull;
 
 public class AutoDisconnect extends Module {
     public AutoDisconnect(Proxy proxy) {
@@ -17,8 +18,10 @@ public class AutoDisconnect extends Module {
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {
         if (Constants.CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
             if (event.newHealth <= Constants.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
-                EVENT_BUS.dispatch(new AutoDisconnectEvent());
-                this.proxy.disconnect();
+                if (isNull(this.proxy.getCurrentPlayer().get())) {
+                    EVENT_BUS.dispatch(new AutoDisconnectEvent());
+                    this.proxy.disconnect();
+                }
             }
         }
 
