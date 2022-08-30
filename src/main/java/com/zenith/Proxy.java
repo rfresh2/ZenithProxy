@@ -265,7 +265,13 @@ public class Proxy {
     }
 
     public synchronized void connect() {
-        this.logIn();
+        try {
+            this.logIn();
+        } catch (final RuntimeException e) {
+            EVENT_BUS.dispatch(new ProxyLoginFailedEvent());
+            return;
+        }
+
         if (this.isConnected()) {
             throw new IllegalStateException("Already connected!");
         }
@@ -325,11 +331,10 @@ public class Proxy {
         while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
             tries++;
             AUTH_LOG.warn("Failed login attempt " + tries);
-            Wait.waitALittle(tries);
+            Wait.waitALittle(3);
         }
         if (tries == 3) {
-            this.client.disconnect("Auth failed");
-            return;
+            throw new RuntimeException("Auth failed");
         }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
         AUTH_LOG.success("Logged in.");
