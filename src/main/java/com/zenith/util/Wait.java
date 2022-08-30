@@ -1,6 +1,8 @@
 package com.zenith.util;
 
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class Wait {
     public static void waitALittle(int seconds) {
@@ -29,5 +31,13 @@ public class Wait {
         }
     }
 
-    public Wait() {}
+    public static boolean waitUntilCondition(final Supplier<Boolean> conditionSupplier, int secondsToWait) {
+        long beforeTime = Instant.now().getEpochSecond();
+        while (!conditionSupplier.get() && Instant.now().getEpochSecond() - beforeTime < secondsToWait) {
+            Wait.waitALittleMs(50);
+        }
+        return conditionSupplier.get();
+    }
+
+    private Wait() {}
 }

@@ -53,11 +53,8 @@ public class PlayerCache implements CachedData {
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
     protected int dimension;
-    @NonNull
     protected GameMode gameMode;
-    @NonNull
     protected WorldType worldType;
-    @NonNull
     protected Difficulty difficulty;
 
     protected EntityPlayer thePlayer;
