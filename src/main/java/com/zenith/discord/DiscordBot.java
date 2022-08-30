@@ -454,6 +454,15 @@ public class DiscordBot {
                 .build());
     }
 
+    @Subscribe
+    public void handleProxyLoginFailedEvent(ProxyLoginFailedEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Login Failed")
+                .color(Color.RUBY)
+                .addField("Help", "Try waiting and connecting again. If that doesn't work DM rfresh", false)
+                .build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")
@@ -469,7 +478,7 @@ public class DiscordBot {
                 .build());
     }
 
-    private void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
+    public void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
         try {
             mainRestChannel.get().createMessage(MessageCreateSpec.builder()
                     .addEmbed(embedCreateSpec)
