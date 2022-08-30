@@ -74,6 +74,9 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                     connection.send(session.getSpawnPacket());
                     connection.send(session.getEntityMetadataPacket());
                 });
+                if (!session.isShowSelfEntity()) {
+                    session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
+                }
             }
         } else {
             session.getProxy().getServerConnections().forEach(connection -> {
