@@ -162,7 +162,7 @@ public class ServerConnection implements Session, SessionListener {
         }
         if (this.isPlayer) {
             if (isActivePlayer()) {
-                SERVER_LOG.info("Player disconnected: %s", event.getSession().getRemoteAddress());
+                SERVER_LOG.info("Player disconnected: %s, %s", event.getSession().getRemoteAddress(), event.getReason(), event.getCause());
                 try {
                     EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
                 } catch (final Throwable e) {

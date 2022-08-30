@@ -47,6 +47,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
             if (CONFIG.client.extra.autoConnectOnLogin) {
                 Proxy.getInstance().connect();
                 if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
+                        && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())
                         && nonNull(CACHE.getPlayerCache().getDifficulty())

@@ -102,7 +102,7 @@ public class DataCache {
             if (CONFIG.debug.server.cache.sendingmessages) {
                 String msg = data.getSendingMessage();
                 if (msg == null)    {
-                    SERVER_LOG.debug("Sending data to spectator %s", data.getClass().getCanonicalName());
+                    SERVER_LOG.debug("Sending data to client %s", data.getClass().getCanonicalName());
                 } else {
                     SERVER_LOG.debug(msg);
                 }

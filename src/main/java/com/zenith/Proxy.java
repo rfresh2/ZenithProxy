@@ -399,6 +399,7 @@ public class Proxy {
                 .values()
                 .stream()
                 .filter(ServerConnection::isPlayer)
+                .filter(ServerConnection::isLoggedIn)
                 .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
                 .collect(Collectors.toList());
     }
