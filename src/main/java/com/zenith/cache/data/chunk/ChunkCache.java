@@ -84,7 +84,9 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public Column get(int x, int z) {
-        return this.cache.get(Vec2i.of(x, z));
+        synchronized (this) {
+            return this.cache.get(Vec2i.of(x, z));
+        }
     }
 
     public void remove(int x, int z) {
@@ -152,32 +154,38 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        this.cache.values().parallelStream()
-                .map(ServerChunkDataPacket::new)
-                .forEach(consumer);
-        this.blockUpdates.values()
-                .forEach(consumer);
-        this.tileEntityUpdates.values()
-                .forEach(consumer);
-        consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
+        synchronized (this) {
+            this.cache.values().parallelStream()
+                    .map(ServerChunkDataPacket::new)
+                    .forEach(consumer);
+            this.blockUpdates.values()
+                    .forEach(consumer);
+            this.tileEntityUpdates.values()
+                    .forEach(consumer);
+            consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
+        }
     }
 
     @Override
     public void reset(boolean full) {
-        this.cache.clear();
-        this.blockUpdates.clear();
-        this.tileEntityUpdates.clear();
-        this.spawnPosition = DEFAULT_SPAWN_POSITION;
+        synchronized (this) {
+            this.cache.clear();
+            this.blockUpdates.clear();
+            this.tileEntityUpdates.clear();
+            this.spawnPosition = DEFAULT_SPAWN_POSITION;
+        }
     }
 
     @Override
     public String getSendingMessage() {
-        return String.format("Sending %d chunks, %d block updates, %d tile entity updates, world spawn position [%d, %d, %d]",
-                this.cache.size(),
-                this.blockUpdates.size(),
-                this.tileEntityUpdates.size(),
-                this.spawnPosition.getX(),
-                this.spawnPosition.getY(),
-                this.spawnPosition.getZ());
+        synchronized (this) {
+            return String.format("Sending %d chunks, %d block updates, %d tile entity updates, world spawn position [%d, %d, %d]",
+                    this.cache.size(),
+                    this.blockUpdates.size(),
+                    this.tileEntityUpdates.size(),
+                    this.spawnPosition.getX(),
+                    this.spawnPosition.getY(),
+                    this.spawnPosition.getZ());
+        }
     }
 }
