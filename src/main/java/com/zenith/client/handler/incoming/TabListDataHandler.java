@@ -39,7 +39,6 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
-        WEBSOCKET_SERVER.firePlayerListUpdate();
 
         MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getFooter());
         final String messageString = mcTextRoot.toRawString().replace("\n", "");

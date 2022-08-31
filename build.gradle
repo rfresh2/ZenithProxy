@@ -96,11 +96,9 @@ dependencies {
         exclude group: "io.netty", module: "netty-all"
     }
 
-    shade 'io.netty:netty-codec-haproxy:4.1.70.Final'
+    shade 'io.netty:netty-codec-haproxy:4.1.79.Final'
 
     shade "com.discord4j:discord4j-core:$discord4jVersion"
-
-    shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
     shade "com.github.collarmc:Pounce:$pounceVersion"
 
@@ -110,7 +108,7 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
-    shade ('io.netty:netty-resolver-dns-native-macos:4.1.77.Final:osx-aarch_64')
+    shade ('io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64')
 }
 
 //disable regular unshaded jar

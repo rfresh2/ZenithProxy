@@ -33,10 +33,8 @@ public final class Config {
     public Authentication authentication = new Authentication();
     public Client client = new Client();
     public Debug debug = new Debug();
-    public Gui gui = new Gui();
     public Log log = new Log();
     public Server server = new Server();
-    public Websocket websocket = new Websocket();
     public Discord discord = new Discord();
     public boolean autoUpdate = true;
     public int autoUpdateCheckIntervalSeconds = 60;
@@ -198,11 +196,6 @@ public final class Config {
         }
     }
 
-    public static final class Gui {
-        public boolean enabled = false;
-        public int messageCount = 512;
-    }
-
     public static final class Log {
         public boolean printDebug = false;
         public boolean storeDebug = true;
@@ -251,21 +244,6 @@ public final class Config {
 
         public String getProxyAddress() {
             return this.proxyIP;
-        }
-    }
-
-    public static final class Websocket {
-        public Bind bind = new Bind();
-        public Client client = new Client();
-        public boolean enable = false;
-
-        public static final class Bind {
-            public String address = "0.0.0.0";
-            public int port = 8080;
-        }
-
-        public static final class Client {
-            public int maxChatCount = 512;
         }
     }
 

@@ -101,15 +101,8 @@ public class Proxy {
     private Instant lastActiveHoursConnect = Instant.EPOCH;
     public static AutoUpdater autoUpdater;
 
-//    protected final Gui gui = new Gui();
-
     public static void main(String... args) {
         DEFAULT_LOG.info("Starting Proxy v%s...", VERSION);
-
-        if (CONFIG.websocket.enable) {
-            WEBSOCKET_LOG.info("Starting WebSocket server...");
-            WEBSOCKET_SERVER.start();
-        }
 
         instance = new Proxy();
         autoUpdater = new AutoUpdater(instance);
@@ -208,7 +201,6 @@ public class Proxy {
             if (this.server != null) {
                 this.server.close(true);
             }
-            WEBSOCKET_SERVER.shutdown();
             saveConfig();
         }
     }
@@ -218,7 +210,6 @@ public class Proxy {
         if (nonNull(this.server)) {
             this.server.close(true);
         }
-        WEBSOCKET_SERVER.shutdown();
         saveConfig();
         System.exit(0);
     }

@@ -159,7 +159,6 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void connected(ConnectedEvent event) {
-        WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());
         disconnected = false;
         EVENT_BUS.dispatch(new ConnectEvent());
@@ -167,7 +166,6 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void disconnecting(DisconnectingEvent event) {
-        WEBSOCKET_SERVER.fireReset();
         try {
             CLIENT_LOG.info("Disconnecting from server...")
                     .trace("Disconnect reason: %s", event.getReason());
@@ -180,7 +178,6 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        WEBSOCKET_SERVER.fireReset();
         CLIENT_LOG.info("Disconnected: " + event.getReason());
         if (!disconnected) {
             disconnected = true;

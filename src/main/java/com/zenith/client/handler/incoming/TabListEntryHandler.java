@@ -62,13 +62,10 @@ public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler
                 };
                 break;
             case UPDATE_LATENCY:
-                consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setPing(entry.getPing()));
                 break;
             case UPDATE_DISPLAY_NAME:
-                consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setDisplayName(entry.getDisplayName()));
                 break;
             case UPDATE_GAMEMODE:
-                consumer = entry -> WEBSOCKET_SERVER.updatePlayer(CACHE.getTabListCache().getTabList().get(entry).setGameMode(entry.getGameMode()));
                 break;
         }
         for (PlayerListEntry entry : packet.getEntries()) {

@@ -52,7 +52,6 @@ public class TabList {
 
         PlayerEntry coolEntry = PlayerEntry.fromMCProtocolLibEntry(entry);
         this.entries.put(entry.getProfile().getId(), coolEntry);
-        WEBSOCKET_SERVER.updatePlayer(coolEntry);
     }
 
     public Optional<PlayerEntry> remove(@NonNull PlayerListEntry entry) {
@@ -61,7 +60,6 @@ public class TabList {
             CACHE_LOG.error("Could not remove player with UUID: %s", entry.getProfile().getId());
         } else if (removed != null) {
             CACHE_LOG.debug("Removed %s (%s) from tab list", removed.name, removed.id);
-            WEBSOCKET_SERVER.removePlayer(removed.id);
         }
         return Optional.ofNullable(removed);
     }

@@ -29,7 +29,6 @@ import com.zenith.server.handler.spectator.incoming.movement.PlayerRotationSpect
 import com.zenith.server.handler.spectator.outgoing.*;
 import com.zenith.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
 import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.websocket.WebSocketServer;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
 import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
@@ -63,10 +62,8 @@ public class Constants {
     public static final Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
     public static final Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
     public static final Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
-    public static final Logger GUI_LOG = DEFAULT_LOG.channel("GUI");
     public static final Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
     public static final Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
-    public static final Logger WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
     public static final Logger DISCORD_LOG = DEFAULT_LOG.channel("Discord");
 
     public static final File CONFIG_FILE = new File("config.json");
@@ -80,7 +77,6 @@ public class Constants {
 
     public static Config CONFIG;
     public static final DataCache CACHE;
-    public static final WebSocketServer WEBSOCKET_SERVER;
     public static final DiscordBot DISCORD_BOT;
     public static final EventBus EVENT_BUS;
     public static final ExecutorService MODULE_EXECUTOR_SERVICE;
@@ -220,7 +216,6 @@ public class Constants {
         SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
 
         CACHE = new DataCache();
-        WEBSOCKET_SERVER = new WebSocketServer();
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
         MODULE_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1);

@@ -77,7 +77,6 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
                 CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");
                 session.disconnect("heck");
             }
-            WEBSOCKET_SERVER.fireChat(packet.getMessage());
             EVENT_BUS.dispatch(new ServerChatReceivedEvent(messageString));
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);
