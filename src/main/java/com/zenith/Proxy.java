@@ -406,7 +406,7 @@ public class Proxy {
 
     public List<ServerConnection> getSpectatorConnections() {
         return getServerConnections().stream()
-                .filter(connection -> !Objects.equals(connection, this.getCurrentPlayer().get()))
+                .filter(ServerConnection::isSpectator)
                 .collect(Collectors.toList());
     }
 

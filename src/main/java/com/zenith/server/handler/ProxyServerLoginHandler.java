@@ -11,8 +11,10 @@ import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.server.ServerConnection;
 import com.zenith.server.ProxyServerListener;
+import com.zenith.util.Wait;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 public class ProxyServerLoginHandler implements ServerLoginHandler {
     private final Proxy proxy;
@@ -27,12 +29,21 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections().get(session);
-
-        connection.setPlayer(true);
         SERVER_LOG.info("Player connected: %s", session.getRemoteAddress());
-
+        if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
+                        && CACHE.getPlayerCache().getEntityId() != -1
+                        && nonNull(CACHE.getProfileCache().getProfile())
+                        && nonNull(CACHE.getPlayerCache().getGameMode())
+                        && nonNull(CACHE.getPlayerCache().getDifficulty())
+                        && nonNull(CACHE.getPlayerCache().getWorldType()),
+                10)) {
+            session.disconnect("Client login timed out.");
+            return;
+        }
+        connection.setPlayer(true);
         if (this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
             // if we don't have a current player, set player
+            connection.setSpectator(false);
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(
@@ -47,6 +58,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             ));
         } else if (CONFIG.server.allowSpectator) {
             // if we have a current player, allow login but put in spectator
+            connection.setSpectator(true);
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(

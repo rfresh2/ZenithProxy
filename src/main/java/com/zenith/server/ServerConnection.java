@@ -73,6 +73,7 @@ public class ServerConnection implements Session, SessionListener {
 
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
+    protected boolean isSpectator = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
@@ -88,7 +89,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
-            if (isActivePlayer()) {
+            if (!isSpectator()) {
                 this.lastPacket = System.currentTimeMillis();
                 if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)
                         && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
@@ -112,7 +113,7 @@ public class ServerConnection implements Session, SessionListener {
         try {
             Packet p1 = event.getPacket();
             Packet p2;
-            if (isActivePlayer()) {
+            if (!isSpectator()) {
                 p2 = SERVER_PLAYER_HANDLERS.handleOutgoing(p1, this);
             } else {
                 p2 = SERVER_SPECTATOR_HANDLERS.handleOutgoing(p1, this);
@@ -130,7 +131,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            if (isActivePlayer()) {
+            if (!isSpectator()) {
                 SERVER_PLAYER_HANDLERS.handlePostOutgoing(packet, this);
             } else {
                 SERVER_SPECTATOR_HANDLERS.handlePostOutgoing(packet, this);
@@ -161,7 +162,7 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
-            if (isActivePlayer()) {
+            if (!isSpectator()) {
                 SERVER_LOG.info("Player disconnected: %s, %s", event.getSession().getRemoteAddress(), event.getReason(), event.getCause());
                 try {
                     EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
@@ -184,6 +185,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public boolean isActivePlayer() {
+        // note: this could be false for the player connection during some points of disconnect
         return Objects.equals(this.proxy.getCurrentPlayer().get(), this);
     }
 

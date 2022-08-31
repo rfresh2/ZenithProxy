@@ -24,12 +24,10 @@ import com.github.steveice10.mc.protocol.packet.login.client.LoginStartPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.Wait;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import static com.zenith.util.Constants.*;
-import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
@@ -46,15 +44,6 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
         if (!Proxy.getInstance().isConnected()) {
             if (CONFIG.client.extra.autoConnectOnLogin) {
                 Proxy.getInstance().connect();
-                if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
-                        && CACHE.getPlayerCache().getEntityId() != -1
-                        && nonNull(CACHE.getProfileCache().getProfile())
-                        && nonNull(CACHE.getPlayerCache().getGameMode())
-                        && nonNull(CACHE.getPlayerCache().getDifficulty())
-                        && nonNull(CACHE.getPlayerCache().getWorldType()),
-                        10)) {
-                    session.disconnect("Client login timed out.");
-                }
             } else {
                 session.disconnect("Not connected to server!");
             }
