@@ -52,7 +52,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  * @author DaPorkchop_
  */
 public class Constants {
-    public static final String VERSION = "0.2.8";
 
     public static final JsonParser JSON_PARSER = new JsonParser();
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

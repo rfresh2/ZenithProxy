@@ -102,7 +102,7 @@ public class Proxy {
     public static AutoUpdater autoUpdater;
 
     public static void main(String... args) {
-        DEFAULT_LOG.info("Starting Proxy v%s...", VERSION);
+        DEFAULT_LOG.info("Starting Proxy...");
 
         instance = new Proxy();
         autoUpdater = new AutoUpdater(instance);
