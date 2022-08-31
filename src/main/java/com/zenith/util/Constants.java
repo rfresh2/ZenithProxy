@@ -21,6 +21,7 @@ import com.zenith.server.handler.shared.incoming.LoginStartHandler;
 import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
 import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
+import com.zenith.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
 import com.zenith.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.ServerChatSpectatorHandler;
 import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
@@ -154,6 +155,7 @@ public class Constants {
             // Outbound packets
             //
             .registerOutbound(new LoginSuccessOutgoingHandler())
+            .registerOutbound(new ServerTablistDataOutgoingHandler())
             //
             // Post-outbound packets
             //
@@ -188,6 +190,7 @@ public class Constants {
             .registerOutbound(new ServerVehicleMoveSpectatorOutgoingHandler())
             .registerOutbound(new ServerWindowItemsSpectatorOutgoingHandler())
             .registerOutbound(new ServerWindowPropertySpectatorOutgoingHandler())
+            .registerOutbound(new ServerTablistDataOutgoingHandler())
 
             .registerPostOutbound(new JoinGameSpectatorPostHandler())
             .build();

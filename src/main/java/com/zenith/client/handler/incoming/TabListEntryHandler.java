@@ -35,6 +35,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 /**
  * @author DaPorkchop_
@@ -42,9 +43,7 @@ import static com.zenith.util.Constants.*;
 public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListEntryPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ServerPlayerListEntryPacket packet, @NonNull ClientSession session) {
-        Consumer<PlayerListEntry> consumer = entry -> {
-            throw new IllegalStateException();
-        };
+        Consumer<PlayerListEntry> consumer = null;
         switch (packet.getAction()) {
             case ADD_PLAYER:
                 consumer = entry -> {
@@ -61,15 +60,11 @@ public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler
                     playerEntry.ifPresent(e -> EVENT_BUS.dispatch(new ServerPlayerDisconnectedEvent(e)));
                 };
                 break;
-            case UPDATE_LATENCY:
-                break;
-            case UPDATE_DISPLAY_NAME:
-                break;
-            case UPDATE_GAMEMODE:
-                break;
         }
-        for (PlayerListEntry entry : packet.getEntries()) {
-            consumer.accept(entry);
+        if (nonNull(consumer)) {
+            for (PlayerListEntry entry : packet.getEntries()) {
+                consumer.accept(entry);
+            }
         }
         return true;
     }
