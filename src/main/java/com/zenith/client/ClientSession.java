@@ -26,6 +26,7 @@ import com.zenith.Proxy;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import net.daporkchop.lib.unsafe.PUnsafe;
 
 import java.io.IOException;
@@ -38,11 +39,18 @@ import static com.zenith.util.Constants.CLIENT_LOG;
  * @author DaPorkchop_
  */
 @Getter
+@Setter
 public class ClientSession extends TcpClientSession {
     @Getter(AccessLevel.PRIVATE)
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
+
+    private boolean inQueue = false;
+    private int lastQueuePosition = Integer.MAX_VALUE;
+    // in game
+    private boolean online = false;
+    private boolean disconnected = true;
 
     public ClientSession(String host, int port, PacketProtocol protocol, @NonNull Proxy proxy) {
         super(host, port, protocol);

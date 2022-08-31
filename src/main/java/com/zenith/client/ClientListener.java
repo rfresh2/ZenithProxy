@@ -20,24 +20,16 @@
 
 package com.zenith.client;
 
-import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.SubProtocol;
-import com.github.steveice10.mc.protocol.data.game.TitleAction;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerTitlePacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
-import com.zenith.event.proxy.*;
+import com.zenith.event.proxy.ConnectEvent;
+import com.zenith.event.proxy.DisconnectEvent;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
-
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
 
@@ -53,76 +45,15 @@ public class ClientListener implements SessionListener {
     @NonNull
     protected final ClientSession session;
 
-    private boolean inQueue = false;
-    private int lastQueuePosition = Integer.MAX_VALUE;
-    // in game
-    private boolean online = false;
-    private boolean disconnected = true;
-
     @Override
     public void packetReceived(Session session, Packet packet) {
-        if (packet instanceof ServerTitlePacket) {
-            parse2bQueuePos(((ServerTitlePacket) packet));
-        }
-        if (packet instanceof ServerPlayerListDataPacket) {
-            parse2bQueueState((ServerPlayerListDataPacket) packet);
-        }
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
                 this.proxy.getServerConnections().forEach(connection -> connection.send(packet));
             }
-        } catch (RuntimeException e) {
-            CLIENT_LOG.alert(e);
-            throw e;
         } catch (Exception e) {
             CLIENT_LOG.alert(e);
             throw new RuntimeException(e);
-        }
-    }
-
-    private void parse2bQueueState(ServerPlayerListDataPacket packet) {
-        Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
-                .map(String::trim)
-                .filter(m -> m.contains("2b2t is full") || m.toLowerCase(Locale.ROOT).contains("pending"))
-                .findAny();
-        if (queueHeader.isPresent()) {
-            if (!inQueue) {
-                EVENT_BUS.dispatch(new StartQueueEvent());
-            }
-            inQueue = true;
-        } else if (inQueue) {
-            inQueue = false;
-            lastQueuePosition = Integer.MAX_VALUE;
-            EVENT_BUS.dispatch(new QueueCompleteEvent());
-        } else if (!online) {
-            online = true;
-            EVENT_BUS.dispatch(new PlayerOnlineEvent());
-        }
-    }
-
-    private void parse2bQueuePos(ServerTitlePacket serverTitlePacket) {
-        try {
-            Optional<Integer> position = Optional.of(serverTitlePacket)
-                    .filter(packet -> packet.getAction().equals(TitleAction.SUBTITLE))
-                    .map(ServerTitlePacket::getSubtitle)
-                    .map(title -> AutoMCFormatParser.DEFAULT.parse(title).toRawString())
-                    .map(text -> {
-                        String[] split = text.split(":");
-                        if (split.length > 1) {
-                            return split[1].trim();
-                        } else {
-                            return ""+Integer.MAX_VALUE; // some arbitrarily non-zero value
-                        }
-                    })
-                    .map(Integer::parseInt);
-            if (position.isPresent()) {
-                if (position.get() != lastQueuePosition) {
-                    EVENT_BUS.dispatch(new QueuePositionUpdateEvent(position.get()));
-                }
-                lastQueuePosition = position.get();
-            }
-        } catch (final Exception e) {
-            CLIENT_LOG.warn("Error parsing queue position from title packet", e);
         }
     }
 
@@ -160,7 +91,7 @@ public class ClientListener implements SessionListener {
     @Override
     public void connected(ConnectedEvent event) {
         CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());
-        disconnected = false;
+        session.setDisconnected(false);
         EVENT_BUS.dispatch(new ConnectEvent());
     }
 
@@ -179,8 +110,8 @@ public class ClientListener implements SessionListener {
     @Override
     public void disconnected(DisconnectedEvent event) {
         CLIENT_LOG.info("Disconnected: " + event.getReason());
-        if (!disconnected) {
-            disconnected = true;
+        if (!session.isDisconnected()) {
+            session.setDisconnected(true);
             EVENT_BUS.dispatch(new DisconnectEvent(AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString()));
         }
     }

@@ -106,6 +106,7 @@ public class Constants {
             .registerInbound(new StatisticsHandler())
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
+            .registerInbound(new TitlePacketHandler())
             .registerInbound(new UnloadChunkHandler())
             .registerInbound(new UnlockRecipesHandler())
             .registerInbound(new UpdateTileEntityHandler())

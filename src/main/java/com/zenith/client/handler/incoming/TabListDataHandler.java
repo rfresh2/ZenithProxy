@@ -21,12 +21,19 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.PrioStatusUpdateEvent;
+import com.zenith.event.proxy.QueueCompleteEvent;
+import com.zenith.event.proxy.StartQueueEvent;
 import lombok.NonNull;
 import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
 
@@ -39,6 +46,7 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
+        parse2bQueueState(packet, session);
 
         MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getFooter());
         final String messageString = mcTextRoot.toRawString().replace("\n", "");
@@ -59,4 +67,25 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
     public Class<ServerPlayerListDataPacket> getPacketClass() {
         return ServerPlayerListDataPacket.class;
     }
+
+    private void parse2bQueueState(ServerPlayerListDataPacket packet, ClientSession session) {
+        Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
+                .map(String::trim)
+                .filter(m -> m.contains("2b2t is full") || m.toLowerCase(Locale.ROOT).contains("pending"))
+                .findAny();
+        if (queueHeader.isPresent()) {
+            if (!session.isInQueue()) {
+                EVENT_BUS.dispatch(new StartQueueEvent());
+            }
+            session.setInQueue(true);
+        } else if (session.isInQueue()) {
+            session.setInQueue(false);
+            session.setLastQueuePosition(Integer.MAX_VALUE);
+            EVENT_BUS.dispatch(new QueueCompleteEvent());
+        } else if (!session.isOnline()) {
+            session.setOnline(true);
+            EVENT_BUS.dispatch(new PlayerOnlineEvent());
+        }
+    }
+
 }
