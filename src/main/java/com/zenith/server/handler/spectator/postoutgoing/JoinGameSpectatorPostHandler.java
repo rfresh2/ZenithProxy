@@ -8,7 +8,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
@@ -41,7 +40,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                 .setDifficulty(CACHE.getPlayerCache().getDifficulty())
                 .setHardcore(false)
                 .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
-        session.send(session.getSpawnPacket());
+        session.send(session.getEntitySpawnPacket());
         session.send(session.getSelfEntityMetadataPacket());
         //send cached data
         DataCache.sendCacheData(CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()), session);
@@ -81,10 +80,10 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
                     "§9Send private messages: \"!m <message>\"§r", true
             ));
         } else {
-            selfSession.send(connection.getSpawnPacket());
+            selfSession.send(connection.getEntitySpawnPacket());
             selfSession.send(connection.getEntityMetadataPacket());
         }
-        connection.send(selfSession.getSpawnPacket());
+        connection.send(selfSession.getEntitySpawnPacket());
         connection.send(selfSession.getEntityMetadataPacket());
         SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache(selfSession.getProxy());
     }

@@ -20,11 +20,8 @@
 
 package com.zenith.server.handler.player.postoutgoing;
 
-import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.zenith.cache.DataCache;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.RefStrings;
@@ -49,7 +46,7 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                 .filter(connection -> !connection.equals(session))
                 .filter(connection -> !connection.isPlayerCam())
                 .forEach(connection -> {
-                    session.send(connection.getSpawnPacket());
+                    session.send(connection.getEntitySpawnPacket());
                     session.send(connection.getEntityMetadataPacket());
                 });
 

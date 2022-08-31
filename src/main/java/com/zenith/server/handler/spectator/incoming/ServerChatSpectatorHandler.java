@@ -28,7 +28,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
         } else if (packet.getMessage().toLowerCase().startsWith("!etoggle")) {
             session.setShowSelfEntity(!session.isShowSelfEntity());
             if (session.isShowSelfEntity()) {
-                session.send(session.getSpawnPacket());
+                session.send(session.getEntitySpawnPacket());
                 session.send(session.getEntityMetadataPacket());
             } else {
                 session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
@@ -40,12 +40,11 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                 // respawn entity on all connections
                 session.getProxy().getServerConnections().forEach(connection -> {
                     connection.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
-                    connection.send(session.getSpawnPacket());
-                    connection.send(session.getEntityMetadataPacket());
+                    if (!connection.equals(session) || session.isShowSelfEntity()) {
+                        connection.send(session.getEntitySpawnPacket());
+                        connection.send(session.getEntityMetadataPacket());
+                    }
                 });
-                if (!session.isShowSelfEntity()) {
-                    session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
-                }
                 session.send(new ServerChatPacket("§9Updated entity to: " + entityId + "§r", true));
             } else {
                 session.send(new ServerChatPacket("§cNo entity found with id: " + entityId + "§r", true));
@@ -71,12 +70,11 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                 ));
                 session.setAllowSpectatorServerPlayerPosRotate(false);
                 session.getProxy().getServerConnections().forEach(connection -> {
-                    connection.send(session.getSpawnPacket());
-                    connection.send(session.getEntityMetadataPacket());
+                    if (!connection.equals(session) || session.isShowSelfEntity()) {
+                        connection.send(session.getEntitySpawnPacket());
+                        connection.send(session.getEntityMetadataPacket());
+                    }
                 });
-                if (!session.isShowSelfEntity()) {
-                    session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
-                }
             }
         } else {
             session.getProxy().getServerConnections().forEach(connection -> {
