@@ -261,6 +261,7 @@ public class Proxy {
         } catch (final RuntimeException e) {
             EVENT_BUS.dispatch(new ProxyLoginFailedEvent());
             getServerConnections().forEach(connection -> connection.disconnect("Login failed"));
+            disconnect("Login Failed");
             return;
         }
 

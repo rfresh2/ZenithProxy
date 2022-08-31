@@ -462,7 +462,7 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Login Failed")
                 .color(Color.RUBY)
-                .addField("Help", "Try waiting and connecting again. If that doesn't work DM rfresh", false)
+                .addField("Help", "Try waiting and connecting again.", false)
                 .build());
     }
 
