@@ -23,11 +23,13 @@ package com.zenith.util;
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.auth.service.MojangAuthenticationService;
-import com.github.steveice10.mc.auth.service.MsaAuthenticationService;
+import com.github.steveice10.mc.auth.service.MsaAuthenticationService2;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import lombok.Getter;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.nonNull;
 
 /**
  * because mcprotocollib is shit
@@ -43,6 +45,7 @@ public class LoggerInner {
     }
 
     private AuthenticationService getAuth() {
+        if (nonNull(this.auth)) return this.auth;
         AuthenticationService auth;
         if (CONFIG.authentication.doAuthentication) {
             if (CONFIG.authentication.accountType.equalsIgnoreCase("mojang")) {
@@ -52,7 +55,7 @@ public class LoggerInner {
             } else if (CONFIG.authentication.accountType.equalsIgnoreCase("msa")) {
                 try
                 {
-                    auth = new MsaAuthenticationService("1b3f2c18-6aee-48bc-8aa8-636537d84925");
+                    auth = new MsaAuthenticationService2();
                     auth.setUsername(CONFIG.authentication.email);
                     auth.setPassword(CONFIG.authentication.password);
                 } catch (Exception e) {
@@ -83,7 +86,8 @@ public class LoggerInner {
                 throw new RuntimeException("No valid account type set. Must set either mojang or msa");
             }
 
-        } catch (RequestException e)    {
+        } catch (RequestException | MicrosoftAuthenticationException e)    {
+            this.auth = null;
             throw new RuntimeException(String.format(
                     "Unable to log in using credentials (%s)",
                     CONFIG.authentication.username), e);
