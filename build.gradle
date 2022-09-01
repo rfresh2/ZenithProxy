@@ -73,6 +73,10 @@ repositories {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
     }
+    maven {
+        name = "litarvan"
+        url = "https://litarvan.github.io/maven"
+    }
     mavenLocal()
 }
 
