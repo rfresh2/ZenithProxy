@@ -49,12 +49,8 @@ import reactor.netty.http.client.HttpClient;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -178,6 +174,9 @@ public class Proxy {
                             .asInputStream()
                             .block();
                     this.serverIcon = ImageIO.read(netInputStream);
+                    if (nonNull(DISCORD_BOT)) {
+                        DISCORD_BOT.updateProfileImage(this.serverIcon);
+                    }
                 } catch (Exception e) {
                     SERVER_LOG.error("Unable to download server icon for \"%s\":\n", CONFIG.authentication.username, e);
                 }

@@ -17,17 +17,18 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.ImmutableUserModifyRequest;
 import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -473,6 +474,18 @@ public class DiscordBot {
                 .build();
     }
 
+    public void updateProfileImage(final BufferedImage bufferedImage) {
+        try {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", os);
+            DISCORD_BOT.restClient.edit(ImmutableUserModifyRequest.builder()
+                            .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(os.toByteArray()))
+                            .build())
+                    .subscribe();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed updating discord profile image", e);
+        }
+    }
 
     public void sendAutoReconnectMessage() {
         sendEmbedMessage(EmbedCreateSpec.builder()
