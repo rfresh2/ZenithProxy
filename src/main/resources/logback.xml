@@ -55,46 +55,40 @@
         <withJansi>true</withJansi>
     </appender>
 
-    <root level="TRACE">
+    <root level="INFO">
+        <!--        allow logs from other libs to also go to stdout-->
+        <appender-ref ref="STDOUT"/>
     </root>
     <logger name="Proxy" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Auth" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Cache" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Client" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Chat" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Module" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Server" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="Discord" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
 </configuration>
