@@ -9,16 +9,16 @@ import com.zenith.client.ClientSession;
 import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.client.handler.incoming.spawn.*;
+import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
+import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
+import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
 import com.zenith.discord.DiscordBot;
 import com.zenith.server.ServerConnection;
-import com.zenith.server.handler.player.incoming.PlayerSwingArmPacketHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerPositionHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerPositionRotationHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerRotationHandler;
+import com.zenith.server.handler.player.incoming.ServerChatHandler;
+import com.zenith.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
 import com.zenith.server.handler.player.postoutgoing.HeldItemChangePostHandler;
 import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
 import com.zenith.server.handler.shared.incoming.LoginStartHandler;
-import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
 import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
 import com.zenith.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
@@ -49,9 +49,6 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-/**
- * @author DaPorkchop_
- */
 public class Constants {
 
     public static final JsonParser JSON_PARSER = new JsonParser();
@@ -135,6 +132,10 @@ public class Constants {
             .registerInbound(new SpawnPaintingPacket())
             .registerInbound(new SpawnPlayerHandler())
             .registerInbound(new SpawnPositionHandler())
+            //Postoutgoing
+            .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
+            .registerPostOutbound(new PostOutgoingPlayerPositionRotationHandler())
+            .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
             .build();
 
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
@@ -147,9 +148,6 @@ public class Constants {
             .registerInbound(new ServerChatHandler())
             .registerInbound(new ServerKeepaliveHandler())
             //PLAYER MOVEMENT
-            .registerInbound(new PlayerPositionHandler())
-            .registerInbound(new PlayerPositionRotationHandler())
-            .registerInbound(new PlayerRotationHandler())
             .registerInbound(new PlayerSwingArmPacketHandler())
             //
             // Outbound packets

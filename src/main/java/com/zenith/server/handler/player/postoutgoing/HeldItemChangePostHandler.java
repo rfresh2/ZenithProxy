@@ -15,7 +15,7 @@ public class HeldItemChangePostHandler implements HandlerRegistry.AsyncIncomingH
     public boolean applyAsync(ClientPlayerChangeHeldItemPacket packet, ServerConnection session) {
         try {
             CACHE.getPlayerCache().getThePlayer().getEquipment().put(EquipmentSlot.MAIN_HAND, CACHE.getPlayerCache().getInventory()[packet.getSlot() + 36]);
-            SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache(session.getProxy());
+            SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache();
         } catch (final Exception e) {
             DEFAULT_LOG.error("Failed updating held item", e);
         }

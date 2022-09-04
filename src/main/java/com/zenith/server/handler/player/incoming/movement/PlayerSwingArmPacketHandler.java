@@ -1,4 +1,4 @@
-package com.zenith.server.handler.player.incoming;
+package com.zenith.server.handler.player.incoming.movement;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.Animation;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;

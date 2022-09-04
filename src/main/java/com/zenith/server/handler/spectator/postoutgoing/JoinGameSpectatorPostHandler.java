@@ -85,7 +85,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
         }
         connection.send(selfSession.getEntitySpawnPacket());
         connection.send(selfSession.getEntityMetadataPacket());
-        SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache(selfSession.getProxy());
+        SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache();
     }
 
     private EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {
