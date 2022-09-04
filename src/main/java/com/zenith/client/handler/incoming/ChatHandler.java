@@ -19,9 +19,9 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
     @Override
     public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
         try {
+            CHAT_LOG.info(packet.getMessage());
             MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
             final String messageString = mcTextRoot.toRawString();
-            CHAT_LOG.info(messageString);
             /*
              * example death message:
              * {"extra":[{"text":""},{"color":"dark_aqua","text":""},

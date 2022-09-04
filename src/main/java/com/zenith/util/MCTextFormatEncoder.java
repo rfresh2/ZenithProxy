@@ -1,30 +1,25 @@
 package com.zenith.util;
 
-import ch.qos.logback.classic.PatternLayout;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.pattern.PatternLayoutEncoderBase;
-import net.daporkchop.lib.logging.format.FormatParser;
-import net.daporkchop.lib.logging.format.component.TextComponent;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.core.CoreConstants;
 
-public class MCTextFormatEncoder extends PatternLayoutEncoderBase<ILoggingEvent> {
-    private final FormatParser formatParser = AutoMCFormatParser.DEFAULT;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Objects.isNull;
+
+public class MCTextFormatEncoder extends PatternLayoutEncoder {
 
     @Override
     public void start() {
-        PatternLayout patternLayout = new PatternLayout();
-        patternLayout.setContext(context);
-        patternLayout.setPattern(getPattern());
-        patternLayout.setOutputPatternAsHeader(outputPatternAsHeader);
-        patternLayout.start();
-        this.layout = patternLayout;
+        // insert our converter for minecraft text components, also should work for normal log messages
+        Map patternRuleRegistry = (Map) context.getObject(CoreConstants.PATTERN_RULE_REGISTRY);
+        if (isNull(patternRuleRegistry)) {
+            patternRuleRegistry = new HashMap<>();
+        }
+        patternRuleRegistry.put("minecraftText", MCTextFormatConverter.class.getName());
+        context.putObject(CoreConstants.PATTERN_RULE_REGISTRY, patternRuleRegistry);
         super.start();
     }
 
-    @Override
-    public byte[] encode(ILoggingEvent event) {
-        TextComponent textComponent = formatParser.parse(event.getMessage());
-        event.getMessage();
-        return super.encode(event);
-    }
 }
