@@ -30,7 +30,7 @@ public class ClientListener implements SessionListener {
                 this.proxy.getServerConnections().forEach(connection -> connection.send(packet));
             }
         } catch (Exception e) {
-            CLIENT_LOG.alert(e);
+            CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
         }
     }
@@ -46,7 +46,7 @@ public class ClientListener implements SessionListener {
                 event.setPacket(p2);
             }
         } catch (Exception e) {
-            CLIENT_LOG.alert(e);
+            CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
         }
     }
@@ -56,19 +56,19 @@ public class ClientListener implements SessionListener {
         try {
             CLIENT_HANDLERS.handlePostOutgoing(packet, this.session);
         } catch (Exception e) {
-            CLIENT_LOG.alert(e);
+            CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void packetError(PacketErrorEvent event) {
-        CLIENT_LOG.error(event.getCause());
+        CLIENT_LOG.error("", event.getCause());
     }
 
     @Override
     public void connected(ConnectedEvent event) {
-        CLIENT_LOG.success("Connected to %s!", event.getSession().getRemoteAddress());
+        CLIENT_LOG.info("Connected to {}!", event.getSession().getRemoteAddress());
         session.setDisconnected(false);
         EVENT_BUS.dispatch(new ConnectEvent());
     }
@@ -76,8 +76,8 @@ public class ClientListener implements SessionListener {
     @Override
     public void disconnecting(DisconnectingEvent event) {
         try {
-            CLIENT_LOG.info("Disconnecting from server...")
-                    .trace("Disconnect reason: %s", event.getReason());
+            CLIENT_LOG.info("Disconnecting from server...");
+            CLIENT_LOG.trace("Disconnect reason: {}", event.getReason());
             // reason can be malformed for MC parser the logger uses
         } catch (final Exception e) {
             // fall through

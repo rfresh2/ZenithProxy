@@ -20,7 +20,7 @@ public class EntitySetPassengersHandler implements HandlerRegistry.AsyncIncoming
             entity.setPassengerIds(Arrays.stream(packet.getPassengerIds()).boxed().collect(Collectors.toList()));
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntitySetPassengersPacket for invalid entity (id=%d)", packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntitySetPassengersPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

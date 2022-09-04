@@ -379,7 +379,7 @@ public class DiscordBot {
                 }
                 relayRestChannel.get().createMessage(message).subscribe();
             } catch (final Throwable e) {
-                DISCORD_LOG.error(e);
+                DISCORD_LOG.error("", e);
             }
         }
     }
@@ -391,7 +391,7 @@ public class DiscordBot {
             try {
                 relayRestChannel.get().createMessage(escape(event.playerEntry.getName() + " connected")).subscribe();
             } catch (final Throwable e) {
-                DISCORD_LOG.error(e);
+                DISCORD_LOG.error("", e);
             }
         }
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
@@ -416,7 +416,7 @@ public class DiscordBot {
             try {
                 relayRestChannel.get().createMessage(escape(event.playerEntry.getName()) + " disconnected").subscribe();
             } catch (final Throwable e) {
-                DISCORD_LOG.error(e);
+                DISCORD_LOG.error("", e);
             }
         }
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
@@ -478,7 +478,7 @@ public class DiscordBot {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", os);
-            DISCORD_BOT.restClient.edit(ImmutableUserModifyRequest.builder()
+            this.restClient.edit(ImmutableUserModifyRequest.builder()
                             .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(os.toByteArray()))
                             .build())
                     .subscribe();

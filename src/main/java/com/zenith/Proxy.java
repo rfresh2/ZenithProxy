@@ -88,7 +88,7 @@ public class Proxy {
             try {
                 DISCORD_BOT.start(instance);
             } catch (final Throwable e) {
-                DISCORD_LOG.error(e);
+                DISCORD_LOG.error("", e);
             }
         }
 
@@ -159,7 +159,7 @@ public class Proxy {
                         DISCORD_BOT.updateProfileImage(this.serverIcon);
                     }
                 } catch (Exception e) {
-                    SERVER_LOG.error("Unable to download server icon for \"%s\":\n", CONFIG.authentication.username, e);
+                    SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
                 }
             }
             if (CONFIG.client.autoConnect) {
@@ -175,7 +175,7 @@ public class Proxy {
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
-            DEFAULT_LOG.alert(e);
+            DEFAULT_LOG.error("", e);
         } finally {
             DEFAULT_LOG.info("Shutting down...");
             if (this.server != null) {
@@ -252,7 +252,7 @@ public class Proxy {
         String address = CONFIG.client.server.address;
         int port = CONFIG.client.server.port;
 
-        CLIENT_LOG.info("Connecting to %s:%d...", address, port);
+        CLIENT_LOG.info("Connecting to {}:{}...", address, port);
         this.client = new ClientSession(address, port, this.protocol, this);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
@@ -282,7 +282,7 @@ public class Proxy {
                 String address = CONFIG.server.bind.address;
                 int port = CONFIG.server.bind.port;
 
-                SERVER_LOG.info("Starting server on %s:%d...", address, port);
+                SERVER_LOG.info("Starting server on {}:{}...", address, port);
                 this.server = new TcpServer(address, port, MinecraftProtocol::new);
                 this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, java.net.Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
@@ -310,7 +310,7 @@ public class Proxy {
             throw new RuntimeException("Auth failed");
         }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
-        AUTH_LOG.success("Logged in.");
+        AUTH_LOG.info("Logged in.");
     }
 
     public Future<Boolean> loginTask() {
@@ -319,7 +319,7 @@ public class Proxy {
                 this.protocol = this.loggerInner.handleRelog();
                 return true;
             } catch (final Exception e) {
-                CLIENT_LOG.error(e);
+                CLIENT_LOG.error("", e);
                 return false;
             }
         });
@@ -418,7 +418,7 @@ public class Proxy {
                         + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
             }
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
-                if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in %d", i);
+                if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
                 Wait.waitALittle(1);
             }
             return true;

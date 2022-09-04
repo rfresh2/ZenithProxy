@@ -21,7 +21,7 @@ public class EntityTeleportHandler implements HandlerRegistry.AsyncIncomingHandl
                     .setPitch(packet.getPitch());
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityTeleportPacket for invalid entity (id=%d)", packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

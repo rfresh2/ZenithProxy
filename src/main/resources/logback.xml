@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<configuration scan="true" scanPeriod="10 seconds">
+    <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+    <import class="ch.qos.logback.core.rolling.RollingFileAppender"/>
+    <import class="ch.qos.logback.classic.filter.ThresholdFilter"/>
+    <import class="ch.qos.logback.classic.filter.LevelFilter"/>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
+    <import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"/>
+
+    <statusListener class="com.zenith.util.PrintOnlyErrorLogbackStatusListener"/>
+
+    <appender name="FILE" class="RollingFileAppender">
+        <file>log/proxy.log</file>
+        <encoder class="PatternLayoutEncoder">
+            <pattern>[%d{HH:mm:ss.SSS}] [%logger{36}] [%level] %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="TimeBasedRollingPolicy">
+            <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <maxHistory>10000</maxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.StartupSizeAndTimeBasedTriggeringPolicy">
+                <MaxFileSize>250MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <filter class="ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="DEBUG_FILE" class="RollingFileAppender">
+        <file>log/proxy.debug.log</file>
+        <encoder class="PatternLayoutEncoder">
+            <pattern>[%d{HH:mm:ss.SSS}] [%logger{36}] [%level] %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="TimeBasedRollingPolicy">
+            <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.debug.log.zip</fileNamePattern>
+            <maxHistory>10000</maxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.StartupSizeAndTimeBasedTriggeringPolicy">
+                <MaxFileSize>250MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <filter class="ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <appender name="STDOUT" class="ConsoleAppender">
+        <encoder class="PatternLayoutEncoder">
+            <pattern>[%d{HH:mm:ss.SSS}] [%logger{36}] [%level] %msg%n</pattern>
+        </encoder>
+        <filter class="ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <root level="TRACE">
+    </root>
+    <logger name="Proxy" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Auth" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Cache" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Client" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Chat" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Module" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Server" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="Discord" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+</configuration>

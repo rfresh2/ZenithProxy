@@ -27,7 +27,7 @@ public class TabList {
     protected String footer = "{\"text\":\"\"}";
 
     public void add(@NonNull PlayerListEntry entry) {
-        CACHE_LOG.debug("Added %s (%s) to tab list", entry.getProfile().getName(), entry.getProfile().getId());
+        CACHE_LOG.debug("Added {} ({}) to tab list", entry.getProfile().getName(), entry.getProfile().getId());
 
         PlayerEntry coolEntry = PlayerEntry.fromMCProtocolLibEntry(entry);
         this.entries.put(entry.getProfile().getId(), coolEntry);
@@ -36,9 +36,9 @@ public class TabList {
     public Optional<PlayerEntry> remove(@NonNull PlayerListEntry entry) {
         PlayerEntry removed = this.entries.remove(entry.getProfile().getId());
         if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
-            CACHE_LOG.error("Could not remove player with UUID: %s", entry.getProfile().getId());
+            CACHE_LOG.error("Could not remove player with UUID: {}", entry.getProfile().getId());
         } else if (removed != null) {
-            CACHE_LOG.debug("Removed %s (%s) from tab list", removed.name, removed.id);
+            CACHE_LOG.debug("Removed {} ({}) from tab list", removed.name, removed.id);
         }
         return Optional.ofNullable(removed);
     }
@@ -47,7 +47,7 @@ public class TabList {
         PlayerEntry e = this.entries.get(entry.getProfile().getId());
         if (e == null) {
             if (CONFIG.debug.server.cache.unknownplayers) {
-                CACHE_LOG.error("Could not find player with UUID: %s", entry.getProfile().getId());
+                CACHE_LOG.error("Could not find player with UUID: {}", entry.getProfile().getId());
             }
             return new PlayerEntry("", entry.getProfile().getId());
         }

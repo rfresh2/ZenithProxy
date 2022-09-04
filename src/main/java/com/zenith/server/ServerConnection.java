@@ -118,7 +118,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void packetError(PacketErrorEvent event) {
-        SERVER_LOG.error(event.getCause());
+        SERVER_LOG.error("", event.getCause());
     }
 
     @Override
@@ -138,7 +138,7 @@ public class ServerConnection implements Session, SessionListener {
         }
         if (this.isPlayer) {
             if (!isSpectator()) {
-                SERVER_LOG.info("Player disconnected: %s, %s", event.getSession().getRemoteAddress(), event.getReason(), event.getCause());
+                SERVER_LOG.info("Player disconnected: {}, {}", event.getSession().getRemoteAddress(), event.getReason(), event.getCause());
                 try {
                     EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
                 } catch (final Throwable e) {

@@ -86,7 +86,7 @@ public class Queue {
                     / (queueLength.doubleValue() + CONSTANT_FACTOR))
                     /  Math.log(value);
         } catch (OutOfRangeException e) {
-            CLIENT_LOG.warn(e);
+            CLIENT_LOG.warn("", e);
             return 0;
         }
     }

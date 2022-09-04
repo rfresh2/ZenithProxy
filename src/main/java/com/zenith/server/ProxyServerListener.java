@@ -31,7 +31,7 @@ public class ProxyServerListener implements ServerListener {
 
     @Override
     public void serverBound(ServerBoundEvent event) {
-        SERVER_LOG.success("Server started.");
+        SERVER_LOG.info("Server started.");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ProxyServerListener implements ServerListener {
 
     @Override
     public void serverClosed(ServerClosedEvent event) {
-        SERVER_LOG.success("Server closed.");
+        SERVER_LOG.info("Server closed.");
     }
 
     @Override

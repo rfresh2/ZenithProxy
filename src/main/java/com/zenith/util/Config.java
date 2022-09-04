@@ -11,7 +11,6 @@ public final class Config {
     public Authentication authentication = new Authentication();
     public Client client = new Client();
     public Debug debug = new Debug();
-    public Log log = new Log();
     public Server server = new Server();
     public Discord discord = new Discord();
     public boolean autoUpdate = true;
@@ -172,11 +171,6 @@ public final class Config {
                 public boolean unknownplayers = false;
             }
         }
-    }
-
-    public static final class Log {
-        public boolean printDebug = false;
-        public boolean storeDebug = true;
     }
 
     public static final class Server {

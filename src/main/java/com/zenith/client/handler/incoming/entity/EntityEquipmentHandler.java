@@ -23,12 +23,12 @@ public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHand
                     ((EntityArmorStand) entity).getEquipment().put(packet.getSlot(), packet.getItem());
                 }
             } else {
-                CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id=%d)", packet.getEntityId());
+                CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id={})", packet.getEntityId());
                 return false;
             }
             return true;
         } catch (ClassCastException e)  {
-            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id=%d)", e, packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id={})", e, packet.getEntityId());
             return false;
         }
     }

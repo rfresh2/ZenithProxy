@@ -13,7 +13,7 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
     @Override
     public boolean apply(@NonNull LoginStartPacket packet, @NonNull ServerConnection session) {
         if (CONFIG.server.extra.whitelist.enable && !isUserWhitelisted(packet.getUsername())) {
-            SERVER_LOG.warn("User %s [%s] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+            SERVER_LOG.warn("User {} [{}] tried to connect!", packet.getUsername(), session.getRemoteAddress());
             EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));
             session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
             return false;

@@ -21,7 +21,7 @@ public class EntityAttachHandler implements HandlerRegistry.AsyncIncomingHandler
             }
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityAttachPacket for invalid entity (id=%d)", packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityAttachPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

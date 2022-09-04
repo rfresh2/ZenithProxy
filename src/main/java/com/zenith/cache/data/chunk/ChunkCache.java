@@ -33,7 +33,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     public void add(@NonNull Column column) {
         synchronized (this) {
             this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
-            CACHE_LOG.debug("Cached chunk (%d, %d)", column.getX(), column.getZ());
+            CACHE_LOG.debug("Cached chunk ({}, {})", column.getX(), column.getZ());
         }
     }
 
@@ -43,7 +43,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Override
     @Deprecated
     public Column apply(@NonNull Column existing, @NonNull Column add) {
-        CACHE_LOG.debug("Chunk (%d, %d) is already cached, merging with existing", add.getX(), add.getZ());
+        CACHE_LOG.debug("Chunk ({}, {}) is already cached, merging with existing", add.getX(), add.getZ());
         Chunk[] chunks = existing.getChunks().clone();
         for (int chunkY = 0; chunkY < 16; chunkY++) {
             Chunk addChunk = add.getChunks()[chunkY];
@@ -71,9 +71,9 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
 
     public void remove(int x, int z) {
         synchronized (this) {
-            CACHE_LOG.debug("Server telling us to uncache chunk (%d, %d)", x, z);
+            CACHE_LOG.debug("Server telling us to uncache chunk ({}, {})", x, z);
             if (this.cache.remove(Vec2i.of(x, z)) == null) {
-                CACHE_LOG.warn("Could not remove column (%d, %d)! this is probably a server issue", x, z);
+                CACHE_LOG.warn("Could not remove column ({}, {})! this is probably a server issue", x, z);
             }
 
             final int xLow = x * 16;
@@ -102,7 +102,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         synchronized (this) {
             Position pos = packet.getRecord().getPosition();
             if (pos.getY() < 0 || pos.getY() >= 256) {
-                CLIENT_LOG.error("Received out-of-bounds block update: %s", packet.getRecord());
+                CLIENT_LOG.error("Received out-of-bounds block update: {}", packet.getRecord());
                 return;
             }
             final int x = pos.getX();
@@ -117,7 +117,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         synchronized (this) {
             Position pos = packet.getPosition();
             if (pos.getY() < 0 || pos.getY() >= 256) {
-                CLIENT_LOG.error("Received out-of-bounds tile entity update: %s", pos);
+                CLIENT_LOG.error("Received out-of-bounds tile entity update: {}", pos);
                 return;
             }
             final int x = pos.getX();

@@ -21,7 +21,7 @@ public class EntityPositionRotationHandler implements HandlerRegistry.AsyncIncom
                     .setZ(entity.getZ() + packet.getMovementZ());
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityPositionRotationPacket for invalid entity (id=%d)", packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityPositionRotationPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

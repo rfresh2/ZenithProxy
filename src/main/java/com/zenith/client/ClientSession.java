@@ -57,7 +57,7 @@ public class ClientSession extends TcpClientSession {
         } else if (cause instanceof IOException)    {
             this.disconnectFuture.complete(String.format("IOException: %s", cause.getMessage()));
         } else {
-            CLIENT_LOG.alert(cause);
+            CLIENT_LOG.error("", cause);
             this.disconnectFuture.completeExceptionally(cause);
         }
     }

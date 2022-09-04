@@ -22,7 +22,7 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
             session.disconnect(MANUAL_DISCONNECT);
             return null;
         } else {
-            SERVER_LOG.debug("User UUID: %s\nBot UUID: %s", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+            SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(packet.getProfile());
             if (isNull(session.getProxy().getCurrentPlayer().get()))
             {

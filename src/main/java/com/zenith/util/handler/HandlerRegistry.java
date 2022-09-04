@@ -6,7 +6,7 @@ import com.zenith.util.PacketHandler;
 import com.zenith.util.Wait;
 import lombok.*;
 import lombok.experimental.Accessors;
-import net.daporkchop.lib.logging.Logger;
+import org.slf4j.Logger;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.received)  {
-            this.logger.debug("Received packet: %s@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            this.logger.debug("Received packet: {}@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
         if (isNull(handler)) {
@@ -55,7 +55,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.preSent)  {
-            this.logger.debug("Sending packet: %s@%08x", CONFIG.debug.packet.preSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            this.logger.debug("Sending packet: {}@%08x", CONFIG.debug.packet.preSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
         if (isNull(handler)) {
@@ -69,7 +69,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.postSent)  {
-            this.logger.debug("Sent packet: %s@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            this.logger.debug("Sent packet: {}@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (nonNull(handler)) {

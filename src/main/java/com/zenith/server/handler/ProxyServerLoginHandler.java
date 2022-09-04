@@ -9,8 +9,8 @@ import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
-import com.zenith.server.ServerConnection;
 import com.zenith.server.ProxyServerListener;
+import com.zenith.server.ServerConnection;
 import com.zenith.util.Wait;
 
 import static com.zenith.util.Constants.*;
@@ -29,7 +29,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections().get(session);
-        SERVER_LOG.info("Player connected: %s", session.getRemoteAddress());
+        SERVER_LOG.info("Player connected: {}", session.getRemoteAddress());
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())

@@ -34,18 +34,12 @@ import net.daporkchop.lib.binary.oio.appendable.PAppendable;
 import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
 import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
 import net.daporkchop.lib.common.misc.file.PFiles;
-import net.daporkchop.lib.logging.LogAmount;
-import net.daporkchop.lib.logging.Logger;
-import net.daporkchop.lib.logging.Logging;
-import net.daporkchop.lib.logging.impl.DefaultLogger;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -56,15 +50,14 @@ public class Constants {
 
     public static final JsonParser JSON_PARSER = new JsonParser();
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-    public static final DefaultLogger DEFAULT_LOG = Logging.logger;
-    public static final Logger AUTH_LOG = DEFAULT_LOG.channel("Auth");
-    public static final Logger CACHE_LOG = DEFAULT_LOG.channel("Cache");
-    public static final Logger CLIENT_LOG = DEFAULT_LOG.channel("Client");
-    public static final Logger CHAT_LOG = DEFAULT_LOG.channel("Chat");
-    public static final Logger MODULE_LOG = DEFAULT_LOG.channel("Module");
-    public static final Logger SERVER_LOG = DEFAULT_LOG.channel("Server");
-    public static final Logger DISCORD_LOG = DEFAULT_LOG.channel("Discord");
+    public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
+    public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");
+    public static final Logger CACHE_LOG = LoggerFactory.getLogger("Cache");
+    public static final Logger CLIENT_LOG = LoggerFactory.getLogger("Client");
+    public static final Logger CHAT_LOG = LoggerFactory.getLogger("Chat");
+    public static final Logger MODULE_LOG = LoggerFactory.getLogger("Module");
+    public static final Logger SERVER_LOG = LoggerFactory.getLogger("Server");
+    public static final Logger DISCORD_LOG = LoggerFactory.getLogger("Discord");
 
     public static final File CONFIG_FILE = new File("config.json");
     public static final String SERVER_RESTARTING = "Server restarting";
@@ -197,30 +190,10 @@ public class Constants {
             .build();
 
     static {
-        String date = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(Date.from(Instant.now()));
-        File logFolder = PFiles.ensureDirectoryExists(new File("log"));
-        File logFile = new File(logFolder, String.format("%s.log", date));
-        DEFAULT_LOG.addFile(logFile, LogAmount.NORMAL)
-                .enableANSI()
-                .setFormatParser(AutoMCFormatParser.DEFAULT)
-                .setLogAmount(LogAmount.NORMAL);
-        Path logLink = Paths.get(logFolder.getAbsolutePath(), "latest.log");
-        createSymLink(logLink, logFile.toPath());
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
-            DEFAULT_LOG.alert(String.format("Uncaught exception in thread \"%s\"!", thread), e);
+            DEFAULT_LOG.error(String.format("Uncaught exception in thread \"%s\"!", thread), e);
         });
-
         loadConfig();
-
-        if (CONFIG.log.printDebug) {
-            DEFAULT_LOG.setLogAmount(LogAmount.DEBUG);
-        }
-        if (CONFIG.log.storeDebug) {
-            File debugLog = new File(logFolder, String.format("%s-debug.log", date));
-            DEFAULT_LOG.addFile(debugLog, LogAmount.DEBUG);
-            Path debugLogLink = Paths.get(logFolder.getAbsolutePath(), "debug.log");
-            createSymLink(debugLogLink, debugLog.toPath());
-        }
 
         SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
 
@@ -231,22 +204,6 @@ public class Constants {
     }
 
     public static volatile boolean SHOULD_RECONNECT;
-
-    private static void createSymLink(final Path link, final Path target) {
-        if (Files.exists(link)) {
-            try {
-                Files.delete(link);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        try {
-            // i'd prefer creating a soft symlink but creating it requires admin perms
-            Files.createLink(link, target);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static synchronized void loadConfig() {
         DEFAULT_LOG.info("Loading config...");

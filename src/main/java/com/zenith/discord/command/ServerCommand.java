@@ -46,7 +46,7 @@ public class ServerCommand extends Command {
                         .addField("Port", "" + CONFIG.client.server.port, true)
                         .color(Color.CYAN);
             } catch (final Exception e) {
-                DISCORD_LOG.error(e);
+                DISCORD_LOG.error("", e);
                 embedBuilder
                         .title("Invalid command usage")
                         .addField("Usage", this.description, false)

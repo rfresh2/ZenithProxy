@@ -32,18 +32,18 @@ public class DataCache {
                 field.setAccessible(true);
                 if (CachedData.class.isAssignableFrom(field.getType())) {
                     if (CONFIG.debug.printDataFields) {
-                        CACHE_LOG.debug("Found data field: %s", field.getName());
+                        CACHE_LOG.debug("Found data field: {}", field.getName());
                     }
                     dataFields.add(field);
                 } else if (CONFIG.debug.printDataFields) {
-                    CACHE_LOG.debug("Class %s is not a valid data field.", field.getType().getCanonicalName());
+                    CACHE_LOG.debug("Class {} is not a valid data field.", field.getType().getCanonicalName());
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         if (CONFIG.debug.printDataFields) {
-            CACHE_LOG.debug("Found a total of %d data fields.", dataFields.size());
+            CACHE_LOG.debug("Found a total of {} data fields.", dataFields.size());
         }
     }
     protected final ChunkCache chunkCache = new ChunkCache();
@@ -82,7 +82,7 @@ public class DataCache {
             if (CONFIG.debug.server.cache.sendingmessages) {
                 String msg = data.getSendingMessage();
                 if (msg == null)    {
-                    SERVER_LOG.debug("Sending data to client %s", data.getClass().getCanonicalName());
+                    SERVER_LOG.debug("Sending data to client {}", data.getClass().getCanonicalName());
                 } else {
                     SERVER_LOG.debug(msg);
                 }

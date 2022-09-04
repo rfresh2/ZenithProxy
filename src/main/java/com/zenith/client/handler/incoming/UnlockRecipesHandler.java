@@ -17,7 +17,7 @@ public class UnlockRecipesHandler implements HandlerRegistry.AsyncIncomingHandle
 
         switch (packet.getAction()) {
             case INIT:
-                CLIENT_LOG.debug("Init recipes: recipes=%d, known=%d", packet.getRecipes().size(), packet.getAlreadyKnownRecipes().size());
+                CLIENT_LOG.debug("Init recipes: recipes={}, known={}", packet.getRecipes().size(), packet.getAlreadyKnownRecipes().size());
                 CACHE.getStatsCache().getRecipes().addAll(packet.getRecipes());
                 CACHE.getStatsCache().getAlreadyKnownRecipes().addAll(packet.getAlreadyKnownRecipes());
                 break;

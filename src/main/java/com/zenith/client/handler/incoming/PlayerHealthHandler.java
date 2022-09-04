@@ -21,9 +21,9 @@ public class PlayerHealthHandler implements HandlerRegistry.AsyncIncomingHandler
                 .setFood(packet.getFood())
                 .setSaturation(packet.getSaturation())
                 .setHealth(packet.getHealth());
-        CACHE_LOG.debug("Player food: %d", packet.getFood())
-                .debug("Player saturation: %f", packet.getSaturation())
-                .debug("Player health: %f", packet.getHealth());
+        CACHE_LOG.debug("Player food: {}", packet.getFood());
+        CACHE_LOG.debug("Player saturation: {}", packet.getSaturation());
+        CACHE_LOG.debug("Player health: {}", packet.getHealth());
         return true;
     }
 

@@ -18,7 +18,7 @@ public class EntityRotationHandler implements HandlerRegistry.AsyncIncomingHandl
                     .setPitch(packet.getPitch());
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityRotationPacket for invalid entity (id=%d)", packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityRotationPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

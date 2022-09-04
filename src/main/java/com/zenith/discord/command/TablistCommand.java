@@ -90,7 +90,7 @@ public class TablistCommand extends Command {
                     restChannel.createMessage("```\n" + outputMessage + "\n```").block();
                 });
             } catch (final Exception e) {
-                DEFAULT_LOG.error(e);
+                DEFAULT_LOG.error("", e);
             }
             return null;
         }
