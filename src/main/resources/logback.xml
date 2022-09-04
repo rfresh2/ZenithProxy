@@ -14,7 +14,7 @@
     <appender name="FILE" class="RollingFileAppender">
         <file>log/latest.log</file>
         <encoder class="com.zenith.util.log.MCTextFormatEncoder">
-            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
+            <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
@@ -31,7 +31,7 @@
     <appender name="DEBUG_FILE" class="RollingFileAppender">
         <file>log/debug.log</file>
         <encoder class="com.zenith.util.log.MCTextFormatEncoder">
-            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
+            <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.debug.log.zip</fileNamePattern>
@@ -47,7 +47,7 @@
 
     <appender name="STDOUT" class="ConsoleAppender">
         <encoder class="com.zenith.util.log.MCTextFormatANSIEncoder">
-            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
+            <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <filter class="ThresholdFilter">
             <level>INFO</level>
