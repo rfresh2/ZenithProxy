@@ -43,6 +43,9 @@ import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -196,22 +199,27 @@ public class Constants {
     static {
         String date = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(Date.from(Instant.now()));
         File logFolder = PFiles.ensureDirectoryExists(new File("log"));
-        DEFAULT_LOG.addFile(new File(logFolder, String.format("%s.log", date)), LogAmount.NORMAL)
+        File logFile = new File(logFolder, String.format("%s.log", date));
+        DEFAULT_LOG.addFile(logFile, LogAmount.NORMAL)
                 .enableANSI()
                 .setFormatParser(AutoMCFormatParser.DEFAULT)
                 .setLogAmount(LogAmount.NORMAL);
-
+        Path logLink = Paths.get(logFolder.getAbsolutePath(), "latest.log");
+        createSymLink(logLink, logFile.toPath());
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
             DEFAULT_LOG.alert(String.format("Uncaught exception in thread \"%s\"!", thread), e);
         });
 
         loadConfig();
 
-        if (CONFIG.log.printDebug)  {
+        if (CONFIG.log.printDebug) {
             DEFAULT_LOG.setLogAmount(LogAmount.DEBUG);
         }
         if (CONFIG.log.storeDebug) {
-            DEFAULT_LOG.addFile(new File(logFolder, String.format("%s-debug.log", date)), LogAmount.DEBUG);
+            File debugLog = new File(logFolder, String.format("%s-debug.log", date));
+            DEFAULT_LOG.addFile(debugLog, LogAmount.DEBUG);
+            Path debugLogLink = Paths.get(logFolder.getAbsolutePath(), "debug.log");
+            createSymLink(debugLogLink, debugLog.toPath());
         }
 
         SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
@@ -223,6 +231,22 @@ public class Constants {
     }
 
     public static volatile boolean SHOULD_RECONNECT;
+
+    private static void createSymLink(final Path link, final Path target) {
+        if (Files.exists(link)) {
+            try {
+                Files.delete(link);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            // i'd prefer creating a soft symlink but creating it requires admin perms
+            Files.createLink(link, target);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static synchronized void loadConfig() {
         DEFAULT_LOG.info("Loading config...");
