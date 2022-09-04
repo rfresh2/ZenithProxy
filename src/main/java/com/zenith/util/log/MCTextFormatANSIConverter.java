@@ -1,4 +1,4 @@
-package com.zenith.util;
+package com.zenith.util.log;
 
 import ch.qos.logback.classic.pattern.MessageConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -15,7 +15,7 @@ import static net.daporkchop.lib.logging.console.ansi.ANSI.ESC;
  * All the ANSI formatting stuff is taken from PorkLib:
  * https://github.com/PorkStudios/PorkLib/blob/development/logging/src/main/java/net/daporkchop/lib/logging/console/ansi/
  */
-public class MCTextFormatConverter extends MessageConverter {
+public class MCTextFormatANSIConverter extends MessageConverter {
     private final FormatParser formatParser = AutoMCFormatParser.DEFAULT;
 
     protected static String getUpdateTextFormatCommand(VGAColor textColor, VGAColor backgroundColor, int style) {
@@ -67,7 +67,7 @@ public class MCTextFormatConverter extends MessageConverter {
         {
             String text = component.getText();
             if (text != null && !text.isEmpty()) {
-                builder.append(MCTextFormatConverter.getUpdateTextFormatCommand(
+                builder.append(MCTextFormatANSIConverter.getUpdateTextFormatCommand(
                         VGAColor.closestTo(component.getColor()),
                         VGAColor.closestTo(component.getBackgroundColor()),
                         component.getStyle()

@@ -9,17 +9,17 @@
     <import class="ch.qos.logback.core.ConsoleAppender"/>
     <import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"/>
 
-    <statusListener class="com.zenith.util.PrintOnlyErrorLogbackStatusListener"/>
+    <statusListener class="com.zenith.util.log.PrintOnlyErrorLogbackStatusListener"/>
 
     <appender name="FILE" class="RollingFileAppender">
-        <file>log/proxy.log</file>
-        <encoder class="PatternLayoutEncoder">
-            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %msg%n</pattern>
+        <file>log/latest.log</file>
+        <encoder class="com.zenith.util.log.MCTextFormatEncoder">
+            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxHistory>10000</maxHistory>
-            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.StartupSizeAndTimeBasedTriggeringPolicy">
+            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
@@ -29,14 +29,14 @@
     </appender>
 
     <appender name="DEBUG_FILE" class="RollingFileAppender">
-        <file>log/proxy.debug.log</file>
-        <encoder class="PatternLayoutEncoder">
-            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %msg%n</pattern>
+        <file>log/debug.log</file>
+        <encoder class="com.zenith.util.log.MCTextFormatEncoder">
+            <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.debug.log.zip</fileNamePattern>
             <maxHistory>10000</maxHistory>
-            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.StartupSizeAndTimeBasedTriggeringPolicy">
+            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
@@ -46,7 +46,7 @@
     </appender>
 
     <appender name="STDOUT" class="ConsoleAppender">
-        <encoder class="com.zenith.util.MCTextFormatEncoder">
+        <encoder class="com.zenith.util.log.MCTextFormatANSIEncoder">
             <pattern>[%d{HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <filter class="ThresholdFilter">

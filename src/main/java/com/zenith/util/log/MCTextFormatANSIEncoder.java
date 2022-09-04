@@ -1,4 +1,4 @@
-package com.zenith.util;
+package com.zenith.util.log;
 
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.CoreConstants;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.util.Objects.isNull;
 
-public class MCTextFormatEncoder extends PatternLayoutEncoder {
+public class MCTextFormatANSIEncoder extends PatternLayoutEncoder {
 
     @Override
     public void start() {
@@ -17,7 +17,7 @@ public class MCTextFormatEncoder extends PatternLayoutEncoder {
         if (isNull(patternRuleRegistry)) {
             patternRuleRegistry = new HashMap<>();
         }
-        patternRuleRegistry.put("minecraftText", MCTextFormatConverter.class.getName());
+        patternRuleRegistry.put("minecraftText", MCTextFormatANSIConverter.class.getName());
         context.putObject(CoreConstants.PATTERN_RULE_REGISTRY, patternRuleRegistry);
         super.start();
     }

@@ -1,4 +1,4 @@
-package com.zenith.util;
+package com.zenith.util.log;
 
 import ch.qos.logback.core.joran.spi.NoAutoStart;
 import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP;
