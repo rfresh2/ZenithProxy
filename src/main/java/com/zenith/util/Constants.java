@@ -40,9 +40,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -106,6 +103,7 @@ public class Constants {
             .registerInbound(new UpdateTileEntityHandler())
             .registerInbound(new ServerCombatHandler())
             .registerInbound(new PlayerChangeHeldItemHandler())
+            .registerInbound(new MapDataHandler())
             //ENTITY
             .registerInbound(new EntityAttachHandler())
             .registerInbound(new EntityCollectItemHandler())
