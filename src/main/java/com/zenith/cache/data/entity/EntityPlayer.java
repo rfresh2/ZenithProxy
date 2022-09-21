@@ -11,6 +11,8 @@ import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
 
+import static com.zenith.util.Constants.SERVER_LOG;
+
 
 @RequiredArgsConstructor
 @NoArgsConstructor
@@ -43,6 +45,7 @@ public class EntityPlayer extends EntityEquipment {
             consumer.accept(new ServerPlayerSetExperiencePacket(experience, level, totalExperience));
             if (this.health == 0.0f) {
                 // indicates respawn screen should be shown
+                SERVER_LOG.info("Sending respawn screen packet. entityId: {},", this.entityId);
                 consumer.accept(new ServerCombatPacket(this.entityId, -1, "", false));
             }
         } else {

@@ -21,6 +21,7 @@ import com.zenith.util.spectator.entity.SpectatorEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -137,13 +138,14 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
+            final String reason = AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString();
             if (!isSpectator()) {
-                SERVER_LOG.info("Player disconnected: {}, {}", event.getSession().getRemoteAddress(), event.getReason(), event.getCause());
+                SERVER_LOG.info("Player disconnected: {}, {}", event.getSession().getRemoteAddress(), reason, event.getCause());
                 try {
                     EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
                 } catch (final Throwable e) {
                     SERVER_LOG.info("Could not get game profile of disconnecting player");
-                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason()));
+                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(reason));
                 }
             } else {
                 proxy.getServerConnections().forEach(connection -> {

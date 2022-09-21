@@ -64,15 +64,13 @@ public class MCTextFormatANSIConverter extends MessageConverter {
     }
 
     protected void doBuild(@NonNull StringBuilder builder, @NonNull TextComponent component) {
-        {
-            String text = component.getText();
-            if (text != null && !text.isEmpty()) {
-                builder.append(MCTextFormatANSIConverter.getUpdateTextFormatCommand(
-                        VGAColor.closestTo(component.getColor()),
-                        VGAColor.closestTo(component.getBackgroundColor()),
-                        component.getStyle()
-                )).append(text);
-            }
+        String text = component.getText();
+        if (text != null && !text.isEmpty()) {
+            builder.append(MCTextFormatANSIConverter.getUpdateTextFormatCommand(
+                    VGAColor.closestTo(component.getColor()),
+                    VGAColor.closestTo(component.getBackgroundColor()),
+                    component.getStyle()
+            )).append(text);
         }
         for (TextComponent child : component.getChildren()) {
             this.doBuild(builder, child);

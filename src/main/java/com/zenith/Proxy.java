@@ -496,6 +496,8 @@ public class Proxy {
             ForkJoinPool.commonPool().execute(() -> {
                 PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
                 if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
+                    MODULE_LOG.info("Performing AutoRespawn");
+                    CACHE.getPlayerCache().getThePlayer().setHealth(20.0f);
                     Proxy.getInstance().getClient().send(new ClientRequestPacket(ClientRequest.RESPAWN));
                 }
             });
