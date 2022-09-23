@@ -453,7 +453,7 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Server Restarting!" + " : " + CONFIG.authentication.username)
                 .color(Color.CYAN)
-                .addField("Message", "restarting in 15 minutes...", true)
+                .addField("Message", event.message, true)
                 .addField("Server", CONFIG.client.server.address, false)
                 .build());
     }

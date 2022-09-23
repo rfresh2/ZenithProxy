@@ -5,4 +5,7 @@ import com.collarmc.pounce.Preference;
 
 @EventInfo(preference = Preference.POOL)
 public class ServerRestartingEvent {
+    public final String message;
+
+    public ServerRestartingEvent(String message) { this.message = message; }
 }

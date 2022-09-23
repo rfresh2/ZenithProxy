@@ -42,8 +42,8 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
                     EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
                 } else if (messageString.startsWith(("[SERVER]"))) { // server message
                     System.out.println(messageString);
-                    if (messageString.startsWith("[SERVER] Server restarting in 15 minutes...")) { // todo: include time till restart in event
-                        EVENT_BUS.dispatch(new ServerRestartingEvent());
+                    if (messageString.startsWith("[SERVER] Server restarting in")) { // todo: include time till restart in event
+                        EVENT_BUS.dispatch(new ServerRestartingEvent(messageString));
                     }
                 }
             }
