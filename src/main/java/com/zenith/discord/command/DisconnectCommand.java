@@ -8,7 +8,7 @@ import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.MultipartRequest;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.DISCORD_LOG;
 
 public class DisconnectCommand extends Command {
     public DisconnectCommand(Proxy proxy) {
@@ -42,7 +42,7 @@ public class DisconnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getFailedToDisconnectMessage() {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("Proxy Failed to Disconnect : " + CONFIG.authentication.username)
+                        .title("Proxy Failed to Disconnect")
                         .build())
                 .build().asRequest();
     }

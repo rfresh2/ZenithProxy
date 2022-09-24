@@ -156,7 +156,7 @@ public class DiscordBot {
     public void handleConnectEvent(ConnectEvent event) {
         this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-               .title("Proxy Connected!" + " : " + CONFIG.authentication.username)
+                .title("Proxy Connected")
                .color(Color.CYAN)
                .addField("Server", CONFIG.client.server.address, true)
                .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
@@ -168,10 +168,9 @@ public class DiscordBot {
     @Subscribe
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Online!" + " : " + CONFIG.authentication.username)
+                .title("Proxy Online")
                 .color(Color.CYAN)
                 .addField("Server", CONFIG.client.server.address, true)
-//                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
     }
 
@@ -179,7 +178,7 @@ public class DiscordBot {
     public void handleDisconnectEvent(DisconnectEvent event) {
         this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Disconnected" + " : " + CONFIG.authentication.username)
+                .title("Proxy Disconnected")
                 .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
@@ -197,11 +196,10 @@ public class DiscordBot {
 
     private void sendQueueWarning(int position) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Queue Warning" + " : " + CONFIG.authentication.username)
+                .title("Proxy Queue Warning")
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)
-//                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
 
     }
@@ -227,7 +225,7 @@ public class DiscordBot {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.client.updatePresence(getQueuePresence()).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Started Queuing..." + " : " + CONFIG.authentication.username)
+                .title("Proxy Started Queuing")
                 .color(Color.CYAN)
                 .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
                 .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
@@ -237,7 +235,7 @@ public class DiscordBot {
     @Subscribe
     public void handleDeathEvent(DeathEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Player Death!" + " : " + CONFIG.authentication.username)
+                .title("Player Death")
                 .color(Color.RUBY)
                 .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), false)
                 .build());
@@ -289,7 +287,7 @@ public class DiscordBot {
     @Subscribe
     public void handleAutoDisconnectEvent(AutoDisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy AutoDisconnect Triggered!" + " : " + CONFIG.authentication.username)
+                .title("Proxy AutoDisconnect Triggered")
                 .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .color(Color.CYAN)
                 .build());
@@ -459,7 +457,7 @@ public class DiscordBot {
     @Subscribe
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Server Restarting!" + " : " + CONFIG.authentication.username)
+                .title("Server Restarting")
                 .color(Color.CYAN)
                 .addField("Message", event.message, true)
                 .addField("Server", CONFIG.client.server.address, false)

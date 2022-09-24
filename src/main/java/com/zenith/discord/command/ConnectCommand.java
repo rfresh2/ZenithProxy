@@ -1,7 +1,6 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
-import com.zenith.util.Queue;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -40,7 +39,7 @@ public class ConnectCommand extends Command {
     private MultipartRequest<MessageCreateRequest> getFailedConnectionMessage() {
         return MessageCreateSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
-                        .title("Proxy Failed to Connect!" + " : " + CONFIG.authentication.username)
+                        .title("Proxy Failed to Connect")
                         .color(Color.RED)
                         .addField("Server", CONFIG.client.server.address, true)
                         .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)

@@ -1,9 +1,9 @@
 package com.zenith.discord.command;
 
 import com.zenith.Proxy;
+import com.zenith.cache.data.PlayerCache;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Queue;
-import com.zenith.cache.data.PlayerCache;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -28,7 +28,7 @@ public class StatusCommand extends Command {
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
-                .title("Proxy Status" + " : " + CONFIG.authentication.username)
+                .title("Proxy Status")
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Status", getStatus(), true)
                 .addField("Connected User", getCurrentClientUserName(), true)
@@ -78,7 +78,7 @@ public class StatusCommand extends Command {
         if (nonNull(currentConnection)) {
             return currentConnection.getProfileCache().getProfile().getName();
         } else {
-            return "None";
+            return CONFIG.authentication.username;
         }
     }
 
