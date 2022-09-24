@@ -89,7 +89,7 @@ public class DiscordBot {
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
-                    EVENT_BUS.dispatch(new DiscordMessageSentEvent(event.getMessage().getContent()));
+                    EVENT_BUS.dispatch(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent())));
                     return;
                 }
             }
@@ -472,6 +472,10 @@ public class DiscordBot {
                 .title("Updating and restarting...")
                 .color(Color.CYAN)
                 .build();
+    }
+
+    public String sanitizeRelayInputMessage(final String input) {
+        return input.replaceAll("[\\r\\n\\t\\p{C}]", "");
     }
 
     public void updateProfileImage(final BufferedImage bufferedImage) {
