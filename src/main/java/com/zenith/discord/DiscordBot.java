@@ -437,7 +437,7 @@ public class DiscordBot {
     @Subscribe
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (CONFIG.discord.chatRelay.enable) {
-            if (this.proxy.isConnected()) {
+            if (this.proxy.isConnected() && !event.message.isEmpty()) {
                 this.proxy.getClient().send(new ClientChatPacket(event.message));
             }
         }
@@ -475,7 +475,7 @@ public class DiscordBot {
     }
 
     public String sanitizeRelayInputMessage(final String input) {
-        return input.replaceAll("[\\r\\n\\t\\p{C}]", "");
+        return input.replaceAll("[§\\r\\n\\t\\p{C}]", "");
     }
 
     public void updateProfileImage(final BufferedImage bufferedImage) {
