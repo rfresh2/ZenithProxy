@@ -369,11 +369,19 @@ public class DiscordBot {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
                 String message = escape(event.message);
-                if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
+                if (CONFIG.discord.chatRelay.mentionRoleOnWhisper || CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                     if (!message.startsWith("<")) {
-                        String[] split = message.split(" ");
-                        if (split.length > 2 && split[1].startsWith("whispers") && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")) {
-                            message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                        if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
+                            String[] split = message.split(" ");
+                            if (split.length > 2 && split[1].startsWith("whispers") && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")) {
+                                message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                            }
+                        }
+                    } else {
+                        if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
+                            if (message.split(" ", 2)[1].toLowerCase().contains(CONFIG.authentication.username.toLowerCase())) {
+                                message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                            }
                         }
                     }
                 }

@@ -63,7 +63,9 @@ public class StatusCommand extends Command {
                 .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), false)
                 .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
                 .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
-                .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured"), false)
+                .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured")
+                        + "\n[WhisperMention: " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "on" : "off") + "]"
+                        + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", false)
                 .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), true);
 
         return MessageCreateSpec.builder()

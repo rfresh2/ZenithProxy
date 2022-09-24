@@ -235,6 +235,7 @@ public final class Config {
             public boolean enable = false;
             public boolean ignoreQueue = true;
             public boolean mentionRoleOnWhisper = false;
+            public boolean mentionRoleOnNameMention = false;
             public boolean connectionMessages = false;
             public String channelId = "";
         }

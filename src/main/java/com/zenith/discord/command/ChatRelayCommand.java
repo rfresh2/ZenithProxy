@@ -21,7 +21,8 @@ public class ChatRelayCommand extends Command {
                 + "\nUsage:"
                 + "\n  " + CONFIG.discord.prefix + "chatRelay on/off"
                 + "\n  " + CONFIG.discord.prefix + "chatRelay connectionMessages on/off"
-                + "\n  " + CONFIG.discord.prefix + "chatRelay whisperMentions on/off");
+                + "\n  " + CONFIG.discord.prefix + "chatRelay whisperMentions on/off"
+                + "\n " + CONFIG.discord.prefix + "chatRelay nameMentions on/off");
     }
 
     @Override
@@ -76,6 +77,23 @@ public class ChatRelayCommand extends Command {
                 CONFIG.discord.chatRelay.mentionRoleOnWhisper = false;
                 embedBuilder
                         .title("Whisper Mentions Relay Off!")
+                        .color(Color.CYAN);
+            } else {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            }
+        } else if (commandArgs.get(1).equalsIgnoreCase("namementions")) {
+            if (commandArgs.get(2).equalsIgnoreCase("on")) {
+                CONFIG.discord.chatRelay.mentionRoleOnNameMention = true;
+                embedBuilder
+                        .title("Name Mentions Relay On!")
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
+                CONFIG.discord.chatRelay.mentionRoleOnNameMention = false;
+                embedBuilder
+                        .title("Name Mentions Relay Off!")
                         .color(Color.CYAN);
             } else {
                 embedBuilder
