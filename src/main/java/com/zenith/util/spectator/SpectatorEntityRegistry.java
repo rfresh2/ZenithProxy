@@ -22,6 +22,7 @@ public final class SpectatorEntityRegistry {
         spectatorEntityMap.put("bat", new SpectatorEntityBat());
         spectatorEntityMap.put("crystal", new SpectatorEntityEndCrystal());
         spectatorEntityMap.put("dragon", new SpectatorEntityEnderDragon());
+        spectatorEntityMap.put("wither", new SpectatorEntityWither());
         spectatorEntityMap.put("egg", new SpectatorEntityEgg());
         spectatorEntityMap.put("creeper", new SpectatorEntityCreeper());
         spectatorEntityMap.put("vex", new SpectatorEntityVex());
