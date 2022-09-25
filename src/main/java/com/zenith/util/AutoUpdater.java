@@ -90,10 +90,31 @@ public class AutoUpdater {
         if (CONFIG.autoUpdate && updateAvailable) {
             if (!event.reason.equals(MANUAL_DISCONNECT)) {
                 CONFIG.shouldReconnectAfterAutoUpdate = true;
-                saveConfig();
+            } else {
+                CONFIG.shouldReconnectAfterAutoUpdate = false;
             }
-            update();
+            saveConfig();
+            scheduleConditionalUpdate();
         }
+    }
+
+    private void scheduleConditionalUpdate() {
+        if (this.proxy.getIsPrio().orElse(CONFIG.authentication.prio)) {
+            // update immediately if we have prio
+            update();
+        } else {
+            updaterExecutorService.schedule(this::conditionalRegularQueueUpdate, 30L, TimeUnit.SECONDS);
+        }
+    }
+
+    private void conditionalRegularQueueUpdate() {
+        if (this.proxy.isConnected()) {
+            // queue skipped
+            if (!this.proxy.isInQueue()) return;
+            // we're in the middle of a queue skip
+            if (this.proxy.isInQueue() && this.proxy.getQueuePosition() < 10) return;
+        }
+        update();
     }
 
     public void update() {
