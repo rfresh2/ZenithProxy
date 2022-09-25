@@ -15,7 +15,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
 
     @Override
     public boolean apply(ClientChatPacket packet, ServerConnection session) {
-        if (packet.getMessage().startsWith("!help")) {
+        if (packet.getMessage().toLowerCase().startsWith("!help")) {
             session.send(new ServerChatPacket("§9§lSpectator commands:", true));
             session.send(new ServerChatPacket("§2Prefix : \"!\"", true));
             session.send(new ServerChatPacket("", true));
@@ -23,7 +23,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
             session.send(new ServerChatPacket("§7§cplayercam §7- §8Set camera to the player", true));
             session.send(new ServerChatPacket("§7§cetoggle §7- §8Hide your entity from yourself", true));
             session.send(new ServerChatPacket("§7§ce §7- §8List spectator entities. Change with \"!e <entity>\"", true));
-        } else if (packet.getMessage().startsWith("!m")) {
+        } else if (packet.getMessage().toLowerCase().startsWith("!m")) {
             session.getProxy().getClient().send(new ClientChatPacket(packet.getMessage().substring(2).trim()));
         } else if (packet.getMessage().toLowerCase().startsWith("!etoggle")) {
             session.setShowSelfEntity(!session.isShowSelfEntity());
@@ -33,7 +33,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
             } else {
                 session.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
             }
-        } else if (packet.getMessage().startsWith("!e")) {
+        } else if (packet.getMessage().toLowerCase().startsWith("!e")) {
             String entityId = packet.getMessage().substring(2).trim();
             boolean spectatorEntitySet = session.setSpectatorEntity(entityId);
             if (spectatorEntitySet) {
