@@ -469,6 +469,7 @@ public class Proxy {
     @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
+        this.queuePosition = 0;
     }
 
     @Subscribe
