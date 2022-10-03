@@ -15,7 +15,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.EVENT_BUS;
 
 public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListDataPacket, ClientSession> {
     @Override
@@ -48,7 +49,8 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
     private synchronized void parse2bQueueState(ServerPlayerListDataPacket packet, ClientSession session) {
         Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
                 .map(String::trim)
-                .filter(m -> m.contains("2b2t is full") || m.toLowerCase(Locale.ROOT).contains("pending"))
+                .map(m -> m.toLowerCase(Locale.ROOT))
+                .filter(m -> m.contains("2b2t is full") || m.contains("pending") || m.contains("in queue"))
                 .findAny();
         if (queueHeader.isPresent()) {
             if (!session.isInQueue()) {
@@ -58,8 +60,6 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
         } else if (session.isInQueue()) {
             session.setInQueue(false);
             session.setLastQueuePosition(Integer.MAX_VALUE);
-            // temp adding this to debug why sometimes 2b causes many start queue events to occur
-            CLIENT_LOG.debug("Queue complete event. Queue pos: {}, playerList packet header: {}", session.getLastQueuePosition(), packet.getHeader());
             EVENT_BUS.dispatch(new QueueCompleteEvent());
         } else if (!session.isOnline()) {
             session.setOnline(true);
