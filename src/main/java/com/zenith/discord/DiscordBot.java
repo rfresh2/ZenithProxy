@@ -474,6 +474,14 @@ public class DiscordBot {
     }
 
     @Subscribe
+    public void handleStartConnectEvent(StartConnectEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Connecting...")
+                .color(Color.CYAN)
+                .build());
+    }
+
+    @Subscribe
     public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
         if (event.prioBanned) {
@@ -488,6 +496,7 @@ public class DiscordBot {
         embedCreateSpec.addField("User", CONFIG.authentication.username, false);
         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
     }
+
 
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
