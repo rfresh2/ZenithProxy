@@ -237,11 +237,16 @@ public class Proxy {
 
     public synchronized void connect() {
         try {
+            EVENT_BUS.dispatch(new StartConnectEvent());
             this.logIn();
         } catch (final RuntimeException e) {
             EVENT_BUS.dispatch(new ProxyLoginFailedEvent());
             getServerConnections().forEach(connection -> connection.disconnect("Login failed"));
-            disconnect("Login Failed");
+            ForkJoinPool.commonPool().submit(() -> {
+                // mitigate possible race condition in autoreconnect
+                Wait.waitALittle(1);
+                EVENT_BUS.dispatch(new DisconnectEvent("Login Failed"));
+            });
             return;
         }
 
@@ -304,7 +309,8 @@ public class Proxy {
         while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
             tries++;
             AUTH_LOG.warn("Failed login attempt " + tries);
-            Wait.waitALittle(3);
+            // wait random time between 3 and 10 seconds
+            Wait.waitALittle((int) (3 + (Math.random() * 7.0)));
         }
         if (tries == 3) {
             throw new RuntimeException("Auth failed");
@@ -409,7 +415,7 @@ public class Proxy {
     public boolean delayBeforeReconnect() {
         try {
             final int countdown;
-            if (((ClientSession) client).isServerProbablyOff()) {
+            if (nonNull(client) && ((ClientSession) client).isServerProbablyOff()) {
                 countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
 
                 this.reconnectCounter = 0;

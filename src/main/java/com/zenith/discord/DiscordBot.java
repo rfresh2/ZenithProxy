@@ -473,6 +473,14 @@ public class DiscordBot {
                 .build());
     }
 
+    @Subscribe
+    public void handleStartConnectEvent(StartConnectEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Connecting...")
+                .color(Color.CYAN)
+                .build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")
