@@ -28,7 +28,7 @@ public class StatusCommand extends Command {
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
-                .title("Proxy Status")
+                .title("Proxy Status: " + CONFIG.authentication.username)
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Status", getStatus(), true)
                 .addField("Connected User", getCurrentClientUserName(), true)
@@ -78,7 +78,7 @@ public class StatusCommand extends Command {
         if (nonNull(currentConnection)) {
             return currentConnection.getProfileCache().getProfile().getName();
         } else {
-            return CONFIG.authentication.username;
+            return "None";
         }
     }
 
