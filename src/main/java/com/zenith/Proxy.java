@@ -534,7 +534,7 @@ public class Proxy {
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         if (!this.isPrio.isPresent()) {
             // assume we are prio if we skipped queuing
-            EVENT_BUS.dispatch(new PrioStatusUpdateEvent(true));
+            EVENT_BUS.dispatch(new PrioStatusEvent(true));
         }
     }
 
@@ -571,7 +571,7 @@ public class Proxy {
     }
 
     @Subscribe
-    public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
+    public void handlePrioStatusUpdateEvent(PrioStatusEvent event) {
         if (!this.isPrio.isPresent()) {
             this.isPrio = Optional.of(event.prio);
             CONFIG.authentication.prio = event.prio;

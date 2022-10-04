@@ -3,7 +3,7 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.PlayerOnlineEvent;
-import com.zenith.event.proxy.PrioStatusUpdateEvent;
+import com.zenith.event.proxy.PrioStatusEvent;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.StartQueueEvent;
 import com.zenith.util.handler.HandlerRegistry;
@@ -36,7 +36,7 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
          * "This account has priority status and will be placed in a shorter queue."
          */
         if (messageString.contains("priority")) {
-            EVENT_BUS.dispatch(new PrioStatusUpdateEvent(!messageString.contains("shop.2b2t.org")));
+            EVENT_BUS.dispatch(new PrioStatusEvent(!messageString.contains("shop.2b2t.org")));
         }
         return true;
     }

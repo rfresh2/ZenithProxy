@@ -496,7 +496,7 @@ public class DiscordBot {
         embedCreateSpec.addField("User", CONFIG.authentication.username, false);
         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
     }
-    
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")

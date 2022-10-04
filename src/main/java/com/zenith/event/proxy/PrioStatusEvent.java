@@ -4,10 +4,10 @@ import com.collarmc.pounce.EventInfo;
 import com.collarmc.pounce.Preference;
 
 @EventInfo(preference = Preference.POOL)
-public class PrioStatusUpdateEvent {
+public class PrioStatusEvent {
     public final boolean prio;
 
-    public PrioStatusUpdateEvent(boolean prio) {
+    public PrioStatusEvent(boolean prio) {
         this.prio = prio;
     }
 }
