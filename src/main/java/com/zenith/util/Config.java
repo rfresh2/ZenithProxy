@@ -24,6 +24,7 @@ public final class Config {
         public String password = "my_secure_password";
         public String username = "Steve";
         public boolean prio = false;
+        public boolean prioBanned = false;
     }
 
     public static final class Client {

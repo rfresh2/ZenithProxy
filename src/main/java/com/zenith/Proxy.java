@@ -22,10 +22,13 @@ import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Queue;
 import com.zenith.util.*;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.common.util.PorkUtil;
 import reactor.netty.http.client.HttpClient;
+import reactor.netty.http.client.HttpClientResponse;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -74,6 +77,7 @@ public class Proxy {
     private Instant connectTime;
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
+    private Optional<Boolean> isPrioBanned = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
     public static AutoUpdater autoUpdater;
@@ -144,6 +148,7 @@ public class Proxy {
                     }
                 }, 0, 200L, TimeUnit.MILLISECONDS);
             }
+            checkPrioBan();
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 try {
                     InputStream netInputStream = HttpClient.create()
@@ -427,6 +432,41 @@ public class Proxy {
         }
     }
 
+    public boolean checkPrioBan() {
+        try {
+            HttpClient client = HttpClient.create()
+                    .followRedirect(false)
+                    .secure()
+                    .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON));
+            HttpClientResponse response = client
+                    .post()
+                    .uri("https://shop.2b2t.org/checkout/packages/add/1994962/single?ign=" + CONFIG.authentication.username)
+                    .response()
+                    .block();
+            try {
+                String result = response.responseHeaders().get("Set-Cookie").split("; ")[0];
+                if (result.contains("buycraft_basket")) { // unbanned
+                    this.isPrioBanned = Optional.of(false);
+                } else if (result.contains("XRxlbOYKOzX5HYSsk7VO72KxURUxqkzYCSTxTat")) { // banned
+                    this.isPrioBanned = Optional.of(true);
+                } else {
+                    isPrioBanned = Optional.empty();
+                }
+            } catch (final Throwable e) {
+                DEFAULT_LOG.error("Unable to parse response cookies from 2b2t webstore", e);
+            }
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Error contacting 2b2t webstore", e);
+        }
+        if (isPrioBanned.isPresent() && !isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
+            EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(isPrioBanned.get()));
+            CONFIG.authentication.prioBanned = isPrioBanned.get();
+            saveConfig();
+            CLIENT_LOG.info("Prio Ban Change Detected: " + isPrioBanned.get());
+        }
+        return isPrioBanned.orElse(false);
+    }
+
     private void handleActiveHoursTick() {
         Config.Client.Extra.Utility.ActiveHours activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
         if (activeHoursConfig.enabled
@@ -470,6 +510,7 @@ public class Proxy {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
         this.queuePosition = 0;
+        checkPrioBan();
     }
 
     @Subscribe

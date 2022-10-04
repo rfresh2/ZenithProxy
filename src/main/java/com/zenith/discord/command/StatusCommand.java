@@ -34,7 +34,7 @@ public class StatusCommand extends Command {
                 .addField("Connected User", getCurrentClientUserName(), true)
                 .addField("Online Time", getOnlineTime(), true)
                 .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
-                .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no"), true);
+                .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
                 if (!getSpectatorUserNames().isEmpty()) {
                     builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), false);
                 }

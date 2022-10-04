@@ -473,6 +473,22 @@ public class DiscordBot {
                 .build());
     }
 
+    @Subscribe
+    public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
+        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
+        if (event.prioBanned) {
+            embedCreateSpec
+                    .title("PRIO BAN DETECTED")
+                    .color(Color.RED);
+        } else {
+            embedCreateSpec
+                    .title("PRIO UNBAN DETECTED")
+                    .color(Color.GREEN);
+        }
+        embedCreateSpec.addField("User", CONFIG.authentication.username, false);
+        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")
