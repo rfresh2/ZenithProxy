@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -44,13 +45,17 @@ public class DiscordBot {
     private Supplier<RestChannel> relayRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId)));
     private GatewayDiscordClient client;
     private Proxy proxy;
-    public List<Command> commands = new ArrayList<>();
+    // Main channel discord message FIFO queue
+    private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
-    private final ScheduledExecutorService presenceExecutorService;
+    private final ScheduledExecutorService scheduledExecutorService;
+    public List<Command> commands;
 
     public DiscordBot() {
-        this.presenceExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
+        this.commands = new ArrayList<>();
     }
 
     public void start(Proxy proxy) {
@@ -100,15 +105,14 @@ public class DiscordBot {
             if (!message.startsWith(CONFIG.discord.prefix)) {
                 return;
             }
-            RestChannel restChannel = restClient.getChannelById(event.getMessage().getChannelId());
             commands.stream()
                     .filter(command -> message.toLowerCase(Locale.ROOT).startsWith(CONFIG.discord.prefix + command.getName().toLowerCase(Locale.ROOT)))
                     .findFirst()
                     .ifPresent(command -> {
                         try {
-                            MultipartRequest<MessageCreateRequest> m = command.execute(event, restChannel);
+                            MultipartRequest<MessageCreateRequest> m = command.execute(event, mainRestChannel.get());
                             if (m != null) {
-                                restChannel.createMessage(m).block();
+                                mainChannelMessageQueue.add(m);
                             }
                         } catch (final Exception e) {
                             DISCORD_LOG.error("Error executing discord command: " + command, e);
@@ -119,9 +123,21 @@ public class DiscordBot {
         if (CONFIG.discord.isUpdating) {
             handleProxyUpdateComplete();
         }
-        presenceExecutorService.scheduleAtFixedRate(this::updatePresence, 0L,
+        scheduledExecutorService.scheduleAtFixedRate(this::updatePresence, 0L,
                 15L, // discord rate limit
                 TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+    }
+
+    private void processMessageQueue() {
+        try {
+            MultipartRequest<MessageCreateRequest> message = mainChannelMessageQueue.poll();
+            if (nonNull(message)) {
+                this.mainRestChannel.get().createMessage(message).block();
+            }
+        } catch (final Throwable e) {
+            DISCORD_LOG.error("Message processor error", e);
+        }
     }
 
     private void updatePresence() {
@@ -142,14 +158,10 @@ public class DiscordBot {
     private void handleProxyUpdateComplete() {
         CONFIG.discord.isUpdating = false;
         saveConfig();
-        restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)).createMessage(
-                MessageCreateSpec.builder()
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title("Update complete!")
-                                .color(Color.CYAN)
-                                .build())
-                        .build().asRequest())
-                .subscribe();
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Update complete!")
+                .color(Color.CYAN)
+                .build());
     }
 
     @Subscribe
@@ -188,13 +200,13 @@ public class DiscordBot {
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         this.client.updatePresence(getQueuePresence()).subscribe();
         if (event.position == CONFIG.server.queueWarning) {
-            sendQueueWarning(event.position);
+            sendQueueWarning();
         } else if (event.position <= 3) {
-            sendQueueWarning(event.position);
+            sendQueueWarning();
         }
     }
 
-    private void sendQueueWarning(int position) {
+    private void sendQueueWarning() {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Proxy Queue Warning")
                 .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
@@ -451,7 +463,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleUpdateStartEvent(UpdateStartEvent event) {
-        sendEmbedMessageAndBlock(getUpdateMessage());
+        sendEmbedMessage(getUpdateMessage());
     }
 
     @Subscribe
@@ -540,19 +552,9 @@ public class DiscordBot {
 
     public void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
         try {
-            mainRestChannel.get().createMessage(MessageCreateSpec.builder()
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
                     .addEmbed(embedCreateSpec)
-                    .build().asRequest()).subscribe();
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
-    }
-
-    private void sendEmbedMessageAndBlock(EmbedCreateSpec embedCreateSpec) {
-        try {
-            mainRestChannel.get().createMessage(MessageCreateSpec.builder()
-                    .addEmbed(embedCreateSpec)
-                    .build().asRequest()).block();
+                    .build().asRequest());
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }
@@ -560,10 +562,10 @@ public class DiscordBot {
 
     private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
         try {
-            mainRestChannel.get().createMessage(MessageCreateSpec.builder()
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
                     .content(message)
                     .addEmbed(embedCreateSpec)
-                    .build().asRequest()).subscribe();
+                    .build().asRequest());
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }
@@ -575,5 +577,9 @@ public class DiscordBot {
 
     public static String escape(String message) {
         return message.replaceAll("_", "\\\\_");
+    }
+
+    public boolean isMessageQueueEmpty() {
+        return mainChannelMessageQueue.isEmpty();
     }
 }

@@ -20,7 +20,7 @@ public class UpdateCommand extends Command {
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
-        validateUserHasAccountOwnerRole(event, restChannel);
+        validateUserHasAccountOwnerRole(event);
         try {
             EVENT_BUS.dispatch(new UpdateStartEvent());
             CONFIG.discord.isUpdating = true;

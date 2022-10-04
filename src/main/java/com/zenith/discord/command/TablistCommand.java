@@ -39,6 +39,7 @@ public class TablistCommand extends Command {
             // embeds will be too small for tablist
             List<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
                     .map(PlayerEntry::getName)
+                    .distinct()
                     .sorted(String::compareTo)
                     .collect(Collectors.toList());
             final int longestPlayerNameSize = playerNames.stream().map(String::length).max(Integer::compareTo).get();

@@ -196,6 +196,9 @@ public class Proxy {
             this.server.close(true);
         }
         saveConfig();
+        while (!DISCORD_BOT.isMessageQueueEmpty()) {
+            Wait.waitALittleMs(100);
+        }
         System.exit(0);
     }
 

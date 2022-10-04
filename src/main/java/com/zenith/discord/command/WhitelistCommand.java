@@ -13,7 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.zenith.discord.DiscordBot.escape;
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.saveConfig;
 
 public class WhitelistCommand extends Command {
     public WhitelistCommand(Proxy proxy) {
@@ -23,7 +24,7 @@ public class WhitelistCommand extends Command {
 
     @Override
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
-        this.validateUserHasAccountOwnerRole(event, restChannel);
+        this.validateUserHasAccountOwnerRole(event);
         List<String> commandArgs = Arrays.asList(event.getMessage().getContent().split(" "));
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder();
 
