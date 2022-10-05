@@ -88,9 +88,7 @@ public class ClientListener implements SessionListener {
     @Override
     public void disconnected(DisconnectedEvent event) {
         CLIENT_LOG.info("Disconnected: " + event.getReason());
-        if (!session.isDisconnected()) {
-            session.setDisconnected(true);
-            EVENT_BUS.dispatch(new DisconnectEvent(AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString()));
-        }
+        session.setDisconnected(true);
+        EVENT_BUS.dispatch(new DisconnectEvent(AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString()));
     }
 }
