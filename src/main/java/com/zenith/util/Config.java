@@ -40,6 +40,7 @@ public final class Config {
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
+            public AutoReply autoReply = new AutoReply();
             public Stalk stalk = new Stalk();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
@@ -141,6 +142,12 @@ public final class Config {
                         "/stats",
                         "/stats"
                 );
+            }
+
+            public static final class AutoReply {
+                public boolean enabled = false;
+                public int cooldownSeconds = 15;
+                public String message = "I am currently AFK, check back later or message me on discord.";
             }
         }
 

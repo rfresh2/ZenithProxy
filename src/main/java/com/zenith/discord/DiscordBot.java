@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class DiscordBot {
@@ -50,6 +51,7 @@ public class DiscordBot {
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
     private final ScheduledExecutorService scheduledExecutorService;
+    private static HashMap<String, Long> repliedPlayers = new HashMap<String, Long>();
     public List<Command> commands;
 
     public DiscordBot() {
@@ -91,6 +93,7 @@ public class DiscordBot {
         commands.add(new TablistCommand(this.proxy));
         commands.add(new SpectatorCommand(this.proxy));
         commands.add(new PrioCommand(this.proxy));
+        commands.add(new AutoReplyCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
@@ -376,6 +379,23 @@ public class DiscordBot {
 
     @Subscribe
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
+        if (CONFIG.client.extra.autoReply.enabled && isNull(this.proxy.getCurrentPlayer().get())) {
+            try {
+                if (!escape(event.message).startsWith("<")) {
+                    String[] split = escape(event.message).split(" ");
+                    final String sender = split[0];
+                    if (split.length > 2 && split[1].startsWith("whispers") && !sender.equalsIgnoreCase(CONFIG.authentication.username)) { // make sending chat relay messages pause autoreply for (x) minutes
+                        repliedPlayers.entrySet().removeIf(entry -> entry.getValue() < Instant.now().getEpochSecond());
+                        if (isNull(repliedPlayers.get(sender))) {
+                            this.proxy.getClient().send(new ClientChatPacket("/w " + sender + " " + CONFIG.client.extra.autoReply.message)); // 236 char max ( 256 - 4(command) - 16(max name length)
+                            repliedPlayers.put(sender, Instant.now().getEpochSecond() + CONFIG.client.extra.autoReply.cooldownSeconds);
+                        }
+                    }
+                }
+            } catch (final Throwable e) {
+                CLIENT_LOG.error("", e);
+            }
+        }
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
@@ -537,7 +557,7 @@ public class DiscordBot {
         return c0 != 167 && c0 >= 32 && c0 != 127;
     }
 
-    public String sanitizeRelayInputMessage(final String input) {
+    public static String sanitizeRelayInputMessage(final String input) {
         StringBuilder stringbuilder = new StringBuilder();
         for (char c0 : input.toCharArray()) {
             if (isAllowedChatCharacter(c0)) {
