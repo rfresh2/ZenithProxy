@@ -494,22 +494,6 @@ public class DiscordBot {
     }
 
     @Subscribe
-    public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
-        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
-        if (event.prioBanned) {
-            embedCreateSpec
-                    .title("PRIO BAN DETECTED")
-                    .color(Color.RED);
-        } else {
-            embedCreateSpec
-                    .title("PRIO UNBAN DETECTED")
-                    .color(Color.GREEN);
-        }
-        embedCreateSpec.addField("User", CONFIG.authentication.username, false);
-        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
-    }
-
-    @Subscribe
     public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
         if (event.prio) {
@@ -523,6 +507,22 @@ public class DiscordBot {
         }
         embedCreateSpec.addField("User", CONFIG.authentication.username, false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
+    }
+
+    @Subscribe
+    public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
+        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
+        if (event.prioBanned) {
+            embedCreateSpec
+                    .title("PRIO BAN DETECTED")
+                    .color(Color.RED);
+        } else {
+            embedCreateSpec
+                    .title("PRIO UNBAN DETECTED")
+                    .color(Color.GREEN);
+        }
+        embedCreateSpec.addField("User", CONFIG.authentication.username, false);
+        sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
     }
 
     private EmbedCreateSpec getUpdateMessage() {

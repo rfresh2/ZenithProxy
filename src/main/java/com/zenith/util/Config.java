@@ -230,6 +230,7 @@ public final class Config {
         public boolean reportCoords = false;
         // internal use for update command state persistence
         public boolean mentionRoleOnPrioUpdate = true;
+        public boolean mentionRoleOnPrioBanUpdate = true;
         public boolean isUpdating = false;
         public ChatRelay chatRelay = new ChatRelay();
 
