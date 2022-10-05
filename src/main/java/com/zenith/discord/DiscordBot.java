@@ -509,6 +509,22 @@ public class DiscordBot {
         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
     }
 
+    @Subscribe
+    public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
+        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
+        if (event.prio) {
+            embedCreateSpec
+                    .title("PRIO QUEUE STATUS DETECTED")
+                    .color(Color.GREEN);
+        } else {
+            embedCreateSpec
+                    .title("PRIO QUEUE STATUS LOST")
+                    .color(Color.RED);
+        }
+        embedCreateSpec.addField("User", CONFIG.authentication.username, false);
+        sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")

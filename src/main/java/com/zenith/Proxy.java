@@ -574,17 +574,17 @@ public class Proxy {
     }
 
     @Subscribe
-    public void handlePrioStatusUpdateEvent(PrioStatusEvent event) {
-        if (!this.isPrio.isPresent()) {
-            this.isPrio = Optional.of(event.prio);
-            CONFIG.authentication.prio = event.prio;
-            saveConfig();
-            CLIENT_LOG.info("Prio Detected: " + event.prio);
-        } else if (event.prio != this.isPrio.get()) {
-            this.isPrio = Optional.of(event.prio);
-            CONFIG.authentication.prio = event.prio;
-            saveConfig();
+    public void handlePrioStatusEvent(PrioStatusEvent event) {
+        if (event.prio == CONFIG.authentication.prio) {
+            if (!isPrio.isPresent()) {
+                CLIENT_LOG.info("Prio Detected: " + event.prio);
+                this.isPrio = Optional.of(event.prio);
+            }
+        } else {
             CLIENT_LOG.info("Prio Change Detected: " + event.prio);
+            EVENT_BUS.dispatch(new PrioStatusUpdateEvent(event.prio));
+            CONFIG.authentication.prio = event.prio;
+            saveConfig();
         }
     }
 }
