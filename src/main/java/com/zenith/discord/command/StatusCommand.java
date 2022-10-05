@@ -62,11 +62,13 @@ public class StatusCommand extends Command {
                 .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
                 .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), false)
                 .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
-                .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
+                .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), false)
                 .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured")
                         + "\n[WhisperMention: " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "on" : "off") + "]"
-                        + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", false)
-                .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), true);
+                        + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", true)
+                .addField("AutoReply", (CONFIG.client.extra.autoReply.enabled ? "on" : "off")
+                        + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
+                .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), false);
 
         return MessageCreateSpec.builder()
                 .addEmbed(builder.build())
