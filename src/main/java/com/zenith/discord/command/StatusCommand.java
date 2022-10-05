@@ -29,7 +29,7 @@ public class StatusCommand extends Command {
     public MultipartRequest<MessageCreateRequest> execute(MessageCreateEvent event, RestChannel restChannel) {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                 .title("Proxy Status: " + CONFIG.authentication.username)
-                .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
+                .color(this.proxy.isConnected() ? (this.proxy.isInQueue() ? Color.MOON_YELLOW : Color.CYAN) : Color.RUBY)
                 .addField("Status", getStatus(), true)
                 .addField("Connected User", getCurrentClientUserName(), true)
                 .addField("Online Time", getOnlineTime(), true)
