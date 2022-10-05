@@ -1,0 +1,8 @@
+TODO:
+
+
+- namemc link embeds for player name or uuid mentions
+
+autoreply:
+- global autoreply cooldown
+- pause autoreply for (x) minutes when a chatrelay message is sent
