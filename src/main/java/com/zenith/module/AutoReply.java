@@ -16,16 +16,25 @@ import static com.zenith.util.Constants.CONFIG;
 import static java.util.Objects.isNull;
 
 public class AutoReply extends Module {
-    private final Cache<String, String> repliedPlayersCache;
-    private final Duration replyRateLimitDuration = Duration.ofSeconds(3);
+    private final Duration replyRateLimitDuration = Duration.ofSeconds(1);
+    private Cache<String, String> repliedPlayersCache;
     private Instant lastReply;
 
     public AutoReply(Proxy proxy) {
         super(proxy);
         this.repliedPlayersCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(20L, TimeUnit.MINUTES)
+                .expireAfterWrite(CONFIG.client.extra.autoReply.cooldownSeconds, TimeUnit.SECONDS)
                 .build();
         this.lastReply = Instant.now();
+    }
+
+    public void updateCooldown(final int newCooldown) {
+        CONFIG.client.extra.autoReply.cooldownSeconds = newCooldown;
+        Cache<String, String> newCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(newCooldown, TimeUnit.SECONDS)
+                .build();
+        newCache.putAll(this.repliedPlayersCache.asMap());
+        this.repliedPlayersCache = newCache;
     }
 
     @Subscribe

@@ -2,6 +2,7 @@ package com.zenith.discord.command;
 
 import com.zenith.Proxy;
 import com.zenith.discord.DiscordBot;
+import com.zenith.module.AutoReply;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -57,11 +58,11 @@ public class AutoReplyCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("cooldown")) {
             try {
                 int delay = Integer.parseInt(commandArgs.get(2));
-                CONFIG.client.extra.autoReply.cooldownSeconds = delay;
+                this.proxy.getModules().stream().filter(m -> m instanceof AutoReply).findFirst().ifPresent(m -> ((AutoReply) m).updateCooldown(delay));
                 embedBuilder
                         .title("AutoReply Cooldown Updated!")
                         .addField("Status", (CONFIG.client.extra.autoReply.enabled ? "on" : "off"), false)
-                        .addField("Cooldown Seconds", ""+CONFIG.client.extra.autoReply.cooldownSeconds, false)
+                        .addField("Cooldown Seconds", "" + CONFIG.client.extra.autoReply.cooldownSeconds, false)
                         .addField("Message", CONFIG.client.extra.autoReply.message, false)
                         .color(Color.CYAN);
             } catch (final Exception e) {
