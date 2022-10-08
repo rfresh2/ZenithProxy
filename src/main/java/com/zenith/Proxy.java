@@ -15,6 +15,7 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.module.AntiAFK;
 import com.zenith.module.AutoDisconnect;
+import com.zenith.module.AutoReply;
 import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
@@ -22,13 +23,10 @@ import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Queue;
 import com.zenith.util.*;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.lib.common.util.PorkUtil;
 import reactor.netty.http.client.HttpClient;
-import reactor.netty.http.client.HttpClientResponse;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -80,6 +78,7 @@ public class Proxy {
     private Optional<Boolean> isPrioBanned = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
+    private final PriorityBanChecker priorityBanChecker;
     public static AutoUpdater autoUpdater;
 
     public static void main(String... args) {
@@ -105,6 +104,7 @@ public class Proxy {
         this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         this.activeHoursExecutorService = new ScheduledThreadPoolExecutor(1);
         this.reconnectExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.priorityBanChecker = new PriorityBanChecker();
         EVENT_BUS.subscribe(this);
     }
 
@@ -148,7 +148,7 @@ public class Proxy {
                     }
                 }, 0, 200L, TimeUnit.MILLISECONDS);
             }
-            checkPrioBan();
+            updatePrioBanStatus();
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 try {
                     InputStream netInputStream = HttpClient.create()
@@ -221,26 +221,11 @@ public class Proxy {
     }
 
     void registerModules() {
-        // todo: do some reflection magic to auto-register modules in the package
         this.modules = asList(
                 new AntiAFK(this),
-                new AutoDisconnect(this)
+                new AutoDisconnect(this),
+                new AutoReply(this)
         );
-
-        // todo: make this into a module
-        //  too lazy to do this rn bc this is not very useful
-//        if (CONFIG.client.extra.spammer.enabled) {
-//            List<String> messages = CONFIG.client.extra.spammer.messages;
-//            int delaySeconds = CONFIG.client.extra.spammer.delaySeconds;
-//            AtomicInteger i = new AtomicInteger(0);
-//            MODULE_LOG.trace("Enabling spammer with %d messages, choosing every %d seconds", messages.size(), delaySeconds);
-//            modules.add(() -> {
-//                if ((i.getAndIncrement() >> 1) == delaySeconds) {
-//                    i.set(0);
-//                    this.client.getSession().send(new ClientChatPacket(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
-//                }
-//            });
-//        }
     }
 
     public synchronized void connect() {
@@ -420,12 +405,11 @@ public class Proxy {
         }
     }
 
-    public boolean delayBeforeReconnect() {
+    public void delayBeforeReconnect() {
         try {
             final int countdown;
             if (nonNull(client) && ((ClientSession) client).isServerProbablyOff()) {
                 countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
-
                 this.reconnectCounter = 0;
             } else {
                 countdown = CONFIG.client.extra.autoReconnect.delaySeconds
@@ -435,45 +419,20 @@ public class Proxy {
                 if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
                 Wait.waitALittle(1);
             }
-            return true;
         } catch (Exception e) {
-            return false;
+            CLIENT_LOG.error("AutoReconnect delay failure", e);
         }
     }
 
-    public boolean checkPrioBan() {
-        try {
-            HttpClient client = HttpClient.create()
-                    .followRedirect(false)
-                    .secure()
-                    .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON));
-            HttpClientResponse response = client
-                    .post()
-                    .uri("https://shop.2b2t.org/checkout/packages/add/1994962/single?ign=" + CONFIG.authentication.username)
-                    .response()
-                    .block();
-            try {
-                String result = response.responseHeaders().get("Set-Cookie").split("; ")[0];
-                if (result.contains("buycraft_basket")) { // unbanned
-                    this.isPrioBanned = Optional.of(false);
-                } else if (result.contains("XRxlbOYKOzX5HYSsk7VO72KxURUxqkzYCSTxTat")) { // banned
-                    this.isPrioBanned = Optional.of(true);
-                } else {
-                    isPrioBanned = Optional.empty();
-                }
-            } catch (final Throwable e) {
-                DEFAULT_LOG.error("Unable to parse response cookies from 2b2t webstore", e);
-            }
-        } catch (final Throwable e) {
-            DEFAULT_LOG.error("Error contacting 2b2t webstore", e);
-        }
-        if (isPrioBanned.isPresent() && !isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
-            EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(isPrioBanned.get()));
-            CONFIG.authentication.prioBanned = isPrioBanned.get();
+    public void updatePrioBanStatus() {
+        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t")) return;
+        this.isPrioBanned = this.priorityBanChecker.checkPrioBan();
+        if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
+            EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
+            CONFIG.authentication.prioBanned = this.isPrioBanned.get();
             saveConfig();
-            CLIENT_LOG.info("Prio Ban Change Detected: " + isPrioBanned.get());
+            CLIENT_LOG.info("Prio Ban Change Detected: " + this.isPrioBanned.get());
         }
-        return isPrioBanned.orElse(false);
     }
 
     private void handleActiveHoursTick() {
@@ -519,7 +478,7 @@ public class Proxy {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
         this.queuePosition = 0;
-        checkPrioBan();
+        updatePrioBanStatus();
     }
 
     @Subscribe
