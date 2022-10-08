@@ -1,5 +1,7 @@
 package com.zenith.util;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,12 +21,16 @@ public final class Config {
 
     public static final class Authentication {
         public boolean doAuthentication = false;
-        public String accountType = "msa";
+        public AccountType accountType = AccountType.MSA;
         public String email = "john.doe@example.com";
         public String password = "my_secure_password";
         public String username = "Steve";
         public boolean prio = false;
         public boolean prioBanned = false;
+
+        public enum AccountType {
+            @SerializedName("msa") MSA
+        }
     }
 
     public static final class Client {

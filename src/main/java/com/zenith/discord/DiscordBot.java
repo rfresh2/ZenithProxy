@@ -28,7 +28,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -119,7 +122,7 @@ public class DiscordBot {
                                 mainChannelMessageQueue.add(m);
                             }
                         } catch (final Exception e) {
-                            DISCORD_LOG.error("Error executing discord command: " + command, e);
+                            DISCORD_LOG.error("Error executing discord command: {}", command, e);
                         }
                     });
         });
@@ -271,7 +274,7 @@ public class DiscordBot {
         if (CONFIG.client.extra.visualRangeAlert) {
             EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
                     .title("Player In Visual Range")
-                    .addField("Player Name", Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown"), true)
+                    .addField("Player Name", event.playerEntry.getName(), true)
                     .addField("Player UUID", event.playerEntry.getId().toString(), true)
                     .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
 
@@ -284,7 +287,7 @@ public class DiscordBot {
             }
             if (CONFIG.client.extra.visualRangeAlertMention) {
                 boolean notFriend = CONFIG.client.extra.friendList.stream()
-                        .noneMatch(friend -> friend.equalsIgnoreCase(Optional.ofNullable(event.playerEntry.getName()).orElse("Unknown")));
+                        .noneMatch(friend -> friend.equalsIgnoreCase(event.playerEntry.getName()));
                 if (notFriend) {
                     if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
                         sendEmbedMessage("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build());
