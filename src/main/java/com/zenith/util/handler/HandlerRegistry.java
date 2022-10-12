@@ -1,5 +1,10 @@
 package com.zenith.util.handler;
 
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.util.PacketHandler;
@@ -9,6 +14,7 @@ import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +23,7 @@ import java.util.function.BiFunction;
 
 import static com.zenith.util.Constants.CLIENT_LOG;
 import static com.zenith.util.Constants.CONFIG;
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -38,11 +45,19 @@ public class HandlerRegistry<S extends Session> {
     protected final boolean allowUnhandled;
 
     protected static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newFixedThreadPool(10); // idk 10 seems reasonable but might need to adjust
+    private static final List<Class<? extends Packet>> allowedPackets = asList(
+            ServerPlayerPositionRotationPacket.class,
+            ClientPlayerPositionRotationPacket.class,
+            ClientPlayerRotationPacket.class,
+            ClientPlayerPositionPacket.class,
+            ClientTeleportConfirmPacket.class);
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.received)  {
-            this.logger.debug("Received packet: {}@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            if (allowedPackets.stream().anyMatch(allowPacket -> packet.getClass() == allowPacket)) {
+                this.logger.debug("Received packet: {}@%08x", CONFIG.debug.packet.receivedBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            }
         }
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
         if (isNull(handler)) {
@@ -69,7 +84,9 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.postSent)  {
-            this.logger.debug("Sent packet: {}@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            if (allowedPackets.stream().anyMatch(allowPacket -> packet.getClass() == allowPacket)) {
+                this.logger.debug("Sent packet: {}@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
+            }
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (nonNull(handler)) {
