@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.pathing.BlockPos;
 import com.zenith.util.TickTimer;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -72,7 +73,9 @@ public class AntiAFK extends Module {
             } else {
                 // calculate a walk, to keep things simple let's just walk +x and -x
                 double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
-                CLIENT_LOG.debug("Walking to new X: " + newX);
+                CLIENT_LOG.info("Walking to new X: " + newX);
+                boolean solidBlock = this.proxy.world.isSolidBlock(new BlockPos((int) newX, (int) CACHE.getPlayerCache().getY(), (int) CACHE.getPlayerCache().getZ()));
+                CLIENT_LOG.info("AntiAFK: Next block solid: {}", solidBlock);
                 this.proxy.getClient().send(
                         new ClientPlayerPositionPacket(
                                 true,

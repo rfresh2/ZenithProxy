@@ -3,8 +3,12 @@ package com.zenith.pathing;
 import lombok.Data;
 
 @Data
-public class ChunkPos {
+public class BlockPos {
     private final int x;
     private final int y;
     private final int z;
+
+    public ChunkPos toChunkPos() {
+        return new ChunkPos(x / 16, y / 16, z / 16);
+    }
 }

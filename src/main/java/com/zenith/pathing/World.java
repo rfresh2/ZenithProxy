@@ -1,22 +1,39 @@
 package com.zenith.pathing;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
-import jdk.nashorn.internal.ir.Block;
+
+import java.util.Optional;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.CLIENT_LOG;
 
 public class World {
 
-    public Chunk getChunk(final ChunkPos chunkPos) {
-        return CACHE.getChunkCache().get(chunkPos.getX(), chunkPos.getZ()).getChunks()[chunkPos.getY()];
+    private final BlockDataManager blockDataManager;
+
+    public World(final BlockDataManager blockDataManager) {
+        this.blockDataManager = blockDataManager;
     }
 
-
-    public int getBlockId(final int x, final int y, final int z) {
-        return getChunk(new ChunkPos(x, y, z)).getBlocks().get(x, y, z).getId();
+    public Optional<Chunk> getChunk(final ChunkPos chunkPos) {
+        try {
+            return Optional.of(CACHE.getChunkCache().get(chunkPos.getX(), chunkPos.getZ()).getChunks()[chunkPos.getY()]);
+        } catch (final Exception e) {
+            CLIENT_LOG.error("error finding chunk at pos: {}", chunkPos);
+        }
+        return Optional.empty();
     }
 
-    public boolean isSolidBlock(final int x, final int y, final int z) {
-        return getBlock(getBlockId(x, y, z)).isSolid;
+    public int getBlockId(final BlockPos blockPos) {
+        return getChunk(blockPos.toChunkPos())
+                .map(chunk -> chunk.getBlocks().get(Math.abs(blockPos.getX()) % 16, Math.abs(blockPos.getY()) % 16, Math.abs(blockPos.getZ()) % 16).getId())
+                .orElse(0);
+    }
+
+    public boolean isSolidBlock(final BlockPos blockPos) {
+        return blockDataManager.getBlockFromId(getBlockId(blockPos))
+                .map(Block::getBoundingBox)
+                .map(boundingBox -> boundingBox == BoundingBox.block)
+                .orElse(false);
     }
 }

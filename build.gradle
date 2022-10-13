@@ -73,6 +73,14 @@ repositories {
     mavenLocal()
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs("minecraft-data/")
+        }
+    }
+}
+
 configurations {
     shade
     implementation.extendsFrom shade
