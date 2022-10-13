@@ -149,6 +149,7 @@ dependencies {
     shade 'org.slf4j:slf4j-api:2.0.3'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
+    shade 'com.esotericsoftware:kryo:5.3.0'
 
     shade("com.github.5cmc:mcprotocollib:$mcprotocollibVersion") {
         exclude group: "io.netty", module: "netty-all"

@@ -9,6 +9,6 @@ public class BlockPos {
     private final int z;
 
     public ChunkPos toChunkPos() {
-        return new ChunkPos(x / 16, y / 16, z / 16);
+        return new ChunkPos(x >> 4, y >> 4, z >> 4);
     }
 }

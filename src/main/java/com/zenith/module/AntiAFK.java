@@ -62,7 +62,8 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-        if (startWalkTickTimer.tick(1200L, true)) {
+        // temp lowering this 200 for testing
+        if (startWalkTickTimer.tick(200L, true)) {
             shouldWalk = !shouldWalk;
             walkTickTimer.reset();
         }
@@ -73,18 +74,27 @@ public class AntiAFK extends Module {
             } else {
                 // calculate a walk, to keep things simple let's just walk +x and -x
                 double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
-                CLIENT_LOG.info("Walking to new X: " + newX);
-                boolean solidBlock = this.proxy.world.isSolidBlock(new BlockPos((int) newX, (int) CACHE.getPlayerCache().getY(), (int) CACHE.getPlayerCache().getZ()));
-                CLIENT_LOG.info("AntiAFK: Next block solid: {}", solidBlock);
-                this.proxy.getClient().send(
-                        new ClientPlayerPositionPacket(
-                                true,
-                                newX,
-                                CACHE.getPlayerCache().getY(),
-                                CACHE.getPlayerCache().getZ()));
-                CACHE.getPlayerCache().setX(newX);
+                if (nextWalkSafe((int) Math.floor(newX), (int) Math.floor(CACHE.getPlayerCache().getY()), (int) Math.floor(CACHE.getPlayerCache().getZ()))) {
+                    this.proxy.getClient().send(
+                            new ClientPlayerPositionPacket(
+                                    true,
+                                    newX,
+                                    CACHE.getPlayerCache().getY(),
+                                    CACHE.getPlayerCache().getZ()));
+                    CACHE.getPlayerCache().setX(newX);
+                } else {
+                    CLIENT_LOG.info("next move not safe {}, {}, {}", newX,
+                            CACHE.getPlayerCache().getY(),
+                            CACHE.getPlayerCache().getZ());
+                }
             }
         }
+    }
+
+    private boolean nextWalkSafe(final int x, final int y, final int z) {
+        boolean groundSolid = this.proxy.world.isSolidBlock(new BlockPos(x, y - 1, z));
+        boolean blocked = this.proxy.world.isSolidBlock(new BlockPos(x, y, z)) || this.proxy.world.isSolidBlock(new BlockPos(x, y + 1, z));
+        return groundSolid && !blocked;
     }
 
     private void swingTick() {
