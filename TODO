@@ -2,6 +2,8 @@ TODO:
 
 
 - namemc link embeds for player name or uuid mentions
+- antiafk that pauses after alot of lagbacks (illegal movement)
+- have the proxy passively track 2b2t's antiafk pulses and handles modules accordingly to fulfill at least 1 pulse per 20 mins (additionally notifies the player or account owner on discord if they haven't pulsed for a certain time and when they will get kicked)
 
 autoreply:
 - global autoreply cooldown
