@@ -2,17 +2,18 @@ package com.zenith.module;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.pathing.BlockPos;
+import com.zenith.pathing.Pathing;
+import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CONFIG;
 import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
@@ -20,12 +21,16 @@ public class AntiAFK extends Module {
     private final TickTimer startWalkTickTimer = new TickTimer();
     private final TickTimer walkTickTimer = new TickTimer();
     private final TickTimer rotateTimer = new TickTimer();
+    private final Pathing pathing;
     private boolean shouldWalk = false;
+    private final int walkGoalDelta = 9;
     // toggle this between 1 and -1
-    private double xDirectionMultiplier = 1.0;
+    private double directionMultiplier = 1.0;
+    private BlockPos currentPathingGoal;
 
-    public AntiAFK(Proxy proxy) {
+    public AntiAFK(Proxy proxy, final Pathing pathing) {
         super(proxy);
+        this.pathing = pathing;
     }
 
     @Subscribe
@@ -66,35 +71,20 @@ public class AntiAFK extends Module {
         if (startWalkTickTimer.tick(200L, true)) {
             shouldWalk = !shouldWalk;
             walkTickTimer.reset();
+            if (shouldWalk) {
+                directionMultiplier *= -1.0;
+                ;
+                currentPathingGoal = pathing.getCurrentPlayerPos().addX(walkGoalDelta * directionMultiplier).addZ(walkGoalDelta * directionMultiplier).toBlockPos();
+            }
         }
         if (shouldWalk) {
             if (walkTickTimer.tick(100L, true)) {
                 shouldWalk = false;
-                xDirectionMultiplier *= -1.0;
             } else {
-                // calculate a walk, to keep things simple let's just walk +x and -x
-                double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
-                if (nextWalkSafe((int) Math.floor(newX), (int) Math.floor(CACHE.getPlayerCache().getY()), (int) Math.floor(CACHE.getPlayerCache().getZ()))) {
-                    this.proxy.getClient().send(
-                            new ClientPlayerPositionPacket(
-                                    true,
-                                    newX,
-                                    CACHE.getPlayerCache().getY(),
-                                    CACHE.getPlayerCache().getZ()));
-                    CACHE.getPlayerCache().setX(newX);
-                } else {
-                    CLIENT_LOG.info("next move not safe {}, {}, {}", newX,
-                            CACHE.getPlayerCache().getY(),
-                            CACHE.getPlayerCache().getZ());
-                }
+                Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);
+                this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
             }
         }
-    }
-
-    private boolean nextWalkSafe(final int x, final int y, final int z) {
-        boolean groundSolid = this.proxy.world.isSolidBlock(new BlockPos(x, y - 1, z));
-        boolean blocked = this.proxy.world.isSolidBlock(new BlockPos(x, y, z)) || this.proxy.world.isSolidBlock(new BlockPos(x, y + 1, z));
-        return groundSolid && !blocked;
     }
 
     private void swingTick() {

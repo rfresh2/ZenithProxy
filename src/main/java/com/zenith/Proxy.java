@@ -17,6 +17,7 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.module.*;
 import com.zenith.pathing.BlockDataManager;
+import com.zenith.pathing.Pathing;
 import com.zenith.pathing.World;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
@@ -232,7 +233,7 @@ public class Proxy {
 
     void registerModules() {
         this.modules = asList(
-                new AntiAFK(this),
+                new AntiAFK(this, new Pathing(world)),
                 new AutoDisconnect(this),
                 new AutoReply(this),
                 new Spook(this)

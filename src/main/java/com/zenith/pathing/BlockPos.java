@@ -11,4 +11,8 @@ public class BlockPos {
     public ChunkPos toChunkPos() {
         return new ChunkPos(x >> 4, y >> 4, z >> 4);
     }
+
+    public BlockPos addY(int delta) {
+        return new BlockPos(x, y + delta, z);
+    }
 }
