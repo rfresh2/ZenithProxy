@@ -203,8 +203,8 @@ public class DiscordBot {
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         this.client.updatePresence(getQueuePresence()).subscribe();
-        if (CONFIG.server.queueWarning.enabled) {
-            if (event.position == CONFIG.server.queueWarning.position) {
+        if (CONFIG.discord.queueWarning.enabled) {
+            if (event.position == CONFIG.discord.queueWarning.position) {
                 sendQueueWarning();
             } else if (event.position <= 3) {
                 sendQueueWarning();
@@ -213,7 +213,7 @@ public class DiscordBot {
     }
 
     private void sendQueueWarning() {
-        sendEmbedMessage((CONFIG.server.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
+        sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("Proxy Queue Warning")
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)

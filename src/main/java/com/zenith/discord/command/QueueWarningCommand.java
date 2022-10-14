@@ -35,18 +35,18 @@ public class QueueWarningCommand extends Command {
                     .addField("Usage", this.description, false)
                     .color(Color.RUBY);
         } else if (commandArgs.get(1).equalsIgnoreCase("on")) {
-            CONFIG.server.queueWarning.enabled = true;
+            CONFIG.discord.queueWarning.enabled = true;
             embedBuilder
                     .title("QueueWarning On!")
-                    .addField("Position", ""+CONFIG.server.queueWarning.position, false)
-                    .addField("mention", (CONFIG.server.queueWarning.mentionRole ? "on" : "off"), false)
+                    .addField("Position", ""+CONFIG.discord.queueWarning.position, false)
+                    .addField("mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("off")) {
-            CONFIG.server.queueWarning.enabled = false;
+            CONFIG.discord.queueWarning.enabled = false;
             embedBuilder
                     .title("QueueWarning Off!")
-                    .addField("Position", ""+CONFIG.server.queueWarning.position, false)
-                    .addField("mention", (CONFIG.server.queueWarning.mentionRole ? "on" : "off"), false)
+                    .addField("Position", ""+CONFIG.discord.queueWarning.position, false)
+                    .addField("mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("mention")) {
             if (commandArgs.size() < 3) {
@@ -55,18 +55,18 @@ public class QueueWarningCommand extends Command {
                         .addField("Usage", this.description, false)
                         .color(Color.RUBY);
             } else if (commandArgs.get(2).equalsIgnoreCase("on")) {
-                CONFIG.server.queueWarning.mentionRole = true;
+                CONFIG.discord.queueWarning.mentionRole = true;
                 embedBuilder
                         .title("QueueWarning Mention On!")
-                        .addField("Status", (CONFIG.server.queueWarning.enabled ? "on" : "off"), false)
-                        .addField("Position", ""+CONFIG.server.queueWarning.position, false)
+                        .addField("Status", (CONFIG.discord.queueWarning.enabled ? "on" : "off"), false)
+                        .addField("Position", ""+CONFIG.discord.queueWarning.position, false)
                         .color(Color.CYAN);
             } else if (commandArgs.get(2).equalsIgnoreCase("off")) {
-                CONFIG.server.queueWarning.mentionRole = false;
+                CONFIG.discord.queueWarning.mentionRole = false;
                 embedBuilder
                         .title("QueueWarning Mention Off!")
-                        .addField("Status", (CONFIG.server.queueWarning.enabled ? "on" : "off"), false)
-                        .addField("Position", ""+CONFIG.server.queueWarning.position, false)
+                        .addField("Status", (CONFIG.discord.queueWarning.enabled ? "on" : "off"), false)
+                        .addField("Position", ""+CONFIG.discord.queueWarning.position, false)
                         .color(Color.CYAN);
             } else {
                 embedBuilder
@@ -77,12 +77,12 @@ public class QueueWarningCommand extends Command {
         } else if (commandArgs.get(1).equalsIgnoreCase("position")) {
             try {
                 int position = Integer.parseInt(commandArgs.get(2));
-                CONFIG.server.queueWarning.position = position;
+                CONFIG.discord.queueWarning.position = position;
                 embedBuilder
                         .title("QueueWarning Position Updated!")
-                        .addField("Status", (CONFIG.server.queueWarning.enabled ? "on" : "off"), false)
-                        .addField("Position", ""+CONFIG.server.queueWarning.position, false)
-                        .addField("mention", (CONFIG.server.queueWarning.mentionRole ? "on" : "off"), false)
+                        .addField("Status", (CONFIG.discord.queueWarning.enabled ? "on" : "off"), false)
+                        .addField("Position", ""+CONFIG.discord.queueWarning.position, false)
+                        .addField("mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
                         .color(Color.CYAN);
             } catch (final Exception e) {
                 embedBuilder
