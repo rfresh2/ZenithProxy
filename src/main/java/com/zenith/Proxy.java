@@ -146,7 +146,7 @@ public class Proxy {
                     } catch (final Throwable e) {
                         DEFAULT_LOG.error("Error in reconnect executor service", e);
                     }
-                }, 0, 200L, TimeUnit.MILLISECONDS);
+                }, 0, 10L, TimeUnit.SECONDS);
             }
             updatePrioBanStatus();
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
