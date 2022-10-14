@@ -1,9 +1,10 @@
+import com.zenith.pathing.BlockDataManager;
+import com.zenith.pathing.World;
 import com.zenith.util.Queue;
 import org.junit.Test;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertTrue;
 
@@ -24,4 +25,12 @@ public class QueueTest {
         String s = message.replaceAll("_", "\\\\_");
         System.out.println(s);
     }
+
+    @Test
+    public void worldTest() {
+        final World world = new World(new BlockDataManager());
+
+
+    }
+
 }
