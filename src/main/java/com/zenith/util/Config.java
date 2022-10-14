@@ -193,13 +193,19 @@ public final class Config {
         public boolean enabled = true;
         public Extra extra = new Extra();
         public Ping ping = new Ping();
+        public QueueWarning queueWarning = new QueueWarning();
         public boolean verifyUsers = true;
         public boolean kickPrevious = false;
-        public int queueWarning = 10; // Queue position to send warning message at
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
         public boolean allowSpectator = true;
         public String spectatorEntity = "cat";
+
+        public static final class QueueWarning {
+            public boolean enabled = true;
+            public int position = 10; // Queue position to send warning message at
+            public boolean mentionRole = false;
+        }
 
         public static final class Bind {
             public String address = "0.0.0.0";

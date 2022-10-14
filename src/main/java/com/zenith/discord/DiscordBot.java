@@ -93,6 +93,7 @@ public class DiscordBot {
         commands.add(new SpectatorCommand(this.proxy));
         commands.add(new PrioCommand(this.proxy));
         commands.add(new AutoReplyCommand(this.proxy));
+        commands.add(new QueueWarningCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
@@ -202,21 +203,22 @@ public class DiscordBot {
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         this.client.updatePresence(getQueuePresence()).subscribe();
-        if (event.position == CONFIG.server.queueWarning) {
-            sendQueueWarning();
-        } else if (event.position <= 3) {
-            sendQueueWarning();
+        if (CONFIG.server.queueWarning.enabled) {
+            if (event.position == CONFIG.server.queueWarning.position) {
+                sendQueueWarning();
+            } else if (event.position <= 3) {
+                sendQueueWarning();
+            }
         }
     }
 
     private void sendQueueWarning() {
-        sendEmbedMessage(EmbedCreateSpec.builder()
+        sendEmbedMessage((CONFIG.server.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("Proxy Queue Warning")
-                .color(this.proxy.isConnected() ? Color.CYAN : Color.RUBY)
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)
+                .color(Color.MOON_YELLOW)
                 .build());
-
     }
 
     private String queuePositionStr() {

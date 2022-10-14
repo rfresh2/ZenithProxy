@@ -8,3 +8,6 @@ TODO:
 autoreply:
 - global autoreply cooldown
 - pause autoreply for (x) minutes when a chatrelay message is sent
+
+spectator:
+- etoggle for players
