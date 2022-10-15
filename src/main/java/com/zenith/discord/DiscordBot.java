@@ -272,7 +272,7 @@ public class DiscordBot {
         if (CONFIG.client.extra.visualRangeAlert) {
             EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
                     .title("Player In Visual Range")
-                    .addField("Player Name", event.playerEntry.getName(), true)
+                    .addField("Player Name", escape(event.playerEntry.getName()), true)
                     .addField("Player UUID", event.playerEntry.getId().toString(), true)
                     .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
 
