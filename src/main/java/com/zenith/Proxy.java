@@ -11,6 +11,9 @@ import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.ClientSession;
+import com.zenith.database.ConnectionPool;
+import com.zenith.database.Database;
+import com.zenith.database.QueueWaitDatabase;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.module.AntiAFK;
@@ -68,6 +71,7 @@ public class Proxy {
     protected ScheduledExecutorService activeHoursExecutorService;
     protected ScheduledExecutorService reconnectExecutorService;
     protected List<Module> modules;
+    protected Database queueWait; // nullable
 
     private int reconnectCounter;
     private boolean inQueue = false;
@@ -106,6 +110,10 @@ public class Proxy {
         this.reconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         this.priorityBanChecker = new PriorityBanChecker();
         EVENT_BUS.subscribe(this);
+        if (CONFIG.database.queueWait.enabled) {
+            // if we add more databases, ensure the connectionpool is shared
+            this.queueWait = new QueueWaitDatabase(new ConnectionPool(), this);
+        }
     }
 
     public void start() {

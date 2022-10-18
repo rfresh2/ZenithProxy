@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'nu.studer.jooq' version '5.2.2'
+}
+
 apply plugin: "java"
 apply plugin: "com.github.johnrengelman.shadow"
 
@@ -25,6 +29,8 @@ ext {
     porklibVersion = "0.5.8-SNAPSHOT"
     discord4jVersion = "3.2.3"
     pounceVersion = "main-SNAPSHOT"
+    hikaricpVersion = "4.0.3"
+    postgresVersion = "42.3.3"
 }
 
 group "com.zenith"
@@ -62,7 +68,64 @@ configurations {
     implementation.extendsFrom shade
 }
 
+jooq {
+    configurations {
+        main {  // name of the jOOQ configuration
+            generateSchemaSourceOnCompilation = true  // default (can be omitted)
+
+            generationTool {
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = 'jdbc:postgresql://mc-proxy.czyfkzmxjkdp.us-east-1.rds.amazonaws.com:5432/postgres'
+                    user = 'proxy'
+                    password = 'cghRVLQQiRqEpn9ccJEEeU'
+                    properties {
+                        property {
+                            key = 'ssl'
+                            value = 'false'
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                        forcedTypes {
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'JSONB?'
+                            }
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'INET'
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'com.zenith.database.dto'
+                        directory = 'build/generated-src/jooq/main'  // default (can be omitted)
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+
 dependencies {
+    jooqGenerator "org.postgresql:postgresql:$postgresVersion"
+    shade "org.jooq:jooq:3.16.6"
+    shade "com.zaxxer:HikariCP:$hikaricpVersion"
+    shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:5.13.1.202206130422-r'
     shade 'com.github.mwiede:jsch:0.2.4'

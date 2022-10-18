@@ -15,6 +15,7 @@ public final class Config {
     public Debug debug = new Debug();
     public Server server = new Server();
     public Discord discord = new Discord();
+    public Database database = new Database();
     public boolean autoUpdate = true;
     public int autoUpdateCheckIntervalSeconds = 60;
     public boolean shouldReconnectAfterAutoUpdate = false;
@@ -253,6 +254,7 @@ public final class Config {
             public int position = 10; // Queue position to send warning message at
             public boolean mentionRole = false;
         }
+
         public static class ChatRelay {
             public boolean enable = false;
             public boolean ignoreQueue = true;
@@ -260,6 +262,15 @@ public final class Config {
             public boolean mentionRoleOnNameMention = false;
             public boolean connectionMessages = false;
             public String channelId = "";
+        }
+    }
+
+    public static final class Database {
+        public QueueWait queueWait = new QueueWait();
+
+        public static final class QueueWait {
+            // queue wait time monitor
+            public boolean enabled = true;
         }
     }
 

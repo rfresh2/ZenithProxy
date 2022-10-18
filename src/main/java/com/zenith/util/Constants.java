@@ -56,6 +56,7 @@ public class Constants {
     public static final Logger MODULE_LOG = LoggerFactory.getLogger("Module");
     public static final Logger SERVER_LOG = LoggerFactory.getLogger("Server");
     public static final Logger DISCORD_LOG = LoggerFactory.getLogger("Discord");
+    public static final Logger DATABASE_LOG = LoggerFactory.getLogger("Database");
 
     public static final File CONFIG_FILE = new File("config.json");
     public static final String SERVER_RESTARTING = "Server restarting";
