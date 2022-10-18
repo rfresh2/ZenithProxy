@@ -56,7 +56,7 @@ public class QueueWaitDatabase extends Database {
                     .set(q.PRIO, CONFIG.authentication.prio)
                     .set(q.INITIAL_QUEUE_LEN, initialQueueLen)
                     .set(q.START_QUEUE_TIME, initialQueueTime.atOffset(ZoneOffset.UTC)) // must be UTC
-                    .set(q.END_QUEUE_TIME, initialQueueTime.atOffset(ZoneOffset.UTC))
+                    .set(q.END_QUEUE_TIME, endQueueTime.atOffset(ZoneOffset.UTC))
                     .execute();
         } catch (final SQLException e) {
             DATABASE_LOG.error("Error writing queue wait", e);
