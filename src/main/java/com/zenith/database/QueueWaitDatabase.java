@@ -4,8 +4,9 @@ import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.database.dto.tables.Queuewait;
 import com.zenith.event.proxy.QueueCompleteEvent;
+import com.zenith.event.proxy.QueuePositionUpdateEvent;
+import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.event.proxy.StartQueueEvent;
-import com.zenith.util.Queue;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -15,30 +16,56 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DATABASE_LOG;
 
 public class QueueWaitDatabase extends Database {
 
+    private static final Duration MIN_RESTART_COOLDOWN = Duration.ofHours(6);
     private static final Duration MIN_QUEUE_DURATION = Duration.ofMinutes(3);
-    private int initialQueueLen = 0;
-    private Instant initialQueueTime = Instant.EPOCH;
+    private final AtomicBoolean shouldUpdateQueueLen = new AtomicBoolean(false);
+    private Integer initialQueueLen = null;
+    private Instant initialQueueTime = null;
+    private Instant lastServerRestart = Instant.EPOCH;
 
     public QueueWaitDatabase(ConnectionPool connectionPool, Proxy proxy) {
         super(connectionPool, proxy);
     }
 
     @Subscribe
+    public void handleServerRestart(final ServerRestartingEvent event) {
+        lastServerRestart = Instant.now();
+    }
+
+    @Subscribe
     public void handleStartQueue(final StartQueueEvent event) {
-        // technically we could also get this from first queue update event
-        initialQueueLen = CONFIG.authentication.prio ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular;
-        initialQueueTime = Instant.now();
+        shouldUpdateQueueLen.set(true);
+        initialQueueLen = null;
+        initialQueueTime = null;
+    }
+
+    @Subscribe
+    public void handleQueuePosition(final QueuePositionUpdateEvent event) {
+        // record only first position update
+        if (shouldUpdateQueueLen.compareAndSet(true, false)) {
+            initialQueueLen = event.position;
+            initialQueueTime = Instant.now();
+        }
     }
 
     @Subscribe
     public void handleQueueComplete(final QueueCompleteEvent event) {
-        Instant queueCompleteTime = Instant.now();
+        final Instant queueCompleteTime = Instant.now();
+
+        // filter out queue waits that happened directly after a server restart
+        // these aren't very representative of normal queue waits
+        // there might be a better way to filter these out
+        if (!queueCompleteTime.minus(MIN_RESTART_COOLDOWN).isAfter(lastServerRestart)) {
+            return;
+        }
+
         // don't think there's much value in storing queue skips or immediate prio queues
         // will just need to filter them out in queries after
         // if there is a use case, just remove the condition
