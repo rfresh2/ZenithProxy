@@ -41,7 +41,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             return;
         }
         connection.setPlayer(true);
-        if (this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
+        if (!connection.isOnlySpectator() && this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
             // if we don't have a current player, set player
             connection.setSpectator(false);
             GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
@@ -56,23 +56,26 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getWorldType(),
                     CACHE.getPlayerCache().isReducedDebugInfo()
             ));
-        } else if (CONFIG.server.allowSpectator) {
-            // if we have a current player, allow login but put in spectator
-            connection.setSpectator(true);
-            GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-            EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
-            session.send(new ServerJoinGamePacket(
-                    connection.getSpectatorSelfEntityId(),
-                    CACHE.getPlayerCache().isHardcore(),
-                    GameMode.SPECTATOR,
-                    CACHE.getPlayerCache().getDimension(),
-                    CACHE.getPlayerCache().getDifficulty(),
-                    CACHE.getPlayerCache().getMaxPlayers(),
-                    CACHE.getPlayerCache().getWorldType(),
-                    CACHE.getPlayerCache().isReducedDebugInfo()
-            ));
         } else {
-            connection.disconnect("§cA client is already connected to this bot!");
+            if (nonNull(this.proxy.getCurrentPlayer().get())) {
+                // if we have a current player, allow login but put in spectator
+                connection.setSpectator(true);
+                GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
+                EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
+                session.send(new ServerJoinGamePacket(
+                        connection.getSpectatorSelfEntityId(),
+                        CACHE.getPlayerCache().isHardcore(),
+                        GameMode.SPECTATOR,
+                        CACHE.getPlayerCache().getDimension(),
+                        CACHE.getPlayerCache().getDifficulty(),
+                        CACHE.getPlayerCache().getMaxPlayers(),
+                        CACHE.getPlayerCache().getWorldType(),
+                        CACHE.getPlayerCache().isReducedDebugInfo()
+                ));
+            } else {
+                // can probably make this state work with some more work but im just gonna block it for now
+                connection.disconnect("A player must be connected in order to spectate!");
+            }
         }
     }
 }

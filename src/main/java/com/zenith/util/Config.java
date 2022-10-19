@@ -198,8 +198,20 @@ public final class Config {
         public boolean kickPrevious = false;
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
-        public boolean allowSpectator = true;
-        public String spectatorEntity = "cat";
+
+
+        public Spectator spectator = new Spectator();
+
+        public static final class Spectator {
+            public boolean allowSpectator = true;
+            public String spectatorEntity = "cat";
+            public boolean spectatorPublicChatEnabled = true;
+
+            /**
+             * Players who are allowed to spectate but are not necessarily on the whitelist.
+             */
+            public List<String> spectatorWhitelist = new ArrayList<>();
+        }
 
 
         public static final class Bind {

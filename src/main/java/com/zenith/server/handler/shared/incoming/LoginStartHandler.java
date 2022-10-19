@@ -13,13 +13,17 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
     @Override
     public boolean apply(@NonNull LoginStartPacket packet, @NonNull ServerConnection session) {
         if (CONFIG.server.extra.whitelist.enable && !isUserWhitelisted(packet.getUsername())) {
-            SERVER_LOG.warn("User {} [{}] tried to connect!", packet.getUsername(), session.getRemoteAddress());
-            EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));
-            session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
-            return false;
+            if (!CONFIG.server.spectator.allowSpectator || !isUserSpectatorWhitelisted(packet.getUsername())) {
+                SERVER_LOG.warn("User {} [{}] tried to connect!", packet.getUsername(), session.getRemoteAddress());
+                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Not Whitelisted User: " + packet.getUsername() + "[" + session.getRemoteAddress() + "] tried to connect!"));
+                session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+                return false;
+            } else if (CONFIG.server.spectator.allowSpectator && isUserSpectatorWhitelisted(packet.getUsername())) {
+                session.setOnlySpectator(true);
+            }
         }
         if (!Proxy.getInstance().isConnected()) {
-            if (CONFIG.client.extra.autoConnectOnLogin) {
+            if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
                 Proxy.getInstance().connect();
             } else {
                 session.disconnect("Not connected to server!");
@@ -30,6 +34,11 @@ public class LoginStartHandler implements HandlerRegistry.IncomingHandler<LoginS
 
     public boolean isUserWhitelisted(String loggingInUser) {
         return CONFIG.server.extra.whitelist.allowedUsers.stream()
+                .anyMatch(user -> user.equalsIgnoreCase(loggingInUser));
+    }
+
+    public boolean isUserSpectatorWhitelisted(String loggingInUser) {
+        return CONFIG.server.spectator.spectatorWhitelist.stream()
                 .anyMatch(user -> user.equalsIgnoreCase(loggingInUser));
     }
 

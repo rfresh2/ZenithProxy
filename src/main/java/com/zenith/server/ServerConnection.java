@@ -50,6 +50,7 @@ public class ServerConnection implements Session, SessionListener {
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
     protected boolean isSpectator = false;
+    protected boolean onlySpectator = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
@@ -185,7 +186,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public void initSpectatorEntity() {
-        this.spectatorEntity = SpectatorEntityRegistry.getSpectatorEntityWithDefault(CONFIG.server.spectatorEntity);
+        this.spectatorEntity = SpectatorEntityRegistry.getSpectatorEntityWithDefault(CONFIG.server.spectator.spectatorEntity);
     }
 
     // todo: might rework this to handle respawns in some central place

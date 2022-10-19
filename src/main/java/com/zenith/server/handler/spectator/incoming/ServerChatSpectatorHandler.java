@@ -10,6 +10,7 @@ import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.util.spectator.SpectatorEntityRegistry;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.CONFIG;
 
 public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, ServerConnection> {
 
@@ -24,7 +25,11 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
             session.send(new ServerChatPacket("§7§cetoggle §7- §8Hide your entity from yourself", true));
             session.send(new ServerChatPacket("§7§ce §7- §8List spectator entities. Change with \"!e <entity>\"", true));
         } else if (packet.getMessage().toLowerCase().startsWith("!m")) {
-            session.getProxy().getClient().send(new ClientChatPacket(packet.getMessage().substring(2).trim()));
+            if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
+                session.getProxy().getClient().send(new ClientChatPacket(packet.getMessage().substring(2).trim()));
+            } else {
+                session.send(new ServerChatPacket("§cSpectator chat disabled§r", true));
+            }
         } else if (packet.getMessage().toLowerCase().startsWith("!etoggle")) {
             session.setShowSelfEntity(!session.isShowSelfEntity());
             if (session.isShowSelfEntity()) {

@@ -20,7 +20,7 @@ public class WhitelistCommand extends Command {
     public WhitelistCommand(Proxy proxy) {
         super(proxy, "whitelist", "Manage the proxy's whitelist. Only usable by users with the account owner role."
                 + "\nUsage:"
-                + "\n " + CONFIG.discord.prefix + "whitelist add/del <username>"
+                + "\n " + CONFIG.discord.prefix + "whitelist add/del <player>"
                 + "\n " + CONFIG.discord.prefix + "whitelist list"
                 + "\n " + CONFIG.discord.prefix + "whitelist clear");
     }
@@ -59,14 +59,14 @@ public class WhitelistCommand extends Command {
                 CONFIG.server.extra.whitelist.allowedUsers.add(commandArgs.get(2));
             }
             embedBuilder
-                    .title("Added user: " + commandArgs.get(2) + " To Whitelist")
+                    .title("Added user: " + escape(commandArgs.get(2)) + " To Whitelist")
                     .color(Color.CYAN)
                     .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                             false);
         } else if (commandArgs.get(1).equalsIgnoreCase("del")) {
             CONFIG.server.extra.whitelist.allowedUsers.removeIf(s -> s.equalsIgnoreCase(commandArgs.get(2)));
             embedBuilder
-                    .title("Removed user: " + commandArgs.get(2) + " From Whitelist")
+                    .title("Removed user: " + escape(commandArgs.get(2)) + " From Whitelist")
                     .color(Color.CYAN)
                     .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                             false);

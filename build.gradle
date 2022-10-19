@@ -92,16 +92,6 @@ jooq {
                         name = 'org.jooq.meta.postgres.PostgresDatabase'
                         inputSchema = 'public'
                         forcedTypes {
-                            forcedType {
-                                name = 'varchar'
-                                includeExpression = '.*'
-                                includeTypes = 'JSONB?'
-                            }
-                            forcedType {
-                                name = 'varchar'
-                                includeExpression = '.*'
-                                includeTypes = 'INET'
-                            }
                         }
                     }
                     generate {
