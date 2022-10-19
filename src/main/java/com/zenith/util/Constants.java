@@ -42,6 +42,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class Constants {
@@ -72,6 +74,7 @@ public class Constants {
     public static final DiscordBot DISCORD_BOT;
     public static final EventBus EVENT_BUS;
     public static final ExecutorService MODULE_EXECUTOR_SERVICE;
+    public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
 
 
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
@@ -202,6 +205,7 @@ public class Constants {
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
         MODULE_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1);
+        SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
     }
 
     public static volatile boolean SHOULD_RECONNECT;

@@ -1,28 +1,58 @@
 package com.zenith.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
+import com.zenith.Proxy;
 import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RespawnHandler implements HandlerRegistry.AsyncIncomingHandler<ServerRespawnPacket, ClientSession> {
+import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
+import static java.util.Arrays.asList;
+
+public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, ClientSession> {
+
+    private final AtomicBoolean isSpectatorRespawning = new AtomicBoolean(false);
+
     @Override
-    public boolean applyAsync(@NonNull ServerRespawnPacket packet, @NonNull ClientSession session) {
+    public boolean apply(@NonNull ServerRespawnPacket packet, @NonNull ClientSession session) {
+        // must send respawn packet before cache gets reset
+        // lots of race conditions with packet sequence could happen
+        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
+            connection.send(new ServerRespawnPacket(
+                    packet.getDimension(),
+                    CACHE.getPlayerCache().getDifficulty(),
+                    GameMode.SPECTATOR,
+                    CACHE.getPlayerCache().getWorldType()
+            ));
+        });
+        if (isSpectatorRespawning.compareAndSet(false, true)) {
+            /**
+             * see https://c4k3.github.io/wiki.vg/Protocol.html#Respawn
+             * If you must respawn a player in the same dimension without killing them,
+             * send two respawn packets, one to a different world and then another to the
+             * world you want. You do not need to complete the first respawn;
+             * it only matters that you send two packets.
+             */
+            // we need this method to be invoked *after* the 2nd respawn packet
+            // and we only want to invoke it once (on the first)
+            // delay is a hacky workaround and might still get caught in race condition sometimes
+            SCHEDULED_EXECUTOR_SERVICE.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
+        }
         if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
             CACHE.reset(false);
             // only partial reset chunk and entity cache?
-            disconnectSpectators(session, "Player changed dimensions");
-        } else {
-            disconnectSpectators(session, "Player respawned");
         }
         CACHE.getPlayerCache()
                 .setDimension(packet.getDimension())
                 .setGameMode(packet.getGameMode())
                 .setWorldType(packet.getWorldType())
                 .setDifficulty(packet.getDifficulty());
-
         return true;
     }
 
@@ -31,12 +61,14 @@ public class RespawnHandler implements HandlerRegistry.AsyncIncomingHandler<Serv
         return ServerRespawnPacket.class;
     }
 
-    // todo: handle this situation without disconnecting spectators
-    //  on next PlayerPositionRotation we need to spawn spectators back both on their side and current player side
-    private void disconnectSpectators(ClientSession clientSession, final String reason)
-    {
-        clientSession.getProxy().getSpectatorConnections().forEach(connection -> {
-            connection.disconnect(reason);
-        });
+    private void spectatorRespawn() {
+        try {
+            // load world and init self
+            Proxy.getInstance().getSpectatorConnections().forEach(session -> {
+                SpectatorHelper.initSpectator(session, () -> asList(CACHE.getChunkCache(), CACHE.getEntityCache(), CACHE.getMapDataCache(), session.getSpectatorPlayerCache()));
+            });
+        } finally {
+            isSpectatorRespawning.set(false);
+        }
     }
 }
