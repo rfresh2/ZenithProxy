@@ -94,6 +94,7 @@ public class DiscordBot {
         commands.add(new PrioCommand(this.proxy));
         commands.add(new AutoReplyCommand(this.proxy));
         commands.add(new QueueWarningCommand(this.proxy));
+        commands.add(new KickCommand(this.proxy));
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
