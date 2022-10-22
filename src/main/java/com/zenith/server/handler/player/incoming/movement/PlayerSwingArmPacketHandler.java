@@ -22,6 +22,6 @@ public class PlayerSwingArmPacketHandler implements HandlerRegistry.AsyncIncomin
 
     @Override
     public Class<ClientPlayerSwingArmPacket> getPacketClass() {
-        return null;
+        return ClientPlayerSwingArmPacket.class;
     }
 }
