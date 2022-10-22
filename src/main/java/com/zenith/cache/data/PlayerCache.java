@@ -90,7 +90,7 @@ public class PlayerCache implements CachedData {
 
     public void setInventorySlot(ItemStack newItemStack, int slot) {
         this.inventory[slot] = newItemStack;
-        if (slot >=5 && slot <= 9) {
+        if (slot >= 5 && slot <= 8 || slot == 45) {
             switch (slot) {
                 case 5:
                     this.getThePlayer().getEquipment().put(EquipmentSlot.HELMET, newItemStack);
@@ -104,7 +104,7 @@ public class PlayerCache implements CachedData {
                 case 8:
                     this.getThePlayer().getEquipment().put(EquipmentSlot.BOOTS, newItemStack);
                     break;
-                case 9:
+                case 45:
                     this.getThePlayer().getEquipment().put(EquipmentSlot.OFF_HAND, newItemStack);
                     break;
             }
