@@ -77,7 +77,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 session.send(new ServerChatPacket("§cSpectators toggled " + (CONFIG.server.spectator.allowSpectator ? "on" : "off") + "§r", true));
                 return false;
             } else if (packet.getMessage().toLowerCase().startsWith("!sync")) {
-                PlayerCache.syncInv();
+                PlayerCache.sync();
                 return false;
             }
             else {

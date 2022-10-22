@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.window.ClickItemParam;
 import com.github.steveice10.mc.protocol.data.game.window.WindowAction;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
@@ -25,6 +26,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+
+import static com.zenith.util.Constants.CACHE;
 
 
 @Getter
@@ -81,10 +84,15 @@ public class PlayerCache implements CachedData {
         );
     }
 
-    public static void syncInv() {
+    public static void sync() {
         // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
         // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
-        Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, 1, 1, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
+        Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, 0, 0, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
+        double x = CACHE.getPlayerCache().getX();
+        double y = CACHE.getPlayerCache().getY() + 1000d;
+        double z = CACHE.getPlayerCache().getZ();
+        // one of 2b2t's plugins requires this (as of 2022)
+        Proxy.getInstance().getClient().send(new ClientPlayerPositionPacket(true, x, y, z));
     }
     public void setInventory(ItemStack[] newInventory) {
         System.arraycopy(newInventory, 0, this.inventory, 0, Math.min(this.inventory.length, newInventory.length));
