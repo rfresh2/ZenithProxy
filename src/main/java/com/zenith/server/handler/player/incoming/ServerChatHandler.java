@@ -2,6 +2,7 @@ package com.zenith.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.zenith.cache.data.PlayerCache;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Queue;
 import com.zenith.util.handler.HandlerRegistry;
@@ -75,7 +76,11 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 }
                 session.send(new ServerChatPacket("§cSpectators toggled " + (CONFIG.server.spectator.allowSpectator ? "on" : "off") + "§r", true));
                 return false;
-            } else {
+            } else if (packet.getMessage().toLowerCase().startsWith("!sync")) {
+                PlayerCache.syncInv();
+                return false;
+            }
+            else {
                 session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §cUnknown command: §o%s", packet.getMessage()), true));
                 return false;
             }

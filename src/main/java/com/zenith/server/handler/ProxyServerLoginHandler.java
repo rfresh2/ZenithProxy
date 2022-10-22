@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
+import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.server.ProxyServerListener;
@@ -56,6 +57,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getWorldType(),
                     CACHE.getPlayerCache().isReducedDebugInfo()
             ));
+            PlayerCache.syncInv();
         } else {
             if (nonNull(this.proxy.getCurrentPlayer().get())) {
                 // if we have a current player, allow login but put in spectator
