@@ -74,6 +74,7 @@ jooq {
             generateSchemaSourceOnCompilation = true  // default (can be omitted)
 
             generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc {
                     driver = 'org.postgresql.Driver'
                     url = 'jdbc:postgresql://mc-proxy.czyfkzmxjkdp.us-east-1.rds.amazonaws.com:5432/postgres'
@@ -168,5 +169,7 @@ shadowJar {
                 "Main-Class": "com.zenith.Proxy"
     }
 }
+
+tasks.named('generateJooq').configure { allInputsDeclared = true }
 
 build.dependsOn(shadowJar)
