@@ -57,7 +57,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getWorldType(),
                     CACHE.getPlayerCache().isReducedDebugInfo()
             ));
-            PlayerCache.syncInv();
+            if (!proxy.isInQueue()) { PlayerCache.syncInv(); }
         } else {
             if (nonNull(this.proxy.getCurrentPlayer().get())) {
                 // if we have a current player, allow login but put in spectator
