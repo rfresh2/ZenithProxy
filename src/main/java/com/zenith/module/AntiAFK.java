@@ -29,7 +29,7 @@ public class AntiAFK extends Module {
 
     @Subscribe
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.antiafk.enabled && isNull(this.proxy.getCurrentPlayer().get())) {
+        if (CONFIG.client.extra.antiafk.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue()) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
