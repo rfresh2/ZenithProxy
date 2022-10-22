@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.zenith.discord.command.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class DiscordBot {
@@ -385,18 +386,20 @@ public class DiscordBot {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
                 String message = escape(event.message);
-                if (CONFIG.discord.chatRelay.mentionRoleOnWhisper || CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
-                    if (!message.startsWith("<")) {
-                        if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
-                            String[] split = message.split(" ");
-                            if (split.length > 2 && split[1].startsWith("whispers") && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")) {
-                                message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(this.proxy.getCurrentPlayer().get())) {
+                    if (CONFIG.discord.chatRelay.mentionRoleOnWhisper || CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
+                        if (!message.startsWith("<")) {
+                            if (CONFIG.discord.chatRelay.mentionRoleOnWhisper) {
+                                String[] split = message.split(" ");
+                                if (split.length > 2 && split[1].startsWith("whispers") && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")) {
+                                    message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                                }
                             }
-                        }
-                    } else {
-                        if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
-                            if (message.split(" ", 2)[1].toLowerCase().contains(CONFIG.authentication.username.toLowerCase())) {
-                                message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                        } else {
+                            if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
+                                if (message.split(" ", 2)[1].toLowerCase().contains(CONFIG.authentication.username.toLowerCase())) {
+                                    message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                                }
                             }
                         }
                     }
