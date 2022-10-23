@@ -87,7 +87,7 @@ public class PlayerCache implements CachedData {
     public static void sync() {
         // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
         // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
-        Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, 0, 0, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
+        Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, -1337, 0, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
         double x = CACHE.getPlayerCache().getX();
         double y = CACHE.getPlayerCache().getY() + 1000d;
         double z = CACHE.getPlayerCache().getZ();

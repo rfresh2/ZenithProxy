@@ -89,6 +89,7 @@ public class Constants {
             .registerInbound(new ChatHandler())
             .registerInbound(new ChunkDataHandler())
             .registerInbound(new ClientKeepaliveHandler())
+            .registerInbound(new ConfirmTransactionHandler())
             .registerInbound(new GameStateHandler())
             .registerInbound(new JoinGameHandler())
             .registerInbound(new LoginSuccessHandler())
