@@ -24,7 +24,9 @@ public class VisualRangeCommand extends Command {
                 + "\nUsage:"
                 + "\n  " + CONFIG.discord.prefix + "visualRange on/off"
                 + "\n  " + CONFIG.discord.prefix + "visualRange mention on/off"
-                + "\n  " + CONFIG.discord.prefix + "visualRange friend add/del <username>");
+                + "\n  " + CONFIG.discord.prefix + "visualRange friend add/del <username>"
+                + "\n  " + CONFIG.discord.prefix + "visualRange friend list"
+                + "\n  " + CONFIG.discord.prefix + "visualRange friend clear");
     }
 
     @Override
@@ -48,7 +50,22 @@ public class VisualRangeCommand extends Command {
                     .title("VisualRange Off!")
                     .color(Color.CYAN);
         } else if (commandArgs.get(1).equalsIgnoreCase("friend")) {
-            if (commandArgs.size() < 4) {
+            if (commandArgs.size() < 3) {
+                embedBuilder
+                        .title("Invalid command usage")
+                        .addField("Usage", this.description, false)
+                        .color(Color.RUBY);
+            } else if (commandArgs.get(2).equalsIgnoreCase("list")) {
+                embedBuilder
+                        .title("Friend list")
+                        .addField("Friend List", friendListString(), false)
+                        .color(Color.CYAN);
+            } else if (commandArgs.get(2).equalsIgnoreCase("clear")) {
+                CONFIG.client.extra.friendList.clear();
+                embedBuilder
+                        .title("Friend list cleared!")
+                        .color(Color.CYAN);
+            } if (commandArgs.size() < 4) {
                 embedBuilder
                         .title("Invalid command usage")
                         .addField("Usage", this.description, false)
