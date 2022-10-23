@@ -6,6 +6,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.discord.command.*;
+import com.zenith.discord.command.brigadier.BrigadierCommandManager;
 import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
@@ -97,6 +98,8 @@ public class DiscordBot {
         commands.add(new QueueWarningCommand(this.proxy));
         commands.add(new KickCommand(this.proxy));
 
+        final BrigadierCommandManager brigadierCommandManager = new BrigadierCommandManager();
+
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
@@ -111,19 +114,24 @@ public class DiscordBot {
             if (!message.startsWith(CONFIG.discord.prefix)) {
                 return;
             }
-            commands.stream()
-                    .filter(command -> message.toLowerCase(Locale.ROOT).startsWith(CONFIG.discord.prefix + command.getName().toLowerCase(Locale.ROOT)))
-                    .findFirst()
-                    .ifPresent(command -> {
-                        try {
-                            MultipartRequest<MessageCreateRequest> m = command.execute(event, mainRestChannel.get());
-                            if (m != null) {
-                                mainChannelMessageQueue.add(m);
+            MultipartRequest<MessageCreateRequest> request = brigadierCommandManager.execute(message.substring(1), event);
+            if (request != null) {
+                mainChannelMessageQueue.add(request);
+            } else {
+                commands.stream()
+                        .filter(command -> message.toLowerCase(Locale.ROOT).startsWith(CONFIG.discord.prefix + command.getName().toLowerCase(Locale.ROOT)))
+                        .findFirst()
+                        .ifPresent(command -> {
+                            try {
+                                MultipartRequest<MessageCreateRequest> m = command.execute(event, mainRestChannel.get());
+                                if (m != null) {
+                                    mainChannelMessageQueue.add(m);
+                                }
+                            } catch (final Exception e) {
+                                DISCORD_LOG.error("Error executing discord command: {}", command, e);
                             }
-                        } catch (final Exception e) {
-                            DISCORD_LOG.error("Error executing discord command: {}", command, e);
-                        }
-                    });
+                        });
+            }
         });
 
         if (CONFIG.discord.isUpdating) {
