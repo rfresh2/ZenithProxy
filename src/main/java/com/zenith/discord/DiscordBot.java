@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
-import com.zenith.discord.command.brigadier.BrigadierCommandManager;
+import com.zenith.discord.command.CommandManager;
 import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.discord.command.brigadier.impl.StatusBrigadierCommand.getCoordinates;
+import static com.zenith.discord.command.impl.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -71,7 +71,7 @@ public class DiscordBot {
 
         restClient = client.getRestClient();
 
-        final BrigadierCommandManager brigadierCommandManager = new BrigadierCommandManager();
+        final CommandManager commandManager = new CommandManager();
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
@@ -87,9 +87,13 @@ public class DiscordBot {
             if (!message.startsWith(CONFIG.discord.prefix)) {
                 return;
             }
-            MultipartRequest<MessageCreateRequest> request = brigadierCommandManager.execute(message.substring(1), event, mainRestChannel.get());
-            if (request != null) {
-                mainChannelMessageQueue.add(request);
+            try {
+                MultipartRequest<MessageCreateRequest> request = commandManager.execute(message.substring(1), event, mainRestChannel.get());
+                if (request != null) {
+                    mainChannelMessageQueue.add(request);
+                }
+            } catch (final Exception e) {
+                DISCORD_LOG.error("Failed processing discord command: {}", message, e);
             }
         });
 
