@@ -44,7 +44,7 @@ public abstract class Command {
     }
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {
-        return CaseInsensitiveLiteralArgumentBuilder.literal(literal.toLowerCase());
+        return CaseInsensitiveLiteralArgumentBuilder.literal(literal);
     }
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal, Function<CommandContext, Void> errorHandler) {

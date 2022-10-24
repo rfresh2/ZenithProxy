@@ -18,7 +18,7 @@ public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> 
     private final Function<CommandContext, Void> errorHandler;
 
     public CaseInsensitiveLiteralCommandNode(String literal, Command<S> command, Predicate<S> requirement, CommandNode<S> redirect, RedirectModifier<S> modifier, boolean forks, Function<CommandContext, Void> errorHandler) {
-        super(literal, command, requirement, redirect, modifier, forks);
+        super(literal.toLowerCase(), command, requirement, redirect, modifier, forks);
         this.errorHandler = errorHandler;
     }
 

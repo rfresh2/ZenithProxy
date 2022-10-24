@@ -18,7 +18,8 @@ public class CaseInsensitiveLiteralArgumentBuilder<S> extends LiteralArgumentBui
     }
 
     public static <S> CaseInsensitiveLiteralArgumentBuilder<S> literal(final String name, Function<CommandContext, Void> errorHandler) {
-        return new CaseInsensitiveLiteralArgumentBuilder<>(name);
+        final CaseInsensitiveLiteralArgumentBuilder<S> builder = literal(name);
+        return builder.withErrorHandler(errorHandler);
     }
 
     public CaseInsensitiveLiteralArgumentBuilder<S> withErrorHandler(Function<CommandContext, Void> errorHandler) {
