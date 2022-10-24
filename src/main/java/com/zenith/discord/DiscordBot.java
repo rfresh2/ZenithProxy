@@ -88,7 +88,9 @@ public class DiscordBot {
                 return;
             }
             try {
-                MultipartRequest<MessageCreateRequest> request = commandManager.execute(message.substring(1), event, mainRestChannel.get());
+                final String commandInput = message.substring(1);
+                DISCORD_LOG.debug("Executing discord command: {}", commandInput);
+                MultipartRequest<MessageCreateRequest> request = commandManager.execute(commandInput, event, mainRestChannel.get());
                 if (request != null) {
                     mainChannelMessageQueue.add(request);
                 }

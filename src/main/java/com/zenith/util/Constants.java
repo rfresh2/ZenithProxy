@@ -230,7 +230,7 @@ public class Constants {
     }
 
     public static synchronized void saveConfig() {
-        DEFAULT_LOG.info("Saving config...");
+        DEFAULT_LOG.debug("Saving config...");
 
         if (CONFIG == null) {
             DEFAULT_LOG.warn("Config is not set, saving default config!");
@@ -243,6 +243,6 @@ public class Constants {
             throw new RuntimeException("Unable to save config!", e);
         }
 
-        DEFAULT_LOG.info("Config saved.");
+        DEFAULT_LOG.debug("Config saved.");
     }
 }
