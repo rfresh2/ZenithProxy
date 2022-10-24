@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DISCORD_BOT;
 
 public class HelpBrigadierCommand extends BrigadierCommand {
     @Override
@@ -31,16 +30,12 @@ public class HelpBrigadierCommand extends BrigadierCommand {
                             c.getSource().getEmbedBuilder()
                                     .title("Proxy Commands")
                                     .color(Color.CYAN);
-                            final String legacyCommands = DISCORD_BOT.commands.stream()
-                                    .sorted((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()))
-                                    .map(command -> CONFIG.discord.prefix + command.getName())
-                                    .collect(Collectors.joining("\n"));
                             final String brigadierCommands = c.getSource().getCommandManager().getCommands().stream()
                                     .sorted((c1, c2) -> c1.commandUsage().getName().compareToIgnoreCase(c2.commandUsage().getName()))
                                     .map(command -> command.commandUsage().shortSerialize())
                                     .collect(Collectors.joining("\n"));
                             c.getSource().getEmbedBuilder()
-                                    .description("More info: \n  " + CONFIG.discord.prefix + "help <command>\n\n" + legacyCommands + "\n" + brigadierCommands);
+                                    .description("More info: \n  " + CONFIG.discord.prefix + "help <command>\n\n" + brigadierCommands);
                         })
                         .then(argument("commandName", string()).executes(c -> {
                             c.getSource().getEmbedBuilder()

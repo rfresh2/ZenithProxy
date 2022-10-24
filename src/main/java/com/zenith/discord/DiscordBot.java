@@ -5,7 +5,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
-import com.zenith.discord.command.*;
 import com.zenith.discord.command.brigadier.BrigadierCommandManager;
 import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
@@ -29,13 +28,15 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.discord.command.StatusCommand.getCoordinates;
+import static com.zenith.discord.command.brigadier.impl.StatusBrigadierCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -53,12 +54,10 @@ public class DiscordBot {
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
     private final ScheduledExecutorService scheduledExecutorService;
     private static HashMap<String, Long> repliedPlayers = new HashMap<String, Long>();
-    public List<Command> commands;
 
     public DiscordBot() {
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
-        this.commands = new ArrayList<>();
     }
 
     public void start(Proxy proxy) {
@@ -71,32 +70,6 @@ public class DiscordBot {
         EVENT_BUS.subscribe(this);
 
         restClient = client.getRestClient();
-
-        commands.add(new ConnectCommand(this.proxy));
-        commands.add(new DisconnectCommand(this.proxy));
-        commands.add(new StatusCommand(this.proxy));
-        commands.add(new HelpCommand(this.proxy, this.commands));
-        commands.add(new WhitelistCommand(this.proxy));
-        commands.add(new AutoDisconnectCommand(this.proxy));
-        commands.add(new AutoReconnectCommand(this.proxy));
-        commands.add(new AutoRespawnCommand(this.proxy));
-        commands.add(new ServerCommand(this.proxy));
-        commands.add(new AntiAFKCommand(this.proxy));
-        commands.add(new VisualRangeCommand(this.proxy));
-        commands.add(new UpdateCommand(this.proxy));
-        commands.add(new ProxyClientConnectionCommand(this.proxy));
-        commands.add(new ActiveHoursCommand(this.proxy));
-        commands.add(new DisplayCoordsCommand(this.proxy));
-        commands.add(new ChatRelayCommand(this.proxy));
-        commands.add(new ReconnectCommand(this.proxy));
-        commands.add(new AutoUpdateCommand(this.proxy));
-        commands.add(new StalkCommand(this.proxy));
-        commands.add(new TablistCommand(this.proxy));
-        commands.add(new SpectatorCommand(this.proxy));
-        commands.add(new PrioCommand(this.proxy));
-        commands.add(new AutoReplyCommand(this.proxy));
-        commands.add(new QueueWarningCommand(this.proxy));
-        commands.add(new KickCommand(this.proxy));
 
         final BrigadierCommandManager brigadierCommandManager = new BrigadierCommandManager();
 
@@ -114,23 +87,9 @@ public class DiscordBot {
             if (!message.startsWith(CONFIG.discord.prefix)) {
                 return;
             }
-            MultipartRequest<MessageCreateRequest> request = brigadierCommandManager.execute(message.substring(1), event);
+            MultipartRequest<MessageCreateRequest> request = brigadierCommandManager.execute(message.substring(1), event, mainRestChannel.get());
             if (request != null) {
                 mainChannelMessageQueue.add(request);
-            } else {
-                commands.stream()
-                        .filter(command -> message.toLowerCase(Locale.ROOT).startsWith(CONFIG.discord.prefix + command.getName().toLowerCase(Locale.ROOT)))
-                        .findFirst()
-                        .ifPresent(command -> {
-                            try {
-                                MultipartRequest<MessageCreateRequest> m = command.execute(event, mainRestChannel.get());
-                                if (m != null) {
-                                    mainChannelMessageQueue.add(m);
-                                }
-                            } catch (final Exception e) {
-                                DISCORD_LOG.error("Error executing discord command: {}", command, e);
-                            }
-                        });
             }
         });
 

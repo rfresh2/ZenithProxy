@@ -4,14 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.zenith.discord.command.brigadier.impl.AutoReconnectBrigadierCommand;
-import com.zenith.discord.command.brigadier.impl.AutoUpdateBrigadierCommand;
-import com.zenith.discord.command.brigadier.impl.HelpBrigadierCommand;
-import com.zenith.discord.command.brigadier.impl.KickBrigadierCommand;
+import com.zenith.discord.command.brigadier.impl.*;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.MessageCreateRequest;
+import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
 
@@ -36,16 +34,35 @@ public class BrigadierCommandManager {
 
     private void registerCommands() {
         this.commands = asList(
-                new AutoUpdateBrigadierCommand(),
+                new ActiveHoursBrigadierCommand(),
+                new AntiAFKBrigadierCommand(),
+                new AutoDisconnectBrigadierCommand(),
                 new AutoReconnectBrigadierCommand(),
+                new AutoReplyBrigadierCommand(),
+                new AutoRespawnBrigadierCommand(),
+                new AutoUpdateBrigadierCommand(),
+                new ChatRelayBrigadierCommand(),
+                new ConnectBrigadierCommand(),
+                new DisconnectBrigadierCommand(),
+                new DisplayCoordsBrigadierCommand(),
+                new HelpBrigadierCommand(),
                 new KickBrigadierCommand(),
-                new HelpBrigadierCommand()
+                new PrioBrigadierCommand(),
+                new ProxyClientConnectionBrigadierCommand(),
+                new QueueWarningBrigadierCommand(),
+                new ReconnectBrigadierCommand(),
+                new ServerBrigadierCommand(),
+                new StalkBrigadierCommand(),
+                new TablistBrigadierCommand(),
+                new UpdateBrigadierCommand(),
+                new VisualRangeBrigadierCommand(),
+                new WhitelistBrigadierCommand()
         );
         this.commands.forEach(c -> c.register(dispatcher));
     }
 
-    public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent) {
-        final CommandContext context = new CommandContext(EmbedCreateSpec.builder(), messageCreateEvent, this);
+    public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent, final RestChannel restChannel) {
+        final CommandContext context = new CommandContext(EmbedCreateSpec.builder(), messageCreateEvent, this, restChannel);
         final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(message), context);
         try {
             executeWithErrorHandler(context, parse);
@@ -55,7 +72,7 @@ public class BrigadierCommandManager {
             // and if this not a matching root command we want to fallback to original commands
         }
         if (!context.getEmbedBuilder().build().isTitlePresent()) {
-            DISCORD_LOG.debug("Failed executing brigadier command: {}", message);
+            DISCORD_LOG.debug("Brigadier command returned no embed: {}", message);
             return null;
         } else {
             saveConfig();

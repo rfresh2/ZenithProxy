@@ -20,7 +20,7 @@ public class AutoUpdateBrigadierCommand extends BrigadierCommand {
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
         dispatcher.register(
-                command("autoupdate")
+                command("autoupdate").requires(this::validateAccountOwner)
                         // todo: could also make an argument type for on/off
                         //  would still need to have an if statement in here so won't be all that much shorter
                         .then(literal("on").executes(c -> {
