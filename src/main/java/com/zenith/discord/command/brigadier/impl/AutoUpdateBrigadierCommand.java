@@ -27,13 +27,11 @@ public class AutoUpdateBrigadierCommand extends BrigadierCommand {
                             CONFIG.autoUpdate = true;
                             Proxy.autoUpdater.start();
                             c.getSource().getEmbedBuilder().title("AutoUpdater On!");
-                            return 1;
                         }))
                         .then(literal("off").executes(c -> {
                             CONFIG.autoUpdate = false;
                             Proxy.autoUpdater.stop();
                             c.getSource().getEmbedBuilder().title("AutoUpdater Off!");
-                            return 1;
                         }))
         );
     }

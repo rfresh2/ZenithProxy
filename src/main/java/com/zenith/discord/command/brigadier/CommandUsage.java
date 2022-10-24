@@ -31,4 +31,8 @@ public class CommandUsage {
                 .map(line -> "\n  " + CONFIG.discord.prefix + name + " " + line)
                 .collect(Collectors.joining());
     }
+
+    public String shortSerialize() {
+        return CONFIG.discord.prefix + this.name;
+    }
 }

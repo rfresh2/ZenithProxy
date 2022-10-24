@@ -26,6 +26,13 @@ public class CaseInsensitiveLiteralArgumentBuilder<S> extends LiteralArgumentBui
         return this;
     }
 
+    public LiteralArgumentBuilder<S> executes(final IExecutes<S> command) {
+        return this.executes((context) -> {
+            command.execute(context);
+            return 1;
+        });
+    }
+
     @Override
     public LiteralCommandNode<S> build() {
         final LiteralCommandNode<S> result = new CaseInsensitiveLiteralCommandNode<>(getLiteral(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), errorHandler);

@@ -8,4 +8,5 @@ import lombok.Data;
 public class CommandContext {
     private final EmbedCreateSpec.Builder embedBuilder;
     private final MessageCreateEvent messageCreateEvent;
+    private final BrigadierCommandManager commandManager;
 }

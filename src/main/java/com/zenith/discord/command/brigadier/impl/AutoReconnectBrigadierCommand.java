@@ -30,7 +30,6 @@ public class AutoReconnectBrigadierCommand extends BrigadierCommand {
                             .addField("Delay", "" + CONFIG.client.extra.autoReconnect.delaySeconds, true)
                             .addField("DelayOffline", "" + CONFIG.client.extra.autoReconnect.delaySecondsOffline, true)
                             .color(Color.CYAN);
-                    return 1;
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.autoReconnect.enabled = false;
@@ -39,7 +38,6 @@ public class AutoReconnectBrigadierCommand extends BrigadierCommand {
                             .addField("Delay", "" + CONFIG.client.extra.autoReconnect.delaySeconds, true)
                             .addField("DelayOffline", "" + CONFIG.client.extra.autoReconnect.delaySecondsOffline, true)
                             .color(Color.CYAN);
-                    return 1;
                 }))
                 .then(literal("delay")
                         .then(argument("delaySec", integer()).executes(c -> {
