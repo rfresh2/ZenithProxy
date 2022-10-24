@@ -9,6 +9,7 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DISCORD_BOT;
@@ -17,6 +18,8 @@ public abstract class BrigadierCommand {
     public static <T> RequiredArgumentBuilder<CommandContext, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
+
+    public abstract CommandUsage commandUsage();
 
     public abstract void register(CommandDispatcher<CommandContext> dispatcher);
 
@@ -42,5 +45,23 @@ public abstract class BrigadierCommand {
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {
         return CaseInsensitiveLiteralArgumentBuilder.literal(literal);
+    }
+
+    public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal, Function<CommandContext, Void> errorHandler) {
+        return literal(literal).withErrorHandler(errorHandler);
+    }
+
+    public CaseInsensitiveLiteralArgumentBuilder<CommandContext> command(String literal) {
+        return literal(literal).withErrorHandler(getUsageErrorHandler());
+    }
+
+    public Function<CommandContext, Void> getUsageErrorHandler() {
+        return context -> {
+            context.getEmbedBuilder()
+                    .title("Invalid command usage")
+                    .addField("Usage", commandUsage().serialize(), false)
+                    .color(Color.RUBY);
+            return null;
+        };
     }
 }

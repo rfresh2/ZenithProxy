@@ -9,15 +9,21 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> {
-    // private access in parent class unfortunately, we'll just shadow it
-    private final String this_literal;
+    private final Function<CommandContext, Void> errorHandler;
 
-    public CaseInsensitiveLiteralCommandNode(String literal, Command<S> command, Predicate<S> requirement, CommandNode<S> redirect, RedirectModifier<S> modifier, boolean forks) {
+    public CaseInsensitiveLiteralCommandNode(String literal, Command<S> command, Predicate<S> requirement, CommandNode<S> redirect, RedirectModifier<S> modifier, boolean forks, Function<CommandContext, Void> errorHandler) {
         super(literal, command, requirement, redirect, modifier, forks);
-        this.this_literal = literal;
+        this.errorHandler = errorHandler;
+    }
+
+    public Optional<Function<CommandContext, Void>> getErrorHandler() {
+        return Optional.ofNullable(errorHandler);
     }
 
     @Override
@@ -29,14 +35,14 @@ public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> 
             return;
         }
 
-        throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.literalIncorrect().createWithContext(reader, this_literal);
+        throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.literalIncorrect().createWithContext(reader, getLiteral());
     }
 
     private int parse(final StringReader reader) {
         final int start = reader.getCursor();
-        if (reader.canRead(this_literal.length())) {
-            final int end = start + this_literal.length();
-            if (reader.getString().substring(start, end).equalsIgnoreCase(this_literal)) {
+        if (reader.canRead(getLiteral().length())) {
+            final int end = start + getLiteral().length();
+            if (reader.getString().substring(start, end).equalsIgnoreCase(getLiteral())) {
                 reader.setCursor(end);
                 if (!reader.canRead() || reader.peek() == ' ') {
                     return end;
@@ -46,5 +52,12 @@ public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> 
             }
         }
         return -1;
+    }
+
+    @Override
+    public Collection<? extends CommandNode<S>> getRelevantNodes(final StringReader input) {
+        final StringReader stringReader = new StringReader(input.getString().toLowerCase());
+        stringReader.setCursor(input.getCursor());
+        return super.getRelevantNodes(stringReader);
     }
 }
