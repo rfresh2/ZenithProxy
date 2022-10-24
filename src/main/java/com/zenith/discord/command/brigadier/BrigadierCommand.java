@@ -5,14 +5,12 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DISCORD_BOT;
 
 public abstract class BrigadierCommand {
     public static <T> RequiredArgumentBuilder<CommandContext, T> argument(String name, ArgumentType<T> type) {
@@ -23,8 +21,9 @@ public abstract class BrigadierCommand {
 
     public abstract void register(CommandDispatcher<CommandContext> dispatcher);
 
-    void validateUserHasAccountOwnerRole(MessageCreateEvent event) {
-        Optional<String> roleContainsOptional = event.getMember()
+    public boolean validateAccountOwner(final CommandContext context) {
+        final MessageCreateEvent event = context.getMessageCreateEvent();
+        final Optional<String> roleContainsOptional = event.getMember()
                 .orElseThrow(() -> new RuntimeException("Message does not have a valid member"))
                 .getRoleIds()
                 .stream()
@@ -32,15 +31,16 @@ public abstract class BrigadierCommand {
                 .filter(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId))
                 .findAny();
         if (!roleContainsOptional.isPresent()) {
-            DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
+            context.getEmbedBuilder()
                     .title("Not Authorized!")
                     .color(Color.RUBY)
                     .addField("Error",
                             "User: " + event.getMember().get().getUsername() + "#" + event.getMember().get().getDiscriminator()
                                     + " is not authorized to execute this command! Contact the account owner", true)
-                    .build());
-            throw new RuntimeException("User: " + event.getMember().get().getUsername() + "#" + event.getMember().get().getDiscriminator() + " is not an account owner!");
+                    .build();
+            return false;
         }
+        return true;
     }
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {

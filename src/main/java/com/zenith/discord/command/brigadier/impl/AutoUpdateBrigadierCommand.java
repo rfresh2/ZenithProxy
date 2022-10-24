@@ -13,7 +13,7 @@ public class AutoUpdateBrigadierCommand extends BrigadierCommand {
 
     @Override
     public CommandUsage commandUsage() {
-        return new CommandUsage("autoUpdate", "Configures the autoupdater.",
+        return CommandUsage.of("autoUpdate", "Configures the autoupdater.",
                 asList("on/off"));
     }
 

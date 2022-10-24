@@ -14,7 +14,9 @@ import static java.util.Arrays.asList;
 public class AutoReconnectBrigadierCommand extends BrigadierCommand {
     @Override
     public CommandUsage commandUsage() {
-        return new CommandUsage("autoReconnect", "Configure the AutoReconnect feature",
+        return CommandUsage.of(
+                "autoReconnect",
+                "Configure the AutoReconnect feature",
                 asList("on/off", "delay <seconds>"));
     }
 

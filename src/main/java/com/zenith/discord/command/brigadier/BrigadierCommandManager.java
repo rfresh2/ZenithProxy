@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.zenith.discord.command.brigadier.impl.AutoReconnectBrigadierCommand;
 import com.zenith.discord.command.brigadier.impl.AutoUpdateBrigadierCommand;
+import com.zenith.discord.command.brigadier.impl.KickBrigadierCommand;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -29,6 +30,7 @@ public class BrigadierCommandManager {
 
         new AutoUpdateBrigadierCommand().register(dispatcher);
         new AutoReconnectBrigadierCommand().register(dispatcher);
+        new KickBrigadierCommand().register(dispatcher);
     }
 
     public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent) {
