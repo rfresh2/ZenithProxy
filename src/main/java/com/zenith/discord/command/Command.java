@@ -2,7 +2,9 @@ package com.zenith.discord.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.rest.util.Color;
@@ -53,6 +55,22 @@ public abstract class Command {
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> command(String literal) {
         return literal(literal).withErrorHandler(this::usageErrorHandler);
+    }
+
+    /**
+     * Workaround for no-arg redirect nodes
+     * see https://github.com/Mojang/brigadier/issues/46
+     * 4 years and no official fix T.T
+     */
+    public LiteralArgumentBuilder<CommandContext> redirect(String literal, final CommandNode<CommandContext> destination) {
+        final LiteralArgumentBuilder<CommandContext> builder = command(literal)
+                .requires(destination.getRequirement())
+                .forward(destination.getRedirect(), destination.getRedirectModifier(), destination.isFork())
+                .executes(destination.getCommand());
+        for (final CommandNode<CommandContext> child : destination.getChildren()) {
+            builder.then(child);
+        }
+        return builder;
     }
 
     public Void usageErrorHandler(final CommandContext context) {

@@ -25,8 +25,8 @@ public class WhitelistCommand extends Command {
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
         dispatcher.register(
-                command("whitelist").requires(this::validateAccountOwner)
-                        .then(literal("add").then(argument("player", string()).executes(c -> {
+                command("whitelist")
+                        .then(literal("add").requires(this::validateAccountOwner).then(argument("player", string()).executes(c -> {
                             final String player = StringArgumentType.getString(c, "player");
                             if (!CONFIG.server.extra.whitelist.allowedUsers.contains(player)) {
                                 CONFIG.server.extra.whitelist.allowedUsers.add(player);
@@ -38,7 +38,7 @@ public class WhitelistCommand extends Command {
                                             false);
                             return 1;
                         })))
-                        .then(literal("del").then(argument("player", string()).executes(c -> {
+                        .then(literal("del").requires(this::validateAccountOwner).then(argument("player", string()).executes(c -> {
                             final String player = StringArgumentType.getString(c, "player");
                             CONFIG.server.extra.whitelist.allowedUsers.removeIf(s -> s.equalsIgnoreCase(player));
                             c.getSource().getEmbedBuilder()
@@ -55,13 +55,14 @@ public class WhitelistCommand extends Command {
                                     .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                                             false);
                         }))
-                        .then(literal("clear").executes(c -> {
+                        .then(literal("clear").requires(this::validateAccountOwner).executes(c -> {
                             CONFIG.server.extra.whitelist.allowedUsers.clear();
                             c.getSource().getEmbedBuilder()
                                     .title("Whitelist Cleared")
                                     .color(Color.RUBY)
                                     .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
                                             false);
+                            return 1;
                         }))
         );
     }

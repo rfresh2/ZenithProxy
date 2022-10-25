@@ -1,6 +1,7 @@
 package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.Proxy;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
@@ -22,7 +23,7 @@ public class DisconnectCommand extends Command {
 
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<CommandContext> node = dispatcher.register(
                 command("disconnect").executes(c -> {
                     if (!Proxy.getInstance().isConnected()) {
                         if (Proxy.getInstance().cancelAutoReconnect()) {
@@ -44,5 +45,6 @@ public class DisconnectCommand extends Command {
                     }
                 })
         );
+        dispatcher.register(redirect("dc", node));
     }
 }

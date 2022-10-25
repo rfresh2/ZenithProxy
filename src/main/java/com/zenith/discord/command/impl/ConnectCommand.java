@@ -1,6 +1,7 @@
 package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.Proxy;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
@@ -24,7 +25,7 @@ public class ConnectCommand extends Command {
 
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<CommandContext> node = dispatcher.register(
                 command("connect").executes(c -> {
                     if (Proxy.getInstance().isConnected()) {
                         c.getSource().getEmbedBuilder()
@@ -44,5 +45,6 @@ public class ConnectCommand extends Command {
                     }
                 })
         );
+        dispatcher.register(redirect("c", node));
     }
 }
