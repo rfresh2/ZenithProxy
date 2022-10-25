@@ -487,7 +487,7 @@ public class DiscordBot {
                     .title("PRIO QUEUE STATUS LOST")
                     .color(Color.RED);
         }
-        embedCreateSpec.addField("User", CONFIG.authentication.username, false);
+        embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
     }
 
@@ -503,7 +503,7 @@ public class DiscordBot {
                     .title("PRIO UNBAN DETECTED")
                     .color(Color.GREEN);
         }
-        embedCreateSpec.addField("User", CONFIG.authentication.username, false);
+        embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
     }
 
