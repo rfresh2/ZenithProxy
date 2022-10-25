@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 public class ProxyClientConnectionCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "clientConnectionMessages",
                 "Send notification messages when a client connects to the proxy",
                 asList("on/off")

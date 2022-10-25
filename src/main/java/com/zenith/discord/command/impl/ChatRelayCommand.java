@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 public class ChatRelayCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "chatRelay",
                 "Configures the ChatRelay feature",
                 asList("on/off", "connectionMessages on/off", "whisperMentions on/off",

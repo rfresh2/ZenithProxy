@@ -6,17 +6,14 @@ import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 
-import java.util.Collections;
-
 import static com.zenith.util.Constants.SYSTEM_DISCONNECT;
 
 public class ReconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simple(
                 "reconnect",
-                "disconnect and reconnect the proxy client",
-                Collections.emptyList()
+                "disconnect and reconnect the proxy client"
         );
     }
 

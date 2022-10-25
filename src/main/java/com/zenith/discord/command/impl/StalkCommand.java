@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 public class StalkCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "stalk",
                 "Configures the stalk module which sends discord mentions when a player connects",
                 asList("on/off", "list", "add/del <player>")

@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 public class QueueWarningCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "queueWarning",
                 "Configure warning messages for when 2b2t queue positions are reached",
                 asList("on/off", "position <integer>", "mention on/off")

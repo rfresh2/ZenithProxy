@@ -16,7 +16,7 @@ import static java.util.Arrays.asList;
 public class ServerCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "server",
                 "Change the server the proxy connects to.",
                 asList("<IP>", "<IP> <port>")

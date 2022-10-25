@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 public class WhitelistCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "whitelist",
                 "Manage the proxy's whitelist. Only usable by users with the account owner role.",
                 asList("add/del <player>", "list", "clear")

@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 public class AutoReconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "autoReconnect",
                 "Configure the AutoReconnect feature",
                 asList("on/off", "delay <seconds>"));

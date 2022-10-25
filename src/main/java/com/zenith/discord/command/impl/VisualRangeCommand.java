@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 public class VisualRangeCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "visualRange",
                 "Configure the VisualRange notification feature",
                 asList("on/off", "mention on/off", "friend add/del <player>", "friend list", "friend clear")

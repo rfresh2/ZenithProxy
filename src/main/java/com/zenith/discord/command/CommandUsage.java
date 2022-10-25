@@ -24,15 +24,19 @@ public class CommandUsage {
         this.aliases = aliases;
     }
 
-    public static CommandUsage of(final String name, final String description) {
+    public static CommandUsage simple(final String name, final String description) {
         return new CommandUsage(name, description, Collections.emptyList(), Collections.emptyList());
     }
 
-    public static CommandUsage of(final String name, final String description, final List<String> usageLines) {
+    public static CommandUsage simpleAliases(final String name, final String description, final List<String> aliases) {
+        return new CommandUsage(name, description, Collections.emptyList(), aliases);
+    }
+
+    public static CommandUsage args(final String name, final String description, final List<String> usageLines) {
         return new CommandUsage(name, description, usageLines, Collections.emptyList());
     }
 
-    public static CommandUsage of(final String name, final String description, final List<String> usageLines, final List<String> aliases) {
+    public static CommandUsage full(final String name, final String description, final List<String> usageLines, final List<String> aliases) {
         return new CommandUsage(name, description, usageLines, aliases);
     }
 

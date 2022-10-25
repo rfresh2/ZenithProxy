@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 public class PrioCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "prio",
                 "Configure the mentions for 2b2t priority & priority ban updates",
                 asList("mentions on/off", "banMentions on/off")

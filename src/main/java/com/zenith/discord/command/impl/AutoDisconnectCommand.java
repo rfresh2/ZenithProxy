@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 public class AutoDisconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "autoDisconnect",
                 "Configures the AutoDisconnect feature",
                 asList("on/off", "health <integer>", "autoClientDisconnect on/off")

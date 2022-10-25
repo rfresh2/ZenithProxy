@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 public class DisplayCoordsCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "displayCoords",
                 "Sets whether proxy status commands should display coordinates. Only usable by account owner(s).",
                 asList("on/off")

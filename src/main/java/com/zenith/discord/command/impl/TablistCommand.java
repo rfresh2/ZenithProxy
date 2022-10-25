@@ -9,7 +9,10 @@ import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -19,10 +22,9 @@ import static com.zenith.util.Constants.DEFAULT_LOG;
 public class TablistCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simple(
                 "tablist",
-                "Displays the current server's tablist",
-                Collections.emptyList()
+                "Displays the current server's tablist"
         );
     }
 

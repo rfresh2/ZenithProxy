@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 public class AntiAFKCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "antiAFK",
                 "Configure the AntiAFK feature",
                 asList("on/off")

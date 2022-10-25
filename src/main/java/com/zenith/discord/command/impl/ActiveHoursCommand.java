@@ -24,7 +24,7 @@ public class ActiveHoursCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "activeHours",
                 "Set active hours for the proxy to automatically be logged in at."
                         + "\n Time zone Ids (\"TZ database name\" column): https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"

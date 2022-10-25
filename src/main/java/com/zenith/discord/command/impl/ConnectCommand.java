@@ -8,8 +8,6 @@ import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
 
-import java.util.Collections;
-
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DISCORD_LOG;
 import static java.util.Arrays.asList;
@@ -17,10 +15,9 @@ import static java.util.Arrays.asList;
 public class ConnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simpleAliases(
                 "connect",
                 "Connect the current player to the server",
-                Collections.emptyList(),
                 asList("c")
         );
     }

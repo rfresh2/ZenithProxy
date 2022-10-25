@@ -12,7 +12,6 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +34,9 @@ public class StatusCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simple(
                 "status",
-                "Gets the current proxy status",
-                Collections.emptyList()
+                "Gets the current proxy status"
         );
     }
 

@@ -20,7 +20,7 @@ import static java.util.Arrays.asList;
 public class SpectatorCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "spectator",
                 "Configure the Spectator feature",
                 asList("on/off",

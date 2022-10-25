@@ -13,7 +13,7 @@ public class AutoUpdateCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of("autoUpdate", "Configures the autoupdater.",
+        return CommandUsage.args("autoUpdate", "Configures the autoupdater.",
                 asList("on/off"));
     }
 

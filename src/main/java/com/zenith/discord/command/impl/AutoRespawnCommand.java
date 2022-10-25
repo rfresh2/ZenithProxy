@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 public class AutoRespawnCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "autoRespawn",
                 "Automatically respawn the player after dying.",
                 asList("on/off", "delay <milliseconds")

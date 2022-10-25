@@ -7,18 +7,15 @@ import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 
-import java.util.Collections;
-
 import static com.zenith.util.Constants.DISCORD_LOG;
 import static java.util.Arrays.asList;
 
 public class DisconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simpleAliases(
                 "disconnect",
                 "Disconnect the current player from the server",
-                Collections.emptyList(),
                 asList("dc")
         );
     }

@@ -8,17 +8,14 @@ import com.zenith.discord.command.CommandUsage;
 import com.zenith.event.proxy.UpdateStartEvent;
 import discord4j.rest.util.Color;
 
-import java.util.Collections;
-
 import static com.zenith.util.Constants.*;
 
 public class UpdateCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simple(
                 "update",
-                "Restarts and updates the proxy software",
-                Collections.emptyList()
+                "Restarts and updates the proxy software"
         );
     }
 

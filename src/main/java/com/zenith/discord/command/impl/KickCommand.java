@@ -20,7 +20,7 @@ import static java.util.Arrays.asList;
 public class KickCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "kick",
                 "Kick a user from the proxy. Only usable by account owners",
                 asList("<player>"));

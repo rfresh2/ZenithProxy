@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 public class AutoReplyCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.args(
                 "autoReply",
                 "Configure the AutoReply feature",
                 asList("on/off", "cooldown <seconds>", "message <message>")

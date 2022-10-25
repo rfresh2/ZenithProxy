@@ -7,7 +7,6 @@ import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,10 +16,9 @@ import static com.zenith.util.Constants.CONFIG;
 public class HelpCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.of(
+        return CommandUsage.simple(
                 "help",
-                "Proxy command list",
-                Collections.emptyList());
+                "Proxy command list");
     }
 
     @Override
