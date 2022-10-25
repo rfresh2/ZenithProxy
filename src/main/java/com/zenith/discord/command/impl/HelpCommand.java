@@ -43,7 +43,8 @@ public class HelpCommand extends Command {
                                     .color(Color.CYAN);
                             final String commandName = StringArgumentType.getString(c, "commandName");
                             final Optional<Command> foundCommand = c.getSource().getCommandManager().getCommands().stream()
-                                    .filter(command -> command.commandUsage().getName().equalsIgnoreCase(commandName))
+                                    .filter(command -> command.commandUsage().getName().equalsIgnoreCase(commandName)
+                                            || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
                                     .findFirst();
                             if (foundCommand.isPresent()) {
                                 c.getSource().getEmbedBuilder().description(foundCommand.get().commandUsage().serialize());

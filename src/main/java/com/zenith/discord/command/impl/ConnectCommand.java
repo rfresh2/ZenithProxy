@@ -12,6 +12,7 @@ import java.util.Collections;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DISCORD_LOG;
+import static java.util.Arrays.asList;
 
 public class ConnectCommand extends Command {
     @Override
@@ -19,7 +20,8 @@ public class ConnectCommand extends Command {
         return CommandUsage.of(
                 "connect",
                 "Connect the current player to the server",
-                Collections.emptyList()
+                Collections.emptyList(),
+                asList("c")
         );
     }
 

@@ -10,6 +10,7 @@ import com.zenith.discord.command.CommandUsage;
 import java.util.Collections;
 
 import static com.zenith.util.Constants.DISCORD_LOG;
+import static java.util.Arrays.asList;
 
 public class DisconnectCommand extends Command {
     @Override
@@ -17,7 +18,8 @@ public class DisconnectCommand extends Command {
         return CommandUsage.of(
                 "disconnect",
                 "Disconnect the current player from the server",
-                Collections.emptyList()
+                Collections.emptyList(),
+                asList("dc")
         );
     }
 
