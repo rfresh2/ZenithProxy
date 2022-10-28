@@ -1,6 +1,7 @@
 package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -12,16 +13,17 @@ import static java.util.Arrays.asList;
 public class AntiAFKCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
                 "antiAFK",
                 "Configure the AntiAFK feature",
-                asList("on/off")
+                asList("on/off"),
+                asList("afk")
         );
     }
 
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<CommandContext> node = dispatcher.register(
                 command("antiAFK")
                         .then(literal("on").executes(c -> {
                             CONFIG.client.extra.antiafk.enabled = true;
@@ -36,5 +38,6 @@ public class AntiAFKCommand extends Command {
                                     .color(Color.CYAN);
                         }))
         );
+        dispatcher.register(redirect("afk", node));
     }
 }

@@ -2,6 +2,7 @@ package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -14,16 +15,17 @@ import static java.util.Arrays.asList;
 public class AutoDisconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
                 "autoDisconnect",
                 "Configures the AutoDisconnect feature",
-                asList("on/off", "health <integer>", "autoClientDisconnect on/off")
+                asList("on/off", "health <integer>", "autoClientDisconnect on/off"),
+                asList("autoLog")
         );
     }
 
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<CommandContext> node = dispatcher.register(
                 command("autoDisconnect")
                         .then(literal("on").executes(c -> {
                             CONFIG.client.extra.utility.actions.autoDisconnect.enabled = true;
@@ -62,5 +64,6 @@ public class AutoDisconnectCommand extends Command {
                                             .color(Color.CYAN);
                                 })))
         );
+        dispatcher.register(redirect("autoLog", node));
     }
 }

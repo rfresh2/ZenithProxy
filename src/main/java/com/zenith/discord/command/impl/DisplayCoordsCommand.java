@@ -1,6 +1,7 @@
 package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -12,16 +13,17 @@ import static java.util.Arrays.asList;
 public class DisplayCoordsCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
                 "displayCoords",
                 "Sets whether proxy status commands should display coordinates. Only usable by account owner(s).",
-                asList("on/off")
+                asList("on/off"),
+                asList("coords")
         );
     }
 
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<CommandContext> node = dispatcher.register(
                 command("displayCoords").requires(this::validateAccountOwner)
                         .then(literal("on").executes(c -> {
                             CONFIG.discord.reportCoords = true;
@@ -36,5 +38,6 @@ public class DisplayCoordsCommand extends Command {
                                     .color(Color.CYAN);
                         }))
         );
+        dispatcher.register(redirect("coords", node));
     }
 }

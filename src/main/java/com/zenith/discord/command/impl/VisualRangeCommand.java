@@ -2,6 +2,7 @@ package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -15,16 +16,17 @@ import static java.util.Arrays.asList;
 public class VisualRangeCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
                 "visualRange",
                 "Configure the VisualRange notification feature",
-                asList("on/off", "mention on/off", "friend add/del <player>", "friend list", "friend clear")
+                asList("on/off", "mention on/off", "friend add/del <player>", "friend list", "friend clear"),
+                asList("vr")
         );
     }
 
     @Override
     public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<CommandContext> node = dispatcher.register(
                 command("visualRange")
                         .then(literal("on").executes(c -> {
                             CONFIG.client.extra.visualRangeAlert = true;
@@ -86,6 +88,7 @@ public class VisualRangeCommand extends Command {
                                             .color(Color.CYAN);
                                 })))
         );
+        dispatcher.register(redirect("vr", node));
     }
 
     private String friendListString() {
