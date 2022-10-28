@@ -19,6 +19,7 @@ import com.zenith.event.proxy.*;
 import com.zenith.module.AntiAFK;
 import com.zenith.module.AutoDisconnect;
 import com.zenith.module.AutoReply;
+import com.zenith.module.Spook;
 import com.zenith.module.Module;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
@@ -232,7 +233,8 @@ public class Proxy {
         this.modules = asList(
                 new AntiAFK(this),
                 new AutoDisconnect(this),
-                new AutoReply(this)
+                new AutoReply(this),
+                new Spook(this)
         );
     }
 

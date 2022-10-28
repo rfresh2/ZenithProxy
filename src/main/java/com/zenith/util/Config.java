@@ -43,6 +43,7 @@ public final class Config {
 
         public static final class Extra {
             public AntiAFK antiafk = new AntiAFK();
+            public Spook spook = new Spook();
             public Utility utility = new Utility();
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
@@ -69,6 +70,10 @@ public final class Config {
                     public boolean swingHand = true;
                     public boolean rotate = true;
                 }
+            }
+
+            public static final class Spook {
+                public boolean enabled = true;
             }
 
             public static final class Utility {

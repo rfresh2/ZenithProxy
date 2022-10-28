@@ -36,7 +36,7 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
             }
-            if (CONFIG.client.extra.antiafk.actions.rotate) {
+            if (CONFIG.client.extra.antiafk.actions.rotate && !CONFIG.client.extra.spook.enabled) {
                 rotateTick();
             }
         }

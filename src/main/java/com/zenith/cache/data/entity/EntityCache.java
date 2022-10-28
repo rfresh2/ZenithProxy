@@ -49,4 +49,6 @@ public class EntityCache implements CachedData {
     public <E extends Entity> E get(int id)   {
         return (E) this.cachedEntities.get(id);
     }
+
+    public Map<Integer, Entity> getEntities() { return this.cachedEntities;}
 }
