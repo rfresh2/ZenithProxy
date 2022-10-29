@@ -36,10 +36,18 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
             }
-            if (CONFIG.client.extra.antiafk.actions.rotate && !CONFIG.client.extra.spook.enabled) {
+            if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
                 rotateTick();
             }
         }
+    }
+
+    private boolean spookHasTarget() {
+        return this.proxy.getModules().stream()
+                .filter(m -> m instanceof Spook)
+                .map(m -> ((Spook) m).hasTarget.get())
+                .findFirst()
+                .orElse(false);
     }
 
     private void rotateTick() {
