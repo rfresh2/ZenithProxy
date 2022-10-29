@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.discord.command.impl.*;
-import com.zenith.module.Spook;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -62,7 +62,12 @@ public class CommandManager {
                 new VisualRangeCommand(),
                 new WhitelistCommand()
         );
-        this.commands.forEach(c -> c.register(dispatcher));
+        this.commands.forEach(this::registerCommand);
+    }
+
+    private void registerCommand(final Command command) {
+        final LiteralCommandNode<CommandContext> node = dispatcher.register(command.register());
+        command.aliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));
     }
 
     public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent, final RestChannel restChannel) {

@@ -1,6 +1,6 @@
 package com.zenith.discord.command.impl;
 
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -20,21 +20,19 @@ public class ProxyClientConnectionCommand extends Command {
     }
 
     @Override
-    public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
-                command("clientConnectionMessages")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.clientConnectionMessages = true;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Client connection messages On!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.clientConnectionMessages = false;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Client connection messages Off!")
-                                    .color(Color.CYAN);
-                        }))
-        );
+    public LiteralArgumentBuilder<CommandContext> register() {
+        return command("clientConnectionMessages")
+                .then(literal("on").executes(c -> {
+                    CONFIG.client.extra.clientConnectionMessages = true;
+                    c.getSource().getEmbedBuilder()
+                            .title("Client connection messages On!")
+                            .color(Color.CYAN);
+                }))
+                .then(literal("off").executes(c -> {
+                    CONFIG.client.extra.clientConnectionMessages = false;
+                    c.getSource().getEmbedBuilder()
+                            .title("Client connection messages Off!")
+                            .color(Color.CYAN);
+                }));
     }
 }

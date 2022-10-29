@@ -1,6 +1,6 @@
 package com.zenith.discord.command.impl;
 
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
@@ -18,13 +18,11 @@ public class ReconnectCommand extends Command {
     }
 
     @Override
-    public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
-                command("reconnect").executes(c -> {
-                    Proxy.getInstance().disconnect(SYSTEM_DISCONNECT);
-                    Proxy.getInstance().cancelAutoReconnect();
-                    Proxy.getInstance().connect();
-                })
-        );
+    public LiteralArgumentBuilder<CommandContext> register() {
+        return command("reconnect").executes(c -> {
+            Proxy.getInstance().disconnect(SYSTEM_DISCONNECT);
+            Proxy.getInstance().cancelAutoReconnect();
+            Proxy.getInstance().connect();
+        });
     }
 }

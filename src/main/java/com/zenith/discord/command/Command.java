@@ -1,6 +1,5 @@
 package com.zenith.discord.command;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -9,6 +8,8 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.rest.util.Color;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -19,11 +20,7 @@ public abstract class Command {
         return RequiredArgumentBuilder.argument(name, type);
     }
 
-    public abstract CommandUsage commandUsage();
-
-    public abstract void register(CommandDispatcher<CommandContext> dispatcher);
-
-    public boolean validateAccountOwner(final CommandContext context) {
+    public static boolean validateAccountOwner(final CommandContext context) {
         final MessageCreateEvent event = context.getMessageCreateEvent();
         final Optional<String> roleContainsOptional = event.getMember()
                 .orElseThrow(() -> new RuntimeException("Message does not have a valid member"))
@@ -45,12 +42,31 @@ public abstract class Command {
         return true;
     }
 
-    public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {
+    public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {
         return CaseInsensitiveLiteralArgumentBuilder.literal(literal);
     }
 
-    public CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal, Function<CommandContext, Void> errorHandler) {
+    public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal, Function<CommandContext, Void> errorHandler) {
         return literal(literal).withErrorHandler(errorHandler);
+    }
+
+    /**
+     * Required. Registers {@link CommandUsage}
+     */
+    public abstract CommandUsage commandUsage();
+
+    /**
+     * Required. Register a {@link #command}
+     */
+    public abstract LiteralArgumentBuilder<CommandContext> register();
+
+    /**
+     * Optional override to register command aliases.
+     * Also check these are set in {@link #commandUsage()}
+     * todo: auto-set these in commandUsage
+     */
+    public List<String> aliases() {
+        return Collections.emptyList();
     }
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> command(String literal) {

@@ -1,8 +1,8 @@
 package com.zenith.discord.command.impl;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -24,32 +24,30 @@ public class ServerCommand extends Command {
     }
 
     @Override
-    public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(
-                command("server")
-                        .then(argument("ip", wordWithChars()).executes(c -> {
-                                    final String ip = StringArgumentType.getString(c, "ip");
-                                    CONFIG.client.server.address = ip;
-                                    CONFIG.client.server.port = 25565;
-                                    c.getSource().getEmbedBuilder()
-                                            .title("Server Updated!")
-                                            .addField("IP", CONFIG.client.server.address, false)
-                                            .addField("Port", "" + CONFIG.client.server.port, true)
-                                            .color(Color.CYAN);
-                                    return 1;
-                                })
-                                .then(argument("port", integer()).executes(c -> {
-                                    final String ip = StringArgumentType.getString(c, "ip");
-                                    final int port = IntegerArgumentType.getInteger(c, "port");
-                                    CONFIG.client.server.address = ip;
-                                    CONFIG.client.server.port = port;
-                                    c.getSource().getEmbedBuilder()
-                                            .title("Server Updated!")
-                                            .addField("IP", CONFIG.client.server.address, false)
-                                            .addField("Port", "" + CONFIG.client.server.port, true)
-                                            .color(Color.CYAN);
-                                    return 1;
-                                })))
-        );
+    public LiteralArgumentBuilder<CommandContext> register() {
+        return command("server")
+                .then(argument("ip", wordWithChars()).executes(c -> {
+                            final String ip = StringArgumentType.getString(c, "ip");
+                            CONFIG.client.server.address = ip;
+                            CONFIG.client.server.port = 25565;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Server Updated!")
+                                    .addField("IP", CONFIG.client.server.address, false)
+                                    .addField("Port", "" + CONFIG.client.server.port, true)
+                                    .color(Color.CYAN);
+                            return 1;
+                        })
+                        .then(argument("port", integer()).executes(c -> {
+                            final String ip = StringArgumentType.getString(c, "ip");
+                            final int port = IntegerArgumentType.getInteger(c, "port");
+                            CONFIG.client.server.address = ip;
+                            CONFIG.client.server.port = port;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Server Updated!")
+                                    .addField("IP", CONFIG.client.server.address, false)
+                                    .addField("Port", "" + CONFIG.client.server.port, true)
+                                    .color(Color.CYAN);
+                            return 1;
+                        })));
     }
 }

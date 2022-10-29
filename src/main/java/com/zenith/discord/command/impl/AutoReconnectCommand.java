@@ -1,7 +1,7 @@
 package com.zenith.discord.command.impl;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
@@ -21,8 +21,8 @@ public class AutoReconnectCommand extends Command {
     }
 
     @Override
-    public void register(CommandDispatcher<CommandContext> dispatcher) {
-        dispatcher.register(command("autoreconnect")
+    public LiteralArgumentBuilder<CommandContext> register() {
+        return command("autoreconnect")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.autoReconnect.enabled = true;
                     c.getSource().getEmbedBuilder()
@@ -50,7 +50,6 @@ public class AutoReconnectCommand extends Command {
                                     .color(Color.CYAN);
                             return 1;
                         }))
-                )
-        );
+                );
     }
 }

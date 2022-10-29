@@ -1,12 +1,13 @@
 package com.zenith.discord.command.impl;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
+
+import java.util.List;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DISCORD_LOG;
@@ -18,32 +19,33 @@ public class ConnectCommand extends Command {
         return CommandUsage.simpleAliases(
                 "connect",
                 "Connect the current player to the server",
-                asList("c")
+                aliases()
         );
     }
 
     @Override
-    public void register(CommandDispatcher<CommandContext> dispatcher) {
-        LiteralCommandNode<CommandContext> node = dispatcher.register(
-                command("connect").executes(c -> {
-                    if (Proxy.getInstance().isConnected()) {
-                        c.getSource().getEmbedBuilder()
-                                .title("Already Connected!");
+    public LiteralArgumentBuilder<CommandContext> register() {
+        return command("connect").executes(c -> {
+            if (Proxy.getInstance().isConnected()) {
+                c.getSource().getEmbedBuilder()
+                        .title("Already Connected!");
+            } else {
+                try {
+                    Proxy.getInstance().connect();
+                } catch (final Exception e) {
+                    DISCORD_LOG.error("Failed to connect", e);
+                    c.getSource().getEmbedBuilder()
+                            .title("Proxy Failed to Connect")
+                            .color(Color.RED)
+                            .addField("Server", CONFIG.client.server.address, true)
+                            .addField("Proxy IP", CONFIG.server.getProxyAddress(), false);
+                }
+            }
+        });
+    }
 
-                    } else {
-                        try {
-                            Proxy.getInstance().connect();
-                        } catch (final Exception e) {
-                            DISCORD_LOG.error("Failed to connect", e);
-                            c.getSource().getEmbedBuilder()
-                                    .title("Proxy Failed to Connect")
-                                    .color(Color.RED)
-                                    .addField("Server", CONFIG.client.server.address, true)
-                                    .addField("Proxy IP", CONFIG.server.getProxyAddress(), false);
-                        }
-                    }
-                })
-        );
-        dispatcher.register(redirect("c", node));
+    @Override
+    public List<String> aliases() {
+        return asList("c");
     }
 }
