@@ -34,7 +34,7 @@ public class Spook extends Module {
     }
 
     private void stareTick() {
-        if (stareTimer.tick(0L, true)) {
+        if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay, true)) {
             Entity focus = getFocus();
             if (nonNull(focus)) {
 //                System.out.println(focus.getUuid());

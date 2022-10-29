@@ -5,6 +5,7 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.zenith.discord.command.impl.*;
+import com.zenith.module.Spook;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -55,6 +56,7 @@ public class CommandManager {
                 new StalkCommand(),
                 new StatusCommand(),
                 new SpectatorCommand(),
+                new SpookCommand(),
                 new TablistCommand(),
                 new UpdateCommand(),
                 new VisualRangeCommand(),
