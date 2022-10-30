@@ -75,6 +75,12 @@ public final class Config {
             public static final class Spook {
                 public boolean enabled = true;
                 public Long tickDelay = 0L;
+                public TargetingMode spookTargetingMode = TargetingMode.VISUAL_RANGE;
+
+                public enum TargetingMode {
+                    NEAREST,
+                    VISUAL_RANGE
+                }
             }
 
             public static final class Utility {

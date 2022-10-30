@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
+import com.zenith.util.Config;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -17,7 +18,7 @@ public class SpookCommand extends Command {
         return CommandUsage.args(
                 "spook",
                 "Automatically spooks nearby players",
-                asList("on/off", "delay <ticks>")
+                asList("on/off", "delay <ticks>", "mode <visualRange/nearest>")
         );
     }
 
@@ -28,12 +29,18 @@ public class SpookCommand extends Command {
                     CONFIG.client.extra.spook.enabled = true;
                     c.getSource().getEmbedBuilder()
                             .title("Spook On!")
+                            .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
+                            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
+                            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
                             .color(Color.TAHITI_GOLD);
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.spook.enabled = false;
                     c.getSource().getEmbedBuilder()
                             .title("Spook Off!")
+                            .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
+                            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
+                            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
                             .color(Color.TAHITI_GOLD);
                 }))
                 .then(literal("delay").then(argument("delayTicks", integer()).executes(c -> {
@@ -43,8 +50,28 @@ public class SpookCommand extends Command {
                             .title("Spook Delay Updated!")
                             .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
                             .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
+                            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
                             .color(Color.TAHITI_GOLD);
                     return 1;
-                })));
+                })))
+                .then(literal("mode")
+                        .then(literal("nearest").executes(c -> {
+                            CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.NEAREST;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Spook Mode Updated!")
+                                    .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
+                                    .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
+                                    .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
+                                    .color(Color.TAHITI_GOLD);
+                        }))
+                        .then(literal("visualrange").executes(c -> {
+                            CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.VISUAL_RANGE;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Spook Mode Updated!")
+                                    .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
+                                    .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
+                                    .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
+                                    .color(Color.TAHITI_GOLD);
+                        })));
     }
 }

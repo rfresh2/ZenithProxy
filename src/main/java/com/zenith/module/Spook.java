@@ -7,9 +7,12 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.util.TickTimer;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.util.Constants.CACHE;
@@ -19,11 +22,35 @@ import static java.util.Objects.isNull;
 public class Spook extends Module {
     public final AtomicBoolean hasTarget;
     private final TickTimer stareTimer;
+    private final Stack<EntityPlayer> focusStack;
 
     public Spook(Proxy proxy) {
         super(proxy);
         this.stareTimer = new TickTimer();
         this.hasTarget = new AtomicBoolean(false);
+        this.focusStack = new Stack<>();
+    }
+
+    @Subscribe
+    public void handleClientTickEvent(final ClientTickEvent event) {
+        synchronized (focusStack) { // handling this regardless of mode so we don't fill stack indefinitely
+            if (!this.focusStack.isEmpty()) {
+                this.focusStack.removeIf(e -> CACHE.getEntityCache().getEntities().values().stream()
+                        .noneMatch(entity -> Objects.equals(e, entity)));
+            }
+        }
+        if (CONFIG.client.extra.spook.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue()) {
+            stareTick();
+        } else {
+            hasTarget.lazySet(false);
+        }
+    }
+
+    @Subscribe
+    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
+        synchronized (this.focusStack) {
+            this.focusStack.push(event.playerEntity);
+        }
     }
 
     public static float getPitch(Entity entity) {
@@ -38,15 +65,6 @@ public class Spook extends Module {
         return player.getPitch() + wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - player.getPitch());
     }
 
-    @Subscribe
-    public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.spook.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue()) {
-            stareTick();
-        } else {
-            hasTarget.lazySet(false);
-        }
-    }
-
     public static float getYaw(Entity entity) {
         PlayerCache player = CACHE.getPlayerCache();
         return player.getYaw() + wrapDegrees((float) Math.toDegrees(Math.atan2(entity.getZ() - player.getZ(), entity.getX() - player.getX())) - 90f - player.getYaw());
@@ -54,13 +72,40 @@ public class Spook extends Module {
 
     private void stareTick() {
         if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay, true)) {
-            final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
-            if (nearestPlayer.isPresent()) {
+            switch (CONFIG.client.extra.spook.spookTargetingMode) {
+                case NEAREST:
+                    handleNearestTargetTick();
+                    break;
+                case VISUAL_RANGE:
+                    handleVisualRangeTargetTick();
+                    break;
+            }
+        }
+    }
+
+    private void handleNearestTargetTick() {
+        final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
+        if (nearestPlayer.isPresent()) {
+            this.hasTarget.set(true);
+            this.proxy.getClient().send(new ClientPlayerRotationPacket(
+                    true,
+                    getYaw(nearestPlayer.get()),
+                    getPitch(nearestPlayer.get())
+            ));
+        } else {
+            this.hasTarget.set(false);
+        }
+    }
+
+    private void handleVisualRangeTargetTick() {
+        synchronized (focusStack) {
+            if (!this.focusStack.isEmpty()) {
+                final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
                 this.proxy.getClient().send(new ClientPlayerRotationPacket(
                         true,
-                        getYaw(nearestPlayer.get()),
-                        getPitch(nearestPlayer.get())
+                        getYaw(target),
+                        getPitch(target)
                 ));
             } else {
                 this.hasTarget.set(false);
