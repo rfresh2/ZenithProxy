@@ -35,6 +35,12 @@ ext {
 
 group "com.zenith"
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
 compileJava {
     sourceCompatibility = targetCompatibility = "1.8"
 }
@@ -151,8 +157,18 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
-    shade ('io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64')
+    shade('io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64')
 }
+
+task run(type: JavaExec) {
+    group = "run"
+    description = "Execute proxy"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.zenith.Proxy"
+    maxHeapSize = "280M"
+    jvmArgs = ["-server", "-XX:NewSize=80M", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
+}
+run.dependsOn build
 
 //disable regular unshaded jar
 jar.enabled = false
@@ -177,4 +193,4 @@ shadowJar {
 
 tasks.named('generateJooq').configure { allInputsDeclared = true }
 
-build.dependsOn(shadowJar)
+//build.dependsOn(shadowJar)
