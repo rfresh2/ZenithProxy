@@ -32,7 +32,7 @@ public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJo
                 ChatVisibility.FULL,
                 true,
                 SkinPart.values(),
-                Hand.MAIN_HAND
+                Hand.OFF_HAND
         ));
         return true;
     }
