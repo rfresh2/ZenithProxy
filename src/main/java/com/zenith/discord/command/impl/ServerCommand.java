@@ -25,7 +25,7 @@ public class ServerCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("server")
+        return command("server").requires(Command::validateAccountOwner)
                 .then(argument("ip", wordWithChars()).executes(c -> {
                             final String ip = StringArgumentType.getString(c, "ip");
                             CONFIG.client.server.address = ip;
