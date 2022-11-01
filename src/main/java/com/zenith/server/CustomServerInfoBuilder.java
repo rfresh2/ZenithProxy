@@ -73,8 +73,8 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
                                 : "Queueing")
                         + "§r§f]§r"
                         + ((this.proxy.getQueuePosition() != Integer.MAX_VALUE)
-                            ? " - §cETA§r §f[§r§b" + Queue.getQueueEta((this.proxy.getIsPrio().get() ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular), this.proxy.getQueuePosition()) + "§r§f]§r"
-                            : "")
+                    ? " - §cETA§r §f[§r§b" + Queue.getQueueEta(this.proxy.getQueuePosition()) + "§r§f]§r"
+                    : "")
                     : "§cQueuing§r");
         } else {
             return "§aIn Game§r";

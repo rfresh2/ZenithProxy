@@ -113,9 +113,9 @@ public class StatusCommand extends Command {
             if (Proxy.getInstance().isInQueue()) {
                 if (Proxy.getInstance().getIsPrio().isPresent()) {
                     if (Proxy.getInstance().getIsPrio().get()) {
-                        return "In Priority Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + Queue.getQueueEta(Queue.getQueueStatus().prio, Proxy.getInstance().getQueuePosition());
+                        return "In Priority Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
                     } else {
-                        return "In Regular Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + Queue.getQueueEta(Queue.getQueueStatus().regular, Proxy.getInstance().getQueuePosition());
+                        return "In Regular Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
                     }
                 } else {
                     return "Queueing";
@@ -129,8 +129,8 @@ public class StatusCommand extends Command {
     }
 
     private String getQueueStatus() {
-        return "Priority: " + Queue.getQueueStatus().prio + " [" + Queue.getQueueEta(Queue.getQueueStatus().prio, Queue.getQueueStatus().prio) + "]"
-                + "\nRegular: " + Queue.getQueueStatus().regular + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular, Queue.getQueueStatus().regular) + "]";
+        return "Priority: " + Queue.getQueueStatus().prio + " [" + Queue.getQueueEta(Queue.getQueueStatus().prio) + "]"
+                + "\nRegular: " + Queue.getQueueStatus().regular + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular) + "]";
     }
 
     private String dimensionIdToString(final int dimension) {

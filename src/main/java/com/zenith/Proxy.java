@@ -16,11 +16,7 @@ import com.zenith.database.Database;
 import com.zenith.database.QueueWaitDatabase;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
-import com.zenith.module.AntiAFK;
-import com.zenith.module.AutoDisconnect;
-import com.zenith.module.AutoReply;
-import com.zenith.module.Spook;
-import com.zenith.module.Module;
+import com.zenith.module.*;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;
@@ -455,7 +451,7 @@ public class Proxy {
                             || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected()))) {
             // get current queue wait time
             Integer queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio : Queue.getQueueStatus().regular);
-            double queueWaitSeconds = Queue.getQueueWait(queueLength, queueLength);
+            double queueWaitSeconds = Queue.getQueueWait(queueLength);
             activeHoursConfig.activeTimes.stream()
                     .flatMap(activeTime -> {
                         ZonedDateTime activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(activeTime.hour, activeTime.minute), ZoneId.of(activeHoursConfig.timeZoneId));
