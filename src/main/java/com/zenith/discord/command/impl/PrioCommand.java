@@ -1,10 +1,14 @@
 package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
+import com.zenith.util.PriorityBanChecker;
 import discord4j.rest.util.Color;
+
+import java.util.Optional;
 
 import static com.zenith.util.Constants.CONFIG;
 import static java.util.Arrays.asList;
@@ -15,7 +19,7 @@ public class PrioCommand extends Command {
         return CommandUsage.args(
                 "prio",
                 "Configure the mentions for 2b2t priority & priority ban updates",
-                asList("mentions on/off", "banMentions on/off")
+                asList("mentions on/off", "banMentions on/off", "check")
         );
     }
 
@@ -47,6 +51,15 @@ public class PrioCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                     .title("Prio Ban Mentions Off!")
                                     .color(Color.CYAN);
-                        })));
+                        })))
+                .then(literal("check").executes(c -> {
+                    c.getSource().getEmbedBuilder()
+                            .title("Checking Prio ban")
+                            .color(Color.CYAN);
+//                    Proxy.getInstance().updatePrioBanStatus();
+                    Optional<Boolean> banned = Proxy.getInstance().getPriorityBanChecker().checkPrioBan();
+                    c.getSource().getEmbedBuilder()
+                            .addField("Banned", (banned.isPresent() ? banned.get().toString() : "null"), true);
+                }));
     }
 }
