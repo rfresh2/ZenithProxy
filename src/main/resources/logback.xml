@@ -10,6 +10,8 @@
     <import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"/>
 
     <statusListener class="com.zenith.util.log.PrintOnlyErrorLogbackStatusListener"/>
+    <!-- Prevent logback compression failing during JVM stop https://logback.qos.ch/manual/configuration.html#shutdownHook -->
+    <shutdownHook/>
 
     <appender name="FILE" class="RollingFileAppender">
         <file>log/latest.log</file>
@@ -18,7 +20,8 @@
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
-            <maxHistory>10000</maxHistory>
+            <maxHistory>1000</maxHistory>
+            <totalSizeCap>250MB</totalSizeCap>
             <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
@@ -35,7 +38,8 @@
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.debug.log.zip</fileNamePattern>
-            <maxHistory>10000</maxHistory>
+            <maxHistory>1000</maxHistory>
+            <totalSizeCap>250MB</totalSizeCap>
             <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
