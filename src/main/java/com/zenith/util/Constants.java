@@ -107,6 +107,7 @@ public class Constants {
             .registerInbound(new UnloadChunkHandler())
             .registerInbound(new UnlockRecipesHandler())
             .registerInbound(new UpdateTileEntityHandler())
+            .registerInbound(new UpdateTimePacketHandler())
             .registerInbound(new ServerCombatHandler())
             .registerInbound(new PlayerChangeHeldItemHandler())
             .registerInbound(new MapDataHandler())

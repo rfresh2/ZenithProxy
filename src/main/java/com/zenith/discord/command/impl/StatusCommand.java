@@ -53,6 +53,9 @@ public class StatusCommand extends Command {
                     .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
                     .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
+            if (Proxy.getInstance().isConnected()) {
+                builder.addField("TPS", Proxy.getInstance().getTpsCalculator().getTPS(), true);
+            }
             if (!getSpectatorUserNames().isEmpty()) {
                 builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), true);
             }

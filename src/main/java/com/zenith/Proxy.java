@@ -69,6 +69,7 @@ public class Proxy {
     protected ScheduledExecutorService reconnectExecutorService;
     protected List<Module> modules;
     protected Database queueWait; // nullable
+    protected final TPSCalculator tpsCalculator;
 
     private int reconnectCounter;
     private boolean inQueue = false;
@@ -111,6 +112,7 @@ public class Proxy {
             // if we add more databases, ensure the connectionpool is shared
             this.queueWait = new QueueWaitDatabase(new ConnectionPool(), this);
         }
+        this.tpsCalculator = new TPSCalculator();
     }
 
     public void start() {
@@ -409,6 +411,7 @@ public class Proxy {
                 }));
             }
         }
+        this.tpsCalculator.reset();
     }
 
     public void delayBeforeReconnect() {

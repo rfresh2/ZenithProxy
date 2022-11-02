@@ -31,8 +31,8 @@ public class ServerTablistDataOutgoingHandler implements HandlerRegistry.Outgoin
     public String insertProxyDataIntoFooter(final String beforeFooter, final ServerConnection session) {
         try {
             MCTextRoot mcTextRoot = JsonTextParser.DEFAULT.parse(beforeFooter);
-            mcTextRoot.pushChild(new TextComponentString("§9§lProxy Connected: " + CACHE.getProfileCache().getProfile().getName() + "§r§b§l -> §r§9§l" + session.getProfileCache().getProfile().getName() + "§r\n"));
-            mcTextRoot.pushChild(new TextComponentString("§9§lOnline Time: " + getOnlineTime() + "§r"));
+            mcTextRoot.pushChild(new TextComponentString("§9Proxy: §r§b§l" + CACHE.getProfileCache().getProfile().getName() + "§r§a -> §r§b§l" + session.getProfileCache().getProfile().getName() + "§r\n"));
+            mcTextRoot.pushChild(new TextComponentString("§9Online: §r§b§l" + getOnlineTime() + " §r§a-§r §r§9TPS: §r§b§l" + session.getProxy().getTpsCalculator().getTPS() + "§r"));
             return ServerChatPacket.escapeText(mcTextRoot.toRawString());
         } catch (final Exception e) {
             SERVER_LOG.warn("Failed injecting proxy info to tablist footer", e);
