@@ -12,6 +12,7 @@ import net.daporkchop.lib.minecraft.text.parser.JsonTextParser;
 
 import java.time.Instant;
 
+import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.SERVER_LOG;
 
 public class ServerTablistDataOutgoingHandler implements HandlerRegistry.OutgoingHandler<ServerPlayerListDataPacket, ServerConnection> {
@@ -19,7 +20,7 @@ public class ServerTablistDataOutgoingHandler implements HandlerRegistry.Outgoin
 
     @Override
     public ServerPlayerListDataPacket apply(ServerPlayerListDataPacket packet, ServerConnection session) {
-        return new ServerPlayerListDataPacket(packet.getHeader(), insertProxyDataIntoFooter(packet.getFooter()), false);
+        return new ServerPlayerListDataPacket(packet.getHeader(), insertProxyDataIntoFooter(packet.getFooter(), session), false);
     }
 
     @Override
@@ -27,10 +28,11 @@ public class ServerTablistDataOutgoingHandler implements HandlerRegistry.Outgoin
         return ServerPlayerListDataPacket.class;
     }
 
-    public String insertProxyDataIntoFooter(final String beforeFooter) {
+    public String insertProxyDataIntoFooter(final String beforeFooter, final ServerConnection session) {
         try {
             MCTextRoot mcTextRoot = JsonTextParser.DEFAULT.parse(beforeFooter);
-            mcTextRoot.pushChild(new TextComponentString("§9§lProxy Online Time: " + getOnlineTime() + "§r"));
+            mcTextRoot.pushChild(new TextComponentString("§9§lProxy Connected: " + CACHE.getProfileCache().getProfile().getName() + "§r§b§l -> §r§9§l" + session.getProfileCache().getProfile().getName() + "§r\n"));
+            mcTextRoot.pushChild(new TextComponentString("§9§lOnline Time: " + getOnlineTime() + "§r"));
             return ServerChatPacket.escapeText(mcTextRoot.toRawString());
         } catch (final Exception e) {
             SERVER_LOG.warn("Failed injecting proxy info to tablist footer", e);
