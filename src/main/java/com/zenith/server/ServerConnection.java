@@ -46,6 +46,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     protected long lastPacket = System.currentTimeMillis();
+    protected long ping = 0L;
 
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;

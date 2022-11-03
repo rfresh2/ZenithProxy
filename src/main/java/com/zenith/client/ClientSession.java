@@ -23,6 +23,7 @@ public class ClientSession extends TcpClientSession {
     protected final CompletableFuture<String> disconnectFuture = new CompletableFuture<>();
     protected final Proxy proxy;
     protected boolean serverProbablyOff;
+    protected long ping = 0L;
 
     private boolean inQueue = false;
     private int lastQueuePosition = Integer.MAX_VALUE;

@@ -8,7 +8,6 @@ import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
-import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.ClientSession;
 import com.zenith.database.ConnectionPool;
@@ -56,7 +55,7 @@ public class Proxy {
     protected static Proxy instance;
 
     protected MinecraftProtocol protocol;
-    protected TcpClientSession client;
+    protected ClientSession client;
     protected TcpServer server;
     protected LoggerInner loggerInner;
     @Setter
@@ -295,6 +294,7 @@ public class Proxy {
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
+                this.server.setGlobalFlag(MinecraftConstants.SERVER_KEEPALIVE_INTERVAL_MS, 10000);
                 this.server.addListener(new ProxyServerListener(this));
                 this.server.bind(false);
             }

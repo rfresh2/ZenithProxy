@@ -8,6 +8,9 @@ import lombok.NonNull;
 public class ServerKeepaliveHandler implements HandlerRegistry.IncomingHandler<ClientKeepAlivePacket, ServerConnection> {
     @Override
     public boolean apply(@NonNull ClientKeepAlivePacket packet, @NonNull ServerConnection session) {
+        final long serverSentPingTime = packet.getPingId();
+        final long clientReceivedPingTime = System.nanoTime();
+        session.setPing((clientReceivedPingTime - serverSentPingTime) / 1000000L);
         return false;
     }
 
