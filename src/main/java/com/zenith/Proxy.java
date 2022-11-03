@@ -371,16 +371,20 @@ public class Proxy {
     }
 
     public Collection<ServerConnection> getServerConnections() {
-        return ((ProxyServerListener) this.server.getListeners().stream()
+        final ProxyServerListener proxyServerListener = (ProxyServerListener) this.server.getListeners().stream()
                 .filter(ProxyServerListener.class::isInstance)
-                .findAny().orElseThrow(IllegalStateException::new))
-                .getConnections()
-                .values()
-                .stream()
-                .filter(ServerConnection::isPlayer)
-                .filter(ServerConnection::isLoggedIn)
-                .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
-                .collect(Collectors.toList());
+                .findAny().orElseThrow(IllegalStateException::new);
+        final Collection<ServerConnection> connections = proxyServerListener
+                .connections
+                .values();
+        // prevent concurrent modification on connections, see Collections.synchronizedMap javadocs
+        synchronized (proxyServerListener.connections) {
+            return connections.stream()
+                    .filter(ServerConnection::isPlayer)
+                    .filter(ServerConnection::isLoggedIn)
+                    .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
+                    .collect(Collectors.toList());
+        }
     }
 
     public List<ServerConnection> getSpectatorConnections() {

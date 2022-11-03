@@ -23,7 +23,7 @@ public class ProxyServerListener implements ServerListener {
     @NonNull
     protected final Proxy proxy;
 
-    protected final Map<Session, ServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
+    public final Map<Session, ServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
 
     //this isn't really needed, but it lets me print the correct address to the log
     //TODO: ip-ban specific clients?
