@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DATABASE_LOG;
+import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {
 
@@ -69,8 +70,10 @@ public class QueueWaitDatabase extends Database {
         // don't think there's much value in storing queue skips or immediate prio queues
         // will just need to filter them out in queries after
         // if there is a use case, just remove the condition
-        if (queueCompleteTime.minus(MIN_QUEUE_DURATION).isAfter(initialQueueTime)) {
-            writeQueueWait(initialQueueLen, initialQueueTime, queueCompleteTime);
+        if (nonNull(initialQueueTime) && nonNull(initialQueueLen)) {
+            if (queueCompleteTime.minus(MIN_QUEUE_DURATION).isAfter(initialQueueTime)) {
+                writeQueueWait(initialQueueLen, initialQueueTime, queueCompleteTime);
+            }
         }
     }
 
