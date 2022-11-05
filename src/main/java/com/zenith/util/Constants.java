@@ -112,7 +112,6 @@ public class Constants {
             .registerInbound(new ServerCombatHandler())
             .registerInbound(new PlayerChangeHeldItemHandler())
             .registerInbound(new MapDataHandler())
-            .registerInbound(new PluginMessageHandler())
             //ENTITY
             .registerInbound(new EntityAttachHandler())
             .registerInbound(new EntityCollectItemHandler())
