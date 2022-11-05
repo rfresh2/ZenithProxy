@@ -4,9 +4,9 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessag
 import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
-public class PluginMessageHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPluginMessagePacket, ClientSession> {
+public class PluginMessageHandler implements HandlerRegistry.IncomingHandler<ServerPluginMessagePacket, ClientSession> {
     @Override
-    public boolean applyAsync(ServerPluginMessagePacket packet, ClientSession session) {
+    public boolean apply(ServerPluginMessagePacket packet, ClientSession session) {
         return !packet.getChannel().equalsIgnoreCase("MC|Brand");
     }
 
