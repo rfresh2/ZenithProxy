@@ -73,7 +73,6 @@ public class AntiAFK extends Module {
             walkTickTimer.reset();
             if (shouldWalk) {
                 directionMultiplier *= -1.0;
-                ;
                 currentPathingGoal = pathing.getCurrentPlayerPos().addX(walkGoalDelta * directionMultiplier).addZ(walkGoalDelta * directionMultiplier).toBlockPos();
             }
         }

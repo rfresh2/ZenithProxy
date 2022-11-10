@@ -17,7 +17,7 @@ public class World {
 
     public Optional<Chunk> getChunk(final ChunkPos chunkPos) {
         try {
-            return Optional.of(CACHE.getChunkCache().worldGet(chunkPos.getX(), chunkPos.getZ()).getChunks()[chunkPos.getY()]);
+            return Optional.of(CACHE.getChunkCache().get(chunkPos.getX(), chunkPos.getZ()).getChunks()[chunkPos.getY()]);
         } catch (final Exception e) {
             CLIENT_LOG.error("error finding chunk at pos: {}", chunkPos);
         }
