@@ -103,7 +103,7 @@ public class HandlerRegistry<S extends Session> {
                 try {
                     int iterCount = 0;
                     while (!applyAsync(packet, session)) {
-                        Wait.waitALittleMs(50);
+                        Wait.waitALittleMs(200);
                         if (iterCount++ > 3) {
                             CLIENT_LOG.warn("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
                             break;

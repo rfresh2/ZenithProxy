@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.CACHE_LOG;
 import static com.zenith.util.Constants.CLIENT_LOG;
+import static java.util.Objects.isNull;
 
 
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
@@ -163,9 +164,12 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         }
     }
 
-    public void updateTileEntity(final ServerUpdateTileEntityPacket packet) {
+    public boolean updateTileEntity(final ServerUpdateTileEntityPacket packet) {
         synchronized (this) {
             final Column column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
+            if (isNull(column)) {
+                return false;
+            }
             final List<TileEntity> tileEntities = column.getTileEntities();
             final Optional<TileEntity> existingTileEntity = tileEntities.stream()
                     .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
@@ -186,6 +190,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                 existingTileEntity.ifPresent(tileEntities::remove);
             }
         }
+        return true;
     }
 
     public void setSpawnPosition(final Position position) {

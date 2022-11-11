@@ -6,12 +6,16 @@ import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.CLIENT_LOG;
 
 public class UpdateTileEntityHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUpdateTileEntityPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ServerUpdateTileEntityPacket packet, @NonNull ClientSession session) {
-        CACHE.getChunkCache().updateTileEntity(packet);
+        if (!CACHE.getChunkCache().updateTileEntity(packet)) {
+            CLIENT_LOG.warn("Received ServerUpdateTileEntityPacket for chunk column that does not exist: {}, data: {}", packet.getPosition(), packet.getNBT());
+            return false;
+        }
         return true;
     }
 
