@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CONFIG;
+import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 
 public class StatusCommand extends Command {
@@ -34,9 +35,10 @@ public class StatusCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simple(
+        return CommandUsage.simpleAliases(
                 "status",
-                "Gets the current proxy status"
+                "Gets the current proxy status",
+                aliases()
         );
     }
 
@@ -116,9 +118,9 @@ public class StatusCommand extends Command {
             if (Proxy.getInstance().isInQueue()) {
                 if (Proxy.getInstance().getIsPrio().isPresent()) {
                     if (Proxy.getInstance().getIsPrio().get()) {
-                        return "In Priority Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
+                        return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
                     } else {
-                        return "In Regular Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
+                        return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
                     }
                 } else {
                     return "Queueing";
@@ -156,5 +158,10 @@ public class StatusCommand extends Command {
         } else {
             return "Not Online!";
         }
+    }
+
+    @Override
+    public List<String> aliases() {
+        return asList("s");
     }
 }
