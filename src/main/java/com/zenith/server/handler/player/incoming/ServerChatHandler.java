@@ -36,6 +36,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 session.send(new ServerChatPacket("§7§ckick <player>§7- §8Kicks a spectator by name", true));
                 session.send(new ServerChatPacket("§7§cspectator§7- §8Toggles spectator enabled status. If disabled, all spectators are kicked", true));
                 session.send(new ServerChatPacket("§7§cschat§7- §8Toggles if spectators are allowed to send public chats.", true));
+                return false;
             } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
                 session.getProxy().getClient().disconnect(MANUAL_DISCONNECT);
                 return false;
