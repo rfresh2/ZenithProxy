@@ -89,13 +89,10 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-        // temp lowering this 200 for testing
-        if (startWalkTickTimer.tick(200L, true)) {
+        if (startWalkTickTimer.tick(500L, true)) {
             shouldWalk = !shouldWalk;
             walkTickTimer.reset();
             if (shouldWalk) {
-                // todo: more intelligent goal setting that checks our goal block is reachable
-                //  maybe also add some randomness
                 final Pair<Integer, Integer> directions = walkDirectionIterator.next();
                 currentPathingGoal = pathing.getCurrentPlayerPos()
                         .addX(walkGoalDelta * directions.getKey())
@@ -108,9 +105,10 @@ public class AntiAFK extends Module {
                 shouldWalk = false;
             } else {
                 Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);
-                if (!nextMovePos.equals(pathing.getCurrentPlayerPos())) {
-                    this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+                if (nextMovePos.equals(pathing.getCurrentPlayerPos())) {
+                    shouldWalk = false;
                 }
+                this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
             }
         }
     }

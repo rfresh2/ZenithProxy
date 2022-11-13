@@ -1,6 +1,7 @@
 package com.zenith.pathing;
 
 import lombok.RequiredArgsConstructor;
+import net.daporkchop.lib.math.vector.Vec3i;
 
 import java.util.Optional;
 
@@ -73,6 +74,7 @@ public class Pathing {
     public double calculateFallDamage(final double distance) {
         // todo: check if we have feather falling + prot 4 which will increase our distance to 103 before death
         // todo: check if we're falling into a liquid
+        // todo: check if we have a totem equipped
         return Math.max(0, distance - 3.5);
     }
 
@@ -92,8 +94,21 @@ public class Pathing {
     }
 
     public boolean isNextWalkSafe(final Position position) {
+        final Vec3i direction = getCurrentPlayerPos().minus(position).toDirectionVector();
         final BlockPos blockPos = position.toBlockPos();
         final BlockPos groundBlockPos = blockPos.addY(-1);
+        final Optional<BlockPos> legsRayTrace = this.world.rayTraceCB(position.addY(0.01), direction);
+        if (legsRayTrace.isPresent()) {
+            final BlockPos legRayTraceBlockPos = legsRayTrace.get();
+            final double dist = getCurrentPlayerPos().toBlockPos().distance(legRayTraceBlockPos);
+            if (dist < 2) return false;
+        }
+        final Optional<BlockPos> headRayTrace = this.world.rayTraceCB(position.addY(1.01), direction);
+        if (headRayTrace.isPresent()) {
+            final BlockPos headRayTraceBlockPos = headRayTrace.get();
+            final double dist = getCurrentPlayerPos().toBlockPos().distance(headRayTraceBlockPos);
+            if (dist < 2) return false;
+        }
         final boolean groundSolid = this.world.isSolidBlock(groundBlockPos);
         final boolean blocked = this.world.isSolidBlock(blockPos) || this.world.isSolidBlock(blockPos.addY(1));
         if (!CONFIG.client.extra.antiafk.actions.safeWalk) {

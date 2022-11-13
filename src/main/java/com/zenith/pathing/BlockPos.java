@@ -23,4 +23,12 @@ public class BlockPos {
     public BlockPos addZ(int delta) {
         return new BlockPos(x, y, z + delta);
     }
+
+    public BlockPos minus(BlockPos other) {
+        return new BlockPos(x - other.getX(), y - other.getY(), z - other.getZ());
+    }
+
+    public double distance(final BlockPos other) {
+        return Math.sqrt(Math.pow(other.x - x, 2) + Math.pow(other.y - y, 2) + Math.pow(other.z - z, 2));
+    }
 }
