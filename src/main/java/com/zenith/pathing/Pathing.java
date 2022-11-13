@@ -1,7 +1,6 @@
 package com.zenith.pathing;
 
 import lombok.RequiredArgsConstructor;
-import net.daporkchop.lib.math.vector.Vec3i;
 
 import java.util.Optional;
 
@@ -44,7 +43,7 @@ public class Pathing {
             final int t) {
         final Position currentPlayerPos = getCurrentPlayerPos();
         if (t < 0) return Optional.of(currentPlayerPos);
-        final Optional<BlockPos> groundTraceResult = this.world.rayTraceCB(currentPlayerPos, Vec3i.of(0, -1, 0));
+        final Optional<BlockPos> groundTraceResult = this.world.rayTraceCBDown(currentPlayerPos);
         if (groundTraceResult.isPresent()) {
             // todo: handle half blocks
             final BlockPos floor = groundTraceResult.get().addY(1);
@@ -101,7 +100,7 @@ public class Pathing {
             if (!groundSolid) {
                 if (CONFIG.client.extra.antiafk.actions.gravity) {
                     if (CONFIG.client.extra.antiafk.actions.safeGravity) {
-                        Optional<BlockPos> groundTraceResult = this.world.rayTrace(groundBlockPos, Vec3i.of(0, -1, 0));
+                        Optional<BlockPos> groundTraceResult = this.world.raytraceDown(groundBlockPos);
                         if (groundTraceResult.isPresent()) {
                             final BlockPos floor = groundTraceResult.get().addY(1);
                             final double yDelta = floor.getY() - groundBlockPos.getY();

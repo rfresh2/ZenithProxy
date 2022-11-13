@@ -10,11 +10,16 @@ import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Pathing;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
+import javafx.util.Pair;
+import org.apache.commons.collections4.iterators.LoopingListIterator;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.zenith.util.Constants.CONFIG;
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
@@ -25,9 +30,15 @@ public class AntiAFK extends Module {
     private final Pathing pathing;
     private boolean shouldWalk = false;
     private final int walkGoalDelta = 9;
-    // toggle this between 1 and -1
-    private double directionMultiplier = 1.0;
+    private List<Pair<Integer, Integer>> walkDirections = asList(
+            new Pair<>(1, 0), new Pair<>(-1, 0),
+            new Pair<>(1, 1), new Pair<>(-1, -1),
+            new Pair<>(1, -1), new Pair<>(-1, 1),
+            new Pair<>(0, 1), new Pair<>(0, -1));
+    private final LoopingListIterator<Pair<Integer, Integer>> walkDirectionIterator = new LoopingListIterator<>(walkDirections);
     private BlockPos currentPathingGoal;
+    // tick time since we started falling
+    // can be negative, indicates pathing should wait until it reaches 0 to fall
     private int gravityT = 0;
 
     public AntiAFK(Proxy proxy, final Pathing pathing) {
@@ -44,8 +55,8 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.gravity) {
                 gravity();
             }
-            if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT == 0)) {
-//                walkTick();
+            if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
+                walkTick();
             }
             if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
                 rotateTick();
@@ -83,20 +94,29 @@ public class AntiAFK extends Module {
             shouldWalk = !shouldWalk;
             walkTickTimer.reset();
             if (shouldWalk) {
-                directionMultiplier *= -1.0;
                 // todo: more intelligent goal setting that checks our goal block is reachable
                 //  maybe also add some randomness
-                currentPathingGoal = pathing.getCurrentPlayerPos().addX(walkGoalDelta * directionMultiplier).addZ(walkGoalDelta * directionMultiplier).toBlockPos();
+                final Pair<Integer, Integer> directions = walkDirectionIterator.next();
+                currentPathingGoal = pathing.getCurrentPlayerPos()
+                        .addX(walkGoalDelta * directions.getKey())
+                        .addZ(walkGoalDelta * directions.getValue())
+                        .toBlockPos();
             }
         }
         if (shouldWalk) {
-            if (walkTickTimer.tick(100L, true)) {
+            if (reachedPathingGoal() || walkTickTimer.tick(100L, true)) {
                 shouldWalk = false;
             } else {
                 Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);
-                this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+                if (!nextMovePos.equals(pathing.getCurrentPlayerPos())) {
+                    this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+                }
             }
         }
+    }
+
+    private boolean reachedPathingGoal() {
+        return Objects.equals(pathing.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
     }
 
     private void gravity() {

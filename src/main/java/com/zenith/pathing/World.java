@@ -12,6 +12,7 @@ import static java.util.Arrays.asList;
 public class World {
 
     private final BlockDataManager blockDataManager;
+    static final Vec3i downVec = Vec3i.of(0, -1, 0);
 
     public World(final BlockDataManager blockDataManager) {
         this.blockDataManager = blockDataManager;
@@ -39,6 +40,12 @@ public class World {
                 .orElse(false);
     }
 
+    public Optional<BlockPos> rayTraceCBDown(final Position startPos) {
+        return rayTraceCB(startPos, downVec);
+    }
+
+    // todo: raytrace in arbitrary direction
+    // todo: make this more efficient
     public Optional<BlockPos> rayTraceCB(final Position startPos, final Vec3i ray) {
         final int maxDist = 256; // todo: make this based on max possible distance for loaded chunks or something
         Position pos = startPos;
@@ -52,7 +59,7 @@ public class World {
             for (int j = 0; j < maxDist; j++) {
                 Optional<BlockPos> intersection = getBlockIntersection(pos);
                 if (intersection.isPresent()) return intersection;
-                pos.addX(j * i);
+                pos = pos.addX(j * i);
             }
         } else if (ray.y() != 0) {
             int i;
@@ -83,18 +90,23 @@ public class World {
     }
 
     private Optional<BlockPos> getBlockIntersection(Position pos) {
-        BlockPos center = pos.toBlockPos();
-        List<BlockPos> surroundingBlockPos = asList(center, center.addX(1), center.addX(-1), center.addZ(1), center.addZ(-1),
+        final BlockPos center = pos.toBlockPos();
+        // this is not very efficient but it works
+        final List<BlockPos> surroundingBlockPos = asList(center, center.addX(1), center.addX(-1), center.addZ(1), center.addZ(-1),
                 center.addX(1).addZ(1), center.addX(1).addZ(-1),
                 center.addX(-1).addZ(1), center.addX(-1).addZ(-1));
         for (BlockPos blockPos : surroundingBlockPos) {
             if (isSolidBlock(blockPos)) {
-                if (Cuboid.playerIntersectsWithBlock(pos, blockPos)) {
+                if (CollisionBox.playerIntersectsWithBlock(pos, blockPos)) {
                     return Optional.of(blockPos);
                 }
             }
         }
         return Optional.empty();
+    }
+
+    public Optional<BlockPos> raytraceDown(final BlockPos startPos) {
+        return rayTrace(startPos, downVec);
     }
 
     // raytrace with actual ray, no collision box checks assumes everything has block dimensions
@@ -115,7 +127,7 @@ public class World {
                 if (isSolidBlock(blockPos)) {
                     return Optional.of(blockPos);
                 }
-                blockPos.addX(j * i);
+                blockPos = blockPos.addX(j * i);
             }
         } else if (ray.y() != 0) {
             int i;
