@@ -1,1 +1,2 @@
-call gradlew clean build
+call git pull
+call gradlew build
