@@ -16,6 +16,9 @@ import com.zenith.database.QueueWaitDatabase;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.module.*;
+import com.zenith.pathing.BlockDataManager;
+import com.zenith.pathing.Pathing;
+import com.zenith.pathing.World;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;
@@ -81,6 +84,7 @@ public class Proxy {
     private Instant lastActiveHoursConnect = Instant.EPOCH;
     private final PriorityBanChecker priorityBanChecker;
     public static AutoUpdater autoUpdater;
+    public final World world;
 
     public static void main(String... args) {
         DEFAULT_LOG.info("Starting Proxy...");
@@ -106,6 +110,7 @@ public class Proxy {
         this.activeHoursExecutorService = new ScheduledThreadPoolExecutor(1);
         this.reconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         this.priorityBanChecker = new PriorityBanChecker();
+        this.world = new World(new BlockDataManager());
         EVENT_BUS.subscribe(this);
         if (CONFIG.database.queueWait.enabled) {
             // if we add more databases, ensure the connectionpool is shared
@@ -228,7 +233,7 @@ public class Proxy {
 
     void registerModules() {
         this.modules = asList(
-                new AntiAFK(this),
+                new AntiAFK(this, new Pathing(world)),
                 new AutoDisconnect(this),
                 new AutoReply(this),
                 new Spook(this)

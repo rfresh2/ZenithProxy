@@ -2,16 +2,24 @@ package com.zenith.module;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.pathing.BlockPos;
+import com.zenith.pathing.Pathing;
+import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
+import javafx.util.Pair;
+import org.apache.commons.collections4.iterators.LoopingListIterator;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.CONFIG;
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
@@ -19,12 +27,23 @@ public class AntiAFK extends Module {
     private final TickTimer startWalkTickTimer = new TickTimer();
     private final TickTimer walkTickTimer = new TickTimer();
     private final TickTimer rotateTimer = new TickTimer();
+    private final Pathing pathing;
     private boolean shouldWalk = false;
-    // toggle this between 1 and -1
-    private double xDirectionMultiplier = 1.0;
+    private final int walkGoalDelta = 9;
+    private final List<Pair<Integer, Integer>> walkDirections = asList(
+            new Pair<>(1, 0), new Pair<>(-1, 0),
+            new Pair<>(1, 1), new Pair<>(-1, -1),
+            new Pair<>(1, -1), new Pair<>(-1, 1),
+            new Pair<>(0, 1), new Pair<>(0, -1));
+    private final LoopingListIterator<Pair<Integer, Integer>> walkDirectionIterator = new LoopingListIterator<>(walkDirections);
+    private BlockPos currentPathingGoal;
+    // tick time since we started falling
+    // can be negative, indicates pathing should wait until it reaches 0 to fall
+    private int gravityT = 0;
 
-    public AntiAFK(Proxy proxy) {
+    public AntiAFK(Proxy proxy, final Pathing pathing) {
         super(proxy);
+        this.pathing = pathing;
     }
 
     @Subscribe
@@ -33,7 +52,10 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
-            if (CONFIG.client.extra.antiafk.actions.walk) {
+            if (CONFIG.client.extra.antiafk.actions.gravity) {
+                gravity();
+            }
+            if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
                 walkTick();
             }
             if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
@@ -60,26 +82,51 @@ public class AntiAFK extends Module {
         }
     }
 
+    public void handlePlayerPosRotate() {
+        synchronized (this) {
+            this.gravityT = -2;
+        }
+    }
+
     private void walkTick() {
-        if (startWalkTickTimer.tick(1200L, true)) {
+        if (startWalkTickTimer.tick(400L, true)) {
             shouldWalk = !shouldWalk;
             walkTickTimer.reset();
+            if (shouldWalk) {
+                final Pair<Integer, Integer> directions = walkDirectionIterator.next();
+                currentPathingGoal = pathing.getCurrentPlayerPos()
+                        .addX(walkGoalDelta * directions.getKey())
+                        .addZ(walkGoalDelta * directions.getValue())
+                        .toBlockPos();
+            }
         }
         if (shouldWalk) {
-            if (walkTickTimer.tick(100L, true)) {
+            if (reachedPathingGoal() || walkTickTimer.tick(100L, true)) {
                 shouldWalk = false;
-                xDirectionMultiplier *= -1.0;
             } else {
-                // calculate a walk, to keep things simple let's just walk +x and -x
-                double newX = CACHE.getPlayerCache().getX() + (0.2 * xDirectionMultiplier);
-                CLIENT_LOG.debug("Walking to new X: " + newX);
-                this.proxy.getClient().send(
-                        new ClientPlayerPositionPacket(
-                                true,
-                                newX,
-                                CACHE.getPlayerCache().getY(),
-                                CACHE.getPlayerCache().getZ()));
-                CACHE.getPlayerCache().setX(newX);
+                Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);
+                if (nextMovePos.equals(pathing.getCurrentPlayerPos())) {
+                    shouldWalk = false;
+                }
+                this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+            }
+        }
+    }
+
+    private boolean reachedPathingGoal() {
+        return Objects.equals(pathing.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
+    }
+
+    private void gravity() {
+        synchronized (this) {
+            final Optional<Position> nextGravityMove = pathing.calculateNextGravityMove(gravityT);
+            if (nextGravityMove.isPresent()) {
+                if (!nextGravityMove.get().equals(pathing.getCurrentPlayerPos())) {
+                    this.proxy.getClient().send(nextGravityMove.get().toPlayerPositionPacket());
+                }
+                gravityT++;
+            } else {
+                gravityT = 0;
             }
         }
     }

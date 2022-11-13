@@ -1,10 +1,12 @@
 package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.client.ClientSession;
+import com.zenith.module.AntiAFK;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;
@@ -24,8 +26,17 @@ public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler
                 .setPitch((packet.getRelativeElements().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
         if (isNull(session.getProxy().getCurrentPlayer().get())) {
             session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
+            session.send(new ClientPlayerPositionRotationPacket(
+                    false,
+                    CACHE.getPlayerCache().getX(),
+                    CACHE.getPlayerCache().getY(),
+                    CACHE.getPlayerCache().getZ(),
+                    CACHE.getPlayerCache().getYaw(),
+                    CACHE.getPlayerCache().getPitch()
+            ));
         }
         SpectatorHelper.syncPlayerPositionWithSpectators();
+        session.getProxy().getModules().stream().filter(m -> m instanceof AntiAFK).findFirst().map(module -> (AntiAFK) module).ifPresent(AntiAFK::handlePlayerPosRotate);
         return true;
     }
 
