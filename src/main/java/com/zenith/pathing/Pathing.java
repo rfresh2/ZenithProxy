@@ -21,18 +21,34 @@ public class Pathing {
         final BlockPos currentPlayerBlockPos = currentPlayerPos.toBlockPos();
         final int xDelta = goal.getX() - currentPlayerBlockPos.getX();
         final int zDelta = goal.getZ() - currentPlayerBlockPos.getZ();
-        if (xDelta != 0) {
-            Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * (double) (xDelta / Math.abs(xDelta)));
-            if (isNextWalkSafe(xMovePos)) {
-                return xMovePos;
+        if (Math.abs(xDelta) > Math.abs(zDelta)) {
+            if (xDelta != 0) {
+                Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Integer.signum(xDelta));
+                if (isNextWalkSafe(xMovePos)) {
+                    return xMovePos;
+                }
+            }
+            if (zDelta != 0) {
+                Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Integer.signum(zDelta));
+                if (isNextWalkSafe(zMovePos)) {
+                    return zMovePos;
+                }
+            }
+        } else {
+            if (zDelta != 0) {
+                Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Integer.signum(zDelta));
+                if (isNextWalkSafe(zMovePos)) {
+                    return zMovePos;
+                }
+            }
+            if (xDelta != 0) {
+                Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Integer.signum(xDelta));
+                if (isNextWalkSafe(xMovePos)) {
+                    return xMovePos;
+                }
             }
         }
-        if (zDelta != 0) {
-            Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * (double) (zDelta / Math.abs(zDelta)));
-            if (isNextWalkSafe(zMovePos)) {
-                return zMovePos;
-            }
-        }
+
 
 //        CLIENT_LOG.info("Pathing: No safe movement towards goal found");
         return currentPlayerPos;

@@ -50,40 +50,22 @@ public class World {
         final int maxDist = 256; // todo: make this based on max possible distance for loaded chunks or something
         Position pos = startPos;
         if (ray.x() != 0) {
-            int i;
-            if (ray.x() > 0) {
-                i = 1;
-            } else {
-                i = -1;
-            }
             for (int j = 0; j < maxDist; j++) {
                 Optional<BlockPos> intersection = getBlockIntersection(pos);
                 if (intersection.isPresent()) return intersection;
-                pos = pos.addX(j * i);
+                pos = pos.addX(j * Integer.signum(ray.x()));
             }
         } else if (ray.y() != 0) {
-            int i;
-            if (ray.y() > 0) {
-                i = 1;
-            } else {
-                i = -1;
-            }
             for (int j = 0; j < maxDist; j++) {
                 Optional<BlockPos> intersection = getBlockIntersection(pos);
                 if (intersection.isPresent()) return intersection;
-                pos = startPos.addY(j * i);
+                pos = startPos.addY(j * Integer.signum(ray.y()));
             }
         } else if (ray.z() != 0) {
-            int i;
-            if (ray.z() > 0) {
-                i = 1;
-            } else {
-                i = -1;
-            }
             for (int j = 0; j < maxDist; j++) {
                 Optional<BlockPos> intersection = getBlockIntersection(pos);
                 if (intersection.isPresent()) return intersection;
-                pos = startPos.addZ(j * i);
+                pos = startPos.addZ(j * Integer.signum(ray.z()));
             }
         }
         return Optional.empty();
@@ -117,43 +99,25 @@ public class World {
         final int maxDist = 256; // todo: make this based on max possible distance for loaded chunks or something
         BlockPos blockPos = startPos;
         if (ray.x() != 0) {
-            int i;
-            if (ray.x() > 0) {
-                i = 1;
-            } else {
-                i = -1;
-            }
             for (int j = 0; j < maxDist; j++) {
                 if (isSolidBlock(blockPos)) {
                     return Optional.of(blockPos);
                 }
-                blockPos = blockPos.addX(j * i);
+                blockPos = blockPos.addX(j * Integer.signum(ray.x()));
             }
         } else if (ray.y() != 0) {
-            int i;
-            if (ray.y() > 0) {
-                i = 1;
-            } else {
-                i = -1;
-            }
             for (int j = 0; j < maxDist; j++) {
                 if (isSolidBlock(blockPos)) {
                     return Optional.of(blockPos);
                 }
-                blockPos = startPos.addY(j * i);
+                blockPos = startPos.addY(j * Integer.signum(ray.y()));
             }
         } else if (ray.z() != 0) {
-            int i;
-            if (ray.z() > 0) {
-                i = 1;
-            } else {
-                i = -1;
-            }
             for (int j = 0; j < maxDist; j++) {
                 if (isSolidBlock(blockPos)) {
                     return Optional.of(blockPos);
                 }
-                blockPos = startPos.addZ(j * i);
+                blockPos = startPos.addZ(j * Integer.signum(ray.z()));
             }
         }
         return Optional.empty();

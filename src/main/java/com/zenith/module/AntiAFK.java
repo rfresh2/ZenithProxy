@@ -30,7 +30,7 @@ public class AntiAFK extends Module {
     private final Pathing pathing;
     private boolean shouldWalk = false;
     private final int walkGoalDelta = 9;
-    private List<Pair<Integer, Integer>> walkDirections = asList(
+    private final List<Pair<Integer, Integer>> walkDirections = asList(
             new Pair<>(1, 0), new Pair<>(-1, 0),
             new Pair<>(1, 1), new Pair<>(-1, -1),
             new Pair<>(1, -1), new Pair<>(-1, 1),
