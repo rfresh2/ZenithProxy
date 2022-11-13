@@ -245,11 +245,14 @@ public class DiscordBot {
     @Subscribe
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (CONFIG.client.extra.visualRangeAlert) {
+            boolean notFriend = CONFIG.client.extra.friendList.stream()
+                    .noneMatch(friend -> friend.equalsIgnoreCase(event.playerEntry.getName()));
             EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
                     .title("Player In Visual Range")
+                    .color(notFriend ? Color.RUBY : Color.GREEN)
                     .addField("Player Name", escape(event.playerEntry.getName()), true)
                     .addField("Player UUID", event.playerEntry.getId().toString(), true)
-                    .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
+                    .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
 
             if (CONFIG.discord.reportCoords) {
                 embedCreateSpec.addField("Coordinates", "||["
@@ -259,8 +262,6 @@ public class DiscordBot {
                         + "]||", false);
             }
             if (CONFIG.client.extra.visualRangeAlertMention) {
-                boolean notFriend = CONFIG.client.extra.friendList.stream()
-                        .noneMatch(friend -> friend.equalsIgnoreCase(event.playerEntry.getName()));
                 if (notFriend) {
                     if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
                         sendEmbedMessage("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build());
@@ -400,10 +401,10 @@ public class DiscordBot {
                     .filter(s -> s.equalsIgnoreCase(event.playerEntry.getName()))
                     .findFirst()
                     .ifPresent(player -> {
-                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">",  EmbedCreateSpec.builder()
+                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Online!")
                                 .addField("Player Name", event.playerEntry.getName(), true)
-                                .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                                .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
                     });
         }
@@ -425,10 +426,10 @@ public class DiscordBot {
                     .filter(s -> s.equalsIgnoreCase(event.playerEntry.getName()))
                     .findFirst()
                     .ifPresent(player -> {
-                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">",  EmbedCreateSpec.builder()
+                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Offline!")
                                 .addField("Player Name", event.playerEntry.getName(), true)
-                                .image(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                                .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
                     });
         }

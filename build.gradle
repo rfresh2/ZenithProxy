@@ -30,7 +30,7 @@ ext {
     discord4jVersion = "3.2.3"
     pounceVersion = "main-SNAPSHOT"
     hikaricpVersion = "4.0.3"
-    postgresVersion = "42.3.3"
+    postgresVersion = '42.5.0'
 }
 
 group "com.zenith"
@@ -132,7 +132,7 @@ jooq {
 
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade "org.jooq:jooq:3.16.6"
+    shade 'org.jooq:jooq:3.17.5'
     shade "com.zaxxer:HikariCP:$hikaricpVersion"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'

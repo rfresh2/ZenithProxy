@@ -69,7 +69,7 @@ public class Proxy {
     protected ScheduledExecutorService autoReconnectExecutorService;
     protected ScheduledExecutorService activeHoursExecutorService;
     protected ScheduledExecutorService reconnectExecutorService;
-    protected List<Module> modules;
+    protected List<Module> modules = Collections.emptyList();
     protected Database queueWait; // nullable
     protected final TPSCalculator tpsCalculator;
 
@@ -238,6 +238,12 @@ public class Proxy {
                 new AutoReply(this),
                 new Spook(this)
         );
+    }
+
+    public Optional<Module> getModule(final Class<? extends Module> clazz) {
+        return this.modules.stream()
+                .filter(module -> module.getClass().equals(clazz))
+                .findFirst();
     }
 
     public synchronized void connect() {

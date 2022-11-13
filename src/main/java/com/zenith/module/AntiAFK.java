@@ -66,10 +66,8 @@ public class AntiAFK extends Module {
     }
 
     private boolean spookHasTarget() {
-        return this.proxy.getModules().stream()
-                .filter(m -> m instanceof Spook)
+        return this.proxy.getModule(Spook.class)
                 .map(m -> ((Spook) m).hasTarget.get())
-                .findFirst()
                 .orElse(false);
     }
 
