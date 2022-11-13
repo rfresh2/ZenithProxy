@@ -76,7 +76,7 @@ repositories {
 sourceSets {
     main {
         resources {
-            srcDirs("minecraft-data/")
+            srcDirs("data/")
         }
     }
 }

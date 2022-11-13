@@ -67,8 +67,13 @@ public final class Config {
                 public boolean enabled = true;
                 public static final class Actions {
                     public boolean walk = true;
+                    // avoid going off ledges even when falls are non-fatal
+                    public boolean safeWalk = true;
                     public boolean swingHand = true;
                     public boolean rotate = true;
+                    public boolean gravity = true;
+                    // avoid falls that could cause player death
+                    public boolean safeGravity = true;
                 }
             }
 

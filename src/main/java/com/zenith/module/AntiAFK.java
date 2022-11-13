@@ -11,6 +11,7 @@ import com.zenith.pathing.Pathing;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
 
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.zenith.util.Constants.CONFIG;
@@ -27,6 +28,7 @@ public class AntiAFK extends Module {
     // toggle this between 1 and -1
     private double directionMultiplier = 1.0;
     private BlockPos currentPathingGoal;
+    private int gravityT = 0;
 
     public AntiAFK(Proxy proxy, final Pathing pathing) {
         super(proxy);
@@ -39,8 +41,11 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
-            if (CONFIG.client.extra.antiafk.actions.walk) {
-                walkTick();
+            if (CONFIG.client.extra.antiafk.actions.gravity) {
+                gravity();
+            }
+            if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT == 0)) {
+//                walkTick();
             }
             if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
                 rotateTick();
@@ -66,6 +71,12 @@ public class AntiAFK extends Module {
         }
     }
 
+    public void handlePlayerPosRotate() {
+        synchronized (this) {
+            this.gravityT = -2;
+        }
+    }
+
     private void walkTick() {
         // temp lowering this 200 for testing
         if (startWalkTickTimer.tick(200L, true)) {
@@ -73,6 +84,8 @@ public class AntiAFK extends Module {
             walkTickTimer.reset();
             if (shouldWalk) {
                 directionMultiplier *= -1.0;
+                // todo: more intelligent goal setting that checks our goal block is reachable
+                //  maybe also add some randomness
                 currentPathingGoal = pathing.getCurrentPlayerPos().addX(walkGoalDelta * directionMultiplier).addZ(walkGoalDelta * directionMultiplier).toBlockPos();
             }
         }
@@ -82,6 +95,20 @@ public class AntiAFK extends Module {
             } else {
                 Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);
                 this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+            }
+        }
+    }
+
+    private void gravity() {
+        synchronized (this) {
+            final Optional<Position> nextGravityMove = pathing.calculateNextGravityMove(gravityT);
+            if (nextGravityMove.isPresent()) {
+                if (!nextGravityMove.get().equals(pathing.getCurrentPlayerPos())) {
+                    this.proxy.getClient().send(nextGravityMove.get().toPlayerPositionPacket());
+                }
+                gravityT++;
+            } else {
+                gravityT = 0;
             }
         }
     }

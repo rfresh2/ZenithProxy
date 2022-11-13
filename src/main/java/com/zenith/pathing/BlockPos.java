@@ -12,7 +12,15 @@ public class BlockPos {
         return new ChunkPos(x >> 4, y >> 4, z >> 4);
     }
 
+    public BlockPos addX(int delta) {
+        return new BlockPos(x + delta, y, z);
+    }
+
     public BlockPos addY(int delta) {
         return new BlockPos(x, y + delta, z);
+    }
+
+    public BlockPos addZ(int delta) {
+        return new BlockPos(x, y, z + delta);
     }
 }

@@ -15,7 +15,7 @@ public class BlockDataManager {
     private final List<Block> blocks;
 
     public BlockDataManager() {
-        File f = new File(this.getClass().getClassLoader().getResource("data/pc/1.12/blocks.json").getFile());
+        File f = new File("data/pc/1.12/blocks.json");
         try (Reader reader = new UTF8FileReader(f)) {
             blocks = GSON.fromJson(reader, TypeToken.getParameterized(List.class, Block.class).getType());
         } catch (IOException e) {

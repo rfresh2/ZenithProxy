@@ -1,17 +1,18 @@
 package com.zenith.pathing;
 
 import lombok.RequiredArgsConstructor;
+import net.daporkchop.lib.math.vector.Vec3i;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CLIENT_LOG;
+import java.util.Optional;
+
+import static com.zenith.util.Constants.*;
 
 @RequiredArgsConstructor
 public class Pathing {
-    private static final double walkBlocksPerTick = 4 / 20.0; // bps / 20
+    private static final double walkBlocksPerTick = 3 / 20.0; // need to go slower than sprint to not trip NCP
+
     private final World world;
 
-    // todo: vertical movement
-    //  keeping this simple with 2d x-z movement right now
     // todo: this pathing doesn't know how to get around blocks
     //  i.e. sometimes you need to go in the opposite direction to get to a goal
     //  might need to incorporate some algorithm like A* to chart out a full path rather than just the next move
@@ -20,17 +21,71 @@ public class Pathing {
         final BlockPos currentPlayerBlockPos = currentPlayerPos.toBlockPos();
         final int xDelta = goal.getX() - currentPlayerBlockPos.getX();
         final int zDelta = goal.getZ() - currentPlayerBlockPos.getZ();
-        // let's try moving x
-        Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * (double) (xDelta / Math.abs(xDelta)));
-        if (isNextWalkSafe(xMovePos)) {
-            return xMovePos;
+        if (xDelta != 0) {
+            Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * (double) (xDelta / Math.abs(xDelta)));
+            if (isNextWalkSafe(xMovePos)) {
+                return xMovePos;
+            }
         }
-        Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * (double) (zDelta / Math.abs(zDelta)));
-        if (isNextWalkSafe(zMovePos)) {
-            return zMovePos;
+        if (zDelta != 0) {
+            Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * (double) (zDelta / Math.abs(zDelta)));
+            if (isNextWalkSafe(zMovePos)) {
+                return zMovePos;
+            }
         }
-        CLIENT_LOG.info("Pathing: No safe movement towards goal found");
+
+//        CLIENT_LOG.info("Pathing: No safe movement towards goal found");
         return currentPlayerPos;
+    }
+
+    // empty optional when we shouldn't do a gravity move
+    public Optional<Position> calculateNextGravityMove(
+            // t = current tick time from when we started falling
+            final int t) {
+        final Position currentPlayerPos = getCurrentPlayerPos();
+        if (t < 0) return Optional.of(currentPlayerPos);
+        final Optional<BlockPos> groundTraceResult = this.world.rayTraceCB(currentPlayerPos, Vec3i.of(0, -1, 0));
+        if (groundTraceResult.isPresent()) {
+            // todo: handle half blocks
+            final BlockPos floor = groundTraceResult.get().addY(1);
+            if ((double) floor.getY() == currentPlayerPos.getY()) {
+                return Optional.empty(); // we're on ground
+            } else {
+                final double yDelta = floor.getY() - currentPlayerPos.getY();
+                if (yDelta > 0) return Optional.empty();
+                if (CONFIG.client.extra.antiafk.actions.safeGravity) {
+                    if (calculateFallDamage(Math.abs(yDelta)) >= CACHE.getPlayerCache().getThePlayer().getHealth()) {
+                        CLIENT_LOG.warn("Gravity: possible fatal fall detected");
+                        return Optional.empty();
+                    }
+                }
+                final double nextGravityMoveDelta = calculateGravity(t);
+                Position nextGravityMove = currentPlayerPos.addY(nextGravityMoveDelta);
+                if (nextGravityMove.getY() <= floor.getY()) {
+                    // handle ground impact
+                    nextGravityMove = currentPlayerPos.addY(yDelta);
+                }
+                return Optional.of(nextGravityMove);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public double calculateFallDamage(final double distance) {
+        // todo: check if we have feather falling + prot 4 which will increase our distance to 103 before death
+        // todo: check if we're falling into a liquid
+        return Math.max(0, distance - 3.5);
+    }
+
+    public double calculateGravity(final int t) {
+        // https://minecraft.fandom.com/wiki/Transportation
+        int a = t;
+        double result = 0;
+        while (a > 0) {
+            result = (result - 0.08) * 0.98;
+            a--;
+        }
+        return result;
     }
 
     public Position getCurrentPlayerPos() {
@@ -39,8 +94,27 @@ public class Pathing {
 
     public boolean isNextWalkSafe(final Position position) {
         final BlockPos blockPos = position.toBlockPos();
-        final boolean groundSolid = this.world.isSolidBlock(blockPos.addY(-1));
+        final BlockPos groundBlockPos = blockPos.addY(-1);
+        final boolean groundSolid = this.world.isSolidBlock(groundBlockPos);
         final boolean blocked = this.world.isSolidBlock(blockPos) || this.world.isSolidBlock(blockPos.addY(1));
+        if (!CONFIG.client.extra.antiafk.actions.safeWalk) {
+            if (!groundSolid) {
+                if (CONFIG.client.extra.antiafk.actions.gravity) {
+                    if (CONFIG.client.extra.antiafk.actions.safeGravity) {
+                        Optional<BlockPos> groundTraceResult = this.world.rayTrace(groundBlockPos, Vec3i.of(0, -1, 0));
+                        if (groundTraceResult.isPresent()) {
+                            final BlockPos floor = groundTraceResult.get().addY(1);
+                            final double yDelta = floor.getY() - groundBlockPos.getY();
+                            if (calculateFallDamage(Math.abs(yDelta)) < CACHE.getPlayerCache().getThePlayer().getHealth()) {
+                                return !blocked;
+                            }
+                        }
+                    } else {
+                        return !blocked;
+                    }
+                }
+            }
+        }
         return groundSolid && !blocked;
     }
 }
