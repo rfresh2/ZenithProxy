@@ -10,14 +10,15 @@ import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Pathing;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
-import javafx.util.Pair;
 import org.apache.commons.collections4.iterators.LoopingListIterator;
+import org.apache.commons.math3.util.Pair;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CONFIG;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
@@ -48,7 +49,7 @@ public class AntiAFK extends Module {
 
     @Subscribe
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.antiafk.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue()) {
+        if (CONFIG.client.extra.antiafk.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue() && CACHE.getPlayerCache().getThePlayer().getHealth() > 0) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
