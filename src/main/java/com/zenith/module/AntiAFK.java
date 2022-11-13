@@ -89,7 +89,7 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-        if (startWalkTickTimer.tick(500L, true)) {
+        if (startWalkTickTimer.tick(400L, true)) {
             shouldWalk = !shouldWalk;
             walkTickTimer.reset();
             if (shouldWalk) {

@@ -110,7 +110,7 @@ public class Pathing {
     }
 
     public boolean isNextWalkSafe(final Position position) {
-        final Vec3i direction = getCurrentPlayerPos().minus(position).toDirectionVector();
+        final Vec3i direction = position.minus(getCurrentPlayerPos()).toDirectionVector();
         final BlockPos blockPos = position.toBlockPos();
         final BlockPos groundBlockPos = blockPos.addY(-1);
         final Optional<BlockPos> legsRayTrace = this.world.rayTraceCB(position.addY(0.01), direction);
