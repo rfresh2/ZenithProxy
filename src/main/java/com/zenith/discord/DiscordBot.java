@@ -190,7 +190,7 @@ public class DiscordBot {
 
     private void sendQueueWarning() {
         sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
-                .title("Proxy Queue Warning")
+                .title("Queue Warning")
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)
                 .color(Color.MOON_YELLOW)
@@ -482,12 +482,12 @@ public class DiscordBot {
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
         if (event.prio) {
             embedCreateSpec
-                    .title("PRIO QUEUE STATUS DETECTED")
+                    .title("Prio Queue Status Detected")
                     .color(Color.GREEN);
         } else {
             embedCreateSpec
-                    .title("PRIO QUEUE STATUS LOST")
-                    .color(Color.RED);
+                    .title("Prio Queue Status Lost")
+                    .color(Color.RUBY);
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
@@ -498,11 +498,11 @@ public class DiscordBot {
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
         if (event.prioBanned) {
             embedCreateSpec
-                    .title("PRIO BAN DETECTED")
-                    .color(Color.RED);
+                    .title("Prio Ban Detected")
+                    .color(Color.RUBY);
         } else {
             embedCreateSpec
-                    .title("PRIO UNBAN DETECTED")
+                    .title("Prio Unban Detected")
                     .color(Color.GREEN);
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);

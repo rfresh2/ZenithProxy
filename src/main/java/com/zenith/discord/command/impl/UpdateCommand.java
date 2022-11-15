@@ -36,7 +36,7 @@ public class UpdateCommand extends Command {
                 saveConfig();
                 c.getSource().getEmbedBuilder()
                         .title("Failed updating")
-                        .color(Color.RED);
+                        .color(Color.RUBY);
             }
             return 1;
         });

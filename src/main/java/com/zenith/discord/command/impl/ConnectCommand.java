@@ -36,7 +36,7 @@ public class ConnectCommand extends Command {
                     DISCORD_LOG.error("Failed to connect", e);
                     c.getSource().getEmbedBuilder()
                             .title("Proxy Failed to Connect")
-                            .color(Color.RED)
+                            .color(Color.RUBY)
                             .addField("Server", CONFIG.client.server.address, true)
                             .addField("Proxy IP", CONFIG.server.getProxyAddress(), false);
                 }
