@@ -96,11 +96,15 @@ public class AntiAFK extends Module {
 
     @Subscribe
     private void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
+        // there's still a race condition where this event is called after the first client tick
+        // so dont rely on this to be 100% accurate
         resetChecks();
     }
 
     @Subscribe
     private void handleOnlineEvent(final PlayerOnlineEvent event) {
+        // there's still a race condition where this event is called after the first client tick
+        // so dont rely on this to be 100% accurate
         resetChecks();
     }
 
@@ -119,7 +123,13 @@ public class AntiAFK extends Module {
 
     private double getDistanceMovedDelta() {
         final Collection<Position> positions = this.positionCache.asMap().values();
-        double minX = Double.POSITIVE_INFINITY;
+        if (positions.size() < 10) {
+            // handle race condition where we check delta right after login
+            // this means we're asserting that we've had a significant amount of movements
+            // until then we're not giving a true delta, there might be a better way to handle the race condition
+            return Double.MAX_VALUE;
+        }
+        double minX = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double minZ = Double.MAX_VALUE;
         double maxZ = -Double.MAX_VALUE;
