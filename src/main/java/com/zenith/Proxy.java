@@ -5,8 +5,6 @@ import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
-import com.github.steveice10.mc.protocol.data.game.ClientRequest;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.ClientSession;
@@ -27,7 +25,6 @@ import com.zenith.util.Queue;
 import com.zenith.util.*;
 import lombok.Getter;
 import lombok.Setter;
-import net.daporkchop.lib.common.util.PorkUtil;
 import reactor.netty.http.client.HttpClient;
 
 import javax.imageio.ImageIO;
@@ -236,7 +233,8 @@ public class Proxy {
                 new AntiAFK(this, new Pathing(world)),
                 new AutoDisconnect(this),
                 new AutoReply(this),
-                new Spook(this)
+                new Spook(this),
+                new AutoRespawn(this)
         );
     }
 
@@ -521,20 +519,6 @@ public class Proxy {
         if (!this.isPrio.isPresent()) {
             // assume we are prio if we skipped queuing
             EVENT_BUS.dispatch(new PrioStatusEvent(true));
-        }
-    }
-
-    @Subscribe
-    public void handleDeathEvent(DeathEvent event) {
-        if (CONFIG.client.extra.autoRespawn.enabled)  {
-            ForkJoinPool.commonPool().execute(() -> {
-                PorkUtil.sleep(CONFIG.client.extra.autoRespawn.delayMillis);
-                if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0)    {
-                    MODULE_LOG.info("Performing AutoRespawn");
-                    CACHE.getPlayerCache().getThePlayer().setHealth(20.0f);
-                    Proxy.getInstance().getClient().send(new ClientRequestPacket(ClientRequest.RESPAWN));
-                }
-            });
         }
     }
 
