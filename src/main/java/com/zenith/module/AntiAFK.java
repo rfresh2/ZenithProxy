@@ -4,8 +4,13 @@ import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
+import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.proxy.PlayerOnlineEvent;
+import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Pathing;
 import com.zenith.pathing.Position;
@@ -13,13 +18,16 @@ import com.zenith.util.TickTimer;
 import org.apache.commons.collections4.iterators.LoopingListIterator;
 import org.apache.commons.math3.util.Pair;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
@@ -28,14 +36,20 @@ public class AntiAFK extends Module {
     private final TickTimer startWalkTickTimer = new TickTimer();
     private final TickTimer walkTickTimer = new TickTimer();
     private final TickTimer rotateTimer = new TickTimer();
+    private static final long positionCacheTTLMins = 20;
+    private final TickTimer distanceDeltaCheckTimer = new TickTimer();
     private final Pathing pathing;
     private boolean shouldWalk = false;
-    private final int walkGoalDelta = 9;
+    private final Cache<Position, Position> positionCache;
     private final List<Pair<Integer, Integer>> walkDirections = asList(
             new Pair<>(1, 0), new Pair<>(-1, 0),
             new Pair<>(1, 1), new Pair<>(-1, -1),
+            new Pair<>(0, -1), new Pair<>(0, 1),
+            new Pair<>(-1, 1), new Pair<>(1, -1),
+            new Pair<>(-1, 0), new Pair<>(1, 0),
             new Pair<>(1, -1), new Pair<>(-1, 1),
             new Pair<>(0, 1), new Pair<>(0, -1));
+    private Instant lastDistanceDeltaWarningTime = Instant.EPOCH;
     private final LoopingListIterator<Pair<Integer, Integer>> walkDirectionIterator = new LoopingListIterator<>(walkDirections);
     private BlockPos currentPathingGoal;
     // tick time since we started falling
@@ -45,6 +59,9 @@ public class AntiAFK extends Module {
     public AntiAFK(Proxy proxy, final Pathing pathing) {
         super(proxy);
         this.pathing = pathing;
+        this.positionCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(positionCacheTTLMins, TimeUnit.MINUTES)
+                .build();
     }
 
     @Subscribe
@@ -58,6 +75,18 @@ public class AntiAFK extends Module {
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
                 walkTick();
+                // check distance delta every 10 mins. Stuck kick should happen at 30 mins
+                if (distanceDeltaCheckTimer.tick(12000L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
+                    final double distanceMovedDelta = getDistanceMovedDelta();
+                    if (distanceMovedDelta < 6) {
+                        MODULE_LOG.warn("AntiAFK appears to be stuck. Distance moved: {}", distanceMovedDelta);
+                        if (Instant.now().minus(Duration.ofMinutes(20)).isAfter(lastDistanceDeltaWarningTime)) {
+                            // only send discord warning once every 20 mins so we don't spam too hard
+                            EVENT_BUS.dispatch(new AntiAfkStuckEvent(distanceMovedDelta));
+                            lastDistanceDeltaWarningTime = Instant.now();
+                        }
+                    }
+                }
             }
             if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
                 rotateTick();
@@ -65,10 +94,42 @@ public class AntiAFK extends Module {
         }
     }
 
+    @Subscribe
+    private void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
+        resetChecks();
+    }
+
+    @Subscribe
+    private void handleOnlineEvent(final PlayerOnlineEvent event) {
+        resetChecks();
+    }
+
+    private void resetChecks() {
+        distanceDeltaCheckTimer.reset();
+        this.positionCache.invalidateAll();
+        lastDistanceDeltaWarningTime = Instant.now();
+        gravityT = 0;
+    }
+
     private boolean spookHasTarget() {
         return this.proxy.getModule(Spook.class)
                 .map(m -> ((Spook) m).hasTarget.get())
                 .orElse(false);
+    }
+
+    private double getDistanceMovedDelta() {
+        final Collection<Position> positions = this.positionCache.asMap().values();
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = -Double.MAX_VALUE;
+        double minZ = Double.MAX_VALUE;
+        double maxZ = -Double.MAX_VALUE;
+        for (Position pos : positions) {
+            minX = Math.min(pos.getX(), minX);
+            maxX = Math.max(pos.getX(), maxX);
+            minZ = Math.min(pos.getZ(), minZ);
+            maxZ = Math.max(pos.getZ(), maxZ);
+        }
+        return Math.max(Math.abs(maxX - minX), Math.abs(maxZ - minZ));
     }
 
     private void rotateTick() {
@@ -94,8 +155,8 @@ public class AntiAFK extends Module {
             if (shouldWalk) {
                 final Pair<Integer, Integer> directions = walkDirectionIterator.next();
                 currentPathingGoal = pathing.getCurrentPlayerPos()
-                        .addX(walkGoalDelta * directions.getKey())
-                        .addZ(walkGoalDelta * directions.getValue())
+                        .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getKey())
+                        .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getValue())
                         .toBlockPos();
             }
         }
@@ -108,6 +169,7 @@ public class AntiAFK extends Module {
                     shouldWalk = false;
                 }
                 this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+                this.positionCache.put(nextMovePos, nextMovePos);
             }
         }
     }

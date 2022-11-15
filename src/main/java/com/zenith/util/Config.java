@@ -67,6 +67,9 @@ public final class Config {
                 public boolean enabled = true;
                 public static final class Actions {
                     public boolean walk = true;
+                    // we only need about 5-6 blocks in reality but adding a few extra here to be safe
+                    // this isn't dependent on chunks loading but is more based on distance
+                    public int walkDistance = 8;
                     // avoid going off ledges even when falls are non-fatal
                     public boolean safeWalk = true;
                     public boolean swingHand = true;
@@ -74,6 +77,7 @@ public final class Config {
                     public boolean gravity = true;
                     // avoid falls that could cause player death
                     public boolean safeGravity = true;
+                    public boolean stuckWarning = true;
                 }
             }
 

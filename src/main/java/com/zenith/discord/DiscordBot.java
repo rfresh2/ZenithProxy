@@ -6,6 +6,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.discord.command.CommandManager;
+import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
@@ -217,7 +218,7 @@ public class DiscordBot {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.client.updatePresence(getQueuePresence()).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Started Queuing")
+                .title("Started Queuing")
                 .color(Color.CYAN)
                 .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
                 .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
@@ -506,6 +507,17 @@ public class DiscordBot {
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
+    }
+
+    @Subscribe
+    public void handleAntiAfkStuckEvent(final AntiAfkStuckEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("AntiAFK Warning")
+                .color(Color.RUBY)
+                .description("AntiAFK enabled but player may be stuck. "
+                        + "Log in and move player to a location with 8+ flat blocks to move within.")
+                .addField("Distance Walked", "" + (int) event.distanceMovedDelta, false)
+                .build());
     }
 
     private EmbedCreateSpec getUpdateMessage() {
