@@ -18,31 +18,31 @@ public class Pathing {
     //  might need to incorporate some algorithm like A* to chart out a full path rather than just the next move
     public Position calculateNextMove(final BlockPos goal) {
         final Position currentPlayerPos = getCurrentPlayerPos();
-        final BlockPos currentPlayerBlockPos = currentPlayerPos.toBlockPos();
-        final int xDelta = goal.getX() - currentPlayerBlockPos.getX();
-        final int zDelta = goal.getZ() - currentPlayerBlockPos.getZ();
+        final Position goalPosition = new Position(goal.getX() + 0.5, goal.getY(), goal.getZ() + 0.5);
+        final double xDelta = goalPosition.getX() - currentPlayerPos.getX();
+        final double zDelta = goalPosition.getZ() - currentPlayerPos.getZ();
         if (Math.abs(xDelta) > Math.abs(zDelta)) {
             if (xDelta != 0) {
-                Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Integer.signum(xDelta));
+                final Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Math.signum(xDelta));
                 if (isNextWalkSafe(xMovePos)) {
                     return xMovePos;
                 }
             }
             if (zDelta != 0) {
-                Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Integer.signum(zDelta));
+                final Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Math.signum(zDelta));
                 if (isNextWalkSafe(zMovePos)) {
                     return zMovePos;
                 }
             }
         } else {
             if (zDelta != 0) {
-                Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Integer.signum(zDelta));
+                final Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Math.signum(zDelta));
                 if (isNextWalkSafe(zMovePos)) {
                     return zMovePos;
                 }
             }
             if (xDelta != 0) {
-                Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Integer.signum(xDelta));
+                final Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Math.signum(xDelta));
                 if (isNextWalkSafe(xMovePos)) {
                     return xMovePos;
                 }
@@ -116,14 +116,16 @@ public class Pathing {
         final Optional<BlockPos> legsRayTrace = this.world.rayTraceCB(position.addY(0.01), direction);
         if (legsRayTrace.isPresent()) {
             final BlockPos legRayTraceBlockPos = legsRayTrace.get();
-            final double dist = getCurrentPlayerPos().toBlockPos().distance(legRayTraceBlockPos);
-            if (dist < 2) return false;
+            if (CollisionBox.playerIntersectsWithBlock(getCurrentPlayerPos(), legRayTraceBlockPos)) {
+                return false;
+            }
         }
         final Optional<BlockPos> headRayTrace = this.world.rayTraceCB(position.addY(1.01), direction);
         if (headRayTrace.isPresent()) {
             final BlockPos headRayTraceBlockPos = headRayTrace.get();
-            final double dist = getCurrentPlayerPos().toBlockPos().distance(headRayTraceBlockPos);
-            if (dist < 2) return false;
+            if (CollisionBox.playerIntersectsWithBlock(getCurrentPlayerPos(), headRayTraceBlockPos)) {
+                return false;
+            }
         }
         final boolean groundSolid = this.world.isSolidBlock(groundBlockPos);
         final boolean blocked = this.world.isSolidBlock(blockPos) || this.world.isSolidBlock(blockPos.addY(1));
