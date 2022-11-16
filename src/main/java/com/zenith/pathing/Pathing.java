@@ -23,35 +23,43 @@ public class Pathing {
         final double zDelta = goalPosition.getZ() - currentPlayerPos.getZ();
         if (Math.abs(xDelta) > Math.abs(zDelta)) {
             if (xDelta != 0) {
-                final Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Math.signum(xDelta));
+                final Position xMovePos = currentPlayerPos.addX(getNextMoveDelta(xDelta));
                 if (isNextWalkSafe(xMovePos)) {
                     return xMovePos;
                 }
             }
             if (zDelta != 0) {
-                final Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Math.signum(zDelta));
+                final Position zMovePos = currentPlayerPos.addZ(getNextMoveDelta(zDelta));
                 if (isNextWalkSafe(zMovePos)) {
                     return zMovePos;
                 }
             }
         } else {
             if (zDelta != 0) {
-                final Position zMovePos = currentPlayerPos.addZ(walkBlocksPerTick * Math.signum(zDelta));
+                final Position zMovePos = currentPlayerPos.addZ(getNextMoveDelta(zDelta));
                 if (isNextWalkSafe(zMovePos)) {
                     return zMovePos;
                 }
             }
             if (xDelta != 0) {
-                final Position xMovePos = currentPlayerPos.addX(walkBlocksPerTick * Math.signum(xDelta));
+                final Position xMovePos = currentPlayerPos.addX(getNextMoveDelta(xDelta));
                 if (isNextWalkSafe(xMovePos)) {
                     return xMovePos;
                 }
             }
         }
 
-
 //        CLIENT_LOG.info("Pathing: No safe movement towards goal found");
         return currentPlayerPos;
+    }
+
+    private double getNextMoveDelta(final double delta) {
+        double walkD = walkBlocksPerTick * Math.signum(delta);
+        if (Math.abs(walkD) > Math.abs(delta)) {
+            return delta;
+        } else {
+            return walkD;
+        }
     }
 
     // empty optional when we shouldn't do a gravity move
@@ -60,6 +68,9 @@ public class Pathing {
             final int t) {
         final Position currentPlayerPos = getCurrentPlayerPos();
         if (t < 0) return Optional.of(currentPlayerPos);
+        // note: if floor is > downVec Y distance away we're not going to calc a gravity move
+        // might make this distance configurable but this is probably fine until there's some reason
+        // we want to do a fatal fall
         final Optional<BlockPos> groundTraceResult = this.world.rayTraceCBDown(currentPlayerPos);
         if (groundTraceResult.isPresent()) {
             // todo: handle half blocks
@@ -116,14 +127,14 @@ public class Pathing {
         final Optional<BlockPos> legsRayTrace = this.world.rayTraceCB(position.addY(0.01), direction);
         if (legsRayTrace.isPresent()) {
             final BlockPos legRayTraceBlockPos = legsRayTrace.get();
-            if (CollisionBox.playerIntersectsWithBlock(getCurrentPlayerPos(), legRayTraceBlockPos)) {
+            if (CollisionBox.playerIntersectsWithBlock(position, legRayTraceBlockPos)) {
                 return false;
             }
         }
         final Optional<BlockPos> headRayTrace = this.world.rayTraceCB(position.addY(1.01), direction);
         if (headRayTrace.isPresent()) {
             final BlockPos headRayTraceBlockPos = headRayTrace.get();
-            if (CollisionBox.playerIntersectsWithBlock(getCurrentPlayerPos(), headRayTraceBlockPos)) {
+            if (CollisionBox.playerIntersectsWithBlock(position, headRayTraceBlockPos)) {
                 return false;
             }
         }

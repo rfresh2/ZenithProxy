@@ -24,21 +24,7 @@ public class Position {
     }
 
     public Vec3i toDirectionVector() {
-        if (x > 0) {
-            return Vec3i.of(1, 0, 0);
-        } else if (x < 0) {
-            return Vec3i.of(-1, 0, 0);
-        } else if (y > 0) {
-            return Vec3i.of(0, 1, 0);
-        } else if (y < 0) {
-            return Vec3i.of(0, -1, 0);
-        } else if (z > 0) {
-            return Vec3i.of(0, 0, 1);
-        } else if (z < 0) {
-            return Vec3i.of(0, 0, -1);
-        } else {
-            return Vec3i.of(0, 0, 0);
-        }
+        return Vec3i.of((int) Math.signum(x), (int) Math.signum(y), (int) Math.signum(z));
     }
 
     public Position addX(double delta) {
@@ -51,6 +37,10 @@ public class Position {
 
     public Position addZ(double delta) {
         return new Position(x, y, z + delta);
+    }
+
+    public Position add(final double x, final double y, final double z) {
+        return new Position(getX() + x, getY() + y, getZ() + z);
     }
 
     public Position minus(final Position position) {

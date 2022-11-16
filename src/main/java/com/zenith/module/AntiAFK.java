@@ -34,7 +34,6 @@ import static java.util.Objects.isNull;
 public class AntiAFK extends Module {
     private final TickTimer swingTickTimer = new TickTimer();
     private final TickTimer startWalkTickTimer = new TickTimer();
-    private final TickTimer walkTickTimer = new TickTimer();
     private final TickTimer rotateTimer = new TickTimer();
     private static final long positionCacheTTLMins = 20;
     private final TickTimer distanceDeltaCheckTimer = new TickTimer();
@@ -160,18 +159,16 @@ public class AntiAFK extends Module {
 
     private void walkTick() {
         if (startWalkTickTimer.tick(400L, true)) {
-            shouldWalk = !shouldWalk;
-            walkTickTimer.reset();
-            if (shouldWalk) {
-                final Pair<Integer, Integer> directions = walkDirectionIterator.next();
-                currentPathingGoal = pathing.getCurrentPlayerPos()
-                        .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getKey())
-                        .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getValue())
-                        .toBlockPos();
-            }
+            shouldWalk = true;
+            final Pair<Integer, Integer> directions = walkDirectionIterator.next();
+            currentPathingGoal = pathing.getCurrentPlayerPos()
+                    .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getKey())
+                    .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getValue())
+                    .toBlockPos();
+
         }
         if (shouldWalk) {
-            if (reachedPathingGoal() || walkTickTimer.tick(100L, true)) {
+            if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
                 Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);

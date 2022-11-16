@@ -16,6 +16,10 @@ public class BlockPos {
         return new BlockPos(x + delta, y, z);
     }
 
+    public BlockPos add(final int x, final int y, final int z) {
+        return new BlockPos(getX() + x, getY() + y, getZ() + z);
+    }
+
     public BlockPos addY(int delta) {
         return new BlockPos(x, y + delta, z);
     }

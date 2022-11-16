@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 public class World {
 
     private final BlockDataManager blockDataManager;
-    static final Vec3i downVec = Vec3i.of(0, -1, 0);
+    static final Vec3i downVec = Vec3i.of(0, -150, 0);
 
     public World(final BlockDataManager blockDataManager) {
         this.blockDataManager = blockDataManager;
@@ -47,26 +47,12 @@ public class World {
     // todo: raytrace in arbitrary direction
     // todo: make this more efficient
     public Optional<BlockPos> rayTraceCB(final Position startPos, final Vec3i ray) {
-        final int maxDist = 256; // todo: make this based on max possible distance for loaded chunks or something
         Position pos = startPos;
-        if (ray.x() != 0) {
-            for (int j = 0; j < maxDist; j++) {
-                Optional<BlockPos> intersection = getBlockIntersection(pos);
-                if (intersection.isPresent()) return intersection;
-                pos = pos.addX(j * Integer.signum(ray.x()));
-            }
-        } else if (ray.y() != 0) {
-            for (int j = 0; j < maxDist; j++) {
-                Optional<BlockPos> intersection = getBlockIntersection(pos);
-                if (intersection.isPresent()) return intersection;
-                pos = startPos.addY(j * Integer.signum(ray.y()));
-            }
-        } else if (ray.z() != 0) {
-            for (int j = 0; j < maxDist; j++) {
-                Optional<BlockPos> intersection = getBlockIntersection(pos);
-                if (intersection.isPresent()) return intersection;
-                pos = startPos.addZ(j * Integer.signum(ray.z()));
-            }
+        final Position endPos = startPos.add(ray.x(), ray.y(), ray.z());
+        while (!pos.equals(endPos)) {
+            final Optional<BlockPos> intersection = getBlockIntersection(pos);
+            if (intersection.isPresent()) return intersection;
+            pos = pos.add(Integer.signum(ray.x()), Integer.signum(ray.y()), Integer.signum(ray.z()));
         }
         return Optional.empty();
     }
@@ -92,33 +78,15 @@ public class World {
     }
 
     // raytrace with actual ray, no collision box checks assumes everything has block dimensions
-    // only supporting one direction at a time raytrace atm
     // warning: careful using this for player movement checks, use CB raytrace to use collision boxes
-    // todo: refactor out common code
     public Optional<BlockPos> rayTrace(final BlockPos startPos, final Vec3i ray) {
-        final int maxDist = 256; // todo: make this based on max possible distance for loaded chunks or something
         BlockPos blockPos = startPos;
-        if (ray.x() != 0) {
-            for (int j = 0; j < maxDist; j++) {
-                if (isSolidBlock(blockPos)) {
-                    return Optional.of(blockPos);
-                }
-                blockPos = blockPos.addX(j * Integer.signum(ray.x()));
+        final BlockPos endBlockPos = blockPos.add(ray.x(), ray.y(), ray.z());
+        while (!blockPos.equals(endBlockPos)) {
+            if (isSolidBlock(blockPos)) {
+                return Optional.of(blockPos);
             }
-        } else if (ray.y() != 0) {
-            for (int j = 0; j < maxDist; j++) {
-                if (isSolidBlock(blockPos)) {
-                    return Optional.of(blockPos);
-                }
-                blockPos = startPos.addY(j * Integer.signum(ray.y()));
-            }
-        } else if (ray.z() != 0) {
-            for (int j = 0; j < maxDist; j++) {
-                if (isSolidBlock(blockPos)) {
-                    return Optional.of(blockPos);
-                }
-                blockPos = startPos.addZ(j * Integer.signum(ray.z()));
-            }
+            blockPos = blockPos.add(Integer.signum(ray.x()), Integer.signum(ray.y()), Integer.signum(ray.z()));
         }
         return Optional.empty();
     }
