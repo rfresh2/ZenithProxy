@@ -68,7 +68,7 @@ public class AntiAFK extends Module {
                 swingTick();
             }
             if (CONFIG.client.extra.antiafk.actions.gravity) {
-                gravity();
+                gravityTick();
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
                 walkTick();
@@ -117,12 +117,6 @@ public class AntiAFK extends Module {
 
     private double getDistanceMovedDelta() {
         final Collection<Position> positions = this.positionCache.asMap().values();
-        if (positions.size() < 10) {
-            // handle race condition where we check delta right after login
-            // this means we're asserting that we've had a significant amount of movements
-            // until then we're not giving a true delta, there might be a better way to handle the race condition
-            return Double.MAX_VALUE;
-        }
         double minX = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double minZ = Double.MAX_VALUE;
@@ -180,7 +174,7 @@ public class AntiAFK extends Module {
         return Objects.equals(pathing.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
     }
 
-    private void gravity() {
+    private void gravityTick() {
         synchronized (this) {
             final Optional<Position> nextGravityMove = pathing.calculateNextGravityMove(gravityT);
             if (nextGravityMove.isPresent()) {

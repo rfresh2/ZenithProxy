@@ -36,7 +36,7 @@ public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler
             ));
         }
         SpectatorHelper.syncPlayerPositionWithSpectators();
-        session.getProxy().getModule(AntiAFK.class)
+        session.getProxy().getModuleManager().getModule(AntiAFK.class)
                 .map(module -> (AntiAFK) module)
                 .ifPresent(AntiAFK::handlePlayerPosRotate);
         return true;

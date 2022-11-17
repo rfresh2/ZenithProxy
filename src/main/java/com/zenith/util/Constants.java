@@ -3,7 +3,6 @@ package com.zenith.util;
 import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.zenith.cache.DataCache;
 import com.zenith.client.ClientSession;
 import com.zenith.client.handler.incoming.*;
@@ -48,7 +47,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class Constants {
 
-    public static final JsonParser JSON_PARSER = new JsonParser();
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
     public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");

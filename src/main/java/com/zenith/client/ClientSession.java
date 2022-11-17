@@ -7,11 +7,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import net.daporkchop.lib.unsafe.PUnsafe;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import static com.zenith.util.Constants.CLIENT_LOG;
 
@@ -37,17 +35,6 @@ public class ClientSession extends TcpClientSession {
         this.addListener(new ClientListener(this.proxy, this));
     }
 
-    public String getDisconnectReason() {
-        try {
-            return this.disconnectFuture.get();
-        } catch (ExecutionException e)  {
-            return e.toString();
-        } catch (Exception e) {
-            PUnsafe.throwException(e);
-            return null;
-        }
-    }
-
     @Override
     public void disconnect(String reason, Throwable cause) {
         super.disconnect(reason, cause);
@@ -61,6 +48,7 @@ public class ClientSession extends TcpClientSession {
             CLIENT_LOG.error("", cause);
             this.disconnectFuture.completeExceptionally(cause);
         }
+        this.online = false;
     }
 
     @Override

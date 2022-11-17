@@ -32,6 +32,11 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
             } else if (session.isOnline()) {
                 parse2bPing(packet, session);
             }
+        } else {
+            if (!session.isOnline()) {
+                session.setOnline(true);
+                EVENT_BUS.dispatch(new PlayerOnlineEvent());
+            }
         }
         return true;
     }
