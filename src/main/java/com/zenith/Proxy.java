@@ -11,11 +11,9 @@ import com.zenith.client.ClientSession;
 import com.zenith.database.ConnectionPool;
 import com.zenith.database.Database;
 import com.zenith.database.QueueWaitDatabase;
-import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.*;
-import com.zenith.module.*;
+import com.zenith.module.ModuleManager;
 import com.zenith.pathing.BlockDataManager;
-import com.zenith.pathing.Pathing;
 import com.zenith.pathing.World;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
@@ -44,7 +42,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zenith.util.Constants.*;
-import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -61,12 +58,10 @@ public class Proxy {
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
-    protected final ScheduledExecutorService clientTickExecutorService;
     protected final ScheduledExecutorService clientTimeoutExecutorService;
     protected ScheduledExecutorService autoReconnectExecutorService;
     protected ScheduledExecutorService activeHoursExecutorService;
     protected ScheduledExecutorService reconnectExecutorService;
-    protected List<Module> modules = Collections.emptyList();
     protected Database queueWait; // nullable
     protected final TPSCalculator tpsCalculator;
 
@@ -82,6 +77,7 @@ public class Proxy {
     private final PriorityBanChecker priorityBanChecker;
     public static AutoUpdater autoUpdater;
     public final World world;
+    private final ModuleManager moduleManager;
 
     public static void main(String... args) {
         DEFAULT_LOG.info("Starting Proxy...");
@@ -101,7 +97,6 @@ public class Proxy {
     }
 
     public Proxy() {
-        this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
         this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
         this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
         this.activeHoursExecutorService = new ScheduledThreadPoolExecutor(1);
@@ -114,12 +109,12 @@ public class Proxy {
             this.queueWait = new QueueWaitDatabase(new ConnectionPool(), this);
         }
         this.tpsCalculator = new TPSCalculator();
+        this.moduleManager = new ModuleManager(this);
     }
 
     public void start() {
         try {
             saveConfig();
-            registerModules();
             if (CONFIG.server.extra.timeout.enable) {
                 long millis = CONFIG.server.extra.timeout.millis;
                 long interval = CONFIG.server.extra.timeout.interval;
@@ -132,13 +127,6 @@ public class Proxy {
             }
             this.startServer();
             CACHE.reset(true);
-            clientTickExecutorService.scheduleAtFixedRate(() -> {
-                if (this.isConnected()
-                        && ((MinecraftProtocol) this.client.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                        && isNull(this.currentPlayer.get())) {
-                    MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(new ClientTickEvent()));
-                }
-            }, 0, 50L, TimeUnit.MILLISECONDS);
             activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             if (CONFIG.client.extra.sixHourReconnect) {
                 reconnectExecutorService.scheduleAtFixedRate(() -> {
@@ -226,22 +214,6 @@ public class Proxy {
             this.client.disconnect(reason);
         }
         CACHE.reset(true);
-    }
-
-    void registerModules() {
-        this.modules = asList(
-                new AntiAFK(this, new Pathing(world)),
-                new AutoDisconnect(this),
-                new AutoReply(this),
-                new Spook(this),
-                new AutoRespawn(this)
-        );
-    }
-
-    public Optional<Module> getModule(final Class<? extends Module> clazz) {
-        return this.modules.stream()
-                .filter(module -> module.getClass().equals(clazz))
-                .findFirst();
     }
 
     public synchronized void connect() {

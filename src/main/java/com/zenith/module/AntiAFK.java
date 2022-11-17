@@ -9,8 +9,6 @@ import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
-import com.zenith.event.proxy.PlayerOnlineEvent;
-import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Pathing;
 import com.zenith.pathing.Position;
@@ -93,29 +91,26 @@ public class AntiAFK extends Module {
         }
     }
 
-    @Subscribe
-    private void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
-        // there's still a race condition where this event is called after the first client tick
-        // so dont rely on this to be 100% accurate
-        resetChecks();
+    @Override
+    public void clientTickStarting() {
+        reset();
     }
 
-    @Subscribe
-    private void handleOnlineEvent(final PlayerOnlineEvent event) {
-        // there's still a race condition where this event is called after the first client tick
-        // so dont rely on this to be 100% accurate
-        resetChecks();
-    }
-
-    private void resetChecks() {
+    private void reset() {
+        swingTickTimer.reset();
+        startWalkTickTimer.reset();
+        rotateTimer.reset();
         distanceDeltaCheckTimer.reset();
-        this.positionCache.invalidateAll();
-        lastDistanceDeltaWarningTime = Instant.now();
+        shouldWalk = false;
+        positionCache.invalidateAll();
+        lastDistanceDeltaWarningTime = Instant.EPOCH;
+        walkDirectionIterator.reset();
+        currentPathingGoal = null;
         gravityT = 0;
     }
 
     private boolean spookHasTarget() {
-        return this.proxy.getModule(Spook.class)
+        return this.proxy.getModuleManager().getModule(Spook.class)
                 .map(m -> ((Spook) m).hasTarget.get())
                 .orElse(false);
     }

@@ -14,4 +14,10 @@ public abstract class Module {
         this.proxy = proxy;
         EVENT_BUS.subscribe(this);
     }
+
+    public void clientTickStarting() {
+    }
+
+    public void clientTickStopping() {
+    }
 }
