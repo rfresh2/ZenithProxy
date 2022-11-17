@@ -172,7 +172,9 @@ public class Proxy {
             if (CONFIG.shouldReconnectAfterAutoUpdate) {
                 CONFIG.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
-                this.connect();
+                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
+                    this.connect();
+                }
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
