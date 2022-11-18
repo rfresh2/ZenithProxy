@@ -25,7 +25,7 @@ ext {
     //dependency things
     junitVersion = '4.13.2'
     lombokVersion = "1.18.24"
-    mcprotocollibVersion = "83ba5d28b7"
+    mcprotocollibVersion = "8be4e96934"
     porklibVersion = "0.5.8-SNAPSHOT"
     discord4jVersion = "3.2.3"
     pounceVersion = "main-SNAPSHOT"

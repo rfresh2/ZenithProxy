@@ -3,7 +3,7 @@ package com.zenith.util;
 import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.auth.service.MojangAuthenticationService;
-import com.github.steveice10.mc.auth.service.MsaAuthenticationService2;
+import com.github.steveice10.mc.auth.service.MsaAuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.zenith.util.Config.Authentication.AccountType;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
@@ -43,7 +43,7 @@ public class LoggerInner {
     private AuthenticationService getAuthenticationService() {
         if (CONFIG.authentication.doAuthentication) {
             if (CONFIG.authentication.accountType == AccountType.MSA) {
-                final MsaAuthenticationService2 authenticationService = new MsaAuthenticationService2();
+                final MsaAuthenticationService authenticationService = new MsaAuthenticationService();
                 authenticationService.setUsername(CONFIG.authentication.email);
                 authenticationService.setPassword(CONFIG.authentication.password);
                 return authenticationService;
