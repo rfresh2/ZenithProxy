@@ -1,1 +1,1 @@
-call gradlew run
+call gradlew run --console=plain
