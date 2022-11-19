@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import static com.zenith.util.Constants.*;
+import static java.util.Objects.isNull;
 
 
 @RequiredArgsConstructor
@@ -94,7 +95,7 @@ public class ClientListener implements SessionListener {
             reason = AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString();
         } catch (final Exception e) {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
-            reason = "Disconnected";
+            reason = isNull(event.getReason()) ? "Disconnected" : event.getReason();
         }
         EVENT_BUS.dispatch(new DisconnectEvent(reason));
     }
