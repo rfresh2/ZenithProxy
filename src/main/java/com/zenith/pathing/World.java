@@ -33,6 +33,8 @@ public class World {
                 .orElse(0);
     }
 
+    // todo: it'd be preferable to get a mapping from blockID + blockStateID to a collision box
+    //  this can cause problems with blocks like trapdoors which have different collision boxes
     public boolean isSolidBlock(final BlockPos blockPos) {
         return blockDataManager.getBlockFromId(getBlockId(blockPos))
                 .map(Block::getBoundingBox)
@@ -44,7 +46,6 @@ public class World {
         return rayTraceCB(startPos, downVec);
     }
 
-    // todo: raytrace in arbitrary direction
     // todo: make this more efficient
     public Optional<BlockPos> rayTraceCB(final Position startPos, final Vec3i ray) {
         Position pos = startPos;
@@ -77,7 +78,7 @@ public class World {
         return rayTrace(startPos, downVec);
     }
 
-    // raytrace with actual ray, no collision box checks assumes everything has block dimensions
+    // raytrace with blockPos only, no collision box checks
     // warning: careful using this for player movement checks, use CB raytrace to use collision boxes
     public Optional<BlockPos> rayTrace(final BlockPos startPos, final Vec3i ray) {
         BlockPos blockPos = startPos;

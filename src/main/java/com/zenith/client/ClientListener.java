@@ -89,6 +89,13 @@ public class ClientListener implements SessionListener {
     public void disconnected(DisconnectedEvent event) {
         CLIENT_LOG.info("Disconnected: " + event.getReason());
         session.setDisconnected(true);
-        EVENT_BUS.dispatch(new DisconnectEvent(AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString()));
+        String reason;
+        try {
+            reason = AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString();
+        } catch (final Exception e) {
+            CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
+            reason = "Disconnected";
+        }
+        EVENT_BUS.dispatch(new DisconnectEvent(reason));
     }
 }
