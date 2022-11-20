@@ -421,7 +421,7 @@ public class Proxy {
     }
 
     public void updatePrioBanStatus() {
-        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t")) return;
+        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
         this.isPrioBanned = this.priorityBanChecker.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
@@ -516,16 +516,18 @@ public class Proxy {
 
     @Subscribe
     public void handlePrioStatusEvent(PrioStatusEvent event) {
-        if (event.prio == CONFIG.authentication.prio) {
-            if (!isPrio.isPresent()) {
-                CLIENT_LOG.info("Prio Detected: " + event.prio);
-                this.isPrio = Optional.of(event.prio);
+        if (CONFIG.client.server.address.toLowerCase().contains("2b2t.org")) {
+            if (event.prio == CONFIG.authentication.prio) {
+                if (!isPrio.isPresent()) {
+                    CLIENT_LOG.info("Prio Detected: " + event.prio);
+                    this.isPrio = Optional.of(event.prio);
+                }
+            } else {
+                CLIENT_LOG.info("Prio Change Detected: " + event.prio);
+                EVENT_BUS.dispatch(new PrioStatusUpdateEvent(event.prio));
+                CONFIG.authentication.prio = event.prio;
+                saveConfig();
             }
-        } else {
-            CLIENT_LOG.info("Prio Change Detected: " + event.prio);
-            EVENT_BUS.dispatch(new PrioStatusUpdateEvent(event.prio));
-            CONFIG.authentication.prio = event.prio;
-            saveConfig();
         }
     }
 }

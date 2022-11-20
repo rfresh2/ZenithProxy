@@ -151,8 +151,6 @@ public class DiscordBot {
                 .title("Proxy Connected")
                .color(Color.CYAN)
                .addField("Server", CONFIG.client.server.address, true)
-               .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
-               .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                .build());
     }
@@ -162,7 +160,6 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Proxy Online")
                 .color(Color.CYAN)
-                .addField("Server", CONFIG.client.server.address, true)
                 .build());
     }
 
@@ -191,7 +188,6 @@ public class DiscordBot {
     private void sendQueueWarning() {
         sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("Queue Warning")
-                .addField("Server", CONFIG.client.server.address, true)
                 .addField("Queue Position", "[" + queuePositionStr() + "]", false)
                 .color(Color.MOON_YELLOW)
                 .build());
@@ -456,7 +452,6 @@ public class DiscordBot {
                 .title("Server Restarting")
                 .color(Color.CYAN)
                 .addField("Message", event.message, true)
-                .addField("Server", CONFIG.client.server.address, false)
                 .build());
     }
 
