@@ -78,14 +78,19 @@ public class World {
                 center.addX(-1).addZ(1), center.addX(-1).addZ(-1));
         for (BlockPos blockPos : surroundingBlockPos) {
             if (isSolidBlock(blockPos)) {
-                final BlockState blockState = getBlockState(blockPos);
-                final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
-                if (CollisionBox.playerIntersectsWithGenericCollisionBoxes(pos, blockPos, blockAtBlockPos.getStateCollisionBoxes().get(blockState.getData()))) {
+                if (playerIntersectsWithBlockAtPos(pos, blockPos)) {
                     return Optional.of(blockPos);
                 }
             }
         }
         return Optional.empty();
+    }
+
+    private boolean playerIntersectsWithBlockAtPos(final Position playerPosition, final BlockPos blockPos) {
+        final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
+        final BlockState blockStateAtBlockPos = getBlockState(blockPos);
+        final List<CollisionBox> collisionBoxesForStateId = blockAtBlockPos.getCollisionBoxesForStateId(blockStateAtBlockPos.getData());
+        return CollisionBox.playerIntersectsWithGenericCollisionBoxes(playerPosition, blockPos, collisionBoxesForStateId);
     }
 
     public Optional<BlockPos> raytraceDown(final BlockPos startPos) {

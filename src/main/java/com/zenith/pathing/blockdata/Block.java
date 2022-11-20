@@ -17,4 +17,8 @@ public class Block {
     private final String name;
     private final BlockData.BoundingBox boundingBox;
     private final Map<Integer, List<CollisionBox>> stateCollisionBoxes;
+
+    public List<CollisionBox> getCollisionBoxesForStateId(final Integer id) {
+        return stateCollisionBoxes.getOrDefault(id, Collections.emptyList());
+    }
 }

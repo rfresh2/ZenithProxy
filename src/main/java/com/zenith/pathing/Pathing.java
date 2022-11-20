@@ -126,19 +126,13 @@ public class Pathing {
         final BlockPos groundBlockPos = blockPos.addY(-1);
         final Optional<BlockPos> legsRayTrace = this.world.rayTraceCB(position.addY(0.01), direction);
         if (legsRayTrace.isPresent()) {
-            final BlockPos legRayTraceBlockPos = legsRayTrace.get();
-            if (CollisionBox.playerIntersectsWithBlock(position, legRayTraceBlockPos)) {
-                return false;
-            }
+            return false;
         }
         final Optional<BlockPos> headRayTrace = this.world.rayTraceCB(position.addY(1.01), direction);
         if (headRayTrace.isPresent()) {
-            final BlockPos headRayTraceBlockPos = headRayTrace.get();
-            if (CollisionBox.playerIntersectsWithBlock(position, headRayTraceBlockPos)) {
-                return false;
-            }
+            return false;
         }
-        final boolean groundSolid = this.world.isSolidBlock(groundBlockPos);
+        final boolean groundSolid = this.world.rayTraceCB(position, Vec3i.of(0, -2, 0)).isPresent();
         final boolean blocked = this.world.isSolidBlock(blockPos) || this.world.isSolidBlock(blockPos.addY(1));
         if (!CONFIG.client.extra.antiafk.actions.safeWalk) {
             if (!groundSolid) {

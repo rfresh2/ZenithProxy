@@ -14,10 +14,12 @@ public class CollisionBox {
     private final double minZ;
     private final double maxZ;
 
-    public static boolean playerIntersectsWithBlock(final Position playerPosition, final BlockPos blockPos) {
-        return playerPosToCollisionBox(playerPosition).intersects(blockPosToCollisionBox(blockPos));
-    }
-
+    /**
+     * MC Data has "generic" CollisionBoxes - they aren't localized to a BlockPos.
+     * To see if we intersect we need to check at the actual world's coords and localize both
+     * the player and the block's CollisionBox's to those coords.
+     * there might be a cleaner way of representing this in code without so many extra objects
+     */
     public static boolean playerIntersectsWithGenericCollisionBoxes(final Position playerPosition, final BlockPos blockPos, final List<CollisionBox> genericCollisionBoxes) {
         final CollisionBox playerCollisionBox = playerPosToCollisionBox(playerPosition);
         final List<CollisionBox> localizedCollisionBoxes = genericCollisionBoxes.stream()
@@ -31,7 +33,11 @@ public class CollisionBox {
         return false;
     }
 
-    public static CollisionBox playerPosToCollisionBox(final Position playerPosition) {
+    private static boolean playerIntersectsWithBlock(final Position playerPosition, final BlockPos blockPos) {
+        return playerPosToCollisionBox(playerPosition).intersects(blockPosToCollisionBox(blockPos));
+    }
+
+    private static CollisionBox playerPosToCollisionBox(final Position playerPosition) {
         // current player coordinates are in the middle (xz) of their bounding box
         final double halfW = 0.3;
         return new CollisionBox(
@@ -40,7 +46,7 @@ public class CollisionBox {
                 playerPosition.getZ() - halfW, playerPosition.getZ() + halfW);
     }
 
-    public static CollisionBox blockPosToCollisionBox(final BlockPos blockPos) {
+    private static CollisionBox blockPosToCollisionBox(final BlockPos blockPos) {
         // blockPos is at lower northwest (-y -z -x corner)
         return new CollisionBox(
                 blockPos.getX(), blockPos.getX() + 1,
@@ -49,7 +55,7 @@ public class CollisionBox {
         );
     }
 
-    public static CollisionBox blockPosAndGenericCollisionBoxToLocalizedCollisionBox(final BlockPos blockPos, final CollisionBox genericCollisionBox) {
+    private static CollisionBox blockPosAndGenericCollisionBoxToLocalizedCollisionBox(final BlockPos blockPos, final CollisionBox genericCollisionBox) {
         return new CollisionBox(
                 blockPos.getX() + genericCollisionBox.minX,
                 blockPos.getX() + genericCollisionBox.maxX,
