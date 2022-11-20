@@ -1,6 +1,10 @@
 package com.zenith.pathing;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
+import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
+import com.zenith.pathing.blockdata.Block;
+import com.zenith.pathing.blockdata.BlockData;
+import com.zenith.pathing.blockdata.BlockDataManager;
 import net.daporkchop.lib.math.vector.Vec3i;
 
 import java.util.List;
@@ -10,6 +14,7 @@ import static com.zenith.util.Constants.CACHE;
 import static java.util.Arrays.asList;
 
 public class World {
+    private static final BlockState AIR = new BlockState(0, 0);
 
     private final BlockDataManager blockDataManager;
     static final Vec3i downVec = Vec3i.of(0, -150, 0);
@@ -33,20 +38,27 @@ public class World {
                 .orElse(0);
     }
 
-    // todo: it'd be preferable to get a mapping from blockID + blockStateID to a collision box
-    //  this can cause problems with blocks like trapdoors which have different collision boxes
+    public BlockState getBlockState(final BlockPos blockPos) {
+        return getChunk(blockPos.toChunkPos())
+                .map(chunk -> chunk.getBlocks().get(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15))
+                .orElse(AIR);
+    }
+
     public boolean isSolidBlock(final BlockPos blockPos) {
         return blockDataManager.getBlockFromId(getBlockId(blockPos))
                 .map(Block::getBoundingBox)
-                .map(boundingBox -> boundingBox == BoundingBox.block)
+                .map(boundingBox -> boundingBox == BlockData.BoundingBox.BLOCK)
                 .orElse(false);
+    }
+
+    public Block getBlockAtBlockPos(final BlockPos blockPos) {
+        return blockDataManager.getBlockFromId(getBlockId(blockPos)).orElse(Block.AIR);
     }
 
     public Optional<BlockPos> rayTraceCBDown(final Position startPos) {
         return rayTraceCB(startPos, downVec);
     }
 
-    // todo: make this more efficient
     public Optional<BlockPos> rayTraceCB(final Position startPos, final Vec3i ray) {
         Position pos = startPos;
         final Position endPos = startPos.add(ray.x(), ray.y(), ray.z());
@@ -66,7 +78,9 @@ public class World {
                 center.addX(-1).addZ(1), center.addX(-1).addZ(-1));
         for (BlockPos blockPos : surroundingBlockPos) {
             if (isSolidBlock(blockPos)) {
-                if (CollisionBox.playerIntersectsWithBlock(pos, blockPos)) {
+                final BlockState blockState = getBlockState(blockPos);
+                final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
+                if (CollisionBox.playerIntersectsWithGenericCollisionBoxes(pos, blockPos, blockAtBlockPos.getStateCollisionBoxes().get(blockState.getData()))) {
                     return Optional.of(blockPos);
                 }
             }
