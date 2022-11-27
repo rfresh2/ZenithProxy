@@ -275,10 +275,10 @@ public class DiscordBot {
     }
 
     @Subscribe
-    public void handleAutoDisconnectEvent(AutoDisconnectEvent event) {
+    public void handleAutoDisconnectEvent(HealthAutoDisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy AutoDisconnect Triggered")
-                .addField("Health", ""+((int)CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                .title("Health AutoDisconnect Triggered")
+                .addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .color(Color.CYAN)
                 .build());
     }

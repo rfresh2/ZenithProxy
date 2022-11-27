@@ -3,7 +3,7 @@ package com.zenith.module;
 import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.event.module.PlayerHealthChangedEvent;
-import com.zenith.event.proxy.AutoDisconnectEvent;
+import com.zenith.event.proxy.HealthAutoDisconnectEvent;
 import com.zenith.util.Constants;
 
 import static com.zenith.util.Constants.EVENT_BUS;
@@ -19,7 +19,7 @@ public class AutoDisconnect extends Module {
         if (Constants.CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
             if (event.newHealth <= Constants.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
                 if (isNull(this.proxy.getCurrentPlayer().get())) {
-                    EVENT_BUS.dispatch(new AutoDisconnectEvent());
+                    EVENT_BUS.dispatch(new HealthAutoDisconnectEvent());
                     this.proxy.disconnect();
                 }
             }
