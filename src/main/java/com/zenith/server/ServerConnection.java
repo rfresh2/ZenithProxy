@@ -163,6 +163,10 @@ public class ServerConnection implements Session, SessionListener {
         this.session.send(packet);
     }
 
+    public void sendDirect(Packet packet) {
+        this.session.sendDirect(packet);
+    }
+
     public boolean isActivePlayer() {
         // note: this could be false for the player connection during some points of disconnect
         return Objects.equals(this.proxy.getCurrentPlayer().get(), this);

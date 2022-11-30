@@ -92,8 +92,9 @@ public class PlayerCache implements CachedData {
         double y = CACHE.getPlayerCache().getY() + 1000d;
         double z = CACHE.getPlayerCache().getZ();
         // one of 2b2t's plugins requires this (as of 2022)
-        Proxy.getInstance().getClient().send(new ClientPlayerPositionPacket(true, x, y, z));
+        Proxy.getInstance().getClient().sendDirect(new ClientPlayerPositionPacket(true, x, y, z));
     }
+
     public void setInventory(ItemStack[] newInventory) {
         System.arraycopy(newInventory, 0, this.inventory, 0, Math.min(this.inventory.length, newInventory.length));
         final Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);

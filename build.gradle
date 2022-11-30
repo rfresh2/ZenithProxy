@@ -18,18 +18,9 @@ apply plugin: "java"
 apply plugin: "com.github.johnrengelman.shadow"
 
 ext {
-    //general things
-    minecraftVersion = "1.12.2"
-    programVersion = "1.0"
 
-    //dependency things
-    junitVersion = '4.13.2'
     lombokVersion = "1.18.24"
-    mcprotocollibVersion = "2e6708ae8f"
     porklibVersion = "0.5.8-SNAPSHOT"
-    discord4jVersion = "3.2.3"
-    pounceVersion = "main-SNAPSHOT"
-    hikaricpVersion = "4.0.3"
     postgresVersion = '42.5.0'
 }
 
@@ -133,7 +124,7 @@ jooq {
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
     shade 'org.jooq:jooq:3.17.5'
-    shade "com.zaxxer:HikariCP:$hikaricpVersion"
+    shade "com.zaxxer:HikariCP:4.0.3"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:5.13.1.202206130422-r'
@@ -148,17 +139,17 @@ dependencies {
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
 
-    shade("com.github.5cmc:mcprotocollib:$mcprotocollibVersion") {
+    shade("com.github.5cmc:mcprotocollib:ddb6d245f7") {
         exclude group: "io.netty", module: "netty-all"
     }
 
     shade 'io.netty:netty-codec-haproxy:4.1.79.Final'
 
-    shade "com.discord4j:discord4j-core:$discord4jVersion"
+    shade "com.discord4j:discord4j-core:3.2.3"
 
-    shade "com.github.collarmc:Pounce:$pounceVersion"
+    shade "com.github.collarmc:Pounce:main-SNAPSHOT"
 
-    testImplementation "junit:junit:$junitVersion"
+    testImplementation "junit:junit:4.13.2"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
