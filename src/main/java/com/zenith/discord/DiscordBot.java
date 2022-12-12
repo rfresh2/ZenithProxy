@@ -506,11 +506,11 @@ public class DiscordBot {
 
     @Subscribe
     public void handleAntiAfkStuckEvent(final AntiAfkStuckEvent event) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
+        sendEmbedMessage((CONFIG.client.extra.antiafk.actions.stuckWarningMention ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("AntiAFK Warning")
                 .color(Color.RUBY)
                 .description("AntiAFK enabled but player may be stuck. "
-                        + "Log in and move player to a location with 8+ flat blocks to move within.")
+                        + "Log in and move player to a location with " + CONFIG.client.extra.antiafk.actions.walkDistance + "+ flat blocks to move within.")
                 .addField("Distance Walked", "" + (int) event.distanceMovedDelta, false)
                 .build());
     }

@@ -78,6 +78,7 @@ public final class Config {
                     // avoid falls that could cause player death
                     public boolean safeGravity = true;
                     public boolean stuckWarning = true;
+                    public boolean stuckWarningMention = false;
                 }
             }
 
