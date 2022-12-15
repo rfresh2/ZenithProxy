@@ -45,14 +45,14 @@ public class AutoUpdater {
         }
         if (isNull(updaterExecutorService) || updaterExecutorService.isShutdown()) {
             updaterExecutorService = new ScheduledThreadPoolExecutor(1);
-            updaterExecutorService.scheduleAtFixedRate(this::updateCheck, 3, CONFIG.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
+            updaterExecutorService.scheduleWithFixedDelay(this::updateCheck, 3, CONFIG.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
         }
         return true;
     }
 
     private void updateCheck() {
         try {
-            final FetchResult fetchResult = git.fetch().setCheckFetchedObjects(true).setDryRun(true).call();
+            final FetchResult fetchResult = git.fetch().setCheckFetchedObjects(true).setDryRun(true).setTimeout(30).call();
             List<TrackingRefUpdate> localBranchUpdates = fetchResult.getTrackingRefUpdates().stream()
                     .filter(trackingRefUpdate -> {
                         try {
@@ -73,7 +73,7 @@ public class AutoUpdater {
             } else {
                 updateAvailable = false;
             }
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             DEFAULT_LOG.error("Error checking for updates.", e);
             // fall through
             updateAvailable = false;
