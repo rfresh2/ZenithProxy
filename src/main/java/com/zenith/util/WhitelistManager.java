@@ -5,7 +5,6 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.auth.service.ProfileService;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -13,8 +12,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.nonNull;
@@ -27,9 +24,6 @@ public class WhitelistManager {
     public WhitelistManager() {
         this.random = new Random();
         this.whitelistRefreshExecutorService = Executors.newSingleThreadScheduledExecutor();
-        if (!CONFIG.server.extra.whitelist.allowedUsers.isEmpty() || !CONFIG.server.spectator.spectatorWhitelist.isEmpty()) {
-            migrateLegacyWhitelists();
-        }
         if (CONFIG.server.extra.whitelist.whitelistRefresh) {
             startRefreshTask();
         }
@@ -141,32 +135,6 @@ public class WhitelistManager {
             // most likely would be caused by throttled network requests to mojang API
             // there may also be some state where the account gets deleted
         }
-    }
-
-    public void migrateLegacyWhitelists() {
-        SERVER_LOG.info("Migrating whitelist..."
-                + "\nCurrent whitelist: " + String.join(", ", CONFIG.server.extra.whitelist.allowedUsers)
-                + "\nCurrent spectator whitelist: " + String.join(", ", CONFIG.server.spectator.spectatorWhitelist));
-        final List<WhitelistEntry> whitelistEntries = CONFIG.server.extra.whitelist.allowedUsers.stream()
-                .map(this::getWhitelistEntryFromUsername)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-        CONFIG.server.extra.whitelist.whitelist = Stream.concat(whitelistEntries.stream(), CONFIG.server.extra.whitelist.whitelist.stream())
-                .distinct()
-                .collect(Collectors.toList());
-        CONFIG.server.extra.whitelist.allowedUsers.clear();
-        final List<WhitelistEntry> spectatorWhitelistEntries = CONFIG.server.spectator.spectatorWhitelist.stream()
-                .map(this::getWhitelistEntryFromUsername)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-        CONFIG.server.spectator.whitelist = Stream.concat(spectatorWhitelistEntries.stream(), CONFIG.server.spectator.whitelist.stream())
-                .distinct()
-                .collect(Collectors.toList());
-        CONFIG.server.spectator.spectatorWhitelist.clear();
-        SERVER_LOG.info("Whitelist migration complete.");
-        saveConfig();
     }
 
     private Optional<WhitelistEntry> getWhitelistEntryFromUUID(final UUID uuid) {
