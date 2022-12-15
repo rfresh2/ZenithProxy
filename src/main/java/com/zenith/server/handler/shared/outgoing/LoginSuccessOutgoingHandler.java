@@ -1,6 +1,10 @@
 package com.zenith.server.handler.shared.outgoing;
 
+import com.github.steveice10.mc.auth.data.GameProfile;
+import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
+import com.zenith.Proxy;
+import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Wait;
 import com.zenith.util.handler.HandlerRegistry;
@@ -12,6 +16,27 @@ import static java.util.Objects.isNull;
 public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, ServerConnection> {
     @Override
     public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull ServerConnection session) {
+        final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
+        if (CONFIG.server.extra.whitelist.enable && !WHITELIST_MANAGER.isUserWhitelisted(clientGameProfile)) {
+            if (CONFIG.server.spectator.allowSpectator && WHITELIST_MANAGER.isUserSpectatorWhitelisted(clientGameProfile)) {
+                session.setOnlySpectator(true);
+            } else {
+                SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
+                EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Non-whitelisted player tried to connect!"
+                        + "\nPlayer: " + clientGameProfile.getName() + " [" + clientGameProfile.getIdAsString() + "]"
+                        + "\nIP: " + session.getRemoteAddress()));
+                session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+                return null;
+            }
+        }
+        if (!Proxy.getInstance().isConnected()) {
+            if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
+                Proxy.getInstance().connect();
+            } else {
+                session.disconnect("Not connected to server!");
+            }
+        }
+
         // profile could be null at this point?
         int tryCount = 0;
         while (tryCount < 3 && CACHE.getProfileCache().getProfile() == null) {

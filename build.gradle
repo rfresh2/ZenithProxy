@@ -139,9 +139,10 @@ dependencies {
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
 
-    shade("com.github.5cmc:mcprotocollib:ddb6d245f7") {
+    shade("com.github.5cmc:mcprotocollib:16859c9bf6") {
         exclude group: "io.netty", module: "netty-all"
     }
+    shade "com.github.5cmc:MCAuthLib:604e1a964a"
 
     shade 'io.netty:netty-codec-haproxy:4.1.79.Final'
 

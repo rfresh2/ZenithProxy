@@ -62,6 +62,7 @@ public class Proxy {
     protected ScheduledExecutorService autoReconnectExecutorService;
     protected ScheduledExecutorService activeHoursExecutorService;
     protected ScheduledExecutorService reconnectExecutorService;
+    protected ScheduledExecutorService whitelistUpdateExecutorService;
     protected Database queueWait; // nullable
     protected final TPSCalculator tpsCalculator;
 
@@ -97,10 +98,11 @@ public class Proxy {
     }
 
     public Proxy() {
-        this.clientTimeoutExecutorService = new ScheduledThreadPoolExecutor(1);
-        this.autoReconnectExecutorService = new ScheduledThreadPoolExecutor(1);
-        this.activeHoursExecutorService = new ScheduledThreadPoolExecutor(1);
-        this.reconnectExecutorService = new ScheduledThreadPoolExecutor(1);
+        this.clientTimeoutExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.autoReconnectExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.activeHoursExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.reconnectExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.whitelistUpdateExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.priorityBanChecker = new PriorityBanChecker();
         this.world = new World(new BlockDataManager());
         EVENT_BUS.subscribe(this);
@@ -354,6 +356,8 @@ public class Proxy {
     }
 
     public Collection<ServerConnection> getServerConnections() {
+        // todo: optimize this. It's called on every client packet and probably adds some undue latency.
+        //  we could probably cache the set of active connections and just update it on connection change events
         final ProxyServerListener proxyServerListener = (ProxyServerListener) this.server.getListeners().stream()
                 .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new);

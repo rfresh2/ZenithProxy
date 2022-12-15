@@ -231,8 +231,10 @@ public final class Config {
 
             /**
              * Players who are allowed to spectate but are not necessarily on the whitelist.
+             * todo: remove. deprecated.
              */
             public List<String> spectatorWhitelist = new ArrayList<>();
+            public List<WhitelistEntry> whitelist = new ArrayList<>();
         }
 
 
@@ -247,7 +249,11 @@ public final class Config {
 
             public static final class Whitelist {
                 public boolean enable = true;
-                public List<String> allowedUsers = asList();
+                // todo: remove. deprecated
+                public List<String> allowedUsers = new ArrayList<>();
+                public List<WhitelistEntry> whitelist = new ArrayList<>();
+                public boolean whitelistRefresh = true;
+                public long whitelistRefreshIntervalMins = 1440L; // one day as default
                 public String kickmsg = "get out of here you HECKING scrub";
             }
 

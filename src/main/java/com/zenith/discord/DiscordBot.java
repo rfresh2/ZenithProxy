@@ -299,7 +299,7 @@ public class DiscordBot {
         if (CONFIG.client.extra.clientConnectionMessages) {
             sendEmbedMessage(EmbedCreateSpec.builder()
                     .title("Spectator Connected")
-                    .addField("Username", event.clientGameProfile.getName(), true)
+                    .addField("Username", escape(event.clientGameProfile.getName()), true)
                     .color(Color.CYAN)
                     .build());
         }
@@ -312,10 +312,10 @@ public class DiscordBot {
                     .title("Client Disconnected")
                     .color(Color.RUBY);
             if (nonNull(event.clientGameProfile)) {
-                builder = builder.addField("Username", event.clientGameProfile.getName(), false);
+                builder = builder.addField("Username", escape(event.clientGameProfile.getName()), false);
             }
             if (nonNull(event.reason)) {
-                builder = builder.addField("Reason" , event.reason, false);
+                builder = builder.addField("Reason", escape(event.reason), false);
             }
             sendEmbedMessage(builder
                     .build());
@@ -329,7 +329,7 @@ public class DiscordBot {
                     .title("Spectator Disconnected")
                     .color(Color.RUBY);
             if (nonNull(event.clientGameProfile)) {
-                builder = builder.addField("Username", event.clientGameProfile.getName(), false);
+                builder = builder.addField("Username", escape(event.clientGameProfile.getName()), false);
             }
             sendEmbedMessage(builder
                     .build());

@@ -7,9 +7,12 @@ import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
 
+import java.util.stream.Collectors;
+
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.WHITELIST_MANAGER;
 import static java.util.Arrays.asList;
 
 public class WhitelistCommand extends Command {
@@ -27,41 +30,49 @@ public class WhitelistCommand extends Command {
         return command("whitelist")
                 .then(literal("add").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");
-                    if (!CONFIG.server.extra.whitelist.allowedUsers.contains(player)) {
-                        CONFIG.server.extra.whitelist.allowedUsers.add(player);
+                    if (WHITELIST_MANAGER.addWhitelistEntryByUsername(player)) {
+                        c.getSource().getEmbedBuilder()
+                                .title("Added user: " + escape(player) + " To Whitelist")
+                                .color(Color.CYAN)
+                                .addField("Whitelisted", whitelistToString(), false);
+                    } else {
+                        c.getSource().getEmbedBuilder()
+                                .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile.")
+                                .color(Color.RUBY);
                     }
-                    c.getSource().getEmbedBuilder()
-                            .title("Added user: " + escape(player) + " To Whitelist")
-                            .color(Color.CYAN)
-                            .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
-                                    false);
                     return 1;
                 })))
                 .then(literal("del").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");
-                    CONFIG.server.extra.whitelist.allowedUsers.removeIf(s -> s.equalsIgnoreCase(player));
+                    WHITELIST_MANAGER.removeWhitelistEntryByUsername(player);
                     c.getSource().getEmbedBuilder()
                             .title("Removed user: " + escape(player) + " From Whitelist")
                             .color(Color.CYAN)
-                            .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
-                                    false);
+                            .addField("Whitelisted", whitelistToString(), false);
                     return 1;
                 })))
                 .then(literal("list").executes(c -> {
                     c.getSource().getEmbedBuilder()
                             .title("Whitelist List")
                             .color(Color.CYAN)
-                            .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
-                                    false);
+                            .addField("Whitelisted", whitelistToString(), false);
                 }))
                 .then(literal("clear").requires(Command::validateAccountOwner).executes(c -> {
-                    CONFIG.server.extra.whitelist.allowedUsers.clear();
+                    WHITELIST_MANAGER.clearWhitelist();
                     c.getSource().getEmbedBuilder()
                             .title("Whitelist Cleared")
                             .color(Color.RUBY)
-                            .addField("Whitelisted", escape(((CONFIG.server.extra.whitelist.allowedUsers.size() > 0) ? String.join(", ", CONFIG.server.extra.whitelist.allowedUsers) : "Whitelist is empty")),
-                                    false);
+                            .addField("Whitelisted", whitelistToString(), false);
                     return 1;
                 }));
+    }
+
+    private String whitelistToString() {
+        return CONFIG.server.extra.whitelist.whitelist.isEmpty()
+                ? "Empty"
+                : String.join("\n",
+                CONFIG.server.extra.whitelist.whitelist.stream()
+                        .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
+                        .collect(Collectors.toList()));
     }
 }

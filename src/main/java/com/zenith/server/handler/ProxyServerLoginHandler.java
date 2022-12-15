@@ -26,11 +26,12 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
 
     @Override
     public void loggedIn(Session session) {
+        SERVER_LOG.info("Player connected: {}", session.getRemoteAddress());
         ServerConnection connection = ((ProxyServerListener) this.proxy.getServer().getListeners().stream()
                 .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections().get(session);
-        SERVER_LOG.info("Player connected: {}", session.getRemoteAddress());
+
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
@@ -42,10 +43,10 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             return;
         }
         connection.setPlayer(true);
+        final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
         if (!connection.isOnlySpectator() && this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
             // if we don't have a current player, set player
             connection.setSpectator(false);
-            GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(
                     CACHE.getPlayerCache().getEntityId(),
@@ -62,7 +63,6 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             if (nonNull(this.proxy.getCurrentPlayer().get())) {
                 // if we have a current player, allow login but put in spectator
                 connection.setSpectator(true);
-                GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
                 EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
                 session.send(new ServerJoinGamePacket(
                         connection.getSpectatorSelfEntityId(),

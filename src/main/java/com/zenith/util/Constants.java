@@ -73,6 +73,7 @@ public class Constants {
     public static final EventBus EVENT_BUS;
     public static final ExecutorService MODULE_EXECUTOR_SERVICE;
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
+    public static final WhitelistManager WHITELIST_MANAGER;
 
 
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
@@ -207,6 +208,7 @@ public class Constants {
         EVENT_BUS = new EventBus(Runnable::run);
         MODULE_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1);
         SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
+        WHITELIST_MANAGER = new WhitelistManager();
     }
 
     public static volatile boolean SHOULD_RECONNECT;
