@@ -25,7 +25,7 @@ public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoin
         ));
         SpectatorHelper.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         //send cached data
-        session.getProxy().getServerConnections().stream()
+        session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
                     connection.send(new ServerChatPacket(

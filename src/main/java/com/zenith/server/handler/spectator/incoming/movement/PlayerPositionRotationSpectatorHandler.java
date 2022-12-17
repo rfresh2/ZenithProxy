@@ -32,7 +32,7 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
             return;
         }
         float yaw = getYaw(selfSession);
-        selfSession.getProxy().getServerConnections().stream()
+        selfSession.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(selfSession))
                 .forEach(connection -> {
                     connection.send(new ServerEntityTeleportPacket(

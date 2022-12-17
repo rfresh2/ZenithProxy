@@ -43,7 +43,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
             boolean spectatorEntitySet = session.setSpectatorEntity(entityId);
             if (spectatorEntitySet) {
                 // respawn entity on all connections
-                session.getProxy().getServerConnections().forEach(connection -> {
+                session.getProxy().getActiveConnections().forEach(connection -> {
                     connection.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
                     if (!connection.equals(session) || session.isShowSelfEntity()) {
                         connection.send(session.getEntitySpawnPacket());
@@ -59,7 +59,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
             session.setPlayerCam(!session.isPlayerCam());
             if (session.isPlayerCam()) {
                 session.send(new ServerSwitchCameraPacket(CACHE.getPlayerCache().getEntityId()));
-                session.getProxy().getServerConnections().forEach(connection -> {
+                session.getProxy().getActiveConnections().forEach(connection -> {
                     connection.send(new ServerEntityDestroyPacket(session.getSpectatorEntityId()));
                 });
             } else {
@@ -74,7 +74,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                         12345678
                 ));
                 session.setAllowSpectatorServerPlayerPosRotate(false);
-                session.getProxy().getServerConnections().forEach(connection -> {
+                session.getProxy().getActiveConnections().forEach(connection -> {
                     if (!connection.equals(session) || session.isShowSelfEntity()) {
                         connection.send(session.getEntitySpawnPacket());
                         connection.send(session.getEntityMetadataPacket());
@@ -82,7 +82,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                 });
             }
         } else {
-            session.getProxy().getServerConnections().forEach(connection -> {
+            session.getProxy().getActiveConnections().forEach(connection -> {
                 connection.send(new ServerChatPacket("§c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "§r", true));
             });
         }

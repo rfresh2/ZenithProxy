@@ -28,7 +28,7 @@ public class ClientListener implements SessionListener {
     public void packetReceived(Session session, Packet packet) {
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
-                this.proxy.getServerConnections().forEach(connection -> connection.send(packet));
+                this.proxy.getActiveConnections().forEach(connection -> connection.send(packet));
             }
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
@@ -83,7 +83,7 @@ public class ClientListener implements SessionListener {
         } catch (final Exception e) {
             // fall through
         }
-        this.proxy.getServerConnections().forEach(connection -> connection.disconnect(event.getReason()));
+        this.proxy.getActiveConnections().forEach(connection -> connection.disconnect(event.getReason()));
     }
 
     @Override

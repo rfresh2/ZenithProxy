@@ -4,7 +4,6 @@ import com.collarmc.pounce.Preference;
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.ClientSession;
@@ -58,6 +57,7 @@ public class Proxy {
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
+    protected final CopyOnWriteArrayList<ServerConnection> activeConnections = new CopyOnWriteArrayList<>();
     protected final ScheduledExecutorService clientTimeoutExecutorService;
     protected ScheduledExecutorService autoReconnectExecutorService;
     protected ScheduledExecutorService activeHoursExecutorService;
@@ -226,7 +226,7 @@ public class Proxy {
             this.logIn();
         } catch (final RuntimeException e) {
             EVENT_BUS.dispatch(new ProxyLoginFailedEvent());
-            getServerConnections().forEach(connection -> connection.disconnect("Login failed"));
+            getActiveConnections().forEach(connection -> connection.disconnect("Login failed"));
             ForkJoinPool.commonPool().submit(() -> {
                 // mitigate possible race condition in autoreconnect
                 Wait.waitALittle(1);
@@ -355,27 +355,8 @@ public class Proxy {
         return this.autoReconnectFuture.isPresent();
     }
 
-    public Collection<ServerConnection> getServerConnections() {
-        // todo: optimize this. It's called on every client packet and probably adds some undue latency.
-        //  we could probably cache the set of active connections and just update it on connection change events
-        final ProxyServerListener proxyServerListener = (ProxyServerListener) this.server.getListeners().stream()
-                .filter(ProxyServerListener.class::isInstance)
-                .findAny().orElseThrow(IllegalStateException::new);
-        final Collection<ServerConnection> connections = proxyServerListener
-                .connections
-                .values();
-        // prevent concurrent modification on connections, see Collections.synchronizedMap javadocs
-        synchronized (proxyServerListener.connections) {
-            return connections.stream()
-                    .filter(ServerConnection::isPlayer)
-                    .filter(ServerConnection::isLoggedIn)
-                    .filter(connection -> ((MinecraftProtocol) connection.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME)
-                    .collect(Collectors.toList());
-        }
-    }
-
     public List<ServerConnection> getSpectatorConnections() {
-        return getServerConnections().stream()
+        return getActiveConnections().stream()
                 .filter(ServerConnection::isSpectator)
                 .collect(Collectors.toList());
     }

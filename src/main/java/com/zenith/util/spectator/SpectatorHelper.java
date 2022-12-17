@@ -133,7 +133,7 @@ public final class SpectatorHelper {
         DataCache.sendCacheData(cacheSupplier.get(), session);
         session.send(session.getEntitySpawnPacket());
         session.send(session.getSelfEntityMetadataPacket());
-        session.getProxy().getServerConnections().stream()
+        session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> spawnSpectatorForOtherSessions(session, connection));
         session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));

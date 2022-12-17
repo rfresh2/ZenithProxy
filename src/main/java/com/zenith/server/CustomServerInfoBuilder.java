@@ -30,7 +30,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
                 new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
                 new PlayerInfo(
                         CONFIG.server.ping.maxPlayers,
-                        this.proxy.getServerConnections().size(),
+                        this.proxy.getActiveConnections().size(),
                         getOnlinePlayerProfiles()
                 ),
                 Message.fromString(getMotd()),
@@ -40,7 +40,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     private GameProfile[] getOnlinePlayerProfiles() {
         try {
-            return this.proxy.getServerConnections().stream()
+            return this.proxy.getActiveConnections().stream()
                     .map(connection -> connection.profileCache.getProfile())
                     .collect(Collectors.toList()).toArray(new GameProfile[0]);
         } catch (final RuntimeException e) {

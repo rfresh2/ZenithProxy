@@ -31,7 +31,7 @@ public class KickCommand extends Command {
         return command("kick").requires(Command::validateAccountOwner)
                 .then(argument("player", string()).executes(c -> {
                     final String playerName = StringArgumentType.getString(c, "player");
-                    List<ServerConnection> connections = Proxy.getInstance().getServerConnections().stream()
+                    List<ServerConnection> connections = Proxy.getInstance().getActiveConnections().stream()
                             .filter(connection -> connection.getProfileCache().getProfile().getName().equalsIgnoreCase(playerName))
                             .collect(Collectors.toList());
                     if (!connections.isEmpty()) {

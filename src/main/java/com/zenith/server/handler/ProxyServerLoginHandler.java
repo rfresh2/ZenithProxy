@@ -14,6 +14,10 @@ import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Wait;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.nonNull;
 
@@ -33,6 +37,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 .getConnections().get(session);
 
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
+                        && this.proxy.getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS)))
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())

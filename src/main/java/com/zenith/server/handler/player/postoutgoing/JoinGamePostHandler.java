@@ -19,7 +19,7 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
         DataCache.sendCacheData(CACHE.getAllData(), session);
 
         // init any active spectators
-        session.getProxy().getServerConnections().stream()
+        session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .filter(connection -> !connection.isPlayerCam())
                 .forEach(connection -> {

@@ -11,7 +11,7 @@ public class PlayerStateSpectatorHandler implements HandlerRegistry.IncomingHand
     public boolean apply(ClientPlayerStatePacket packet, ServerConnection session) {
         if (packet.getState() == PlayerState.START_SNEAKING || packet.getState() == PlayerState.START_SPRINTING) {
             session.getSoundPacket().ifPresent(p -> {
-                session.getProxy().getServerConnections().forEach(connection -> connection.send(p));
+                session.getProxy().getActiveConnections().forEach(connection -> connection.send(p));
             });
         }
         return false;

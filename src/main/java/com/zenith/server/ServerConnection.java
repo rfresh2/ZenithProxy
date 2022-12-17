@@ -132,8 +132,14 @@ public class ServerConnection implements Session, SessionListener {
     public void disconnecting(DisconnectingEvent event) {
     }
 
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+        this.proxy.getActiveConnections().add(this);
+    }
+
     @Override
     public void disconnected(DisconnectedEvent event) {
+        this.proxy.getActiveConnections().remove(this);
         if (!this.isPlayer && event.getCause() != null && !((event.getCause() instanceof IOException || event.getCause() instanceof ClosedChannelException) && !this.isPlayer)) {
             // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
             SERVER_LOG.warn(String.format("Connection disconnected: %s", event.getSession().getRemoteAddress()), event.getCause());
@@ -150,7 +156,7 @@ public class ServerConnection implements Session, SessionListener {
                     EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(reason));
                 }
             } else {
-                proxy.getServerConnections().forEach(connection -> {
+                proxy.getActiveConnections().forEach(connection -> {
                     connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
                     connection.send(new ServerChatPacket("§9" + profileCache.getProfile().getName() + " disconnected§r", true));
                 });
