@@ -10,7 +10,6 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -51,8 +50,13 @@ public class ChatDatabase extends Database {
                     .set(c.PLAYER_UUID, playerUUID)
                     .set(c.PLAYER_NAME, playerName)
                     .execute();
-        } catch (final SQLException e) {
-            DATABASE_LOG.error("Failed writing chat {}, {}, {}", playerUUID, playerName, message, e);
+        } catch (final Exception e) {
+            if (e.getMessage().contains("violates exclusion constraint")) {
+                // expected due to multiple proxies writing the same chat
+                DATABASE_LOG.debug("chat dedupe detected");
+            } else {
+                DATABASE_LOG.error("Failed writing chat {}, {}, {}", playerUUID, playerName, message, e);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.zenith.database;
 
 import com.collarmc.pounce.Subscribe;
+import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.tables.Connections;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
@@ -10,7 +11,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.UUID;
@@ -42,7 +43,10 @@ public class ConnectionsDatabase extends Database {
     //  need to think about a better approach for this
 
     public void writeConnection(final Connectiontype connectiontype, final String playerName, final UUID playerUUID) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org")) return; // ensure we're only writing these for 2b2t
+        if (!CONFIG.client.server.address.endsWith("2b2t.org")
+                || Proxy.getInstance().isInQueue()
+                || (Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.ofSeconds(3))) && playerName.equals(CONFIG.authentication.username))
+        ) return;
         try (final Connection connection = connectionPool.getWriteConnection()) {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
             final Connections c = Connections.CONNECTIONS;
@@ -52,8 +56,13 @@ public class ConnectionsDatabase extends Database {
                     .set(c.PLAYER_NAME, playerName)
                     .set(c.PLAYER_UUID, playerUUID)
                     .execute();
-        } catch (final SQLException e) {
-            DATABASE_LOG.error("Error writing connection", e);
+        } catch (final Exception e) {
+            if (e.getMessage().contains("violates exclusion constraint")) {
+                // expected due to multiple proxies writing the same connection
+                DATABASE_LOG.debug("connection dedupe detected");
+            } else {
+                DATABASE_LOG.error("Error writing connection", e);
+            }
         }
     }
 }
