@@ -4,11 +4,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdate
 import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 
+import static com.zenith.util.Constants.TPS_CALCULATOR;
+
 public class UpdateTimePacketHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUpdateTimePacket, ClientSession> {
 
     @Override
     public boolean applyAsync(ServerUpdateTimePacket packet, ClientSession session) {
-        session.getProxy().getTpsCalculator().handleTimeUpdate(packet);
+        TPS_CALCULATOR.handleTimeUpdate(packet);
         return true;
     }
 

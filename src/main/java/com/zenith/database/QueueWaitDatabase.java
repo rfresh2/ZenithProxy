@@ -1,7 +1,6 @@
 package com.zenith.database;
 
 import com.collarmc.pounce.Subscribe;
-import com.zenith.Proxy;
 import com.zenith.database.dto.tables.Queuewait;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
@@ -31,8 +30,8 @@ public class QueueWaitDatabase extends Database {
     private Instant initialQueueTime = null;
     private Instant lastServerRestart = Instant.EPOCH;
 
-    public QueueWaitDatabase(ConnectionPool connectionPool, Proxy proxy) {
-        super(connectionPool, proxy);
+    public QueueWaitDatabase(ConnectionPool connectionPool) {
+        super(connectionPool);
     }
 
     @Subscribe

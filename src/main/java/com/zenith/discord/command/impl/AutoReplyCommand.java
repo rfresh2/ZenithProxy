@@ -3,7 +3,6 @@ package com.zenith.discord.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.Proxy;
 import com.zenith.discord.DiscordBot;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
@@ -14,6 +13,7 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class AutoReplyCommand extends Command {
@@ -47,7 +47,7 @@ public class AutoReplyCommand extends Command {
                 }))
                 .then(literal("cooldown").then(argument("secs", integer()).executes(c -> {
                     int delay = IntegerArgumentType.getInteger(c, "secs");
-                    Proxy.getInstance().getModuleManager().getModule(AutoReply.class).ifPresent(m -> ((AutoReply) m).updateCooldown(delay));
+                    MODULE_MANAGER.getModule(AutoReply.class).ifPresent(m -> ((AutoReply) m).updateCooldown(delay));
                     c.getSource().getEmbedBuilder()
                             .title("AutoReply Cooldown Updated!")
                             .addField("Status", (CONFIG.client.extra.autoReply.enabled ? "on" : "off"), false)

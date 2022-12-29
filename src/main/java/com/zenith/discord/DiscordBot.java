@@ -136,7 +136,7 @@ public class DiscordBot {
 
     private ClientPresence getOnlinePresence() {
         long onlineSeconds = Instant.now().getEpochSecond() - this.proxy.getConnectTime().getEpochSecond();
-        return ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "] TPS: " + this.proxy.getTpsCalculator().getTPS()));
+        return ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "] TPS: " + TPS_CALCULATOR.getTPS()));
     }
 
     private void handleProxyUpdateComplete() {

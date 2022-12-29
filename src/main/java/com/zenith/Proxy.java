@@ -7,19 +7,15 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.ClientSession;
-import com.zenith.database.ConnectionPool;
-import com.zenith.database.Database;
-import com.zenith.database.QueueWaitDatabase;
 import com.zenith.event.proxy.*;
-import com.zenith.module.ModuleManager;
-import com.zenith.pathing.World;
-import com.zenith.pathing.blockdata.BlockDataManager;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.ProxyServerLoginHandler;
+import com.zenith.util.Config;
+import com.zenith.util.LoggerInner;
 import com.zenith.util.Queue;
-import com.zenith.util.*;
+import com.zenith.util.Wait;
 import lombok.Getter;
 import lombok.Setter;
 import reactor.netty.http.client.HttpClient;
@@ -63,9 +59,6 @@ public class Proxy {
     protected ScheduledExecutorService activeHoursExecutorService;
     protected ScheduledExecutorService reconnectExecutorService;
     protected ScheduledExecutorService whitelistUpdateExecutorService;
-    protected Database queueWait; // nullable
-    protected final TPSCalculator tpsCalculator;
-
     private int reconnectCounter;
     private boolean inQueue = false;
     private int queuePosition = 0;
@@ -75,16 +68,11 @@ public class Proxy {
     private Optional<Boolean> isPrioBanned = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
-    private final PriorityBanChecker priorityBanChecker;
-    public static AutoUpdater autoUpdater;
-    public final World world;
-    private final ModuleManager moduleManager;
 
     public static void main(String... args) {
         DEFAULT_LOG.info("Starting Proxy...");
 
         instance = new Proxy();
-        autoUpdater = new AutoUpdater(instance);
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
             try {
@@ -103,15 +91,7 @@ public class Proxy {
         this.activeHoursExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.reconnectExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.whitelistUpdateExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.priorityBanChecker = new PriorityBanChecker();
-        this.world = new World(new BlockDataManager());
         EVENT_BUS.subscribe(this);
-        if (CONFIG.database.queueWait.enabled) {
-            // if we add more databases, ensure the connectionpool is shared
-            this.queueWait = new QueueWaitDatabase(new ConnectionPool(), this);
-        }
-        this.tpsCalculator = new TPSCalculator();
-        this.moduleManager = new ModuleManager(this);
     }
 
     public void start() {
@@ -169,7 +149,7 @@ public class Proxy {
                 this.connect();
             }
             if (CONFIG.autoUpdate) {
-                autoUpdater.start();
+                AUTO_UPDATER.start();
             }
             if (CONFIG.shouldReconnectAfterAutoUpdate) {
                 CONFIG.shouldReconnectAfterAutoUpdate = false;
@@ -382,7 +362,7 @@ public class Proxy {
                 }));
             }
         }
-        this.tpsCalculator.reset();
+        TPS_CALCULATOR.reset();
     }
 
     public void delayBeforeReconnect() {
@@ -414,7 +394,7 @@ public class Proxy {
 
     public void updatePrioBanStatus() {
         if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
-        this.isPrioBanned = this.priorityBanChecker.checkPrioBan();
+        this.isPrioBanned = PRIORITY_BAN_CHECKER.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
             CONFIG.authentication.prioBanned = this.isPrioBanned.get();

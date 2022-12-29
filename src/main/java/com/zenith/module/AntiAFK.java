@@ -10,7 +10,6 @@ import com.zenith.Proxy;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.pathing.BlockPos;
-import com.zenith.pathing.Pathing;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
 import org.apache.commons.collections4.iterators.LoopingListIterator;
@@ -35,7 +34,6 @@ public class AntiAFK extends Module {
     private final TickTimer rotateTimer = new TickTimer();
     private static final long positionCacheTTLMins = 20;
     private final TickTimer distanceDeltaCheckTimer = new TickTimer();
-    private final Pathing pathing;
     private boolean shouldWalk = false;
     private final Cache<Position, Position> positionCache;
     private final List<Pair<Integer, Integer>> walkDirections = asList(
@@ -53,9 +51,8 @@ public class AntiAFK extends Module {
     // can be negative, indicates pathing should wait until it reaches 0 to fall
     private int gravityT = 0;
 
-    public AntiAFK(Proxy proxy, final Pathing pathing) {
-        super(proxy);
-        this.pathing = pathing;
+    public AntiAFK() {
+        super();
         this.positionCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(positionCacheTTLMins, TimeUnit.MINUTES)
                 .build();
@@ -63,7 +60,7 @@ public class AntiAFK extends Module {
 
     @Subscribe
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.antiafk.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue() && CACHE.getPlayerCache().getThePlayer().getHealth() > 0) {
+        if (CONFIG.client.extra.antiafk.enabled && isNull(Proxy.getInstance().getCurrentPlayer().get()) && !Proxy.getInstance().isInQueue() && CACHE.getPlayerCache().getThePlayer().getHealth() > 0) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
@@ -110,7 +107,7 @@ public class AntiAFK extends Module {
     }
 
     private boolean spookHasTarget() {
-        return this.proxy.getModuleManager().getModule(Spook.class)
+        return MODULE_MANAGER.getModule(Spook.class)
                 .map(m -> ((Spook) m).hasTarget.get())
                 .orElse(false);
     }
@@ -132,7 +129,7 @@ public class AntiAFK extends Module {
 
     private void rotateTick() {
         if (rotateTimer.tick(1500L, true)) {
-            this.proxy.getClient().send(new ClientPlayerRotationPacket(
+            Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
                     true,
                     -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat(),
                     -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat()
@@ -150,7 +147,7 @@ public class AntiAFK extends Module {
         if (startWalkTickTimer.tick(400L, true)) {
             shouldWalk = true;
             final Pair<Integer, Integer> directions = walkDirectionIterator.next();
-            currentPathingGoal = pathing.getCurrentPlayerPos()
+            currentPathingGoal = PATHING.getCurrentPlayerPos()
                     .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getKey())
                     .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getValue())
                     .toBlockPos();
@@ -160,26 +157,26 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                Position nextMovePos = pathing.calculateNextMove(currentPathingGoal);
-                if (nextMovePos.equals(pathing.getCurrentPlayerPos())) {
+                Position nextMovePos = PATHING.calculateNextMove(currentPathingGoal);
+                if (nextMovePos.equals(PATHING.getCurrentPlayerPos())) {
                     shouldWalk = false;
                 }
-                this.proxy.getClient().send(nextMovePos.toPlayerPositionPacket());
+                Proxy.getInstance().getClient().send(nextMovePos.toPlayerPositionPacket());
                 this.positionCache.put(nextMovePos, nextMovePos);
             }
         }
     }
 
     private boolean reachedPathingGoal() {
-        return Objects.equals(pathing.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
+        return Objects.equals(PATHING.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
     }
 
     private void gravityTick() {
         synchronized (this) {
-            final Optional<Position> nextGravityMove = pathing.calculateNextGravityMove(gravityT);
+            final Optional<Position> nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
             if (nextGravityMove.isPresent()) {
-                if (!nextGravityMove.get().equals(pathing.getCurrentPlayerPos())) {
-                    this.proxy.getClient().send(nextGravityMove.get().toPlayerPositionPacket());
+                if (!nextGravityMove.get().equals(PATHING.getCurrentPlayerPos())) {
+                    Proxy.getInstance().getClient().send(nextGravityMove.get().toPlayerPositionPacket());
                 }
                 gravityT++;
             } else {
@@ -190,7 +187,7 @@ public class AntiAFK extends Module {
 
     private void swingTick() {
         if (swingTickTimer.tick(3000L, true)) {
-            this.proxy.getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+            Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
         }
     }
 }

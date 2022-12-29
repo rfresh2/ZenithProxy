@@ -12,6 +12,7 @@ import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.MODULE_MANAGER;
 import static java.util.Objects.isNull;
 
 public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerPositionRotationPacket, ClientSession> {
@@ -36,7 +37,7 @@ public class PlayerPosRotHandler implements HandlerRegistry.AsyncIncomingHandler
             ));
         }
         SpectatorHelper.syncPlayerPositionWithSpectators();
-        session.getProxy().getModuleManager().getModule(AntiAFK.class)
+        MODULE_MANAGER.getModule(AntiAFK.class)
                 .map(module -> (AntiAFK) module)
                 .ifPresent(AntiAFK::handlePlayerPosRotate);
         return true;

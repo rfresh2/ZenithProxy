@@ -15,8 +15,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 
@@ -118,7 +117,7 @@ public class StatusCommand extends Command {
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
                     .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
             if (Proxy.getInstance().isConnected()) {
-                builder.addField("TPS", Proxy.getInstance().getTpsCalculator().getTPS(), true);
+                builder.addField("TPS", TPS_CALCULATOR.getTPS(), true);
             }
             if (!getSpectatorUserNames().isEmpty()) {
                 builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), true);

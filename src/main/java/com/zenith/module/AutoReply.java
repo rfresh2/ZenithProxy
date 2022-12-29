@@ -20,8 +20,8 @@ public class AutoReply extends Module {
     private Cache<String, String> repliedPlayersCache;
     private Instant lastReply;
 
-    public AutoReply(Proxy proxy) {
-        super(proxy);
+    public AutoReply() {
+        super();
         this.repliedPlayersCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(CONFIG.client.extra.autoReply.cooldownSeconds, TimeUnit.SECONDS)
                 .build();
@@ -39,7 +39,7 @@ public class AutoReply extends Module {
 
     @Subscribe
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
-        if (CONFIG.client.extra.autoReply.enabled && isNull(this.proxy.getCurrentPlayer().get())) {
+        if (CONFIG.client.extra.autoReply.enabled && isNull(Proxy.getInstance().getCurrentPlayer().get())) {
             try {
                 if (!event.message.startsWith("<")) {
                     String[] split = event.message.split(" ");
@@ -51,7 +51,7 @@ public class AutoReply extends Module {
                             if (isNull(repliedPlayersCache.getIfPresent(sender))) {
                                 repliedPlayersCache.put(sender, sender);
                                 // 236 char max ( 256 - 4(command) - 16(max name length)
-                                this.proxy.getClient().send(new ClientChatPacket("/w " + sender + " " + CONFIG.client.extra.autoReply.message));
+                                Proxy.getInstance().getClient().send(new ClientChatPacket("/w " + sender + " " + CONFIG.client.extra.autoReply.message));
                                 this.lastReply = Instant.now();
                             }
                         }

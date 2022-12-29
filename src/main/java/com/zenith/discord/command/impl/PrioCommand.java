@@ -1,16 +1,15 @@
 package com.zenith.discord.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.Proxy;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
-import com.zenith.util.PriorityBanChecker;
 import discord4j.rest.util.Color;
 
 import java.util.Optional;
 
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.PRIORITY_BAN_CHECKER;
 import static java.util.Arrays.asList;
 
 public class PrioCommand extends Command {
@@ -57,7 +56,7 @@ public class PrioCommand extends Command {
                             .title("Checking Prio ban")
                             .color(Color.CYAN);
 //                    Proxy.getInstance().updatePrioBanStatus();
-                    Optional<Boolean> banned = Proxy.getInstance().getPriorityBanChecker().checkPrioBan();
+                    Optional<Boolean> banned = PRIORITY_BAN_CHECKER.checkPrioBan();
                     c.getSource().getEmbedBuilder()
                             .addField("Banned", (banned.isPresent() ? banned.get().toString() : "null"), true);
                 }));

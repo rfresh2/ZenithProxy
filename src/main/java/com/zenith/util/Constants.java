@@ -11,7 +11,12 @@ import com.zenith.client.handler.incoming.spawn.*;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
+import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
+import com.zenith.module.ModuleManager;
+import com.zenith.pathing.Pathing;
+import com.zenith.pathing.World;
+import com.zenith.pathing.blockdata.BlockDataManager;
 import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
@@ -74,8 +79,14 @@ public class Constants {
     public static final ExecutorService MODULE_EXECUTOR_SERVICE;
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
     public static final WhitelistManager WHITELIST_MANAGER;
-
-
+    public static final PriorityBanChecker PRIORITY_BAN_CHECKER;
+    public static final World WORLD;
+    public static final BlockDataManager BLOCK_DATA_MANAGER;
+    public static final DatabaseManager DATABASE_MANAGER;
+    public static final TPSCalculator TPS_CALCULATOR;
+    public static final ModuleManager MODULE_MANAGER;
+    public static final Pathing PATHING;
+    public static final AutoUpdater AUTO_UPDATER;
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
             .setLogger(CLIENT_LOG)
             .allowUnhandled(true)
@@ -139,6 +150,42 @@ public class Constants {
             .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
             .build();
 
+    public static volatile boolean SHOULD_RECONNECT;
+
+    public static synchronized void loadConfig() {
+        DEFAULT_LOG.info("Loading config...");
+
+        Config config;
+        if (PFiles.checkFileExists(CONFIG_FILE)) {
+            try (Reader reader = new UTF8FileReader(CONFIG_FILE)) {
+                config = GSON.fromJson(reader, Config.class);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to load config!", e);
+            }
+        } else {
+            config = new Config();
+        }
+
+        CONFIG = config.doPostLoad();
+        DEFAULT_LOG.info("Config loaded.");
+    }
+
+    public static synchronized void saveConfig() {
+        DEFAULT_LOG.debug("Saving config...");
+
+        if (CONFIG == null) {
+            DEFAULT_LOG.warn("Config is not set, saving default config!");
+            CONFIG = new Config().doPostLoad();
+        }
+
+        try (PAppendable out = new UTF8FileWriter(PFiles.ensureFileExists(CONFIG_FILE))) {
+            GSON.toJson(CONFIG, out);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to save config!", e);
+        }
+
+        DEFAULT_LOG.debug("Config saved.");
+    }
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(true)
@@ -162,7 +209,6 @@ public class Constants {
             .registerPostOutbound(new ClientRequestPacketPostHandler())
             .registerInbound(new HeldItemChangePostHandler())
             .build();
-
     public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(false)
@@ -209,42 +255,14 @@ public class Constants {
         MODULE_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1);
         SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
         WHITELIST_MANAGER = new WhitelistManager();
+        PRIORITY_BAN_CHECKER = new PriorityBanChecker();
+        BLOCK_DATA_MANAGER = new BlockDataManager();
+        WORLD = new World(BLOCK_DATA_MANAGER);
+        DATABASE_MANAGER = new DatabaseManager();
+        TPS_CALCULATOR = new TPSCalculator();
+        MODULE_MANAGER = new ModuleManager();
+        PATHING = new Pathing(WORLD);
+        AUTO_UPDATER = new AutoUpdater();
     }
 
-    public static volatile boolean SHOULD_RECONNECT;
-
-    public static synchronized void loadConfig() {
-        DEFAULT_LOG.info("Loading config...");
-
-        Config config;
-        if (PFiles.checkFileExists(CONFIG_FILE)) {
-            try (Reader reader = new UTF8FileReader(CONFIG_FILE)) {
-                config = GSON.fromJson(reader, Config.class);
-            } catch (IOException e) {
-                throw new RuntimeException("Unable to load config!", e);
-            }
-        } else {
-            config = new Config();
-        }
-
-        CONFIG = config.doPostLoad();
-        DEFAULT_LOG.info("Config loaded.");
-    }
-
-    public static synchronized void saveConfig() {
-        DEFAULT_LOG.debug("Saving config...");
-
-        if (CONFIG == null) {
-            DEFAULT_LOG.warn("Config is not set, saving default config!");
-            CONFIG = new Config().doPostLoad();
-        }
-
-        try (PAppendable out = new UTF8FileWriter(PFiles.ensureFileExists(CONFIG_FILE))) {
-            GSON.toJson(CONFIG, out);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to save config!", e);
-        }
-
-        DEFAULT_LOG.debug("Config saved.");
-    }
 }

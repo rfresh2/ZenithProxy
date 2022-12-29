@@ -7,7 +7,6 @@ import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
-import com.zenith.pathing.Pathing;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +25,14 @@ public class ModuleManager {
     protected ScheduledExecutorService clientTickExecutorService;
     protected List<Module> modules;
 
-    public ModuleManager(final Proxy proxy) {
+    public ModuleManager() {
         EVENT_BUS.subscribe(this);
         this.modules = asList(
-                new AntiAFK(proxy, new Pathing(proxy.getWorld())),
-                new AutoDisconnect(proxy),
-                new AutoReply(proxy),
-                new Spook(proxy),
-                new AutoRespawn(proxy)
+                new AntiAFK(),
+                new AutoDisconnect(),
+                new AutoReply(),
+                new Spook(),
+                new AutoRespawn()
         );
     }
 

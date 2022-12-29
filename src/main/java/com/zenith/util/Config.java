@@ -309,10 +309,17 @@ public final class Config {
 
     public static final class Database {
         public QueueWait queueWait = new QueueWait();
+        public Connections connections = new Connections();
 
         public static final class QueueWait {
             // queue wait time monitor
             public boolean enabled = true;
+        }
+
+        public static final class Connections {
+            public boolean testingEnabled = false;
+            // todo: leaving this open so we can enable it by default later
+//            public boolean enabled = true;
         }
     }
 

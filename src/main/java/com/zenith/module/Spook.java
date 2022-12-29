@@ -24,8 +24,8 @@ public class Spook extends Module {
     private final TickTimer stareTimer;
     private final Stack<EntityPlayer> focusStack;
 
-    public Spook(Proxy proxy) {
-        super(proxy);
+    public Spook() {
+        super();
         this.stareTimer = new TickTimer();
         this.hasTarget = new AtomicBoolean(false);
         this.focusStack = new Stack<>();
@@ -39,7 +39,7 @@ public class Spook extends Module {
                         .noneMatch(entity -> Objects.equals(e, entity)));
             }
         }
-        if (CONFIG.client.extra.spook.enabled && isNull(this.proxy.getCurrentPlayer().get()) && !proxy.isInQueue()) {
+        if (CONFIG.client.extra.spook.enabled && isNull(Proxy.getInstance().getCurrentPlayer().get()) && !Proxy.getInstance().isInQueue()) {
             stareTick();
         } else {
             hasTarget.lazySet(false);
@@ -87,7 +87,7 @@ public class Spook extends Module {
         final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
-            this.proxy.getClient().send(new ClientPlayerRotationPacket(
+            Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
                     true,
                     getYaw(nearestPlayer.get()),
                     getPitch(nearestPlayer.get())
@@ -102,7 +102,7 @@ public class Spook extends Module {
             if (!this.focusStack.isEmpty()) {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                this.proxy.getClient().send(new ClientPlayerRotationPacket(
+                Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
                         true,
                         getYaw(target),
                         getPitch(target)

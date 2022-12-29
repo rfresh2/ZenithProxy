@@ -11,17 +11,17 @@ import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
-    public AutoRespawn(final Proxy proxy) {
-        super(proxy);
+    public AutoRespawn() {
+        super();
     }
 
     @Subscribe
     public void handleDeathEvent(final DeathEvent event) {
         if (CONFIG.client.extra.autoRespawn.enabled) {
             Wait.waitALittleMs(Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000));
-            if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0 && isNull(proxy.getCurrentPlayer().get())) {
+            if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0 && isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                 MODULE_LOG.info("Performing AutoRespawn");
-                proxy.getClient().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                Proxy.getInstance().getClient().send(new ClientRequestPacket(ClientRequest.RESPAWN));
 
                 // todo: remove this and only stop trying to respawn once we actually respawn
                 //  i.e. we received a respawn packet and our health > 0

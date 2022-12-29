@@ -1,16 +1,19 @@
 package com.zenith.database;
 
-import com.zenith.Proxy;
-
 import static com.zenith.util.Constants.EVENT_BUS;
 
 public abstract class Database {
     protected final ConnectionPool connectionPool;
-    protected final Proxy proxy;
 
-    public Database(final ConnectionPool connectionPool, final Proxy proxy) {
+    public Database(final ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
-        this.proxy = proxy;
+    }
+
+    public void start() {
         EVENT_BUS.subscribe(this);
+    }
+
+    public void stop() {
+        EVENT_BUS.unsubscribe(this);
     }
 }

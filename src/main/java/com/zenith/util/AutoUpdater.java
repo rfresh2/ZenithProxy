@@ -24,13 +24,11 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoUpdater {
-    private final Proxy proxy;
     private ScheduledExecutorService updaterExecutorService;
     private Git git;
     private boolean updateAvailable = false;
 
-    public AutoUpdater(final Proxy proxy) {
-        this.proxy = proxy;
+    public AutoUpdater() {
         EVENT_BUS.subscribe(this);
     }
 
@@ -65,9 +63,9 @@ public class AutoUpdater {
             if (localBranchUpdates.size() > 0) {
                 if (!updateAvailable) DEFAULT_LOG.info("New update found!"); // only log on first detection
                 updateAvailable = true;
-                if (!proxy.isConnected()
+                if (!Proxy.getInstance().isConnected()
                         // adding some delay here to prefer disconnect event updates if times happen to align
-                        && proxy.getDisconnectTime().isBefore(Instant.now().minus(60L, ChronoUnit.SECONDS))) {
+                        && Proxy.getInstance().getDisconnectTime().isBefore(Instant.now().minus(60L, ChronoUnit.SECONDS))) {
                     update();
                 }
             } else {
@@ -99,7 +97,7 @@ public class AutoUpdater {
     }
 
     private void scheduleConditionalUpdate() {
-        if (this.proxy.getIsPrio().orElse(CONFIG.authentication.prio)) {
+        if (Proxy.getInstance().getIsPrio().orElse(CONFIG.authentication.prio)) {
             // update immediately if we have prio
             update();
         } else {
@@ -108,11 +106,11 @@ public class AutoUpdater {
     }
 
     private void conditionalRegularQueueUpdate() {
-        if (this.proxy.isConnected()) {
+        if (Proxy.getInstance().isConnected()) {
             // queue skipped
-            if (!this.proxy.isInQueue()) return;
+            if (!Proxy.getInstance().isInQueue()) return;
             // we're in the middle of a queue skip
-            if (this.proxy.isInQueue() && this.proxy.getQueuePosition() < 10) return;
+            if (Proxy.getInstance().getQueuePosition() < 10) return;
         }
         update();
     }
@@ -120,6 +118,6 @@ public class AutoUpdater {
     public void update() {
         EVENT_BUS.dispatch(new UpdateStartEvent());
         CONFIG.discord.isUpdating = true;
-        this.proxy.stop();
+        Proxy.getInstance().stop();
     }
 }
