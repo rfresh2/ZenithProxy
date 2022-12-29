@@ -374,7 +374,6 @@ public class Proxy {
                     return;
                 }
                 this.autoReconnectFuture = Optional.of(this.autoReconnectExecutorService.submit(() -> {
-                    DISCORD_BOT.sendAutoReconnectMessage();
                     delayBeforeReconnect();
                     synchronized (this.autoReconnectFuture) {
                         if (this.autoReconnectFuture.isPresent()) this.connect();
@@ -403,12 +402,13 @@ public class Proxy {
 //                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
 //                        + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
 //            }
+            EVENT_BUS.dispatch(new AutoReconnectEvent(countdown));
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
                 Wait.waitALittle(1);
             }
         } catch (Exception e) {
-            CLIENT_LOG.error("AutoReconnect delay failure", e);
+            CLIENT_LOG.info("AutoReconnect stopped", e);
         }
     }
 

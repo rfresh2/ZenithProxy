@@ -515,6 +515,14 @@ public class DiscordBot {
                 .build());
     }
 
+    @Subscribe
+    public void handleAutoReconnectEvent(final AutoReconnectEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("AutoReconnecting in " + event.delaySeconds + "s")
+                .color(Color.CYAN)
+                .build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")
@@ -547,13 +555,6 @@ public class DiscordBot {
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating discord profile image", e);
         }
-    }
-
-    public void sendAutoReconnectMessage() {
-        sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("AutoReconnecting in " + CONFIG.client.extra.autoReconnect.delaySeconds + "s")
-                .color(Color.CYAN)
-                .build());
     }
 
     public void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
