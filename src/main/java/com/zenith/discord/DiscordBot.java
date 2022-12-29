@@ -30,7 +30,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
@@ -54,7 +53,6 @@ public class DiscordBot {
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
     private final ScheduledExecutorService scheduledExecutorService;
-    private static HashMap<String, Long> repliedPlayers = new HashMap<String, Long>();
 
     public DiscordBot() {
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -90,9 +88,10 @@ public class DiscordBot {
             }
             try {
                 final String commandInput = message.substring(1);
-                DISCORD_LOG.debug("Executing discord command: {}", commandInput);
+                DISCORD_LOG.info(event.getMember().get().getUsername() + "#" + event.getMember().get().getDiscriminator() + " executed discord command: {}", commandInput);
                 MultipartRequest<MessageCreateRequest> request = commandManager.execute(commandInput, event, mainRestChannel.get());
                 if (request != null) {
+                    DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
                     mainChannelMessageQueue.add(request);
                 }
             } catch (final Exception e) {
