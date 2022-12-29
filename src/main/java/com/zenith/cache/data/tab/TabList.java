@@ -58,6 +58,10 @@ public class TabList {
         return Optional.ofNullable(this.entries.get(uuid));
     }
 
+    public Optional<PlayerEntry> getFromName(final String username) {
+        return this.entries.values().stream().filter(v -> v.name.equals(username)).findFirst();
+    }
+
     public Collection<PlayerEntry> getEntries() {
         return this.entries.values();
     }

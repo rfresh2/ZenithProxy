@@ -190,7 +190,7 @@ shadowJar {
     }
 }
 
-tasks.named('generateJooq').configure { allInputsDeclared = true }
+tasks.named('generateJooq').configure { allInputsDeclared = false }
 task jarBuild() {}
 jarBuild.dependsOn([shadowJar, build])
 

@@ -9,6 +9,7 @@ import static java.util.Objects.nonNull;
 public class DatabaseManager {
     private QueueWaitDatabase queueWaitDatabase;
     private ConnectionsDatabase connectionsDatabase;
+    private ChatDatabase chatDatabase;
     private ConnectionPool connectionPool;
 
     public DatabaseManager() {
@@ -17,6 +18,9 @@ public class DatabaseManager {
         }
         if (CONFIG.database.connections.testingEnabled) {
             startConnectionsDatabase();
+        }
+        if (CONFIG.database.chats.testingEnabled) {
+            startChatsDatabase();
         }
     }
 
@@ -47,6 +51,21 @@ public class DatabaseManager {
     public void stopConnectionsDatabase() {
         if (nonNull(this.connectionsDatabase)) {
             this.connectionsDatabase.stop();
+        }
+    }
+
+    public void startChatsDatabase() {
+        if (nonNull(this.chatDatabase)) {
+            this.chatDatabase.start();
+        } else {
+            this.chatDatabase = new ChatDatabase(getConnectionPool());
+            this.chatDatabase.start();
+        }
+    }
+
+    public void stopChatsDatabase() {
+        if (nonNull(this.chatDatabase)) {
+            this.chatDatabase.stop();
         }
     }
 
