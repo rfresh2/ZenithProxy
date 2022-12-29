@@ -24,6 +24,7 @@ import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
+import lombok.Getter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -53,10 +54,13 @@ public class DiscordBot {
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
     private final ScheduledExecutorService scheduledExecutorService;
+    @Getter
+    private boolean isRunning;
 
     public DiscordBot() {
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
+        this.isRunning = false;
     }
 
     public void start(Proxy proxy) {
@@ -106,6 +110,7 @@ public class DiscordBot {
                 15L, // discord rate limit
                 TimeUnit.SECONDS);
         scheduledExecutorService.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        this.isRunning = true;
     }
 
     private void processMessageQueue() {

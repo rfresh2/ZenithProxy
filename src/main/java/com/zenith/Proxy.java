@@ -158,7 +158,7 @@ public class Proxy {
                             .asInputStream()
                             .block();
                     this.serverIcon = ImageIO.read(netInputStream);
-                    if (nonNull(DISCORD_BOT)) {
+                    if (DISCORD_BOT.isRunning()) {
                         DISCORD_BOT.updateProfileImage(this.serverIcon);
                     }
                 } catch (Exception e) {
