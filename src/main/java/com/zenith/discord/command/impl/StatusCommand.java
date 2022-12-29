@@ -21,6 +21,15 @@ import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 
 public class StatusCommand extends Command {
+    @Override
+    public CommandUsage commandUsage() {
+        return CommandUsage.simpleAliases(
+                "status",
+                "Gets the current proxy status",
+                aliases()
+        );
+    }
+
     public static String getCoordinates(final PlayerCache playerCache) {
         if (CONFIG.discord.reportCoords) {
             return "||["
@@ -31,71 +40,6 @@ public class StatusCommand extends Command {
         } else {
             return "Coords disabled";
         }
-    }
-
-    @Override
-    public CommandUsage commandUsage() {
-        return CommandUsage.simpleAliases(
-                "status",
-                "Gets the current proxy status",
-                aliases()
-        );
-    }
-
-    @Override
-    public LiteralArgumentBuilder<CommandContext> register() {
-        return command("status").executes(c -> {
-            final EmbedCreateSpec.Builder builder = c.getSource().getEmbedBuilder();
-            builder
-                    .title("Proxy Status: " + CONFIG.authentication.username)
-                    .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.CYAN) : Color.RUBY)
-                    .addField("Status", getStatus(), true)
-                    .addField("Connected User", getCurrentClientUserName(), true)
-                    .addField("Online Time", getOnlineTime(), true)
-                    .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
-                    .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
-                    .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
-            if (Proxy.getInstance().isConnected()) {
-                builder.addField("TPS", Proxy.getInstance().getTpsCalculator().getTPS(), true);
-            }
-            if (!getSpectatorUserNames().isEmpty()) {
-                builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), true);
-            }
-            builder.addField("2b2t Queue", getQueueStatus(), true)
-                    .addField("Dimension",
-                            dimensionIdToString(CACHE.getPlayerCache().getDimension()),
-                            true);
-            if (CONFIG.discord.reportCoords) {
-                builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
-            }
-            builder.addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), true)
-                    .addField("AutoDisconnect",
-                            "[Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
-                                    + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"
-                                    + "\n[AutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off") + "]", true)
-                    .addField("AutoReconnect",
-                            (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
-                                    + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
-                    .addField("AutoRespawn",
-                            (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off")
-                                    + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
-                    .addField("AntiAFK",
-                            (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
-                    .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
-                            + "\n[Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
-                    .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
-                    .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), true)
-                    .addField("Spectators", (CONFIG.server.spectator.allowSpectator ? "on" : "off")
-                            + "\n[Public Chat: " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "on" : "off") + "]", true)
-                    .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
-                    .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
-                    .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured")
-                            + "\n[WhisperMention: " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "on" : "off") + "]"
-                            + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", true)
-                    .addField("AutoReply", (CONFIG.client.extra.autoReply.enabled ? "on" : "off")
-                            + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
-                    .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), false);
-        });
     }
 
     private String getCurrentClientUserName() {
@@ -158,6 +102,64 @@ public class StatusCommand extends Command {
         } else {
             return "Not Online!";
         }
+    }
+
+    @Override
+    public LiteralArgumentBuilder<CommandContext> register() {
+        return command("status").executes(c -> {
+            final EmbedCreateSpec.Builder builder = c.getSource().getEmbedBuilder();
+            builder
+                    .title("Proxy Status: " + CONFIG.authentication.username)
+                    .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.CYAN) : Color.RUBY)
+                    .addField("Status", getStatus(), true)
+                    .addField("Connected User", getCurrentClientUserName(), true)
+                    .addField("Online Time", getOnlineTime(), true)
+                    .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
+                    .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
+                    .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
+            if (Proxy.getInstance().isConnected()) {
+                builder.addField("TPS", Proxy.getInstance().getTpsCalculator().getTPS(), true);
+            }
+            if (!getSpectatorUserNames().isEmpty()) {
+                builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), true);
+            }
+            builder.addField("2b2t Queue", getQueueStatus(), true)
+                    .addField("Dimension",
+                            dimensionIdToString(CACHE.getPlayerCache().getDimension()),
+                            true);
+            if (CONFIG.discord.reportCoords) {
+                builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
+            }
+            builder.addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                    .addField("AutoDisconnect",
+                            "[Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
+                                    + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"
+                                    + "\n[AutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off")
+                                    + ", Thunder: " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off")
+                                    + "]", true)
+                    .addField("AutoReconnect",
+                            (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
+                                    + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
+                    .addField("AutoRespawn",
+                            (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off")
+                                    + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
+                    .addField("AntiAFK",
+                            (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
+                    .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
+                            + "\n[Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
+                    .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
+                    .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), true)
+                    .addField("Spectators", (CONFIG.server.spectator.allowSpectator ? "on" : "off")
+                            + "\n[Public Chat: " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "on" : "off") + "]", true)
+                    .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
+                    .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
+                    .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured")
+                            + "\n[WhisperMention: " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "on" : "off") + "]"
+                            + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", true)
+                    .addField("AutoReply", (CONFIG.client.extra.autoReply.enabled ? "on" : "off")
+                            + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
+                    .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), false);
+        });
     }
 
     @Override

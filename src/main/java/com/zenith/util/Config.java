@@ -105,6 +105,7 @@ public final class Config {
                     public boolean enabled = false;
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
+                    public boolean thunder = false;
                 }
 
                 public static final class ActiveHours {

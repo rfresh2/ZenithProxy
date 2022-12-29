@@ -5,6 +5,9 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.chunk.TileEntity;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
+import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
+import com.github.steveice10.mc.protocol.data.game.world.notify.RainStrengthValue;
+import com.github.steveice10.mc.protocol.data.game.world.notify.ThunderStrengthValue;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.IntTag;
@@ -12,7 +15,9 @@ import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.zenith.cache.CachedData;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import net.daporkchop.lib.math.vector.Vec2i;
 
 import java.util.List;
@@ -26,11 +31,22 @@ import static com.zenith.util.Constants.CACHE_LOG;
 import static com.zenith.util.Constants.CLIENT_LOG;
 import static java.util.Objects.isNull;
 
-
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
     private static final Position DEFAULT_SPAWN_POSITION = new Position(8, 64, 8);
     protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
+    @Getter
+    @Setter
     protected Position spawnPosition = DEFAULT_SPAWN_POSITION;
+    @Getter
+    @Setter
+    private boolean isRaining = false;
+    @Getter
+    @Setter
+    private float rainStrength = 0f;
+    @Getter
+    @Setter
+    private float thunderStrength = 0f;
+
     public void add(@NonNull Column column) {
         synchronized (this) {
             this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
@@ -193,10 +209,6 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         return true;
     }
 
-    public void setSpawnPosition(final Position position) {
-        this.spawnPosition = position;
-    }
-
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         synchronized (this) {
@@ -204,6 +216,11 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                     .map(ServerChunkDataPacket::new)
                     .forEach(consumer);
             consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
+            if (isRaining) {
+                consumer.accept(new ServerNotifyClientPacket(ClientNotification.START_RAIN, null));
+                consumer.accept(new ServerNotifyClientPacket(ClientNotification.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
+                consumer.accept(new ServerNotifyClientPacket(ClientNotification.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
+            }
         }
     }
 
@@ -212,6 +229,9 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         synchronized (this) {
             this.cache.clear();
             this.spawnPosition = DEFAULT_SPAWN_POSITION;
+            this.isRaining = false;
+            this.thunderStrength = 0.0f;
+            this.rainStrength = 0.0f;
         }
     }
 

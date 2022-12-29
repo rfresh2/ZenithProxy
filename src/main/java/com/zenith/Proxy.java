@@ -389,13 +389,20 @@ public class Proxy {
     public void delayBeforeReconnect() {
         try {
             final int countdown;
-            if (nonNull(client) && ((ClientSession) client).isServerProbablyOff()) {
-                countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
-                this.reconnectCounter = 0;
-            } else {
-                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
-                        + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
-            }
+            countdown = CONFIG.client.extra.autoReconnect.delaySeconds
+                    + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
+            // todo: improve offline server detection
+            //  currently it's based on null exception thrown during the last disconnect
+            //  however, when the Proxy.disconnect method is called with only a string reason this also trips it
+            //  those situations need to be differentiated
+            //  also there is no way to configure the delaySecondsOffline in the discord command currently
+//            if (nonNull(client) && ((ClientSession) client).isServerProbablyOff()) {
+//                countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
+//                this.reconnectCounter = 0;
+//            } else {
+//                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
+//                        + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
+//            }
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
                 Wait.waitALittle(1);
@@ -478,17 +485,6 @@ public class Proxy {
         if (!this.isPrio.isPresent()) {
             // assume we are prio if we skipped queuing
             EVENT_BUS.dispatch(new PrioStatusEvent(true));
-        }
-    }
-
-    @Subscribe
-    public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
-        if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            ServerConnection currentConnection = this.getCurrentPlayer().get();
-            if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile))
-            {
-                disconnect();
-            }
         }
     }
 

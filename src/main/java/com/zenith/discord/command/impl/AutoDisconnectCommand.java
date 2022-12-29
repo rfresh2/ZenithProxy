@@ -19,7 +19,7 @@ public class AutoDisconnectCommand extends Command {
         return CommandUsage.full(
                 "autoDisconnect",
                 "Configures the AutoDisconnect feature",
-                asList("on/off", "health <integer>", "autoClientDisconnect on/off"),
+                asList("on/off", "health <integer>", "autoClientDisconnect on/off", "thunder on/off"),
                 aliases()
         );
     }
@@ -61,6 +61,19 @@ public class AutoDisconnectCommand extends Command {
                             CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = false;
                             c.getSource().getEmbedBuilder()
                                     .title("AutoDisconnect AutoClientDisconnect Off!")
+                                    .color(Color.CYAN);
+                        })))
+                .then(literal("thunder")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.utility.actions.autoDisconnect.thunder = true;
+                            c.getSource().getEmbedBuilder()
+                                    .title("AutoDisconnect Thunder On!")
+                                    .color(Color.CYAN);
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.utility.actions.autoDisconnect.thunder = false;
+                            c.getSource().getEmbedBuilder()
+                                    .title("AutoDisconnect Thunder Off!")
                                     .color(Color.CYAN);
                         })));
     }
