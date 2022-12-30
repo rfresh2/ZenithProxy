@@ -44,6 +44,7 @@ public class CommandManager {
                 new AutoUpdateCommand(),
                 new ChatRelayCommand(),
                 new ConnectCommand(),
+                new DatabaseCommand(),
                 new DisconnectCommand(),
                 new DisplayCoordsCommand(),
                 new HelpCommand(),
