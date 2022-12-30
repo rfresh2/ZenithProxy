@@ -33,7 +33,7 @@ public class AutoDisconnect extends Module {
     @Subscribe
     public void handleWeatherChangeEvent(final WeatherChangeEvent event) {
         synchronized (this) {
-            if (CACHE.getChunkCache().isRaining() && CACHE.getChunkCache().getThunderStrength() > 0.0f) {
+            if (CONFIG.client.extra.utility.actions.autoDisconnect.thunder && CACHE.getChunkCache().isRaining() && CACHE.getChunkCache().getThunderStrength() > 0.0f) {
                 if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                     Proxy.getInstance().disconnect("Thunder AutoDisconnect");
                 }
