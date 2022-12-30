@@ -95,4 +95,8 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
+    <logger name="Database" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
 </configuration>

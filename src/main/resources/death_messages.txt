@@ -65,7 +65,8 @@ $k broke $v (with) $w
 
 # mobs
 # there's many variations of the same message but with different mobs that still need to be added here
-# technically the mob should be the $k but cba to categorize these differently rn. Mob types aren't highlighted in a separate color like players.
+# technically the mob should be the $k but this is explicitly typing them
+# Mob types aren't highlighted in a separate color like players or weapons so they would need special parsing cases
 $v was killed to death by a zombie pigman wielding $w
 $v was killed to death by a creeper.
 $v was gibbed apart by zombie punches.
@@ -99,6 +100,8 @@ $v was consumed by an enderman.
 $v was ripped and smashed apart by a spider.
 $v was beaten into meaty pulp by a zombie wielding $w and died painfully.
 $v was ripped and smashed apart by a spider.
+$v was bombarded apart by a wither.
+$v was gored to death by a zombie pigman wielding $w
 
 # suicides
 $v burned up in lava.
@@ -151,3 +154,4 @@ $v suicide bombed with a(n) $w
 $v smashed themselves and died trying to fly with elytra.
 $v blew themselves up with a(n) $w
 $v was consumed by the void.
+$v destroyed themselves with a(n) $w

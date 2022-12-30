@@ -20,7 +20,7 @@ public class DatabaseCommand extends Command {
                 asList(
                         "queue on/off",
                         "publicChat on/off",
-                        "joinleave on/off",
+                        "joinLeave on/off",
                         "deathMessages on/off"
                 ),
                 aliases());
