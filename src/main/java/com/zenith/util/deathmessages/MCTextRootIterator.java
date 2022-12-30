@@ -43,6 +43,10 @@ public final class MCTextRootIterator implements Iterator<MCTextWord> {
             if (words.size() > wordIndex) {
                 boolean isKeyword = !childComponent.getColor().equals(new Color(170, 0, 0));
                 String word = words.get(wordIndex);
+                if (word.isEmpty()) {
+                    wordIndex++;
+                    return next(); // if child words starts with " " then split will have an empty string here
+                }
                 if (isKeyword) {
                     if (word.startsWith("'s")) { // special case where player names have possession modifier in a child
                         wordIndex++;
@@ -52,9 +56,21 @@ public final class MCTextRootIterator implements Iterator<MCTextWord> {
                     word = String.join(" ", words.toArray(new String[0]));
                     wordIndex = Integer.MAX_VALUE;
                 } else {
+                    String finalWord = word;
+                    if (DeathMessageSchemaInstance.mobTypes.stream().anyMatch(mt -> Arrays.asList(mt.split(" ")).stream().anyMatch(mts -> mts.equals(finalWord.replace(".", ""))))) {
+                        // greedily look for a second word
+                        // todo: i don't like this. if there's a mob type word that isn't unique, things will go very wrong
+                        if (words.size() > wordIndex + 1) {
+                            // this doesn't prevent matching on different mob types
+                            // todo: we want to preserve mob type word index on matching
+                            //  would also be nice to percolate the mob type up so we can set it as the killer
+                            if (DeathMessageSchemaInstance.mobTypes.stream().anyMatch(mt -> Arrays.asList(mt.split(" ")).stream().anyMatch(mts -> mts.equals(words.get(wordIndex + 1).replace(".", ""))))) {
+                                wordIndex += 2; // skip ahead
+                                return new MCTextWord(isKeyword, word + " " + words.get(wordIndex - 2 + 1));
+                            }
+                        }
+                    }
                     wordIndex++;
-                    if (word.isEmpty())
-                        return next(); // if child words starts with " " then split will have an empty string here
                 }
                 return new MCTextWord(isKeyword, word);
             } else {

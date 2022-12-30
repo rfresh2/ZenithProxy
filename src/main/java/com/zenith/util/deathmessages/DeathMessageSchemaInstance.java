@@ -3,20 +3,36 @@ package com.zenith.util.deathmessages;
 import lombok.Data;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
 @Data
 public final class DeathMessageSchemaInstance {
     private final String schemaRaw;
     private final List<String> schema;
+    static final List<String> mobTypes = asList(
+            "zombie pigman",
+            "creeper",
+            "wither",
+            "zombie",
+            "slime",
+            "slime cube", // todo: need to handle these special
+            "magma cube",
+            "zombies",
+            "skeletons",
+            "skeleton",
+            "spider",
+            "skeletal warrior",
+            "endermite",
+            "enderman"
+    );
 
     public DeathMessageSchemaInstance(final String schemaRaw) {
         this.schemaRaw = schemaRaw;
-        this.schema = Arrays.asList(schemaRaw.split(" "));
+        this.schema = asList(schemaRaw.split(" "));
     }
 
     public Optional<DeathMessageParseResult> parse(final MCTextRoot mcTextRoot) {
@@ -45,6 +61,26 @@ public final class DeathMessageSchemaInstance {
                     return Optional.empty();
                 } else {
                     weapon = mcTextWord.word;
+                }
+            } else if (schemaWord.contains("$m")) { // iterator doesn't split these out
+                if (mcTextWord.isKeyword) {
+                    return Optional.empty();
+                } else {
+                    if (mcTextWord.word.equals("a") || mcTextWord.word.equals("an")) {
+                        i--; // skips any a or an prefix to a mob type
+                        continue;
+                    }
+                    boolean found = false;
+                    for (String mobType : mobTypes) {
+                        // mcTextWord.word can have multiple spaces here - special parsing case
+                        if (mcTextWord.word.startsWith(mobType)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return Optional.empty();
+                    }
                 }
             } else {
                 if (mcTextWord.isKeyword) {

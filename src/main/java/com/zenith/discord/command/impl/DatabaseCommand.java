@@ -16,7 +16,7 @@ public class DatabaseCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("database",
-                "Configures what 2b2t server data is collected by the proxy. None of these log personal data like coords or whispers",
+                "Configures what 2b2t server data is collected by the proxy. No database logs personal data.",
                 asList(
                         "queue on/off",
                         "publicChat on/off",

@@ -1,6 +1,16 @@
+# 2b2t death message schemas
+# lines starting with '#' are comments and ignored
+# empty lines also ignored
+# keywords:
+#  $v = victim player name
+#  $k = killer player name
+#  $w = weapon name
+#  $m = mob type, e.g. zombie, skeleton
+#  (with) = either "with" or "using"
+#  a(n) = either "a" or "an"
+# keywords are used as wildcard strings that match instance of that type (kind of).
+
 # pvp messages
-# many pvp messages have both "using" and "with" versions, notated with '(with)' in below schema
-# also, a(n) signifies either 'an' or 'a' depending on grammar
 $v was stung to death whilst fighting $k
 $v was turned into red dust by $k with a(n) $w
 $v was destroyed by $k with a(n) $w
@@ -62,48 +72,38 @@ $v melted by fire whilst fighting $k
 $v was pushed off of vines by $k
 $k demolished $v (with) $w
 $k broke $v (with) $w
+$k pummeled $v to death using $w
 
 # mobs
-# there's many variations of the same message but with different mobs that still need to be added here
-# technically the mob should be the $k but this is explicitly typing them
-# Mob types aren't highlighted in a separate color like players or weapons so they would need special parsing cases
-$v was killed to death by a zombie pigman wielding $w
-$v was killed to death by a creeper.
-$v was gibbed apart by zombie punches.
-$v died stuck on a cactus.
-$v was killed by a wither named $w
-$v was smashed to death by a zombie.
-$v was fisted to death by a zombie.
-$v merged with a slime and died slowly.
-$v was consumed by a slime.
-$v was destroyed by a slime cube.
-$v was destroyed by a magma cube.
-$v was demolished by a magma cube.
-$v was assassinated by zombies.
-$v was assassinated by skeletons.
-$v was smashed to death by a zombie wielding $w
-$v was killed by skeletons.
-$v was destroyed by a creeper.
-$v was assassinated by a zombie wielding $w
-$v was stung to death by a skeleton.
-$v was deconstructed by a zombie pigman wielding $w
-$v was killed by an endermite.
-$v was pummeled into multiple parts by a zombie and died slowly.
-$v was assassinated by a skeletal warrior.
-$v couldn't outrun a wither.
-$v was shot by a skeleton and died instantly.
-$v was assassinated by a zombie.
-$v was ripped apart by a zombie and instantly died.
-$v was demolished by a skeleton.
-$v was beaten to death by a zombie wielding $w
-$v was consumed by an enderman.
-$v was ripped and smashed apart by a spider.
-$v was beaten into meaty pulp by a zombie wielding $w and died painfully.
-$v was ripped and smashed apart by a spider.
-$v was bombarded apart by a wither.
-$v was gored to death by a zombie pigman wielding $w
+# Mob types aren't highlighted in a separate color like players or weapons
+$v was killed to death by $m wielding $w
+$v was killed to death by $m.
+$v was killed by $m named $w
+$v was smashed to death by $m.
+$v was fisted to death by $m.
+$v was consumed by $m.
+$v was destroyed by $m.
+$v was demolished by $m.
+$v was assassinated by $m.
+$v was smashed to death by $m wielding $w
+$v was killed by $m.
+$v was stung to death by $m.
+$v was deconstructed by $m wielding $w
+$v was pummeled into multiple parts by $m and died slowly.
+$v couldn't outrun $m.
+$v was shot by $m and died instantly.
+$v was ripped apart by $m and instantly died.
+$v was beaten to death by $m wielding $w
+$v was consumed by $m.
+$v was ripped and smashed apart by $m.
+$v was bombarded apart by $m.
+$v was gored to death by $m wielding $w
+$v was smashed into a boneless flesh pile by $m.
+$v was messed up by $m.
+$v was murdered by $m.
 
 # suicides
+$v died stuck on a cactus.
 $v burned up in lava.
 $v forgot to eat.
 $v exhausted and died.
@@ -155,3 +155,5 @@ $v smashed themselves and died trying to fly with elytra.
 $v blew themselves up with a(n) $w
 $v was consumed by the void.
 $v destroyed themselves with a(n) $w
+$v violently ended their own life with a(n) $w
+$v was turned into bloody rain by an explosion.
