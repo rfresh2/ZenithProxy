@@ -11,6 +11,7 @@ import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class ChatDatabase extends Database {
             final Optional<PlayerEntry> playerEntry = extractSender(event.message);
             if (playerEntry.isPresent()) {
                 final String msg = event.message.substring(event.message.indexOf(">") + 1);
-                writeChat(playerEntry.get().getId(), playerEntry.get().getName(), msg);
+                writeChat(playerEntry.get().getId(), playerEntry.get().getName(), msg, Instant.now().atOffset(ZoneOffset.UTC));
             } else {
                 DATABASE_LOG.error("Unable to extract sender for chat message: {}", event.message);
             }
@@ -40,12 +41,12 @@ public class ChatDatabase extends Database {
         }
     }
 
-    public void writeChat(final UUID playerUUID, final String playerName, final String message) {
+    public void writeChat(final UUID playerUUID, final String playerName, final String message, final OffsetDateTime time) {
         try (final Connection connection = connectionPool.getWriteConnection()) {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
             final Chats c = Chats.CHATS;
             context.insertInto(c)
-                    .set(c.TIME, Instant.now().atOffset(ZoneOffset.UTC))
+                    .set(c.TIME, time)
                     .set(c.CHAT, message)
                     .set(c.PLAYER_UUID, playerUUID)
                     .set(c.PLAYER_NAME, playerName)

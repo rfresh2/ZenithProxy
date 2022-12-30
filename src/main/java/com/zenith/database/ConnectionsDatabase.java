@@ -13,6 +13,7 @@ import org.jooq.impl.DSL;
 import java.sql.Connection;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
@@ -26,12 +27,12 @@ public class ConnectionsDatabase extends Database {
 
     @Subscribe
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
-        writeConnection(Connectiontype.JOIN, event.playerEntry.getName(), event.playerEntry.getId());
+        writeConnection(Connectiontype.JOIN, event.playerEntry.getName(), event.playerEntry.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     @Subscribe
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
-        writeConnection(Connectiontype.LEAVE, event.playerEntry.getName(), event.playerEntry.getId());
+        writeConnection(Connectiontype.LEAVE, event.playerEntry.getName(), event.playerEntry.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     // todo: handle server restart
@@ -42,7 +43,7 @@ public class ConnectionsDatabase extends Database {
     //  could cause duplicated data, once from the proactive marking as disconnected, and once on actual restart disconnects
     //  need to think about a better approach for this
 
-    public void writeConnection(final Connectiontype connectiontype, final String playerName, final UUID playerUUID) {
+    public void writeConnection(final Connectiontype connectiontype, final String playerName, final UUID playerUUID, final OffsetDateTime time) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org")
                 || Proxy.getInstance().isInQueue()
                 || (Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.ofSeconds(3))) && playerName.equals(CONFIG.authentication.username))
@@ -51,7 +52,7 @@ public class ConnectionsDatabase extends Database {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
             final Connections c = Connections.CONNECTIONS;
             context.insertInto(c)
-                    .set(c.TIME, Instant.now().atOffset(ZoneOffset.UTC))
+                    .set(c.TIME, time)
                     .set(c.CONNECTION, connectiontype)
                     .set(c.PLAYER_NAME, playerName)
                     .set(c.PLAYER_UUID, playerUUID)

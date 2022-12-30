@@ -1,0 +1,148 @@
+# pvp messages
+# many pvp messages have both "using" and "with" versions. these could be simplified down with a small schema change
+$v was stung to death whilst fighting $k
+$v was turned into red dust by $k with a(n) $w
+$v was destroyed by $k with a(n) $w
+$k murdered $v using $w
+$k murdered $v with $w
+$v was removed by $k with a(n) $w
+$k crushed $v using $w
+$k crushed $v with $w
+$v turned into ash whilst fighting $k
+$k unmade $v with $w
+$k unmade $v using $w
+$k tore $v apart using $w
+$k tore $v apart with $w
+$k stabbed $v with $w
+$k stabbed $v using $w
+$v burned to death whilst fighting $k
+$v was turned into bloody rain by $k with a(n) $w
+$k violently combined $w and $v
+$k disintegrated $v using $w
+$k disintegrated $v with $w
+$v was shot by $k using $w
+$v was shot by $k with $w
+$k obliterated $v with $w
+$k obliterated $v using $w
+$k terminated $v with $w
+$k terminated $v using $w
+$k broke their fists on $v
+$k separated $v with $w
+$k separated $v using $w
+$v was blown apart by $k with a(n) $w
+$v was utterly destroyed by $k with a(n) $w
+$k pummeled $v to death using $w
+$k pummeled $v to death with $w
+$k ruined $v using $w
+$k ruined $v with $w
+$v was blown up by $k with a(n) $w
+$k chopped $v up with $w
+$k chopped $v up using $w
+$v was violently assassinated by $w with a(n) $w
+$k assassinated $v with $w
+$k assassinated $v using $w
+$k liquified $v with $w
+$k liquified $v using $w
+$v fell into the void whilst fighting $k
+$k executed $v with $w
+$k executed $v using $w
+$k cracked $v open using $w
+$k cracked $v open with $w
+$v was deleted by $k with a(n) $w
+$k slayed $v using $w
+$k slayed $v with $w
+$v was assassinated by $k using $w
+$k smashed $v using $w
+$k smashed $v with $w
+$k exterminated $v with $w
+$k exterminated $v using $w
+$v burned up in lava whilst fighting $k
+$k put $w through $v's body.
+$k cut $v using $w
+$k cut $v with $w
+$k pummeled $v to death with $w
+$k pummeled $v to death using $w
+$k butchered $v using $w
+$k butchered $v with $w
+$k used $w to separate $v
+$k mashed $v using $w
+$k mashed $v with $w
+$v was slain by $k using $w
+$v was slain by $k with $w
+$k did something horrible to $v using $w
+$k did something horrible to $v with $w
+$v fell to death after being pushed by $k
+$k abused $w on $v
+
+# mobs
+# there's many variations of the same message but with different mobs that still need to be added here
+# technically the mob is the $k but cba to categorize these differently now
+$v was killed to death by a zombie pigman wielding $w
+$v was killed to death by a creeper.
+$v was gibbed apart by zombie punches.
+$v died stuck on a cactus.
+$v was killed by a wither named $w
+$v was smashed to death by a zombie.
+$v was fisted to death by a zombie.
+$v merged with a slime and died slowly.
+$v was consumed by a slime.
+$v was destroyed by a slime cube.
+$v was destroyed by a magma cube.
+$v was demolished by a magma cube.
+$v was assassinated by zombies.
+$v was assassinated by skeletons.
+$v was smashed to death by a zombie wielding $w
+$v was killed by skeletons.
+$v was destroyed by a creeper.
+$v was assassinated by a zombie wielding $w
+$v was stung to death by a skeleton.
+$v was deconstructed by a zombie pigman wielding $w
+$v was killed by an endermite.
+$v was pummeled into multiple parts by a zombie and died slowly.
+
+# suicides
+$v burned up in lava.
+$v forgot to eat.
+$v exhausted and died.
+$v lost grip of vines and fell to death.
+The Zone claims $v's life.
+$v hit the ground too hard.
+$v forgot to breath air.
+$v dried up and fell apart.
+$v fell and crushed their insides with their legbones.
+$v starved to death.
+$v broke apart from falling.
+$v died inside lava somehow.
+$v fell to death.
+$v couldn't swim up quick enough.
+$v suffocated in water.
+$v broke their neck, and the rest of their body.
+$v drank themselves dead.
+$v swam out of a waterfall and fell to death.
+$v fell and was reduced into a jittering flesh heap.
+$v fell and was reduced into a jittering flesh pile.
+$v withered away.
+$v was reduced to lava by lava.
+$v fell and crushed their lungs with their legbones.
+$v drowned in lava.
+$v tripped, broke a bone or died somehow inside lava.
+$v sprained their entire body and instantly died.
+$v melted in lava.
+$v melted by fire.
+$v tried to swim in lava and didn't get out quick enough.
+$v became lava.
+$v tripped too hard and died.
+$v drowned.
+$v was crushed, drowned, killed or something.
+$v choked to death.
+$v was buried alive.
+$v combusted.
+$v lost grip of a ladder and fell to death.
+$v was buried alive.
+$v turned into ash.
+$v fell into the void and instantly died.
+$v died inside a wall.
+$v burned apart.
+$v exploded themselves with a(n) $w
+$v took an arrow to the knee and died.
+$v burned to death.

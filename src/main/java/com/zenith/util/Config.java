@@ -304,6 +304,7 @@ public final class Config {
         public QueueWait queueWait = new QueueWait();
         public Connections connections = new Connections();
         public Chats chats = new Chats();
+        public Deaths deaths = new Deaths();
 
         public static final class QueueWait {
             // queue wait time monitor
@@ -317,6 +318,12 @@ public final class Config {
         }
 
         public static final class Chats {
+            public boolean testingEnabled = false;
+            // todo: leaving this open so we can enable it by default later
+//            public boolean enabled = true;
+        }
+
+        public static final class Deaths {
             public boolean testingEnabled = false;
             // todo: leaving this open so we can enable it by default later
 //            public boolean enabled = true;

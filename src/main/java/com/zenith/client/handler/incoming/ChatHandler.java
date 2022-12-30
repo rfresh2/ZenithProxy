@@ -3,6 +3,7 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.DeathMessageEvent;
+import com.zenith.event.proxy.SelfDeathMessageEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.util.handler.HandlerRegistry;
@@ -20,7 +21,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
     public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
         try {
             CHAT_LOG.info(packet.getMessage());
-            MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
+            final MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
             final String messageString = mcTextRoot.toRawString();
             /*
              * example death message:
@@ -34,26 +35,20 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
              */
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
-                if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)))
-                        // we should find ourselves in the death message
-                        && mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getText()) && child.getText().equals(CONFIG.authentication.username))) {
-                    // todo: known oversight: also detects when we kill someone else
-                    // probable death message
-                    EVENT_BUS.dispatch(new DeathMessageEvent(messageString));
+                if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)))) {
+                    EVENT_BUS.dispatch(new DeathMessageEvent(messageString, mcTextRoot));
+                    if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getText()) && child.getText().equals(CONFIG.authentication.username))) {
+                        // todo: known oversight: also detects when we kill someone else
+                        //  need to make a death message parsing helper class
+                        EVENT_BUS.dispatch(new SelfDeathMessageEvent(messageString));
+                    }
                 } else if (messageString.startsWith(("[SERVER]"))) { // server message
-                    System.out.println(messageString);
                     if (messageString.startsWith("[SERVER] Server restarting in")) { // todo: include time till restart in event
                         EVENT_BUS.dispatch(new ServerRestartingEvent(messageString));
                     }
                 }
             }
 
-
-            if ("2b2t.org".equals(CONFIG.client.server.address)
-                    && mcTextRoot.toRawString().toLowerCase().startsWith("Exception Connecting:".toLowerCase()))    {
-                CLIENT_LOG.error("2b2t's queue is broken as per usual, disconnecting to avoid being stuck forever");
-                session.disconnect("heck");
-            }
             EVENT_BUS.dispatch(new ServerChatReceivedEvent(messageString));
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);

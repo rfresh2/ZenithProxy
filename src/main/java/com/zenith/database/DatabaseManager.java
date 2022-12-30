@@ -10,6 +10,7 @@ public class DatabaseManager {
     private QueueWaitDatabase queueWaitDatabase;
     private ConnectionsDatabase connectionsDatabase;
     private ChatDatabase chatDatabase;
+    private DeathsDatabase deathsDatabase;
     private ConnectionPool connectionPool;
 
     public DatabaseManager() {
@@ -21,6 +22,9 @@ public class DatabaseManager {
         }
         if (CONFIG.database.chats.testingEnabled) {
             startChatsDatabase();
+        }
+        if (CONFIG.database.deaths.testingEnabled) {
+            startDeathsDatabase();
         }
     }
 
@@ -66,6 +70,21 @@ public class DatabaseManager {
     public void stopChatsDatabase() {
         if (nonNull(this.chatDatabase)) {
             this.chatDatabase.stop();
+        }
+    }
+
+    public void startDeathsDatabase() {
+        if (nonNull(this.deathsDatabase)) {
+            this.deathsDatabase.start();
+        } else {
+            this.deathsDatabase = new DeathsDatabase(getConnectionPool());
+            this.deathsDatabase.start();
+        }
+    }
+
+    public void stopDeathsDatabase() {
+        if (nonNull(this.deathsDatabase)) {
+            this.deathsDatabase.stop();
         }
     }
 

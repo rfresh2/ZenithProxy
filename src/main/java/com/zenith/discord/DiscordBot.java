@@ -216,13 +216,13 @@ public class DiscordBot {
 
     @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
-        this.client.updatePresence(getQueuePresence()).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Started Queuing")
                 .color(Color.CYAN)
-                .addField("Regular Queue", ""+Queue.getQueueStatus().regular, true)
-                .addField("Priority Queue", ""+Queue.getQueueStatus().prio, true)
+                .addField("Regular Queue", "" + Queue.getQueueStatus().regular, true)
+                .addField("Priority Queue", "" + Queue.getQueueStatus().prio, true)
                 .build());
+        this.client.updatePresence(getQueuePresence()).block();
     }
 
     @Subscribe
@@ -235,7 +235,7 @@ public class DiscordBot {
     }
 
     @Subscribe
-    public void handleDeathMessageEvent(DeathMessageEvent event) {
+    public void handleDeathMessageEvent(SelfDeathMessageEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Death Message")
                 .color(Color.RUBY)
