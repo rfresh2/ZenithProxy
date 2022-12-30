@@ -130,7 +130,7 @@ jooq {
                     }
                     target {
                         packageName = 'com.zenith.database.dto'
-                        // you need to manually copy these generated files into main src set
+                        // you need to manually move these generated files into main src set
                         // only needs to be done on db schema changes
                         directory = 'build/jooq/main'
                     }
@@ -210,6 +210,17 @@ shadowJar {
     }
 }
 
+task clearJooqBuild() {
+    // clear any jooq generated classes in the build directory
+    // we already have these classes in our src
+    // can't configure jooq generator to not auto-add these generated dirs to gradle source sets
+    group = "build"
+    // this can be removed after all instances get updated to this commit at least once
+    new File('build/generated-src').deleteDir()
+    new File('build/jooq').deleteDir()
+}
+
+compileJava.dependsOn([clearJooqBuild])
 tasks.named('generateJooq').configure { allInputsDeclared = false }
 task jarBuild() {}
 jarBuild.dependsOn([shadowJar, build])
