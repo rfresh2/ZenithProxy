@@ -1,82 +1,71 @@
 # pvp messages
-# many pvp messages have both "using" and "with" versions. these could be simplified down with a small schema change
+# many pvp messages have both "using" and "with" versions, notated with '(with)' in below schema
+# also, a(n) signifies either 'an' or 'a' depending on grammar
 $v was stung to death whilst fighting $k
 $v was turned into red dust by $k with a(n) $w
 $v was destroyed by $k with a(n) $w
-$k murdered $v using $w
-$k murdered $v with $w
+$k murdered $v (with) $w
 $v was removed by $k with a(n) $w
-$k crushed $v using $w
-$k crushed $v with $w
+$k crushed $v (with) $w
 $v turned into ash whilst fighting $k
-$k unmade $v with $w
-$k unmade $v using $w
-$k tore $v apart using $w
-$k tore $v apart with $w
-$k stabbed $v with $w
-$k stabbed $v using $w
+$k unmade $v (with) $w
+$k tore $v apart (with) $w
+$k stabbed $v (with) $w
 $v burned to death whilst fighting $k
 $v was turned into bloody rain by $k with a(n) $w
 $k violently combined $w and $v
-$k disintegrated $v using $w
-$k disintegrated $v with $w
-$v was shot by $k using $w
-$v was shot by $k with $w
-$k obliterated $v with $w
-$k obliterated $v using $w
-$k terminated $v with $w
-$k terminated $v using $w
+$k disintegrated $v (with) $w
+$v was shot by $k (with) $w
+$k obliterated $v (with) $w
+$k terminated $v (with) $w
 $k broke their fists on $v
-$k separated $v with $w
-$k separated $v using $w
+$k separated $v (with) $w
 $v was blown apart by $k with a(n) $w
 $v was utterly destroyed by $k with a(n) $w
-$k pummeled $v to death using $w
-$k pummeled $v to death with $w
-$k ruined $v using $w
-$k ruined $v with $w
+$k pummeled $v to death (with) $w
+$k ruined $v (with) $w
 $v was blown up by $k with a(n) $w
-$k chopped $v up with $w
-$k chopped $v up using $w
+$k chopped $v up (with) $w
 $v was violently assassinated by $w with a(n) $w
-$k assassinated $v with $w
-$k assassinated $v using $w
-$k liquified $v with $w
-$k liquified $v using $w
+$k assassinated $v (with) $w
+$k liquified $v (with) $w
 $v fell into the void whilst fighting $k
-$k executed $v with $w
-$k executed $v using $w
-$k cracked $v open using $w
-$k cracked $v open with $w
+$k executed $v (with) $w
+$k cracked $v open (with) $w
 $v was deleted by $k with a(n) $w
-$k slayed $v using $w
-$k slayed $v with $w
-$v was assassinated by $k using $w
-$k smashed $v using $w
-$k smashed $v with $w
-$k exterminated $v with $w
-$k exterminated $v using $w
+$k slayed $v (with) $w
+$v was assassinated by $k (with) $w
+$k smashed $v (with) $w
+$k exterminated $v (with) $w
 $v burned up in lava whilst fighting $k
 $k put $w through $v's body.
-$k cut $v using $w
-$k cut $v with $w
-$k pummeled $v to death with $w
-$k pummeled $v to death using $w
-$k butchered $v using $w
-$k butchered $v with $w
+$k cut $v (with) $w
+$k pummeled $v to death (with) $w
+$k butchered $v (with) $w
 $k used $w to separate $v
-$k mashed $v using $w
-$k mashed $v with $w
-$v was slain by $k using $w
-$v was slain by $k with $w
-$k did something horrible to $v using $w
-$k did something horrible to $v with $w
+$k mashed $v (with) $w
+$v was slain by $k (with) $w
+$k did something horrible to $v (with) $w
 $v fell to death after being pushed by $k
 $k abused $w on $v
+$k killed $v (with) $w
+$k destroyed $v (with) $w
+$k shoved $w inside $v
+$k slapped $v to death.
+$k crumbled $v (with) $w
+$k annihilated $v (with) $w
+$k ravaged $v (with) $w
+$v melted by fire whilst fighting $k
+$v combusted whilst fighting $k
+$k wrecked $v (with) $w
+$v melted by fire whilst fighting $k
+$v was pushed off of vines by $k
+$k demolished $v (with) $w
+$k broke $v (with) $w
 
 # mobs
 # there's many variations of the same message but with different mobs that still need to be added here
-# technically the mob is the $k but cba to categorize these differently now
+# technically the mob should be the $k but cba to categorize these differently rn. Mob types aren't highlighted in a separate color like players.
 $v was killed to death by a zombie pigman wielding $w
 $v was killed to death by a creeper.
 $v was gibbed apart by zombie punches.
@@ -99,6 +88,17 @@ $v was stung to death by a skeleton.
 $v was deconstructed by a zombie pigman wielding $w
 $v was killed by an endermite.
 $v was pummeled into multiple parts by a zombie and died slowly.
+$v was assassinated by a skeletal warrior.
+$v couldn't outrun a wither.
+$v was shot by a skeleton and died instantly.
+$v was assassinated by a zombie.
+$v was ripped apart by a zombie and instantly died.
+$v was demolished by a skeleton.
+$v was beaten to death by a zombie wielding $w
+$v was consumed by an enderman.
+$v was ripped and smashed apart by a spider.
+$v was beaten into meaty pulp by a zombie wielding $w and died painfully.
+$v was ripped and smashed apart by a spider.
 
 # suicides
 $v burned up in lava.
@@ -146,3 +146,8 @@ $v burned apart.
 $v exploded themselves with a(n) $w
 $v took an arrow to the knee and died.
 $v burned to death.
+$v committed suicide with a(n) $w
+$v suicide bombed with a(n) $w
+$v smashed themselves and died trying to fly with elytra.
+$v blew themselves up with a(n) $w
+$v was consumed by the void.

@@ -102,6 +102,10 @@ public class DeathMessagesHelper {
                             if (!(word.word.equals("a") || word.word.equals("an"))) {
                                 return Optional.empty();
                             }
+                        } else if (s.equals("(with)")) {
+                            if (!(word.word.equals("with") || word.word.equals("using"))) {
+                                return Optional.empty();
+                            }
                         } else {
                             if (!word.word.equals(s)) {
                                 return Optional.empty();

@@ -39,6 +39,7 @@ public class DeathsDatabase extends Database {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
             final Deaths d = Deaths.DEATHS;
             // todo: known problem: if a victim logs right when they die they aren't in the tablist when we check, thus throwing an exception here
+            //  we could query mojang API as fallback and get around this
             final Optional<PlayerEntry> victimEntry = CACHE.getTabListCache().getTabList().getFromName(deathMessageParseResult.getVictim());
             InsertSetMoreStep<DeathsRecord> step = context.insertInto(d)
                     .set(d.TIME, time)
