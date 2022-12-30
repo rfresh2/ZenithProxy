@@ -19,7 +19,7 @@ public final class DeathMessageSchemaInstance {
             "wither",
             "zombie",
             "slime",
-            "slime cube", // todo: need to handle these special
+            "slime cube",
             "magma cube",
             "zombies",
             "skeletons",
@@ -27,7 +27,9 @@ public final class DeathMessageSchemaInstance {
             "spider",
             "skeletal warrior",
             "endermite",
-            "enderman"
+            "enderman",
+            "wolf",
+            "witch"
     );
 
     public DeathMessageSchemaInstance(final String schemaRaw) {

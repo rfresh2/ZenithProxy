@@ -5,7 +5,7 @@
 #  $v = victim player name
 #  $k = killer player name
 #  $w = weapon name
-#  $m = mob type, e.g. zombie, skeleton
+#  $m = mob type, e.g. zombie, skeleton. will also match mobs with a preceding "a" or "an".
 #  (with) = either "with" or "using"
 #  a(n) = either "a" or "an"
 # keywords are used as wildcard strings that match instance of that type (kind of).
@@ -15,7 +15,7 @@ $v was stung to death whilst fighting $k
 $v was turned into red dust by $k with a(n) $w
 $v was destroyed by $k with a(n) $w
 $k murdered $v (with) $w
-$v was removed by $k with a(n) $w
+$v was removed by $k (with) a(n) $w
 $k crushed $v (with) $w
 $v turned into ash whilst fighting $k
 $k unmade $v (with) $w
@@ -34,7 +34,7 @@ $v was blown apart by $k with a(n) $w
 $v was utterly destroyed by $k with a(n) $w
 $k pummeled $v to death (with) $w
 $k ruined $v (with) $w
-$v was blown up by $k with a(n) $w
+$v was blown up by $k (with) a(n) $w
 $k chopped $v up (with) $w
 $v was violently assassinated by $w with a(n) $w
 $k assassinated $v (with) $w
@@ -42,7 +42,7 @@ $k liquified $v (with) $w
 $v fell into the void whilst fighting $k
 $k executed $v (with) $w
 $k cracked $v open (with) $w
-$v was deleted by $k with a(n) $w
+$v was deleted by $k (with) a(n) $w
 $k slayed $v (with) $w
 $v was assassinated by $k (with) $w
 $k smashed $v (with) $w
@@ -72,7 +72,8 @@ $v melted by fire whilst fighting $k
 $v was pushed off of vines by $k
 $k demolished $v (with) $w
 $k broke $v (with) $w
-$k pummeled $v to death using $w
+$k pummeled $v to death (with) $w
+$k separated $v (with) their bare hands.
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -101,6 +102,13 @@ $v was gored to death by $m wielding $w
 $v was smashed into a boneless flesh pile by $m.
 $v was messed up by $m.
 $v was murdered by $m.
+$v was slashed into gibs by $m wielding $w
+$v was trampled to death by $m.
+$v was removed by $m wielding $w
+$v was raided to death by $m.
+$v was violently severed into pieces by $m.
+$v was gibbed apart by $m punches.
+$v was pummeled into multiple parts by $m wielding $w and died slowly.
 
 # suicides
 $v died stuck on a cactus.
