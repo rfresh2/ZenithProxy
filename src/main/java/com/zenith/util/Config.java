@@ -301,6 +301,12 @@ public final class Config {
     }
 
     public static final class Database {
+        public String hostname = "mc-proxy.czyfkzmxjkdp.us-east-1.rds.amazonaws.com";
+        public int port = 5432;
+        public String username = "proxy";
+        public String password = "cghRVLQQiRqEpn9ccJEEeU";
+        public int writePoolSize = 1;
+        public int readPoolSize = 1;
         public QueueWait queueWait = new QueueWait();
         public Connections connections = new Connections();
         public Chats chats = new Chats();

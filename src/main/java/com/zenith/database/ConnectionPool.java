@@ -8,14 +8,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
 
+import static com.zenith.util.Constants.CONFIG;
+
 public final class ConnectionPool {
 
     private final HikariDataSource writePool;
     private final HikariDataSource readPool;
 
     public ConnectionPool() {
-        writePool = createDataSource(1);
-        readPool = createDataSource(1);
+        writePool = createDataSource(CONFIG.database.writePoolSize);
+        readPool = createDataSource(CONFIG.database.readPoolSize);
     }
 
     public ConnectionPool(int size) {
@@ -32,9 +34,9 @@ public final class ConnectionPool {
     private static HikariDataSource createDataSource(int maxPoolSize) {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.postgresql.Driver");
-        config.setJdbcUrl("jdbc:postgresql://mc-proxy.czyfkzmxjkdp.us-east-1.rds.amazonaws.com:5432/postgres");
-        config.setUsername("proxy");
-        config.setPassword("cghRVLQQiRqEpn9ccJEEeU");
+        config.setJdbcUrl("jdbc:postgresql://" + CONFIG.database.hostname + ":" + CONFIG.database.port + "/postgres");
+        config.setUsername(CONFIG.database.username);
+        config.setPassword(CONFIG.database.password);
         config.setMaximumPoolSize(maxPoolSize);
         config.setConnectionTimeout(5000);
         config.setKeepaliveTime(Duration.ofMinutes(1).toMillis());
