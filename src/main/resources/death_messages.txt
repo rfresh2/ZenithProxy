@@ -68,7 +68,7 @@ $k ravaged $v (with) $w
 $v melted by fire whilst fighting $k
 $v combusted whilst fighting $k
 $k wrecked $v (with) $w
-$v melted by fire whilst fighting $k
+$v melted in lava whilst fighting $k
 $v was pushed off of vines by $k
 $k demolished $v (with) $w
 $k broke $v (with) $w
@@ -101,6 +101,7 @@ $v was pummeled into multiple parts by $m and died slowly.
 $v couldn't outrun $m.
 $v was shot by $m and died instantly.
 $v was ripped apart by $m and instantly died.
+$v was ripped apart by $m wielding $w and instantly died.
 $v was beaten to death by $m wielding $w
 $v was consumed by $m.
 $v was ripped and smashed apart by $m.
@@ -136,6 +137,7 @@ $v was reduced to dust by $m.
 $v was reduced into thick paste by $m wielding $m
 $v was eaten by $m wielding $w
 $v was reduced to dust by $m.
+$v was bombarded into a fiery death by $m.
 
 # suicides
 $v died stuck on a cactus.
@@ -202,3 +204,4 @@ $v was consumed by living magma.
 $v was boned to death.
 $v was violently separated by explosives.
 $v was stung to death by cactus.
+$v killed themselves using magic.

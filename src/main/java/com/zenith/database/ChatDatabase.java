@@ -31,7 +31,7 @@ public class ChatDatabase extends Database {
         try {
             final Optional<PlayerEntry> playerEntry = extractSender(event.message);
             if (playerEntry.isPresent()) {
-                final String msg = event.message.substring(event.message.indexOf(">") + 1);
+                final String msg = event.message.substring(event.message.indexOf(">") + 2); // skip leading space
                 writeChat(playerEntry.get().getId(), playerEntry.get().getName(), msg, Instant.now().atOffset(ZoneOffset.UTC));
             } else {
                 DATABASE_LOG.error("Unable to extract sender for chat message: {}", event.message);
