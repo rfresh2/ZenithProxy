@@ -8,6 +8,7 @@ import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.*;
+import com.zenith.module.AntiAFK;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;
@@ -123,6 +124,25 @@ public class Proxy {
                         }
                     } catch (final Throwable e) {
                         DEFAULT_LOG.error("Error in reconnect executor service", e);
+                    }
+                }, 0, 10L, TimeUnit.SECONDS);
+            }
+            if (CONFIG.client.extra.twentyMinuteReconnectIfStuck) {
+                reconnectExecutorService.scheduleAtFixedRate(() -> {
+                    try {
+                        if (this.isConnected() && !inQueue && nonNull(connectTime)
+                                && CONFIG.client.extra.antiafk.enabled
+                                && CONFIG.client.extra.antiafk.actions.stuckWarning // ensures we don't get into a weird state
+                                && MODULE_MANAGER.getModule(AntiAFK.class).map(AntiAFK::isStuck).orElse(false)) {
+                            long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
+                            if (onlineSeconds >= (1200 - 20)) { // 20 mins - 20 seconds padding
+                                this.disconnect(SYSTEM_DISCONNECT);
+                                this.cancelAutoReconnect();
+                                this.connect();
+                            }
+                        }
+                    } catch (final Exception e) {
+                        DEFAULT_LOG.error("Error in twenty minute reconnect executor", e);
                     }
                 }, 0, 10L, TimeUnit.SECONDS);
             }

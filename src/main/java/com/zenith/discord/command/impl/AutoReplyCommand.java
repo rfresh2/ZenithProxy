@@ -47,7 +47,7 @@ public class AutoReplyCommand extends Command {
                 }))
                 .then(literal("cooldown").then(argument("secs", integer()).executes(c -> {
                     int delay = IntegerArgumentType.getInteger(c, "secs");
-                    MODULE_MANAGER.getModule(AutoReply.class).ifPresent(m -> ((AutoReply) m).updateCooldown(delay));
+                    MODULE_MANAGER.getModule(AutoReply.class).ifPresent(m -> m.updateCooldown(delay));
                     c.getSource().getEmbedBuilder()
                             .title("AutoReply Cooldown Updated!")
                             .addField("Status", (CONFIG.client.extra.autoReply.enabled ? "on" : "off"), false)

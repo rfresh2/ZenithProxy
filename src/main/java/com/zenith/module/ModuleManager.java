@@ -36,9 +36,10 @@ public class ModuleManager {
         );
     }
 
-    public Optional<Module> getModule(final Class<? extends Module> clazz) {
+    public <T> Optional<T> getModule(final Class<T> clazz) {
         return this.modules.stream()
                 .filter(module -> module.getClass().equals(clazz))
+                .map(module -> (T) module)
                 .findFirst();
     }
 

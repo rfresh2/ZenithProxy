@@ -45,6 +45,7 @@ public class AntiAFK extends Module {
             new Pair<>(1, -1), new Pair<>(-1, 1),
             new Pair<>(0, 1), new Pair<>(0, -1));
     private Instant lastDistanceDeltaWarningTime = Instant.EPOCH;
+    private boolean stuck = false;
     private final LoopingListIterator<Pair<Integer, Integer>> walkDirectionIterator = new LoopingListIterator<>(walkDirections);
     private BlockPos currentPathingGoal;
     // tick time since we started falling
@@ -69,16 +70,19 @@ public class AntiAFK extends Module {
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
                 walkTick();
-                // check distance delta every 10 mins. Stuck kick should happen at 30 mins
-                if (distanceDeltaCheckTimer.tick(12000L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
+                // check distance delta every 9 mins. Stuck kick should happen at 20 mins
+                if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
                     final double distanceMovedDelta = getDistanceMovedDelta();
                     if (distanceMovedDelta < 6) {
                         MODULE_LOG.warn("AntiAFK appears to be stuck. Distance moved: {}", distanceMovedDelta);
+                        stuck = true;
                         if (Instant.now().minus(Duration.ofMinutes(20)).isAfter(lastDistanceDeltaWarningTime)) {
                             // only send discord warning once every 20 mins so we don't spam too hard
                             EVENT_BUS.dispatch(new AntiAfkStuckEvent(distanceMovedDelta));
                             lastDistanceDeltaWarningTime = Instant.now();
                         }
+                    } else {
+                        stuck = false;
                     }
                 }
             }
@@ -104,6 +108,7 @@ public class AntiAFK extends Module {
         walkDirectionIterator.reset();
         currentPathingGoal = null;
         gravityT = 0;
+        stuck = false;
     }
 
     private boolean spookHasTarget() {
@@ -131,8 +136,8 @@ public class AntiAFK extends Module {
         if (rotateTimer.tick(1500L, true)) {
             Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
                     true,
-                    -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat(),
-                    -90 + (90 + 90) * ThreadLocalRandom.current().nextFloat()
+                    -90 + (180 * ThreadLocalRandom.current().nextFloat()),
+                    -90 + (180 * ThreadLocalRandom.current().nextFloat())
             ));
         }
     }
@@ -189,5 +194,9 @@ public class AntiAFK extends Module {
         if (swingTickTimer.tick(3000L, true)) {
             Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
         }
+    }
+
+    public boolean isStuck() {
+        return this.stuck;
     }
 }

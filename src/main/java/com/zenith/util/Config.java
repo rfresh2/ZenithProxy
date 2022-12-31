@@ -55,7 +55,8 @@ public final class Config {
             public List<String> friendList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
-            public boolean sixHourReconnect = false;
+            public boolean sixHourReconnect = true;
+            public boolean twentyMinuteReconnectIfStuck = true;
 
             public static final class Stalk {
                 public boolean enabled = false;
@@ -65,6 +66,7 @@ public final class Config {
             public static final class AntiAFK {
                 public Actions actions = new Actions();
                 public boolean enabled = true;
+
                 public static final class Actions {
                     public boolean walk = true;
                     // we only need about 5-6 blocks in reality but adding a few extra here to be safe
