@@ -58,7 +58,7 @@ public class ConnectionsDatabase extends Database {
                     .set(c.PLAYER_UUID, playerUUID)
                     .execute();
         } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint")) {
+            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same connection
                 DATABASE_LOG.debug("connection dedupe detected");
             } else {

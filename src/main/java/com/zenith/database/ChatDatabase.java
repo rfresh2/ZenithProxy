@@ -52,7 +52,7 @@ public class ChatDatabase extends Database {
                     .set(c.PLAYER_NAME, playerName)
                     .execute();
         } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint")) {
+            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same chat
                 DATABASE_LOG.debug("chat dedupe detected");
             } else {

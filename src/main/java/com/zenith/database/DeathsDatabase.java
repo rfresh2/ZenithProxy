@@ -40,8 +40,6 @@ public class DeathsDatabase extends Database {
         try (final Connection connection = connectionPool.getWriteConnection()) {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
             final Deaths d = Deaths.DEATHS;
-            // todo: known problem: if a victim logs right when they die they aren't in the tablist when we check, thus throwing an exception here
-            //  we could query mojang API as fallback and get around this
             final Optional<PlayerEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
             if (!victimEntry.isPresent()) {
                 DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
@@ -55,7 +53,7 @@ public class DeathsDatabase extends Database {
             if (deathMessageParseResult.getKiller().isPresent()) {
                 final Optional<PlayerEntry> killerEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getKiller().get());
                 if (!killerEntry.isPresent()) {
-                    DATABASE_LOG.error("Unalbe to resolve killer player data: {}", deathMessageParseResult.getKiller());
+                    DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
                     return;
                 }
                 step
@@ -67,7 +65,7 @@ public class DeathsDatabase extends Database {
             }
             step.execute();
         } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint")) {
+            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same death
                 DATABASE_LOG.debug("death dedupe detected");
             } else {

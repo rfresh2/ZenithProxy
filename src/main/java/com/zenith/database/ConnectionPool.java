@@ -2,13 +2,12 @@ package com.zenith.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.HikariPoolMXBean;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.Duration;
 
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DATABASE_LOG;
 
 public final class ConnectionPool {
 
@@ -16,19 +15,20 @@ public final class ConnectionPool {
     private final HikariDataSource readPool;
 
     public ConnectionPool() {
-        writePool = createDataSource(CONFIG.database.writePoolSize);
-        readPool = createDataSource(CONFIG.database.readPoolSize);
-    }
-
-    public ConnectionPool(int size) {
-        HikariDataSource dataSource = createDataSource(size);
-        writePool = dataSource;
-        readPool = dataSource;
-    }
-
-    private static String describePoolState(String name, HikariDataSource readPool) {
-        HikariPoolMXBean bean = readPool.getHikariPoolMXBean();
-        return "Acquiring connection from " + name + ". Waiting: " + bean.getThreadsAwaitingConnection() + " Active: " + bean.getActiveConnections() + " Idle: " + bean.getIdleConnections() + " Total: " + bean.getTotalConnections();
+        HikariDataSource wPool = null;
+        try {
+            wPool = createDataSource(CONFIG.database.writePool);
+        } catch (final Exception e) {
+            DATABASE_LOG.error("Error initializing database connection pool", e);
+        }
+        writePool = wPool;
+        HikariDataSource rPool = null;
+        try {
+            rPool = createDataSource(CONFIG.database.readPool);
+        } catch (final Exception e) {
+            DATABASE_LOG.error("Error initializing database connection pool", e);
+        }
+        readPool = rPool;
     }
 
     private static HikariDataSource createDataSource(int maxPoolSize) {
@@ -47,7 +47,7 @@ public final class ConnectionPool {
     public Connection getWriteConnection() {
         try {
             return writePool.getConnection();
-        } catch (final SQLException e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -57,7 +57,7 @@ public final class ConnectionPool {
             Connection connection = readPool.getConnection();
             connection.setReadOnly(true);
             return connection;
-        } catch (final SQLException e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
