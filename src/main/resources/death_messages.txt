@@ -5,7 +5,7 @@
 #  $v = victim player name
 #  $k = killer player name
 #  $w = weapon name
-#  $m = mob type, e.g. zombie, skeleton. will also match mobs with a preceding "a" or "an".
+#  $m = mob type, e.g. zombie, skeleton. singular mob types will have a preceding "a" or "an".
 #  (with) = either "with" or "using"
 #  a(n) = either "a" or "an"
 # keywords are used as wildcard strings that match instance of that type (kind of).
@@ -74,6 +74,12 @@ $k demolished $v (with) $w
 $k broke $v (with) $w
 $k pummeled $v to death (with) $w
 $k separated $v (with) their bare hands.
+$k reduced $v into a bloody meat pile with just fists.
+$k tore $v apart (with) their fists.
+$v tripped, broke a bone or died somehow inside lava whilst fighting $k
+$v burned apart whilst fighting $k
+$k put their fists inside $v violently.
+$k shoved $w down $v's throat.
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -109,9 +115,22 @@ $v was raided to death by $m.
 $v was violently severed into pieces by $m.
 $v was gibbed apart by $m punches.
 $v was pummeled into multiple parts by $m wielding $w and died slowly.
+$v was pummeled into multiple parts by $m and died slowly.
+$v went inside $m and died.
+$v was mauled to pieces by $m.
+$v was slain by $m wielding $w
+$v was blown to pieces by $m.
+$v was torn apart by $m.
+$v was carefully killed by $m.
+$v was brutally ripped apart by $m.
+$v was obliterated by $m.
+$v was beaten into meaty pulp by $m wielding $w and died painfully.
+$v was beaten into meaty pulp by $m and died painfully.
+$v was exploded by $m.
 
 # suicides
 $v died stuck on a cactus.
+$v got stuck on a cactus.
 $v burned up in lava.
 $v forgot to eat.
 $v exhausted and died.
@@ -165,3 +184,9 @@ $v was consumed by the void.
 $v destroyed themselves with a(n) $w
 $v violently ended their own life with a(n) $w
 $v was turned into bloody rain by an explosion.
+$v was disintegrated by explosives.
+$v shot themselves.
+$v suffocated.
+$v exploded into gibs playing with fireworks.
+# is living magma a mob?
+$v was consumed by living magma.

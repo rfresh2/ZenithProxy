@@ -15,6 +15,7 @@ public final class DeathMessageSchemaInstance {
     private final List<String> schema;
     static final List<String> mobTypes = asList(
             "zombie pigman",
+            "zombie pigmen",
             "creeper",
             "wither",
             "zombie",
@@ -29,7 +30,9 @@ public final class DeathMessageSchemaInstance {
             "endermite",
             "enderman",
             "wolf",
-            "witch"
+            "witch",
+            "zombie villager",
+            "ghast"
     );
 
     public DeathMessageSchemaInstance(final String schemaRaw) {
