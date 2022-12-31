@@ -1,5 +1,6 @@
 package com.zenith.server;
 
+import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
@@ -148,7 +149,12 @@ public class ServerConnection implements Session, SessionListener {
         if (this.isPlayer) {
             final String reason = AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString();
             if (!isSpectator()) {
-                SERVER_LOG.info("Player disconnected: {}, {}", event.getSession().getRemoteAddress(), reason, event.getCause());
+                SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
+                        Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getId).orElse(null),
+                        Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getName).orElse(null),
+                        event.getSession().getRemoteAddress(),
+                        reason,
+                        event.getCause());
                 try {
                     EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
                 } catch (final Throwable e) {

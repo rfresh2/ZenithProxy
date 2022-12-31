@@ -30,7 +30,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
 
     @Override
     public void loggedIn(Session session) {
-        SERVER_LOG.info("Player connected: {}", session.getRemoteAddress());
+        final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
+        SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
         ServerConnection connection = ((ProxyServerListener) this.proxy.getServer().getListeners().stream()
                 .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
@@ -48,7 +49,6 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             return;
         }
         connection.setPlayer(true);
-        final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
         if (!connection.isOnlySpectator() && this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
             // if we don't have a current player, set player
             connection.setSpectator(false);

@@ -67,7 +67,6 @@ public class DeathsDatabase extends Database {
         } catch (final Exception e) {
             if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same death
-                DATABASE_LOG.debug("death dedupe detected");
             } else {
                 DATABASE_LOG.error("Error writing death", e);
             }

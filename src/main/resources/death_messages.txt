@@ -80,6 +80,7 @@ $v tripped, broke a bone or died somehow inside lava whilst fighting $k
 $v burned apart whilst fighting $k
 $k put their fists inside $v violently.
 $k shoved $w down $v's throat.
+$v tried to swim in lava and didn't get out quick enough whilst fighting $k
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -127,6 +128,14 @@ $v was obliterated by $m.
 $v was beaten into meaty pulp by $m wielding $w and died painfully.
 $v was beaten into meaty pulp by $m and died painfully.
 $v was exploded by $m.
+$v merged with $m and died slowly.
+$v suffocated inside $m.
+$v was bitten to death by $m.
+$v was turned into a spider nest.
+$v was reduced to dust by $m.
+$v was reduced into thick paste by $m wielding $m
+$v was eaten by $m wielding $w
+$v was reduced to dust by $m.
 
 # suicides
 $v died stuck on a cactus.
@@ -190,3 +199,6 @@ $v suffocated.
 $v exploded into gibs playing with fireworks.
 # is living magma a mob?
 $v was consumed by living magma.
+$v was boned to death.
+$v was violently separated by explosives.
+$v was stung to death by cactus.

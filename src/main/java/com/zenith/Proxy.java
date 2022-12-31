@@ -54,7 +54,7 @@ public class Proxy {
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
-    protected final CopyOnWriteArrayList<ServerConnection> activeConnections = new CopyOnWriteArrayList<>();
+    protected final CopyOnWriteArraySet<ServerConnection> activeConnections = new CopyOnWriteArraySet<>();
     protected final ScheduledExecutorService clientTimeoutExecutorService;
     protected ScheduledExecutorService autoReconnectExecutorService;
     protected ScheduledExecutorService activeHoursExecutorService;

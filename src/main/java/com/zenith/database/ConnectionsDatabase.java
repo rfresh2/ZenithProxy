@@ -60,7 +60,6 @@ public class ConnectionsDatabase extends Database {
         } catch (final Exception e) {
             if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same connection
-                DATABASE_LOG.debug("connection dedupe detected");
             } else {
                 DATABASE_LOG.error("Error writing connection", e);
             }

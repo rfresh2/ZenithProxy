@@ -17,16 +17,20 @@ public final class ConnectionPool {
     public ConnectionPool() {
         HikariDataSource wPool = null;
         try {
-            wPool = createDataSource(CONFIG.database.writePool);
+            if (CONFIG.database.writePool > 0) {
+                wPool = createDataSource(CONFIG.database.writePool);
+            }
         } catch (final Exception e) {
-            DATABASE_LOG.error("Error initializing database connection pool", e);
+            DATABASE_LOG.error("Error initializing database write connection pool", e);
         }
         writePool = wPool;
         HikariDataSource rPool = null;
         try {
-            rPool = createDataSource(CONFIG.database.readPool);
+            if (CONFIG.database.readPool > 0) {
+                rPool = createDataSource(CONFIG.database.readPool);
+            }
         } catch (final Exception e) {
-            DATABASE_LOG.error("Error initializing database connection pool", e);
+            DATABASE_LOG.error("Error initializing database read connection pool", e);
         }
         readPool = rPool;
     }
