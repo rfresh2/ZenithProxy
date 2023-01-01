@@ -81,6 +81,8 @@ $v burned apart whilst fighting $k
 $k put their fists inside $v violently.
 $k shoved $w down $v's throat.
 $v tried to swim in lava and didn't get out quick enough whilst fighting $k
+$k shoved a fist down $v's throat.
+$k fisted $v to death.
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -138,6 +140,8 @@ $v was reduced into thick paste by $m wielding $m
 $v was eaten by $m wielding $w
 $v was reduced to dust by $m.
 $v was bombarded into a fiery death by $m.
+$v was stretched to death by $m.
+$v was reduced into thick paste by $m wielding $w
 
 # suicides
 $v died stuck on a cactus.
@@ -205,3 +209,5 @@ $v was boned to death.
 $v was violently separated by explosives.
 $v was stung to death by cactus.
 $v killed themselves using magic.
+$v was struck by lightning and exploded.
+$v smashed themselves against a cactus and instantly died.

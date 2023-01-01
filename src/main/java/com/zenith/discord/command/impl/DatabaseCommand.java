@@ -46,14 +46,14 @@ public class DatabaseCommand extends Command {
                         })))
                 .then(literal("publicchat")
                         .then(literal("on").executes(c -> {
-                            CONFIG.database.chats.testingEnabled = true;
+                            CONFIG.database.chats.enabled = true;
                             DATABASE_MANAGER.startChatsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Public Chat Database On!")
                                     .color(Color.CYAN);
                         }))
                         .then(literal("off").executes(c -> {
-                            CONFIG.database.chats.testingEnabled = false;
+                            CONFIG.database.chats.enabled = false;
                             DATABASE_MANAGER.stopChatsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Public Chat Database Off!")
@@ -61,14 +61,14 @@ public class DatabaseCommand extends Command {
                         })))
                 .then(literal("joinleave")
                         .then(literal("on").executes(c -> {
-                            CONFIG.database.connections.testingEnabled = true;
+                            CONFIG.database.connections.enabled = true;
                             DATABASE_MANAGER.startConnectionsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Join/Leave Connections Database On!")
                                     .color(Color.CYAN);
                         }))
                         .then(literal("off").executes(c -> {
-                            CONFIG.database.connections.testingEnabled = false;
+                            CONFIG.database.connections.enabled = false;
                             DATABASE_MANAGER.stopConnectionsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Join/Leave Connections Database Off!")
@@ -76,14 +76,14 @@ public class DatabaseCommand extends Command {
                         })))
                 .then(literal("deathmessages")
                         .then(literal("on").executes(c -> {
-                            CONFIG.database.deaths.testingEnabled = true;
+                            CONFIG.database.deaths.enabled = true;
                             DATABASE_MANAGER.startDeathsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Death Messages Database On!")
                                     .color(Color.CYAN);
                         }))
                         .then(literal("off").executes(c -> {
-                            CONFIG.database.deaths.testingEnabled = false;
+                            CONFIG.database.deaths.enabled = false;
                             DATABASE_MANAGER.stopDeathsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Death Messages Database Off!")

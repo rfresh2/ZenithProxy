@@ -1,6 +1,8 @@
 package com.zenith.util.deathmessages;
 
 import com.google.common.io.Files;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.rest.util.Color;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 
 import java.io.File;
@@ -10,8 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.CLIENT_LOG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.util.Constants.*;
 import static java.util.Objects.nonNull;
 
 // todo: simplify and refactor this class
@@ -44,6 +45,13 @@ public class DeathMessagesParser {
                     return parse;
                 }
             }
+        }
+        if (CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
+            DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
+                    .title("Unknown death message")
+                    .description(mcTextRoot.toRawString())
+                    .color(Color.RUBY)
+                    .build());
         }
         DATABASE_LOG.error("No death message schema found for '{}'", mcTextRoot.toRawString());
         return Optional.empty();

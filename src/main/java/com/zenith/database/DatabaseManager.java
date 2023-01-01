@@ -17,13 +17,13 @@ public class DatabaseManager {
         if (CONFIG.database.queueWait.enabled) {
             startQueueWaitDatabase();
         }
-        if (CONFIG.database.connections.testingEnabled) {
+        if (CONFIG.database.connections.enabled) {
             startConnectionsDatabase();
         }
-        if (CONFIG.database.chats.testingEnabled) {
+        if (CONFIG.database.chats.enabled) {
             startChatsDatabase();
         }
-        if (CONFIG.database.deaths.testingEnabled) {
+        if (CONFIG.database.deaths.enabled) {
             startDeathsDatabase();
         }
     }

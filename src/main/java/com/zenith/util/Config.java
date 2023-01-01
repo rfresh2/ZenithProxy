@@ -320,21 +320,16 @@ public final class Config {
         }
 
         public static final class Connections {
-            public boolean testingEnabled = false;
-            // todo: leaving this open so we can enable it by default later
-//            public boolean enabled = true;
+            public boolean enabled = true;
         }
 
         public static final class Chats {
-            public boolean testingEnabled = false;
-            // todo: leaving this open so we can enable it by default later
-//            public boolean enabled = true;
+            public boolean enabled = true;
         }
 
         public static final class Deaths {
-            public boolean testingEnabled = false;
-            // todo: leaving this open so we can enable it by default later
-//            public boolean enabled = true;
+            public boolean enabled = true;
+            public boolean unknownDeathDiscordMsg = false;
         }
     }
 
