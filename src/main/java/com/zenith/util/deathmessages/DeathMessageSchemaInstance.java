@@ -34,7 +34,8 @@ public final class DeathMessageSchemaInstance {
             "zombie villager",
             "ghast",
             "husk",
-            "ender dragon"
+            "ender dragon",
+            "blaze"
     );
 
     public DeathMessageSchemaInstance(final String schemaRaw) {

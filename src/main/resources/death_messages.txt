@@ -83,6 +83,7 @@ $k shoved $w down $v's throat.
 $v tried to swim in lava and didn't get out quick enough whilst fighting $k
 $k shoved a fist down $v's throat.
 $k fisted $v to death.
+$v drowned in lava whilst fighting $k
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -211,3 +212,4 @@ $v was stung to death by cactus.
 $v killed themselves using magic.
 $v was struck by lightning and exploded.
 $v smashed themselves against a cactus and instantly died.
+$v was blown apart by an explosion.

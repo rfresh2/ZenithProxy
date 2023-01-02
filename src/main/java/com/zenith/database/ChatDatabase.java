@@ -4,12 +4,13 @@ import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.database.dto.tables.Chats;
+import com.zenith.database.dto.tables.records.ChatsRecord;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import org.jooq.DSLContext;
+import org.jooq.InsertSetMoreStep;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
-import java.sql.Connection;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -19,8 +20,8 @@ import java.util.UUID;
 import static com.zenith.util.Constants.*;
 
 public class ChatDatabase extends Database {
-    public ChatDatabase(ConnectionPool connectionPool) {
-        super(connectionPool);
+    public ChatDatabase(QueryQueue queryQueue) {
+        super(queryQueue);
     }
 
     @Subscribe
@@ -42,22 +43,14 @@ public class ChatDatabase extends Database {
     }
 
     public void writeChat(final UUID playerUUID, final String playerName, final String message, final OffsetDateTime time) {
-        try (final Connection connection = connectionPool.getWriteConnection()) {
-            final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
-            final Chats c = Chats.CHATS;
-            context.insertInto(c)
-                    .set(c.TIME, time)
-                    .set(c.CHAT, message)
-                    .set(c.PLAYER_UUID, playerUUID)
-                    .set(c.PLAYER_NAME, playerName)
-                    .execute();
-        } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
-                // expected due to multiple proxies writing the same chat
-            } else {
-                DATABASE_LOG.error("Failed writing chat {}, {}, {}", playerUUID, playerName, message, e);
-            }
-        }
+        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+        final Chats c = Chats.CHATS;
+        InsertSetMoreStep<ChatsRecord> query = context.insertInto(c)
+                .set(c.TIME, time)
+                .set(c.CHAT, message)
+                .set(c.PLAYER_UUID, playerUUID)
+                .set(c.PLAYER_NAME, playerName);
+        queryQueue.add(query);
     }
 
     private Optional<PlayerEntry> extractSender(final String message) {

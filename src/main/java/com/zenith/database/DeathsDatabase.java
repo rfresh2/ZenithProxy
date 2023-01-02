@@ -13,7 +13,6 @@ import org.jooq.InsertSetMoreStep;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
-import java.sql.Connection;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -24,8 +23,8 @@ import static com.zenith.util.Constants.*;
 public class DeathsDatabase extends Database {
     private final DeathMessagesParser deathMessagesHelper;
 
-    public DeathsDatabase(ConnectionPool connectionPool) {
-        super(connectionPool);
+    public DeathsDatabase(final QueryQueue queryQueue) {
+        super(queryQueue);
         this.deathMessagesHelper = new DeathMessagesParser();
     }
 
@@ -37,15 +36,15 @@ public class DeathsDatabase extends Database {
     }
 
     private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time) {
-        try (final Connection connection = connectionPool.getWriteConnection()) {
-            final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
+        try {
+            final DSLContext context = DSL.using(SQLDialect.POSTGRES);
             final Deaths d = Deaths.DEATHS;
             final Optional<PlayerEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
             if (!victimEntry.isPresent()) {
                 DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
                 return;
             }
-            final InsertSetMoreStep<DeathsRecord> step = context.insertInto(d)
+            final InsertSetMoreStep<DeathsRecord> query = context.insertInto(d)
                     .set(d.TIME, time)
                     .set(d.DEATH_MESSAGE, rawDeathMessage)
                     .set(d.VICTIM_PLAYER_NAME, victimEntry.get().getName())
@@ -56,19 +55,19 @@ public class DeathsDatabase extends Database {
                     DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
                     return;
                 }
-                step
+                query
                         .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName())
                         .set(d.KILLER_PLAYER_UUID, killerEntry.get().getId());
             }
             if (deathMessageParseResult.getWeapon().isPresent()) {
-                step.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());
+                query.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());
             }
-            step.execute();
+            queryQueue.add(query);
         } catch (final Exception e) {
             if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same death
             } else {
-                DATABASE_LOG.error("Error writing death", e);
+                DATABASE_LOG.debug("Error writing death: {}", rawDeathMessage, e);
             }
         }
     }

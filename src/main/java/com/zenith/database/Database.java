@@ -3,10 +3,10 @@ package com.zenith.database;
 import static com.zenith.util.Constants.EVENT_BUS;
 
 public abstract class Database {
-    protected final ConnectionPool connectionPool;
+    protected final QueryQueue queryQueue;
 
-    public Database(final ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public Database(final QueryQueue queryQueue) {
+        this.queryQueue = queryQueue;
     }
 
     public void start() {

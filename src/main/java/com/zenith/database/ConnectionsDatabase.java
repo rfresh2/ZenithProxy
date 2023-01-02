@@ -4,13 +4,14 @@ import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.tables.Connections;
+import com.zenith.database.dto.tables.records.ConnectionsRecord;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 import org.jooq.DSLContext;
+import org.jooq.InsertSetMoreStep;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
-import java.sql.Connection;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -18,11 +19,10 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
 
 public class ConnectionsDatabase extends Database {
-    public ConnectionsDatabase(ConnectionPool connectionPool) {
-        super(connectionPool);
+    public ConnectionsDatabase(QueryQueue queryQueue) {
+        super(queryQueue);
     }
 
     @Subscribe
@@ -48,21 +48,13 @@ public class ConnectionsDatabase extends Database {
                 || Proxy.getInstance().isInQueue()
                 || (Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.ofSeconds(3))) && playerName.equals(CONFIG.authentication.username))
         ) return;
-        try (final Connection connection = connectionPool.getWriteConnection()) {
-            final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
-            final Connections c = Connections.CONNECTIONS;
-            context.insertInto(c)
-                    .set(c.TIME, time)
-                    .set(c.CONNECTION, connectiontype)
-                    .set(c.PLAYER_NAME, playerName)
-                    .set(c.PLAYER_UUID, playerUUID)
-                    .execute();
-        } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
-                // expected due to multiple proxies writing the same connection
-            } else {
-                DATABASE_LOG.error("Error writing connection", e);
-            }
-        }
+        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+        final Connections c = Connections.CONNECTIONS;
+        InsertSetMoreStep<ConnectionsRecord> query = context.insertInto(c)
+                .set(c.TIME, time)
+                .set(c.CONNECTION, connectiontype)
+                .set(c.PLAYER_NAME, playerName)
+                .set(c.PLAYER_UUID, playerUUID);
+        queryQueue.add(query);
     }
 }

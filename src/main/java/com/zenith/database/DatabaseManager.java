@@ -12,8 +12,11 @@ public class DatabaseManager {
     private ChatDatabase chatDatabase;
     private DeathsDatabase deathsDatabase;
     private ConnectionPool connectionPool;
+    private QueryQueue queryQueue;
 
     public DatabaseManager() {
+        queryQueue = new QueryQueue(this::getConnectionPool);
+        queryQueue.start();
         if (CONFIG.database.queueWait.enabled) {
             startQueueWaitDatabase();
         }
@@ -32,7 +35,7 @@ public class DatabaseManager {
         if (nonNull(this.queueWaitDatabase)) {
             this.queueWaitDatabase.start();
         } else {
-            this.queueWaitDatabase = new QueueWaitDatabase(getConnectionPool());
+            this.queueWaitDatabase = new QueueWaitDatabase(queryQueue);
             this.queueWaitDatabase.start();
         }
     }
@@ -47,7 +50,7 @@ public class DatabaseManager {
         if (nonNull(this.connectionsDatabase)) {
             this.connectionsDatabase.start();
         } else {
-            this.connectionsDatabase = new ConnectionsDatabase(getConnectionPool());
+            this.connectionsDatabase = new ConnectionsDatabase(queryQueue);
             this.connectionsDatabase.start();
         }
     }
@@ -62,7 +65,7 @@ public class DatabaseManager {
         if (nonNull(this.chatDatabase)) {
             this.chatDatabase.start();
         } else {
-            this.chatDatabase = new ChatDatabase(getConnectionPool());
+            this.chatDatabase = new ChatDatabase(queryQueue);
             this.chatDatabase.start();
         }
     }
@@ -77,7 +80,7 @@ public class DatabaseManager {
         if (nonNull(this.deathsDatabase)) {
             this.deathsDatabase.start();
         } else {
-            this.deathsDatabase = new DeathsDatabase(getConnectionPool());
+            this.deathsDatabase = new DeathsDatabase(queryQueue);
             this.deathsDatabase.start();
         }
     }
