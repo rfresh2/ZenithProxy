@@ -84,6 +84,8 @@ $v tried to swim in lava and didn't get out quick enough whilst fighting $k
 $k shoved a fist down $v's throat.
 $k fisted $v to death.
 $v drowned in lava whilst fighting $k
+$v suffocated in water whilst fighting $k
+$k assassinated $v using just their hands.
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -144,6 +146,7 @@ $v was bombarded into a fiery death by $m.
 $v was stretched to death by $m.
 $v was reduced into thick paste by $m wielding $w
 $v melted inside $m.
+$v was crushed by $m.
 
 # suicides
 $v died stuck on a cactus.
@@ -214,3 +217,7 @@ $v killed themselves using magic.
 $v was struck by lightning and exploded.
 $v smashed themselves against a cactus and instantly died.
 $v was blown apart by an explosion.
+$v rubbed themselves too hard against a cactus.
+$v was deleted by an explosion.
+$v rubbed themselves too hard against a cactus.
+$v was hit by a life erasing potion.

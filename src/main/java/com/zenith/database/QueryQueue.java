@@ -42,7 +42,7 @@ public class QueryQueue {
     }
 
     public boolean isRunning() {
-        return isNull(queryExecutorPool) || !queryExecutorPool.isShutdown();
+        return nonNull(queryExecutorPool) && !queryExecutorPool.isShutdown();
     }
 
     public void add(final Query q) {
