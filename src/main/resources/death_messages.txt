@@ -143,6 +143,7 @@ $v was reduced to dust by $m.
 $v was bombarded into a fiery death by $m.
 $v was stretched to death by $m.
 $v was reduced into thick paste by $m wielding $w
+$v melted inside $m.
 
 # suicides
 $v died stuck on a cactus.

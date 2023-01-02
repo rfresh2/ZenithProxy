@@ -8,8 +8,8 @@ import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -19,7 +19,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class QueryQueue {
-    private final ConcurrentLinkedQueue<Query> queue = new ConcurrentLinkedQueue<>();
+    private final LinkedBlockingQueue<Query> queue = new LinkedBlockingQueue<>(200);
     private final Random random = new Random();
     private final Supplier<ConnectionPool> connectionPoolProvider;
     private ScheduledExecutorService queryExecutorPool;
@@ -46,7 +46,13 @@ public class QueryQueue {
     }
 
     public void add(final Query q) {
-        queue.add(q);
+        try {
+            if (!queue.offer(q, 50L, TimeUnit.MILLISECONDS)) {
+                DATABASE_LOG.error("Timed out adding element to query queue: {}", q);
+            }
+        } catch (final Exception e) {
+            DATABASE_LOG.error("Failed adding element to query queue: {}", q, e);
+        }
     }
 
     private void processQueue() {
