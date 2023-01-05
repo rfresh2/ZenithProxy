@@ -70,6 +70,7 @@ public class SpectatorCommand extends Command {
                                     .title("Removed user: " + escape(playerName) + " From Spectator Whitelist")
                                     .color(Color.CYAN)
                                     .addField("Spectator Whitelist", whitelistToString(), false);
+                            WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                             return 1;
                         })))
                         .then(literal("clear").executes(c -> {
@@ -78,6 +79,7 @@ public class SpectatorCommand extends Command {
                                     .title("Spectator Whitelist Cleared")
                                     .color(Color.RUBY)
                                     .addField("Spectator Whitelist", whitelistToString(), false);
+                            WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                         }))
                         .then(literal("list").executes(c -> {
                             c.getSource().getEmbedBuilder()

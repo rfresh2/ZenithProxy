@@ -49,6 +49,7 @@ public class WhitelistCommand extends Command {
                             .title("Removed user: " + escape(player) + " From Whitelist")
                             .color(Color.CYAN)
                             .addField("Whitelisted", whitelistToString(), false);
+                    WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                     return 1;
                 })))
                 .then(literal("list").executes(c -> {
@@ -63,6 +64,7 @@ public class WhitelistCommand extends Command {
                             .title("Whitelist Cleared")
                             .color(Color.RUBY)
                             .addField("Whitelisted", whitelistToString(), false);
+                    WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                     return 1;
                 }));
     }

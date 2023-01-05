@@ -3,6 +3,7 @@ package com.zenith.util;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.auth.service.ProfileService;
+import com.zenith.Proxy;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -120,6 +121,14 @@ public class WhitelistManager {
         CONFIG.server.spectator.whitelist.forEach(this::refreshWhitelistEntry);
         SERVER_LOG.info("Whitelist refresh complete");
         saveConfig();
+    }
+
+    public void kickNonWhitelistedPlayers() {
+        Proxy.getInstance().getActiveConnections().stream()
+                .filter(con -> nonNull(con.getProfileCache().getProfile()))
+                .filter(con -> !WHITELIST_MANAGER.isUserWhitelisted(con.getProfileCache().getProfile()))
+                .filter(con -> !(WHITELIST_MANAGER.isUserSpectatorWhitelisted(con.getProfileCache().getProfile()) && con.isSpectator()))
+                .forEach(con -> con.disconnect("Not whitelisted"));
     }
 
     private void refreshWhitelistEntry(final WhitelistEntry whitelistEntry) {

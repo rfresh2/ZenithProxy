@@ -61,6 +61,7 @@ public class QueueWaitDatabase extends Database {
         // filter out queue waits that happened directly after a server restart
         // these aren't very representative of normal queue waits
         // there might be a better way to filter these out
+        // todo: problem: we often update the proxy right after a restart and won't have an accurate lastServerRestart value
         if (!queueCompleteTime.minus(MIN_RESTART_COOLDOWN).isAfter(lastServerRestart)) {
             return;
         }
@@ -73,6 +74,7 @@ public class QueueWaitDatabase extends Database {
                 writeQueueWait(initialQueueLen, initialQueueTime, queueCompleteTime);
             }
         }
+        // todo: filter obvious undetected restart queues based on initial queue len and actual queue time
     }
 
     private void writeQueueWait(int initialQueueLen, Instant initialQueueTime, Instant endQueueTime) {
