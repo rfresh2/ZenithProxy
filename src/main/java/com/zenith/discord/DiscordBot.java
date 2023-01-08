@@ -252,7 +252,7 @@ public class DiscordBot {
                     .title("Player In Visual Range")
                     .color(notFriend ? Color.RUBY : Color.GREEN)
                     .addField("Player Name", escape(event.playerEntry.getName()), true)
-                    .addField("Player UUID", event.playerEntry.getId().toString(), true)
+                    .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
                     .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
 
             if (CONFIG.discord.reportCoords) {
