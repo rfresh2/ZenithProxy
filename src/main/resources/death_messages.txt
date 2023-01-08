@@ -88,6 +88,9 @@ $v suffocated in water whilst fighting $k
 $k assassinated $v using just their hands.
 $v died inside lava somehow whilst fighting $k
 $v was reduced to lava by lava whilst fighting $k
+$v became lava whilst fighting $k
+$v drowned whilst fighting $k
+$v smashed themselves against a cactus and died trying to escape $k
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -226,3 +229,5 @@ $v was deleted by an explosion.
 $v rubbed themselves too hard against a cactus.
 $v was hit by a life erasing potion.
 $v had their health meter depleted.
+$v had their life instantly removed.
+$v was utterly destroyed by an explosion.

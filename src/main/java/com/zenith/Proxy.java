@@ -287,7 +287,7 @@ public class Proxy {
     }
 
     public void logIn() {
-        AUTH_LOG.info("Logging in...");
+        AUTH_LOG.info("Logging in {}...", CONFIG.authentication.username);
         if (this.loggerInner == null) {
             this.loggerInner = new LoggerInner();
         }
@@ -302,7 +302,7 @@ public class Proxy {
             throw new RuntimeException("Auth failed");
         }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
-        AUTH_LOG.info("Logged in.");
+        AUTH_LOG.info("Logged in as {} [{}].", this.protocol.getProfile().getName(), this.protocol.getProfile().getId());
     }
 
     public Future<Boolean> loginTask() {
