@@ -50,7 +50,7 @@ public class AutoReply extends Module {
                                 && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)) {
                             if (isNull(repliedPlayersCache.getIfPresent(sender))) {
                                 repliedPlayersCache.put(sender, sender);
-                                // 236 char max ( 256 - 4(command) - 16(max name length)
+                                // 236 char max ( 256 - 4(command) - 16(max name length) )
                                 Proxy.getInstance().getClient().send(new ClientChatPacket("/w " + sender + " " + CONFIG.client.extra.autoReply.message));
                                 this.lastReply = Instant.now();
                             }
