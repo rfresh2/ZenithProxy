@@ -50,6 +50,7 @@ public final class Config {
             public Spammer spammer = new Spammer();
             public AutoReply autoReply = new AutoReply();
             public Stalk stalk = new Stalk();
+            public AutoEat autoEat = new AutoEat();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
             public List<String> friendList = new ArrayList<>();
@@ -57,6 +58,13 @@ public final class Config {
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = true;
             public boolean twentyMinuteReconnectIfStuck = true;
+
+            public static final class AutoEat {
+                public boolean enabled = true;
+                public int healthThreshold = 10;
+                public int hungerThreshold = 10;
+                public boolean warning = true;
+            }
 
             public static final class Stalk {
                 public boolean enabled = false;

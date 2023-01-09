@@ -8,6 +8,7 @@ import com.zenith.client.ClientSession;
 import com.zenith.client.handler.incoming.*;
 import com.zenith.client.handler.incoming.entity.*;
 import com.zenith.client.handler.incoming.spawn.*;
+import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerChangeHeldItemHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
@@ -21,7 +22,6 @@ import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
 import com.zenith.server.handler.player.postoutgoing.ClientRequestPacketPostHandler;
-import com.zenith.server.handler.player.postoutgoing.HeldItemChangePostHandler;
 import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
 import com.zenith.server.handler.shared.incoming.LoginStartHandler;
 import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
@@ -104,6 +104,7 @@ public class Constants {
             .registerInbound(new JoinGameHandler())
             .registerInbound(new LoginSuccessHandler())
             .registerInbound(new MultiBlockChangeHandler())
+            .registerInbound(new PlayerChangeHeldItemHandler())
             .registerInbound(new PlayerHealthHandler())
             .registerInbound(new PlayerPosRotHandler())
             .registerInbound(new PlayerSetExperienceHandler())
@@ -119,7 +120,6 @@ public class Constants {
             .registerInbound(new UpdateTileEntityHandler())
             .registerInbound(new UpdateTimePacketHandler())
             .registerInbound(new ServerCombatHandler())
-            .registerInbound(new PlayerChangeHeldItemHandler())
             .registerInbound(new MapDataHandler())
             .registerInbound(new PluginMessageHandler())
             //ENTITY
@@ -145,6 +145,7 @@ public class Constants {
             .registerInbound(new SpawnPlayerHandler())
             .registerInbound(new SpawnPositionHandler())
             //Postoutgoing
+            .registerPostOutbound(new PostOutgoingPlayerChangeHeldItemHandler())
             .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
             .registerPostOutbound(new PostOutgoingPlayerPositionRotationHandler())
             .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
@@ -207,7 +208,6 @@ public class Constants {
             //
             .registerPostOutbound(new JoinGamePostHandler())
             .registerPostOutbound(new ClientRequestPacketPostHandler())
-            .registerInbound(new HeldItemChangePostHandler())
             .build();
     public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)

@@ -7,6 +7,7 @@ import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.discord.command.CommandManager;
 import com.zenith.event.module.AntiAfkStuckEvent;
+import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
@@ -187,6 +188,15 @@ public class DiscordBot {
                 sendQueueWarning();
             }
         }
+    }
+
+    @Subscribe
+    public void handleAutoEatOutOfFood(final AutoEatOutOfFoodEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("AutoEat Out Of Food")
+                .description("AutoEat threshold met but player has no food")
+                .color(Color.RUBY)
+                .build());
     }
 
     private void sendQueueWarning() {

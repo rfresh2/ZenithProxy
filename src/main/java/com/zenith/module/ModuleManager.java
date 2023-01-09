@@ -32,7 +32,8 @@ public class ModuleManager {
                 new AutoDisconnect(),
                 new AutoReply(),
                 new Spook(),
-                new AutoRespawn()
+                new AutoRespawn(),
+                new AutoEat()
         );
     }
 
@@ -45,7 +46,9 @@ public class ModuleManager {
 
     @Subscribe
     public void handlePlayerOnlineEvent(final PlayerOnlineEvent event) {
-        startClientTicks();
+        if (Proxy.getInstance().getActiveConnections().isEmpty()) {
+            startClientTicks();
+        }
     }
 
     @Subscribe

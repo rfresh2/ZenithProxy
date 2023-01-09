@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
+import com.zenith.cache.data.PlayerCache;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.*;
 import com.zenith.module.AntiAFK;
@@ -486,6 +487,12 @@ public class Proxy {
             // assume we are prio if we skipped queuing
             EVENT_BUS.dispatch(new PrioStatusEvent(true));
         }
+        PlayerCache.sync();
+    }
+
+    @Subscribe
+    public void handleClientDisconnect(final ProxyClientDisconnectedEvent e) {
+        PlayerCache.sync();
     }
 
     @Subscribe

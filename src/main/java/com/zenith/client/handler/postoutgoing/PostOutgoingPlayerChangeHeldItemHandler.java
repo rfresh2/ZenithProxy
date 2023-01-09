@@ -1,6 +1,6 @@
-package com.zenith.client.handler.incoming;
+package com.zenith.client.handler.postoutgoing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerChangeHeldItemPacket;
 import com.zenith.client.ClientSession;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.util.spectator.SpectatorHelper;
@@ -8,20 +8,19 @@ import com.zenith.util.spectator.SpectatorHelper;
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.DEFAULT_LOG;
 
-public class PlayerChangeHeldItemHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerChangeHeldItemPacket, ClientSession> {
+public class PostOutgoingPlayerChangeHeldItemHandler implements HandlerRegistry.PostOutgoingHandler<ClientPlayerChangeHeldItemPacket, ClientSession> {
     @Override
-    public boolean applyAsync(ServerPlayerChangeHeldItemPacket packet, ClientSession session) {
+    public void accept(ClientPlayerChangeHeldItemPacket packet, ClientSession session) {
         try {
             CACHE.getPlayerCache().setHeldItemSlot(packet.getSlot());
             SpectatorHelper.syncPlayerEquipmentWithSpectatorsFromCache();
         } catch (final Exception e) {
             DEFAULT_LOG.error("failed updating main hand slot", e);
         }
-        return true;
     }
 
     @Override
-    public Class<ServerPlayerChangeHeldItemPacket> getPacketClass() {
-        return ServerPlayerChangeHeldItemPacket.class;
+    public Class<ClientPlayerChangeHeldItemPacket> getPacketClass() {
+        return ClientPlayerChangeHeldItemPacket.class;
     }
 }

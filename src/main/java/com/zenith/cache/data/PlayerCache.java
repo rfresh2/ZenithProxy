@@ -9,6 +9,7 @@ import com.github.steveice10.mc.protocol.data.game.window.WindowAction;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -41,6 +42,7 @@ public class PlayerCache implements CachedData {
     protected GameMode gameMode;
     protected WorldType worldType;
     protected Difficulty difficulty;
+    protected int heldItemSlot = 0;
 
     protected EntityPlayer thePlayer;
 
@@ -56,6 +58,7 @@ public class PlayerCache implements CachedData {
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerWindowItemsPacket(0, this.inventory.clone()));
         consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ServerPlayerChangeHeldItemPacket(heldItemSlot));
     }
 
     @Override
@@ -65,6 +68,7 @@ public class PlayerCache implements CachedData {
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;
             Arrays.fill(this.inventory, null);
+            this.heldItemSlot = 0;
         }
         this.dimension = Integer.MAX_VALUE;
         this.gameMode = null;
@@ -103,12 +107,13 @@ public class PlayerCache implements CachedData {
         equipment.put(EquipmentSlot.LEGGINGS, this.inventory[7]);
         equipment.put(EquipmentSlot.BOOTS, this.inventory[8]);
         equipment.put(EquipmentSlot.OFF_HAND, this.inventory[45]);
+        equipment.put(EquipmentSlot.MAIN_HAND, this.inventory[heldItemSlot + 36]);
         this.getThePlayer().setEquipment(equipment);
     }
 
     public void setInventorySlot(ItemStack newItemStack, int slot) {
         this.inventory[slot] = newItemStack;
-        if (slot >= 5 && slot <= 8 || slot == 45) {
+        if (slot >= 5 && slot <= 8 || slot == 45 || slot == heldItemSlot) {
             switch (slot) {
                 case 5:
                     this.getThePlayer().getEquipment().put(EquipmentSlot.HELMET, newItemStack);
@@ -127,13 +132,21 @@ public class PlayerCache implements CachedData {
                     break;
             }
         }
+        if (slot == heldItemSlot + 36) {
+            getThePlayer().getEquipment().put(EquipmentSlot.MAIN_HAND, newItemStack);
+        }
     }
 
-    public double getX()    {
+    public void setHeldItemSlot(final int slot) {
+        this.heldItemSlot = slot;
+        getThePlayer().getEquipment().put(EquipmentSlot.MAIN_HAND, getInventory()[slot + 36]);
+    }
+
+    public double getX() {
         return this.thePlayer.getX();
     }
 
-    public PlayerCache setX(double x)    {
+    public PlayerCache setX(double x) {
         this.thePlayer.setX(x);
         return this;
     }

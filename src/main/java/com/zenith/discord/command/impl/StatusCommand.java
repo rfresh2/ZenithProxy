@@ -144,6 +144,7 @@ public class StatusCommand extends Command {
                                     + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
                     .addField("AntiAFK",
                             (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
+                    .addField("AutoEat", (CONFIG.client.extra.autoEat.enabled ? "on" : "off"), true)
                     .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
                             + "\n[Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
                     .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)

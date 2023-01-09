@@ -62,7 +62,8 @@ public class CommandManager {
                 new TablistCommand(),
                 new UpdateCommand(),
                 new VisualRangeCommand(),
-                new WhitelistCommand()
+                new WhitelistCommand(),
+                new AutoEatCommand()
         );
         this.commands.forEach(this::registerCommand);
     }
