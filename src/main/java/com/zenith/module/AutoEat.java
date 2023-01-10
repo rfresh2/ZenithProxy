@@ -14,6 +14,7 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.util.food.FoodManager;
+import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -27,6 +28,8 @@ public class AutoEat extends Module {
     private int delay = 0;
     private boolean swapping = false;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
+    @Getter
+    private boolean isEating = false;
 
     @Subscribe
     public void handleClientTick(final ClientTickEvent e) {
@@ -47,8 +50,12 @@ public class AutoEat extends Module {
                 //  inventory will only change on certain events
                 if (switchToFood()) {
                     startEating();
+                } else {
+                    isEating = false;
                 }
             }
+        } else {
+            isEating = false;
         }
     }
 
@@ -98,6 +105,7 @@ public class AutoEat extends Module {
         final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
             if (foodManager.isFood(offhandStack.getId())) {
+                isEating = true;
                 delay = 50;
                 Proxy.getInstance().getClient().send(new ClientPlayerUseItemPacket(Hand.OFF_HAND));
                 return;
@@ -107,6 +115,7 @@ public class AutoEat extends Module {
         final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (foodManager.isFood(mainHandStack.getId())) {
+                isEating = true;
                 delay = 50;
                 Proxy.getInstance().getClient().send(new ClientPlayerUseItemPacket(Hand.MAIN_HAND));
                 return;
@@ -120,6 +129,7 @@ public class AutoEat extends Module {
         actionId = 0;
         delay = 0;
         lastAutoEatOutOfFoodWarning = Instant.EPOCH;
+        isEating = false;
     }
 
     private boolean playerHealthBelowThreshold() {

@@ -17,8 +17,8 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
     @Override
     public LoginSuccessPacket apply(@NonNull LoginSuccessPacket packet, @NonNull ServerConnection session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-        if (CONFIG.server.extra.whitelist.enable && !WHITELIST_MANAGER.isUserWhitelisted(clientGameProfile)) {
-            if (CONFIG.server.spectator.allowSpectator && WHITELIST_MANAGER.isUserSpectatorWhitelisted(clientGameProfile)) {
+        if (CONFIG.server.extra.whitelist.enable && !WHITELIST_MANAGER.isProfileWhitelisted(clientGameProfile)) {
+            if (CONFIG.server.spectator.allowSpectator && WHITELIST_MANAGER.isProfileSpectatorWhitelisted(clientGameProfile)) {
                 session.setOnlySpectator(true);
             } else {
                 SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());

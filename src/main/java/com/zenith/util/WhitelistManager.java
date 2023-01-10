@@ -6,6 +6,7 @@ import com.github.steveice10.mc.auth.service.ProfileService;
 import com.zenith.Proxy;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -85,7 +86,7 @@ public class WhitelistManager {
         CONFIG.server.spectator.whitelist.clear();
     }
 
-    public boolean isUserWhitelisted(final GameProfile clientGameProfile) {
+    public boolean isProfileWhitelisted(final GameProfile clientGameProfile) {
         final Optional<WhitelistEntry> whitelistedOptional = CONFIG.server.extra.whitelist.whitelist.stream()
                 .filter(whitelistEntry -> whitelistEntry.uuid.equals(clientGameProfile.getId()))
                 .findFirst();
@@ -100,7 +101,19 @@ public class WhitelistManager {
         }
     }
 
-    public boolean isUserSpectatorWhitelisted(final GameProfile clientGameProfile) {
+    public boolean isUUIDWhitelisted(final UUID uuid) {
+        return CONFIG.server.extra.whitelist.whitelist.stream()
+                .map(entry -> entry.uuid)
+                .anyMatch(id -> Objects.equals(id, uuid));
+    }
+
+    public boolean isUserNameWhitelisted(final String name) {
+        return CONFIG.server.extra.whitelist.whitelist.stream()
+                .map(entry -> entry.username)
+                .anyMatch(name::equalsIgnoreCase);
+    }
+
+    public boolean isProfileSpectatorWhitelisted(final GameProfile clientGameProfile) {
         final Optional<WhitelistEntry> whitelistedOptional = CONFIG.server.spectator.whitelist.stream()
                 .filter(whitelistEntry -> whitelistEntry.uuid.equals(clientGameProfile.getId()))
                 .findFirst();
@@ -115,6 +128,18 @@ public class WhitelistManager {
         }
     }
 
+    public boolean isUUIDSpectatorWhitelisted(final UUID uuid) {
+        return CONFIG.server.spectator.whitelist.stream()
+                .map(entry -> entry.uuid)
+                .anyMatch(id -> Objects.equals(id, uuid));
+    }
+
+    public boolean isUserNameSpectatorWhitelisted(final String name) {
+        return CONFIG.server.spectator.whitelist.stream()
+                .map(entry -> entry.username)
+                .anyMatch(name::equalsIgnoreCase);
+    }
+
     public void refreshWhitelistEntries() {
         SERVER_LOG.info("Refreshing whitelist entries...");
         CONFIG.server.extra.whitelist.whitelist.forEach(this::refreshWhitelistEntry);
@@ -126,8 +151,8 @@ public class WhitelistManager {
     public void kickNonWhitelistedPlayers() {
         Proxy.getInstance().getActiveConnections().stream()
                 .filter(con -> nonNull(con.getProfileCache().getProfile()))
-                .filter(con -> !WHITELIST_MANAGER.isUserWhitelisted(con.getProfileCache().getProfile()))
-                .filter(con -> !(WHITELIST_MANAGER.isUserSpectatorWhitelisted(con.getProfileCache().getProfile()) && con.isSpectator()))
+                .filter(con -> !WHITELIST_MANAGER.isProfileWhitelisted(con.getProfileCache().getProfile()))
+                .filter(con -> !(WHITELIST_MANAGER.isProfileSpectatorWhitelisted(con.getProfileCache().getProfile()) && con.isSpectator()))
                 .forEach(con -> con.disconnect("Not whitelisted"));
     }
 

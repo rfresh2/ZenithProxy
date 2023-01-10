@@ -15,8 +15,7 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
@@ -39,7 +38,10 @@ public class Spook extends Module {
                         .noneMatch(entity -> Objects.equals(e, entity)));
             }
         }
-        if (CONFIG.client.extra.spook.enabled && isNull(Proxy.getInstance().getCurrentPlayer().get()) && !Proxy.getInstance().isInQueue()) {
+        if (CONFIG.client.extra.spook.enabled
+                && isNull(Proxy.getInstance().getCurrentPlayer().get())
+                && !Proxy.getInstance().isInQueue()
+                && !MODULE_MANAGER.getModule(KillAura.class).map(KillAura::isAttacking).orElse(false)) {
             stareTick();
         } else {
             hasTarget.lazySet(false);

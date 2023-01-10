@@ -49,6 +49,7 @@ public class CommandManager {
                 new DisplayCoordsCommand(),
                 new HelpCommand(),
                 new KickCommand(),
+                new KillAuraCommand(),
                 new PrioCommand(),
                 new ProxyClientConnectionCommand(),
                 new QueueWarningCommand(),

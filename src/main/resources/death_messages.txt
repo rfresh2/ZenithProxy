@@ -154,6 +154,7 @@ $v melted inside $m.
 $v was crushed by $m.
 $v was devoured by $m.
 $v was turned into ash by $m.
+$v fought with $m and died.
 
 # suicides
 $v died stuck on a cactus.
