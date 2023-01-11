@@ -15,7 +15,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.util.Constants.EVENT_BUS;
-import static com.zenith.util.Constants.MODULE_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -74,14 +73,14 @@ public class ModuleManager {
             this.modules.forEach(Module::clientTickStarting);
             this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
             this.clientTickExecutorService.scheduleAtFixedRate(() -> {
-                MODULE_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(new ClientTickEvent()));
+                EVENT_BUS.dispatch(new ClientTickEvent());
             }, 0, 50L, TimeUnit.MILLISECONDS);
         }
     }
 
     public synchronized void stopClientTicks() {
         if (nonNull(this.clientTickExecutorService)) {
-            this.clientTickExecutorService.shutdown();
+            this.clientTickExecutorService.shutdownNow();
             this.clientTickExecutorService = null;
             this.modules.forEach(Module::clientTickStopping);
         }

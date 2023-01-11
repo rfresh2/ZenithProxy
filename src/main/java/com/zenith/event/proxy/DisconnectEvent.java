@@ -4,7 +4,7 @@ import com.collarmc.pounce.EventInfo;
 import com.collarmc.pounce.Preference;
 import com.zenith.util.Constants;
 
-@EventInfo(preference = Preference.POOL)
+@EventInfo(preference = Preference.CALLER)
 public class DisconnectEvent {
     public final String reason;
     public final boolean manualDisconnect;
