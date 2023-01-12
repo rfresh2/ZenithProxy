@@ -1,6 +1,5 @@
 package com.zenith;
 
-import com.collarmc.pounce.Preference;
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
@@ -362,7 +361,7 @@ public class Proxy {
                 .collect(Collectors.toList());
     }
 
-    @Subscribe(value = Preference.CALLER)
+    @Subscribe
     public void handleDisconnectEvent(DisconnectEvent event) {
         CACHE.reset(true);
         this.disconnectTime = Instant.now();

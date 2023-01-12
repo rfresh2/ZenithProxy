@@ -32,6 +32,8 @@ public class EntityPlayer extends EntityEquipment {
     {
         //set health to maximum by default
         this.health = 20.0f;
+        this.food = 20;
+        this.saturation = 5;
     }
 
     @Override

@@ -68,21 +68,27 @@ public class ModuleManager {
         stopClientTicks();
     }
 
-    public synchronized void startClientTicks() {
-        if (isNull(clientTickExecutorService) || clientTickExecutorService.isShutdown()) {
-            this.modules.forEach(Module::clientTickStarting);
-            this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
-            this.clientTickExecutorService.scheduleAtFixedRate(() -> {
-                EVENT_BUS.dispatch(new ClientTickEvent());
-            }, 0, 50L, TimeUnit.MILLISECONDS);
+    public void startClientTicks() {
+        synchronized (this) {
+            if (isNull(clientTickExecutorService) || clientTickExecutorService.isShutdown()) {
+                this.modules.forEach(Module::clientTickStarting);
+                this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
+                this.clientTickExecutorService.scheduleAtFixedRate(() -> {
+                    if (Proxy.getInstance().isConnected() && !Proxy.getInstance().isInQueue()) {
+                        EVENT_BUS.dispatch(new ClientTickEvent());
+                    }
+                }, 0, 50L, TimeUnit.MILLISECONDS);
+            }
         }
     }
 
     public synchronized void stopClientTicks() {
-        if (nonNull(this.clientTickExecutorService)) {
-            this.clientTickExecutorService.shutdownNow();
-            this.clientTickExecutorService = null;
-            this.modules.forEach(Module::clientTickStopping);
+        synchronized (this) {
+            if (nonNull(this.clientTickExecutorService)) {
+                this.clientTickExecutorService.shutdownNow();
+                this.clientTickExecutorService = null;
+                this.modules.forEach(Module::clientTickStopping);
+            }
         }
     }
 }
