@@ -170,12 +170,12 @@ public class DiscordBot {
 
     @Subscribe
     public void handleDisconnectEvent(DisconnectEvent event) {
-        this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
                 .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
+        this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
     }
 
     @Subscribe
