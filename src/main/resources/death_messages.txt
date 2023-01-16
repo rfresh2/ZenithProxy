@@ -92,6 +92,7 @@ $v became lava whilst fighting $k
 $v drowned whilst fighting $k
 $v smashed themselves against a cactus and died trying to escape $k
 $v was pushed off a ladder by $k
+$v couldn't swim up quick enough whilst fighting $k
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -157,7 +158,7 @@ $v was devoured by $m.
 $v was turned into ash by $m.
 $v fought with $m and died.
 $v was maimed by $m.
-$v couldn't swim up quick enough whilst fighting $k
+$v was cursed to slow death by $m.
 
 # suicides
 $v died stuck on a cactus.
@@ -236,3 +237,5 @@ $v had their health meter depleted.
 $v had their life instantly removed.
 $v was utterly destroyed by an explosion.
 $v died from an arrow trap.
+$v was utterly destroyed by an anvil.
+$v was turned into red dust by an explosion.
