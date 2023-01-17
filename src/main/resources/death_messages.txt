@@ -159,6 +159,7 @@ $v was turned into ash by $m.
 $v fought with $m and died.
 $v was maimed by $m.
 $v was cursed to slow death by $m.
+$v was nibbled to death by $m.
 
 # suicides
 $v died stuck on a cactus.

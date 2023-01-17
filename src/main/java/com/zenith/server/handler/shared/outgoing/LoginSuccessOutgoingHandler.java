@@ -22,10 +22,10 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
                 session.setOnlySpectator(true);
             } else {
                 SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
+                session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                 EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Non-whitelisted player tried to connect!"
                         + "\nPlayer: " + clientGameProfile.getName() + " [" + clientGameProfile.getIdAsString() + "]"
                         + "\nIP: " + session.getRemoteAddress()));
-                session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                 return null;
             }
         }

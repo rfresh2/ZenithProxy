@@ -29,6 +29,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.CLIENT_LOG;
+import static java.util.Objects.nonNull;
 
 
 @Getter
@@ -89,14 +91,20 @@ public class PlayerCache implements CachedData {
     }
 
     public static void sync() {
-        // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
-        // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
-        Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, -1337, 0, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
-        double x = CACHE.getPlayerCache().getX();
-        double y = CACHE.getPlayerCache().getY() + 1000d;
-        double z = CACHE.getPlayerCache().getZ();
-        // one of 2b2t's plugins requires this (as of 2022)
-        Proxy.getInstance().getClient().sendDirect(new ClientPlayerPositionPacket(true, x, y, z));
+        if (nonNull(Proxy.getInstance().getClient())) {
+            try {
+                // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
+                // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
+                Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, -1337, 0, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
+                double x = CACHE.getPlayerCache().getX();
+                double y = CACHE.getPlayerCache().getY() + 1000d;
+                double z = CACHE.getPlayerCache().getZ();
+                // one of 2b2t's plugins requires this (as of 2022)
+                Proxy.getInstance().getClient().sendDirect(new ClientPlayerPositionPacket(true, x, y, z));
+            } catch (final Exception e) {
+                CLIENT_LOG.warn("Failed Player Sync", e);
+            }
+        }
     }
 
     public void setInventory(ItemStack[] newInventory) {
