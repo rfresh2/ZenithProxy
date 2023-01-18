@@ -240,3 +240,4 @@ $v was utterly destroyed by an explosion.
 $v died from an arrow trap.
 $v was utterly destroyed by an anvil.
 $v was turned into red dust by an explosion.
+$v was torn in half by an arrow trap.
