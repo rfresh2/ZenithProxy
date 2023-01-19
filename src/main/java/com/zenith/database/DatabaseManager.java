@@ -14,12 +14,10 @@ public class DatabaseManager {
     private DeathsDatabase deathsDatabase;
     private ConnectionPool connectionPool;
     private QueryExecutor queryExecutor;
-    private RedisClient redisClient;
 
     public DatabaseManager() {
         try {
             this.queryExecutor = new QueryExecutor(this::getConnectionPool);
-            this.redisClient = new RedisClient();
             if (CONFIG.database.queueWait.enabled) {
                 startQueueWaitDatabase();
             }
@@ -56,7 +54,7 @@ public class DatabaseManager {
         if (nonNull(this.connectionsDatabase)) {
             this.connectionsDatabase.start();
         } else {
-            this.connectionsDatabase = new ConnectionsDatabase(queryExecutor, redisClient);
+            this.connectionsDatabase = new ConnectionsDatabase(queryExecutor, new RedisClient());
             this.connectionsDatabase.start();
         }
     }
@@ -71,7 +69,7 @@ public class DatabaseManager {
         if (nonNull(this.chatDatabase)) {
             this.chatDatabase.start();
         } else {
-            this.chatDatabase = new ChatDatabase(queryExecutor, redisClient);
+            this.chatDatabase = new ChatDatabase(queryExecutor, new RedisClient());
             this.chatDatabase.start();
         }
     }
@@ -86,7 +84,7 @@ public class DatabaseManager {
         if (nonNull(this.deathsDatabase)) {
             this.deathsDatabase.start();
         } else {
-            this.deathsDatabase = new DeathsDatabase(queryExecutor, redisClient);
+            this.deathsDatabase = new DeathsDatabase(queryExecutor, new RedisClient());
             this.deathsDatabase.start();
         }
     }

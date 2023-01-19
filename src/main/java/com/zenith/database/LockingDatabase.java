@@ -79,16 +79,11 @@ public abstract class LockingDatabase extends Database {
             if (nonNull(lockExecutorService)) {
                 try {
                     lockExecutorService.submit(() -> {
-                        synchronized (lockAcquired) {
-                            if (hasLock() || lockAcquired.get()) {
-                                releaseLock();
-                                onLockReleased();
-                                lockAcquired.set(false);
-                            }
-                        }
-                    }).get(30, TimeUnit.SECONDS);
+                        releaseLock();
+                        onLockReleased();
+                    }, true).get(5, TimeUnit.SECONDS);
                 } catch (final Exception e) {
-                    DATABASE_LOG.error("Failed stopping {} database", getLockKey(), e);
+                    DATABASE_LOG.warn("Failed releasing lock", e);
                 }
                 lockExecutorService.shutdownNow();
                 lockExecutorService = null;
@@ -103,21 +98,17 @@ public abstract class LockingDatabase extends Database {
     public void onLockAcquired() {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
         syncQueue();
-        synchronized (this) {
-            if (isNull(queryExecutorPool)) {
-                queryExecutorPool = Executors.newSingleThreadScheduledExecutor();
-                queryExecutorPool.scheduleWithFixedDelay(this::processQueue, 0L, 500, TimeUnit.MILLISECONDS);
-            }
+        if (isNull(queryExecutorPool)) {
+            queryExecutorPool = Executors.newSingleThreadScheduledExecutor();
+            queryExecutorPool.scheduleWithFixedDelay(this::processQueue, 0L, 500, TimeUnit.MILLISECONDS);
         }
     }
 
     public void onLockReleased() {
         DATABASE_LOG.info("{} Database Lock Released", getLockKey());
-        synchronized (this) {
-            if (nonNull(queryExecutorPool)) {
-                this.queryExecutorPool.shutdownNow();
-                this.queryExecutorPool = null;
-            }
+        if (nonNull(queryExecutorPool)) {
+            this.queryExecutorPool.shutdownNow();
+            this.queryExecutorPool = null;
         }
     }
 
@@ -136,7 +127,7 @@ public abstract class LockingDatabase extends Database {
     public void releaseLock() {
         if (hasLock()) {
             try {
-                rLock.unlock();
+                redisClient.unlock(rLock);
             } catch (final Exception e) {
                 DATABASE_LOG.warn("Error unlocking {} database", getLockKey(), e);
             }
@@ -154,19 +145,23 @@ public abstract class LockingDatabase extends Database {
                     return;
                 }
             }
+            if (Thread.currentThread().isInterrupted()) {
+                releaseLock();
+                onLockReleased();
+                lockAcquired.set(false);
+                return;
+            }
             if (!CONFIG.client.server.address.endsWith("2b2t.org")
                     || Proxy.getInstance().isInQueue()
                     || !Proxy.getInstance().isConnected()
                     || isNull(Proxy.getInstance().getConnectTime())
                     || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(10)))) {
-                synchronized (lockAcquired) {
-                    if (hasLock() || lockAcquired.get()) {
-                        onLockReleased();
-                        releaseLock();
-                        lockAcquired.set(false);
-                    }
-                    return;
+                if (hasLock() || lockAcquired.get()) {
+                    onLockReleased();
+                    releaseLock();
+                    lockAcquired.set(false);
                 }
+                return;
             }
             if (!hasLock()) {
                 if (tryLock()) {
@@ -182,7 +177,7 @@ public abstract class LockingDatabase extends Database {
                     onLockAcquired();
                 }
             }
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             DATABASE_LOG.warn("Try lock process exception", e);
         }
     }
@@ -200,7 +195,7 @@ public abstract class LockingDatabase extends Database {
     }
 
     private void processQueue() {
-        if (lockAcquired.get()) {
+        if (lockAcquired.get() && nonNull(lockExecutorService) && !lockExecutorService.isShutdown()) {
             try {
                 final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
                 if (nonNull(insertInstance)) {
