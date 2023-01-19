@@ -43,7 +43,6 @@ public abstract class LockingDatabase extends Database {
      * Query the database, get latest entry
      * Then drop all records later than that in our queue
      */
-
     public abstract Instant getLastEntryTime();
 
     /**
@@ -87,8 +86,8 @@ public abstract class LockingDatabase extends Database {
                 }
                 lockExecutorService.shutdownNow();
                 lockExecutorService = null;
-                lockAcquired.set(false);
             }
+            lockAcquired.set(false);
             if (nonNull(rLock)) {
                 rLock = null;
             }
@@ -155,7 +154,7 @@ public abstract class LockingDatabase extends Database {
                     || Proxy.getInstance().isInQueue()
                     || !Proxy.getInstance().isConnected()
                     || isNull(Proxy.getInstance().getConnectTime())
-                    || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(10)))) {
+                    || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(30)))) {
                 if (hasLock() || lockAcquired.get()) {
                     onLockReleased();
                     releaseLock();
@@ -165,8 +164,8 @@ public abstract class LockingDatabase extends Database {
             }
             if (!hasLock()) {
                 if (tryLock()) {
-                    lockAcquired.set(true);
                     onLockAcquired();
+                    lockAcquired.set(true);
                 } else {
                     if (lockAcquired.compareAndSet(true, false)) {
                         onLockReleased();

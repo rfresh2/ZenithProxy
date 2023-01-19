@@ -26,7 +26,7 @@ public class RedisClient {
                         .setPassword(CONFIG.database.lock.redisPassword)
                         .setConnectionPoolSize(1)
                         .setConnectionMinimumIdleSize(1);
-                config.setLockWatchdogTimeout(5000);
+                config.setLockWatchdogTimeout(15000);
                 redissonClient = Redisson.create(config);
             }
             return redissonClient.getLock(lockKey);
