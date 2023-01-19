@@ -79,10 +79,13 @@ public abstract class LockingDatabase extends Database {
             if (nonNull(lockExecutorService)) {
                 try {
                     lockExecutorService.submit(() -> {
-                        if (hasLock()) {
-                            onLockReleased();
+                        synchronized (lockAcquired) {
+                            if (hasLock() || lockAcquired.get()) {
+                                releaseLock();
+                                onLockReleased();
+                                lockAcquired.set(false);
+                            }
                         }
-                        releaseLock();
                     }).get(30, TimeUnit.SECONDS);
                 } catch (final Exception e) {
                     DATABASE_LOG.error("Failed stopping {} database", getLockKey(), e);
@@ -135,7 +138,7 @@ public abstract class LockingDatabase extends Database {
             try {
                 rLock.unlock();
             } catch (final Exception e) {
-                DATABASE_LOG.debug("Error unlocking {} database", getLockKey(), e);
+                DATABASE_LOG.warn("Error unlocking {} database", getLockKey(), e);
             }
         }
     }
@@ -156,12 +159,14 @@ public abstract class LockingDatabase extends Database {
                     || !Proxy.getInstance().isConnected()
                     || isNull(Proxy.getInstance().getConnectTime())
                     || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(10)))) {
-                if (hasLock() || lockAcquired.get()) {
-                    onLockReleased();
-                    releaseLock();
-                    lockAcquired.set(false);
+                synchronized (lockAcquired) {
+                    if (hasLock() || lockAcquired.get()) {
+                        onLockReleased();
+                        releaseLock();
+                        lockAcquired.set(false);
+                    }
+                    return;
                 }
-                return;
             }
             if (!hasLock()) {
                 if (tryLock()) {
