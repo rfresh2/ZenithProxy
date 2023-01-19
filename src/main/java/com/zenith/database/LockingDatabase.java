@@ -50,12 +50,16 @@ public abstract class LockingDatabase extends Database {
      * intended as a deduping mechanism
      */
     public void syncQueue() {
-        final long lastRecordSeenTimeEpochMs = getLastEntryTime().toEpochMilli();
-        synchronized (this.insertQueue) {
-            while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli() + 250 // buffer for latency or time shift
-                    <= lastRecordSeenTimeEpochMs) {
-                this.insertQueue.poll();
+        try {
+            final long lastRecordSeenTimeEpochMs = getLastEntryTime().toEpochMilli();
+            synchronized (this.insertQueue) {
+                while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli() + 250 // buffer for latency or time shift
+                        <= lastRecordSeenTimeEpochMs) {
+                    this.insertQueue.poll();
+                }
             }
+        } catch (final Exception e) {
+            DATABASE_LOG.warn("Error syncing {} database queue", getLockKey(), e);
         }
     }
 
