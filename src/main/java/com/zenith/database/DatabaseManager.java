@@ -3,6 +3,7 @@ package com.zenith.database;
 import lombok.Getter;
 
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DATABASE_LOG;
 import static java.util.Objects.nonNull;
 
 @Getter
@@ -12,22 +13,27 @@ public class DatabaseManager {
     private ChatDatabase chatDatabase;
     private DeathsDatabase deathsDatabase;
     private ConnectionPool connectionPool;
-    private QueryQueue queryQueue;
+    private QueryExecutor queryExecutor;
+    private RedisClient redisClient;
 
     public DatabaseManager() {
-        queryQueue = new QueryQueue(this::getConnectionPool);
-        queryQueue.start();
-        if (CONFIG.database.queueWait.enabled) {
-            startQueueWaitDatabase();
-        }
-        if (CONFIG.database.connections.enabled) {
-            startConnectionsDatabase();
-        }
-        if (CONFIG.database.chats.enabled) {
-            startChatsDatabase();
-        }
-        if (CONFIG.database.deaths.enabled) {
-            startDeathsDatabase();
+        try {
+            this.queryExecutor = new QueryExecutor(this::getConnectionPool);
+            this.redisClient = new RedisClient();
+            if (CONFIG.database.queueWait.enabled) {
+                startQueueWaitDatabase();
+            }
+            if (CONFIG.database.connections.enabled) {
+                startConnectionsDatabase();
+            }
+            if (CONFIG.database.chats.enabled) {
+                startChatsDatabase();
+            }
+            if (CONFIG.database.deaths.enabled) {
+                startDeathsDatabase();
+            }
+        } catch (final Exception e) {
+            DATABASE_LOG.error("Failed starting databases", e);
         }
     }
 
@@ -35,7 +41,7 @@ public class DatabaseManager {
         if (nonNull(this.queueWaitDatabase)) {
             this.queueWaitDatabase.start();
         } else {
-            this.queueWaitDatabase = new QueueWaitDatabase(queryQueue);
+            this.queueWaitDatabase = new QueueWaitDatabase(queryExecutor);
             this.queueWaitDatabase.start();
         }
     }
@@ -50,7 +56,7 @@ public class DatabaseManager {
         if (nonNull(this.connectionsDatabase)) {
             this.connectionsDatabase.start();
         } else {
-            this.connectionsDatabase = new ConnectionsDatabase(queryQueue);
+            this.connectionsDatabase = new ConnectionsDatabase(queryExecutor, redisClient);
             this.connectionsDatabase.start();
         }
     }
@@ -65,7 +71,7 @@ public class DatabaseManager {
         if (nonNull(this.chatDatabase)) {
             this.chatDatabase.start();
         } else {
-            this.chatDatabase = new ChatDatabase(queryQueue);
+            this.chatDatabase = new ChatDatabase(queryExecutor, redisClient);
             this.chatDatabase.start();
         }
     }
@@ -80,7 +86,7 @@ public class DatabaseManager {
         if (nonNull(this.deathsDatabase)) {
             this.deathsDatabase.start();
         } else {
-            this.deathsDatabase = new DeathsDatabase(queryQueue);
+            this.deathsDatabase = new DeathsDatabase(queryExecutor, redisClient);
             this.deathsDatabase.start();
         }
     }

@@ -8,6 +8,7 @@ import com.zenith.database.dto.tables.records.ChatsRecord;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
+import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -19,9 +20,29 @@ import java.util.UUID;
 
 import static com.zenith.util.Constants.*;
 
-public class ChatDatabase extends Database {
-    public ChatDatabase(QueryQueue queryQueue) {
-        super(queryQueue);
+public class ChatDatabase extends LockingDatabase {
+    public ChatDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
+        super(queryExecutor, redisClient);
+    }
+
+    @Override
+    public String getLockKey() {
+        return "Chats";
+    }
+
+    @Override
+    public Instant getLastEntryTime() {
+        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+        final Chats c = Chats.CHATS;
+        final Result<ChatsRecord> recordResult = this.queryExecutor.fetch(context.selectFrom(c)
+                .orderBy(c.TIME.desc())
+                .limit(1));
+        if (recordResult.isEmpty()) {
+            DATABASE_LOG.warn("Chats database unable to sync. Database empty?");
+            return Instant.EPOCH;
+        }
+        final ChatsRecord chatsRecord = recordResult.get(0);
+        return chatsRecord.getTime().toInstant();
     }
 
     @Subscribe
@@ -50,7 +71,7 @@ public class ChatDatabase extends Database {
                 .set(c.CHAT, message)
                 .set(c.PLAYER_UUID, playerUUID)
                 .set(c.PLAYER_NAME, playerName);
-        queryQueue.add(query);
+        this.enqueue(new InsertInstance(time.toInstant(), query));
     }
 
     private Optional<PlayerEntry> extractSender(final String message) {

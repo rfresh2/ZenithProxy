@@ -1,0 +1,210 @@
+package com.zenith.database;
+
+import com.zenith.Proxy;
+import com.zenith.util.Wait;
+import lombok.Data;
+import org.jooq.Query;
+import org.redisson.api.RLock;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DATABASE_LOG;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
+/**
+ * Base class for databases that require a lock to be acquired before writing
+ */
+public abstract class LockingDatabase extends Database {
+    private static final int maxQueueLen = 500;
+    protected final Queue<InsertInstance> insertQueue = new ConcurrentLinkedQueue<>();
+    private final AtomicBoolean lockAcquired = new AtomicBoolean(false);
+    private final RedisClient redisClient;
+    private RLock rLock;
+    private ScheduledExecutorService lockExecutorService;
+    private ScheduledExecutorService queryExecutorPool;
+
+    public LockingDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
+        super(queryExecutor);
+        this.redisClient = redisClient;
+    }
+
+    public abstract String getLockKey();
+
+    /**
+     * Query the database, get latest entry
+     * Then drop all records later than that in our queue
+     */
+
+    public abstract Instant getLastEntryTime();
+
+    /**
+     * Sync the current insert queue with what is in the remote database
+     * intended as a deduping mechanism
+     */
+    public void syncQueue() {
+        final long lastRecordSeenTimeEpochMs = getLastEntryTime().toEpochMilli();
+        synchronized (this.insertQueue) {
+            while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli() + 250 // buffer for latency or time shift
+                    <= lastRecordSeenTimeEpochMs) {
+                this.insertQueue.poll();
+            }
+        }
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        this.lockAcquired.set(false);
+        synchronized (this) {
+            if (isNull(lockExecutorService)) {
+                lockExecutorService = Executors.newSingleThreadScheduledExecutor();
+            }
+        }
+        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, 5000L, 500L, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        synchronized (this) {
+            if (nonNull(lockExecutorService)) {
+                if (hasLock()) {
+                    onLockReleased();
+                }
+                releaseLock();
+                lockExecutorService.shutdownNow();
+                lockExecutorService = null;
+                lockAcquired.set(false);
+            }
+            if (nonNull(rLock)) {
+                rLock = null;
+            }
+        }
+    }
+
+    public void onLockAcquired() {
+        DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
+        syncQueue();
+        synchronized (this) {
+            if (isNull(queryExecutorPool)) {
+                queryExecutorPool = Executors.newSingleThreadScheduledExecutor();
+                queryExecutorPool.scheduleWithFixedDelay(this::processQueue, 0L, 500, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
+
+    public void onLockReleased() {
+        DATABASE_LOG.info("{} Database Lock Released", getLockKey());
+        synchronized (this) {
+            if (nonNull(queryExecutorPool)) {
+                this.queryExecutorPool.shutdownNow();
+                this.queryExecutorPool = null;
+            }
+        }
+    }
+
+    /**
+     * These lock methods must be executed within the lock thread
+     **/
+
+    public boolean hasLock() {
+        return rLock.isLocked();
+    }
+
+    public boolean tryLock() {
+        return rLock.tryLock();
+    }
+
+    public void releaseLock() {
+        if (hasLock()) {
+            try {
+                rLock.unlock();
+            } catch (final Exception e) {
+                DATABASE_LOG.debug("Error unlocking {} database", getLockKey(), e);
+            }
+        }
+    }
+
+    public void tryLockProcess() {
+        try {
+            if (isNull(rLock)) {
+                try {
+                    rLock = redisClient.getLock(getLockKey());
+                } catch (final Exception e) {
+                    DATABASE_LOG.error("Failed starting {} database. Unable to initialize lock", getLockKey(), e);
+                    stop();
+                    return;
+                }
+            }
+            if (!CONFIG.client.server.address.endsWith("2b2t.org")
+                    || Proxy.getInstance().isInQueue()
+                    || !Proxy.getInstance().isConnected()
+                    || isNull(Proxy.getInstance().getConnectTime())
+                    || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(10)))) {
+                if (hasLock() || lockAcquired.get()) {
+                    onLockReleased();
+                    releaseLock();
+                    lockAcquired.set(false);
+                }
+                return;
+            }
+            if (!hasLock()) {
+                if (tryLock()) {
+                    lockAcquired.set(true);
+                    onLockAcquired();
+                } else {
+                    if (lockAcquired.compareAndSet(true, false)) {
+                        onLockReleased();
+                    }
+                }
+            } else {
+                if (lockAcquired.compareAndSet(false, true)) {
+                    onLockAcquired();
+                }
+            }
+        } catch (final Exception e) {
+            DATABASE_LOG.warn("Try lock process exception", e);
+        }
+    }
+
+    public void enqueue(final InsertInstance insertInstance) {
+        final int size = insertQueue.size();
+        if (size > maxQueueLen) {
+            synchronized (insertQueue) {
+                for (int i = 0; i < maxQueueLen / 5; i++) {
+                    insertQueue.poll();
+                }
+            }
+        }
+        insertQueue.offer(insertInstance);
+    }
+
+    private void processQueue() {
+        if (lockAcquired.get()) {
+            try {
+                final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
+                if (nonNull(insertInstance)) {
+                    queryExecutor.execute(insertInstance.getQuery());
+                    Wait.waitRandomWithinMsBound(100); // adds some jitter
+                }
+            } catch (final Exception e) {
+                DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);
+            }
+        }
+    }
+
+    @Data
+    public static final class InsertInstance {
+        private final Instant instant;
+        private final Query query;
+    }
+}

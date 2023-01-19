@@ -10,6 +10,7 @@ import com.zenith.util.deathmessages.DeathMessageParseResult;
 import com.zenith.util.deathmessages.DeathMessagesParser;
 import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
+import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -20,12 +21,32 @@ import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
 
-public class DeathsDatabase extends Database {
+public class DeathsDatabase extends LockingDatabase {
     private final DeathMessagesParser deathMessagesHelper;
 
-    public DeathsDatabase(final QueryQueue queryQueue) {
-        super(queryQueue);
+    public DeathsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
+        super(queryExecutor, redisClient);
         this.deathMessagesHelper = new DeathMessagesParser();
+    }
+
+    @Override
+    public String getLockKey() {
+        return "Deaths";
+    }
+
+    @Override
+    public Instant getLastEntryTime() {
+        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+        final Deaths c = Deaths.DEATHS;
+        final Result<DeathsRecord> recordResult = this.queryExecutor.fetch(context.selectFrom(c)
+                .orderBy(c.TIME.desc())
+                .limit(1));
+        if (recordResult.isEmpty()) {
+            DATABASE_LOG.warn("Deaths database unable to sync. Database empty?");
+            return Instant.EPOCH;
+        }
+        final DeathsRecord deathsRecord = recordResult.get(0);
+        return deathsRecord.getTime().toInstant();
     }
 
     @Subscribe
@@ -62,7 +83,7 @@ public class DeathsDatabase extends Database {
             if (deathMessageParseResult.getWeapon().isPresent()) {
                 query.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());
             }
-            queryQueue.add(query);
+            this.enqueue(new InsertInstance(time.toInstant(), query));
         } catch (final Exception e) {
             if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same death

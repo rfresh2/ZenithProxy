@@ -29,8 +29,8 @@ public class QueueWaitDatabase extends Database {
     private Instant initialQueueTime = null;
     private Instant lastServerRestart = Instant.EPOCH;
 
-    public QueueWaitDatabase(QueryQueue queryQueue) {
-        super(queryQueue);
+    public QueueWaitDatabase(QueryExecutor queryExecutor) {
+        super(queryExecutor);
     }
 
     @Subscribe
@@ -86,6 +86,6 @@ public class QueueWaitDatabase extends Database {
                 .set(q.INITIAL_QUEUE_LEN, initialQueueLen)
                 .set(q.START_QUEUE_TIME, initialQueueTime.atOffset(ZoneOffset.UTC)) // must be UTC
                 .set(q.END_QUEUE_TIME, endQueueTime.atOffset(ZoneOffset.UTC));
-        queryQueue.add(query);
+        queryExecutor.execute(query);
     }
 }

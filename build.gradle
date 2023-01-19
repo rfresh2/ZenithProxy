@@ -169,6 +169,7 @@ dependencies {
     shade "com.discord4j:discord4j-core:3.2.3"
 
     shade "com.github.collarmc:Pounce:13ef4ab90e"
+    shade 'org.redisson:redisson:3.19.1'
 
     testImplementation "junit:junit:4.13.2"
 

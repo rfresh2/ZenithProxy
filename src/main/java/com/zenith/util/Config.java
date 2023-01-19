@@ -329,10 +329,18 @@ public final class Config {
         public Connections connections = new Connections();
         public Chats chats = new Chats();
         public Deaths deaths = new Deaths();
+        public Lock lock = new Lock();
 
         public static final class QueueWait {
             // queue wait time monitor
             public boolean enabled = true;
+        }
+
+        public static final class Lock {
+            // use "rediss://" for SSL connection
+            public String redisAddress = "redis://redis.2b2t.vc:7181";
+            public String redisUsername = "proxy";
+            public String redisPassword = "w9e52ivAGUNmbFuEPar5Y3GEqBaT6SBfVV36XrYKGLtreBVmiGqxV2s7YMfsmuSA";
         }
 
         public static final class Connections {

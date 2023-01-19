@@ -7,9 +7,7 @@ import com.zenith.database.dto.tables.Connections;
 import com.zenith.database.dto.tables.records.ConnectionsRecord;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
-import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.time.Duration;
@@ -19,10 +17,31 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DATABASE_LOG;
 
-public class ConnectionsDatabase extends Database {
-    public ConnectionsDatabase(QueryQueue queryQueue) {
-        super(queryQueue);
+public class ConnectionsDatabase extends LockingDatabase {
+    public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
+        super(queryExecutor, redisClient);
+    }
+
+    @Override
+    public String getLockKey() {
+        return "Connections";
+    }
+
+    @Override
+    public Instant getLastEntryTime() {
+        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+        final Connections c = Connections.CONNECTIONS;
+        Result<Record1<OffsetDateTime>> timeRecordResult = this.queryExecutor.fetch(context.select(c.TIME)
+                .from(c)
+                .orderBy(c.TIME.desc())
+                .limit(1));
+        if (timeRecordResult.isEmpty()) {
+            DATABASE_LOG.warn("Connections database unable to sync. Database empty?");
+            return Instant.EPOCH;
+        }
+        return timeRecordResult.get(0).value1().toInstant();
     }
 
     @Subscribe
@@ -55,6 +74,6 @@ public class ConnectionsDatabase extends Database {
                 .set(c.CONNECTION, connectiontype)
                 .set(c.PLAYER_NAME, playerName)
                 .set(c.PLAYER_UUID, playerUUID);
-        queryQueue.add(query);
+        this.enqueue(new InsertInstance(time.toInstant(), query));
     }
 }

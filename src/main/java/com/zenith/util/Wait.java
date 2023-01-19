@@ -39,5 +39,11 @@ public class Wait {
         return conditionSupplier.get();
     }
 
-    private Wait() {}
+    private Wait() {
+    }
+
+    public static void waitRandomWithinMsBound(final int ms) {
+        int wait = (int) (Math.random() * ms);
+        Wait.waitALittleMs(wait);
+    }
 }
