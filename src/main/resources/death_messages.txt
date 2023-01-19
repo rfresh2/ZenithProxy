@@ -93,6 +93,7 @@ $v drowned whilst fighting $k
 $v smashed themselves against a cactus and died trying to escape $k
 $v was pushed off a ladder by $k
 $v couldn't swim up quick enough whilst fighting $k
+$v was killed by $k using magic.
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -160,6 +161,7 @@ $v fought with $m and died.
 $v was maimed by $m.
 $v was cursed to slow death by $m.
 $v was nibbled to death by $m.
+$v was stomped into mince by $m.
 
 # suicides
 $v died stuck on a cactus.
