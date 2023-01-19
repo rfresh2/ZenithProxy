@@ -21,12 +21,8 @@ public class QueryExecutor {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
             context.execute(query);
         } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
-                // expected due to multiple proxies writing the same events
-            } else {
-                DATABASE_LOG.error("Failed executing query: {}", query, e);
-                Wait.waitALittleMs(3000);
-            }
+            DATABASE_LOG.error("Failed executing query: {}", query, e);
+            Wait.waitALittleMs(3000);
         }
     }
 
