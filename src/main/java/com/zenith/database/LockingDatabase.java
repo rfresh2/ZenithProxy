@@ -69,7 +69,7 @@ public abstract class LockingDatabase extends Database {
                 lockExecutorService = Executors.newSingleThreadScheduledExecutor();
             }
         }
-        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, 5000L, 500L, TimeUnit.MILLISECONDS);
+        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, 5000L, 1000L, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -117,7 +117,7 @@ public abstract class LockingDatabase extends Database {
      **/
 
     public boolean hasLock() {
-        return rLock.isLocked();
+        return rLock.isLocked() && rLock.isHeldByCurrentThread();
     }
 
     public boolean tryLock() {
