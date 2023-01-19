@@ -77,10 +77,16 @@ public abstract class LockingDatabase extends Database {
         super.stop();
         synchronized (this) {
             if (nonNull(lockExecutorService)) {
-                if (hasLock()) {
-                    onLockReleased();
+                try {
+                    lockExecutorService.submit(() -> {
+                        if (hasLock()) {
+                            onLockReleased();
+                        }
+                        releaseLock();
+                    }).get(30, TimeUnit.SECONDS);
+                } catch (final Exception e) {
+                    DATABASE_LOG.error("Failed stopping {} database", getLockKey(), e);
                 }
-                releaseLock();
                 lockExecutorService.shutdownNow();
                 lockExecutorService = null;
                 lockAcquired.set(false);
@@ -176,7 +182,7 @@ public abstract class LockingDatabase extends Database {
         }
     }
 
-    public void enqueue(final InsertInstance insertInstance) {
+    public void insert(final Instant instant, final Query query) {
         final int size = insertQueue.size();
         if (size > maxQueueLen) {
             synchronized (insertQueue) {
@@ -185,7 +191,7 @@ public abstract class LockingDatabase extends Database {
                 }
             }
         }
-        insertQueue.offer(insertInstance);
+        insertQueue.offer(new InsertInstance(instant, query));
     }
 
     private void processQueue() {

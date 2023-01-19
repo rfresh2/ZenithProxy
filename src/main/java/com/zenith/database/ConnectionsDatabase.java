@@ -74,6 +74,6 @@ public class ConnectionsDatabase extends LockingDatabase {
                 .set(c.CONNECTION, connectiontype)
                 .set(c.PLAYER_NAME, playerName)
                 .set(c.PLAYER_UUID, playerUUID);
-        this.enqueue(new InsertInstance(time.toInstant(), query));
+        this.insert(time.toInstant(), query);
     }
 }

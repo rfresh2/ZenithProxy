@@ -83,7 +83,7 @@ public class DeathsDatabase extends LockingDatabase {
             if (deathMessageParseResult.getWeapon().isPresent()) {
                 query.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());
             }
-            this.enqueue(new InsertInstance(time.toInstant(), query));
+            this.insert(time.toInstant(), query);
         } catch (final Exception e) {
             if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
                 // expected due to multiple proxies writing the same death

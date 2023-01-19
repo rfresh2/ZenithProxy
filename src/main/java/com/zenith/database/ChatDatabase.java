@@ -71,7 +71,7 @@ public class ChatDatabase extends LockingDatabase {
                 .set(c.CHAT, message)
                 .set(c.PLAYER_UUID, playerUUID)
                 .set(c.PLAYER_NAME, playerName);
-        this.enqueue(new InsertInstance(time.toInstant(), query));
+        this.insert(time.toInstant(), query);
     }
 
     private Optional<PlayerEntry> extractSender(final String message) {
