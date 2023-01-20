@@ -103,7 +103,7 @@ public abstract class LockingDatabase extends Database {
         syncQueue();
         if (isNull(queryExecutorPool)) {
             queryExecutorPool = Executors.newSingleThreadScheduledExecutor();
-            queryExecutorPool.scheduleWithFixedDelay(this::processQueue, 0L, 500, TimeUnit.MILLISECONDS);
+            queryExecutorPool.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -148,21 +148,15 @@ public abstract class LockingDatabase extends Database {
                     return;
                 }
             }
-            if (Thread.currentThread().isInterrupted()) {
-                releaseLock();
-                onLockReleased();
-                lockAcquired.set(false);
-                return;
-            }
             if (!CONFIG.client.server.address.endsWith("2b2t.org")
                     || Proxy.getInstance().isInQueue()
                     || !Proxy.getInstance().isConnected()
                     || isNull(Proxy.getInstance().getConnectTime())
                     || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(30)))) {
                 if (hasLock() || lockAcquired.get()) {
-                    onLockReleased();
-                    releaseLock();
-                    lockAcquired.set(false);
+                    stop();
+                    // todo: check we should be able to reach this statement even if the pool gets shutdown?
+                    start();
                 }
                 return;
             }
@@ -203,12 +197,12 @@ public abstract class LockingDatabase extends Database {
                 final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
                 if (nonNull(insertInstance)) {
                     queryExecutor.execute(insertInstance.getQuery());
-                    Wait.waitRandomWithinMsBound(100); // adds some jitter
                 }
             } catch (final Exception e) {
                 DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);
             }
         }
+        Wait.waitRandomWithinMsBound(100); // adds some jitter
     }
 
     @Data
