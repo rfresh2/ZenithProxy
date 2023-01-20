@@ -53,8 +53,9 @@ public abstract class LockingDatabase extends Database {
         try {
             final long lastRecordSeenTimeEpochMs = getLastEntryTime().toEpochMilli();
             synchronized (this.insertQueue) {
-                while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli() + 250 // buffer for latency or time shift
-                        <= lastRecordSeenTimeEpochMs) {
+                while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli()
+                        <= lastRecordSeenTimeEpochMs + 250 // buffer for latency or time shift
+                ) {
                     this.insertQueue.poll();
                 }
             }
