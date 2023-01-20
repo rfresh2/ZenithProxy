@@ -54,7 +54,7 @@ public abstract class LockingDatabase extends Database {
             final long lastRecordSeenTimeEpochMs = getLastEntryTime().toEpochMilli();
             synchronized (this.insertQueue) {
                 while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli()
-                        <= lastRecordSeenTimeEpochMs + 250 // buffer for latency or time shift
+                        <= lastRecordSeenTimeEpochMs + 5000 // buffer for latency or time shift
                 ) {
                     this.insertQueue.poll();
                 }
@@ -136,12 +136,13 @@ public abstract class LockingDatabase extends Database {
             } catch (final Exception e) {
                 DATABASE_LOG.warn("Error unlocking {} database", getLockKey(), e);
             }
+            lockAcquired.set(false);
         }
     }
 
     public void tryLockProcess() {
         try {
-            if (isNull(rLock)) {
+            if (isNull(rLock) || redisClient.isShutDown()) {
                 try {
                     rLock = redisClient.getLock(getLockKey());
                 } catch (final Exception e) {
@@ -156,9 +157,8 @@ public abstract class LockingDatabase extends Database {
                     || isNull(Proxy.getInstance().getConnectTime())
                     || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(30)))) {
                 if (hasLock() || lockAcquired.get()) {
-                    stop();
-                    // todo: check we should be able to reach this statement even if the pool gets shutdown?
-                    start();
+                    releaseLock();
+                    onLockReleased();
                 }
                 return;
             }

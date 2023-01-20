@@ -6,6 +6,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.DATABASE_LOG;
 import static java.util.Objects.isNull;
 
 public class RedisClient {
@@ -13,21 +14,13 @@ public class RedisClient {
     private RedissonClient redissonClient;
 
     public RedisClient() {
-
+        redissonClient = getRedissonClient();
     }
 
     public RLock getLock(final String lockKey) {
         synchronized (this) {
-            if (isNull(redissonClient)) {
-                Config config = new Config();
-                config.useSingleServer()
-                        .setAddress(CONFIG.database.lock.redisAddress)
-                        .setUsername(CONFIG.database.lock.redisUsername)
-                        .setPassword(CONFIG.database.lock.redisPassword)
-                        .setConnectionPoolSize(1)
-                        .setConnectionMinimumIdleSize(1);
-                config.setLockWatchdogTimeout(15000);
-                redissonClient = Redisson.create(config);
+            if (isShutDown()) {
+                redissonClient = getRedissonClient();
             }
             return redissonClient.getLock(lockKey);
         }
@@ -38,12 +31,25 @@ public class RedisClient {
             try {
                 lock.unlock();
             } catch (final Throwable e) {
-                // todo: this always throws for some reason on stop()
-                //  but the watchdog will release the lock eventually anyway
-                // DATABASE_LOG.warn("Unlock threw exception", e);
+                redissonClient.shutdown();
+                DATABASE_LOG.warn("Unlock threw exception", e);
             }
-            redissonClient.shutdown();
-            redissonClient = null;
         }
+    }
+
+    public boolean isShutDown() {
+        return isNull(redissonClient) || redissonClient.isShuttingDown() || redissonClient.isShutdown();
+    }
+
+    public RedissonClient getRedissonClient() {
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress(CONFIG.database.lock.redisAddress)
+                .setUsername(CONFIG.database.lock.redisUsername)
+                .setPassword(CONFIG.database.lock.redisPassword)
+                .setConnectionPoolSize(1)
+                .setConnectionMinimumIdleSize(1);
+        config.setLockWatchdogTimeout(15000);
+        return Redisson.create(config);
     }
 }
