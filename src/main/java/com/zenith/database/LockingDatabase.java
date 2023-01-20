@@ -15,7 +15,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DATABASE_LOG;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -151,11 +150,7 @@ public abstract class LockingDatabase extends Database {
                     return;
                 }
             }
-            if (!CONFIG.client.server.address.endsWith("2b2t.org")
-                    || Proxy.getInstance().isInQueue()
-                    || !Proxy.getInstance().isConnected()
-                    || isNull(Proxy.getInstance().getConnectTime())
-                    || Proxy.getInstance().getConnectTime().isAfter(Instant.now().minus(Duration.ofSeconds(30)))) {
+            if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30))) {
                 if (hasLock() || lockAcquired.get()) {
                     releaseLock();
                     onLockReleased();

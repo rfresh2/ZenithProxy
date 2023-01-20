@@ -114,7 +114,7 @@ public class Proxy {
             if (CONFIG.client.extra.sixHourReconnect) {
                 reconnectExecutorService.scheduleAtFixedRate(() -> {
                     try {
-                        if (this.isConnected() && !inQueue && nonNull(connectTime)) {
+                        if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
                             long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
                             if (onlineSeconds > (21600 - 60)) { // 6 hrs - 60 seconds padding
                                 this.disconnect(SYSTEM_DISCONNECT);
@@ -130,7 +130,7 @@ public class Proxy {
             if (CONFIG.client.extra.twentyMinuteReconnectIfStuck) {
                 reconnectExecutorService.scheduleAtFixedRate(() -> {
                     try {
-                        if (this.isConnected() && !inQueue && nonNull(connectTime)
+                        if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))
                                 && CONFIG.client.extra.antiafk.enabled
                                 && CONFIG.client.extra.antiafk.actions.stuckWarning // ensures we don't get into a weird state
                                 && MODULE_MANAGER.getModule(AntiAFK.class).map(AntiAFK::isStuck).orElse(false)) {
@@ -454,6 +454,14 @@ public class Proxy {
                         connect();
                     });
         }
+    }
+
+    public boolean isOnlineOn2b2tForAtLeastDuration(Duration duration) {
+        return CONFIG.client.server.address.endsWith("2b2t.org")
+                && isConnected()
+                && !isInQueue()
+                && nonNull(getConnectTime())
+                && getConnectTime().isBefore(Instant.now().minus(duration));
     }
 
     @Subscribe

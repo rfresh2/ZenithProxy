@@ -16,7 +16,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DATABASE_LOG;
 
 public class ConnectionsDatabase extends LockingDatabase {
@@ -63,10 +62,9 @@ public class ConnectionsDatabase extends LockingDatabase {
     //  need to think about a better approach for this
 
     public void writeConnection(final Connectiontype connectiontype, final String playerName, final UUID playerUUID, final OffsetDateTime time) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org")
-                || Proxy.getInstance().isInQueue()
-                || (Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.ofSeconds(3))) && playerName.equals(CONFIG.authentication.username))
-        ) return;
+        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))) {
+            return;
+        }
         final DSLContext context = DSL.using(SQLDialect.POSTGRES);
         final Connections c = Connections.CONNECTIONS;
         InsertSetMoreStep<ConnectionsRecord> query = context.insertInto(c)
