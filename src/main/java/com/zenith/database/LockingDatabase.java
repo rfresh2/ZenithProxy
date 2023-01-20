@@ -100,6 +100,7 @@ public abstract class LockingDatabase extends Database {
 
     public void onLockAcquired() {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
+        Wait.waitALittleMs(5000); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorPool)) {
             queryExecutorPool = Executors.newSingleThreadScheduledExecutor();
