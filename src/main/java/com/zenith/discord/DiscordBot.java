@@ -180,7 +180,6 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
-        this.client.updatePresence(getQueuePresence()).subscribe();
         if (CONFIG.discord.queueWarning.enabled) {
             if (event.position == CONFIG.discord.queueWarning.position) {
                 sendQueueWarning();
@@ -188,6 +187,7 @@ public class DiscordBot {
                 sendQueueWarning();
             }
         }
+        this.client.updatePresence(getQueuePresence()).subscribe();
     }
 
     @Subscribe
