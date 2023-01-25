@@ -1,10 +1,12 @@
 package com.zenith.module;
 
 import com.collarmc.pounce.Subscribe;
+import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerInteractEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.google.common.collect.Sets;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
@@ -88,6 +90,7 @@ public class KillAura extends Module {
 
     private void attack(final Entity entity) {
         Proxy.getInstance().getClient().send(new ClientPlayerInteractEntityPacket(entity.getEntityId(), InteractAction.ATTACK));
+        Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
     }
 
     private boolean rotateTo(Entity entity) {
