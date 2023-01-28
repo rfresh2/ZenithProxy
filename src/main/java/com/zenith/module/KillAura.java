@@ -13,7 +13,6 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientTickEvent;
-import lombok.Getter;
 import net.daporkchop.lib.math.vector.Vec3d;
 
 import java.util.Optional;
@@ -31,8 +30,11 @@ public class KillAura extends Module {
             MobType.LLAMA, MobType.PARROT, MobType.VILLAGER
     );
     private int delay = 0;
-    @Getter
     private boolean isAttacking = false;
+
+    public boolean active() {
+        return CONFIG.client.extra.killAura.enabled && isAttacking;
+    }
 
     @Subscribe
     public void handleClientTick(final ClientTickEvent event) {
@@ -50,7 +52,7 @@ public class KillAura extends Module {
                     .filter(entity -> CONFIG.client.extra.killAura.targetPlayers || !(entity instanceof EntityPlayer))
                     .filter(entity -> CONFIG.client.extra.killAura.targetMobs || !(entity instanceof EntityMob))
                     .filter(entity -> !(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSelfPlayer()))
-                    .filter(entity -> distanceToSelf(entity) <= 3.5)
+                    .filter(entity -> distanceToSelf(entity) <= 4.5)
                     // filter friends
                     .filter(entity -> !(entity instanceof EntityPlayer
                             && CACHE.getTabListCache().getTabList().get(entity.getUuid())
@@ -102,9 +104,8 @@ public class KillAura extends Module {
         final double pitch = normalizeAngle(Math.toDegrees(-Math.atan2(targetVec.y(), xz)));
         final double currentYaw = CACHE.getPlayerCache().getYaw();
         final double currentPitch = CACHE.getPlayerCache().getPitch();
-        if (!((currentYaw + 0.05 > yaw && currentYaw - 0.05 < yaw) && (currentPitch + 0.05 > pitch && currentPitch - 0.05 < pitch))) {
+        if (!((currentYaw + 0.01 > yaw && currentYaw - 0.01 < yaw) && (currentPitch + 0.01 > pitch && currentPitch - 0.01 < pitch))) {
             Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(false, (float) yaw, (float) pitch));
-            delay = 1;
             return false;
         }
         return true;

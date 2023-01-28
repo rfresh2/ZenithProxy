@@ -41,7 +41,7 @@ public class Spook extends Module {
         if (CONFIG.client.extra.spook.enabled
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
-                && !MODULE_MANAGER.getModule(KillAura.class).map(KillAura::isAttacking).orElse(false)) {
+                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.active()).orElse(true)) {
             stareTick();
         } else {
             hasTarget.lazySet(false);

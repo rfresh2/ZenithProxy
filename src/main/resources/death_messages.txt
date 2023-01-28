@@ -163,6 +163,7 @@ $v was cursed to slow death by $m.
 $v was nibbled to death by $m.
 $v was stomped into mince by $m.
 $v was mauled to death by $m.
+$v was melted apart by $m.
 
 # suicides
 $v died stuck on a cactus.
@@ -247,3 +248,4 @@ $v was torn in half by an arrow trap.
 $v was reduced to mince from an anvil falling on them.
 $v was removed by an explosion.
 $v was violently severed by explosives.
+$v was hit by a dispensed arrow and died.

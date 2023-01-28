@@ -65,7 +65,8 @@ public class AntiAFK extends Module {
                 && Proxy.getInstance().isConnected()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0) {
+                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.active()).orElse(true)) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
