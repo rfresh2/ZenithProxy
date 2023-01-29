@@ -62,12 +62,9 @@ public class KillAura extends Module {
                     .filter(entity -> !(entity instanceof EntityPlayer)
                             || (!WHITELIST_MANAGER.isUUIDWhitelisted(entity.getUuid())
                             && !WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(entity.getUuid())))
-                    .filter(entity -> {
-                        if (entity instanceof EntityMob && CONFIG.client.extra.killAura.avoidFriendlyMobs) {
-                            return !friendlyMobTypes.contains(((EntityMob) entity).getMobType());
-                        }
-                        return true;
-                    })
+                    .filter(entity -> !(entity instanceof EntityMob)
+                            || !CONFIG.client.extra.killAura.avoidFriendlyMobs
+                            || !friendlyMobTypes.contains(((EntityMob) entity).getMobType()))
                     .findFirst();
 
             // rotate to target

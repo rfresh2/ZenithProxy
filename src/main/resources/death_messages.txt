@@ -249,3 +249,5 @@ $v was reduced to mince from an anvil falling on them.
 $v was removed by an explosion.
 $v was violently severed by explosives.
 $v was hit by a dispensed arrow and died.
+$v died by mysterious means.
+$v died from unknown causes.
