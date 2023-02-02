@@ -71,9 +71,8 @@ public class Proxy {
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
     public static void main(String... args) {
-        DEFAULT_LOG.info("Starting Proxy...");
-
         instance = new Proxy();
+        DEFAULT_LOG.info("Starting Proxy...");
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
             try {
