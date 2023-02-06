@@ -251,3 +251,4 @@ $v was violently severed by explosives.
 $v was hit by a dispensed arrow and died.
 $v died by mysterious means.
 $v died from unknown causes.
+$v was crushed by an anvil.
