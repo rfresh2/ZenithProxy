@@ -1,15 +1,19 @@
 package com.zenith.util;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zenith.mcping.MCPing;
+import com.zenith.mcping.PingOptions;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import reactor.netty.http.client.HttpClient;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.SERVER_LOG;
@@ -26,13 +30,21 @@ public class Queue {
     private static final Duration refreshPeriod = Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES);
     private static QueueStatus queueStatus;
     private static ScheduledExecutorService refreshExecutorService = new ScheduledThreadPoolExecutor(1);
+    private static final Pattern digitPattern = Pattern.compile("\\d+");
+    private static final MCPing mcPing = new MCPing();
+    private static final PingOptions pingOptions = new PingOptions();
+
 
     static {
         refreshExecutorService.scheduleAtFixedRate(
                 Queue::updateQueueStatus,
-                0,
+                500L,
                 refreshPeriod.toMillis(),
                 TimeUnit.MILLISECONDS);
+        pingOptions.setHostname("connect.2b2t.org");
+        pingOptions.setPort(25565);
+        pingOptions.setTimeout(3000);
+        pingOptions.setProtocolVersion(340);
     }
 
     public static QueueStatus getQueueStatus() {
@@ -43,18 +55,12 @@ public class Queue {
     }
 
     private static void updateQueueStatus() {
-        try {
-            final String response = httpClient
-                    .get()
-                    .responseContent()
-                    .aggregate()
-                    .asString()
-                    .block();
-            queueStatus = mapper.readValue(response, QueueStatus.class);
-        } catch (Exception e) {
-            SERVER_LOG.error("Failed updating queue status", e);
-            if (isNull(queueStatus)) {
-                queueStatus = new QueueStatus(0, 0, 0, 0L, "");
+        if (!pingUpdate()) {
+            if (!apiUpdate()) {
+                SERVER_LOG.error("Failed updating queue status. Is the network down?");
+                if (isNull(queueStatus)) {
+                    queueStatus = new QueueStatus(0, 0, 0, 0L, "");
+                }
             }
         }
     }
@@ -77,5 +83,42 @@ public class Queue {
 
     public static String getQueueEta(final Integer queuePos) {
         return getEtaStringFromSeconds(getQueueWait(queuePos));
+    }
+
+    private static boolean pingUpdate() {
+        try {
+            final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
+            final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(0).getName();
+            final Matcher matcher = digitPattern.matcher(queueStr.substring(queueStr.indexOf(" ")));
+            if (!matcher.find()) {
+                throw new IOException("didn't find regular queue len: " + queueStr);
+            }
+            final Integer regular = Integer.parseInt(matcher.group());
+            if (!matcher.find()) {
+                throw new IOException("didn't find prio queue len: " + queueStr);
+            }
+            final Integer prio = Integer.parseInt(matcher.group());
+            queueStatus = new QueueStatus(prio, regular, prio + regular, 0L, "");
+            return true;
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed updating queue with ping", e);
+            return false;
+        }
+    }
+
+    private static boolean apiUpdate() {
+        try {
+            final String response = httpClient
+                    .get()
+                    .responseContent()
+                    .aggregate()
+                    .asString()
+                    .block();
+            queueStatus = mapper.readValue(response, QueueStatus.class);
+            return true;
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed updating queue status from API", e);
+            return false;
+        }
     }
 }

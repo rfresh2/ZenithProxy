@@ -14,7 +14,8 @@ public class QueueStatus {
     @JsonProperty("msg")
     public String msg;
 
-    public QueueStatus() {}
+    public QueueStatus() {
+    }
 
     public QueueStatus(Integer prio, Integer regular, Integer total, Long timems, String msg) {
         this.prio = prio;
@@ -22,5 +23,16 @@ public class QueueStatus {
         this.total = total;
         this.timems = timems;
         this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "QueueStatus{" +
+                "prio=" + prio +
+                ", regular=" + regular +
+                ", total=" + total +
+                ", timems=" + timems +
+                ", msg='" + msg + '\'' +
+                '}';
     }
 }
