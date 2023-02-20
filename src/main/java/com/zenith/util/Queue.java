@@ -89,6 +89,9 @@ public class Queue {
         try {
             final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
             final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(0).getName();
+            if (!queueStr.contains("main")) {
+                throw new IOException("Queue string doesn't contain main: " + queueStr);
+            }
             final Matcher matcher = digitPattern.matcher(queueStr.substring(queueStr.indexOf(" ")));
             if (!matcher.find()) {
                 throw new IOException("didn't find regular queue len: " + queueStr);
