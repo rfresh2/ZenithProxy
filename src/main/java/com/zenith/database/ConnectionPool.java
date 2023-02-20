@@ -38,7 +38,7 @@ public final class ConnectionPool {
     private static HikariDataSource createDataSource(int maxPoolSize) {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.postgresql.Driver");
-        config.setJdbcUrl("jdbc:postgresql://" + CONFIG.database.hostname + ":" + CONFIG.database.port + "/postgres");
+        config.setJdbcUrl("jdbc:postgresql://" + CONFIG.database.host + ":" + CONFIG.database.port + "/postgres");
         config.setUsername(CONFIG.database.username);
         config.setPassword(CONFIG.database.password);
         config.setMaximumPoolSize(maxPoolSize);

@@ -319,7 +319,7 @@ public final class Config {
     }
 
     public static final class Database {
-        public String hostname = "mc-proxy.czyfkzmxjkdp.us-east-1.rds.amazonaws.com";
+        public String host = "db.2b2t.vc";
         public int port = 5432;
         public String username = "proxy";
         public String password = "cghRVLQQiRqEpn9ccJEEeU";
