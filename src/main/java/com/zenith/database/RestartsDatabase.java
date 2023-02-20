@@ -45,13 +45,15 @@ public class RestartsDatabase extends LockingDatabase {
 
     @Subscribe
     public void handleServerRestartEvent(final ServerRestartingEvent event) {
-        if (lastRestartWrite.isBefore(Instant.now().minus(cooldownDuration))) {
-            lastRestartWrite = Instant.now();
-            final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-            final Restarts r = Restarts.RESTARTS;
-            final InsertSetMoreStep<RestartsRecord> query = context.insertInto(r)
-                    .set(r.TIME, Instant.now().plus(Duration.ofMinutes(15L)).atOffset(ZoneOffset.UTC));
-            this.insert(Instant.now(), query);
+        synchronized (this) {
+            if (lastRestartWrite.isBefore(Instant.now().minus(cooldownDuration))) {
+                lastRestartWrite = Instant.now();
+                final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+                final Restarts r = Restarts.RESTARTS;
+                final InsertSetMoreStep<RestartsRecord> query = context.insertInto(r)
+                        .set(r.TIME, Instant.now().plus(Duration.ofMinutes(15L)).atOffset(ZoneOffset.UTC));
+                this.insert(Instant.now(), query);
+            }
         }
     }
 }
