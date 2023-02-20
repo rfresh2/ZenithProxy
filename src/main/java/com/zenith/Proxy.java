@@ -519,6 +519,7 @@ public class Proxy {
             } else {
                 CLIENT_LOG.info("Prio Change Detected: " + event.prio);
                 EVENT_BUS.dispatch(new PrioStatusUpdateEvent(event.prio));
+                this.isPrio = Optional.of(event.prio);
                 CONFIG.authentication.prio = event.prio;
                 saveConfig();
             }
