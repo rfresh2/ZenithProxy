@@ -31,7 +31,9 @@ public class DatabaseManager {
             if (CONFIG.database.deaths.enabled) {
                 startDeathsDatabase();
             }
-            startQueueLengthDatabase();
+            if (CONFIG.database.queueLength.enabled) {
+                startQueueLengthDatabase();
+            }
         } catch (final Exception e) {
             DATABASE_LOG.error("Failed starting databases", e);
         }

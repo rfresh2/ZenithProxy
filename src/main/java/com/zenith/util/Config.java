@@ -329,6 +329,7 @@ public final class Config {
         public Connections connections = new Connections();
         public Chats chats = new Chats();
         public Deaths deaths = new Deaths();
+        public QueueLength queueLength = new QueueLength();
         public Lock lock = new Lock();
 
         public static final class QueueWait {
@@ -354,6 +355,10 @@ public final class Config {
         public static final class Deaths {
             public boolean enabled = true;
             public boolean unknownDeathDiscordMsg = false;
+        }
+
+        public static final class QueueLength {
+            public boolean enabled = true;
         }
     }
 

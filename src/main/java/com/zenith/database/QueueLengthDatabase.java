@@ -14,10 +14,11 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.DATABASE_LOG;
 
 public class QueueLengthDatabase extends LockingDatabase {
-    private static final Duration updateInterval = Duration.ofMinutes(1L);
+    private static final Duration updateInterval = Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes + 1L);
     private Instant lastUpdate = Instant.EPOCH;
 
     public QueueLengthDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
@@ -47,6 +48,7 @@ public class QueueLengthDatabase extends LockingDatabase {
     @Subscribe
     public void handleTickEvent(final ClientTickEvent event) {
         if (lastUpdate.isBefore(Instant.now().minus(updateInterval))) {
+            lastUpdate = Instant.now();
             final QueueStatus queueStatus = Queue.getQueueStatus();
             final DSLContext context = DSL.using(SQLDialect.POSTGRES);
             final Queuelength q = Queuelength.QUEUELENGTH;
@@ -55,8 +57,6 @@ public class QueueLengthDatabase extends LockingDatabase {
                     .set(q.REGULAR, queueStatus.regular.shortValue())
                     .set(q.PRIO, queueStatus.prio.shortValue());
             this.insert(Instant.now(), query);
-
-            lastUpdate = Instant.now();
         }
     }
 }

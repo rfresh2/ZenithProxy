@@ -18,7 +18,8 @@ public class DatabaseCommand extends Command {
         return CommandUsage.full("database",
                 "Configures what 2b2t server data is collected by the proxy. No database logs personal data.",
                 asList(
-                        "queue on/off",
+                        "queueWait on/off",
+                        "queueLength on/off",
                         "publicChat on/off",
                         "joinLeave on/off",
                         "deathMessages on/off"
@@ -29,7 +30,7 @@ public class DatabaseCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("database")
-                .then(literal("queue")
+                .then(literal("queuewait")
                         .then(literal("on").executes(c -> {
                             CONFIG.database.queueWait.enabled = true;
                             DATABASE_MANAGER.startQueueWaitDatabase();
@@ -42,6 +43,21 @@ public class DatabaseCommand extends Command {
                             DATABASE_MANAGER.stopQueueWaitDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Queue Wait Database Off!")
+                                    .color(Color.CYAN);
+                        })))
+                .then(literal("queuelength")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.database.queueLength.enabled = true;
+                            DATABASE_MANAGER.startQueueLengthDatabase();
+                            c.getSource().getEmbedBuilder()
+                                    .title("Queue Length Database On!")
+                                    .color(Color.CYAN);
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.database.queueLength.enabled = false;
+                            DATABASE_MANAGER.stopQueueLengthDatabase();
+                            c.getSource().getEmbedBuilder()
+                                    .title("Queue Length Database Off!")
                                     .color(Color.CYAN);
                         })))
                 .then(literal("publicchat")
