@@ -14,6 +14,8 @@ public class DatabaseManager {
     private DeathsDatabase deathsDatabase;
     private ConnectionPool connectionPool;
     private QueueLengthDatabase queueLengthDatabase;
+    private RestartsDatabase restartsDatabase;
+    private PlayerCountDatabase playerCountDatabase;
     private QueryExecutor queryExecutor;
 
     public DatabaseManager() {
@@ -33,6 +35,12 @@ public class DatabaseManager {
             }
             if (CONFIG.database.queueLength.enabled) {
                 startQueueLengthDatabase();
+            }
+            if (CONFIG.database.restarts.enabled) {
+                startRestartsDatabase();
+            }
+            if (CONFIG.database.playerCount.enabled) {
+                startPlayerCountDatabase();
             }
         } catch (final Exception e) {
             DATABASE_LOG.error("Failed starting databases", e);
@@ -111,6 +119,36 @@ public class DatabaseManager {
     public void stopQueueLengthDatabase() {
         if (nonNull(this.queueLengthDatabase)) {
             this.queueLengthDatabase.stop();
+        }
+    }
+
+    public void startRestartsDatabase() {
+        if (nonNull(this.restartsDatabase)) {
+            this.restartsDatabase.start();
+        } else {
+            this.restartsDatabase = new RestartsDatabase(queryExecutor, new RedisClient());
+            this.restartsDatabase.start();
+        }
+    }
+
+    public void stopRestartsDatabase() {
+        if (nonNull(this.restartsDatabase)) {
+            this.restartsDatabase.stop();
+        }
+    }
+
+    public void startPlayerCountDatabase() {
+        if (nonNull(this.playerCountDatabase)) {
+            this.playerCountDatabase.start();
+        } else {
+            this.playerCountDatabase = new PlayerCountDatabase(queryExecutor, new RedisClient());
+            this.playerCountDatabase.start();
+        }
+    }
+
+    public void stopPlayerCountDatabase() {
+        if (nonNull(this.playerCountDatabase)) {
+            this.playerCountDatabase.stop();
         }
     }
 

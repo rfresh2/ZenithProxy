@@ -50,13 +50,14 @@ public class Public extends SchemaImpl {
     public final Names NAMES = Names.NAMES;
 
     /**
+     * The table <code>public.playercount</code>.
+     */
+    public final Playercount PLAYERCOUNT = Playercount.PLAYERCOUNT;
+
+    /**
      * The table <code>public.playtime_all</code>.
      */
     public final PlaytimeAll PLAYTIME_ALL = PlaytimeAll.PLAYTIME_ALL;
-    /**
-     * The table <code>public.queuelength</code>.
-     */
-    public final Queuelength QUEUELENGTH = Queuelength.QUEUELENGTH;
 
     /**
      * Call <code>public.playtime_all</code>.
@@ -77,9 +78,19 @@ public class Public extends SchemaImpl {
     }
 
     /**
+     * The table <code>public.queuelength</code>.
+     */
+    public final Queuelength QUEUELENGTH = Queuelength.QUEUELENGTH;
+
+    /**
      * The table <code>public.queuewait</code>.
      */
     public final Queuewait QUEUEWAIT = Queuewait.QUEUEWAIT;
+
+    /**
+     * The table <code>public.restarts</code>.
+     */
+    public final Restarts RESTARTS = Restarts.RESTARTS;
 
     /**
      * No further instances allowed
@@ -101,8 +112,10 @@ public class Public extends SchemaImpl {
                 Connections.CONNECTIONS,
                 Deaths.DEATHS,
                 Names.NAMES,
+                Playercount.PLAYERCOUNT,
                 PlaytimeAll.PLAYTIME_ALL,
                 Queuelength.QUEUELENGTH,
-                Queuewait.QUEUEWAIT);
+                Queuewait.QUEUEWAIT,
+                Restarts.RESTARTS);
     }
 }
