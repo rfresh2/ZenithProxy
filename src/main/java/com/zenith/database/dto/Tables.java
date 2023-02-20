@@ -37,6 +37,11 @@ public class Tables {
     public static final Names NAMES = Names.NAMES;
 
     /**
+     * The table <code>public.playercount</code>.
+     */
+    public static final Playercount PLAYERCOUNT = Playercount.PLAYERCOUNT;
+
+    /**
      * The table <code>public.playtime_all</code>.
      */
     public static final PlaytimeAll PLAYTIME_ALL = PlaytimeAll.PLAYTIME_ALL;

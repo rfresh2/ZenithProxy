@@ -15,6 +15,7 @@ public class DatabaseManager {
     private ConnectionPool connectionPool;
     private QueueLengthDatabase queueLengthDatabase;
     private RestartsDatabase restartsDatabase;
+    private PlayerCountDatabase playerCountDatabase;
     private QueryExecutor queryExecutor;
 
     public DatabaseManager() {
@@ -37,6 +38,9 @@ public class DatabaseManager {
             }
             if (CONFIG.database.restarts.enabled) {
                 startRestartsDatabase();
+            }
+            if (CONFIG.database.playerCount.enabled) {
+                startPlayerCountDatabase();
             }
         } catch (final Exception e) {
             DATABASE_LOG.error("Failed starting databases", e);
@@ -130,6 +134,21 @@ public class DatabaseManager {
     public void stopRestartsDatabase() {
         if (nonNull(this.restartsDatabase)) {
             this.restartsDatabase.stop();
+        }
+    }
+
+    public void startPlayerCountDatabase() {
+        if (nonNull(this.playerCountDatabase)) {
+            this.playerCountDatabase.start();
+        } else {
+            this.playerCountDatabase = new PlayerCountDatabase(queryExecutor, new RedisClient());
+            this.playerCountDatabase.start();
+        }
+    }
+
+    public void stopPlayerCountDatabase() {
+        if (nonNull(this.playerCountDatabase)) {
+            this.playerCountDatabase.stop();
         }
     }
 

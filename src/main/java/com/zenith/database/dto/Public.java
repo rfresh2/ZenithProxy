@@ -50,6 +50,11 @@ public class Public extends SchemaImpl {
     public final Names NAMES = Names.NAMES;
 
     /**
+     * The table <code>public.playercount</code>.
+     */
+    public final Playercount PLAYERCOUNT = Playercount.PLAYERCOUNT;
+
+    /**
      * The table <code>public.playtime_all</code>.
      */
     public final PlaytimeAll PLAYTIME_ALL = PlaytimeAll.PLAYTIME_ALL;
@@ -107,6 +112,7 @@ public class Public extends SchemaImpl {
                 Connections.CONNECTIONS,
                 Deaths.DEATHS,
                 Names.NAMES,
+                Playercount.PLAYERCOUNT,
                 PlaytimeAll.PLAYTIME_ALL,
                 Queuelength.QUEUELENGTH,
                 Queuewait.QUEUEWAIT,

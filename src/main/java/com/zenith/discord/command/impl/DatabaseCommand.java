@@ -23,7 +23,8 @@ public class DatabaseCommand extends Command {
                         "publicChat on/off",
                         "joinLeave on/off",
                         "deathMessages on/off",
-                        "restarts on/off"
+                        "restarts on/off",
+                        "playerCount on/off"
                 ),
                 aliases());
     }
@@ -119,6 +120,21 @@ public class DatabaseCommand extends Command {
                             DATABASE_MANAGER.stopRestartsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Restarts Database Off!")
+                                    .color(Color.CYAN);
+                        })))
+                .then(literal("playercount")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.database.playerCount.enabled = true;
+                            DATABASE_MANAGER.startPlayerCountDatabase();
+                            c.getSource().getEmbedBuilder()
+                                    .title("Player Count Database On!")
+                                    .color(Color.CYAN);
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.database.playerCount.enabled = false;
+                            DATABASE_MANAGER.stopPlayerCountDatabase();
+                            c.getSource().getEmbedBuilder()
+                                    .title("Player Count Database Off!")
                                     .color(Color.CYAN);
                         })));
     }
