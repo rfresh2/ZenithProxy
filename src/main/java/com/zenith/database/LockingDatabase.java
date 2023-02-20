@@ -23,7 +23,7 @@ import static java.util.Objects.nonNull;
  * Base class for databases that require a lock to be acquired before writing
  */
 public abstract class LockingDatabase extends Database {
-    private static final int maxQueueLen = 500;
+    private static final int maxQueueLen = 100;
     protected final Queue<InsertInstance> insertQueue = new ConcurrentLinkedQueue<>();
     private final AtomicBoolean lockAcquired = new AtomicBoolean(false);
     private final RedisClient redisClient;
