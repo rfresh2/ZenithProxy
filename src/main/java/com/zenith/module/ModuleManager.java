@@ -74,7 +74,7 @@ public class ModuleManager {
                 this.modules.forEach(Module::clientTickStarting);
                 this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
                 this.clientTickExecutorService.scheduleAtFixedRate(() -> {
-                    if (Proxy.getInstance().isConnected() && !Proxy.getInstance().isInQueue()) {
+                    if (Proxy.getInstance().isConnected()) {
                         EVENT_BUS.dispatch(new ClientTickEvent());
                     }
                 }, 0, 50L, TimeUnit.MILLISECONDS);

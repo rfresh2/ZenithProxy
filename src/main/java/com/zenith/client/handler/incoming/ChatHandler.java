@@ -39,7 +39,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
                     EVENT_BUS.dispatch(new DeathMessageEvent(messageString, mcTextRoot));
                     if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getText()) && child.getText().equals(CONFIG.authentication.username))) {
                         // todo: known oversight: also detects when we kill someone else
-                        //  need to make a death message parsing helper class
+                        //  need to use death message parsing helper class
                         EVENT_BUS.dispatch(new SelfDeathMessageEvent(messageString));
                     }
                 } else if (messageString.startsWith(("[SERVER]"))) { // server message

@@ -4,11 +4,11 @@
 package com.zenith.database.dto;
 
 
-import com.zenith.database.dto.tables.Chats;
-import com.zenith.database.dto.tables.Connections;
-import com.zenith.database.dto.tables.Deaths;
-import com.zenith.database.dto.tables.Queuewait;
+import com.zenith.database.dto.tables.*;
+import com.zenith.database.dto.tables.records.PlaytimeAllRecord;
 import org.jooq.Catalog;
+import org.jooq.Configuration;
+import org.jooq.Result;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
@@ -22,11 +22,13 @@ import java.util.List;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Public extends SchemaImpl {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public</code>
      */
     public static final Public PUBLIC = new Public();
-    private static final long serialVersionUID = 1L;
+
     /**
      * The table <code>public.chats</code>.
      */
@@ -41,6 +43,38 @@ public class Public extends SchemaImpl {
      * The table <code>public.deaths</code>.
      */
     public final Deaths DEATHS = Deaths.DEATHS;
+
+    /**
+     * The table <code>public.names</code>.
+     */
+    public final Names NAMES = Names.NAMES;
+
+    /**
+     * The table <code>public.playtime_all</code>.
+     */
+    public final PlaytimeAll PLAYTIME_ALL = PlaytimeAll.PLAYTIME_ALL;
+    /**
+     * The table <code>public.queuelength</code>.
+     */
+    public final Queuelength QUEUELENGTH = Queuelength.QUEUELENGTH;
+
+    /**
+     * Call <code>public.playtime_all</code>.
+     */
+    public static Result<PlaytimeAllRecord> PLAYTIME_ALL(
+            Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.zenith.database.dto.tables.PlaytimeAll.PLAYTIME_ALL.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>public.playtime_all</code> as a table.
+     */
+    public static PlaytimeAll PLAYTIME_ALL() {
+        return com.zenith.database.dto.tables.PlaytimeAll.PLAYTIME_ALL.call(
+        );
+    }
 
     /**
      * The table <code>public.queuewait</code>.
@@ -66,6 +100,9 @@ public class Public extends SchemaImpl {
                 Chats.CHATS,
                 Connections.CONNECTIONS,
                 Deaths.DEATHS,
+                Names.NAMES,
+                PlaytimeAll.PLAYTIME_ALL,
+                Queuelength.QUEUELENGTH,
                 Queuewait.QUEUEWAIT);
     }
 }
