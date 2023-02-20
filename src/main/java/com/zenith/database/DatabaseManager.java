@@ -14,6 +14,7 @@ public class DatabaseManager {
     private DeathsDatabase deathsDatabase;
     private ConnectionPool connectionPool;
     private QueueLengthDatabase queueLengthDatabase;
+    private RestartsDatabase restartsDatabase;
     private QueryExecutor queryExecutor;
 
     public DatabaseManager() {
@@ -33,6 +34,9 @@ public class DatabaseManager {
             }
             if (CONFIG.database.queueLength.enabled) {
                 startQueueLengthDatabase();
+            }
+            if (CONFIG.database.restarts.enabled) {
+                startRestartsDatabase();
             }
         } catch (final Exception e) {
             DATABASE_LOG.error("Failed starting databases", e);
@@ -111,6 +115,21 @@ public class DatabaseManager {
     public void stopQueueLengthDatabase() {
         if (nonNull(this.queueLengthDatabase)) {
             this.queueLengthDatabase.stop();
+        }
+    }
+
+    public void startRestartsDatabase() {
+        if (nonNull(this.restartsDatabase)) {
+            this.restartsDatabase.start();
+        } else {
+            this.restartsDatabase = new RestartsDatabase(queryExecutor, new RedisClient());
+            this.restartsDatabase.start();
+        }
+    }
+
+    public void stopRestartsDatabase() {
+        if (nonNull(this.restartsDatabase)) {
+            this.restartsDatabase.stop();
         }
     }
 

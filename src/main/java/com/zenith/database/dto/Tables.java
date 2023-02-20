@@ -40,10 +40,6 @@ public class Tables {
      * The table <code>public.playtime_all</code>.
      */
     public static final PlaytimeAll PLAYTIME_ALL = PlaytimeAll.PLAYTIME_ALL;
-    /**
-     * The table <code>public.queuelength</code>.
-     */
-    public static final Queuelength QUEUELENGTH = Queuelength.QUEUELENGTH;
 
     /**
      * Call <code>public.playtime_all</code>.
@@ -64,7 +60,17 @@ public class Tables {
     }
 
     /**
+     * The table <code>public.queuelength</code>.
+     */
+    public static final Queuelength QUEUELENGTH = Queuelength.QUEUELENGTH;
+
+    /**
      * The table <code>public.queuewait</code>.
      */
     public static final Queuewait QUEUEWAIT = Queuewait.QUEUEWAIT;
+
+    /**
+     * The table <code>public.restarts</code>.
+     */
+    public static final Restarts RESTARTS = Restarts.RESTARTS;
 }

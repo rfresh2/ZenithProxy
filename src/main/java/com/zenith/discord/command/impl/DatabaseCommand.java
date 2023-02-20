@@ -22,7 +22,8 @@ public class DatabaseCommand extends Command {
                         "queueLength on/off",
                         "publicChat on/off",
                         "joinLeave on/off",
-                        "deathMessages on/off"
+                        "deathMessages on/off",
+                        "restarts on/off"
                 ),
                 aliases());
     }
@@ -103,6 +104,21 @@ public class DatabaseCommand extends Command {
                             DATABASE_MANAGER.stopDeathsDatabase();
                             c.getSource().getEmbedBuilder()
                                     .title("Death Messages Database Off!")
+                                    .color(Color.CYAN);
+                        })))
+                .then(literal("restarts")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.database.restarts.enabled = true;
+                            DATABASE_MANAGER.startRestartsDatabase();
+                            c.getSource().getEmbedBuilder()
+                                    .title("Restarts Database On!")
+                                    .color(Color.CYAN);
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.database.restarts.enabled = false;
+                            DATABASE_MANAGER.stopRestartsDatabase();
+                            c.getSource().getEmbedBuilder()
+                                    .title("Restarts Database Off!")
                                     .color(Color.CYAN);
                         })));
     }

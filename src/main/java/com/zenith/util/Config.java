@@ -330,6 +330,7 @@ public final class Config {
         public Chats chats = new Chats();
         public Deaths deaths = new Deaths();
         public QueueLength queueLength = new QueueLength();
+        public Restarts restarts = new Restarts();
         public Lock lock = new Lock();
 
         public static final class QueueWait {
@@ -358,6 +359,10 @@ public final class Config {
         }
 
         public static final class QueueLength {
+            public boolean enabled = true;
+        }
+
+        public static final class Restarts {
             public boolean enabled = true;
         }
     }
