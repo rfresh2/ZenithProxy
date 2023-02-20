@@ -43,6 +43,11 @@ public class ConnectionsDatabase extends LockingDatabase {
         return timeRecordResult.get(0).value1().toInstant();
     }
 
+    @Override
+    public int getMaxQueueLength() {
+        return 300; // higher limit needed here to handle restarts where there are mass disconnects/connects
+    }
+
     @Subscribe
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         writeConnection(Connectiontype.JOIN, event.playerEntry.getName(), event.playerEntry.getId(), Instant.now().atOffset(ZoneOffset.UTC));

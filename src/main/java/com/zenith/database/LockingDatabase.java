@@ -23,7 +23,7 @@ import static java.util.Objects.nonNull;
  * Base class for databases that require a lock to be acquired before writing
  */
 public abstract class LockingDatabase extends Database {
-    private static final int maxQueueLen = 100;
+    private static final int defaultMaxQueueLen = 100;
     protected final Queue<InsertInstance> insertQueue = new ConcurrentLinkedQueue<>();
     private final AtomicBoolean lockAcquired = new AtomicBoolean(false);
     private final RedisClient redisClient;
@@ -43,6 +43,10 @@ public abstract class LockingDatabase extends Database {
      * Then drop all records later than that in our queue
      */
     public abstract Instant getLastEntryTime();
+
+    public int getMaxQueueLength() {
+        return defaultMaxQueueLen;
+    }
 
     /**
      * Sync the current insert queue with what is in the remote database
@@ -178,9 +182,9 @@ public abstract class LockingDatabase extends Database {
 
     public void insert(final Instant instant, final Query query) {
         final int size = insertQueue.size();
-        if (size > maxQueueLen) {
+        if (size > getMaxQueueLength()) {
             synchronized (insertQueue) {
-                for (int i = 0; i < maxQueueLen / 5; i++) {
+                for (int i = 0; i < getMaxQueueLength() / 5; i++) {
                     insertQueue.poll();
                 }
             }
