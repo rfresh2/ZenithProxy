@@ -8,6 +8,7 @@ import org.redisson.api.RLock;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
@@ -195,9 +196,9 @@ public abstract class LockingDatabase extends Database {
     private void processQueue() {
         if (lockAcquired.get() && nonNull(lockExecutorService) && !lockExecutorService.isShutdown()) {
             try {
-                final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
+                final LockingDatabase.InsertInstance insertInstance = insertQueue.peek();
                 if (nonNull(insertInstance)) {
-                    queryExecutor.execute(insertInstance.getQuery());
+                    queryExecutor.execute(() -> Objects.requireNonNull(insertQueue.poll()).getQuery());
                 }
             } catch (final Exception e) {
                 DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);

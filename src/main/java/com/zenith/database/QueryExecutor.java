@@ -16,12 +16,12 @@ public class QueryExecutor {
         this.connectionPoolProvider = connectionPoolProvider;
     }
 
-    public void execute(final Query query) {
+    public void execute(final Supplier<Query> queryProvider) {
         try (final Connection connection = connectionPoolProvider.get().getWriteConnection()) {
             final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
-            context.execute(query);
+            context.execute(queryProvider.get());
         } catch (final Exception e) {
-            DATABASE_LOG.error("Failed executing query: {}", query, e);
+            DATABASE_LOG.error("Failed executing query", e);
             Wait.waitALittleMs(3000);
         }
     }

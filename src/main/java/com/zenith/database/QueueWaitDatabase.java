@@ -86,6 +86,6 @@ public class QueueWaitDatabase extends Database {
                 .set(q.INITIAL_QUEUE_LEN, initialQueueLen)
                 .set(q.START_QUEUE_TIME, initialQueueTime.atOffset(ZoneOffset.UTC)) // must be UTC
                 .set(q.END_QUEUE_TIME, endQueueTime.atOffset(ZoneOffset.UTC));
-        queryExecutor.execute(query);
+        queryExecutor.execute(() -> query);
     }
 }
