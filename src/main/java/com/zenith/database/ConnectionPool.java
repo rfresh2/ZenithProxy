@@ -35,6 +35,24 @@ public final class ConnectionPool {
         readPool = rPool;
     }
 
+    public ConnectionPool(final String customUrl, final String customUser, final String customPass) {
+        writePool = createDataSource(1, customUrl, customUser, customPass);
+        readPool = null;
+    }
+
+    private static HikariDataSource createDataSource(int maxPoolSize, String url, String user, String pass) {
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName("org.postgresql.Driver");
+        config.setJdbcUrl(url);
+        config.setUsername(user);
+        config.setPassword(pass);
+        config.setMaximumPoolSize(maxPoolSize);
+        config.setConnectionTimeout(5000);
+        config.setKeepaliveTime(Duration.ofMinutes(1).toMillis());
+        config.setMaxLifetime(Duration.ofMinutes(5).toMillis());
+        return new HikariDataSource(config);
+    }
+
     private static HikariDataSource createDataSource(int maxPoolSize) {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.postgresql.Driver");
