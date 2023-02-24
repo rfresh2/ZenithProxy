@@ -71,6 +71,14 @@ public class DeathMessageParserTest {
                 .build());
     }
 
+    @Test
+    public void zombiePigmen() {
+        parseTest(DeathMessageTestCase.builder()
+                .rawInput("DeathsBlessing was removed by zombie pigmen wielding Golden Sword")
+                .expectedParseResult(new DeathMessageParseResult("DeathsBlessing", Optional.of(new Killer("zombie pigmen", KillerType.MOB)), Optional.of("Golden Sword"), null))
+                .build());
+    }
+
     private void parseTest(final DeathMessageTestCase testCase) {
         final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(testCase.rawInput);
         assertTrue(deathMessageParseResult.isPresent());

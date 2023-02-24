@@ -92,8 +92,9 @@ public final class DeathMessageSchemaInstance {
                     if (mobSplit.get(0).equals(mcTextWord.replace(".", ""))) {
                         if (mobSplit.size() > 1) {
                             if (iterator.hasNext()) {
-                                final String next = iterator.next();
+                                final String next = iterator.peek();
                                 if (mobSplit.get(1).equals(next.replace(".", ""))) {
+                                    iterator.next();
                                     killer = new Killer(mobType, KillerType.MOB);
                                     continue OUTER_LOOP;
                                 }

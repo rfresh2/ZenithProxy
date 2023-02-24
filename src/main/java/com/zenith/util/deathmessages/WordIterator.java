@@ -28,4 +28,12 @@ public class WordIterator implements Iterator<String> {
             return null;
         }
     }
+
+    public String peek() {
+        try {
+            return words.get(index);
+        } catch (final IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
 }
