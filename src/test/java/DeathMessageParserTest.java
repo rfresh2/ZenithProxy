@@ -63,6 +63,14 @@ public class DeathMessageParserTest {
                 .build());
     }
 
+    @Test
+    public void pvpKillTest() {
+        parseTest(DeathMessageTestCase.builder()
+                .rawInput("Torrentel was violently assassinated by stone_golem_ with an end crystal")
+                .expectedParseResult(new DeathMessageParseResult("Torrentel", Optional.of(new Killer("stone_golem_", KillerType.PLAYER)), Optional.of("end crystal"), null))
+                .build());
+    }
+
     private void parseTest(final DeathMessageTestCase testCase) {
         final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(testCase.rawInput);
         assertTrue(deathMessageParseResult.isPresent());
