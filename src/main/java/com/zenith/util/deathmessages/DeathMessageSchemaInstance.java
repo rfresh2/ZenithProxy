@@ -27,13 +27,6 @@ public final class DeathMessageSchemaInstance {
     }
 
     public Optional<DeathMessageParseResult> parse(final String deathMessageRaw) {
-        /**
-         * todo: we need to rework something to allow for multiple schema matches
-         *  e.g. $v was slain by $m. VS $v was slain by $m wielding $w
-         *  Both will match but we obv want to the longer one
-         *  some edge cases around $m and $w since these can be multiple words
-         */
-
         final WordIterator iterator = new WordIterator(deathMessageRaw);
         String victim = null;
         Killer killer = null;
@@ -45,10 +38,14 @@ public final class DeathMessageSchemaInstance {
             final String mcTextWord = iterator.next();
             if (isNull(mcTextWord)) return Optional.empty();
             if (schemaWord.startsWith("$v")) {
-                if (!userNameValidPattern.matcher(mcTextWord).matches()) {
+                String textWord = mcTextWord;
+                if (schemaWord.endsWith("'s")) { // handle special case with apostrophe
+                    textWord = mcTextWord.replace("'s", "");
+                }
+                if (!userNameValidPattern.matcher(textWord).matches()) {
                     return Optional.empty();
                 } else {
-                    victim = mcTextWord;
+                    victim = textWord;
                 }
             } else if (schemaWord.startsWith("$k")) {
                 if (!userNameValidPattern.matcher(mcTextWord).matches()) {
@@ -67,12 +64,13 @@ public final class DeathMessageSchemaInstance {
                         final String next = iterator.next();
                         if (next.equals(schemaPeek)) {
                             i++;
+                            weapon = weaponWip;
                             continue OUTER_LOOP;
                         } else {
                             weaponWip += " " + next;
                         }
                     }
-                    weapon = weaponWip;
+                    return Optional.empty(); // we didn't match on subsequent words
                 } else {
                     String weaponWip = mcTextWord;
                     while (iterator.hasNext()) {
@@ -81,7 +79,7 @@ public final class DeathMessageSchemaInstance {
                     }
                     weapon = weaponWip;
                 }
-            } else if (schemaWord.contains("$m")) { // iterator doesn't split these out
+            } else if (schemaWord.startsWith("$m")) { // iterator doesn't split these out
                 if (mcTextWord.equals("a") || mcTextWord.equals("an")) {
                     i--; // skips any a or an prefix to a mob type
                     continue;
@@ -98,8 +96,6 @@ public final class DeathMessageSchemaInstance {
                                     killer = new Killer(mobType, KillerType.MOB);
                                     continue OUTER_LOOP;
                                 }
-                            } else {
-                                return Optional.empty();
                             }
                         } else {
                             killer = new Killer(mobType, KillerType.MOB);

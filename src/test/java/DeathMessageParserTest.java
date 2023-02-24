@@ -72,10 +72,34 @@ public class DeathMessageParserTest {
     }
 
     @Test
+    public void weaponInMiddleOfSchemaTest() {
+        parseTest(DeathMessageTestCase.builder()
+                .rawInput("rfresh2 abused Alpha's Stacked 32k's on rfresh_")
+                .expectedParseResult(new DeathMessageParseResult("rfresh_", Optional.of(new Killer("rfresh2", KillerType.PLAYER)), Optional.of("Alpha's Stacked 32k's"), null))
+                .build());
+    }
+
+    @Test
     public void zombiePigmen() {
         parseTest(DeathMessageTestCase.builder()
                 .rawInput("DeathsBlessing was removed by zombie pigmen wielding Golden Sword")
                 .expectedParseResult(new DeathMessageParseResult("DeathsBlessing", Optional.of(new Killer("zombie pigmen", KillerType.MOB)), Optional.of("Golden Sword"), null))
+                .build());
+    }
+
+    @Test
+    public void apostropheTest() {
+        parseTest(DeathMessageTestCase.builder()
+                .rawInput("The Zone claims rfresh2's life.")
+                .expectedParseResult(new DeathMessageParseResult("rfresh2", Optional.empty(), Optional.empty(), null))
+                .build());
+    }
+
+    @Test
+    public void byAZombie() {
+        parseTest(DeathMessageTestCase.builder()
+                .rawInput("April30th1945 was smashed to death by a zombie.")
+                .expectedParseResult(new DeathMessageParseResult("April30th1945", Optional.of(new Killer("zombie", KillerType.MOB)), Optional.empty(), null))
                 .build());
     }
 
