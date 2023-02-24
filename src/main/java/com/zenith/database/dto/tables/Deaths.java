@@ -21,39 +21,59 @@ import java.util.UUID;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Deaths extends TableImpl<DeathsRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.deaths</code>
      */
     public static final Deaths DEATHS = new Deaths();
-    private static final long serialVersionUID = 1L;
+    /**
+     * The column <code>public.deaths.killer_mob</code>.
+     */
+    public final TableField<DeathsRecord, String> KILLER_MOB = createField(DSL.name("killer_mob"), SQLDataType.CLOB, this, "");
+
     /**
      * The column <code>public.deaths.time</code>.
      */
     public final TableField<DeathsRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     /**
      * The column <code>public.deaths.death_message</code>.
      */
     public final TableField<DeathsRecord, String> DEATH_MESSAGE = createField(DSL.name("death_message"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
      * The column <code>public.deaths.victim_player_name</code>.
      */
     public final TableField<DeathsRecord, String> VICTIM_PLAYER_NAME = createField(DSL.name("victim_player_name"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
      * The column <code>public.deaths.victim_player_uuid</code>.
      */
     public final TableField<DeathsRecord, UUID> VICTIM_PLAYER_UUID = createField(DSL.name("victim_player_uuid"), SQLDataType.UUID.nullable(false), this, "");
+
     /**
      * The column <code>public.deaths.killer_player_name</code>.
      */
     public final TableField<DeathsRecord, String> KILLER_PLAYER_NAME = createField(DSL.name("killer_player_name"), SQLDataType.CLOB, this, "");
+
     /**
      * The column <code>public.deaths.killer_player_uuid</code>.
      */
     public final TableField<DeathsRecord, UUID> KILLER_PLAYER_UUID = createField(DSL.name("killer_player_uuid"), SQLDataType.UUID, this, "");
+
     /**
      * The column <code>public.deaths.weapon_name</code>.
      */
     public final TableField<DeathsRecord, String> WEAPON_NAME = createField(DSL.name("weapon_name"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<DeathsRecord> getRecordType() {
+        return DeathsRecord.class;
+    }
 
     private Deaths(Name alias, Table<DeathsRecord> aliased) {
         this(alias, aliased, null);
@@ -88,14 +108,6 @@ public class Deaths extends TableImpl<DeathsRecord> {
         super(child, key, DEATHS);
     }
 
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<DeathsRecord> getRecordType() {
-        return DeathsRecord.class;
-    }
-
     @Override
     public Schema getSchema() {
         return Public.PUBLIC;
@@ -128,11 +140,11 @@ public class Deaths extends TableImpl<DeathsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<OffsetDateTime, String, String, UUID, String, UUID, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<OffsetDateTime, String, String, UUID, String, UUID, String, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

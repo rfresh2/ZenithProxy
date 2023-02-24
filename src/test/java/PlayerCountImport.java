@@ -13,7 +13,6 @@ import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.junit.Test;
 
 import java.io.File;
 import java.sql.Connection;
@@ -27,7 +26,7 @@ import static java.util.Objects.nonNull;
 
 public class PlayerCountImport {
 
-    @Test
+//    @Test
     public void importPlayerCount() {
         final ConnectionPool connectionPool = new ConnectionPool();
         final ObjectMapper objectMapper = new ObjectMapper();
@@ -63,7 +62,7 @@ public class PlayerCountImport {
         }
     }
 
-    @Test
+    //    @Test
     public void importQueues() {
         final ConnectionPool connectionPool = new ConnectionPool();
         final ObjectMapper objectMapper = new ObjectMapper();

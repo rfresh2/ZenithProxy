@@ -8,6 +8,8 @@ import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.util.WhitelistEntry;
 import com.zenith.util.deathmessages.DeathMessageParseResult;
 import com.zenith.util.deathmessages.DeathMessagesParser;
+import com.zenith.util.deathmessages.Killer;
+import com.zenith.util.deathmessages.KillerType;
 import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
 import org.jooq.Result;
@@ -52,7 +54,7 @@ public class DeathsDatabase extends LockingDatabase {
     @Subscribe
     public void handleDeathMessageEvent(DeathMessageEvent event) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org")) return;
-        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(event.mcTextRoot);
+        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(event.mcTextRoot.toRawString());
         deathMessageParseResult.ifPresent(d -> writeDeath(d, event.message, Instant.now().atOffset(ZoneOffset.UTC)));
     }
 
@@ -71,14 +73,23 @@ public class DeathsDatabase extends LockingDatabase {
                     .set(d.VICTIM_PLAYER_NAME, victimEntry.get().getName())
                     .set(d.VICTIM_PLAYER_UUID, victimEntry.get().getId());
             if (deathMessageParseResult.getKiller().isPresent()) {
-                final Optional<PlayerEntry> killerEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getKiller().get());
-                if (!killerEntry.isPresent()) {
-                    DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
-                    return;
+                final Killer killer = deathMessageParseResult.getKiller().get();
+                if (killer.getType().equals(KillerType.PLAYER)) {
+                    final Optional<PlayerEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
+                    if (!killerEntry.isPresent()) {
+                        query
+                                .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName());
+                        DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
+                        return;
+                    } else {
+                        query
+                                .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName())
+                                .set(d.KILLER_PLAYER_UUID, killerEntry.get().getId());
+                    }
+                } else if (killer.getType().equals(KillerType.MOB)) {
+                    query
+                            .set(d.KILLER_MOB, killer.getName());
                 }
-                query
-                        .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName())
-                        .set(d.KILLER_PLAYER_UUID, killerEntry.get().getId());
             }
             if (deathMessageParseResult.getWeapon().isPresent()) {
                 query.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());

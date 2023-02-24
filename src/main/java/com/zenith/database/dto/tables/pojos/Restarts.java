@@ -17,15 +17,19 @@ public class Restarts implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final OffsetDateTime time;
+    private final Integer id;
 
     public Restarts(Restarts value) {
         this.time = value.time;
+        this.id = value.id;
     }
 
     public Restarts(
-            OffsetDateTime time
+            OffsetDateTime time,
+            Integer id
     ) {
         this.time = time;
+        this.id = id;
     }
 
     /**
@@ -35,11 +39,19 @@ public class Restarts implements Serializable {
         return this.time;
     }
 
+    /**
+     * Getter for <code>public.restarts.id</code>.
+     */
+    public Integer getId() {
+        return this.id;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Restarts (");
 
         sb.append(time);
+        sb.append(", ").append(id);
 
         sb.append(")");
         return sb.toString();

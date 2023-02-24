@@ -3,9 +3,9 @@
 # empty lines also ignored
 # keywords:
 #  $v = victim player name
-#  $k = killer player name
-#  $w = weapon name
-#  $m = mob type, e.g. zombie, skeleton. singular mob types will have a preceding "a" or "an".
+#  $k = killer player.
+#  $m = mob type. singular mob types will have a preceding "a" or "an". Mobs can be up to two words, e.g. "zombie pigman".
+#  $w = weapon name or named mob's name
 #  (with) = either "with" or "using"
 #  a(n) = either "a" or "an"
 # keywords are used as wildcard strings that match instance of that type (kind of).

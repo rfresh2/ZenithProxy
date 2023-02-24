@@ -4,6 +4,7 @@
 package com.zenith.database.dto.tables;
 
 
+import com.zenith.database.dto.Keys;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.RestartsRecord;
 import org.jooq.*;
@@ -12,6 +13,8 @@ import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -20,15 +23,29 @@ import java.time.OffsetDateTime;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Restarts extends TableImpl<RestartsRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.restarts</code>
      */
     public static final Restarts RESTARTS = new Restarts();
-    private static final long serialVersionUID = 1L;
+    /**
+     * The column <code>public.restarts.id</code>.
+     */
+    public final TableField<RestartsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+
     /**
      * The column <code>public.restarts.time</code>.
      */
     public final TableField<RestartsRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<RestartsRecord> getRecordType() {
+        return RestartsRecord.class;
+    }
 
     private Restarts(Name alias, Table<RestartsRecord> aliased) {
         this(alias, aliased, null);
@@ -63,17 +80,24 @@ public class Restarts extends TableImpl<RestartsRecord> {
         super(child, key, RESTARTS);
     }
 
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<RestartsRecord> getRecordType() {
-        return RestartsRecord.class;
-    }
-
     @Override
     public Schema getSchema() {
         return Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<RestartsRecord, Integer> getIdentity() {
+        return (Identity<RestartsRecord, Integer>) super.getIdentity();
+    }
+
+    @Override
+    public UniqueKey<RestartsRecord> getPrimaryKey() {
+        return Keys.RESTARTS_PKEY;
+    }
+
+    @Override
+    public List<UniqueKey<RestartsRecord>> getKeys() {
+        return Arrays.<UniqueKey<RestartsRecord>>asList(Keys.RESTARTS_PKEY);
     }
 
     @Override
@@ -103,11 +127,11 @@ public class Restarts extends TableImpl<RestartsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row1 type methods
+    // Row2 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row1<OffsetDateTime> fieldsRow() {
-        return (Row1) super.fieldsRow();
+    public Row2<OffsetDateTime, Integer> fieldsRow() {
+        return (Row2) super.fieldsRow();
     }
 }

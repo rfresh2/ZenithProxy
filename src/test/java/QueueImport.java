@@ -12,7 +12,6 @@ import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.junit.Test;
 import reactor.netty.http.client.HttpClient;
 
 import java.sql.Connection;
@@ -34,7 +33,7 @@ public class QueueImport {
 
     private final HttpClient httpClient = HttpClient.create();
 
-    @Test
+//    @Test
     public void importQueue() {
         final String regularQUrl = "https://2b2t.io/api/queue?range=24h";
         final String prioQUrl = "https://2b2t.io/api/prioqueue?range=24h";

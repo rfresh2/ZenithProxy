@@ -87,7 +87,7 @@ jooq {
     try {
         def inputFile = new File(projectDir.getAbsolutePath() + "/config.json")
         def jsonFile = new JsonSlurper().parseText(inputFile.text)
-        dbUrl = 'jdbc:postgresql://' + jsonFile.database.hostname + ':' + jsonFile.database.port + '/postgres'
+        dbUrl = 'jdbc:postgresql://' + jsonFile.database.host + ':' + jsonFile.database.port + '/postgres'
         dbUser = jsonFile.database.username
         dbPass = jsonFile.database.password
     } catch (Exception ex) {

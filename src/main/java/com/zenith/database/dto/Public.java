@@ -6,10 +6,7 @@ package com.zenith.database.dto;
 
 import com.zenith.database.dto.tables.*;
 import com.zenith.database.dto.tables.records.PlaytimeAllRecord;
-import org.jooq.Catalog;
-import org.jooq.Configuration;
-import org.jooq.Result;
-import org.jooq.Table;
+import org.jooq.*;
 import org.jooq.impl.SchemaImpl;
 
 import java.util.Arrays;
@@ -43,6 +40,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.deaths</code>.
      */
     public final Deaths DEATHS = Deaths.DEATHS;
+
+    /**
+     * The table <code>public.import_death</code>.
+     */
+    public final ImportDeath IMPORT_DEATH = ImportDeath.IMPORT_DEATH;
 
     /**
      * The table <code>public.names</code>.
@@ -106,11 +108,18 @@ public class Public extends SchemaImpl {
     }
 
     @Override
+    public final List<Sequence<?>> getSequences() {
+        return Arrays.<Sequence<?>>asList(
+                Sequences.RESTARTS_ID_SEQ);
+    }
+
+    @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
                 Chats.CHATS,
                 Connections.CONNECTIONS,
                 Deaths.DEATHS,
+                ImportDeath.IMPORT_DEATH,
                 Names.NAMES,
                 Playercount.PLAYERCOUNT,
                 PlaytimeAll.PLAYTIME_ALL,

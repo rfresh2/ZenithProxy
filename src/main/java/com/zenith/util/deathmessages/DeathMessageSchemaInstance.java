@@ -1,10 +1,10 @@
 package com.zenith.util.deathmessages;
 
 import lombok.Data;
-import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
@@ -13,112 +13,114 @@ import static java.util.Objects.isNull;
 public final class DeathMessageSchemaInstance {
     private final String schemaRaw;
     private final List<String> schema;
-    static final List<String> mobTypes = asList(
-            "zombie pigman",
-            "zombie pigmen",
-            "creeper",
-            "wither",
-            "zombie",
-            "slime",
-            "slime cube",
-            "magma cube",
-            "zombies",
-            "skeletons",
-            "skeleton",
-            "spider",
-            "skeletal warrior",
-            "endermite",
-            "enderman",
-            "wolf",
-            "witch",
-            "zombie villager",
-            "ghast",
-            "husk",
-            "ender dragon",
-            "blaze",
-            "elder guardian",
-            "polar bear",
-            "guardian",
-            "silverfish",
-            "vindicator",
-            "vex",
-            "shulker",
-            "iron golem",
-            "strays",
-            "llama",
-            "wolves"
-    );
+    private static final Pattern userNameValidPattern = Pattern.compile("[A-Za-z0-9_]{1,16}");
+    private final List<String> mobs;
 
-    public DeathMessageSchemaInstance(final String schemaRaw) {
+    public DeathMessageSchemaInstance(final String schemaRaw, final List<String> mobs) {
         this.schemaRaw = schemaRaw;
-        this.schema = asList(schemaRaw.split(" "));
+        this.schema = spaceSplit(schemaRaw);
+        this.mobs = mobs;
     }
 
-    public Optional<DeathMessageParseResult> parse(final MCTextRoot mcTextRoot) {
-        final MCTextRootIterator iterator = new MCTextRootIterator(mcTextRoot);
+    public static List<String> spaceSplit(final String in) {
+        return asList(in.split(" "));
+    }
+
+    public Optional<DeathMessageParseResult> parse(final String deathMessageRaw) {
+        /**
+         * todo: we need to rework something to allow for multiple schema matches
+         *  e.g. $v was slain by $m. VS $v was slain by $m wielding $w
+         *  Both will match but we obv want to the longer one
+         *  some edge cases around $m and $w since these can be multiple words
+         */
+
+        final WordIterator iterator = new WordIterator(deathMessageRaw);
         String victim = null;
-        String killer = null;
+        Killer killer = null;
         String weapon = null;
+
+        OUTER_LOOP:
         for (int i = 0; i < schema.size(); i++) {
             final String schemaWord = schema.get(i);
-            final MCTextWord mcTextWord = iterator.next();
-            if (isNull(mcTextWord)) break;
+            final String mcTextWord = iterator.next();
+            if (isNull(mcTextWord)) return Optional.empty();
             if (schemaWord.startsWith("$v")) {
-                if (!mcTextWord.isKeyword) {
+                if (!userNameValidPattern.matcher(mcTextWord).matches()) {
                     return Optional.empty();
                 } else {
-                    victim = mcTextWord.word;
+                    victim = mcTextWord;
                 }
             } else if (schemaWord.startsWith("$k")) {
-                if (!mcTextWord.isKeyword) {
+                if (!userNameValidPattern.matcher(mcTextWord).matches()) {
                     return Optional.empty();
                 } else {
-                    killer = mcTextWord.word;
+                    killer = new Killer(mcTextWord, KillerType.PLAYER);
                 }
             } else if (schemaWord.startsWith("$w")) {
-                if (!mcTextWord.isKeyword) {
-                    return Optional.empty();
+                // we want to match just about any character and multiple words here
+                // if there are additional schema words after $w we want to ensure we match those too though
+                if (i + 1 < schema.size()) {
+                    // peek next word and match any words until then
+                    final String schemaPeek = schema.get(i + 1);
+                    String weaponWip = mcTextWord;
+                    while (iterator.hasNext()) {
+                        final String next = iterator.next();
+                        if (next.equals(schemaPeek)) {
+                            i++;
+                            continue OUTER_LOOP;
+                        } else {
+                            weaponWip += " " + next;
+                        }
+                    }
+                    weapon = weaponWip;
                 } else {
-                    weapon = mcTextWord.word;
+                    String weaponWip = mcTextWord;
+                    while (iterator.hasNext()) {
+                        final String next = iterator.next();
+                        weaponWip += " " + next;
+                    }
+                    weapon = weaponWip;
                 }
             } else if (schemaWord.contains("$m")) { // iterator doesn't split these out
-                if (mcTextWord.isKeyword) {
-                    return Optional.empty();
-                } else {
-                    if (mcTextWord.word.equals("a") || mcTextWord.word.equals("an")) {
-                        i--; // skips any a or an prefix to a mob type
-                        continue;
-                    }
-                    boolean found = false;
-                    for (String mobType : mobTypes) {
-                        // mcTextWord.word can have multiple spaces here - special parsing case
-                        if (mcTextWord.word.startsWith(mobType)) {
-                            found = true;
-                            break;
+                if (mcTextWord.equals("a") || mcTextWord.equals("an")) {
+                    i--; // skips any a or an prefix to a mob type
+                    continue;
+                }
+
+                for (final String mobType : this.mobs) {
+                    final List<String> mobSplit = spaceSplit(mobType);
+                    if (mobSplit.get(0).equals(mcTextWord.replace(".", ""))) {
+                        if (mobSplit.size() > 1) {
+                            if (iterator.hasNext()) {
+                                final String next = iterator.next();
+                                if (mobSplit.get(1).equals(next.replace(".", ""))) {
+                                    killer = new Killer(mobType, KillerType.MOB);
+                                    continue OUTER_LOOP;
+                                }
+                            } else {
+                                return Optional.empty();
+                            }
+                        } else {
+                            killer = new Killer(mobType, KillerType.MOB);
+                            continue OUTER_LOOP;
                         }
-                    }
-                    if (!found) {
-                        return Optional.empty();
                     }
                 }
+                return Optional.empty();
             } else {
-                if (mcTextWord.isKeyword) {
-                    return Optional.empty();
+                if (schemaWord.equals("a(n)")) {
+                    // special case for grammar
+                    if (!(mcTextWord.equals("a") || mcTextWord.equals("an"))) {
+                        return Optional.empty();
+                    }
+                } else if (schemaWord.equals("(with)")) {
+                    // special case for "with"/"using" alt shorthand
+                    if (!(mcTextWord.equals("with") || mcTextWord.equals("using"))) {
+                        return Optional.empty();
+                    }
                 } else {
-                    if (schemaWord.equals("a(n)")) {
-                        // special case for grammar
-                        if (!(mcTextWord.word.equals("a") || mcTextWord.word.equals("an"))) {
-                            return Optional.empty();
-                        }
-                    } else if (schemaWord.equals("(with)")) {
-                        // special case for "with"/"using" alt shorthand
-                        if (!(mcTextWord.word.equals("with") || mcTextWord.word.equals("using"))) {
-                            return Optional.empty();
-                        }
-                    } else {
-                        if (!mcTextWord.word.equals(schemaWord)) {
-                            return Optional.empty();
-                        }
+                    if (!mcTextWord.equals(schemaWord)) {
+                        return Optional.empty();
                     }
                 }
             }
