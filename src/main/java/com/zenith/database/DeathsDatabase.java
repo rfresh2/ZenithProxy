@@ -96,11 +96,7 @@ public class DeathsDatabase extends LockingDatabase {
             }
             this.insert(time.toInstant(), query);
         } catch (final Exception e) {
-            if (e.getMessage().contains("violates exclusion constraint") || e.getMessage().contains("deadlock detected")) {
-                // expected due to multiple proxies writing the same death
-            } else {
-                DATABASE_LOG.debug("Error writing death: {}", rawDeathMessage, e);
-            }
+            DATABASE_LOG.error("Error writing death: {}", rawDeathMessage, e);
         }
     }
 
