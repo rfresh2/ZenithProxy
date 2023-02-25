@@ -1,5 +1,6 @@
 package com.zenith.util.deathmessages;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +35,14 @@ public class WordIterator implements Iterator<String> {
             return words.get(index);
         } catch (final IndexOutOfBoundsException e) {
             return null;
+        }
+    }
+
+    public List<String> peekToEnd() {
+        try {
+            return words.subList(index, words.size());
+        } catch (final IndexOutOfBoundsException e) {
+            return Collections.emptyList();
         }
     }
 }

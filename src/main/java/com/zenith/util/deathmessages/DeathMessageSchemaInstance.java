@@ -62,7 +62,7 @@ public final class DeathMessageSchemaInstance {
                     String weaponWip = mcTextWord;
                     while (iterator.hasNext()) {
                         final String next = iterator.next();
-                        if (next.equals(schemaPeek)) {
+                        if (next.equals(schemaPeek) && iterator.peekToEnd().stream().noneMatch(w -> w.equals(schemaPeek))) {
                             i++;
                             weapon = weaponWip;
                             continue OUTER_LOOP;

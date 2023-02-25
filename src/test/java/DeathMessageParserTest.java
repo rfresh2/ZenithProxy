@@ -106,6 +106,12 @@ public class DeathMessageParserTest {
                 "UhhMagnum2", "zombie", KillerType.MOB, "Air");
     }
 
+    @Test
+    public void namedWeaponWithSameWordAsInSchema() {
+        parseTest("Warske abused Gysdall on Top! on Atket_",
+                "Atket_", "Warske", KillerType.PLAYER, "Gysdall on Top!");
+    }
+
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(rawInput);
         assertTrue(deathMessageParseResult.isPresent());
