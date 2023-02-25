@@ -80,7 +80,6 @@ public class DeathsDatabase extends LockingDatabase {
                         query
                                 .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName());
                         DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
-                        return;
                     } else {
                         query
                                 .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName())
