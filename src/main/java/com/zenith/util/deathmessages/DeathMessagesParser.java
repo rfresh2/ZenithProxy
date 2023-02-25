@@ -8,6 +8,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class DeathMessagesParser {
             mobsTemp = lines.stream()
                     .filter(l -> !l.isEmpty()) //any empty lines
                     .filter(l -> !l.startsWith("#")) //comments
+                    .sorted(Comparator.comparingInt(String::length).reversed())
                     .collect(Collectors.toList());
         } catch (final Exception e) {
             CLIENT_LOG.error("Error initializing mobs for death message parsing", e);
@@ -39,6 +41,7 @@ public class DeathMessagesParser {
             schemaInstancesTemp = lines.stream()
                     .filter(l -> !l.isEmpty()) //any empty lines
                     .filter(l -> !l.startsWith("#")) //comments
+                    .sorted(Comparator.comparingInt(String::length).reversed())
                     .map(l -> new DeathMessageSchemaInstance(l, mobs))
                     .collect(Collectors.toList());
 

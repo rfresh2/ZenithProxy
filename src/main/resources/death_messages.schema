@@ -11,6 +11,10 @@
 # keywords are used as wildcard strings that match instance of that type (kind of).
 
 # pvp messages
+$k separated $v (with) their bare hands.
+$k reduced $v into a bloody meat pile with just fists.
+$k tore $v apart (with) their fists.
+$v was killed by $k using magic.
 $v was stung to death whilst fighting $k
 $v was turned into red dust by $k with a(n) $w
 $v was destroyed by $k with a(n) $w
@@ -37,6 +41,7 @@ $k ruined $v (with) $w
 $v was blown up by $k (with) a(n) $w
 $k chopped $v up (with) $w
 $v was violently assassinated by $k with a(n) $w
+$k assassinated $v using just their hands.
 $k assassinated $v (with) $w
 $k liquified $v (with) $w
 $v fell into the void whilst fighting $k
@@ -73,9 +78,6 @@ $v was pushed off of vines by $k
 $k demolished $v (with) $w
 $k broke $v (with) $w
 $k pummeled $v to death (with) $w
-$k separated $v (with) their bare hands.
-$k reduced $v into a bloody meat pile with just fists.
-$k tore $v apart (with) their fists.
 $v tripped, broke a bone or died somehow inside lava whilst fighting $k
 $v burned apart whilst fighting $k
 $k put their fists inside $v violently.
@@ -85,7 +87,6 @@ $k shoved a fist down $v's throat.
 $k fisted $v to death.
 $v drowned in lava whilst fighting $k
 $v suffocated in water whilst fighting $k
-$k assassinated $v using just their hands.
 $v died inside lava somehow whilst fighting $k
 $v was reduced to lava by lava whilst fighting $k
 $v became lava whilst fighting $k
@@ -93,51 +94,74 @@ $v drowned whilst fighting $k
 $v smashed themselves against a cactus and died trying to escape $k
 $v was pushed off a ladder by $k
 $v couldn't swim up quick enough whilst fighting $k
-$v was killed by $k using magic.
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
 $v was killed to death by $m wielding $w
 $v was killed to death by $m.
+$v was killed by $m named $w wielding $w
 $v was killed by $m named $w
+$v was killed by $m wielding $w
+$v was killed by $m.
+$v was smashed to death by $m wielding $w
 $v was smashed to death by $m.
 $v was fisted to death by $m.
+$v was consumed by $m wielding $w
 $v was consumed by $m.
+$v was destroyed by $m wielding $w
 $v was destroyed by $m.
+$v was demolished by $m wielding $w
 $v was demolished by $m.
+$v was assassinated by $m wielding $w
 $v was assassinated by $m.
-$v was smashed to death by $m wielding $w
-$v was killed by $m.
 $v was stung to death by $m.
 $v was deconstructed by $m wielding $w
+$v was deconstructed by $m.
 $v was pummeled into multiple parts by $m and died slowly.
 $v couldn't outrun $m.
 $v was shot by $m and died instantly.
-$v was ripped apart by $m and instantly died.
 $v was ripped apart by $m wielding $w and instantly died.
+$v was ripped apart by $m and instantly died.
 $v was beaten to death by $m wielding $w
-$v was consumed by $m.
+$v was beaten to death by $m.
+$v was ripped and smashed apart by $m wielding $w
 $v was ripped and smashed apart by $m.
+$v was bombarded apart by $m wielding $w
 $v was bombarded apart by $m.
 $v was gored to death by $m wielding $w
+$v was gored to death by $m.
+$v was smashed into a boneless flesh pile by $m wielding $w
 $v was smashed into a boneless flesh pile by $m.
+$v was messed up by $m wielding $w
 $v was messed up by $m.
+$v was murdered by $m wielding $w
 $v was murdered by $m.
 $v was slashed into gibs by $m wielding $w
+$v was slashed into gibs by $m.
+$v was trampled to death by $m wielding $w
 $v was trampled to death by $m.
 $v was removed by $m wielding $w
+$v was removed by $m.
+$v was raided to death by $m wielding $w
 $v was raided to death by $m.
+$v was violently severed into pieces by $m wielding $w
 $v was violently severed into pieces by $m.
 $v was gibbed apart by $m punches.
 $v was pummeled into multiple parts by $m wielding $w and died slowly.
 $v was pummeled into multiple parts by $m and died slowly.
 $v went inside $m and died.
+$v was mauled to pieces by $m wielding $w
 $v was mauled to pieces by $m.
 $v was slain by $m wielding $w
+$v was slain by $m.
 $v was blown to pieces by $m.
+$v was torn apart by $m wielding $w
 $v was torn apart by $m.
+$v was carefully killed by $m wielding $w
 $v was carefully killed by $m.
+$v was brutally ripped apart by $m wielding $w
 $v was brutally ripped apart by $m.
+$v was obliterated by $m wielding $w
 $v was obliterated by $m.
 $v was beaten into meaty pulp by $m wielding $w and died painfully.
 $v was beaten into meaty pulp by $m and died painfully.
@@ -146,23 +170,30 @@ $v merged with $m and died slowly.
 $v suffocated inside $m.
 $v was bitten to death by $m.
 $v was turned into a spider nest.
+$v was reduced to dust by $m wielding $w
 $v was reduced to dust by $m.
 $v was reduced into thick paste by $m wielding $m
+$v was reduced into thick paste by $m.
 $v was eaten by $m wielding $w
-$v was reduced to dust by $m.
+$v was eaten by $m.
 $v was bombarded into a fiery death by $m.
+$v was stretched to death by $m wielding $w
 $v was stretched to death by $m.
-$v was reduced into thick paste by $m wielding $w
 $v melted inside $m.
+$v was crushed by $m wielding $w
 $v was crushed by $m.
 $v was devoured by $m.
+$v was turned into ash by $m wielding $w
 $v was turned into ash by $m.
 $v fought with $m and died.
+$v was maimed by $m wielding $w
 $v was maimed by $m.
 $v was cursed to slow death by $m.
 $v was nibbled to death by $m.
 $v was stomped into mince by $m.
+$v was mauled to death by $m wielding $w
 $v was mauled to death by $m.
+$v was melted apart by $m wielding $w
 $v was melted apart by $m.
 
 # suicides

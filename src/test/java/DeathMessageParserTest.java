@@ -1,15 +1,12 @@
 import com.zenith.util.deathmessages.DeathMessageParseResult;
 import com.zenith.util.deathmessages.DeathMessagesParser;
-import com.zenith.util.deathmessages.Killer;
 import com.zenith.util.deathmessages.KillerType;
-import lombok.Builder;
-import lombok.Data;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static java.util.Objects.nonNull;
+import static org.junit.Assert.*;
 
 public class DeathMessageParserTest {
 
@@ -17,104 +14,115 @@ public class DeathMessageParserTest {
 
     @Test
     public void basicSuicide() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("LordYes tripped too hard and died.")
-                .expectedParseResult(new DeathMessageParseResult("LordYes", Optional.empty(), Optional.empty(), null))
-                .build());
+        parseTest("LordYes tripped too hard and died.", "LordYes", null, null, null);
     }
 
     @Test
     public void witheredAway() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("ClosetGirl withered away.")
-                .expectedParseResult(new DeathMessageParseResult("ClosetGirl", Optional.empty(), Optional.empty(), null))
-                .build());
+        parseTest("ClosetGirl withered away.", "ClosetGirl", null, null, null);
     }
 
     @Test
     public void pvpKillerAndWeapon() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("FarGaming was turned into bloody rain by zyzz_motivation with an end crystal")
-                .expectedParseResult(new DeathMessageParseResult("FarGaming", Optional.of(new Killer("zyzz_motivation", KillerType.PLAYER)), Optional.of("end crystal"), null))
-                .build());
+        parseTest("FarGaming was turned into bloody rain by zyzz_motivation with an end crystal",
+                "FarGaming", "zyzz_motivation", KillerType.PLAYER, "end crystal");
     }
 
     @Test
     public void pvpKillerReversedAndNamedWeapon() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("BepSkra assassinated YoMomBroYo with Moving ur stash")
-                .expectedParseResult(new DeathMessageParseResult("YoMomBroYo", Optional.of(new Killer("BepSkra", KillerType.PLAYER)), Optional.of("Moving ur stash"), null))
-                .build());
+        parseTest("BepSkra assassinated YoMomBroYo with Moving ur stash",
+                "YoMomBroYo", "BepSkra", KillerType.PLAYER, "Moving ur stash");
     }
 
     @Test
     public void mobKill() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("Cap7ainDes7roy was killed to death by a creeper.")
-                .expectedParseResult(new DeathMessageParseResult("Cap7ainDes7roy", Optional.of(new Killer("creeper", KillerType.MOB)), Optional.empty(), null))
-                .build());
+        parseTest("Cap7ainDes7roy was killed to death by a creeper.",
+                "Cap7ainDes7roy", "creeper", KillerType.MOB, null);
     }
 
     @Test
     public void namedMobKill() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("SpaceV0id was killed by a wither named New? Need Gear? Discord.gg/2BSupply")
-                .expectedParseResult(new DeathMessageParseResult("SpaceV0id", Optional.of(new Killer("wither", KillerType.MOB)), Optional.of("New? Need Gear? Discord.gg/2BSupply"), null))
-                .build());
+        parseTest("SpaceV0id was killed by a wither named New? Need Gear? Discord.gg/2BSupply",
+                "SpaceV0id", "wither", KillerType.MOB, "New? Need Gear? Discord.gg/2BSupply");
     }
 
     @Test
     public void pvpKillTest() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("Torrentel was violently assassinated by stone_golem_ with an end crystal")
-                .expectedParseResult(new DeathMessageParseResult("Torrentel", Optional.of(new Killer("stone_golem_", KillerType.PLAYER)), Optional.of("end crystal"), null))
-                .build());
+        parseTest("Torrentel was violently assassinated by stone_golem_ with an end crystal",
+                "Torrentel", "stone_golem_", KillerType.PLAYER, "end crystal");
     }
 
     @Test
     public void weaponInMiddleOfSchemaTest() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("rfresh2 abused Alpha's Stacked 32k's on rfresh_")
-                .expectedParseResult(new DeathMessageParseResult("rfresh_", Optional.of(new Killer("rfresh2", KillerType.PLAYER)), Optional.of("Alpha's Stacked 32k's"), null))
-                .build());
+        parseTest("rfresh2 abused Alpha's Stacked 32k's on rfresh_",
+                "rfresh_", "rfresh2", KillerType.PLAYER, "Alpha's Stacked 32k's");
     }
 
     @Test
     public void zombiePigmen() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("DeathsBlessing was removed by zombie pigmen wielding Golden Sword")
-                .expectedParseResult(new DeathMessageParseResult("DeathsBlessing", Optional.of(new Killer("zombie pigmen", KillerType.MOB)), Optional.of("Golden Sword"), null))
-                .build());
+        parseTest("DeathsBlessing was removed by zombie pigmen wielding Golden Sword",
+                "DeathsBlessing", "zombie pigmen", KillerType.MOB, "Golden Sword");
+    }
+
+    @Test
+    public void zombiePigman() {
+        parseTest("herrShimon was assassinated by a zombie pigman wielding Golden Sword",
+                "herrShimon", "zombie pigman", KillerType.MOB, "Golden Sword");
     }
 
     @Test
     public void apostropheTest() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("The Zone claims rfresh2's life.")
-                .expectedParseResult(new DeathMessageParseResult("rfresh2", Optional.empty(), Optional.empty(), null))
-                .build());
+        parseTest("The Zone claims rfresh2's life.",
+                "rfresh2", null, null, null);
     }
 
     @Test
     public void byAZombie() {
-        parseTest(DeathMessageTestCase.builder()
-                .rawInput("April30th1945 was smashed to death by a zombie.")
-                .expectedParseResult(new DeathMessageParseResult("April30th1945", Optional.of(new Killer("zombie", KillerType.MOB)), Optional.empty(), null))
-                .build());
+        parseTest("April30th1945 was smashed to death by a zombie.",
+                "April30th1945", "zombie", KillerType.MOB, null);
     }
 
-    private void parseTest(final DeathMessageTestCase testCase) {
-        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(testCase.rawInput);
+    @Test
+    public void zombieVillager() {
+        parseTest("SandyHookVictim was beaten to death by a zombie villager.",
+                "SandyHookVictim", "zombie villager", KillerType.MOB, null);
+    }
+
+    @Test
+    public void stray() {
+        parseTest("Arzexz was assassinated by a stray.",
+                "Arzexz", "stray", KillerType.MOB, null);
+    }
+
+    @Test
+    public void mobTrampleTest() {
+        parseTest("Modcrafter72 was trampled to death by a zombie wielding Iron Shovel",
+                "Modcrafter72", "zombie", KillerType.MOB, "Iron Shovel");
+    }
+
+    @Test
+    public void namedAndWieldingMob() {
+        parseTest("UhhMagnum2 was killed by a zombie named Free kits .gg/5ZscrDAsp7 wielding Air",
+                "UhhMagnum2", "zombie", KillerType.MOB, "Air");
+    }
+
+    private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
+        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(rawInput);
         assertTrue(deathMessageParseResult.isPresent());
-        assertEquals(deathMessageParseResult.get().getVictim(), testCase.expectedParseResult.getVictim());
-        assertEquals(deathMessageParseResult.get().getKiller(), testCase.expectedParseResult.getKiller());
-        assertEquals(deathMessageParseResult.get().getWeapon(), testCase.expectedParseResult.getWeapon());
-    }
+        assertEquals(deathMessageParseResult.get().getVictim(), victim);
+        if (nonNull(killerName)) {
+            assertTrue(deathMessageParseResult.get().getKiller().isPresent());
+            assertEquals(deathMessageParseResult.get().getKiller().get().getName(), killerName);
+            assertEquals(deathMessageParseResult.get().getKiller().get().getType(), killerType);
+        } else {
+            assertFalse(deathMessageParseResult.get().getKiller().isPresent());
+        }
+        if (nonNull(weapon)) {
+            assertTrue(deathMessageParseResult.get().getWeapon().isPresent());
+            assertEquals(deathMessageParseResult.get().getWeapon().get(), weapon);
+        } else {
+            assertFalse(deathMessageParseResult.get().getWeapon().isPresent());
+        }
 
-    @Data
-    @Builder
-    private static class DeathMessageTestCase {
-        private final String rawInput;
-        private final DeathMessageParseResult expectedParseResult;
     }
 }

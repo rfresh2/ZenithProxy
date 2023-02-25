@@ -85,7 +85,7 @@ public final class DeathMessageSchemaInstance {
                     continue;
                 }
 
-                for (final String mobType : this.mobs) {
+                for (final String mobType : this.mobs) { // only works if mobs is sorted by longest first :/
                     final List<String> mobSplit = spaceSplit(mobType);
                     if (mobSplit.get(0).equals(mcTextWord.replace(".", ""))) {
                         if (mobSplit.size() > 1) {
@@ -122,7 +122,8 @@ public final class DeathMessageSchemaInstance {
                 }
             }
         }
-        if (isNull(victim)) return Optional.empty(); // we shouldn't ever reach this but just in case
+        if (isNull(victim) || iterator.hasNext())
+            return Optional.empty(); // we shouldn't ever reach this but just in case
         return Optional.of(new DeathMessageParseResult(victim, Optional.ofNullable(killer), Optional.ofNullable(weapon), this));
     }
 }
