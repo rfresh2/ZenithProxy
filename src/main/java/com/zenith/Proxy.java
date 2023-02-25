@@ -98,7 +98,7 @@ public class Proxy {
         try {
             saveConfig();
             if (CONFIG.server.extra.timeout.enable) {
-                long millis = CONFIG.server.extra.timeout.millis;
+                long millis = CONFIG.server.extra.timeout.ms;
                 long interval = CONFIG.server.extra.timeout.interval;
                 clientTimeoutExecutorService.scheduleAtFixedRate(() -> {
                     ServerConnection currentPlayer = this.currentPlayer.get();

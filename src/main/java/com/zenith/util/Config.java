@@ -271,7 +271,7 @@ public final class Config {
 
             public static final class Timeout {
                 public boolean enable = true;
-                public long millis = 30000L;
+                public long ms = 30000L;
                 public long interval = 100L;
             }
         }
