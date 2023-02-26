@@ -114,14 +114,17 @@ $v was demolished by $m wielding $w
 $v was demolished by $m.
 $v was assassinated by $m wielding $w
 $v was assassinated by $m.
+$v was stung to death by $m wielding $w
 $v was stung to death by $m.
 $v was deconstructed by $m wielding $w
 $v was deconstructed by $m.
 $v was pummeled into multiple parts by $m and died slowly.
 $v couldn't outrun $m.
+$v was shot by $m wielding $w and died instantly.
 $v was shot by $m and died instantly.
 $v was ripped apart by $m wielding $w and instantly died.
 $v was ripped apart by $m and instantly died.
+$v was ripped apart by $m.
 $v was beaten to death by $m wielding $w
 $v was beaten to death by $m.
 $v was ripped and smashed apart by $m wielding $w
@@ -172,7 +175,7 @@ $v was bitten to death by $m.
 $v was turned into a spider nest.
 $v was reduced to dust by $m wielding $w
 $v was reduced to dust by $m.
-$v was reduced into thick paste by $m wielding $m
+$v was reduced into thick paste by $m wielding $w
 $v was reduced into thick paste by $m.
 $v was eaten by $m wielding $w
 $v was eaten by $m.
@@ -195,6 +198,7 @@ $v was mauled to death by $m wielding $w
 $v was mauled to death by $m.
 $v was melted apart by $m wielding $w
 $v was melted apart by $m.
+$v tamed $m to kill themselves.
 
 # suicides
 $v died stuck on a cactus.
@@ -258,6 +262,7 @@ $v suffocated.
 $v exploded into gibs playing with fireworks.
 # is living magma a mob?
 $v was consumed by living magma.
+$v was boned to death by $w
 $v was boned to death.
 $v was violently separated by explosives.
 $v was stung to death by cactus.
@@ -283,3 +288,9 @@ $v was hit by a dispensed arrow and died.
 $v died by mysterious means.
 $v died from unknown causes.
 $v was crushed by an anvil.
+$v was smashed by an anvil.
+$v died randomly.
+$v died suddenly.
+$v was fireballed to death.
+$v was hit too hard by a fireball.
+$v fireballed themselves.

@@ -85,6 +85,7 @@ public final class DeathMessageSchemaInstance {
                     continue;
                 }
 
+                // this entire loop is horrifying
                 for (final String mobType : this.mobs) { // only works if mobs is sorted by longest first :/
                     final List<String> mobSplit = spaceSplit(mobType);
                     if (mobSplit.get(0).equals(mcTextWord.replace(".", ""))) {
@@ -92,9 +93,21 @@ public final class DeathMessageSchemaInstance {
                             if (iterator.hasNext()) {
                                 final String next = iterator.peek();
                                 if (mobSplit.get(1).equals(next.replace(".", ""))) {
-                                    iterator.next();
-                                    killer = new Killer(mobType, KillerType.MOB);
-                                    continue OUTER_LOOP;
+                                    if (mobSplit.size() > 2) {
+                                        if (iterator.hasNext()) {
+                                            final String nextNext = iterator.peek2();
+                                            if (mobSplit.get(2).equals(nextNext.replace(".", ""))) {
+                                                iterator.next();
+                                                iterator.next();
+                                                killer = new Killer(mobType, KillerType.MOB);
+                                                continue OUTER_LOOP;
+                                            }
+                                        }
+                                    } else {
+                                        iterator.next();
+                                        killer = new Killer(mobType, KillerType.MOB);
+                                        continue OUTER_LOOP;
+                                    }
                                 }
                             }
                         } else {

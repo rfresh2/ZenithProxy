@@ -118,7 +118,7 @@ public class ConnectionsImport {
     }
 
 
-    static class DiscordMain {
+    private static class DiscordMain {
         @JsonProperty("messages")
         public List<DiscordMessage> messages;
 
@@ -126,14 +126,14 @@ public class ConnectionsImport {
 
     @Data
     @Builder
-    static class ParsedConnection {
+    private static class ParsedConnection {
         private final String username;
         private final UUID uuid;
         private final Instant time;
         private final Connectiontype connectiontype;
     }
 
-    static class DiscordMessage {
+    private static class DiscordMessage {
         @JsonProperty("timestamp")
         public String timestamp;
         @JsonProperty("content")
@@ -144,7 +144,7 @@ public class ConnectionsImport {
         public List<DiscordMessageEmbed> embeds;
     }
 
-    static class DiscordMessageEmbed {
+    private static class DiscordMessageEmbed {
         @JsonProperty("description")
         public String description;
         @JsonProperty("color")
@@ -155,13 +155,13 @@ public class ConnectionsImport {
         public DiscordEmbedThumbnail thumbnail;
     }
 
-    static class DiscordMessageAuthor {
+    private static class DiscordMessageAuthor {
         @JsonProperty("id")
         public String id;
 
     }
 
-    static class DiscordEmbedThumbnail {
+    private static class DiscordEmbedThumbnail {
         @JsonProperty("url")
         public String url;
     }

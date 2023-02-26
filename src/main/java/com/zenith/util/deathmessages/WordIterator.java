@@ -38,6 +38,14 @@ public class WordIterator implements Iterator<String> {
         }
     }
 
+    public String peek2() {
+        try {
+            return words.get(index + 1);
+        } catch (final IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
     public List<String> peekToEnd() {
         try {
             return words.subList(index, words.size());

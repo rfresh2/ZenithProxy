@@ -186,14 +186,14 @@ public class ChatImport {
 
     @Data
     @Builder
-    static class ParsedChat {
+    private static class ParsedChat {
         private final String username;
         private final UUID uuid;
         private final Instant time;
         private final String chat;
     }
 
-    static class DiscordMessage {
+    private static class DiscordMessage {
         @JsonProperty("timestamp")
         public String timestamp;
         @JsonProperty("content")
@@ -205,7 +205,7 @@ public class ChatImport {
     }
 
     @ToString
-    static class DiscordMessageEmbed {
+    private static class DiscordMessageEmbed {
         @JsonProperty("description")
         public String description;
         @JsonProperty("color")
@@ -216,13 +216,13 @@ public class ChatImport {
         public DiscordEmbedThumbnail thumbnail;
     }
 
-    static class DiscordMessageAuthor {
+    private static class DiscordMessageAuthor {
         @JsonProperty("id")
         public String id;
 
     }
 
-    static class DiscordEmbedThumbnail {
+    private static class DiscordEmbedThumbnail {
         @JsonProperty("url")
         public String url;
     }

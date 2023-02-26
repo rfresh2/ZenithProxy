@@ -107,7 +107,7 @@ public class PlayerCountImport {
         return Integer.parseInt(value.split(" ")[0]);
     }
 
-    static class DiscordMain {
+    private static class DiscordMain {
         @JsonProperty("messages")
         public List<DiscordMessage> messages;
 
@@ -115,20 +115,20 @@ public class PlayerCountImport {
 
     @Data
     @Builder
-    static class ParsedPlayerCount {
+    private static class ParsedPlayerCount {
         private final Integer count;
         private final Instant time;
     }
 
     @Data
     @Builder
-    static class ParsedQueueStatus {
+    private static class ParsedQueueStatus {
         private final Integer regular;
         private final Integer prio;
         private final Instant time;
     }
 
-    static class DiscordMessage {
+    private static class DiscordMessage {
         @JsonProperty("timestamp")
         public String timestamp;
         @JsonProperty("author")
@@ -138,7 +138,7 @@ public class PlayerCountImport {
     }
 
     @ToString
-    static class DiscordMessageEmbed {
+    private static class DiscordMessageEmbed {
         @JsonProperty("timestamp")
         public String timestamp;
         @JsonProperty("author")
@@ -147,25 +147,25 @@ public class PlayerCountImport {
         public List<DiscordMessageEmbedField> fields;
     }
 
-    static class DiscordMessageEmbedField {
+    private static class DiscordMessageEmbedField {
         @JsonProperty("name")
         public String name;
         @JsonProperty("value")
         public String value;
     }
 
-    static class DiscordMessageEmbedAuthor {
+    private static class DiscordMessageEmbedAuthor {
         @JsonProperty("name")
         public String name;
     }
 
-    static class DiscordMessageAuthor {
+    private static class DiscordMessageAuthor {
         @JsonProperty("id")
         public String id;
 
     }
 
-    static class DiscordEmbedThumbnail {
+    private static class DiscordEmbedThumbnail {
         @JsonProperty("url")
         public String url;
     }

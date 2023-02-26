@@ -112,6 +112,18 @@ public class DeathMessageParserTest {
                 "Atket_", "Warske", KillerType.PLAYER, "Gysdall on Top!");
     }
 
+    @Test
+    public void thickPasteByZombieWielding() {
+        parseTest("Etbes was reduced into thick paste by a zombie pigman wielding Golden Sword",
+                "Etbes", "zombie pigman", KillerType.MOB, "Golden Sword");
+    }
+
+    @Test
+    public void witherSkeletalWarriorMob() {
+        parseTest("Gosha_Dibenko was destroyed by a wither skeletal warrior wielding Stone Sword",
+                "Gosha_Dibenko", "wither skeletal warrior", KillerType.MOB, "Stone Sword");
+    }
+
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(rawInput);
         assertTrue(deathMessageParseResult.isPresent());

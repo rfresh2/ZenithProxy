@@ -54,13 +54,13 @@ public class RestartsImport {
         return new ParsedMessage(OffsetDateTime.parse(discordMessage.timestamp).toInstant(), discordMessage.content, discordMessage.author.id);
     }
 
-    static class DiscordMain {
+    private static class DiscordMain {
         @JsonProperty("messages")
         public List<DiscordMessage> messages;
 
     }
 
-    static class DiscordMessage {
+    private static class DiscordMessage {
         @JsonProperty("timestamp")
         public String timestamp;
         @JsonProperty("content")
@@ -69,13 +69,13 @@ public class RestartsImport {
         public DiscordMessageAuthor author;
     }
 
-    static class DiscordMessageAuthor {
+    private static class DiscordMessageAuthor {
         @JsonProperty("id")
         public String id;
     }
 
     @Data
-    static class ParsedMessage {
+    private static class ParsedMessage {
         private final Instant time;
         private final String content;
         private final String authorId;

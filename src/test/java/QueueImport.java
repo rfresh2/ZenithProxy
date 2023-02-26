@@ -196,7 +196,7 @@ public class QueueImport {
 
     @Data
     @Builder
-    static class ParsedQueueData { // could be for either prio or regular
+    private static class ParsedQueueData { // could be for either prio or regular
         private final Instant time;
         private final int count;
     }
