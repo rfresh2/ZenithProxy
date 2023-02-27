@@ -1,5 +1,6 @@
 package com.zenith;
 
+import ch.qos.logback.classic.LoggerContext;
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
@@ -19,6 +20,7 @@ import com.zenith.util.Queue;
 import com.zenith.util.Wait;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.LoggerFactory;
 import reactor.netty.http.client.HttpClient;
 
 import javax.imageio.ImageIO;
@@ -198,6 +200,7 @@ public class Proxy {
         while (!DISCORD_BOT.isMessageQueueEmpty()) {
             Wait.waitALittleMs(100);
         }
+        ((LoggerContext) LoggerFactory.getILoggerFactory()).stop();
         System.exit(0);
     }
 
