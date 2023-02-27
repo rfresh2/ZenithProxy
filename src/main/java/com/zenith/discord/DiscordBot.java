@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -55,6 +56,8 @@ public class DiscordBot {
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
     private final ScheduledExecutorService scheduledExecutorService;
+    public Optional<Instant> lastRelaymessage = Optional.empty();
+
     @Getter
     private boolean isRunning;
 
@@ -451,6 +454,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable) {
             if (this.proxy.isConnected() && !event.message.isEmpty()) {
                 this.proxy.getClient().send(new ClientChatPacket(event.message));
+                lastRelaymessage = Optional.of(Instant.now());
             }
         }
     }

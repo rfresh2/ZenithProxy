@@ -5,14 +5,14 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
+import com.zenith.discord.DiscordBot;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.util.Constants.CLIENT_LOG;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 
 public class AutoReply extends Module {
@@ -47,7 +47,8 @@ public class AutoReply extends Module {
                         final String sender = split[0];
                         if (split[1].startsWith("whispers")
                                 && !sender.equalsIgnoreCase(CONFIG.authentication.username)
-                                && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)) {
+                                && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)
+                                && (!DISCORD_BOT.lastRelaymessage.isPresent() || Instant.now().minus(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds)).isAfter(DISCORD_BOT.lastRelaymessage.get()))) {
                             if (isNull(repliedPlayersCache.getIfPresent(sender))) {
                                 repliedPlayersCache.put(sender, sender);
                                 // 236 char max ( 256 - 4(command) - 16(max name length) )
