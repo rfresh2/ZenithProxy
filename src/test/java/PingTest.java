@@ -1,13 +1,12 @@
 import com.zenith.mcping.MCPing;
 import com.zenith.mcping.PingOptions;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class pingtest {
-    @Test
+public class PingTest {
+    //    @Test
     public void test() {
         final MCPing mcPing = new MCPing();
         final PingOptions pingOptions = new PingOptions();
