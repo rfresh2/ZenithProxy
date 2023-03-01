@@ -20,23 +20,36 @@ import java.time.OffsetDateTime;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Names extends TableImpl<NamesRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.names</code>
      */
     public static final Names NAMES = new Names();
-    private static final long serialVersionUID = 1L;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<NamesRecord> getRecordType() {
+        return NamesRecord.class;
+    }
+
     /**
      * The column <code>public.names.name</code>.
      */
     public final TableField<NamesRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
      * The column <code>public.names.uuid</code>.
      */
     public final TableField<NamesRecord, java.util.UUID> UUID = createField(DSL.name("uuid"), SQLDataType.UUID.nullable(false), this, "");
+
     /**
      * The column <code>public.names.changedtoat</code>.
      */
     public final TableField<NamesRecord, OffsetDateTime> CHANGEDTOAT = createField(DSL.name("changedtoat"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+
     /**
      * The column <code>public.names.changedfromat</code>.
      */
@@ -73,14 +86,6 @@ public class Names extends TableImpl<NamesRecord> {
 
     public <O extends Record> Names(Table<O> child, ForeignKey<O, NamesRecord> key) {
         super(child, key, NAMES);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<NamesRecord> getRecordType() {
-        return NamesRecord.class;
     }
 
     @Override

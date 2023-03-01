@@ -20,35 +20,51 @@ import java.time.OffsetDateTime;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Queuewait extends TableImpl<QueuewaitRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.queuewait</code>
      */
     public static final Queuewait QUEUEWAIT = new Queuewait();
-    private static final long serialVersionUID = 1L;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<QueuewaitRecord> getRecordType() {
+        return QueuewaitRecord.class;
+    }
+
     /**
      * The column <code>public.queuewait.id</code>.
      */
     public final TableField<QueuewaitRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+
     /**
      * The column <code>public.queuewait.player_name</code>.
      */
     public final TableField<QueuewaitRecord, String> PLAYER_NAME = createField(DSL.name("player_name"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
      * The column <code>public.queuewait.prio</code>.
      */
     public final TableField<QueuewaitRecord, Boolean> PRIO = createField(DSL.name("prio"), SQLDataType.BOOLEAN.nullable(false), this, "");
+
     /**
      * The column <code>public.queuewait.start_queue_time</code>.
      */
     public final TableField<QueuewaitRecord, OffsetDateTime> START_QUEUE_TIME = createField(DSL.name("start_queue_time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     /**
      * The column <code>public.queuewait.end_queue_time</code>.
      */
     public final TableField<QueuewaitRecord, OffsetDateTime> END_QUEUE_TIME = createField(DSL.name("end_queue_time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     /**
      * The column <code>public.queuewait.queue_time</code>.
      */
     public final TableField<QueuewaitRecord, Long> QUEUE_TIME = createField(DSL.name("queue_time"), SQLDataType.BIGINT, this, "");
+
     /**
      * The column <code>public.queuewait.initial_queue_len</code>.
      */
@@ -85,14 +101,6 @@ public class Queuewait extends TableImpl<QueuewaitRecord> {
 
     public <O extends Record> Queuewait(Table<O> child, ForeignKey<O, QueuewaitRecord> key) {
         super(child, key, QUEUEWAIT);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<QueuewaitRecord> getRecordType() {
-        return QueuewaitRecord.class;
     }
 
     @Override

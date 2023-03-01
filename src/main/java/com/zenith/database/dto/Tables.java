@@ -32,11 +32,6 @@ public class Tables {
     public static final Deaths DEATHS = Deaths.DEATHS;
 
     /**
-     * The table <code>public.import_death</code>.
-     */
-    public static final ImportDeath IMPORT_DEATH = ImportDeath.IMPORT_DEATH;
-
-    /**
      * The table <code>public.names</code>.
      */
     public static final Names NAMES = Names.NAMES;

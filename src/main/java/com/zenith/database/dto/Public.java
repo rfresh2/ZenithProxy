@@ -42,11 +42,6 @@ public class Public extends SchemaImpl {
     public final Deaths DEATHS = Deaths.DEATHS;
 
     /**
-     * The table <code>public.import_death</code>.
-     */
-    public final ImportDeath IMPORT_DEATH = ImportDeath.IMPORT_DEATH;
-
-    /**
      * The table <code>public.names</code>.
      */
     public final Names NAMES = Names.NAMES;
@@ -119,7 +114,6 @@ public class Public extends SchemaImpl {
                 Chats.CHATS,
                 Connections.CONNECTIONS,
                 Deaths.DEATHS,
-                ImportDeath.IMPORT_DEATH,
                 Names.NAMES,
                 Playercount.PLAYERCOUNT,
                 PlaytimeAll.PLAYTIME_ALL,

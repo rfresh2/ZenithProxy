@@ -18,22 +18,22 @@ public class Queuelength implements Serializable {
 
     private final OffsetDateTime time;
     private final Short prio;
-    private final Short normal;
+    private final Short regular;
 
     public Queuelength(Queuelength value) {
         this.time = value.time;
         this.prio = value.prio;
-        this.normal = value.normal;
+        this.regular = value.regular;
     }
 
     public Queuelength(
             OffsetDateTime time,
             Short prio,
-            Short normal
+            Short regular
     ) {
         this.time = time;
         this.prio = prio;
-        this.normal = normal;
+        this.regular = regular;
     }
 
     /**
@@ -51,10 +51,10 @@ public class Queuelength implements Serializable {
     }
 
     /**
-     * Getter for <code>public.queuelength.normal</code>.
+     * Getter for <code>public.queuelength.regular</code>.
      */
-    public Short getNormal() {
-        return this.normal;
+    public Short getRegular() {
+        return this.regular;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Queuelength implements Serializable {
 
         sb.append(time);
         sb.append(", ").append(prio);
-        sb.append(", ").append(normal);
+        sb.append(", ").append(regular);
 
         sb.append(")");
         return sb.toString();

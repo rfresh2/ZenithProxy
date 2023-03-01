@@ -29,15 +29,6 @@ public class Restarts extends TableImpl<RestartsRecord> {
      * The reference instance of <code>public.restarts</code>
      */
     public static final Restarts RESTARTS = new Restarts();
-    /**
-     * The column <code>public.restarts.id</code>.
-     */
-    public final TableField<RestartsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
-
-    /**
-     * The column <code>public.restarts.time</code>.
-     */
-    public final TableField<RestartsRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     /**
      * The class holding records for this type
@@ -46,6 +37,16 @@ public class Restarts extends TableImpl<RestartsRecord> {
     public Class<RestartsRecord> getRecordType() {
         return RestartsRecord.class;
     }
+
+    /**
+     * The column <code>public.restarts.time</code>.
+     */
+    public final TableField<RestartsRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
+    /**
+     * The column <code>public.restarts.id</code>.
+     */
+    public final TableField<RestartsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     private Restarts(Name alias, Table<RestartsRecord> aliased) {
         this(alias, aliased, null);

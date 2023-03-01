@@ -22,10 +22,25 @@ public class PlaytimeAllRecord extends TableRecordImpl<PlaytimeAllRecord> implem
     private static final long serialVersionUID = 1L;
 
     /**
+     * Getter for <code>public.playtime_all.p_uuid</code>.
+     */
+    public UUID getPUuid() {
+        return (UUID) get(0);
+    }
+
+    /**
      * Create a detached PlaytimeAllRecord
      */
     public PlaytimeAllRecord() {
         super(PlaytimeAll.PLAYTIME_ALL);
+    }
+
+    /**
+     * Setter for <code>public.playtime_all.p_uuid</code>.
+     */
+    public PlaytimeAllRecord setPUuid(UUID value) {
+        set(0, value);
+        return this;
     }
 
     /**
@@ -38,39 +53,9 @@ public class PlaytimeAllRecord extends TableRecordImpl<PlaytimeAllRecord> implem
         setPlaytime(playtime);
     }
 
-    /**
-     * Getter for <code>public.playtime_all.p_uuid</code>.
-     */
-    public UUID getPUuid() {
-        return (UUID) get(0);
-    }
-
-    /**
-     * Setter for <code>public.playtime_all.p_uuid</code>.
-     */
-    public PlaytimeAllRecord setPUuid(UUID value) {
-        set(0, value);
-        return this;
-    }
-
     // -------------------------------------------------------------------------
     // Record2 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.playtime_all.playtime</code>.
-     */
-    public Integer getPlaytime() {
-        return (Integer) get(1);
-    }
-
-    /**
-     * Setter for <code>public.playtime_all.playtime</code>.
-     */
-    public PlaytimeAllRecord setPlaytime(Integer value) {
-        set(1, value);
-        return this;
-    }
 
     @Override
     public Row2<UUID, Integer> fieldsRow() {
@@ -118,10 +103,6 @@ public class PlaytimeAllRecord extends TableRecordImpl<PlaytimeAllRecord> implem
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public PlaytimeAllRecord value2(Integer value) {
         setPlaytime(value);
@@ -132,6 +113,25 @@ public class PlaytimeAllRecord extends TableRecordImpl<PlaytimeAllRecord> implem
     public PlaytimeAllRecord values(UUID value1, Integer value2) {
         value1(value1);
         value2(value2);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.playtime_all.playtime</code>.
+     */
+    public Integer getPlaytime() {
+        return (Integer) get(1);
+    }
+
+    /**
+     * Setter for <code>public.playtime_all.playtime</code>.
+     */
+    public PlaytimeAllRecord setPlaytime(Integer value) {
+        set(1, value);
         return this;
     }
 }

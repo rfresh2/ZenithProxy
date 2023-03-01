@@ -20,15 +20,26 @@ import java.time.OffsetDateTime;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Playercount extends TableImpl<PlayercountRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.playercount</code>
      */
     public static final Playercount PLAYERCOUNT = new Playercount();
-    private static final long serialVersionUID = 1L;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<PlayercountRecord> getRecordType() {
+        return PlayercountRecord.class;
+    }
+
     /**
      * The column <code>public.playercount.time</code>.
      */
     public final TableField<PlayercountRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     /**
      * The column <code>public.playercount.count</code>.
      */
@@ -65,14 +76,6 @@ public class Playercount extends TableImpl<PlayercountRecord> {
 
     public <O extends Record> Playercount(Table<O> child, ForeignKey<O, PlayercountRecord> key) {
         super(child, key, PLAYERCOUNT);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<PlayercountRecord> getRecordType() {
-        return PlayercountRecord.class;
     }
 
     @Override

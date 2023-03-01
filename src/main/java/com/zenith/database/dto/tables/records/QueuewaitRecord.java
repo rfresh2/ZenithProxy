@@ -22,10 +22,26 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>public.queuewait.id</code>.
+     */
+    public QueuewaitRecord setId(Integer value) {
+        set(0, value);
+        return this;
+    }
+
+    /**
      * Create a detached QueuewaitRecord
      */
     public QueuewaitRecord() {
         super(Queuewait.QUEUEWAIT);
+    }
+
+    /**
+     * Setter for <code>public.queuewait.player_name</code>.
+     */
+    public QueuewaitRecord setPlayerName(String value) {
+        set(1, value);
+        return this;
     }
 
     /**
@@ -44,43 +60,6 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
     }
 
     /**
-     * Getter for <code>public.queuewait.id</code>.
-     */
-    public Integer getId() {
-        return (Integer) get(0);
-    }
-
-    /**
-     * Setter for <code>public.queuewait.id</code>.
-     */
-    public QueuewaitRecord setId(Integer value) {
-        set(0, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.queuewait.player_name</code>.
-     */
-    public String getPlayerName() {
-        return (String) get(1);
-    }
-
-    /**
-     * Setter for <code>public.queuewait.player_name</code>.
-     */
-    public QueuewaitRecord setPlayerName(String value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.queuewait.prio</code>.
-     */
-    public Boolean getPrio() {
-        return (Boolean) get(2);
-    }
-
-    /**
      * Setter for <code>public.queuewait.prio</code>.
      */
     public QueuewaitRecord setPrio(Boolean value) {
@@ -89,10 +68,10 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
     }
 
     /**
-     * Getter for <code>public.queuewait.start_queue_time</code>.
+     * Getter for <code>public.queuewait.id</code>.
      */
-    public OffsetDateTime getStartQueueTime() {
-        return (OffsetDateTime) get(3);
+    public Integer getId() {
+        return (Integer) get(0);
     }
 
     /**
@@ -104,10 +83,10 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
     }
 
     /**
-     * Getter for <code>public.queuewait.end_queue_time</code>.
+     * Getter for <code>public.queuewait.player_name</code>.
      */
-    public OffsetDateTime getEndQueueTime() {
-        return (OffsetDateTime) get(4);
+    public String getPlayerName() {
+        return (String) get(1);
     }
 
     /**
@@ -119,10 +98,24 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
     }
 
     /**
+     * Getter for <code>public.queuewait.prio</code>.
+     */
+    public Boolean getPrio() {
+        return (Boolean) get(2);
+    }
+
+    /**
      * Getter for <code>public.queuewait.queue_time</code>.
      */
     public Long getQueueTime() {
         return (Long) get(5);
+    }
+
+    /**
+     * Getter for <code>public.queuewait.start_queue_time</code>.
+     */
+    public OffsetDateTime getStartQueueTime() {
+        return (OffsetDateTime) get(3);
     }
 
     /**
@@ -133,24 +126,16 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
         return this;
     }
 
+    /**
+     * Getter for <code>public.queuewait.end_queue_time</code>.
+     */
+    public OffsetDateTime getEndQueueTime() {
+        return (OffsetDateTime) get(4);
+    }
+
     // -------------------------------------------------------------------------
     // Record7 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.queuewait.initial_queue_len</code>.
-     */
-    public Integer getInitialQueueLen() {
-        return (Integer) get(6);
-    }
-
-    /**
-     * Setter for <code>public.queuewait.initial_queue_len</code>.
-     */
-    public QueuewaitRecord setInitialQueueLen(Integer value) {
-        set(6, value);
-        return this;
-    }
 
     @Override
     public Row7<Integer, String, Boolean, OffsetDateTime, OffsetDateTime, Long, Integer> fieldsRow() {
@@ -303,10 +288,6 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public QueuewaitRecord value7(Integer value) {
         setInitialQueueLen(value);
@@ -322,6 +303,25 @@ public class QueuewaitRecord extends TableRecordImpl<QueuewaitRecord> implements
         value5(value5);
         value6(value6);
         value7(value7);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.queuewait.initial_queue_len</code>.
+     */
+    public Integer getInitialQueueLen() {
+        return (Integer) get(6);
+    }
+
+    /**
+     * Setter for <code>public.queuewait.initial_queue_len</code>.
+     */
+    public QueuewaitRecord setInitialQueueLen(Integer value) {
+        set(6, value);
         return this;
     }
 }

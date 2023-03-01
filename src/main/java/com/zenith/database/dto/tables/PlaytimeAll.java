@@ -20,15 +20,26 @@ import java.util.UUID;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class PlaytimeAll extends TableImpl<PlaytimeAllRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.playtime_all</code>
      */
     public static final PlaytimeAll PLAYTIME_ALL = new PlaytimeAll();
-    private static final long serialVersionUID = 1L;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<PlaytimeAllRecord> getRecordType() {
+        return PlaytimeAllRecord.class;
+    }
+
     /**
      * The column <code>public.playtime_all.p_uuid</code>.
      */
     public final TableField<PlaytimeAllRecord, UUID> P_UUID = createField(DSL.name("p_uuid"), SQLDataType.UUID, this, "");
+
     /**
      * The column <code>public.playtime_all.playtime</code>.
      */
@@ -61,14 +72,6 @@ public class PlaytimeAll extends TableImpl<PlaytimeAllRecord> {
      */
     public PlaytimeAll() {
         this(DSL.name("playtime_all"), null);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<PlaytimeAllRecord> getRecordType() {
-        return PlaytimeAllRecord.class;
     }
 
     @Override

@@ -22,10 +22,25 @@ public class PlayercountRecord extends TableRecordImpl<PlayercountRecord> implem
     private static final long serialVersionUID = 1L;
 
     /**
+     * Getter for <code>public.playercount.time</code>.
+     */
+    public OffsetDateTime getTime() {
+        return (OffsetDateTime) get(0);
+    }
+
+    /**
      * Create a detached PlayercountRecord
      */
     public PlayercountRecord() {
         super(Playercount.PLAYERCOUNT);
+    }
+
+    /**
+     * Setter for <code>public.playercount.time</code>.
+     */
+    public PlayercountRecord setTime(OffsetDateTime value) {
+        set(0, value);
+        return this;
     }
 
     /**
@@ -38,39 +53,9 @@ public class PlayercountRecord extends TableRecordImpl<PlayercountRecord> implem
         setCount(count);
     }
 
-    /**
-     * Getter for <code>public.playercount.time</code>.
-     */
-    public OffsetDateTime getTime() {
-        return (OffsetDateTime) get(0);
-    }
-
-    /**
-     * Setter for <code>public.playercount.time</code>.
-     */
-    public PlayercountRecord setTime(OffsetDateTime value) {
-        set(0, value);
-        return this;
-    }
-
     // -------------------------------------------------------------------------
     // Record2 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.playercount.count</code>.
-     */
-    public Short getCount() {
-        return (Short) get(1);
-    }
-
-    /**
-     * Setter for <code>public.playercount.count</code>.
-     */
-    public PlayercountRecord setCount(Short value) {
-        set(1, value);
-        return this;
-    }
 
     @Override
     public Row2<OffsetDateTime, Short> fieldsRow() {
@@ -118,10 +103,6 @@ public class PlayercountRecord extends TableRecordImpl<PlayercountRecord> implem
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public PlayercountRecord value2(Short value) {
         setCount(value);
@@ -132,6 +113,25 @@ public class PlayercountRecord extends TableRecordImpl<PlayercountRecord> implem
     public PlayercountRecord values(OffsetDateTime value1, Short value2) {
         value1(value1);
         value2(value2);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.playercount.count</code>.
+     */
+    public Short getCount() {
+        return (Short) get(1);
+    }
+
+    /**
+     * Setter for <code>public.playercount.count</code>.
+     */
+    public PlayercountRecord setCount(Short value) {
+        set(1, value);
         return this;
     }
 }

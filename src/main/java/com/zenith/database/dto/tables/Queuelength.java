@@ -20,23 +20,33 @@ import java.time.OffsetDateTime;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Queuelength extends TableImpl<QueuelengthRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.queuelength</code>
      */
     public static final Queuelength QUEUELENGTH = new Queuelength();
-    private static final long serialVersionUID = 1L;
+    /**
+     * The column <code>public.queuelength.prio</code>.
+     */
+    public final TableField<QueuelengthRecord, Short> PRIO = createField(DSL.name("prio"), SQLDataType.SMALLINT, this, "");
+
     /**
      * The column <code>public.queuelength.time</code>.
      */
     public final TableField<QueuelengthRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
     /**
-     * The column <code>public.queuelength.prio</code>.
-     */
-    public final TableField<QueuelengthRecord, Short> PRIO = createField(DSL.name("prio"), SQLDataType.SMALLINT.nullable(false), this, "");
-    /**
      * The column <code>public.queuelength.regular</code>.
      */
-    public final TableField<QueuelengthRecord, Short> REGULAR = createField(DSL.name("regular"), SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<QueuelengthRecord, Short> REGULAR = createField(DSL.name("regular"), SQLDataType.SMALLINT, this, "");
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<QueuelengthRecord> getRecordType() {
+        return QueuelengthRecord.class;
+    }
 
     private Queuelength(Name alias, Table<QueuelengthRecord> aliased) {
         this(alias, aliased, null);
@@ -69,14 +79,6 @@ public class Queuelength extends TableImpl<QueuelengthRecord> {
 
     public <O extends Record> Queuelength(Table<O> child, ForeignKey<O, QueuelengthRecord> key) {
         super(child, key, QUEUELENGTH);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<QueuelengthRecord> getRecordType() {
-        return QueuelengthRecord.class;
     }
 
     @Override

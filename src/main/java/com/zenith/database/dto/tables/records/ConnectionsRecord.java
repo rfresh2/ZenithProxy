@@ -24,10 +24,26 @@ public class ConnectionsRecord extends TableRecordImpl<ConnectionsRecord> implem
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>public.connections.time</code>.
+     */
+    public ConnectionsRecord setTime(OffsetDateTime value) {
+        set(0, value);
+        return this;
+    }
+
+    /**
      * Create a detached ConnectionsRecord
      */
     public ConnectionsRecord() {
         super(Connections.CONNECTIONS);
+    }
+
+    /**
+     * Setter for <code>public.connections.connection</code>.
+     */
+    public ConnectionsRecord setConnection(Connectiontype value) {
+        set(1, value);
+        return this;
     }
 
     /**
@@ -43,40 +59,17 @@ public class ConnectionsRecord extends TableRecordImpl<ConnectionsRecord> implem
     }
 
     /**
-     * Getter for <code>public.connections.time</code>.
-     */
-    public OffsetDateTime getTime() {
-        return (OffsetDateTime) get(0);
-    }
-
-    /**
-     * Setter for <code>public.connections.time</code>.
-     */
-    public ConnectionsRecord setTime(OffsetDateTime value) {
-        set(0, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.connections.connection</code>.
-     */
-    public Connectiontype getConnection() {
-        return (Connectiontype) get(1);
-    }
-
-    /**
-     * Setter for <code>public.connections.connection</code>.
-     */
-    public ConnectionsRecord setConnection(Connectiontype value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
      * Getter for <code>public.connections.player_name</code>.
      */
     public String getPlayerName() {
         return (String) get(2);
+    }
+
+    /**
+     * Getter for <code>public.connections.time</code>.
+     */
+    public OffsetDateTime getTime() {
+        return (OffsetDateTime) get(0);
     }
 
     /**
@@ -87,24 +80,16 @@ public class ConnectionsRecord extends TableRecordImpl<ConnectionsRecord> implem
         return this;
     }
 
+    /**
+     * Getter for <code>public.connections.connection</code>.
+     */
+    public Connectiontype getConnection() {
+        return (Connectiontype) get(1);
+    }
+
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.connections.player_uuid</code>.
-     */
-    public UUID getPlayerUuid() {
-        return (UUID) get(3);
-    }
-
-    /**
-     * Setter for <code>public.connections.player_uuid</code>.
-     */
-    public ConnectionsRecord setPlayerUuid(UUID value) {
-        set(3, value);
-        return this;
-    }
 
     @Override
     public Row4<OffsetDateTime, Connectiontype, String, UUID> fieldsRow() {
@@ -194,10 +179,6 @@ public class ConnectionsRecord extends TableRecordImpl<ConnectionsRecord> implem
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public ConnectionsRecord value4(UUID value) {
         setPlayerUuid(value);
@@ -210,6 +191,25 @@ public class ConnectionsRecord extends TableRecordImpl<ConnectionsRecord> implem
         value2(value2);
         value3(value3);
         value4(value4);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.connections.player_uuid</code>.
+     */
+    public UUID getPlayerUuid() {
+        return (UUID) get(3);
+    }
+
+    /**
+     * Setter for <code>public.connections.player_uuid</code>.
+     */
+    public ConnectionsRecord setPlayerUuid(UUID value) {
+        set(3, value);
         return this;
     }
 }

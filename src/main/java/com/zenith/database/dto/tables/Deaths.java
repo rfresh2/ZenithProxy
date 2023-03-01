@@ -27,10 +27,11 @@ public class Deaths extends TableImpl<DeathsRecord> {
      * The reference instance of <code>public.deaths</code>
      */
     public static final Deaths DEATHS = new Deaths();
+
     /**
-     * The column <code>public.deaths.killer_mob</code>.
+     * The column <code>public.deaths.victim_player_uuid</code>.
      */
-    public final TableField<DeathsRecord, String> KILLER_MOB = createField(DSL.name("killer_mob"), SQLDataType.CLOB, this, "");
+    public final TableField<DeathsRecord, UUID> VICTIM_PLAYER_UUID = createField(DSL.name("victim_player_uuid"), SQLDataType.UUID, this, "");
 
     /**
      * The column <code>public.deaths.time</code>.
@@ -46,11 +47,10 @@ public class Deaths extends TableImpl<DeathsRecord> {
      * The column <code>public.deaths.victim_player_name</code>.
      */
     public final TableField<DeathsRecord, String> VICTIM_PLAYER_NAME = createField(DSL.name("victim_player_name"), SQLDataType.CLOB.nullable(false), this, "");
-
     /**
-     * The column <code>public.deaths.victim_player_uuid</code>.
+     * The column <code>public.deaths.killer_mob</code>.
      */
-    public final TableField<DeathsRecord, UUID> VICTIM_PLAYER_UUID = createField(DSL.name("victim_player_uuid"), SQLDataType.UUID.nullable(false), this, "");
+    public final TableField<DeathsRecord, String> KILLER_MOB = createField(DSL.name("killer_mob"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>public.deaths.killer_player_name</code>.

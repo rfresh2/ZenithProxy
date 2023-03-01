@@ -21,27 +21,39 @@ import java.util.UUID;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Chats extends TableImpl<ChatsRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.chats</code>
      */
     public static final Chats CHATS = new Chats();
-    private static final long serialVersionUID = 1L;
+    /**
+     * The column <code>public.chats.player_uuid</code>.
+     */
+    public final TableField<ChatsRecord, UUID> PLAYER_UUID = createField(DSL.name("player_uuid"), SQLDataType.UUID, this, "");
+
     /**
      * The column <code>public.chats.time</code>.
      */
     public final TableField<ChatsRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     /**
      * The column <code>public.chats.chat</code>.
      */
     public final TableField<ChatsRecord, String> CHAT = createField(DSL.name("chat"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
      * The column <code>public.chats.player_name</code>.
      */
     public final TableField<ChatsRecord, String> PLAYER_NAME = createField(DSL.name("player_name"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
-     * The column <code>public.chats.player_uuid</code>.
+     * The class holding records for this type
      */
-    public final TableField<ChatsRecord, UUID> PLAYER_UUID = createField(DSL.name("player_uuid"), SQLDataType.UUID.nullable(false), this, "");
+    @Override
+    public Class<ChatsRecord> getRecordType() {
+        return ChatsRecord.class;
+    }
 
     private Chats(Name alias, Table<ChatsRecord> aliased) {
         this(alias, aliased, null);
@@ -74,14 +86,6 @@ public class Chats extends TableImpl<ChatsRecord> {
 
     public <O extends Record> Chats(Table<O> child, ForeignKey<O, ChatsRecord> key) {
         super(child, key, CHATS);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<ChatsRecord> getRecordType() {
-        return ChatsRecord.class;
     }
 
     @Override

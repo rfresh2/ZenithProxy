@@ -130,11 +130,30 @@ public class DeathsRecord extends TableRecordImpl<DeathsRecord> implements Recor
     }
 
     /**
+     * Getter for <code>public.deaths.weapon_name</code>.
+     */
+    public String getWeaponName() {
+        return (String) get(6);
+    }
+
+    /**
+     * Setter for <code>public.deaths.killer_mob</code>.
+     */
+    public DeathsRecord setKillerMob(String value) {
+        set(7, value);
+        return this;
+    }
+
+    /**
      * Getter for <code>public.deaths.killer_player_name</code>.
      */
     public String getKillerPlayerName() {
         return (String) get(4);
     }
+
+    // -------------------------------------------------------------------------
+    // Record8 type implementation
+    // -------------------------------------------------------------------------
 
     /**
      * Getter for <code>public.deaths.killer_player_uuid</code>.
@@ -144,29 +163,10 @@ public class DeathsRecord extends TableRecordImpl<DeathsRecord> implements Recor
     }
 
     /**
-     * Getter for <code>public.deaths.weapon_name</code>.
-     */
-    public String getWeaponName() {
-        return (String) get(6);
-    }
-
-    // -------------------------------------------------------------------------
-    // Record8 type implementation
-    // -------------------------------------------------------------------------
-
-    /**
      * Getter for <code>public.deaths.killer_mob</code>.
      */
     public String getKillerMob() {
         return (String) get(7);
-    }
-
-    /**
-     * Setter for <code>public.deaths.killer_mob</code>.
-     */
-    public DeathsRecord setKillerMob(String value) {
-        set(7, value);
-        return this;
     }
 
     @Override
@@ -332,20 +332,6 @@ public class DeathsRecord extends TableRecordImpl<DeathsRecord> implements Recor
     }
 
     @Override
-    public String component8() {
-        return getKillerMob();
-    }
-
-    @Override
-    public String value8() {
-        return getKillerMob();
-    }
-
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
-    @Override
     public DeathsRecord value8(String value) {
         setKillerMob(value);
         return this;
@@ -362,5 +348,19 @@ public class DeathsRecord extends TableRecordImpl<DeathsRecord> implements Recor
         value7(value7);
         value8(value8);
         return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    @Override
+    public String component8() {
+        return getKillerMob();
+    }
+
+    @Override
+    public String value8() {
+        return getKillerMob();
     }
 }

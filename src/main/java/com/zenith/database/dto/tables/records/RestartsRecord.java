@@ -31,10 +31,47 @@ public class RestartsRecord extends UpdatableRecordImpl<RestartsRecord> implemen
     }
 
     /**
+     * Getter for <code>public.restarts.time</code>.
+     */
+    public OffsetDateTime getTime() {
+        return (OffsetDateTime) get(0);
+    }
+
+    /**
      * Create a detached RestartsRecord
      */
     public RestartsRecord() {
         super(Restarts.RESTARTS);
+    }
+
+    /**
+     * Getter for <code>public.restarts.id</code>.
+     */
+    public Integer getId() {
+        return (Integer) get(1);
+    }
+
+    // -------------------------------------------------------------------------
+    // Primary key information
+    // -------------------------------------------------------------------------
+
+    @Override
+    public Record1<Integer> key() {
+        return (Record1) super.key();
+    }
+
+    // -------------------------------------------------------------------------
+    // Record2 type implementation
+    // -------------------------------------------------------------------------
+
+    @Override
+    public Row2<OffsetDateTime, Integer> fieldsRow() {
+        return (Row2) super.fieldsRow();
+    }
+
+    @Override
+    public Row2<OffsetDateTime, Integer> valuesRow() {
+        return (Row2) super.valuesRow();
     }
 
     /**
@@ -47,27 +84,10 @@ public class RestartsRecord extends UpdatableRecordImpl<RestartsRecord> implemen
         setId(id);
     }
 
-    /**
-     * Getter for <code>public.restarts.time</code>.
-     */
-    public OffsetDateTime getTime() {
-        return (OffsetDateTime) get(0);
+    @Override
+    public Field<Integer> field2() {
+        return Restarts.RESTARTS.ID;
     }
-
-    // -------------------------------------------------------------------------
-    // Primary key information
-    // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.restarts.id</code>.
-     */
-    public Integer getId() {
-        return (Integer) get(1);
-    }
-
-    // -------------------------------------------------------------------------
-    // Record2 type implementation
-    // -------------------------------------------------------------------------
 
     /**
      * Setter for <code>public.restarts.id</code>.
@@ -78,8 +98,8 @@ public class RestartsRecord extends UpdatableRecordImpl<RestartsRecord> implemen
     }
 
     @Override
-    public Record1<Integer> key() {
-        return (Record1) super.key();
+    public Integer component2() {
+        return getId();
     }
 
     @Override
@@ -88,49 +108,14 @@ public class RestartsRecord extends UpdatableRecordImpl<RestartsRecord> implemen
     }
 
     @Override
-    public Row2<OffsetDateTime, Integer> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Integer value2() {
+        return getId();
     }
 
     @Override
     public OffsetDateTime component1() {
         return getTime();
     }
-
-    @Override
-    public Row2<OffsetDateTime, Integer> valuesRow() {
-        return (Row2) super.valuesRow();
-    }
-
-    @Override
-    public OffsetDateTime value1() {
-        return getTime();
-    }
-
-    @Override
-    public Field<Integer> field2() {
-        return Restarts.RESTARTS.ID;
-    }
-
-    @Override
-    public RestartsRecord value1(OffsetDateTime value) {
-        setTime(value);
-        return this;
-    }
-
-    @Override
-    public Integer component2() {
-        return getId();
-    }
-
-    @Override
-    public Integer value2() {
-        return getId();
-    }
-
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
 
     @Override
     public RestartsRecord value2(Integer value) {
@@ -142,6 +127,21 @@ public class RestartsRecord extends UpdatableRecordImpl<RestartsRecord> implemen
     public RestartsRecord values(OffsetDateTime value1, Integer value2) {
         value1(value1);
         value2(value2);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    @Override
+    public OffsetDateTime value1() {
+        return getTime();
+    }
+
+    @Override
+    public RestartsRecord value1(OffsetDateTime value) {
+        setTime(value);
         return this;
     }
 }

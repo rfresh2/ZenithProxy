@@ -4,6 +4,7 @@
 package com.zenith.database.dto.tables;
 
 
+import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.tables.records.ConnectionsRecord;
@@ -13,6 +14,8 @@ import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,27 +25,39 @@ import java.util.UUID;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Connections extends TableImpl<ConnectionsRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>public.connections</code>
      */
     public static final Connections CONNECTIONS = new Connections();
-    private static final long serialVersionUID = 1L;
+    /**
+     * The column <code>public.connections.player_uuid</code>.
+     */
+    public final TableField<ConnectionsRecord, UUID> PLAYER_UUID = createField(DSL.name("player_uuid"), SQLDataType.UUID, this, "");
+
     /**
      * The column <code>public.connections.time</code>.
      */
     public final TableField<ConnectionsRecord, OffsetDateTime> TIME = createField(DSL.name("time"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     /**
      * The column <code>public.connections.connection</code>.
      */
     public final TableField<ConnectionsRecord, Connectiontype> CONNECTION = createField(DSL.name("connection"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(com.zenith.database.dto.enums.Connectiontype.class), this, "");
+
     /**
      * The column <code>public.connections.player_name</code>.
      */
     public final TableField<ConnectionsRecord, String> PLAYER_NAME = createField(DSL.name("player_name"), SQLDataType.CLOB.nullable(false), this, "");
+
     /**
-     * The column <code>public.connections.player_uuid</code>.
+     * The class holding records for this type
      */
-    public final TableField<ConnectionsRecord, UUID> PLAYER_UUID = createField(DSL.name("player_uuid"), SQLDataType.UUID.nullable(false), this, "");
+    @Override
+    public Class<ConnectionsRecord> getRecordType() {
+        return ConnectionsRecord.class;
+    }
 
     private Connections(Name alias, Table<ConnectionsRecord> aliased) {
         this(alias, aliased, null);
@@ -77,17 +92,14 @@ public class Connections extends TableImpl<ConnectionsRecord> {
         super(child, key, CONNECTIONS);
     }
 
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<ConnectionsRecord> getRecordType() {
-        return ConnectionsRecord.class;
-    }
-
     @Override
     public Schema getSchema() {
         return Public.PUBLIC;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.<Index>asList(Indexes.CONNECTIONS_PLAYER_UUID_IDX);
     }
 
     @Override

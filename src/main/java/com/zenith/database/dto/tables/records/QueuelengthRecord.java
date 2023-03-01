@@ -22,10 +22,25 @@ public class QueuelengthRecord extends TableRecordImpl<QueuelengthRecord> implem
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>public.queuelength.time</code>.
+     */
+    public QueuelengthRecord setTime(OffsetDateTime value) {
+        set(0, value);
+        return this;
+    }
+
+    /**
      * Create a detached QueuelengthRecord
      */
     public QueuelengthRecord() {
         super(Queuelength.QUEUELENGTH);
+    }
+
+    /**
+     * Getter for <code>public.queuelength.prio</code>.
+     */
+    public Short getPrio() {
+        return (Short) get(1);
     }
 
     /**
@@ -40,28 +55,6 @@ public class QueuelengthRecord extends TableRecordImpl<QueuelengthRecord> implem
     }
 
     /**
-     * Getter for <code>public.queuelength.time</code>.
-     */
-    public OffsetDateTime getTime() {
-        return (OffsetDateTime) get(0);
-    }
-
-    /**
-     * Setter for <code>public.queuelength.time</code>.
-     */
-    public QueuelengthRecord setTime(OffsetDateTime value) {
-        set(0, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.queuelength.prio</code>.
-     */
-    public Short getPrio() {
-        return (Short) get(1);
-    }
-
-    /**
      * Setter for <code>public.queuelength.prio</code>.
      */
     public QueuelengthRecord setPrio(Short value) {
@@ -69,24 +62,16 @@ public class QueuelengthRecord extends TableRecordImpl<QueuelengthRecord> implem
         return this;
     }
 
+    /**
+     * Getter for <code>public.queuelength.time</code>.
+     */
+    public OffsetDateTime getTime() {
+        return (OffsetDateTime) get(0);
+    }
+
     // -------------------------------------------------------------------------
     // Record3 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.queuelength.regular</code>.
-     */
-    public Short getRegular() {
-        return (Short) get(2);
-    }
-
-    /**
-     * Setter for <code>public.queuelength.regular</code>.
-     */
-    public QueuelengthRecord setRegular(Short value) {
-        set(2, value);
-        return this;
-    }
 
     @Override
     public Row3<OffsetDateTime, Short, Short> fieldsRow() {
@@ -155,10 +140,6 @@ public class QueuelengthRecord extends TableRecordImpl<QueuelengthRecord> implem
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public QueuelengthRecord value3(Short value) {
         setRegular(value);
@@ -170,6 +151,25 @@ public class QueuelengthRecord extends TableRecordImpl<QueuelengthRecord> implem
         value1(value1);
         value2(value2);
         value3(value3);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.queuelength.regular</code>.
+     */
+    public Short getRegular() {
+        return (Short) get(2);
+    }
+
+    /**
+     * Setter for <code>public.queuelength.regular</code>.
+     */
+    public QueuelengthRecord setRegular(Short value) {
+        set(2, value);
         return this;
     }
 }

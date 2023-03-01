@@ -7,23 +7,20 @@ buildscript {
             url = "https://plugins.gradle.org/m2/"
         }
     }
-    dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
-    }
 }
 
 plugins {
     id 'nu.studer.jooq' version '5.2.2'
+    id "com.github.johnrengelman.shadow" version "8.1.0"
 }
 
 apply plugin: "java"
-apply plugin: "com.github.johnrengelman.shadow"
 
 ext {
 
-    lombokVersion = "1.18.24"
+    lombokVersion = "1.18.26"
     porklibVersion = "0.5.8-SNAPSHOT"
-    postgresVersion = '42.5.0'
+    postgresVersion = '42.5.4'
 }
 
 group "com.zenith"
@@ -143,7 +140,7 @@ jooq {
 
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.jooq:jooq:3.17.5'
+    shade 'org.jooq:jooq:3.17.8'
     shade "com.zaxxer:HikariCP:4.0.3"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'
@@ -154,8 +151,8 @@ dependencies {
     shade "org.apache.commons:commons-collections4:4.4"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
-    shade "ch.qos.logback:logback-classic:1.3.3"
-    shade 'org.slf4j:slf4j-api:2.0.3'
+    shade "ch.qos.logback:logback-classic:1.3.5"
+    shade 'org.slf4j:slf4j-api:2.0.6'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1'
@@ -170,7 +167,7 @@ dependencies {
     shade "com.discord4j:discord4j-core:3.2.3"
 
     shade "com.github.collarmc:Pounce:5fddbfca2d"
-    shade 'org.redisson:redisson:3.19.1'
+    shade 'org.redisson:redisson:3.19.3'
 
     testImplementation "junit:junit:4.13.2"
 
@@ -181,11 +178,11 @@ dependencies {
     shade('io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64')
 }
 
-task run(type: JavaExec) {
+tasks.register('run', JavaExec) {
     group = "run"
     description = "Execute proxy"
     classpath = sourceSets.main.runtimeClasspath
-    main = "com.zenith.Proxy"
+    mainClass.set("com.zenith.Proxy")
     maxHeapSize = "280M"
     jvmArgs = ["-server", "-XX:NewSize=80M", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
 }
@@ -194,12 +191,14 @@ run.dependsOn build
 //disable regular unshaded jar
 jar.enabled = false
 
-task sourceJar(type: Jar) {
+tasks.register('sourceJar', Jar) {
     from sourceSets.main.allSource
 }
 
 shadowJar {
-    archiveName "${project.name}.jar"
+    archiveBaseName.set(project.name)
+    archiveClassifier.set('')
+    archiveVersion.set('')
 
     configurations = [project.configurations.shade]
 
@@ -212,7 +211,7 @@ shadowJar {
     }
 }
 
-task clearJooqBuild() {
+tasks.register('clearJooqBuild') {
     // clear any jooq generated classes in the build directory
     // we already have these classes in our src
     // can't configure jooq generator to not auto-add these generated dirs to gradle source sets
@@ -224,7 +223,9 @@ task clearJooqBuild() {
 
 compileJava.dependsOn([clearJooqBuild])
 tasks.named('generateJooq').configure { allInputsDeclared = false }
-task jarBuild() {}
+tasks.register('jarBuild') {
+    group = "build"
+}
 jarBuild.dependsOn([shadowJar, build])
 
 //build.dependsOn(shadowJar)

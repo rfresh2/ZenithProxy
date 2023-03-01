@@ -23,10 +23,26 @@ public class NamesRecord extends TableRecordImpl<NamesRecord> implements Record4
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>public.names.name</code>.
+     */
+    public NamesRecord setName(String value) {
+        set(0, value);
+        return this;
+    }
+
+    /**
      * Create a detached NamesRecord
      */
     public NamesRecord() {
         super(Names.NAMES);
+    }
+
+    /**
+     * Setter for <code>public.names.uuid</code>.
+     */
+    public NamesRecord setUuid(UUID value) {
+        set(1, value);
+        return this;
     }
 
     /**
@@ -42,40 +58,17 @@ public class NamesRecord extends TableRecordImpl<NamesRecord> implements Record4
     }
 
     /**
-     * Getter for <code>public.names.name</code>.
-     */
-    public String getName() {
-        return (String) get(0);
-    }
-
-    /**
-     * Setter for <code>public.names.name</code>.
-     */
-    public NamesRecord setName(String value) {
-        set(0, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.names.uuid</code>.
-     */
-    public UUID getUuid() {
-        return (UUID) get(1);
-    }
-
-    /**
-     * Setter for <code>public.names.uuid</code>.
-     */
-    public NamesRecord setUuid(UUID value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
      * Getter for <code>public.names.changedtoat</code>.
      */
     public OffsetDateTime getChangedtoat() {
         return (OffsetDateTime) get(2);
+    }
+
+    /**
+     * Getter for <code>public.names.name</code>.
+     */
+    public String getName() {
+        return (String) get(0);
     }
 
     /**
@@ -86,24 +79,16 @@ public class NamesRecord extends TableRecordImpl<NamesRecord> implements Record4
         return this;
     }
 
+    /**
+     * Getter for <code>public.names.uuid</code>.
+     */
+    public UUID getUuid() {
+        return (UUID) get(1);
+    }
+
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.names.changedfromat</code>.
-     */
-    public OffsetDateTime getChangedfromat() {
-        return (OffsetDateTime) get(3);
-    }
-
-    /**
-     * Setter for <code>public.names.changedfromat</code>.
-     */
-    public NamesRecord setChangedfromat(OffsetDateTime value) {
-        set(3, value);
-        return this;
-    }
 
     @Override
     public Row4<String, UUID, OffsetDateTime, OffsetDateTime> fieldsRow() {
@@ -193,10 +178,6 @@ public class NamesRecord extends TableRecordImpl<NamesRecord> implements Record4
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public NamesRecord value4(OffsetDateTime value) {
         setChangedfromat(value);
@@ -209,6 +190,25 @@ public class NamesRecord extends TableRecordImpl<NamesRecord> implements Record4
         value2(value2);
         value3(value3);
         value4(value4);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.names.changedfromat</code>.
+     */
+    public OffsetDateTime getChangedfromat() {
+        return (OffsetDateTime) get(3);
+    }
+
+    /**
+     * Setter for <code>public.names.changedfromat</code>.
+     */
+    public NamesRecord setChangedfromat(OffsetDateTime value) {
+        set(3, value);
         return this;
     }
 }

@@ -23,10 +23,26 @@ public class ChatsRecord extends TableRecordImpl<ChatsRecord> implements Record4
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>public.chats.time</code>.
+     */
+    public ChatsRecord setTime(OffsetDateTime value) {
+        set(0, value);
+        return this;
+    }
+
+    /**
      * Create a detached ChatsRecord
      */
     public ChatsRecord() {
         super(Chats.CHATS);
+    }
+
+    /**
+     * Setter for <code>public.chats.chat</code>.
+     */
+    public ChatsRecord setChat(String value) {
+        set(1, value);
+        return this;
     }
 
     /**
@@ -42,40 +58,17 @@ public class ChatsRecord extends TableRecordImpl<ChatsRecord> implements Record4
     }
 
     /**
-     * Getter for <code>public.chats.time</code>.
-     */
-    public OffsetDateTime getTime() {
-        return (OffsetDateTime) get(0);
-    }
-
-    /**
-     * Setter for <code>public.chats.time</code>.
-     */
-    public ChatsRecord setTime(OffsetDateTime value) {
-        set(0, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.chats.chat</code>.
-     */
-    public String getChat() {
-        return (String) get(1);
-    }
-
-    /**
-     * Setter for <code>public.chats.chat</code>.
-     */
-    public ChatsRecord setChat(String value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
      * Getter for <code>public.chats.player_name</code>.
      */
     public String getPlayerName() {
         return (String) get(2);
+    }
+
+    /**
+     * Getter for <code>public.chats.time</code>.
+     */
+    public OffsetDateTime getTime() {
+        return (OffsetDateTime) get(0);
     }
 
     /**
@@ -86,24 +79,16 @@ public class ChatsRecord extends TableRecordImpl<ChatsRecord> implements Record4
         return this;
     }
 
+    /**
+     * Getter for <code>public.chats.chat</code>.
+     */
+    public String getChat() {
+        return (String) get(1);
+    }
+
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>public.chats.player_uuid</code>.
-     */
-    public UUID getPlayerUuid() {
-        return (UUID) get(3);
-    }
-
-    /**
-     * Setter for <code>public.chats.player_uuid</code>.
-     */
-    public ChatsRecord setPlayerUuid(UUID value) {
-        set(3, value);
-        return this;
-    }
 
     @Override
     public Row4<OffsetDateTime, String, String, UUID> fieldsRow() {
@@ -193,10 +178,6 @@ public class ChatsRecord extends TableRecordImpl<ChatsRecord> implements Record4
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public ChatsRecord value4(UUID value) {
         setPlayerUuid(value);
@@ -209,6 +190,25 @@ public class ChatsRecord extends TableRecordImpl<ChatsRecord> implements Record4
         value2(value2);
         value3(value3);
         value4(value4);
+        return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>public.chats.player_uuid</code>.
+     */
+    public UUID getPlayerUuid() {
+        return (UUID) get(3);
+    }
+
+    /**
+     * Setter for <code>public.chats.player_uuid</code>.
+     */
+    public ChatsRecord setPlayerUuid(UUID value) {
+        set(3, value);
         return this;
     }
 }
