@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -18,13 +17,11 @@ import static com.zenith.util.Constants.*;
 import static java.util.Objects.nonNull;
 
 public class WhitelistManager {
-    private final ScheduledExecutorService whitelistRefreshExecutorService;
     private final Random random;
     private ScheduledFuture<?> refreshScheduledFuture;
 
     public WhitelistManager() {
         this.random = new Random();
-        this.whitelistRefreshExecutorService = getVirtualScheduledExecutorService();
         if (CONFIG.server.extra.whitelist.whitelistRefresh) {
             startRefreshTask();
         }
@@ -32,7 +29,7 @@ public class WhitelistManager {
 
     public void startRefreshTask() {
         stopRefreshTask();
-        refreshScheduledFuture = whitelistRefreshExecutorService.scheduleAtFixedRate(this::refreshWhitelistEntries,
+        refreshScheduledFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::refreshWhitelistEntries,
                 random.nextInt(Math.max(1, (int) (CONFIG.server.extra.whitelist.whitelistRefreshIntervalMins / 2))),
                 Math.max(10L, CONFIG.server.extra.whitelist.whitelistRefreshIntervalMins),
                 TimeUnit.MINUTES);

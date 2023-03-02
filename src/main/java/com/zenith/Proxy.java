@@ -36,7 +36,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -60,11 +59,6 @@ public class Proxy {
     protected BufferedImage serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
     protected final CopyOnWriteArraySet<ServerConnection> activeConnections = new CopyOnWriteArraySet<>();
-    protected final ScheduledExecutorService clientTimeoutExecutorService;
-    protected ScheduledExecutorService autoReconnectExecutorService;
-    protected ScheduledExecutorService activeHoursExecutorService;
-    protected ScheduledExecutorService reconnectExecutorService;
-    protected ScheduledExecutorService whitelistUpdateExecutorService;
     private int reconnectCounter;
     private boolean inQueue = false;
     private int queuePosition = 0;
@@ -78,12 +72,16 @@ public class Proxy {
     public static void main(String... args) {
         instance = new Proxy();
         DEFAULT_LOG.info("Starting Proxy...");
+        if (CONFIG.database.enabled) {
+            DEFAULT_LOG.info("Starting Databases...");
+            DATABASE_MANAGER.initialize();
+        }
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
             try {
                 DISCORD_BOT.start(instance);
             } catch (final Throwable e) {
-                DISCORD_LOG.error("", e);
+                DISCORD_LOG.error("Failed starting discord bot", e);
             }
         }
 
@@ -91,11 +89,6 @@ public class Proxy {
     }
 
     public Proxy() {
-        this.clientTimeoutExecutorService = getVirtualScheduledExecutorService();
-        this.autoReconnectExecutorService = getVirtualScheduledExecutorService();
-        this.activeHoursExecutorService = getVirtualScheduledExecutorService();
-        this.reconnectExecutorService = getVirtualScheduledExecutorService();
-        this.whitelistUpdateExecutorService = getVirtualScheduledExecutorService();
         EVENT_BUS.subscribe(this);
     }
 
@@ -105,18 +98,18 @@ public class Proxy {
             if (CONFIG.server.extra.timeout.enable) {
                 long millis = CONFIG.server.extra.timeout.ms;
                 long interval = CONFIG.server.extra.timeout.interval;
-                clientTimeoutExecutorService.scheduleAtFixedRate(() -> {
+                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     ServerConnection currentPlayer = this.currentPlayer.get();
-                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis)  {
+                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis) {
                         currentPlayer.disconnect("Timed out");
                     }
                 }, 0, interval, TimeUnit.MILLISECONDS);
             }
             this.startServer();
             CACHE.reset(true);
-            activeHoursExecutorService.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             if (CONFIG.client.extra.sixHourReconnect) {
-                reconnectExecutorService.scheduleAtFixedRate(() -> {
+                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     try {
                         if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
                             long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
@@ -132,7 +125,7 @@ public class Proxy {
                 }, 0, 10L, TimeUnit.SECONDS);
             }
             if (CONFIG.client.extra.twentyMinuteReconnectIfStuck) {
-                reconnectExecutorService.scheduleAtFixedRate(() -> {
+                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     try {
                         if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))
                                 && CONFIG.client.extra.antiafk.enabled
@@ -376,7 +369,7 @@ public class Proxy {
                 if (autoReconnectIsInProgress()) {
                     return;
                 }
-                this.autoReconnectFuture = Optional.of(this.autoReconnectExecutorService.submit(() -> {
+                this.autoReconnectFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
                     delayBeforeReconnect();
                     synchronized (this.autoReconnectFuture) {
                         if (this.autoReconnectFuture.isPresent()) this.connect();

@@ -35,7 +35,6 @@ import java.util.Base64;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.discord.command.impl.StatusCommand.getCoordinates;
@@ -54,14 +53,12 @@ public class DiscordBot {
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing(CONFIG.client.server.address));
-    private final ScheduledExecutorService scheduledExecutorService;
     public Optional<Instant> lastRelaymessage = Optional.empty();
 
     @Getter
     private boolean isRunning;
 
     public DiscordBot() {
-        this.scheduledExecutorService = getVirtualScheduledExecutorService();
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
         this.isRunning = false;
     }
@@ -109,10 +106,10 @@ public class DiscordBot {
         if (CONFIG.discord.isUpdating) {
             handleProxyUpdateComplete();
         }
-        scheduledExecutorService.scheduleAtFixedRate(this::updatePresence, 0L,
+        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePresence, 0L,
                 15L, // discord rate limit
                 TimeUnit.SECONDS);
-        scheduledExecutorService.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
     }
 

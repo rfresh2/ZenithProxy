@@ -7,21 +7,21 @@ import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
+import com.zenith.util.Wait;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.util.Constants.EVENT_BUS;
-import static com.zenith.util.Constants.getVirtualScheduledExecutorService;
+import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class ModuleManager {
-
-    protected ScheduledExecutorService clientTickExecutorService;
+    protected ScheduledFuture<?> clientTickFuture;
     protected List<Module> modules;
 
     public ModuleManager() {
@@ -70,10 +70,9 @@ public class ModuleManager {
 
     public void startClientTicks() {
         synchronized (this) {
-            if (isNull(clientTickExecutorService) || clientTickExecutorService.isShutdown()) {
+            if (isNull(clientTickFuture) || clientTickFuture.isDone()) {
                 this.modules.forEach(Module::clientTickStarting);
-                this.clientTickExecutorService = getVirtualScheduledExecutorService();
-                this.clientTickExecutorService.scheduleAtFixedRate(() -> {
+                clientTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         EVENT_BUS.dispatch(new ClientTickEvent());
                     }
@@ -84,10 +83,12 @@ public class ModuleManager {
 
     public synchronized void stopClientTicks() {
         synchronized (this) {
-            if (nonNull(this.clientTickExecutorService)) {
-                this.clientTickExecutorService.shutdownNow();
-                this.clientTickExecutorService = null;
+            if (nonNull(this.clientTickFuture)) {
+                this.clientTickFuture.cancel(true);
                 this.modules.forEach(Module::clientTickStopping);
+                while (!this.clientTickFuture.isDone()) {
+                    Wait.waitALittleMs(50);
+                }
             }
         }
     }

@@ -319,6 +319,7 @@ public final class Config {
     }
 
     public static final class Database {
+        public boolean enabled = true;
         public String host = "db.2b2t.vc";
         public int port = 5432;
         public String username = "proxy";

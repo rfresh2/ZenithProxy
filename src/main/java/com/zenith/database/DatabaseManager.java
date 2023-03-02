@@ -19,6 +19,10 @@ public class DatabaseManager {
     private QueryExecutor queryExecutor;
 
     public DatabaseManager() {
+
+    }
+
+    public void initialize() {
         try {
             this.queryExecutor = new QueryExecutor(this::getConnectionPool);
             if (CONFIG.database.queueWait.enabled) {

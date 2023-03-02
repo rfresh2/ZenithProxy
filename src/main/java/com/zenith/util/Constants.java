@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -76,7 +75,6 @@ public class Constants {
     public static final DataCache CACHE;
     public static final DiscordBot DISCORD_BOT;
     public static final EventBus EVENT_BUS;
-    public static final ExecutorService MODULE_EXECUTOR_SERVICE;
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
     public static final WhitelistManager WHITELIST_MANAGER;
     public static final PriorityBanChecker PRIORITY_BAN_CHECKER;
@@ -254,7 +252,6 @@ public class Constants {
         CACHE = new DataCache();
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
-        MODULE_EXECUTOR_SERVICE = getVirtualScheduledExecutorService();
         SCHEDULED_EXECUTOR_SERVICE = getVirtualScheduledExecutorService();
         WHITELIST_MANAGER = new WhitelistManager();
         PRIORITY_BAN_CHECKER = new PriorityBanChecker();
@@ -267,8 +264,12 @@ public class Constants {
         AUTO_UPDATER = new AutoUpdater();
     }
 
-    public static ScheduledExecutorService getVirtualScheduledExecutorService() {
+    public static ScheduledExecutorService getVirtualSingleThreadScheduledExecutorService() {
         return Executors.newSingleThreadScheduledExecutor(virtualThreadFactory);
+    }
+
+    public static ScheduledExecutorService getVirtualScheduledExecutorService() {
+        return Executors.newScheduledThreadPool(16, virtualThreadFactory);
     }
 
 }

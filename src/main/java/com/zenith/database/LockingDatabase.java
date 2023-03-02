@@ -12,11 +12,11 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
-import static com.zenith.util.Constants.getVirtualScheduledExecutorService;
+import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -30,7 +30,7 @@ public abstract class LockingDatabase extends Database {
     private final RedisClient redisClient;
     private RLock rLock;
     private ScheduledExecutorService lockExecutorService;
-    private ScheduledExecutorService queryExecutorPool;
+    private ScheduledFuture<?> queryExecutorFuture;
 
     public LockingDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor);
@@ -74,7 +74,7 @@ public abstract class LockingDatabase extends Database {
         this.lockAcquired.set(false);
         synchronized (this) {
             if (isNull(lockExecutorService)) {
-                lockExecutorService = getVirtualScheduledExecutorService();
+                lockExecutorService = getVirtualSingleThreadScheduledExecutorService();
             }
         }
         lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, 5000L, 1000L, TimeUnit.MILLISECONDS);
@@ -107,17 +107,18 @@ public abstract class LockingDatabase extends Database {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
         Wait.waitALittleMs(5000); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
-        if (isNull(queryExecutorPool)) {
-            queryExecutorPool = getVirtualScheduledExecutorService();
-            queryExecutorPool.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
+        if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
+            queryExecutorFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
         }
     }
 
     public void onLockReleased() {
         DATABASE_LOG.info("{} Database Lock Released", getLockKey());
-        if (nonNull(queryExecutorPool)) {
-            this.queryExecutorPool.shutdownNow();
-            this.queryExecutorPool = null;
+        if (nonNull(queryExecutorFuture)) {
+            queryExecutorFuture.cancel(true);
+            while (!queryExecutorFuture.isDone()) {
+                Wait.waitALittleMs(50);
+            }
         }
     }
 
