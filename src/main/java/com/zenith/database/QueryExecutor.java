@@ -1,6 +1,7 @@
 package com.zenith.database;
 
 import com.zenith.util.Wait;
+import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 

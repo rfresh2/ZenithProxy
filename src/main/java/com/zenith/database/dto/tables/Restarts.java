@@ -7,6 +7,7 @@ package com.zenith.database.dto.tables;
 import com.zenith.database.dto.Keys;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.RestartsRecord;
+import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;

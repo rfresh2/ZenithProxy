@@ -10,14 +10,13 @@ buildscript {
 }
 
 plugins {
-    id 'nu.studer.jooq' version '5.2.2'
+    id 'nu.studer.jooq' version '8.1'
     id "com.github.johnrengelman.shadow" version "8.1.0"
 }
 
 apply plugin: "java"
 
 ext {
-
     lombokVersion = "1.18.26"
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.5.4'
@@ -27,15 +26,15 @@ group "com.zenith"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
+    sourceCompatibility = targetCompatibility = "17"
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
 }
 
@@ -141,7 +140,7 @@ jooq {
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
     shade 'org.jooq:jooq:3.17.8'
-    shade "com.zaxxer:HikariCP:4.0.3"
+    shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:5.13.1.202206130422-r'
@@ -151,22 +150,22 @@ dependencies {
     shade "org.apache.commons:commons-collections4:4.4"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
-    shade "ch.qos.logback:logback-classic:1.3.5"
+    shade "ch.qos.logback:logback-classic:1.4.5"
     shade 'org.slf4j:slf4j-api:2.0.6'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
-    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1'
+    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
-    shade("com.github.5cmc:mcprotocollib:16859c9bf6") {
+    shade("com.github.5cmc:MCProtocolLib:b889208170") {
         exclude group: "io.netty", module: "netty-all"
     }
-    shade "com.github.5cmc:MCAuthLib:604e1a964a"
+    shade "com.github.5cmc:MCAuthLib:94b70b772d"
 
-    shade 'io.netty:netty-codec-haproxy:4.1.79.Final'
+    shade 'io.netty:netty-codec-haproxy:4.1.89.Final'
 
     shade "com.discord4j:discord4j-core:3.2.3"
 
-    shade "com.github.collarmc:Pounce:5fddbfca2d"
+    shade "com.github.collarmc:pounce:0e8492b68e"
     shade 'org.redisson:redisson:3.19.3'
 
     testImplementation "junit:junit:4.13.2"
