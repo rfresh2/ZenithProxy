@@ -184,7 +184,7 @@ tasks.register('run', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass.set("com.zenith.Proxy")
     maxHeapSize = "280M"
-    jvmArgs = ["-server", "-XX:NewSize=80M", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
+    jvmArgs = ["-server", "-XX:+UseShenandoahGC", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
 }
 
 tasks.withType(JavaExec).configureEach {
