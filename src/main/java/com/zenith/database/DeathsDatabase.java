@@ -39,16 +39,16 @@ public class DeathsDatabase extends LockingDatabase {
     @Override
     public Instant getLastEntryTime() {
         final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Deaths c = Deaths.DEATHS;
-        final Result<DeathsRecord> recordResult = this.queryExecutor.fetch(context.selectFrom(c)
-                .orderBy(c.TIME.desc())
+        final Deaths d = Deaths.DEATHS;
+        final Result<DeathsRecord> recordResult = this.queryExecutor.fetch(context.selectFrom(d)
+                .orderBy(d.TIME.desc())
                 .limit(1));
         if (recordResult.isEmpty()) {
             DATABASE_LOG.warn("Deaths database unable to sync. Database empty?");
             return Instant.EPOCH;
         }
         final DeathsRecord deathsRecord = recordResult.get(0);
-        return deathsRecord.getTime().toInstant();
+        return deathsRecord.get(d.TIME).toInstant();
     }
 
     @Subscribe

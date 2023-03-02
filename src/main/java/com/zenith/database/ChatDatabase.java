@@ -42,7 +42,7 @@ public class ChatDatabase extends LockingDatabase {
             return Instant.EPOCH;
         }
         final ChatsRecord chatsRecord = recordResult.get(0);
-        return chatsRecord.getTime().toInstant();
+        return chatsRecord.get(c.TIME).toInstant();
     }
 
     @Subscribe
