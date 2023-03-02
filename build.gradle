@@ -157,7 +157,7 @@ dependencies {
     shade 'com.mojang:brigadier:1.0.18'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
-    shade("com.github.5cmc:MCProtocolLib:b889208170") {
+    shade("com.github.5cmc:MCProtocolLib:2db4c3f3b6") {
         exclude group: "io.netty", module: "netty-all"
     }
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
