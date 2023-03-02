@@ -35,7 +35,6 @@ import java.util.Base64;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +61,7 @@ public class DiscordBot {
     private boolean isRunning;
 
     public DiscordBot() {
-        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.scheduledExecutorService = getVirtualScheduledExecutorService();
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
         this.isRunning = false;
     }

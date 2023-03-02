@@ -34,7 +34,10 @@ import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -88,11 +91,11 @@ public class Proxy {
     }
 
     public Proxy() {
-        this.clientTimeoutExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.autoReconnectExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.activeHoursExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.reconnectExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.whitelistUpdateExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.clientTimeoutExecutorService = getVirtualScheduledExecutorService();
+        this.autoReconnectExecutorService = getVirtualScheduledExecutorService();
+        this.activeHoursExecutorService = getVirtualScheduledExecutorService();
+        this.reconnectExecutorService = getVirtualScheduledExecutorService();
+        this.whitelistUpdateExecutorService = getVirtualScheduledExecutorService();
         EVENT_BUS.subscribe(this);
     }
 
@@ -229,11 +232,9 @@ public class Proxy {
         } catch (final RuntimeException e) {
             EVENT_BUS.dispatch(new ProxyLoginFailedEvent());
             getActiveConnections().forEach(connection -> connection.disconnect("Login failed"));
-            ForkJoinPool.commonPool().submit(() -> {
-                // mitigate possible race condition in autoreconnect
-                Wait.waitALittle(1);
+            SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
                 EVENT_BUS.dispatch(new DisconnectEvent("Login Failed"));
-            });
+            }, 1L, TimeUnit.SECONDS);
             return;
         }
 
@@ -308,7 +309,7 @@ public class Proxy {
     }
 
     public Future<Boolean> loginTask() {
-        return ForkJoinPool.commonPool().submit(() -> {
+        return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
                 this.protocol = this.loggerInner.handleRelog();
                 return true;

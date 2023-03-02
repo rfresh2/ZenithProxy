@@ -48,7 +48,7 @@ import java.io.Reader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 
 public class Constants {
 
@@ -241,6 +241,8 @@ public class Constants {
             .registerPostOutbound(new JoinGameSpectatorPostHandler())
             .build();
 
+    private static final ThreadFactory virtualThreadFactory = Thread.ofVirtual().factory();
+
     static {
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
             DEFAULT_LOG.error(String.format("Uncaught exception in thread \"%s\"!", thread), e);
@@ -252,8 +254,8 @@ public class Constants {
         CACHE = new DataCache();
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
-        MODULE_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1);
-        SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
+        MODULE_EXECUTOR_SERVICE = getVirtualScheduledExecutorService();
+        SCHEDULED_EXECUTOR_SERVICE = getVirtualScheduledExecutorService();
         WHITELIST_MANAGER = new WhitelistManager();
         PRIORITY_BAN_CHECKER = new PriorityBanChecker();
         BLOCK_DATA_MANAGER = new BlockDataManager();
@@ -263,6 +265,10 @@ public class Constants {
         MODULE_MANAGER = new ModuleManager();
         PATHING = new Pathing(WORLD);
         AUTO_UPDATER = new AutoUpdater();
+    }
+
+    public static ScheduledExecutorService getVirtualScheduledExecutorService() {
+        return Executors.newSingleThreadScheduledExecutor(virtualThreadFactory);
     }
 
 }

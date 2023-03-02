@@ -11,10 +11,10 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.util.Constants.getVirtualScheduledExecutorService;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -72,7 +72,7 @@ public class ModuleManager {
         synchronized (this) {
             if (isNull(clientTickExecutorService) || clientTickExecutorService.isShutdown()) {
                 this.modules.forEach(Module::clientTickStarting);
-                this.clientTickExecutorService = new ScheduledThreadPoolExecutor(1);
+                this.clientTickExecutorService = getVirtualScheduledExecutorService();
                 this.clientTickExecutorService.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         EVENT_BUS.dispatch(new ClientTickEvent());

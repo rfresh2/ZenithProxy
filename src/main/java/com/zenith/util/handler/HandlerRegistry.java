@@ -44,7 +44,7 @@ public class HandlerRegistry<S extends Session> {
 
     protected final boolean allowUnhandled;
 
-    protected static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newFixedThreadPool(10); // idk 10 seems reasonable but might need to adjust
+    protected static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newVirtualThreadPerTaskExecutor();
     private static final List<Class<? extends Packet>> allowedPackets = asList(
             ServerPlayerPositionRotationPacket.class,
             ClientPlayerPositionRotationPacket.class,

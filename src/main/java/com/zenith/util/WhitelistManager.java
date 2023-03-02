@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +24,7 @@ public class WhitelistManager {
 
     public WhitelistManager() {
         this.random = new Random();
-        this.whitelistRefreshExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.whitelistRefreshExecutorService = getVirtualScheduledExecutorService();
         if (CONFIG.server.extra.whitelist.whitelistRefresh) {
             startRefreshTask();
         }

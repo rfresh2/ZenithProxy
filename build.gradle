@@ -27,16 +27,14 @@ group "com.zenith"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(19)
     }
 }
 
-compileJava {
-    sourceCompatibility = targetCompatibility = "17"
-}
-
 tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = targetCompatibility = "19"
     options.encoding = "UTF-8"
+    options.compilerArgs.addAll(["--enable-preview"])
 }
 
 repositories {
@@ -166,7 +164,7 @@ dependencies {
 
     shade "com.discord4j:discord4j-core:3.2.3"
 
-    shade "com.github.collarmc:pounce:0e8492b68e"
+    shade "com.github.collarmc:pounce:eaabbb27de"
     shade 'org.redisson:redisson:3.19.3'
 
     testImplementation "junit:junit:4.13.2"
@@ -184,7 +182,7 @@ tasks.register('run', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass.set("com.zenith.Proxy")
     maxHeapSize = "280M"
-    jvmArgs = ["-server", "-XX:+UseShenandoahGC", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
+    jvmArgs = ["-server", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=4", "--enable-preview"]
 }
 
 tasks.withType(JavaExec).configureEach {
