@@ -10,8 +10,8 @@ buildscript {
 }
 
 plugins {
-    id 'nu.studer.jooq' version '5.2.3'
     // todo: cannot upgrade this as consumers still have jdk 8 configured in gradle separate from the toolchain
+    id 'nu.studer.jooq' version '5.2.2'
     id "com.github.johnrengelman.shadow" version "8.1.0"
 }
 
