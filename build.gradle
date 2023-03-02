@@ -155,12 +155,20 @@ dependencies {
     shade 'com.mojang:brigadier:1.0.18'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
-    shade("com.github.5cmc:MCProtocolLib:2db4c3f3b6") {
-        exclude group: "io.netty", module: "netty-all"
-    }
+    shade("com.github.5cmc:MCProtocolLib:2db4c3f3b6")
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
 
     shade 'io.netty:netty-codec-haproxy:4.1.89.Final'
+    shade 'io.netty:netty-codec-dns:4.1.89.Final'
+    shade 'io.netty:netty-codec-http2:4.1.89.Final'
+    shade 'io.netty:netty-codec-http:4.1.89.Final'
+    shade 'io.netty:netty-codec-socks:4.1.89.Final'
+    shade 'io.netty:netty-handler-proxy:4.1.89.Final'
+    shade 'io.netty:netty-handler:4.1.89.Final'
+    shade 'io.netty:netty-resolver-dns:4.1.89.Final'
+    shade 'io.netty:netty-transport-classes-epoll:4.1.89.Final'
+    shade 'io.netty:netty-transport-native-epoll:4.1.89.Final'
+    shade('io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64')
 
     shade "com.discord4j:discord4j-core:3.2.3"
 
@@ -173,7 +181,6 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
-    shade('io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64')
 }
 
 tasks.register('run', JavaExec) {
