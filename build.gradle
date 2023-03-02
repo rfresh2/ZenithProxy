@@ -186,6 +186,11 @@ tasks.register('run', JavaExec) {
     maxHeapSize = "280M"
     jvmArgs = ["-server", "-XX:NewSize=80M", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
 }
+
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+}
+
 run.dependsOn build
 
 //disable regular unshaded jar
