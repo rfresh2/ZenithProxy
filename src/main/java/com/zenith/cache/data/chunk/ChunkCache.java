@@ -14,7 +14,9 @@ import com.github.steveice10.opennbt.tag.builtin.IntTag;
 import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
+import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
+import com.zenith.server.ServerConnection;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -27,9 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE_LOG;
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
     private static final Position DEFAULT_SPAWN_POSITION = new Position(8, 64, 8);
@@ -243,6 +245,15 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                     this.spawnPosition.getX(),
                     this.spawnPosition.getY(),
                     this.spawnPosition.getZ());
+        }
+    }
+
+    public static void sync() {
+        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+        if (nonNull(currentPlayer)) {
+            CACHE.getChunkCache().cache.values().parallelStream()
+                    .map(ServerChunkDataPacket::new)
+                    .forEach(currentPlayer::send);
         }
     }
 }

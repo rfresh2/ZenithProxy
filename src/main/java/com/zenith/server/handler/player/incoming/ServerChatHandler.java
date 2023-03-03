@@ -3,6 +3,7 @@ package com.zenith.server.handler.player.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Queue;
 import com.zenith.util.handler.HandlerRegistry;
@@ -36,6 +37,8 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 session.send(new ServerChatPacket("§7§ckick <player>§7- §8Kicks a spectator by name", true));
                 session.send(new ServerChatPacket("§7§cspectator§7- §8Toggles spectator enabled status. If disabled, all spectators are kicked", true));
                 session.send(new ServerChatPacket("§7§cschat§7- §8Toggles if spectators are allowed to send public chats.", true));
+                session.send(new ServerChatPacket("§7§csync §7- §8Syncs current player inventory with server", true));
+                session.send(new ServerChatPacket("§7§cchunksync §7- §8Syncs server chunks to the current player", true));
                 return false;
             } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
                 session.getProxy().getClient().disconnect(MANUAL_DISCONNECT);
@@ -79,9 +82,13 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 return false;
             } else if (packet.getMessage().toLowerCase().startsWith("!sync")) {
                 PlayerCache.sync();
+                session.send(new ServerChatPacket("§cSync inventory complete", true));
                 return false;
-            }
-            else {
+            } else if (packet.getMessage().toLowerCase().startsWith("!chunksync")) {
+                ChunkCache.sync();
+                session.send(new ServerChatPacket("§cSync chunks complete", true));
+                return false;
+            } else {
                 session.send(new ServerChatPacket(String.format("§7[§9Proxy§7]§r §cUnknown command: §o%s", packet.getMessage()), true));
                 return false;
             }
