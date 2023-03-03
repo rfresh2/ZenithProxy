@@ -1,11 +1,15 @@
 package com.zenith.util.spectator;
 
-import com.zenith.util.spectator.entity.*;
+import com.zenith.util.spectator.entity.SpectatorEntity;
 import com.zenith.util.spectator.entity.mob.*;
 import com.zenith.util.spectator.entity.object.SpectatorEntityEgg;
 import com.zenith.util.spectator.entity.object.SpectatorEntityEndCrystal;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.zenith.util.Constants.SERVER_LOG;
 import static java.util.Objects.isNull;
@@ -14,7 +18,7 @@ public final class SpectatorEntityRegistry {
 
     private SpectatorEntityRegistry() {}
 
-    static final Map<String, SpectatorEntity> spectatorEntityMap = new HashMap<>();
+    static final Map<String, SpectatorEntity> spectatorEntityMap = new Object2ObjectOpenHashMap<>();
 
     static {
         spectatorEntityMap.put("cat", new SpectatorEntityCat());

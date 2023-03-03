@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.server.ServerConnection;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -25,7 +26,6 @@ import net.daporkchop.lib.math.vector.Vec2i;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -35,7 +35,7 @@ import static java.util.Objects.nonNull;
 
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
     private static final Position DEFAULT_SPAWN_POSITION = new Position(8, 64, 8);
-    protected final Map<Vec2i, Column> cache = new ConcurrentHashMap<>();
+    protected final Map<Vec2i, Column> cache = new Object2ObjectOpenHashMap<>();
     @Getter
     @Setter
     protected Position spawnPosition = DEFAULT_SPAWN_POSITION;

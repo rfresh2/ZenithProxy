@@ -2,16 +2,17 @@ package com.zenith.cache.data.entity;
 
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.NonNull;
 
+import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import static com.zenith.util.Constants.CACHE;
 
 public class EntityCache implements CachedData {
-    protected final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
+    protected final Map<Integer, Entity> cachedEntities = Collections.synchronizedMap(new Int2ObjectOpenHashMap<>());
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {

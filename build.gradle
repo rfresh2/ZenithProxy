@@ -169,11 +169,10 @@ dependencies {
     shade 'io.netty:netty-transport-classes-epoll:4.1.89.Final'
     shade 'io.netty:netty-transport-native-epoll:4.1.89.Final'
     shade('io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64')
-
     shade "com.discord4j:discord4j-core:3.2.3"
-
     shade "com.github.collarmc:pounce:eaabbb27de"
     shade 'org.redisson:redisson:3.19.3'
+    shade 'it.unimi.dsi:fastutil:8.5.11'
 
     testImplementation "junit:junit:4.13.2"
 
