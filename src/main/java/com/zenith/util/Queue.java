@@ -3,6 +3,7 @@ package com.zenith.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenith.mcping.MCPing;
 import com.zenith.mcping.PingOptions;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import reactor.netty.http.client.HttpClient;
@@ -23,6 +24,7 @@ import static java.util.Objects.isNull;
 public class Queue {
     private static final String apiUrl = "https://2bqueue.info/queue";
     private static final HttpClient httpClient = HttpClient.create()
+            .runOn(new NioEventLoopGroup(Thread.ofVirtual().factory()))
             .secure()
             .baseUrl(apiUrl)
             .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON));

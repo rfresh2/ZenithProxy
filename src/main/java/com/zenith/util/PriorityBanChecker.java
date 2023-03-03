@@ -1,5 +1,6 @@
 package com.zenith.util;
 
+import io.netty.channel.nio.NioEventLoopGroup;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.http.client.HttpClientResponse;
 
@@ -13,6 +14,7 @@ public class PriorityBanChecker {
 
     public PriorityBanChecker() {
         this.client = HttpClient.create()
+                .runOn(new NioEventLoopGroup(Thread.ofVirtual().factory()))
                 .followRedirect(false)
                 .secure();
     }
