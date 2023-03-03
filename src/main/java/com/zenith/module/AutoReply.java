@@ -52,7 +52,7 @@ public class AutoReply extends Module {
                             if (isNull(repliedPlayersCache.getIfPresent(sender))) {
                                 repliedPlayersCache.put(sender, sender);
                                 // 236 char max ( 256 - 4(command) - 16(max name length) )
-                                Proxy.getInstance().getClient().send(new ClientChatPacket("/w " + sender + " " + CONFIG.client.extra.autoReply.message));
+                                Proxy.getInstance().getClient().send(new ClientChatPacket("/w " + sender + " " + (event.message.toLowerCase().endsWith("bep") ? "kill yourself" : CONFIG.client.extra.autoReply.message)));
                                 this.lastReply = Instant.now();
                             }
                         }
