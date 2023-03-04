@@ -4,13 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenith.pathing.CollisionBox;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -58,7 +54,7 @@ public class BlockDataManager {
     }
 
     private Map<Integer, List<CollisionBox>> getBlockVariationMapping(BlockCollisionShapes blockCollisionShapes, BlockData blockData) {
-        final Map<Integer, List<CollisionBox>> map = new Int2ObjectOpenHashMap<>();
+        final Map<Integer, List<CollisionBox>> map = new HashMap<>();
         if (isNull(blockData.getVariations())) {
             map.put(0, getCollisionBoxesFromBlockState(blockCollisionShapes, blockData, 0).orElse(Collections.emptyList()));
         } else {

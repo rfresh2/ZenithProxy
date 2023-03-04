@@ -1,8 +1,8 @@
 package com.zenith.pathing.blockdata;
 
 import com.fasterxml.jackson.annotation.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -437,7 +437,7 @@ public class BlockData {
 
         BLOCK("block"),
         EMPTY("empty");
-        private final static Map<String, BoundingBox> CONSTANTS = new Object2ObjectOpenHashMap<>();
+        private final static Map<String, BoundingBox> CONSTANTS = new HashMap<String, BoundingBox>();
 
         static {
             for (BoundingBox c : values()) {

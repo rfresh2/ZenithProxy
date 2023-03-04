@@ -145,7 +145,6 @@ dependencies {
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:5.13.1.202206130422-r'
     shade 'com.github.mwiede:jsch:0.2.4'
     shade 'com.google.guava:guava:31.1-jre'
-    shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
@@ -153,7 +152,6 @@ dependencies {
     shade 'org.slf4j:slf4j-api:2.0.6'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
-    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
     shade("com.github.5cmc:MCProtocolLib:2db4c3f3b6")
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
@@ -169,10 +167,11 @@ dependencies {
     shade 'io.netty:netty-transport-classes-epoll:4.1.89.Final'
     shade 'io.netty:netty-transport-native-epoll:4.1.89.Final'
     shade('io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64')
+
     shade "com.discord4j:discord4j-core:3.2.3"
+
     shade "com.github.collarmc:pounce:eaabbb27de"
-    shade 'org.redisson:redisson:3.19.3'
-    shade 'it.unimi.dsi:fastutil:8.5.11'
+    shade 'org.redisson:redisson:3.20.0'
 
     testImplementation "junit:junit:4.13.2"
 

@@ -6,21 +6,17 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Iterators;
 import com.zenith.Proxy;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
-import org.apache.commons.collections4.iterators.LoopingListIterator;
-import org.apache.commons.math3.util.Pair;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -36,17 +32,17 @@ public class AntiAFK extends Module {
     private final TickTimer distanceDeltaCheckTimer = new TickTimer();
     private boolean shouldWalk = false;
     private final Cache<Position, Position> positionCache;
-    private final List<Pair<Integer, Integer>> walkDirections = asList(
-            new Pair<>(1, 0), new Pair<>(-1, 0),
-            new Pair<>(1, 1), new Pair<>(-1, -1),
-            new Pair<>(0, -1), new Pair<>(0, 1),
-            new Pair<>(-1, 1), new Pair<>(1, -1),
-            new Pair<>(-1, 0), new Pair<>(1, 0),
-            new Pair<>(1, -1), new Pair<>(-1, 1),
-            new Pair<>(0, 1), new Pair<>(0, -1));
+    private final List<WalkDirection> walkDirections = asList(
+            new WalkDirection(1, 0), new WalkDirection(-1, 0),
+            new WalkDirection(1, 1), new WalkDirection(-1, -1),
+            new WalkDirection(0, -1), new WalkDirection(0, 1),
+            new WalkDirection(-1, 1), new WalkDirection(1, -1),
+            new WalkDirection(-1, 0), new WalkDirection(1, 0),
+            new WalkDirection(1, -1), new WalkDirection(-1, 1),
+            new WalkDirection(0, 1), new WalkDirection(0, -1));
     private Instant lastDistanceDeltaWarningTime = Instant.EPOCH;
     private boolean stuck = false;
-    private final LoopingListIterator<Pair<Integer, Integer>> walkDirectionIterator = new LoopingListIterator<>(walkDirections);
+    private final Iterator<WalkDirection> walkDirectionIterator = Iterators.cycle(walkDirections);
     private BlockPos currentPathingGoal;
     // tick time since we started falling
     // can be negative, indicates pathing should wait until it reaches 0 to fall
@@ -110,7 +106,6 @@ public class AntiAFK extends Module {
         shouldWalk = false;
         positionCache.invalidateAll();
         lastDistanceDeltaWarningTime = Instant.EPOCH;
-        walkDirectionIterator.reset();
         currentPathingGoal = null;
         gravityT = 0;
         stuck = false;
@@ -156,10 +151,10 @@ public class AntiAFK extends Module {
     private void walkTick() {
         if (startWalkTickTimer.tick(400L, true)) {
             shouldWalk = true;
-            final Pair<Integer, Integer> directions = walkDirectionIterator.next();
+            final WalkDirection directions = walkDirectionIterator.next();
             currentPathingGoal = PATHING.getCurrentPlayerPos()
-                    .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getKey())
-                    .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.getValue())
+                    .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.from)
+                    .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.to)
                     .toBlockPos();
 
         }
@@ -203,5 +198,9 @@ public class AntiAFK extends Module {
 
     public boolean isStuck() {
         return this.stuck;
+    }
+
+
+    record WalkDirection(int from, int to) {
     }
 }

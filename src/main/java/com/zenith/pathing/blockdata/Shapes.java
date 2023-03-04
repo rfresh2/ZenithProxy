@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 public class Shapes {
 
     @JsonIgnore
-    private Map<String, List<List<Double>>> additionalProperties = new Object2ObjectOpenHashMap<>();
+    private Map<String, List<List<Double>>> additionalProperties = new HashMap<String, List<List<Double>>>();
 
     @JsonAnyGetter
     public Map<String, List<List<Double>>> getAdditionalProperties() {

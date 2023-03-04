@@ -1,8 +1,8 @@
 package com.zenith.pathing.blockdata;
 
 import com.fasterxml.jackson.annotation.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,7 +122,7 @@ public class State {
         ENUM("enum"),
         BOOL("bool"),
         INT("int");
-        private final static Map<String, Type> CONSTANTS = new Object2ObjectOpenHashMap<>();
+        private final static Map<String, Type> CONSTANTS = new HashMap<String, Type>();
 
         static {
             for (State.Type c : values()) {

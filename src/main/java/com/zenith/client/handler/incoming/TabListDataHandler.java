@@ -57,6 +57,7 @@ public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<
                 EVENT_BUS.dispatch(new StartQueueEvent());
             }
             session.setInQueue(true);
+            session.setOnline(false);
         } else if (session.isInQueue()) {
             session.setInQueue(false);
             session.setLastQueuePosition(Integer.MAX_VALUE);
