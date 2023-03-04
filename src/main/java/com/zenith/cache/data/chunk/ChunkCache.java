@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.server.ServerConnection;
+import com.zenith.util.Wait;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
@@ -93,9 +94,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     public void remove(int x, int z) {
         synchronized (this) {
             CACHE_LOG.debug("Server telling us to uncache chunk ({}, {})", x, z);
-            if (this.cache.remove(Vec2i.of(x, z)) == null) {
-                CACHE_LOG.warn("Could not remove column ({}, {})! this is probably a server issue", x, z);
-            }
+            Wait.waitUntilCondition(() -> this.cache.remove(Vec2i.of(x, z)) == null, 1);
         }
     }
 
