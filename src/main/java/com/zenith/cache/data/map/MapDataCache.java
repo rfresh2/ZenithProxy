@@ -3,15 +3,15 @@ package com.zenith.cache.data.map;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMapDataPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.NonNull;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class MapDataCache implements CachedData {
-    Map<Integer, StoredMapData> mapDataMap = new ConcurrentHashMap<>();
+    Map<Integer, StoredMapData> mapDataMap = Collections.synchronizedMap(new Int2ObjectOpenHashMap<>());
 
     public void upsert(final ServerMapDataPacket serverMapDataPacket) {
         if (mapDataMap.containsKey(serverMapDataPacket.getMapId())) {
@@ -41,7 +41,7 @@ public class MapDataCache implements CachedData {
     @Override
     public void reset(boolean full) {
         if (full) {
-            mapDataMap = new HashMap<>();
+            mapDataMap = new Int2ObjectOpenHashMap<>();
         }
     }
 
