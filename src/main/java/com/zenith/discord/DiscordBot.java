@@ -10,11 +10,9 @@ import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.util.Queue;
-import discord4j.common.ReactorResources;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.EventDispatcher;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
@@ -23,15 +21,11 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ImmutableUserModifyRequest;
 import discord4j.discordjson.json.MessageCreateRequest;
-import discord4j.gateway.GatewayReactorResources;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
-import reactor.core.scheduler.Schedulers;
-import reactor.netty.resources.ConnectionProvider;
-import reactor.netty.resources.LoopResources;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -73,18 +67,9 @@ public class DiscordBot {
         this.proxy = proxy;
 
         this.client = DiscordClientBuilder.create(CONFIG.discord.token)
-                .setReactorResources(ReactorResources.builder()
-                        .blockingTaskScheduler(Schedulers.fromExecutorService(SCHEDULED_EXECUTOR_SERVICE))
-                        .timerTaskScheduler(Schedulers.fromExecutorService(SCHEDULED_EXECUTOR_SERVICE))
-                        .httpClient(ReactorResources.newHttpClient(
-                                ConnectionProvider.create("d4j-conn-provider", 2),
-                                LoopResources.create("d4j-loop", 1, true)))
-                        .build())
                 .build()
                 .gateway()
-                .setGatewayReactorResources((r) -> new GatewayReactorResources(r, Schedulers.fromExecutorService(SCHEDULED_EXECUTOR_SERVICE)))
                 .setInitialPresence(shardInfo -> DISCONNECTED_PRESENCE)
-                .setEventDispatcher(EventDispatcher.builder().eventScheduler(Schedulers.fromExecutorService(SCHEDULED_EXECUTOR_SERVICE)).build())
                 .login()
                 .block();
         EVENT_BUS.subscribe(this);
