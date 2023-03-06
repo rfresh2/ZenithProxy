@@ -45,8 +45,6 @@ public class RedisClient {
         Config config = new Config();
         config.setNettyThreads(1)
                 .setThreads(1)
-//                .setExecutor(SCHEDULED_EXECUTOR_SERVICE)
-//                .setEventLoopGroup(new NioEventLoopGroup(Thread.ofVirtual().factory()))
                 .useSingleServer()
                 .setAddress(CONFIG.database.lock.redisAddress)
                 .setUsername(CONFIG.database.lock.redisUsername)

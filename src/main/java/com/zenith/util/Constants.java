@@ -252,7 +252,7 @@ public class Constants {
         CACHE = new DataCache();
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
-        SCHEDULED_EXECUTOR_SERVICE = getVirtualScheduledExecutorService();
+        SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(10);
         WHITELIST_MANAGER = new WhitelistManager();
         PRIORITY_BAN_CHECKER = new PriorityBanChecker();
         BLOCK_DATA_MANAGER = new BlockDataManager();

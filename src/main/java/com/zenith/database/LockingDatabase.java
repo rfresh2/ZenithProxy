@@ -10,13 +10,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -74,7 +72,7 @@ public abstract class LockingDatabase extends Database {
         this.lockAcquired.set(false);
         synchronized (this) {
             if (isNull(lockExecutorService)) {
-                lockExecutorService = getVirtualSingleThreadScheduledExecutorService();
+                lockExecutorService = Executors.newSingleThreadScheduledExecutor();
             }
         }
         lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, 5000L, 1000L, TimeUnit.MILLISECONDS);

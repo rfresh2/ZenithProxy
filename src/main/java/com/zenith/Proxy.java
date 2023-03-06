@@ -18,7 +18,6 @@ import com.zenith.util.Config;
 import com.zenith.util.LoggerInner;
 import com.zenith.util.Queue;
 import com.zenith.util.Wait;
-import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
@@ -148,7 +147,6 @@ public class Proxy {
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 try {
                     InputStream netInputStream = HttpClient.create()
-                            .runOn(new NioEventLoopGroup(Thread.ofVirtual().factory()))
                             .secure()
                             .get()
                             .uri(getAvatarURL(CONFIG.authentication.username).toURI())
