@@ -25,6 +25,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 //allow sending ingame commands to bots or whatever
                 PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, packet.getMessage().substring(1));
                 return true;
+//                todo: intercept toggledeathmessages/toggleconnectionmessages and block them at proxy to simulate the effect
             } else if (packet.getMessage().toLowerCase().startsWith("!help")) {
                 session.send(new ServerChatPacket("§9§lPlayer commands:", true));
                 session.send(new ServerChatPacket("§2Prefix : \"!\"", true));

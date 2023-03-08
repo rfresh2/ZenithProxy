@@ -79,6 +79,7 @@ configurations {
 }
 
 jooq {
+    version = "3.17.8"
     // read from config.json (will fail if config doesn't exist)
     def dbUrl = ''
     def dbUser = ''
