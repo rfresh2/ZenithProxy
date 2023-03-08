@@ -46,13 +46,18 @@ public class RespawnCommand extends Command {
                     // i haven't fully found the root cause of those situations yet
                     final ServerConnection serverConnection = Proxy.getInstance().getCurrentPlayer().get();
                     if (nonNull(serverConnection)) {
+                        final int realDim = CACHE.getPlayerCache().getDimension();
+                        int fakeDim = 1;
+                        if (realDim == 1) {
+                            fakeDim = -1;
+                        }
                         serverConnection.sendDirect(new ServerRespawnPacket(
-                                CACHE.getPlayerCache().getDimension() * -1,
+                                fakeDim,
                                 CACHE.getPlayerCache().getDifficulty(),
                                 CACHE.getPlayerCache().getGameMode(),
                                 CACHE.getPlayerCache().getWorldType()));
                         serverConnection.sendDirect(new ServerRespawnPacket(
-                                CACHE.getPlayerCache().getDimension(),
+                                realDim,
                                 CACHE.getPlayerCache().getDifficulty(),
                                 CACHE.getPlayerCache().getGameMode(),
                                 CACHE.getPlayerCache().getWorldType()));
