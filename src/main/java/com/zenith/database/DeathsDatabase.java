@@ -7,7 +7,6 @@ import com.zenith.database.dto.tables.records.DeathsRecord;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.util.WhitelistEntry;
 import com.zenith.util.deathmessages.DeathMessageParseResult;
-import com.zenith.util.deathmessages.DeathMessagesParser;
 import com.zenith.util.deathmessages.Killer;
 import com.zenith.util.deathmessages.KillerType;
 import org.jooq.DSLContext;
@@ -24,11 +23,9 @@ import java.util.Optional;
 import static com.zenith.util.Constants.*;
 
 public class DeathsDatabase extends LockingDatabase {
-    private final DeathMessagesParser deathMessagesHelper;
 
     public DeathsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
-        this.deathMessagesHelper = new DeathMessagesParser();
     }
 
     @Override
@@ -54,8 +51,7 @@ public class DeathsDatabase extends LockingDatabase {
     @Subscribe
     public void handleDeathMessageEvent(DeathMessageEvent event) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org")) return;
-        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(event.mcTextRoot.toRawString());
-        deathMessageParseResult.ifPresent(d -> writeDeath(d, event.message, Instant.now().atOffset(ZoneOffset.UTC)));
+        writeDeath(event.deathMessageParseResult, event.deathMessageRaw, Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time) {
