@@ -182,6 +182,7 @@ dependencies {
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-int-object-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
+    shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
 
     testImplementation "junit:junit:4.13.2"
 

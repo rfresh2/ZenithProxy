@@ -246,13 +246,13 @@ public class Constants {
             DEFAULT_LOG.error(String.format("Uncaught exception in thread \"%s\"!", thread), e);
         });
         loadConfig();
+        SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(10);
 
         SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
 
-        CACHE = new DataCache();
         DISCORD_BOT = new DiscordBot();
         EVENT_BUS = new EventBus(Runnable::run);
-        SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(10);
+        CACHE = new DataCache();
         WHITELIST_MANAGER = new WhitelistManager();
         PRIORITY_BAN_CHECKER = new PriorityBanChecker();
         BLOCK_DATA_MANAGER = new BlockDataManager();

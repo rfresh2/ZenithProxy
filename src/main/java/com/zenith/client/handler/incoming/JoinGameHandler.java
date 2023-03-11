@@ -6,10 +6,13 @@ import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.zenith.client.ClientSession;
+import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
+import java.util.Locale;
+
+import static com.zenith.util.Constants.*;
 
 public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJoinGamePacket, ClientSession> {
     @Override
@@ -34,6 +37,12 @@ public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJo
                 SkinPart.values(),
                 Hand.OFF_HAND
         ));
+        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).endsWith("2b2t.org")) {
+            if (!session.isOnline()) {
+                session.setOnline(true);
+                EVENT_BUS.dispatch(new PlayerOnlineEvent());
+            }
+        }
         return true;
     }
 

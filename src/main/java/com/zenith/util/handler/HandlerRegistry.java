@@ -9,11 +9,11 @@ import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.util.PacketHandler;
 import com.zenith.util.Wait;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -157,11 +157,11 @@ public class HandlerRegistry<S extends Session> {
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
 
-        protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new Object2ObjectOpenHashMap<>();
 
-        protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new Object2ObjectOpenHashMap<>();
 
-        protected final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
+        protected final Map<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new Object2ObjectOpenHashMap<>();
 
         @NonNull
         protected Logger logger;

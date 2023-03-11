@@ -17,16 +17,14 @@ import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.Wait;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import net.daporkchop.lib.math.vector.Vec2i;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -36,7 +34,7 @@ import static java.util.Objects.nonNull;
 
 public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
     private static final Position DEFAULT_SPAWN_POSITION = new Position(8, 64, 8);
-    protected final Map<Vec2i, Column> cache = new Object2ObjectOpenHashMap<>();
+    private static final double maxDistanceExpected = Math.pow(32, 2); // squared to speed up calc, no need to sqrt
     @Getter
     @Setter
     protected Position spawnPosition = DEFAULT_SPAWN_POSITION;
@@ -49,12 +47,10 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Getter
     @Setter
     private float thunderStrength = 0f;
+    protected final Long2ObjectOpenHashMap<Column> cache = new Long2ObjectOpenHashMap<>();
 
-    public void add(@NonNull Column column) {
-        synchronized (this) {
-            this.cache.merge(Vec2i.of(column.getX(), column.getZ()), column, this);
-            CACHE_LOG.debug("Cached chunk ({}, {})", column.getX(), column.getZ());
-        }
+    public ChunkCache() {
+        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
     }
 
     /**
@@ -64,7 +60,6 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Deprecated
     public Column apply(@NonNull Column existing, @NonNull Column add) {
         synchronized (this) {
-            CACHE_LOG.debug("Chunk ({}, {}) is already cached, merging with existing", add.getX(), add.getZ());
             Chunk[] chunks = existing.getChunks().clone();
             for (int chunkY = 0; chunkY < 16; chunkY++) {
                 Chunk addChunk = add.getChunks()[chunkY];
@@ -85,26 +80,26 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         }
     }
 
-    public Column get(int x, int z) {
-        synchronized (this) {
-            return this.cache.get(Vec2i.of(x, z));
+    public static void sync() {
+        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+        if (nonNull(currentPlayer)) {
+            synchronized (CACHE.getChunkCache()) {
+                CACHE.getChunkCache().cache.values().parallelStream()
+                        .map(ServerChunkDataPacket::new)
+                        .forEach(currentPlayer::send);
+            }
         }
     }
 
-    public void remove(int x, int z) {
-        synchronized (this) {
-            CACHE_LOG.debug("Server telling us to uncache chunk ({}, {})", x, z);
-            Wait.waitUntilCondition(() -> this.cache.remove(Vec2i.of(x, z)) == null, 1);
-        }
+    private static long chunkPosToLong(final int x, final int z) {
+        return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
     }
 
     public boolean updateBlock(final BlockChangeRecord record) {
         synchronized (this) {
             try {
-                CLIENT_LOG.debug("Handling block update: pos: [{}, {}, {}], id: {}, data: {}", record.getPosition().getX(), record.getPosition().getY(), record.getPosition().getZ(), record.getBlock().getId(), record.getBlock().getData());
                 final Position pos = record.getPosition();
                 if (pos.getY() < 0 || pos.getY() >= 256) {
-                    CLIENT_LOG.debug("Received out-of-bounds block update: {}", record);
                     return true;
                 }
                 Column column = get(pos.getX() >> 4, pos.getZ() >> 4);
@@ -247,12 +242,54 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         }
     }
 
-    public static void sync() {
-        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
-        if (nonNull(currentPlayer)) {
-            CACHE.getChunkCache().cache.values().parallelStream()
-                    .map(ServerChunkDataPacket::new)
-                    .forEach(currentPlayer::send);
+    private static int longToChunkX(final long l) {
+        return (int) (l & 4294967295L);
+    }
+
+    private static int longToChunkZ(final long l) {
+        return (int) (l >> 32 & 4294967295L);
+    }
+
+    public void add(@NonNull Column column) {
+        synchronized (this) {
+            this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
         }
+    }
+
+    public Column get(int x, int z) {
+        synchronized (this) {
+            return this.cache.get(chunkPosToLong(x, z));
+        }
+    }
+
+    public void remove(int x, int z) {
+        synchronized (this) {
+            this.cache.remove(chunkPosToLong(x, z));
+        }
+    }
+
+    // reap any chunks we possibly didn't remove from the cache
+    // dead chunks could occur due to race conditions, packet ordering, or bad server
+    // doesn't need to be invoked frequently and this is not a condition that happens normally
+    // i'm adding this because we are very memory constrained
+    private void reapDeadChunks() {
+        if (!Proxy.getInstance().isConnected()) return;
+        final int playerX = ((int) CACHE.getPlayerCache().getX()) >> 4;
+        final int playerZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
+        synchronized (this) {
+            final long[] toRemove = cache.keySet().longStream()
+                    .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
+                    .toArray();
+            for (final long l : toRemove) {
+                cache.remove(l);
+            }
+            if (toRemove.length > 0) {
+                CLIENT_LOG.warn("Reaped {} dead chunks", toRemove.length);
+            }
+        }
+    }
+
+    private boolean distanceOutOfRange(final int x1, final int y1, final int x2, final int y2) {
+        return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) > maxDistanceExpected;
     }
 }
