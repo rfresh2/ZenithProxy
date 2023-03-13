@@ -130,7 +130,8 @@ public class Proxy {
                         if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))
                                 && CONFIG.client.extra.antiafk.enabled
                                 && CONFIG.client.extra.antiafk.actions.stuckWarning // ensures we don't get into a weird state
-                                && MODULE_MANAGER.getModule(AntiAFK.class).map(AntiAFK::isStuck).orElse(false)) {
+                                && MODULE_MANAGER.getModule(AntiAFK.class).map(AntiAFK::isStuck).orElse(false)
+                                && isNull(getCurrentPlayer().get())) {
                             long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
                             if (onlineSeconds >= (1200 - 20)) { // 20 mins - 20 seconds padding
                                 this.disconnect(SYSTEM_DISCONNECT);
