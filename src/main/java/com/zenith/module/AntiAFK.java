@@ -10,6 +10,7 @@ import com.google.common.collect.Iterators;
 import com.zenith.Proxy;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.proxy.DeathEvent;
 import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
@@ -47,6 +48,8 @@ public class AntiAFK extends Module {
     // tick time since we started falling
     // can be negative, indicates pathing should wait until it reaches 0 to fall
     private int gravityT = 0;
+    private int antiStuckT = 0;
+    private double antiStuckStartY = 0;
 
     public AntiAFK() {
         super();
@@ -66,13 +69,24 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
+
+            if (CONFIG.client.extra.antiafk.actions.antiStuck && isStuck()) {
+                if (antiStuckT < 0) {
+                    antiStuckT++;
+                } else {
+                    if (antiStuckTick()) {
+                        return;
+                    }
+                }
+            }
+
             if (CONFIG.client.extra.antiafk.actions.gravity) {
                 gravityTick();
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
                 walkTick();
                 // check distance delta every 9 mins. Stuck kick should happen at 20 mins
-                if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
+                if (distanceDeltaCheckTimer.tick(30L, true) && CONFIG.client.extra.antiafk.actions.stuckWarning) {
                     final double distanceMovedDelta = getDistanceMovedDelta();
                     if (distanceMovedDelta < 6) {
                         MODULE_LOG.warn("AntiAFK appears to be stuck. Distance moved: {}", distanceMovedDelta);
@@ -93,6 +107,13 @@ public class AntiAFK extends Module {
         }
     }
 
+    @Subscribe
+    public void handleDeathEvent(final DeathEvent event) {
+        synchronized (this) {
+            reset();
+        }
+    }
+
     @Override
     public void clientTickStarting() {
         reset();
@@ -108,12 +129,13 @@ public class AntiAFK extends Module {
         lastDistanceDeltaWarningTime = Instant.EPOCH;
         currentPathingGoal = null;
         gravityT = 0;
+        antiStuckT = 0;
         stuck = false;
     }
 
     private boolean spookHasTarget() {
         return MODULE_MANAGER.getModule(Spook.class)
-                .map(m -> ((Spook) m).hasTarget.get())
+                .map(m -> m.hasTarget.get())
                 .orElse(false);
     }
 
@@ -145,6 +167,7 @@ public class AntiAFK extends Module {
     public void handlePlayerPosRotate() {
         synchronized (this) {
             this.gravityT = -2;
+            this.antiStuckT = -2;
         }
     }
 
@@ -187,6 +210,28 @@ public class AntiAFK extends Module {
             } else {
                 gravityT = 0;
             }
+        }
+    }
+
+    private boolean antiStuckTick() {
+        // jump in place until we die
+        synchronized (this) {
+            if (antiStuckT == 0) {
+                if (!PATHING.isOnGround()) {
+                    antiStuckT = -2;
+                    return false;
+                }
+                antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
+            }
+            final Optional<Position> nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
+            antiStuckT++;
+            if (nextAntiStuckMove.isPresent()) {
+                Proxy.getInstance().getClient().send(nextAntiStuckMove.get().toPlayerPositionPacket());
+            } else {
+                antiStuckT = -2;
+                return false;
+            }
+            return true;
         }
     }
 

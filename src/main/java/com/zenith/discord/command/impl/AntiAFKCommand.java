@@ -21,7 +21,8 @@ public class AntiAFKCommand extends Command {
                 "antiAFK",
                 "Configure the AntiAFK feature",
                 asList("on/off", "safeWalk on/off", "gravity on/off", "safeGravity on/off",
-                        "stuckWarning on/off", "stuckWarning mention on/off", "walkDistance <int>"),
+                        "stuckWarning on/off", "stuckWarning mention on/off", "walkDistance <int>",
+                        "antiStuckSuicide on/off"),
                 aliases()
         );
     }
@@ -100,6 +101,17 @@ public class AntiAFKCommand extends Command {
                             defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                                     .title("Walk Distance Set!");
                             return 1;
+                        })))
+                .then(literal("antistucksuicide")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.antiafk.actions.antiStuck = true;
+                            defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                                    .title("AntiStuck Suicide On!");
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.antiafk.actions.antiStuck = false;
+                            defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                                    .title("AntiStuck Suicide Off!");
                         })));
     }
 

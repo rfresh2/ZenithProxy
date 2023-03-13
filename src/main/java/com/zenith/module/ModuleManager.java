@@ -14,8 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.util.Constants.EVENT_BUS;
-import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -74,7 +73,11 @@ public class ModuleManager {
                 this.modules.forEach(Module::clientTickStarting);
                 clientTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
-                        EVENT_BUS.dispatch(new ClientTickEvent());
+                        try {
+                            EVENT_BUS.dispatch(new ClientTickEvent());
+                        } catch (final Exception e) {
+                            CLIENT_LOG.error("Client Tick Error", e);
+                        }
                     }
                 }, 0, 50L, TimeUnit.MILLISECONDS);
             }

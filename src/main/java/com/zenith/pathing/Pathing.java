@@ -1,8 +1,10 @@
 package com.zenith.pathing;
 
+import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.lib.math.vector.Vec3i;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
@@ -98,6 +100,16 @@ public class Pathing {
         return Optional.empty();
     }
 
+    private static final List<Double> jumpYPositions = ImmutableList.of(0.0, 0.41999998688698, 0.7531999805212, 1.00133597911214, 1.16610926093821,
+            1.24918707874468, 1.17675927506424, 1.02442408821369, 0.79673560066871, 0.49520087700593, 0.1212968405392, 0.0);
+
+    public Optional<Position> calculateNextJumpMove(final double startY, final int t) {
+        final Position currentPlayerPos = getCurrentPlayerPos();
+        if (t < 0) return Optional.of(currentPlayerPos);
+        if (t > jumpYPositions.size() - 1) return Optional.empty();
+        return Optional.of(new Position(currentPlayerPos.getX(), startY + jumpYPositions.get(t), currentPlayerPos.getZ()));
+    }
+
     public double calculateFallDamage(final double distance) {
         // todo: check if we have feather falling + prot 4 which will increase our distance to 103 before death
         // todo: check if we're falling into a liquid
@@ -153,5 +165,16 @@ public class Pathing {
             }
         }
         return groundSolid && !blocked;
+    }
+
+    public boolean isOnGround() {
+        final Position currentPlayerPos = getCurrentPlayerPos();
+        final Optional<BlockPos> groundTraceResult = this.world.rayTraceCBDown(currentPlayerPos);
+        if (groundTraceResult.isPresent()) {
+            final BlockPos floor = groundTraceResult.get().addY(1);
+            return (double) floor.getY() == currentPlayerPos.getY();
+        } else {
+            return false;
+        }
     }
 }
