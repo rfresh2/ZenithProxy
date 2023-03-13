@@ -97,6 +97,7 @@ public final class Config {
                     public boolean safeGravity = true;
                     public boolean stuckWarning = true;
                     public boolean stuckWarningMention = false;
+                    public boolean antiStuck = false;
                 }
             }
 

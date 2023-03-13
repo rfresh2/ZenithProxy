@@ -21,7 +21,8 @@ public class AntiAFKCommand extends Command {
                 "antiAFK",
                 "Configure the AntiAFK feature",
                 asList("on/off", "safeWalk on/off", "gravity on/off", "safeGravity on/off",
-                        "stuckWarning on/off", "stuckWarning mention on/off", "walkDistance <int>"),
+                        "stuckWarning on/off", "stuckWarning mention on/off", "walkDistance <int>",
+                        "antiStuck on/off"),
                 aliases()
         );
     }
@@ -100,6 +101,17 @@ public class AntiAFKCommand extends Command {
                             defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                                     .title("Walk Distance Set!");
                             return 1;
+                        })))
+                .then(literal("antistuck")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.antiafk.actions.antiStuck = true;
+                            defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                                    .title("AntiStuck Suicide On!");
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.antiafk.actions.antiStuck = false;
+                            defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                                    .title("AntiStuck Suicide Off!");
                         })));
     }
 
@@ -116,6 +128,7 @@ public class AntiAFKCommand extends Command {
                 .addField("Gravity", CONFIG.client.extra.antiafk.actions.gravity ? "on" : "off", false)
                 .addField("Safe Gravity", CONFIG.client.extra.antiafk.actions.safeGravity ? "on" : "off", false)
                 .addField("Stuck Warning", (CONFIG.client.extra.antiafk.actions.stuckWarning ? "on" : "off") + " [Mention: " + (CONFIG.client.extra.antiafk.actions.stuckWarningMention ? "on" : "off") + "]", false)
+                .addField("AntiStuck Suicide", (CONFIG.client.extra.antiafk.actions.antiStuck ? "on" : "off"), false)
                 .color(Color.CYAN);
     }
 }

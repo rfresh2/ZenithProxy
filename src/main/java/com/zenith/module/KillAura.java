@@ -69,11 +69,13 @@ public class KillAura extends Module {
 
             // rotate to target
             if (target.isPresent()) {
-                isAttacking = true;
-                if (rotateTo(target.get())) {
-                    // attack
-                    attack(target.get());
-                    delay = 5;
+                if (PATHING.isOnGround()) {
+                    isAttacking = true;
+                    if (rotateTo(target.get())) {
+                        // attack
+                        attack(target.get());
+                        delay = 5;
+                    }
                 }
             } else {
                 isAttacking = false;
