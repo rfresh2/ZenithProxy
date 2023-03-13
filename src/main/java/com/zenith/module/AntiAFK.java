@@ -123,17 +123,19 @@ public class AntiAFK extends Module {
     }
 
     private void reset() {
-        swingTickTimer.reset();
-        startWalkTickTimer.reset();
-        rotateTimer.reset();
-        distanceDeltaCheckTimer.reset();
-        shouldWalk = false;
-        positionCache.invalidateAll();
-        lastDistanceDeltaWarningTime = Instant.EPOCH;
-        currentPathingGoal = null;
-        gravityT = 0;
-        antiStuckT = 0;
-        stuck = false;
+        synchronized (this) {
+            swingTickTimer.reset();
+            startWalkTickTimer.reset();
+            rotateTimer.reset();
+            distanceDeltaCheckTimer.reset();
+            shouldWalk = false;
+            positionCache.invalidateAll();
+            lastDistanceDeltaWarningTime = Instant.EPOCH;
+            currentPathingGoal = null;
+            gravityT = 0;
+            antiStuckT = 0;
+            stuck = false;
+        }
     }
 
     private boolean spookHasTarget() {
