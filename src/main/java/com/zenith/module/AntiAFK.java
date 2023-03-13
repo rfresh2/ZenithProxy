@@ -86,7 +86,7 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
                 walkTick();
                 // check distance delta every 9 mins. Stuck kick should happen at 20 mins
-                if (distanceDeltaCheckTimer.tick(30L, true) && CONFIG.client.extra.antiafk.actions.stuckWarning) {
+                if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
                     final double distanceMovedDelta = getDistanceMovedDelta();
                     if (distanceMovedDelta < 6) {
                         MODULE_LOG.warn("AntiAFK appears to be stuck. Distance moved: {}", distanceMovedDelta);
