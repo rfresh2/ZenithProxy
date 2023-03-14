@@ -14,6 +14,11 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
     @Override
     public void accept(@NonNull ServerJoinGamePacket packet, @NonNull ServerConnection session) {
         session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
+
+
+        session.setLoggedIn(true); // allows server packets to start being sent to player
+        // send cached data
+        DataCache.sendCacheData(CACHE.getAllData(), session);
         // init any active spectators
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
@@ -22,10 +27,6 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
                     session.send(connection.getEntitySpawnPacket());
                     session.send(connection.getEntityMetadataPacket());
                 });
-
-        session.setLoggedIn(true); // allows server packets to start being sent to player
-        // send cached data
-        DataCache.sendCacheData(CACHE.getAllData(), session);
     }
 
     @Override
