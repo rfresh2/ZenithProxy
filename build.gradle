@@ -204,7 +204,7 @@ tasks.register('run', JavaExec) {
                "-XX:G1ReservePercent=20", "-XX:G1HeapWastePercent=5", "-XX:G1MixedGCCountTarget=4", "-XX:InitiatingHeapOccupancyPercent=15",
                "-XX:G1MixedGCLiveThresholdPercent=90", "-XX:G1RSetUpdatingPauseTimePercent=5", "-XX:SurvivorRatio=32",
                "-XX:+PerfDisableSharedMem", "-XX:MaxTenuringThreshold=1",
-               "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=4", "--enable-preview"]
+               "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16", "--enable-preview"]
 }
 
 tasks.withType(JavaExec).configureEach {

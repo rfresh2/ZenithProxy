@@ -390,7 +390,7 @@ public class DiscordBot {
                         }
                     }
                 }
-                relayRestChannel.get().createMessage(message).block();
+                relayRestChannel.get().createMessage(message).subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }
@@ -402,7 +402,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(escape(event.playerEntry.getName() + " connected")).block();
+                relayRestChannel.get().createMessage(escape(event.playerEntry.getName() + " connected")).subscribe();
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }
