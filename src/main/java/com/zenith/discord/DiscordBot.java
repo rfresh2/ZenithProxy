@@ -51,6 +51,7 @@ public class DiscordBot {
     private Proxy proxy;
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
+    private final ConcurrentLinkedQueue<MessageCreateRequest> relayChannelMessageQueue;
     private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
     private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing((CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
     public Optional<Instant> lastRelaymessage = Optional.empty();
@@ -60,6 +61,7 @@ public class DiscordBot {
 
     public DiscordBot() {
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
+        this.relayChannelMessageQueue = new ConcurrentLinkedQueue<>();
         this.isRunning = false;
     }
 
@@ -112,6 +114,7 @@ public class DiscordBot {
                 15L, // discord rate limit
                 TimeUnit.SECONDS);
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
     }
 
@@ -120,6 +123,17 @@ public class DiscordBot {
             MultipartRequest<MessageCreateRequest> message = mainChannelMessageQueue.poll();
             if (nonNull(message)) {
                 this.mainRestChannel.get().createMessage(message).block();
+            }
+        } catch (final Throwable e) {
+            DISCORD_LOG.error("Message processor error", e);
+        }
+    }
+
+    private void processRelayMessageQueue() {
+        try {
+            MessageCreateRequest message = relayChannelMessageQueue.poll();
+            if (nonNull(message)) {
+                this.relayRestChannel.get().createMessage(message).block();
             }
         } catch (final Throwable e) {
             DISCORD_LOG.error("Message processor error", e);
@@ -390,7 +404,7 @@ public class DiscordBot {
                         }
                     }
                 }
-                relayRestChannel.get().createMessage(message).subscribe();
+                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(message).build());
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }
@@ -402,7 +416,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(escape(event.playerEntry.getName() + " connected")).subscribe();
+                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry.getName() + " connected")).build());
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }
@@ -427,7 +441,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
             try {
-                relayRestChannel.get().createMessage(escape(event.playerEntry.getName()) + " disconnected").block();
+                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry.getName()) + " disconnected").build());
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }

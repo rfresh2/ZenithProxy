@@ -246,7 +246,7 @@ public class Constants {
             DEFAULT_LOG.error(String.format("Uncaught exception in thread \"%s\"!", thread), e);
         });
         loadConfig();
-        SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(10);
+        SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);
 
         SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
 
@@ -262,14 +262,6 @@ public class Constants {
         MODULE_MANAGER = new ModuleManager();
         PATHING = new Pathing(WORLD);
         AUTO_UPDATER = new AutoUpdater();
-    }
-
-    public static ScheduledExecutorService getVirtualSingleThreadScheduledExecutorService() {
-        return Executors.newSingleThreadScheduledExecutor(virtualThreadFactory);
-    }
-
-    public static ScheduledExecutorService getVirtualScheduledExecutorService() {
-        return Executors.newScheduledThreadPool(16, virtualThreadFactory);
     }
 
 }
