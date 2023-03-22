@@ -56,7 +56,7 @@ public class KillAura extends Module {
                     // filter friends
                     .filter(entity -> !(entity instanceof EntityPlayer
                             && CACHE.getTabListCache().getTabList().get(entity.getUuid())
-                            .map(p -> CONFIG.client.extra.friendList.stream().anyMatch(n -> n.equalsIgnoreCase(p.getName())))
+                            .map(p -> CONFIG.client.extra.friendsList.stream().anyMatch(n -> n.uuid.equals(p.getId())))
                             .orElse(false)))
                     // filter whitelist
                     .filter(entity -> !(entity instanceof EntityPlayer)

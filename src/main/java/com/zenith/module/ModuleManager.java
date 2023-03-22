@@ -21,7 +21,7 @@ import static java.util.Objects.nonNull;
 
 public class ModuleManager {
     protected ScheduledFuture<?> clientTickFuture;
-    protected List<Module> modules;
+    protected final List<Module> modules;
 
     public ModuleManager() {
         EVENT_BUS.subscribe(this);

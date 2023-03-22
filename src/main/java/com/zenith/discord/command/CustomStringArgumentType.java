@@ -40,7 +40,7 @@ public class CustomStringArgumentType implements ArgumentType<String> {
         }
     }
 
-    public String readStringUntil(char terminator, final StringReader reader) throws CommandSyntaxException {
+    public String readStringUntil(char terminator, final StringReader reader) {
         final StringBuilder result = new StringBuilder();
         while (reader.canRead()) {
             final char c = reader.read();

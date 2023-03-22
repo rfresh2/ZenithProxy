@@ -24,7 +24,7 @@ import static java.util.Objects.nonNull;
 
 public class AutoEat extends Module {
     private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
-    private FoodManager foodManager = new FoodManager();
+    private final FoodManager foodManager = new FoodManager();
     private int delay = 0;
     private boolean swapping = false;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;

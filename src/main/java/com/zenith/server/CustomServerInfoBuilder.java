@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static com.zenith.util.Constants.CONFIG;
 
 public class CustomServerInfoBuilder implements ServerInfoBuilder {
-    private Proxy proxy;
+    private final Proxy proxy;
 
     public CustomServerInfoBuilder(final Proxy proxy) {
         this.proxy = proxy;

@@ -39,11 +39,12 @@ public class LegacyPinger {
     }
 
     public LegacyPingResponse ping() throws IOException {
-        Socket socket = new Socket();
-        socket.setSoTimeout(this.timeout);
-        socket.connect(this.host, this.timeout);
-        sendPing(new DataOutputStream(socket.getOutputStream()));
-        return readResponse(new DataInputStream(socket.getInputStream()));
+        try (Socket socket = new Socket()) {
+            socket.setSoTimeout(this.timeout);
+            socket.connect(this.host, this.timeout);
+            sendPing(new DataOutputStream(socket.getOutputStream()));
+            return readResponse(new DataInputStream(socket.getInputStream()));
+        }
     }
 
     private void sendPing(DataOutputStream dataOutputStream) throws IOException {
@@ -145,15 +146,6 @@ public class LegacyPinger {
 
         return result;
     }
-
-//    public static void main(String[] args) throws IOException {
-//        int protocol = ProtocolVersions.findProtocolVersion("1.8").get();
-//        LegacyPinger pinger = new LegacyPinger();
-//        pinger.setAddress(new InetSocketAddress("78.34.48.126",25565));
-//        pinger.setTimeout(5000);
-//        pinger.setProtocolVersion(protocol);
-//        System.out.println(pinger.ping());
-//    }
 
     public static final class LegacyPingResponse {
         public final int protocolVersion;

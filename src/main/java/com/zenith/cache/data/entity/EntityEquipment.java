@@ -30,8 +30,8 @@ public abstract class EntityEquipment extends Entity {
 
     @Override
     public void addPackets(@NonNull Consumer<Packet> consumer) {
-        if (this instanceof EntityPlayer) {
-            if (!((EntityPlayer) this).isSelfPlayer()) {
+        if (this instanceof EntityPlayer e) {
+            if (!e.isSelfPlayer()) {
                 // skip sending potion effects for self player out of precaution for potential cache desync
                 // todo: come back and fix this
                 this.potionEffects.forEach(effect -> consumer.accept(new ServerEntityEffectPacket(

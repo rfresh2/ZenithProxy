@@ -17,10 +17,10 @@ public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHand
         try {
             Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
-                if (entity instanceof EntityEquipment) {
-                    ((EntityEquipment) entity).getEquipment().put(packet.getSlot(), packet.getItem());
-                } else if (entity instanceof EntityArmorStand) {
-                    ((EntityArmorStand) entity).getEquipment().put(packet.getSlot(), packet.getItem());
+                if (entity instanceof EntityEquipment e) {
+                    e.getEquipment().put(packet.getSlot(), packet.getItem());
+                } else if (entity instanceof EntityArmorStand e) {
+                    e.getEquipment().put(packet.getSlot(), packet.getItem());
                 }
             } else {
                 CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id={})", packet.getEntityId());
@@ -28,7 +28,7 @@ public class EntityEquipmentHandler implements HandlerRegistry.AsyncIncomingHand
             }
             return true;
         } catch (ClassCastException e)  {
-            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id={})", e, packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id={})", packet.getEntityId(), e);
             return false;
         }
     }

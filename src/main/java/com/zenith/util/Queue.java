@@ -31,7 +31,7 @@ public class Queue {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Duration refreshPeriod = Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES);
     private static QueueStatus queueStatus;
-    private static ScheduledExecutorService refreshExecutorService = new ScheduledThreadPoolExecutor(1);
+    private static final ScheduledExecutorService refreshExecutorService = new ScheduledThreadPoolExecutor(1);
     private static final Pattern digitPattern = Pattern.compile("\\d+");
     private static final MCPing mcPing = new MCPing();
     private static final PingOptions pingOptions = new PingOptions();
