@@ -102,7 +102,7 @@ public class VisualRangeCommand extends Command {
         return CONFIG.client.extra.friendsList.isEmpty()
                 ? "Empty"
                 : CONFIG.client.extra.friendsList.stream()
-                .map(e -> escape(e.username + " [" + e.uuid.toString() + "]"))
+                .map(e -> escape(e.username + " [[" + e.uuid.toString() + "](" + e.getNameMCLink() + ")]"))
                 .collect(Collectors.joining("\n"));
     }
 }

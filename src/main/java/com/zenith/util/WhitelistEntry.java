@@ -18,6 +18,10 @@ public class WhitelistEntry {
         this.lastRefreshed = lastRefreshed;
     }
 
+    public String getNameMCLink() {
+        return "https://namemc.com/profile/" + uuid.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

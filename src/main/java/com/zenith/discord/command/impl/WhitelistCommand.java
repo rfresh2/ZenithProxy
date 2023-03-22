@@ -73,7 +73,7 @@ public class WhitelistCommand extends Command {
         return CONFIG.server.extra.whitelist.whitelist.isEmpty()
                 ? "Empty"
                 : CONFIG.server.extra.whitelist.whitelist.stream()
-                .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
+                .map(mp -> escape(mp.username + " [[" + mp.uuid.toString() + "](" + mp.getNameMCLink() + ")]"))
                 .collect(Collectors.joining("\n"));
     }
 

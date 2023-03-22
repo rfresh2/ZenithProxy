@@ -128,7 +128,7 @@ public class SpectatorCommand extends Command {
         return CONFIG.server.spectator.whitelist.isEmpty()
                 ? "Empty"
                 : CONFIG.server.spectator.whitelist.stream()
-                .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
+                .map(mp -> escape(mp.username + " [[" + mp.uuid.toString() + "](" + mp.getNameMCLink() + ")]"))
                 .collect(Collectors.joining("\n"));
     }
 }
