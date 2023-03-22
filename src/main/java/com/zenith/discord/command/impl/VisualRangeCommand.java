@@ -8,10 +8,12 @@ import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.WHITELIST_MANAGER;
 import static java.util.Arrays.asList;
 
 public class VisualRangeCommand extends Command {
@@ -57,18 +59,20 @@ public class VisualRangeCommand extends Command {
                         .then(literal("friend")
                                 .then(literal("add").then(argument("player", string()).executes(c -> {
                                     final String player = StringArgumentType.getString(c, "player");
-                                    if (!CONFIG.client.extra.friendList.contains(player)) {
-                                        CONFIG.client.extra.friendList.add(player);
-                                    }
-                                    c.getSource().getEmbedBuilder()
-                                            .title("Friend added")
-                                            .addField("Friend List", friendListString(), false)
-                                            .color(Color.CYAN);
+                                    WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(player).ifPresentOrElse(e ->
+                                                    c.getSource().getEmbedBuilder()
+                                                            .title("Friend added")
+                                                            .addField("Friend List", friendListString(), false)
+                                                            .color(Color.CYAN),
+                                            () -> c.getSource().getEmbedBuilder()
+                                                    .title("Failed to add user: " + escape(player) + " to friends. Unable to lookup profile.")
+                                                    .addField("Friend List", friendListString(), false)
+                                                    .color(Color.CYAN));
                                     return 1;
                                 })))
                                 .then(literal("del").then(argument("player", string()).executes(c -> {
                                     final String player = StringArgumentType.getString(c, "player");
-                                    CONFIG.client.extra.friendList.removeIf(friend -> friend.equalsIgnoreCase(player));
+                                    WHITELIST_MANAGER.removeFriendWhitelistEntryByUsername(player);
                                     c.getSource().getEmbedBuilder()
                                             .title("Friend deleted")
                                             .addField("Friend List", friendListString(), false)
@@ -82,7 +86,7 @@ public class VisualRangeCommand extends Command {
                                             .color(Color.CYAN);
                                 }))
                                 .then(literal("clear").executes(c -> {
-                                    CONFIG.client.extra.friendList.clear();
+                                    WHITELIST_MANAGER.clearFriendWhitelist();
                                     c.getSource().getEmbedBuilder()
                                             .title("Friend list cleared!")
                                             .color(Color.CYAN);
@@ -95,6 +99,10 @@ public class VisualRangeCommand extends Command {
     }
 
     private String friendListString() {
-        return escape((CONFIG.client.extra.friendList.size() > 0 ? String.join(", ", CONFIG.client.extra.friendList) : "Friend List is empty"));
+        return CONFIG.client.extra.friendsList.isEmpty()
+                ? "Empty"
+                : CONFIG.client.extra.friendsList.stream()
+                .map(e -> escape(e.username + " [" + e.uuid.toString() + "]"))
+                .collect(Collectors.joining("\n"));
     }
 }

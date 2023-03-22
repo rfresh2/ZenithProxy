@@ -45,8 +45,8 @@ import static java.util.Objects.nonNull;
 public class DiscordBot {
 
     private RestClient restClient;
-    private Supplier<RestChannel> mainRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)));
-    private Supplier<RestChannel> relayRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId)));
+    private final Supplier<RestChannel> mainRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)));
+    private final Supplier<RestChannel> relayRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId)));
     private GatewayDiscordClient client;
     private Proxy proxy;
     // Main channel discord message FIFO queue
@@ -271,8 +271,8 @@ public class DiscordBot {
     @Subscribe
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (CONFIG.client.extra.visualRangeAlert) {
-            boolean notFriend = CONFIG.client.extra.friendList.stream()
-                    .noneMatch(friend -> friend.equalsIgnoreCase(event.playerEntry.getName()));
+            boolean notFriend = CONFIG.client.extra.friendsList.stream()
+                    .noneMatch(friend -> friend.username.equalsIgnoreCase(event.playerEntry.getName()));
             EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
                     .title("Player In Visual Range")
                     .color(notFriend ? Color.RUBY : Color.GREEN)

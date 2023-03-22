@@ -54,7 +54,9 @@ public final class Config {
             public KillAura killAura = new KillAura();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
+            // todo: remove in a future update
             public List<String> friendList = new ArrayList<>();
+            public List<WhitelistEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = true;

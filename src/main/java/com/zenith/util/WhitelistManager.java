@@ -6,10 +6,7 @@ import com.github.steveice10.mc.auth.service.ProfileService;
 import com.zenith.Proxy;
 
 import java.time.Instant;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -41,16 +38,8 @@ public class WhitelistManager {
         }
     }
 
-    public boolean addWhitelistEntryByUsername(final String username) {
-        final Optional<WhitelistEntry> whitelistEntryOptional = getWhitelistEntryFromUsername(username);
-        if (whitelistEntryOptional.isPresent()) {
-            final WhitelistEntry whitelistEntry = whitelistEntryOptional.get();
-            if (!CONFIG.server.extra.whitelist.whitelist.contains(whitelistEntry)) {
-                CONFIG.server.extra.whitelist.whitelist.add(whitelistEntry);
-            }
-            return true;
-        }
-        return false;
+    public Optional<WhitelistEntry> addWhitelistEntryByUsername(final String username) {
+        return addWhitelistEntryByUsernameBase(username, CONFIG.server.extra.whitelist.whitelist);
     }
 
     public void removeWhitelistEntryByUsername(final String username) {
@@ -62,16 +51,8 @@ public class WhitelistManager {
         CONFIG.server.extra.whitelist.whitelist.clear();
     }
 
-    public boolean addSpectatorWhitelistEntryByUsername(final String username) {
-        final Optional<WhitelistEntry> whitelistEntryOptional = getWhitelistEntryFromUsername(username);
-        if (whitelistEntryOptional.isPresent()) {
-            final WhitelistEntry whitelistEntry = whitelistEntryOptional.get();
-            if (!CONFIG.server.spectator.whitelist.contains(whitelistEntry)) {
-                CONFIG.server.spectator.whitelist.add(whitelistEntry);
-            }
-            return true;
-        }
-        return false;
+    public Optional<WhitelistEntry> addSpectatorWhitelistEntryByUsername(final String username) {
+        return addWhitelistEntryByUsernameBase(username, CONFIG.server.spectator.whitelist);
     }
 
     public void removeSpectatorWhitelistEntryByUsername(final String username) {
@@ -80,6 +61,29 @@ public class WhitelistManager {
 
     public void clearSpectatorWhitelist() {
         CONFIG.server.spectator.whitelist.clear();
+    }
+
+    public Optional<WhitelistEntry> addFriendWhitelistEntryByUsername(final String username) {
+        return addWhitelistEntryByUsernameBase(username, CONFIG.client.extra.friendsList);
+    }
+
+    public void removeFriendWhitelistEntryByUsername(final String username) {
+        CONFIG.client.extra.friendsList.removeIf(s -> s.username.equalsIgnoreCase(username));
+    }
+
+    public void clearFriendWhitelist() {
+        CONFIG.client.extra.friendsList.clear();
+    }
+
+    private Optional<WhitelistEntry> addWhitelistEntryByUsernameBase(final String username, final List<WhitelistEntry> destList) {
+        final Optional<WhitelistEntry> whitelistEntryOptional = getWhitelistEntryFromUsername(username);
+        if (whitelistEntryOptional.isPresent()) {
+            final WhitelistEntry whitelistEntry = whitelistEntryOptional.get();
+            if (!destList.contains(whitelistEntry)) {
+                destList.add(whitelistEntry);
+            }
+        }
+        return whitelistEntryOptional;
     }
 
     public boolean isProfileWhitelisted(final GameProfile clientGameProfile) {
@@ -140,6 +144,7 @@ public class WhitelistManager {
         SERVER_LOG.info("Refreshing whitelist entries...");
         CONFIG.server.extra.whitelist.whitelist.forEach(this::refreshWhitelistEntry);
         CONFIG.server.spectator.whitelist.forEach(this::refreshWhitelistEntry);
+        CONFIG.client.extra.friendsList.forEach(this::refreshWhitelistEntry);
         SERVER_LOG.info("Whitelist refresh complete");
         saveConfig();
     }
@@ -200,6 +205,13 @@ public class WhitelistManager {
         return Optional.empty();
     }
 
+    public void convertFriendsList() {
+        if (!CONFIG.client.extra.friendList.isEmpty()) {
+            CONFIG.client.extra.friendList.forEach(this::addFriendWhitelistEntryByUsername);
+            CONFIG.client.extra.friendList.clear();
+            saveConfig();
+        }
+    }
 
     private static final class SingleLookupProfileLookupCallbackHelper implements ProfileService.ProfileLookupCallback {
         public Optional<GameProfile> gameProfile = Optional.empty();

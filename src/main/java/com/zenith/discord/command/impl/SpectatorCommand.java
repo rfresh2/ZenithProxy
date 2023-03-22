@@ -51,16 +51,14 @@ public class SpectatorCommand extends Command {
                 .then(literal("whitelist")
                         .then(literal("add").then(argument("player", string()).executes(c -> {
                             final String playerName = StringArgumentType.getString(c, "player");
-                            if (WHITELIST_MANAGER.addSpectatorWhitelistEntryByUsername(playerName)) {
-                                c.getSource().getEmbedBuilder()
-                                        .title("Added user: " + escape(playerName) + " To Spectator Whitelist")
-                                        .color(Color.CYAN)
-                                        .addField("Spectator Whitelist", whitelistToString(), false);
-                            } else {
-                                c.getSource().getEmbedBuilder()
-                                        .title("Failed to add user: " + escape(playerName) + " to whitelist. Unable to lookup profile.")
-                                        .color(Color.RUBY);
-                            }
+                            WHITELIST_MANAGER.addSpectatorWhitelistEntryByUsername(playerName).ifPresentOrElse(e ->
+                                            c.getSource().getEmbedBuilder()
+                                                    .title("Added user: " + escape(e.username) + " To Spectator Whitelist")
+                                                    .color(Color.CYAN)
+                                                    .addField("Spectator Whitelist", whitelistToString(), false),
+                                    () -> c.getSource().getEmbedBuilder()
+                                            .title("Failed to add user: " + escape(playerName) + " to whitelist. Unable to lookup profile.")
+                                            .color(Color.RUBY));
                             return 1;
                         })))
                         .then(literal("del").then(argument("player", string()).executes(c -> {
@@ -129,9 +127,8 @@ public class SpectatorCommand extends Command {
     private String whitelistToString() {
         return CONFIG.server.spectator.whitelist.isEmpty()
                 ? "Empty"
-                : String.join("\n",
-                CONFIG.server.spectator.whitelist.stream()
-                        .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
-                        .collect(Collectors.toList()));
+                : CONFIG.server.spectator.whitelist.stream()
+                .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
+                .collect(Collectors.joining("\n"));
     }
 }

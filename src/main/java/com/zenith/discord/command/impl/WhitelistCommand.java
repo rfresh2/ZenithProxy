@@ -32,16 +32,14 @@ public class WhitelistCommand extends Command {
         return command("whitelist")
                 .then(literal("add").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");
-                    if (WHITELIST_MANAGER.addWhitelistEntryByUsername(player)) {
-                        c.getSource().getEmbedBuilder()
-                                .title("Added user: " + escape(player) + " To Whitelist")
-                                .color(Color.CYAN)
-                                .addField("Whitelisted", whitelistToString(), false);
-                    } else {
-                        c.getSource().getEmbedBuilder()
-                                .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile.")
-                                .color(Color.RUBY);
-                    }
+                    WHITELIST_MANAGER.addWhitelistEntryByUsername(player).ifPresentOrElse(e ->
+                                    c.getSource().getEmbedBuilder()
+                                            .title("Added user: " + escape(e.username) + " To Whitelist")
+                                            .color(Color.CYAN)
+                                            .addField("Whitelisted", whitelistToString(), false),
+                            () -> c.getSource().getEmbedBuilder()
+                                    .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile.")
+                                    .color(Color.RUBY));
                     return 1;
                 })))
                 .then(literal("del").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
@@ -74,10 +72,9 @@ public class WhitelistCommand extends Command {
     private String whitelistToString() {
         return CONFIG.server.extra.whitelist.whitelist.isEmpty()
                 ? "Empty"
-                : String.join("\n",
-                CONFIG.server.extra.whitelist.whitelist.stream()
-                        .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
-                        .collect(Collectors.toList()));
+                : CONFIG.server.extra.whitelist.whitelist.stream()
+                .map(mp -> escape(mp.username + " [" + mp.uuid.toString() + "]"))
+                .collect(Collectors.joining("\n"));
     }
 
     @Override
