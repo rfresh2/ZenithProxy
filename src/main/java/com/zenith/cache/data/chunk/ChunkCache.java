@@ -25,6 +25,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -48,9 +49,26 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Setter
     private float thunderStrength = 0f;
     protected final Long2ObjectOpenHashMap<Column> cache = new Long2ObjectOpenHashMap<>();
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     public ChunkCache() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
+    }
+
+    public static void sync() {
+        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+        if (nonNull(currentPlayer)) {
+            try {
+                if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+                    CACHE.getChunkCache().cache.values().parallelStream()
+                            .map(ServerChunkDataPacket::new)
+                            .forEach(currentPlayer::send);
+                    lock.readLock().unlock();
+                }
+            } catch (final Exception e) {
+                CLIENT_LOG.error("Error sending chunk data", e);
+            }
+        }
     }
 
     /**
@@ -59,36 +77,30 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Override
     @Deprecated
     public Column apply(@NonNull Column existing, @NonNull Column add) {
-        synchronized (this) {
-            Chunk[] chunks = existing.getChunks().clone();
-            for (int chunkY = 0; chunkY < 16; chunkY++) {
-                Chunk addChunk = add.getChunks()[chunkY];
-                if (addChunk == null) {
-                    continue;
-                } else if (add.hasSkylight()) {
-                    chunks[chunkY] = addChunk;
-                } else {
-                    chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY] == null ? null : chunks[chunkY].getSkyLight());
+        try {
+            Chunk[] chunks = existing.getChunks();
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                for (int chunkY = 0; chunkY < 16; chunkY++) {
+                    Chunk addChunk = add.getChunks()[chunkY];
+                    if (addChunk == null) {
+                        continue;
+                    } else if (add.hasSkylight()) {
+                        chunks[chunkY] = addChunk;
+                    } else {
+                        chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY] == null ? null : chunks[chunkY].getSkyLight());
+                    }
                 }
+                lock.writeLock().unlock();
             }
-
             return new Column(
                     add.getX(), add.getZ(),
                     chunks,
                     add.hasBiomeData() ? add.getBiomeData() : existing.getBiomeData(),
                     add.getTileEntities());
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error merging chunk data", e);
         }
-    }
-
-    public static void sync() {
-        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
-        if (nonNull(currentPlayer)) {
-            synchronized (CACHE.getChunkCache()) {
-                CACHE.getChunkCache().cache.values().parallelStream()
-                        .map(ServerChunkDataPacket::new)
-                        .forEach(currentPlayer::send);
-            }
-        }
+        return null;
     }
 
     private static long chunkPosToLong(final int x, final int z) {
@@ -96,26 +108,34 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public boolean updateBlock(final BlockChangeRecord record) {
-        synchronized (this) {
-            try {
-                final Position pos = record.getPosition();
-                if (pos.getY() < 0 || pos.getY() >= 256) {
-                    return true;
-                }
+        try {
+            final Position pos = record.getPosition();
+            if (pos.getY() < 0 || pos.getY() >= 256) {
+                return true;
+            }
+            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
                 Column column = get(pos.getX() >> 4, pos.getZ() >> 4);
                 if (column != null) {
                     Chunk chunk = column.getChunks()[pos.getY() >> 4];
                     if (chunk == null) {
                         chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
                     }
-                    chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+                    lock.readLock().unlock();
+                    if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+                        lock.writeLock().unlock();
+                    }
                     handleBlockUpdateTileEntity(record, pos, column);
+                } else {
+                    lock.readLock().unlock();
                 }
-            } catch (final Exception e) {
-                CLIENT_LOG.error("Error applying block update", e);
-                return false;
             }
+
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error applying block update", e);
+            return false;
         }
+
         return true;
     }
 
@@ -123,11 +143,18 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     // server doesn't always send us tile entity update packets and relies on logic in client
     private void handleBlockUpdateTileEntity(BlockChangeRecord record, Position pos, Column column) {
         if (record.getBlock().getId() == 0 && record.getBlock().getData() == 0) {
-            final List<TileEntity> tileEntitiesList = column.getTileEntities();
-            final Optional<TileEntity> foundTileEntity = tileEntitiesList.stream()
-                    .filter(tileEntity -> tileEntity.getPosition().equals(pos))
-                    .findFirst();
-            foundTileEntity.ifPresent(tileEntitiesList::remove);
+            try {
+                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                    final List<TileEntity> tileEntitiesList = column.getTileEntities();
+                    final Optional<TileEntity> foundTileEntity = tileEntitiesList.stream()
+                            .filter(tileEntity -> tileEntity.getPosition().equals(pos))
+                            .findFirst();
+                    foundTileEntity.ifPresent(tileEntitiesList::remove);
+                    lock.writeLock().unlock();
+                }
+            } catch (Exception e) {
+                CLIENT_LOG.error("Error removing tile entity", e);
+            }
         } else {
             // if we don't create a tile entity for certain blocks they render with no texture for some reason
             if (record.getBlock().getId() == 54) {
@@ -143,18 +170,14 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public boolean multiBlockUpdate(final ServerMultiBlockChangePacket packet) {
-        synchronized (this) {
-            for (BlockChangeRecord record : packet.getRecords()) {
-                updateBlock(record);
-            }
-            return true;
+        for (BlockChangeRecord record : packet.getRecords()) {
+            updateBlock(record);
         }
+        return true;
     }
 
     public boolean updateBlock(ServerBlockChangePacket packet) {
-        synchronized (this) {
-            return updateBlock(packet.getRecord());
-        }
+        return updateBlock(packet.getRecord());
     }
 
     private void writeTileEntity(final Column column, final String tileEntityId, final Position position) {
@@ -165,81 +188,113 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                 "y", new IntTag("y", position.getY()),
                 "z", new IntTag("z", position.getZ())
         ));
-        final Optional<TileEntity> foundTileEntity = column.getTileEntities()
-                .stream()
-                .filter(tileEntity -> tileEntity.getPosition().equals(position))
-                .findFirst();
-        if (foundTileEntity.isPresent()) {
-            foundTileEntity.get().setCompoundTag(tileEntityTag);
-        } else {
-            column.getTileEntities().add(new TileEntity(position, tileEntityTag));
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                final Optional<TileEntity> foundTileEntity = column.getTileEntities()
+                        .stream()
+                        .filter(tileEntity -> tileEntity.getPosition().equals(position))
+                        .findFirst();
+                if (foundTileEntity.isPresent()) {
+                    foundTileEntity.get().setCompoundTag(tileEntityTag);
+                } else {
+                    column.getTileEntities().add(new TileEntity(position, tileEntityTag));
+                }
+                lock.writeLock().unlock();
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error writing tile entity", e);
         }
     }
 
     public boolean updateTileEntity(final ServerUpdateTileEntityPacket packet) {
-        synchronized (this) {
-            final Column column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
-            if (isNull(column)) {
-                return false;
-            }
-            final List<TileEntity> tileEntities = column.getTileEntities();
-            final Optional<TileEntity> existingTileEntity = tileEntities.stream()
-                    .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
-                    .findFirst();
-            final CompoundTag packetNbt = packet.getNBT();
-            if (packetNbt != null && !packetNbt.isEmpty()) {
-                // ensure position is encoded in NBT
-                // not sure if this is totally needed or not
-                packetNbt.put(new IntTag("x", packet.getPosition().getX()));
-                packetNbt.put(new IntTag("y", packet.getPosition().getY()));
-                packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
-                if (existingTileEntity.isPresent()) {
-                    existingTileEntity.get().setCompoundTag(packetNbt);
-                } else {
-                    tileEntities.add(new TileEntity(packet.getPosition(), packetNbt));
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                final Column column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
+                if (isNull(column)) {
+                    return false;
                 }
-            } else {
-                existingTileEntity.ifPresent(tileEntities::remove);
+                final List<TileEntity> tileEntities = column.getTileEntities();
+                final Optional<TileEntity> existingTileEntity = tileEntities.stream()
+                        .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
+                        .findFirst();
+                final CompoundTag packetNbt = packet.getNBT();
+                if (packetNbt != null && !packetNbt.isEmpty()) {
+                    // ensure position is encoded in NBT
+                    // not sure if this is totally needed or not
+                    packetNbt.put(new IntTag("x", packet.getPosition().getX()));
+                    packetNbt.put(new IntTag("y", packet.getPosition().getY()));
+                    packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
+                    if (existingTileEntity.isPresent()) {
+                        existingTileEntity.get().setCompoundTag(packetNbt);
+                    } else {
+                        tileEntities.add(new TileEntity(packet.getPosition(), packetNbt));
+                    }
+                } else {
+                    existingTileEntity.ifPresent(tileEntities::remove);
+                }
+                lock.writeLock().unlock();
             }
+
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error applying tile entity update", e);
+            return false;
         }
         return true;
     }
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        synchronized (this) {
-            this.cache.values().parallelStream()
-                    .map(ServerChunkDataPacket::new)
-                    .forEach(consumer);
-            consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
-            if (isRaining) {
-                consumer.accept(new ServerNotifyClientPacket(ClientNotification.START_RAIN, null));
-                consumer.accept(new ServerNotifyClientPacket(ClientNotification.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
-                consumer.accept(new ServerNotifyClientPacket(ClientNotification.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
+        try {
+            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+                this.cache.values().parallelStream()
+                        .map(ServerChunkDataPacket::new)
+                        .forEach(consumer);
+                lock.readLock().unlock();
             }
+        } catch (Exception e) {
+            CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
+        }
+        consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
+        if (isRaining) {
+            consumer.accept(new ServerNotifyClientPacket(ClientNotification.START_RAIN, null));
+            consumer.accept(new ServerNotifyClientPacket(ClientNotification.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
+            consumer.accept(new ServerNotifyClientPacket(ClientNotification.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
         }
     }
 
     @Override
     public void reset(boolean full) {
-        synchronized (this) {
-            this.cache.clear();
-            this.spawnPosition = DEFAULT_SPAWN_POSITION;
-            this.isRaining = false;
-            this.thunderStrength = 0.0f;
-            this.rainStrength = 0.0f;
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                this.cache.clear();
+                lock.writeLock().unlock();
+                this.spawnPosition = DEFAULT_SPAWN_POSITION;
+                this.isRaining = false;
+                this.thunderStrength = 0.0f;
+                this.rainStrength = 0.0f;
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to acquire write lock", e);
         }
+
     }
 
     @Override
     public String getSendingMessage() {
-        synchronized (this) {
-            return String.format("Sending %d chunks, world spawn position [%d, %d, %d]",
-                    this.cache.size(),
-                    this.spawnPosition.getX(),
-                    this.spawnPosition.getY(),
-                    this.spawnPosition.getZ());
+        try {
+            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+                String format = String.format("Sending %d chunks, world spawn position [%d, %d, %d]",
+                        this.cache.size(),
+                        this.spawnPosition.getX(),
+                        this.spawnPosition.getY(),
+                        this.spawnPosition.getZ());
+                lock.readLock().unlock();
+                return format;
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to acquire read lock", e);
         }
+        return null;
     }
 
     private static int longToChunkX(final long l) {
@@ -251,20 +306,30 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public void add(@NonNull Column column) {
-        synchronized (this) {
-            this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
-        }
+        this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
     }
 
     public Column get(int x, int z) {
-        synchronized (this) {
-            return this.cache.get(chunkPosToLong(x, z));
+        try {
+            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+                Column column = this.cache.get(chunkPosToLong(x, z));
+                lock.readLock().unlock();
+                return column;
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to acquire read lock", e);
         }
+        return null;
     }
 
     public void remove(int x, int z) {
-        synchronized (this) {
-            this.cache.remove(chunkPosToLong(x, z));
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                this.cache.remove(chunkPosToLong(x, z));
+                lock.writeLock().unlock();
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to acquire write lock", e);
         }
     }
 
@@ -276,16 +341,24 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         if (!Proxy.getInstance().isConnected()) return;
         final int playerX = ((int) CACHE.getPlayerCache().getX()) >> 4;
         final int playerZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
-        synchronized (this) {
-            final long[] toRemove = cache.keySet().longStream()
-                    .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
-                    .toArray();
-            for (final long l : toRemove) {
-                cache.remove(l);
+        try {
+            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+                final long[] toRemove = cache.keySet().longStream()
+                        .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
+                        .toArray();
+                lock.readLock().unlock();
+                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                    for (final long l : toRemove) {
+                        cache.remove(l);
+                    }
+                    lock.writeLock().unlock();
+                }
+                if (toRemove.length > 0) {
+                    CLIENT_LOG.warn("Reaped {} dead chunks", toRemove.length);
+                }
             }
-            if (toRemove.length > 0) {
-                CLIENT_LOG.warn("Reaped {} dead chunks", toRemove.length);
-            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to acquire read lock", e);
         }
     }
 

@@ -7,9 +7,9 @@ import lombok.NonNull;
 
 import static com.zenith.util.Constants.CACHE;
 
-public class UnloadChunkHandler implements HandlerRegistry.IncomingHandler<ServerUnloadChunkPacket, ClientSession> {
+public class UnloadChunkHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnloadChunkPacket, ClientSession> {
     @Override
-    public boolean apply(@NonNull ServerUnloadChunkPacket packet, @NonNull ClientSession session) {
+    public boolean applyAsync(@NonNull ServerUnloadChunkPacket packet, @NonNull ClientSession session) {
         CACHE.getChunkCache().remove(packet.getX(), packet.getZ());
         return true;
     }
