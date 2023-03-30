@@ -122,6 +122,11 @@ public class AntiAFK extends Module {
         reset();
     }
 
+    @Override
+    public void clientTickStopping() {
+        reset();
+    }
+
     private void reset() {
         synchronized (this) {
             swingTickTimer.reset();

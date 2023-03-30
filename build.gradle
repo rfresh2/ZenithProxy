@@ -27,12 +27,12 @@ group "com.zenith"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(19)
+        languageVersion = JavaLanguageVersion.of(20)
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    sourceCompatibility = targetCompatibility = "19"
+    sourceCompatibility = targetCompatibility = "20"
     options.encoding = "UTF-8"
     options.compilerArgs.addAll(["--enable-preview"])
 }
@@ -184,12 +184,16 @@ dependencies {
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
 
-    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.9.2"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 tasks.register('run', JavaExec) {

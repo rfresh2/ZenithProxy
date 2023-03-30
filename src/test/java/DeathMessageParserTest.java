@@ -1,12 +1,12 @@
 import com.zenith.util.deathmessages.DeathMessageParseResult;
 import com.zenith.util.deathmessages.DeathMessagesParser;
 import com.zenith.util.deathmessages.KillerType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DeathMessageParserTest {
 
