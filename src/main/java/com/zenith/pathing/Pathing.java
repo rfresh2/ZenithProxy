@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.lib.math.vector.Vec3i;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,8 @@ public class Pathing {
         }
     }
 
+    private Instant lastFatalFallWarningTime = Instant.now();
+
     // empty optional when we shouldn't do a gravity move
     public Optional<Position> calculateNextGravityMove(
             // t = current tick time from when we started falling
@@ -84,7 +87,10 @@ public class Pathing {
                 if (yDelta > 0) return Optional.empty();
                 if (CONFIG.client.extra.antiafk.actions.safeGravity) {
                     if (calculateFallDamage(Math.abs(yDelta)) >= CACHE.getPlayerCache().getThePlayer().getHealth()) {
-                        CLIENT_LOG.warn("Gravity: possible fatal fall detected");
+                        if (lastFatalFallWarningTime.plusSeconds(20).isBefore(Instant.now())) {
+                            lastFatalFallWarningTime = Instant.now();
+                            CLIENT_LOG.warn("Gravity: possible fatal fall detected");
+                        }
                         return Optional.empty();
                     }
                 }

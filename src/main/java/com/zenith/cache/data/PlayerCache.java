@@ -123,21 +123,11 @@ public class PlayerCache implements CachedData {
         this.inventory[slot] = newItemStack;
         if (slot >= 5 && slot <= 8 || slot == 45 || slot == heldItemSlot) {
             switch (slot) {
-                case 5:
-                    this.getThePlayer().getEquipment().put(EquipmentSlot.HELMET, newItemStack);
-                    break;
-                case 6:
-                    this.getThePlayer().getEquipment().put(EquipmentSlot.CHESTPLATE, newItemStack);
-                    break;
-                case 7:
-                    this.getThePlayer().getEquipment().put(EquipmentSlot.LEGGINGS, newItemStack);
-                    break;
-                case 8:
-                    this.getThePlayer().getEquipment().put(EquipmentSlot.BOOTS, newItemStack);
-                    break;
-                case 45:
-                    this.getThePlayer().getEquipment().put(EquipmentSlot.OFF_HAND, newItemStack);
-                    break;
+                case 5 -> this.getThePlayer().getEquipment().put(EquipmentSlot.HELMET, newItemStack);
+                case 6 -> this.getThePlayer().getEquipment().put(EquipmentSlot.CHESTPLATE, newItemStack);
+                case 7 -> this.getThePlayer().getEquipment().put(EquipmentSlot.LEGGINGS, newItemStack);
+                case 8 -> this.getThePlayer().getEquipment().put(EquipmentSlot.BOOTS, newItemStack);
+                case 45 -> this.getThePlayer().getEquipment().put(EquipmentSlot.OFF_HAND, newItemStack);
             }
         }
         if (slot == heldItemSlot + 36) {

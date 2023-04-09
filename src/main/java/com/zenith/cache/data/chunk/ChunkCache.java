@@ -306,7 +306,14 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     }
 
     public void add(@NonNull Column column) {
-        this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
+                lock.writeLock().unlock();
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to merge chunk column", e);
+        }
     }
 
     public Column get(int x, int z) {
