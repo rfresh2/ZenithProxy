@@ -163,17 +163,17 @@ dependencies {
     shade "com.github.5cmc:MCProtocolLib:e8ef424600"
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
 
-    shade 'io.netty:netty-codec-haproxy:4.1.91.Final'
-    shade 'io.netty:netty-codec-dns:4.1.91.Final'
-    shade 'io.netty:netty-codec-http2:4.1.91.Final'
-    shade 'io.netty:netty-codec-http:4.1.91.Final'
-    shade 'io.netty:netty-codec-socks:4.1.91.Final'
-    shade 'io.netty:netty-handler-proxy:4.1.91.Final'
-    shade 'io.netty:netty-handler:4.1.91.Final'
-    shade 'io.netty:netty-resolver-dns:4.1.91.Final'
-    shade 'io.netty:netty-transport-classes-epoll:4.1.91.Final'
-    shade 'io.netty:netty-transport-native-epoll:4.1.91.Final'
-    shade('io.netty:netty-resolver-dns-native-macos:4.1.91.Final:osx-aarch_64')
+    shade 'io.netty:netty-codec-haproxy:4.1.90.Final'
+    shade 'io.netty:netty-codec-dns:4.1.90.Final'
+    shade 'io.netty:netty-codec-http2:4.1.90.Final'
+    shade 'io.netty:netty-codec-http:4.1.90.Final'
+    shade 'io.netty:netty-codec-socks:4.1.90.Final'
+    shade 'io.netty:netty-handler-proxy:4.1.90.Final'
+    shade 'io.netty:netty-handler:4.1.90.Final'
+    shade 'io.netty:netty-resolver-dns:4.1.90.Final'
+    shade 'io.netty:netty-transport-classes-epoll:4.1.90.Final'
+    shade 'io.netty:netty-transport-native-epoll:4.1.90.Final'
+    shade('io.netty:netty-resolver-dns-native-macos:4.1.90.Final:osx-aarch_64')
 
     shade "com.discord4j:discord4j-core:3.2.4"
 
