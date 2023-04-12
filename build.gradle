@@ -20,7 +20,7 @@ apply plugin: "java"
 ext {
     lombokVersion = "1.18.26"
     porklibVersion = "0.5.8-SNAPSHOT"
-    postgresVersion = '42.5.4'
+    postgresVersion = '42.6.0'
 }
 
 group "com.zenith"
@@ -79,7 +79,7 @@ configurations {
 }
 
 jooq {
-    version = "3.17.8"
+    version = "3.18.0"
     // read from config.json (will fail if config doesn't exist)
     def dbUrl = ''
     def dbUser = ''
@@ -154,8 +154,8 @@ dependencies {
     shade "org.apache.commons:commons-collections4:4.4"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
-    shade "ch.qos.logback:logback-classic:1.4.5"
-    shade 'org.slf4j:slf4j-api:2.0.6'
+    shade "ch.qos.logback:logback-classic:1.4.6"
+    shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
@@ -163,17 +163,17 @@ dependencies {
     shade "com.github.5cmc:MCProtocolLib:e8ef424600"
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
 
-    shade 'io.netty:netty-codec-haproxy:4.1.90.Final'
-    shade 'io.netty:netty-codec-dns:4.1.90.Final'
-    shade 'io.netty:netty-codec-http2:4.1.90.Final'
-    shade 'io.netty:netty-codec-http:4.1.90.Final'
-    shade 'io.netty:netty-codec-socks:4.1.90.Final'
-    shade 'io.netty:netty-handler-proxy:4.1.90.Final'
-    shade 'io.netty:netty-handler:4.1.90.Final'
-    shade 'io.netty:netty-resolver-dns:4.1.90.Final'
-    shade 'io.netty:netty-transport-classes-epoll:4.1.90.Final'
-    shade 'io.netty:netty-transport-native-epoll:4.1.90.Final'
-    shade('io.netty:netty-resolver-dns-native-macos:4.1.90.Final:osx-aarch_64')
+    shade 'io.netty:netty-codec-haproxy:4.1.91.Final'
+    shade 'io.netty:netty-codec-dns:4.1.91.Final'
+    shade 'io.netty:netty-codec-http2:4.1.91.Final'
+    shade 'io.netty:netty-codec-http:4.1.91.Final'
+    shade 'io.netty:netty-codec-socks:4.1.91.Final'
+    shade 'io.netty:netty-handler-proxy:4.1.91.Final'
+    shade 'io.netty:netty-handler:4.1.91.Final'
+    shade 'io.netty:netty-resolver-dns:4.1.91.Final'
+    shade 'io.netty:netty-transport-classes-epoll:4.1.91.Final'
+    shade 'io.netty:netty-transport-native-epoll:4.1.91.Final'
+    shade('io.netty:netty-resolver-dns-native-macos:4.1.91.Final:osx-aarch_64')
 
     shade "com.discord4j:discord4j-core:3.2.4"
 

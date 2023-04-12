@@ -12,12 +12,10 @@ public class StartupSizeAndTimeBasedTriggeringPolicy<E> extends SizeAndTimeBased
     @Override
     public boolean isTriggeringEvent(File activeFile, E event) {
         if (!started) {
-            nextCheck = 0L;
+            atomicNextCheck.set(0L);
             return started = true;
         }
 
         return super.isTriggeringEvent(activeFile, event);
     }
-
-    ;
 }
