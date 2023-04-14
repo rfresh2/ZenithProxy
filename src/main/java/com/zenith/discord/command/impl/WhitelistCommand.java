@@ -36,7 +36,7 @@ public class WhitelistCommand extends Command {
                                     c.getSource().getEmbedBuilder()
                                             .title("Added user: " + escape(e.username) + " To Whitelist")
                                             .color(Color.CYAN)
-                                            .addField("Whitelisted", whitelistToString(), false),
+                                            .description(whitelistToString()),
                             () -> c.getSource().getEmbedBuilder()
                                     .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile.")
                                     .color(Color.RUBY));
@@ -48,7 +48,7 @@ public class WhitelistCommand extends Command {
                     c.getSource().getEmbedBuilder()
                             .title("Removed user: " + escape(player) + " From Whitelist")
                             .color(Color.CYAN)
-                            .addField("Whitelisted", whitelistToString(), false);
+                            .description(whitelistToString());
                     WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                     return 1;
                 })))
@@ -56,14 +56,14 @@ public class WhitelistCommand extends Command {
                     c.getSource().getEmbedBuilder()
                             .title("Whitelist List")
                             .color(Color.CYAN)
-                            .addField("Whitelisted", whitelistToString(), false);
+                            .description(whitelistToString());
                 }))
                 .then(literal("clear").requires(Command::validateAccountOwner).executes(c -> {
                     WHITELIST_MANAGER.clearWhitelist();
                     c.getSource().getEmbedBuilder()
                             .title("Whitelist Cleared")
                             .color(Color.RUBY)
-                            .addField("Whitelisted", whitelistToString(), false);
+                            .description(whitelistToString());
                     WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                     return 1;
                 }));

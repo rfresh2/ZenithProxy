@@ -55,7 +55,7 @@ public class SpectatorCommand extends Command {
                                             c.getSource().getEmbedBuilder()
                                                     .title("Added user: " + escape(e.username) + " To Spectator Whitelist")
                                                     .color(Color.CYAN)
-                                                    .addField("Spectator Whitelist", whitelistToString(), false),
+                                                    .description(whitelistToString()),
                                     () -> c.getSource().getEmbedBuilder()
                                             .title("Failed to add user: " + escape(playerName) + " to whitelist. Unable to lookup profile.")
                                             .color(Color.RUBY));
@@ -67,7 +67,7 @@ public class SpectatorCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                     .title("Removed user: " + escape(playerName) + " From Spectator Whitelist")
                                     .color(Color.CYAN)
-                                    .addField("Spectator Whitelist", whitelistToString(), false);
+                                    .description(whitelistToString());
                             WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                             return 1;
                         })))
@@ -76,14 +76,14 @@ public class SpectatorCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                     .title("Spectator Whitelist Cleared")
                                     .color(Color.RUBY)
-                                    .addField("Spectator Whitelist", whitelistToString(), false);
+                                    .description(whitelistToString());
                             WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                         }))
                         .then(literal("list").executes(c -> {
                             c.getSource().getEmbedBuilder()
                                     .title("Spectator Whitelist")
                                     .color(Color.CYAN)
-                                    .addField("Spectator Whitelist", whitelistToString(), false);
+                                    .description(whitelistToString());
                         })))
                 .then(literal("entity")
                         .then(literal("list").executes(c -> {
