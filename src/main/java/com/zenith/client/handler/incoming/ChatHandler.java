@@ -25,7 +25,7 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
     @Override
     public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
         try {
-            CHAT_LOG.info(packet.getMessage());
+            CHAT_LOG.info(packet.getMessage().replace("\\n\\n", "")); // removes the chat clearing linebreaks from queue messages
             final MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
             final String messageString = mcTextRoot.toRawString();
             /*
