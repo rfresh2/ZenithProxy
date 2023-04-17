@@ -185,12 +185,14 @@ public class DiscordBot {
 
     @Subscribe
     public void handleDisconnectEvent(DisconnectEvent event) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
+        boolean sus = event.reason.startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
+        sendEmbedMessage((sus ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
                 .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
         this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
+        if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
     }
 
     @Subscribe
