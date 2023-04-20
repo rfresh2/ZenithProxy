@@ -160,25 +160,33 @@ dependencies {
     shade 'com.mojang:brigadier:1.0.18'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
-    shade "com.github.5cmc:MCProtocolLib:e8ef424600"
+    shade("com.github.5cmc:MCProtocolLib:69464d07fb") {
+        exclude group: 'io.netty.incubator'
+        exclude group: 'io.netty'
+    }
+    shade("com.discord4j:discord4j-core:3.2.4") {
+        exclude group: 'io.netty'
+    }
+
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
 
-    shade 'io.netty:netty-codec-haproxy:4.1.90.Final'
-    shade 'io.netty:netty-codec-dns:4.1.90.Final'
-    shade 'io.netty:netty-codec-http2:4.1.90.Final'
-    shade 'io.netty:netty-codec-http:4.1.90.Final'
-    shade 'io.netty:netty-codec-socks:4.1.90.Final'
-    shade 'io.netty:netty-handler-proxy:4.1.90.Final'
-    shade 'io.netty:netty-handler:4.1.90.Final'
-    shade 'io.netty:netty-resolver-dns:4.1.90.Final'
-    shade 'io.netty:netty-transport-classes-epoll:4.1.90.Final'
-    shade 'io.netty:netty-transport-native-epoll:4.1.90.Final'
-    shade('io.netty:netty-resolver-dns-native-macos:4.1.90.Final:osx-aarch_64')
-
-    shade "com.discord4j:discord4j-core:3.2.4"
+    shade 'io.netty:netty-codec-haproxy:4.1.91.Final'
+    shade 'io.netty:netty-codec-dns:4.1.91.Final'
+    shade 'io.netty:netty-codec-http2:4.1.91.Final'
+    shade 'io.netty:netty-codec-http:4.1.91.Final'
+    shade 'io.netty:netty-codec-socks:4.1.91.Final'
+    shade 'io.netty:netty-handler-proxy:4.1.91.Final'
+    shade 'io.netty:netty-handler:4.1.91.Final'
+    shade 'io.netty:netty-resolver-dns:4.1.91.Final'
+    shade 'io.netty:netty-transport-classes-epoll:4.1.91.Final'
+    shade 'io.netty:netty-transport-native-epoll:4.1.91.Final:linux-x86_64'
+    shade 'io.netty:netty-transport-native-unix-common:4.1.91.Final:linux-x86_64'
+    shade 'io.netty:netty-resolver-dns-native-macos:4.1.91.Final:osx-aarch_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade 'org.redisson:redisson:3.20.1'
+    shade('org.redisson:redisson:3.20.1') {
+        exclude group: 'io.netty'
+    }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-int-object-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
