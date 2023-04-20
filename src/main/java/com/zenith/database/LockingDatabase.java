@@ -177,6 +177,14 @@ public abstract class LockingDatabase extends Database {
             }
         } catch (final Throwable e) {
             DATABASE_LOG.warn("Try lock process exception", e);
+            try {
+                if (hasLock() || lockAcquired.get()) {
+                    releaseLock();
+                    onLockReleased();
+                }
+            } catch (final Exception e2) {
+                DATABASE_LOG.warn("Error releasing lock in try lock process exception", e2);
+            }
         }
     }
 
