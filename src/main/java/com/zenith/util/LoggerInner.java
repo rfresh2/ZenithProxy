@@ -9,7 +9,10 @@ import com.zenith.util.Config.Authentication.AccountType;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import lombok.Getter;
 
+import java.util.Objects;
+
 import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.saveConfig;
 import static java.util.Objects.nonNull;
 
 @Getter
@@ -26,6 +29,10 @@ public class LoggerInner {
         try {
             this.auth.login();
             if (CONFIG.authentication.accountType == AccountType.MSA) {
+                if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
+                    CONFIG.authentication.username = auth.getSelectedProfile().getName();
+                    saveConfig();
+                }
                 return new MinecraftProtocol(
                         auth.getSelectedProfile(), "", auth.getAccessToken()
                 );
@@ -34,9 +41,7 @@ public class LoggerInner {
             }
         } catch (RequestException | MicrosoftAuthenticationException e) {
             this.auth = null;
-            throw new RuntimeException(String.format(
-                    "Unable to log in using credentials (%s)",
-                    CONFIG.authentication.username), e);
+            throw new RuntimeException("Unable to log in", e);
         }
     }
 
