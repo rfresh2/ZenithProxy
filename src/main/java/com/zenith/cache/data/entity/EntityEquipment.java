@@ -25,13 +25,15 @@ public abstract class EntityEquipment extends Entity {
 
     public void setHealth(float health) {
         this.health = health;
-        final List<EntityMetadata> md = new ArrayList<>(this.getMetadata());
-        md.forEach(meta -> {
-            if (meta.getId() == 7) { // https://c4k3.github.io/wiki.vg/Entities.html#Living
-                meta.setValue(health);
-            }
-        });
-        this.metadata = md;
+        if (this instanceof EntityPlayer) {
+            final List<EntityMetadata> md = new ArrayList<>(this.getMetadata());
+            md.forEach(meta -> {
+                if (meta.getId() == 7) { // https://c4k3.github.io/wiki.vg/Entities.html#Living
+                    meta.setValue(health);
+                }
+            });
+            this.metadata = md;
+        }
     }
 
     {
