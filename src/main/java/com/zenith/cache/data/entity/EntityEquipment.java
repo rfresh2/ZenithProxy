@@ -1,6 +1,7 @@
 package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEffectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
@@ -21,6 +22,17 @@ public abstract class EntityEquipment extends Entity {
     protected List<PotionEffect> potionEffects = Collections.synchronizedList(new ArrayList<>());
     protected Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
     protected float health;
+
+    public void setHealth(float health) {
+        this.health = health;
+        final List<EntityMetadata> md = new ArrayList<>(this.getMetadata());
+        md.forEach(meta -> {
+            if (meta.getId() == 7) { // https://c4k3.github.io/wiki.vg/Entities.html#Living
+                meta.setValue(health);
+            }
+        });
+        this.metadata = md;
+    }
 
     {
         for (EquipmentSlot slot : EquipmentSlot.values()) {

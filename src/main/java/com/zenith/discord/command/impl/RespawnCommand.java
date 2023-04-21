@@ -15,6 +15,7 @@ import com.zenith.server.ServerConnection;
 import discord4j.rest.util.Color;
 
 import static com.zenith.util.Constants.CACHE;
+import static com.zenith.util.Constants.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
 public class RespawnCommand extends Command {
@@ -62,8 +63,14 @@ public class RespawnCommand extends Command {
                                 CACHE.getPlayerCache().getGameMode(),
                                 CACHE.getPlayerCache().getWorldType()));
                         ChunkCache.sync();
-                        CACHE.getPlayerCache().getPackets(serverConnection::sendDirect);
-                        CACHE.getEntityCache().getPackets(serverConnection::sendDirect);
+                        CACHE.getPlayerCache().getPackets(p -> {
+                            CLIENT_LOG.info("Sending packet: " + p.getClass().getSimpleName() + " " + p);
+                            serverConnection.sendDirect(p);
+                        });
+                        CACHE.getEntityCache().getPackets(p -> {
+                            CLIENT_LOG.info("Sending packet: " + p.getClass().getSimpleName() + " " + p);
+                            serverConnection.sendDirect(p);
+                        });
                     }
                     c.getSource().getEmbedBuilder()
                             .title("Fix Respawn performed")
