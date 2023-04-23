@@ -4,10 +4,10 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerSwitchCameraPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.util.spectator.SpectatorEntityRegistry;
+import com.zenith.util.spectator.SpectatorHelper;
 
 import static com.zenith.util.Constants.CACHE;
 import static com.zenith.util.Constants.CONFIG;
@@ -64,22 +64,7 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                 });
             } else {
                 session.send(new ServerSwitchCameraPacket(session.getSpectatorSelfEntityId()));
-                session.setAllowSpectatorServerPlayerPosRotate(true);
-                session.send(new ServerPlayerPositionRotationPacket(
-                        CACHE.getPlayerCache().getX(),
-                        CACHE.getPlayerCache().getY(),
-                        CACHE.getPlayerCache().getZ(),
-                        CACHE.getPlayerCache().getYaw(),
-                        CACHE.getPlayerCache().getPitch(),
-                        12345678
-                ));
-                session.setAllowSpectatorServerPlayerPosRotate(false);
-                session.getProxy().getActiveConnections().forEach(connection -> {
-                    if (!connection.equals(session) || session.isShowSelfEntity()) {
-                        connection.send(session.getEntitySpawnPacket());
-                        connection.send(session.getEntityMetadataPacket());
-                    }
-                });
+                SpectatorHelper.syncSpectatorPositionToPlayer(session);
             }
         } else {
             session.getProxy().getActiveConnections().forEach(connection -> {

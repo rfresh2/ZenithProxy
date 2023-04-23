@@ -8,6 +8,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.Proxy;
@@ -49,6 +50,25 @@ public final class SpectatorHelper {
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getYaw()
             ));
+        });
+    }
+
+    public static void syncSpectatorPositionToPlayer(final ServerConnection spectConnection) {
+        spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
+        spectConnection.send(new ServerPlayerPositionRotationPacket(
+                CACHE.getPlayerCache().getX(),
+                CACHE.getPlayerCache().getY(),
+                CACHE.getPlayerCache().getZ(),
+                CACHE.getPlayerCache().getYaw(),
+                CACHE.getPlayerCache().getPitch(),
+                12345678
+        ));
+        spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
+        Proxy.getInstance().getActiveConnections().forEach(c -> {
+            if (!c.equals(spectConnection) || spectConnection.isShowSelfEntity()) {
+                c.send(spectConnection.getEntitySpawnPacket());
+                c.send(spectConnection.getEntityMetadataPacket());
+            }
         });
     }
 
@@ -139,5 +159,15 @@ public final class SpectatorHelper {
         session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
         session.send(new ServerEntityMetadataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
         session.setAllowSpectatorServerPlayerPosRotate(false);
+    }
+
+    public static void checkSpectatorPositionOutOfRender(final ServerConnection spectConnection) {
+        final int spectX = (int) spectConnection.getSpectatorPlayerCache().getX() >> 4;
+        final int spectZ = (int) spectConnection.getSpectatorPlayerCache().getZ() >> 4;
+        final int playerX = (int) CACHE.getPlayerCache().getX() >> 4;
+        final int playerZ = (int) CACHE.getPlayerCache().getZ() >> 4;
+        if (Math.abs(spectX - playerX) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1) || Math.abs(spectZ - playerZ) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1)) {
+            SpectatorHelper.syncSpectatorPositionToPlayer(spectConnection);
+        }
     }
 }

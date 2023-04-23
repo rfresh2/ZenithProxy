@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.util.spectator.SpectatorHelper;
 import com.zenith.util.spectator.entity.mob.SpectatorEntityEnderDragon;
 import lombok.NonNull;
 
@@ -18,6 +19,7 @@ public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.I
                 .setYaw((float) packet.getYaw())
                 .setPitch((float) packet.getPitch());
         PlayerPositionRotationSpectatorHandler.updateSpectatorPosition(session);
+        SpectatorHelper.checkSpectatorPositionOutOfRender(session);
         return false;
     }
 

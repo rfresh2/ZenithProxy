@@ -48,6 +48,9 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Getter
     @Setter
     private float thunderStrength = 0f;
+    @Getter
+    @Setter
+    private int renderDistance = 25;
     protected final Long2ObjectOpenHashMap<Column> cache = new Long2ObjectOpenHashMap<>();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 

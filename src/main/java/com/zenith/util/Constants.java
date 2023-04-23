@@ -19,6 +19,7 @@ import com.zenith.pathing.Pathing;
 import com.zenith.pathing.World;
 import com.zenith.pathing.blockdata.BlockDataManager;
 import com.zenith.server.ServerConnection;
+import com.zenith.server.handler.player.incoming.ClientSettingsPacketHandler;
 import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
 import com.zenith.server.handler.player.postoutgoing.ClientRequestPacketPostHandler;
@@ -193,6 +194,7 @@ public class Constants {
             //
             .registerInbound(new LoginStartHandler())
             .registerInbound(new ServerChatHandler())
+            .registerInbound(new ClientSettingsPacketHandler())
             .registerInbound(new ServerKeepaliveHandler())
             //PLAYER MOVEMENT
             .registerInbound(new PlayerSwingArmPacketHandler())
