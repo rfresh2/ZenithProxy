@@ -71,15 +71,17 @@ public class ServerConnection implements Session, SessionListener {
         try {
             if (!isSpectator()) {
                 this.lastPacket = System.currentTimeMillis();
-                if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)
-                        && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                        && this.isLoggedIn) {
+                if (((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && ((MinecraftProtocol) this.proxy.getClient().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && this.isLoggedIn
+                        && SERVER_PLAYER_HANDLERS.handleInbound(packet, this)) {
                     this.proxy.getClient().send(packet);
                 }
             } else {
-                if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)
-                        && ((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                        && this.isLoggedIn) {
+                if (((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && ((MinecraftProtocol) this.proxy.getClient().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                        && this.isLoggedIn
+                        && SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)) {
                     this.proxy.getClient().send(packet);
                 }
             }
