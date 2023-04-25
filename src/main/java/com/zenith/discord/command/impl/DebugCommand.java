@@ -51,6 +51,7 @@ public class DebugCommand extends Command {
                                     .color(Color.CYAN);
                         }))
                         .then(literal("off").executes(c -> {
+                            CONFIG.debug.printDataFields = false;
                             CONFIG.debug.packet.received = false;
                             CONFIG.debug.packet.postSent = false;
                             c.getSource().getEmbedBuilder()
