@@ -129,7 +129,7 @@ public class ActiveHoursCommand extends Command {
         boolean matchesRegex = matcher.matches();
         if (!matchesRegex) return false;
         final ActiveTime activeTime = ActiveTime.fromString(arg);
-        return activeTime.hour <= 24 && activeTime.minute <= 59;
+        return activeTime.hour <= 23 && activeTime.minute <= 59;
     }
 
     private String activeTimeListToString(final List<ActiveTime> activeTimes) {
