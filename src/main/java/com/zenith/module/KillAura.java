@@ -1,14 +1,21 @@
 package com.zenith.module;
 
 import com.collarmc.pounce.Subscribe;
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
+import com.github.steveice10.mc.protocol.data.game.window.MoveToHotbarParam;
+import com.github.steveice10.mc.protocol.data.game.window.WindowAction;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerInteractEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerSwingArmPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
 import com.google.common.collect.Sets;
 import com.zenith.Proxy;
+import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.cache.data.entity.EntityPlayer;
@@ -20,6 +27,7 @@ import java.util.Set;
 
 import static com.zenith.util.Constants.*;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public class KillAura extends Module {
 
@@ -31,6 +39,9 @@ public class KillAura extends Module {
     );
     private int delay = 0;
     private boolean isAttacking = false;
+    private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
+    private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
+    private boolean swapping = false;
 
     public boolean active() {
         return CONFIG.client.extra.killAura.enabled && isAttacking;
@@ -44,6 +55,12 @@ public class KillAura extends Module {
                 && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)) {
             if (delay > 0) {
                 delay--;
+                return;
+            }
+            if (swapping) {
+                PlayerCache.sync();
+                delay = 5;
+                swapping = false;
                 return;
             }
             // find non-friended players or hostile mobs within 3.5 blocks
@@ -70,11 +87,13 @@ public class KillAura extends Module {
             // rotate to target
             if (target.isPresent()) {
                 if (PATHING.isOnGround()) {
-                    isAttacking = true;
-                    if (rotateTo(target.get())) {
-                        // attack
-                        attack(target.get());
-                        delay = 5;
+                    if (switchToWeapon()) {
+                        isAttacking = true;
+                        if (rotateTo(target.get())) {
+                            // attack
+                            attack(target.get());
+                            delay = 5;
+                        }
                     }
                 }
             } else {
@@ -91,7 +110,7 @@ public class KillAura extends Module {
 
     private void attack(final Entity entity) {
         Proxy.getInstance().getClient().send(new ClientPlayerInteractEntityPacket(entity.getEntityId(), InteractAction.ATTACK));
-        Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+        Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(weaponSlot == EquipmentSlot.MAIN_HAND ? Hand.MAIN_HAND : Hand.OFF_HAND));
     }
 
     private boolean rotateTo(Entity entity) {
@@ -127,6 +146,62 @@ public class KillAura extends Module {
                 Math.pow(CACHE.getPlayerCache().getX() - entity.getX(), 2)
                         + Math.pow(CACHE.getPlayerCache().getY() - entity.getY(), 2)
                         + Math.pow(CACHE.getPlayerCache().getZ() - entity.getZ(), 2));
+    }
+
+    public boolean switchToWeapon() {
+        if (!CONFIG.client.extra.killAura.switchWeapon) {
+            return true;
+        }
+
+        // check if offhand has weapon
+        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        if (nonNull(offhandStack)) {
+            if (isWeapon(offhandStack.getId())) {
+                weaponSlot = EquipmentSlot.OFF_HAND;
+                return true;
+            }
+        }
+        // check mainhand
+        final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
+        if (nonNull(mainHandStack)) {
+            if (isWeapon(mainHandStack.getId())) {
+                weaponSlot = EquipmentSlot.MAIN_HAND;
+                return true;
+            }
+        }
+
+        // find next weapon and switch it into our hotbar slot
+        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
+        for (int i = 44; i >= 9; i--) {
+            final ItemStack stack = inventory[i];
+            if (nonNull(stack) && isWeapon(stack.getId())) {
+                Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.MOVE_TO_HOTBAR_SLOT, MoveToHotbarParam.SLOT_2));
+                if (CACHE.getPlayerCache().getHeldItemSlot() != 1) {
+                    Proxy.getInstance().getClient().send(new ClientPlayerChangeHeldItemPacket(1));
+                }
+                delay = 5;
+                swapping = true;
+                weaponSlot = EquipmentSlot.MAIN_HAND;
+                return false;
+            }
+        }
+        // no weapon, let's just punch em
+        weaponSlot = EquipmentSlot.MAIN_HAND;
+        return true;
+    }
+
+    private boolean isWeapon(int id) {
+        return
+                id == 276 // diamond sword
+                        || id == 283 // gold sword
+                        || id == 267 // iron sword
+                        || id == 272 // stone sword
+                        || id == 268 // wooden sword
+                        || id == 271 // wooden axe
+                        || id == 275 // stone axe
+                        || id == 258 // iron axe
+                        || id == 286 // gold axe
+                        || id == 279; // diamond axe
     }
 
 }

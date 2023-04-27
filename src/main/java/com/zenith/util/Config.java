@@ -67,6 +67,7 @@ public final class Config {
                 public boolean targetPlayers = false;
                 public boolean targetMobs = true;
                 public boolean avoidFriendlyMobs = true;
+                public boolean switchWeapon = true;
             }
 
             public static final class AutoEat {

@@ -16,7 +16,7 @@ public class KillAuraCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.full("killAura",
                 "Attacks entities near the player",
-                asList("on/off", "targetPlayers on/off", "targetMobs on/off", "avoidFriendlyMobs on/off"),
+                asList("on/off", "targetPlayers on/off", "targetMobs on/off", "avoidFriendlyMobs on/off", "weaponSwitch on/off"),
                 aliases());
     }
 
@@ -30,7 +30,8 @@ public class KillAuraCommand extends Command {
                             .color(Color.CYAN)
                             .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                             .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                            .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                            .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                            .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
 
                 }))
                 .then(literal("off").executes(c -> {
@@ -40,7 +41,8 @@ public class KillAuraCommand extends Command {
                             .color(Color.CYAN)
                             .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                             .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                            .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                            .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                            .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                 }))
                 .then(literal("targetplayers")
                         .then(literal("on").executes(c -> {
@@ -50,7 +52,8 @@ public class KillAuraCommand extends Command {
                                     .color(Color.CYAN)
                                     .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                                     .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                         }))
                         .then(literal("off").executes(c -> {
                             CONFIG.client.extra.killAura.targetPlayers = false;
@@ -59,7 +62,8 @@ public class KillAuraCommand extends Command {
                                     .color(Color.CYAN)
                                     .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                                     .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                         })))
                 .then(literal("targetmobs")
                         .then(literal("on").executes(c -> {
@@ -69,7 +73,8 @@ public class KillAuraCommand extends Command {
                                     .color(Color.CYAN)
                                     .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                                     .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                         }))
                         .then(literal("off").executes(c -> {
                             CONFIG.client.extra.killAura.targetMobs = true;
@@ -78,7 +83,8 @@ public class KillAuraCommand extends Command {
                                     .color(Color.CYAN)
                                     .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                                     .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                         })))
                 .then(literal("avoidfriendlymobs")
                         .then(literal("on").executes(c -> {
@@ -88,7 +94,8 @@ public class KillAuraCommand extends Command {
                                     .color(Color.CYAN)
                                     .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                                     .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                         }))
                         .then(literal("off").executes(c -> {
                             CONFIG.client.extra.killAura.avoidFriendlyMobs = false;
@@ -97,7 +104,29 @@ public class KillAuraCommand extends Command {
                                     .color(Color.CYAN)
                                     .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
                                     .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
-                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false);
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
+                        })))
+                .then(literal("weaponswitch")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.killAura.switchWeapon = true;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Weapon Switching On!")
+                                    .color(Color.CYAN)
+                                    .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
+                                    .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.killAura.switchWeapon = false;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Weapon Switching Off!")
+                                    .color(Color.CYAN)
+                                    .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
+                                    .addField("Target Mobs", CONFIG.client.extra.killAura.targetMobs ? "on" : "off", false)
+                                    .addField("Avoid Friendly Mobs", CONFIG.client.extra.killAura.avoidFriendlyMobs ? "on" : "off", false)
+                                    .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false);
                         })));
     }
 

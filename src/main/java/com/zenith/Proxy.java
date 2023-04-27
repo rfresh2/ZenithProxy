@@ -149,22 +149,7 @@ public class Proxy {
             }
             updatePrioBanStatus();
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
-                try {
-                    InputStream netInputStream = HttpClient.create()
-                            .secure()
-                            .get()
-                            .uri(getAvatarURL(CONFIG.authentication.username).toURI())
-                            .responseContent()
-                            .aggregate()
-                            .asInputStream()
-                            .block();
-                    this.serverIcon = ImageIO.read(netInputStream);
-                    if (DISCORD_BOT.isRunning()) {
-                        DISCORD_BOT.updateProfileImage(this.serverIcon);
-                    }
-                } catch (Exception e) {
-                    SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
-                }
+                updateFavicon();
             }
             if (CONFIG.client.autoConnect) {
                 this.connect();
@@ -251,7 +236,6 @@ public class Proxy {
         this.client.connect(true);
     }
 
-
     public boolean isConnected() {
         return this.client != null && this.client.isConnected();
     }
@@ -303,6 +287,7 @@ public class Proxy {
         }
         CACHE.getProfileCache().setProfile(this.protocol.getProfile());
         AUTH_LOG.info("Logged in as {} [{}].", this.protocol.getProfile().getName(), this.protocol.getProfile().getId());
+        SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
     }
 
     public Future<Boolean> loginTask() {
@@ -462,6 +447,25 @@ public class Proxy {
                 && !isInQueue()
                 && nonNull(getConnectTime())
                 && getConnectTime().isBefore(Instant.now().minus(duration));
+    }
+
+    public void updateFavicon() {
+        try {
+            InputStream netInputStream = HttpClient.create()
+                    .secure()
+                    .get()
+                    .uri(getAvatarURL(CONFIG.authentication.username).toURI())
+                    .responseContent()
+                    .aggregate()
+                    .asInputStream()
+                    .block();
+            this.serverIcon = ImageIO.read(netInputStream);
+            if (DISCORD_BOT.isRunning()) {
+                DISCORD_BOT.updateProfileImage(this.serverIcon);
+            }
+        } catch (Exception e) {
+            SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
+        }
     }
 
     @Subscribe

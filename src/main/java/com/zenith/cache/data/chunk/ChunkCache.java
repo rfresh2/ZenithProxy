@@ -121,7 +121,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                 if (column != null) {
                     Chunk chunk = column.getChunks()[pos.getY() >> 4];
                     if (chunk == null) {
-                        chunk = column.getChunks()[pos.getY() >> 4] = new Chunk(column.hasSkylight());
+                        chunk = new Chunk(column.hasSkylight());
                     }
                     lock.readLock().unlock();
                     if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
