@@ -75,6 +75,18 @@ public class WhitelistManager {
         CONFIG.client.extra.friendsList.clear();
     }
 
+    public Optional<WhitelistEntry> addIgnoreWhitelistEntryByUsername(final String username) {
+        return addWhitelistEntryByUsernameBase(username, CONFIG.client.extra.chat.ignoreList);
+    }
+
+    public void removeIgnoreWhitelistEntryByUsername(final String username) {
+        CONFIG.client.extra.chat.ignoreList.removeIf(s -> s.username.equalsIgnoreCase(username));
+    }
+
+    public void clearIgnoreWhitelist() {
+        CONFIG.client.extra.chat.ignoreList.clear();
+    }
+
     private Optional<WhitelistEntry> addWhitelistEntryByUsernameBase(final String username, final List<WhitelistEntry> destList) {
         final Optional<WhitelistEntry> whitelistEntryOptional = getWhitelistEntryFromUsername(username);
         if (whitelistEntryOptional.isPresent()) {
@@ -136,6 +148,12 @@ public class WhitelistManager {
 
     public boolean isUserNameSpectatorWhitelisted(final String name) {
         return CONFIG.server.spectator.whitelist.stream()
+                .map(entry -> entry.username)
+                .anyMatch(name::equalsIgnoreCase);
+    }
+
+    public boolean isPlayerIgnored(final String name) {
+        return CONFIG.client.extra.chat.ignoreList.stream()
                 .map(entry -> entry.username)
                 .anyMatch(name::equalsIgnoreCase);
     }

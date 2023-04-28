@@ -57,7 +57,22 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
                 }
             }
 
-            EVENT_BUS.dispatch(new ServerChatReceivedEvent(messageString));
+            boolean isWhisper = false;
+            String playerName = null;
+            if (messageString.startsWith("<")) {
+                playerName = extractSenderNameNormalChat(messageString);
+            } else {
+                final String[] split = messageString.split(" ");
+                if (split.length > 2 && split[1].startsWith("whispers")) {
+                    isWhisper = true;
+                    playerName = extractSenderNameWhisper(split);
+                }
+            }
+            if (playerName == null) {
+                EVENT_BUS.dispatch(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper));
+            } else {
+                EVENT_BUS.dispatch(new ServerChatReceivedEvent(CACHE.getTabListCache().getTabList().getFromName(playerName), messageString, isWhisper));
+            }
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);
         }
@@ -67,5 +82,13 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
     @Override
     public Class<ServerChatPacket> getPacketClass() {
         return ServerChatPacket.class;
+    }
+
+    private String extractSenderNameNormalChat(final String message) {
+        return message.substring(message.indexOf("<") + 1, message.indexOf(">"));
+    }
+
+    private String extractSenderNameWhisper(final String[] messageSplit) {
+        return messageSplit[0].trim();
     }
 }

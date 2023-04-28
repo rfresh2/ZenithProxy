@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
@@ -524,6 +525,26 @@ public class Proxy {
                 this.isPrio = Optional.of(event.prio);
                 CONFIG.authentication.prio = event.prio;
                 saveConfig();
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
+        if (CONFIG.client.extra.chat.showConnectionMessages) {
+            ServerConnection serverConnection = getCurrentPlayer().get();
+            if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
+                serverConnection.sendDirect(new ServerChatPacket("§4" + event.playerEntry.getName() + "§r§e connected", true));
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
+        if (CONFIG.client.extra.chat.showConnectionMessages) {
+            ServerConnection serverConnection = getCurrentPlayer().get();
+            if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
+                serverConnection.sendDirect(new ServerChatPacket("§4" + event.playerEntry.getName() + "§r§e disconnected", true));
             }
         }
     }

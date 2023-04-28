@@ -52,6 +52,7 @@ public final class Config {
             public AutoEat autoEat = new AutoEat();
             public KillAura killAura = new KillAura();
             public AutoTotem autoTotem = new AutoTotem();
+            public Chat chat = new Chat();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
             public List<WhitelistEntry> friendsList = new ArrayList<>();
@@ -59,6 +60,15 @@ public final class Config {
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = true;
             public boolean twentyMinuteReconnectIfStuck = true;
+
+            public static final class Chat {
+                public List<WhitelistEntry> ignoreList = new ArrayList<>();
+                public boolean hideChat = false;
+                public boolean hideWhispers = false;
+                public boolean hideDeathMessages = false;
+                public boolean showConnectionMessages = false;
+
+            }
 
             public static final class AutoTotem {
                 public boolean enabled = true;
