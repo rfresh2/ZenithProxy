@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.discord.command.Command;
 import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
+import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.util.Constants.CONFIG;
@@ -25,12 +26,14 @@ public class AutoTotemCommand extends Command {
                     CONFIG.client.extra.autoTotem.enabled = true;
                     c.getSource().getEmbedBuilder()
                             .title("Auto Totem On!")
+                            .color(Color.CYAN)
                             .addField("Health Threshold", String.valueOf(CONFIG.client.extra.autoTotem.healthThreshold), false);
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.autoTotem.enabled = false;
                     c.getSource().getEmbedBuilder()
                             .title("Auto Totem Off!")
+                            .color(Color.CYAN)
                             .addField("Health Threshold", String.valueOf(CONFIG.client.extra.autoTotem.healthThreshold), false);
                 }))
                 .then(literal("health")
@@ -38,6 +41,7 @@ public class AutoTotemCommand extends Command {
                             CONFIG.client.extra.autoTotem.healthThreshold = c.getArgument("healthArg", Integer.class);
                             c.getSource().getEmbedBuilder()
                                     .title("Auto Totem Health Threshold Set!")
+                                    .color(Color.CYAN)
                                     .addField("Auto Totem", CONFIG.client.extra.autoTotem.enabled ? "on" : "off", false)
                                     .addField("Health Threshold", String.valueOf(CONFIG.client.extra.autoTotem.healthThreshold), false);
                             return 1;

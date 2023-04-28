@@ -23,7 +23,7 @@ public class AutoTotem extends Module {
     private int delay = 0;
 
     public boolean isActive() {
-        return CONFIG.client.extra.autoTotem.enabled && !swapping;
+        return CONFIG.client.extra.autoTotem.enabled && swapping;
     }
 
     @Subscribe
