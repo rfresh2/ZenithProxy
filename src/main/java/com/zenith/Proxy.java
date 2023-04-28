@@ -534,7 +534,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ServerChatPacket("§4" + event.playerEntry.getName() + "§r§e connected", true));
+                serverConnection.sendDirect(new ServerChatPacket("§b" + event.playerEntry.getName() + "§r§e connected", true));
             }
         }
     }
@@ -544,7 +544,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ServerChatPacket("§4" + event.playerEntry.getName() + "§r§e disconnected", true));
+                serverConnection.sendDirect(new ServerChatPacket("§b" + event.playerEntry.getName() + "§r§e disconnected", true));
             }
         }
     }

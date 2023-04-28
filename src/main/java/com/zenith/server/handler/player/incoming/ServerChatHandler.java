@@ -27,7 +27,6 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 //allow sending ingame commands to bots or whatever
                 PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, message.substring(1));
                 return true;
-//                todo: intercept toggledeathmessages/toggleconnectionmessages and block them at proxy to simulate the effect
             } else if (lowerCase.startsWith("!help")) {
                 session.send(new ServerChatPacket("§9§lPlayer commands:", true));
                 session.send(new ServerChatPacket("§2Prefix : \"!\"", true));
@@ -103,12 +102,20 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
                 return false;
             } else if (lowerCase.startsWith("/ignoredeathmsgs")) { // /ignoredeathmsgs <name>
                 // todo
+                session.send(new ServerChatPacket("§cNot implemented yet", true));
+                return false;
             } else if (lowerCase.startsWith("/ignore")) { // can also be ignorehard which is what we treat these like anyway
                 String[] split = message.split(" ");
                 if (split.length == 2) {
-                    WHITELIST_MANAGER.addIgnoreWhitelistEntryByUsername(split[1]).ifPresentOrElse(
+                    final String player = split[1];
+                    if (WHITELIST_MANAGER.isPlayerIgnored(player)) {
+                        WHITELIST_MANAGER.removeIgnoreWhitelistEntryByUsername(player);
+                        session.send(new ServerChatPacket("§cRemoved " + player + " from ignore list", true));
+                        return false;
+                    }
+                    WHITELIST_MANAGER.addIgnoreWhitelistEntryByUsername(player).ifPresentOrElse(
                             ignoreEntry -> session.send(new ServerChatPacket("§cAdded " + ignoreEntry.username + " to ignore list", true)),
-                            () -> session.send(new ServerChatPacket("§cFailed to add " + split[1] + " to ignore list", true))
+                            () -> session.send(new ServerChatPacket("§cFailed to add " + player + " to ignore list", true))
                     );
                 } else {
                     session.send(new ServerChatPacket("§cInvalid syntax. Usage: /ignore <name>", true));
@@ -122,7 +129,7 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
             } else if (lowerCase.startsWith("/toggleprivatemsgs")) {
                 CONFIG.client.extra.chat.hideWhispers = !CONFIG.client.extra.chat.hideWhispers;
                 saveConfig();
-                session.send(new ServerChatPacket("§Whispers messages toggled " + (CONFIG.client.extra.chat.hideWhispers ? "off" : "on") + "§r", true));
+                session.send(new ServerChatPacket("§cWhispers messages toggled " + (CONFIG.client.extra.chat.hideWhispers ? "off" : "on") + "§r", true));
                 return false;
             } else if (lowerCase.startsWith("/toggledeathmsgs")) {
                 CONFIG.client.extra.chat.hideDeathMessages = !CONFIG.client.extra.chat.hideDeathMessages;

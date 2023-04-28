@@ -22,6 +22,7 @@ import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.player.incoming.ClientSettingsPacketHandler;
 import com.zenith.server.handler.player.incoming.ServerChatHandler;
 import com.zenith.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
+import com.zenith.server.handler.player.outgoing.ServerChatOutgoingHandler;
 import com.zenith.server.handler.player.postoutgoing.ClientRequestPacketPostHandler;
 import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
 import com.zenith.server.handler.shared.incoming.LoginStartHandler;
@@ -203,6 +204,7 @@ public class Constants {
             //
             .registerOutbound(new LoginSuccessOutgoingHandler())
             .registerOutbound(new ServerTablistDataOutgoingHandler())
+            .registerOutbound(new ServerChatOutgoingHandler())
             //
             // Post-outbound packets
             //
