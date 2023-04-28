@@ -31,6 +31,7 @@ public class ModuleManager {
                 new AutoReply(),
                 new Spook(),
                 new AutoRespawn(),
+                new AutoTotem(),
                 new AutoEat(),
                 new KillAura()
         );

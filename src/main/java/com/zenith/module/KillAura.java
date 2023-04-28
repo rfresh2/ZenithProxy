@@ -52,7 +52,8 @@ public class KillAura extends Module {
         if (CONFIG.client.extra.killAura.enabled
                 && !Proxy.getInstance().isInQueue()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)) {
+                && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)
+                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActive).orElse(false)) {
             if (delay > 0) {
                 delay--;
                 return;

@@ -41,6 +41,7 @@ public class CommandManager {
                 new AutoReconnectCommand(),
                 new AutoReplyCommand(),
                 new AutoRespawnCommand(),
+                new AutoTotemCommand(),
                 new AutoUpdateCommand(),
                 new ChatRelayCommand(),
                 new ConnectCommand(),

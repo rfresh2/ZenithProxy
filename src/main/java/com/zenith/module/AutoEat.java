@@ -36,9 +36,11 @@ public class AutoEat extends Module {
         if (CONFIG.client.extra.autoEat.enabled
                 && playerHealthBelowThreshold()
                 && !Proxy.getInstance().isInQueue()
-                && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())) {
+                && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())
+                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActive).orElse(false)) {
             if (delay > 0) {
                 delay--;
+                return;
             } else {
                 if (swapping) {
                     PlayerCache.sync();

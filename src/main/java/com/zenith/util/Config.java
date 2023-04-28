@@ -52,6 +52,7 @@ public final class Config {
             public Stalk stalk = new Stalk();
             public AutoEat autoEat = new AutoEat();
             public KillAura killAura = new KillAura();
+            public AutoTotem autoTotem = new AutoTotem();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
             // todo: remove in a future update
@@ -61,6 +62,11 @@ public final class Config {
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = true;
             public boolean twentyMinuteReconnectIfStuck = true;
+
+            public static final class AutoTotem {
+                public boolean enabled = true;
+                public int healthThreshold = 20;
+            }
 
             public static final class KillAura {
                 public boolean enabled = true;
