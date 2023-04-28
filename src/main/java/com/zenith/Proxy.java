@@ -85,9 +85,6 @@ public class Proxy {
             }
         }
 
-        // todo: remove in future update
-        WHITELIST_MANAGER.convertFriendsList();
-
         instance.start();
     }
 

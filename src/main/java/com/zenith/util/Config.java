@@ -38,7 +38,6 @@ public final class Config {
         public Extra extra = new Extra();
         public Server server = new Server();
         // auto-connect proxy on process start
-        // todo: might make discord command to configure this
         public boolean autoConnect = false;
 
         public static final class Extra {
@@ -55,8 +54,6 @@ public final class Config {
             public AutoTotem autoTotem = new AutoTotem();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
-            // todo: remove in a future update
-            public List<String> friendList = new ArrayList<>();
             public List<WhitelistEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;

@@ -205,14 +205,6 @@ public class WhitelistManager {
         return Optional.empty();
     }
 
-    public void convertFriendsList() {
-        if (!CONFIG.client.extra.friendList.isEmpty()) {
-            CONFIG.client.extra.friendList.forEach(this::addFriendWhitelistEntryByUsername);
-            CONFIG.client.extra.friendList.clear();
-            saveConfig();
-        }
-    }
-
     private static final class SingleLookupProfileLookupCallbackHelper implements ProfileService.ProfileLookupCallback {
         public Optional<GameProfile> gameProfile = Optional.empty();
         public Optional<Exception> errorException = Optional.empty();
