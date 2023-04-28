@@ -159,6 +159,7 @@ dependencies {
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
+    shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 
     shade("com.github.5cmc:MCProtocolLib:c0b123fbd2") {
         exclude group: 'io.netty.incubator'
