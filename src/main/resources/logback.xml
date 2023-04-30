@@ -25,6 +25,7 @@
             <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
         <filter class="ThresholdFilter">
             <level>INFO</level>
@@ -43,6 +44,7 @@
             <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
         <filter class="ThresholdFilter">
             <level>TRACE</level>
