@@ -79,7 +79,7 @@ configurations {
 }
 
 jooq {
-    version = "3.18.0"
+    version = "3.18.3"
     // read from config.json (will fail if config doesn't exist)
     def dbUrl = ''
     def dbUser = ''
@@ -143,7 +143,7 @@ jooq {
 
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.jooq:jooq:3.18.0'
+    shade 'org.jooq:jooq:3.18.3'
     shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.5.0.202303070854-r'
@@ -154,7 +154,7 @@ dependencies {
     shade "org.apache.commons:commons-collections4:4.4"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
-    shade "ch.qos.logback:logback-classic:1.4.6"
+    shade "ch.qos.logback:logback-classic:1.4.7"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
@@ -171,22 +171,22 @@ dependencies {
 
     shade "com.github.5cmc:MCAuthLib:94b70b772d"
 
-    shade 'io.netty:netty-codec-haproxy:4.1.91.Final'
-    shade 'io.netty:netty-codec-dns:4.1.91.Final'
-    shade 'io.netty:netty-codec-http2:4.1.91.Final'
-    shade 'io.netty:netty-codec-http:4.1.91.Final'
-    shade 'io.netty:netty-codec-socks:4.1.91.Final'
-    shade 'io.netty:netty-handler-proxy:4.1.91.Final'
-    shade 'io.netty:netty-handler:4.1.91.Final'
-    shade 'io.netty:netty-resolver-dns:4.1.91.Final'
-    shade 'io.netty:netty-transport-classes-epoll:4.1.91.Final'
-    shade 'io.netty:netty-transport-native-epoll:4.1.91.Final:linux-x86_64'
-    shade 'io.netty:netty-transport-native-unix-common:4.1.91.Final:linux-x86_64'
-    shade 'io.netty:netty-resolver-dns-native-macos:4.1.91.Final:osx-aarch_64'
-    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.20.Final:linux-x86_64'
+    shade 'io.netty:netty-codec-haproxy:4.1.92.Final'
+    shade 'io.netty:netty-codec-dns:4.1.92.Final'
+    shade 'io.netty:netty-codec-http2:4.1.92.Final'
+    shade 'io.netty:netty-codec-http:4.1.92.Final'
+    shade 'io.netty:netty-codec-socks:4.1.92.Final'
+    shade 'io.netty:netty-handler-proxy:4.1.92.Final'
+    shade 'io.netty:netty-handler:4.1.92.Final'
+    shade 'io.netty:netty-resolver-dns:4.1.92.Final'
+    shade 'io.netty:netty-transport-classes-epoll:4.1.92.Final'
+    shade 'io.netty:netty-transport-native-epoll:4.1.92.Final:linux-x86_64'
+    shade 'io.netty:netty-transport-native-unix-common:4.1.92.Final:linux-x86_64'
+    shade 'io.netty:netty-resolver-dns-native-macos:4.1.92.Final:osx-aarch_64'
+    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.20.1') {
+    shade('org.redisson:redisson:3.21.0') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
@@ -194,7 +194,7 @@ dependencies {
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
 
-    testImplementation "org.junit.jupiter:junit-jupiter:5.9.2"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
