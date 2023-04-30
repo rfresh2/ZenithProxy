@@ -56,7 +56,6 @@
         <filter class="ThresholdFilter">
             <level>INFO</level>
         </filter>
-        <withJansi>true</withJansi>
     </appender>
 
     <root level="INFO">
