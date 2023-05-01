@@ -35,7 +35,7 @@ public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<
         if (CONFIG.client.extra.chat.hideWhispers) {
             session.send(new ServerChatPacket("§7Whispers are currently disabled. To enable whispers, type §c/toggleprivatemsgs§7.", true));
         }
-        if (CONFIG.client.extra.clientConnectionMessages) {
+        if (CONFIG.client.extra.chat.showConnectionMessages) {
             session.send(new ServerChatPacket("§7Connection messages enabled. To disable, type §c/toggleconnectionmsgs§7.", true));
         }
         if (CONFIG.client.extra.chat.hideDeathMessages) {
