@@ -1,5 +1,7 @@
 import groovy.json.JsonSlurper
 
+import java.nio.file.Files
+
 buildscript {
     repositories {
         maven {
@@ -228,6 +230,21 @@ tasks.register('run', JavaExec) {
                "-XX:G1ConcMarkStepDurationMillis=5.0", "-XX:G1ConcRSHotCardLimit=16",
                "-XX:GCTimeRatio=99",
                "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16", "--enable-preview"]
+}
+
+tasks.register('java_path') {
+    group = "run"
+    doLast {
+        RegularFile execPath = javaToolchains.launcherFor(java.toolchain).get().getExecutablePath()
+        // create a file symlinked to the java executable for use in scripts
+        project.buildDir.mkdirs()
+        File f = file(project.buildDir.toString() + "/java_toolchain")
+        if (f.exists()) {
+            f.delete()
+        }
+        // does not work on windows
+        Files.createSymbolicLink(f.toPath(), execPath.asFile.toPath())
+    }
 }
 
 tasks.withType(JavaExec).configureEach {
