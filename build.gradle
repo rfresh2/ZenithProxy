@@ -213,11 +213,18 @@ tasks.register('run', JavaExec) {
     mainClass.set("com.zenith.Proxy")
     jvmArgs = ["-server",
                "-XX:MaxRAMPercentage=30", "-XX:MinRAMPercentage=30", // optimizing these for 3 instances per machine with varying amounts of ram
-               "-XX:+UseG1GC", "-XX:+ParallelRefProcEnabled", "-XX:MaxGCPauseMillis=200", "-XX:+UnlockExperimentalVMOptions",
-               "-XX:+AlwaysPreTouch", "-XX:G1NewSizePercent=30", "-XX:G1MaxNewSizePercent=40", "-XX:G1HeapRegionSize=8M",
-               "-XX:G1ReservePercent=20", "-XX:G1HeapWastePercent=5", "-XX:G1MixedGCCountTarget=4", "-XX:InitiatingHeapOccupancyPercent=15",
-               "-XX:G1MixedGCLiveThresholdPercent=90", "-XX:G1RSetUpdatingPauseTimePercent=5", "-XX:SurvivorRatio=32",
-               "-XX:+PerfDisableSharedMem", "-XX:MaxTenuringThreshold=1",
+               // base
+               "-XX:+UnlockExperimentalVMOptions", "-XX:+UnlockDiagnosticVMOptions", "-XX:+AlwaysActAsServerClassMachine",
+               "-XX:+AlwaysPreTouch", "-XX:+DisableExplicitGC", "-XX:+UseNUMA", "-XX:NmethodSweepActivity=1",
+               "-XX:+UseVectorCmov", "-XX:+PerfDisableSharedMem", "-XX:+UseFastUnorderedTimeStamps",
+               "-XX:+UseCriticalJavaThreadPriority", "-XX:ThreadPriorityPolicy=1", "-XX:AllocatePrefetchStyle=3",
+               // memory
+               "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=37", "-XX:+PerfDisableSharedMem", "-XX:G1HeapRegionSize=16M",
+               "-XX:G1NewSizePercent=23", "-XX:G1ReservePercent=20", "-XX:SurvivorRatio=32",
+               "-XX:G1MixedGCCountTarget=3", "-XX:G1HeapWastePercent=20", "-XX:InitiatingHeapOccupancyPercent=10",
+               "-XX:G1RSetUpdatingPauseTimePercent=0", "-XX:MaxTenuringThreshold=1", "-XX:G1SATBBufferEnqueueingThresholdPercent=30",
+               "-XX:G1ConcMarkStepDurationMillis=5.0", "-XX:G1ConcRSHotCardLimit=16", "-XX:G1ConcRefinementServiceIntervalMillis=150",
+               "-XX:GCTimeRatio=99",
                "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16", "--enable-preview"]
 }
 
