@@ -434,6 +434,7 @@ public class Proxy {
                         EVENT_BUS.dispatch(new ActiveHoursConnectEvent());
                         this.lastActiveHoursConnect = Instant.now();
                         disconnect(SYSTEM_DISCONNECT);
+                        Wait.waitALittle(30);
                         connect();
                     });
         }
