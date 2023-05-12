@@ -39,6 +39,10 @@ public class UpdateCommand extends Command {
                         .color(Color.RUBY);
             }
             return 1;
-        });
+        }).then(literal("c").executes(c -> {
+            CONFIG.shouldReconnectAfterAutoUpdate = true;
+            EVENT_BUS.dispatch(new UpdateStartEvent());
+            Proxy.getInstance().stop();
+        }));
     }
 }

@@ -79,7 +79,7 @@ configurations {
 }
 
 jooq {
-    version = "3.18.3"
+    version = "3.18.4"
     // read from config.json (will fail if config doesn't exist)
     def dbUrl = ''
     def dbUser = ''
@@ -143,7 +143,7 @@ jooq {
 
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.jooq:jooq:3.18.3'
+    shade 'org.jooq:jooq:3.18.4'
     shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.5.0.202303070854-r'
@@ -165,7 +165,7 @@ dependencies {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
-    shade("com.discord4j:discord4j-core:3.2.4") {
+    shade("com.discord4j:discord4j-core:3.3.0-M1") {
         exclude group: 'io.netty'
     }
 
@@ -186,7 +186,7 @@ dependencies {
     shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.21.0') {
+    shade('org.redisson:redisson:3.21.1') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
