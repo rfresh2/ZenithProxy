@@ -431,6 +431,7 @@ public class DiscordBot {
                     .ifPresent(player -> {
                         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Online!")
+                                .color(Color.GREEN)
                                 .addField("Player Name", event.playerEntry.getName(), true)
                                 .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
@@ -456,6 +457,7 @@ public class DiscordBot {
                     .ifPresent(player -> {
                         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Offline!")
+                                .color(Color.RUBY)
                                 .addField("Player Name", event.playerEntry.getName(), true)
                                 .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
