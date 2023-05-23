@@ -482,13 +482,11 @@ public class DiscordBot {
 
     @Subscribe
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
-        if (!CONFIG.authentication.prio) {
-            sendEmbedMessage(EmbedCreateSpec.builder()
-                    .title("Server Restarting")
-                    .color(Color.CYAN)
-                    .addField("Message", event.message, true)
-                    .build());
-        }
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Server Restarting")
+                .color(Color.RUBY)
+                .addField("Message", event.message, true)
+                .build());
     }
 
     @Subscribe

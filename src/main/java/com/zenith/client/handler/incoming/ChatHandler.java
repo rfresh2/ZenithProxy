@@ -14,6 +14,8 @@ import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.awt.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 import static com.zenith.util.Constants.*;
@@ -21,6 +23,7 @@ import static java.util.Objects.nonNull;
 
 public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerChatPacket, ClientSession> {
     private final DeathMessagesParser deathMessagesHelper = new DeathMessagesParser();
+    private Instant lastRestartEvent = Instant.EPOCH;
 
     @Override
     public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
@@ -51,7 +54,8 @@ public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerC
                         CLIENT_LOG.warn("Failed to parse death message: {}", messageString);
                     }
                 } else if (messageString.startsWith(("[SERVER]"))) { // server message
-                    if (messageString.startsWith("[SERVER] Server restarting in")) { // todo: include time till restart in event
+                    if (messageString.startsWith("[SERVER] Server restarting in") && lastRestartEvent.isBefore(Instant.now().minus(Duration.ofMinutes(1)))) { // todo: include time till restart in event
+                        lastRestartEvent = Instant.now();
                         EVENT_BUS.dispatch(new ServerRestartingEvent(messageString));
                     }
                 }
