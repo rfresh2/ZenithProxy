@@ -508,6 +508,7 @@ public class Proxy {
     @Subscribe
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         if (!CONFIG.authentication.prio && isNull(getCurrentPlayer().get())) {
+            Wait.waitRandomWithinMsBound(30000);
             disconnect(SERVER_RESTARTING, new Exception());
         }
     }
@@ -516,7 +517,7 @@ public class Proxy {
     public void handlePrioStatusEvent(PrioStatusEvent event) {
         if (CONFIG.client.server.address.toLowerCase().contains("2b2t.org")) {
             if (event.prio == CONFIG.authentication.prio) {
-                if (!isPrio.isPresent()) {
+                if (isPrio.isEmpty()) {
                     CLIENT_LOG.info("Prio Detected: " + event.prio);
                     this.isPrio = Optional.of(event.prio);
                 }
