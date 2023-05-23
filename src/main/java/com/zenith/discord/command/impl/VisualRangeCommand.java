@@ -97,21 +97,21 @@ public class VisualRangeCommand extends Command {
                                     c.getSource().getEmbedBuilder()
                                             .title("Friend list cleared!")
                                             .color(Color.CYAN);
-                                }))
-                                .then(literal("enemytracking")
-                                        .then(literal("on").executes(c -> {
-                                            CONFIG.client.extra.visualRangePositionTracking = true;
-                                            c.getSource().getEmbedBuilder()
-                                                    .title("Enemy Tracking On!")
-                                                    .description("Request tracking data from the proxy admin")
-                                                    .color(Color.CYAN);
-                                        }))
-                                        .then(literal("off").executes(c -> {
-                                            CONFIG.client.extra.visualRangePositionTracking = true;
-                                            c.getSource().getEmbedBuilder()
-                                                    .title("Enemy Tracking Off!")
-                                                    .color(Color.RUBY);
-                                        }))));
+                                })))
+                .then(literal("enemytracking")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.visualRangePositionTracking = true;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Enemy Tracking On!")
+                                    .description("Request tracking data from the proxy admin")
+                                    .color(Color.CYAN);
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.visualRangePositionTracking = true;
+                            c.getSource().getEmbedBuilder()
+                                    .title("Enemy Tracking Off!")
+                                    .color(Color.RUBY);
+                        })));
     }
 
     @Override
