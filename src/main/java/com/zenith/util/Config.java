@@ -55,6 +55,7 @@ public final class Config {
             public Chat chat = new Chat();
             public boolean visualRangeAlert = true;
             public boolean visualRangeAlertMention = false;
+            public boolean visualRangePositionTracking = false;
             public List<WhitelistEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;

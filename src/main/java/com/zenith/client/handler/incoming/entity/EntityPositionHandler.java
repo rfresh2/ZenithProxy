@@ -17,6 +17,7 @@ public class EntityPositionHandler implements HandlerRegistry.AsyncIncomingHandl
         entity.setX(entity.getX() + packet.getMovementX())
                 .setY(entity.getY() + packet.getMovementY())
                 .setZ(entity.getZ() + packet.getMovementZ());
+        EntityPositionRotationHandler.trackPlayerVisualRangePosition(entity);
         return true;
     }
 

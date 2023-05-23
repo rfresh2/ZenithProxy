@@ -125,6 +125,10 @@ public class WhitelistManager {
                 .anyMatch(name::equalsIgnoreCase);
     }
 
+    public boolean isUUIDFriendWhitelisted(final UUID uuid) {
+        return CONFIG.client.extra.friendsList.stream().anyMatch(entry -> Objects.equals(entry.uuid, uuid));
+    }
+
     public boolean isProfileSpectatorWhitelisted(final GameProfile clientGameProfile) {
         final Optional<WhitelistEntry> whitelistedOptional = CONFIG.server.spectator.whitelist.stream()
                 .filter(whitelistEntry -> whitelistEntry.uuid.equals(clientGameProfile.getId()))

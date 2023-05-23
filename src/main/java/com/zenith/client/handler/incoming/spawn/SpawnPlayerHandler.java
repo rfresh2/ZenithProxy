@@ -8,8 +8,7 @@ import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.util.Constants.*;
 
 public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPlayerPacket, ClientSession> {
     @Override
@@ -25,7 +24,15 @@ public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<
                 .setMetadata(Lists.newArrayList(packet.getMetadata()));
         CACHE.getEntityCache().add(entity);
         CACHE.getTabListCache().getTabList().get(packet.getUUID())
-                .ifPresent(playerEntry -> EVENT_BUS.dispatch(new NewPlayerInVisualRangeEvent(playerEntry, entity)));
+                .ifPresent(playerEntry -> {
+                    EVENT_BUS.dispatch(new NewPlayerInVisualRangeEvent(playerEntry, entity));
+                    if (CONFIG.client.extra.visualRangePositionTracking) {
+                        if (!WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getId())) {
+                            CLIENT_LOG.info("Tracking Spawn {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
+                        }
+                    }
+                });
+
         return true;
     }
 
