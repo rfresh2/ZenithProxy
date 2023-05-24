@@ -257,6 +257,7 @@ public final class Config {
         public boolean kickPrevious = false;
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
+        public boolean healthCheck = true;
 
 
         public Spectator spectator = new Spectator();

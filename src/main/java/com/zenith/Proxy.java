@@ -109,6 +109,8 @@ public class Proxy {
             this.startServer();
             CACHE.reset(true);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
+            // health check on proxy server state.
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 5L, 5L, TimeUnit.MINUTES);
             if (CONFIG.client.extra.sixHourReconnect) {
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     try {
@@ -171,6 +173,20 @@ public class Proxy {
                 this.server.close(true);
             }
             saveConfig();
+        }
+    }
+
+    private void serverHealthCheck() {
+        if (CONFIG.server.enabled && CONFIG.server.healthCheck) {
+            if (server == null || !server.isListening()) {
+                this.startServer();
+                Wait.waitALittle(30);
+                if (server == null || !server.isListening()) {
+                    SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
+                    CONFIG.shouldReconnectAfterAutoUpdate = true;
+                    stop();
+                }
+            }
         }
     }
 
@@ -240,7 +256,7 @@ public class Proxy {
 
     public void startServer() {
         synchronized (this) {
-            if (this.server != null) {
+            if (this.server != null && this.server.isListening()) {
                 throw new IllegalStateException("Server already started!");
             }
             if (CONFIG.server.enabled) {

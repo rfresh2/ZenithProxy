@@ -40,6 +40,7 @@ public class UpdateCommand extends Command {
             }
             return 1;
         }).then(literal("c").executes(c -> {
+            CONFIG.discord.isUpdating = true;
             CONFIG.shouldReconnectAfterAutoUpdate = true;
             EVENT_BUS.dispatch(new UpdateStartEvent());
             Proxy.getInstance().stop();
