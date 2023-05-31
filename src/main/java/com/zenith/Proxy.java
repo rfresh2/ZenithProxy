@@ -149,7 +149,7 @@ public class Proxy {
             }
             updatePrioBanStatus();
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
-                updateFavicon();
+                SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }
             if (CONFIG.client.autoConnect) {
                 this.connect();

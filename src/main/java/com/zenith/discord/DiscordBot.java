@@ -142,11 +142,11 @@ public class DiscordBot {
 
     private void updatePresence() {
         if (this.proxy.isInQueue()) {
-            this.client.updatePresence(getQueuePresence()).subscribe();
+            this.client.updatePresence(getQueuePresence()).block();
         } else if (this.proxy.isConnected()) {
-            this.client.updatePresence(getOnlinePresence()).subscribe();
+            this.client.updatePresence(getOnlinePresence()).block();
         } else {
-            this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
+            this.client.updatePresence(DISCONNECTED_PRESENCE).block();
         }
     }
 
@@ -166,13 +166,13 @@ public class DiscordBot {
 
     @Subscribe
     public void handleConnectEvent(ConnectEvent event) {
-        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).subscribe();
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Proxy Connected")
-               .color(Color.CYAN)
-               .addField("Server", CONFIG.client.server.address, true)
-               .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-               .build());
+                .color(Color.CYAN)
+                .addField("Server", CONFIG.client.server.address, true)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+                .build());
+        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).block();
     }
 
     @Subscribe
@@ -191,7 +191,7 @@ public class DiscordBot {
                 .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
-        this.client.updatePresence(DISCONNECTED_PRESENCE).subscribe();
+        SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(DISCONNECTED_PRESENCE).block());
         if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
     }
 
@@ -204,7 +204,7 @@ public class DiscordBot {
                 sendQueueWarning();
             }
         }
-        this.client.updatePresence(getQueuePresence()).subscribe();
+        this.client.updatePresence(getQueuePresence()).block();
     }
 
     @Subscribe
@@ -238,7 +238,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
-        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).subscribe();
+        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).block();
     }
 
     @Subscribe
@@ -585,7 +585,7 @@ public class DiscordBot {
             this.restClient.edit(ImmutableUserModifyRequest.builder()
                             .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(os.toByteArray()))
                             .build())
-                    .subscribe();
+                    .block();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating discord profile image", e);
         }
