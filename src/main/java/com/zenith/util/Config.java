@@ -39,6 +39,12 @@ public final class Config {
         public Server server = new Server();
         // auto-connect proxy on process start
         public boolean autoConnect = false;
+        public ViaVersion viaversion;
+
+        public static final class ViaVersion {
+            public boolean enabled = true;
+            public int protocolVersion = 0; // todo
+        }
 
         public static final class Extra {
             public AntiAFK antiafk = new AntiAFK();
