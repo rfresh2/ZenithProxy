@@ -24,33 +24,34 @@ public class Pathing {
         final Position goalPosition = new Position(goal.getX() + 0.5, goal.getY(), goal.getZ() + 0.5);
         final double xDelta = goalPosition.getX() - currentPlayerPos.getX();
         final double zDelta = goalPosition.getZ() - currentPlayerPos.getZ();
-        if (Math.abs(xDelta) > Math.abs(zDelta)) {
-            if (xDelta != 0) {
-                final Position xMovePos = currentPlayerPos.addX(getNextMoveDelta(xDelta));
-                if (isNextWalkSafe(xMovePos)) {
-                    return xMovePos;
-                }
-            }
-            if (zDelta != 0) {
-                final Position zMovePos = currentPlayerPos.addZ(getNextMoveDelta(zDelta));
-                if (isNextWalkSafe(zMovePos)) {
-                    return zMovePos;
-                }
-            }
-        } else {
-            if (zDelta != 0) {
-                final Position zMovePos = currentPlayerPos.addZ(getNextMoveDelta(zDelta));
-                if (isNextWalkSafe(zMovePos)) {
-                    return zMovePos;
-                }
-            }
-            if (xDelta != 0) {
-                final Position xMovePos = currentPlayerPos.addX(getNextMoveDelta(xDelta));
-                if (isNextWalkSafe(xMovePos)) {
-                    return xMovePos;
-                }
+        if (xDelta != 0) {
+            final Position xMovePos = currentPlayerPos.addX(getNextMoveDelta(xDelta));
+            if (isNextWalkSafe(xMovePos)) {
+                return xMovePos;
             }
         }
+        if (zDelta != 0) {
+            final Position zMovePos = currentPlayerPos.addZ(getNextMoveDelta(zDelta));
+            if (isNextWalkSafe(zMovePos)) {
+                return zMovePos;
+            }
+        }
+//        if (Math.abs(xDelta) > Math.abs(zDelta)) {
+//
+//        } else {
+//            if (zDelta != 0) {
+//                final Position zMovePos = currentPlayerPos.addZ(getNextMoveDelta(zDelta));
+//                if (isNextWalkSafe(zMovePos)) {
+//                    return zMovePos;
+//                }
+//            }
+//            if (xDelta != 0) {
+//                final Position xMovePos = currentPlayerPos.addX(getNextMoveDelta(xDelta));
+//                if (isNextWalkSafe(xMovePos)) {
+//                    return xMovePos;
+//                }
+//            }
+//        }
 
 //        CLIENT_LOG.info("Pathing: No safe movement towards goal found");
         return currentPlayerPos;

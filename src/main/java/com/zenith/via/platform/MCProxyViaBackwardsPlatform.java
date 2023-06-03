@@ -27,6 +27,6 @@ public class MCProxyViaBackwardsPlatform implements ViaBackwardsPlatform {
 
     @Override
     public File getDataFolder() {
-        return new File("build/via");
+        return new File("via/");
     }
 }
