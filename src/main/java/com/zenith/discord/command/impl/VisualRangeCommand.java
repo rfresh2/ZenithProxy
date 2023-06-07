@@ -54,7 +54,7 @@ public class VisualRangeCommand extends Command {
                                     CONFIG.client.extra.visualRangeAlertMention = true;
                                     c.getSource().getEmbedBuilder()
                                             .title("VisualRange Mentions On!")
-                                            .addField("Friend List", friendListString(), false)
+                                            .description("Friend List: \n " + friendListString())
                                             .color(Color.CYAN);
                                 }))
                                 .then(literal("off").executes(c -> {
@@ -69,11 +69,11 @@ public class VisualRangeCommand extends Command {
                                     WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(player).ifPresentOrElse(e ->
                                                     c.getSource().getEmbedBuilder()
                                                             .title("Friend added")
-                                                            .addField("Friend List", friendListString(), false)
+                                                            .description("Friend List: \n " + friendListString())
                                                             .color(Color.CYAN),
                                             () -> c.getSource().getEmbedBuilder()
                                                     .title("Failed to add user: " + escape(player) + " to friends. Unable to lookup profile.")
-                                                    .addField("Friend List", friendListString(), false)
+                                                    .description("Friend List: \n " + friendListString())
                                                     .color(Color.CYAN));
                                     return 1;
                                 })))
@@ -82,14 +82,14 @@ public class VisualRangeCommand extends Command {
                                     WHITELIST_MANAGER.removeFriendWhitelistEntryByUsername(player);
                                     c.getSource().getEmbedBuilder()
                                             .title("Friend deleted")
-                                            .addField("Friend List", friendListString(), false)
+                                            .description("Friend List: \n " + friendListString())
                                             .color(Color.CYAN);
                                     return 1;
                                 })))
                                 .then(literal("list").executes(c -> {
                                     c.getSource().getEmbedBuilder()
                                             .title("Friend list")
-                                            .addField("Friend List", friendListString(), false)
+                                            .description("Friend List: \n " + friendListString())
                                             .color(Color.CYAN);
                                 }))
                                 .then(literal("clear").executes(c -> {
