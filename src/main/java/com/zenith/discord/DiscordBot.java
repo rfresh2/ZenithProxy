@@ -13,7 +13,10 @@ import com.zenith.util.Queue;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
@@ -26,19 +29,27 @@ import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 
 import static com.zenith.discord.command.impl.StatusCommand.getCoordinates;
 import static com.zenith.util.Constants.*;
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -289,18 +300,38 @@ public class DiscordBot {
                         + (int) event.playerEntity.getZ()
                         + "]||", false);
             }
+            final String buttonId = "addFriend" + ThreadLocalRandom.current().nextInt(1000000);
+            final List<Button> buttons = asList(Button.primary(buttonId, "Add Friend"));
+            final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
+                if (e.getCustomId().equals(buttonId)) {
+                    WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
+                    e.reply().withEmbeds(EmbedCreateSpec.builder()
+                            .title("Friend Added")
+                            .color(Color.GREEN)
+                            .addField("Player Name", escape(event.playerEntry.getName()), true)
+                            .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
+                            .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                            .build()).block();
+                    saveConfig();
+                }
+                return Mono.empty();
+            };
             if (CONFIG.client.extra.visualRangeAlertMention) {
                 if (notFriend) {
                     if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                        sendEmbedMessage("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build());
+                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
                     } else {
-                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build());
+                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
                     }
                 } else {
                     sendEmbedMessage(embedCreateSpec.build());
                 }
             } else {
-                sendEmbedMessage(embedCreateSpec.build());
+                if (notFriend) {
+                    sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                } else {
+                    sendEmbedMessage(embedCreateSpec.build());
+                }
             }
         }
     }
@@ -607,6 +638,39 @@ public class DiscordBot {
                     .content(message)
                     .addEmbed(embedCreateSpec)
                     .build().asRequest());
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private void sendEmbedMessageWithButtons(String message, EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                    .content(message)
+                    .addEmbed(embedCreateSpec)
+                    .components(ActionRow.of(buttons))
+                    .build().asRequest());
+            client.getEventDispatcher()
+                    .on(ButtonInteractionEvent.class, mapper)
+                    .timeout(timeout)
+                    .onErrorResume(TimeoutException.class, e -> Mono.empty())
+                    .subscribe();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private void sendEmbedMessageWithButtons(EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                    .addEmbed(embedCreateSpec)
+                    .components(ActionRow.of(buttons))
+                    .build().asRequest());
+            client.getEventDispatcher()
+                    .on(ButtonInteractionEvent.class, mapper)
+                    .timeout(timeout)
+                    .onErrorResume(TimeoutException.class, e -> Mono.empty())
+                    .subscribe();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }
