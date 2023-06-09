@@ -281,59 +281,12 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
-    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
-        if (CONFIG.client.extra.visualRangeAlert) {
-            boolean notFriend = CONFIG.client.extra.friendsList.stream()
-                    .noneMatch(friend -> friend.username.equalsIgnoreCase(event.playerEntry.getName()));
-            EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
-                    .title("Player In Visual Range")
-                    .color(notFriend ? Color.RUBY : Color.GREEN)
-                    .addField("Player Name", escape(event.playerEntry.getName()), true)
-                    .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
-                    .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
-
-            if (CONFIG.discord.reportCoords) {
-                embedCreateSpec.addField("Coordinates", "||["
-                        + (int) event.playerEntity.getX() + ", "
-                        + (int) event.playerEntity.getY() + ", "
-                        + (int) event.playerEntity.getZ()
-                        + "]||", false);
-            }
-            final String buttonId = "addFriend" + ThreadLocalRandom.current().nextInt(1000000);
-            final List<Button> buttons = asList(Button.primary(buttonId, "Add Friend"));
-            final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
-                if (e.getCustomId().equals(buttonId)) {
-                    WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
-                    e.reply().withEmbeds(EmbedCreateSpec.builder()
-                            .title("Friend Added")
-                            .color(Color.GREEN)
-                            .addField("Player Name", escape(event.playerEntry.getName()), true)
-                            .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
-                            .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
-                            .build()).block();
-                    saveConfig();
-                }
-                return Mono.empty();
-            };
-            if (CONFIG.client.extra.visualRangeAlertMention) {
-                if (notFriend) {
-                    if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
-                    } else {
-                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
-                    }
-                } else {
-                    sendEmbedMessage(embedCreateSpec.build());
-                }
-            } else {
-                if (notFriend) {
-                    sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
-                } else {
-                    sendEmbedMessage(embedCreateSpec.build());
-                }
-            }
-        }
+    static boolean validateButtonInteractionEventFromAccountOwner(final ButtonInteractionEvent event) {
+        return event.getInteraction().getMember()
+                .map(m -> m.getRoleIds().stream()
+                        .map(Snowflake::asString)
+                        .anyMatch(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId)))
+                .orElse(false);
     }
 
     @Subscribe
@@ -378,6 +331,120 @@ public class DiscordBot {
             }
             if (nonNull(event.reason)) {
                 builder = builder.addField("Reason", escape(event.reason), false);
+            }
+            sendEmbedMessage(builder
+                    .build());
+        }
+    }
+
+    @Subscribe
+    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
+        if (CONFIG.client.extra.visualRangeAlert) {
+            boolean notFriend = CONFIG.client.extra.friendsList.stream()
+                    .noneMatch(friend -> friend.username.equalsIgnoreCase(event.playerEntry.getName()));
+            EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
+                    .title("Player In Visual Range")
+                    .color(notFriend ? Color.RUBY : Color.GREEN)
+                    .addField("Player Name", escape(event.playerEntry.getName()), true)
+                    .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
+                    .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
+
+            if (CONFIG.discord.reportCoords) {
+                embedCreateSpec.addField("Coordinates", "||["
+                        + (int) event.playerEntity.getX() + ", "
+                        + (int) event.playerEntity.getY() + ", "
+                        + (int) event.playerEntity.getZ()
+                        + "]||", false);
+            }
+            final String buttonId = "addFriend" + ThreadLocalRandom.current().nextInt(1000000);
+            final List<Button> buttons = asList(Button.primary(buttonId, "Add Friend"));
+            final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
+                if (e.getCustomId().equals(buttonId)) {
+                    DISCORD_LOG.info(e.getInteraction().getMember()
+                            .map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                            + " added friend: " + event.playerEntry.getName() + " [" + event.playerEntry.getId() + "]");
+                    WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
+                    e.reply().withEmbeds(EmbedCreateSpec.builder()
+                            .title("Friend Added")
+                            .color(Color.GREEN)
+                            .addField("Player Name", escape(event.playerEntry.getName()), true)
+                            .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
+                            .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                            .build()).block();
+                    saveConfig();
+                }
+                return Mono.empty();
+            };
+            if (CONFIG.client.extra.visualRangeAlertMention) {
+                if (notFriend) {
+                    if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
+                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                    } else {
+                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                    }
+                } else {
+                    sendEmbedMessage(embedCreateSpec.build());
+                }
+            } else {
+                if (notFriend) {
+                    sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                } else {
+                    sendEmbedMessage(embedCreateSpec.build());
+                }
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleNonWhitelistedPlayerConnectedEvent(NonWhitelistedPlayerConnectedEvent event) {
+        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
+                .title("Non-Whitelisted Player Connected")
+                .color(Color.RUBY);
+        if (nonNull(event.remoteAddress())) {
+            builder = builder.addField("IP", escape(event.remoteAddress().toString()), false);
+        }
+        if (nonNull(event.gameProfile()) && nonNull(event.gameProfile().getId()) && nonNull(event.gameProfile().getName())) {
+            builder
+                    .addField("Username", escape(event.gameProfile().getName()), false)
+                    .addField("Player UUID", ("[" + event.gameProfile().getId().toString() + "](https://namemc.com/profile/" + event.gameProfile().getId().toString() + ")"), true)
+                    .thumbnail(this.proxy.getAvatarURL(event.gameProfile().getId()).toString());
+            final String buttonId = "whitelist" + ThreadLocalRandom.current().nextInt(10000000);
+            final List<Button> buttons = asList(Button.primary(buttonId, "Whitelist Player"));
+            final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
+                if (e.getCustomId().equals(buttonId)) {
+                    if (validateButtonInteractionEventFromAccountOwner(e)) {
+                        DISCORD_LOG.info(e.getInteraction().getMember()
+                                .map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                                + " whitelisted " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "]");
+                        WHITELIST_MANAGER.addWhitelistEntryByUsername(event.gameProfile().getName());
+                        e.reply().withEmbeds(EmbedCreateSpec.builder()
+                                .title("Player Whitelisted")
+                                .color(Color.GREEN)
+                                .addField("Player Name", escape(event.gameProfile().getName()), true)
+                                .addField("Player UUID", ("[" + event.gameProfile().getId().toString() + "](https://namemc.com/profile/" + event.gameProfile().getId().toString() + ")"), true)
+                                .thumbnail(this.proxy.getAvatarURL(event.gameProfile().getId()).toString())
+                                .build()).block();
+                        saveConfig();
+                    } else {
+                        DISCORD_LOG.error(e.getInteraction().getMember()
+                                .map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                                + " attempted to whitelist " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "] but was not authorized to do so!");
+                        e.reply().withEmbeds(EmbedCreateSpec.builder()
+                                .title("Not Authorized!")
+                                .color(Color.RUBY)
+                                .addField("Error",
+                                        "User: " + e.getInteraction().getMember().map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                                                + " is not authorized to execute this command! Contact the account owner", true)
+                                .build()).block();
+                    }
+                }
+                return Mono.empty();
+            };
+            sendEmbedMessageWithButtons(builder.build(), buttons, mapper, Duration.ofMinutes(1L));
+        } else { // shouldn't be possible if verifyUsers is enabled
+            if (nonNull(event.gameProfile())) {
+                builder
+                        .addField("Username", escape(event.gameProfile().getName()), false);
             }
             sendEmbedMessage(builder
                     .build());

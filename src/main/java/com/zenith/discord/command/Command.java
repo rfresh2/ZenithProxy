@@ -10,7 +10,6 @@ import discord4j.rest.util.Color;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static com.zenith.util.Constants.CONFIG;
@@ -22,19 +21,18 @@ public abstract class Command {
 
     public static boolean validateAccountOwner(final CommandContext context) {
         final MessageCreateEvent event = context.getMessageCreateEvent();
-        final Optional<String> roleContainsOptional = event.getMember()
+        final boolean hasAccountOwnerRole = event.getMember()
                 .orElseThrow(() -> new RuntimeException("Message does not have a valid member"))
                 .getRoleIds()
                 .stream()
                 .map(Snowflake::asString)
-                .filter(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId))
-                .findAny();
-        if (!roleContainsOptional.isPresent()) {
+                .anyMatch(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId));
+        if (!hasAccountOwnerRole) {
             context.getEmbedBuilder()
                     .title("Not Authorized!")
                     .color(Color.RUBY)
                     .addField("Error",
-                            "User: " + event.getMember().get().getUsername() + "#" + event.getMember().get().getDiscriminator()
+                            "User: " + event.getMember().map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
                                     + " is not authorized to execute this command! Contact the account owner", true)
                     .build();
             return false;

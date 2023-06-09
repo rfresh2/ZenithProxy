@@ -4,7 +4,7 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.zenith.Proxy;
-import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
+import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Wait;
 import com.zenith.util.handler.HandlerRegistry;
@@ -29,9 +29,7 @@ public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHand
                     session.setWhitelistChecked(false);
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                     SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
-                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent("Non-whitelisted player tried to connect!"
-                            + "\nPlayer: " + clientGameProfile.getName() + " [" + clientGameProfile.getIdAsString() + "]"
-                            + "\nIP: " + session.getRemoteAddress()));
+                    EVENT_BUS.dispatch(new NonWhitelistedPlayerConnectedEvent(clientGameProfile, session.getRemoteAddress()));
                     return null;
                 }
             }
