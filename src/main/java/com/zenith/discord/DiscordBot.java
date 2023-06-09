@@ -378,16 +378,16 @@ public class DiscordBot {
             if (CONFIG.client.extra.visualRangeAlertMention) {
                 if (notFriend) {
                     if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                     } else {
-                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                     }
                 } else {
                     sendEmbedMessage(embedCreateSpec.build());
                 }
             } else {
                 if (notFriend) {
-                    sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofMinutes(1));
+                    sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                 } else {
                     sendEmbedMessage(embedCreateSpec.build());
                 }
@@ -440,7 +440,7 @@ public class DiscordBot {
                 }
                 return Mono.empty();
             };
-            sendEmbedMessageWithButtons(builder.build(), buttons, mapper, Duration.ofMinutes(1L));
+            sendEmbedMessageWithButtons(builder.build(), buttons, mapper, Duration.ofHours(1L));
         } else { // shouldn't be possible if verifyUsers is enabled
             if (nonNull(event.gameProfile())) {
                 builder
