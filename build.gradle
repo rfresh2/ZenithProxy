@@ -171,7 +171,7 @@ dependencies {
         exclude group: 'io.netty'
         exclude group: 'com.github.5cmc', module: 'packetlib'
     }
-    shade("com.github.steveice10:packetlib:3.2-5c") {
+    shade("com.github.5cmc:PacketLib:7bc2eaeb6e") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
