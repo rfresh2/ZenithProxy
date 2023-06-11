@@ -26,14 +26,14 @@ public class ModuleManager {
     public ModuleManager() {
         EVENT_BUS.subscribe(this);
         this.modules = asList(
-                new AntiAFK(),
+//                new AntiAFK(),
                 new AutoDisconnect(),
                 new AutoReply(),
                 new Spook(),
                 new AutoRespawn(),
-                new AutoTotem(),
-                new AutoEat(),
-                new KillAura()
+//                new AutoTotem(),
+                new AutoEat()
+//                new KillAura()
         );
     }
 
