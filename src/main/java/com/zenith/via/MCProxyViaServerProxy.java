@@ -36,14 +36,27 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
 
     public void init() {
         config.reloadConfig();
-        Via.init(ViaManagerImpl.builder()
-                .platform(this)
-                .commandHandler(new MCProxyViaCommandHandler())
-                .loader(new MCProxyViaLoader())
-                .injector(new MCProxyViaInjector())
-                .build());
-        backwardsPlatform.initViaBackwards();
-        ((ViaManagerImpl) Via.getManager()).init();
+        try {
+            Via.init(ViaManagerImpl.builder()
+                    .platform(this)
+                    .commandHandler(new MCProxyViaCommandHandler())
+                    .loader(new MCProxyViaLoader())
+                    .injector(new MCProxyViaInjector())
+                    .build());
+        } catch (final Exception e) {
+            // fall through
+        }
+        try {
+            backwardsPlatform.initViaBackwards();
+        } catch (final Exception e) {
+            // fall through
+        }
+        try {
+            ((ViaManagerImpl) Via.getManager()).init();
+        } catch (final Exception e) {
+            // fall through
+        }
+
     }
 
     public ChannelInitializer<Channel> inject(final ChannelInitializer<Channel> original) {
