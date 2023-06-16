@@ -155,7 +155,7 @@ dependencies {
     shade "org.apache.commons:commons-collections4:4.4"
     shade "net.daporkchop.lib:hash:$porklibVersion"
     shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
-    shade "ch.qos.logback:logback-classic:1.4.7"
+    shade "ch.qos.logback:logback-classic:1.4.8"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.0.18'
@@ -166,7 +166,7 @@ dependencies {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
-    shade("com.discord4j:discord4j-core:3.3.0-M1") {
+    shade("com.discord4j:discord4j-core:3.3.0-M2") {
         exclude group: 'io.netty'
     }
 
@@ -187,7 +187,7 @@ dependencies {
     shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.21.3') {
+    shade('org.redisson:redisson:3.22.0') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'

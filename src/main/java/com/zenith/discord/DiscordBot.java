@@ -17,6 +17,7 @@ import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
+import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
@@ -107,7 +108,7 @@ public class DiscordBot {
             }
             try {
                 final String commandInput = message.substring(1);
-                DISCORD_LOG.info(event.getMember().get().getUsername() + "#" + event.getMember().get().getDiscriminator() + " executed discord command: {}", commandInput);
+                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " executed discord command: {}", commandInput);
                 MultipartRequest<MessageCreateRequest> request = commandManager.execute(commandInput, event, mainRestChannel.get());
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
@@ -361,7 +362,7 @@ public class DiscordBot {
             final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
                 if (e.getCustomId().equals(buttonId)) {
                     DISCORD_LOG.info(e.getInteraction().getMember()
-                            .map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                            .map(User::getTag).orElse("Unknown")
                             + " added friend: " + event.playerEntry.getName() + " [" + event.playerEntry.getId() + "]");
                     WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
                     e.reply().withEmbeds(EmbedCreateSpec.builder()
@@ -414,7 +415,7 @@ public class DiscordBot {
                 if (e.getCustomId().equals(buttonId)) {
                     if (validateButtonInteractionEventFromAccountOwner(e)) {
                         DISCORD_LOG.info(e.getInteraction().getMember()
-                                .map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                                .map(User::getTag).orElse("Unknown")
                                 + " whitelisted " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "]");
                         WHITELIST_MANAGER.addWhitelistEntryByUsername(event.gameProfile().getName());
                         e.reply().withEmbeds(EmbedCreateSpec.builder()
@@ -427,13 +428,13 @@ public class DiscordBot {
                         saveConfig();
                     } else {
                         DISCORD_LOG.error(e.getInteraction().getMember()
-                                .map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                                .map(User::getTag).orElse("Unknown")
                                 + " attempted to whitelist " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "] but was not authorized to do so!");
                         e.reply().withEmbeds(EmbedCreateSpec.builder()
                                 .title("Not Authorized!")
                                 .color(Color.RUBY)
                                 .addField("Error",
-                                        "User: " + e.getInteraction().getMember().map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                                        "User: " + e.getInteraction().getMember().map(User::getTag).orElse("Unknown")
                                                 + " is not authorized to execute this command! Contact the account owner", true)
                                 .build()).block();
                     }

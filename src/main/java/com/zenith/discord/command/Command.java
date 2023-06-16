@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.User;
 import discord4j.rest.util.Color;
 
 import java.util.Collections;
@@ -32,7 +33,7 @@ public abstract class Command {
                     .title("Not Authorized!")
                     .color(Color.RUBY)
                     .addField("Error",
-                            "User: " + event.getMember().map(m -> m.getUsername() + "#" + m.getDiscriminator()).orElse("Unknown")
+                            "User: " + event.getMember().map(User::getTag).orElse("Unknown")
                                     + " is not authorized to execute this command! Contact the account owner", true)
                     .build();
             return false;
