@@ -72,8 +72,16 @@ configurations {
     implementation.extendsFrom shade
 }
 
+ext {
+    lombokVersion = "1.18.28"
+    porklibVersion = "0.5.8-SNAPSHOT"
+    postgresVersion = '42.6.0'
+    nettyVersion = '4.1.94.Final'
+    jooqVersion = "3.18.5"
+}
+
 jooq {
-    version = "3.18.4"
+    version = project.ext.jooqVersion
     // read from config.json (will fail if config doesn't exist)
     def dbUrl = ''
     def dbUser = ''
@@ -135,16 +143,9 @@ jooq {
     }
 }
 
-ext {
-    lombokVersion = "1.18.28"
-    porklibVersion = "0.5.8-SNAPSHOT"
-    postgresVersion = '42.6.0'
-    nettyVersion = '4.1.93.Final'
-}
-
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.jooq:jooq:3.18.4'
+    shade "org.jooq:jooq:$jooqVersion"
     shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.5.0.202303070854-r'
@@ -187,7 +188,7 @@ dependencies {
     shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.22.0') {
+    shade('org.redisson:redisson:3.22.1') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
