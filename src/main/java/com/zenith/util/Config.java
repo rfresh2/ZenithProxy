@@ -339,10 +339,10 @@ public final class Config {
 
     public static final class Database {
         public boolean enabled = true;
-        public String host = "db.2b2t.vc";
+        public String host = "";
         public int port = 5432;
-        public String username = "proxy";
-        public String password = "cghRVLQQiRqEpn9ccJEEeU";
+        public String username = "";
+        public String password = "";
         public int writePool = 1;
         public int readPool = 0; // no database actually needs a read pool currently
         public QueueWait queueWait = new QueueWait();
@@ -361,9 +361,9 @@ public final class Config {
 
         public static final class Lock {
             // use "rediss://" for SSL connection
-            public String redisAddress = "redis://redis.2b2t.vc:7181";
-            public String redisUsername = "proxy";
-            public String redisPassword = "w9e52ivAGUNmbFuEPar5Y3GEqBaT6SBfVV36XrYKGLtreBVmiGqxV2s7YMfsmuSA";
+            public String redisAddress = "redis://localhost:7181";
+            public String redisUsername = "";
+            public String redisPassword = "";
         }
 
         public static final class Connections {
