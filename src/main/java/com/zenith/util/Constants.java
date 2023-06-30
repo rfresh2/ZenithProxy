@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 
 public class Constants {
 
@@ -242,8 +241,6 @@ public class Constants {
 
             .registerPostOutbound(new JoinGameSpectatorPostHandler())
             .build();
-
-    private static final ThreadFactory virtualThreadFactory = Thread.ofVirtual().factory();
 
     static {
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
