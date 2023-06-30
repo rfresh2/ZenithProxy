@@ -1,4 +1,4 @@
 #!/bin/sh
 
 git pull
-./gradlew build
+./gradlew jarBuild --no-daemon

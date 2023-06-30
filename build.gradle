@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import org.apache.tools.ant.taskdefs.condition.Os
 
 import java.nio.file.Files
 
@@ -238,12 +239,19 @@ tasks.register('java_path') {
         RegularFile execPath = javaToolchains.launcherFor(java.toolchain).get().getExecutablePath()
         // create a file symlinked to the java executable for use in scripts
         project.buildDir.mkdirs()
-        File f = file(project.buildDir.toString() + "/java_toolchain")
-        if (f.exists()) {
-            f.delete()
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            File f = file(project.buildDir.toString() + "/java_toolchain.bat")
+            if (f.exists()) {
+                f.delete()
+            }
+            f.write("@" + execPath.asFile.toString() + " %*")
+        } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+            File f = file(project.buildDir.toString() + "/java_toolchain")
+            if (f.exists()) {
+                f.delete()
+            }
+            Files.createSymbolicLink(f.toPath(), execPath.asFile.toPath())
         }
-        // does not work on windows
-        Files.createSymbolicLink(f.toPath(), execPath.asFile.toPath())
     }
 }
 
@@ -289,6 +297,6 @@ tasks.named('generateJooq').configure { allInputsDeclared = false }
 tasks.register('jarBuild') {
     group = "build"
 }
-jarBuild.dependsOn([shadowJar, build])
+jarBuild.dependsOn([shadowJar, build, java_path])
 
 //build.dependsOn(shadowJar)

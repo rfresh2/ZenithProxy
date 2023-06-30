@@ -1,12 +1,10 @@
 package com.zenith.util.deathmessages;
 
-import com.google.common.io.Files;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -23,28 +21,27 @@ public class DeathMessagesParser {
     public DeathMessagesParser() {
         List<String> mobsTemp = Collections.emptyList();
         try {
-            final File file = Paths.get(getClass().getClassLoader().getResource("death_message_mobs.schema").toURI()).toFile();
-            final List<String> lines = Files.readLines(file, StandardCharsets.UTF_8);
-            mobsTemp = lines.stream()
-                    .filter(l -> !l.isEmpty()) //any empty lines
-                    .filter(l -> !l.startsWith("#")) //comments
-                    .sorted(Comparator.comparingInt(String::length).reversed())
-                    .collect(Collectors.toList());
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("death_message_mobs.schema")))) {
+                mobsTemp = br.lines()
+                        .filter(l -> !l.isEmpty()) //any empty lines
+                        .filter(l -> !l.startsWith("#")) //comments
+                        .sorted(Comparator.comparingInt(String::length).reversed())
+                        .collect(Collectors.toList());
+            }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error initializing mobs for death message parsing", e);
         }
         mobs = mobsTemp;
         List<DeathMessageSchemaInstance> schemaInstancesTemp = Collections.emptyList();
         try {
-            final File file = Paths.get(getClass().getClassLoader().getResource("death_messages.schema").toURI()).toFile();
-            final List<String> lines = Files.readLines(file, StandardCharsets.UTF_8);
-            schemaInstancesTemp = lines.stream()
-                    .filter(l -> !l.isEmpty()) //any empty lines
-                    .filter(l -> !l.startsWith("#")) //comments
-                    .sorted(Comparator.comparingInt(String::length).reversed())
-                    .map(l -> new DeathMessageSchemaInstance(l, mobs))
-                    .collect(Collectors.toList());
-
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("death_messages.schema")))) {
+                schemaInstancesTemp = br.lines()
+                        .filter(l -> !l.isEmpty()) //any empty lines
+                        .filter(l -> !l.startsWith("#")) //comments
+                        .sorted(Comparator.comparingInt(String::length).reversed())
+                        .map(l -> new DeathMessageSchemaInstance(l, mobs))
+                        .collect(Collectors.toList());
+            }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error initializing death message schemas", e);
         }
