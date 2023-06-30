@@ -1,4 +1,7 @@
 import groovy.json.JsonSlurper
+import org.apache.tools.ant.taskdefs.condition.Os
+
+import java.nio.file.Files
 
 buildscript {
     repositories {
@@ -10,7 +13,6 @@ buildscript {
 }
 
 plugins {
-    // todo: cannot upgrade this as consumers still have jdk 8 configured in gradle separate from the toolchain
     id 'nu.studer.jooq' version '8.2.1'
     id "com.github.johnrengelman.shadow" version "8.1.0"
 }
@@ -229,6 +231,28 @@ tasks.register('run', JavaExec) {
                "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
 }
 
+tasks.register('java_path') {
+    group = "run"
+    doLast {
+        RegularFile execPath = javaToolchains.launcherFor(java.toolchain).get().getExecutablePath()
+        // create a file symlinked to the java executable for use in scripts
+        project.buildDir.mkdirs()
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            File f = file(project.buildDir.toString() + "/java_toolchain.bat")
+            if (f.exists()) {
+                f.delete()
+            }
+            f.write("@" + execPath.asFile.toString() + " %*")
+        } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+            File f = file(project.buildDir.toString() + "/java_toolchain")
+            if (f.exists()) {
+                f.delete()
+            }
+            Files.createSymbolicLink(f.toPath(), execPath.asFile.toPath())
+        }
+    }
+}
+
 tasks.withType(JavaExec).configureEach {
     javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
@@ -271,6 +295,6 @@ tasks.named('generateJooq').configure { allInputsDeclared = false }
 tasks.register('jarBuild') {
     group = "build"
 }
-jarBuild.dependsOn([shadowJar, build])
+jarBuild.dependsOn([shadowJar, build, java_path])
 
 //build.dependsOn(shadowJar)
