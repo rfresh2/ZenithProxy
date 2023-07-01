@@ -304,11 +304,11 @@ public final class Config {
     }
 
     public static final class Discord {
+        public boolean enable = false;
         public String token = "";
         public String channelId = "";
         public String accountOwnerRoleId = "";
         public String visualRangeMentionRoleId = "";
-        public boolean enable = false;
         public String prefix = ".";
         public boolean reportCoords = false;
         // internal use for update command state persistence
