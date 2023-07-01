@@ -154,11 +154,11 @@ public class Proxy {
             if (CONFIG.client.autoConnect) {
                 this.connect();
             }
-            if (CONFIG.autoUpdate) {
+            if (CONFIG.autoUpdater.autoUpdate) {
                 AUTO_UPDATER.start();
             }
-            if (CONFIG.shouldReconnectAfterAutoUpdate) {
-                CONFIG.shouldReconnectAfterAutoUpdate = false;
+            if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
+                CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
                 if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
                     this.connect();
@@ -183,7 +183,7 @@ public class Proxy {
                 Wait.waitALittle(30);
                 if (server == null || !server.isListening()) {
                     SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
-                    CONFIG.shouldReconnectAfterAutoUpdate = true;
+                    CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
                     stop();
                 }
             }

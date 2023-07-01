@@ -21,12 +21,12 @@ public class AutoUpdateCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("autoupdate").requires(Command::validateAccountOwner)
                 .then(literal("on").executes(c -> {
-                    CONFIG.autoUpdate = true;
+                    CONFIG.autoUpdater.autoUpdate = true;
                     AUTO_UPDATER.start();
                     c.getSource().getEmbedBuilder().title("AutoUpdater On!");
                 }))
                 .then(literal("off").executes(c -> {
-                    CONFIG.autoUpdate = false;
+                    CONFIG.autoUpdater.autoUpdate = false;
                     AUTO_UPDATER.stop();
                     c.getSource().getEmbedBuilder().title("AutoUpdater Off!");
                 }));

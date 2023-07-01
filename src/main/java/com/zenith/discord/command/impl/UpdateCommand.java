@@ -26,13 +26,13 @@ public class UpdateCommand extends Command {
                 EVENT_BUS.dispatch(new UpdateStartEvent());
                 CONFIG.discord.isUpdating = true;
                 if (Proxy.getInstance().isConnected()) {
-                    CONFIG.shouldReconnectAfterAutoUpdate = true;
+                    CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
                 }
                 Proxy.getInstance().stop();
             } catch (final Exception e) {
                 DISCORD_LOG.error("Failed to update", e);
                 CONFIG.discord.isUpdating = false;
-                CONFIG.shouldReconnectAfterAutoUpdate = false;
+                CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
                 c.getSource().getEmbedBuilder()
                         .title("Failed updating")
@@ -41,7 +41,7 @@ public class UpdateCommand extends Command {
             return 1;
         }).then(literal("c").executes(c -> {
             CONFIG.discord.isUpdating = true;
-            CONFIG.shouldReconnectAfterAutoUpdate = true;
+            CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
             EVENT_BUS.dispatch(new UpdateStartEvent());
             Proxy.getInstance().stop();
         }));

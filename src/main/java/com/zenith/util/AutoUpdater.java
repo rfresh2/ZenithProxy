@@ -43,7 +43,7 @@ public class AutoUpdater {
         }
         if (isNull(updaterExecutorService) || updaterExecutorService.isShutdown()) {
             updaterExecutorService = new ScheduledThreadPoolExecutor(1);
-            updaterExecutorService.scheduleWithFixedDelay(this::updateCheck, 3, CONFIG.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
+            updaterExecutorService.scheduleWithFixedDelay(this::updateCheck, 3, CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
         }
         return true;
     }
@@ -85,11 +85,11 @@ public class AutoUpdater {
 
     @Subscribe
     public void handleDisconnectEvent(final DisconnectEvent event) {
-        if (CONFIG.autoUpdate && updateAvailable) {
+        if (CONFIG.autoUpdater.autoUpdate && updateAvailable) {
             if (!event.reason.equals(MANUAL_DISCONNECT)) {
-                CONFIG.shouldReconnectAfterAutoUpdate = true;
+                CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
             } else {
-                CONFIG.shouldReconnectAfterAutoUpdate = false;
+                CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
             }
             saveConfig();
             scheduleConditionalUpdate();

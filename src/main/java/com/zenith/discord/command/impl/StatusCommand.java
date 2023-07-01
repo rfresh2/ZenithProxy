@@ -158,7 +158,7 @@ public class StatusCommand extends Command {
                             + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", true)
                     .addField("AutoReply", (CONFIG.client.extra.autoReply.enabled ? "on" : "off")
                             + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
-                    .addField("AutoUpdate", (CONFIG.autoUpdate ? "on" : "off"), false);
+                    .addField("AutoUpdate", (CONFIG.autoUpdater.autoUpdate ? "on" : "off"), false);
         });
     }
 

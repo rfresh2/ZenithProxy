@@ -16,9 +16,7 @@ public final class Config {
     public Server server = new Server();
     public Discord discord = new Discord();
     public Database database = new Database();
-    public boolean autoUpdate = true;
-    public int autoUpdateCheckIntervalSeconds = 60;
-    public boolean shouldReconnectAfterAutoUpdate = false;
+    public AutoUpdater autoUpdater = new AutoUpdater();
 
     public static final class Authentication {
         public boolean doAuthentication = false;
@@ -218,7 +216,7 @@ public final class Config {
         }
 
         public static final class Server {
-            public String address = "2b2t.org";
+            public String address = "connect.2b2t.org";
             public int port = 25565;
         }
     }
@@ -338,7 +336,7 @@ public final class Config {
     }
 
     public static final class Database {
-        public boolean enabled = true;
+        public boolean enabled = false;
         public String host = "";
         public int port = 5432;
         public String username = "";
@@ -390,6 +388,12 @@ public final class Config {
         public static final class PlayerCount {
             public boolean enabled = true;
         }
+    }
+
+    public static final class AutoUpdater {
+        public boolean autoUpdate = true;
+        public int autoUpdateCheckIntervalSeconds = 60;
+        public boolean shouldReconnectAfterAutoUpdate = false;
     }
 
     private transient boolean donePostLoad = false;
