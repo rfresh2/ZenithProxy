@@ -1,6 +1,6 @@
 # ZenithProxy
 
-[Discord Server](discord.gg/Gvyb4g6c34)
+Discord Server: ([ZProxy](https://discord.gg/mf9uUvuUCU), [rProxy](https://discord.gg/Gvyb4g6c34))
 
 Minecraft 1.12.2 proxy/bot. Primarily for use on 2b2t.org.
 
