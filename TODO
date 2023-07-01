@@ -5,8 +5,6 @@ TODO:
 - have the proxy passively track 2b2t's antiafk pulses and handles modules accordingly to fulfill at least 1 pulse per 20 mins (additionally notifies the player or account owner on discord if they haven't pulsed for a certain time and when they will get kicked)
 
 autoreply:
-- global autoreply cooldown
-- pause autoreply for (x) minutes when a chatrelay message is sent
 
 spectator:
 - etoggle for players
