@@ -1,4 +1,4 @@
-# mc-proxy
+# ZenithProxy
 
 Minecraft 1.12.2 proxy/bot intended for use on 2b2t.org.
 
@@ -47,7 +47,7 @@ Note that when no Player Client is connected the Proxy Client can still login an
 
 ## Setup
 
-1. `git clone git@github.com:rfresh2/mc-proxy.git`
+1. `git clone git@github.com:rfresh2/ZenithProxy.git`
 2. Execute in CLI: `./start.sh` (Linux) or `./run.bat` (Windows). Close the instance with `CTRL-C`.
 3. Edit `config.json`. Important sections:
   * `authentication` -> Input your Minecraft account details

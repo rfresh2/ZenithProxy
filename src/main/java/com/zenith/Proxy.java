@@ -72,7 +72,7 @@ public class Proxy {
 
     public static void main(String... args) {
         instance = new Proxy();
-        DEFAULT_LOG.info("Starting Proxy...");
+        DEFAULT_LOG.info("Starting ZenithProxy...");
         if (CONFIG.database.enabled) {
             DEFAULT_LOG.info("Starting Databases...");
             DATABASE_MANAGER.initialize();
