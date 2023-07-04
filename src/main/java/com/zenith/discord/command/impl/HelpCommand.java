@@ -7,18 +7,21 @@ import com.zenith.discord.command.CommandContext;
 import com.zenith.discord.command.CommandUsage;
 import discord4j.rest.util.Color;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.util.Constants.CONFIG;
+import static java.util.Arrays.asList;
 
 public class HelpCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simple(
+        return CommandUsage.simpleAliases(
                 "help",
-                "Proxy command list");
+                "Proxy command list",
+                aliases());
     }
 
     @Override
@@ -52,5 +55,8 @@ public class HelpCommand extends Command {
                 }));
     }
 
-
+    @Override
+    public List<String> aliases() {
+        return asList("h");
+    } // I love undertime slopper
 }
