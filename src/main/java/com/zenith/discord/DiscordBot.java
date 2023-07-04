@@ -108,7 +108,7 @@ public class DiscordBot {
             }
             try {
                 final String commandInput = message.substring(1);
-                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " executed discord command: {}", commandInput);
+                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", commandInput);
                 MultipartRequest<MessageCreateRequest> request = commandManager.execute(commandInput, event, mainRestChannel.get());
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
