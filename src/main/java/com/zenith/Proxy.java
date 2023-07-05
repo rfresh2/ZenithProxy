@@ -151,17 +151,18 @@ public class Proxy {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }
             if (CONFIG.client.autoConnect) {
-                this.connect();
-            }
-            if (CONFIG.autoUpdater.autoUpdate) {
-                AUTO_UPDATER.start();
+                this.connectAndCatchExceptions();
             }
             if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
                 if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-                    this.connect();
+                    this.connectAndCatchExceptions();
                 }
+            }
+            if (CONFIG.autoUpdater.autoUpdate) {
+                DEFAULT_LOG.info("Starting AutoUpdater...");
+                AUTO_UPDATER.start();
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
@@ -220,6 +221,17 @@ public class Proxy {
         CACHE.reset(true);
     }
 
+    public void connectAndCatchExceptions() {
+        try {
+            this.connect();
+        } catch (final Exception e) {
+            DEFAULT_LOG.error("Error connecting", e);
+        }
+    }
+
+    /**
+     * @throws IllegalStateException if already connected
+     */
     public synchronized void connect() {
         try {
             EVENT_BUS.dispatch(new StartConnectEvent());
@@ -450,7 +462,7 @@ public class Proxy {
                         this.lastActiveHoursConnect = Instant.now();
                         disconnect(SYSTEM_DISCONNECT);
                         Wait.waitALittle(30);
-                        connect();
+                        connectAndCatchExceptions();
                     });
         }
     }
