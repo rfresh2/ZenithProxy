@@ -5,68 +5,55 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.zenith.command.impl.*;
+import com.zenith.util.ClassUtil;
 import lombok.Getter;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.saveConfig;
+import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
+import static java.util.Objects.isNull;
 
 @Getter
 public class CommandManager {
+    private static final String modulePackage = "com.zenith.command.impl";
+    private final LinkedHashMap<Class<? extends Command>, Command> commandsClassMap = new LinkedHashMap<>();
     private final CommandDispatcher<CommandContext> dispatcher;
-    private List<Command> commands;
 
     public CommandManager() {
         this.dispatcher = new CommandDispatcher<>();
-        registerCommands();
+        init();
     }
 
-    private void registerCommands() {
-        this.commands = asList(
-                new ActiveHoursCommand(),
-                new AntiAFKCommand(),
-                new AutoDisconnectCommand(),
-                new AutoReconnectCommand(),
-                new AutoReplyCommand(),
-                new AutoRespawnCommand(),
-                new AutoTotemCommand(),
-                new AutoUpdateCommand(),
-                new ChatRelayCommand(),
-                new ConnectCommand(),
-                new DatabaseCommand(),
-                new DebugCommand(),
-                new DisconnectCommand(),
-                new DisplayCoordsCommand(),
-                new ExtraChatCommand(),
-                new HelpCommand(),
-                new IgnoreCommand(),
-                new KickCommand(),
-                new KillAuraCommand(),
-                new PrioCommand(),
-                new ProxyClientConnectionCommand(),
-                new QueueWarningCommand(),
-                new ReconnectCommand(),
-                new RespawnCommand(),
-                new SendMessageCommand(),
-                new ServerCommand(),
-                new SpammerCommand(),
-                new StalkCommand(),
-                new StatusCommand(),
-                new SpectatorCommand(),
-                new SpookCommand(),
-                new TablistCommand(),
-                new UpdateCommand(),
-                new VisualRangeCommand(),
-                new WhitelistCommand(),
-                new AutoEatCommand()
-        );
-        this.commands.forEach(this::registerCommand);
+    public void init() {
+        for (final Class<?> clazz : ClassUtil.findClassesInPath(modulePackage)) {
+            if (isNull(clazz)) continue;
+            if (Command.class.isAssignableFrom(clazz)) {
+                try {
+                    final Command command = (Command) clazz.newInstance();
+                    addCommand(command);
+                } catch (InstantiationException | IllegalAccessException e) {
+                    MODULE_LOG.warn("Error initializing command class", e);
+                }
+            }
+        }
+    }
+
+    private void addCommand(Command command) {
+        commandsClassMap.put(command.getClass(), command);
+        registerCommand(command);
+    }
+
+    public <T extends Command> T getCommand(Class<T> clazz) {
+        return (T) commandsClassMap.get(clazz);
+    }
+
+    public List<Command> getCommands() {
+        return commandsClassMap.values().stream().toList();
     }
 
     private void registerCommand(final Command command) {

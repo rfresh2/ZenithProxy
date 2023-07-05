@@ -10,7 +10,7 @@ import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.*;
-import com.zenith.module.AntiAFK;
+import com.zenith.module.impl.AntiAFK;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;

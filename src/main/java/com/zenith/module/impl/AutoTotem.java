@@ -1,4 +1,4 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
@@ -9,6 +9,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindo
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.module.Module;
 
 import java.time.Duration;
 import java.time.Instant;

@@ -1,9 +1,10 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
 import static com.zenith.util.Constants.CONFIG;

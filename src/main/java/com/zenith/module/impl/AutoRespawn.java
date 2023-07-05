@@ -1,10 +1,11 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.DeathEvent;
+import com.zenith.module.Module;
 import com.zenith.util.Wait;
 
 import static com.zenith.util.Constants.*;

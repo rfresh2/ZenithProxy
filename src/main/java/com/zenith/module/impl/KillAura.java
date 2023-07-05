@@ -1,4 +1,4 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
@@ -20,6 +20,7 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.module.Module;
 import net.daporkchop.lib.math.vector.Vec3d;
 
 import java.util.Optional;

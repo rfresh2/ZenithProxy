@@ -1,4 +1,4 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
@@ -6,6 +6,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
+import com.zenith.module.Module;
 
 import java.time.Duration;
 import java.time.Instant;

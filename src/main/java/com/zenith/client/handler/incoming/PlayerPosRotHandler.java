@@ -6,7 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTelepo
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.client.ClientSession;
-import com.zenith.module.AntiAFK;
+import com.zenith.module.impl.AntiAFK;
 import com.zenith.util.handler.HandlerRegistry;
 import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;

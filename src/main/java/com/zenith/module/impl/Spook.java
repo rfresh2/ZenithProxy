@@ -1,4 +1,4 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
@@ -8,6 +8,7 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
+import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
 import java.util.Objects;

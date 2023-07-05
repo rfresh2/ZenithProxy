@@ -1,4 +1,4 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
@@ -13,6 +13,7 @@ import com.zenith.Proxy;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
+import com.zenith.module.Module;
 import com.zenith.pathing.BlockPos;
 import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;

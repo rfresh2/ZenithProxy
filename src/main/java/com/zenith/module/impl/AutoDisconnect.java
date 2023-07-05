@@ -1,4 +1,4 @@
-package com.zenith.module;
+package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
@@ -6,6 +6,7 @@ import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.event.proxy.HealthAutoDisconnectEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
+import com.zenith.module.Module;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Constants;
 

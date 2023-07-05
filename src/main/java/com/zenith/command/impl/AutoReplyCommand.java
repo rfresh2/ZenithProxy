@@ -7,7 +7,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.DiscordBot;
-import com.zenith.module.AutoReply;
+import com.zenith.module.impl.AutoReply;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
