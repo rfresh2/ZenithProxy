@@ -40,14 +40,23 @@ public class TerminalManager {
                         .option(LineReader.Option.INSERT_TAB, false)
                         .build();
                 TerminalConsoleAppender.setReader(lineReader);
-                executorFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(this::executeReaderThread));
+                executorFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(interactiveRunnable));
             } else {
                 DEFAULT_LOG.warn("Unsupported Terminal. Interactive Terminal will not be started.");
             }
         }
     }
 
-    private void executeReaderThread() {
+    public void stop() {
+        if (executorFuture.isPresent()) {
+            executorFuture.get().cancel(true);
+            executorFuture = Optional.empty();
+        }
+        isRunning.set(false);
+        TerminalConsoleAppender.setReader(null);
+    }
+
+    private final Runnable interactiveRunnable = () -> {
         while (true) {
             try {
                 String line;
@@ -69,7 +78,7 @@ public class TerminalManager {
                 TERMINAL_LOG.error("Error while reading terminal input", e);
             }
         }
-    }
+    };
 
     private void handleTerminalCommand(final String command) {
         switch (command) {
@@ -83,10 +92,37 @@ public class TerminalManager {
     }
 
     private void executeDiscordCommand(final String command) {
+        if (CONFIG.interactiveTerminal.logToDiscord) logInputToDiscord(command);
         CommandContext commandContext = CommandContext.create(command, CommandSource.TERMINAL);
         COMMAND_MANAGER.execute(commandContext);
         logEmbedOutput(commandContext);
+        if (CONFIG.interactiveTerminal.logToDiscord) logEmbedOutputToDiscord(commandContext);
         logMultiLineOutput(commandContext);
+        if (CONFIG.interactiveTerminal.logToDiscord) logMultiLineOutputToDiscord(commandContext);
+    }
+
+    private void logMultiLineOutputToDiscord(CommandContext commandContext) {
+        if (DISCORD_BOT.isRunning()) {
+            commandContext.getMultiLineOutput().forEach(DISCORD_BOT::sendMessage);
+        }
+    }
+
+    private void logEmbedOutputToDiscord(CommandContext commandContext) {
+        if (DISCORD_BOT.isRunning()) {
+            EmbedCreateSpec embedCreateSpec = commandContext.getEmbedBuilder().build();
+            if (embedCreateSpec.isTitlePresent()) {
+                DISCORD_BOT.sendEmbedMessage(embedCreateSpec);
+            }
+        }
+    }
+
+    private void logInputToDiscord(String command) {
+        if (DISCORD_BOT.isRunning()) {
+            DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
+                            .title("Terminal Command Executed")
+                            .description(command)
+                    .build());
+        }
     }
 
     private void logEmbedOutput(final CommandContext context) {

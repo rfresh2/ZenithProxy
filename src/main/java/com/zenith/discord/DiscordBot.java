@@ -710,7 +710,7 @@ public class DiscordBot {
                     .addEmbed(embedCreateSpec)
                     .build().asRequest());
         } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
+            DISCORD_LOG.error("Failed sending discord embed message", e);
         }
     }
 
@@ -719,6 +719,16 @@ public class DiscordBot {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
                     .content(message)
                     .addEmbed(embedCreateSpec)
+                    .build().asRequest());
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord embed message", e);
+        }
+    }
+
+    public void sendMessage(final String message) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                    .content(message)
                     .build().asRequest());
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
