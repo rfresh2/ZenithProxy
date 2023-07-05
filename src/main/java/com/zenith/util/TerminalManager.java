@@ -1,8 +1,8 @@
 package com.zenith.util;
 
 import com.zenith.Proxy;
-import com.zenith.discord.command.CommandContext;
-import com.zenith.discord.command.CommandSource;
+import com.zenith.command.CommandContext;
+import com.zenith.command.CommandSource;
 import com.zenith.util.log.TerminalConsoleAppender;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
@@ -159,6 +159,7 @@ public class TerminalManager {
     }
 
     private static String unescape(String s) {
+        // todo: fix
         return s.replace("\\\\_", "_");
     }
 }

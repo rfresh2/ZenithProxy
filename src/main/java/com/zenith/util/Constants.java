@@ -12,9 +12,9 @@ import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerChangeHeldItemHa
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
 import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
+import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
-import com.zenith.discord.command.CommandManager;
 import com.zenith.module.ModuleManager;
 import com.zenith.pathing.Pathing;
 import com.zenith.pathing.World;
