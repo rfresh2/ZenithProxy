@@ -55,6 +55,7 @@ public class CommandManager {
                 new RespawnCommand(),
                 new SendMessageCommand(),
                 new ServerCommand(),
+                new SpammerCommand(),
                 new StalkCommand(),
                 new StatusCommand(),
                 new SpectatorCommand(),

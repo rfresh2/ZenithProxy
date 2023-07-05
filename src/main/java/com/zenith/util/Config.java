@@ -200,8 +200,9 @@ public final class Config {
             }
 
             public static final class Spammer {
-                public int delaySeconds = 30;
                 public boolean enabled = false;
+                public long delayTicks = 200;
+                public boolean randomOrder = false;
                 public List<String> messages = asList(
                         "/stats",
                         "/stats",

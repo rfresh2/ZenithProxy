@@ -29,11 +29,12 @@ public class ModuleManager {
                 new AntiAFK(),
                 new AutoDisconnect(),
                 new AutoReply(),
-                new Spook(),
                 new AutoRespawn(),
                 new AutoTotem(),
                 new AutoEat(),
-                new KillAura()
+                new KillAura(),
+                new Spammer(),
+                new Spook()
         );
     }
 
