@@ -22,7 +22,7 @@ public class DatabaseManager {
 
     }
 
-    public void initialize() {
+    public void start() {
         try {
             this.queryExecutor = new QueryExecutor(this::getConnectionPool);
             if (CONFIG.database.queueWait.enabled) {

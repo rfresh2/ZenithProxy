@@ -6,12 +6,6 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.discord.command.impl.*;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.MessageCreateSpec;
-import discord4j.discordjson.json.MessageCreateRequest;
-import discord4j.rest.entity.RestChannel;
-import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
 
 import java.util.List;
@@ -19,7 +13,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.DISCORD_LOG;
+import static com.zenith.util.Constants.CONFIG;
 import static com.zenith.util.Constants.saveConfig;
 import static java.util.Arrays.asList;
 
@@ -78,9 +72,8 @@ public class CommandManager {
         command.aliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));
     }
 
-    public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent, final RestChannel restChannel) {
-        final CommandContext context = new CommandContext(EmbedCreateSpec.builder(), messageCreateEvent, this, restChannel);
-        final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(message), context);
+    public void execute(final CommandContext context) {
+        final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(context.getInput()), context);
         try {
             executeWithErrorHandler(context, parse);
         } catch (final CommandSyntaxException e) {
@@ -88,17 +81,30 @@ public class CommandManager {
             // errors handled by delegate
             // and if this not a matching root command we want to fallback to original commands
         }
-        if (!context.getEmbedBuilder().build().isTitlePresent()) {
-            DISCORD_LOG.debug("Brigadier command returned no embed: {}", message);
-            return null;
-        } else {
-            saveConfig();
-            return MessageCreateSpec.builder()
-                    .addEmbed(context.getEmbedBuilder()
-                            .build())
-                    .build().asRequest();
-        }
+        saveConfig();
     }
+
+//    public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent, final RestChannel restChannel) {
+//        final CommandContext context = new CommandContext(EmbedCreateSpec.builder(), messageCreateEvent, this, restChannel); // move to discord
+//        final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(message), context);
+//        try {
+//            executeWithErrorHandler(context, parse);
+//        } catch (final CommandSyntaxException e) {
+//            // fall through
+//            // errors handled by delegate
+//            // and if this not a matching root command we want to fallback to original commands
+//        }
+//        if (!context.getEmbedBuilder().build().isTitlePresent()) { // move to discord
+//            DISCORD_LOG.debug("Brigadier command returned no embed: {}", message);
+//            return null;
+//        } else {
+//            saveConfig();
+//            return MessageCreateSpec.builder()
+//                    .addEmbed(context.getEmbedBuilder()
+//                            .build())
+//                    .build().asRequest();
+//        }
+//    }
 
     private String downcaseFirstWord(final String sentence) {
         List<String> words = asList(sentence.split(" "));
@@ -123,5 +129,9 @@ public class CommandManager {
         }));
 
         return dispatcher.execute(parse);
+    }
+
+    public String getCommandPrefix(final CommandSource source) {
+        return source == CommandSource.DISCORD ? CONFIG.discord.prefix : "";
     }
 }

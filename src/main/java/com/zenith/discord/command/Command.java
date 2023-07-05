@@ -21,7 +21,9 @@ public abstract class Command {
     }
 
     public static boolean validateAccountOwner(final CommandContext context) {
-        final MessageCreateEvent event = context.getMessageCreateEvent();
+        if (context.getCommandSource() != CommandSource.DISCORD) return true;
+        final DiscordCommandContext discordCommandContext = (DiscordCommandContext) context;
+        final MessageCreateEvent event = discordCommandContext.getMessageCreateEvent();
         final boolean hasAccountOwnerRole = event.getMember()
                 .orElseThrow(() -> new RuntimeException("Message does not have a valid member"))
                 .getRoleIds()
@@ -91,7 +93,7 @@ public abstract class Command {
     public Void usageErrorHandler(final CommandContext context) {
         context.getEmbedBuilder()
                 .title("Invalid command usage")
-                .addField("Usage", commandUsage().serialize(), false)
+                .addField("Usage", commandUsage().serialize(context.getCommandSource()), false)
                 .color(Color.RUBY);
         return null;
     }

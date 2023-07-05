@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.util.Constants.COMMAND_MANAGER;
 
 @Getter
 @Setter
@@ -40,18 +40,20 @@ public class CommandUsage {
         return new CommandUsage(name, description, usageLines, aliases);
     }
 
-    public String serialize() {
+    public String serialize(CommandSource commandSource) {
         return this.description
                 + usageLines.stream()
-                .map(line -> "\n  " + CONFIG.discord.prefix + name + " " + line)
+                .map(line -> "\n  " + COMMAND_MANAGER.getCommandPrefix(commandSource) + name + " " + line)
                 .collect(Collectors.joining());
     }
 
-    public String shortSerialize() {
-        String result = CONFIG.discord.prefix + this.name;
+    public String shortSerialize(CommandSource commandSource) {
+        String result = COMMAND_MANAGER.getCommandPrefix(commandSource) + this.name;
         if (!aliases.isEmpty()) {
             result += aliases.stream()
-                    .collect(Collectors.joining(" / .", " / .", ""));
+                    .collect(Collectors.joining(" / " + COMMAND_MANAGER.getCommandPrefix(commandSource),
+                            " / " + COMMAND_MANAGER.getCommandPrefix(commandSource),
+                            ""));
         }
         return result;
     }

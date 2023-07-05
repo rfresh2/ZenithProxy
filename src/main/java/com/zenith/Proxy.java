@@ -70,30 +70,29 @@ public class Proxy {
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
-    public static void main(String... args) {
-        instance = new Proxy();
+    public static void main(String... args) throws IOException {
         DEFAULT_LOG.info("Starting ZenithProxy...");
+        instance = new Proxy();
+        if (CONFIG.interactiveTerminal.enable) {
+            TERMINAL_MANAGER.start();
+        }
         if (CONFIG.database.enabled) {
             DEFAULT_LOG.info("Starting Databases...");
-            DATABASE_MANAGER.initialize();
+            DATABASE_MANAGER.start();
         }
         if (CONFIG.discord.enable) {
             DISCORD_LOG.info("Starting discord bot...");
             try {
-                DISCORD_BOT.start(instance);
+                DISCORD_BOT.start();
             } catch (final Throwable e) {
                 DISCORD_LOG.error("Failed starting discord bot", e);
             }
         }
-
         instance.start();
     }
 
-    public Proxy() {
-        EVENT_BUS.subscribe(this);
-    }
-
     public void start() {
+        EVENT_BUS.subscribe(this);
         try {
             saveConfig();
             if (CONFIG.server.extra.timeout.enable) {

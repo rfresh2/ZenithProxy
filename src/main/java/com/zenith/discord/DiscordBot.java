@@ -5,7 +5,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
-import com.zenith.discord.command.CommandManager;
+import com.zenith.discord.command.CommandContext;
+import com.zenith.discord.command.DiscordCommandContext;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
@@ -77,9 +78,7 @@ public class DiscordBot {
         this.isRunning = false;
     }
 
-    public void start(Proxy proxy) {
-        this.proxy = proxy;
-
+    public void start() {
         this.client = DiscordClientBuilder.create(CONFIG.discord.token)
                 .build()
                 .gateway()
@@ -89,8 +88,6 @@ public class DiscordBot {
         EVENT_BUS.subscribe(this);
 
         restClient = client.getRestClient();
-
-        final CommandManager commandManager = new CommandManager();
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
@@ -107,12 +104,19 @@ public class DiscordBot {
                 return;
             }
             try {
-                final String commandInput = message.substring(1);
-                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", commandInput);
-                MultipartRequest<MessageCreateRequest> request = commandManager.execute(commandInput, event, mainRestChannel.get());
+                final String inputMessage = message.substring(1);
+                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
+                final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel.get());
+                COMMAND_MANAGER.execute(context);
+                final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
                     mainChannelMessageQueue.add(request);
+                }
+                if (!context.getMultiLineOutput().isEmpty()) {
+                    for (final String line : context.getMultiLineOutput()) {
+                        mainChannelMessageQueue.add(MessageCreateSpec.builder().content(line).build().asRequest());
+                    }
                 }
             } catch (final Exception e) {
                 DISCORD_LOG.error("Failed processing discord command: {}", message, e);
@@ -128,6 +132,16 @@ public class DiscordBot {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
+    }
+
+    private MultipartRequest<MessageCreateRequest> commandEmbedOutputToMessage(final CommandContext context) {
+        EmbedCreateSpec embedCreateSpec = context.getEmbedBuilder().build();
+        if (!embedCreateSpec.isTitlePresent()) {
+            return null;
+        }
+        return MessageCreateSpec.builder()
+                .addEmbed(embedCreateSpec)
+                .build().asRequest();
     }
 
     private void processMessageQueue() {

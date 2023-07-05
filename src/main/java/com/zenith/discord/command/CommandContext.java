@@ -1,14 +1,36 @@
 package com.zenith.discord.command;
 
-import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.rest.entity.RestChannel;
-import lombok.Data;
 
-@Data
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandContext {
+    private final String input;
+    private final CommandSource source;
     private final EmbedCreateSpec.Builder embedBuilder;
-    private final MessageCreateEvent messageCreateEvent;
-    private final CommandManager commandManager;
-    private final RestChannel restChannel;
+    private final List<String> multiLineOutput;
+
+    public CommandContext(String input, CommandSource source, EmbedCreateSpec.Builder embedBuilder, List<String> multiLineOutput) {
+        this.input = input;
+        this.source = source;
+        this.embedBuilder = embedBuilder;
+        this.multiLineOutput = multiLineOutput;
+    }
+    public static CommandContext create(final String input, final CommandSource source) {
+        return new CommandContext(input, source, EmbedCreateSpec.builder(), new ArrayList<>());
+    }
+
+    public String getInput() {
+        return input;
+    }
+    public CommandSource getCommandSource() {
+        return source;
+    }
+    public EmbedCreateSpec.Builder getEmbedBuilder() {
+        return embedBuilder;
+    }
+    public List<String> getMultiLineOutput() {
+        return multiLineOutput;
+    }
 }

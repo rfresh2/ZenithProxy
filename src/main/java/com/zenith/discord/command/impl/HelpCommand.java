@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.zenith.util.Constants.CONFIG;
 import static java.util.Arrays.asList;
+import static com.zenith.util.Constants.COMMAND_MANAGER;
 
 public class HelpCommand extends Command {
     @Override
@@ -30,24 +30,24 @@ public class HelpCommand extends Command {
                     c.getSource().getEmbedBuilder()
                             .title("Proxy Commands")
                             .color(Color.CYAN);
-                    final String brigadierCommands = c.getSource().getCommandManager().getCommands().stream()
+                    final String brigadierCommands = COMMAND_MANAGER.getCommands().stream()
                             .sorted((c1, c2) -> c1.commandUsage().getName().compareToIgnoreCase(c2.commandUsage().getName()))
-                            .map(command -> command.commandUsage().shortSerialize())
+                            .map(command -> command.commandUsage().shortSerialize(c.getSource().getCommandSource()))
                             .collect(Collectors.joining("\n"));
                     c.getSource().getEmbedBuilder()
-                            .description("**More info:** \n  " + CONFIG.discord.prefix + "help <command>\n\n**Command List**\n" + brigadierCommands);
+                            .description("**More info:** \n  " + COMMAND_MANAGER.getCommandPrefix(c.getSource().getCommandSource()) + "help <command>\n\n**Command List**\n" + brigadierCommands);
                 })
                 .then(argument("commandName", string()).executes(c -> {
                     c.getSource().getEmbedBuilder()
                             .title("Command Usage")
                             .color(Color.CYAN);
                     final String commandName = StringArgumentType.getString(c, "commandName");
-                    final Optional<Command> foundCommand = c.getSource().getCommandManager().getCommands().stream()
+                    final Optional<Command> foundCommand = COMMAND_MANAGER.getCommands().stream()
                             .filter(command -> command.commandUsage().getName().equalsIgnoreCase(commandName)
                                     || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
                             .findFirst();
                     if (foundCommand.isPresent()) {
-                        c.getSource().getEmbedBuilder().description(foundCommand.get().commandUsage().serialize());
+                        c.getSource().getEmbedBuilder().description(foundCommand.get().commandUsage().serialize(c.getSource().getCommandSource()));
                     } else {
                         c.getSource().getEmbedBuilder().description("Unknown command");
                     }

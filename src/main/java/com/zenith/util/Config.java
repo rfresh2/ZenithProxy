@@ -14,6 +14,7 @@ public final class Config {
     public Client client = new Client();
     public Debug debug = new Debug();
     public Server server = new Server();
+    public InteractiveTerminal interactiveTerminal = new InteractiveTerminal();
     public Discord discord = new Discord();
     public Database database = new Database();
     public AutoUpdater autoUpdater = new AutoUpdater();
@@ -303,6 +304,9 @@ public final class Config {
         }
     }
 
+    public static final class InteractiveTerminal {
+        public boolean enable = true;
+    }
     public static final class Discord {
         public boolean enable = false;
         public String token = "";

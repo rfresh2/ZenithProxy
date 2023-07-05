@@ -164,7 +164,7 @@ dependencies {
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 
-    shade("com.github.5cmc:MCProtocolLib:c0b123fbd2") {
+    shade("com.github.5cmc:MCProtocolLib:b4773eabab") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -197,6 +197,8 @@ dependencies {
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
 
+    shade 'org.jline:jline:3.23.0'
+    shade 'org.jline:jline-terminal-jansi:3.23.0'
     testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"

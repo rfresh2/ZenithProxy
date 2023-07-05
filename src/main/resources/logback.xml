@@ -59,14 +59,22 @@
             <level>INFO</level>
         </filter>
     </appender>
+    <appender name="TERMINAL" class="com.zenith.util.log.TerminalConsoleAppender">
+        <encoder class="com.zenith.util.log.MCTextFormatANSIEncoder">
+            <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
+        </encoder>
+        <filter class="ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
 
     <root level="INFO">
         <!--        allow logs from other libs to also go to stdout-->
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TERMINAL"/>
     </root>
     <logger name="org.jooq" level="WARN">
         <!-- suppress these dumb "thank you" and ascii arts -->
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TERMINAL"/>
     </logger>
     <logger name="Proxy" level="TRACE">
         <appender-ref ref="FILE"/>
@@ -101,6 +109,10 @@
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
     <logger name="Database" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <logger name="Terminal" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
