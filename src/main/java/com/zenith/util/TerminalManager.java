@@ -125,7 +125,7 @@ public class TerminalManager {
         }
     }
 
-    private void logEmbedOutput(final CommandContext context) {
+    public void logEmbedOutput(final CommandContext context) {
         // todo: handle formatted bold, italicized, or underlined text
         EmbedCreateSpec embedCreateSpec = context.getEmbedBuilder().build();
         if (!embedCreateSpec.isTitlePresent()) return;
@@ -154,7 +154,7 @@ public class TerminalManager {
         TERMINAL_LOG.info(unescape(output.toAnsi()));
     }
 
-    private void logMultiLineOutput(CommandContext context) {
+    public void logMultiLineOutput(CommandContext context) {
         context.getMultiLineOutput().forEach(TERMINAL_LOG::info);
     }
 

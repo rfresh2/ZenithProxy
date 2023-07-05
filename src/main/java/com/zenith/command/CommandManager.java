@@ -85,28 +85,6 @@ public class CommandManager {
         saveConfig();
     }
 
-//    public MultipartRequest<MessageCreateRequest> execute(final String message, final MessageCreateEvent messageCreateEvent, final RestChannel restChannel) {
-//        final CommandContext context = new CommandContext(EmbedCreateSpec.builder(), messageCreateEvent, this, restChannel); // move to discord
-//        final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(message), context);
-//        try {
-//            executeWithErrorHandler(context, parse);
-//        } catch (final CommandSyntaxException e) {
-//            // fall through
-//            // errors handled by delegate
-//            // and if this not a matching root command we want to fallback to original commands
-//        }
-//        if (!context.getEmbedBuilder().build().isTitlePresent()) { // move to discord
-//            DISCORD_LOG.debug("Brigadier command returned no embed: {}", message);
-//            return null;
-//        } else {
-//            saveConfig();
-//            return MessageCreateSpec.builder()
-//                    .addEmbed(context.getEmbedBuilder()
-//                            .build())
-//                    .build().asRequest();
-//        }
-//    }
-
     private String downcaseFirstWord(final String sentence) {
         List<String> words = asList(sentence.split(" "));
         if (words.size() > 1) {
@@ -133,6 +111,9 @@ public class CommandManager {
     }
 
     public String getCommandPrefix(final CommandSource source) {
+        // todo: tie this to each output instead because multiple outputs can be used regardless of source
+        //  insert a string that gets replaced?
+        //      abstract the embed builder output to a mutable intermediary?
         return source == CommandSource.DISCORD ? CONFIG.discord.prefix : "";
     }
 }

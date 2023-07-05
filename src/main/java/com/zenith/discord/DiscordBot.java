@@ -111,11 +111,13 @@ public class DiscordBot {
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
                     mainChannelMessageQueue.add(request);
+                    if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.logEmbedOutput(context);
                 }
                 if (!context.getMultiLineOutput().isEmpty()) {
                     for (final String line : context.getMultiLineOutput()) {
                         mainChannelMessageQueue.add(MessageCreateSpec.builder().content(line).build().asRequest());
                     }
+                    if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.logMultiLineOutput(context);
                 }
             } catch (final Exception e) {
                 DISCORD_LOG.error("Failed processing discord command: {}", message, e);
