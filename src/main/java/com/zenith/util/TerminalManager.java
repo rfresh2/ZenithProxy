@@ -159,7 +159,6 @@ public class TerminalManager {
     }
 
     private static String unescape(String s) {
-        // todo: fix
-        return s.replace("\\\\_", "_");
+        return s.replace("\\_", "_");
     }
 }
