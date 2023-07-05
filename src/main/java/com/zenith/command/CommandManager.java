@@ -53,6 +53,7 @@ public class CommandManager {
                 new QueueWarningCommand(),
                 new ReconnectCommand(),
                 new RespawnCommand(),
+                new SendMessageCommand(),
                 new ServerCommand(),
                 new StalkCommand(),
                 new StatusCommand(),

@@ -61,7 +61,6 @@ public class DiscordBot {
     private final Supplier<RestChannel> mainRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)));
     private final Supplier<RestChannel> relayRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId)));
     private GatewayDiscordClient client;
-    private Proxy proxy;
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
     private final ConcurrentLinkedQueue<MessageCreateRequest> relayChannelMessageQueue;
@@ -167,9 +166,9 @@ public class DiscordBot {
     }
 
     private void updatePresence() {
-        if (this.proxy.isInQueue()) {
+        if (Proxy.getInstance().isInQueue()) {
             this.client.updatePresence(getQueuePresence()).block();
-        } else if (this.proxy.isConnected()) {
+        } else if (Proxy.getInstance().isConnected()) {
             this.client.updatePresence(getOnlinePresence()).block();
         } else {
             this.client.updatePresence(DISCONNECTED_PRESENCE).block();
@@ -177,7 +176,7 @@ public class DiscordBot {
     }
 
     private ClientPresence getOnlinePresence() {
-        long onlineSeconds = Instant.now().getEpochSecond() - this.proxy.getConnectTime().getEpochSecond();
+        long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
         return ClientPresence.of(Status.ONLINE, ClientActivity.playing((CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
     }
 
@@ -251,11 +250,11 @@ public class DiscordBot {
     }
 
     private String queuePositionStr() {
-        if (proxy.getIsPrio().isPresent()) {
-            if (proxy.getIsPrio().get()) {
-                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().prio + " - ETA: " + Queue.getQueueEta(this.proxy.getQueuePosition());
+        if (Proxy.getInstance().getIsPrio().isPresent()) {
+            if (Proxy.getInstance().getIsPrio().get()) {
+                return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
             } else {
-                return this.proxy.getQueuePosition() + " / " + Queue.getQueueStatus().regular + " - ETA: " + Queue.getQueueEta(this.proxy.getQueuePosition());
+                return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
             }
         } else {
             return "?";
@@ -362,7 +361,7 @@ public class DiscordBot {
                     .color(notFriend ? Color.RUBY : Color.GREEN)
                     .addField("Player Name", escape(event.playerEntry.getName()), true)
                     .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
-                    .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString());
+                    .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString());
 
             if (CONFIG.discord.reportCoords) {
                 embedCreateSpec.addField("Coordinates", "||["
@@ -384,7 +383,7 @@ public class DiscordBot {
                             .color(Color.GREEN)
                             .addField("Player Name", escape(event.playerEntry.getName()), true)
                             .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
-                            .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                            .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
                             .build()).block();
                     saveConfig();
                 }
@@ -422,7 +421,7 @@ public class DiscordBot {
             builder
                     .addField("Username", escape(event.gameProfile().getName()), false)
                     .addField("Player UUID", ("[" + event.gameProfile().getId().toString() + "](https://namemc.com/profile/" + event.gameProfile().getId().toString() + ")"), true)
-                    .thumbnail(this.proxy.getAvatarURL(event.gameProfile().getId()).toString());
+                    .thumbnail(Proxy.getInstance().getAvatarURL(event.gameProfile().getId()).toString());
             final String buttonId = "whitelist" + ThreadLocalRandom.current().nextInt(10000000);
             final List<Button> buttons = asList(Button.primary(buttonId, "Whitelist Player"));
             final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
@@ -437,7 +436,7 @@ public class DiscordBot {
                                 .color(Color.GREEN)
                                 .addField("Player Name", escape(event.gameProfile().getName()), true)
                                 .addField("Player UUID", ("[" + event.gameProfile().getId().toString() + "](https://namemc.com/profile/" + event.gameProfile().getId().toString() + ")"), true)
-                                .thumbnail(this.proxy.getAvatarURL(event.gameProfile().getId()).toString())
+                                .thumbnail(Proxy.getInstance().getAvatarURL(event.gameProfile().getId()).toString())
                                 .build()).block();
                         saveConfig();
                     } else {
@@ -483,7 +482,7 @@ public class DiscordBot {
     @Subscribe
     public void handleActiveHoursConnectEvent(ActiveHoursConnectEvent event) {
         int queueLength;
-        if (proxy.getIsPrio().orElse(false)) {
+        if (Proxy.getInstance().getIsPrio().orElse(false)) {
             queueLength = Queue.getQueueStatus().prio;
         } else {
             queueLength = Queue.getQueueStatus().regular;
@@ -498,10 +497,10 @@ public class DiscordBot {
     @Subscribe
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.length() > 0) {
-            if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
+            if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             try {
                 String message = escape(event.message);
-                if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(this.proxy.getCurrentPlayer().get())) {
+                if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                     if (CONFIG.discord.chatRelay.mentionRoleOnWhisper || CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                         if (!message.startsWith("<")) {
                             if (event.isWhisper
@@ -529,7 +528,7 @@ public class DiscordBot {
     @Subscribe
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
-            if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
+            if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             try {
                 relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry.getName() + " connected")).build());
             } catch (final Throwable e) {
@@ -546,7 +545,7 @@ public class DiscordBot {
                                 .title("Stalked Player Online!")
                                 .color(Color.GREEN)
                                 .addField("Player Name", event.playerEntry.getName(), true)
-                                .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
                     });
         }
@@ -555,7 +554,7 @@ public class DiscordBot {
     @Subscribe
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
-            if (CONFIG.discord.chatRelay.ignoreQueue && this.proxy.isInQueue()) return;
+            if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             try {
                 relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry.getName()) + " disconnected").build());
             } catch (final Throwable e) {
@@ -572,7 +571,7 @@ public class DiscordBot {
                                 .title("Stalked Player Offline!")
                                 .color(Color.RUBY)
                                 .addField("Player Name", event.playerEntry.getName(), true)
-                                .thumbnail(this.proxy.getAvatarURL(event.playerEntry.getId()).toString())
+                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
                     });
         }
@@ -581,8 +580,8 @@ public class DiscordBot {
     @Subscribe
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (CONFIG.discord.chatRelay.enable) {
-            if (this.proxy.isConnected() && !event.message.isEmpty()) {
-                this.proxy.getClient().send(new ClientChatPacket(event.message));
+            if (Proxy.getInstance().isConnected() && !event.message.isEmpty()) {
+                Proxy.getInstance().getClient().send(new ClientChatPacket(event.message));
                 lastRelaymessage = Optional.of(Instant.now());
             }
         }
