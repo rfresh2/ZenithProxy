@@ -52,7 +52,8 @@ player movements, spectator mode, discord chat relay, and more.
 
 1. Linux or Windows server. I recommend DigitalOcean `2 GB Memory / 1 AMD vCPU` in the NYC-1 region for
    minimal ping to 2b2t. 2b2t allows a maximum of 3 accounts concurrently connected per IP address.
-2. JDK17 and git installed. JDK17's path must be set on the JAVA_HOME environment variable.
+2. JDK17 and git installed. 
+  * JDK17's path must be set on the JAVA_HOME environment variable or create a gradle.properties file with `org.gradle.java.home=/path/to/jdk17`
 
 ## Setup
 
@@ -81,8 +82,8 @@ player movements, spectator mode, discord chat relay, and more.
 ## Run
 
 * `./start.sh` (Linux) or `./start.bat` (Windows) or `./gradlew run` (Universal)
-* Use `.help` in discord to get a list of available commands.
-    * `.connect` and `.disconnect` will login/disconnect the proxy from the MC server.
+* Type `help` in your terminal to get a list of available commands.
+* The discord prefix is `.` by default. e.g. `.connect` or `.disconnect`.
 
 # Developers
 
