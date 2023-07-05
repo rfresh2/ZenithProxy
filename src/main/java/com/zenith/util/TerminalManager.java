@@ -115,22 +115,14 @@ public class TerminalManager {
             output.append(": ");
             output.append(field.value());
         });
-        String ansi = output.toAnsi();
-        TERMINAL_LOG.info(ansi);
+        TERMINAL_LOG.info(unescape(output.toAnsi()));
     }
 
     private void logMultiLineOutput(CommandContext context) {
         context.getMultiLineOutput().forEach(TERMINAL_LOG::info);
     }
 
-    public void shutdown() {
-        if (executorFuture.isPresent()) {
-            executorFuture.get().cancel(true);
-            executorFuture = Optional.empty();
-        }
-        isRunning.set(false);
-        TerminalConsoleAppender.setReader(null);
+    private static String unescape(String s) {
+        return s.replace("\\\\_", "_");
     }
-
-
 }
