@@ -7,7 +7,7 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 
 public class Spammer extends Module {
     private final TickTimer tickTimer = new TickTimer();

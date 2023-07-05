@@ -5,8 +5,8 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
-import static com.zenith.util.Constants.AUTO_UPDATER;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.AUTO_UPDATER;
+import static com.zenith.Shared.CONFIG;
 import static java.util.Arrays.asList;
 
 public class AutoUpdateCommand extends Command {

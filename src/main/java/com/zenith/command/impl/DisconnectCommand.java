@@ -8,7 +8,7 @@ import com.zenith.command.CommandUsage;
 
 import java.util.List;
 
-import static com.zenith.util.Constants.DISCORD_LOG;
+import static com.zenith.Shared.DISCORD_LOG;
 import static java.util.Arrays.asList;
 
 public class DisconnectCommand extends Command {

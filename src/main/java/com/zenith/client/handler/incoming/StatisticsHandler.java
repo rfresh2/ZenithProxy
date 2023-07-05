@@ -2,13 +2,13 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerStatisticsPacket;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
 
 import java.util.HashMap;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class StatisticsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerStatisticsPacket, ClientSession> {
     protected static final long PACKET_STATISTICS_OFFSET = PUnsafe.pork_getOffset(ServerStatisticsPacket.class, "statistics");

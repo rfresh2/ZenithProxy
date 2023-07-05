@@ -1,9 +1,9 @@
 package com.zenith.server.handler.spectator.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.spectator.SpectatorHelper;
+import com.zenith.spectator.SpectatorHelper;
 import lombok.NonNull;
 
 public class PlayerPositionSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerPositionPacket, ServerConnection> {

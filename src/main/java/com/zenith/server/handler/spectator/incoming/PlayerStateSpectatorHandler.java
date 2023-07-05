@@ -2,8 +2,8 @@ package com.zenith.server.handler.spectator.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerStatePacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
 
 public class PlayerStateSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerStatePacket, ServerConnection> {
 

@@ -26,7 +26,7 @@ import net.daporkchop.lib.math.vector.Vec3d;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 

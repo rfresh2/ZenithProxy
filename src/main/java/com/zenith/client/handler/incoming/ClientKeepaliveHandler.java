@@ -2,7 +2,7 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerKeepAlivePacket;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
 public class ClientKeepaliveHandler implements HandlerRegistry.IncomingHandler<ServerKeepAlivePacket, ClientSession> {

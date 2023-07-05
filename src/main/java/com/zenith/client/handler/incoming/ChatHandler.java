@@ -6,9 +6,9 @@ import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.event.proxy.SelfDeathMessageEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
-import com.zenith.util.deathmessages.DeathMessageParseResult;
-import com.zenith.util.deathmessages.DeathMessagesParser;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.deathmessages.DeathMessageParseResult;
+import com.zenith.feature.deathmessages.DeathMessagesParser;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class ChatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerChatPacket, ClientSession> {

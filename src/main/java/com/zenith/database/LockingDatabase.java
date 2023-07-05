@@ -13,8 +13,8 @@ import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
-import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 

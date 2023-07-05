@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class ConnectionsDatabase extends LockingDatabase {
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {

@@ -17,7 +17,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {

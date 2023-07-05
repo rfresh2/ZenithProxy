@@ -2,9 +2,9 @@ package com.zenith.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerSpawnPositionPacket;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 /**
  * Xaero's WorldMap seems to care about this for some reason.

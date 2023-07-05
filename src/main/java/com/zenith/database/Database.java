@@ -1,6 +1,6 @@
 package com.zenith.database;
 
-import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.Shared.EVENT_BUS;
 
 public abstract class Database {
     protected final QueryExecutor queryExecutor;

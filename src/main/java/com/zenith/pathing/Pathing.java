@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 @RequiredArgsConstructor
 public class Pathing {

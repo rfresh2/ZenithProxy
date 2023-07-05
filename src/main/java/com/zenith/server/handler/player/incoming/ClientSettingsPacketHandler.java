@@ -1,10 +1,10 @@
 package com.zenith.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class ClientSettingsPacketHandler implements HandlerRegistry.AsyncIncomingHandler<ClientSettingsPacket, ServerConnection> {
     @Override

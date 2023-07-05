@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.zenith.util.Constants.COMMAND_MANAGER;
+import static com.zenith.Shared.COMMAND_MANAGER;
 import static java.util.Arrays.asList;
 
 public class HelpCommand extends Command {

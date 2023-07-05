@@ -3,10 +3,10 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.zenith.client.ClientSession;
 import com.zenith.event.module.PlayerHealthChangedEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class PlayerHealthHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerHealthPacket, ClientSession> {
 

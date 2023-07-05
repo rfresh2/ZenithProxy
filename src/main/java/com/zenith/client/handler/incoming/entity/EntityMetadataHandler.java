@@ -4,10 +4,10 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadat
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 import static java.util.Objects.isNull;
 
 public class EntityMetadataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerEntityMetadataPacket, ClientSession> {

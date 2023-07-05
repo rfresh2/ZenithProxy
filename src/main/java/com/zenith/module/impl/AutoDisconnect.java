@@ -2,15 +2,15 @@ package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
+import com.zenith.Shared;
 import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.event.proxy.HealthAutoDisconnectEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.Module;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.Constants;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -21,8 +21,8 @@ public class AutoDisconnect extends Module {
 
     @Subscribe
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {
-        if (Constants.CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
-            if (event.newHealth <= Constants.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
+        if (Shared.CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
+            if (event.newHealth <= Shared.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
                 if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                     EVENT_BUS.dispatch(new HealthAutoDisconnectEvent());
                     Proxy.getInstance().disconnect();

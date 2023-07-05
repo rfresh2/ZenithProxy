@@ -6,14 +6,14 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
+import com.zenith.spectator.SpectatorHelper;
 import com.zenith.util.RefStrings;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.spectator.SpectatorHelper;
 import lombok.NonNull;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class JoinGameSpectatorPostHandler implements HandlerRegistry.PostOutgoingHandler<ServerJoinGamePacket, ServerConnection> {
     @Override

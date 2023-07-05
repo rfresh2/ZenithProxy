@@ -16,7 +16,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 
 @Getter

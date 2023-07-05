@@ -4,15 +4,15 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
 import com.zenith.Proxy;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.spectator.SpectatorHelper;
+import com.zenith.feature.handler.HandlerRegistry;
+import com.zenith.spectator.SpectatorHelper;
 import lombok.NonNull;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 
 public class RespawnHandler implements HandlerRegistry.IncomingHandler<ServerRespawnPacket, ClientSession> {

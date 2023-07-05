@@ -8,7 +8,7 @@ import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Wait;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {

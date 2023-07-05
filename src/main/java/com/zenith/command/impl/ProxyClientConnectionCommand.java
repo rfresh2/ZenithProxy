@@ -6,7 +6,7 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 import static java.util.Arrays.asList;
 
 public class ProxyClientConnectionCommand extends Command {

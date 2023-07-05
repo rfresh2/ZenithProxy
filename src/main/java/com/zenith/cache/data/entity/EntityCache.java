@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class EntityCache implements CachedData {
     protected final Map<Integer, Entity> cachedEntities = Collections.synchronizedMap(new Int2ObjectOpenHashMap<>());

@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class ConnectionsImport {
     final Pattern usernamePattern = Pattern.compile("`\\w+`");

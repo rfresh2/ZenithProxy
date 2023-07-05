@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.Shared.CLIENT_LOG;
 
 
 @Getter

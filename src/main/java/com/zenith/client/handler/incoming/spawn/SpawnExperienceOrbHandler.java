@@ -3,10 +3,10 @@ package com.zenith.client.handler.incoming.spawn;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnExpOrbPacket;
 import com.zenith.cache.data.entity.EntityExperienceOrb;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class SpawnExperienceOrbHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnExpOrbPacket, ClientSession> {
     @Override

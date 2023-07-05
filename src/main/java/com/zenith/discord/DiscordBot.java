@@ -10,7 +10,7 @@ import com.zenith.command.DiscordCommandContext;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
-import com.zenith.util.Queue;
+import com.zenith.feature.queue.Queue;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -49,8 +49,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
+import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
-import static com.zenith.util.Constants.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -159,7 +159,7 @@ public class DiscordBot {
     private void processRelayMessageQueue() {
         try {
             MessageCreateRequest message = relayChannelMessageQueue.poll();
-            if (nonNull(message)) {
+            if (nonNull(message) && !message.content().isAbsent() && !message.content().get().isBlank()) {
                 this.relayRestChannel.get().createMessage(message).block();
             }
         } catch (final Throwable e) {

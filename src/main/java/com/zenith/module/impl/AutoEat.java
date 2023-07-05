@@ -13,14 +13,14 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.feature.food.FoodManager;
 import com.zenith.module.Module;
-import com.zenith.util.food.FoodManager;
 import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class AutoEat extends Module {

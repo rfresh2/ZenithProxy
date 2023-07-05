@@ -16,8 +16,8 @@ import java.util.ListIterator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.DEFAULT_LOG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.DEFAULT_LOG;
 
 public class TablistCommand extends Command {
     @Override

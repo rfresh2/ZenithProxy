@@ -9,12 +9,12 @@ import com.github.steveice10.mc.protocol.data.status.VersionInfo;
 import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
-import com.zenith.util.Queue;
+import com.zenith.feature.queue.Queue;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 
 public class CustomServerInfoBuilder implements ServerInfoBuilder {
     private final Proxy proxy;

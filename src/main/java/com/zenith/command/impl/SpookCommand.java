@@ -9,7 +9,7 @@ import com.zenith.util.Config;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 import static java.util.Arrays.asList;
 
 public class SpookCommand extends Command {

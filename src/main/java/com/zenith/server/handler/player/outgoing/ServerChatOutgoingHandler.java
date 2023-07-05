@@ -1,14 +1,14 @@
 package com.zenith.server.handler.player.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.awt.*;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class ServerChatOutgoingHandler implements HandlerRegistry.OutgoingHandler<ServerChatPacket, ServerConnection> {

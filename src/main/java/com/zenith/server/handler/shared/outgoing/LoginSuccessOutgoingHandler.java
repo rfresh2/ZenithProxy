@@ -5,12 +5,12 @@ import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.Wait;
-import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class LoginSuccessOutgoingHandler implements HandlerRegistry.OutgoingHandler<LoginSuccessPacket, ServerConnection> {

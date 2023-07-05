@@ -2,12 +2,12 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 import static java.util.Objects.isNull;
 
 public class BossBarHandler implements HandlerRegistry.AsyncIncomingHandler<ServerBossBarPacket, ClientSession> {

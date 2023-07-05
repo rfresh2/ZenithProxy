@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.COMMAND_MANAGER;
+import static com.zenith.Shared.COMMAND_MANAGER;
 
 @Getter
 @Setter

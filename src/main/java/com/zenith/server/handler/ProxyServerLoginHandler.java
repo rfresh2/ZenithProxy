@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class ProxyServerLoginHandler implements ServerLoginHandler {

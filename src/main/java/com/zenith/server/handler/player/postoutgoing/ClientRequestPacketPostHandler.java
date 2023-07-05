@@ -3,10 +3,10 @@ package com.zenith.server.handler.player.postoutgoing;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class ClientRequestPacketPostHandler implements HandlerRegistry.PostOutgoingHandler<ClientRequestPacket, ServerConnection> {
     @Override

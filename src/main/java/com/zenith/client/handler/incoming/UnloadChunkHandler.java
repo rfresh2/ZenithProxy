@@ -3,11 +3,11 @@ package com.zenith.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUnloadChunkPacket;
 import com.zenith.Proxy;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.spectator.SpectatorHelper;
+import com.zenith.feature.handler.HandlerRegistry;
+import com.zenith.spectator.SpectatorHelper;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class UnloadChunkHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnloadChunkPacket, ClientSession> {
     @Override

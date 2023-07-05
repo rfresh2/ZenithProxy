@@ -1,6 +1,7 @@
 package com.zenith.util;
 
 import com.google.gson.annotations.SerializedName;
+import com.zenith.feature.whitelist.WhitelistEntry;
 
 import java.util.ArrayList;
 import java.util.List;

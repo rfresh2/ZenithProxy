@@ -4,13 +4,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
 import com.zenith.cache.DataCache;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
 import com.zenith.util.RefStrings;
-import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CONFIG;
 
 public class JoinGamePostHandler implements HandlerRegistry.PostOutgoingHandler<ServerJoinGamePacket, ServerConnection> {
     @Override

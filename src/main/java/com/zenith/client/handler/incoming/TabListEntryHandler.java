@@ -6,7 +6,7 @@ import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import java.time.Instant;
@@ -14,8 +14,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EVENT_BUS;
 import static java.util.Objects.nonNull;
 
 public class TabListEntryHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListEntryPacket, ClientSession> {

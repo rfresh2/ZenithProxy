@@ -14,7 +14,7 @@ import com.zenith.module.Module;
 import java.time.Duration;
 import java.time.Instant;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 

@@ -4,8 +4,8 @@ import com.collarmc.pounce.Subscribe;
 import com.zenith.database.dto.tables.Queuelength;
 import com.zenith.database.dto.tables.records.QueuelengthRecord;
 import com.zenith.event.module.ClientTickEvent;
-import com.zenith.util.Queue;
-import com.zenith.util.QueueStatus;
+import com.zenith.feature.queue.Queue;
+import com.zenith.feature.queue.QueueStatus;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -14,8 +14,8 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class QueueLengthDatabase extends LockingDatabase {
     private static final Duration updateInterval = Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes + 1L);

@@ -2,8 +2,8 @@ package com.zenith.database;
 
 import lombok.Getter;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DATABASE_LOG;
 import static java.util.Objects.nonNull;
 
 @Getter

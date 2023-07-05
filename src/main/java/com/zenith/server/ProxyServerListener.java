@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import static com.zenith.util.Constants.SERVER_LOG;
+import static com.zenith.Shared.SERVER_LOG;
 
 
 @RequiredArgsConstructor

@@ -9,8 +9,8 @@ import lombok.experimental.Accessors;
 
 import java.util.*;
 
-import static com.zenith.util.Constants.CACHE_LOG;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CACHE_LOG;
+import static com.zenith.Shared.CONFIG;
 
 
 @Getter

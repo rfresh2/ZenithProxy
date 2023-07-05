@@ -3,16 +3,16 @@ package com.zenith.server.handler.shared.outgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
 import com.zenith.Proxy;
+import com.zenith.feature.handler.HandlerRegistry;
+import com.zenith.feature.queue.Queue;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.Queue;
-import com.zenith.util.handler.HandlerRegistry;
 import net.daporkchop.lib.logging.format.component.TextComponentString;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.JsonTextParser;
 
 import java.time.Instant;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class ServerTablistDataOutgoingHandler implements HandlerRegistry.OutgoingHandler<ServerPlayerListDataPacket, ServerConnection> {
 

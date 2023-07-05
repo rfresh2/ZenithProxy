@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
 

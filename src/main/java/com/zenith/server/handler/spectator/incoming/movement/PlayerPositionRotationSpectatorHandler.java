@@ -3,10 +3,10 @@ package com.zenith.server.handler.spectator.incoming.movement;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
-import com.zenith.util.spectator.SpectatorHelper;
-import com.zenith.util.spectator.entity.mob.SpectatorEntityEnderDragon;
+import com.zenith.spectator.SpectatorHelper;
+import com.zenith.spectator.entity.mob.SpectatorEntityEnderDragon;
 import lombok.NonNull;
 
 public class PlayerPositionRotationSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerPositionRotationPacket, ServerConnection> {

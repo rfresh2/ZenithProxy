@@ -13,8 +13,8 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class PlayerCountDatabase extends LockingDatabase {
     private static final Duration updateInterval = Duration.ofMinutes(5L);

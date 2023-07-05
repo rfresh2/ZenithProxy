@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class DeathsUuidCorrection {
     int batchCount = 0;

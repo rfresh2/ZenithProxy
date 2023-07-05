@@ -4,16 +4,16 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.chunk.ChunkCache;
+import com.zenith.feature.handler.HandlerRegistry;
+import com.zenith.feature.queue.Queue;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.Queue;
-import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PUnsafe;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class ServerChatHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, ServerConnection> {
     protected static final long CLIENTCHATPACKET_MESSAGE_OFFSET = PUnsafe.pork_getOffset(ClientChatPacket.class, "message");

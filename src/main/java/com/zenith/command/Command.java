@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 
 public abstract class Command {
     public static <T> RequiredArgumentBuilder<CommandContext, T> argument(String name, ArgumentType<T> type) {

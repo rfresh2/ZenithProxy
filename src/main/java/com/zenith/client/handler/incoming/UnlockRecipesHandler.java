@@ -2,11 +2,11 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerUnlockRecipesPacket;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 
 public class UnlockRecipesHandler implements HandlerRegistry.AsyncIncomingHandler<ServerUnlockRecipesPacket, ClientSession> {
     @Override

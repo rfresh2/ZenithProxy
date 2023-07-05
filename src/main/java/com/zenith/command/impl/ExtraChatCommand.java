@@ -9,7 +9,7 @@ import discord4j.rest.util.Color;
 
 import java.util.Arrays;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 
 public class ExtraChatCommand extends Command {
     @Override

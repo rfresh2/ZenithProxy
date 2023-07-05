@@ -4,10 +4,10 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.google.common.collect.Lists;
 import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class SpawnMobHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnMobPacket, ClientSession> {
     @Override

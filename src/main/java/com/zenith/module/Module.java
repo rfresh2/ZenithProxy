@@ -1,6 +1,6 @@
 package com.zenith.module;
 
-import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.Shared.EVENT_BUS;
 
 /**
  * Module system base class.

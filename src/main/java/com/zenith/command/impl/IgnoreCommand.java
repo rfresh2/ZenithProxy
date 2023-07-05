@@ -9,9 +9,9 @@ import discord4j.rest.util.Color;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.WHITELIST_MANAGER;
 import static com.zenith.discord.DiscordBot.escape;
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.WHITELIST_MANAGER;
 import static java.util.Arrays.asList;
 
 public class IgnoreCommand extends Command {

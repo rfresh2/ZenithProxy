@@ -8,7 +8,7 @@ import org.jooq.impl.DSL;
 import java.sql.Connection;
 import java.util.function.Supplier;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class QueryExecutor {
     private final Supplier<ConnectionPool> connectionPoolProvider;

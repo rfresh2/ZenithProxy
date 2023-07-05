@@ -1,8 +1,8 @@
 package com.zenith.server.handler.spectator.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
 
 public class ServerPlayerChangeHeldItemSpectatorOutgoingHandler implements HandlerRegistry.OutgoingHandler<ServerPlayerChangeHeldItemPacket, ServerConnection> {
     @Override

@@ -7,12 +7,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPack
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.PlayerOnlineEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import java.util.Locale;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class JoinGameHandler implements HandlerRegistry.IncomingHandler<ServerJoinGamePacket, ClientSession> {
     @Override

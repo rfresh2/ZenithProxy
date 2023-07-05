@@ -17,8 +17,8 @@ import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
-import com.zenith.util.spectator.SpectatorEntityRegistry;
-import com.zenith.util.spectator.entity.SpectatorEntity;
+import com.zenith.spectator.SpectatorEntityRegistry;
+import com.zenith.spectator.entity.SpectatorEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -29,7 +29,7 @@ import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.*;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 
 @Getter

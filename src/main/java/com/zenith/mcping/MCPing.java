@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.Shared.CLIENT_LOG;
 
 public class MCPing {
     /**

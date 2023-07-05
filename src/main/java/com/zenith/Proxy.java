@@ -8,16 +8,16 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.client.Authenticator;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.*;
+import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AntiAFK;
 import com.zenith.server.CustomServerInfoBuilder;
 import com.zenith.server.ProxyServerListener;
 import com.zenith.server.ServerConnection;
 import com.zenith.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Config;
-import com.zenith.util.LoggerInner;
-import com.zenith.util.Queue;
 import com.zenith.util.Wait;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -55,7 +55,7 @@ public class Proxy {
     protected MinecraftProtocol protocol;
     protected ClientSession client;
     protected TcpServer server;
-    protected LoggerInner loggerInner;
+    protected Authenticator authenticator;
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
@@ -297,8 +297,8 @@ public class Proxy {
 
     public void logIn() {
         AUTH_LOG.info("Logging in {}...", CONFIG.authentication.username);
-        if (this.loggerInner == null) {
-            this.loggerInner = new LoggerInner();
+        if (this.authenticator == null) {
+            this.authenticator = new Authenticator();
         }
         int tries = 0;
         while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
@@ -318,7 +318,7 @@ public class Proxy {
     public Future<Boolean> loginTask() {
         return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
-                this.protocol = this.loggerInner.handleRelog();
+                this.protocol = this.authenticator.handleRelog();
                 return true;
             } catch (final Exception e) {
                 CLIENT_LOG.error("", e);

@@ -15,8 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
-import static com.zenith.util.Constants.CONFIG;
 import static java.util.Arrays.asList;
 
 public class ActiveHoursCommand extends Command {

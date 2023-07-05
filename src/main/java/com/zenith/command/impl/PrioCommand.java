@@ -8,8 +8,8 @@ import discord4j.rest.util.Color;
 
 import java.util.Optional;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.PRIORITY_BAN_CHECKER;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.PRIORITY_BAN_CHECKER;
 import static java.util.Arrays.asList;
 
 public class PrioCommand extends Command {

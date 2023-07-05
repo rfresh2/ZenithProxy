@@ -4,10 +4,10 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.CombatState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerCombatPacket;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.DeathEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class ServerCombatHandler implements HandlerRegistry.AsyncIncomingHandler<ServerCombatPacket, ClientSession> {
 

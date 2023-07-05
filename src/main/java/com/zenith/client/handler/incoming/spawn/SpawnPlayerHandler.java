@@ -5,10 +5,10 @@ import com.google.common.collect.Lists;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class SpawnPlayerHandler implements HandlerRegistry.AsyncIncomingHandler<ServerSpawnPlayerPacket, ClientSession> {
     @Override

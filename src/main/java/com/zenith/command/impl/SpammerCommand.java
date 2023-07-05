@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 import static java.util.Arrays.asList;
 
 public class SpammerCommand extends Command {

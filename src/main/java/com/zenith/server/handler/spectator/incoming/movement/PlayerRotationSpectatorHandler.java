@@ -1,8 +1,8 @@
 package com.zenith.server.handler.spectator.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.handler.HandlerRegistry;
 import lombok.NonNull;
 
 public class PlayerRotationSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientPlayerRotationPacket, ServerConnection> {

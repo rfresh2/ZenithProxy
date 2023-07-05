@@ -10,9 +10,9 @@ import com.zenith.database.dto.tables.pojos.Deaths;
 import com.zenith.database.dto.tables.records.ConnectionsRecord;
 import com.zenith.database.dto.tables.records.DeathsRecord;
 import com.zenith.database.dto.tables.records.NamesRecord;
-import com.zenith.util.deathmessages.DeathMessageParseResult;
-import com.zenith.util.deathmessages.DeathMessagesParser;
-import com.zenith.util.deathmessages.KillerType;
+import com.zenith.feature.deathmessages.DeathMessageParseResult;
+import com.zenith.feature.deathmessages.DeathMessagesParser;
+import com.zenith.feature.deathmessages.KillerType;
 import lombok.ToString;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -28,7 +28,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.DATABASE_LOG;
 import static java.util.Objects.isNull;
 
 public class DeathsImport {

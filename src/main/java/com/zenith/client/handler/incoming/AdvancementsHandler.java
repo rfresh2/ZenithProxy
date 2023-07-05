@@ -2,12 +2,12 @@ package com.zenith.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerAdvancementsPacket;
 import com.zenith.client.ClientSession;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 
 import java.util.HashMap;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class AdvancementsHandler implements HandlerRegistry.AsyncIncomingHandler<ServerAdvancementsPacket, ClientSession> {
     @Override

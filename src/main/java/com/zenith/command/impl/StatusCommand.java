@@ -6,8 +6,8 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.feature.queue.Queue;
 import com.zenith.server.ServerConnection;
-import com.zenith.util.Queue;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 

@@ -10,7 +10,7 @@ import net.daporkchop.lib.math.vector.Vec3i;
 import java.util.List;
 import java.util.Optional;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 import static java.util.Arrays.asList;
 
 public class World {

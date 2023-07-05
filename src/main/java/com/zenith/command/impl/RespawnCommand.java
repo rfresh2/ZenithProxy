@@ -14,8 +14,8 @@ import com.zenith.command.CommandUsage;
 import com.zenith.server.ServerConnection;
 import discord4j.rest.util.Color;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
 public class RespawnCommand extends Command {

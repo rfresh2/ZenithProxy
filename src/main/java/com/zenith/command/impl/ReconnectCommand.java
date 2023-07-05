@@ -6,7 +6,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
-import static com.zenith.util.Constants.SYSTEM_DISCONNECT;
+import static com.zenith.Shared.SYSTEM_DISCONNECT;
 
 public class ReconnectCommand extends Command {
     @Override

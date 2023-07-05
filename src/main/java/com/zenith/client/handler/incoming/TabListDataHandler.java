@@ -6,7 +6,7 @@ import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.PrioStatusEvent;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.StartQueueEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import lombok.NonNull;
 import net.daporkchop.lib.logging.format.component.TextComponent;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class TabListDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerPlayerListDataPacket, ClientSession> {
     @Override

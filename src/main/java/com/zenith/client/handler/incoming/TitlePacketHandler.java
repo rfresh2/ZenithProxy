@@ -4,13 +4,13 @@ import com.github.steveice10.mc.protocol.data.game.TitleAction;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerTitlePacket;
 import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
-import com.zenith.util.handler.HandlerRegistry;
+import com.zenith.feature.handler.HandlerRegistry;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.util.Optional;
 
-import static com.zenith.util.Constants.CLIENT_LOG;
-import static com.zenith.util.Constants.EVENT_BUS;
+import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class TitlePacketHandler implements HandlerRegistry.AsyncIncomingHandler<ServerTitlePacket, ClientSession> {
     @Override

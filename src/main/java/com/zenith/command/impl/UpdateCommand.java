@@ -8,7 +8,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.event.proxy.UpdateStartEvent;
 import discord4j.rest.util.Color;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class UpdateCommand extends Command {
     @Override
