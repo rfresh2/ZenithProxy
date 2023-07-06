@@ -76,6 +76,10 @@ public class PlayerCache implements CachedData {
         this.gameMode = null;
         this.worldType = null;
         this.difficulty = null;
+        this.thePlayer.setHealth(20.0f);
+        this.thePlayer.setFood(20);
+        this.thePlayer.setSaturation(5);
+        this.thePlayer.getPotionEffectMap().clear();
     }
 
     @Override
