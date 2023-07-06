@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 public class SendMessageCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simpleAliases("sendMessage", "Sends a message in-game.", asList("msg", "m"));
+        return CommandUsage.simpleAliases("sendMessage", "Sends a message in-game.", asList("say", "msg", "m"));
     }
 
     @Override
