@@ -22,7 +22,7 @@ public class AutoRespawn extends Module {
             Wait.waitALittleMs(Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000));
             if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0 && isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                 MODULE_LOG.info("Performing AutoRespawn");
-                Proxy.getInstance().getClient().send(new ClientRequestPacket(ClientRequest.RESPAWN));
+                sendClientPacketAsync(new ClientRequestPacket(ClientRequest.RESPAWN));
 
                 // todo: remove this and only stop trying to respawn once we actually respawn
                 //  i.e. we received a respawn packet and our health > 0

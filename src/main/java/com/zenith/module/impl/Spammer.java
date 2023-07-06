@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
-import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
@@ -29,7 +28,7 @@ public class Spammer extends Module {
         } else {
             spamIndex = (spamIndex + 1) % CONFIG.client.extra.spammer.messages.size();
         }
-        Proxy.getInstance().getClient().send(new ClientChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex)));
+        sendClientPacketAsync(new ClientChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex)));
     }
 
     @Override

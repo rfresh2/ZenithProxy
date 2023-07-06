@@ -85,9 +85,9 @@ public class AutoEat extends Module {
             ItemStack itemStack = inventory[i];
             if (nonNull(itemStack)) {
                 if (foodManager.isSafeFood(itemStack.getId(), itemStack.getData())) {
-                    Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.MOVE_TO_HOTBAR_SLOT, MoveToHotbarParam.SLOT_1));
+                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.MOVE_TO_HOTBAR_SLOT, MoveToHotbarParam.SLOT_1));
                     if (CACHE.getPlayerCache().getHeldItemSlot() != 0) {
-                        Proxy.getInstance().getClient().send(new ClientPlayerChangeHeldItemPacket(0));
+                        sendClientPacketAsync(new ClientPlayerChangeHeldItemPacket(0));
                     }
                     delay = 5;
                     swapping = true;
@@ -110,7 +110,7 @@ public class AutoEat extends Module {
             if (foodManager.isFood(offhandStack.getId())) {
                 isEating = true;
                 delay = 50;
-                Proxy.getInstance().getClient().send(new ClientPlayerUseItemPacket(Hand.OFF_HAND));
+                sendClientPacketAsync(new ClientPlayerUseItemPacket(Hand.OFF_HAND));
                 return;
             }
         }
@@ -120,8 +120,7 @@ public class AutoEat extends Module {
             if (foodManager.isFood(mainHandStack.getId())) {
                 isEating = true;
                 delay = 50;
-                Proxy.getInstance().getClient().send(new ClientPlayerUseItemPacket(Hand.MAIN_HAND));
-                return;
+                sendClientPacketAsync(new ClientPlayerUseItemPacket(Hand.MAIN_HAND));
             }
         }
     }

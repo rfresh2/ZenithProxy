@@ -90,7 +90,7 @@ public class Spook extends Module {
         final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
-            Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
+            sendClientPacketAsync(new ClientPlayerRotationPacket(
                     true,
                     getYaw(nearestPlayer.get()),
                     getPitch(nearestPlayer.get())
@@ -105,7 +105,7 @@ public class Spook extends Module {
             if (!this.focusStack.isEmpty()) {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
+                sendClientPacketAsync(new ClientPlayerRotationPacket(
                         true,
                         getYaw(target),
                         getPitch(target)

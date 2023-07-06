@@ -146,7 +146,7 @@ public class Proxy {
                     }
                 }, 0, 10L, TimeUnit.SECONDS);
             }
-            updatePrioBanStatus();
+            SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }

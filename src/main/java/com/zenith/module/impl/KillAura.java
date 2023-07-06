@@ -23,7 +23,7 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import net.daporkchop.lib.math.vector.Vec3d;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 import java.util.Set;
 
 import static com.zenith.Shared.*;
@@ -66,42 +66,39 @@ public class KillAura extends Module {
                 return;
             }
             // find non-friended players or hostile mobs within 3.5 blocks
-            final Optional<Entity> target = CACHE.getEntityCache().getEntities().values().stream()
-                    .filter(entity -> entity instanceof EntityPlayer || entity instanceof EntityMob)
-                    .filter(entity -> CONFIG.client.extra.killAura.targetPlayers || !(entity instanceof EntityPlayer))
-                    .filter(entity -> CONFIG.client.extra.killAura.targetMobs || !(entity instanceof EntityMob))
-                    .filter(entity -> !(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSelfPlayer()))
-                    .filter(entity -> distanceToSelf(entity) <= 4.5)
-                    // filter friends
-                    .filter(entity -> !(entity instanceof EntityPlayer
-                            && CACHE.getTabListCache().getTabList().get(entity.getUuid())
-                            .map(p -> CONFIG.client.extra.friendsList.stream().anyMatch(n -> n.uuid.equals(p.getId())))
-                            .orElse(false)))
-                    // filter whitelist
-                    .filter(entity -> !(entity instanceof EntityPlayer)
-                            || (!WHITELIST_MANAGER.isUUIDWhitelisted(entity.getUuid())
-                            && !WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(entity.getUuid())))
-                    .filter(entity -> !(entity instanceof EntityMob)
-                            || !CONFIG.client.extra.killAura.avoidFriendlyMobs
-                            || !friendlyMobTypes.contains(((EntityMob) entity).getMobType()))
-                    .findFirst();
-
+            final Entity target = findTarget();
             // rotate to target
-            if (target.isPresent()) {
-                if (PATHING.isOnGround()) {
-                    if (switchToWeapon()) {
-                        isAttacking = true;
-                        if (rotateTo(target.get())) {
-                            // attack
-                            attack(target.get());
-                            delay = 5;
-                        }
+            if (target != null && PATHING.isOnGround()) {
+                if (switchToWeapon()) {
+                    isAttacking = true;
+                    if (rotateTo(target)) {
+                        // attack
+                        attack(target);
+                        delay = 5;
                     }
                 }
             } else {
                 isAttacking = false;
             }
         }
+    }
+
+    @Nullable
+    private Entity findTarget() {
+        for (Entity entity : CACHE.getEntityCache().getEntities().values()) {
+            if (!(entity instanceof EntityPlayer || entity instanceof EntityMob)) continue;
+            if (entity instanceof EntityPlayer) {
+                if (!CONFIG.client.extra.killAura.targetPlayers) continue;
+                if (((EntityPlayer) entity).isSelfPlayer()) continue;
+                if (WHITELIST_MANAGER.isUUIDFriendWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(entity.getUuid())) continue;
+            } else {
+                if (!CONFIG.client.extra.killAura.targetMobs) continue;
+                if (CONFIG.client.extra.killAura.avoidFriendlyMobs && friendlyMobTypes.contains(((EntityMob) entity).getMobType())) continue;
+            }
+            if (distanceToSelf(entity) > 4.5) continue;
+            return entity;
+        }
+        return null;
     }
 
     @Override
@@ -111,8 +108,8 @@ public class KillAura extends Module {
     }
 
     private void attack(final Entity entity) {
-        Proxy.getInstance().getClient().send(new ClientPlayerInteractEntityPacket(entity.getEntityId(), InteractAction.ATTACK));
-        Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(weaponSlot == EquipmentSlot.MAIN_HAND ? Hand.MAIN_HAND : Hand.OFF_HAND));
+        sendClientPacketAsync(new ClientPlayerInteractEntityPacket(entity.getEntityId(), InteractAction.ATTACK));
+        sendClientPacketAsync(new ClientPlayerSwingArmPacket(weaponSlot == EquipmentSlot.MAIN_HAND ? Hand.MAIN_HAND : Hand.OFF_HAND));
     }
 
     private boolean rotateTo(Entity entity) {
@@ -125,7 +122,7 @@ public class KillAura extends Module {
         final double currentYaw = CACHE.getPlayerCache().getYaw();
         final double currentPitch = CACHE.getPlayerCache().getPitch();
         if (!((currentYaw + 0.01 > yaw && currentYaw - 0.01 < yaw) && (currentPitch + 0.01 > pitch && currentPitch - 0.01 < pitch))) {
-            Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(false, (float) yaw, (float) pitch));
+            sendClientPacketAsync(new ClientPlayerRotationPacket(false, (float) yaw, (float) pitch));
             return false;
         }
         return true;
@@ -177,9 +174,9 @@ public class KillAura extends Module {
         for (int i = 44; i >= 9; i--) {
             final ItemStack stack = inventory[i];
             if (nonNull(stack) && isWeapon(stack.getId())) {
-                Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.MOVE_TO_HOTBAR_SLOT, MoveToHotbarParam.SLOT_2));
+                sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.MOVE_TO_HOTBAR_SLOT, MoveToHotbarParam.SLOT_2));
                 if (CACHE.getPlayerCache().getHeldItemSlot() != 1) {
-                    Proxy.getInstance().getClient().send(new ClientPlayerChangeHeldItemPacket(1));
+                    sendClientPacketAsync(new ClientPlayerChangeHeldItemPacket(1));
                 }
                 delay = 5;
                 swapping = true;

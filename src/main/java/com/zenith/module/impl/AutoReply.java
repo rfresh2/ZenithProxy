@@ -49,7 +49,7 @@ public class AutoReply extends Module {
                         if (isNull(repliedPlayersCache.getIfPresent(event.sender.get().getName()))) {
                             repliedPlayersCache.put(event.sender.get().getName(), event.sender.get().getName());
                             // 236 char max ( 256 - 4(command) - 16(max name length) )
-                            Proxy.getInstance().getClient().send(new ClientChatPacket("/w " + event.sender.get().getName() + " " + CONFIG.client.extra.autoReply.message.substring(0, 236)));
+                            sendClientPacketAsync(new ClientChatPacket("/w " + event.sender.get().getName() + " " + CONFIG.client.extra.autoReply.message.substring(0, 236)));
                             this.lastReply = Instant.now();
                         }
                     }

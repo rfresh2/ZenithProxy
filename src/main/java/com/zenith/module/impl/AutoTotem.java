@@ -67,12 +67,12 @@ public class AutoTotem extends Module {
             final ItemStack stack = inventory[i];
             if (nonNull(stack) && stack.getId() == 449) {
                 if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
-                    Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, i, stack, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-                    Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, 45, offhand, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-                    Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
+                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, stack, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
+                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, 45, offhand, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
+                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
                 } else {
-                    Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, i, stack, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-                    Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, actionId++, 45, new ItemStack(0, 0), WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
+                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, stack, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
+                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, 45, new ItemStack(0, 0), WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
                 }
                 CLIENT_LOG.info("Swapping to totem");
                 delay = 5;

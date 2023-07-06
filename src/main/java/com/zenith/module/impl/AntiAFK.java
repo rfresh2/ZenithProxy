@@ -20,7 +20,10 @@ import com.zenith.util.TickTimer;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -87,7 +90,7 @@ public class AntiAFK extends Module {
                 gravityTick();
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
-                Proxy.getInstance().getClient().send(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
+                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
                 walkTick();
                 // check distance delta every 9 mins. Stuck kick should happen at 20 mins
                 if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
@@ -167,7 +170,7 @@ public class AntiAFK extends Module {
 
     private void rotateTick() {
         if (rotateTimer.tick(1500L, true)) {
-            Proxy.getInstance().getClient().send(new ClientPlayerRotationPacket(
+            sendClientPacketAsync(new ClientPlayerRotationPacket(
                     true,
                     -90 + (180 * ThreadLocalRandom.current().nextFloat()),
                     -90 + (180 * ThreadLocalRandom.current().nextFloat())
@@ -200,7 +203,7 @@ public class AntiAFK extends Module {
                 if (nextMovePos.equals(PATHING.getCurrentPlayerPos())) {
                     shouldWalk = false;
                 }
-                Proxy.getInstance().getClient().send(nextMovePos.toPlayerPositionPacket());
+                sendClientPacketAsync(nextMovePos.toPlayerPositionPacket());
                 this.positionCache.put(nextMovePos, nextMovePos);
             }
         }
@@ -212,10 +215,10 @@ public class AntiAFK extends Module {
 
     private void gravityTick() {
         synchronized (this) {
-            final Optional<Position> nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
-            if (nextGravityMove.isPresent()) {
-                if (!nextGravityMove.get().equals(PATHING.getCurrentPlayerPos())) {
-                    Proxy.getInstance().getClient().send(nextGravityMove.get().toPlayerPositionPacket());
+            final Position nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
+            if (nextGravityMove != null) {
+                if (!nextGravityMove.equals(PATHING.getCurrentPlayerPos())) {
+                    sendClientPacketAsync(nextGravityMove.toPlayerPositionPacket());
                 }
                 gravityT++;
             } else {
@@ -234,12 +237,12 @@ public class AntiAFK extends Module {
                 }
                 antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
                 // increases hunger loss by 4x if we're sprinting
-                Proxy.getInstance().getClient().send(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
+                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
             }
-            final Optional<Position> nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
+            final Position nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
             antiStuckT++;
-            if (nextAntiStuckMove.isPresent()) {
-                Proxy.getInstance().getClient().send(nextAntiStuckMove.get().toPlayerPositionPacket());
+            if (nextAntiStuckMove != null) {
+                sendClientPacketAsync(nextAntiStuckMove.toPlayerPositionPacket());
             } else {
                 antiStuckT = -2;
                 return false;
@@ -250,7 +253,7 @@ public class AntiAFK extends Module {
 
     private void swingTick() {
         if (swingTickTimer.tick(3000L, true)) {
-            Proxy.getInstance().getClient().send(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
+            sendClientPacketAsync(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
         }
     }
 

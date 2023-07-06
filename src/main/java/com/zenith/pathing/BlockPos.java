@@ -8,8 +8,20 @@ public class BlockPos {
     private final int y;
     private final int z;
 
-    public ChunkPos toChunkPos() {
-        return new ChunkPos(x >> 4, y >> 4, z >> 4);
+//    public ChunkPos toChunkPos() {
+//        return new ChunkPos(x >> 4, y >> 4, z >> 4);
+//    }
+
+    public int getChunkX() {
+        return x >> 4;
+    }
+
+    public int getChunkY() {
+        return y >> 4;
+    }
+
+    public int getChunkZ() {
+        return z >> 4;
     }
 
     public BlockPos addX(int delta) {

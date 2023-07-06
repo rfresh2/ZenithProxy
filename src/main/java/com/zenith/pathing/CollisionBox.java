@@ -3,7 +3,6 @@ package com.zenith.pathing;
 import lombok.Data;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class CollisionBox {
@@ -18,23 +17,14 @@ public class CollisionBox {
      * MC Data has "generic" CollisionBoxes - they aren't localized to a BlockPos.
      * To see if we intersect we need to check at the actual world's coords and localize both
      * the player and the block's CollisionBox's to those coords.
-     * there might be a cleaner way of representing this in code without so many extra objects
      */
     public static boolean playerIntersectsWithGenericCollisionBoxes(final Position playerPosition, final BlockPos blockPos, final List<CollisionBox> genericCollisionBoxes) {
-        final CollisionBox playerCollisionBox = playerPosToCollisionBox(playerPosition);
-        final List<CollisionBox> localizedCollisionBoxes = genericCollisionBoxes.stream()
-                .map(genericCollisionBox -> blockPosAndGenericCollisionBoxToLocalizedCollisionBox(blockPos, genericCollisionBox))
-                .collect(Collectors.toList());
-        for (final CollisionBox blockCollisionBox : localizedCollisionBoxes) {
-            if (playerCollisionBox.intersects(blockCollisionBox)) {
+        for(final CollisionBox genericCollisionBox : genericCollisionBoxes) {
+            if (genericCollisionBox.intersectsAtLocalizedPosWithPlayerPosition(playerPosition, blockPos.getX(), blockPos.getY(), blockPos.getZ())) {
                 return true;
             }
         }
         return false;
-    }
-
-    private static boolean playerIntersectsWithBlock(final Position playerPosition, final BlockPos blockPos) {
-        return playerPosToCollisionBox(playerPosition).intersects(blockPosToCollisionBox(blockPos));
     }
 
     private static CollisionBox playerPosToCollisionBox(final Position playerPosition) {
@@ -70,6 +60,18 @@ public class CollisionBox {
         return this.maxX >= collisionBox.minX && this.minX <= collisionBox.maxX
                 && this.maxZ >= collisionBox.minZ && this.minZ <= collisionBox.maxZ
                 && this.maxY >= collisionBox.minY && this.minY <= collisionBox.maxY;
+    }
+
+    public boolean intersectsAtLocalizedPos(final CollisionBox collisionBox, final int xLocal, final int yLocal, final int zLocal) {
+        return this.maxX >= (xLocal + collisionBox.minX) && this.minX <= (xLocal + collisionBox.maxX)
+                && this.maxZ >= (zLocal + collisionBox.minZ) && this.minZ <= (zLocal + collisionBox.maxZ)
+                && this.maxY >= (yLocal + collisionBox.minY) && this.minY <= (yLocal + collisionBox.maxY);
+    }
+
+    public boolean intersectsAtLocalizedPosWithPlayerPosition(final Position playerPosition, final int xLocal, final int yLocal, final int zLocal) {
+        return (this.maxX + xLocal) >= (playerPosition.getX() - 0.3) && (this.minX + xLocal) <= (playerPosition.getX() + 0.3)
+                && (this.maxZ + zLocal) >= (playerPosition.getZ() - 0.3) && (this.minZ + zLocal) <= (playerPosition.getZ() + 0.3)
+                && (this.maxY + yLocal) >= playerPosition.getY() && (this.minY + yLocal) <= (playerPosition.getY() + 1.8);
     }
 }
 

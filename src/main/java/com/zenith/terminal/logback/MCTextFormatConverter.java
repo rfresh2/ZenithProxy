@@ -11,7 +11,11 @@ public class MCTextFormatConverter extends MessageConverter {
 
     @Override
     public String convert(ILoggingEvent event) {
-        TextComponent textComponent = formatParser.parse(event.getFormattedMessage());
-        return textComponent.toRawString();
+        try {
+            TextComponent textComponent = formatParser.parse(event.getFormattedMessage());
+            return textComponent.toRawString();
+        } catch (final Exception e) {
+            return event.getFormattedMessage();
+        }
     }
 }

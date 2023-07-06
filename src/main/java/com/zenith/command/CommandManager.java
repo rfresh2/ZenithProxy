@@ -6,9 +6,9 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.util.ClassUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -21,7 +21,7 @@ import static java.util.Objects.isNull;
 @Getter
 public class CommandManager {
     private static final String modulePackage = "com.zenith.command.impl";
-    private final LinkedHashMap<Class<? extends Command>, Command> commandsClassMap = new LinkedHashMap<>();
+    private final Object2ObjectOpenHashMap<Class<? extends Command>, Command> commandsClassMap = new Object2ObjectOpenHashMap<>();
     private final CommandDispatcher<CommandContext> dispatcher;
 
     public CommandManager() {
