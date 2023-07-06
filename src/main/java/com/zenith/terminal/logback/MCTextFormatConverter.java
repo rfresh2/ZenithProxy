@@ -11,11 +11,16 @@ public class MCTextFormatConverter extends MessageConverter {
 
     @Override
     public String convert(ILoggingEvent event) {
+        final String formattedMessage = event.getFormattedMessage();
         try {
-            TextComponent textComponent = formatParser.parse(event.getFormattedMessage());
-            return textComponent.toRawString();
+            // if the message doesn't start with a curly brace it ain't json
+            if (formattedMessage.startsWith("{") || formattedMessage.contains("§")) {
+                TextComponent textComponent = formatParser.parse(formattedMessage);
+                return textComponent.toRawString();
+            }
         } catch (final Exception e) {
-            return event.getFormattedMessage();
+            // fall through
         }
+        return formattedMessage;
     }
 }

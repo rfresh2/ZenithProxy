@@ -10,6 +10,7 @@ import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
+import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.impl.DumbTerminal;
 import org.jline.utils.AttributedStringBuilder;
@@ -18,6 +19,8 @@ import org.jline.utils.AttributedStyle;
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
 
@@ -33,16 +36,20 @@ public class TerminalManager {
         if (executorFuture.isEmpty() && isRunning.compareAndSet(false, true)) {
             Terminal terminal = TerminalConsoleAppender.getTerminal();
             if (terminal != null && !(terminal instanceof DumbTerminal)) {
-                DEFAULT_LOG.info("Starting Interactive Terminal...");
+                TERMINAL_LOG.info("Starting Interactive Terminal...");
                 this.lineReader = LineReaderBuilder.builder()
                         .terminal(terminal)
                         .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                         .option(LineReader.Option.INSERT_TAB, false)
+                        // todo: integrate brigadier arguments or suggestion system
+                        .completer(new StringsCompleter(COMMAND_MANAGER.getCommands().stream()
+                                .flatMap(command -> Stream.concat(Stream.of(command.commandUsage().getName()), command.commandUsage().getAliases().stream()))
+                                .collect(Collectors.toList())))
                         .build();
                 TerminalConsoleAppender.setReader(lineReader);
                 executorFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(interactiveRunnable));
             } else {
-                DEFAULT_LOG.warn("Unsupported Terminal. Interactive Terminal will not be started.");
+                TERMINAL_LOG.warn("Unsupported Terminal. Interactive Terminal will not be started.");
             }
         }
     }
