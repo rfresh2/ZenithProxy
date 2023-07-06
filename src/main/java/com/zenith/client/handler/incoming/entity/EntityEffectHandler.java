@@ -16,7 +16,7 @@ public class EntityEffectHandler implements HandlerRegistry.AsyncIncomingHandler
         try {
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
-                entity.getPotionEffects().add(new PotionEffect(
+                entity.getPotionEffectMap().put(packet.getEffect(), new PotionEffect(
                         packet.getEffect(),
                         packet.getAmplifier(),
                         packet.getDuration(),
@@ -28,7 +28,8 @@ public class EntityEffectHandler implements HandlerRegistry.AsyncIncomingHandler
                 return false;
             }
         } catch (ClassCastException e)  {
-            CLIENT_LOG.warn("Received ServerEntityEffectPacket for non-equipment entity (id={})", e, packet.getEntityId());
+            CLIENT_LOG.warn("Received ServerEntityEffectPacket for non-equipment entity (id={})", packet.getEntityId(), e);
+            return false;
         }
         return true;
     }

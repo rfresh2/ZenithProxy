@@ -17,8 +17,7 @@ public class EntityRemoveEffectHandler implements HandlerRegistry.AsyncIncomingH
             EntityEquipment entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (nonNull(entity)) {
                 try {
-                    entity.getPotionEffects()
-                            .removeIf(entityPotionEffect -> !entityPotionEffect.getEffect().equals(packet.getEffect()));
+                    entity.getPotionEffectMap().remove(packet.getEffect());
                 } catch (final Exception e) {
                     CLIENT_LOG.warn("Failed removing entity effects", e);
                     return false;

@@ -1,9 +1,11 @@
 package com.zenith.server.handler.spectator.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerSwitchCameraPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityRemoveEffectPacket;
 import com.zenith.feature.handler.HandlerRegistry;
 import com.zenith.server.ServerConnection;
 import com.zenith.spectator.SpectatorEntityRegistry;
@@ -11,6 +13,7 @@ import com.zenith.spectator.SpectatorHelper;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CONFIG;
+import static java.util.Arrays.asList;
 
 public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandler<ClientChatPacket, ServerConnection> {
 
@@ -66,6 +69,12 @@ public class ServerChatSpectatorHandler implements HandlerRegistry.IncomingHandl
                 session.send(new ServerSwitchCameraPacket(session.getSpectatorSelfEntityId()));
                 SpectatorHelper.syncSpectatorPositionToPlayer(session);
             }
+        } else if (packet.getMessage().toLowerCase().startsWith("!cleareffects")) {
+            CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();
+            asList(Effect.values()).forEach(effect -> {
+                session.send(new ServerEntityRemoveEffectPacket(CACHE.getPlayerCache().getEntityId(), effect));
+            });
+            session.send(new ServerChatPacket("§9Cleared effects§r", true));
         } else {
             session.getProxy().getActiveConnections().forEach(connection -> {
                 connection.send(new ServerChatPacket("§c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "§r", true));
