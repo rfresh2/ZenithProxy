@@ -30,7 +30,7 @@ public class ServerTablistDataOutgoingHandler implements HandlerRegistry.Outgoin
     public String insertProxyDataIntoFooter(final String beforeFooter, final ServerConnection session) {
         try {
             MCTextRoot mcTextRoot = JsonTextParser.DEFAULT.parse(beforeFooter);
-            mcTextRoot.pushChild(new TextComponentString("§b§lZenithProxy §r§7~§b§l " + CACHE.getProfileCache().getProfile().getName() + " §r§7[§r§3" + session.getPing() + "ms§r§r§7]§r§a -> §r§b§l" + session.getProfileCache().getProfile().getName() + " §r§7[§r§3" + Proxy.getInstance().getClient().getPing() + "ms§r§r§7]§r\n"));
+            mcTextRoot.pushChild(new TextComponentString("§b§lZenithProxy §r§7-§b§l " + CACHE.getProfileCache().getProfile().getName() + " §r§7[§r§3" + session.getPing() + "ms§r§r§7]§r§a -> §r§b§l" + session.getProfileCache().getProfile().getName() + " §r§7[§r§3" + Proxy.getInstance().getClient().getPing() + "ms§r§r§7]§r\n"));
             mcTextRoot.pushChild(new TextComponentString("§9Online: §r§b§l" + getOnlineTime() + " §r§a-§r §r§9TPS: §r§b§l" + TPS_CALCULATOR.getTPS() + "§r\n"));
             return ServerChatPacket.escapeText(mcTextRoot.toRawString());
         } catch (final Exception e) {
