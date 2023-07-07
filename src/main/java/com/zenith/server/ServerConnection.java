@@ -7,7 +7,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.crypt.PacketEncryption;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
@@ -24,6 +23,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
@@ -329,8 +329,8 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void enableEncryption(PacketEncryption encryption) {
-        this.session.enableEncryption(encryption);
+    public void enableEncryption(SecretKey key) {
+        this.session.enableEncryption(key);
     }
 
     @Override

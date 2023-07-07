@@ -164,7 +164,7 @@ dependencies {
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 
-    shade("com.github.5cmc:MCProtocolLib:b4773eabab") {
+    shade("com.github.rfresh2:MCProtocolLib:6d5365518a") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -172,7 +172,7 @@ dependencies {
         exclude group: 'io.netty'
     }
 
-    shade "com.github.5cmc:MCAuthLib:94b70b772d"
+    shade "com.github.rfresh2:MCAuthLib:0de5befe37"
 
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
