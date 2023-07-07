@@ -57,6 +57,10 @@ repositories {
         "opencollab-release"
         url "https://repo.opencollab.dev/maven-releases/"
     }
+    maven {
+        name = "paper"
+        url "https://papermc.io/repo/repository/maven-public/"
+    }
     mavenLocal()
 }
 
