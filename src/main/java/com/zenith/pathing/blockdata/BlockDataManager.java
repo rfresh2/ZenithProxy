@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenith.pathing.CollisionBox;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ public class BlockDataManager {
 
     private List<BlockData> getBlockData() {
         try {
-            return objectMapper.readValue(new File("data/pc/1.12/blocks.json"), new TypeReference<List<BlockData>>() {
+            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.12/blocks.json"), new TypeReference<List<BlockData>>() {
             });
         } catch (final Exception e) {
             throw new RuntimeException(e);
@@ -44,7 +43,7 @@ public class BlockDataManager {
 
     private BlockCollisionShapes getBlockCollisionShapes() {
         try {
-            return objectMapper.readValue(new File("data/pc/1.12/blockCollisionShapes.json"), BlockCollisionShapes.class);
+            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.12/blockCollisionShapes.json"), BlockCollisionShapes.class);
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

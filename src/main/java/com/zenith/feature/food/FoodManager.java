@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class FoodManager {
 
     private void init() {
         try {
-            this.foodDataMap = objectMapper.readValue(new File("data/pc/1.12/foods.json"), new TypeReference<List<FoodData>>() {
+            this.foodDataMap = objectMapper.readValue(getClass().getResourceAsStream("/pc/1.12/foods.json"), new TypeReference<List<FoodData>>() {
                     }).stream()
                     .collect(Collectors.toMap(FoodData::getId, v -> v, (k1, k2) -> k1));
         } catch (final Exception e) {
