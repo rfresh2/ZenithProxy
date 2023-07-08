@@ -40,7 +40,7 @@ public class PlayerCache implements CachedData {
     protected boolean hardcore;
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
-    protected int dimension;
+    protected int dimension = Integer.MAX_VALUE;
     protected GameMode gameMode;
     protected WorldType worldType;
     protected Difficulty difficulty;

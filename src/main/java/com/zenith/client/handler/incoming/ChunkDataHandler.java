@@ -10,7 +10,10 @@ import static com.zenith.Shared.CACHE;
 public class ChunkDataHandler implements HandlerRegistry.AsyncIncomingHandler<ServerChunkDataPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ServerChunkDataPacket packet, @NonNull ClientSession session) {
-        CACHE.getChunkCache().add(packet.getColumn());
+        // todo: rework chunk data cache to not perform parsing until we have a block update in the chunk.
+        //  essentially cache the raw packet data and only parse it when we need to.
+        //  then handle gracefully in the cache whether we need to serialize a column or simply send a cached packet
+        CACHE.getChunkCache().add(packet.readColumn(CACHE.getPlayerCache().getDimension() == 0));
         return true;
     }
 
