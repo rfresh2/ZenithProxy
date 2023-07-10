@@ -51,6 +51,7 @@ import static java.util.Objects.nonNull;
 public class Proxy {
     @Getter
     protected static Proxy instance;
+    private static String version;
 
     protected MinecraftProtocol protocol;
     protected ClientSession client;
@@ -70,8 +71,9 @@ public class Proxy {
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
-    public static void main(String... args) throws IOException {
-        DEFAULT_LOG.info("Starting ZenithProxy...");
+    public static void main(String... args) {
+        version = determineVersion();
+        DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
         instance = new Proxy();
         if (CONFIG.interactiveTerminal.enable) {
             TERMINAL_MANAGER.start();
@@ -91,19 +93,30 @@ public class Proxy {
         instance.start();
     }
 
+    public static String determineVersion() {
+        try (InputStream in = Proxy.class.getClassLoader().getResourceAsStream("proxy_version.txt")) {
+            if (in == null) {
+                throw new IOException("Unable to find version file");
+            }
+            final Scanner scanner = new Scanner(in);
+            return scanner.nextLine();
+        } catch (final Exception e) {
+            DEFAULT_LOG.error("Failed to read proxy version", e);
+            return "DEV";
+        }
+    }
+
     public void start() {
         EVENT_BUS.subscribe(this);
         try {
             saveConfig();
             if (CONFIG.server.extra.timeout.enable) {
-                long millis = CONFIG.server.extra.timeout.ms;
-                long interval = CONFIG.server.extra.timeout.interval;
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     ServerConnection currentPlayer = this.currentPlayer.get();
-                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis) {
+                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= CONFIG.server.extra.timeout.ms) {
                         currentPlayer.disconnect("Timed out");
                     }
-                }, 0, interval, TimeUnit.MILLISECONDS);
+                }, 0, CONFIG.server.extra.timeout.interval, TimeUnit.MILLISECONDS);
             }
             this.startServer();
             CACHE.reset(true);
