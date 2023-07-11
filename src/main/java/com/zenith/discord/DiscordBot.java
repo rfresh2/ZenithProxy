@@ -39,10 +39,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Base64;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -513,7 +510,9 @@ public class DiscordBot {
                             }
                         } else {
                             if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
-                                if (escape(event.message).split(" ", 2)[1].toLowerCase().contains(CONFIG.authentication.username.toLowerCase())) {
+                                if (event.sender.filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
+                                        && event.sender.map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
+                                        && Arrays.asList(message.toLowerCase().split(" ")).contains(CONFIG.authentication.username.toLowerCase())) {
                                     message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
                                 }
                             }
