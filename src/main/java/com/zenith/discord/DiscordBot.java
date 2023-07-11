@@ -513,7 +513,7 @@ public class DiscordBot {
                             }
                         } else {
                             if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
-                                if (event.sender.filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isPresent()) {
+                                if (escape(event.message).split(" ", 2)[1].toLowerCase().contains(CONFIG.authentication.username.toLowerCase())) {
                                     message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
                                 }
                             }
