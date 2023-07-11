@@ -210,7 +210,7 @@ dependencies {
     shade "io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64"
     shade "io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64"
     shade "io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64"
-    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
+//    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
     shade('org.redisson:redisson:3.22.1') {
