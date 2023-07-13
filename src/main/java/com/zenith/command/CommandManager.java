@@ -9,6 +9,7 @@ import com.zenith.util.ClassUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -34,9 +35,9 @@ public class CommandManager {
             if (isNull(clazz)) continue;
             if (Command.class.isAssignableFrom(clazz)) {
                 try {
-                    final Command command = (Command) clazz.newInstance();
+                    final Command command = (Command) clazz.getDeclaredConstructor().newInstance();
                     addCommand(command);
-                } catch (InstantiationException | IllegalAccessException e) {
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     MODULE_LOG.warn("Error initializing command class", e);
                 }
             }

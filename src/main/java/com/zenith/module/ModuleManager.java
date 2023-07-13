@@ -11,6 +11,7 @@ import com.zenith.util.ClassUtil;
 import com.zenith.util.Wait;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
@@ -35,9 +36,9 @@ public class ModuleManager {
             if (isNull(clazz)) continue;
             if (Module.class.isAssignableFrom(clazz)) {
                 try {
-                    final Module module = (Module) clazz.newInstance();
+                    final Module module = (Module) clazz.getDeclaredConstructor().newInstance();
                     addModule(module);
-                } catch (InstantiationException | IllegalAccessException e) {
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     MODULE_LOG.warn("Error initializing command class", e);
                 }
             }

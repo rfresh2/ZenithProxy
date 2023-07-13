@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -355,7 +356,7 @@ public class Proxy {
 
     public URL getAvatarURL(String playerName) {
         try {
-            return new URL(String.format("https://minotar.net/helm/%s/64", playerName));
+            return URI.create(String.format("https://minotar.net/helm/%s/64", playerName)).toURL();
         } catch (MalformedURLException e) {
             SERVER_LOG.error("Failed to get avatar");
             throw new UncheckedIOException(e);

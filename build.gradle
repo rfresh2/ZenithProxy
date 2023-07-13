@@ -30,6 +30,7 @@ java {
 tasks.withType(JavaCompile).configureEach {
     sourceCompatibility = targetCompatibility = "20"
     options.encoding = "UTF-8"
+    options.deprecation(true)
 }
 
 tasks.register('writeVersion') {
