@@ -4,7 +4,7 @@ Discord Server: [rfresh's dev server](https://discord.gg/nJZrSaRKtb)
 
 Minecraft 1.12.2 proxy/bot. Intended for use on 2b2t.org but will work on any server.
 
-The primary purpose is to Minecraft accounts always online and be securely shared by multiple people.
+The primary purpose is to have Minecraft accounts always online and be securely shared by multiple people.
 
 This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and [Discord Bot](https://bot.2b2t.vc).
 
