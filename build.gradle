@@ -174,8 +174,8 @@ dependencies {
     shade "org.jooq:jooq:$jooqVersion"
     shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.eclipse.jgit:org.eclipse.jgit:6.5.0.202303070854-r'
-    shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.5.0.202303070854-r'
+    shade 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
+    shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.6.0.202305301015-r'
     shade 'com.github.mwiede:jsch:0.2.9'
     shade 'com.google.guava:guava:32.0.0-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
@@ -185,7 +185,7 @@ dependencies {
     shade "ch.qos.logback:logback-classic:1.4.8"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
-    shade 'com.mojang:brigadier:1.0.18'
+    shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 
@@ -211,10 +211,11 @@ dependencies {
     shade "io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64"
     shade "io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64"
     shade "io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64"
+    // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.22.1') {
+    shade('org.redisson:redisson:3.23.0') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
