@@ -1,7 +1,11 @@
 # Note: does not build a jar file, only runs basic build and test tasks
 name: ZenithProxy Build
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+    branches:
+      - "mainline"
 
 jobs:
   build:
