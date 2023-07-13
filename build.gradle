@@ -185,7 +185,7 @@ dependencies {
     shade "ch.qos.logback:logback-classic:1.4.8"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
-    shade 'com.mojang:brigadier:1.0.18'
+    shade 'com.mojang:brigadier:1.0.500'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 
