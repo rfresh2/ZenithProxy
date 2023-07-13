@@ -213,7 +213,7 @@ dependencies {
     shade "io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64"
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade "com.github.collarmc:pounce:0e8492b68e"
+    shade "com.github.collarmc:pounce:pounce-0.5"
     shade('org.redisson:redisson:3.22.1') {
         exclude group: 'io.netty'
     }
