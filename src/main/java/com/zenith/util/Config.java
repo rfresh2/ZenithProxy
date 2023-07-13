@@ -37,8 +37,7 @@ public final class Config {
     public static final class Client {
         public Extra extra = new Extra();
         public Server server = new Server();
-        // auto-connect proxy on process start
-        public boolean autoConnect = false;
+        public boolean autoConnect = false; // auto-connect proxy on process start
 
         public static final class Extra {
             public AntiAFK antiafk = new AntiAFK();
@@ -205,9 +204,9 @@ public final class Config {
                 public long delayTicks = 200;
                 public boolean randomOrder = false;
                 public List<String> messages = asList(
-                        "/stats",
-                        "/stats",
-                        "/stats"
+                        "ZenithProxy on top!",
+                        "I just skipped queue thanks to ZenithProxy!",
+                        "I love undertimer slopper!"
                 );
             }
 
@@ -318,10 +317,9 @@ public final class Config {
         public String visualRangeMentionRoleId = "";
         public String prefix = ".";
         public boolean reportCoords = false;
-        // internal use for update command state persistence
         public boolean mentionRoleOnPrioUpdate = true;
         public boolean mentionRoleOnPrioBanUpdate = true;
-        public boolean isUpdating = false;
+        public boolean isUpdating = false; // internal use for update command state persistence
         public QueueWarning queueWarning = new QueueWarning();
         public ChatRelay chatRelay = new ChatRelay();
 

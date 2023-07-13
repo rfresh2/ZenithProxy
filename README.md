@@ -1,12 +1,12 @@
 # ZenithProxy
 
-Discord Server: ([ZProxy](https://discord.gg/mf9uUvuUCU), [rProxy](https://discord.gg/Gvyb4g6c34))
+Discord Server: [rfresh's dev server](https://discord.gg/nJZrSaRKtb)
 
-Minecraft 1.12.2 proxy/bot. Primarily for use on 2b2t.org.
+Minecraft 1.12.2 proxy/bot. Intended for use on 2b2t.org but will work on any server.
 
 The primary purpose is to Minecraft accounts always online and be securely shared by multiple people.
 
-This project also provides the data for the [2b2t.vc API](https://api.2b2t.vc) and [Discord Bot](https://bot.2b2t.vc).
+This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and [Discord Bot](https://bot.2b2t.vc).
 
 # What is a proxy?
 
@@ -43,22 +43,23 @@ player movements, spectator mode, discord chat relay, and more.
 * Advanced AntiAFK with pathing and gravity
 * 2b2t Queue Skip
   * Reconnects and skips the queue when the proxy is online for 6 hours (2b2t's max connection time)
-* AutoUpdater that automatically pulls and restarts the proxy at convenient times
+* Modules including AutoEat, AutoDisconnect, AutoReconnect, AutoRespawn, AutoTotem, KillAura, Spammer, AutoReply
 * Many, many, more features.
 
 # Getting Started
 
 ## Prerequisites
 
-1. Linux or Windows server. I recommend DigitalOcean `2 GB Memory / 1 AMD vCPU` in the NYC-1 region for
+1. Linux or Windows server. I recommend DigitalOcean's `1 GB Memory / 1 vCPU` in the NYC-1 region for
    minimal ping to 2b2t. 2b2t allows a maximum of 3 accounts concurrently connected per IP address.
-2. JDK17 and git installed. 
-  * JDK17's path must be set on the JAVA_HOME environment variable or create a gradle.properties file with `org.gradle.java.home=/path/to/jdk17`
+   [Free DigitalOcean $200 credit for new accounts](https://m.do.co/c/3a3a226e4936).
+2. JDK17+ and git installed. 
+  * JDK17+'s path must be set on the JAVA_HOME environment variable or create a gradle.properties file with `org.gradle.java.home=/path/to/jdk17`
 
 ## Setup
 
 1. `git clone git@github.com:rfresh2/ZenithProxy.git`
-2. Execute in CLI: `./start.sh` (Linux) or `./start.bat` (Windows). Close the instance with `CTRL-C`.
+2. Execute in CLI: `./start.sh` (Linux) or `.\start.bat` (Windows). Close the instance with `CTRL-C`.
 3. Edit `config.json`. Important sections:
   * `authentication` -> Input your Minecraft account details
     * You must disable 2FA on your Microsoft account and may need to approve the proxy's
@@ -81,9 +82,9 @@ player movements, spectator mode, discord chat relay, and more.
 
 ## Run
 
-* `./start.sh` (Linux) or `./start.bat` (Windows) or `./gradlew run` (Universal)
-* Type `help` in your terminal to get a list of available commands.
+* `./start.sh` (Linux) or `.\start.bat` (Windows) or `./gradlew run` (Universal)
 * The discord prefix is `.` by default. e.g. `.connect` or `.disconnect`.
+* Type `.help` in discord or `help` in the terminal to get a list of available commands.
 
 # Developers
 
