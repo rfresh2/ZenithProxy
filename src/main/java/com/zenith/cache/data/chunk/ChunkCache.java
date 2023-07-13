@@ -16,7 +16,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.server.ServerConnection;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;

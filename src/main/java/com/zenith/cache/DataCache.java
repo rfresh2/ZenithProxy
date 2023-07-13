@@ -8,7 +8,7 @@ import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.map.MapDataCache;
 import com.zenith.cache.data.stats.StatisticsCache;
 import com.zenith.cache.data.tab.TabListCache;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.server.ServerConnection;
 import lombok.Getter;
 
 import java.lang.reflect.Field;

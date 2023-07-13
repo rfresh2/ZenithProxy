@@ -24,7 +24,7 @@ public class Wait {
     public static void waitSpinLoop() {
         while (true) {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(30000);
             } catch (InterruptedException e) {
                 throw new IllegalStateException(e);
             }

@@ -7,11 +7,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.client.ClientSession;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.client.ClientSession;
+import com.zenith.network.server.ServerConnection;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CACHE;

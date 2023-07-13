@@ -8,7 +8,7 @@ import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.event.proxy.HealthAutoDisconnectEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.Module;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;

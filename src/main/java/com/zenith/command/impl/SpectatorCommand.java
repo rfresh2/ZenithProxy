@@ -6,8 +6,8 @@ import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import com.zenith.spectator.SpectatorEntityRegistry;
-import com.zenith.spectator.entity.SpectatorEntity;
+import com.zenith.feature.spectator.SpectatorEntityRegistry;
+import com.zenith.feature.spectator.entity.SpectatorEntity;
 import discord4j.rest.util.Color;
 
 import java.util.Optional;

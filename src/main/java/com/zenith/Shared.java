@@ -4,44 +4,44 @@ import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zenith.cache.DataCache;
-import com.zenith.client.ClientSession;
-import com.zenith.client.handler.incoming.*;
-import com.zenith.client.handler.incoming.entity.*;
-import com.zenith.client.handler.incoming.spawn.*;
-import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerChangeHeldItemHandler;
-import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
-import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
-import com.zenith.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.feature.autoupdater.AutoUpdater;
-import com.zenith.feature.handler.HandlerRegistry;
+import com.zenith.feature.pathing.Pathing;
+import com.zenith.feature.pathing.World;
+import com.zenith.feature.pathing.blockdata.BlockDataManager;
 import com.zenith.feature.prioban.PriorityBanChecker;
 import com.zenith.feature.tps.TPSCalculator;
 import com.zenith.feature.whitelist.WhitelistManager;
 import com.zenith.module.ModuleManager;
-import com.zenith.pathing.Pathing;
-import com.zenith.pathing.World;
-import com.zenith.pathing.blockdata.BlockDataManager;
-import com.zenith.server.ServerConnection;
-import com.zenith.server.handler.player.incoming.ClientSettingsPacketHandler;
-import com.zenith.server.handler.player.incoming.ServerChatHandler;
-import com.zenith.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
-import com.zenith.server.handler.player.outgoing.ServerChatOutgoingHandler;
-import com.zenith.server.handler.player.postoutgoing.ClientRequestPacketPostHandler;
-import com.zenith.server.handler.player.postoutgoing.JoinGamePostHandler;
-import com.zenith.server.handler.shared.incoming.LoginStartHandler;
-import com.zenith.server.handler.shared.incoming.ServerKeepaliveHandler;
-import com.zenith.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
-import com.zenith.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
-import com.zenith.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
-import com.zenith.server.handler.spectator.incoming.ServerChatSpectatorHandler;
-import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
-import com.zenith.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
-import com.zenith.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
-import com.zenith.server.handler.spectator.outgoing.*;
-import com.zenith.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
+import com.zenith.network.client.ClientSession;
+import com.zenith.network.client.handler.incoming.*;
+import com.zenith.network.client.handler.incoming.entity.*;
+import com.zenith.network.client.handler.incoming.spawn.*;
+import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerChangeHeldItemHandler;
+import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
+import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
+import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
+import com.zenith.network.registry.HandlerRegistry;
+import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.handler.player.incoming.ClientSettingsPacketHandler;
+import com.zenith.network.server.handler.player.incoming.ServerChatHandler;
+import com.zenith.network.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
+import com.zenith.network.server.handler.player.outgoing.ServerChatOutgoingHandler;
+import com.zenith.network.server.handler.player.postoutgoing.ClientRequestPacketPostHandler;
+import com.zenith.network.server.handler.player.postoutgoing.JoinGamePostHandler;
+import com.zenith.network.server.handler.shared.incoming.LoginStartHandler;
+import com.zenith.network.server.handler.shared.incoming.ServerKeepaliveHandler;
+import com.zenith.network.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
+import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
+import com.zenith.network.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
+import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
+import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
+import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
+import com.zenith.network.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
+import com.zenith.network.server.handler.spectator.outgoing.*;
+import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import net.daporkchop.lib.binary.oio.appendable.PAppendable;
@@ -70,16 +70,13 @@ public class Shared {
     public static final Logger DISCORD_LOG = LoggerFactory.getLogger("Discord");
     public static final Logger DATABASE_LOG = LoggerFactory.getLogger("Database");
     public static final Logger TERMINAL_LOG = LoggerFactory.getLogger("Terminal");
-
     public static final File CONFIG_FILE = new File("config.json");
     public static final String SERVER_RESTARTING = "Server restarting";
     public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
-
     public static boolean isReconnectableDisconnect(final String reason) {
         return !(reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT));
     }
-
     public static Config CONFIG;
     public static final DataCache CACHE;
     public static final DiscordBot DISCORD_BOT;
@@ -254,7 +251,7 @@ public class Shared {
 
     static {
         Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
-            DEFAULT_LOG.error(String.format("Uncaught exception in thread \"%s\"!", thread), e);
+            DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e);
         });
         loadConfig();
         SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);

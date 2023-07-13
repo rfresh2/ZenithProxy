@@ -2,7 +2,7 @@ package com.zenith.module;
 
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
-import com.zenith.client.ClientSession;
+import com.zenith.network.client.ClientSession;
 
 import static com.zenith.Shared.EVENT_BUS;
 import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;

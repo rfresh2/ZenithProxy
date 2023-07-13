@@ -1,8 +1,8 @@
 package com.zenith.feature.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zenith.mcping.MCPing;
-import com.zenith.mcping.PingOptions;
+import com.zenith.feature.queue.mcping.MCPing;
+import com.zenith.feature.queue.mcping.PingOptions;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import reactor.netty.http.client.HttpClient;

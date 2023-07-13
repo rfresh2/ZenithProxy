@@ -57,14 +57,14 @@ public class DeathMessagesParser {
                 }
             }
         }
-        if (CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
+        if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
             DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
-                    .title("Unknown death message")
-                    .description(rawInput)
-                    .color(Color.RUBY)
-                    .build());
+                                                 .title("Unknown death message")
+                                                 .description(rawInput)
+                                                 .color(Color.RUBY)
+                                                 .build());
         }
-        DATABASE_LOG.error("No death message schema found for '{}'", rawInput);
+        DEFAULT_LOG.warn("No death message schema found for '{}'", rawInput);
         return Optional.empty();
     }
 }

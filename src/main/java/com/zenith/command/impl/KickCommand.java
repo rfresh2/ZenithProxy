@@ -6,7 +6,7 @@ import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.server.ServerConnection;
 import discord4j.rest.util.Color;
 
 import java.util.List;

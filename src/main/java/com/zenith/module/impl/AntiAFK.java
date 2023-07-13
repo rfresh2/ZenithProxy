@@ -13,9 +13,9 @@ import com.zenith.Proxy;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
+import com.zenith.feature.pathing.BlockPos;
+import com.zenith.feature.pathing.Position;
 import com.zenith.module.Module;
-import com.zenith.pathing.BlockPos;
-import com.zenith.pathing.Position;
 import com.zenith.util.TickTimer;
 
 import java.time.Duration;
