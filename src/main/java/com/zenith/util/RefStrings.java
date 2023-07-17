@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 @UtilityClass
 public class RefStrings {
-    protected final String BRAND = "Proxy";
+    protected final String BRAND = "ZenithProxy";
     public final byte[] BRAND_ENCODED;
 
     static {
