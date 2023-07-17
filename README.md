@@ -26,14 +26,14 @@ When no Player Client is connected the Proxy Client can still act as a bot: movi
 
 # How does it work?
 
-The Proxy caches the client's world state including chunks, entities, other players, etc. to allow Player Clients to connect and disconnect at any time.
+The Proxy caches the client's world state including chunks, entities, other players, etc. to allow Player Clients to connect at any time.
 
-The Proxy is also able to read/modify/cancel/send arbitrary packets in either direction at any time. This is used to simulating 
+The Proxy is also able to read/modify/cancel/send arbitrary packets in either direction at any time. This is used to simulate
 player movements, spectator mode, discord chat relay, and more.
 
 # Features
 
-* Secure Whitelist system that allows sharing MC accounts without sharing passwords
+* Secure Whitelist system - share MC accounts without sharing passwords
 * Extensive discord integration
     * Chat relay
     * Player in visual range alerts
@@ -42,7 +42,7 @@ player movements, spectator mode, discord chat relay, and more.
   * Multiple players can connect to the proxy and spectate the player as entities in-game or playercam
 * Advanced AntiAFK with pathing and gravity
 * 2b2t Queue Skip
-  * Reconnects and skips the queue when the proxy is online for 6 hours (2b2t's max connection time)
+  * Reconnects and skips the queue after the proxy is online for 6 hours (2b2t's max connection time). Can only be performed once.
 * Modules including AutoEat, AutoDisconnect, AutoReconnect, AutoRespawn, AutoTotem, KillAura, Spammer, AutoReply
 * Many, many, more features.
 
@@ -83,6 +83,7 @@ player movements, spectator mode, discord chat relay, and more.
 ## Run
 
 * `./start.sh` (Linux) or `.\start.bat` (Windows) or `./gradlew run` (Universal)
+  * To build a standalone executable jar run `./gradlew jarBuild`
 * The discord prefix is `.` by default. e.g. `.connect` or `.disconnect`.
 * Type `.help` in discord or `help` in the terminal to get a list of available commands.
 

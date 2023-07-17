@@ -255,8 +255,8 @@ tasks.register('run', JavaExec) {
                "-XX:G1MixedGCCountTarget=3", "-XX:G1HeapWastePercent=20", "-XX:InitiatingHeapOccupancyPercent=10",
                "-XX:G1RSetUpdatingPauseTimePercent=0", "-XX:MaxTenuringThreshold=1", "-XX:G1SATBBufferEnqueueingThresholdPercent=30",
                "-XX:G1ConcMarkStepDurationMillis=5.0", "-XX:G1ConcRSHotCardLimit=16",
-               "-XX:GCTimeRatio=99",
-               "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16"]
+               "-XX:GCTimeRatio=99", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=2",
+               "-Djava.util.concurrent.ForkJoinPool.common.parallelism=8"]
 }
 
 tasks.register('java_path') {
@@ -302,7 +302,7 @@ shadowJar {
     exclude 'module-info.class'
 
     manifest {
-        attributes "Implementation-Title": "Proxy",
+        attributes "Implementation-Title": "ZenithProxy",
                 "Implementation-Version": project.version,
                 "Main-Class": "com.zenith.Proxy"
     }
