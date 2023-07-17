@@ -193,7 +193,7 @@ dependencies {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
-    shade("com.discord4j:discord4j-core:3.3.0-M2") {
+    shade("com.discord4j:discord4j-core:3.3.0-SNAPSHOT") {
         exclude group: 'io.netty'
     }
 
