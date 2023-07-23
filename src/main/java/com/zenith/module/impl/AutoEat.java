@@ -35,6 +35,7 @@ public class AutoEat extends Module {
     @Subscribe
     public void handleClientTick(final ClientTickEvent e) {
         if (CONFIG.client.extra.autoEat.enabled
+                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && playerHealthBelowThreshold()
                 && !Proxy.getInstance().isInQueue()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())

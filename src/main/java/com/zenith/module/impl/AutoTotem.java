@@ -30,6 +30,7 @@ public class AutoTotem extends Module {
     @Subscribe
     public void handleClientTick(final ClientTickEvent event) {
         if (CONFIG.client.extra.autoTotem.enabled
+                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && playerHealthBelowThreshold()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())

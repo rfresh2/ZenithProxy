@@ -51,6 +51,7 @@ public class KillAura extends Module {
     @Subscribe
     public void handleClientTick(final ClientTickEvent event) {
         if (CONFIG.client.extra.killAura.enabled
+                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && !Proxy.getInstance().isInQueue()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)
