@@ -15,9 +15,8 @@ buildscript {
 plugins {
     id 'nu.studer.jooq' version '8.2.1'
     id "com.github.johnrengelman.shadow" version "8.1.1"
+    id 'java'
 }
-
-apply plugin: "java"
 
 group "com.zenith"
 
@@ -102,7 +101,7 @@ ext {
     lombokVersion = "1.18.28"
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
-    nettyVersion = '4.1.94.Final'
+    nettyVersion = '4.1.95.Final'
     jooqVersion = "3.18.5"
 }
 
@@ -188,17 +187,14 @@ dependencies {
     shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-
-    shade("com.github.rfresh2:MCProtocolLib:a9bf5e045c") {
-        exclude group: 'io.netty.incubator'
-        exclude group: 'io.netty'
-    }
     shade("com.discord4j:discord4j-core:3.3.0-M2") {
         exclude group: 'io.netty'
     }
-
-    shade "com.github.rfresh2:MCAuthLib:0de5befe37"
-
+    shade("com.github.rfresh2:MCProtocolLib:9c1211449c") {
+        exclude group: 'io.netty.incubator'
+        exclude group: 'io.netty'
+    }
+    shade "com.github.rfresh2:MCAuthLib:3c6759fe22"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"
@@ -215,7 +211,7 @@ dependencies {
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
     shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.23.0') {
+    shade('org.redisson:redisson:3.23.1') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
