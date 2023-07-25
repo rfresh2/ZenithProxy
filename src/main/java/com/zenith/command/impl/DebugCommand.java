@@ -40,7 +40,6 @@ public class DebugCommand extends Command {
                         })))
                 .then(literal("packetlog")
                         .then(literal("on").executes(c -> {
-                            CONFIG.debug.printDataFields = true;
                             CONFIG.debug.packet.received = true;
                             CONFIG.debug.packet.receivedBody = true;
                             CONFIG.debug.packet.preSent = false;
@@ -51,7 +50,6 @@ public class DebugCommand extends Command {
                                     .color(Color.CYAN);
                         }))
                         .then(literal("off").executes(c -> {
-                            CONFIG.debug.printDataFields = false;
                             CONFIG.debug.packet.received = false;
                             CONFIG.debug.packet.postSent = false;
                             c.getSource().getEmbedBuilder()

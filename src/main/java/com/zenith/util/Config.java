@@ -225,7 +225,6 @@ public final class Config {
 
     public static final class Debug {
         public Packet packet = new Packet();
-        public boolean printDataFields = false;
         public Server server = new Server();
 
         public static final class Packet {
