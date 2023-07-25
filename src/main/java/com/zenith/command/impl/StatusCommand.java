@@ -133,6 +133,7 @@ public class StatusCommand extends Command {
                     .addField("AutoDisconnect",
                             "[Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
                                     + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"
+                                    + "\n[CancelAutoReconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "on" : "off") + "]"
                                     + "\n[AutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off") + "]"
                                     + "\n[Thunder: " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off") + "]"
                             , true)

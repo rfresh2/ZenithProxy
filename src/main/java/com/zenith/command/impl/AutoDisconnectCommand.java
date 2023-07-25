@@ -19,7 +19,12 @@ public class AutoDisconnectCommand extends Command {
         return CommandUsage.full(
                 "autoDisconnect",
                 "Configures the AutoDisconnect feature",
-                asList("on/off", "health <integer>", "autoClientDisconnect on/off", "thunder on/off"),
+                asList(
+                        "on/off",
+                        "health <integer>",
+                        "cancelAutoReconnect on/off",
+                        "autoClientDisconnect on/off",
+                        "thunder on/off"),
                 aliases()
         );
     }
@@ -32,6 +37,9 @@ public class AutoDisconnectCommand extends Command {
                     c.getSource().getEmbedBuilder()
                             .title("AutoDisconnect On!")
                             .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
+                            .addField("CancelAutoReconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "on" : "off"), false)
+                            .addField("AutoClientDisconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), false)
+                            .addField("Thunder", (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off"), false)
                             .color(Color.CYAN);
                 }))
                 .then(literal("off").executes(c -> {
@@ -39,6 +47,9 @@ public class AutoDisconnectCommand extends Command {
                     c.getSource().getEmbedBuilder()
                             .title("AutoDisconnect Off!")
                             .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
+                            .addField("CancelAutoReconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "on" : "off"), false)
+                            .addField("AutoClientDisconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), false)
+                            .addField("Thunder", (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off"), false)
                             .color(Color.CYAN);
                 }))
                 .then(literal("health").then(argument("healthLevel", integer()).executes(c -> {
@@ -50,6 +61,19 @@ public class AutoDisconnectCommand extends Command {
                             .color(Color.CYAN);
                     return 1;
                 })))
+                .then(literal("cancelAutoReconnect")
+                          .then(literal("on").executes(c -> {
+                                CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = true;
+                                c.getSource().getEmbedBuilder()
+                                        .title("AutoDisconnect CancelAutoReconnect On!")
+                                        .color(Color.CYAN);
+                          }))
+                          .then(literal("off").executes(c -> {
+                                CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = false;
+                                c.getSource().getEmbedBuilder()
+                                        .title("AutoDisconnect CancelAutoReconnect Off!")
+                                        .color(Color.CYAN);
+                          })))
                 .then(literal("autoClientDisconnect")
                         .then(literal("on").executes(c -> {
                             CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = true;

@@ -74,8 +74,15 @@ public class Shared {
     public static final String SERVER_RESTARTING = "Server restarting";
     public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
+    public static final String AUTO_DISCONNECT = "AutoDisconnect";
     public static boolean isReconnectableDisconnect(final String reason) {
-        return !(reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT));
+        if (reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT)) {
+            return false;
+        } else if (reason.equals(AUTO_DISCONNECT)) {
+            return !CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect;
+        } else {
+            return true;
+        }
     }
     public static Config CONFIG;
     public static final DataCache CACHE;

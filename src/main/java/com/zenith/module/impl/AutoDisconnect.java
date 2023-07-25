@@ -15,6 +15,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoDisconnect extends Module {
+
     public AutoDisconnect() {
         super();
     }
@@ -25,7 +26,7 @@ public class AutoDisconnect extends Module {
             if (event.newHealth <= Shared.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
                 if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                     EVENT_BUS.dispatch(new HealthAutoDisconnectEvent());
-                    Proxy.getInstance().disconnect();
+                    Proxy.getInstance().disconnect(AUTO_DISCONNECT);
                 }
             }
         }
@@ -37,7 +38,7 @@ public class AutoDisconnect extends Module {
             synchronized (this) {
                 if (CACHE.getChunkCache().isRaining() && CACHE.getChunkCache().getThunderStrength() > 0.0f) {
                     if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
-                        Proxy.getInstance().disconnect("Thunder AutoDisconnect");
+                        Proxy.getInstance().disconnect(AUTO_DISCONNECT);
                     }
                 }
             }
