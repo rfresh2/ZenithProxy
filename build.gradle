@@ -221,7 +221,7 @@ dependencies {
 
     shade 'org.jline:jline:3.23.0'
     shade 'org.jline:jline-terminal-jansi:3.23.0'
-    testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.0"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
