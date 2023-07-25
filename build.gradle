@@ -27,7 +27,7 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    sourceCompatibility = targetCompatibility = "20"
+    sourceCompatibility = targetCompatibility = "17"
     options.encoding = "UTF-8"
     options.deprecation(true)
 }
@@ -296,7 +296,19 @@ shadowJar {
     configurations = [project.configurations.shade]
 
     exclude 'module-info.class'
-
+    minimize {
+        exclude(dependency("org.slf4j:slf4j-api:.*"))
+        exclude(dependency("ch.qos.logback:.*:.*"))
+        exclude(dependency("org.jline:jline:.*"))
+        exclude(dependency("org.jline:jline-terminal-jansi:.*"))
+        exclude(dependency("com.github.mwiede:jsch:.*"))
+        exclude(dependency("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:.*"))
+        exclude(dependency("com.discord4j:discord4j-core:.*"))
+        exclude(dependency("org.postgresql:postgresql:.*"))
+        exclude(dependency("io.netty:netty-codec-http:.*"))
+        exclude(dependency("io.netty:netty-codec-http2:.*"))
+        exclude(dependency("io.netty:netty-resolver-dns:.*"))
+    }
     manifest {
         attributes "Implementation-Title": "ZenithProxy",
                 "Implementation-Version": project.version,
