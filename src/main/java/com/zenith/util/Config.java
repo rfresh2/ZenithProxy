@@ -113,6 +113,7 @@ public final class Config {
                     public boolean safeGravity = true;
                     public boolean stuckWarning = true;
                     public boolean stuckWarningMention = false;
+                    public boolean stuckReconnect = true;
                     public boolean antiStuck = false;
                 }
             }
