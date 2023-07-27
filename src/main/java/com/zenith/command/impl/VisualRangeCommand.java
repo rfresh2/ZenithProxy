@@ -107,10 +107,10 @@ public class VisualRangeCommand extends Command {
                                     .color(Color.CYAN);
                         }))
                         .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.visualRangePositionTracking = true;
+                            CONFIG.client.extra.visualRangePositionTracking = false;
                             c.getSource().getEmbedBuilder()
                                     .title("Enemy Tracking Off!")
-                                    .color(Color.RUBY);
+                                    .color(Color.CYAN);
                         })));
     }
 
