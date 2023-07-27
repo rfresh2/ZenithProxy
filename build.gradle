@@ -190,12 +190,10 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-M2") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:357015f6f1") {
+    shade("com.github.rfresh2:MCProtocolLib:396244f567") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
-        exclude group: 'com.github.rfresh2', module: 'MCAuthLib'
     }
-    shade "com.github.rfresh2:MCAuthLib:d96d102c50"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"
