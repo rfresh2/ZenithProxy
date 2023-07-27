@@ -670,6 +670,18 @@ public class DiscordBot {
                 .build());
     }
 
+    @Subscribe
+    public void handleMsaDeviceCodeLoginEvent(final MsaDeviceCodeLoginEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                             .title("Microsoft Device Code Login")
+                             .color(Color.CYAN)
+                             .description("Go to [" + event.getDeviceCode().verificationUri() + "]("
+                                              + event.getDeviceCode().verificationUri()
+                                              + ") and enter code: " + event.getDeviceCode().userCode()
+                                              + " to login.")
+                             .build());
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")

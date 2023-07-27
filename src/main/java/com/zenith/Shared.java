@@ -167,21 +167,26 @@ public class Shared {
     public static volatile boolean SHOULD_RECONNECT;
 
     public static synchronized void loadConfig() {
-        DEFAULT_LOG.info("Loading config...");
+        try {
+            DEFAULT_LOG.info("Loading config...");
 
-        Config config;
-        if (PFiles.checkFileExists(CONFIG_FILE)) {
-            try (Reader reader = new UTF8FileReader(CONFIG_FILE)) {
-                config = GSON.fromJson(reader, Config.class);
-            } catch (IOException e) {
-                throw new RuntimeException("Unable to load config!", e);
+            Config config;
+            if (PFiles.checkFileExists(CONFIG_FILE)) {
+                try (Reader reader = new UTF8FileReader(CONFIG_FILE)) {
+                    config = GSON.fromJson(reader, Config.class);
+                } catch (IOException e) {
+                    throw new RuntimeException("Unable to load config!", e);
+                }
+            } else {
+                config = new Config();
             }
-        } else {
-            config = new Config();
-        }
 
-        CONFIG = config.doPostLoad();
-        DEFAULT_LOG.info("Config loaded.");
+            CONFIG = config.doPostLoad();
+            DEFAULT_LOG.info("Config loaded.");
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Unable to load config!", e);
+            System.exit(1);
+        }
     }
 
     public static synchronized void saveConfig() {

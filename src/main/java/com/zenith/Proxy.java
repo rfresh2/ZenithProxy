@@ -344,7 +344,7 @@ public class Proxy {
 
     public boolean retrieveLoginTaskResult(Future<Boolean> loginTask) {
         try {
-            return loginTask.get(10L, TimeUnit.SECONDS);
+            return loginTask.get(CONFIG.authentication.accountType == Config.Authentication.AccountType.DEVICE_CODE ? 300L : 10L, TimeUnit.SECONDS);
         } catch (Exception e) {
             loginTask.cancel(true);
             return false;

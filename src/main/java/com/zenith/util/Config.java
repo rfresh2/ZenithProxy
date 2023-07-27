@@ -30,7 +30,8 @@ public final class Config {
         public boolean prioBanned = false;
 
         public enum AccountType {
-            @SerializedName("msa") MSA
+            @SerializedName("msa") MSA,
+            @SerializedName("device_code") DEVICE_CODE
         }
     }
 
