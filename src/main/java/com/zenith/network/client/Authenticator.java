@@ -1,6 +1,5 @@
 package com.zenith.network.client;
 
-import com.github.steveice10.mc.auth.exception.request.RequestException;
 import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.auth.service.MojangAuthenticationService;
 import com.github.steveice10.mc.auth.service.MsaAuthenticationService;
@@ -9,10 +8,11 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.microsoft.aad.msal4j.DeviceCode;
 import com.zenith.event.proxy.MsaDeviceCodeLoginEvent;
 import com.zenith.util.Config.Authentication.AccountType;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import static com.zenith.Shared.*;
@@ -51,7 +51,12 @@ public class Authenticator {
             } else {
                 throw new RuntimeException("No valid account type set.");
             }
-        } catch (RequestException | MicrosoftAuthenticationException e) {
+        } catch (Exception e) {
+            try {
+                Files.deleteIfExists(Paths.get("msal_serialized_cache.json"));
+            } catch (IOException ex) {
+                CLIENT_LOG.error("Unable to delete msal cache file", ex);
+            }
             this.auth = null;
             throw new RuntimeException("Unable to log in", e);
         }

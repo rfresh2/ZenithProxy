@@ -61,9 +61,10 @@ player movements, spectator mode, discord chat relay, and more.
 1. `git clone git@github.com:rfresh2/ZenithProxy.git`
 2. Execute in CLI: `./start.sh` (Linux) or `.\start.bat` (Windows). Close the instance with `CTRL-C`.
 3. Edit `config.json`. Important sections:
-  * `authentication` -> Input your Minecraft account details
-    * You must disable 2FA on your Microsoft account and may need to approve the proxy's
-      IP [here](https://account.live.com/Activity)
+  * `authentication` -> Device code login is selected by default.
+    * Optional: For username/password login change `accountType` to `msa` and set `username` and `password`.
+      * You must disable 2FA on your Microsoft account and may need to approve the proxy's
+        IP [here](https://account.live.com/Activity)
   * `server` -> Optionally change the port the proxy listens on.
   * `proxyIP` -> set this to DNS name or IP address + port clients should connect to.
     * For DNS you need the following records:

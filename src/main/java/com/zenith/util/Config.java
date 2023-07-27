@@ -22,9 +22,11 @@ public final class Config {
 
     public static final class Authentication {
         public boolean doAuthentication = false;
-        public AccountType accountType = AccountType.MSA;
+        public AccountType accountType = AccountType.DEVICE_CODE;
+        // only used for MSA
         public String email = "john.doe@example.com";
         public String password = "my_secure_password";
+        // updated on successful login
         public String username = "Steve";
         public boolean prio = false;
         public boolean prioBanned = false;
