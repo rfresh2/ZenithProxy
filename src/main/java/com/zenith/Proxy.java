@@ -165,13 +165,13 @@ public class Proxy {
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }
-            if (CONFIG.client.autoConnect) {
+            if (CONFIG.client.autoConnect && !this.isConnected()) {
                 this.connectAndCatchExceptions();
             }
             if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
-                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
+                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
                     this.connectAndCatchExceptions();
                 }
             }
