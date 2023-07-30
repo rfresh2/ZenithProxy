@@ -621,6 +621,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
+        if (!CONFIG.client.extra.prioStatusChangeMention) return;
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
         if (event.prio) {
             embedCreateSpec
