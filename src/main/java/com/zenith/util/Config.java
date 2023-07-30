@@ -64,6 +64,7 @@ public final class Config {
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = true;
             public boolean twentyMinuteReconnectIfStuck = true;
+            public boolean prioBan2b2tCheck = true;
 
             public static final class Chat {
                 public List<WhitelistEntry> ignoreList = new ArrayList<>();

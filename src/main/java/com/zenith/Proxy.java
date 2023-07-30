@@ -438,7 +438,7 @@ public class Proxy {
     }
 
     public void updatePrioBanStatus() {
-        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
+        if (!CONFIG.client.extra.prioBan2b2tCheck || !CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
         this.isPrioBanned = PRIORITY_BAN_CHECKER.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
