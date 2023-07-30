@@ -20,7 +20,6 @@ import static java.util.Objects.nonNull;
 
 @Getter
 public class Authenticator {
-    private static final String CLIENT_ID = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
     protected AuthenticationService auth;
 
     private AuthenticationService getAuth() {
@@ -77,7 +76,7 @@ public class Authenticator {
             } else if (CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
                 try {
                     MsaDeviceAuthenticationService msaDeviceAuthenticationService = new MsaDeviceAuthenticationService(
-                        CLIENT_ID);
+                        CONFIG.authentication.msaClientId);
                     msaDeviceAuthenticationService.setDeviceCodeConsumer(this::onDeviceCode);
                     return msaDeviceAuthenticationService;
                 } catch (IOException e) {
