@@ -108,7 +108,7 @@ public class DiscordBot {
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
                     mainChannelMessageQueue.add(request);
-                    if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.logEmbedOutput(context);
+                    if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.logEmbedOutput(context.getEmbedBuilder().build());
                 }
                 if (!context.getMultiLineOutput().isEmpty()) {
                     for (final String line : context.getMultiLineOutput()) {
@@ -682,6 +682,20 @@ public class DiscordBot {
             .build());
     }
 
+    @Subscribe
+    public void handleDeathMessageEvent(final DeathMessageEvent event) {
+        if (!CONFIG.client.extra.killMessage) return;
+        event.deathMessageParseResult.getKiller().ifPresent(killer -> {
+            if (!killer.getName().equals(CONFIG.authentication.username)) return;
+            sendEmbedMessage(EmbedCreateSpec.builder()
+                                 .title("Kill Detected")
+                                 .color(Color.CYAN)
+                                 .addField("Victim", escape(event.deathMessageParseResult.getVictim()), false)
+                                 .addField("Message", escape(event.deathMessageRaw), false)
+                    .build());
+        });
+    }
+
     private EmbedCreateSpec getUpdateMessage() {
         return EmbedCreateSpec.builder()
                 .title("Updating and restarting...")
@@ -721,6 +735,7 @@ public class DiscordBot {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
                     .addEmbed(embedCreateSpec)
                     .build().asRequest());
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord embed message", e);
         }
@@ -732,6 +747,8 @@ public class DiscordBot {
                     .content(message)
                     .addEmbed(embedCreateSpec)
                     .build().asRequest());
+            TERMINAL_LOG.info(message);
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord embed message", e);
         }
@@ -742,6 +759,7 @@ public class DiscordBot {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
                     .content(message)
                     .build().asRequest());
+            TERMINAL_LOG.info(message);
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
         }
@@ -754,6 +772,8 @@ public class DiscordBot {
                     .addEmbed(embedCreateSpec)
                     .components(ActionRow.of(buttons))
                     .build().asRequest());
+            TERMINAL_LOG.info(message);
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
             client.getEventDispatcher()
                     .on(ButtonInteractionEvent.class, mapper)
                     .timeout(timeout)
@@ -770,6 +790,7 @@ public class DiscordBot {
                     .addEmbed(embedCreateSpec)
                     .components(ActionRow.of(buttons))
                     .build().asRequest());
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
             client.getEventDispatcher()
                     .on(ButtonInteractionEvent.class, mapper)
                     .timeout(timeout)

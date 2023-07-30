@@ -66,6 +66,7 @@ public final class Config {
             public boolean twentyMinuteReconnectIfStuck = true;
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;
+            public boolean killMessage = true;
 
             public static final class Chat {
                 public List<WhitelistEntry> ignoreList = new ArrayList<>();

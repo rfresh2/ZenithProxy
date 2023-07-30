@@ -102,7 +102,7 @@ public class TerminalManager {
         if (CONFIG.interactiveTerminal.logToDiscord) logInputToDiscord(command);
         CommandContext commandContext = CommandContext.create(command, CommandSource.TERMINAL);
         COMMAND_MANAGER.execute(commandContext);
-        logEmbedOutput(commandContext);
+        logEmbedOutput(commandContext.getEmbedBuilder().build());
         if (CONFIG.interactiveTerminal.logToDiscord) logEmbedOutputToDiscord(commandContext);
         logMultiLineOutput(commandContext);
         if (CONFIG.interactiveTerminal.logToDiscord) logMultiLineOutputToDiscord(commandContext);
@@ -132,26 +132,25 @@ public class TerminalManager {
         }
     }
 
-    public void logEmbedOutput(final CommandContext context) {
+    public void logEmbedOutput(final EmbedCreateSpec embed) {
         // todo: handle formatted bold, italicized, or underlined text
-        EmbedCreateSpec embedCreateSpec = context.getEmbedBuilder().build();
-        if (!embedCreateSpec.isTitlePresent()) return;
+        if (!embed.isTitlePresent()) return;
         final AttributedStringBuilder output = new AttributedStringBuilder();
-        if (embedCreateSpec.isColorPresent()) {
-            final Color color = embedCreateSpec.color().get();
+        if (embed.isColorPresent()) {
+            final Color color = embed.color().get();
             output.style(AttributedStyle.DEFAULT.foreground(color.getRed(), color.getBlue(), color.getGreen()));
         }
         output.append("\n");
-        output.append(embedCreateSpec.title().get());
-        if (embedCreateSpec.isDescriptionPresent()) {
+        output.append(embed.title().get());
+        if (embed.isDescriptionPresent()) {
             output.append("\n");
-            output.append(embedCreateSpec.description().get());
+            output.append(embed.description().get());
         }
-        if (embedCreateSpec.isUrlPresent()) {
+        if (embed.isUrlPresent()) {
             output.append("\n");
-            output.append(embedCreateSpec.url().get());
+            output.append(embed.url().get());
         }
-        embedCreateSpec.fields().forEach(field -> {
+        embed.fields().forEach(field -> {
             // todo: format fields as in discord where there can be multiple on a line
             output.append("\n");
             output.append(field.name());
