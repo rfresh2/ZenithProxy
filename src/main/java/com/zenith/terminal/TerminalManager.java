@@ -102,10 +102,10 @@ public class TerminalManager {
         if (CONFIG.interactiveTerminal.logToDiscord) logInputToDiscord(command);
         CommandContext commandContext = CommandContext.create(command, CommandSource.TERMINAL);
         COMMAND_MANAGER.execute(commandContext);
-        logEmbedOutput(commandContext.getEmbedBuilder().build());
         if (CONFIG.interactiveTerminal.logToDiscord) logEmbedOutputToDiscord(commandContext);
-        logMultiLineOutput(commandContext);
+            else logEmbedOutput(commandContext.getEmbedBuilder().build());
         if (CONFIG.interactiveTerminal.logToDiscord) logMultiLineOutputToDiscord(commandContext);
+            else logMultiLineOutput(commandContext);
     }
 
     private void logMultiLineOutputToDiscord(CommandContext commandContext) {
