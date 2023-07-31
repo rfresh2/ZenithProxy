@@ -3,7 +3,11 @@
   "includes":[{
     "pattern":"\\QMETA-INF/MANIFEST.MF\\E"
   }, {
+    "pattern":"\\QMETA-INF/native/libnetty_transport_native_epoll_x86_64.so\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/ch.qos.logback.classic.spi.Configurator\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.eclipse.jgit.transport.SshSessionFactory\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"
   }, {
@@ -23,7 +27,13 @@
   }, {
     "pattern":"\\Qdiscord4j/common/git.properties\\E"
   }, {
+    "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl30x.so\\E"
+  }, {
+    "pattern":"\\Qlinux_x86_64/velocity-compress.so\\E"
+  }, {
     "pattern":"\\Qlogback.xml\\E"
+  }, {
+    "pattern":"\\Qorg/fusesource/jansi/internal/native/Linux/x86_64/libjansi.so\\E"
   }, {
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Windows/x86_64/jansi.dll\\E"
   }, {
@@ -32,6 +42,8 @@
     "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"
   }, {
     "pattern":"\\Qorg/jline/utils/dumb-color.caps\\E"
+  }, {
+    "pattern":"\\Qorg/jline/utils/screen.caps\\E"
   }, {
     "pattern":"\\Qpc/1.12/blockCollisionShapes.json\\E"
   }, {
@@ -50,6 +62,9 @@
     "pattern":"java.base:\\Qsun/net/idn/uidna.spp\\E"
   }]},
   "bundles":[{
+    "name":"org.eclipse.jgit.internal.JGitText",
+    "locales":[""]
+  }, {
     "name":"sun.awt.resources.awt",
     "classNames":["sun.awt.resources.awt"]
   }]
