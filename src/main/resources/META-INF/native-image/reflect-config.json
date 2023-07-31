@@ -521,7 +521,7 @@
   "name":"com.zenith.Proxy",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioStatusEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusEvent"] }]
+  "methods":[{"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioStatusEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }]
 },
 {
   "name":"com.zenith.command.impl.ActiveHoursCommand",
@@ -676,7 +676,8 @@
 {
   "name":"com.zenith.database.ConnectionsDatabase",
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }]
 },
 {
   "name":"com.zenith.database.Database",
@@ -686,7 +687,8 @@
 {
   "name":"com.zenith.database.DeathsDatabase",
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.DeathMessageEvent"] }]
 },
 {
   "name":"com.zenith.database.LockingDatabase",
@@ -719,7 +721,7 @@
   "name":"com.zenith.discord.DiscordBot",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleAutoEatOutOfFood","parameterTypes":["com.zenith.event.module.AutoEatOutOfFoodEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleServerChatReceivedEvent","parameterTypes":["com.zenith.event.proxy.ServerChatReceivedEvent"] }, {"name":"handleStartConnectEvent","parameterTypes":["com.zenith.event.proxy.StartConnectEvent"] }]
+  "methods":[{"name":"handleAutoEatOutOfFood","parameterTypes":["com.zenith.event.module.AutoEatOutOfFoodEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.DeathMessageEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleServerChatReceivedEvent","parameterTypes":["com.zenith.event.proxy.ServerChatReceivedEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartConnectEvent","parameterTypes":["com.zenith.event.proxy.StartConnectEvent"] }]
 },
 {
   "name":"com.zenith.feature.autoupdater.AutoUpdater",
