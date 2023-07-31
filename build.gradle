@@ -339,10 +339,11 @@ graalvmNative {
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
             verbose = true
-            buildArgs.add('--add-opens=java.base/java.nio=ALL-UNNAMED')
-            buildArgs.add('--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED')
-            buildArgs.add('--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED')
-            buildArgs.addAll("--initialize-at-run-time=org.slf4j.LoggerFactory",
+            buildArgs.addAll(
+                    "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
+                    "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
+                    "--add-opens=java.base/java.nio=ALL-UNNAMED",
+                    "--initialize-at-run-time=org.slf4j.LoggerFactory",
                     "--initialize-at-build-time=net.daporkchop.lib",
                     "--initialize-at-build-time=org.jline",
                     "--initialize-at-build-time=java.awt.Toolkit",
@@ -353,8 +354,15 @@ graalvmNative {
                     "--initialize-at-run-time=io.netty",
                     "--initialize-at-run-time=net.daporkchop.lib",
                     "--initialize-at-run-time=org.apache.logging.log4j",
-                    "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl")
-            buildArgs.add('--enable-url-protocols=https,http')
+                    "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl",
+                    "--enable-url-protocols=https,http",
+                    "--static",
+                    "--libc=musl",
+                    "-march=native",
+                    "-R:MaxHeapSize:300m",
+                    "--pgo-instrument",
+                    "--gc=G1"
+            )
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
