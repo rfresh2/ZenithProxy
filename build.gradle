@@ -16,6 +16,7 @@ plugins {
     id 'nu.studer.jooq' version '8.2.1'
     id "com.github.johnrengelman.shadow" version "8.1.1"
     id 'java'
+    id 'org.graalvm.buildtools.native' version '0.9.23'
 }
 
 group "com.zenith"
@@ -209,7 +210,7 @@ dependencies {
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade "com.github.collarmc:pounce:0e8492b68e"
+    shade "com.github.collarmc:pounce:d921e2c156"
     shade('org.redisson:redisson:3.23.2') {
         exclude group: 'io.netty'
     }
@@ -330,11 +331,45 @@ tasks.register('clearJooqBuild') {
     new File('build/jooq').deleteDir()
 }
 
+
+graalvmNative {
+    binaries {
+        main {
+            javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+            imageName = "ZenithProxy"
+            mainClass = "com.zenith.Proxy"
+            verbose = true
+            buildArgs.add('--add-opens=java.base/java.nio=ALL-UNNAMED')
+            buildArgs.add('--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED')
+            buildArgs.add('--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED')
+            buildArgs.addAll("--initialize-at-run-time=org.slf4j.LoggerFactory",
+                    "--initialize-at-build-time=net.daporkchop.lib",
+                    "--initialize-at-build-time=org.jline",
+                    "--initialize-at-build-time=java.awt.Toolkit",
+                    "--initialize-at-build-time=java.awt.Color",
+                    "--initialize-at-build-time=org.fusesource.jansi",
+                    "--initialize-at-build-time=com.google.gson",
+                    "--initialize-at-run-time=ch.qos.logback",
+                    "--initialize-at-run-time=io.netty",
+                    "--initialize-at-run-time=net.daporkchop.lib",
+                    "--initialize-at-run-time=org.apache.logging.log4j",
+                    "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl")
+            buildArgs.add('--enable-url-protocols=https,http')
+            configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
+        }
+    }
+    metadataRepository {
+        enabled = true
+    }
+}
+
 compileJava.dependsOn([clearJooqBuild])
 tasks.named('generateJooq').configure { allInputsDeclared = false }
 tasks.register('jarBuild') {
     group = "build"
 }
 jarBuild.dependsOn([shadowJar, build, java_path])
+nativeCompile.dependsOn(jarBuild)
+generateResourcesConfigFile.dependsOn(shadowJar)
 
 //build.dependsOn(shadowJar)

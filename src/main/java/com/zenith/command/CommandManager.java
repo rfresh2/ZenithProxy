@@ -5,23 +5,24 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.zenith.util.ClassUtil;
+import com.zenith.command.impl.ActiveHoursCommand;
+import com.zenith.command.impl.AntiAFKCommand;
+import com.zenith.command.impl.AutoDisconnectCommand;
+import com.zenith.command.impl.AutoReplyCommand;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.saveConfig;
 import static java.util.Arrays.asList;
-import static java.util.Objects.isNull;
 
 @Getter
 public class CommandManager {
-    private static final String modulePackage = "com.zenith.command.impl";
     private final Object2ObjectOpenHashMap<Class<? extends Command>, Command> commandsClassMap = new Object2ObjectOpenHashMap<>();
     private final CommandDispatcher<CommandContext> dispatcher;
 
@@ -31,17 +32,12 @@ public class CommandManager {
     }
 
     public void init() {
-        for (final Class<?> clazz : ClassUtil.findClassesInPath(modulePackage)) {
-            if (isNull(clazz)) continue;
-            if (Command.class.isAssignableFrom(clazz)) {
-                try {
-                    final Command command = (Command) clazz.getDeclaredConstructor().newInstance();
-                    addCommand(command);
-                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    MODULE_LOG.warn("Error initializing command class", e);
-                }
-            }
-        }
+       asList(
+           new ActiveHoursCommand(),
+           new AntiAFKCommand(),
+           new AutoDisconnectCommand(),
+           new AutoReplyCommand()
+       ).forEach(this::addCommand);
     }
 
     private void addCommand(Command command) {

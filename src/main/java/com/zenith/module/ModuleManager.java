@@ -7,23 +7,23 @@ import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
-import com.zenith.util.ClassUtil;
+import com.zenith.module.impl.*;
 import com.zenith.util.Wait;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
+import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class ModuleManager {
     protected ScheduledFuture<?> clientTickFuture;
-    private static final String modulePackage = "com.zenith.module.impl";
+//    private static final String modulePackage = "com.zenith.module.impl";
     private final Object2ObjectOpenHashMap<Class<? extends Module>, Module> moduleClassMap = new Object2ObjectOpenHashMap<>();
 
     public ModuleManager() {
@@ -32,17 +32,17 @@ public class ModuleManager {
     }
 
     public void init() {
-        for (final Class<?> clazz : ClassUtil.findClassesInPath(modulePackage)) {
-            if (isNull(clazz)) continue;
-            if (Module.class.isAssignableFrom(clazz)) {
-                try {
-                    final Module module = (Module) clazz.getDeclaredConstructor().newInstance();
-                    addModule(module);
-                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    MODULE_LOG.warn("Error initializing command class", e);
-                }
-            }
-        }
+        asList(
+            new AntiAFK(),
+            new AutoDisconnect(),
+            new AutoEat(),
+            new AutoReply(),
+            new AutoRespawn(),
+            new AutoTotem(),
+            new KillAura(),
+            new Spammer(),
+            new Spook()
+        ).forEach(this::addModule);
     }
 
     private void addModule(Module module) {
