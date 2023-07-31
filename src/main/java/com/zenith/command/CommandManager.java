@@ -5,10 +5,7 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.zenith.command.impl.ActiveHoursCommand;
-import com.zenith.command.impl.AntiAFKCommand;
-import com.zenith.command.impl.AutoDisconnectCommand;
-import com.zenith.command.impl.AutoReplyCommand;
+import com.zenith.command.impl.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 
@@ -36,7 +33,37 @@ public class CommandManager {
            new ActiveHoursCommand(),
            new AntiAFKCommand(),
            new AutoDisconnectCommand(),
-           new AutoReplyCommand()
+           new AutoReplyCommand(),
+           new AutoRespawnCommand(),
+           new AutoTotemCommand(),
+           new AutoUpdateCommand(),
+           new ChatRelayCommand(),
+           new ConnectCommand(),
+           new DatabaseCommand(),
+           new DebugCommand(),
+           new DisconnectCommand(),
+           new DisplayCoordsCommand(),
+           new ExtraChatCommand(),
+           new HelpCommand(),
+           new IgnoreCommand(),
+           new KickCommand(),
+           new KillAuraCommand(),
+           new PrioCommand(),
+           new ProxyClientConnectionCommand(),
+           new QueueWarningCommand(),
+           new ReconnectCommand(),
+           new RespawnCommand(),
+           new SendMessageCommand(),
+           new ServerCommand(),
+           new SpammerCommand(),
+           new SpectatorCommand(),
+           new SpookCommand(),
+           new StalkCommand(),
+           new StatusCommand(),
+           new TablistCommand(),
+           new UpdateCommand(),
+           new VisualRangeCommand(),
+           new WhitelistCommand()
        ).forEach(this::addCommand);
     }
 
