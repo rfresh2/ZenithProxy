@@ -24,6 +24,10 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoUpdater {
+    // todo: design an autoupdater for native image.
+    //  embed version identifier in native image. we already embed the short commit hash
+    //      also embed a release channel?
+    //  wget binary from github releases if commit hash doesn't match?
     private ScheduledExecutorService updaterExecutorService;
     private Git git;
     private boolean updateAvailable = false;

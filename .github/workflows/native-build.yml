@@ -17,12 +17,10 @@ jobs:
           java-version: '20.0.2'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          native-image-musl: true
+#          native-image-musl: true
 
       - name: Echo Versions and Paths
         run: |
-          export GRAALVM_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
-          export JAVA_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
           echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
           java --version
@@ -34,17 +32,23 @@ jobs:
       - name: Build Native Binary
         run: ./gradlew nativeCompile
 
+      - name: Elevate binary permissions
+        run: chmod +x build/native/nativeCompile/*
+
       - name: Compress Native Binary
         uses: svenstaro/upx-action@v2
         with:
           files: |
             build/native/nativeCompile/ZenithProxy
 
+      - name: Zip Binary And Libs
+        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
+
       - name: Upload Binary
         uses: actions/upload-artifact@v3
         with:
           name: linux-native
-          path: build/native/nativeCompile/*
+          path: ZenithProxy.zip
 
 #      - name: Release Artifact
 #        uses: "marvinpinto/action-automatic-releases@latest"

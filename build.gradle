@@ -351,16 +351,17 @@ graalvmNative {
                     "--initialize-at-build-time=org.fusesource.jansi",
                     "--initialize-at-build-time=com.google.gson",
                     "--initialize-at-run-time=ch.qos.logback",
-                    "--initialize-at-run-time=io.netty",
+                    "--initialize-at-run-time=io.netty", // todo: slim this down to particular classes or packages in netty
                     "--initialize-at-run-time=net.daporkchop.lib",
                     "--initialize-at-run-time=org.apache.logging.log4j",
                     "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl",
                     "--enable-url-protocols=https,http",
-                    "--static",
-                    "--libc=musl",
-                    "-march=native",
-                    "-R:MaxHeapSize:300m",
-                    "--pgo-instrument",
+//                    "--static", // todo: remove java.awt from code and dependencies. having issues getting this to statically link
+                    // awt replacement for png IO? https://github.com/nayuki/PNG-library
+//                    "--libc=musl",
+                    // todo: decide if we want to bake in GC tuning or specify it at runtime
+//                    "-R:MaxRAMPercentage=30",
+//                    "--pgo-instrument",
                     "--gc=G1"
             )
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
