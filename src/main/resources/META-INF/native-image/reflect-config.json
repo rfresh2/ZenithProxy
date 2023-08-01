@@ -33,6 +33,9 @@
   "name":"[Lcom.microsoft.aad.msal4j.InstanceDiscoveryMetadataEntry;"
 },
 {
+  "name":"[Lcom.zaxxer.hikari.util.ConcurrentBag$IConcurrentBagEntry;"
+},
+{
   "name":"[Lcom.zenith.feature.queue.mcping.rawData.Extra;"
 },
 {
@@ -46,6 +49,9 @@
 },
 {
   "name":"[Ljava.lang.String;"
+},
+{
+  "name":"[Ljava.sql.Statement;"
 },
 {
   "name":"[Lsun.security.pkcs.SignerInfo;"
@@ -215,6 +221,11 @@
   "fields":[{"name":"tableBusy"}]
 },
 {
+  "name":"com.github.steveice10.mc.auth.data.GameProfile",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.github.steveice10.mc.auth.data.GameProfile$MinecraftTexturesPayload",
   "allDeclaredFields":true,
   "unsafeAllocated":true,
@@ -309,6 +320,10 @@
 {
   "name":"com.github.steveice10.mc.protocol.packet.ingame.server.ServerStatisticsPacket",
   "fields":[{"name":"statistics"}]
+},
+{
+  "name":"com.github.steveice10.opennbt.tag.builtin.ByteTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.github.steveice10.opennbt.tag.builtin.CompoundTag",
@@ -568,6 +583,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.sun.crypto.provider.PBKDF2Core$HmacSHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.sun.crypto.provider.RSACipher",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -588,10 +607,22 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zaxxer.hikari.HikariConfig",
+  "allDeclaredFields":true
+},
+{
+  "name":"com.zaxxer.hikari.pool.PoolBase",
+  "fields":[{"name":"catalog"}]
+},
+{
+  "name":"com.zaxxer.hikari.pool.PoolEntry",
+  "fields":[{"name":"state"}]
+},
+{
   "name":"com.zenith.Proxy",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleClientDisconnect","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioStatusEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }]
+  "methods":[{"name":"handleClientDisconnect","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioStatusEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }]
 },
 {
   "name":"com.zenith.command.impl.ActiveHoursCommand",
@@ -792,12 +823,13 @@
   "name":"com.zenith.discord.DiscordBot",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleAutoEatOutOfFood","parameterTypes":["com.zenith.event.module.AutoEatOutOfFoodEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDeathEvent","parameterTypes":["com.zenith.event.proxy.DeathEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.DeathMessageEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.SelfDeathMessageEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleProxyClientConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientConnectedEvent"] }, {"name":"handleProxyClientDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerChatReceivedEvent","parameterTypes":["com.zenith.event.proxy.ServerChatReceivedEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartConnectEvent","parameterTypes":["com.zenith.event.proxy.StartConnectEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }]
+  "methods":[{"name":"handleAutoEatOutOfFood","parameterTypes":["com.zenith.event.module.AutoEatOutOfFoodEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDeathEvent","parameterTypes":["com.zenith.event.proxy.DeathEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.DeathMessageEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.SelfDeathMessageEvent"] }, {"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handleNewPlayerInVisualRangeEvent","parameterTypes":["com.zenith.event.proxy.NewPlayerInVisualRangeEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleProxyClientConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientConnectedEvent"] }, {"name":"handleProxyClientDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerChatReceivedEvent","parameterTypes":["com.zenith.event.proxy.ServerChatReceivedEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartConnectEvent","parameterTypes":["com.zenith.event.proxy.StartConnectEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }]
 },
 {
   "name":"com.zenith.feature.autoupdater.AutoUpdater",
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }]
 },
 {
   "name":"com.zenith.feature.food.FoodData",
@@ -902,7 +934,7 @@
   "name":"com.zenith.module.ModuleManager",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleProxyClientConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientConnectedEvent"] }, {"name":"handleProxyClientDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }]
+  "methods":[{"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleProxyClientConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientConnectedEvent"] }, {"name":"handleProxyClientDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }]
 },
 {
   "name":"com.zenith.module.impl.AntiAFK",
@@ -959,7 +991,7 @@
   "name":"com.zenith.module.impl.Spook",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"handleClientTickEvent","parameterTypes":["com.zenith.event.module.ClientTickEvent"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"handleClientTickEvent","parameterTypes":["com.zenith.event.module.ClientTickEvent"] }, {"name":"handleNewPlayerInVisualRangeEvent","parameterTypes":["com.zenith.event.proxy.NewPlayerInVisualRangeEvent"] }]
 },
 {
   "name":"com.zenith.module.impl.Spook$1"
@@ -1515,13 +1547,15 @@
   "name":"discord4j.discordjson.json.ImmutableComponentData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"channelTypes","parameterTypes":[] }, {"name":"components","parameterTypes":[] }, {"name":"customId","parameterTypes":[] }, {"name":"disabled","parameterTypes":[] }, {"name":"emoji","parameterTypes":[] }, {"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableComponentData$Json"] }, {"name":"label","parameterTypes":[] }, {"name":"maxLength","parameterTypes":[] }, {"name":"maxValues","parameterTypes":[] }, {"name":"minLength","parameterTypes":[] }, {"name":"minValues","parameterTypes":[] }, {"name":"options","parameterTypes":[] }, {"name":"placeholder","parameterTypes":[] }, {"name":"required","parameterTypes":[] }, {"name":"style","parameterTypes":[] }, {"name":"type","parameterTypes":[] }, {"name":"url","parameterTypes":[] }, {"name":"value","parameterTypes":[] }, {"name":"values","parameterTypes":[] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableComponentData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setComponents","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setCustomId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setLabel","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setStyle","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["int"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableDefaultReactionData",
@@ -1559,7 +1593,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setColor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFields","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTitle","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setColor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFields","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setThumbnail","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTitle","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableEmbedFieldData",
@@ -1615,13 +1649,15 @@
   "name":"discord4j.discordjson.json.ImmutableEmbedThumbnailData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableEmbedThumbnailData$Json"] }, {"name":"height","parameterTypes":[] }, {"name":"proxyUrl","parameterTypes":[] }, {"name":"url","parameterTypes":[] }, {"name":"width","parameterTypes":[] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableEmbedThumbnailData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setHeight","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setProxyUrl","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUrl","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setWidth","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableEmbedVideoData",
@@ -1811,6 +1847,20 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAvatar","parameterTypes":["java.util.Optional"] }, {"name":"setCommunicationDisabledUntil","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDeaf","parameterTypes":["boolean"] }, {"name":"setFlags","parameterTypes":["long"] }, {"name":"setJoinedAt","parameterTypes":["java.util.Optional"] }, {"name":"setMute","parameterTypes":["boolean"] }, {"name":"setNick","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPremiumSince","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setRoles","parameterTypes":["java.util.List"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutablePartialMessageData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutablePartialMessageData$Json"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutablePartialMessageData$Json",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setChannelId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setEmbeds","parameterTypes":["java.util.List"] }, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutablePartialStickerData",
@@ -2078,6 +2128,10 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"discord4j.discordjson.json.PartialMessageData",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"discord4j.discordjson.json.PartialStickerData",
   "queryAllDeclaredMethods":true
 },
@@ -2234,6 +2288,20 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setMessage","parameterTypes":["discord4j.discordjson.json.MessageData"] }]
 },
 {
+  "name":"discord4j.discordjson.json.gateway.ImmutableMessageUpdate",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.gateway.ImmutableMessageUpdate$Json"] }]
+},
+{
+  "name":"discord4j.discordjson.json.gateway.ImmutableMessageUpdate$Json",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setMessage","parameterTypes":["discord4j.discordjson.json.PartialMessageData"] }]
+},
+{
   "name":"discord4j.discordjson.json.gateway.ImmutableReady",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -2291,6 +2359,10 @@
 },
 {
   "name":"discord4j.discordjson.json.gateway.MessageCreate",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"discord4j.discordjson.json.gateway.MessageUpdate",
   "queryAllDeclaredMethods":true
 },
 {
@@ -2724,7 +2796,15 @@
   "name":"java.lang.RuntimePermission"
 },
 {
+  "name":"java.lang.SecurityManager",
+  "methods":[{"name":"checkPermission","parameterTypes":["java.security.Permission"] }]
+},
+{
   "name":"java.lang.String"
+},
+{
+  "name":"java.lang.System",
+  "methods":[{"name":"getSecurityManager","parameterTypes":[] }]
 },
 {
   "name":"java.lang.Thread",
@@ -2798,6 +2878,10 @@
 {
   "name":"java.nio.channels.spi.SelectorProvider",
   "methods":[{"name":"openServerSocketChannel","parameterTypes":["java.net.ProtocolFamily"] }, {"name":"openSocketChannel","parameterTypes":["java.net.ProtocolFamily"] }]
+},
+{
+  "name":"java.security.AccessController",
+  "methods":[{"name":"doPrivileged","parameterTypes":["java.security.PrivilegedExceptionAction"] }]
 },
 {
   "name":"java.security.AlgorithmParametersSpi"
@@ -3654,6 +3738,18 @@
   "name":"org.jooq.util.yugabytedb.YugabyteDBDataType"
 },
 {
+  "name":"org.postgresql.Driver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.postgresql.core.QueryExecutorCloseAction",
+  "fields":[{"name":"pgStream"}]
+},
+{
+  "name":"org.postgresql.jdbc.PgStatement",
+  "fields":[{"name":"cancelTimerTask"}, {"name":"isClosed"}, {"name":"statementState"}]
+},
+{
   "name":"org.redisson.api.RedissonClient",
   "queryAllDeclaredMethods":true
 },
@@ -3785,6 +3881,10 @@
   "fields":[{"name":"requested"}]
 },
 {
+  "name":"reactor.core.publisher.FluxOnErrorReturn$ReturnSubscriber",
+  "fields":[{"name":"requested"}]
+},
+{
   "name":"reactor.core.publisher.FluxPublish$PubSubInner",
   "fields":[{"name":"requested"}]
 },
@@ -3811,6 +3911,14 @@
 {
   "name":"reactor.core.publisher.FluxTakeUntilOther$TakeUntilMainSubscriber",
   "fields":[{"name":"main"}, {"name":"other"}]
+},
+{
+  "name":"reactor.core.publisher.FluxTimeout$TimeoutMainSubscriber",
+  "fields":[{"name":"index"}, {"name":"timeout"}]
+},
+{
+  "name":"reactor.core.publisher.FluxTimeout$TimeoutTimeoutSubscriber",
+  "fields":[{"name":"s"}]
 },
 {
   "name":"reactor.core.publisher.FluxWindowPredicate$WindowFlux",
