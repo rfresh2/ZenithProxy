@@ -39,9 +39,11 @@
   }, {
     "pattern":"\\Qorg/fusesource/jansi/jansi.properties\\E"
   }, {
+    "pattern":"\\Qorg/jline/utils/*.caps\\E"
+  }, {
     "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"
   }, {
-    "pattern":"\\Qorg/jline/utils/*.caps\\E"
+    "pattern":"\\Qorg/jline/utils/screen.caps\\E"
   }, {
     "pattern":"\\Qpc/1.12/blockCollisionShapes.json\\E"
   }, {
@@ -61,7 +63,7 @@
   }]},
   "bundles":[{
     "name":"org.eclipse.jgit.internal.JGitText",
-    "locales":["", "und"]
+    "locales":["und"]
   }, {
     "name":"sun.awt.resources.awt",
     "classNames":["sun.awt.resources.awt"]

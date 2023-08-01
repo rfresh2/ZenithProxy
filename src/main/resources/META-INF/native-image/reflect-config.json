@@ -60,6 +60,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setLevel","parameterTypes":["java.lang.String"] }]
 },
 {
+  "name":"ch.qos.logback.classic.jul.LevelChangePropagator",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setResetJUL","parameterTypes":["boolean"] }]
+},
+{
   "name":"ch.qos.logback.classic.pattern.DateConverter",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -111,11 +116,6 @@
   "name":"ch.qos.logback.core.rolling.RollingFileAppender",
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setFile","parameterTypes":["java.lang.String"] }, {"name":"setRollingPolicy","parameterTypes":["ch.qos.logback.core.rolling.RollingPolicy"] }]
-},
-{
-  "name":"com.zenith.terminal.logback.LazyInitRollingFileAppender",
-  "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"ch.qos.logback.core.rolling.RollingPolicy",
@@ -966,6 +966,11 @@
 },
 {
   "name":"com.zenith.network.client.ClientSession"
+},
+{
+  "name":"com.zenith.terminal.logback.LazyInitRollingFileAppender",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.terminal.logback.MCTextFormatANSIConverter",
@@ -4043,7 +4048,7 @@
 },
 {
   "name":"sun.misc.SignalHandler",
-  "fields":[{"name":"SIG_DFL"}]
+  "fields":[{"name":"SIG_DFL"}, {"name":"SIG_IGN"}]
 },
 {
   "name":"sun.misc.Unsafe",
