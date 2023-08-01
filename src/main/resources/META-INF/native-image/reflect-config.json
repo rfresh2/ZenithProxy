@@ -113,6 +113,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setFile","parameterTypes":["java.lang.String"] }, {"name":"setRollingPolicy","parameterTypes":["ch.qos.logback.core.rolling.RollingPolicy"] }]
 },
 {
+  "name":"com.zenith.terminal.logback.LazyInitRollingFileAppender",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"ch.qos.logback.core.rolling.RollingPolicy",
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },

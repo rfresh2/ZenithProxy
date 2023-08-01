@@ -11,9 +11,6 @@ import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
 
-import static net.daporkchop.lib.common.math.PMath.floorI;
-
-
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -28,9 +25,9 @@ public class EntityPainting extends Entity {
                 this.uuid,
                 this.paintingType,
                 new Position(
-                        floorI(this.x),
-                        floorI(this.y),
-                        floorI(this.z)
+                    (int) Math.floor(this.x),
+                    (int) Math.floor(this.y),
+                    (int) Math.floor(this.z)
                 ),
                 this.direction
         ));

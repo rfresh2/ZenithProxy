@@ -180,10 +180,13 @@ dependencies {
     shade 'com.google.guava:guava:32.1.1-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
-    shade "net.daporkchop.lib:hash:$porklibVersion"
-    shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
+    shade ("net.daporkchop.lib:math:$porklibVersion") {
+        exclude group: 'net.daporkchop.lib', module: 'common'
+        exclude group: 'net.daporkchop.lib', module: 'unsafe'
+    }
     shade "ch.qos.logback:logback-classic:1.4.8"
     shade 'org.slf4j:slf4j-api:2.0.7'
+    shade 'org.slf4j:jul-to-slf4j:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
@@ -343,19 +346,35 @@ graalvmNative {
                     "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
                     "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
                     "--add-opens=java.base/java.nio=ALL-UNNAMED",
-                    "--initialize-at-run-time=org.slf4j.LoggerFactory",
+//                    "--initialize-at-build-time=",
+//                    "--initialize-at-build-time=org.slf4j.MDC",
+//                    "--initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder",
+//                    "--initialize-at-build-time=org.slf4j.LoggerFactory",
+//                    "--initialize-at-run-time=net.daporkchop.lib",
                     "--initialize-at-build-time=net.daporkchop.lib",
                     "--initialize-at-build-time=org.jline",
                     "--initialize-at-build-time=java.awt.Toolkit",
                     "--initialize-at-build-time=java.awt.Color",
+                    "--initialize-at-build-time=java.awt.Insets",
                     "--initialize-at-build-time=org.fusesource.jansi",
                     "--initialize-at-build-time=com.google.gson",
-                    "--initialize-at-run-time=ch.qos.logback",
-                    "--initialize-at-run-time=io.netty", // todo: slim this down to particular classes or packages in netty
-                    "--initialize-at-run-time=net.daporkchop.lib",
-                    "--initialize-at-run-time=org.apache.logging.log4j",
+//                    "--initialize-at-build-time=ch.qos.logback",
+                    "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
+                    "--initialize-at-run-time=io.netty.channel.epoll.Native",
+                    "--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop",
+                    "--initialize-at-run-time=io.netty.channel.epoll.EpollEventArray",
+                    "--initialize-at-run-time=io.netty.channel.DefaultFileRegion",
+                    "--initialize-at-run-time=io.netty.channel.unix.Errors",
+                    "--initialize-at-run-time=io.netty.channel.unix.IovArray",
+                    "--initialize-at-run-time=io.netty.channel.unix.Limits",
+                    "--initialize-at-run-time=io.netty.util.internal.logging.Slf4jLogger",
+                    "--initialize-at-run-time=io.netty.channel.unix.Socket",
+                    "--initialize-at-run-time=io.netty.channel.ChannelHandlerMask",
                     "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl",
                     "--enable-url-protocols=https,http",
+                    "--report-unsupported-elements-at-runtime",
+                    "-H:+ReportExceptionStackTraces",
+//                    "--trace-class-initialization=ch.qos.logback.core.status.InfoStatus,ch.qos.logback.core.status.StatusBase,ch.qos.logback.core.util.Duration,ch.qos.logback.core.util.FileSize,ch.qos.logback.core.status.ErrorStatus,org.slf4j.LoggerFactory,ch.qos.logback.core.hook.DefaultShutdownHook,ch.qos.logback.classic.Level,ch.qos.logback.classic.Logger",
 //                    "--static", // todo: remove java.awt from code and dependencies. having issues getting this to statically link
                     // awt replacement for png IO? https://github.com/nayuki/PNG-library
 //                    "--libc=musl",
@@ -364,6 +383,19 @@ graalvmNative {
 //                    "--pgo-instrument",
                     "--gc=G1"
             )
+            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback')
+            buildArgs.add('--initialize-at-build-time=org.slf4j.MDC')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.classic.Level')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.classic.Logger')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.util.StatusPrinter')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.status.StatusBase')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.status.InfoStatus')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl')
+            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.util.Loader')
+            buildArgs.add('--initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.classic.spi.ThrowableProxy')
+            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.CoreConstants')
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }

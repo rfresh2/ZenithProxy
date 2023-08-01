@@ -3,6 +3,7 @@ package com.zenith;
 import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.zenith.cache.DataCache;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
@@ -44,22 +45,17 @@ import com.zenith.network.server.handler.spectator.outgoing.*;
 import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
-import net.daporkchop.lib.binary.oio.appendable.PAppendable;
-import net.daporkchop.lib.binary.oio.reader.UTF8FileReader;
-import net.daporkchop.lib.binary.oio.writer.UTF8FileWriter;
-import net.daporkchop.lib.common.misc.file.PFiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Shared {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final JsonParser JSON_PARSER = new JsonParser();
     public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
     public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");
     public static final Logger CACHE_LOG = LoggerFactory.getLogger("Cache");
@@ -171,8 +167,8 @@ public class Shared {
             DEFAULT_LOG.info("Loading config...");
 
             Config config;
-            if (PFiles.checkFileExists(CONFIG_FILE)) {
-                try (Reader reader = new UTF8FileReader(CONFIG_FILE)) {
+            if (CONFIG_FILE.exists()) {
+                try (Reader reader = new FileReader(CONFIG_FILE)) {
                     config = GSON.fromJson(reader, Config.class);
                 } catch (IOException e) {
                     throw new RuntimeException("Unable to load config!", e);
@@ -197,7 +193,7 @@ public class Shared {
             CONFIG = new Config().doPostLoad();
         }
 
-        try (PAppendable out = new UTF8FileWriter(PFiles.ensureFileExists(CONFIG_FILE))) {
+        try (Writer out = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(CONFIG, out);
         } catch (IOException e) {
             throw new RuntimeException("Unable to save config!", e);

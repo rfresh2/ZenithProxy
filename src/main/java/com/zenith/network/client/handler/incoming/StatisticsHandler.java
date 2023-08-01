@@ -4,19 +4,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerStatisticsPa
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
-import net.daporkchop.lib.unsafe.PUnsafe;
-
-import java.util.HashMap;
 
 import static com.zenith.Shared.CACHE;
 
 public class StatisticsHandler implements AsyncIncomingHandler<ServerStatisticsPacket, ClientSession> {
-    protected static final long PACKET_STATISTICS_OFFSET = PUnsafe.pork_getOffset(ServerStatisticsPacket.class, "statistics");
-
     @Override
     public boolean applyAsync(@NonNull ServerStatisticsPacket packet, @NonNull ClientSession session) {
         CACHE.getStatsCache().getStatistics().putAll(packet.getStatistics()); //cache all locally
-        PUnsafe.putObject(packet, PACKET_STATISTICS_OFFSET, new HashMap<>(CACHE.getStatsCache().getStatistics())); //replace statistics packet with copy of local
         return true;
     }
 

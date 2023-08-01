@@ -8,7 +8,6 @@ import com.zenith.feature.queue.Queue;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
-import net.daporkchop.lib.unsafe.PUnsafe;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
 import static com.zenith.Shared.*;
 
 public class ServerChatHandler implements IncomingHandler<ClientChatPacket, ServerConnection> {
-    protected static final long CLIENTCHATPACKET_MESSAGE_OFFSET = PUnsafe.pork_getOffset(ClientChatPacket.class, "message");
 
     @Override
     public boolean apply(@NonNull ClientChatPacket packet, @NonNull ServerConnection session) {
@@ -25,7 +23,8 @@ public class ServerChatHandler implements IncomingHandler<ClientChatPacket, Serv
             final String lowerCase = message.toLowerCase();
             if (message.startsWith("!!")) {
                 //allow sending ingame commands to bots or whatever
-                PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, message.substring(1));
+                // todo: reimplement without reflection
+//                PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, message.substring(1));
                 return true;
             } else if (lowerCase.startsWith("!help")) {
                 session.send(new ServerChatPacket("§9§lPlayer commands:", true));

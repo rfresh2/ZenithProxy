@@ -22,6 +22,7 @@ import com.zenith.util.Wait;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import reactor.netty.http.client.HttpClient;
 
 import javax.imageio.ImageIO;
@@ -73,11 +74,17 @@ public class Proxy {
     private Instant lastActiveHoursConnect = Instant.EPOCH;
 
     public static void main(String... args) {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
+        System.out.println("main");
         version = determineVersion();
+        System.out.println("version: " + version);
         DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
+        System.out.println("shared init");
         instance = new Proxy();
         if (CONFIG.interactiveTerminal.enable) {
             TERMINAL_MANAGER.start();
+            System.out.println("terminal start");
         }
         if (CONFIG.database.enabled) {
             DEFAULT_LOG.info("Starting Databases...");
@@ -91,6 +98,7 @@ public class Proxy {
                 DISCORD_LOG.error("Failed starting discord bot", e);
             }
         }
+        System.out.println("instance start before");
         instance.start();
     }
 

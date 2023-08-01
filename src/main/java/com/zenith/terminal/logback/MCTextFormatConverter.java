@@ -5,6 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import net.daporkchop.lib.logging.format.FormatParser;
 import net.daporkchop.lib.logging.format.component.TextComponent;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+import org.graalvm.nativeimage.ImageInfo;
 
 public class MCTextFormatConverter extends MessageConverter {
     private final FormatParser formatParser = AutoMCFormatParser.DEFAULT;
@@ -12,6 +13,7 @@ public class MCTextFormatConverter extends MessageConverter {
     @Override
     public String convert(ILoggingEvent event) {
         final String formattedMessage = event.getFormattedMessage();
+        if (ImageInfo.inImageBuildtimeCode()) return formattedMessage;
         try {
             // if the message doesn't start with a curly brace it ain't json
             if (formattedMessage.startsWith("{") || formattedMessage.contains("§")) {

@@ -41,9 +41,7 @@
   }, {
     "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"
   }, {
-    "pattern":"\\Qorg/jline/utils/dumb-color.caps\\E"
-  }, {
-    "pattern":"\\Qorg/jline/utils/screen.caps\\E"
+    "pattern":"\\Qorg/jline/utils/*.caps\\E"
   }, {
     "pattern":"\\Qpc/1.12/blockCollisionShapes.json\\E"
   }, {
