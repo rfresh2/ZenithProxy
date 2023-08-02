@@ -2,7 +2,6 @@ package com.zenith.discord;
 
 import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
-import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
@@ -45,6 +44,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
@@ -61,8 +61,8 @@ public class DiscordBot {
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
     private final ConcurrentLinkedQueue<MessageCreateRequest> relayChannelMessageQueue;
-    private static final ClientPresence DISCONNECTED_PRESENCE = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected"));
-    private static final ClientPresence DEFAULT_CONNECTED_PRESENCE = ClientPresence.of(Status.ONLINE, ClientActivity.playing((CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
+    private final Supplier<ClientPresence> disconnectedPresence = Suppliers.memoize(() -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected")));
+    private final Supplier<ClientPresence> defaultConnectedPresence = () -> ClientPresence.of(Status.ONLINE, ClientActivity.playing((CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
     public Optional<Instant> lastRelaymessage = Optional.empty();
 
     @Getter
@@ -78,7 +78,7 @@ public class DiscordBot {
         this.client = DiscordClientBuilder.create(CONFIG.discord.token)
                 .build()
                 .gateway()
-                .setInitialPresence(shardInfo -> DISCONNECTED_PRESENCE)
+                .setInitialPresence(shardInfo -> disconnectedPresence.get())
                 .login()
                 .block();
         EVENT_BUS.subscribe(this);
@@ -170,7 +170,7 @@ public class DiscordBot {
         } else if (Proxy.getInstance().isConnected()) {
             this.client.updatePresence(getOnlinePresence()).block();
         } else {
-            this.client.updatePresence(DISCONNECTED_PRESENCE).block();
+            this.client.updatePresence(disconnectedPresence.get()).block();
         }
     }
 
@@ -196,7 +196,7 @@ public class DiscordBot {
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
-        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).block();
+        this.client.updatePresence(defaultConnectedPresence.get()).block();
     }
 
     @Subscribe
@@ -215,7 +215,7 @@ public class DiscordBot {
                 .addField("Reason", event.reason, true)
                 .color(Color.CYAN)
                 .build());
-        SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(DISCONNECTED_PRESENCE).block());
+        SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(disconnectedPresence.get()).block());
         if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
     }
 
@@ -262,7 +262,7 @@ public class DiscordBot {
 
     @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
-        this.client.updatePresence(DEFAULT_CONNECTED_PRESENCE).block();
+        this.client.updatePresence(defaultConnectedPresence.get()).block();
     }
 
     @Subscribe

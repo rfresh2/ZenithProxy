@@ -820,63 +820,63 @@
   "queryAllPublicMethods":true
 },
 {
-  "name":"com.zenith.database.dto.ChatsRecord",
+  "name":"com.zenith.database.dto.tables.records.ChatsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.ConnectionsRecord",
+  "name":"com.zenith.database.dto.tables.records.ConnectionsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.DeathsRecord",
+  "name":"com.zenith.database.dto.tables.records.DeathsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.NamesRecord",
+  "name":"com.zenith.database.dto.tables.records.NamesRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.PlayercountRecord",
+  "name":"com.zenith.database.dto.tables.records.PlayercountRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.PlaytimeAllRecord",
+  "name":"com.zenith.database.dto.tables.records.PlaytimeAllRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.QueuelengthRecord",
+  "name":"com.zenith.database.dto.tables.records.QueuelengthRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.QueuewaitRecord",
+  "name":"com.zenith.database.dto.tables.records.QueuewaitRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
   "unsafeAllocated":true
 },
 {
-  "name":"com.zenith.database.dto.RestartsRecord",
+  "name":"com.zenith.database.dto.tables.records.RestartsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }],
@@ -951,6 +951,11 @@
 },
 {
   "name":"com.zenith.feature.queue.mcping.data.ExtraResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.QueueStatus",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },

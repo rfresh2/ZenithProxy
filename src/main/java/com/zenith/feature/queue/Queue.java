@@ -22,29 +22,28 @@ import static java.util.Objects.isNull;
 
 public class Queue {
     private static final String apiUrl = "https://2bqueue.info/queue";
-    private static final HttpClient httpClient = HttpClient.create()
-            .secure()
-            .baseUrl(apiUrl)
-            .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON));
+    private static HttpClient httpClient;
     private static final ObjectMapper mapper = new ObjectMapper();
-    private static final Duration refreshPeriod = Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES);
     private static QueueStatus queueStatus;
     private static final ScheduledExecutorService refreshExecutorService = new ScheduledThreadPoolExecutor(1);
     private static final Pattern digitPattern = Pattern.compile("\\d+");
     private static final MCPing mcPing = new MCPing();
     private static final PingOptions pingOptions = new PingOptions();
 
-
-    static {
+    public static void start() {
         refreshExecutorService.scheduleAtFixedRate(
-                Queue::updateQueueStatus,
-                500L,
-                refreshPeriod.toMillis(),
-                TimeUnit.MILLISECONDS);
+            Queue::updateQueueStatus,
+            500L,
+            Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES).toMillis(),
+            TimeUnit.MILLISECONDS);
         pingOptions.setHostname("connect.2b2t.org");
         pingOptions.setPort(25565);
         pingOptions.setTimeout(3000);
         pingOptions.setProtocolVersion(340);
+        httpClient = HttpClient.create()
+            .secure()
+            .baseUrl(apiUrl)
+            .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON));
     }
 
     public static QueueStatus getQueueStatus() {

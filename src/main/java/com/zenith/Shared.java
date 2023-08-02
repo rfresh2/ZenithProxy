@@ -176,6 +176,7 @@ public class Shared {
             }
 
             CONFIG = config.doPostLoad();
+            SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
             DEFAULT_LOG.info("Config loaded.");
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to load config!", e);
@@ -256,27 +257,29 @@ public class Shared {
             .build();
 
     static {
-        Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
-            DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e);
-        });
-        loadConfig();
-        SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);
-
-        SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
-        DISCORD_BOT = new DiscordBot();
-        EVENT_BUS = new EventBus(Runnable::run);
-        CACHE = new DataCache();
-        WHITELIST_MANAGER = new WhitelistManager();
-        PRIORITY_BAN_CHECKER = new PriorityBanChecker();
-        BLOCK_DATA_MANAGER = new BlockDataManager();
-        WORLD = new World(BLOCK_DATA_MANAGER);
-        DATABASE_MANAGER = new DatabaseManager();
-        TPS_CALCULATOR = new TPSCalculator();
-        MODULE_MANAGER = new ModuleManager();
-        PATHING = new Pathing(WORLD);
-        AUTO_UPDATER = new AutoUpdater();
-        TERMINAL_MANAGER = new TerminalManager();
-        COMMAND_MANAGER = new CommandManager();
+        try {
+            Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
+                DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e);
+            });
+            SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);
+            DISCORD_BOT = new DiscordBot();
+            EVENT_BUS = new EventBus(Runnable::run);
+            CACHE = new DataCache();
+            WHITELIST_MANAGER = new WhitelistManager();
+            PRIORITY_BAN_CHECKER = new PriorityBanChecker();
+            BLOCK_DATA_MANAGER = new BlockDataManager();
+            WORLD = new World(BLOCK_DATA_MANAGER);
+            DATABASE_MANAGER = new DatabaseManager();
+            TPS_CALCULATOR = new TPSCalculator();
+            MODULE_MANAGER = new ModuleManager();
+            PATHING = new Pathing(WORLD);
+            AUTO_UPDATER = new AutoUpdater();
+            TERMINAL_MANAGER = new TerminalManager();
+            COMMAND_MANAGER = new CommandManager();
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Unable to initialize!", e);
+            throw e;
+        }
     }
 
 }

@@ -15,7 +15,7 @@ import static com.zenith.Shared.CONFIG;
 public class JoinGamePostHandler implements PostOutgoingHandler<ServerJoinGamePacket, ServerConnection> {
     @Override
     public void accept(@NonNull ServerJoinGamePacket packet, @NonNull ServerConnection session) {
-        session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
+        session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_SUPPLIER.get()));
 
 
         session.setLoggedIn(true); // allows server packets to start being sent to player

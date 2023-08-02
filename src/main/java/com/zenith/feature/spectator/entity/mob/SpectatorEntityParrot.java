@@ -11,6 +11,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.data.PlayerCache;
 
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SpectatorEntityParrot extends SpectatorMob {
     @Override
@@ -51,7 +52,7 @@ public class SpectatorEntityParrot extends SpectatorMob {
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
-        final float randFloat = rand.nextFloat();
+        final float randFloat = ThreadLocalRandom.current().nextFloat();
         return Optional.of(new ServerPlayBuiltinSoundPacket(
                 BuiltinSound.ENTITY_PARROT_AMBIENT,
                 SoundCategory.AMBIENT,

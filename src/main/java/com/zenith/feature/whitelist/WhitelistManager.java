@@ -19,9 +19,6 @@ public class WhitelistManager {
 
     public WhitelistManager() {
         this.random = new Random();
-        if (CONFIG.server.extra.whitelist.whitelistRefresh) {
-            startRefreshTask();
-        }
     }
 
     public void startRefreshTask() {

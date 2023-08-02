@@ -80,21 +80,6 @@ public class Proxy {
         version = determineVersion();
         DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
         instance = new Proxy();
-        if (CONFIG.interactiveTerminal.enable) {
-            TERMINAL_MANAGER.start();
-        }
-        if (CONFIG.database.enabled) {
-            DEFAULT_LOG.info("Starting Databases...");
-            DATABASE_MANAGER.start();
-        }
-        if (CONFIG.discord.enable) {
-            DISCORD_LOG.info("Starting discord bot...");
-            try {
-                DISCORD_BOT.start();
-            } catch (final Throwable e) {
-                DISCORD_LOG.error("Failed starting discord bot", e);
-            }
-        }
         instance.start();
     }
 
@@ -112,8 +97,30 @@ public class Proxy {
     }
 
     public void start() {
+        loadConfig();
         EVENT_BUS.subscribe(this);
         try {
+            if (CONFIG.interactiveTerminal.enable) {
+                TERMINAL_MANAGER.start();
+            }
+            if (CONFIG.database.enabled) {
+                DEFAULT_LOG.info("Starting Databases...");
+                DATABASE_MANAGER.start();
+            }
+            if (CONFIG.discord.enable) {
+                DISCORD_LOG.info("Starting discord bot...");
+                try {
+                    DISCORD_BOT.start();
+                } catch (final Throwable e) {
+                    DISCORD_LOG.error("Failed starting discord bot", e);
+                }
+            }
+            if (CONFIG.server.extra.whitelist.whitelistRefresh) {
+                WHITELIST_MANAGER.startRefreshTask();
+            }
+            MODULE_MANAGER.init();
+            // todo: move to shared
+            Queue.start();
             saveConfig();
             if (CONFIG.server.extra.timeout.enable) {
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {

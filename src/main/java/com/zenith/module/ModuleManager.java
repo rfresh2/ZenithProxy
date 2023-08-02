@@ -28,7 +28,6 @@ public class ModuleManager {
 
     public ModuleManager() {
         EVENT_BUS.subscribe(this);
-        init();
     }
 
     public void init() {

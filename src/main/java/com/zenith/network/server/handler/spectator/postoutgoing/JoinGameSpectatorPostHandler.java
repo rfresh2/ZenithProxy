@@ -18,7 +18,7 @@ import static com.zenith.Shared.CACHE;
 public class JoinGameSpectatorPostHandler implements PostOutgoingHandler<ServerJoinGamePacket, ServerConnection> {
     @Override
     public void accept(@NonNull ServerJoinGamePacket packet, @NonNull ServerConnection session) {
-        session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_ENCODED));
+        session.send(new ServerPluginMessagePacket("MC|Brand", RefStrings.BRAND_SUPPLIER.get()));
         session.send(new ServerPlayerListEntryPacket(
                 PlayerListEntryAction.ADD_PLAYER,
                 new PlayerListEntry[]{new PlayerListEntry(session.getProfileCache().getProfile(), SPECTATOR)}
