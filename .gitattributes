@@ -12,3 +12,4 @@
 *.html text=auto eol=lf
 *.settings text=auto eol=lf
 Jenkinsfile text=auto eol=lf
+gradlew test=auto eol=lf

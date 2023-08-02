@@ -1,0 +1,61 @@
+name: Prerelease GraalVM Native
+
+on:
+  # todo: move this to push on mainline or native branch
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '20.0.2'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      #          native-image-musl: true
+
+      - name: Echo Versions and Paths
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Build Native Binary
+        run: ./gradlew nativeCompile
+
+      - name: Elevate binary permissions
+        run: chmod +x build/native/nativeCompile/*
+
+      # This will reduce the size of the binary substantially.
+      # BUT, the tradeoff is increased mem usage at runtime
+      # which is exactly what we're trying to avoid by using native compilation.
+      #      - name: Compress Native Binary
+      #        uses: svenstaro/upx-action@v2
+      #        with:
+      #          files: |
+      #            build/native/nativeCompile/ZenithProxy
+
+      - name: Zip Binary And Libs
+        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
+
+      - name: Create version identifier file
+        run: git rev-parse --short HEAD > version.txt
+
+      - name: Release Artifact
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "linux-native-prerelease"
+          prerelease: true
+          files: |
+            build/native/nativeCompile/ZenithProxy
+            version.txt

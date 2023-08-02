@@ -1,0 +1,71 @@
+name: ACT-Local GraalVM Native
+
+# Command:
+
+# act workflow_dispatch -W .github\workflows\act-local.yml --artifact-server-path build\artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '20.0.2'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        #          native-image-musl: true
+
+      - name: Set ACT Runner Env Variables
+        run: |
+          export GRAALVM_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
+          export JAVA_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1  
+
+      - name: Echo Versions and Paths
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Build Native Binary
+        run: ./gradlew nativeCompile
+
+      - name: Elevate binary permissions
+        run: chmod +x build/native/nativeCompile/*
+
+      # This will reduce the size of the binary substantially.
+      # BUT, the tradeoff is increased mem usage at runtime
+      # which is exactly what we're trying to avoid by using native compilation.
+      #      - name: Compress Native Binary
+      #        uses: svenstaro/upx-action@v2
+      #        with:
+      #          files: |
+      #            build/native/nativeCompile/ZenithProxy
+
+      - name: Zip Binary And Libs
+        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
+
+      - name: Create version identifier file
+        run: git rev-parse --short HEAD > version.txt
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-native
+          path: ZenithProxy.zip
+
+      - name: Upload Version Identifier
+        uses: actions/upload-artifact@v3
+        with:
+          name: version
+          path: version.txt
