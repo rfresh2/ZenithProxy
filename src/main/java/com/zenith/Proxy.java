@@ -39,6 +39,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -132,7 +133,7 @@ public class Proxy {
                     try {
                         if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
                             long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                            if (onlineSeconds > (21600 - 60)) { // 6 hrs - 60 seconds padding
+                            if (onlineSeconds > (21600 - (60 + ThreadLocalRandom.current().nextInt(120)))) { // 6 hrs - 60 seconds padding
                                 this.disconnect(SYSTEM_DISCONNECT);
                                 this.cancelAutoReconnect();
                                 this.connect();
