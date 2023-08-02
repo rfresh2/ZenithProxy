@@ -12,13 +12,14 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
-    private static boolean initialized;
+    private static boolean initialized = false;
     @Nullable
     private static Terminal terminal;
     @Nullable
     private static LineReader reader;
     @Nullable
     public static synchronized Terminal getTerminal() {
+        initializeTerminal();
         return terminal;
     }
 
@@ -37,10 +38,9 @@ public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
 
     public TerminalConsoleAppender() {
         super();
-        initializeTerminal();
     }
 
-    private synchronized void initializeTerminal() {
+    private static synchronized void initializeTerminal() {
         if (!initialized) {
             initialized = true;
             try {
@@ -51,7 +51,7 @@ public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
                         .build();
 
             } catch (IllegalStateException | IOException e) {
-                addStatus(new ErrorStatus("Failed to initialize terminal. Falling back to standard output", this, e));
+                System.out.println("Failed to initialize terminal. Falling back to standard output");
             }
         }
     }

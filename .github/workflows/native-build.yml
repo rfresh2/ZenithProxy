@@ -38,6 +38,9 @@ jobs:
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
 
+      # This will reduce the size of the binary substantially.
+      # BUT, the tradeoff is increased mem usage at runtime
+      # which is exactly what we're trying to avoid by using native compilation.
 #      - name: Compress Native Binary
 #        uses: svenstaro/upx-action@v2
 #        with:

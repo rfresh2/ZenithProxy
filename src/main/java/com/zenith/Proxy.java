@@ -76,15 +76,11 @@ public class Proxy {
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
-        System.out.println("main");
         version = determineVersion();
-        System.out.println("version: " + version);
         DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
-        System.out.println("shared init");
         instance = new Proxy();
         if (CONFIG.interactiveTerminal.enable) {
             TERMINAL_MANAGER.start();
-            System.out.println("terminal start");
         }
         if (CONFIG.database.enabled) {
             DEFAULT_LOG.info("Starting Databases...");
@@ -98,7 +94,6 @@ public class Proxy {
                 DISCORD_LOG.error("Failed starting discord bot", e);
             }
         }
-        System.out.println("instance start before");
         instance.start();
     }
 

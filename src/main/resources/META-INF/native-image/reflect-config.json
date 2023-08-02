@@ -820,6 +820,69 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"com.zenith.database.dto.ChatsRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.ConnectionsRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.DeathsRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.NamesRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.PlayercountRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.PlaytimeAllRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.QueuelengthRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.QueuewaitRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
+  "name":"com.zenith.database.dto.RestartsRecord",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "unsafeAllocated":true
+},
+{
   "name":"com.zenith.discord.DiscordBot",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,

@@ -3,7 +3,6 @@ package com.zenith;
 import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.zenith.cache.DataCache;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
@@ -55,7 +54,6 @@ import java.util.concurrent.ScheduledExecutorService;
 public class Shared {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static final JsonParser JSON_PARSER = new JsonParser();
     public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
     public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");
     public static final Logger CACHE_LOG = LoggerFactory.getLogger("Cache");
@@ -263,37 +261,22 @@ public class Shared {
         });
         loadConfig();
         SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);
-        DEFAULT_LOG.info("ScheduledExecutorService init");
+
         SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
-        DEFAULT_LOG.info("AutoReconnect init");
         DISCORD_BOT = new DiscordBot();
-        DEFAULT_LOG.info("Discord bot init");
         EVENT_BUS = new EventBus(Runnable::run);
-        DEFAULT_LOG.info("EventBus init");
         CACHE = new DataCache();
-        DEFAULT_LOG.info("DataCache init");
         WHITELIST_MANAGER = new WhitelistManager();
-        DEFAULT_LOG.info("WhitelistManager init");
         PRIORITY_BAN_CHECKER = new PriorityBanChecker();
-        DEFAULT_LOG.info("PriorityBanChecker init");
         BLOCK_DATA_MANAGER = new BlockDataManager();
-        DEFAULT_LOG.info("BlockDataManager init");
         WORLD = new World(BLOCK_DATA_MANAGER);
-        DEFAULT_LOG.info("World init");
         DATABASE_MANAGER = new DatabaseManager();
-        DEFAULT_LOG.info("DatabaseManager init");
         TPS_CALCULATOR = new TPSCalculator();
-        DEFAULT_LOG.info("TPSCalculator init");
         MODULE_MANAGER = new ModuleManager();
-        DEFAULT_LOG.info("ModuleManager init");
         PATHING = new Pathing(WORLD);
-        DEFAULT_LOG.info("Pathing init");
         AUTO_UPDATER = new AutoUpdater();
-        DEFAULT_LOG.info("AutoUpdater init");
         TERMINAL_MANAGER = new TerminalManager();
-        DEFAULT_LOG.info("TerminalManager init");
         COMMAND_MANAGER = new CommandManager();
-        DEFAULT_LOG.info("CommandManager init");
     }
 
 }

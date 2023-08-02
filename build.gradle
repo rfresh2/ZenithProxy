@@ -341,16 +341,12 @@ graalvmNative {
             javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
+//            quickBuild = true
             verbose = true
             buildArgs.addAll(
                     "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
                     "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
                     "--add-opens=java.base/java.nio=ALL-UNNAMED",
-//                    "--initialize-at-build-time=",
-//                    "--initialize-at-build-time=org.slf4j.MDC",
-//                    "--initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder",
-//                    "--initialize-at-build-time=org.slf4j.LoggerFactory",
-//                    "--initialize-at-run-time=net.daporkchop.lib",
                     "--initialize-at-build-time=net.daporkchop.lib",
                     "--initialize-at-build-time=org.jline",
                     "--initialize-at-build-time=java.awt.Toolkit",
@@ -358,7 +354,19 @@ graalvmNative {
                     "--initialize-at-build-time=java.awt.Insets",
                     "--initialize-at-build-time=org.fusesource.jansi",
                     "--initialize-at-build-time=com.google.gson",
-//                    "--initialize-at-build-time=ch.qos.logback",
+                    '--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback',
+                    '--initialize-at-build-time=org.slf4j.MDC',
+                    '--initialize-at-build-time=ch.qos.logback.classic.Level',
+                    '--initialize-at-build-time=ch.qos.logback.classic.Logger',
+                    '--initialize-at-build-time=ch.qos.logback.core.util.StatusPrinter',
+                    '--initialize-at-build-time=ch.qos.logback.core.status.StatusBase',
+                    '--initialize-at-build-time=ch.qos.logback.core.status.InfoStatus',
+                    '--initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl',
+                    '--initialize-at-build-time=org.slf4j.LoggerFactory',
+                    '--initialize-at-build-time=ch.qos.logback.core.util.Loader',
+                    '--initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder',
+                    '--initialize-at-build-time=ch.qos.logback.classic.spi.ThrowableProxy',
+                    '--initialize-at-build-time=ch.qos.logback.core.CoreConstants',
                     "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
                     "--initialize-at-run-time=io.netty.channel.epoll.Native",
                     "--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop",
@@ -374,28 +382,14 @@ graalvmNative {
                     "--enable-url-protocols=https,http",
                     "--report-unsupported-elements-at-runtime",
                     "-H:+ReportExceptionStackTraces",
-//                    "--trace-class-initialization=ch.qos.logback.core.status.InfoStatus,ch.qos.logback.core.status.StatusBase,ch.qos.logback.core.util.Duration,ch.qos.logback.core.util.FileSize,ch.qos.logback.core.status.ErrorStatus,org.slf4j.LoggerFactory,ch.qos.logback.core.hook.DefaultShutdownHook,ch.qos.logback.classic.Level,ch.qos.logback.classic.Logger",
 //                    "--static", // todo: remove java.awt from code and dependencies. having issues getting this to statically link
                     // awt replacement for png IO? https://github.com/nayuki/PNG-library
 //                    "--libc=musl",
-                    // todo: decide if we want to bake in GC tuning or specify it at runtime
-//                    "-R:MaxRAMPercentage=30",
+                    "-R:MaxHeapSize=100m",
 //                    "--pgo-instrument",
-                    "--gc=G1"
+                    "--gc=serial",
             )
-            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback')
-            buildArgs.add('--initialize-at-build-time=org.slf4j.MDC')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.classic.Level')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.classic.Logger')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.util.StatusPrinter')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.status.StatusBase')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.status.InfoStatus')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl')
-            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.util.Loader')
-            buildArgs.add('--initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.classic.spi.ThrowableProxy')
-            buildArgs.add('--initialize-at-build-time=ch.qos.logback.core.CoreConstants')
+
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
