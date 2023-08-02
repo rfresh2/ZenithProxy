@@ -119,7 +119,6 @@ public class Proxy {
                 WHITELIST_MANAGER.startRefreshTask();
             }
             MODULE_MANAGER.init();
-            // todo: move to shared
             Queue.start();
             saveConfig();
             if (CONFIG.server.extra.timeout.enable) {

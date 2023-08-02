@@ -1,7 +1,7 @@
 package com.zenith.terminal.logback;
 
 import ch.qos.logback.core.rolling.RollingFileAppender;
-import org.graalvm.nativeimage.ImageInfo;
+import com.zenith.util.ImageInfo;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

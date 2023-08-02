@@ -11,7 +11,7 @@
     <import class="ch.qos.logback.core.ConsoleAppender"/>
     <import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"/>
 
-<!--    <statusListener class="com.zenith.terminal.logback.PrintOnlyErrorLogbackStatusListener"/>-->
+    <statusListener class="com.zenith.terminal.logback.PrintOnlyErrorLogbackStatusListener"/>
     <!-- Prevent logback compression failing during JVM stop https://logback.qos.ch/manual/configuration.html#shutdownHook -->
     <shutdownHook/>
 
@@ -70,7 +70,7 @@
         <!-- suppress these dumb "thank you" and ascii arts -->
         <appender-ref ref="TERMINAL"/>
     </logger>
-    <logger name="org.jline" level="TRACE">
+    <logger name="org.jline" level="WARN">
         <appender-ref ref="TERMINAL"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
