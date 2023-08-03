@@ -150,6 +150,7 @@ def download_release_asset(asset_id):
 
 
 def java_update_check():
+    global version
     latest_release_id = get_latest_release_id(release_channel)
     version_asset_id = get_release_asset_id(latest_release_id, "version.txt")
     version_data = download_release_asset(version_asset_id)
@@ -165,15 +166,14 @@ def java_update_check():
     jar_data = download_release_asset(jar_asset_id)
     with open("ZenithProxy.jar", "wb") as f:
         f.write(jar_data)
+    version = version_str
 
 
 def linux_native_update_check():
+    global version
     latest_release_id = get_latest_release_id(release_channel)
-    print("Latest release ID:", str(latest_release_id))
     version_asset_id = get_release_asset_id(latest_release_id, "version.txt")
-    print("Version asset ID:", str(version_asset_id))
     version_data = download_release_asset(version_asset_id)
-    print(version_data)
     version_str = version_data.decode().strip()
     if not version_looks_valid(version_str):
         print("Invalid version string:", version_str)
@@ -189,7 +189,7 @@ def linux_native_update_check():
     with zipfile.ZipFile("ZenithProxy.zip", "r") as zip_ref:
         zip_ref.extractall(".")
     os.remove("ZenithProxy.zip")
-
+    version = version_str
 
 def get_java_version():
     try:
