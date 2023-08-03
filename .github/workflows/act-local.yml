@@ -56,7 +56,7 @@ jobs:
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Create version identifier file
-        run: git rev-parse --short HEAD > version.txt
+        run: git rev-parse --short=8 HEAD > version.txt
 
       - name: Upload Binary
         uses: actions/upload-artifact@v3

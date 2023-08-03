@@ -3,7 +3,7 @@ name: ZenithProxy Java Build And Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'java*'
 
 jobs:
   build:
@@ -28,13 +28,14 @@ jobs:
         run: ./gradlew jarBuild
 
       - name: Create version identifier file
-        run: git rev-parse --short HEAD > version.txt
+        run: git rev-parse --short=8 HEAD > version.txt
 
       - name: Release Artifact
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          automatic_release_tag: "${{ github.ref_name }}"
           files: |
             build/libs/ZenithProxy.jar
             version.txt
