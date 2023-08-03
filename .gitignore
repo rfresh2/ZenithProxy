@@ -4,6 +4,7 @@
 /log/
 /build/
 /config*.json
+launch_config.json
 /.gradle/
 *.class
 *.ipr

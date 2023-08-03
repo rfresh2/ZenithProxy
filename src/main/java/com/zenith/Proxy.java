@@ -9,6 +9,9 @@ import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.proxy.*;
+import com.zenith.feature.autoupdater.AutoUpdater;
+import com.zenith.feature.autoupdater.GitAutoUpdater;
+import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AntiAFK;
 import com.zenith.network.client.Authenticator;
@@ -54,6 +57,7 @@ import static java.util.Objects.nonNull;
 public class Proxy {
     @Getter
     protected static Proxy instance;
+    @Getter
     private static String version;
 
     protected MinecraftProtocol protocol;
@@ -73,6 +77,9 @@ public class Proxy {
     private Optional<Boolean> isPrioBanned = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
+    @Getter
+    @Setter
+    private AutoUpdater autoUpdater;
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -97,6 +104,7 @@ public class Proxy {
     }
 
     public void start() {
+        loadLaunchConfig();
         loadConfig();
         EVENT_BUS.subscribe(this);
         try {
@@ -186,8 +194,10 @@ public class Proxy {
                 }
             }
             if (CONFIG.autoUpdater.autoUpdate) {
-                DEFAULT_LOG.info("Starting AutoUpdater...");
-                AUTO_UPDATER.start();
+                DEFAULT_LOG.info("Starting {} AutoUpdater...", LAUNCH_CONFIG.release_channel);
+                if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
+                else autoUpdater = new RestAutoUpdater();
+                autoUpdater.start();
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
