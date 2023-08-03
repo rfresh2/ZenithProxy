@@ -57,5 +57,5 @@ jobs:
           automatic_release_tag: "linux-native-prerelease"
           prerelease: true
           files: |
-            build/native/nativeCompile/ZenithProxy
+            ZenithProxy.zip
             version.txt

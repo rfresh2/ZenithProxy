@@ -58,5 +58,5 @@ jobs:
           prerelease: false
           automatic_release_tag: "${{ github.ref_name }}"
           files: |
-            build/native/nativeCompile/ZenithProxy
+            ZenithProxy.zip
             version.txt
