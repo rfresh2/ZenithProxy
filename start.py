@@ -69,7 +69,10 @@ def write_launch_config():
 def git_update_check():
     global version
     os.system("git pull")
-    os.system("gradlew jarBuild --no-daemon")
+    if system == "Windows":
+        os.system(".\\gradlew jarBuild --no-daemon")
+    else:
+        os.system("./gradlew jarBuild --no-daemon")
     try:
         output = subprocess.check_output(['git', 'rev-parse', '--short=8', 'HEAD'], stderr=subprocess.STDOUT, text=True)
         v = str(output).splitlines()[0].strip()
