@@ -56,6 +56,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          automatic_release_tag: "${{ env.GITHUB_REF_NAME }}"
           files: |
             build/native/nativeCompile/ZenithProxy
             version.txt
