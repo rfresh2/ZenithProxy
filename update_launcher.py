@@ -2,6 +2,7 @@ import hashlib
 import http.client
 import json
 import os
+from urllib.parse import urlparse
 
 with open("launch_config.json", "r") as f:
     launch_config = json.load(f)
@@ -10,7 +11,7 @@ auto_update = launch_config["auto_update"]
 repo_owner = launch_config["repo_owner"]
 repo_name = launch_config["repo_name"]
 repo_branch = launch_config["repo_branch"]
-launcher_tag = "launcher"
+launcher_tag = "launch"
 
 if not auto_update:
     exit(0)
@@ -56,9 +57,21 @@ def download_release_asset(asset_id):
         download_headers["Accept"] = "application/octet-stream"
         connection.request("GET", url, headers=download_headers)
         response = connection.getresponse()
+        # Follow redirects
+        while response.status // 100 == 3:
+            redirect_location = response.getheader('Location')
+            connection.close()
+
+            # Parse the redirect URL to extract the new host
+            redirect_url = urlparse(redirect_location)
+            redirect_host = redirect_url.netloc
+
+            # Reopen connection to the new host
+            connection = http.client.HTTPSConnection(redirect_host)
+            connection.request("GET", redirect_location, headers=download_headers)
+            response = connection.getresponse()
         if response.status == 200:
             asset_data = response.read()
-            print("Downloaded asset:", len(asset_data), "bytes")
             return asset_data
         else:
             print("Failed to download asset:", response.status, response.reason)
@@ -72,19 +85,19 @@ def download_release_asset(asset_id):
 
 startAssetId = get_release_asset_id(launcher_tag, "start.py")
 startAsset = download_release_asset(startAssetId)
-contents = startAsset.decode("utf-8")
+contents = startAsset.decode()
 if len(contents) < 100:
     print("Failed to download start.py")
     exit(1)
 
-with open("start.py", "r") as f:
+with open("start.py", "r", newline='') as f:
     current = f.read()
-    currentHash = hashlib.sha1(current.encode("utf-8")).hexdigest()
-    newHash = hashlib.sha1(contents.encode("utf-8")).hexdigest()
+    currentHash = hashlib.sha1(current.encode()).hexdigest()
+    newHash = hashlib.sha1(contents.encode()).hexdigest()
     if currentHash != newHash:
         print("Updating to remote start.py...")
     else:
         exit(0)
 
-with open("start.py", "w") as f:
+with open("start.py", "w", newline='') as f:
     f.write(contents)
