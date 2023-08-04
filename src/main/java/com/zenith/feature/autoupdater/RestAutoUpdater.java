@@ -58,10 +58,16 @@ public class RestAutoUpdater extends AutoUpdater {
                 }
                 return getVersionFromRelease(releaseId)
                     .map(versionFromRelease -> {
-                        if (versionLooksCorrect(versionFromRelease) && !Objects.equals(Proxy.getVersion(), versionFromRelease)) {
-                            if (!getUpdateAvailable()) DEFAULT_LOG.info("New update on release channel {}! Current version: {} New Version: {}!", LAUNCH_CONFIG.release_channel, Proxy.getVersion(), versionFromRelease);
-                            setUpdateAvailable(true);
-                        } else DEFAULT_LOG.warn("Failed to parse version from release: {}", versionFromRelease);
+                        if (versionLooksCorrect(versionFromRelease)) {
+                            if (!Objects.equals(Proxy.getVersion(), versionFromRelease)) {
+                                if (!getUpdateAvailable()) DEFAULT_LOG.info(
+                                    "New update on release channel {}! Current version: {} New Version: {}!",
+                                    LAUNCH_CONFIG.release_channel,
+                                    Proxy.getVersion(),
+                                    versionFromRelease);
+                                setUpdateAvailable(true);
+                            }
+                        } else DEFAULT_LOG.warn("Failed to parse version from release: '{}'", versionFromRelease);
                         return Mono.empty();
                     });
             })
