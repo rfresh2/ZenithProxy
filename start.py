@@ -11,6 +11,7 @@ release_channel = "git"
 version = "0"
 repo_owner = "rfresh2"
 repo_name = "ZenithProxy"
+repo_branch = "mainline"
 system = platform.system()
 
 github_headers = {
@@ -43,16 +44,18 @@ def init_launch_config():
 
 
 def read_launch_config(data):
-    global release_channel, version, repo_owner, repo_name
+    global release_channel, version, repo_owner, repo_name, repo_branch
     try:
         t_channel = data['release_channel']
         t_version = data['version']
         t_repo_owner = data['repo_owner']
         t_repo_name = data['repo_name']
+        t_repo_branch = data['repo_branch']
         release_channel = t_channel
         version = t_version
         repo_owner = t_repo_owner
         repo_name = t_repo_name
+        repo_branch = t_repo_branch
     except KeyError:
         print("Error reading launch_config.json")
         create_default_launch_config()
@@ -64,7 +67,8 @@ def write_launch_config():
         "release_channel": release_channel,
         "version": version,
         "repo_owner": repo_owner,
-        "repo_name": repo_name
+        "repo_name": repo_name,
+        "repo_branch": repo_branch
     }
     with open('launch_config.json', 'w') as f:
         f.write(json.dumps(output, indent=4))
