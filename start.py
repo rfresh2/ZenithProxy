@@ -306,6 +306,8 @@ if json_data is None:
     json_data = init_launch_config()
 read_launch_config(json_data)
 validate_launch_config()
+if not validate_system_with_config():
+    raise UpdateError("Invalid system for release channel: " + release_channel)
 
 # Determine if there's a new update
 # Install new update if available
