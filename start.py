@@ -236,7 +236,7 @@ def rest_update_check(asset_name):
         raise RestUpdateError("Failed to decode version asset")
     if not version_looks_valid(version_str):
         raise RestUpdateError("Invalid version string: " + version_str)
-    if version_str == version:
+    if version_str == version and os.path.isfile("launcher/" + asset_name):
         print("Already up to date")
         return
     print("Updating to version", version_str)
@@ -247,12 +247,12 @@ def rest_update_check(asset_name):
     if not asset_data:
         raise RestUpdateError("Failed to download executable asset")
     try:
-        with open(asset_name, "wb") as f:
+        with open("launcher/" + asset_name, "wb") as f:
             f.write(asset_data)
         if asset_name.endswith(".zip"):
-            with zipfile.ZipFile(asset_name, "r") as zip_ref:
-                zip_ref.extractall(".")
-            os.remove(asset_name)
+            with zipfile.ZipFile("launcher/" + asset_name, "r") as zip_ref:
+                zip_ref.extractall("launcher/")
+            os.remove("launcher/" + asset_name)
     except IOError as e:
         raise RestUpdateError("Failed to write executable asset: " + str(e))
     version = version_str
@@ -351,7 +351,7 @@ if release_channel == "git":
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
 elif release_channel == "java":
-    if not os.path.isfile("ZenithProxy.jar"):
+    if not os.path.isfile("launcher/ZenithProxy.jar"):
         raise RuntimeError("ZenithProxy.jar not found")
     toolchain_command = ""
     jar_command = ""
@@ -364,10 +364,10 @@ elif release_channel == "java":
 -Djava.util.concurrent.ForkJoinPool.common.parallelism=8 -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 """
     if system == 'Windows':
         toolchain_command = "call java"
-        jar_command = "-jar ZenithProxy.jar"
+        jar_command = "-jar launcher\\ZenithProxy.jar"
     else:
         toolchain_command = "java"
-        jar_command = "-jar ZenithProxy.jar"
+        jar_command = "-jar launcher/ZenithProxy.jar"
     full_script = f"{toolchain_command} {common_script} {jar_command}"
     try:
         subprocess.run(full_script, shell=True, check=True)
@@ -379,7 +379,7 @@ elif release_channel == "linux-native" or release_channel == "prerelease-linux-n
     if not os.path.isfile("ZenithProxy"):
         raise RuntimeError("ZenithProxy executable not found")
     try:
-        subprocess.run("./ZenithProxy "
+        subprocess.run("./launcher/ZenithProxy "
                        "-Xmx150m -Djava.util.concurrent.ForkJoinPool.common.parallelism=8 "
                        "-Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2",
                        shell=True, check=True)

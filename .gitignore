@@ -13,3 +13,4 @@ launch_config.json
 gradle.properties
 msal*.json
 /.vscode/settings.json
+launcher/
