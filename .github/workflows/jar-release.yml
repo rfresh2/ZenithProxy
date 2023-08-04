@@ -3,7 +3,7 @@ name: ZenithProxy Java Build And Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'java*'
 
 jobs:
   build:

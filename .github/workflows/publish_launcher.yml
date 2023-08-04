@@ -1,0 +1,29 @@
+name: Publish Launcher
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Elevate launcher script permissions
+        run: chmod +x ./launcher.sh
+
+      - name: Create version identifier file
+        run: git rev-parse --short HEAD > version.txt
+
+      - name: Release Artifacts
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "launch"
+          prerelease: true
+          files: |
+            launch.sh
+            launch.bat
+            launcher.py
+            update_launcher.py

@@ -1,8 +1,9 @@
 name: Prerelease GraalVM Native
 
 on:
-  # todo: move this to push on mainline or native branch
-  workflow_dispatch:
+  push:
+    tags:
+      - 'prerelease-linux-native*'
 
 jobs:
   build:
