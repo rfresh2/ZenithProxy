@@ -83,21 +83,21 @@ def download_release_asset(asset_id):
         connection.close()
 
 
-startAssetId = get_release_asset_id(launcher_tag, "start.py")
+startAssetId = get_release_asset_id(launcher_tag, "launcher.py")
 startAsset = download_release_asset(startAssetId)
 contents = startAsset.decode()
 if len(contents) < 100:
-    print("Failed to download start.py")
+    print("Failed to download launcher.py")
     exit(1)
 
-with open("start.py", "r", newline='') as f:
+with open("launcher.py", "r", newline='') as f:
     current = f.read()
     currentHash = hashlib.sha1(current.encode()).hexdigest()
     newHash = hashlib.sha1(contents.encode()).hexdigest()
     if currentHash != newHash:
-        print("Updating to remote start.py...")
+        print("Updating to remote launcher.py...")
     else:
         exit(0)
 
-with open("start.py", "w", newline='') as f:
+with open("launcher.py", "w", newline='') as f:
     f.write(contents)

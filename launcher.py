@@ -13,6 +13,7 @@ version = "0"
 repo_owner = "rfresh2"
 repo_name = "ZenithProxy"
 repo_branch = "mainline"
+launch_dir = "launcher/"
 system = platform.system()
 
 github_headers = {
@@ -219,7 +220,7 @@ class RestUpdateError(UpdateError):
     pass
 
 
-def rest_update_check(asset_name):
+def rest_update_check(asset_name, executable_name):
     global version
     latest_release_id = get_latest_release_id(release_channel)
     if not latest_release_id:
@@ -236,7 +237,7 @@ def rest_update_check(asset_name):
         raise RestUpdateError("Failed to decode version asset")
     if not version_looks_valid(version_str):
         raise RestUpdateError("Invalid version string: " + version_str)
-    if version_str == version and os.path.isfile("launcher/" + asset_name):
+    if version_str == version and os.path.isfile(launch_dir + executable_name):
         print("Already up to date")
         return
     print("Updating to version", version_str)
@@ -247,23 +248,24 @@ def rest_update_check(asset_name):
     if not asset_data:
         raise RestUpdateError("Failed to download executable asset")
     try:
-        with open("launcher/" + asset_name, "wb") as f:
+        with open(launch_dir + asset_name, "wb") as f:
             f.write(asset_data)
         if asset_name.endswith(".zip"):
-            with zipfile.ZipFile("launcher/" + asset_name, "r") as zip_ref:
-                zip_ref.extractall("launcher/")
-            os.remove("launcher/" + asset_name)
+            with zipfile.ZipFile(launch_dir + asset_name, "r") as zip_ref:
+                zip_ref.extractall(launch_dir)
+                subprocess.run(["chmod", "+x", launch_dir + "ZenithProxy"])
+            os.remove(launch_dir + asset_name)
     except IOError as e:
         raise RestUpdateError("Failed to write executable asset: " + str(e))
     version = version_str
 
 
 def java_update_check():
-    rest_update_check("ZenithProxy.jar")
+    rest_update_check("ZenithProxy.jar", "ZenithProxy.jar")
 
 
 def linux_native_update_check():
-    rest_update_check("ZenithProxy.zip")
+    rest_update_check("ZenithProxy.zip", "ZenithProxy")
 
 
 def get_java_version():

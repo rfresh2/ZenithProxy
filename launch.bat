@@ -17,7 +17,7 @@ where %PYTHON_CMD% >nul 2>nul || (
 
 :loop
 %PYTHON_CMD% update_launcher.py
-%PYTHON_CMD% start.py
+%PYTHON_CMD% launcher.py
 echo Restarting. Press Ctrl+C to stop
 timeout /t 3 >nul
 goto loop

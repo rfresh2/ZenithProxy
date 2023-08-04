@@ -18,7 +18,7 @@ fi
 while true
 do
   $PYTHON_CMD update_launcher.py
-  $PYTHON_CMD start.py
+  $PYTHON_CMD launcher.py
   echo "Restarting. Press Ctrl+C to stop"
   sleep 3
 done
