@@ -1,12 +1,13 @@
+import http.client
 import json
 import os
 import platform
 import re
 import subprocess
 import zipfile
+from urllib.parse import urlparse
 
-import requests
-
+auto_update = True
 release_channel = "git"
 version = "0"
 repo_owner = "rfresh2"
@@ -44,13 +45,15 @@ def init_launch_config():
 
 
 def read_launch_config(data):
-    global release_channel, version, repo_owner, repo_name, repo_branch
+    global release_channel, version, repo_owner, repo_name, repo_branch, auto_update
     try:
+        t_auto_update = data['auto_update']
         t_channel = data['release_channel']
         t_version = data['version']
         t_repo_owner = data['repo_owner']
         t_repo_name = data['repo_name']
         t_repo_branch = data['repo_branch']
+        auto_update = t_auto_update
         release_channel = t_channel
         version = t_version
         repo_owner = t_repo_owner
@@ -64,6 +67,7 @@ def read_launch_config(data):
 def write_launch_config():
     global release_channel, version, repo_owner, repo_name
     output = {
+        "auto_update": True,
         "release_channel": release_channel,
         "version": version,
         "repo_owner": repo_owner,
@@ -77,10 +81,6 @@ def write_launch_config():
 def git_update_check():
     global version
     os.system("git pull")
-    if system == "Windows":
-        os.system(".\\gradlew jarBuild --no-daemon")
-    else:
-        os.system("./gradlew jarBuild --no-daemon")
     try:
         output = subprocess.check_output(['git', 'rev-parse', '--short=8', 'HEAD'], stderr=subprocess.STDOUT, text=True)
         v = str(output).splitlines()[0].strip()
@@ -92,6 +92,13 @@ def git_update_check():
     except subprocess.CalledProcessError as e:
         print("Error:", e.output)
     return None
+
+
+def git_build():
+    if system == "Windows":
+        os.system(".\\gradlew jarBuild --no-daemon")
+    else:
+        os.system("./gradlew jarBuild --no-daemon")
 
 
 def version_looks_valid(ver):
@@ -122,45 +129,86 @@ def valid_release_channel(channel):
 
 
 def get_latest_release_id(channel):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases"
+    url = f"/repos/{repo_owner}/{repo_name}/releases"
     try:
-        response = requests.get(url, headers=github_headers)
-        releases = response.json()
-        latest_release = next(
-            (release for release in releases if release["tag_name"].startswith(channel)),
-            None
-        )
-        return latest_release["id"] if latest_release else None
-    except requests.exceptions.RequestException as e:
+        connection = http.client.HTTPSConnection("api.github.com")
+        connection.request("GET", url, headers=github_headers)
+        response = connection.getresponse()
+        if response.status == 200:
+            releases = json.loads(response.read())
+            latest_release = next(
+                (release for release in releases if release["tag_name"].startswith(channel)),
+                None
+            )
+            return latest_release["id"] if latest_release else None
+        else:
+            print("Failed to get latest release ID:", response.status, response.reason)
+            return None
+    except Exception as e:
         print("Failed to get latest release ID:", e)
         return None
+    finally:
+        connection.close()
+
 
 
 def get_release_asset_id(release_id, asset_name):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/{release_id}"
+    url = f"/repos/{repo_owner}/{repo_name}/releases/{release_id}"
     try:
-        response = requests.get(url, headers=github_headers)
-        release_data = response.json()
-        return next(
-            (asset["id"] for asset in release_data["assets"] if asset["name"] == asset_name),
-            None
-        )
-    except requests.exceptions.RequestException as e:
+        connection = http.client.HTTPSConnection("api.github.com")
+        connection.request("GET", url, headers=github_headers)
+        response = connection.getresponse()
+        if response.status == 200:
+            release_data = json.loads(response.read())
+            asset_id = next(
+                (asset["id"] for asset in release_data["assets"] if asset["name"] == asset_name),
+                None
+            )
+            return asset_id
+        else:
+            print("Failed to get release asset ID:", response.status, response.reason)
+            return None
+    except Exception as e:
         print("Failed to get release asset ID:", e)
         return None
+    finally:
+        connection.close()
 
 
 def download_release_asset(asset_id):
-    download_headers = github_headers.copy()
-    download_headers["Accept"] = "application/octet-stream"
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
+    url = f"/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
     try:
-        response = requests.get(url, headers=download_headers)
-        asset_data = response.content
-        return asset_data
-    except requests.exceptions.RequestException as e:
+        connection = http.client.HTTPSConnection("api.github.com")
+        download_headers = github_headers.copy()
+        download_headers["Accept"] = "application/octet-stream"
+        connection.request("GET", url, headers=download_headers)
+        response = connection.getresponse()
+
+        # Follow redirects
+        while response.status // 100 == 3:
+            redirect_location = response.getheader('Location')
+            connection.close()
+
+            # Parse the redirect URL to extract the new host
+            redirect_url = urlparse(redirect_location)
+            redirect_host = redirect_url.netloc
+
+            # Reopen connection to the new host
+            connection = http.client.HTTPSConnection(redirect_host)
+            connection.request("GET", redirect_location, headers=download_headers)
+            response = connection.getresponse()
+
+        if response.status == 200:
+            asset_data = response.read()
+            return asset_data
+        else:
+            print("Failed to download asset:", response.status, response.reason)
+            return None
+    except Exception as e:
         print("Failed to download asset:", e)
         return None
+    finally:
+        connection.close()
 
 
 class UpdateError(Exception):
@@ -261,24 +309,25 @@ validate_launch_config()
 
 # Determine if there's a new update
 # Install new update if available
-
-try:
-    if release_channel == "git":
-        git_update_check()
-    elif release_channel == "java":
-        java_update_check()
-    elif release_channel == "linux-native":
-        linux_native_update_check()
-    elif release_channel == "prerelease-linux-native":
-        linux_native_update_check()
-except UpdateError as e:
-    print("Error performing update check:", e)
+if auto_update:
+    try:
+        if release_channel == "git":
+            git_update_check()
+        elif release_channel == "java":
+            java_update_check()
+        elif release_channel == "linux-native":
+            linux_native_update_check()
+        elif release_channel == "prerelease-linux-native":
+            linux_native_update_check()
+    except UpdateError as e:
+        print("Error performing update check:", e)
 
 write_launch_config()
 
 # Launch application
 
 if release_channel == "git":
+    git_build()
     toolchain_command = ""
     jar_command = ""
     common_script = """\

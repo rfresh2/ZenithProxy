@@ -1,6 +1,7 @@
 package com.zenith.util;
 
 public class LaunchConfig {
+    public boolean auto_update = true;
     public String release_channel = "java";
     public String version = "0";
     public String repo_owner = "rfresh2";

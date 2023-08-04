@@ -223,6 +223,23 @@ public class Shared {
 
         DEFAULT_LOG.debug("Config saved.");
     }
+    public static synchronized void saveLaunchConfig() {
+        DEFAULT_LOG.debug("Saving launch config...");
+
+        if (LAUNCH_CONFIG == null) {
+            DEFAULT_LOG.warn("Launch config is not set, saving default config!");
+            LAUNCH_CONFIG = new LaunchConfig();
+        }
+
+        try (Writer out = new FileWriter(LAUNCH_CONFIG_FILE)) {
+            GSON.toJson(LAUNCH_CONFIG, out);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to save launch config!", e);
+        }
+
+        DEFAULT_LOG.debug("Launch config saved.");
+    }
+
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(true)

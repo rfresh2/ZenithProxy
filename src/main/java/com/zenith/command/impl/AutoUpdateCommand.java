@@ -9,8 +9,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.LAUNCH_CONFIG;
+import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
 public class AutoUpdateCommand extends Command {
@@ -32,6 +31,8 @@ public class AutoUpdateCommand extends Command {
                         else autoUpdater = new RestAutoUpdater();
                         Proxy.getInstance().setAutoUpdater(autoUpdater);
                     }
+                    LAUNCH_CONFIG.auto_update = true;
+                    saveLaunchConfig();
                     autoUpdater.start();
                     c.getSource().getEmbedBuilder().title("AutoUpdater On!");
                 }))
@@ -39,6 +40,8 @@ public class AutoUpdateCommand extends Command {
                     CONFIG.autoUpdater.autoUpdate = false;
                     AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
                     if (autoUpdater != null) autoUpdater.stop();
+                    LAUNCH_CONFIG.auto_update = false;
+                    saveLaunchConfig();
                     c.getSource().getEmbedBuilder().title("AutoUpdater Off!");
                 }));
     }
