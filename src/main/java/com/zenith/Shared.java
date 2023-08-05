@@ -194,10 +194,14 @@ public class Shared {
                 try (Reader reader = new FileReader(LAUNCH_CONFIG_FILE)) {
                     config = GSON.fromJson(reader, LaunchConfig.class);
                 } catch (IOException e) {
-                    throw new RuntimeException("Unable to load launch config!", e);
+                    config = new LaunchConfig();
+                    saveLaunchConfig();
+//                    throw new RuntimeException("Unable to load launch config!", e);
                 }
             } else {
-                throw new RuntimeException("No launch config found!");
+                config = new LaunchConfig();
+                saveLaunchConfig();
+//                throw new RuntimeException("No launch config found!");
             }
             LAUNCH_CONFIG = config;
             CONFIG.autoUpdater.autoUpdate = LAUNCH_CONFIG.auto_update;
