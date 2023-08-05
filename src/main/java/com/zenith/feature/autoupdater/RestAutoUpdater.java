@@ -71,7 +71,7 @@ public class RestAutoUpdater extends AutoUpdater {
     }
 
     private boolean versionLooksCorrect(final String version) {
-        return version != null && version.matches("[0-9]+\\.[0-9]+\\.[0-9]+");
+        return version != null && version.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\+.*") && version.endsWith("+" + LAUNCH_CONFIG.release_channel);
     }
 
     private Pair<String, String> parseLatestReleaseId(String response) {
@@ -79,6 +79,7 @@ public class RestAutoUpdater extends AutoUpdater {
             JsonNode releases = objectMapper.readTree(response);
 
             List<JsonNode> releaseNodes = releases.findParents("tag_name");
+            releaseNodes.removeIf(node -> node.get("draft").asBoolean());
             releaseNodes.removeIf(node -> !node.get("tag_name").textValue().endsWith("+" + LAUNCH_CONFIG.release_channel));
 
             releaseNodes.sort((a, b) -> b.get("published_at").asText().compareTo(a.get("published_at").asText()));
