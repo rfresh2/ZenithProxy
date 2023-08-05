@@ -200,6 +200,7 @@ public class Shared {
                 throw new RuntimeException("No launch config found!");
             }
             LAUNCH_CONFIG = config;
+            CONFIG.autoUpdater.autoUpdate = LAUNCH_CONFIG.auto_update;
             DEFAULT_LOG.info("Launch config loaded.");
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to load launch config!", e);
