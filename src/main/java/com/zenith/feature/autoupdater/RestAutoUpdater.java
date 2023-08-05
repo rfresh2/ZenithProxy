@@ -57,7 +57,7 @@ public class RestAutoUpdater extends AutoUpdater {
                     return Mono.empty();
                 }
                 if (versionLooksCorrect(releaseIdToTag.getSecond())) {
-                    if (!Objects.equals(Proxy.getVersion(), releaseIdToTag.getSecond())) {
+                    if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
                         if (!getUpdateAvailable()) DEFAULT_LOG.info(
                             "New update on release channel {}! Current: {} New: {}!",
                             LAUNCH_CONFIG.release_channel,

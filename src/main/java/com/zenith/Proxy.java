@@ -84,8 +84,6 @@ public class Proxy {
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
-        version = determineVersion();
-        DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
         instance = new Proxy();
         instance.start();
     }
@@ -106,6 +104,10 @@ public class Proxy {
     public void start() {
         loadConfig();
         loadLaunchConfig();
+        if (LAUNCH_CONFIG.release_channel.equals("git"))
+            version = determineVersion();
+        else version = LAUNCH_CONFIG.version;
+        DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
         EVENT_BUS.subscribe(this);
         try {
             if (CONFIG.interactiveTerminal.enable) {
