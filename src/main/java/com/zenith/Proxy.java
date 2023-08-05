@@ -57,9 +57,6 @@ import static java.util.Objects.nonNull;
 public class Proxy {
     @Getter
     protected static Proxy instance;
-    @Getter
-    private static String version;
-
     protected MinecraftProtocol protocol;
     protected ClientSession client;
     protected TcpServer server;
@@ -104,10 +101,7 @@ public class Proxy {
     public void start() {
         loadConfig();
         loadLaunchConfig();
-        if (LAUNCH_CONFIG.release_channel.equals("git"))
-            version = determineVersion();
-        else version = LAUNCH_CONFIG.version;
-        DEFAULT_LOG.info("Starting ZenithProxy-{}", version);
+        DEFAULT_LOG.info("Starting ZenithProxy-{}", LAUNCH_CONFIG.version);
         EVENT_BUS.subscribe(this);
         try {
             if (CONFIG.interactiveTerminal.enable) {

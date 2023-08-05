@@ -2,7 +2,6 @@ package com.zenith.feature.autoupdater;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zenith.Proxy;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import org.apache.commons.math3.util.Pair;
 import reactor.core.publisher.Mono;
@@ -61,7 +60,7 @@ public class RestAutoUpdater extends AutoUpdater {
                         if (!getUpdateAvailable()) DEFAULT_LOG.info(
                             "New update on release channel {}! Current: {} New: {}!",
                             LAUNCH_CONFIG.release_channel,
-                            Proxy.getVersion(),
+                            LAUNCH_CONFIG.version,
                             releaseIdToTag.getSecond());
                         setUpdateAvailable(true);
                     }
@@ -85,7 +84,7 @@ public class RestAutoUpdater extends AutoUpdater {
             releaseNodes.sort((a, b) -> b.get("published_at").asText().compareTo(a.get("published_at").asText()));
 
             if (!releaseNodes.isEmpty()) {
-                return Pair.create(releaseNodes.get(0).get("id").asText(), releaseNodes.get(0).get("tag_name").asText().split("\\+")[0]);
+                return Pair.create(releaseNodes.get(0).get("id").asText(), releaseNodes.get(0).get("tag_name").asText());
             }
         } catch (Throwable e) {
             DEFAULT_LOG.error("Failed to parse latest release ID.", e);

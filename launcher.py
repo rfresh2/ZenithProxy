@@ -150,7 +150,7 @@ def get_latest_release_and_ver(channel):
         print("Failed to get releases:", e)
     finally:
         connection.close()
-    return (latest_release["id"], latest_release["tag_name"].split('+')[0]) if latest_release else None
+    return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
 
 
 def get_release_asset_id(release_id, asset_name):

@@ -189,21 +189,19 @@ public class Shared {
         try {
             DEFAULT_LOG.info("Loading launch config...");
 
-            LaunchConfig config;
+            LaunchConfig config = null;
             if (LAUNCH_CONFIG_FILE.exists()) {
                 try (Reader reader = new FileReader(LAUNCH_CONFIG_FILE)) {
                     config = GSON.fromJson(reader, LaunchConfig.class);
                 } catch (IOException e) {
-                    config = new LaunchConfig();
                     saveLaunchConfig();
-//                    throw new RuntimeException("Unable to load launch config!", e);
                 }
             } else {
-                config = new LaunchConfig();
                 saveLaunchConfig();
-//                throw new RuntimeException("No launch config found!");
             }
-            LAUNCH_CONFIG = config;
+            if (config == null) {
+                if (LAUNCH_CONFIG == null) LAUNCH_CONFIG = new LaunchConfig();
+            } else LAUNCH_CONFIG = config;
             CONFIG.autoUpdater.autoUpdate = LAUNCH_CONFIG.auto_update;
             DEFAULT_LOG.info("Launch config loaded.");
         } catch (final Throwable e) {
