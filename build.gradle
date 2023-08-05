@@ -20,6 +20,7 @@ plugins {
 }
 
 group "com.zenith"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -40,13 +41,17 @@ tasks.register('writeVersion') {
     doLast {
         var ver = 'git rev-parse --short HEAD'.execute().text.trim()
         if (ver.length() > 5) {
-            var f = file(project.buildDir.absolutePath + '/resources/main/proxy_version.txt')
+            var f = file(project.buildDir.absolutePath + '/resources/main/proxy_commit.txt')
             f.parentFile.mkdirs()
-            println "Writing version: " + ver
+            println "Writing commit hash: " + ver
             f.write(ver)
         } else {
-            println "Unable to determine full version"
+            println "Unable to determine commit hash"
         }
+        var f = file(project.buildDir.absolutePath + '/resources/main/proxy_version.txt')
+        f.parentFile.mkdirs()
+        println "Writing version: " + project.version
+        f.write(project.version.toString())
     }
     outputs.upToDateWhen { false }
 }

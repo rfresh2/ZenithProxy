@@ -13,11 +13,8 @@ jobs:
       - name: Elevate launcher script permissions
         run: chmod +x ./launcher.sh
 
-      - name: Create version identifier file
-        run: git rev-parse --short HEAD > version.txt
-
       - name: Zip Launcher files
-        run: zip -j ZenithProxyLauncher.zip launch.sh launch.bat launcher.py update_launcher.py version.txt
+        run: zip -j ZenithProxyLauncher.zip launch.sh launch.bat launcher.py update_launcher.py
 
       - name: Release Artifacts
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -30,5 +27,4 @@ jobs:
             launch.bat
             launcher.py
             update_launcher.py
-            version.txt
             ZenithProxyLauncher.zip

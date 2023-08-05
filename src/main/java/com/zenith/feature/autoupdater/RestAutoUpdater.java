@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenith.Proxy;
 import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaderValues;
+import org.apache.commons.math3.util.Pair;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
@@ -40,7 +40,7 @@ public class RestAutoUpdater extends AutoUpdater {
     }
 
     public boolean validReleaseChannel(final String in) {
-        return List.of("git", "java", "linux-native", "prerelease-linux-native").contains(in);
+        return List.of("git", "java", "linux", "linux.pre").contains(in);
     }
 
     @Override
@@ -52,86 +52,45 @@ public class RestAutoUpdater extends AutoUpdater {
             .aggregate()
             .asString()
             .flatMap(response -> {
-                String releaseId = parseLatestReleaseId(response);
-                if (releaseId == null) {
+                Pair<String, String> releaseIdToTag = parseLatestReleaseId(response);
+                if (releaseIdToTag == null || releaseIdToTag.getFirst() == null || releaseIdToTag.getSecond() == null) {
                     return Mono.empty();
                 }
-                return getVersionFromRelease(releaseId)
-                    .map(versionFromRelease -> {
-                        if (versionLooksCorrect(versionFromRelease)) {
-                            if (!Objects.equals(Proxy.getVersion(), versionFromRelease)) {
-                                if (!getUpdateAvailable()) DEFAULT_LOG.info(
-                                    "New update on release channel {}! Current version: {} New Version: {}!",
-                                    LAUNCH_CONFIG.release_channel,
-                                    Proxy.getVersion(),
-                                    versionFromRelease);
-                                setUpdateAvailable(true);
-                            }
-                        } else DEFAULT_LOG.warn("Failed to parse version from release: '{}'", versionFromRelease);
-                        return Mono.empty();
-                    });
+                if (versionLooksCorrect(releaseIdToTag.getSecond())) {
+                    if (!Objects.equals(Proxy.getVersion(), releaseIdToTag.getSecond())) {
+                        if (!getUpdateAvailable()) DEFAULT_LOG.info(
+                            "New update on release channel {}! Current: {} New: {}!",
+                            LAUNCH_CONFIG.release_channel,
+                            Proxy.getVersion(),
+                            releaseIdToTag.getSecond());
+                        setUpdateAvailable(true);
+                    }
+                } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.getSecond());
+                return Mono.empty();
             })
             .block();
     }
 
     private boolean versionLooksCorrect(final String version) {
-        return version != null && version.length() == 8 && version.matches("[0-9a-f]+");
+        return version != null && version.matches("[0-9]+\\.[0-9]+\\.[0-9]+");
     }
 
-    private String parseLatestReleaseId(String response) {
+    private Pair<String, String> parseLatestReleaseId(String response) {
         try {
             JsonNode releases = objectMapper.readTree(response);
 
             List<JsonNode> releaseNodes = releases.findParents("tag_name");
-            releaseNodes.removeIf(node -> !node.get("tag_name").textValue().matches(LAUNCH_CONFIG.release_channel + "-.*"));
+            releaseNodes.removeIf(node -> !node.get("tag_name").textValue().endsWith("+" + LAUNCH_CONFIG.release_channel));
 
             releaseNodes.sort((a, b) -> b.get("published_at").asText().compareTo(a.get("published_at").asText()));
 
             if (!releaseNodes.isEmpty()) {
-                return releaseNodes.get(0).get("id").asText();
+                return Pair.create(releaseNodes.get(0).get("id").asText(), releaseNodes.get(0).get("tag_name").asText().split("\\+")[0]);
             }
         } catch (Throwable e) {
             DEFAULT_LOG.error("Failed to parse latest release ID.", e);
         }
 
-        return null;
-    }
-
-    private Mono<String> getVersionFromRelease(final String releaseId) {
-        return httpClient
-            .get()
-            .uri("/releases/" + releaseId)
-            .responseContent()
-            .aggregate()
-            .asString()
-            .mapNotNull(this::parseVersionFileAssetId)
-            .flatMap(this::downloadVersionFile);
-    }
-
-    private Mono<String> downloadVersionFile(final String assetId) {
-        return httpClient
-            .followRedirect(true)
-            .headers(h -> h.remove(HttpHeaderNames.ACCEPT))
-            .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_OCTET_STREAM))
-            .get()
-            .uri("/releases/assets/" + assetId)
-            .responseContent()
-            .aggregate()
-            .asString()
-            .map(String::trim);
-    }
-
-    private String parseVersionFileAssetId(final String response) {
-        try {
-            JsonNode release = objectMapper.readTree(response);
-            List<JsonNode> releaseNodes = release.findParents("name");
-            releaseNodes.removeIf(node -> !node.get("name").textValue().matches("version.txt"));
-            return releaseNodes.stream().findFirst()
-                .map(node -> node.get("id").asText())
-                .orElse(null);
-        } catch (Throwable e) {
-            DEFAULT_LOG.error("Failed to parse version file asset ID", e);
-        }
         return null;
     }
 }

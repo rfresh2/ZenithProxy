@@ -95,7 +95,7 @@ with open("launcher.py", "r", newline='') as f:
     currentHash = hashlib.sha1(current.encode()).hexdigest()
     newHash = hashlib.sha1(contents.encode()).hexdigest()
     if currentHash != newHash:
-        print("Updating to remote launcher.py...")
+        print("Updating launcher.py to " + newHash)
     else:
         exit(0)
 

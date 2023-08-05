@@ -55,17 +55,8 @@ jobs:
       - name: Zip Binary And Libs
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
-      - name: Create version identifier file
-        run: git rev-parse --short HEAD > version.txt
-
       - name: Upload Binary
         uses: actions/upload-artifact@v3
         with:
           name: linux-native
           path: ZenithProxy.zip
-
-      - name: Upload Version Identifier
-        uses: actions/upload-artifact@v3
-        with:
-          name: version
-          path: version.txt

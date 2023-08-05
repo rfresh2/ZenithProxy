@@ -9,7 +9,7 @@ import zipfile
 
 auto_update = True
 release_channel = "git"
-version = "0"
+version = "0.0.0"
 repo_owner = "rfresh2"
 repo_name = "ZenithProxy"
 repo_branch = "mainline"
@@ -85,9 +85,9 @@ def git_update_check():
     try:
         output = subprocess.check_output(['git', 'rev-parse', '--short=8', 'HEAD'], stderr=subprocess.STDOUT, text=True)
         v = str(output).splitlines()[0].strip()
-        if version_looks_valid(v):
+        if len(v) == 8:
             version = v
-            print("Git updated to version: ", version)
+            print("Git updated to commit:", version)
         else:
             print("Invalid version string found from git:", output)
     except subprocess.CalledProcessError as e:
@@ -103,7 +103,7 @@ def git_build():
 
 
 def version_looks_valid(ver):
-    return ver == '0' or (len(ver) == 8 and re.match(r"[0-9a-f]+", ver))
+    return re.match(r"[0-9]+\.[0-9]+\.[0-9]+", ver) or (len(ver) == 8 and re.match(r"[0-9a-f]+", ver))
 
 
 def validate_launch_config():
@@ -125,41 +125,32 @@ def validate_launch_config():
 def valid_release_channel(channel):
     return channel == "git" \
         or channel == "java" \
-        or channel == "linux-native" \
-        or channel == "prerelease-linux-native"
+        or channel == "linux" \
+        or channel == "linux.pre"
 
 
-def get_latest_release_id(channel):
-    page = 0
+def get_latest_release_and_ver(channel):
     latest_release = None
-
-    while True:
-        url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'page': page, 'per_page': 100})}"
-        try:
-            connection = http.client.HTTPSConnection("api.github.com")
-            connection.request("GET", url, headers=github_headers)
-            response = connection.getresponse()
-            if response.status == 200:
-                releases = json.loads(response.read())
-                if not releases:
-                    break  # Stop iterating if empty array
-                for release in releases:
-                    if release["draft"]:
-                        continue
-                    if release["tag_name"].startswith(channel):
-                        if latest_release is None or release["published_at"] > latest_release["published_at"]:
-                            latest_release = release
-            else:
-                print("Failed to get releases:", response.status, response.reason)
-                break
-        except Exception as e:
-            print("Failed to get releases:", e)
-            break
-        finally:
-            connection.close()
-        page += 1
-    return latest_release["id"] if latest_release else None
-
+    url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100})}"
+    try:
+        connection = http.client.HTTPSConnection("api.github.com")
+        connection.request("GET", url, headers=github_headers)
+        response = connection.getresponse()
+        if response.status == 200:
+            releases = json.loads(response.read())
+            for release in releases:
+                if release["draft"]:
+                    continue
+                if release["tag_name"].endswith("+" + channel):
+                    if latest_release is None or release["published_at"] > latest_release["published_at"]:
+                        latest_release = release
+        else:
+            print("Failed to get releases:", response.status, response.reason)
+    except Exception as e:
+        print("Failed to get releases:", e)
+    finally:
+        connection.close()
+    return (latest_release["id"], latest_release["tag_name"].split('+')[0]) if latest_release else None
 
 
 def get_release_asset_id(release_id, asset_name):
@@ -231,26 +222,14 @@ class RestUpdateError(UpdateError):
 
 def rest_update_check(asset_name, executable_name):
     global version
-    latest_release_id = get_latest_release_id(release_channel)
-    if not latest_release_id:
-        raise RestUpdateError("Failed to get latest release ID")
-    version_asset_id = get_release_asset_id(latest_release_id, "version.txt")
-    if not version_asset_id:
-        raise RestUpdateError("Failed to get version asset ID")
-    version_data = download_release_asset(version_asset_id)
-    if not version_data:
-        raise RestUpdateError("Failed to download version asset")
-    try:
-        version_str = version_data.decode().strip()
-    except UnicodeDecodeError:
-        raise RestUpdateError("Failed to decode version asset")
-    if not version_looks_valid(version_str):
-        raise RestUpdateError("Invalid version string: " + version_str)
-    if version_str == version and os.path.isfile(launch_dir + executable_name):
+    latest_release_and_ver = get_latest_release_and_ver(release_channel)
+    if not latest_release_and_ver:
+        raise RestUpdateError("Failed to get latest release for channel: " + release_channel)
+    if latest_release_and_ver[1] == version and os.path.isfile(launch_dir + executable_name):
         print("Already up to date")
         return
-    print("Updating to version", version_str)
-    asset_id = get_release_asset_id(latest_release_id, asset_name)
+    print("Updating to version:", latest_release_and_ver[1])
+    asset_id = get_release_asset_id(latest_release_and_ver[0], asset_name)
     if not asset_id:
         raise RestUpdateError("Failed to get executable asset ID")
     asset_data = download_release_asset(asset_id)
@@ -262,11 +241,11 @@ def rest_update_check(asset_name, executable_name):
         if asset_name.endswith(".zip"):
             with zipfile.ZipFile(launch_dir + asset_name, "r") as zip_ref:
                 zip_ref.extractall(launch_dir)
-                subprocess.run(["chmod", "+x", launch_dir + "ZenithProxy"])
+                subprocess.run(["chmod", "+x", launch_dir + executable_name])
             os.remove(launch_dir + asset_name)
     except IOError as e:
         raise RestUpdateError("Failed to write executable asset: " + str(e))
-    version = version_str
+    version = latest_release_and_ver[1]
 
 
 def java_update_check():
@@ -302,9 +281,9 @@ def validate_system_with_config():
             print("Invalid Java version on PATH. Please install Java 17 or higher.")
             return False
         return True
-    elif release_channel == "linux-native":
+    elif release_channel == "linux":
         return system == "Linux"
-    elif release_channel == "prerelease-linux-native":
+    elif release_channel == "linux.pre":
         return system == "Linux"
     else:
         return False
@@ -328,9 +307,9 @@ if auto_update:
             git_update_check()
         elif release_channel == "java":
             java_update_check()
-        elif release_channel == "linux-native":
+        elif release_channel == "linux":
             linux_native_update_check()
-        elif release_channel == "prerelease-linux-native":
+        elif release_channel == "linux.pre":
             linux_native_update_check()
     except UpdateError as e:
         print("Error performing update check:", e)
@@ -384,7 +363,7 @@ elif release_channel == "java":
         subprocess.run(full_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
-elif release_channel == "linux-native" or release_channel == "prerelease-linux-native":
+elif release_channel == "linux" or release_channel == "linux.pre":
     if system != "Linux":
         raise RuntimeError(f"Linux release channel is not supported on current system: {system}")
     if not os.path.isfile("ZenithProxy"):

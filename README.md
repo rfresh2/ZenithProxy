@@ -58,7 +58,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 ZenithProxy has 3 release channels:
 
 * (Default) `java` - Supports all operating systems
-* (Recommended) `linux-native` - Linux native executable
+* (Recommended) `linux` - Linux native executable
   * Instant startup and ~50% reduced memory usage
 * `git` - Builds and runs the proxy from source
 
