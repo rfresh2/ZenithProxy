@@ -47,7 +47,7 @@ public class RestAutoUpdater extends AutoUpdater {
     public void updateCheck() {
         httpClient
             .get()
-            .uri("/releases")
+            .uri("/releases?per_page=100")
             .responseContent()
             .aggregate()
             .asString()

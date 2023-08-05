@@ -4,8 +4,8 @@ import os
 import platform
 import re
 import subprocess
+import urllib.parse
 import zipfile
-from urllib.parse import urlparse
 
 auto_update = True
 release_channel = "git"
@@ -130,26 +130,35 @@ def valid_release_channel(channel):
 
 
 def get_latest_release_id(channel):
-    url = f"/repos/{repo_owner}/{repo_name}/releases"
-    try:
-        connection = http.client.HTTPSConnection("api.github.com")
-        connection.request("GET", url, headers=github_headers)
-        response = connection.getresponse()
-        if response.status == 200:
-            releases = json.loads(response.read())
-            latest_release = next(
-                (release for release in releases if release["tag_name"].startswith(channel)),
-                None
-            )
-            return latest_release["id"] if latest_release else None
-        else:
-            print("Failed to get latest release ID:", response.status, response.reason)
-            return None
-    except Exception as e:
-        print("Failed to get latest release ID:", e)
-        return None
-    finally:
-        connection.close()
+    page = 0
+    latest_release = None
+
+    while True:
+        url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'page': page, 'per_page': 100})}"
+        try:
+            connection = http.client.HTTPSConnection("api.github.com")
+            connection.request("GET", url, headers=github_headers)
+            response = connection.getresponse()
+            if response.status == 200:
+                releases = json.loads(response.read())
+                if not releases:
+                    break  # Stop iterating if empty array
+                for release in releases:
+                    if release["draft"]:
+                        continue
+                    if release["tag_name"].startswith(channel):
+                        if latest_release is None or release["published_at"] > latest_release["published_at"]:
+                            latest_release = release
+            else:
+                print("Failed to get releases:", response.status, response.reason)
+                break
+        except Exception as e:
+            print("Failed to get releases:", e)
+            break
+        finally:
+            connection.close()
+        page += 1
+    return latest_release["id"] if latest_release else None
 
 
 
@@ -191,7 +200,7 @@ def download_release_asset(asset_id):
             connection.close()
 
             # Parse the redirect URL to extract the new host
-            redirect_url = urlparse(redirect_location)
+            redirect_url = urllib.parse.urlparse(redirect_location)
             redirect_host = redirect_url.netloc
 
             # Reopen connection to the new host
