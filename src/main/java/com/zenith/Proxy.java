@@ -104,8 +104,8 @@ public class Proxy {
     }
 
     public void start() {
-        loadLaunchConfig();
         loadConfig();
+        loadLaunchConfig();
         EVENT_BUS.subscribe(this);
         try {
             if (CONFIG.interactiveTerminal.enable) {
