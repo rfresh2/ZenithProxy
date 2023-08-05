@@ -236,6 +236,12 @@ def rest_update_check(asset_name, executable_name):
     if not asset_data:
         raise RestUpdateError("Failed to download executable asset")
     try:
+        existing_files = os.listdir(launch_dir)
+        for existing_file in existing_files:
+            if existing_file == ".gitkeep":
+                continue
+            print("Removing existing file:", existing_file)
+            os.remove(launch_dir + existing_file)
         with open(launch_dir + asset_name, "wb") as f:
             f.write(asset_data)
         if asset_name.endswith(".zip"):

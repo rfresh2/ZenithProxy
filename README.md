@@ -73,12 +73,12 @@ Additional Requirements to use `java` or `git` releases:
 
 * `java` - Java 17 or higher (20+ recommended)
   * [Adoptium Java Downloads](https://adoptium.net/)
-* `git` - [git](https://git-scm.com/downloads) installed and the repository cloned.
+* `git` - Java 17 or higher and [git](https://git-scm.com/downloads) installed, plus the repository cloned.
 
 ## Setup
 
 1. Download the `launch` release from the [releases page](https://github.com/rfresh2/ZenithProxy/releases/launch). 
-Extract the zip file to a new folder. Or clone the repository - required if using the `git` release channel.
+Extract the zip file to a new folder. OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git` - required if using the `git` release channel.
 2. Run `./launch.sh` (Linux) or `.\launch.bat` (Windows). Close the instance with `CTRL-C`.
 3. Optional: Select a release channel by editing the `launch_config.json` file.
 4. Run the proxy again. It will automatically download the latest release and start the proxy.

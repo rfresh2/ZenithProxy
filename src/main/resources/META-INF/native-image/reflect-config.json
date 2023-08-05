@@ -1360,6 +1360,11 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"discord4j.rest.json.response.ErrorResponse",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[]}, {"name":"anySetter","parameterTypes":["java.lang.String","java.lang.Object"]}]
+},
+{
   "name":"discord4j.discordjson.json.ActivityAssetsData",
   "queryAllDeclaredMethods":true
 },
