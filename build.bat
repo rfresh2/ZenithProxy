@@ -1,2 +1,2 @@
 call git pull
-call gradlew build
+call gradlew jarBuild --no-daemon

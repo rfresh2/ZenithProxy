@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE;
+import static com.zenith.Shared.CACHE;
 
 public class EntityCache implements CachedData {
     protected final Map<Integer, Entity> cachedEntities = Collections.synchronizedMap(new Int2ObjectOpenHashMap<>());
@@ -25,11 +25,6 @@ public class EntityCache implements CachedData {
             this.cachedEntities.clear();
         } else {
             this.cachedEntities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
-            try {
-                ((EntityPlayer) this.cachedEntities.get(CACHE.getPlayerCache().getEntityId())).health = 20.0f;
-            } catch (final Throwable e) {
-                // do nothing
-            }
         }
     }
 

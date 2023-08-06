@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.CACHE;
-import static com.zenith.util.Constants.CLIENT_LOG;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
 
@@ -40,7 +40,7 @@ public class PlayerCache implements CachedData {
     protected boolean hardcore;
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
-    protected int dimension;
+    protected int dimension = Integer.MAX_VALUE;
     protected GameMode gameMode;
     protected WorldType worldType;
     protected Difficulty difficulty;
@@ -76,6 +76,10 @@ public class PlayerCache implements CachedData {
         this.gameMode = null;
         this.worldType = null;
         this.difficulty = null;
+        this.thePlayer.setHealth(20.0f);
+        this.thePlayer.setFood(20);
+        this.thePlayer.setSaturation(5);
+        this.thePlayer.getPotionEffectMap().clear();
     }
 
     @Override

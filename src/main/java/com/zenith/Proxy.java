@@ -8,16 +8,19 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
-import com.zenith.client.ClientSession;
 import com.zenith.event.proxy.*;
-import com.zenith.module.AntiAFK;
-import com.zenith.server.CustomServerInfoBuilder;
-import com.zenith.server.ProxyServerListener;
-import com.zenith.server.ServerConnection;
-import com.zenith.server.handler.ProxyServerLoginHandler;
+import com.zenith.feature.autoupdater.AutoUpdater;
+import com.zenith.feature.autoupdater.GitAutoUpdater;
+import com.zenith.feature.autoupdater.RestAutoUpdater;
+import com.zenith.feature.queue.Queue;
+import com.zenith.module.impl.AntiAFK;
+import com.zenith.network.client.Authenticator;
+import com.zenith.network.client.ClientSession;
+import com.zenith.network.server.CustomServerInfoBuilder;
+import com.zenith.network.server.ProxyServerListener;
+import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Config;
-import com.zenith.util.LoggerInner;
-import com.zenith.util.Queue;
 import com.zenith.util.Wait;
 import com.zenith.via.MCProxyViaServerProxy;
 import io.netty.bootstrap.Bootstrap;
@@ -26,6 +29,7 @@ import io.netty.channel.ChannelInitializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import reactor.netty.http.client.HttpClient;
 
 import javax.imageio.ImageIO;
@@ -35,18 +39,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -55,11 +61,10 @@ import static java.util.Objects.nonNull;
 public class Proxy {
     @Getter
     protected static Proxy instance;
-
     protected MinecraftProtocol protocol;
     protected ClientSession client;
     protected TcpServer server;
-    protected LoggerInner loggerInner;
+    protected Authenticator authenticator;
     @Setter
     protected BufferedImage serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
@@ -73,42 +78,64 @@ public class Proxy {
     private Optional<Boolean> isPrioBanned = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
+    @Getter
+    @Setter
+    private AutoUpdater autoUpdater;
 
     public static void main(String... args) {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
         instance = new Proxy();
-        DEFAULT_LOG.info("Starting Proxy...");
-        if (CONFIG.database.enabled) {
-            DEFAULT_LOG.info("Starting Databases...");
-            DATABASE_MANAGER.initialize();
-        }
-        if (CONFIG.discord.enable) {
-            DISCORD_LOG.info("Starting discord bot...");
-            try {
-                DISCORD_BOT.start(instance);
-            } catch (final Throwable e) {
-                DISCORD_LOG.error("Failed starting discord bot", e);
-            }
-        }
-
         instance.start();
     }
 
-    public Proxy() {
-        EVENT_BUS.subscribe(this);
+    public static String determineVersion() {
+        try (InputStream in = Proxy.class.getClassLoader().getResourceAsStream("proxy_version.txt")) {
+            if (in == null) {
+                throw new IOException("Unable to find version file");
+            }
+            final Scanner scanner = new Scanner(in);
+            return scanner.nextLine();
+        } catch (final Exception e) {
+            DEFAULT_LOG.error("Failed to read proxy version", e);
+            return "DEV";
+        }
     }
 
     public void start() {
+        loadConfig();
+        loadLaunchConfig();
+        DEFAULT_LOG.info("Starting ZenithProxy-{}", LAUNCH_CONFIG.version);
+        EVENT_BUS.subscribe(this);
         try {
+            if (CONFIG.interactiveTerminal.enable) {
+                TERMINAL_MANAGER.start();
+            }
+            if (CONFIG.database.enabled) {
+                DEFAULT_LOG.info("Starting Databases...");
+                DATABASE_MANAGER.start();
+            }
+            if (CONFIG.discord.enable) {
+                DISCORD_LOG.info("Starting discord bot...");
+                try {
+                    DISCORD_BOT.start();
+                } catch (final Throwable e) {
+                    DISCORD_LOG.error("Failed starting discord bot", e);
+                }
+            }
+            if (CONFIG.server.extra.whitelist.whitelistRefresh) {
+                WHITELIST_MANAGER.startRefreshTask();
+            }
+            MODULE_MANAGER.init();
+            Queue.start();
             saveConfig();
             if (CONFIG.server.extra.timeout.enable) {
-                long millis = CONFIG.server.extra.timeout.ms;
-                long interval = CONFIG.server.extra.timeout.interval;
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     ServerConnection currentPlayer = this.currentPlayer.get();
-                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= millis) {
+                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= CONFIG.server.extra.timeout.ms) {
                         currentPlayer.disconnect("Timed out");
                     }
-                }, 0, interval, TimeUnit.MILLISECONDS);
+                }, 0, CONFIG.server.extra.timeout.interval, TimeUnit.MILLISECONDS);
             }
             this.startServer();
             CACHE.reset(true);
@@ -120,7 +147,7 @@ public class Proxy {
                     try {
                         if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
                             long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                            if (onlineSeconds > (21600 - 60)) { // 6 hrs - 60 seconds padding
+                            if (onlineSeconds > (21600 - (60 + ThreadLocalRandom.current().nextInt(120)))) { // 6 hrs - 60 seconds padding
                                 this.disconnect(SYSTEM_DISCONNECT);
                                 this.cancelAutoReconnect();
                                 this.connect();
@@ -137,6 +164,7 @@ public class Proxy {
                         if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))
                                 && CONFIG.client.extra.antiafk.enabled
                                 && CONFIG.client.extra.antiafk.actions.stuckWarning // ensures we don't get into a weird state
+                                && CONFIG.client.extra.antiafk.actions.stuckReconnect
                                 && MODULE_MANAGER.getModule(AntiAFK.class).map(AntiAFK::isStuck).orElse(false)
                                 && isNull(getCurrentPlayer().get())) {
                             long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
@@ -151,22 +179,25 @@ public class Proxy {
                     }
                 }, 0, 10L, TimeUnit.SECONDS);
             }
-            updatePrioBanStatus();
+            SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }
-            if (CONFIG.client.autoConnect) {
-                this.connect();
+            if (CONFIG.client.autoConnect && !this.isConnected()) {
+                this.connectAndCatchExceptions();
             }
-            if (CONFIG.autoUpdate) {
-                AUTO_UPDATER.start();
-            }
-            if (CONFIG.shouldReconnectAfterAutoUpdate) {
-                CONFIG.shouldReconnectAfterAutoUpdate = false;
+            if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
+                CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfig();
-                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-                    this.connect();
+                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
+                    this.connectAndCatchExceptions();
                 }
+            }
+            if (CONFIG.autoUpdater.autoUpdate) {
+                DEFAULT_LOG.info("Starting {} AutoUpdater...", LAUNCH_CONFIG.release_channel);
+                if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
+                else autoUpdater = new RestAutoUpdater();
+                autoUpdater.start();
             }
             Wait.waitSpinLoop();
         } catch (Exception e) {
@@ -187,7 +218,7 @@ public class Proxy {
                 Wait.waitALittle(30);
                 if (server == null || !server.isListening()) {
                     SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
-                    CONFIG.shouldReconnectAfterAutoUpdate = true;
+                    CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
                     stop();
                 }
             }
@@ -225,6 +256,17 @@ public class Proxy {
         CACHE.reset(true);
     }
 
+    public void connectAndCatchExceptions() {
+        try {
+            this.connect();
+        } catch (final Exception e) {
+            DEFAULT_LOG.error("Error connecting", e);
+        }
+    }
+
+    /**
+     * @throws IllegalStateException if already connected
+     */
     public synchronized void connect() {
         try {
             EVENT_BUS.dispatch(new StartConnectEvent());
@@ -295,8 +337,8 @@ public class Proxy {
 
     public void logIn() {
         AUTH_LOG.info("Logging in {}...", CONFIG.authentication.username);
-        if (this.loggerInner == null) {
-            this.loggerInner = new LoggerInner();
+        if (this.authenticator == null) {
+            this.authenticator = new Authenticator();
         }
         int tries = 0;
         while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
@@ -316,7 +358,7 @@ public class Proxy {
     public Future<Boolean> loginTask() {
         return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
-                this.protocol = this.loggerInner.handleRelog();
+                this.protocol = this.authenticator.handleRelog();
                 return true;
             } catch (final Exception e) {
                 CLIENT_LOG.error("", e);
@@ -327,7 +369,7 @@ public class Proxy {
 
     public boolean retrieveLoginTaskResult(Future<Boolean> loginTask) {
         try {
-            return loginTask.get(10L, TimeUnit.SECONDS);
+            return loginTask.get(CONFIG.authentication.accountType == Config.Authentication.AccountType.DEVICE_CODE ? 300L : 10L, TimeUnit.SECONDS);
         } catch (Exception e) {
             loginTask.cancel(true);
             return false;
@@ -340,7 +382,7 @@ public class Proxy {
 
     public URL getAvatarURL(String playerName) {
         try {
-            return new URL(String.format("https://minotar.net/helm/%s/64", playerName));
+            return URI.create(String.format("https://minotar.net/helm/%s/64", playerName)).toURL();
         } catch (MalformedURLException e) {
             SERVER_LOG.error("Failed to get avatar");
             throw new UncheckedIOException(e);
@@ -421,7 +463,7 @@ public class Proxy {
     }
 
     public void updatePrioBanStatus() {
-        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
+        if (!CONFIG.client.extra.prioBan2b2tCheck || !CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
         this.isPrioBanned = PRIORITY_BAN_CHECKER.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
@@ -460,7 +502,7 @@ public class Proxy {
                         this.lastActiveHoursConnect = Instant.now();
                         disconnect(SYSTEM_DISCONNECT);
                         Wait.waitALittle(30);
-                        connect();
+                        connectAndCatchExceptions();
                     });
         }
     }

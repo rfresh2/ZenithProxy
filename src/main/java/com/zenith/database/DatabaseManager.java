@@ -2,8 +2,8 @@ package com.zenith.database;
 
 import lombok.Getter;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DATABASE_LOG;
 import static java.util.Objects.nonNull;
 
 @Getter
@@ -22,7 +22,7 @@ public class DatabaseManager {
 
     }
 
-    public void initialize() {
+    public void start() {
         try {
             this.queryExecutor = new QueryExecutor(this::getConnectionPool);
             if (CONFIG.database.queueWait.enabled) {

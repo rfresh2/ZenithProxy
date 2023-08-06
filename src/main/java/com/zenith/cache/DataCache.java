@@ -8,41 +8,17 @@ import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.map.MapDataCache;
 import com.zenith.cache.data.stats.StatisticsCache;
 import com.zenith.cache.data.tab.TabListCache;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.server.ServerConnection;
 import lombok.Getter;
 
-import java.lang.reflect.Field;
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 
 @Getter
 public class DataCache {
-    protected static final Collection<Field> dataFields = new ArrayDeque<>();
-
-    static {
-        try {
-            for (Field field : DataCache.class.getDeclaredFields()) {
-                field.setAccessible(true);
-                if (CachedData.class.isAssignableFrom(field.getType())) {
-                    if (CONFIG.debug.printDataFields) {
-                        CACHE_LOG.debug("Found data field: {}", field.getName());
-                    }
-                    dataFields.add(field);
-                } else if (CONFIG.debug.printDataFields) {
-                    CACHE_LOG.debug("Class {} is not a valid data field.", field.getType().getCanonicalName());
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        if (CONFIG.debug.printDataFields) {
-            CACHE_LOG.debug("Found a total of {} data fields.", dataFields.size());
-        }
-    }
     protected final ChunkCache chunkCache = new ChunkCache();
     protected final TabListCache tabListCache = new TabListCache();
     protected final BossBarCache bossBarCache = new BossBarCache();

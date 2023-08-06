@@ -13,8 +13,8 @@ import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
-import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -75,7 +75,7 @@ public abstract class LockingDatabase extends Database {
                 lockExecutorService = Executors.newSingleThreadScheduledExecutor();
             }
         }
-        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, 5000L, 1000L, TimeUnit.MILLISECONDS);
+        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, (long) (Math.random() * 10), 10L, TimeUnit.SECONDS);
     }
 
     @Override
@@ -103,7 +103,7 @@ public abstract class LockingDatabase extends Database {
 
     public void onLockAcquired() {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
-        Wait.waitALittleMs(5000); // buffer for any lock releasers to finish up remaining writes
+        Wait.waitALittleMs(20000); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
             queryExecutorFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);

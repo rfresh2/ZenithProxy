@@ -1,5 +1,5 @@
-import com.zenith.mcping.MCPing;
-import com.zenith.mcping.PingOptions;
+import com.zenith.feature.queue.mcping.MCPing;
+import com.zenith.feature.queue.mcping.PingOptions;
 
 import java.io.IOException;
 import java.util.regex.Matcher;

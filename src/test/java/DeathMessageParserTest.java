@@ -1,6 +1,6 @@
-import com.zenith.util.deathmessages.DeathMessageParseResult;
-import com.zenith.util.deathmessages.DeathMessagesParser;
-import com.zenith.util.deathmessages.KillerType;
+import com.zenith.feature.deathmessages.DeathMessageParseResult;
+import com.zenith.feature.deathmessages.DeathMessagesParser;
+import com.zenith.feature.deathmessages.KillerType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

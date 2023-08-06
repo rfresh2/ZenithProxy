@@ -1,26 +1,27 @@
 package com.zenith.util;
 
+import com.google.common.base.Suppliers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
 
 @UtilityClass
 public class RefStrings {
-    protected final String BRAND = "Proxy";
-    public final byte[] BRAND_ENCODED;
+    protected final String BRAND = "ZenithProxy";
 
-    static {
+    public Supplier<byte[]> BRAND_SUPPLIER = Suppliers.memoize(() -> {
         ByteBuf buf = Unpooled.buffer(5 + BRAND.length());
         try {
             writeUTF8(buf, BRAND);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        BRAND_ENCODED = buf.array();
-    }
+        return buf.array();
+    });
 
     protected void writeUTF8(ByteBuf buf, String value) throws IOException {
         final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);

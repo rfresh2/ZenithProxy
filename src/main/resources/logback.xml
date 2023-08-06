@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration>
 
-<configuration scan="true" scanPeriod="10 seconds">
+<configuration scan="false">
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
     <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
-    <import class="ch.qos.logback.core.rolling.RollingFileAppender"/>
     <import class="ch.qos.logback.classic.filter.ThresholdFilter"/>
     <import class="ch.qos.logback.classic.filter.LevelFilter"/>
     <import class="ch.qos.logback.core.ConsoleAppender"/>
     <import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"/>
 
-    <statusListener class="com.zenith.util.log.PrintOnlyErrorLogbackStatusListener"/>
+    <statusListener class="com.zenith.terminal.logback.PrintOnlyErrorLogbackStatusListener"/>
     <!-- Prevent logback compression failing during JVM stop https://logback.qos.ch/manual/configuration.html#shutdownHook -->
     <shutdownHook/>
 
-    <appender name="FILE" class="RollingFileAppender">
+    <appender name="FILE" class="com.zenith.terminal.logback.LazyInitRollingFileAppender">
         <file>log/latest.log</file>
-        <encoder class="com.zenith.util.log.MCTextFormatEncoder">
+        <encoder class="com.zenith.terminal.logback.MCTextFormatEncoder">
             <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxHistory>1000</maxHistory>
             <totalSizeCap>250MB</totalSizeCap>
-            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
+            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.terminal.logback.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
@@ -32,16 +34,16 @@
         </filter>
     </appender>
 
-    <appender name="DEBUG_FILE" class="RollingFileAppender">
+    <appender name="DEBUG_FILE" class="com.zenith.terminal.logback.LazyInitRollingFileAppender">
         <file>log/debug.log</file>
-        <encoder class="com.zenith.util.log.MCTextFormatEncoder">
+        <encoder class="com.zenith.terminal.logback.MCTextFormatEncoder">
             <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <rollingPolicy class="TimeBasedRollingPolicy">
             <fileNamePattern>log/proxy-%d{yyyy-MM-dd}.%i.debug.log.zip</fileNamePattern>
             <maxHistory>1000</maxHistory>
             <totalSizeCap>250MB</totalSizeCap>
-            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.util.log.StartupSizeAndTimeBasedTriggeringPolicy">
+            <TimeBasedFileNamingAndTriggeringPolicy class="com.zenith.terminal.logback.StartupSizeAndTimeBasedTriggeringPolicy">
                 <MaxFileSize>250MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
@@ -51,8 +53,8 @@
         </filter>
     </appender>
 
-    <appender name="STDOUT" class="ConsoleAppender">
-        <encoder class="com.zenith.util.log.MCTextFormatANSIEncoder">
+    <appender name="TERMINAL" class="com.zenith.terminal.logback.TerminalConsoleAppender">
+        <encoder class="com.zenith.terminal.logback.MCTextFormatANSIEncoder">
             <pattern>[%d{yyyy/MM/dd HH:mm:ss}] [%logger{36}] [%level] %minecraftText%n</pattern>
         </encoder>
         <filter class="ThresholdFilter">
@@ -62,11 +64,15 @@
 
     <root level="INFO">
         <!--        allow logs from other libs to also go to stdout-->
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TERMINAL"/>
     </root>
     <logger name="org.jooq" level="WARN">
         <!-- suppress these dumb "thank you" and ascii arts -->
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TERMINAL"/>
+    </logger>
+    <logger name="org.jline" level="WARN">
+        <appender-ref ref="TERMINAL"/>
+        <appender-ref ref="DEBUG_FILE"/>
     </logger>
     <logger name="Proxy" level="TRACE">
         <appender-ref ref="FILE"/>
@@ -101,6 +107,10 @@
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
     <logger name="Database" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <logger name="Terminal" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>

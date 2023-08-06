@@ -16,7 +16,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
-import com.zenith.server.ServerConnection;
+import com.zenith.network.server.ServerConnection;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
@@ -29,7 +29,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -211,33 +211,35 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
 
     public boolean updateTileEntity(final ServerUpdateTileEntityPacket packet) {
         try {
-            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
                 final Column column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
                 if (isNull(column)) {
+                    lock.readLock().unlock();
                     return false;
                 }
-                final List<TileEntity> tileEntities = column.getTileEntities();
-                final Optional<TileEntity> existingTileEntity = tileEntities.stream()
-                        .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
-                        .findFirst();
-                final CompoundTag packetNbt = packet.getNBT();
-                if (packetNbt != null && !packetNbt.isEmpty()) {
-                    // ensure position is encoded in NBT
-                    // not sure if this is totally needed or not
-                    packetNbt.put(new IntTag("x", packet.getPosition().getX()));
-                    packetNbt.put(new IntTag("y", packet.getPosition().getY()));
-                    packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
-                    if (existingTileEntity.isPresent()) {
-                        existingTileEntity.get().setCompoundTag(packetNbt);
+                lock.readLock().unlock();
+                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                    final List<TileEntity> tileEntities = column.getTileEntities();
+                    final Optional<TileEntity> existingTileEntity = tileEntities.stream()
+                            .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
+                            .findFirst();
+                    final CompoundTag packetNbt = packet.getNBT();
+                    if (packetNbt != null && !packetNbt.isEmpty()) {
+                        // ensure position is encoded in NBT
+                        // not sure if this is totally needed or not
+                        packetNbt.put(new IntTag("x", packet.getPosition().getX()));
+                        packetNbt.put(new IntTag("y", packet.getPosition().getY()));
+                        packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
+                        existingTileEntity.ifPresentOrElse(
+                                tileEntity -> tileEntity.setCompoundTag(packetNbt),
+                                () -> tileEntities.add(new TileEntity(packet.getPosition(), packetNbt))
+                        );
                     } else {
-                        tileEntities.add(new TileEntity(packet.getPosition(), packetNbt));
+                        existingTileEntity.ifPresent(tileEntities::remove);
                     }
-                } else {
-                    existingTileEntity.ifPresent(tileEntities::remove);
+                    lock.writeLock().unlock();
                 }
-                lock.writeLock().unlock();
             }
-
         } catch (final Exception e) {
             CLIENT_LOG.error("Error applying tile entity update", e);
             return false;

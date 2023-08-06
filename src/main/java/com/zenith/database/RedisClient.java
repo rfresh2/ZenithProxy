@@ -5,8 +5,8 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DATABASE_LOG;
 import static java.util.Objects.isNull;
 
 public class RedisClient {

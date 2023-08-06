@@ -15,5 +15,6 @@ public class ServerChatReceivedEvent {
     public ServerChatReceivedEvent(final Optional<PlayerEntry> sender, String message, boolean isWhisper) {
         this.sender = sender;
         this.message = message;
+        this.isWhisper = isWhisper;
     }
 }

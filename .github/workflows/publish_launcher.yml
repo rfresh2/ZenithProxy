@@ -1,0 +1,30 @@
+name: Publish Launcher
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Elevate launcher script permissions
+        run: chmod +x ./launch.sh
+
+      - name: Zip Launcher files
+        run: zip -j ZenithProxyLauncher.zip launch.sh launch.bat launcher.py update_launcher.py
+
+      - name: Release Artifacts
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "launch"
+          prerelease: false
+          files: |
+            launch.sh
+            launch.bat
+            launcher.py
+            update_launcher.py
+            ZenithProxyLauncher.zip

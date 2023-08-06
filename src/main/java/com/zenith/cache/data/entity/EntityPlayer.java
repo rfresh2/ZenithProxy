@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
 
-import static com.zenith.util.Constants.SERVER_LOG;
+import static com.zenith.Shared.SERVER_LOG;
 
 
 @RequiredArgsConstructor

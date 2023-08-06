@@ -6,8 +6,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.time.Duration;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public final class ConnectionPool {
 

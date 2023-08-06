@@ -1,4 +1,7 @@
 import groovy.json.JsonSlurper
+import org.apache.tools.ant.taskdefs.condition.Os
+
+import java.nio.file.Files
 
 buildscript {
     repositories {
@@ -10,14 +13,14 @@ buildscript {
 }
 
 plugins {
-    // todo: cannot upgrade this as consumers still have jdk 8 configured in gradle separate from the toolchain
-    id 'nu.studer.jooq' version '5.2.2'
-    id "com.github.johnrengelman.shadow" version "8.1.0"
+    id 'nu.studer.jooq' version '8.2.1'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id 'java'
+    id 'org.graalvm.buildtools.native' version '0.9.23'
 }
 
-apply plugin: "java"
-
 group "com.zenith"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -26,10 +29,34 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    sourceCompatibility = targetCompatibility = "20"
+    sourceCompatibility = targetCompatibility = "17"
     options.encoding = "UTF-8"
-    options.compilerArgs.addAll(["--enable-preview"])
+    options.deprecation(true)
 }
+
+tasks.register('writeVersion') {
+    group 'build'
+    description 'Write version to file'
+
+    doLast {
+        var ver = 'git rev-parse --short=8 HEAD'.execute().text.trim()
+        if (ver.length() > 5) {
+            var f = file(project.buildDir.absolutePath + '/resources/main/proxy_commit.txt')
+            f.parentFile.mkdirs()
+            println "Writing commit hash: " + ver
+            f.write(ver)
+        } else {
+            println "Unable to determine commit hash"
+        }
+        var f = file(project.buildDir.absolutePath + '/resources/main/proxy_version.txt')
+        f.parentFile.mkdirs()
+        println "Writing version: " + project.version
+        f.write(project.version.toString())
+    }
+    outputs.upToDateWhen { false }
+}
+
+processResources.finalizedBy writeVersion
 
 repositories {
     maven {
@@ -57,6 +84,10 @@ repositories {
         url "https://repo.opencollab.dev/maven-releases/"
     }
     maven {
+        name = "paper"
+        url "https://papermc.io/repo/repository/maven-public/"
+    }
+    maven {
         "ViaVersion"
         url "https://repo.viaversion.com"
     }
@@ -76,8 +107,16 @@ configurations {
     implementation.extendsFrom shade
 }
 
+ext {
+    lombokVersion = "1.18.28"
+    porklibVersion = "0.5.8-SNAPSHOT"
+    postgresVersion = '42.6.0'
+    nettyVersion = '4.1.96.Final'
+    jooqVersion = "3.18.5"
+}
+
 jooq {
-    version = "3.18.4"
+    version = project.ext.jooqVersion
     // read from config.json (will fail if config doesn't exist)
     def dbUrl = ''
     def dbUser = ''
@@ -139,48 +178,40 @@ jooq {
     }
 }
 
-ext {
-    lombokVersion = "1.18.28"
-    porklibVersion = "0.5.8-SNAPSHOT"
-    postgresVersion = '42.6.0'
-    nettyVersion = '4.1.93.Final'
-}
-
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.jooq:jooq:3.18.4'
+    shade "org.jooq:jooq:$jooqVersion"
     shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
-    shade 'org.eclipse.jgit:org.eclipse.jgit:6.5.0.202303070854-r'
-    shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.5.0.202303070854-r'
-    shade 'com.github.mwiede:jsch:0.2.9'
-    shade 'com.google.guava:guava:32.0.0-jre'
+    shade 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
+    shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.6.0.202305301015-r'
+    shade 'com.github.mwiede:jsch:0.2.10'
+    shade 'com.google.guava:guava:32.1.2-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
-    shade "net.daporkchop.lib:hash:$porklibVersion"
-    shade "net.daporkchop.lib:minecraft-text:$porklibVersion"
-    shade "ch.qos.logback:logback-classic:1.4.7"
+    shade ("net.daporkchop.lib:math:$porklibVersion") {
+        exclude group: 'net.daporkchop.lib', module: 'common'
+        exclude group: 'net.daporkchop.lib', module: 'unsafe'
+    }
+    shade "ch.qos.logback:logback-classic:1.4.8"
     shade 'org.slf4j:slf4j-api:2.0.7'
+    shade 'org.slf4j:jul-to-slf4j:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
-    shade 'com.mojang:brigadier:1.0.18'
+    shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-
-    shade("com.github.5cmc:MCProtocolLib:c0b123fbd2") {
+    shade("com.discord4j:discord4j-core:3.3.0-M2") {
+        exclude group: 'io.netty'
+        exclude group: 'com.github.rfresh2', module: 'PacketLib'
+    }
+    shade("com.github.rfresh2:PacketLib:7bc2eaeb6e") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
-        exclude group: 'com.github.5cmc', module: 'packetlib'
     }
-    shade("com.github.5cmc:PacketLib:7bc2eaeb6e") {
+    shade("com.github.rfresh2:MCProtocolLib:396244f567") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
-    shade("com.discord4j:discord4j-core:3.3.0-M1") {
-        exclude group: 'io.netty'
-    }
-
-    shade "com.github.5cmc:MCAuthLib:94b70b772d"
-
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"
@@ -193,10 +224,11 @@ dependencies {
     shade "io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64"
     shade "io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64"
     shade "io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64"
-    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
+    // uncomment to use io_uring
+//    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade "com.github.collarmc:pounce:0e8492b68e"
-    shade('org.redisson:redisson:3.21.3') {
+    shade "com.github.collarmc:pounce:d921e2c156"
+    shade('org.redisson:redisson:3.23.2') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
@@ -208,7 +240,9 @@ dependencies {
     shade "com.viaversion:viaversion-api:4.6.2-SNAPSHOT"
     shade "com.viaversion:viabackwards:4.6.2-SNAPSHOT"
 
-    testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
+    shade 'org.jline:jline:3.23.0'
+    shade 'org.jline:jline-terminal-jansi:3.23.0'
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.0"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -238,16 +272,39 @@ tasks.register('run', JavaExec) {
                "-XX:G1MixedGCCountTarget=3", "-XX:G1HeapWastePercent=20", "-XX:InitiatingHeapOccupancyPercent=10",
                "-XX:G1RSetUpdatingPauseTimePercent=0", "-XX:MaxTenuringThreshold=1", "-XX:G1SATBBufferEnqueueingThresholdPercent=30",
                "-XX:G1ConcMarkStepDurationMillis=5.0", "-XX:G1ConcRSHotCardLimit=16",
-               "-XX:GCTimeRatio=99",
-               "-Djdk.virtualThreadScheduler.parallelism=4", "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16", "--enable-preview"]
+               "-XX:GCTimeRatio=99", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=2",
+               "-Djava.util.concurrent.ForkJoinPool.common.parallelism=8"]
+}
+
+tasks.register('java_path') {
+    group = "run"
+    doLast {
+        RegularFile execPath = javaToolchains.launcherFor(java.toolchain).get().getExecutablePath()
+        // create a file symlinked to the java executable for use in scripts
+        project.buildDir.mkdirs()
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            File f = file(project.buildDir.toString() + "/java_toolchain.bat")
+            if (f.exists()) {
+                f.delete()
+            }
+            f.write("@" + execPath.asFile.toString() + " %*")
+        } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+            File f = file(project.buildDir.toString() + "/java_toolchain")
+            if (f.exists()) {
+                f.delete()
+            }
+            Files.createSymbolicLink(f.toPath(), execPath.asFile.toPath())
+        }
+    }
 }
 
 tasks.withType(JavaExec).configureEach {
     javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
-//disable regular unshaded jar
-jar.enabled = false
+jar {
+    enabled = false
+}
 
 tasks.register('sourceJar', Jar) {
     from sourceSets.main.allSource
@@ -261,9 +318,26 @@ shadowJar {
     configurations = [project.configurations.shade]
 
     exclude 'module-info.class'
-
+    exclude 'META-INF/licenses/**'
+    exclude 'META-INF/maven/**'
+    exclude 'META-INF/proguard/**'
+    exclude 'META-INF/gradle/**'
+    exclude 'META-INF/versions/**'
+    minimize {
+        exclude(dependency("org.slf4j:slf4j-api:.*"))
+        exclude(dependency("ch.qos.logback:.*:.*"))
+        exclude(dependency("org.jline:jline:.*"))
+        exclude(dependency("org.jline:jline-terminal-jansi:.*"))
+        exclude(dependency("com.github.mwiede:jsch:.*"))
+        exclude(dependency("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:.*"))
+        exclude(dependency("com.discord4j:discord4j-core:.*"))
+        exclude(dependency("org.postgresql:postgresql:.*"))
+        exclude(dependency("io.netty:netty-codec-http:.*"))
+        exclude(dependency("io.netty:netty-codec-http2:.*"))
+        exclude(dependency("io.netty:netty-resolver-dns:.*"))
+    }
     manifest {
-        attributes "Implementation-Title": "Proxy",
+        attributes "Implementation-Title": "ZenithProxy",
                 "Implementation-Version": project.version,
                 "Main-Class": "com.zenith.Proxy"
     }
@@ -279,11 +353,112 @@ tasks.register('clearJooqBuild') {
     new File('build/jooq').deleteDir()
 }
 
+tasks.named("nativeCompile") {
+    classpathJar = shadowJar.archiveFile
+}
+
+graalvmNative {
+    binaries {
+        main {
+            javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+            imageName = "ZenithProxy"
+            mainClass = "com.zenith.Proxy"
+//            quickBuild = true
+            verbose = true
+            buildArgs.addAll(
+                    "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
+                    "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
+                    "--add-opens=java.base/java.nio=ALL-UNNAMED",
+                    "--initialize-at-build-time=net.daporkchop.lib",
+                    "--initialize-at-build-time=org.jline",
+                    "--initialize-at-build-time=java.awt.Toolkit",
+                    "--initialize-at-build-time=java.awt.Color",
+                    "--initialize-at-build-time=java.awt.Insets",
+                    "--initialize-at-build-time=org.fusesource.jansi",
+                    "--initialize-at-build-time=com.google.gson",
+                    '--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback',
+                    '--initialize-at-build-time=org.slf4j.MDC',
+                    '--initialize-at-build-time=ch.qos.logback.classic.Level',
+                    '--initialize-at-build-time=ch.qos.logback.classic.Logger',
+                    '--initialize-at-build-time=ch.qos.logback.core.util.StatusPrinter',
+                    '--initialize-at-build-time=ch.qos.logback.core.status.StatusBase',
+                    '--initialize-at-build-time=ch.qos.logback.core.status.InfoStatus',
+                    '--initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl',
+                    '--initialize-at-build-time=org.slf4j.LoggerFactory',
+                    '--initialize-at-build-time=ch.qos.logback.core.util.Loader',
+                    '--initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder',
+                    '--initialize-at-build-time=ch.qos.logback.classic.spi.ThrowableProxy',
+                    '--initialize-at-build-time=ch.qos.logback.core.CoreConstants',
+                    "--initialize-at-build-time=org.jooq",
+                    "--initialize-at-build-time=com.fasterxml",
+                    "--initialize-at-build-time=org.yaml",
+                    "--initialize-at-build-time=org.redisson",
+                    "--initialize-at-build-time=com.zaxxer",
+                    "--initialize-at-run-time=org.redisson.codec.JsonJacksonCodec",
+                    "--initialize-at-build-time=com.github",
+                    "--initialize-at-build-time=com.zenith.command",
+                    "--initialize-at-build-time=com.zenith.network",
+                    "--initialize-at-build-time=com.zenith.database",
+                    "--initialize-at-build-time=com.zenith.discord",
+                    "--initialize-at-build-time=com.zenith.event",
+                    "--initialize-at-build-time=com.zenith.cache",
+                    "--initialize-at-build-time=com.zenith.feature.spectator",
+                    "--initialize-at-run-time=com.zenith.module",
+                    "--initialize-at-run-time=com.zenith.feature.autoupdater",
+                    "--initialize-at-build-time=com.google",
+                    "--initialize-at-build-time=com.collarmc",
+                    "--initialize-at-build-time=reactor",
+                    "--initialize-at-build-time=com.microsoft",
+                    "--initialize-at-build-time=com.nimbusds",
+                    "--initialize-at-build-time=com.mojang",
+                    "--initialize-at-build-time=com.googlecode",
+                    "--initialize-at-run-time=reactor.netty.http.client.HttpClientFormEncoder",
+                    "--initialize-at-run-time=reactor.netty.resources.DefaultLoopNativeDetector",
+                    "--initialize-at-run-time=reactor.netty.resources.DefaultLoopEpoll",
+                    "--initialize-at-run-time=reactor.netty.tcp.SslProvider",
+                    "--initialize-at-run-time=reactor.netty.http.client",
+                    "--initialize-at-run-time=reactor.netty.tcp.TcpClientSecure",
+                    "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
+                    "--initialize-at-run-time=io.netty.channel.epoll.Native",
+                    "--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop",
+                    "--initialize-at-run-time=io.netty.channel.epoll.EpollEventArray",
+                    "--initialize-at-run-time=io.netty.channel.DefaultFileRegion",
+                    "--initialize-at-run-time=io.netty.channel.unix.Errors",
+                    "--initialize-at-run-time=io.netty.channel.unix.IovArray",
+                    "--initialize-at-run-time=io.netty.channel.unix.Limits",
+                    "--initialize-at-run-time=io.netty.util.internal.logging.Slf4jLogger",
+                    "--initialize-at-run-time=io.netty.channel.unix.Socket",
+                    "--initialize-at-run-time=io.netty.channel.ChannelHandlerMask",
+                    "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl",
+                    "--enable-url-protocols=https,http",
+                    "--report-unsupported-elements-at-runtime",
+                    "-H:+ReportExceptionStackTraces",
+//                    "-H:DashboardDump=imageDashboardDump",
+//                    "-H:+DashboardAll",
+//                    "--static", // todo: remove java.awt from code and dependencies. having issues getting this to statically link
+                    // awt replacement for png IO? https://github.com/nayuki/PNG-library
+//                    "--libc=musl",
+                    "-R:MaxHeapSize=100m",
+//                    "--pgo-instrument",
+                    "-march=x86-64-v3",
+                    "--gc=serial",
+            )
+
+            configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
+        }
+    }
+    metadataRepository {
+        enabled = true
+    }
+}
+
 compileJava.dependsOn([clearJooqBuild])
 tasks.named('generateJooq').configure { allInputsDeclared = false }
 tasks.register('jarBuild') {
     group = "build"
 }
-jarBuild.dependsOn([shadowJar, build])
+jarBuild.dependsOn([shadowJar, build, java_path])
+nativeCompile.dependsOn(jarBuild)
+generateResourcesConfigFile.dependsOn(shadowJar)
 
 //build.dependsOn(shadowJar)

@@ -4,8 +4,13 @@
 /log/
 /build/
 /config*.json
+launch_config.json
 /.gradle/
 *.class
 *.ipr
 /out/
 .DS_Store
+gradle.properties
+msal*.json
+/.vscode/settings.json
+launcher/

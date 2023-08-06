@@ -4,8 +4,8 @@ import com.collarmc.pounce.Subscribe;
 import com.zenith.database.dto.tables.Queuelength;
 import com.zenith.database.dto.tables.records.QueuelengthRecord;
 import com.zenith.event.module.ClientTickEvent;
-import com.zenith.util.Queue;
-import com.zenith.util.QueueStatus;
+import com.zenith.feature.queue.Queue;
+import com.zenith.feature.queue.QueueStatus;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -14,11 +14,10 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.zenith.util.Constants.CONFIG;
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class QueueLengthDatabase extends LockingDatabase {
-    private static final Duration updateInterval = Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes + 1L);
     private Instant lastUpdate = Instant.EPOCH;
 
     public QueueLengthDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
@@ -47,7 +46,7 @@ public class QueueLengthDatabase extends LockingDatabase {
 
     @Subscribe
     public void handleTickEvent(final ClientTickEvent event) {
-        if (lastUpdate.isBefore(Instant.now().minus(updateInterval))) {
+        if (lastUpdate.isBefore(Instant.now().minus(Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes + 1L)))) {
             lastUpdate = Instant.now();
             final QueueStatus queueStatus = Queue.getQueueStatus();
             final DSLContext context = DSL.using(SQLDialect.POSTGRES);

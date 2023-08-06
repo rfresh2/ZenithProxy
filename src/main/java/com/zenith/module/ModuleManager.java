@@ -7,41 +7,61 @@ import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
+import com.zenith.module.impl.*;
 import com.zenith.util.Wait;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class ModuleManager {
     protected ScheduledFuture<?> clientTickFuture;
-    protected final List<Module> modules;
+//    private static final String modulePackage = "com.zenith.module.impl";
+    private final Object2ObjectOpenHashMap<Class<? extends Module>, Module> moduleClassMap = new Object2ObjectOpenHashMap<>();
 
     public ModuleManager() {
         EVENT_BUS.subscribe(this);
-        this.modules = asList(
-//                new AntiAFK(),
-                new AutoDisconnect(),
-                new AutoReply(),
-                new Spook(),
-                new AutoRespawn(),
-//                new AutoTotem(),
-                new AutoEat()
-//                new KillAura()
-        );
     }
 
-    public <T> Optional<T> getModule(final Class<T> clazz) {
-        return this.modules.stream()
-                .filter(module -> module.getClass().equals(clazz))
-                .map(module -> (T) module)
-                .findFirst();
+    public void init() {
+        asList(
+//            new AntiAFK(),
+            new AutoDisconnect(),
+            new AutoEat(),
+            new AutoReply(),
+            new AutoRespawn(),
+//            new AutoTotem(),
+//            new KillAura(),
+            new Spammer(),
+            new Spook()
+        ).forEach(this::addModule);
+    }
+
+    private void addModule(Module module) {
+        moduleClassMap.put(module.getClass(), module);
+    }
+
+    public <T extends Module> Optional<T> getModule(final Class<T> clazz) {
+        Module module = moduleClassMap.get(clazz);
+        if (module == null) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of((T) module);
+        } catch (final ClassCastException e) {
+            return Optional.empty();
+        }
+    }
+
+    public List<Module> getModules() {
+        return moduleClassMap.values().stream().toList();
     }
 
     @Subscribe
@@ -71,7 +91,7 @@ public class ModuleManager {
     public void startClientTicks() {
         synchronized (this) {
             if (isNull(clientTickFuture) || clientTickFuture.isDone()) {
-                this.modules.forEach(Module::clientTickStarting);
+                getModules().forEach(Module::clientTickStarting);
                 clientTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         try {
@@ -89,7 +109,7 @@ public class ModuleManager {
         synchronized (this) {
             if (nonNull(this.clientTickFuture)) {
                 this.clientTickFuture.cancel(true);
-                this.modules.forEach(Module::clientTickStopping);
+                getModules().forEach(Module::clientTickStopping);
                 while (!this.clientTickFuture.isDone()) {
                     Wait.waitALittleMs(50);
                 }

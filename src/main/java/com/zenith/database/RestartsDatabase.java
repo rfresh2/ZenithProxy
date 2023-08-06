@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.zenith.util.Constants.DATABASE_LOG;
+import static com.zenith.Shared.DATABASE_LOG;
 
 public class RestartsDatabase extends LockingDatabase {
 

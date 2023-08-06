@@ -1,6 +1,7 @@
 package com.zenith.util;
 
 import com.google.gson.annotations.SerializedName;
+import com.zenith.feature.whitelist.WhitelistEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,31 +15,33 @@ public final class Config {
     public Client client = new Client();
     public Debug debug = new Debug();
     public Server server = new Server();
+    public InteractiveTerminal interactiveTerminal = new InteractiveTerminal();
     public Discord discord = new Discord();
     public Database database = new Database();
-    public boolean autoUpdate = true;
-    public int autoUpdateCheckIntervalSeconds = 60;
-    public boolean shouldReconnectAfterAutoUpdate = false;
+    public AutoUpdater autoUpdater = new AutoUpdater();
 
     public static final class Authentication {
         public boolean doAuthentication = false;
-        public AccountType accountType = AccountType.MSA;
+        public AccountType accountType = AccountType.DEVICE_CODE;
+        // only used for MSA
         public String email = "john.doe@example.com";
         public String password = "my_secure_password";
+        // updated on successful login
         public String username = "Steve";
         public boolean prio = false;
         public boolean prioBanned = false;
+        public String msaClientId = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
 
         public enum AccountType {
-            @SerializedName("msa") MSA
+            @SerializedName("msa") MSA,
+            @SerializedName("device_code") DEVICE_CODE
         }
     }
 
     public static final class Client {
         public Extra extra = new Extra();
         public Server server = new Server();
-        // auto-connect proxy on process start
-        public boolean autoConnect = false;
+        public boolean autoConnect = false; // auto-connect proxy on process start
         public ViaVersion viaversion;
 
         public static final class ViaVersion {
@@ -67,6 +70,9 @@ public final class Config {
             public boolean autoConnectOnLogin = true;
             public boolean sixHourReconnect = true;
             public boolean twentyMinuteReconnectIfStuck = true;
+            public boolean prioBan2b2tCheck = true;
+            public boolean prioStatusChangeMention = true;
+            public boolean killMessage = true;
 
             public static final class Chat {
                 public List<WhitelistEntry> ignoreList = new ArrayList<>();
@@ -120,6 +126,7 @@ public final class Config {
                     public boolean safeGravity = true;
                     public boolean stuckWarning = true;
                     public boolean stuckWarningMention = false;
+                    public boolean stuckReconnect = true;
                     public boolean antiStuck = false;
                 }
             }
@@ -148,6 +155,7 @@ public final class Config {
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
                     public boolean thunder = false;
+                    public boolean cancelAutoReconnect = false;
                 }
 
                 public static final class ActiveHours {
@@ -207,12 +215,13 @@ public final class Config {
             }
 
             public static final class Spammer {
-                public int delaySeconds = 30;
                 public boolean enabled = false;
+                public long delayTicks = 200;
+                public boolean randomOrder = false;
                 public List<String> messages = asList(
-                        "/stats",
-                        "/stats",
-                        "/stats"
+                        "ZenithProxy on top!",
+                        "I just skipped queue thanks to ZenithProxy!",
+                        "I love undertimer slopper!"
                 );
             }
 
@@ -224,14 +233,13 @@ public final class Config {
         }
 
         public static final class Server {
-            public String address = "2b2t.org";
+            public String address = "connect.2b2t.org";
             public int port = 25565;
         }
     }
 
     public static final class Debug {
         public Packet packet = new Packet();
-        public boolean printDataFields = false;
         public Server server = new Server();
 
         public static final class Packet {
@@ -311,18 +319,21 @@ public final class Config {
         }
     }
 
+    public static final class InteractiveTerminal {
+        public boolean enable = true;
+        public boolean logToDiscord = true;
+    }
     public static final class Discord {
+        public boolean enable = false;
         public String token = "";
         public String channelId = "";
         public String accountOwnerRoleId = "";
         public String visualRangeMentionRoleId = "";
-        public boolean enable = false;
         public String prefix = ".";
         public boolean reportCoords = false;
-        // internal use for update command state persistence
         public boolean mentionRoleOnPrioUpdate = true;
         public boolean mentionRoleOnPrioBanUpdate = true;
-        public boolean isUpdating = false;
+        public boolean isUpdating = false; // internal use for update command state persistence
         public QueueWarning queueWarning = new QueueWarning();
         public ChatRelay chatRelay = new ChatRelay();
 
@@ -344,11 +355,11 @@ public final class Config {
     }
 
     public static final class Database {
-        public boolean enabled = true;
-        public String host = "db.2b2t.vc";
+        public boolean enabled = false;
+        public String host = "";
         public int port = 5432;
-        public String username = "proxy";
-        public String password = "cghRVLQQiRqEpn9ccJEEeU";
+        public String username = "";
+        public String password = "";
         public int writePool = 1;
         public int readPool = 0; // no database actually needs a read pool currently
         public QueueWait queueWait = new QueueWait();
@@ -367,9 +378,9 @@ public final class Config {
 
         public static final class Lock {
             // use "rediss://" for SSL connection
-            public String redisAddress = "redis://redis.2b2t.vc:7181";
-            public String redisUsername = "proxy";
-            public String redisPassword = "w9e52ivAGUNmbFuEPar5Y3GEqBaT6SBfVV36XrYKGLtreBVmiGqxV2s7YMfsmuSA";
+            public String redisAddress = "redis://localhost:7181";
+            public String redisUsername = "";
+            public String redisPassword = "";
         }
 
         public static final class Connections {
@@ -396,6 +407,12 @@ public final class Config {
         public static final class PlayerCount {
             public boolean enabled = true;
         }
+    }
+
+    public static final class AutoUpdater {
+        public boolean autoUpdate = true;
+        public int autoUpdateCheckIntervalSeconds = 60;
+        public boolean shouldReconnectAfterAutoUpdate = false;
     }
 
     private transient boolean donePostLoad = false;

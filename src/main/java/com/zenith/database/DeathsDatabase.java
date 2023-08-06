@@ -5,10 +5,10 @@ import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.database.dto.tables.Deaths;
 import com.zenith.database.dto.tables.records.DeathsRecord;
 import com.zenith.event.proxy.DeathMessageEvent;
-import com.zenith.util.WhitelistEntry;
-import com.zenith.util.deathmessages.DeathMessageParseResult;
-import com.zenith.util.deathmessages.Killer;
-import com.zenith.util.deathmessages.KillerType;
+import com.zenith.feature.deathmessages.DeathMessageParseResult;
+import com.zenith.feature.deathmessages.Killer;
+import com.zenith.feature.deathmessages.KillerType;
+import com.zenith.feature.whitelist.WhitelistEntry;
 import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
 import org.jooq.Result;
@@ -20,7 +20,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 
-import static com.zenith.util.Constants.*;
+import static com.zenith.Shared.*;
 
 public class DeathsDatabase extends LockingDatabase {
 
