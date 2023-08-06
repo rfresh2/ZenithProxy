@@ -347,7 +347,7 @@ if release_channel == "git":
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
 elif release_channel == "java":
-    if not os.path.isfile("launcher/ZenithProxy.jar"):
+    if not os.path.isfile(launch_dir + "ZenithProxy.jar"):
         raise RuntimeError("ZenithProxy.jar not found")
     toolchain_command = ""
     jar_command = ""
@@ -360,10 +360,10 @@ elif release_channel == "java":
 -Djava.util.concurrent.ForkJoinPool.common.parallelism=8 -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 """
     if system == 'Windows':
         toolchain_command = "call java"
-        jar_command = "-jar launcher\\ZenithProxy.jar"
+        jar_command = "-jar " + launch_dir.replace("/", "\\") + "ZenithProxy.jar"
     else:
         toolchain_command = "java"
-        jar_command = "-jar launcher/ZenithProxy.jar"
+        jar_command = "-jar " + launch_dir + "ZenithProxy.jar"
     full_script = f"{toolchain_command} {common_script} {jar_command}"
     try:
         subprocess.run(full_script, shell=True, check=True)
@@ -372,10 +372,10 @@ elif release_channel == "java":
 elif release_channel == "linux" or release_channel == "linux.pre":
     if system != "Linux":
         raise RuntimeError(f"Linux release channel is not supported on current system: {system}")
-    if not os.path.isfile("ZenithProxy"):
+    if not os.path.isfile(launch_dir + "ZenithProxy"):
         raise RuntimeError("ZenithProxy executable not found")
     try:
-        subprocess.run("./launcher/ZenithProxy "
+        subprocess.run("./" + launch_dir + "ZenithProxy "
                        "-Xmx150m -Djava.util.concurrent.ForkJoinPool.common.parallelism=8 "
                        "-Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2",
                        shell=True, check=True)
