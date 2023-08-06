@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import static com.zenith.util.Constants.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftProtocol> {

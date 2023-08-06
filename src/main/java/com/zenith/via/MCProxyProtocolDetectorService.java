@@ -5,7 +5,7 @@ import com.viaversion.viaversion.platform.AbstractProtocolDetectorService;
 
 import java.util.Map;
 
-import static com.zenith.util.Constants.CONFIG;
+import static com.zenith.Shared.CONFIG;
 
 // todo: might not need this
 public class MCProxyProtocolDetectorService extends AbstractProtocolDetectorService {

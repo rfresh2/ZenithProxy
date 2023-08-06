@@ -204,7 +204,7 @@ dependencies {
         exclude group: 'io.netty'
         exclude group: 'com.github.rfresh2', module: 'PacketLib'
     }
-    shade("com.github.rfresh2:PacketLib:7bc2eaeb6e") {
+    shade("com.github.rfresh2:PacketLib:89ddde6731") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
