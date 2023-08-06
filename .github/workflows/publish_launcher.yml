@@ -21,7 +21,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "launch"
-          prerelease: true
+          prerelease: false
           files: |
             launch.sh
             launch.bat
