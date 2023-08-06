@@ -1,8 +1,9 @@
 name: Prerelease GraalVM Native
 
 on:
-  # todo: move this to push on mainline or native branch
-  workflow_dispatch:
+  push:
+    tags:
+      - '[0-9].[0-9].[0-9]+linux.pre'
 
 jobs:
   build:
@@ -47,15 +48,11 @@ jobs:
       - name: Zip Binary And Libs
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
-      - name: Create version identifier file
-        run: git rev-parse --short=8 HEAD > version.txt
-
       - name: Release Artifact
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "linux-native-prerelease"
+          automatic_release_tag: "${{ github.ref_name }}"
           prerelease: true
           files: |
             ZenithProxy.zip
-            version.txt

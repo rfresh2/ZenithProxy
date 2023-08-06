@@ -20,6 +20,7 @@ plugins {
 }
 
 group "com.zenith"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -40,13 +41,17 @@ tasks.register('writeVersion') {
     doLast {
         var ver = 'git rev-parse --short=8 HEAD'.execute().text.trim()
         if (ver.length() > 5) {
-            var f = file(project.buildDir.absolutePath + '/resources/main/proxy_version.txt')
+            var f = file(project.buildDir.absolutePath + '/resources/main/proxy_commit.txt')
             f.parentFile.mkdirs()
-            println "Writing version: " + ver
+            println "Writing commit hash: " + ver
             f.write(ver)
         } else {
-            println "Unable to determine full version"
+            println "Unable to determine commit hash"
         }
+        var f = file(project.buildDir.absolutePath + '/resources/main/proxy_version.txt')
+        f.parentFile.mkdirs()
+        println "Writing version: " + project.version
+        f.write(project.version.toString())
     }
     outputs.upToDateWhen { false }
 }
@@ -177,7 +182,7 @@ dependencies {
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.6.0.202305301015-r'
     shade 'com.github.mwiede:jsch:0.2.10'
-    shade 'com.google.guava:guava:32.1.1-jre'
+    shade 'com.google.guava:guava:32.1.2-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
     shade ("net.daporkchop.lib:math:$porklibVersion") {
@@ -284,8 +289,9 @@ tasks.withType(JavaExec).configureEach {
     javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
-//disable regular unshaded jar
-jar.enabled = false
+jar {
+    enabled = false
+}
 
 tasks.register('sourceJar', Jar) {
     from sourceSets.main.allSource
@@ -334,6 +340,9 @@ tasks.register('clearJooqBuild') {
     new File('build/jooq').deleteDir()
 }
 
+tasks.named("nativeCompile") {
+    classpathJar = shadowJar.archiveFile
+}
 
 graalvmNative {
     binaries {

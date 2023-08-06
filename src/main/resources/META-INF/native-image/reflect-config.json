@@ -1360,6 +1360,11 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"discord4j.rest.json.response.ErrorResponse",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[]}, {"name":"anySetter","parameterTypes":["java.lang.String","java.lang.Object"]}]
+},
+{
   "name":"discord4j.discordjson.json.ActivityAssetsData",
   "queryAllDeclaredMethods":true
 },
@@ -4404,5 +4409,18 @@
 {
   "name":"sun.security.x509.SubjectKeyIdentifierExtension",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"com.zenith.feature.autoupdater.RestAutoUpdater",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.zenith.feature.autoupdater.GitAutoUpdater",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.zenith.util.LaunchConfig",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 }
 ]

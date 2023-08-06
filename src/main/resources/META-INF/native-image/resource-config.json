@@ -55,6 +55,8 @@
   }, {
     "pattern":"\\Qproxy_version.txt\\E"
   }, {
+    "pattern":"\\Qproxy_commit.txt\\E"
+  }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
   }, {
     "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"

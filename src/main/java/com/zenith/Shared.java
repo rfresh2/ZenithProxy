@@ -7,7 +7,6 @@ import com.zenith.cache.DataCache;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
-import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.World;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
@@ -44,6 +43,7 @@ import com.zenith.network.server.handler.spectator.outgoing.*;
 import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
+import com.zenith.util.LaunchConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +65,7 @@ public class Shared {
     public static final Logger DATABASE_LOG = LoggerFactory.getLogger("Database");
     public static final Logger TERMINAL_LOG = LoggerFactory.getLogger("Terminal");
     public static final File CONFIG_FILE = new File("config.json");
+    public static final File LAUNCH_CONFIG_FILE = new File("launch_config.json");
     public static final String SERVER_RESTARTING = "Server restarting";
     public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
@@ -79,6 +80,7 @@ public class Shared {
         }
     }
     public static Config CONFIG;
+    public static LaunchConfig LAUNCH_CONFIG;
     public static final DataCache CACHE;
     public static final DiscordBot DISCORD_BOT;
     public static final EventBus EVENT_BUS;
@@ -91,7 +93,6 @@ public class Shared {
     public static final TPSCalculator TPS_CALCULATOR;
     public static final ModuleManager MODULE_MANAGER;
     public static final Pathing PATHING;
-    public static final AutoUpdater AUTO_UPDATER;
     public static final TerminalManager TERMINAL_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
@@ -184,6 +185,31 @@ public class Shared {
         }
     }
 
+    public static synchronized void loadLaunchConfig() {
+        try {
+            DEFAULT_LOG.info("Loading launch config...");
+
+            LaunchConfig config = null;
+            if (LAUNCH_CONFIG_FILE.exists()) {
+                try (Reader reader = new FileReader(LAUNCH_CONFIG_FILE)) {
+                    config = GSON.fromJson(reader, LaunchConfig.class);
+                } catch (IOException e) {
+                    saveLaunchConfig();
+                }
+            } else {
+                saveLaunchConfig();
+            }
+            if (config == null) {
+                if (LAUNCH_CONFIG == null) LAUNCH_CONFIG = new LaunchConfig();
+            } else LAUNCH_CONFIG = config;
+            CONFIG.autoUpdater.autoUpdate = LAUNCH_CONFIG.auto_update;
+            DEFAULT_LOG.info("Launch config loaded.");
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Unable to load launch config!", e);
+            System.exit(1);
+        }
+    }
+
     public static synchronized void saveConfig() {
         DEFAULT_LOG.debug("Saving config...");
 
@@ -200,6 +226,23 @@ public class Shared {
 
         DEFAULT_LOG.debug("Config saved.");
     }
+    public static synchronized void saveLaunchConfig() {
+        DEFAULT_LOG.debug("Saving launch config...");
+
+        if (LAUNCH_CONFIG == null) {
+            DEFAULT_LOG.warn("Launch config is not set, saving default config!");
+            LAUNCH_CONFIG = new LaunchConfig();
+        }
+
+        try (Writer out = new FileWriter(LAUNCH_CONFIG_FILE)) {
+            GSON.toJson(LAUNCH_CONFIG, out);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to save launch config!", e);
+        }
+
+        DEFAULT_LOG.debug("Launch config saved.");
+    }
+
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(true)
@@ -273,7 +316,6 @@ public class Shared {
             TPS_CALCULATOR = new TPSCalculator();
             MODULE_MANAGER = new ModuleManager();
             PATHING = new Pathing(WORLD);
-            AUTO_UPDATER = new AutoUpdater();
             TERMINAL_MANAGER = new TerminalManager();
             COMMAND_MANAGER = new CommandManager();
         } catch (final Throwable e) {
