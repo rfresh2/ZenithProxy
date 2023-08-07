@@ -66,6 +66,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setLevel","parameterTypes":["java.lang.String"] }]
 },
 {
+  "name":"ch.qos.logback.classic.joran.SerializedModelConfigurator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"ch.qos.logback.classic.jul.LevelChangePropagator",
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setResetJUL","parameterTypes":["boolean"] }]
@@ -622,7 +626,7 @@
   "name":"com.zenith.Proxy",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleClientDisconnect","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioStatusEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }, {"name":"handleServerRestartingEvent","parameterTypes":["com.zenith.event.proxy.ServerRestartingEvent"] }]
+  "methods":[{"name":"handleClientDisconnect","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioStatusEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleServerRestartingEvent","parameterTypes":["com.zenith.event.proxy.ServerRestartingEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }]
 },
 {
   "name":"com.zenith.command.impl.ActiveHoursCommand",
@@ -812,7 +816,7 @@
   "name":"com.zenith.database.QueueWaitDatabase",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleQueueComplete","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePosition","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleStartQueue","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }, {"name":"handleServerRestart","parameterTypes":["com.zenith.event.proxy.ServerRestartingEvent"] }]
+  "methods":[{"name":"handleQueueComplete","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePosition","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerRestart","parameterTypes":["com.zenith.event.proxy.ServerRestartingEvent"] }, {"name":"handleStartQueue","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }]
 },
 {
   "name":"com.zenith.database.RestartsDatabase",
@@ -824,76 +828,84 @@
   "name":"com.zenith.database.dto.tables.records.ChatsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.ConnectionsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.DeathsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.NamesRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.PlayercountRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.PlaytimeAllRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.QueuelengthRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.QueuewaitRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.database.dto.tables.records.RestartsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }],
-  "unsafeAllocated":true
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.discord.DiscordBot",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"handleAutoEatOutOfFood","parameterTypes":["com.zenith.event.module.AutoEatOutOfFoodEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDeathEvent","parameterTypes":["com.zenith.event.proxy.DeathEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.DeathMessageEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.SelfDeathMessageEvent"] }, {"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handleNewPlayerInVisualRangeEvent","parameterTypes":["com.zenith.event.proxy.NewPlayerInVisualRangeEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handleProxyClientConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientConnectedEvent"] }, {"name":"handleProxyClientDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerChatReceivedEvent","parameterTypes":["com.zenith.event.proxy.ServerChatReceivedEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleStartConnectEvent","parameterTypes":["com.zenith.event.proxy.StartConnectEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }, {"name": "handleServerRestartingEvent", "parameterTypes":["com.zenith.event.proxy.ServerRestartingEvent"]}, {"name": "handleAutoDisconnectEvent", "parameterTypes":["com.zenith.event.proxy.HealthAutoDisconnectEvent"]}, {"name":"handleProxySpectatorConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxySpectatorConnectedEvent"]}, {"name":"handleNonWhitelistedPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent"]}, {"name":"handleProxySpectatorDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxySpectatorDisconnectedEvent"]}, {"name":"handleActiveHoursConnectEvent","parameterTypes":["com.zenith.event.proxy.ActiveHoursConnectEvent"]}, {"name":"handleDiscordMessageSentEvent","parameterTypes":["com.zenith.event.proxy.DiscordMessageSentEvent"]}, {"name":"handleUpdateStartEvent","parameterTypes":["com.zenith.event.proxy.UpdateStartEvent"]}, {"name":"handleProxyLoginFailedEvent","parameterTypes":["com.zenith.event.proxy.ProxyLoginFailedEvent"]}, {"name":"handleProxyLoginFailedEvent","parameterTypes":["com.zenith.event.proxy.ProxyLoginFailedEvent"]}, {"name":"handlePrioStatusUpdateEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusUpdateEvent"]}, {"name":"handlePrioBanStatusUpdateEvent","parameterTypes":["com.zenith.event.proxy.PrioBanStatusUpdateEvent"]}, {"name":"handleAntiAfkStuckEvent","parameterTypes":["com.zenith.event.module.AntiAfkStuckEvent"]}, {"name":"handleAutoReconnectEvent","parameterTypes":["com.zenith.event.proxy.AutoReconnectEvent"]}, {"name":"handleMsaDeviceCodeLoginEvent","parameterTypes":["com.zenith.event.proxy.MsaDeviceCodeLoginEvent"]}]
+  "methods":[{"name":"handleActiveHoursConnectEvent","parameterTypes":["com.zenith.event.proxy.ActiveHoursConnectEvent"] }, {"name":"handleAntiAfkStuckEvent","parameterTypes":["com.zenith.event.module.AntiAfkStuckEvent"] }, {"name":"handleAutoDisconnectEvent","parameterTypes":["com.zenith.event.proxy.HealthAutoDisconnectEvent"] }, {"name":"handleAutoEatOutOfFood","parameterTypes":["com.zenith.event.module.AutoEatOutOfFoodEvent"] }, {"name":"handleAutoReconnectEvent","parameterTypes":["com.zenith.event.proxy.AutoReconnectEvent"] }, {"name":"handleConnectEvent","parameterTypes":["com.zenith.event.proxy.ConnectEvent"] }, {"name":"handleDeathEvent","parameterTypes":["com.zenith.event.proxy.DeathEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.DeathMessageEvent"] }, {"name":"handleDeathMessageEvent","parameterTypes":["com.zenith.event.proxy.SelfDeathMessageEvent"] }, {"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }, {"name":"handleDiscordMessageSentEvent","parameterTypes":["com.zenith.event.proxy.DiscordMessageSentEvent"] }, {"name":"handleMsaDeviceCodeLoginEvent","parameterTypes":["com.zenith.event.proxy.MsaDeviceCodeLoginEvent"] }, {"name":"handleNewPlayerInVisualRangeEvent","parameterTypes":["com.zenith.event.proxy.NewPlayerInVisualRangeEvent"] }, {"name":"handleNonWhitelistedPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent"] }, {"name":"handlePlayerOnlineEvent","parameterTypes":["com.zenith.event.proxy.PlayerOnlineEvent"] }, {"name":"handlePrioBanStatusUpdateEvent","parameterTypes":["com.zenith.event.proxy.PrioBanStatusUpdateEvent"] }, {"name":"handlePrioStatusUpdateEvent","parameterTypes":["com.zenith.event.proxy.PrioStatusUpdateEvent"] }, {"name":"handleProxyClientConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientConnectedEvent"] }, {"name":"handleProxyClientDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxyClientDisconnectedEvent"] }, {"name":"handleProxyLoginFailedEvent","parameterTypes":["com.zenith.event.proxy.ProxyLoginFailedEvent"] }, {"name":"handleProxySpectatorConnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxySpectatorConnectedEvent"] }, {"name":"handleProxySpectatorDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ProxySpectatorDisconnectedEvent"] }, {"name":"handleQueueCompleteEvent","parameterTypes":["com.zenith.event.proxy.QueueCompleteEvent"] }, {"name":"handleQueuePositionUpdateEvent","parameterTypes":["com.zenith.event.proxy.QueuePositionUpdateEvent"] }, {"name":"handleServerChatReceivedEvent","parameterTypes":["com.zenith.event.proxy.ServerChatReceivedEvent"] }, {"name":"handleServerPlayerConnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerConnectedEvent"] }, {"name":"handleServerPlayerDisconnectedEvent","parameterTypes":["com.zenith.event.proxy.ServerPlayerDisconnectedEvent"] }, {"name":"handleServerRestartingEvent","parameterTypes":["com.zenith.event.proxy.ServerRestartingEvent"] }, {"name":"handleStartConnectEvent","parameterTypes":["com.zenith.event.proxy.StartConnectEvent"] }, {"name":"handleStartQueueEvent","parameterTypes":["com.zenith.event.proxy.StartQueueEvent"] }, {"name":"handleUpdateStartEvent","parameterTypes":["com.zenith.event.proxy.UpdateStartEvent"] }]
 },
 {
   "name":"com.zenith.feature.autoupdater.AutoUpdater",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "methods":[{"name":"handleDisconnectEvent","parameterTypes":["com.zenith.event.proxy.DisconnectEvent"] }]
+},
+{
+  "name":"com.zenith.feature.autoupdater.GitAutoUpdater",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.zenith.feature.autoupdater.RestAutoUpdater",
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"com.zenith.feature.food.FoodData",
@@ -951,12 +963,12 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setMetadata","parameterTypes":["java.lang.Integer"] }]
 },
 {
-  "name":"com.zenith.feature.queue.mcping.data.ExtraResponse",
+  "name":"com.zenith.feature.queue.QueueStatus",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.feature.queue.QueueStatus",
+  "name":"com.zenith.feature.queue.mcping.data.ExtraResponse",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -1349,6 +1361,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.LaunchConfig",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"discord4j.discordjson.Id",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1358,11 +1375,6 @@
 {
   "name":"discord4j.discordjson.json.Activity",
   "queryAllDeclaredMethods":true
-},
-{
-  "name":"discord4j.rest.json.response.ErrorResponse",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[]}, {"name":"anySetter","parameterTypes":["java.lang.String","java.lang.Object"]}]
 },
 {
   "name":"discord4j.discordjson.json.ActivityAssetsData",
@@ -2481,6 +2493,11 @@
 {
   "name":"discord4j.gateway.json.jackson.PayloadDeserializer",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"discord4j.rest.json.response.ErrorResponse",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"anySetter","parameterTypes":["java.lang.String","java.lang.Object"] }]
 },
 {
   "name":"fr.litarvan.openauth.microsoft.model.request.MinecraftLoginRequest",
@@ -4409,18 +4426,5 @@
 {
   "name":"sun.security.x509.SubjectKeyIdentifierExtension",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
-},
-{
-  "name":"com.zenith.feature.autoupdater.RestAutoUpdater",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"com.zenith.feature.autoupdater.GitAutoUpdater",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"com.zenith.util.LaunchConfig",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
 }
 ]

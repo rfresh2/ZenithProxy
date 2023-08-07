@@ -33,6 +33,8 @@
   }, {
     "pattern":"\\Qlinux_x86_64/velocity-compress.so\\E"
   }, {
+    "pattern":"\\Qlogback.scmo\\E"
+  }, {
     "pattern":"\\Qlogback.xml\\E"
   }, {
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Linux/x86_64/libjansi.so\\E"
@@ -45,6 +47,8 @@
   }, {
     "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"
   }, {
+    "pattern":"\\Qorg/jline/utils/dumb-color.caps\\E"
+  }, {
     "pattern":"\\Qorg/jline/utils/screen.caps\\E"
   }, {
     "pattern":"\\Qpc/1.12/blockCollisionShapes.json\\E"
@@ -53,9 +57,9 @@
   }, {
     "pattern":"\\Qpc/1.12/foods.json\\E"
   }, {
-    "pattern":"\\Qproxy_version.txt\\E"
-  }, {
     "pattern":"\\Qproxy_commit.txt\\E"
+  }, {
+    "pattern":"\\Qproxy_version.txt\\E"
   }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
   }, {
