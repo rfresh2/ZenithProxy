@@ -65,7 +65,6 @@ public class ClientListener implements SessionListener {
     @Override
     public void packetError(PacketErrorEvent event) {
         CLIENT_LOG.error("", event.getCause());
-        event.setSuppress(true);
     }
 
     @Override

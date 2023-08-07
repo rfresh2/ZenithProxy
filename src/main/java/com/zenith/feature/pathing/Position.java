@@ -16,11 +16,7 @@ public class Position {
     }
 
     public ClientPlayerPositionPacket toPlayerPositionPacket() {
-        return toPlayerPositionPacket(false);
-    }
-
-    public ClientPlayerPositionPacket toPlayerPositionPacket(boolean onGround) {
-        return new ClientPlayerPositionPacket(onGround, x, y, z);
+        return new ClientPlayerPositionPacket(false, x, y, z);
     }
 
     public BlockPos toBlockPos() {
