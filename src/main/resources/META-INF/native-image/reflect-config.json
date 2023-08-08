@@ -326,11 +326,27 @@
   "fields":[{"name":"statistics"}]
 },
 {
+  "name":"com.github.steveice10.opennbt.tag.builtin.ByteArrayTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
   "name":"com.github.steveice10.opennbt.tag.builtin.ByteTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.github.steveice10.opennbt.tag.builtin.CompoundTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.github.steveice10.opennbt.tag.builtin.DoubleTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.github.steveice10.opennbt.tag.builtin.FloatTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.github.steveice10.opennbt.tag.builtin.IntArrayTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
@@ -342,11 +358,23 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
+  "name":"com.github.steveice10.opennbt.tag.builtin.LongArrayTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.github.steveice10.opennbt.tag.builtin.LongTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
   "name":"com.github.steveice10.opennbt.tag.builtin.ShortTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.github.steveice10.opennbt.tag.builtin.StringTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.github.steveice10.opennbt.tag.builtin.Tag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
