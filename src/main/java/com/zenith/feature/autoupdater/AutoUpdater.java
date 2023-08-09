@@ -1,7 +1,7 @@
 package com.zenith.feature.autoupdater;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
 
@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
 
@@ -16,10 +17,13 @@ public abstract class AutoUpdater {
 
     private boolean updateAvailable = false;
     ScheduledFuture<?> updateCheckFuture;
+    private Subscription eventSubscription;
 
     public void start() {
         if (updateCheckFuture != null) return;
-        EVENT_BUS.subscribe(this);
+        if (eventSubscription != null) eventSubscription = EVENT_BUS.subscribe(
+            DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent
+        );
         scheduleUpdateCheck(this::updateCheck, 3, CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
     }
 
@@ -40,7 +44,10 @@ public abstract class AutoUpdater {
     }
 
     public void stop() {
-        EVENT_BUS.unsubscribe(this);
+        if (eventSubscription != null) {
+            eventSubscription.unsubscribe();
+            eventSubscription = null;
+        }
         cancelUpdateCheck();
         this.updateAvailable = false;
     }
@@ -61,7 +68,6 @@ public abstract class AutoUpdater {
         return updateAvailable;
     }
 
-    @Subscribe
     public void handleDisconnectEvent(final DisconnectEvent event) {
         if (updateAvailable) {
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = !event.reason.equals(MANUAL_DISCONNECT);
@@ -90,7 +96,7 @@ public abstract class AutoUpdater {
     }
 
     public void update() {
-        EVENT_BUS.dispatch(new UpdateStartEvent());
+        EVENT_BUS.post(new UpdateStartEvent());
         CONFIG.discord.isUpdating = true;
         Proxy.getInstance().stop();
     }

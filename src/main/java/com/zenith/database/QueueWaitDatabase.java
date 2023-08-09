@@ -1,8 +1,8 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.database.dto.tables.Queuewait;
 import com.zenith.database.dto.tables.records.QueuewaitRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
@@ -16,8 +16,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.util.Pair.of;
 import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {
@@ -33,19 +36,26 @@ public class QueueWaitDatabase extends Database {
         super(queryExecutor);
     }
 
-    @Subscribe
+    @Override
+    public Subscription initEvents() {
+        return EVENT_BUS.subscribe(
+            of(ServerRestartingEvent.class, (Consumer<ServerRestartingEvent>)this::handleServerRestart),
+            of(StartQueueEvent.class, (Consumer<StartQueueEvent>)this::handleStartQueue),
+            of(QueuePositionUpdateEvent.class, (Consumer<QueuePositionUpdateEvent>)this::handleQueuePosition),
+            of(QueueCompleteEvent.class, (Consumer<QueueCompleteEvent>)this::handleQueueComplete)
+        );
+    }
+
     public void handleServerRestart(final ServerRestartingEvent event) {
         lastServerRestart = Instant.now();
     }
 
-    @Subscribe
     public void handleStartQueue(final StartQueueEvent event) {
         shouldUpdateQueueLen.set(true);
         initialQueueLen = null;
         initialQueueTime = null;
     }
 
-    @Subscribe
     public void handleQueuePosition(final QueuePositionUpdateEvent event) {
         // record only first position update
         if (shouldUpdateQueueLen.compareAndSet(true, false)) {
@@ -54,7 +64,6 @@ public class QueueWaitDatabase extends Database {
         }
     }
 
-    @Subscribe
     public void handleQueueComplete(final QueueCompleteEvent event) {
         final Instant queueCompleteTime = Instant.now();
 

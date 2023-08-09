@@ -41,7 +41,7 @@ public class TitlePacketHandler implements AsyncIncomingHandler<ServerTitlePacke
                     .map(Integer::parseInt);
             if (position.isPresent()) {
                 if (position.get() != session.getLastQueuePosition()) {
-                    EVENT_BUS.dispatch(new QueuePositionUpdateEvent(position.get()));
+                    EVENT_BUS.postAsync(new QueuePositionUpdateEvent(position.get()));
                 }
                 session.setLastQueuePosition(position.get());
             }

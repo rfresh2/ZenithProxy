@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
@@ -10,6 +9,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterators;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
+import static com.zenith.util.Pair.of;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
@@ -56,15 +58,20 @@ public class AntiAFK extends Module {
     private int gravityT = 0;
     private int antiStuckT = 0;
     private double antiStuckStartY = 0;
+    private Subscription eventSubscription;
 
     public AntiAFK() {
         super();
         this.positionCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(positionCacheTTLMins, TimeUnit.MINUTES)
                 .build();
+        this.eventSubscription = EVENT_BUS.subscribe(
+            of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
+            of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent)
+        );
     }
 
-    @Subscribe
+
     public void handleClientTickEvent(final ClientTickEvent event) {
         if (CONFIG.client.extra.antiafk.enabled
                 && Proxy.getInstance().isConnected()
@@ -100,7 +107,7 @@ public class AntiAFK extends Module {
                         stuck = true;
                         if (Instant.now().minus(Duration.ofMinutes(20)).isAfter(lastDistanceDeltaWarningTime)) {
                             // only send discord warning once every 20 mins so we don't spam too hard
-                            EVENT_BUS.dispatch(new AntiAfkStuckEvent(distanceMovedDelta));
+                            EVENT_BUS.postAsync(new AntiAfkStuckEvent(distanceMovedDelta));
                             lastDistanceDeltaWarningTime = Instant.now();
                         }
                     } else {
@@ -114,7 +121,6 @@ public class AntiAFK extends Module {
         }
     }
 
-    @Subscribe
     public void handleDeathEvent(final DeathEvent event) {
         synchronized (this) {
             reset();

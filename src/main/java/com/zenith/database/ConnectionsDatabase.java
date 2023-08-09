@@ -1,12 +1,13 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.tables.Connections;
 import com.zenith.database.dto.tables.records.ConnectionsRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
+import com.zenith.util.Pair;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -15,12 +16,22 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class ConnectionsDatabase extends LockingDatabase {
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
+    }
+
+    @Override
+    public Subscription initEvents() {
+        return EVENT_BUS.subscribe(
+            Pair.of(ServerPlayerConnectedEvent.class, (Consumer<ServerPlayerConnectedEvent>) this::handleServerPlayerConnectedEvent),
+            Pair.of(ServerPlayerDisconnectedEvent.class, (Consumer<ServerPlayerDisconnectedEvent>)this::handleServerPlayerDisconnectedEvent)
+        );
     }
 
     @Override
@@ -48,12 +59,10 @@ public class ConnectionsDatabase extends LockingDatabase {
         return 300; // higher limit needed here to handle restarts where there are mass disconnects/connects
     }
 
-    @Subscribe
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         writeConnection(Connectiontype.JOIN, event.playerEntry.getName(), event.playerEntry.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
-    @Subscribe
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         writeConnection(Connectiontype.LEAVE, event.playerEntry.getName(), event.playerEntry.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }

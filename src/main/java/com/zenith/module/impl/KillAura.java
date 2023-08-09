@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
@@ -48,7 +47,7 @@ public class KillAura extends Module {
         return CONFIG.client.extra.killAura.enabled && isAttacking;
     }
 
-    @Subscribe
+
     public void handleClientTick(final ClientTickEvent event) {
         if (CONFIG.client.extra.killAura.enabled
                 && CACHE.getPlayerCache().getThePlayer().getHealth() > 0

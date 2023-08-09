@@ -1,19 +1,25 @@
 package com.zenith.database;
 
-import static com.zenith.Shared.EVENT_BUS;
+import com.zenith.event.Subscription;
 
 public abstract class Database {
     protected final QueryExecutor queryExecutor;
+    private Subscription eventSubscription;
 
     public Database(final QueryExecutor queryExecutor) {
         this.queryExecutor = queryExecutor;
     }
 
     public void start() {
-        EVENT_BUS.subscribe(this);
+        initEvents();
     }
 
     public void stop() {
-        EVENT_BUS.unsubscribe(this);
+        if (eventSubscription != null) {
+            eventSubscription.unsubscribe();
+            eventSubscription = null;
+        }
     }
+
+    public abstract Subscription initEvents();
 }

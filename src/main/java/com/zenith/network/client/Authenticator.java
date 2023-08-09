@@ -63,7 +63,7 @@ public class Authenticator {
 
     public void onDeviceCode(final DeviceCode code) {
         CLIENT_LOG.error("Please go to " + code.verificationUri() + " and enter " + code.userCode() + " to authenticate.");
-        EVENT_BUS.dispatch(new MsaDeviceCodeLoginEvent(code));
+        EVENT_BUS.postAsync(new MsaDeviceCodeLoginEvent(code));
     }
 
     private AuthenticationService getAuthenticationService() {

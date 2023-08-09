@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -37,7 +36,7 @@ public class AutoReply extends Module {
         this.repliedPlayersCache = newCache;
     }
 
-    @Subscribe
+
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (CONFIG.client.extra.autoReply.enabled && isNull(Proxy.getInstance().getCurrentPlayer().get())) {
             try {

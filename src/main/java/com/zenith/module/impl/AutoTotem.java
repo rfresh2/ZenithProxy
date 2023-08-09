@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.window.ClickItemParam;
@@ -27,7 +26,7 @@ public class AutoTotem extends Module {
         return CONFIG.client.extra.autoTotem.enabled && swapping;
     }
 
-    @Subscribe
+
     public void handleClientTick(final ClientTickEvent event) {
         if (CONFIG.client.extra.autoTotem.enabled
                 && CACHE.getPlayerCache().getThePlayer().getHealth() > 0

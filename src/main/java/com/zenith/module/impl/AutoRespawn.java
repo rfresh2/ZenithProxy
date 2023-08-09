@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.zenith.Proxy;
@@ -19,7 +18,7 @@ public class AutoRespawn extends Module {
         super();
     }
 
-    @Subscribe
+
     public void handleDeathEvent(final DeathEvent event) {
         if (!CONFIG.client.extra.autoRespawn.enabled) return;
         tickCounter = -tickEventRespawnDelay - (CONFIG.client.extra.autoRespawn.delayMillis / 50);
@@ -27,7 +26,7 @@ public class AutoRespawn extends Module {
         checkAndRespawn();
     }
 
-    @Subscribe
+
     public void handleClientTickEvent(final ClientTickEvent event) {
         if (!CONFIG.client.extra.autoRespawn.enabled) return;
         // the purpose of this handler is to also autorespawn when we've logged in and are already dead

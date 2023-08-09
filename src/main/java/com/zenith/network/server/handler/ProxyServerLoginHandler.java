@@ -54,7 +54,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         if (!connection.isOnlySpectator() && this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
             // if we don't have a current player, set player
             connection.setSpectator(false);
-            EVENT_BUS.dispatch(new ProxyClientConnectedEvent(clientGameProfile));
+            EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ServerJoinGamePacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().isHardcore(),
@@ -70,7 +70,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             if (nonNull(this.proxy.getCurrentPlayer().get())) {
                 // if we have a current player, allow login but put in spectator
                 connection.setSpectator(true);
-                EVENT_BUS.dispatch(new ProxySpectatorConnectedEvent(clientGameProfile));
+                EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
                 session.send(new ServerJoinGamePacket(
                         connection.getSpectatorSelfEntityId(),
                         CACHE.getPlayerCache().isHardcore(),

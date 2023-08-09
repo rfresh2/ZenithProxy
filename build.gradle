@@ -218,7 +218,6 @@ dependencies {
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade "com.github.collarmc:pounce:d921e2c156"
     shade('org.redisson:redisson:3.23.2') {
         exclude group: 'io.netty'
     }

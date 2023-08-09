@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
@@ -31,7 +30,7 @@ public class Spook extends Module {
         this.focusStack = new Stack<>();
     }
 
-    @Subscribe
+
     public void handleClientTickEvent(final ClientTickEvent event) {
         synchronized (focusStack) { // handling this regardless of mode so we don't fill stack indefinitely
             if (!this.focusStack.isEmpty()) {
@@ -49,7 +48,7 @@ public class Spook extends Module {
         }
     }
 
-    @Subscribe
+
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         synchronized (this.focusStack) {
             this.focusStack.push(event.playerEntity);

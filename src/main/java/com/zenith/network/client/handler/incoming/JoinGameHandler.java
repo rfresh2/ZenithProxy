@@ -40,7 +40,7 @@ public class JoinGameHandler implements IncomingHandler<ServerJoinGamePacket, Cl
         if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).endsWith("2b2t.org")) {
             if (!session.isOnline()) {
                 session.setOnline(true);
-                EVENT_BUS.dispatch(new PlayerOnlineEvent());
+                EVENT_BUS.post(new PlayerOnlineEvent());
             }
         }
         return true;

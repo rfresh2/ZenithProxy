@@ -1,12 +1,12 @@
 package com.zenith;
 
-import com.collarmc.pounce.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zenith.cache.DataCache;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
+import com.zenith.event.SimpleEventBus;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.World;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
@@ -83,7 +83,7 @@ public class Shared {
     public static LaunchConfig LAUNCH_CONFIG;
     public static final DataCache CACHE;
     public static final DiscordBot DISCORD_BOT;
-    public static final EventBus EVENT_BUS;
+    public static final SimpleEventBus EVENT_BUS;
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
     public static final WhitelistManager WHITELIST_MANAGER;
     public static final PriorityBanChecker PRIORITY_BAN_CHECKER;
@@ -306,7 +306,7 @@ public class Shared {
             });
             SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);
             DISCORD_BOT = new DiscordBot();
-            EVENT_BUS = new EventBus(Runnable::run);
+            EVENT_BUS = new SimpleEventBus();
             CACHE = new DataCache();
             WHITELIST_MANAGER = new WhitelistManager();
             PRIORITY_BAN_CHECKER = new PriorityBanChecker();

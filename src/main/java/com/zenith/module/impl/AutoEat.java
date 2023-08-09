@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
@@ -11,6 +10,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.feature.food.FoodManager;
@@ -31,8 +31,15 @@ public class AutoEat extends Module {
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
     @Getter
     private boolean isEating = false;
+    private Subscription eventSubscription;
 
-    @Subscribe
+    public AutoEat() {
+        super();
+        this.eventSubscription = EVENT_BUS.subscribe(
+            ClientTickEvent.class, this::handleClientTick
+        );
+    }
+
     public void handleClientTick(final ClientTickEvent e) {
         if (CONFIG.client.extra.autoEat.enabled
                 && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
@@ -98,7 +105,7 @@ public class AutoEat extends Module {
         }
 
         if (CONFIG.client.extra.autoEat.warning && Instant.now().minus(Duration.ofHours(7)).isAfter(lastAutoEatOutOfFoodWarning)) {
-            EVENT_BUS.dispatch(new AutoEatOutOfFoodEvent());
+            EVENT_BUS.postAsync(new AutoEatOutOfFoodEvent());
             lastAutoEatOutOfFoodWarning = Instant.now();
         }
 

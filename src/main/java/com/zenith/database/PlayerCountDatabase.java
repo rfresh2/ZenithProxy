@@ -1,9 +1,9 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.database.dto.tables.Playercount;
 import com.zenith.database.dto.tables.records.PlayercountRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -13,8 +13,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.*;
 
 public class PlayerCountDatabase extends LockingDatabase {
     private static final Duration updateInterval = Duration.ofMinutes(5L);
@@ -22,6 +21,13 @@ public class PlayerCountDatabase extends LockingDatabase {
 
     public PlayerCountDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
         super(queryExecutor, redisClient);
+    }
+
+    @Override
+    public Subscription initEvents() {
+        return EVENT_BUS.subscribe(
+            ClientTickEvent.class, this::handleClientTickEvent
+        );
     }
 
     @Override
@@ -44,7 +50,6 @@ public class PlayerCountDatabase extends LockingDatabase {
         return timeRecordResult.get(0).value1().toInstant();
     }
 
-    @Subscribe
     public void handleClientTickEvent(final ClientTickEvent event) {
         if (lastUpdate.isBefore(Instant.now().minus(updateInterval))) {
             if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30L))) return;

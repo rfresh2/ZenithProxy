@@ -1,7 +1,7 @@
 package com.zenith.module;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.PlayerOnlineEvent;
@@ -15,19 +15,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
+import static com.zenith.util.Pair.of;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class ModuleManager {
     protected ScheduledFuture<?> clientTickFuture;
-//    private static final String modulePackage = "com.zenith.module.impl";
+    private Subscription eventSubscription;
     private final Object2ObjectOpenHashMap<Class<? extends Module>, Module> moduleClassMap = new Object2ObjectOpenHashMap<>();
 
     public ModuleManager() {
-        EVENT_BUS.subscribe(this);
+        eventSubscription = EVENT_BUS.subscribe(
+            of(PlayerOnlineEvent.class, (Consumer<PlayerOnlineEvent>)this::handlePlayerOnlineEvent),
+            of(ProxyClientConnectedEvent.class, (Consumer<ProxyClientConnectedEvent>)this::handleProxyClientConnectedEvent),
+            of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent),
+            of(DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent)
+        );
     }
 
     public void init() {
@@ -64,26 +71,22 @@ public class ModuleManager {
         return moduleClassMap.values().stream().toList();
     }
 
-    @Subscribe
     public void handlePlayerOnlineEvent(final PlayerOnlineEvent event) {
         if (Proxy.getInstance().getActiveConnections().isEmpty()) {
             startClientTicks();
         }
     }
 
-    @Subscribe
     public void handleProxyClientConnectedEvent(final ProxyClientConnectedEvent event) {
         stopClientTicks();
     }
 
-    @Subscribe
     public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
         if (nonNull(Proxy.getInstance().getClient()) && Proxy.getInstance().getClient().isOnline()) {
             startClientTicks();
         }
     }
 
-    @Subscribe
     public void handleDisconnectEvent(final DisconnectEvent event) {
         stopClientTicks();
     }
@@ -95,7 +98,7 @@ public class ModuleManager {
                 clientTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         try {
-                            EVENT_BUS.dispatch(new ClientTickEvent());
+                            EVENT_BUS.post(new ClientTickEvent());
                         } catch (final Exception e) {
                             CLIENT_LOG.error("Client Tick Error", e);
                         }

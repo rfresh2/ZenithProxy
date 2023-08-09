@@ -29,7 +29,7 @@ public class LoginSuccessOutgoingHandler implements OutgoingHandler<LoginSuccess
                     session.setWhitelistChecked(false);
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                     SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
-                    EVENT_BUS.dispatch(new NonWhitelistedPlayerConnectedEvent(clientGameProfile, session.getRemoteAddress()));
+                    EVENT_BUS.post(new NonWhitelistedPlayerConnectedEvent(clientGameProfile, session.getRemoteAddress()));
                     return null;
                 }
             }

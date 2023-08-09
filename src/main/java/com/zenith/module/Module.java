@@ -4,7 +4,6 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
 
-import static com.zenith.Shared.EVENT_BUS;
 import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 
 /**
@@ -13,7 +12,7 @@ import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 public abstract class Module {
 
     public Module() {
-        EVENT_BUS.subscribe(this);
+
     }
 
     public void clientTickStarting() {

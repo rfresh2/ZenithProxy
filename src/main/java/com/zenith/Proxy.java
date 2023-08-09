@@ -1,13 +1,13 @@
 package com.zenith;
 
 import ch.qos.logback.classic.LoggerContext;
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
@@ -45,10 +45,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
+import static com.zenith.util.Pair.of;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -77,6 +79,7 @@ public class Proxy {
     @Getter
     @Setter
     private AutoUpdater autoUpdater;
+    private Subscription eventSubscription;
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -98,11 +101,29 @@ public class Proxy {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public void initEventHandlers() {
+        if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
+        eventSubscription = EVENT_BUS.subscribe(
+            of(DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent),
+            of(ConnectEvent.class, (Consumer<ConnectEvent>)this::handleConnectEvent),
+            of(StartQueueEvent.class, (Consumer<StartQueueEvent>)this::handleStartQueueEvent),
+            of(QueuePositionUpdateEvent.class, (Consumer<QueuePositionUpdateEvent>)this::handleQueuePositionUpdateEvent),
+            of(QueueCompleteEvent.class, (Consumer<QueueCompleteEvent>)this::handleQueueCompleteEvent),
+            of(PlayerOnlineEvent.class, (Consumer<PlayerOnlineEvent>)this::handlePlayerOnlineEvent),
+            of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent),
+            of(ServerRestartingEvent.class, (Consumer<ServerRestartingEvent>)this::handleServerRestartingEvent),
+            of(PrioStatusEvent.class, (Consumer<PrioStatusEvent>)this::handlePrioStatusEvent),
+            of(ServerPlayerConnectedEvent.class, (Consumer<ServerPlayerConnectedEvent>)this::handleServerPlayerConnectedEvent),
+            of(ServerPlayerDisconnectedEvent.class, (Consumer<ServerPlayerDisconnectedEvent>)this::handleServerPlayerDisconnectedEvent)
+        );
+    }
+
     public void start() {
         loadConfig();
         loadLaunchConfig();
         DEFAULT_LOG.info("Starting ZenithProxy-{}", LAUNCH_CONFIG.version);
-        EVENT_BUS.subscribe(this);
+        initEventHandlers();
         try {
             if (CONFIG.interactiveTerminal.enable) {
                 TERMINAL_MANAGER.start();
@@ -265,13 +286,13 @@ public class Proxy {
      */
     public synchronized void connect() {
         try {
-            EVENT_BUS.dispatch(new StartConnectEvent());
+            EVENT_BUS.postAsync(new StartConnectEvent());
             this.logIn();
         } catch (final RuntimeException e) {
-            EVENT_BUS.dispatch(new ProxyLoginFailedEvent());
+            EVENT_BUS.post(new ProxyLoginFailedEvent());
             getActiveConnections().forEach(connection -> connection.disconnect("Login failed"));
             SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
-                EVENT_BUS.dispatch(new DisconnectEvent("Login Failed"));
+                EVENT_BUS.post(new DisconnectEvent("Login Failed"));
             }, 1L, TimeUnit.SECONDS);
             return;
         }
@@ -402,30 +423,6 @@ public class Proxy {
                 .collect(Collectors.toList());
     }
 
-    @Subscribe
-    public void handleDisconnectEvent(DisconnectEvent event) {
-        CACHE.reset(true);
-        this.disconnectTime = Instant.now();
-        this.inQueue = false;
-        this.queuePosition = 0;
-        if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            // skip autoreconnect when we want to sync client disconnect
-            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason)) {
-                if (autoReconnectIsInProgress()) {
-                    return;
-                }
-                this.autoReconnectFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
-                    delayBeforeReconnect();
-                    synchronized (this.autoReconnectFuture) {
-                        if (this.autoReconnectFuture.isPresent()) this.connect();
-                        this.autoReconnectFuture = Optional.empty();
-                    }
-                }));
-            }
-        }
-        TPS_CALCULATOR.reset();
-    }
-
     public void delayBeforeReconnect() {
         try {
             final int countdown;
@@ -443,7 +440,7 @@ public class Proxy {
 //                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
 //                        + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
 //            }
-            EVENT_BUS.dispatch(new AutoReconnectEvent(countdown));
+            EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
                 Wait.waitALittle(1);
@@ -457,7 +454,7 @@ public class Proxy {
         if (!CONFIG.client.extra.prioBan2b2tCheck || !CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
         this.isPrioBanned = PRIORITY_BAN_CHECKER.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
-            EVENT_BUS.dispatch(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
+            EVENT_BUS.postAsync(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
             CONFIG.authentication.prioBanned = this.isPrioBanned.get();
             saveConfig();
             CLIENT_LOG.info("Prio Ban Change Detected: " + this.isPrioBanned.get());
@@ -489,7 +486,7 @@ public class Proxy {
                     })
                     .findAny()
                     .ifPresent(t -> {
-                        EVENT_BUS.dispatch(new ActiveHoursConnectEvent());
+                        EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
                         this.lastActiveHoursConnect = Instant.now();
                         disconnect(SYSTEM_DISCONNECT);
                         Wait.waitALittle(30);
@@ -526,45 +523,62 @@ public class Proxy {
         }
     }
 
-    @Subscribe
+    public void handleDisconnectEvent(DisconnectEvent event) {
+        CACHE.reset(true);
+        this.disconnectTime = Instant.now();
+        this.inQueue = false;
+        this.queuePosition = 0;
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
+            // skip autoreconnect when we want to sync client disconnect
+            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason)) {
+                if (autoReconnectIsInProgress()) {
+                    return;
+                }
+                this.autoReconnectFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
+                    delayBeforeReconnect();
+                    synchronized (this.autoReconnectFuture) {
+                        if (this.autoReconnectFuture.isPresent()) this.connect();
+                        this.autoReconnectFuture = Optional.empty();
+                    }
+                }));
+            }
+        }
+        TPS_CALCULATOR.reset();
+    }
+
+
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
         cancelAutoReconnect();
     }
 
-    @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
         this.queuePosition = 0;
         updatePrioBanStatus();
     }
 
-    @Subscribe
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         this.queuePosition = event.position;
     }
 
-    @Subscribe
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
         this.inQueue = false;
         this.connectTime = Instant.now();
     }
 
-    @Subscribe
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         if (!this.isPrio.isPresent()) {
             // assume we are prio if we skipped queuing
-            EVENT_BUS.dispatch(new PrioStatusEvent(true));
+            EVENT_BUS.postAsync(new PrioStatusEvent(true));
         }
         PlayerCache.sync();
     }
 
-    @Subscribe
-    public void handleClientDisconnect(final ProxyClientDisconnectedEvent e) {
+    public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent e) {
         PlayerCache.sync();
     }
 
-    @Subscribe
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         if (!CONFIG.authentication.prio && isNull(getCurrentPlayer().get())) {
             Wait.waitRandomWithinMsBound(30000);
@@ -572,7 +586,6 @@ public class Proxy {
         }
     }
 
-    @Subscribe
     public void handlePrioStatusEvent(PrioStatusEvent event) {
         if (CONFIG.client.server.address.toLowerCase().contains("2b2t.org")) {
             if (event.prio == CONFIG.authentication.prio) {
@@ -582,7 +595,7 @@ public class Proxy {
                 }
             } else {
                 CLIENT_LOG.info("Prio Change Detected: " + event.prio);
-                EVENT_BUS.dispatch(new PrioStatusUpdateEvent(event.prio));
+                EVENT_BUS.postAsync(new PrioStatusUpdateEvent(event.prio));
                 this.isPrio = Optional.of(event.prio);
                 CONFIG.authentication.prio = event.prio;
                 saveConfig();
@@ -590,7 +603,6 @@ public class Proxy {
         }
     }
 
-    @Subscribe
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
@@ -600,7 +612,6 @@ public class Proxy {
         }
     }
 
-    @Subscribe
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();

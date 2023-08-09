@@ -20,18 +20,18 @@ public class GameStateHandler implements AsyncIncomingHandler<ServerNotifyClient
             CACHE.getPlayerCache().setGameMode((GameMode) packet.getValue());
         } else if (packet.getNotification() == ClientNotification.START_RAIN) {
             CACHE.getChunkCache().setRaining(true);
-            EVENT_BUS.dispatch(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(new WeatherChangeEvent());
         } else if (packet.getNotification() == ClientNotification.STOP_RAIN) {
             CACHE.getChunkCache().setRaining(false);
             CACHE.getChunkCache().setThunderStrength(0.0f);
             CACHE.getChunkCache().setRainStrength(0.0f);
-            EVENT_BUS.dispatch(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(new WeatherChangeEvent());
         } else if (packet.getNotification() == ClientNotification.RAIN_STRENGTH) {
             CACHE.getChunkCache().setRainStrength(((RainStrengthValue) packet.getValue()).getStrength());
-            EVENT_BUS.dispatch(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(new WeatherChangeEvent());
         } else if (packet.getNotification() == ClientNotification.THUNDER_STRENGTH) {
             CACHE.getChunkCache().setThunderStrength(((ThunderStrengthValue) packet.getValue()).getStrength());
-            EVENT_BUS.dispatch(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(new WeatherChangeEvent());
         }
         return true;
     }
