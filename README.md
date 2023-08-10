@@ -10,8 +10,8 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 
 <details>
     <summary>What is a proxy?</summary>
-    This proxy itself consists of two components:
 
+    This proxy itself consists of two components:
     1. A Minecraft Server ("Proxy Server")
     2. A Minecraft Client ("Proxy Client")
 
@@ -36,7 +36,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 
 # Features
 
-* High performance and efficiency on minimal hardware, <300MB RAM per java instance or <150MB with the linux native version.
+* High performance and efficiency on minimal hardware, <300MB RAM per java instance or <150MB on linux.
 * Secure Whitelist system - share MC accounts without sharing passwords
 * Extensive discord integration
     * Chat relay
@@ -53,15 +53,6 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 
 # Getting Started
 
-## Release Channels
-
-ZenithProxy has 3 release channels:
-
-* (Default) `java` - Supports all operating systems
-* (Recommended) `linux` - Linux native executable
-  * Instant startup and ~50% reduced memory usage
-* `git` - Builds and runs the proxy from source
-
 ## Prerequisites
 
 1. Linux or Windows computer. I recommend DigitalOcean's `1 GB Memory / 1 vCPU` VPS in NYC-1 for
@@ -69,11 +60,19 @@ ZenithProxy has 3 release channels:
    [Free DigitalOcean $200 credit for new accounts](https://m.do.co/c/3a3a226e4936).
 2. [Python 3](https://www.python.org/downloads/) installed.
 
-Additional Requirements to use `java` or `git` releases:
+## Release Channels
 
-* `java` - Java 17 or higher (20+ recommended)
-  * [Adoptium Java Downloads](https://adoptium.net/)
-* `git` - Java 17 or higher and [git](https://git-scm.com/downloads) installed, plus the repository must be cloned.
+ZenithProxy has 3 release channels:
+
+* (Default) `java` - Supports all operating systems
+* (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
+* `git` - Locally builds and runs the proxy from source
+
+#### Additional Requirements For Release Channels
+
+* `java` - Java 17 or higher (20+ recommended). [Java Downloads](https://adoptium.net/)
+* `linux` - Linux x86_64 OS (e.g. Ubuntu 22.04)
+* `git` - Same as `java`, plus [git](https://git-scm.com/downloads) installed and the repository already cloned.
 
 ## Setup
 
@@ -81,26 +80,29 @@ Additional Requirements to use `java` or `git` releases:
 OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
 2. Run `./launch.sh` (Linux) or `.\launch.bat` (Windows). Close the instance with `CTRL-C`.
 3. Optional: Select a release channel by editing the `launch_config.json` file.
-4. Run the proxy again. It will automatically download the latest release and start the proxy.
+4. Run the proxy again. It will automatically download the latest release and start.
 5. Close the proxy with `CTRL-C` and edit the `config.json` file. Important sections:
    * `authentication` -> Device code login is selected by default. No changes required if you wish to use this.
      * Optional: For username/password login, change `accountType` to `msa` and set `username` and `password`.
        * You must disable 2FA on your Microsoft account and may need to approve the proxy's
          IP [here](https://account.live.com/Activity)
      * `server` -> Optionally change the port the proxy listens on.
-     * `proxyIP` -> set this to DNS name or IP address + port clients should connect to.
-       * For DNS you need the following records:
-         * an `A` record pointing to the proxy IP
-           * an `SRV` record pointing to the `A` record and port. e.g. `0 5 25565 rfresh.proxy.com`
+     * `proxyIP` -> set this to the domain or IP address + port clients should connect to.
+       * For a domain you need the following DNS records:
+         * an `A` record to your IP address
+         * an `SRV` record for `_minecraft._tcp` with the port and the `A` record as its target. [Example](https://cdn.discordapp.com/attachments/971140948593635335/1139099459431698463/firefox_GSnrLzpsR3.png)
      * `discord`
-       * Create a discord bot here `https://discord.com/developers/`. `Message Content Intent` MUST be enabled.
-         * Invite the discord bot to a server. Create a role for users to manage the proxy, a channel to manage the
-           proxy in, and a channel for the chat relay.
-           * `token` -> discord bot token
-           * `channelId` -> the channel ID where you will manage the proxy
-           * `enable` -> set to true
-           * `accountOwnerRoleId` -> a discord role ID that allows managing sensitive configuration like the whitelist
-           * `chatRelay.channelId` -> The channel where the MC server chat relay will be sent and received from.
+       * Create a discord bot here `https://discord.com/developers/`. 
+       * Enable `Message Content Intent` under the "Bot" tab. 
+       * Invite the discord bot to a server. 
+       * Create a role for users to manage the proxy, a channel to manage the
+         proxy in, and a channel for the chat relay. The bot's role must have permissions to send and receive messages in both channels
+       * Edit the following JSON properties:
+         * `enable` -> set to `true`
+         * `token` -> the bot's discord token
+         * `channelId` -> the channel ID where you will manage the proxy from
+         * `accountOwnerRoleId` -> a discord role ID that allows managing sensitive configuration like the whitelist
+         * `chatRelay.channelId` -> The channel ID where the MC server chat relay will be sent and received from.
 
 ## Run
 
@@ -108,17 +110,17 @@ OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
 * The discord prefix is `.` by default. e.g. `.connect` or `.disconnect`.
 * Type `.help` in discord or `help` in the interactive terminal to get a list of available commands.
 
-To specify custom JVM args, (e.g. to set a different max heap size) edit `custom_jvm_args` in `launch_config.json`
+To set custom JVM args, (e.g. to change the max heap size) edit `custom_jvm_args` in `launch_config.json`
 
 ## AutoUpdater
 
-The AutoUpdater is enabled by default. It updates both ZenithProxy and the launcher to the latest releases. 
+The AutoUpdater is enabled by default. It updates both ZenithProxy and the launcher script. 
 
-These can be configured in `launch_config.json`:
-* Proxy AutoUpdater: `auto_update`. Can also be configured with the command `autoupdate off` (with `.` prefix if in discord).
-* Launcher AutoUpdater: `auto_update_launcher`. 
+It can be enabled/disabled in `launch_config.json`:
+* ZenithProxy AutoUpdater: `auto_update`. Can also be configured with the command `autoUpdate off` (with `.` prefix if in discord).
+* Launcher AutoUpdater: `auto_update_launcher`
 
-To use an exact ZenithProxy version, in `launch_config.json` set `auto_update` to `false` and `version` to the desired version.
+To use an exact version, in `launch_config.json` set `auto_update` to `false` and `version` to the desired version (e.g. `1.0.0+java`).
 
 # Developers
 
@@ -127,10 +129,5 @@ To use an exact ZenithProxy version, in `launch_config.json` set `auto_update` t
 
 ## Special Thanks
 
-* [Pork2b2tBot Developers](https://github.com/PorkStudios/Pork2b2tBot/graphs/contributors)
-* [MCProtocolLib Developers](https://github.com/GeyserMC/MCProtocolLib/graphs/contributors)
-
-# License
-
-This project was originally forked from [Pork2b2tBot](https://github.com/PorkStudios/Pork2b2tBot) and carries the same
-MIT license
+* [Pork2b2tBot Contributors](https://github.com/PorkStudios/Pork2b2tBot/graphs/contributors)
+* [MCProtocolLib Contributors](https://github.com/GeyserMC/MCProtocolLib/graphs/contributors)
