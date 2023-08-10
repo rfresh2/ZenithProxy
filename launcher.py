@@ -8,8 +8,10 @@ import urllib.parse
 import zipfile
 
 auto_update = True
+auto_update_launcher = True
 release_channel = "git"
 version = "0.0.0"
+local_version = "0.0.0"
 repo_owner = "rfresh2"
 repo_name = "ZenithProxy"
 repo_branch = "mainline"
@@ -46,31 +48,28 @@ def init_launch_config():
 
 
 def read_launch_config(data):
-    global release_channel, version, repo_owner, repo_name, repo_branch, auto_update
-    try:
-        t_auto_update = data['auto_update']
-        t_channel = data['release_channel']
-        t_version = data['version']
-        t_repo_owner = data['repo_owner']
-        t_repo_name = data['repo_name']
-        t_repo_branch = data['repo_branch']
-        auto_update = t_auto_update
-        release_channel = t_channel
-        version = t_version
-        repo_owner = t_repo_owner
-        repo_name = t_repo_name
-        repo_branch = t_repo_branch
-    except KeyError:
-        print("Error reading launch_config.json")
-        create_default_launch_config()
+    global release_channel, version, local_version, repo_owner, repo_name, repo_branch, auto_update, auto_update_launcher
+    if data is None:
+        print("No data to read from launch_config.json")
+        return
+    auto_update = data.get('auto_update', auto_update)
+    auto_update_launcher = data.get('auto_update_launcher', auto_update_launcher)
+    release_channel = data.get('release_channel', release_channel)
+    version = data.get('version', version)
+    local_version = data.get('local_version', local_version)
+    repo_owner = data.get('repo_owner', repo_owner)
+    repo_name = data.get('repo_name', repo_name)
+    repo_branch = data.get('repo_branch', repo_branch)
 
 
 def write_launch_config():
     global release_channel, version, repo_owner, repo_name
     output = {
-        "auto_update": True,
+        "auto_update": auto_update,
+        "auto_update_launcher": auto_update_launcher,
         "release_channel": release_channel,
         "version": version,
+        "local_version": version,
         "repo_owner": repo_owner,
         "repo_name": repo_name,
         "repo_branch": repo_branch
@@ -80,19 +79,29 @@ def write_launch_config():
 
 
 def git_update_check():
-    global version
-    os.system("git pull")
+    try:
+        print("Running git pull...")
+        subprocess.run(['git', 'pull'], check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as e:
+        print("Error pulling from git:")
+        print(e.stderr)
+    return None
+
+
+def git_read_version():
+    global version, local_version
     try:
         output = subprocess.check_output(['git', 'rev-parse', '--short=8', 'HEAD'], stderr=subprocess.STDOUT, text=True)
         v = str(output).splitlines()[0].strip()
         if len(v) == 8:
             version = v
-            print("Git updated to commit:", version)
+            local_version = v
+            print("Git commit:", version)
         else:
             print("Invalid version string found from git:", output)
     except subprocess.CalledProcessError as e:
-        print("Error:", e.output)
-    return None
+        print("Error reading local git version:")
+        print(e.stderr)
 
 
 def git_build():
@@ -151,6 +160,34 @@ def get_latest_release_and_ver(channel):
     finally:
         connection.close()
     return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
+
+
+def get_release_for_ver(target_version):
+    found_version = False
+    page = 1
+    url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100, 'page': page})}"
+    try:
+        while not found_version and page < 10:
+            connection = http.client.HTTPSConnection("api.github.com")
+            connection.request("GET", url, headers=github_headers)
+            response = connection.getresponse()
+            if response.status == 200:
+                releases = json.loads(response.read())
+                for release in releases:
+                    if release["draft"]:
+                        continue
+                    if release["tag_name"] == target_version:
+                        return release["id"], release["tag_name"]
+            else:
+                print("Failed to get releases:", response.status, response.reason)
+                break
+            connection.close()
+            page += 1
+    except Exception as e:
+        print("Failed to get release for version:", target_version, e)
+    finally:
+        connection.close()
+    return None
 
 
 def get_release_asset_id(release_id, asset_name):
@@ -228,8 +265,21 @@ def rest_update_check(asset_name, executable_name):
     if latest_release_and_ver[1] == version and os.path.isfile(launch_dir + executable_name):
         print("Already up to date")
         return
-    print("Updating to version:", latest_release_and_ver[1])
-    asset_id = get_release_asset_id(latest_release_and_ver[0], asset_name)
+    rest_get_assets(asset_name, executable_name, latest_release_and_ver)
+
+
+def rest_get_version(asset_name, executable_name, target_version):
+    release_and_version = get_release_for_ver(target_version)
+    if not release_and_version:
+        raise RestUpdateError("Failed to get release for version: " + target_version
+                              + " and channel: " + release_channel)
+    rest_get_assets(asset_name, executable_name, release_and_version)
+
+
+def rest_get_assets(asset_name, executable_name, release_and_version):
+    global version, local_version
+    print("Downloading version:", release_and_version[1])
+    asset_id = get_release_asset_id(release_and_version[0], asset_name)
     if not asset_id:
         raise RestUpdateError("Failed to get executable asset ID")
     asset_data = download_release_asset(asset_id)
@@ -251,15 +301,25 @@ def rest_update_check(asset_name, executable_name):
             os.remove(launch_dir + asset_name)
     except IOError as e:
         raise RestUpdateError("Failed to write executable asset: " + str(e))
-    version = latest_release_and_ver[1]
+    local_version = version = release_and_version[1]
 
 
 def java_update_check():
     rest_update_check("ZenithProxy.jar", "ZenithProxy.jar")
 
 
+def java_get_version(target_version):
+    print("Getting version: " + target_version)
+    rest_get_version("ZenithProxy.jar", "ZenithProxy.jar", target_version)
+
+
 def linux_native_update_check():
     rest_update_check("ZenithProxy.zip", "ZenithProxy")
+
+
+def linux_native_get_version(target_version):
+    print("Getting version: " + target_version)
+    rest_get_version("ZenithProxy.zip", "ZenithProxy", target_version)
 
 
 def get_java_version():
@@ -319,6 +379,20 @@ if auto_update:
             linux_native_update_check()
     except UpdateError as e:
         print("Error performing update check:", e)
+elif release_channel != "git" and version != local_version:
+    print("Desired version is different from local version, attempting to download version:", version)
+    try:
+        if release_channel == "java":
+            java_get_version(version)
+        elif release_channel == "linux":
+            linux_native_get_version(version)
+        elif release_channel == "linux.pre":
+            linux_native_get_version(version)
+    except UpdateError as e:
+        print("Error performing update check:", e)
+
+if release_channel == "git":
+    git_read_version()
 
 write_launch_config()
 

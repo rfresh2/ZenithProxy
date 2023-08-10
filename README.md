@@ -108,6 +108,16 @@ Extract the zip file to a new folder. OR clone the repository `git clone git@git
 * The discord prefix is `.` by default. e.g. `.connect` or `.disconnect`.
 * Type `.help` in discord or `help` in the interactive terminal to get a list of available commands.
 
+## AutoUpdater
+
+The AutoUpdater is enabled by default. It updates both ZenithProxy and the launcher to the latest releases. 
+
+These can be configured in `launch_config.json`:
+* Proxy AutoUpdater: `auto_update`. Can also be configured with the command `autoupdate off` (with `.` prefix if in discord).
+* Launcher AutoUpdater: `auto_update_launcher`. 
+
+To use an exact ZenithProxy version, in `launch_config.json` set `auto_update` to `false` and `version` to the desired version.
+
 # Developers
 
 * [rfresh2](https://github.com/rfresh2)

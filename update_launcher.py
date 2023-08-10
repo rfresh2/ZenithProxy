@@ -7,13 +7,14 @@ from urllib.parse import urlparse
 with open("launch_config.json", "r") as f:
     launch_config = json.load(f)
 
-auto_update = launch_config["auto_update"]
+release_channel = launch_config["release_channel"]
+auto_update_launcher = launch_config["auto_update_launcher"]
 repo_owner = launch_config["repo_owner"]
 repo_name = launch_config["repo_name"]
 repo_branch = launch_config["repo_branch"]
 launcher_tag = "launch"
 
-if not auto_update:
+if not auto_update_launcher or release_channel == "git":
     exit(0)
 
 github_headers = {
@@ -23,7 +24,6 @@ github_headers = {
     "X-GitHub-Api-Version": "2022-11-28",
     "Connection": "close"
 }
-payload = {}
 
 
 def get_release_asset_id(tag, asset_name):

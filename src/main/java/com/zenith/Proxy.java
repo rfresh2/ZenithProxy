@@ -88,19 +88,6 @@ public class Proxy {
         instance.start();
     }
 
-    public static String determineVersion() {
-        try (InputStream in = Proxy.class.getClassLoader().getResourceAsStream("proxy_version.txt")) {
-            if (in == null) {
-                throw new IOException("Unable to find version file");
-            }
-            final Scanner scanner = new Scanner(in);
-            return scanner.nextLine();
-        } catch (final Exception e) {
-            DEFAULT_LOG.error("Failed to read proxy version", e);
-            return "DEV";
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public void initEventHandlers() {
         if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
@@ -433,6 +420,7 @@ public class Proxy {
             //  however, when the Proxy.disconnect method is called with only a string reason this also trips it
             //  those situations need to be differentiated
             //  also there is no way to configure the delaySecondsOffline in the discord command currently
+            //  Maybe send an mcping?
 //            if (nonNull(client) && ((ClientSession) client).isServerProbablyOff()) {
 //                countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
 //                this.reconnectCounter = 0;
