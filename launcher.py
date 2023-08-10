@@ -299,9 +299,9 @@ def rest_get_assets(asset_name, executable_name, release_and_version):
                 zip_ref.extractall(launch_dir)
                 subprocess.run(["chmod", "+x", launch_dir + executable_name])
             os.remove(launch_dir + asset_name)
+        local_version = version = release_and_version[1]
     except IOError as e:
         raise RestUpdateError("Failed to write executable asset: " + str(e))
-    local_version = version = release_and_version[1]
 
 
 def java_update_check():
@@ -395,6 +395,11 @@ if release_channel == "git":
     git_read_version()
 
 write_launch_config()
+
+if version == "0.0.0" or local_version == "0.0.0":
+    print("Invalid version found:'", version, "'")
+    print("Enable `auto_updater` or specify a valid version in launch_config.json.")
+    exit(1)
 
 # Launch application
 
