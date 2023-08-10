@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  *
  * We need to avoid reflection where possible due to GraalVM native compilation.
  * Otherwise, anytime we add event handlers we would need to update the compilation configs and whatnot.
- * which would just create a bunch of footguns for development.
+ * which would just create a bunch of footguns for developers.
  *
  * The main drawback to this approach is we need to manage the lifecycle of the subscriptions ourselves.
  * Any object that has methods subscribed MUST unsubscribe itself before the object is garbage collected.
@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  */
 public class SimpleEventBus {
 
-    // todo: benchmark ConcurrentHashMap versus fastutil map with a readwrite lock (StampedLock preferably)
     private final ConcurrentHashMap<Class<?>, List<Consumer<?>>> handlers = new ConcurrentHashMap<>();
 
     public <T> Subscription subscribe(Class<T> eventType, Consumer<T> handler) {
