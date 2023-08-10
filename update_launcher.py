@@ -29,7 +29,7 @@ if os.getenv('GITHUB_TOKEN') is None:
     print("GITHUB_TOKEN environment variable not found")
     exit(1)
 else:
-    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}",
+    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}"
 
 
 def get_release_asset_id(tag, asset_name):
@@ -89,9 +89,13 @@ def download_release_asset(asset_id):
         connection.close()
 
 
-startAssetId = get_release_asset_id(launcher_tag, "launcher.py")
-startAsset = download_release_asset(startAssetId)
-contents = startAsset.decode()
+launcherAssetID = get_release_asset_id(launcher_tag, "launcher.py")
+if launcherAssetID is None:
+    exit(1)
+launcherAssetBytes = download_release_asset(launcherAssetID)
+if launcherAssetBytes is None:
+    exit(1)
+contents = launcherAssetBytes.decode()
 if len(contents) < 100:
     print("Failed to download launcher.py")
     exit(1)

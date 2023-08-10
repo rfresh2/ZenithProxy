@@ -44,7 +44,7 @@ if os.getenv('GITHUB_TOKEN') is None:
     print("GITHUB_TOKEN environment variable not found")
     exit(1)
 else:
-    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}",
+    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}"
 
 
 def create_default_launch_config():
