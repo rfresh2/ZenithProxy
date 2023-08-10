@@ -20,10 +20,16 @@ if not auto_update_launcher or release_channel == "git":
 github_headers = {
     "User-Agent": "ZenithProxy/1.0",
     "Accept": "application/vnd.github+json",
-    "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
     "X-GitHub-Api-Version": "2022-11-28",
     "Connection": "close"
 }
+
+if os.getenv('GITHUB_TOKEN') is None:
+    # todo: remove token requirement after repo is public
+    print("GITHUB_TOKEN environment variable not found")
+    exit(1)
+else:
+    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}",
 
 
 def get_release_asset_id(tag, asset_name):

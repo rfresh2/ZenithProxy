@@ -16,15 +16,35 @@ repo_owner = "rfresh2"
 repo_name = "ZenithProxy"
 repo_branch = "mainline"
 launch_dir = "launcher/"
+custom_jvm_args = None
 system = platform.system()
+
+default_java_args = """\
+-Xmx300m \
+-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch \
+-XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 \
+-XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 \
+-XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 \
+-Djava.util.concurrent.ForkJoinPool.common.parallelism=8 -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2"""
+
+default_linux_args = """\
+-Xmx150m \
+-Djava.util.concurrent.ForkJoinPool.common.parallelism=8 \
+-Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2"""
 
 github_headers = {
     "User-Agent": "ZenithProxy/1.0",
     "Accept": "application/vnd.github+json",
-    "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
     "X-GitHub-Api-Version": "2022-11-28",
     "Connection": "close"
 }
+
+if os.getenv('GITHUB_TOKEN') is None:
+    # todo: remove token requirement after repo is public
+    print("GITHUB_TOKEN environment variable not found")
+    exit(1)
+else:
+    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}",
 
 
 def create_default_launch_config():
@@ -48,7 +68,7 @@ def init_launch_config():
 
 
 def read_launch_config(data):
-    global release_channel, version, local_version, repo_owner, repo_name, repo_branch, auto_update, auto_update_launcher
+    global release_channel, version, local_version, repo_owner, repo_name, repo_branch, auto_update, auto_update_launcher, custom_jvm_args
     if data is None:
         print("No data to read from launch_config.json")
         return
@@ -60,6 +80,9 @@ def read_launch_config(data):
     repo_owner = data.get('repo_owner', repo_owner)
     repo_name = data.get('repo_name', repo_name)
     repo_branch = data.get('repo_branch', repo_branch)
+    custom_jvm_args = data.get('custom_jvm_args', custom_jvm_args)
+    if custom_jvm_args is not None and custom_jvm_args != "":
+        print("Using custom JVM args:", custom_jvm_args)
 
 
 def write_launch_config():
@@ -74,6 +97,8 @@ def write_launch_config():
         "repo_name": repo_name,
         "repo_branch": repo_branch
     }
+    if (custom_jvm_args is not None) and (custom_jvm_args != ""):
+        output["custom_jvm_args"] = custom_jvm_args
     with open('launch_config.json', 'w') as f:
         f.write(json.dumps(output, indent=4))
 
@@ -407,22 +432,19 @@ if release_channel == "git":
     git_build()
     toolchain_command = ""
     jar_command = ""
-    common_script = """\
--server -XX:MaxRAMPercentage=30 -XX:MinRAMPercentage=30 \
--XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch \
--XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 \
--XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 \
--XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 \
--Djava.util.concurrent.ForkJoinPool.common.parallelism=8 -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 """
+    if custom_jvm_args is not None and custom_jvm_args != "":
+        jvm_args = custom_jvm_args
+    else:
+        jvm_args = default_java_args
     if system == 'Windows':
         toolchain_command = ".\\build\\java_toolchain.bat"
         jar_command = "-jar build\\libs\\ZenithProxy.jar"
     else:
         toolchain_command = "./build/java_toolchain"
         jar_command = "-jar build/libs/ZenithProxy.jar"
-    full_script = f"{toolchain_command} {common_script} {jar_command}"
+    run_script = f"{toolchain_command} {jvm_args} {jar_command}"
     try:
-        subprocess.run(full_script, shell=True, check=True)
+        subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
 elif release_channel == "java":
@@ -430,22 +452,19 @@ elif release_channel == "java":
         raise RuntimeError("ZenithProxy.jar not found")
     toolchain_command = ""
     jar_command = ""
-    common_script = """\
--server -Xmx300m \
--XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch \
--XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 \
--XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 \
--XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 \
--Djava.util.concurrent.ForkJoinPool.common.parallelism=8 -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 """
+    if custom_jvm_args is not None and custom_jvm_args != "":
+        jvm_args = custom_jvm_args
+    else:
+        jvm_args = default_java_args
     if system == 'Windows':
         toolchain_command = "call java"
         jar_command = "-jar " + launch_dir.replace("/", "\\") + "ZenithProxy.jar"
     else:
         toolchain_command = "java"
         jar_command = "-jar " + launch_dir + "ZenithProxy.jar"
-    full_script = f"{toolchain_command} {common_script} {jar_command}"
+    run_script = f"{toolchain_command} {jvm_args} {jar_command}"
     try:
-        subprocess.run(full_script, shell=True, check=True)
+        subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
 elif release_channel == "linux" or release_channel == "linux.pre":
@@ -453,11 +472,13 @@ elif release_channel == "linux" or release_channel == "linux.pre":
         raise RuntimeError(f"Linux release channel is not supported on current system: {system}")
     if not os.path.isfile(launch_dir + "ZenithProxy"):
         raise RuntimeError("ZenithProxy executable not found")
+    if custom_jvm_args is not None and custom_jvm_args != "":
+        jvm_args = custom_jvm_args
+    else:
+        jvm_args = default_linux_args
+    run_script = f"./{launch_dir}ZenithProxy {jvm_args}"
     try:
-        subprocess.run("./" + launch_dir + "ZenithProxy "
-                       "-Xmx150m -Djava.util.concurrent.ForkJoinPool.common.parallelism=8 "
-                       "-Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2",
-                       shell=True, check=True)
+        subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
 else:

@@ -108,6 +108,8 @@ Extract the zip file to a new folder. OR clone the repository `git clone git@git
 * The discord prefix is `.` by default. e.g. `.connect` or `.disconnect`.
 * Type `.help` in discord or `help` in the interactive terminal to get a list of available commands.
 
+To specify custom JVM args, (e.g. to set a different max heap size) edit `custom_jvm_args` in `launch_config.json`
+
 ## AutoUpdater
 
 The AutoUpdater is enabled by default. It updates both ZenithProxy and the launcher to the latest releases. 
