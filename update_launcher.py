@@ -100,14 +100,17 @@ if len(contents) < 100:
     print("Failed to download launcher.py")
     exit(1)
 
-with open("launcher.py", "r", newline='') as f:
-    current = f.read()
-    currentHash = hashlib.sha1(current.encode()).hexdigest()
-    newHash = hashlib.sha1(contents.encode()).hexdigest()
-    if currentHash != newHash:
-        print("Updating launcher.py to " + newHash)
-    else:
-        exit(0)
+if os.path.exists("launcher.py"):
+    with open("launcher.py", "r", newline='') as f:
+        current = f.read()
+        currentHash = hashlib.sha1(current.encode()).hexdigest()
+        newHash = hashlib.sha1(contents.encode()).hexdigest()
+        if currentHash != newHash:
+            print("Updating launcher.py to " + newHash)
+        else:
+            exit(0)
+else:
+    print("No launcher.py found. Downloading from GitHub.")
 
 with open("launcher.py", "w", newline='') as f:
     f.write(contents)
