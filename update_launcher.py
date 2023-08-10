@@ -12,7 +12,7 @@ auto_update_launcher = launch_config["auto_update_launcher"]
 repo_owner = launch_config["repo_owner"]
 repo_name = launch_config["repo_name"]
 repo_branch = launch_config["repo_branch"]
-launcher_tag = "launch"
+launcher_tag = "launcher"
 
 if not auto_update_launcher or release_channel == "git":
     exit(0)
