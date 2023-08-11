@@ -2067,18 +2067,32 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setGuild","parameterTypes":["discord4j.discordjson.json.GuildCreateData"] }]
 },
 {
-  "name":"discord4j.discordjson.json.ImmutableGuildMemberUpdate",
+  "name":"discord4j.discordjson.json.gateway.ImmutableGuildMemberUpdate",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.gateway.ImmutableGuildMemberUpdate$Json"] }]
 },
 {
-  "name":"discord4j.discordjson.json.ImmutableGuildMemberUpdate$Json",
+  "name":"discord4j.discordjson.json.gateway.ImmutableGuildMemberUpdate$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setNick","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setRoles","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setMute","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setDead","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setChannelId","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setCommunicationDisabledUntil","parameterTypes":["discord4j.discordjson.possible.Possible"]} ]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.Id"]}, {"name":"setRoles","parameterTypes":["java.util.List"]}, {"name":"setUser","parameterTypes":["discord4j.discordjson.json.UserData"]}, {"name":"setNick","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setAvatar","parameterTypes":["java.util.Optional"]}, {"name":"setJoinedAt","parameterTypes":["java.util.Optional"]}, {"name":"setPremiumSince","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setPending","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setCommunicationDisabledUntil","parameterTypes":["discord4j.discordjson.possible.Possible"]} ]
+},
+{
+  "name":"discord4j.discordjson.json.gateway.ImmutableTypingStart",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.gateway.ImmutableTypingStart$Json"] }]
+},
+{
+  "name":"discord4j.discordjson.json.gateway.ImmutableTypingStart$Json",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setChannelId","parameterTypes":["discord4j.discordjson.Id"]}, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.possible.Possible"]}, {"name":"setUserId","parameterTypes":["discord4j.discordjson.Id"]}, {"name":"setTimestamp","parameterTypes":["long"]}, {"name":"setMember","parameterTypes":["discord4j.discordjson.possible.Possible"]}]
 },
 {
   "name":"discord4j.discordjson.json.gateway.ImmutableHello",
