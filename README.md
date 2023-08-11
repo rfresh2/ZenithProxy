@@ -60,25 +60,22 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
    [Free DigitalOcean $200 credit for new accounts](https://m.do.co/c/3a3a226e4936).
 2. [Python 3](https://www.python.org/downloads/) installed.
 
-## Release Channels
-
-ZenithProxy has 3 release channels:
-
-* (Default) `java` - Supports all operating systems
-* (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
-* `git` - Locally builds and runs the proxy from source
-
-#### Additional Requirements For Release Channels
-
-* `java` - Java 17 or higher (20+ recommended). [Java Downloads](https://adoptium.net/)
-* `linux` - Linux x86_64 OS (e.g. Ubuntu 22.04)
-* `git` - Same as `java`, plus [git](https://git-scm.com/downloads) installed and the repository already cloned.
-
 ## Setup
 
 1. Download `ZenithProxyLauncher.zip` from the [releases page](https://github.com/rfresh2/ZenithProxy/releases/launcher) and unzip to a new folder. 
 OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
-2. Open a terminal in the directory, run `python3 setup.py`, and follow the prompts. (if `python3` is not recognized, try `python` or `py`) 
+2. Open a terminal in the directory, run `python3 setup.py`, and follow the prompts. (if `python3` is not recognized, try `python` or `py`)
+
+### Release Channels
+
+ZenithProxy has 3 release channels:
+
+* (Default) `java` - Supports all operating systems
+  * Requires Java 17+ (20+ recommended). [Java Downloads](https://adoptium.net/)
+* (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
+* `git` - Locally builds and runs the proxy from source in Java
+  * Requires Java 17+ (20+ recommended), plus [git](https://git-scm.com/downloads) installed and the repository cloned.
+
 
 ### DNS Setup
 
@@ -88,7 +85,7 @@ OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
 
 ### Discord Bot Setup
 
-* Create a discord bot here `https://discord.com/developers/`.
+* Create a discord bot here: [discord.com/developers](https://discord.com/developers/)
 * Enable `Message Content Intent` under the "Bot" tab.
 * Invite the discord bot to a server.
 * Create a role for users to manage the proxy, a channel to manage the 
