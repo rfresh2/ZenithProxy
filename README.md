@@ -76,33 +76,29 @@ ZenithProxy has 3 release channels:
 
 ## Setup
 
-1. Download and unzip to a new folder `ZenithProxyLauncher.zip` from the [releases page](https://github.com/rfresh2/ZenithProxy/releases/launcher). 
+1. Download `ZenithProxyLauncher.zip` from the [releases page](https://github.com/rfresh2/ZenithProxy/releases/launcher) and unzip to a new folder. 
 OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
-2. Run `./launch.sh` (Linux) or `.\launch.bat` (Windows). Close the instance with `CTRL-C`.
-3. Optional: Select a release channel by editing the `launch_config.json` file.
-4. Run the proxy again. It will automatically download the latest release and start.
-5. Close the proxy with `CTRL-C` and edit the `config.json` file. Important sections:
-   * `authentication` -> Device code login is selected by default. No changes required if you wish to use this.
-     * Optional: For username/password login, change `accountType` to `msa` and set `username` and `password`.
-       * You must disable 2FA on your Microsoft account and may need to approve the proxy's
-         IP [here](https://account.live.com/Activity)
-     * `server` -> Optionally change the port the proxy listens on.
-     * `proxyIP` -> set this to the domain or IP address + port clients should connect to.
-       * For a domain you need the following DNS records:
-         * an `A` record to your IP address
-         * an `SRV` record for `_minecraft._tcp` with the port and the `A` record as its target. [Example](https://cdn.discordapp.com/attachments/971140948593635335/1139099459431698463/firefox_GSnrLzpsR3.png)
-     * `discord`
-       * Create a discord bot here `https://discord.com/developers/`. 
-       * Enable `Message Content Intent` under the "Bot" tab. 
-       * Invite the discord bot to a server. 
-       * Create a role for users to manage the proxy, a channel to manage the
-         proxy in, and a channel for the chat relay. The bot's role must have permissions to send and receive messages in both channels
-       * Edit the following JSON properties:
-         * `enable` -> set to `true`
-         * `token` -> the bot's discord token
-         * `channelId` -> the channel ID where you will manage the proxy from
-         * `accountOwnerRoleId` -> a discord role ID that allows managing sensitive configuration like the whitelist
-         * `chatRelay.channelId` -> The channel ID where the MC server chat relay will be sent and received from.
+2. Open a terminal in the directory, run `python3 setup.py`, and follow the prompts. (if `python3` is not recognized, try `python` or `py`) 
+
+### DNS Setup
+
+* To use a domain name you need the following DNS records:
+  * an `A` record to your IP address
+  * an `SRV` record for `_minecraft._tcp` with the port and the `A` record as its target. [Example](https://cdn.discordapp.com/attachments/971140948593635335/1139099459431698463/firefox_GSnrLzpsR3.png)
+
+### Discord Bot Setup
+
+* Create a discord bot here `https://discord.com/developers/`.
+* Enable `Message Content Intent` under the "Bot" tab.
+* Invite the discord bot to a server.
+* Create a role for users to manage the proxy, a channel to manage the 
+  proxy in, and a channel for the chat relay. The bot's role must have permissions to send and receive messages in both channels
+* Run `setup.py` or edit these`config.json` properties:
+  * `enable` -> set to `true`
+  * `token` -> the bot's discord token
+  * `channelId` -> the channel ID where you will manage the proxy from
+  * `accountOwnerRoleId` -> a discord role ID that allows managing sensitive configuration like the whitelist
+  * `chatRelay.channelId` -> The channel ID where the MC server chat relay will be sent and received from.
 
 ## Run
 

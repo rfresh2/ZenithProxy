@@ -14,7 +14,6 @@ version = "0.0.0"
 local_version = "0.0.0"
 repo_owner = "rfresh2"
 repo_name = "ZenithProxy"
-repo_branch = "mainline"
 launch_dir = "launcher/"
 custom_jvm_args = None
 system = platform.system()
@@ -68,7 +67,7 @@ def init_launch_config():
 
 
 def read_launch_config(data):
-    global release_channel, version, local_version, repo_owner, repo_name, repo_branch, auto_update, auto_update_launcher, custom_jvm_args
+    global release_channel, version, local_version, repo_owner, repo_name, auto_update, auto_update_launcher, custom_jvm_args
     if data is None:
         print("No data to read from launch_config.json")
         return
@@ -79,7 +78,6 @@ def read_launch_config(data):
     local_version = data.get('local_version', local_version)
     repo_owner = data.get('repo_owner', repo_owner)
     repo_name = data.get('repo_name', repo_name)
-    repo_branch = data.get('repo_branch', repo_branch)
     custom_jvm_args = data.get('custom_jvm_args', custom_jvm_args)
     if custom_jvm_args is not None and custom_jvm_args != "":
         print("Using custom JVM args:", custom_jvm_args)
@@ -95,12 +93,11 @@ def write_launch_config():
         "local_version": version,
         "repo_owner": repo_owner,
         "repo_name": repo_name,
-        "repo_branch": repo_branch
     }
     if (custom_jvm_args is not None) and (custom_jvm_args != ""):
         output["custom_jvm_args"] = custom_jvm_args
     with open('launch_config.json', 'w') as f:
-        f.write(json.dumps(output, indent=4))
+        f.write(json.dumps(output, indent=2))
 
 
 def git_update_check():

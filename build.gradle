@@ -334,8 +334,6 @@ tasks.register('clearJooqBuild') {
     // we already have these classes in our src
     // can't configure jooq generator to not auto-add these generated dirs to gradle source sets
     group = "build"
-    // this can be removed after all instances get updated to this commit at least once
-    new File('build/generated-src').deleteDir()
     new File('build/jooq').deleteDir()
 }
 
@@ -420,7 +418,7 @@ graalvmNative {
 //                    "-H:+DashboardAll",
                     "--static",
                     "--libc=musl",
-                    "-R:MaxHeapSize=100m",
+                    "-R:MaxHeapSize=150m",
 //                    "--pgo-instrument",
                     "-march=x86-64-v3",
                     "--gc=serial",
