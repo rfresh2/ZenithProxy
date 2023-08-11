@@ -9,11 +9,11 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.DeathMessagesParser;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.util.Color;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
-import java.awt.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;

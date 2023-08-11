@@ -20,9 +20,8 @@
 
 package net.daporkchop.lib.minecraft.text.format;
 
+import com.zenith.util.Color;
 import lombok.NonNull;
-
-import java.awt.*;
 
 import static net.daporkchop.lib.minecraft.text.format.ChatColor.*;
 

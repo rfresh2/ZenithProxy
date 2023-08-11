@@ -33,9 +33,6 @@ import lombok.Getter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -278,12 +275,10 @@ public class DiscordBot {
         return stringbuilder.toString();
     }
 
-    public void updateProfileImage(final BufferedImage bufferedImage) {
+    public void updateProfileImage(final byte[] imageBytes) {
         try {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", os);
             this.restClient.edit(ImmutableUserModifyRequest.builder()
-                                     .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(os.toByteArray()))
+                                     .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes))
                                      .build())
                 .block();
         } catch (final Exception e) {

@@ -20,6 +20,7 @@
 
 package net.daporkchop.lib.minecraft.text.parser;
 
+import com.zenith.util.Color;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -61,7 +62,7 @@ public class LegacyTextParser implements MCFormatParser {
                 }
 
                 if (code.isColor()) {
-                    format.setTextColor(((ChatColor) code).awtColor()).setStyle(0);
+                    format.setTextColor(Color.fromInt(((ChatColor) code).colorInstance().getRGB())).setStyle(0);
                 } else {
                     if (code == BOLD) {
                         format.setStyle(format.getStyle() | TextStyle.BOLD);

@@ -199,7 +199,7 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-M2") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:faaefa3287") {
+    shade("com.github.rfresh2:MCProtocolLib:f9755d5768") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -357,9 +357,6 @@ graalvmNative {
                     "--add-opens=java.base/java.nio=ALL-UNNAMED",
                     "--initialize-at-build-time=net.daporkchop.lib",
                     "--initialize-at-build-time=org.jline",
-                    "--initialize-at-build-time=java.awt.Toolkit",
-                    "--initialize-at-build-time=java.awt.Color",
-                    "--initialize-at-build-time=java.awt.Insets",
                     "--initialize-at-build-time=org.fusesource.jansi",
                     "--initialize-at-build-time=com.google.gson",
                     '--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback',
@@ -421,9 +418,8 @@ graalvmNative {
                     "-H:+ReportExceptionStackTraces",
 //                    "-H:DashboardDump=imageDashboardDump",
 //                    "-H:+DashboardAll",
-//                    "--static", // todo: remove java.awt from code and dependencies. having issues getting this to statically link
-                    // awt replacement for png IO? https://github.com/nayuki/PNG-library
-//                    "--libc=musl",
+                    "--static",
+                    "--libc=musl",
                     "-R:MaxHeapSize=100m",
 //                    "--pgo-instrument",
                     "-march=x86-64-v3",

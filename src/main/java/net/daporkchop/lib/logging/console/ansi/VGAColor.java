@@ -20,11 +20,11 @@
 
 package net.daporkchop.lib.logging.console.ansi;
 
+import com.zenith.util.Color;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.awt.*;
 import java.util.Arrays;
 
 /**
