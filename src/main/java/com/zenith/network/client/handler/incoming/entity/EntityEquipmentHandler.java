@@ -23,7 +23,8 @@ public class EntityEquipmentHandler implements AsyncIncomingHandler<ServerEntity
                     e.getEquipment().put(packet.getSlot(), packet.getItem());
                 }
             } else {
-                CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for invalid entity (id={})", packet.getEntityId());
+                // can occur often due to packet ordering. non-critical to retry
+                CLIENT_LOG.debug("Received ServerEntityEquipmentPacket for invalid entity (id={})", packet.getEntityId());
                 return false;
             }
             return true;
