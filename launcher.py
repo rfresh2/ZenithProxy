@@ -308,6 +308,8 @@ def rest_get_assets(asset_name, executable_name, release_and_version):
     if not asset_data:
         raise RestUpdateError("Failed to download executable asset")
     try:
+        if not os.path.exists(launch_dir):
+            os.makedirs(launch_dir)
         existing_files = os.listdir(launch_dir)
         for existing_file in existing_files:
             if existing_file == ".gitkeep":
