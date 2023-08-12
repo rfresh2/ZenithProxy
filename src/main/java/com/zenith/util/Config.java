@@ -21,7 +21,6 @@ public final class Config {
     public AutoUpdater autoUpdater = new AutoUpdater();
 
     public static final class Authentication {
-        public boolean doAuthentication = true;
         public AccountType accountType = AccountType.DEVICE_CODE;
         // only used for MSA
         public String email = "not@set.com";

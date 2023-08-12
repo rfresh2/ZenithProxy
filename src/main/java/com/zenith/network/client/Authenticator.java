@@ -1,7 +1,6 @@
 package com.zenith.network.client;
 
 import com.github.steveice10.mc.auth.service.AuthenticationService;
-import com.github.steveice10.mc.auth.service.MojangAuthenticationService;
 import com.github.steveice10.mc.auth.service.MsaAuthenticationService;
 import com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
@@ -67,26 +66,22 @@ public class Authenticator {
     }
 
     private AuthenticationService getAuthenticationService() {
-        if (CONFIG.authentication.doAuthentication) {
-            if (CONFIG.authentication.accountType == AccountType.MSA) {
-                final MsaAuthenticationService authenticationService = new MsaAuthenticationService();
-                authenticationService.setUsername(CONFIG.authentication.email);
-                authenticationService.setPassword(CONFIG.authentication.password);
-                return authenticationService;
-            } else if (CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
-                try {
-                    MsaDeviceAuthenticationService msaDeviceAuthenticationService = new MsaDeviceAuthenticationService(
-                        CONFIG.authentication.msaClientId);
-                    msaDeviceAuthenticationService.setDeviceCodeConsumer(this::onDeviceCode);
-                    return msaDeviceAuthenticationService;
-                } catch (IOException e) {
-                    throw new RuntimeException("Device code auth failed", e);
-                }
-            } else {
-                throw new RuntimeException("Invalid authentication type set.");
+        if (CONFIG.authentication.accountType == AccountType.MSA) {
+            final MsaAuthenticationService authenticationService = new MsaAuthenticationService();
+            authenticationService.setUsername(CONFIG.authentication.email);
+            authenticationService.setPassword(CONFIG.authentication.password);
+            return authenticationService;
+        } else if (CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
+            try {
+                MsaDeviceAuthenticationService msaDeviceAuthenticationService = new MsaDeviceAuthenticationService(
+                    CONFIG.authentication.msaClientId);
+                msaDeviceAuthenticationService.setDeviceCodeConsumer(this::onDeviceCode);
+                return msaDeviceAuthenticationService;
+            } catch (IOException e) {
+                throw new RuntimeException("Device code auth failed", e);
             }
         } else {
-            return new MojangAuthenticationService();
+            throw new RuntimeException("Invalid authentication type set.");
         }
     }
 }
