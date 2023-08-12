@@ -409,6 +409,7 @@ public final class Config {
     public static final class AutoUpdater {
         public boolean autoUpdate = true;
         public int autoUpdateCheckIntervalSeconds = 60;
+        // internal config, don't set this manually
         public boolean shouldReconnectAfterAutoUpdate = false;
     }
 

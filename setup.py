@@ -47,7 +47,6 @@ if os.path.exists("config.json"):
         else:
             print("Invalid input. Enter y or n")
 
-
 while True:
     print("Select authentication method: (1/2)")
     print("1. Device Code (Recommended)")
@@ -190,3 +189,6 @@ if discord_bot:
 with open("config.json", "w") as f:
     f.write(json.dumps(config, indent=2))
     print("config.json written successfully!")
+
+print("Setup complete!")
+print("Run './launch.sh' (Unix) or '.\\launch.bat` (Windows) to start ZenithProxy!")
