@@ -26,6 +26,9 @@ public class AutoTotem extends Module {
         return CONFIG.client.extra.autoTotem.enabled && swapping;
     }
 
+    public AutoTotem() {
+        EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    }
 
     public void handleClientTick(final ClientTickEvent event) {
         if (CONFIG.client.extra.autoTotem.enabled

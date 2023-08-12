@@ -5,6 +5,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.module.Module;
@@ -14,20 +15,26 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
+import static com.zenith.util.Pair.of;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
     public final AtomicBoolean hasTarget;
     private final TickTimer stareTimer;
     private final Stack<EntityPlayer> focusStack;
+    private final Subscription eventSubscription;
 
     public Spook() {
         super();
         this.stareTimer = new TickTimer();
         this.hasTarget = new AtomicBoolean(false);
         this.focusStack = new Stack<>();
+        this.eventSubscription = EVENT_BUS.subscribe(
+                of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
+                of(NewPlayerInVisualRangeEvent.class, (Consumer<NewPlayerInVisualRangeEvent>)this::handleNewPlayerInVisualRangeEvent));
     }
 
 

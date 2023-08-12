@@ -3,19 +3,28 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.ClientRequest;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Wait;
 
+import java.util.function.Consumer;
+
 import static com.zenith.Shared.*;
+import static com.zenith.util.Pair.of;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
     private static final int tickEventRespawnDelay = 100;
+    private final Subscription eventSubscription;
     private int tickCounter = 0;
     public AutoRespawn() {
         super();
+        this.eventSubscription = EVENT_BUS.subscribe(
+                of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
+                of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent)
+        );
     }
 
 

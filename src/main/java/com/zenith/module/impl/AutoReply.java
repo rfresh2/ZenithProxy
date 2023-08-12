@@ -25,6 +25,7 @@ public class AutoReply extends Module {
                 .expireAfterWrite(CONFIG.client.extra.autoReply.cooldownSeconds, TimeUnit.SECONDS)
                 .build();
         this.lastReply = Instant.now();
+        EVENT_BUS.subscribe(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent);
     }
 
     public void updateCooldown(final int newCooldown) {

@@ -47,7 +47,9 @@ public class KillAura extends Module {
         return CONFIG.client.extra.killAura.enabled && isAttacking;
     }
 
-
+    public KillAura() {
+        EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    }
     public void handleClientTick(final ClientTickEvent event) {
         if (CONFIG.client.extra.killAura.enabled
                 && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
