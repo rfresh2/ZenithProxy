@@ -3,8 +3,10 @@ package com.zenith.feature.autoupdater;
 import com.zenith.Proxy;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.event.proxy.UpdateAvailableEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
 
+import javax.annotation.Nullable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledFuture;
@@ -53,7 +55,11 @@ public abstract class AutoUpdater {
     }
 
     public synchronized void setUpdateAvailable(final boolean updateAvailable) {
-        if (!this.updateAvailable && updateAvailable) DEFAULT_LOG.info("New update found!"); // only log on first detection
+        setUpdateAvailable(updateAvailable, null);
+    }
+
+    public synchronized void setUpdateAvailable(final boolean updateAvailable, @Nullable final String version) {
+        if (!this.updateAvailable && updateAvailable) EVENT_BUS.postAsync(new UpdateAvailableEvent(version));
         this.updateAvailable = updateAvailable;
         if (this.updateAvailable) {
             if (!Proxy.getInstance().isConnected()

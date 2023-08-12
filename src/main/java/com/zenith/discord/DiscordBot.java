@@ -108,7 +108,8 @@ public class DiscordBot {
             pair(AntiAfkStuckEvent.class, this::handleAntiAfkStuckEvent),
             pair(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
             pair(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
-            pair(DeathMessageEvent.class, this::handleDeathMessageEvent)
+            pair(DeathMessageEvent.class, this::handleDeathMessageEvent),
+            pair(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent)
         );
     }
 
@@ -818,5 +819,21 @@ public class DiscordBot {
                                  .addField("Message", escape(event.deathMessageRaw), false)
                     .build());
         });
+    }
+
+    public void handleUpdateAvailableEvent(final UpdateAvailableEvent event) {
+        EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
+            .title("Update Available!")
+            .color(Color.CYAN);
+        event.getVersion().ifPresent(v -> {
+            embedBuilder
+                .addField("Current", LAUNCH_CONFIG.version, false)
+                .addField("New", v, false);
+        });
+        embedBuilder.addField(
+            "Info",
+            "Update will be applied at next opportunity.\nOr apply the update now: `.update`",
+            false);
+        sendEmbedMessage(embedBuilder.build());
     }
 }
