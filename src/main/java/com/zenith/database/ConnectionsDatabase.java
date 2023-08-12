@@ -27,7 +27,7 @@ public class ConnectionsDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription initEvents() {
+    public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
             Pair.of(ServerPlayerConnectedEvent.class, (Consumer<ServerPlayerConnectedEvent>) this::handleServerPlayerConnectedEvent),
             Pair.of(ServerPlayerDisconnectedEvent.class, (Consumer<ServerPlayerDisconnectedEvent>)this::handleServerPlayerDisconnectedEvent)

@@ -7,11 +7,13 @@ import com.github.steveice10.mc.protocol.data.game.window.WindowAction;
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -27,12 +29,21 @@ public class AutoTotem extends Module {
     }
 
     public AutoTotem() {
-        EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+        super();
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.autoTotem.enabled;
     }
 
     public void handleClientTick(final ClientTickEvent event) {
-        if (CONFIG.client.extra.autoTotem.enabled
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && playerHealthBelowThreshold()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())

@@ -11,7 +11,7 @@ public abstract class Database {
     }
 
     public void start() {
-        initEvents();
+        subscribeEvents();
     }
 
     public void stop() {
@@ -21,5 +21,5 @@ public abstract class Database {
         }
     }
 
-    public abstract Subscription initEvents();
+    public abstract Subscription subscribeEvents();
 }

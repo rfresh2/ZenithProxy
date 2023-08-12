@@ -4,11 +4,14 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.KillAura;
 import discord4j.rest.util.Color;
 
 import java.util.List;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class KillAuraCommand extends Command {
@@ -25,6 +28,7 @@ public class KillAuraCommand extends Command {
         return command("killaura")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.killAura.enabled = true;
+                    MODULE_MANAGER.getModule(KillAura.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("Kill Aura On!")
                             .color(Color.CYAN)
@@ -36,6 +40,7 @@ public class KillAuraCommand extends Command {
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.killAura.enabled = false;
+                    MODULE_MANAGER.getModule(KillAura.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("Kill Aura Off!")
                             .color(Color.CYAN)

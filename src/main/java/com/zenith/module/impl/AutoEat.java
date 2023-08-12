@@ -19,6 +19,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -31,18 +32,25 @@ public class AutoEat extends Module {
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
     @Getter
     private boolean isEating = false;
-    private Subscription eventSubscription;
 
     public AutoEat() {
         super();
-        this.eventSubscription = EVENT_BUS.subscribe(
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
             ClientTickEvent.class, this::handleClientTick
         );
     }
 
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.autoEat.enabled;
+    }
+
     public void handleClientTick(final ClientTickEvent e) {
-        if (CONFIG.client.extra.autoEat.enabled
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && playerHealthBelowThreshold()
                 && !Proxy.getInstance().isInQueue()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())

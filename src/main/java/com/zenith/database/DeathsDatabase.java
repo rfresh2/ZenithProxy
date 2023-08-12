@@ -29,7 +29,7 @@ public class DeathsDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription initEvents() {
+    public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
             DeathMessageEvent.class, this::handleDeathMessageEvent
         );

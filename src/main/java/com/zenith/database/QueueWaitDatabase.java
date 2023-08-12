@@ -37,7 +37,7 @@ public class QueueWaitDatabase extends Database {
     }
 
     @Override
-    public Subscription initEvents() {
+    public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
             of(ServerRestartingEvent.class, (Consumer<ServerRestartingEvent>)this::handleServerRestart),
             of(StartQueueEvent.class, (Consumer<StartQueueEvent>)this::handleStartQueue),

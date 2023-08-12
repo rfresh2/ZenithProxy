@@ -48,7 +48,10 @@ public class ModuleManager {
             new KillAura(),
             new Spammer(),
             new Spook()
-        ).forEach(this::addModule);
+        ).forEach(m -> {
+            addModule(m);
+            m.syncEnabledFromConfig();
+        });
     }
 
     private void addModule(Module module) {

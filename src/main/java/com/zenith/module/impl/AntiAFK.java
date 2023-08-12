@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.util.Pair.of;
@@ -58,27 +59,33 @@ public class AntiAFK extends Module {
     private int gravityT = 0;
     private int antiStuckT = 0;
     private double antiStuckStartY = 0;
-    private Subscription eventSubscription;
 
     public AntiAFK() {
         super();
         this.positionCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(positionCacheTTLMins, TimeUnit.MINUTES)
                 .build();
-        this.eventSubscription = EVENT_BUS.subscribe(
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
             of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
             of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent)
         );
     }
 
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.antiafk.enabled;
+    }
 
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.antiafk.enabled
-                && Proxy.getInstance().isConnected()
+        if (Proxy.getInstance().isConnected()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
                 && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
-                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.active()).orElse(true)) {
+                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }

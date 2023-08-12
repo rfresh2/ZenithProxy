@@ -11,6 +11,7 @@ import com.zenith.module.Module;
 import com.zenith.network.server.ServerConnection;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.util.Pair.of;
@@ -18,15 +19,25 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoDisconnect extends Module {
-    private Subscription eventSubscription;
 
     public AutoDisconnect() {
         super();
-        this.eventSubscription = EVENT_BUS.subscribe(
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
             of(PlayerHealthChangedEvent.class, (Consumer<PlayerHealthChangedEvent>)this::handleLowPlayerHealthEvent),
             of(WeatherChangeEvent.class, (Consumer<WeatherChangeEvent>)this::handleWeatherChangeEvent),
             of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent)
         );
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.utility.actions.autoDisconnect.enabled
+            || CONFIG.client.extra.utility.actions.autoDisconnect.thunder
+            || CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect;
     }
 
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {

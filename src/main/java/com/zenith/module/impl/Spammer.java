@@ -8,6 +8,7 @@ import com.zenith.util.TickTimer;
 
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.EVENT_BUS;
@@ -15,19 +16,23 @@ import static com.zenith.util.Pair.of;
 
 public class Spammer extends Module {
     private final TickTimer tickTimer = new TickTimer();
-    private final Subscription eventSubscription;
     private int spamIndex = 0;
 
 
-    public Spammer() {
-        this.eventSubscription = EVENT_BUS.subscribe(
-                of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent));
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent));
     }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.spammer.enabled;
+    }
+
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.spammer.enabled) {
-            if (tickTimer.tick(CONFIG.client.extra.spammer.delayTicks, true)) {
-                sendSpam();
-            }
+        if (tickTimer.tick(CONFIG.client.extra.spammer.delayTicks, true)) {
+            sendSpam();
         }
     }
 

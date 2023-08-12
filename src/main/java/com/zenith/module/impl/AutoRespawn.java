@@ -10,6 +10,7 @@ import com.zenith.module.Module;
 import com.zenith.util.Wait;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.util.Pair.of;
@@ -17,19 +18,26 @@ import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
     private static final int tickEventRespawnDelay = 100;
-    private final Subscription eventSubscription;
     private int tickCounter = 0;
     public AutoRespawn() {
         super();
-        this.eventSubscription = EVENT_BUS.subscribe(
-                of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
-                of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent)
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
+            of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent)
         );
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.autoRespawn.enabled;
     }
 
 
     public void handleDeathEvent(final DeathEvent event) {
-        if (!CONFIG.client.extra.autoRespawn.enabled) return;
         tickCounter = -tickEventRespawnDelay - (CONFIG.client.extra.autoRespawn.delayMillis / 50);
         Wait.waitALittleMs(Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000));
         checkAndRespawn();
@@ -37,7 +45,6 @@ public class AutoRespawn extends Module {
 
 
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (!CONFIG.client.extra.autoRespawn.enabled) return;
         // the purpose of this handler is to also autorespawn when we've logged in and are already dead
         if (tickCounter++ < tickEventRespawnDelay) return;
         tickCounter = 0;

@@ -6,6 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.Spammer;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class SpammerCommand extends Command {
@@ -38,12 +41,14 @@ public class SpammerCommand extends Command {
         return command("spammer")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.spammer.enabled = true;
+                    MODULE_MANAGER.getModule(Spammer.class).ifPresent(Module::syncEnabledFromConfig);
                     addListDescription(c.getSource().getEmbedBuilder()
                             .color(Color.CYAN)
                             .title("Spammer On!"));
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.spammer.enabled = false;
+                    MODULE_MANAGER.getModule(Spammer.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .color(Color.CYAN)
                             .title("Spammer Off!");
