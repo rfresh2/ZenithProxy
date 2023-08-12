@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
 
@@ -23,8 +22,8 @@ public abstract class AutoUpdater {
 
     public void start() {
         if (updateCheckFuture != null) return;
-        if (eventSubscription != null) eventSubscription = EVENT_BUS.subscribe(
-            DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent
+        if (eventSubscription == null) eventSubscription = EVENT_BUS.subscribe(
+            DisconnectEvent.class, this::handleDisconnectEvent
         );
         scheduleUpdateCheck(this::updateCheck, 3, CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
     }
