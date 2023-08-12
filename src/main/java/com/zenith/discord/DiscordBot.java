@@ -25,6 +25,8 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ImmutableUserModifyRequest;
 import discord4j.discordjson.json.MessageCreateRequest;
+import discord4j.gateway.intent.Intent;
+import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
@@ -113,11 +115,12 @@ public class DiscordBot {
 
     public void start() {
         this.client = DiscordClientBuilder.create(CONFIG.discord.token)
-                .build()
-                .gateway()
-                .setInitialPresence(shardInfo -> disconnectedPresence.get())
-                .login()
-                .block();
+            .build()
+            .gateway()
+            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+            .setInitialPresence(shardInfo -> disconnectedPresence.get())
+            .login()
+            .block();
         initEventHandlers();
 
         restClient = client.getRestClient();
