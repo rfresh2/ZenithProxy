@@ -212,10 +212,13 @@ public final class Config {
                 public boolean enabled = false;
                 public long delayTicks = 200;
                 public boolean randomOrder = false;
+                public boolean appendRandom = false;
                 public List<String> messages = asList(
                         "ZenithProxy on top!",
                         "I just skipped queue thanks to ZenithProxy!",
-                        "I love undertimer slopper!"
+                        "I love undertime slopper!",
+                        ">odpay supremacy"
+
                 );
             }
 

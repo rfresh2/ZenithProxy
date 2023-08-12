@@ -20,15 +20,17 @@ import static java.util.Arrays.asList;
 public class SpammerCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("spammer", "Spams messages", asList(
+        return CommandUsage.full("spammer", "Spams messages", asList(
                 "on/off",
                 "delayTicks <int>",
                 "randomOrder on/off",
+                "appendRandom on/off",
                 "list",
                 "clear",
                 "add <message>",
                 "addAt <index> <message>",
-                "del <index>"));
+                "del <index>"),
+                aliases());
     }
 
     @Override
@@ -69,6 +71,21 @@ public class SpammerCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                     .color(Color.CYAN)
                                     .title("Spammer Random Order Off!");
+                            return 1;
+                        })))
+                .then(literal("appendrandom")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.spammer.appendRandom = true;
+                            c.getSource().getEmbedBuilder()
+                                    .color(Color.CYAN)
+                                    .title("Spammer Append Random On!");
+                            return 1;
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.spammer.appendRandom = false;
+                            c.getSource().getEmbedBuilder()
+                                    .color(Color.CYAN)
+                                    .title("Spammer Append Random Off!");
                             return 1;
                         })))
                 .then(literal("list").executes(c -> {
@@ -115,6 +132,10 @@ public class SpammerCommand extends Command {
                         })));
     }
 
+    @Override
+    public List<String> aliases() {
+        return asList("spam");
+    }
     private void addListDescription(final EmbedCreateSpec.Builder embedBuilder) {
         final List<String> messages = new ArrayList<>();
         for (int index = 0; index < CONFIG.client.extra.spammer.messages.size(); index++) {
