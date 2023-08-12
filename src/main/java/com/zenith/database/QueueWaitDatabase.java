@@ -16,11 +16,10 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {
@@ -39,10 +38,10 @@ public class QueueWaitDatabase extends Database {
     @Override
     public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
-            of(ServerRestartingEvent.class, (Consumer<ServerRestartingEvent>)this::handleServerRestart),
-            of(StartQueueEvent.class, (Consumer<StartQueueEvent>)this::handleStartQueue),
-            of(QueuePositionUpdateEvent.class, (Consumer<QueuePositionUpdateEvent>)this::handleQueuePosition),
-            of(QueueCompleteEvent.class, (Consumer<QueueCompleteEvent>)this::handleQueueComplete)
+            pair(ServerRestartingEvent.class, this::handleServerRestart),
+            pair(StartQueueEvent.class, this::handleStartQueue),
+            pair(QueuePositionUpdateEvent.class, this::handleQueuePosition),
+            pair(QueueCompleteEvent.class, this::handleQueueComplete)
         );
     }
 

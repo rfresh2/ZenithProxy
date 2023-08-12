@@ -4,9 +4,8 @@ import com.zenith.util.Wait;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SimpleEventBusTest {
@@ -94,8 +93,8 @@ public class SimpleEventBusTest {
 
         public Subscription subscribe(SimpleEventBus bus) {
             return bus.subscribe(
-                of(TestEvent.class, (Consumer<TestEvent>) this::handleTestEvent),
-                of(AnotherTestEvent.class, (Consumer<AnotherTestEvent>) this::handleAnotherTestEvent));
+                pair(TestEvent.class, this::handleTestEvent),
+                pair(AnotherTestEvent.class, this::handleAnotherTestEvent));
         }
 
         public void handleTestEvent(final TestEvent testEvent) {

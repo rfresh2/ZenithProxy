@@ -40,6 +40,10 @@ public class SimpleEventBus {
         });
     }
 
+    public static <T> Pair<Class<?>, Consumer<?>> pair(Class<T> clazz, Consumer<T> handler) {
+        return Pair.of(clazz, handler);
+    }
+
     public void unsubscribe(Class<?> eventType, Consumer<?> handler) {
         List<Consumer<?>> consumers = handlers.get(eventType);
         if (consumers != null) {

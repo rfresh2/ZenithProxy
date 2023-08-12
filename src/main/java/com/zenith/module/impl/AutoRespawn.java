@@ -9,11 +9,10 @@ import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Wait;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
@@ -26,8 +25,8 @@ public class AutoRespawn extends Module {
     @Override
     public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
-            of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
-            of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent)
+            pair(ClientTickEvent.class, this::handleClientTickEvent),
+            pair(DeathEvent.class, this::handleDeathEvent)
         );
     }
 

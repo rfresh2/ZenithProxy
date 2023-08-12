@@ -43,12 +43,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -90,17 +89,17 @@ public class Proxy {
     public void initEventHandlers() {
         if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
         eventSubscription = EVENT_BUS.subscribe(
-            of(DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent),
-            of(ConnectEvent.class, (Consumer<ConnectEvent>)this::handleConnectEvent),
-            of(StartQueueEvent.class, (Consumer<StartQueueEvent>)this::handleStartQueueEvent),
-            of(QueuePositionUpdateEvent.class, (Consumer<QueuePositionUpdateEvent>)this::handleQueuePositionUpdateEvent),
-            of(QueueCompleteEvent.class, (Consumer<QueueCompleteEvent>)this::handleQueueCompleteEvent),
-            of(PlayerOnlineEvent.class, (Consumer<PlayerOnlineEvent>)this::handlePlayerOnlineEvent),
-            of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent),
-            of(ServerRestartingEvent.class, (Consumer<ServerRestartingEvent>)this::handleServerRestartingEvent),
-            of(PrioStatusEvent.class, (Consumer<PrioStatusEvent>)this::handlePrioStatusEvent),
-            of(ServerPlayerConnectedEvent.class, (Consumer<ServerPlayerConnectedEvent>)this::handleServerPlayerConnectedEvent),
-            of(ServerPlayerDisconnectedEvent.class, (Consumer<ServerPlayerDisconnectedEvent>)this::handleServerPlayerDisconnectedEvent)
+            pair(DisconnectEvent.class, this::handleDisconnectEvent),
+            pair(ConnectEvent.class, this::handleConnectEvent),
+            pair(StartQueueEvent.class, this::handleStartQueueEvent),
+            pair(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
+            pair(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
+            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+            pair(ServerRestartingEvent.class, this::handleServerRestartingEvent),
+            pair(PrioStatusEvent.class, this::handlePrioStatusEvent),
+            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );
     }
 

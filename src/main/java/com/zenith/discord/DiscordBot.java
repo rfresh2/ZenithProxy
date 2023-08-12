@@ -42,13 +42,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -79,37 +78,37 @@ public class DiscordBot {
     public void initEventHandlers() {
         if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
         eventSubscription = EVENT_BUS.subscribe(
-            of(ConnectEvent.class, (Consumer<ConnectEvent>)this::handleConnectEvent),
-            of(PlayerOnlineEvent.class, (Consumer<PlayerOnlineEvent>)this::handlePlayerOnlineEvent),
-            of(DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent),
-            of(QueuePositionUpdateEvent.class, (Consumer<QueuePositionUpdateEvent>)this::handleQueuePositionUpdateEvent),
-            of(AutoEatOutOfFoodEvent.class, (Consumer<AutoEatOutOfFoodEvent>)this::handleAutoEatOutOfFoodEvent),
-            of(QueueCompleteEvent.class, (Consumer<QueueCompleteEvent>)this::handleQueueCompleteEvent),
-            of(StartQueueEvent.class, (Consumer<StartQueueEvent>)this::handleStartQueueEvent),
-            of(DeathEvent.class, (Consumer<DeathEvent>)this::handleDeathEvent),
-            of(SelfDeathMessageEvent.class, (Consumer<SelfDeathMessageEvent>)this::handleSelfDeathMessageEvent),
-            of(HealthAutoDisconnectEvent.class, (Consumer<HealthAutoDisconnectEvent>)this::handleHealthAutoDisconnectEvent),
-            of(ProxyClientConnectedEvent.class, (Consumer<ProxyClientConnectedEvent>)this::handleProxyClientConnectedEvent),
-            of(ProxySpectatorConnectedEvent.class, (Consumer<ProxySpectatorConnectedEvent>)this::handleProxySpectatorConnectedEvent),
-            of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent),
-            of(NewPlayerInVisualRangeEvent.class, (Consumer<NewPlayerInVisualRangeEvent>)this::handleNewPlayerInVisualRangeEvent),
-            of(NonWhitelistedPlayerConnectedEvent.class, (Consumer<NonWhitelistedPlayerConnectedEvent>)this::handleNonWhitelistedPlayerConnectedEvent),
-            of(ProxySpectatorDisconnectedEvent.class, (Consumer<ProxySpectatorDisconnectedEvent>)this::handleProxySpectatorDisconnectedEvent),
-            of(ActiveHoursConnectEvent.class, (Consumer<ActiveHoursConnectEvent>)this::handleActiveHoursConnectEvent),
-            of(ServerChatReceivedEvent.class, (Consumer<ServerChatReceivedEvent>)this::handleServerChatReceivedEvent),
-            of(ServerPlayerConnectedEvent.class, (Consumer<ServerPlayerConnectedEvent>)this::handleServerPlayerConnectedEvent),
-            of(ServerPlayerDisconnectedEvent.class, (Consumer<ServerPlayerDisconnectedEvent>)this::handleServerPlayerDisconnectedEvent),
-            of(DiscordMessageSentEvent.class, (Consumer<DiscordMessageSentEvent>)this::handleDiscordMessageSentEvent),
-            of(UpdateStartEvent.class, (Consumer<UpdateStartEvent>)this::handleUpdateStartEvent),
-            of(ServerRestartingEvent.class, (Consumer<ServerRestartingEvent>)this::handleServerRestartingEvent),
-            of(ProxyLoginFailedEvent.class, (Consumer<ProxyLoginFailedEvent>)this::handleProxyLoginFailedEvent),
-            of(StartConnectEvent.class, (Consumer<StartConnectEvent>)this::handleStartConnectEvent),
-            of(PrioStatusUpdateEvent.class, (Consumer<PrioStatusUpdateEvent>)this::handlePrioStatusUpdateEvent),
-            of(PrioBanStatusUpdateEvent.class, (Consumer<PrioBanStatusUpdateEvent>)this::handlePrioBanStatusUpdateEvent),
-            of(AntiAfkStuckEvent.class, (Consumer<AntiAfkStuckEvent>)this::handleAntiAfkStuckEvent),
-            of(AutoReconnectEvent.class, (Consumer<AutoReconnectEvent>)this::handleAutoReconnectEvent),
-            of(MsaDeviceCodeLoginEvent.class, (Consumer<MsaDeviceCodeLoginEvent>)this::handleMsaDeviceCodeLoginEvent),
-            of(DeathMessageEvent.class, (Consumer<DeathMessageEvent>)this::handleDeathMessageEvent)
+            pair(ConnectEvent.class, this::handleConnectEvent),
+            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+            pair(DisconnectEvent.class, this::handleDisconnectEvent),
+            pair(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
+            pair(AutoEatOutOfFoodEvent.class, this::handleAutoEatOutOfFoodEvent),
+            pair(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
+            pair(StartQueueEvent.class, this::handleStartQueueEvent),
+            pair(DeathEvent.class, this::handleDeathEvent),
+            pair(SelfDeathMessageEvent.class, this::handleSelfDeathMessageEvent),
+            pair(HealthAutoDisconnectEvent.class, this::handleHealthAutoDisconnectEvent),
+            pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+            pair(ProxySpectatorConnectedEvent.class, this::handleProxySpectatorConnectedEvent),
+            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
+            pair(NonWhitelistedPlayerConnectedEvent.class, this::handleNonWhitelistedPlayerConnectedEvent),
+            pair(ProxySpectatorDisconnectedEvent.class, this::handleProxySpectatorDisconnectedEvent),
+            pair(ActiveHoursConnectEvent.class, this::handleActiveHoursConnectEvent),
+            pair(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent),
+            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
+            pair(DiscordMessageSentEvent.class, this::handleDiscordMessageSentEvent),
+            pair(UpdateStartEvent.class, this::handleUpdateStartEvent),
+            pair(ServerRestartingEvent.class, this::handleServerRestartingEvent),
+            pair(ProxyLoginFailedEvent.class, this::handleProxyLoginFailedEvent),
+            pair(StartConnectEvent.class, this::handleStartConnectEvent),
+            pair(PrioStatusUpdateEvent.class, this::handlePrioStatusUpdateEvent),
+            pair(PrioBanStatusUpdateEvent.class, this::handlePrioBanStatusUpdateEvent),
+            pair(AntiAfkStuckEvent.class, this::handleAntiAfkStuckEvent),
+            pair(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
+            pair(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
+            pair(DeathMessageEvent.class, this::handleDeathMessageEvent)
         );
     }
 

@@ -15,10 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -30,10 +29,10 @@ public class ModuleManager {
 
     public ModuleManager() {
         eventSubscription = EVENT_BUS.subscribe(
-            of(PlayerOnlineEvent.class, (Consumer<PlayerOnlineEvent>)this::handlePlayerOnlineEvent),
-            of(ProxyClientConnectedEvent.class, (Consumer<ProxyClientConnectedEvent>)this::handleProxyClientConnectedEvent),
-            of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent),
-            of(DisconnectEvent.class, (Consumer<DisconnectEvent>)this::handleDisconnectEvent)
+            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+            pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+            pair(DisconnectEvent.class, this::handleDisconnectEvent)
         );
     }
 

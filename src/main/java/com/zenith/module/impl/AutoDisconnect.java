@@ -10,11 +10,10 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.Module;
 import com.zenith.network.server.ServerConnection;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -27,9 +26,9 @@ public class AutoDisconnect extends Module {
     @Override
     public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
-            of(PlayerHealthChangedEvent.class, (Consumer<PlayerHealthChangedEvent>)this::handleLowPlayerHealthEvent),
-            of(WeatherChangeEvent.class, (Consumer<WeatherChangeEvent>)this::handleWeatherChangeEvent),
-            of(ProxyClientDisconnectedEvent.class, (Consumer<ProxyClientDisconnectedEvent>)this::handleProxyClientDisconnectedEvent)
+            pair(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
+            pair(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
+            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)
         );
     }
 

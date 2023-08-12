@@ -7,12 +7,10 @@ import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.util.Pair.of;
 
 public class Spammer extends Module {
     private final TickTimer tickTimer = new TickTimer();
@@ -21,8 +19,7 @@ public class Spammer extends Module {
 
     @Override
     public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent));
+        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTickEvent);
     }
 
     @Override

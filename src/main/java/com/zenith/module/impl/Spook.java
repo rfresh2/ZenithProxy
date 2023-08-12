@@ -15,11 +15,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.Pair.of;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
@@ -37,8 +36,8 @@ public class Spook extends Module {
     @Override
     public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
-            of(ClientTickEvent.class, (Consumer<ClientTickEvent>)this::handleClientTickEvent),
-            of(NewPlayerInVisualRangeEvent.class, (Consumer<NewPlayerInVisualRangeEvent>)this::handleNewPlayerInVisualRangeEvent));
+            pair(ClientTickEvent.class, this::handleClientTickEvent),
+            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
     }
 
     @Override

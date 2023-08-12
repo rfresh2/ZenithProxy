@@ -7,7 +7,6 @@ import com.zenith.database.dto.tables.records.ConnectionsRecord;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
-import com.zenith.util.Pair;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -16,10 +15,10 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.DATABASE_LOG;
 import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.event.SimpleEventBus.pair;
 
 public class ConnectionsDatabase extends LockingDatabase {
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
@@ -29,8 +28,8 @@ public class ConnectionsDatabase extends LockingDatabase {
     @Override
     public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
-            Pair.of(ServerPlayerConnectedEvent.class, (Consumer<ServerPlayerConnectedEvent>) this::handleServerPlayerConnectedEvent),
-            Pair.of(ServerPlayerDisconnectedEvent.class, (Consumer<ServerPlayerDisconnectedEvent>)this::handleServerPlayerDisconnectedEvent)
+            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );
     }
 
