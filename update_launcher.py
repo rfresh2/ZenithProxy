@@ -23,11 +23,7 @@ github_headers = {
     "Connection": "close"
 }
 
-if os.getenv('GITHUB_TOKEN') is None:
-    # todo: remove token requirement after repo is public
-    print("GITHUB_TOKEN environment variable not found")
-    exit(1)
-else:
+if os.getenv('GITHUB_TOKEN') is not None:
     github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}"
 
 
