@@ -108,7 +108,7 @@ ext {
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
     nettyVersion = '4.1.96.Final'
-    jooqVersion = "3.18.5"
+    jooqVersion = "3.18.6"
 }
 
 jooq {
