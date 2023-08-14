@@ -2,7 +2,7 @@
 
 Discord Server: [rfresh's dev server](https://discord.gg/nJZrSaRKtb)
 
-Minecraft 1.12.2 proxy/bot. Intended for use on 2b2t.org but will work on any server.
+Minecraft 1.12.2 proxy/bot intended for use on 2b2t.org. 1.20 port is currently in progress.
 
 The primary purpose is to have Minecraft accounts always online and securely shared by multiple people.
 
