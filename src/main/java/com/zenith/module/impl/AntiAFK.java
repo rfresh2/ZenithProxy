@@ -103,7 +103,6 @@ public class AntiAFK extends Module {
                 gravityTick();
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
-                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
                 walkTick();
                 // check distance delta every 9 mins. Stuck kick should happen at 20 mins
                 if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
@@ -136,6 +135,7 @@ public class AntiAFK extends Module {
     @Override
     public void clientTickStarting() {
         reset();
+        sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
     }
 
     @Override
@@ -249,7 +249,8 @@ public class AntiAFK extends Module {
                 }
                 antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
                 // increases hunger loss by 4x if we're sprinting
-                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
+                // todo: track this state so we don't flag grim
+//                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
             }
             final Position nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
             antiStuckT++;
