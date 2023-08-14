@@ -154,10 +154,10 @@ def validate_launch_config():
 
 
 def valid_release_channel(channel):
-    return channel == "git" \
-        or channel == "java" \
-        or channel == "linux" \
-        or channel == "linux.pre"
+    return channel.startswith("git") \
+        or channel.startswith("java") \
+        or channel.startswith("linux") \
+        or channel.startswith("linux.pre")
 
 
 def get_latest_release_and_ver(channel):
@@ -365,15 +365,15 @@ def validate_system_with_config():
             print("No .git directory found. Please clone the repository.")
             return False
         return True
-    elif release_channel == "java":
+    elif release_channel.startswith("java"):
         java_version = get_java_version()
         if java_version is None or java_version < 17:
             print("Invalid Java version on PATH. Please install Java 17 or higher.")
             return False
         return True
-    elif release_channel == "linux":
+    elif release_channel.startswith("linux"):
         return system == "Linux"
-    elif release_channel == "linux.pre":
+    elif release_channel.startswith("linux.pre"):
         return system == "Linux"
     else:
         return False
@@ -395,22 +395,22 @@ if auto_update:
     try:
         if release_channel == "git":
             git_update_check()
-        elif release_channel == "java":
+        elif release_channel.startswith("java"):
             java_update_check()
-        elif release_channel == "linux":
+        elif release_channel.startswith("linux"):
             linux_native_update_check()
-        elif release_channel == "linux.pre":
+        elif release_channel.startswith("linux.pre"):
             linux_native_update_check()
     except UpdateError as e:
         print("Error performing update check:", e)
 elif release_channel != "git" and version != local_version:
     print("Desired version is different from local version, attempting to download version:", version)
     try:
-        if release_channel == "java":
+        if release_channel.startswith("java"):
             java_get_version(version)
-        elif release_channel == "linux":
+        elif release_channel.startswith("linux"):
             linux_native_get_version(version)
-        elif release_channel == "linux.pre":
+        elif release_channel.startswith("linux.pre"):
             linux_native_get_version(version)
     except UpdateError as e:
         print("Error performing update check:", e)
@@ -446,7 +446,7 @@ if release_channel == "git":
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
-elif release_channel == "java":
+elif release_channel.startswith("java"):
     if not os.path.isfile(launch_dir + "ZenithProxy.jar"):
         raise RuntimeError("ZenithProxy.jar not found")
     toolchain_command = ""
@@ -466,7 +466,7 @@ elif release_channel == "java":
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print("Error launching application:", e)
-elif release_channel == "linux" or release_channel == "linux.pre":
+elif release_channel.startswith("linux"):
     if system != "Linux":
         raise RuntimeError(f"Linux release channel is not supported on current system: {system}")
     if not os.path.isfile(launch_dir + "ZenithProxy"):
