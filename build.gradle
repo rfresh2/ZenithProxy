@@ -189,7 +189,7 @@ dependencies {
         exclude group: 'net.daporkchop.lib', module: 'common'
         exclude group: 'net.daporkchop.lib', module: 'unsafe'
     }
-    shade "ch.qos.logback:logback-classic:1.4.9"
+    shade "ch.qos.logback:logback-classic:1.4.11"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.slf4j:jul-to-slf4j:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
