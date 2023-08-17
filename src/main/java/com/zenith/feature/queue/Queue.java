@@ -87,19 +87,24 @@ public class Queue {
     private static boolean pingUpdate() {
         try {
             final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
-            final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(0).getName();
-            if (!queueStr.contains("main")) {
-                throw new IOException("Queue string doesn't contain main: " + queueStr);
+            final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(1).getName();
+            final Matcher regularQMatcher = digitPattern.matcher(queueStr.substring(queueStr.lastIndexOf(" ")));
+            final String prioQueueStr = pingWithDetails.standard.getPlayers().getSample().get(2).getName();
+            final Matcher prioQMatcher = digitPattern.matcher(prioQueueStr.substring(prioQueueStr.lastIndexOf(" ")));
+            if (!queueStr.contains("Queue")) {
+                throw new IOException("Queue string doesn't contain Queue: " + queueStr);
             }
-            final Matcher matcher = digitPattern.matcher(queueStr.substring(queueStr.indexOf(" ")));
-            if (!matcher.find()) {
+            if (!prioQueueStr.contains("Priority")) {
+                throw new IOException("Priority queue string doesn't contain Priority: " + prioQueueStr);
+            }
+            if (!regularQMatcher.find()) {
                 throw new IOException("didn't find regular queue len: " + queueStr);
             }
-            final Integer regular = Integer.parseInt(matcher.group());
-            if (!matcher.find()) {
-                throw new IOException("didn't find prio queue len: " + queueStr);
+            if (!prioQMatcher.find()) {
+                throw new IOException("didn't find priority queue len: " + prioQueueStr);
             }
-            final Integer prio = Integer.parseInt(matcher.group());
+            final Integer regular = Integer.parseInt(regularQMatcher.group());
+            final Integer prio = Integer.parseInt(prioQMatcher.group());
             queueStatus = new QueueStatus(prio, regular, prio + regular, 0L, "");
             return true;
         } catch (final Exception e) {
