@@ -493,7 +493,7 @@ public class Proxy {
             try (InputStream netInputStream = HttpClient.create()
                     .secure()
                     .get()
-                    .uri(getAvatarURL(CONFIG.authentication.username).toURI())
+                    .uri(getAvatarURL((CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username)).toURI())
                     .responseContent()
                     .aggregate()
                     .asInputStream()
