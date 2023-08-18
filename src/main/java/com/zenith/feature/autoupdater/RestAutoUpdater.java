@@ -58,12 +58,14 @@ public class RestAutoUpdater extends AutoUpdater {
                 }
                 if (versionLooksCorrect(releaseIdToTag.getSecond())) {
                     if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
-                        if (!getUpdateAvailable()) DEFAULT_LOG.info(
-                            "New update on release channel {}! Current: {} New: {}!",
-                            LAUNCH_CONFIG.release_channel,
-                            LAUNCH_CONFIG.version,
-                            releaseIdToTag.getSecond());
-                        setUpdateAvailable(true);
+                        if (!getUpdateAvailable()) {
+                            DEFAULT_LOG.info(
+                                "New update on release channel {}! Current: {} New: {}!",
+                                LAUNCH_CONFIG.release_channel,
+                                LAUNCH_CONFIG.version,
+                                releaseIdToTag.getSecond());
+                            setUpdateAvailable(true, releaseIdToTag.getSecond());
+                        }
                     }
                 } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.getSecond());
                 return Mono.empty();
