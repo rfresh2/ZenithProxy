@@ -298,12 +298,16 @@ public class Proxy {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
-        ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
-        final MCProxyViaServerProxy proxy = new MCProxyViaServerProxy();
-        proxy.init();
-        ChannelInitializer<Channel> viaChannelInitializer = proxy.inject(originalChannelInitializer);
-        Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);
-        this.client.connect(true, bootstrap);
+        if (CONFIG.client.viaversion.enabled) {
+            ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
+            final MCProxyViaServerProxy viaProxy = new MCProxyViaServerProxy();
+            viaProxy.init();
+            ChannelInitializer<Channel> viaChannelInitializer = viaProxy.inject(originalChannelInitializer);
+            Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);
+            this.client.connect(true, bootstrap);
+        } else {
+            this.client.connect(true);
+        }
     }
 
     public boolean isConnected() {

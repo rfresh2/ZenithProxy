@@ -38,13 +38,13 @@ public class ModuleManager {
 
     public void init() {
         asList(
-//            new AntiAFK(),
+            new AntiAFK(),
             new AutoDisconnect(),
             new AutoEat(),
             new AutoReply(),
             new AutoRespawn(),
-//            new AutoTotem(),
-//            new KillAura(),
+            new AutoTotem(),
+            new KillAura(),
             new Spammer(),
             new Spook()
         ).forEach(m -> {

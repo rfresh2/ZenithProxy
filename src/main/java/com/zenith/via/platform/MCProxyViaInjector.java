@@ -4,6 +4,8 @@ import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 
+import static com.zenith.Shared.CONFIG;
+
 public class MCProxyViaInjector implements ViaInjector {
 
     public MCProxyViaInjector() {
@@ -20,9 +22,14 @@ public class MCProxyViaInjector implements ViaInjector {
     }
 
     @Override
-    public int getServerProtocolVersion() throws Exception {
-        // todo: config property
-        return ProtocolVersion.v1_19_4.getVersion();
+    public int getServerProtocolVersion() throws RuntimeException {
+        int protocolVersion = CONFIG.client.viaversion.protocolVersion;
+        if (!ProtocolVersion.isRegistered(protocolVersion)) {
+            throw new RuntimeException("Unknown protocol version: " + protocolVersion
+                   + ". See https://wiki.vg/Protocol_version_numbers#Versions_after_the_Netty_rewrite for valid versions."
+                   + " Example: the protocolVersion for 1.19.4 is 762");
+        }
+        return protocolVersion;
     }
 
     @Override

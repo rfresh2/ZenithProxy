@@ -97,6 +97,21 @@ ZenithProxy has 3 release channels:
   * `accountOwnerRoleId` -> a discord role ID that allows managing sensitive configuration like the whitelist
   * `chatRelay.channelId` -> The channel ID where the MC server chat relay will be sent and received from.
 
+### ViaVersion
+
+[ViaVersion](https://github.com/ViaVersion/ViaVersion) is a software library that allows clients with differing Minecraft versions to connect to servers.
+
+The conversion is not perfect, so expect issues. For example, a 1.12.2 client cannot view or explore the increased world heights introduced in 1.18
+
+ZenithProxy has ViaVersion built-in, but it must be manually configured in the `config.json`:
+* `viaversion.enabled` -> set to `true` to use ZenithProxy's ViaVersion
+* `viaversion.protocolVersion` -> the [MC protocol version](https://wiki.vg/Protocol_version_numbers#Versions_after_the_Netty_rewrite) of the server you are connecting to.
+
+**Do not enable ViaVersion if the server already has ViaVersion installed (e.g. 2b2t).**
+**Certain Anti-Cheats will behave significantly different if ViaVersion is on the server vs the client (ZenithProxy).**
+
+You must use the `git` or `java` release channels to use ZenithProxy's ViaVersion. Further compatibility testing will be completed at a later time.
+
 ## Run
 
 * `./launch.sh` (Linux) or `.\launch.bat` (Windows)

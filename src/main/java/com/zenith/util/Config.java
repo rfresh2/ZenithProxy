@@ -41,11 +41,11 @@ public final class Config {
         public Extra extra = new Extra();
         public Server server = new Server();
         public boolean autoConnect = false; // auto-connect proxy on process start
-        public ViaVersion viaversion;
+        public ViaVersion viaversion = new ViaVersion();
 
         public static final class ViaVersion {
-            public boolean enabled = true;
-            public int protocolVersion = 0; // todo
+            public boolean enabled = false;
+            public int protocolVersion = 762; // 1.19.4
         }
 
         public static final class Extra {
