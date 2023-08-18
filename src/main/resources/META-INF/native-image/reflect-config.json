@@ -2496,7 +2496,9 @@
 },
 {
   "name":"discord4j.rest.json.response.ErrorResponse",
+  "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"anySetter","parameterTypes":["java.lang.String","java.lang.Object"] }]
 },
 {
