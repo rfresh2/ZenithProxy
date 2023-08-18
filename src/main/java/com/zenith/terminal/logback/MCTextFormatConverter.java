@@ -8,12 +8,8 @@ import net.daporkchop.lib.logging.format.FormatParser;
 import net.daporkchop.lib.logging.format.component.TextComponent;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
-import java.util.function.Supplier;
-
 public class MCTextFormatConverter extends MessageConverter {
     private final FormatParser defaultFormatParser = AutoMCFormatParser.DEFAULT;
-    // need to lazily init this to get around static init order
-    private final Supplier<FormatParser> translatableFormatParser = () -> Shared.FORMAT_PARSER;
 
     @Override
     public String convert(ILoggingEvent event) {
@@ -22,8 +18,9 @@ public class MCTextFormatConverter extends MessageConverter {
         try {
             // if the message doesn't start with a curly brace it ain't json
             if (formattedMessage.startsWith("{") || formattedMessage.contains("§")) {
-                FormatParser formatParser = translatableFormatParser.get();
-                if (formatParser == null) formatParser = defaultFormatParser;
+                FormatParser formatParser = defaultFormatParser;
+                if (!ImageInfo.inImageBuildtimeCode() && Shared.FORMAT_PARSER != null)
+                    formatParser = Shared.FORMAT_PARSER;
                 TextComponent textComponent = formatParser.parse(formattedMessage);
                 return textComponent.toRawString();
             }
