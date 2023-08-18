@@ -21,7 +21,6 @@ import com.zenith.feature.spectator.entity.SpectatorEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
@@ -148,7 +147,7 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
-            final String reason = AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString();
+            final String reason = FORMAT_PARSER.parse(event.getReason()).toRawString();
             if (!isSpectator()) {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
                         Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getId).orElse(null),

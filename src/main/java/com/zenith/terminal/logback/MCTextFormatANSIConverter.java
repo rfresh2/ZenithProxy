@@ -2,12 +2,15 @@ package com.zenith.terminal.logback;
 
 import ch.qos.logback.classic.pattern.MessageConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.zenith.Shared;
 import lombok.NonNull;
 import net.daporkchop.lib.logging.console.ansi.VGAColor;
 import net.daporkchop.lib.logging.format.FormatParser;
 import net.daporkchop.lib.logging.format.TextStyle;
 import net.daporkchop.lib.logging.format.component.TextComponent;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+
+import java.util.function.Supplier;
 
 import static net.daporkchop.lib.logging.console.ansi.ANSI.ESC;
 
@@ -16,7 +19,9 @@ import static net.daporkchop.lib.logging.console.ansi.ANSI.ESC;
  * https://github.com/PorkStudios/PorkLib/blob/development/logging/src/main/java/net/daporkchop/lib/logging/console/ansi/
  */
 public class MCTextFormatANSIConverter extends MessageConverter {
-    private final FormatParser formatParser = AutoMCFormatParser.DEFAULT;
+    private final FormatParser defaultFormatParser = AutoMCFormatParser.DEFAULT;
+    // need to lazily init this to get around static init order
+    private final Supplier<FormatParser> translatableFormatParser = () -> Shared.FORMAT_PARSER;
 
     protected static String getUpdateTextFormatCommand(VGAColor textColor, VGAColor backgroundColor, int style) {
         return String.format(
@@ -57,6 +62,8 @@ public class MCTextFormatANSIConverter extends MessageConverter {
 
     @Override
     public String convert(ILoggingEvent event) {
+        FormatParser formatParser = translatableFormatParser.get();
+        if (formatParser == null) formatParser = defaultFormatParser;
         TextComponent textComponent = formatParser.parse(event.getFormattedMessage());
         StringBuilder builder = new StringBuilder();
         this.doBuild(builder, textComponent);

@@ -9,7 +9,6 @@ import com.zenith.event.proxy.DisconnectEvent;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -93,7 +92,7 @@ public class ClientListener implements SessionListener {
         session.setDisconnected(true);
         String reason;
         try {
-            reason = AutoMCFormatParser.DEFAULT.parse(event.getReason()).toRawString();
+            reason = FORMAT_PARSER.parse(event.getReason()).toRawString();
         } catch (final Exception e) {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
             reason = isNull(event.getReason()) ? "Disconnected" : event.getReason();

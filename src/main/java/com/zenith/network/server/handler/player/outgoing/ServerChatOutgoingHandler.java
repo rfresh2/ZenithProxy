@@ -5,7 +5,6 @@ import com.zenith.network.registry.OutgoingHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Color;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -14,7 +13,7 @@ public class ServerChatOutgoingHandler implements OutgoingHandler<ServerChatPack
     @Override
     public ServerChatPacket apply(ServerChatPacket packet, ServerConnection session) {
         try {
-            final MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
+            final MCTextRoot mcTextRoot = FORMAT_PARSER.parse(packet.getMessage());
             final String message = mcTextRoot.toRawString();
             if (message.startsWith("<")) {
                 if (CONFIG.client.extra.chat.hideChat) {

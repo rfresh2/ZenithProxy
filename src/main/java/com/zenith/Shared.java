@@ -7,6 +7,7 @@ import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
+import com.zenith.feature.language.LanguageManager;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.World;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
@@ -44,6 +45,8 @@ import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectato
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
+import net.daporkchop.lib.minecraft.text.util.TranslationSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +98,8 @@ public class Shared {
     public static final Pathing PATHING;
     public static final TerminalManager TERMINAL_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
+    public static final LanguageManager LANGUAGE_MANAGER;
+    public static final AutoMCFormatParser FORMAT_PARSER;
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
             .setLogger(CLIENT_LOG)
             .allowUnhandled(true)
@@ -318,6 +323,8 @@ public class Shared {
             PATHING = new Pathing(WORLD);
             TERMINAL_MANAGER = new TerminalManager();
             COMMAND_MANAGER = new CommandManager();
+            LANGUAGE_MANAGER = new LanguageManager();
+            FORMAT_PARSER = new AutoMCFormatParser(TranslationSource.ofMap(LANGUAGE_MANAGER.getLanguageDataMap()));
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to initialize!", e);
             throw e;

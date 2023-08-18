@@ -12,7 +12,6 @@ import com.zenith.network.registry.AsyncIncomingHandler;
 import com.zenith.util.Color;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -29,7 +28,7 @@ public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, Clien
     public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
         try {
             CHAT_LOG.info(packet.getMessage().replace("\\n\\n", "")); // removes the chat clearing linebreaks from queue messages
-            final MCTextRoot mcTextRoot = AutoMCFormatParser.DEFAULT.parse(packet.getMessage());
+            final MCTextRoot mcTextRoot = FORMAT_PARSER.parse(packet.getMessage());
             final String messageString = mcTextRoot.toRawString();
             /*
              * example death message:

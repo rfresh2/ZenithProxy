@@ -173,6 +173,8 @@
   }, {
     "pattern":"\\Qpc/1.12/foods.json\\E"
   }, {
+    "pattern":"\\Qpc/1.12/language.json\\E"
+  }, {
     "pattern":"\\Qproxy_commit.txt\\E"
   }, {
     "pattern":"\\Qproxy_version.txt\\E"

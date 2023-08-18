@@ -5,12 +5,10 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerTitlePacket;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.util.Optional;
 
-import static com.zenith.Shared.CLIENT_LOG;
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 
 public class TitlePacketHandler implements AsyncIncomingHandler<ServerTitlePacket, ClientSession> {
     @Override
@@ -29,7 +27,7 @@ public class TitlePacketHandler implements AsyncIncomingHandler<ServerTitlePacke
             Optional<Integer> position = Optional.of(serverTitlePacket)
                     .filter(packet -> packet.getAction().equals(TitleAction.SUBTITLE))
                     .map(ServerTitlePacket::getSubtitle)
-                    .map(title -> AutoMCFormatParser.DEFAULT.parse(title).toRawString())
+                    .map(title -> FORMAT_PARSER.parse(title).toRawString())
                     .map(text -> {
                         String[] split = text.split(":");
                         if (split.length > 1) {

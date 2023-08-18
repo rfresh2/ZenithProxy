@@ -10,7 +10,6 @@ import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
 import net.daporkchop.lib.logging.format.component.TextComponent;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -112,7 +111,7 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
 
     private Optional<MCTextRoot> parse2b2tTablistFooter(final String footer) {
         try {
-            return Optional.of(AutoMCFormatParser.DEFAULT.parse(footer));
+            return Optional.of(FORMAT_PARSER.parse(footer));
         } catch (final Exception e) {
             CLIENT_LOG.debug("Error parsing 2b2t tablist footer", e);
             return Optional.empty();
