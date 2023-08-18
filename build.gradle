@@ -423,6 +423,7 @@ graalvmNative {
                     "--report-unsupported-elements-at-runtime",
                     "-H:+ReportExceptionStackTraces",
                     "-H:DeadlockWatchdogInterval=30",
+                    "-H:IncludeLocales=en",
 //                    "-H:DashboardDump=imageDashboardDump",
 //                    "-H:+DashboardAll",
                     "--static",
