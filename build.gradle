@@ -87,6 +87,10 @@ repositories {
         name = "paper"
         url "https://papermc.io/repo/repository/maven-public/"
     }
+    maven {
+        "ViaVersion"
+        url "https://repo.viaversion.com"
+    }
     mavenLocal()
 }
 
@@ -199,7 +203,7 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-M2") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:f9755d5768") {
+    shade("com.github.rfresh2:MCProtocolLib:8452a4e1d") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -225,6 +229,10 @@ dependencies {
     shade 'com.nukkitx.fastutil:fastutil-int-object-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
+
+    shade "com.viaversion:viaversion:4.7.0"
+    shade "com.viaversion:viaversion-api:4.7.0"
+    shade "com.viaversion:viabackwards:4.7.0"
 
     shade 'org.jline:jline:3.23.0'
     shade 'org.jline:jline-terminal-jansi:3.23.0'
