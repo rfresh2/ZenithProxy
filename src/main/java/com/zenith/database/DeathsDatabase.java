@@ -1,9 +1,9 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.database.dto.tables.Deaths;
 import com.zenith.database.dto.tables.records.DeathsRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
@@ -29,6 +29,13 @@ public class DeathsDatabase extends LockingDatabase {
     }
 
     @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            DeathMessageEvent.class, this::handleDeathMessageEvent
+        );
+    }
+
+    @Override
     public String getLockKey() {
         return "Deaths";
     }
@@ -48,7 +55,6 @@ public class DeathsDatabase extends LockingDatabase {
         return deathsRecord.get(d.TIME).toInstant();
     }
 
-    @Subscribe
     public void handleDeathMessageEvent(DeathMessageEvent event) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org")) return;
         writeDeath(event.deathMessageParseResult, event.deathMessageRaw, Instant.now().atOffset(ZoneOffset.UTC));

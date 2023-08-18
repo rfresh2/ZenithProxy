@@ -5,6 +5,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.AntiAFK;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class AntiAFKCommand extends Command {
@@ -34,11 +37,13 @@ public class AntiAFKCommand extends Command {
         return command("antiAFK")
             .then(literal("on").executes(c -> {
                 CONFIG.client.extra.antiafk.enabled = true;
+                MODULE_MANAGER.getModule(AntiAFK.class).ifPresent(Module::syncEnabledFromConfig);
                 defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                     .title("AntiAFK On!");
             }))
             .then(literal("off").executes(c -> {
                 CONFIG.client.extra.antiafk.enabled = false;
+                MODULE_MANAGER.getModule(AntiAFK.class).ifPresent(Module::syncEnabledFromConfig);
                 defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                     .title("AntiAFK Off!");
             }))

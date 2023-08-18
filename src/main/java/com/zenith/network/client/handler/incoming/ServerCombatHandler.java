@@ -17,7 +17,7 @@ public class ServerCombatHandler implements AsyncIncomingHandler<ServerCombatPac
             if (packet.getCombatState() == CombatState.ENTITY_DEAD) {
                 // packet.message() value is basically garbage on 2b2t, same message on any death, might have more info on other servers
                 // see ChatHandler for how we try to grab the actual informative death message
-                EVENT_BUS.dispatch(new DeathEvent());
+                EVENT_BUS.postAsync(new DeathEvent());
             }
         }
         return true;

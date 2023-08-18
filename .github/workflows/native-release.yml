@@ -3,7 +3,7 @@ name: GraalVM Native Build And Release
 on:
   push:
     tags:
-      - '[0-9].[0-9].[0-9]\+linux'
+      - '[0-9]+.[0-9]+.[0-9]+\+linux'
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
           java-version: '20.0.2'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-#          native-image-musl: true
+          native-image-musl: true
 
       - name: Echo Versions and Paths
         run: |

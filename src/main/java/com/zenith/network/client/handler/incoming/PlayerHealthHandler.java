@@ -13,8 +13,8 @@ public class PlayerHealthHandler implements AsyncIncomingHandler<ServerPlayerHea
     @Override
     public boolean applyAsync(@NonNull ServerPlayerHealthPacket packet, @NonNull ClientSession session) {
         if (packet.getHealth() != CACHE.getPlayerCache().getThePlayer().getHealth()) {
-            SCHEDULED_EXECUTOR_SERVICE.execute(() -> EVENT_BUS.dispatch(
-                    new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth())));
+            EVENT_BUS.postAsync(
+                new PlayerHealthChangedEvent(packet.getHealth(), CACHE.getPlayerCache().getThePlayer().getHealth()));
         }
 
         CACHE.getPlayerCache().getThePlayer()

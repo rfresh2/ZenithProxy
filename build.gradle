@@ -16,7 +16,7 @@ plugins {
     id 'nu.studer.jooq' version '8.2.1'
     id "com.github.johnrengelman.shadow" version "8.1.1"
     id 'java'
-    id 'org.graalvm.buildtools.native' version '0.9.23'
+    id 'org.graalvm.buildtools.native' version '0.9.24'
 }
 
 group "com.zenith"
@@ -185,7 +185,7 @@ dependencies {
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.6.0.202305301015-r'
-    shade 'com.github.mwiede:jsch:0.2.10'
+    shade 'com.github.mwiede:jsch:0.2.11'
     shade 'com.google.guava:guava:32.1.2-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
@@ -193,7 +193,7 @@ dependencies {
         exclude group: 'net.daporkchop.lib', module: 'common'
         exclude group: 'net.daporkchop.lib', module: 'unsafe'
     }
-    shade "ch.qos.logback:logback-classic:1.4.8"
+    shade "ch.qos.logback:logback-classic:1.4.9"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.slf4j:jul-to-slf4j:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
@@ -208,7 +208,7 @@ dependencies {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:396244f567") {
+    shade("com.github.rfresh2:MCProtocolLib:f9755d5768") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -227,7 +227,6 @@ dependencies {
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade "com.github.collarmc:pounce:d921e2c156"
     shade('org.redisson:redisson:3.23.2') {
         exclude group: 'io.netty'
     }
@@ -348,8 +347,6 @@ tasks.register('clearJooqBuild') {
     // we already have these classes in our src
     // can't configure jooq generator to not auto-add these generated dirs to gradle source sets
     group = "build"
-    // this can be removed after all instances get updated to this commit at least once
-    new File('build/generated-src').deleteDir()
     new File('build/jooq').deleteDir()
 }
 
@@ -371,9 +368,6 @@ graalvmNative {
                     "--add-opens=java.base/java.nio=ALL-UNNAMED",
                     "--initialize-at-build-time=net.daporkchop.lib",
                     "--initialize-at-build-time=org.jline",
-                    "--initialize-at-build-time=java.awt.Toolkit",
-                    "--initialize-at-build-time=java.awt.Color",
-                    "--initialize-at-build-time=java.awt.Insets",
                     "--initialize-at-build-time=org.fusesource.jansi",
                     "--initialize-at-build-time=com.google.gson",
                     '--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback',
@@ -435,10 +429,9 @@ graalvmNative {
                     "-H:+ReportExceptionStackTraces",
 //                    "-H:DashboardDump=imageDashboardDump",
 //                    "-H:+DashboardAll",
-//                    "--static", // todo: remove java.awt from code and dependencies. having issues getting this to statically link
-                    // awt replacement for png IO? https://github.com/nayuki/PNG-library
-//                    "--libc=musl",
-                    "-R:MaxHeapSize=100m",
+                    "--static",
+                    "--libc=musl",
+                    "-R:MaxHeapSize=150m",
 //                    "--pgo-instrument",
                     "-march=x86-64-v3",
                     "--gc=serial",

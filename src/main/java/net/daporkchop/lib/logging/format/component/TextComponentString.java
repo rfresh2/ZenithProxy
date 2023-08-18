@@ -20,11 +20,10 @@
 
 package net.daporkchop.lib.logging.format.component;
 
+import com.zenith.util.Color;
 import lombok.Getter;
 import lombok.NonNull;
 import net.daporkchop.lib.logging.console.TextFormat;
-
-import java.awt.*;
 
 /**
  * A simple text component that only contains plain text

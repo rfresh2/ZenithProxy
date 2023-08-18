@@ -1,8 +1,8 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.database.dto.tables.Restarts;
 import com.zenith.database.dto.tables.records.RestartsRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class RestartsDatabase extends LockingDatabase {
 
@@ -21,6 +22,13 @@ public class RestartsDatabase extends LockingDatabase {
 
     public RestartsDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
         super(queryExecutor, redisClient);
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+                ServerRestartingEvent.class, this::handleServerRestartEvent
+        );
     }
 
     @Override
@@ -43,7 +51,6 @@ public class RestartsDatabase extends LockingDatabase {
         return timeRecordResult.get(0).value1().toInstant();
     }
 
-    @Subscribe
     public void handleServerRestartEvent(final ServerRestartingEvent event) {
         synchronized (this) {
             if (lastRestartWrite.isBefore(Instant.now().minus(cooldownDuration))) {

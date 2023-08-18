@@ -21,13 +21,12 @@ public final class Config {
     public AutoUpdater autoUpdater = new AutoUpdater();
 
     public static final class Authentication {
-        public boolean doAuthentication = false;
         public AccountType accountType = AccountType.DEVICE_CODE;
         // only used for MSA
-        public String email = "john.doe@example.com";
-        public String password = "my_secure_password";
+        public String email = "not@set.com";
+        public String password = "abc123";
         // updated on successful login
-        public String username = "Steve";
+        public String username = "Unknown";
         public boolean prio = false;
         public boolean prioBanned = false;
         public String msaClientId = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
@@ -218,10 +217,13 @@ public final class Config {
                 public boolean enabled = false;
                 public long delayTicks = 200;
                 public boolean randomOrder = false;
+                public boolean appendRandom = false;
                 public List<String> messages = asList(
                         "ZenithProxy on top!",
                         "I just skipped queue thanks to ZenithProxy!",
-                        "I love undertimer slopper!"
+                        "I love undertime slopper!",
+                        ">odpay supremacy"
+
                 );
             }
 
@@ -412,6 +414,7 @@ public final class Config {
     public static final class AutoUpdater {
         public boolean autoUpdate = true;
         public int autoUpdateCheckIntervalSeconds = 60;
+        // internal config, don't set this manually
         public boolean shouldReconnectAfterAutoUpdate = false;
     }
 

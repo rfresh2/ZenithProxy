@@ -1,10 +1,12 @@
 package com.zenith.feature.autoupdater;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.event.proxy.UpdateAvailableEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
 
+import javax.annotation.Nullable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledFuture;
@@ -16,10 +18,13 @@ public abstract class AutoUpdater {
 
     private boolean updateAvailable = false;
     ScheduledFuture<?> updateCheckFuture;
+    private Subscription eventSubscription;
 
     public void start() {
         if (updateCheckFuture != null) return;
-        EVENT_BUS.subscribe(this);
+        if (eventSubscription == null) eventSubscription = EVENT_BUS.subscribe(
+            DisconnectEvent.class, this::handleDisconnectEvent
+        );
         scheduleUpdateCheck(this::updateCheck, 3, CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
     }
 
@@ -40,13 +45,20 @@ public abstract class AutoUpdater {
     }
 
     public void stop() {
-        EVENT_BUS.unsubscribe(this);
+        if (eventSubscription != null) {
+            eventSubscription.unsubscribe();
+            eventSubscription = null;
+        }
         cancelUpdateCheck();
         this.updateAvailable = false;
     }
 
     public synchronized void setUpdateAvailable(final boolean updateAvailable) {
-        if (!this.updateAvailable && updateAvailable) DEFAULT_LOG.info("New update found!"); // only log on first detection
+        setUpdateAvailable(updateAvailable, null);
+    }
+
+    public synchronized void setUpdateAvailable(final boolean updateAvailable, @Nullable final String version) {
+        if (!this.updateAvailable && updateAvailable) EVENT_BUS.postAsync(new UpdateAvailableEvent(version));
         this.updateAvailable = updateAvailable;
         if (this.updateAvailable) {
             if (!Proxy.getInstance().isConnected()
@@ -61,7 +73,6 @@ public abstract class AutoUpdater {
         return updateAvailable;
     }
 
-    @Subscribe
     public void handleDisconnectEvent(final DisconnectEvent event) {
         if (updateAvailable) {
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = !event.reason.equals(MANUAL_DISCONNECT);
@@ -90,7 +101,7 @@ public abstract class AutoUpdater {
     }
 
     public void update() {
-        EVENT_BUS.dispatch(new UpdateStartEvent());
+        EVENT_BUS.post(new UpdateStartEvent());
         CONFIG.discord.isUpdating = true;
         Proxy.getInstance().stop();
     }

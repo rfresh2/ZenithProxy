@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.window.ClickItemParam;
@@ -8,11 +7,13 @@ import com.github.steveice10.mc.protocol.data.game.window.WindowAction;
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -27,10 +28,22 @@ public class AutoTotem extends Module {
         return CONFIG.client.extra.autoTotem.enabled && swapping;
     }
 
-    @Subscribe
+    public AutoTotem() {
+        super();
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.autoTotem.enabled;
+    }
+
     public void handleClientTick(final ClientTickEvent event) {
-        if (CONFIG.client.extra.autoTotem.enabled
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && playerHealthBelowThreshold()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())

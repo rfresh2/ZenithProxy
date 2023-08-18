@@ -72,7 +72,7 @@ public class ClientListener implements SessionListener {
     public void connected(ConnectedEvent event) {
         CLIENT_LOG.info("Connected to {}!", event.getSession().getRemoteAddress());
         session.setDisconnected(false);
-        EVENT_BUS.dispatch(new ConnectEvent());
+        EVENT_BUS.postAsync(new ConnectEvent());
     }
 
     @Override
@@ -98,6 +98,6 @@ public class ClientListener implements SessionListener {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
             reason = isNull(event.getReason()) ? "Disconnected" : event.getReason();
         }
-        EVENT_BUS.dispatch(new DisconnectEvent(reason));
+        EVENT_BUS.post(new DisconnectEvent(reason));
     }
 }

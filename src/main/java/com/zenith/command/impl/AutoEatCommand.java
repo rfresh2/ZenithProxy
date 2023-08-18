@@ -5,10 +5,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.AutoEat;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class AutoEatCommand extends Command {
@@ -24,6 +27,7 @@ public class AutoEatCommand extends Command {
         return command("autoeat")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.autoEat.enabled = true;
+                    MODULE_MANAGER.getModule(AutoEat.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("AutoEat On!")
                             .color(Color.CYAN)
@@ -33,6 +37,7 @@ public class AutoEatCommand extends Command {
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.autoEat.enabled = false;
+                    MODULE_MANAGER.getModule(AutoEat.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("AutoEat Off!")
                             .color(Color.CYAN)

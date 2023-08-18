@@ -21,6 +21,7 @@
 package net.daporkchop.lib.minecraft.text.parser;
 
 import com.google.gson.*;
+import com.zenith.util.Color;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.daporkchop.lib.logging.console.TextFormat;
@@ -69,7 +70,7 @@ public class JsonTextParser implements MCFormatParser {
             } else if (!formattingCode.isColor()) {
                 throw new IllegalStateException();
             } else {
-                format.setTextColor(((ChatColor) formattingCode).awtColor());
+                format.setTextColor(Color.fromInt(((ChatColor) formattingCode).colorInstance().getRGB()));
             }
         }
     }

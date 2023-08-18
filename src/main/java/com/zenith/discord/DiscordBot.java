@@ -1,11 +1,11 @@
 package com.zenith.discord;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
 import com.zenith.command.DiscordCommandContext;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
@@ -25,6 +25,8 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ImmutableUserModifyRequest;
 import discord4j.discordjson.json.MessageCreateRequest;
+import discord4j.gateway.intent.Intent;
+import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.util.Color;
@@ -33,9 +35,6 @@ import lombok.Getter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -48,6 +47,7 @@ import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -67,6 +67,7 @@ public class DiscordBot {
 
     @Getter
     private boolean isRunning;
+    private Subscription eventSubscription;
 
     public DiscordBot() {
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
@@ -74,21 +75,60 @@ public class DiscordBot {
         this.isRunning = false;
     }
 
+    public void initEventHandlers() {
+        if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
+        eventSubscription = EVENT_BUS.subscribe(
+            pair(ConnectEvent.class, this::handleConnectEvent),
+            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+            pair(DisconnectEvent.class, this::handleDisconnectEvent),
+            pair(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
+            pair(AutoEatOutOfFoodEvent.class, this::handleAutoEatOutOfFoodEvent),
+            pair(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
+            pair(StartQueueEvent.class, this::handleStartQueueEvent),
+            pair(DeathEvent.class, this::handleDeathEvent),
+            pair(SelfDeathMessageEvent.class, this::handleSelfDeathMessageEvent),
+            pair(HealthAutoDisconnectEvent.class, this::handleHealthAutoDisconnectEvent),
+            pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+            pair(ProxySpectatorConnectedEvent.class, this::handleProxySpectatorConnectedEvent),
+            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
+            pair(NonWhitelistedPlayerConnectedEvent.class, this::handleNonWhitelistedPlayerConnectedEvent),
+            pair(ProxySpectatorDisconnectedEvent.class, this::handleProxySpectatorDisconnectedEvent),
+            pair(ActiveHoursConnectEvent.class, this::handleActiveHoursConnectEvent),
+            pair(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent),
+            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
+            pair(DiscordMessageSentEvent.class, this::handleDiscordMessageSentEvent),
+            pair(UpdateStartEvent.class, this::handleUpdateStartEvent),
+            pair(ServerRestartingEvent.class, this::handleServerRestartingEvent),
+            pair(ProxyLoginFailedEvent.class, this::handleProxyLoginFailedEvent),
+            pair(StartConnectEvent.class, this::handleStartConnectEvent),
+            pair(PrioStatusUpdateEvent.class, this::handlePrioStatusUpdateEvent),
+            pair(PrioBanStatusUpdateEvent.class, this::handlePrioBanStatusUpdateEvent),
+            pair(AntiAfkStuckEvent.class, this::handleAntiAfkStuckEvent),
+            pair(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
+            pair(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
+            pair(DeathMessageEvent.class, this::handleDeathMessageEvent),
+            pair(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent)
+        );
+    }
+
     public void start() {
         this.client = DiscordClientBuilder.create(CONFIG.discord.token)
-                .build()
-                .gateway()
-                .setInitialPresence(shardInfo -> disconnectedPresence.get())
-                .login()
-                .block();
-        EVENT_BUS.subscribe(this);
+            .build()
+            .gateway()
+            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+            .setInitialPresence(shardInfo -> disconnectedPresence.get())
+            .login()
+            .block();
+        initEventHandlers();
 
         restClient = client.getRestClient();
 
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
-                    EVENT_BUS.dispatch(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent())));
+                    EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent())));
                     return;
                 }
             }
@@ -188,64 +228,12 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
-    public void handleConnectEvent(ConnectEvent event) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Connected")
-                .color(Color.CYAN)
-                .addField("Server", CONFIG.client.server.address, true)
-                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
-                .build());
-        this.client.updatePresence(defaultConnectedPresence.get()).block();
-    }
-
-    @Subscribe
-    public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Online")
-                .color(Color.CYAN)
-                .build());
-    }
-
-    @Subscribe
-    public void handleDisconnectEvent(DisconnectEvent event) {
-        boolean sus = event.reason.startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
-        sendEmbedMessage((sus ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
-                .title("Proxy Disconnected")
-                .addField("Reason", event.reason, true)
-                .color(Color.CYAN)
-                .build());
-        SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(disconnectedPresence.get()).block());
-        if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
-    }
-
-    @Subscribe
-    public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
-        if (CONFIG.discord.queueWarning.enabled) {
-            if (event.position == CONFIG.discord.queueWarning.position) {
-                sendQueueWarning();
-            } else if (event.position <= 3) {
-                sendQueueWarning();
-            }
-        }
-        this.client.updatePresence(getQueuePresence()).block();
-    }
-
-    @Subscribe
-    public void handleAutoEatOutOfFood(final AutoEatOutOfFoodEvent event) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("AutoEat Out Of Food")
-                .description("AutoEat threshold met but player has no food")
-                .color(Color.RUBY)
-                .build());
-    }
-
     private void sendQueueWarning() {
         sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
-                .title("Queue Warning")
-                .addField("Queue Position", "[" + queuePositionStr() + "]", false)
-                .color(Color.MOON_YELLOW)
-                .build());
+            .title("Queue Warning")
+            .addField("Queue Position", "[" + queuePositionStr() + "]", false)
+            .color(Color.MOON_YELLOW)
+            .build());
     }
 
     private String queuePositionStr() {
@@ -260,12 +248,181 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
+    static boolean validateButtonInteractionEventFromAccountOwner(final ButtonInteractionEvent event) {
+        return event.getInteraction().getMember()
+            .map(m -> m.getRoleIds().stream()
+                .map(Snowflake::asString)
+                .anyMatch(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId)))
+            .orElse(false);
+    }
+
+
+    private EmbedCreateSpec getUpdateMessage() {
+        return EmbedCreateSpec.builder()
+            .title("Updating and restarting...")
+            .color(Color.CYAN)
+            .build();
+    }
+
+    public static boolean isAllowedChatCharacter(char c0) {
+        return c0 != 167 && c0 >= 32 && c0 != 127;
+    }
+
+    public static String sanitizeRelayInputMessage(final String input) {
+        StringBuilder stringbuilder = new StringBuilder();
+        for (char c0 : input.toCharArray()) {
+            if (isAllowedChatCharacter(c0)) {
+                stringbuilder.append(c0);
+            }
+        }
+        return stringbuilder.toString();
+    }
+
+    public void updateProfileImage(final byte[] imageBytes) {
+        try {
+            this.restClient.edit(ImmutableUserModifyRequest.builder()
+                                     .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes))
+                                     .build())
+                .block();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed updating discord profile image", e);
+        }
+    }
+
+    public void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .addEmbed(embedCreateSpec)
+                                            .build().asRequest());
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord embed message", e);
+        }
+    }
+
+    private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .content(message)
+                                            .addEmbed(embedCreateSpec)
+                                            .build().asRequest());
+            TERMINAL_LOG.info(message);
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord embed message", e);
+        }
+    }
+
+    public void sendMessage(final String message) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .content(message)
+                                            .build().asRequest());
+            TERMINAL_LOG.info(message);
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private void sendEmbedMessageWithButtons(String message, EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .content(message)
+                                            .addEmbed(embedCreateSpec)
+                                            .components(ActionRow.of(buttons))
+                                            .build().asRequest());
+            TERMINAL_LOG.info(message);
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+            client.getEventDispatcher()
+                .on(ButtonInteractionEvent.class, mapper)
+                .timeout(timeout)
+                .onErrorResume(TimeoutException.class, e -> Mono.empty())
+                .subscribe();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private void sendEmbedMessageWithButtons(EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
+        try {
+            mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .addEmbed(embedCreateSpec)
+                                            .components(ActionRow.of(buttons))
+                                            .build().asRequest());
+            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+            client.getEventDispatcher()
+                .on(ButtonInteractionEvent.class, mapper)
+                .timeout(timeout)
+                .onErrorResume(TimeoutException.class, e -> Mono.empty())
+                .subscribe();
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    private ClientPresence getQueuePresence() {
+        return ClientPresence.of(Status.IDLE, ClientActivity.watching(queuePositionStr()));
+    }
+
+    public static String escape(String message) {
+        return message.replaceAll("_", "\\\\_");
+    }
+
+    public boolean isMessageQueueEmpty() {
+        return mainChannelMessageQueue.isEmpty();
+    }
+
+    public void handleConnectEvent(ConnectEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Proxy Connected")
+                .color(Color.CYAN)
+                .addField("Server", CONFIG.client.server.address, true)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
+                .build());
+        this.client.updatePresence(defaultConnectedPresence.get()).block();
+    }
+
+    public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("Proxy Online")
+                .color(Color.CYAN)
+                .build());
+    }
+
+    public void handleDisconnectEvent(DisconnectEvent event) {
+        boolean sus = event.reason.startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
+        sendEmbedMessage((sus ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
+                .title("Proxy Disconnected")
+                .addField("Reason", event.reason, true)
+                .color(Color.CYAN)
+                .build());
+        SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(disconnectedPresence.get()).block());
+        if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
+    }
+
+    public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
+        if (CONFIG.discord.queueWarning.enabled) {
+            if (event.position == CONFIG.discord.queueWarning.position) {
+                sendQueueWarning();
+            } else if (event.position <= 3) {
+                sendQueueWarning();
+            }
+        }
+        this.client.updatePresence(getQueuePresence()).block();
+    }
+
+    public void handleAutoEatOutOfFoodEvent(final AutoEatOutOfFoodEvent event) {
+        sendEmbedMessage(EmbedCreateSpec.builder()
+                .title("AutoEat Out Of Food")
+                .description("AutoEat threshold met but player has no food")
+                .color(Color.RUBY)
+                .build());
+    }
+
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
         this.client.updatePresence(defaultConnectedPresence.get()).block();
     }
 
-    @Subscribe
     public void handleStartQueueEvent(StartQueueEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Started Queuing")
@@ -276,7 +433,6 @@ public class DiscordBot {
         this.client.updatePresence(getQueuePresence()).block();
     }
 
-    @Subscribe
     public void handleDeathEvent(DeathEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Player Death")
@@ -285,8 +441,7 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
-    public void handleDeathMessageEvent(SelfDeathMessageEvent event) {
+    public void handleSelfDeathMessageEvent(SelfDeathMessageEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Death Message")
                 .color(Color.RUBY)
@@ -294,16 +449,7 @@ public class DiscordBot {
                 .build());
     }
 
-    static boolean validateButtonInteractionEventFromAccountOwner(final ButtonInteractionEvent event) {
-        return event.getInteraction().getMember()
-                .map(m -> m.getRoleIds().stream()
-                        .map(Snowflake::asString)
-                        .anyMatch(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId)))
-                .orElse(false);
-    }
-
-    @Subscribe
-    public void handleAutoDisconnectEvent(HealthAutoDisconnectEvent event) {
+    public void handleHealthAutoDisconnectEvent(HealthAutoDisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Health AutoDisconnect Triggered")
                 .addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), true)
@@ -311,7 +457,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
         if (CONFIG.client.extra.clientConnectionMessages) {
             sendEmbedMessage(EmbedCreateSpec.builder()
@@ -322,7 +467,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleProxySpectatorConnectedEvent(ProxySpectatorConnectedEvent event) {
         if (CONFIG.client.extra.clientConnectionMessages) {
             sendEmbedMessage(EmbedCreateSpec.builder()
@@ -333,7 +477,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.clientConnectionMessages) {
             EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
@@ -350,7 +493,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (CONFIG.client.extra.visualRangeAlert) {
             boolean notFriend = CONFIG.client.extra.friendsList.stream()
@@ -408,7 +550,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleNonWhitelistedPlayerConnectedEvent(NonWhitelistedPlayerConnectedEvent event) {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                 .title("Non-Whitelisted Player Connected")
@@ -464,7 +605,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleProxySpectatorDisconnectedEvent(ProxySpectatorDisconnectedEvent event) {
         if (CONFIG.client.extra.clientConnectionMessages) {
             EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
@@ -478,7 +618,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleActiveHoursConnectEvent(ActiveHoursConnectEvent event) {
         int queueLength;
         if (Proxy.getInstance().getIsPrio().orElse(false)) {
@@ -493,7 +632,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -526,7 +664,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -552,7 +689,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -578,7 +714,6 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (CONFIG.discord.chatRelay.enable) {
             if (Proxy.getInstance().isConnected() && !event.message.isEmpty()) {
@@ -588,12 +723,10 @@ public class DiscordBot {
         }
     }
 
-    @Subscribe
     public void handleUpdateStartEvent(UpdateStartEvent event) {
         sendEmbedMessage(getUpdateMessage());
     }
 
-    @Subscribe
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Server Restarting")
@@ -602,7 +735,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handleProxyLoginFailedEvent(ProxyLoginFailedEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Login Failed")
@@ -611,7 +743,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handleStartConnectEvent(StartConnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Connecting...")
@@ -619,7 +750,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
         if (!CONFIG.client.extra.prioStatusChangeMention) return;
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
@@ -636,7 +766,6 @@ public class DiscordBot {
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
     }
 
-    @Subscribe
     public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
         if (event.prioBanned) {
@@ -652,7 +781,6 @@ public class DiscordBot {
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
     }
 
-    @Subscribe
     public void handleAntiAfkStuckEvent(final AntiAfkStuckEvent event) {
         sendEmbedMessage((CONFIG.client.extra.antiafk.actions.stuckWarningMention ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("AntiAFK Warning")
@@ -663,7 +791,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handleAutoReconnectEvent(final AutoReconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("AutoReconnecting in " + event.delaySeconds + "s")
@@ -671,7 +798,6 @@ public class DiscordBot {
                 .build());
     }
 
-    @Subscribe
     public void handleMsaDeviceCodeLoginEvent(final MsaDeviceCodeLoginEvent event) {
         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
             .title("Microsoft Device Code Login")
@@ -682,7 +808,6 @@ public class DiscordBot {
             .build());
     }
 
-    @Subscribe
     public void handleDeathMessageEvent(final DeathMessageEvent event) {
         if (!CONFIG.client.extra.killMessage) return;
         event.deathMessageParseResult.getKiller().ifPresent(killer -> {
@@ -696,120 +821,19 @@ public class DiscordBot {
         });
     }
 
-    private EmbedCreateSpec getUpdateMessage() {
-        return EmbedCreateSpec.builder()
-                .title("Updating and restarting...")
-                .color(Color.CYAN)
-                .build();
-    }
-
-    public static boolean isAllowedChatCharacter(char c0) {
-        return c0 != 167 && c0 >= 32 && c0 != 127;
-    }
-
-    public static String sanitizeRelayInputMessage(final String input) {
-        StringBuilder stringbuilder = new StringBuilder();
-        for (char c0 : input.toCharArray()) {
-            if (isAllowedChatCharacter(c0)) {
-                stringbuilder.append(c0);
-            }
-        }
-        return stringbuilder.toString();
-    }
-
-    public void updateProfileImage(final BufferedImage bufferedImage) {
-        try {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", os);
-            this.restClient.edit(ImmutableUserModifyRequest.builder()
-                            .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(os.toByteArray()))
-                            .build())
-                    .block();
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed updating discord profile image", e);
-        }
-    }
-
-    public void sendEmbedMessage(EmbedCreateSpec embedCreateSpec) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                    .addEmbed(embedCreateSpec)
-                    .build().asRequest());
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord embed message", e);
-        }
-    }
-
-    private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                    .content(message)
-                    .addEmbed(embedCreateSpec)
-                    .build().asRequest());
-            TERMINAL_LOG.info(message);
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord embed message", e);
-        }
-    }
-
-    public void sendMessage(final String message) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                    .content(message)
-                    .build().asRequest());
-            TERMINAL_LOG.info(message);
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
-    }
-
-    private void sendEmbedMessageWithButtons(String message, EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                    .content(message)
-                    .addEmbed(embedCreateSpec)
-                    .components(ActionRow.of(buttons))
-                    .build().asRequest());
-            TERMINAL_LOG.info(message);
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
-            client.getEventDispatcher()
-                    .on(ButtonInteractionEvent.class, mapper)
-                    .timeout(timeout)
-                    .onErrorResume(TimeoutException.class, e -> Mono.empty())
-                    .subscribe();
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
-    }
-
-    private void sendEmbedMessageWithButtons(EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                    .addEmbed(embedCreateSpec)
-                    .components(ActionRow.of(buttons))
-                    .build().asRequest());
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
-            client.getEventDispatcher()
-                    .on(ButtonInteractionEvent.class, mapper)
-                    .timeout(timeout)
-                    .onErrorResume(TimeoutException.class, e -> Mono.empty())
-                    .subscribe();
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
-    }
-
-    private ClientPresence getQueuePresence() {
-        return ClientPresence.of(Status.IDLE, ClientActivity.watching(queuePositionStr()));
-    }
-
-    public static String escape(String message) {
-        return message.replaceAll("_", "\\\\_");
-    }
-
-    public boolean isMessageQueueEmpty() {
-        return mainChannelMessageQueue.isEmpty();
+    public void handleUpdateAvailableEvent(final UpdateAvailableEvent event) {
+        EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
+            .title("Update Available!")
+            .color(Color.CYAN);
+        event.getVersion().ifPresent(v -> {
+            embedBuilder
+                .addField("Current", LAUNCH_CONFIG.version, false)
+                .addField("New", v, false);
+        });
+        embedBuilder.addField(
+            "Info",
+            "Update will be applied at next opportunity.\nOr apply the update now: `.update`",
+            false);
+        sendEmbedMessage(embedBuilder.build());
     }
 }

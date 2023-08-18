@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
@@ -10,6 +9,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterators;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
@@ -64,14 +66,25 @@ public class AntiAFK extends Module {
                 .build();
     }
 
-    @Subscribe
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            pair(ClientTickEvent.class, this::handleClientTickEvent),
+            pair(DeathEvent.class, this::handleDeathEvent)
+        );
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.antiafk.enabled;
+    }
+
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (CONFIG.client.extra.antiafk.enabled
-                && Proxy.getInstance().isConnected()
+        if (Proxy.getInstance().isConnected()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
                 && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
-                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.active()).orElse(true)) {
+                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
@@ -90,7 +103,6 @@ public class AntiAFK extends Module {
                 gravityTick();
             }
             if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
-                // sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
                 walkTick();
                 // check distance delta every 9 mins. Stuck kick should happen at 20 mins
                 if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
@@ -100,7 +112,7 @@ public class AntiAFK extends Module {
                         stuck = true;
                         if (Instant.now().minus(Duration.ofMinutes(20)).isAfter(lastDistanceDeltaWarningTime)) {
                             // only send discord warning once every 20 mins so we don't spam too hard
-                            EVENT_BUS.dispatch(new AntiAfkStuckEvent(distanceMovedDelta));
+                            EVENT_BUS.postAsync(new AntiAfkStuckEvent(distanceMovedDelta));
                             lastDistanceDeltaWarningTime = Instant.now();
                         }
                     } else {
@@ -114,7 +126,6 @@ public class AntiAFK extends Module {
         }
     }
 
-    @Subscribe
     public void handleDeathEvent(final DeathEvent event) {
         synchronized (this) {
             reset();
@@ -124,6 +135,7 @@ public class AntiAFK extends Module {
     @Override
     public void clientTickStarting() {
         reset();
+        sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
     }
 
     @Override
@@ -203,7 +215,7 @@ public class AntiAFK extends Module {
                 if (nextMovePos.equals(PATHING.getCurrentPlayerPos())) {
                     shouldWalk = false;
                 }
-                // sendClientPacketAsync(nextMovePos.toPlayerPositionPacket());
+                sendClientPacketAsync(nextMovePos.toPlayerPositionPacket());
                 this.positionCache.put(nextMovePos, nextMovePos);
             }
         }
@@ -237,7 +249,8 @@ public class AntiAFK extends Module {
                 }
                 antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
                 // increases hunger loss by 4x if we're sprinting
-                // sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
+                // todo: track this state so we don't flag grim
+//                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
             }
             final Position nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
             antiStuckT++;

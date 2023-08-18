@@ -35,7 +35,7 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
         } else {
             if (!session.isOnline()) {
                 session.setOnline(true);
-                EVENT_BUS.dispatch(new PlayerOnlineEvent());
+                EVENT_BUS.post(new PlayerOnlineEvent());
             }
         }
         return true;
@@ -54,17 +54,17 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
                 .findAny();
         if (queueHeader.isPresent()) {
             if (!session.isInQueue()) {
-                EVENT_BUS.dispatch(new StartQueueEvent());
+                EVENT_BUS.postAsync(new StartQueueEvent());
             }
             session.setInQueue(true);
             session.setOnline(false);
         } else if (session.isInQueue()) {
             session.setInQueue(false);
             session.setLastQueuePosition(Integer.MAX_VALUE);
-            EVENT_BUS.dispatch(new QueueCompleteEvent());
+            EVENT_BUS.postAsync(new QueueCompleteEvent());
         } else if (!session.isOnline()) {
             session.setOnline(true);
-            EVENT_BUS.dispatch(new PlayerOnlineEvent());
+            EVENT_BUS.postAsync(new PlayerOnlineEvent());
         }
     }
 
@@ -81,7 +81,7 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
                      * prio:
                      * "This account has priority status and will be placed in a shorter queue."
                      */
-                    EVENT_BUS.dispatch(new PrioStatusEvent(!messageString.contains("shop.2b2t.org")));
+                    EVENT_BUS.postAsync(new PrioStatusEvent(!messageString.contains("shop.2b2t.org")));
                 });
     }
 

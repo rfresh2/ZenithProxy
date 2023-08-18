@@ -5,11 +5,14 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.Spook;
 import com.zenith.util.Config;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class SpookCommand extends Command {
@@ -27,6 +30,7 @@ public class SpookCommand extends Command {
         return command("spook")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.spook.enabled = true;
+                    MODULE_MANAGER.getModule(Spook.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("Spook On!")
                             .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
@@ -36,6 +40,7 @@ public class SpookCommand extends Command {
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.spook.enabled = false;
+                    MODULE_MANAGER.getModule(Spook.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("Spook Off!")
                             .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)

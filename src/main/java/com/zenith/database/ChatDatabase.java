@@ -1,9 +1,9 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.Proxy;
 import com.zenith.database.dto.tables.Chats;
 import com.zenith.database.dto.tables.records.ChatsRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
@@ -16,8 +16,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.*;
 
 public class ChatDatabase extends LockingDatabase {
     public ChatDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
@@ -44,7 +43,14 @@ public class ChatDatabase extends LockingDatabase {
         return chatsRecord.get(c.TIME).toInstant();
     }
 
-    @Subscribe
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent
+        );
+    }
+
+
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org") // only write on 2b2t
                 || Proxy.getInstance().isInQueue()  // ignore queue

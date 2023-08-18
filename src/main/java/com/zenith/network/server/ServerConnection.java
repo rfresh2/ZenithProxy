@@ -157,17 +157,17 @@ public class ServerConnection implements Session, SessionListener {
                         reason,
                         event.getCause());
                 try {
-                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
+                    EVENT_BUS.post(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
                 } catch (final Throwable e) {
                     SERVER_LOG.info("Could not get game profile of disconnecting player");
-                    EVENT_BUS.dispatch(new ProxyClientDisconnectedEvent(reason));
+                    EVENT_BUS.post(new ProxyClientDisconnectedEvent(reason));
                 }
             } else {
                 proxy.getActiveConnections().forEach(connection -> {
                     connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
                     connection.send(new ServerChatPacket("§9" + profileCache.getProfile().getName() + " disconnected§r", true));
                 });
-                EVENT_BUS.dispatch(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
+                EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
         }
     }

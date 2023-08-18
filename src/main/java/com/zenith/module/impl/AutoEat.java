@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
@@ -11,6 +10,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.feature.food.FoodManager;
@@ -19,6 +19,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -32,10 +33,24 @@ public class AutoEat extends Module {
     @Getter
     private boolean isEating = false;
 
-    @Subscribe
+    public AutoEat() {
+        super();
+    }
+
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            ClientTickEvent.class, this::handleClientTick
+        );
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.autoEat.enabled;
+    }
+
     public void handleClientTick(final ClientTickEvent e) {
-        if (CONFIG.client.extra.autoEat.enabled
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && playerHealthBelowThreshold()
                 && !Proxy.getInstance().isInQueue()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())
@@ -98,7 +113,7 @@ public class AutoEat extends Module {
         }
 
         if (CONFIG.client.extra.autoEat.warning && Instant.now().minus(Duration.ofHours(7)).isAfter(lastAutoEatOutOfFoodWarning)) {
-            EVENT_BUS.dispatch(new AutoEatOutOfFoodEvent());
+            EVENT_BUS.postAsync(new AutoEatOutOfFoodEvent());
             lastAutoEatOutOfFoodWarning = Instant.now();
         }
 

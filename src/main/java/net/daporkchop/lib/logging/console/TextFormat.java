@@ -20,10 +20,9 @@
 
 package net.daporkchop.lib.logging.console;
 
+import com.zenith.util.Color;
 import lombok.*;
 import lombok.experimental.Accessors;
-
-import java.awt.*;
 
 /**
  * @author DaPorkchop_

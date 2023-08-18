@@ -39,7 +39,8 @@ public class RestAutoUpdater extends AutoUpdater {
     }
 
     public boolean validReleaseChannel(final String in) {
-        return List.of("git", "java", "linux", "linux.pre").contains(in);
+        return List.of("git", "java", "linux", "linux.pre").stream()
+            .anyMatch(in::startsWith);
     }
 
     @Override

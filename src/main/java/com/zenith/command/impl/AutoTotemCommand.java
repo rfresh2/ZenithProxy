@@ -4,10 +4,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.AutoTotem;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class AutoTotemCommand extends Command {
@@ -24,6 +27,7 @@ public class AutoTotemCommand extends Command {
         return command("autototem")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.autoTotem.enabled = true;
+                    MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("Auto Totem On!")
                             .color(Color.CYAN)
@@ -31,6 +35,7 @@ public class AutoTotemCommand extends Command {
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.autoTotem.enabled = false;
+                    MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .title("Auto Totem Off!")
                             .color(Color.CYAN)

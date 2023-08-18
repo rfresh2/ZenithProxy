@@ -6,6 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.module.Module;
+import com.zenith.module.impl.Spammer;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
@@ -15,20 +17,23 @@ import java.util.List;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Arrays.asList;
 
 public class SpammerCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("spammer", "Spams messages", asList(
+        return CommandUsage.full("spammer", "Spams messages", asList(
                 "on/off",
                 "delayTicks <int>",
                 "randomOrder on/off",
+                "appendRandom on/off",
                 "list",
                 "clear",
                 "add <message>",
                 "addAt <index> <message>",
-                "del <index>"));
+                "del <index>"),
+                aliases());
     }
 
     @Override
@@ -36,12 +41,14 @@ public class SpammerCommand extends Command {
         return command("spammer")
                 .then(literal("on").executes(c -> {
                     CONFIG.client.extra.spammer.enabled = true;
+                    MODULE_MANAGER.getModule(Spammer.class).ifPresent(Module::syncEnabledFromConfig);
                     addListDescription(c.getSource().getEmbedBuilder()
                             .color(Color.CYAN)
                             .title("Spammer On!"));
                 }))
                 .then(literal("off").executes(c -> {
                     CONFIG.client.extra.spammer.enabled = false;
+                    MODULE_MANAGER.getModule(Spammer.class).ifPresent(Module::syncEnabledFromConfig);
                     c.getSource().getEmbedBuilder()
                             .color(Color.CYAN)
                             .title("Spammer Off!");
@@ -69,6 +76,21 @@ public class SpammerCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                     .color(Color.CYAN)
                                     .title("Spammer Random Order Off!");
+                            return 1;
+                        })))
+                .then(literal("appendrandom")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.spammer.appendRandom = true;
+                            c.getSource().getEmbedBuilder()
+                                    .color(Color.CYAN)
+                                    .title("Spammer Append Random On!");
+                            return 1;
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.spammer.appendRandom = false;
+                            c.getSource().getEmbedBuilder()
+                                    .color(Color.CYAN)
+                                    .title("Spammer Append Random Off!");
                             return 1;
                         })))
                 .then(literal("list").executes(c -> {
@@ -115,6 +137,10 @@ public class SpammerCommand extends Command {
                         })));
     }
 
+    @Override
+    public List<String> aliases() {
+        return asList("spam");
+    }
     private void addListDescription(final EmbedCreateSpec.Builder embedBuilder) {
         final List<String> messages = new ArrayList<>();
         for (int index = 0; index < CONFIG.client.extra.spammer.messages.size(); index++) {

@@ -1,16 +1,17 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.module.Module;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -28,6 +29,16 @@ public class AutoReply extends Module {
         this.lastReply = Instant.now();
     }
 
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent);
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.autoReply.enabled;
+    }
+
     public void updateCooldown(final int newCooldown) {
         CONFIG.client.extra.autoReply.cooldownSeconds = newCooldown;
         Cache<String, String> newCache = CacheBuilder.newBuilder()
@@ -37,9 +48,9 @@ public class AutoReply extends Module {
         this.repliedPlayersCache = newCache;
     }
 
-    @Subscribe
+
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
-        if (CONFIG.client.extra.autoReply.enabled && isNull(Proxy.getInstance().getCurrentPlayer().get())) {
+        if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
             try {
                 if (event.isWhisper && event.sender.isPresent()) {
                     if (!event.sender.get().getName().equalsIgnoreCase(CONFIG.authentication.username)

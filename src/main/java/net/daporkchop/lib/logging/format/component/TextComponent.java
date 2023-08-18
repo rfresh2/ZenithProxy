@@ -20,10 +20,10 @@
 
 package net.daporkchop.lib.logging.format.component;
 
+import com.zenith.util.Color;
 import lombok.NonNull;
 import net.daporkchop.lib.logging.format.TextStyle;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

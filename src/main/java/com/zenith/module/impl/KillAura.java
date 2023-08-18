@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
@@ -19,12 +18,14 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityMob;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import net.daporkchop.lib.math.vector.Vec3d;
 
 import javax.annotation.Nullable;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -44,14 +45,22 @@ public class KillAura extends Module {
     private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
     private boolean swapping = false;
 
-    public boolean active() {
+    public boolean isActive() {
         return CONFIG.client.extra.killAura.enabled && isAttacking;
     }
 
-    @Subscribe
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.killAura.enabled;
+    }
+
     public void handleClientTick(final ClientTickEvent event) {
-        if (CONFIG.client.extra.killAura.enabled
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
                 && !Proxy.getInstance().isInQueue()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)

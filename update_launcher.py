@@ -7,23 +7,24 @@ from urllib.parse import urlparse
 with open("launch_config.json", "r") as f:
     launch_config = json.load(f)
 
-auto_update = launch_config["auto_update"]
+release_channel = launch_config["release_channel"]
+auto_update_launcher = launch_config["auto_update_launcher"]
 repo_owner = launch_config["repo_owner"]
 repo_name = launch_config["repo_name"]
-repo_branch = launch_config["repo_branch"]
-launcher_tag = "launch"
+launcher_tag = "launcher"
 
-if not auto_update:
+if not auto_update_launcher or release_channel == "git":
     exit(0)
 
 github_headers = {
     "User-Agent": "ZenithProxy/1.0",
     "Accept": "application/vnd.github+json",
-    "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
     "X-GitHub-Api-Version": "2022-11-28",
     "Connection": "close"
 }
-payload = {}
+
+if os.getenv('GITHUB_TOKEN') is not None:
+    github_headers["Authorization"] = f"Bearer {os.getenv('GITHUB_TOKEN')}"
 
 
 def get_release_asset_id(tag, asset_name):
@@ -83,21 +84,28 @@ def download_release_asset(asset_id):
         connection.close()
 
 
-startAssetId = get_release_asset_id(launcher_tag, "launcher.py")
-startAsset = download_release_asset(startAssetId)
-contents = startAsset.decode()
+launcherAssetID = get_release_asset_id(launcher_tag, "launcher.py")
+if launcherAssetID is None:
+    exit(1)
+launcherAssetBytes = download_release_asset(launcherAssetID)
+if launcherAssetBytes is None:
+    exit(1)
+contents = launcherAssetBytes.decode()
 if len(contents) < 100:
     print("Failed to download launcher.py")
     exit(1)
 
-with open("launcher.py", "r", newline='') as f:
-    current = f.read()
-    currentHash = hashlib.sha1(current.encode()).hexdigest()
-    newHash = hashlib.sha1(contents.encode()).hexdigest()
-    if currentHash != newHash:
-        print("Updating launcher.py to " + newHash)
-    else:
-        exit(0)
+if os.path.exists("launcher.py"):
+    with open("launcher.py", "r", newline='') as f:
+        current = f.read()
+        currentHash = hashlib.sha1(current.encode()).hexdigest()
+        newHash = hashlib.sha1(contents.encode()).hexdigest()
+        if currentHash != newHash:
+            print("Updating launcher.py to " + newHash)
+        else:
+            exit(0)
+else:
+    print("No launcher.py found. Downloading from GitHub.")
 
 with open("launcher.py", "w", newline='') as f:
     f.write(contents)

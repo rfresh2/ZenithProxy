@@ -33,6 +33,8 @@ public class CommandManager {
            new ActiveHoursCommand(),
            new AntiAFKCommand(),
            new AutoDisconnectCommand(),
+           new AutoEatCommand(),
+           new AutoReconnectCommand(),
            new AutoReplyCommand(),
            new AutoRespawnCommand(),
            new AutoTotemCommand(),

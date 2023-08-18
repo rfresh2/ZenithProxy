@@ -9,11 +9,11 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.DeathMessagesParser;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.util.Color;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 
-import java.awt.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
@@ -46,9 +46,9 @@ public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, Clien
                 if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)))) {
                     final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(messageString);
                     if (deathMessageParseResult.isPresent()) {
-                        EVENT_BUS.dispatch(new DeathMessageEvent(deathMessageParseResult.get(), messageString));
+                        EVENT_BUS.postAsync(new DeathMessageEvent(deathMessageParseResult.get(), messageString));
                         if (deathMessageParseResult.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {
-                            EVENT_BUS.dispatch(new SelfDeathMessageEvent(messageString));
+                            EVENT_BUS.postAsync(new SelfDeathMessageEvent(messageString));
                         }
                     } else {
                         CLIENT_LOG.warn("Failed to parse death message: {}", messageString);
@@ -56,7 +56,7 @@ public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, Clien
                 } else if (messageString.startsWith(("[SERVER]"))) { // server message
                     if (messageString.startsWith("[SERVER] Server restarting in") && lastRestartEvent.isBefore(Instant.now().minus(Duration.ofMinutes(1)))) { // todo: include time till restart in event
                         lastRestartEvent = Instant.now();
-                        EVENT_BUS.dispatch(new ServerRestartingEvent(messageString));
+                        EVENT_BUS.postAsync(new ServerRestartingEvent(messageString));
                     }
                 }
             }
@@ -73,9 +73,9 @@ public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, Clien
                 }
             }
             if (playerName == null) {
-                EVENT_BUS.dispatch(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper));
+                EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper));
             } else {
-                EVENT_BUS.dispatch(new ServerChatReceivedEvent(CACHE.getTabListCache().getTabList().getFromName(playerName), messageString, isWhisper));
+                EVENT_BUS.postAsync(new ServerChatReceivedEvent(CACHE.getTabListCache().getTabList().getFromName(playerName), messageString, isWhisper));
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);

@@ -1,8 +1,8 @@
 package com.zenith.database;
 
-import com.collarmc.pounce.Subscribe;
 import com.zenith.database.dto.tables.Queuewait;
 import com.zenith.database.dto.tables.records.QueuewaitRecord;
+import com.zenith.event.Subscription;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
@@ -18,6 +18,8 @@ import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {
@@ -33,19 +35,26 @@ public class QueueWaitDatabase extends Database {
         super(queryExecutor);
     }
 
-    @Subscribe
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            pair(ServerRestartingEvent.class, this::handleServerRestart),
+            pair(StartQueueEvent.class, this::handleStartQueue),
+            pair(QueuePositionUpdateEvent.class, this::handleQueuePosition),
+            pair(QueueCompleteEvent.class, this::handleQueueComplete)
+        );
+    }
+
     public void handleServerRestart(final ServerRestartingEvent event) {
         lastServerRestart = Instant.now();
     }
 
-    @Subscribe
     public void handleStartQueue(final StartQueueEvent event) {
         shouldUpdateQueueLen.set(true);
         initialQueueLen = null;
         initialQueueTime = null;
     }
 
-    @Subscribe
     public void handleQueuePosition(final QueuePositionUpdateEvent event) {
         // record only first position update
         if (shouldUpdateQueueLen.compareAndSet(true, false)) {
@@ -54,7 +63,6 @@ public class QueueWaitDatabase extends Database {
         }
     }
 
-    @Subscribe
     public void handleQueueComplete(final QueueCompleteEvent event) {
         final Instant queueCompleteTime = Instant.now();
 

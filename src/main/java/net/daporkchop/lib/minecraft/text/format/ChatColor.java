@@ -20,10 +20,10 @@
 
 package net.daporkchop.lib.minecraft.text.format;
 
+import com.zenith.util.Color;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import java.awt.*;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 @Getter
 @Accessors(fluent = true)
 public enum ChatColor implements FormattingCode {
-    BLACK('0', Color.BLACK, Color.BLACK),
+    BLACK('0', new Color(0, 0, 0), new Color(0, 0, 0)),
     DARK_BLUE('1', 0x0000AA, 0x00002A),
     DARK_GREEN('2', 0x00AA00, 0x002A00),
     DARK_AQUA('3', 0x00AAAA, 0x002A2A),
@@ -56,7 +56,7 @@ public enum ChatColor implements FormattingCode {
     RED('c', 0xFF5555, 0x3F1515),
     LIGHT_PURPLE('d', 0xFF55FF, 0x3F153F),
     YELLOW('e', 0xFFFF55, 0x3F3F15),
-    WHITE('f', Color.WHITE, new Color(0x3F3F3F));
+    WHITE('f', new Color(255, 255, 255), new Color(63, 63, 63));
 
     static final Pattern PATTERN = Pattern.compile("§[0-9a-fk-or]", Pattern.CASE_INSENSITIVE);
 
@@ -86,7 +86,7 @@ public enum ChatColor implements FormattingCode {
         int closestDist = 1 << 30;
 
         for (ChatColor format : VALUES) {
-            if (color == format.awtColor) {
+            if (color == format.colorInstance) {
                 //if the colors match at an identity level, blindly accept it
                 return format;
             }
@@ -116,7 +116,7 @@ public enum ChatColor implements FormattingCode {
      *
      * @see #color
      */
-    protected final Color awtColor;
+    protected final Color colorInstance;
 
     /**
      * The in-game background color of this formatting code, as an AWT {@link Color}.
@@ -127,7 +127,7 @@ public enum ChatColor implements FormattingCode {
      *
      * @see #bgColor
      */
-    protected final Color awtBgColor;
+    protected final Color bgColorInstance;
 
     /**
      * The in-game ARGB color of this formatting code.
@@ -151,13 +151,13 @@ public enum ChatColor implements FormattingCode {
     protected final char code;
 
     ChatColor(char code, Color color, Color bgColor) {
-        this.color = (this.awtColor = color) != null ? (color.getRGB() | 0xFF000000) : 0;
-        this.bgColor = (this.awtBgColor = bgColor) != null ? (color.getRGB() | 0xFF000000) : 0;
+        this.color = (this.colorInstance = color) != null ? (color.getRGB() | 0xFF000000) : 0;
+        this.bgColor = (this.bgColorInstance = bgColor) != null ? (color.getRGB() | 0xFF000000) : 0;
         this.code = code;
     }
 
     ChatColor(char code, int color, int bgColor) {
-        this(code, new Color(color), new Color(bgColor));
+        this(code, Color.fromInt(color), Color.fromInt(bgColor));
     }
 
     @Override

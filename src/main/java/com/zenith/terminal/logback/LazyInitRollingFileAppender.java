@@ -27,13 +27,13 @@ public class LazyInitRollingFileAppender<T> extends RollingFileAppender<T> {
     }
 
     private void maybeStart() {
-        lock.lock();
+        streamWriteLock.lock();
         try {
             if (!this.started.get()) {
                 this.start();
             }
         } finally {
-            lock.unlock();
+            streamWriteLock.unlock();
         }
     }
 }

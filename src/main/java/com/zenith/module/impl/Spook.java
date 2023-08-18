@@ -1,11 +1,11 @@
 package com.zenith.module.impl;
 
-import com.collarmc.pounce.Subscribe;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.module.Module;
@@ -15,8 +15,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
+import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
@@ -31,7 +33,26 @@ public class Spook extends Module {
         this.focusStack = new Stack<>();
     }
 
-    @Subscribe
+    @Override
+    public Subscription subscribeEvents() {
+        return EVENT_BUS.subscribe(
+            pair(ClientTickEvent.class, this::handleClientTickEvent),
+            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
+    }
+
+    @Override
+    public Supplier<Boolean> shouldBeEnabled() {
+        return () -> CONFIG.client.extra.spook.enabled;
+    }
+
+    @Override
+    public void onEnable() {
+        CACHE.getEntityCache().getEntities().values().stream()
+                .filter(entity -> entity instanceof EntityPlayer && !entity.equals(CACHE.getPlayerCache().getThePlayer()))
+                .map(entity -> (EntityPlayer) entity)
+                .forEach(this.focusStack::push);
+    }
+
     public void handleClientTickEvent(final ClientTickEvent event) {
         synchronized (focusStack) { // handling this regardless of mode so we don't fill stack indefinitely
             if (!this.focusStack.isEmpty()) {
@@ -39,17 +60,16 @@ public class Spook extends Module {
                         .noneMatch(entity -> Objects.equals(e, entity)));
             }
         }
-        if (CONFIG.client.extra.spook.enabled
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
+        if (isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
-                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.active()).orElse(true)) {
+                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
             stareTick();
         } else {
             hasTarget.lazySet(false);
         }
     }
 
-    @Subscribe
+
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         synchronized (this.focusStack) {
             this.focusStack.push(event.playerEntity);
