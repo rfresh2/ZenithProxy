@@ -36,21 +36,6 @@
   "name":"[Lcom.microsoft.aad.msal4j.InstanceDiscoveryMetadataEntry;"
 },
 {
-  "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
-},
-{
-  "name":"[Lcom.viaversion.viaversion.api.minecraft.PlayerMessageSignature;"
-},
-{
-  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.DataItem;"
-},
-{
-  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.Item;"
-},
-{
-  "name":"[Lcom.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;"
-},
-{
   "name":"[Lcom.zaxxer.hikari.util.ConcurrentBag$IConcurrentBagEntry;"
 },
 {
@@ -66,40 +51,13 @@
   "name":"[Lfr.litarvan.openauth.microsoft.model.response.XboxLoginResponse$XboxLiveUserInfo;"
 },
 {
-  "name":"[Ljava.lang.Boolean;"
-},
-{
-  "name":"[Ljava.lang.Byte;"
-},
-{
-  "name":"[Ljava.lang.Double;"
-},
-{
-  "name":"[Ljava.lang.Float;"
-},
-{
-  "name":"[Ljava.lang.Integer;"
-},
-{
-  "name":"[Ljava.lang.Long;"
-},
-{
-  "name":"[Ljava.lang.Short;"
-},
-{
   "name":"[Ljava.lang.String;"
 },
 {
   "name":"[Ljava.sql.Statement;"
 },
 {
-  "name":"[Ljava.util.UUID;"
-},
-{
   "name":"[Lsun.security.pkcs.SignerInfo;"
-},
-{
-  "name":"[[Lcom.viaversion.viaversion.api.minecraft.item.DataItem;"
 },
 {
   "name":"ch.qos.logback.classic.Logger",
@@ -688,36 +646,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.viaversion.viaversion.api.minecraft.item.DataItem",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.viaversion.viaversion.libs.fastutil.longs.Long2ObjectOpenHashMap"
-},
-{
-  "name":"com.viaversion.viaversion.libs.flare.fastutil.Int2ObjectSyncMapImpl$ExpungingEntryImpl",
-  "fields":[{"name":"value"}]
-},
-{
-  "name":"com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.viaversion.viaversion.libs.opennbt.tag.builtin.Tag",
-  "allDeclaredFields":true
-},
-{
-  "name":"com.viaversion.viaversion.protocols.protocol1_13to1_12_2.data.EntityTypeRewriter",
-  "fields":[{"name":"ENTITY_TYPES"}]
-},
-{
-  "name":"com.viaversion.viaversion.protocols.protocol1_13to1_12_2.data.RecipeData$Recipe",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.zaxxer.hikari.HikariConfig",
   "allDeclaredFields":true
 },
@@ -1055,11 +983,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.util.Config$Client$ViaVersion",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.zenith.util.Config$Database",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -1183,17 +1106,6 @@
   "name":"com.zenith.util.LaunchConfig",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.via.handler.MCProxyViaChannelInitializer"
-},
-{
-  "name":"com.zenith.via.handler.MCProxyViaDecodeHandler",
-  "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
-},
-{
-  "name":"com.zenith.via.handler.MCProxyViaEncodeHandler",
-  "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
   "name":"discord4j.discordjson.Id",
@@ -1559,7 +1471,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAuthor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setColor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFields","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFooter","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setImage","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setProvider","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setThumbnail","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTimestamp","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTitle","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUrl","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setVideo","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAuthor","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setProvider","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setVideo","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setImage","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setFooter","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setTimestamp","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setUrl","parameterTypes":["discord4j.discordjson.possible.Possible"] },{"name":"setColor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFields","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setThumbnail","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTitle","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableEmbedFieldData",
@@ -2606,7 +2518,7 @@
 },
 {
   "name":"io.netty.channel.ChannelInitializer",
-  "methods":[{"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, {"name":"initChannel","parameterTypes":["io.netty.channel.Channel"] }]
+  "methods":[{"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
   "name":"io.netty.channel.ChannelOutboundBuffer",
@@ -2694,15 +2606,11 @@
 },
 {
   "name":"io.netty.handler.codec.ByteToMessageDecoder",
-  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"decode","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.buffer.ByteBuf","java.util.List"] }, {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
+  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageAggregator",
   "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
-},
-{
-  "name":"io.netty.handler.codec.MessageToByteEncoder",
-  "methods":[{"name":"encode","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.buffer.ByteBuf"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageCodec",
@@ -2710,7 +2618,7 @@
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageDecoder",
-  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"decode","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","java.util.List"] }]
+  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageEncoder",
@@ -2854,10 +2762,6 @@
   "fields":[{"name":"producerLimit"}]
 },
 {
-  "name":"it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"java.io.FileDescriptor"
 },
 {
@@ -2910,10 +2814,6 @@
 {
   "name":"java.lang.Thread",
   "fields":[{"name":"threadLocalRandomProbe"}]
-},
-{
-  "name":"java.lang.Throwable",
-  "methods":[{"name":"addSuppressed","parameterTypes":["java.lang.Throwable"] }]
 },
 {
   "name":"java.lang.management.ManagementFactory",
@@ -3017,9 +2917,6 @@
 },
 {
   "name":"java.sql.Date"
-},
-{
-  "name":"java.sql.Timestamp"
 },
 {
   "name":"java.util.Date"
@@ -3915,10 +3812,6 @@
 },
 {
   "name":"org.redisson.client.handler.RedisPubSubConnectionHandler"
-},
-{
-  "name":"org.yaml.snakeyaml.constructor.SafeConstructor",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"reactor.core.Disposables$SwapDisposable",

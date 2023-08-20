@@ -22,10 +22,6 @@ import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
-import com.zenith.via.MCProxyViaServerProxy;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
@@ -298,16 +294,7 @@ public class Proxy {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
-        if (CONFIG.client.viaversion.enabled) {
-            ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
-            final MCProxyViaServerProxy viaProxy = new MCProxyViaServerProxy();
-            viaProxy.init();
-            ChannelInitializer<Channel> viaChannelInitializer = viaProxy.inject(originalChannelInitializer);
-            Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);
-            this.client.connect(true, bootstrap);
-        } else {
-            this.client.connect(true);
-        }
+        this.client.connect(true);
     }
 
     public boolean isConnected() {
