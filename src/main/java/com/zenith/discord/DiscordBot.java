@@ -55,8 +55,8 @@ import static java.util.Objects.nonNull;
 public class DiscordBot {
 
     private RestClient restClient;
-    private final Supplier<RestChannel> mainRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId)));
-    private final Supplier<RestChannel> relayRestChannel = Suppliers.memoize(() -> restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId)));
+    private RestChannel mainRestChannel;
+    private RestChannel relayRestChannel;
     private GatewayDiscordClient client;
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
@@ -113,7 +113,7 @@ public class DiscordBot {
         );
     }
 
-    public void start() {
+    public void createClient() {
         this.client = DiscordClientBuilder.create(CONFIG.discord.token)
             .build()
             .gateway()
@@ -121,10 +121,9 @@ public class DiscordBot {
             .setInitialPresence(shardInfo -> disconnectedPresence.get())
             .login()
             .block();
-        initEventHandlers();
-
         restClient = client.getRestClient();
-
+        mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
+        relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
@@ -142,7 +141,7 @@ public class DiscordBot {
             try {
                 final String inputMessage = message.substring(1);
                 DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
-                final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel.get());
+                final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
                 COMMAND_MANAGER.execute(context);
                 final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
                 if (request != null) {
@@ -160,6 +159,11 @@ public class DiscordBot {
                 DISCORD_LOG.error("Failed processing discord command: {}", message, e);
             }
         });
+    }
+
+    public void start() {
+        createClient();
+        initEventHandlers();
 
         if (CONFIG.discord.isUpdating) {
             handleProxyUpdateComplete();
@@ -186,7 +190,7 @@ public class DiscordBot {
         try {
             MultipartRequest<MessageCreateRequest> message = mainChannelMessageQueue.poll();
             if (nonNull(message)) {
-                this.mainRestChannel.get().createMessage(message).block();
+                this.mainRestChannel.createMessage(message).block();
             }
         } catch (final Throwable e) {
             DISCORD_LOG.error("Message processor error", e);
@@ -197,7 +201,7 @@ public class DiscordBot {
         try {
             MessageCreateRequest message = relayChannelMessageQueue.poll();
             if (nonNull(message) && !message.content().isAbsent() && !message.content().get().isBlank()) {
-                this.relayRestChannel.get().createMessage(message).block();
+                this.relayRestChannel.createMessage(message).block();
             }
         } catch (final Throwable e) {
             DISCORD_LOG.error("Message processor error", e);
@@ -205,12 +209,20 @@ public class DiscordBot {
     }
 
     private void updatePresence() {
-        if (Proxy.getInstance().isInQueue()) {
-            this.client.updatePresence(getQueuePresence()).block();
-        } else if (Proxy.getInstance().isConnected()) {
-            this.client.updatePresence(getOnlinePresence()).block();
-        } else {
-            this.client.updatePresence(disconnectedPresence.get()).block();
+        try {
+            if (Proxy.getInstance().isInQueue()) {
+                this.client.updatePresence(getQueuePresence()).block();
+            } else if (Proxy.getInstance().isConnected()) {
+                this.client.updatePresence(getOnlinePresence()).block();
+            } else {
+                this.client.updatePresence(disconnectedPresence.get()).block();
+            }
+        } catch (final IllegalStateException e) {
+            if (e.getMessage().contains("Backpressure overflow")) {
+                DISCORD_LOG.error("Caught backpressure overflow, restarting discord session", e);
+                this.client.logout().block();
+                createClient();
+            }
         }
     }
 
