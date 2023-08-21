@@ -20,12 +20,13 @@ public class RestAutoUpdater extends AutoUpdater {
     public RestAutoUpdater() {
         this.httpClient = HttpClient.create()
             .secure()
-            // todo: move repo and user to config
-            .baseUrl("https://api.github.com/repos/rfresh2/ZenithProxy")
-            // todo: remove auth token
-            .headers(h -> h.add(HttpHeaderNames.AUTHORIZATION, "Bearer " + System.getenv("GITHUB_TOKEN")))
+            .baseUrl("https://api.github.com/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name)
             .headers(h -> h.add(HttpHeaderNames.ACCEPT, "application/vnd.github+json"))
             .headers(h -> h.add("X-GitHub-Api-Version", "2022-11-28"));
+        String githubToken = System.getenv("GITHUB_TOKEN");
+        if (githubToken != null) {
+            httpClient.headers(h -> h.add(HttpHeaderNames.AUTHORIZATION, "Bearer " + githubToken));
+        }
         this.objectMapper = new ObjectMapper();
     }
 
