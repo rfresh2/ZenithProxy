@@ -40,7 +40,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -113,16 +112,16 @@ public class Proxy {
                 TERMINAL_MANAGER.start();
             }
             if (CONFIG.database.enabled) {
-                DEFAULT_LOG.info("Starting Databases...");
                 DATABASE_MANAGER.start();
+                DEFAULT_LOG.info("Started Databases");
             }
             if (CONFIG.discord.enable) {
-                DISCORD_LOG.info("Starting discord bot...");
                 try {
                     DISCORD_BOT.start();
                 } catch (final Throwable e) {
                     DISCORD_LOG.error("Failed starting discord bot", e);
                 }
+                DISCORD_LOG.info("Started Discord Bot");
             }
             if (CONFIG.server.extra.whitelist.whitelistRefresh) {
                 WHITELIST_MANAGER.startRefreshTask();
@@ -195,11 +194,12 @@ public class Proxy {
                 }
             }
             if (CONFIG.autoUpdater.autoUpdate) {
-                DEFAULT_LOG.info("Starting {} AutoUpdater...", LAUNCH_CONFIG.release_channel);
                 if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
                 else autoUpdater = new RestAutoUpdater();
                 autoUpdater.start();
+                DEFAULT_LOG.info("Started {} AutoUpdater...", LAUNCH_CONFIG.release_channel);
             }
+            DEFAULT_LOG.info("ZenithProxy started!");
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.error("", e);
