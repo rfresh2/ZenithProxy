@@ -222,6 +222,8 @@ public class DiscordBot {
                 DISCORD_LOG.error("Caught backpressure overflow, restarting discord session", e);
                 this.client.logout().block();
                 createClient();
+            } else {
+                throw e;
             }
         }
     }
