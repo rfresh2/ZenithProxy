@@ -108,7 +108,7 @@ ext {
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
     nettyVersion = '4.1.96.Final'
-    jooqVersion = "3.18.5"
+    jooqVersion = "3.18.6"
 }
 
 jooq {
@@ -189,7 +189,7 @@ dependencies {
         exclude group: 'net.daporkchop.lib', module: 'common'
         exclude group: 'net.daporkchop.lib', module: 'unsafe'
     }
-    shade "ch.qos.logback:logback-classic:1.4.9"
+    shade "ch.qos.logback:logback-classic:1.4.11"
     shade 'org.slf4j:slf4j-api:2.0.7'
     shade 'org.slf4j:jul-to-slf4j:2.0.7'
     shade 'org.fusesource.jansi:jansi:2.4.0'
@@ -218,7 +218,7 @@ dependencies {
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade('org.redisson:redisson:3.23.2') {
+    shade('org.redisson:redisson:3.23.3') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
