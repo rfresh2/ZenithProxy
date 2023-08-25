@@ -4,7 +4,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.event.proxy.SelfDeathMessageEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
-import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.DeathMessagesParser;
 import com.zenith.network.client.ClientSession;
@@ -13,8 +12,6 @@ import com.zenith.util.Color;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Optional;
 
 import static com.zenith.Shared.*;
@@ -22,7 +19,6 @@ import static java.util.Objects.nonNull;
 
 public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, ClientSession> {
     private final DeathMessagesParser deathMessagesHelper = new DeathMessagesParser();
-    private Instant lastRestartEvent = Instant.EPOCH;
 
     @Override
     public boolean applyAsync(@NonNull ServerChatPacket packet, @NonNull ClientSession session) {
@@ -51,11 +47,6 @@ public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, Clien
                         }
                     } else {
                         CLIENT_LOG.warn("Failed to parse death message: {}", messageString);
-                    }
-                } else if (messageString.startsWith(("[SERVER]"))) { // server message
-                    if (messageString.startsWith("[SERVER] Server restarting in") && lastRestartEvent.isBefore(Instant.now().minus(Duration.ofMinutes(1)))) { // todo: include time till restart in event
-                        lastRestartEvent = Instant.now();
-                        EVENT_BUS.postAsync(new ServerRestartingEvent(messageString));
                     }
                 }
             }
