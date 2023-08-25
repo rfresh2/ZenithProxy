@@ -121,7 +121,8 @@ public class JsonTextParser implements MCFormatParser {
                 text = textElement.getAsString();
             } else if ((textElement = object.get("translate")) != null && textElement.isJsonPrimitive()) {
                 JsonElement with = object.get("with");
-                text = this.appendTranslation(root, this.translationSource.translate(textElement.getAsString()), format, with.isJsonArray() ? with.getAsJsonArray() : new JsonArray());
+                JsonArray withArray = with != null && with.isJsonArray() ? with.getAsJsonArray() : new JsonArray();
+                text = this.appendTranslation(root, this.translationSource.translate(textElement.getAsString()), format, withArray);
             }
         }
         if (text != null && !text.isEmpty()) {
