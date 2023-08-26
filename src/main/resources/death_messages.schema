@@ -94,6 +94,7 @@ $v drowned whilst fighting $k
 $v smashed themselves against a cactus and died trying to escape $k
 $v was pushed off a ladder by $k
 $v couldn't swim up quick enough whilst fighting $k
+$v was thrown off a cliff by $k
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -199,6 +200,9 @@ $v was mauled to death by $m.
 $v was melted apart by $m wielding $w
 $v was melted apart by $m.
 $v tamed $m to kill themselves.
+$v was thrown off a cliff by $m
+$v burned apart whilst fighting $m
+$v fell to death after being pushed by $m
 
 # suicides
 $v died stuck on a cactus.
