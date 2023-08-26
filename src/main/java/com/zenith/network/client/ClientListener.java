@@ -63,7 +63,7 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void packetError(PacketErrorEvent event) {
-        CLIENT_LOG.error("", event.getCause());
+        CLIENT_LOG.debug("", event.getCause());
         event.setSuppress(true);
     }
 
