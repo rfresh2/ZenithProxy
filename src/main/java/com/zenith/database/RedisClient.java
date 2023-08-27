@@ -14,13 +14,13 @@ public class RedisClient {
     private RedissonClient redissonClient;
 
     public RedisClient() {
-        redissonClient = getRedissonClient();
+        redissonClient = buildRedisClient();
     }
 
     public RLock getLock(final String lockKey) {
         synchronized (this) {
             if (isShutDown()) {
-                redissonClient = getRedissonClient();
+                redissonClient = buildRedisClient();
             }
             return redissonClient.getLock(lockKey);
         }
@@ -41,7 +41,11 @@ public class RedisClient {
         return isNull(redissonClient) || redissonClient.isShuttingDown() || redissonClient.isShutdown();
     }
 
-    public static RedissonClient getRedissonClient() {
+    public RedissonClient getRedissonClient() {
+        return redissonClient;
+    }
+
+    public static RedissonClient buildRedisClient() {
         Config config = new Config();
         config.setNettyThreads(1)
                 .setThreads(1)
