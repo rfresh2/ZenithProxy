@@ -129,6 +129,7 @@ $v was shot by $m and died instantly.
 $v was ripped apart by $m wielding $w and instantly died.
 $v was ripped apart by $m and instantly died.
 $v was ripped apart by $m.
+$v was ripped apart by $m wielding $w
 $v was beaten to death by $m wielding $w
 $v was beaten to death by $m.
 $v was ripped and smashed apart by $m wielding $w
@@ -207,6 +208,8 @@ $v burned apart whilst fighting $m
 $v fell to death after being pushed by $m
 $v became lava whilst fighting $m
 $v tripped, broke a bone or died somehow inside lava whilst fighting $m
+$v melted in lava whilst fighting $m
+$v was impaled by $m.
 
 # suicides
 $v died stuck on a cactus.

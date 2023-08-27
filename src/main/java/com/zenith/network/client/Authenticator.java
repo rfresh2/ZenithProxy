@@ -30,15 +30,7 @@ public class Authenticator {
         this.auth = this.getAuth();
         try {
             this.auth.login();
-            if (CONFIG.authentication.accountType == AccountType.MSA) {
-                if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
-                    CONFIG.authentication.username = auth.getSelectedProfile().getName();
-                    saveConfig();
-                }
-                return new MinecraftProtocol(
-                    auth.getSelectedProfile(), "", auth.getAccessToken()
-                );
-            } else if (CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
+            if (CONFIG.authentication.accountType == AccountType.MSA || CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
                 if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
                     CONFIG.authentication.username = auth.getSelectedProfile().getName();
                     saveConfig();

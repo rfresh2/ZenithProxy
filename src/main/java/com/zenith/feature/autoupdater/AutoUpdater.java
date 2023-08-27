@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
@@ -25,7 +26,10 @@ public abstract class AutoUpdater {
         if (eventSubscription == null) eventSubscription = EVENT_BUS.subscribe(
             DisconnectEvent.class, this::handleDisconnectEvent
         );
-        scheduleUpdateCheck(this::updateCheck, 3, CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, TimeUnit.SECONDS);
+        scheduleUpdateCheck(this::updateCheck,
+                            ThreadLocalRandom.current().nextInt(300),
+                            Math.max(CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, 300),
+                            TimeUnit.SECONDS);
     }
 
     public void scheduleUpdateCheck(Runnable runnable, long initialDelay, long interval, TimeUnit timeUnit) {

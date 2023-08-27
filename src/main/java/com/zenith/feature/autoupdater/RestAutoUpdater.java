@@ -46,6 +46,9 @@ public class RestAutoUpdater extends AutoUpdater {
 
     @Override
     public void updateCheck() {
+        // skip if we already found an update
+        // there are rate limits on the github api so its best to avoid calls where not needed
+        if (getUpdateAvailable()) return;
         httpClient
             .get()
             .uri("/releases?per_page=100")

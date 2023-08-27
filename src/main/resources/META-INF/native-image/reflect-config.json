@@ -2951,6 +2951,10 @@
   "fields":[{"name":"base"}, {"name":"cellsBusy"}]
 },
 {
+  "name":"java.util.concurrent.atomic.Striped64$Cell",
+  "fields":[{"name":"value"}]
+},
+{
   "name":"java.util.zip.Adler32",
   "methods":[{"name":"update","parameterTypes":["java.nio.ByteBuffer"] }]
 },
