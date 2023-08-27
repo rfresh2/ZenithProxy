@@ -120,6 +120,9 @@ $v was stung to death by $m.
 $v was deconstructed by $m wielding $w
 $v was deconstructed by $m.
 $v was pummeled into multiple parts by $m and died slowly.
+$v was pummeled into multiple parts by $m.
+$v was pummeled into multiple parts by $m wielding $w and died slowly.
+$v was pummeled into multiple parts by $m wielding $w
 $v couldn't outrun $m.
 $v was shot by $m wielding $w and died instantly.
 $v was shot by $m and died instantly.
@@ -151,8 +154,6 @@ $v was raided to death by $m.
 $v was violently severed into pieces by $m wielding $w
 $v was violently severed into pieces by $m.
 $v was gibbed apart by $m punches.
-$v was pummeled into multiple parts by $m wielding $w and died slowly.
-$v was pummeled into multiple parts by $m and died slowly.
 $v went inside $m and died.
 $v was mauled to pieces by $m wielding $w
 $v was mauled to pieces by $m.
@@ -204,6 +205,8 @@ $v tamed $m to kill themselves.
 $v was thrown off a cliff by $m
 $v burned apart whilst fighting $m
 $v fell to death after being pushed by $m
+$v became lava whilst fighting $m
+$v tripped, broke a bone or died somehow inside lava whilst fighting $m
 
 # suicides
 $v died stuck on a cactus.

@@ -2437,7 +2437,9 @@
 },
 {
   "name":"fr.litarvan.openauth.microsoft.model.response.MicrosoftRefreshResponse",
-  "unsafeAllocated":true
+  "allDeclaredFields":true,
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftLoginResponse",
