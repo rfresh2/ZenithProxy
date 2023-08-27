@@ -41,7 +41,7 @@ public class RedisClient {
         return isNull(redissonClient) || redissonClient.isShuttingDown() || redissonClient.isShutdown();
     }
 
-    public RedissonClient getRedissonClient() {
+    public static RedissonClient getRedissonClient() {
         Config config = new Config();
         config.setNettyThreads(1)
                 .setThreads(1)

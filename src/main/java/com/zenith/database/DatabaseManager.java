@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DATABASE_LOG;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Getter
@@ -17,6 +18,7 @@ public class DatabaseManager {
     private RestartsDatabase restartsDatabase;
     private PlayerCountDatabase playerCountDatabase;
     private QueryExecutor queryExecutor;
+    private RedisClient redisClient;
 
     public DatabaseManager() {
 
@@ -70,7 +72,7 @@ public class DatabaseManager {
         if (nonNull(this.connectionsDatabase)) {
             this.connectionsDatabase.start();
         } else {
-            this.connectionsDatabase = new ConnectionsDatabase(queryExecutor, new RedisClient());
+            this.connectionsDatabase = new ConnectionsDatabase(queryExecutor, getRedisClient());
             this.connectionsDatabase.start();
         }
     }
@@ -85,7 +87,7 @@ public class DatabaseManager {
         if (nonNull(this.chatDatabase)) {
             this.chatDatabase.start();
         } else {
-            this.chatDatabase = new ChatDatabase(queryExecutor, new RedisClient());
+            this.chatDatabase = new ChatDatabase(queryExecutor, getRedisClient());
             this.chatDatabase.start();
         }
     }
@@ -100,7 +102,7 @@ public class DatabaseManager {
         if (nonNull(this.deathsDatabase)) {
             this.deathsDatabase.start();
         } else {
-            this.deathsDatabase = new DeathsDatabase(queryExecutor, new RedisClient());
+            this.deathsDatabase = new DeathsDatabase(queryExecutor, getRedisClient());
             this.deathsDatabase.start();
         }
     }
@@ -115,7 +117,7 @@ public class DatabaseManager {
         if (nonNull(this.queueLengthDatabase)) {
             this.queueLengthDatabase.start();
         } else {
-            this.queueLengthDatabase = new QueueLengthDatabase(queryExecutor, new RedisClient());
+            this.queueLengthDatabase = new QueueLengthDatabase(queryExecutor, getRedisClient());
             this.queueLengthDatabase.start();
         }
     }
@@ -130,7 +132,7 @@ public class DatabaseManager {
         if (nonNull(this.restartsDatabase)) {
             this.restartsDatabase.start();
         } else {
-            this.restartsDatabase = new RestartsDatabase(queryExecutor, new RedisClient());
+            this.restartsDatabase = new RestartsDatabase(queryExecutor, getRedisClient());
             this.restartsDatabase.start();
         }
     }
@@ -145,7 +147,7 @@ public class DatabaseManager {
         if (nonNull(this.playerCountDatabase)) {
             this.playerCountDatabase.start();
         } else {
-            this.playerCountDatabase = new PlayerCountDatabase(queryExecutor, new RedisClient());
+            this.playerCountDatabase = new PlayerCountDatabase(queryExecutor, getRedisClient());
             this.playerCountDatabase.start();
         }
     }
@@ -157,11 +159,12 @@ public class DatabaseManager {
     }
 
     private synchronized ConnectionPool getConnectionPool() {
-        if (nonNull(this.connectionPool)) {
-            return connectionPool;
-        } else {
-            this.connectionPool = new ConnectionPool();
-            return this.connectionPool;
-        }
+        if (isNull(this.connectionPool)) this.connectionPool = new ConnectionPool();
+        return connectionPool;
+    }
+
+    private synchronized RedisClient getRedisClient() {
+        if (isNull(this.redisClient)) this.redisClient = new RedisClient();
+        return redisClient;
     }
 }
