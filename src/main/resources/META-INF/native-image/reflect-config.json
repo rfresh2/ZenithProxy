@@ -1523,7 +1523,8 @@
   "name":"discord4j.discordjson.json.ImmutableEmbedProviderData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"name","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"url","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableEmbedThumbnailData",
@@ -2254,6 +2255,12 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setInteraction","parameterTypes":["discord4j.discordjson.json.InteractionData"] }]
+},
+{
+  "name":"discord4j.discordjson.json.gateway.ImmutableInvalidSession",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"discord4j.discordjson.json.gateway.ImmutableMessageCreate",
@@ -3962,6 +3969,10 @@
   "fields":[{"name":"state"}]
 },
 {
+  "name":"reactor.core.publisher.MonoCacheTime$CoordinatorSubscriber",
+  "fields":[{"name":"subscribers"}, {"name":"subscription"}]
+},
+{
   "name":"reactor.core.publisher.MonoCallable$MonoCallableSubscription",
   "fields":[{"name":"requestedOnce"}]
 },
@@ -4002,6 +4013,14 @@
   "fields":[{"name":"future"}, {"name":"value"}]
 },
 {
+  "name":"reactor.core.publisher.MonoWhen$WhenCoordinator",
+  "fields":[{"name":"state"}]
+},
+{
+  "name":"reactor.core.publisher.MonoWhen$WhenInner",
+  "fields":[{"name":"s"}]
+},
+{
   "name":"reactor.core.publisher.MonoZip$ZipCoordinator",
   "fields":[{"name":"state"}]
 },
@@ -4019,6 +4038,10 @@
 },
 {
   "name":"reactor.core.publisher.Operators$MonoInnerProducerBase",
+  "fields":[{"name":"state"}]
+},
+{
+  "name":"reactor.core.publisher.Operators$MonoSubscriber",
   "fields":[{"name":"state"}]
 },
 {
