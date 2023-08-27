@@ -95,6 +95,7 @@ $v smashed themselves against a cactus and died trying to escape $k
 $v was pushed off a ladder by $k
 $v couldn't swim up quick enough whilst fighting $k
 $v was thrown off a cliff by $k
+$v was impaled by $k using $w
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
@@ -220,10 +221,12 @@ $v was raided to death by $m.
 $v combusted whilst fighting $m
 $v melted by fire whilst fighting $m
 $v died inside lava somehow whilst fighting $m
+$v drowned whilst fighting $m
 
 # suicides
 $v died stuck on a cactus.
 $v got stuck on a cactus.
+$v was stung to death by a cactus.
 $v burned up in lava.
 $v forgot to eat.
 $v exhausted and died.
