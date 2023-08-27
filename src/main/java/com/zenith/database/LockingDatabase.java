@@ -125,8 +125,8 @@ public abstract class LockingDatabase extends Database {
             this.redisClient.getRedissonClient()
                 .getBucket(getLockKey() + "_lock_info")
                 .set(
-                    "Player=" + CONFIG.authentication.username + "\n" +
-                    "IP=" + CONFIG.server.proxyIP + "\n" +
+                    "Player=" + CONFIG.authentication.username + ", " +
+                    "IP=" + CONFIG.server.proxyIP + ", " +
                     "Time=" + Instant.now().toString()
                 );
         } catch (final Exception e) {
