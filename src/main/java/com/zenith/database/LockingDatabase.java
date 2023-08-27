@@ -13,8 +13,7 @@ import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.Shared.DATABASE_LOG;
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -103,6 +102,7 @@ public abstract class LockingDatabase extends Database {
 
     public void onLockAcquired() {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
+        writeLockInfo();
         Wait.waitALittleMs(20000); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
@@ -117,6 +117,20 @@ public abstract class LockingDatabase extends Database {
             while (!queryExecutorFuture.isDone()) {
                 Wait.waitALittleMs(50);
             }
+        }
+    }
+
+    public void writeLockInfo() {
+        try {
+            this.redisClient.getRedissonClient()
+                .getBucket(getLockKey() + "_lock_info")
+                .set(
+                    "Player=" + CONFIG.authentication.username + "\n" +
+                    "IP=" + CONFIG.server.proxyIP + "\n" +
+                    "Time=" + Instant.now().toString()
+                );
+        } catch (final Exception e) {
+            DATABASE_LOG.warn("Error writing lock info for database: {}", getLockKey(), e);
         }
     }
 
