@@ -136,6 +136,12 @@ public class DeathMessageParserTest {
                   "yakyyakyyou", "pillagers", KillerType.MOB, null);
     }
 
+    @Test
+    public void pushedByMobTest() {
+        parseTest("LavamanHero fell to death after being pushed by Discount code Egg @ Rusherhack.org",
+                  "LavamanHero", null, null, "Discount code Egg @ Rusherhack.org");
+    }
+
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         Shared.loadConfig();
         Shared.loadLaunchConfig();
