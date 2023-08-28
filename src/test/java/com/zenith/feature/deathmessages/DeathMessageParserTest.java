@@ -130,6 +130,12 @@ public class DeathMessageParserTest {
                 "00nether", "zombie", KillerType.MOB, null);
     }
 
+    @Test
+    public void assassinatedByPillagersTest() {
+        parseTest("yakyyakyyou was assassinated by pillagers.",
+                  "yakyyakyyou", "pillagers", KillerType.MOB, null);
+    }
+
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         Shared.loadConfig();
         Shared.loadLaunchConfig();
