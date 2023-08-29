@@ -72,11 +72,11 @@
         <appender-ref ref="TERMINAL"/>
     </logger>
     <logger name="org.jline" level="WARN">
-        <appender-ref ref="TERMINAL"/>
+        <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
-    <logger name="discord4j" level="WARN">
-        <appender-ref ref="TERMINAL"/>
+    <logger name="discord4j" level="INFO">
+        <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
     <logger name="Proxy" level="TRACE">
