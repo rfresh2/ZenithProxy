@@ -3,7 +3,6 @@ package com.zenith;
 import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
@@ -319,12 +318,11 @@ public class Proxy {
 
                 SERVER_LOG.info("Starting server on {}:{}...", address, port);
                 this.server = new TcpServer(address, port, MinecraftProtocol::new);
-                this.server.setGlobalFlag(MinecraftConstants.AUTH_PROXY_KEY, java.net.Proxy.NO_PROXY);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
-                this.server.setGlobalFlag(MinecraftConstants.SERVER_KEEPALIVE_INTERVAL_MS, 10000);
+                this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
                 this.server.addListener(new ProxyServerListener(this));
                 this.server.bind(false);
             }
@@ -595,7 +593,8 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ServerChatPacket("§b" + event.playerEntry.getName() + "§r§e connected", true));
+                // todo: implement
+//                serverConnection.sendDirect(new ClientboundSystemChatPacket("§b" + event.playerEntry.getName() + "§r§e connected", true));
             }
         }
     }
@@ -604,7 +603,8 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ServerChatPacket("§b" + event.playerEntry.getName() + "§r§e disconnected", true));
+                // todo: implement
+//                serverConnection.sendDirect(new ClientboundSystemChatPacket("§b" + event.playerEntry.getName() + "§r§e disconnected", true));
             }
         }
     }

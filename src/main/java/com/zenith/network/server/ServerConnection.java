@@ -2,11 +2,11 @@ package com.zenith.network.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.SubProtocol;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityDestroyPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
+import com.github.steveice10.mc.protocol.data.ProtocolState;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.packetlib.Session;
+import com.github.steveice10.packetlib.codec.PacketCodecHelper;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.packet.PacketProtocol;
@@ -21,6 +21,9 @@ import com.zenith.feature.spectator.entity.SpectatorEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
@@ -68,15 +71,15 @@ public class ServerConnection implements Session, SessionListener {
         try {
             if (!isSpectator()) {
                 this.lastPacket = System.currentTimeMillis();
-                if (((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                        && ((MinecraftProtocol) this.proxy.getClient().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                if (((MinecraftProtocol) this.session.getPacketProtocol()).getState() == ProtocolState.GAME
+                        && ((MinecraftProtocol) this.proxy.getClient().getPacketProtocol()).getState() == ProtocolState.GAME
                         && this.isLoggedIn
                         && SERVER_PLAYER_HANDLERS.handleInbound(packet, this)) {
                     this.proxy.getClient().send(packet);
                 }
             } else {
-                if (((MinecraftProtocol) this.session.getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
-                        && ((MinecraftProtocol) this.proxy.getClient().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME
+                if (((MinecraftProtocol) this.session.getPacketProtocol()).getState() == ProtocolState.GAME
+                        && ((MinecraftProtocol) this.proxy.getClient().getPacketProtocol()).getState() == ProtocolState.GAME
                         && this.isLoggedIn
                         && SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)) {
                     this.proxy.getClient().send(packet);
@@ -147,7 +150,10 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
-            final String reason = FORMAT_PARSER.parse(event.getReason()).toRawString();
+            String reason = "";
+            if (event.getReason() instanceof TextComponent textComponent) {
+                reason = textComponent.content();
+            }
             if (!isSpectator()) {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
                         Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getId).orElse(null),
@@ -156,15 +162,16 @@ public class ServerConnection implements Session, SessionListener {
                         reason,
                         event.getCause());
                 try {
-                    EVENT_BUS.post(new ProxyClientDisconnectedEvent(event.getReason(), profileCache.getProfile()));
+                    EVENT_BUS.post(new ProxyClientDisconnectedEvent(reason, profileCache.getProfile()));
                 } catch (final Throwable e) {
                     SERVER_LOG.info("Could not get game profile of disconnecting player");
                     EVENT_BUS.post(new ProxyClientDisconnectedEvent(reason));
                 }
             } else {
                 proxy.getActiveConnections().forEach(connection -> {
-                    connection.send(new ServerEntityDestroyPacket(this.spectatorEntityId));
-                    connection.send(new ServerChatPacket("§9" + profileCache.getProfile().getName() + " disconnected§r", true));
+                    connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
+                    // todo: fix chat
+//                    connection.send(new ClientboundSystemChatPacket("§9" + profileCache.getProfile().getName() + " disconnected§r", true));
                 });
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
@@ -190,12 +197,12 @@ public class ServerConnection implements Session, SessionListener {
         return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
     }
 
-    public ServerEntityMetadataPacket getSelfEntityMetadataPacket() {
-        return new ServerEntityMetadataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorEntityId));
+    public ClientboundSetEntityDataPacket getSelfEntityMetadataPacket() {
+        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorEntityId));
     }
 
-    public ServerEntityMetadataPacket getEntityMetadataPacket() {
-        return new ServerEntityMetadataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(profileCache.getProfile(), spectatorEntityId));
+    public ClientboundSetEntityDataPacket getEntityMetadataPacket() {
+        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(profileCache.getProfile(), spectatorEntityId));
     }
 
     public Optional<Packet> getSoundPacket() {
@@ -258,6 +265,11 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public PacketProtocol getPacketProtocol() {
         return this.session.getPacketProtocol();
+    }
+
+    @Override
+    public PacketCodecHelper getCodecHelper() {
+        return session.getCodecHelper();
     }
 
     @Override
@@ -373,5 +385,15 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void disconnect(String reason, Throwable cause) {
         this.session.disconnect(reason, cause);
+    }
+
+    @Override
+    public void disconnect(@Nullable final Component reason) {
+
+    }
+
+    @Override
+    public void disconnect(@Nullable final Component reason, final Throwable cause) {
+
     }
 }

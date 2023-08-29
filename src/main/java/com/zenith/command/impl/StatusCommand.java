@@ -81,18 +81,6 @@ public class StatusCommand extends Command {
                 + "\nRegular: " + Queue.getQueueStatus().regular + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular) + "]";
     }
 
-    private String dimensionIdToString(final int dimension) {
-        if (dimension == 0) {
-            return "Overworld";
-        } else if (dimension == -1) {
-            return "Nether";
-        } else if (dimension == 1) {
-            return "The End";
-        } else {
-            return "N/A";
-        }
-    }
-
     public String getOnlineTime() {
         if (Proxy.getInstance().isConnected()) {
             long secondsOnline = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
@@ -124,12 +112,12 @@ public class StatusCommand extends Command {
             }
             builder.addField("2b2t Queue", getQueueStatus(), true)
                     .addField("Dimension",
-                            dimensionIdToString(CACHE.getPlayerCache().getDimension()),
+                            CACHE.getPlayerCache().getDimension(),
                             true);
             if (CONFIG.discord.reportCoords) {
                 builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
             }
-            builder.addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+            builder.addField("Health", "" + (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("AutoDisconnect",
                             "[Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
                                     + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"

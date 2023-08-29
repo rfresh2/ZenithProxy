@@ -4,7 +4,7 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
@@ -42,8 +42,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())
-                        && nonNull(CACHE.getPlayerCache().getDifficulty())
-                        && nonNull(CACHE.getPlayerCache().getWorldType())
+                        && nonNull(CACHE.getPlayerCache().getDimension())
+                        && nonNull(CACHE.getPlayerCache().getWorldName())
                         && nonNull(CACHE.getTabListCache().getTabList().get(CACHE.getProfileCache().getProfile().getId()))
                         && connection.isWhitelistChecked(),
                 20)) {
@@ -55,15 +55,25 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             // if we don't have a current player, set player
             connection.setSpectator(false);
             EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
-            session.send(new ServerJoinGamePacket(
+            session.send(new ClientboundLoginPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().isHardcore(),
                     CACHE.getPlayerCache().getGameMode(),
+                    CACHE.getPlayerCache().getGameMode(),
+                    CACHE.getPlayerCache().getWorldNames(),
+                    CACHE.getPlayerCache().getRegistryCodec(),
                     CACHE.getPlayerCache().getDimension(),
-                    CACHE.getPlayerCache().getDifficulty(),
+                    CACHE.getPlayerCache().getWorldName(),
+                    CACHE.getPlayerCache().getHashedSeed(),
                     CACHE.getPlayerCache().getMaxPlayers(),
-                    CACHE.getPlayerCache().getWorldType(),
-                    CACHE.getPlayerCache().isReducedDebugInfo()
+                    CACHE.getPlayerCache().getViewDistance(),
+                    CACHE.getPlayerCache().getSimulationDistance(),
+                    false,
+                    CACHE.getPlayerCache().isEnableRespawnScreen(),
+                    CACHE.getPlayerCache().isDebug(),
+                    CACHE.getPlayerCache().isFlat(),
+                    CACHE.getPlayerCache().getLastDeathPos(),
+                    CACHE.getPlayerCache().getPortalCooldown()
             ));
             if (!proxy.isInQueue()) { PlayerCache.sync(); }
         } else {
@@ -71,15 +81,25 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 // if we have a current player, allow login but put in spectator
                 connection.setSpectator(true);
                 EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
-                session.send(new ServerJoinGamePacket(
+                session.send(new ClientboundLoginPacket(
                         connection.getSpectatorSelfEntityId(),
                         CACHE.getPlayerCache().isHardcore(),
                         GameMode.SPECTATOR,
+                        GameMode.SPECTATOR,
+                        CACHE.getPlayerCache().getWorldNames(),
+                        CACHE.getPlayerCache().getRegistryCodec(),
                         CACHE.getPlayerCache().getDimension(),
-                        CACHE.getPlayerCache().getDifficulty(),
+                        CACHE.getPlayerCache().getWorldName(),
+                        CACHE.getPlayerCache().getHashedSeed(),
                         CACHE.getPlayerCache().getMaxPlayers(),
-                        CACHE.getPlayerCache().getWorldType(),
-                        CACHE.getPlayerCache().isReducedDebugInfo()
+                        CACHE.getPlayerCache().getViewDistance(),
+                        CACHE.getPlayerCache().getSimulationDistance(),
+                        false,
+                        CACHE.getPlayerCache().isEnableRespawnScreen(),
+                        CACHE.getPlayerCache().isDebug(),
+                        CACHE.getPlayerCache().isFlat(),
+                        CACHE.getPlayerCache().getLastDeathPos(),
+                        CACHE.getPlayerCache().getPortalCooldown()
                 ));
             } else {
                 // can probably make this state work with some more work but im just gonna block it for now

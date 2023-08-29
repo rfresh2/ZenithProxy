@@ -2,10 +2,12 @@ package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
+import com.github.steveice10.mc.protocol.data.game.entity.object.ObjectData;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetPassengersPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateAttributesPacket;
 import com.github.steveice10.packetlib.packet.Packet;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -36,17 +38,18 @@ public abstract class Entity {
     protected boolean isLeashed;
     protected List<Attribute> properties = new ArrayList<>();
     protected List<EntityMetadata> metadata = new ArrayList<>();
-    protected List<Integer> passengerIds = new ArrayList<>(); //TODO: primitive list
+    protected IntArrayList passengerIds = new IntArrayList();
+    protected ObjectData objectData;
 
     public void addPackets(@NonNull Consumer<Packet> consumer)  {
         if (!this.properties.isEmpty()) {
-            consumer.accept(new ServerEntityPropertiesPacket(this.entityId, this.properties));
+            consumer.accept(new ClientboundUpdateAttributesPacket(this.entityId, this.properties));
         }
         if (!this.passengerIds.isEmpty())   {
-            consumer.accept(new ServerEntitySetPassengersPacket(this.entityId, this.getPassengerIdsAsArray()));
+            consumer.accept(new ClientboundSetPassengersPacket(this.entityId, this.getPassengerIdsAsArray()));
         }
         if (!this.metadata.isEmpty()) {
-            consumer.accept(new ServerEntityMetadataPacket(this.entityId, this.getEntityMetadataAsArray()));
+            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getEntityMetadataAsArray()));
         }
     }
 

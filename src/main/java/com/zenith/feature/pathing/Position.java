@@ -1,6 +1,6 @@
 package com.zenith.feature.pathing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosPacket;
 import lombok.Data;
 import net.daporkchop.lib.math.vector.Vec3i;
 
@@ -15,12 +15,12 @@ public class Position {
         return value < (double) i ? i - 1 : i;
     }
 
-    public ClientPlayerPositionPacket toPlayerPositionPacket() {
+    public ServerboundMovePlayerPosPacket toPlayerPositionPacket() {
         return toPlayerPositionPacket(false);
     }
 
-    public ClientPlayerPositionPacket toPlayerPositionPacket(boolean onGround) {
-        return new ClientPlayerPositionPacket(onGround, x, y, z);
+    public ServerboundMovePlayerPosPacket toPlayerPositionPacket(boolean onGround) {
+        return new ServerboundMovePlayerPosPacket(onGround, x, y, z);
     }
 
     public BlockPos toBlockPos() {

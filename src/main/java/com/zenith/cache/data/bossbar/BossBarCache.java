@@ -1,6 +1,6 @@
 package com.zenith.cache.data.bossbar;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerBossBarPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -29,27 +29,27 @@ public class BossBarCache implements CachedData {
         return String.format("Sending %d boss bars", this.cachedBossBars.size());
     }
 
-    public void add(@NonNull ServerBossBarPacket packet) {
+    public void add(@NonNull ClientboundBossEventPacket packet) {
         this.cachedBossBars.put(
-                packet.getUUID(),
-                new BossBar(packet.getUUID())
+                packet.getUuid(),
+                new BossBar(packet.getUuid())
                         .setTitle(packet.getTitle())
                         .setHealth(packet.getHealth())
                         .setColor(packet.getColor())
                         .setDivision(packet.getDivision())
-                        .setDarkenSky(packet.getDarkenSky())
-                        .setDragonBar(packet.isDragonBar())
+                        .setDarkenSky(packet.isDarkenSky())
+                        .setPlayEndMusic(packet.isPlayEndMusic())
         );
     }
 
-    public void remove(@NonNull ServerBossBarPacket packet) {
-        this.cachedBossBars.remove(packet.getUUID());
+    public void remove(@NonNull ClientboundBossEventPacket packet) {
+        this.cachedBossBars.remove(packet.getUuid());
     }
 
-    public BossBar get(@NonNull ServerBossBarPacket packet) {
-        BossBar bossBar = this.cachedBossBars.get(packet.getUUID());
+    public BossBar get(@NonNull ClientboundBossEventPacket packet) {
+        BossBar bossBar = this.cachedBossBars.get(packet.getUuid());
         if (bossBar == null)    {
-            return new BossBar(packet.getUUID());
+            return new BossBar(packet.getUuid());
         }
         return bossBar;
     }

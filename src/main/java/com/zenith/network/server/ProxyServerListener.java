@@ -1,7 +1,7 @@
 package com.zenith.network.server;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.server.*;
 import com.zenith.Proxy;
@@ -46,7 +46,7 @@ public class ProxyServerListener implements ServerListener {
 
     @Override
     public void sessionAdded(SessionAddedEvent event) {
-        if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getSubProtocol() != SubProtocol.STATUS) {
+        if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getState() != ProtocolState.STATUS) {
             ServerConnection connection = new ServerConnection(this.proxy, event.getSession());
             event.getSession().addListener(connection);
             this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());

@@ -1,6 +1,6 @@
 package com.zenith.network.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
@@ -9,9 +9,9 @@ import lombok.NonNull;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class EntityTeleportHandler implements AsyncIncomingHandler<ServerEntityTeleportPacket, ClientSession> {
+public class EntityTeleportHandler implements AsyncIncomingHandler<ClientboundTeleportEntityPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerEntityTeleportPacket packet, @NonNull ClientSession session) {
+    public boolean applyAsync(@NonNull ClientboundTeleportEntityPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
             entity.setX(packet.getX())
@@ -19,7 +19,7 @@ public class EntityTeleportHandler implements AsyncIncomingHandler<ServerEntityT
                     .setZ(packet.getZ())
                     .setYaw(packet.getYaw())
                     .setPitch(packet.getPitch());
-            EntityPositionRotationHandler.trackPlayerVisualRangePosition(entity);
+            MoveEntityPosRotHandler.trackPlayerVisualRangePosition(entity);
             return true;
         } else {
             CLIENT_LOG.warn("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());
@@ -28,7 +28,7 @@ public class EntityTeleportHandler implements AsyncIncomingHandler<ServerEntityT
     }
 
     @Override
-    public Class<ServerEntityTeleportPacket> getPacketClass() {
-        return ServerEntityTeleportPacket.class;
+    public Class<ClientboundTeleportEntityPacket> getPacketClass() {
+        return ClientboundTeleportEntityPacket.class;
     }
 }

@@ -19,22 +19,26 @@ import com.zenith.module.ModuleManager;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.client.handler.incoming.*;
 import com.zenith.network.client.handler.incoming.entity.*;
-import com.zenith.network.client.handler.incoming.spawn.*;
-import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerChangeHeldItemHandler;
+import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
+import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
+import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
+import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
 import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
 import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
 import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
+import com.zenith.network.client.handler.postoutgoing.PostOutgoingSetCarriedItemHandler;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.player.incoming.ClientSettingsPacketHandler;
-import com.zenith.network.server.handler.player.incoming.ServerChatHandler;
+import com.zenith.network.server.handler.player.incoming.ServerboundChatHandler;
 import com.zenith.network.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
-import com.zenith.network.server.handler.player.outgoing.ServerChatOutgoingHandler;
-import com.zenith.network.server.handler.player.postoutgoing.ClientRequestPacketPostHandler;
-import com.zenith.network.server.handler.player.postoutgoing.JoinGamePostHandler;
-import com.zenith.network.server.handler.shared.incoming.LoginStartHandler;
-import com.zenith.network.server.handler.shared.incoming.ServerKeepaliveHandler;
-import com.zenith.network.server.handler.shared.outgoing.LoginSuccessOutgoingHandler;
+import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
+import com.zenith.network.server.handler.player.postoutgoing.ClientCommandPostHandler;
+import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
+import com.zenith.network.server.handler.shared.incoming.ServerboundHelloHandler;
+import com.zenith.network.server.handler.shared.incoming.ServerboundKeepAliveHandler;
+import com.zenith.network.server.handler.shared.incoming.ServerboundPongHandler;
+import com.zenith.network.server.handler.shared.outgoing.GameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
 import com.zenith.network.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
@@ -102,68 +106,67 @@ public class Shared {
     public static final LanguageManager LANGUAGE_MANAGER;
     public static final AutoMCFormatParser FORMAT_PARSER;
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
-            .setLogger(CLIENT_LOG)
-            .allowUnhandled(true)
-            //
-            // Inbound packets
-            //
-            .registerInbound(new AdvancementsHandler())
-            .registerInbound(new BlockChangeHandler())
-            .registerInbound(new BossBarHandler())
-            .registerInbound(new ChatHandler())
-            .registerInbound(new ChunkDataHandler())
-            .registerInbound(new ClientKeepaliveHandler())
-            .registerInbound(new ConfirmTransactionHandler())
-            .registerInbound(new GameStateHandler())
-            .registerInbound(new JoinGameHandler())
-            .registerInbound(new LoginSuccessHandler())
-            .registerInbound(new MultiBlockChangeHandler())
-            .registerInbound(new PlayerChangeHeldItemHandler())
-            .registerInbound(new PlayerHealthHandler())
-            .registerInbound(new PlayerPosRotHandler())
-            .registerInbound(new PlayerSetExperienceHandler())
-            .registerInbound(new RespawnHandler())
-            .registerInbound(new SetSlotHandler())
-            .registerInbound(new SetWindowItemsHandler())
-            .registerInbound(new StatisticsHandler())
-            .registerInbound(new TabListDataHandler())
-            .registerInbound(new TabListEntryHandler())
-            .registerInbound(new TitlePacketHandler())
-            .registerInbound(new UnloadChunkHandler())
-            .registerInbound(new UnlockRecipesHandler())
-            .registerInbound(new UpdateTileEntityHandler())
-            .registerInbound(new UpdateTimePacketHandler())
-            .registerInbound(new ServerCombatHandler())
-            .registerInbound(new MapDataHandler())
-            .registerInbound(new PluginMessageHandler())
-            //ENTITY
-            .registerInbound(new EntityAttachHandler())
-            .registerInbound(new EntityCollectItemHandler())
-            .registerInbound(new EntityDestroyHandler())
-            .registerInbound(new EntityEffectHandler())
-            .registerInbound(new EntityRemoveEffectHandler())
-            .registerInbound(new EntityEquipmentHandler())
-            .registerInbound(new EntityHeadLookHandler())
-            .registerInbound(new EntityMetadataHandler())
-            .registerInbound(new EntityPositionHandler())
-            .registerInbound(new EntityPositionRotationHandler())
-            .registerInbound(new EntityPropertiesHandler())
-            .registerInbound(new EntityRotationHandler())
-            .registerInbound(new EntitySetPassengersHandler())
-            .registerInbound(new EntityTeleportHandler())
-            //SPAWN
-            .registerInbound(new SpawnExperienceOrbHandler())
-            .registerInbound(new SpawnMobHandler())
-            .registerInbound(new SpawnObjectHandler())
-            .registerInbound(new SpawnPaintingPacket())
-            .registerInbound(new SpawnPlayerHandler())
-            .registerInbound(new SpawnPositionHandler())
-            //Postoutgoing
-            .registerPostOutbound(new PostOutgoingPlayerChangeHeldItemHandler())
-            .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
-            .registerPostOutbound(new PostOutgoingPlayerPositionRotationHandler())
-            .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
-            .build();
+        .setLogger(CLIENT_LOG)
+        .allowUnhandled(true)
+        //
+        // Inbound packets
+        //
+        .registerInbound(new AdvancementsHandler())
+        .registerInbound(new BlockChangeHandler())
+        .registerInbound(new BossBarHandler())
+        .registerInbound(new SystemChatHandler())
+        .registerInbound(new PlayerChatHandler())
+        .registerInbound(new LevelChunkWithLightHandler())
+        .registerInbound(new ClientKeepaliveHandler())
+        .registerInbound(new GameEventHandler())
+        .registerInbound(new LoginHandler())
+        .registerInbound(new GameProfileHandler())
+        .registerInbound(new SectionBlocksUpdateHandler())
+        .registerInbound(new SetCarriedItemHandler())
+        .registerInbound(new SetHealthHandler())
+        .registerInbound(new PlayerPositionHandler())
+        .registerInbound(new SetExperienceHandler())
+        .registerInbound(new RespawnHandler())
+        .registerInbound(new ContainerSetSlotHandler())
+        .registerInbound(new SetWindowItemsHandler())
+        .registerInbound(new StatisticsHandler())
+        .registerInbound(new TabListDataHandler())
+        .registerInbound(new PlayerInfoUpdateHandler())
+        .registerInbound(new PlayerInfoRemoveHandler())
+        .registerInbound(new SetSubtitleTextPacketHandler())
+        .registerInbound(new ForgetLevelChunkHandler())
+        .registerInbound(new UpdateRecipesHandler())
+        .registerInbound(new BlockEntityDataHandler())
+        .registerInbound(new UpdateTimePacketHandler())
+        .registerInbound(new ServerCombatHandler())
+        .registerInbound(new MapDataHandler())
+        .registerInbound(new PluginMessageHandler())
+        //ENTITY
+        .registerInbound(new SetEntityLinkHandler())
+        .registerInbound(new TakeItemEntityHandler())
+        .registerInbound(new RemoveEntitiesHandler())
+        .registerInbound(new UpdateMobEffectHandler())
+        .registerInbound(new RemoveMobEffectHandler())
+        .registerInbound(new SetEquipmentHandler())
+        .registerInbound(new RotateHeadHandler())
+        .registerInbound(new SetEntityDataHandler())
+        .registerInbound(new MoveEntityPosHandler())
+        .registerInbound(new MoveEntityPosRotHandler())
+        .registerInbound(new UpdateAttributesHandler())
+        .registerInbound(new MoveEntityRotHandler())
+        .registerInbound(new EntitySetPassengersHandler())
+        .registerInbound(new EntityTeleportHandler())
+        //SPAWN
+        .registerInbound(new AddExperienceOrbHandler())
+        .registerInbound(new AddEntityHandler())
+        .registerInbound(new AddPlayerHandler())
+        .registerInbound(new SpawnPositionHandler())
+        //Postoutgoing
+        .registerPostOutbound(new PostOutgoingSetCarriedItemHandler())
+        .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
+        .registerPostOutbound(new PostOutgoingPlayerPositionRotationHandler())
+        .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
+        .build();
 
     public static volatile boolean SHOULD_RECONNECT;
 
@@ -265,51 +268,53 @@ public class Shared {
             //
             // Inbound packets
             //
-            .registerInbound(new LoginStartHandler())
-            .registerInbound(new ServerChatHandler())
+            .registerInbound(new ServerboundHelloHandler())
+        .registerInbound(new ServerboundKeepAliveHandler())
+            .registerInbound(new ServerboundChatHandler())
             .registerInbound(new ClientSettingsPacketHandler())
-            .registerInbound(new ServerKeepaliveHandler())
+            .registerInbound(new ServerboundPongHandler())
             //PLAYER MOVEMENT
             .registerInbound(new PlayerSwingArmPacketHandler())
             //
             // Outbound packets
             //
-            .registerOutbound(new LoginSuccessOutgoingHandler())
+            .registerOutbound(new GameProfileOutgoingHandler())
             .registerOutbound(new ServerTablistDataOutgoingHandler())
-            .registerOutbound(new ServerChatOutgoingHandler())
+            .registerOutbound(new SystemChatOutgoingHandler())
             //
             // Post-outbound packets
             //
-            .registerPostOutbound(new JoinGamePostHandler())
-            .registerPostOutbound(new ClientRequestPacketPostHandler())
+            .registerPostOutbound(new LoginPostHandler())
+            .registerPostOutbound(new ClientCommandPostHandler())
             .build();
     public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(SERVER_LOG)
             .allowUnhandled(false)
 
-            .registerInbound(new LoginStartHandler())
-            .registerInbound(new ServerKeepaliveHandler())
+            .registerInbound(new ServerboundHelloHandler())
+        .registerInbound(new ServerboundKeepAliveHandler())
+            .registerInbound(new ServerboundPongHandler())
             .registerInbound(new PlayerPositionRotationSpectatorHandler())
             .registerInbound(new PlayerPositionSpectatorHandler())
             .registerInbound(new PlayerRotationSpectatorHandler())
             .registerInbound(new ServerChatSpectatorHandler())
             .registerInbound(new PlayerStateSpectatorHandler())
 
-            .registerOutbound(new LoginSuccessOutgoingHandler())
+            .registerOutbound(new GameProfileOutgoingHandler())
 
-            .registerOutbound(new ServerCloseWindowSpectatorOutgoingHandler())
-            .registerOutbound(new ServerConfirmTransactionSpectatorOutgoingHandler())
-            .registerOutbound(new ServerOpenTileEntityEditorSpectatorOutgoingHandler())
-            .registerOutbound(new ServerOpenWindowSpectatorOutgoingHandler())
-            .registerOutbound(new ServerPlayerChangeHeldItemSpectatorOutgoingHandler())
-            .registerOutbound(new ServerPlayerHealthSpectatorOutgoingHandler())
-            .registerOutbound(new ServerPlayerPositionRotationSpectatorOutgoingHandler())
-            .registerOutbound(new ServerPlayerSetExperienceSpectatorOutgoingHandler())
-            .registerOutbound(new ServerPreparedCraftingGridSpectatorOutgoingHandler())
-            .registerOutbound(new ServerSetSlotSpectatorOutgoingHandler())
-            .registerOutbound(new ServerVehicleMoveSpectatorOutgoingHandler())
-            .registerOutbound(new ServerWindowItemsSpectatorOutgoingHandler())
-            .registerOutbound(new ServerWindowPropertySpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundContainerCloseSpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundContainerSetContentSpectatorOutgoingHandler())
+            .registerOutbound(new PlaceGhostRecipeSpectatorOutgoingHandler())
+            .registerOutbound(new OpenScreenSpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundSetCarriedItemSpectatorOutgoingHandler())
+            .registerOutbound(new SetHealthSpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundPlayerPositionRotationSpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundSetExperienceSpectatorOutgoingHandler())
+            .registerOutbound(new OpenBookSpectatorOutgoingHandler())
+            .registerOutbound(new ContainerSetSlotSpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundVehicleMoveSpectatorOutgoingHandler())
+            .registerOutbound(new HorseScreenOpenSpectatorOutgoingHandler())
+            .registerOutbound(new ClientboundContainerSetDataSpectatorOutgoingHandler())
             .registerOutbound(new ServerTablistDataOutgoingHandler())
 
             .registerPostOutbound(new JoinGameSpectatorPostHandler())

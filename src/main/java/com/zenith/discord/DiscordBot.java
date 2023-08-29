@@ -1,6 +1,5 @@
 package com.zenith.discord;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
@@ -466,7 +465,7 @@ public class DiscordBot {
     public void handleHealthAutoDisconnectEvent(HealthAutoDisconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Health AutoDisconnect Triggered")
-                .addField("Health", "" + ((int) CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                .addField("Health", "" + (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .color(Color.CYAN)
                 .build());
     }
@@ -731,7 +730,8 @@ public class DiscordBot {
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (CONFIG.discord.chatRelay.enable) {
             if (Proxy.getInstance().isConnected() && !event.message.isEmpty()) {
-                Proxy.getInstance().getClient().send(new ClientChatPacket(event.message));
+                // todo: new chat packet
+//                Proxy.getInstance().getClient().send(new ClientChatPacket(event.message));
                 lastRelaymessage = Optional.of(Instant.now());
             }
         }

@@ -1,5 +1,6 @@
 package com.zenith.network.client;
 
+import com.github.steveice10.mc.protocol.data.DefaultComponentSerializer;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.*;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -92,10 +93,10 @@ public class ClientListener implements SessionListener {
         session.setDisconnected(true);
         String reason;
         try {
-            reason = FORMAT_PARSER.parse(event.getReason()).toRawString();
+            reason = FORMAT_PARSER.parse(DefaultComponentSerializer.get().serialize(event.getReason())).toRawString();
         } catch (final Exception e) {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
-            reason = isNull(event.getReason()) ? "Disconnected" : event.getReason();
+            reason = isNull(event.getReason()) ? "Disconnected" : DefaultComponentSerializer.get().serialize(event.getReason());
         }
         EVENT_BUS.post(new DisconnectEvent(reason));
     }

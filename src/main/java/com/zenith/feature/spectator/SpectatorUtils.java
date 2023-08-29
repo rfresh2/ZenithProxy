@@ -1,15 +1,16 @@
 package com.zenith.feature.spectator;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityEquipmentPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerAbilitiesPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
@@ -37,7 +38,7 @@ public final class SpectatorUtils {
 
     public static void syncPlayerPositionWithSpectators() {
         Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.send(new ServerEntityTeleportPacket(
+            connection.send(new ClientboundTeleportEntityPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getX(),
                     CACHE.getPlayerCache().getY(),
@@ -46,7 +47,7 @@ public final class SpectatorUtils {
                     CACHE.getPlayerCache().getPitch(),
                     false // idk if this will break any rendering or not
             ));
-            connection.send(new ServerEntityHeadLookPacket(
+            connection.send(new ClientboundRotateHeadPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getYaw()
             ));
@@ -55,7 +56,7 @@ public final class SpectatorUtils {
 
     public static void syncSpectatorPositionToPlayer(final ServerConnection spectConnection) {
         spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
-        spectConnection.send(new ServerPlayerPositionRotationPacket(
+        spectConnection.send(new ClientboundPlayerPositionPacket(
                 CACHE.getPlayerCache().getX(),
                 CACHE.getPlayerCache().getY(),
                 CACHE.getPlayerCache().getZ(),
@@ -79,23 +80,25 @@ public final class SpectatorUtils {
     }
 
     private static void sendSpectatorsEquipment(final ServerConnection connection, final EquipmentSlot equipmentSlot) {
-        connection.send(new ServerEntityEquipmentPacket(
+        connection.send(new ClientboundSetEquipmentPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                equipmentSlot,
-                CACHE.getPlayerCache().getThePlayer().getEquipment().get(equipmentSlot)
-        ));
+                CACHE.getPlayerCache().getThePlayer().getEquipment().entrySet().stream()
+                    .map(entry -> new Equipment(entry.getKey(), entry.getValue()))
+                    .toArray(Equipment[]::new)));
     }
 
     private static void spawnSpectatorForOtherSessions(ServerConnection session, ServerConnection connection) {
         if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
-            session.send(new ServerSpawnPlayerPacket(
+            session.send(new ClientboundAddPlayerPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getProfileCache().getProfile().getId(),
                     CACHE.getPlayerCache().getX(),
                     CACHE.getPlayerCache().getY(),
                     CACHE.getPlayerCache().getZ(),
                     CACHE.getPlayerCache().getYaw(),
-                    CACHE.getPlayerCache().getPitch(),
+                    CACHE.getPlayerCache().getPitch()));
+            session.send(new ClientboundSetEntityDataPacket(
+                    CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
         } else {
             session.send(connection.getEntitySpawnPacket());
@@ -119,23 +122,23 @@ public final class SpectatorUtils {
         final CompoundTag emptyNbtTag = new CompoundTag("");
         emptyNbtTag.clear();
         spectatorEntityPlayer.setMetadata(asList(
-                new EntityMetadata(0, MetadataType.BYTE, (byte) (((byte) 0) | 0x20)),
-                new EntityMetadata(1, MetadataType.INT, 0),
-                new EntityMetadata(2, MetadataType.STRING, ""),
-                new EntityMetadata(3, MetadataType.BOOLEAN, false),
-                new EntityMetadata(4, MetadataType.BOOLEAN, false),
-                new EntityMetadata(5, MetadataType.BOOLEAN, false),
-                new EntityMetadata(6, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(7, MetadataType.FLOAT, 20f),
-                new EntityMetadata(8, MetadataType.INT, 0),
-                new EntityMetadata(9, MetadataType.BOOLEAN, false),
-                new EntityMetadata(10, MetadataType.INT, 0),
-                new EntityMetadata(11, MetadataType.FLOAT, 0.0f),
-                new EntityMetadata(12, MetadataType.INT, 202),
-                new EntityMetadata(13, MetadataType.BYTE, (byte) 0),
-                new EntityMetadata(14, MetadataType.BYTE, (byte) 1),
-                new EntityMetadata(15, MetadataType.NBT_TAG, emptyNbtTag),
-                new EntityMetadata(16, MetadataType.NBT_TAG, emptyNbtTag)));
+                new ByteEntityMetadata(0, MetadataType.BYTE, (byte) (((byte) 0) | 0x20)),
+                new IntEntityMetadata(1, MetadataType.INT, 0),
+                new ObjectEntityMetadata<>(2, MetadataType.STRING, ""),
+                new BooleanEntityMetadata(3, MetadataType.BOOLEAN, false),
+                new BooleanEntityMetadata(4, MetadataType.BOOLEAN, false),
+                new BooleanEntityMetadata(5, MetadataType.BOOLEAN, false),
+                new ByteEntityMetadata(6, MetadataType.BYTE, (byte) 0),
+                new FloatEntityMetadata(7, MetadataType.FLOAT, 20f),
+                new IntEntityMetadata(8, MetadataType.INT, 0),
+                new BooleanEntityMetadata(9, MetadataType.BOOLEAN, false),
+                new IntEntityMetadata(10, MetadataType.INT, 0),
+                new FloatEntityMetadata(11, MetadataType.FLOAT, 0.0f),
+                new IntEntityMetadata(12, MetadataType.INT, 202),
+                new ByteEntityMetadata(13, MetadataType.BYTE, (byte) 0),
+                new ByteEntityMetadata(14, MetadataType.BYTE, (byte) 1),
+                new ObjectEntityMetadata<>(15, MetadataType.NBT_TAG, emptyNbtTag),
+                new ObjectEntityMetadata<>(16, MetadataType.NBT_TAG, emptyNbtTag)));
         return spectatorEntityPlayer;
     }
 
@@ -143,12 +146,22 @@ public final class SpectatorUtils {
         // update spectator player cache
         EntityPlayer spectatorEntityPlayer = getSpectatorPlayerEntity(session);
         session.getSpectatorPlayerCache()
-                .setThePlayer(spectatorEntityPlayer)
-                .setGameMode(SPECTATOR)
-                .setDimension(CACHE.getPlayerCache().getDimension())
-                .setDifficulty(CACHE.getPlayerCache().getDifficulty())
-                .setHardcore(false)
-                .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
+            .setThePlayer(spectatorEntityPlayer)
+            .setGameMode(SPECTATOR)
+            .setDimension(CACHE.getPlayerCache().getDimension())
+            .setHardcore(false)
+            .setWorldNames(CACHE.getPlayerCache().getWorldNames())
+            .setRegistryCodec(CACHE.getPlayerCache().getRegistryCodec())
+            .setWorldName(CACHE.getPlayerCache().getWorldName())
+            .setHashedSeed(CACHE.getPlayerCache().getHashedSeed())
+            .setViewDistance(CACHE.getPlayerCache().getViewDistance())
+            .setSimulationDistance(CACHE.getPlayerCache().getSimulationDistance())
+            .setEnableRespawnScreen(CACHE.getPlayerCache().isEnableRespawnScreen())
+            .setDebug(CACHE.getPlayerCache().isDebug())
+            .setFlat(CACHE.getPlayerCache().isFlat())
+            .setLastDeathPos(CACHE.getPlayerCache().getLastDeathPos())
+            .setPortalCooldown(CACHE.getPlayerCache().getPortalCooldown())
+            .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
         session.setAllowSpectatorServerPlayerPosRotate(true);
         DataCache.sendCacheData(cacheSupplier.get(), session);
         session.send(session.getEntitySpawnPacket());
@@ -156,8 +169,8 @@ public final class SpectatorUtils {
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> spawnSpectatorForOtherSessions(session, connection));
-        session.send(new ServerPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
-        session.send(new ServerEntityMetadataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
+        session.send(new ClientboundPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
+        session.send(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
         session.setAllowSpectatorServerPlayerPosRotate(false);
     }
 

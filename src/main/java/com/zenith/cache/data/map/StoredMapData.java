@@ -1,8 +1,8 @@
 package com.zenith.cache.data.map;
 
-import com.github.steveice10.mc.protocol.data.game.world.map.MapData;
-import com.github.steveice10.mc.protocol.data.game.world.map.MapIcon;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMapDataPacket;
+import com.github.steveice10.mc.protocol.data.game.level.map.MapData;
+import com.github.steveice10.mc.protocol.data.game.level.map.MapIcon;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundMapItemDataPacket;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,20 +20,20 @@ import static java.util.Objects.nonNull;
 public class StoredMapData {
     private int mapId;
     private byte scale;
-    private boolean trackingPosition;
+    private boolean locked;
     private Set<MapIcon> icons;
     private byte[] data;
 
-    public StoredMapData(final int mapId, final byte scale, final boolean trackingPosition) {
+    public StoredMapData(final int mapId, final byte scale, final boolean locked) {
         this.mapId = mapId;
         this.scale = scale;
-        this.trackingPosition = trackingPosition;
+        this.locked = locked;
         this.icons = new HashSet<>();
         this.data = new byte[16384];
     }
 
-    public ServerMapDataPacket getPacket() {
-        return new ServerMapDataPacket(mapId, scale, trackingPosition, icons.toArray(new MapIcon[0]), new MapData(128, 128, 0, 0, data));
+    public ClientboundMapItemDataPacket getPacket() {
+        return new ClientboundMapItemDataPacket(mapId, scale, locked, icons.toArray(new MapIcon[0]), new MapData(128, 128, 0, 0, data));
     }
 
     public void addData(final MapData mapData) {

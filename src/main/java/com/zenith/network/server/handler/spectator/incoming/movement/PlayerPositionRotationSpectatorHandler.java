@@ -1,31 +1,31 @@
 package com.zenith.network.server.handler.spectator.incoming.movement;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityHeadLookPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosRotPacket;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
-public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<ClientPlayerPositionRotationPacket, ServerConnection> {
+public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<ServerboundMovePlayerPosRotPacket, ServerConnection> {
     @Override
-    public boolean apply(@NonNull ClientPlayerPositionRotationPacket packet, @NonNull ServerConnection session) {
+    public boolean apply(@NonNull ServerboundMovePlayerPosRotPacket packet, @NonNull ServerConnection session) {
         session.getSpectatorPlayerCache()
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ())
-                .setYaw((float) packet.getYaw())
-                .setPitch((float) packet.getPitch());
+                .setYaw(packet.getYaw())
+                .setPitch(packet.getPitch());
         PlayerPositionRotationSpectatorHandler.updateSpectatorPosition(session);
         SpectatorUtils.checkSpectatorPositionOutOfRender(session);
         return false;
     }
 
     @Override
-    public Class<ClientPlayerPositionRotationPacket> getPacketClass() {
-        return ClientPlayerPositionRotationPacket.class;
+    public Class<ServerboundMovePlayerPosRotPacket> getPacketClass() {
+        return ServerboundMovePlayerPosRotPacket.class;
     }
 
     // might move this elsewhere, kinda awkward being here
@@ -37,7 +37,7 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<C
         selfSession.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(selfSession))
                 .forEach(connection -> {
-                    connection.send(new ServerEntityTeleportPacket(
+                    connection.send(new ClientboundTeleportEntityPacket(
                             selfSession.getSpectatorEntityId(),
                             selfSession.getSpectatorPlayerCache().getX(),
                             selfSession.getSpectatorPlayerCache().getY(),
@@ -46,12 +46,12 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<C
                             selfSession.getSpectatorPlayerCache().getPitch(),
                             false
                     ));
-                    connection.send(new ServerEntityHeadLookPacket(
+                    connection.send(new ClientboundRotateHeadPacket(
                             selfSession.getSpectatorEntityId(),
                             yaw
                     ));
                 });
-        selfSession.send(new ServerEntityTeleportPacket(
+        selfSession.send(new ClientboundTeleportEntityPacket(
                 selfSession.getSpectatorEntityId(),
                 selfSession.getSpectatorPlayerCache().getX(),
                 selfSession.getSpectatorPlayerCache().getY(),
@@ -60,7 +60,7 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<C
                 selfSession.getSpectatorPlayerCache().getPitch(),
                 false
         ));
-        selfSession.send(new ServerEntityHeadLookPacket(
+        selfSession.send(new ClientboundRotateHeadPacket(
                 selfSession.getSpectatorEntityId(),
                 yaw
         ));
@@ -68,6 +68,7 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<C
 
     public static float getYaw(final ServerConnection serverConnection) {
         // idk why but dragon is 180 degrees off from what you'd expect
+        // todo: is this still true in 1.20?
         if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityEnderDragon) {
             return serverConnection.getSpectatorPlayerCache().getYaw() - 180f;
         } else {

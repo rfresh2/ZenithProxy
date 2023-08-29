@@ -14,10 +14,12 @@ import static com.zenith.Shared.CACHE;
 public class EntityCache implements CachedData {
     protected final Map<Integer, Entity> cachedEntities = Collections.synchronizedMap(new Int2ObjectOpenHashMap<>());
 
+
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cachedEntities.values().forEach(entity -> entity.addPackets(consumer));
     }
+
 
     @Override
     public void reset(boolean full) {

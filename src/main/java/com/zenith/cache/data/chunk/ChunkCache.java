@@ -1,14 +1,8 @@
 package com.zenith.cache.data.chunk;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
-import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.chunk.TileEntity;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
-import com.github.steveice10.mc.protocol.data.game.world.notify.ClientNotification;
-import com.github.steveice10.mc.protocol.data.game.world.notify.RainStrengthValue;
-import com.github.steveice10.mc.protocol.data.game.world.notify.ThunderStrengthValue;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
+import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
+import com.github.steveice10.mc.protocol.data.game.level.block.BlockChangeEntry;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.IntTag;
 import com.github.steveice10.opennbt.tag.builtin.StringTag;
@@ -21,24 +15,26 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.cloudburstmc.math.vector.Vector3i;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-public class ChunkCache implements CachedData, BiFunction<Column, Column, Column> {
-    private static final Position DEFAULT_SPAWN_POSITION = new Position(8, 64, 8);
+public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSection, ChunkSection> {
+    private static final Vector3i DEFAULT_SPAWN_POSITION = Vector3i.from(8, 64, 8);
     private static final double maxDistanceExpected = Math.pow(32, 2); // squared to speed up calc, no need to sqrt
     @Getter
     @Setter
-    protected Position spawnPosition = DEFAULT_SPAWN_POSITION;
+    protected Vector3i spawnPosition = DEFAULT_SPAWN_POSITION;
     @Getter
     @Setter
     private boolean isRaining = false;
@@ -51,11 +47,12 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     @Getter
     @Setter
     private int renderDistance = 25;
-    protected final Long2ObjectOpenHashMap<Column> cache = new Long2ObjectOpenHashMap<>();
+    protected final Long2ObjectOpenHashMap<ChunkSection> cache = new Long2ObjectOpenHashMap<>();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+    protected final List<ClientboundLevelChunkWithLightPacket> naiveCache = new ArrayList<>(100);
 
     public ChunkCache() {
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
+//        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
     }
 
     public static void sync() {
@@ -63,9 +60,9 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         if (nonNull(currentPlayer)) {
             try {
                 if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                    CACHE.getChunkCache().cache.values().parallelStream()
-                            .map(ServerChunkDataPacket::new)
-                            .forEach(currentPlayer::send);
+//                    CACHE.getChunkCache().cache.values().parallelStream()
+//                            .map(ServerChunkDataPacket::new)
+//                            .forEach(currentPlayer::send);
                     lock.readLock().unlock();
                 }
             } catch (final Exception e) {
@@ -79,30 +76,31 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
      */
     @Override
     @Deprecated
-    public Column apply(@NonNull Column existing, @NonNull Column add) {
-        try {
-            Chunk[] chunks = existing.getChunks();
-            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                for (int chunkY = 0; chunkY < 16; chunkY++) {
-                    Chunk addChunk = add.getChunks()[chunkY];
-                    if (addChunk == null) {
-                        continue;
-                    } else if (add.hasSkylight()) {
-                        chunks[chunkY] = addChunk;
-                    } else {
-                        chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY] == null ? null : chunks[chunkY].getSkyLight());
-                    }
-                }
-                lock.writeLock().unlock();
-            }
-            return new Column(
-                    add.getX(), add.getZ(),
-                    chunks,
-                    add.hasBiomeData() ? add.getBiomeData() : existing.getBiomeData(),
-                    add.getTileEntities());
-        } catch (final Exception e) {
-            CLIENT_LOG.error("Error merging chunk data", e);
-        }
+    public ChunkSection apply(@NonNull ChunkSection existing, @NonNull ChunkSection add) {
+//        try {
+//            existing.getChunkData().
+//            Chunk[] chunks = existing.getChunks();
+//            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+//                for (int chunkY = 0; chunkY < 16; chunkY++) {
+//                    Chunk addChunk = add.getChunks()[chunkY];
+//                    if (addChunk == null) {
+//                        continue;
+//                    } else if (add.hasSkylight()) {
+//                        chunks[chunkY] = addChunk;
+//                    } else {
+//                        chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY] == null ? null : chunks[chunkY].getSkyLight());
+//                    }
+//                }
+//                lock.writeLock().unlock();
+//            }
+//            return new ChunkSection(
+//                    add.getX(), add.getZ(),
+//                    chunks,
+//                    add.hasBiomeData() ? add.getBiomeData() : existing.getBiomeData(),
+//                    add.getTileEntities());
+//        } catch (final Exception e) {
+//            CLIENT_LOG.error("Error merging chunk data", e);
+//        }
         return null;
     }
 
@@ -110,29 +108,29 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
     }
 
-    public boolean updateBlock(final BlockChangeRecord record) {
+    public boolean updateBlock(final @NonNull BlockChangeEntry record) {
         try {
-            final Position pos = record.getPosition();
-            if (pos.getY() < 0 || pos.getY() >= 256) {
-                return true;
-            }
-            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                Column column = get(pos.getX() >> 4, pos.getZ() >> 4);
-                if (column != null) {
-                    Chunk chunk = column.getChunks()[pos.getY() >> 4];
-                    if (chunk == null) {
-                        chunk = new Chunk(column.hasSkylight());
-                    }
-                    lock.readLock().unlock();
-                    if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
-                        lock.writeLock().unlock();
-                    }
-                    handleBlockUpdateTileEntity(record, pos, column);
-                } else {
-                    lock.readLock().unlock();
-                }
-            }
+            Vector3i pos = record.getPosition();
+//            if (pos.getY() < 0 || pos.getY() >= 256) {
+//                return true;
+//            }
+//            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+//                ChunkSection column = get(pos.getX() >> 4, pos.getZ() >> 4);
+//                if (column != null) {
+//                    Chunk chunk = column.getChunks()[pos.getY() >> 4];
+//                    if (chunk == null) {
+//                        chunk = new Chunk(column.hasSkylight());
+//                    }
+//                    lock.readLock().unlock();
+//                    if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+//                        chunk.getBlocks().set(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+//                        lock.writeLock().unlock();
+//                    }
+//                    handleBlockUpdateTileEntity(record, pos, column);
+//                } else {
+//                    lock.readLock().unlock();
+//                }
+//            }
 
         } catch (final Exception e) {
             CLIENT_LOG.error("Error applying block update", e);
@@ -144,46 +142,46 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
 
     // update any tile entities implicitly affected by this block update
     // server doesn't always send us tile entity update packets and relies on logic in client
-    private void handleBlockUpdateTileEntity(BlockChangeRecord record, Position pos, Column column) {
-        if (record.getBlock().getId() == 0 && record.getBlock().getData() == 0) {
-            try {
-                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                    final List<TileEntity> tileEntitiesList = column.getTileEntities();
-                    final Optional<TileEntity> foundTileEntity = tileEntitiesList.stream()
-                            .filter(tileEntity -> tileEntity.getPosition().equals(pos))
-                            .findFirst();
-                    foundTileEntity.ifPresent(tileEntitiesList::remove);
-                    lock.writeLock().unlock();
-                }
-            } catch (Exception e) {
-                CLIENT_LOG.error("Error removing tile entity", e);
-            }
-        } else {
-            // if we don't create a tile entity for certain blocks they render with no texture for some reason
-            if (record.getBlock().getId() == 54) {
-                writeTileEntity(column, "minecraft:chest", record.getPosition());
-            } else if (record.getBlock().getId() == 146) {
-                writeTileEntity(column, "minecraft:trapped_chest", record.getPosition());
-            } else if (record.getBlock().getId() == 130) {
-                writeTileEntity(column, "minecraft:ender_chest", record.getPosition());
-            } else if (record.getBlock().getId() == 116) {
-                writeTileEntity(column, "minecraft:enchanting_table", record.getPosition());
-            }
-        }
+    private void handleBlockUpdateTileEntity(BlockChangeEntry record, Vector3i pos, ChunkSection column) {
+//        if (record.getBlock().getId() == 0 && record.getBlock().getData() == 0) {
+//            try {
+//                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+//                    final List<TileEntity> tileEntitiesList = column.getTileEntities();
+//                    final Optional<TileEntity> foundTileEntity = tileEntitiesList.stream()
+//                            .filter(tileEntity -> tileEntity.getPosition().equals(pos))
+//                            .findFirst();
+//                    foundTileEntity.ifPresent(tileEntitiesList::remove);
+//                    lock.writeLock().unlock();
+//                }
+//            } catch (Exception e) {
+//                CLIENT_LOG.error("Error removing tile entity", e);
+//            }
+//        } else {
+//            // if we don't create a tile entity for certain blocks they render with no texture for some reason
+//            if (record.getBlock().getId() == 54) {
+//                writeTileEntity(column, "minecraft:chest", record.getPosition());
+//            } else if (record.getBlock().getId() == 146) {
+//                writeTileEntity(column, "minecraft:trapped_chest", record.getPosition());
+//            } else if (record.getBlock().getId() == 130) {
+//                writeTileEntity(column, "minecraft:ender_chest", record.getPosition());
+//            } else if (record.getBlock().getId() == 116) {
+//                writeTileEntity(column, "minecraft:enchanting_table", record.getPosition());
+//            }
+//        }
     }
 
-    public boolean multiBlockUpdate(final ServerMultiBlockChangePacket packet) {
-        for (BlockChangeRecord record : packet.getRecords()) {
+    public boolean multiBlockUpdate(final ClientboundSectionBlocksUpdatePacket packet) {
+        for (BlockChangeEntry record : packet.getEntries()) {
             updateBlock(record);
         }
         return true;
     }
 
-    public boolean updateBlock(ServerBlockChangePacket packet) {
-        return updateBlock(packet.getRecord());
+    public boolean updateBlock(@NonNull ClientboundBlockUpdatePacket packet) {
+        return updateBlock(packet.getEntry());
     }
 
-    private void writeTileEntity(final Column column, final String tileEntityId, final Position position) {
+    private void writeTileEntity(final ChunkSection column, final String tileEntityId, final Vector3i position) {
         final CompoundTag tileEntityTag = new CompoundTag(tileEntityId, ImmutableMap.of(
                 // there's probably more properties some tile entities need but this seems to work well enough
                 "id", new StringTag("id", tileEntityId),
@@ -192,53 +190,53 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
                 "z", new IntTag("z", position.getZ())
         ));
         try {
-            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                final Optional<TileEntity> foundTileEntity = column.getTileEntities()
-                        .stream()
-                        .filter(tileEntity -> tileEntity.getPosition().equals(position))
-                        .findFirst();
-                if (foundTileEntity.isPresent()) {
-                    foundTileEntity.get().setCompoundTag(tileEntityTag);
-                } else {
-                    column.getTileEntities().add(new TileEntity(position, tileEntityTag));
-                }
-                lock.writeLock().unlock();
-            }
+//            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+//                final Optional<TileEntity> foundTileEntity = column.getTileEntities()
+//                        .stream()
+//                        .filter(tileEntity -> tileEntity.getPosition().equals(position))
+//                        .findFirst();
+//                if (foundTileEntity.isPresent()) {
+//                    foundTileEntity.get().setCompoundTag(tileEntityTag);
+//                } else {
+//                    column.getTileEntities().add(new TileEntity(position, tileEntityTag));
+//                }
+//                lock.writeLock().unlock();
+//            }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error writing tile entity", e);
         }
     }
 
-    public boolean updateTileEntity(final ServerUpdateTileEntityPacket packet) {
+    public boolean updateTileEntity(final ClientboundBlockEntityDataPacket packet) {
         try {
             if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                final Column column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
+                final ChunkSection column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
                 if (isNull(column)) {
                     lock.readLock().unlock();
                     return false;
                 }
                 lock.readLock().unlock();
-                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                    final List<TileEntity> tileEntities = column.getTileEntities();
-                    final Optional<TileEntity> existingTileEntity = tileEntities.stream()
-                            .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
-                            .findFirst();
-                    final CompoundTag packetNbt = packet.getNBT();
-                    if (packetNbt != null && !packetNbt.isEmpty()) {
-                        // ensure position is encoded in NBT
-                        // not sure if this is totally needed or not
-                        packetNbt.put(new IntTag("x", packet.getPosition().getX()));
-                        packetNbt.put(new IntTag("y", packet.getPosition().getY()));
-                        packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
-                        existingTileEntity.ifPresentOrElse(
-                                tileEntity -> tileEntity.setCompoundTag(packetNbt),
-                                () -> tileEntities.add(new TileEntity(packet.getPosition(), packetNbt))
-                        );
-                    } else {
-                        existingTileEntity.ifPresent(tileEntities::remove);
-                    }
-                    lock.writeLock().unlock();
-                }
+//                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+//                    final List<TileEntity> tileEntities = column.getTileEntities();
+//                    final Optional<TileEntity> existingTileEntity = tileEntities.stream()
+//                            .filter(tileEntity -> tileEntity.getPosition().equals(packet.getPosition()))
+//                            .findFirst();
+//                    final CompoundTag packetNbt = packet.getNBT();
+//                    if (packetNbt != null && !packetNbt.isEmpty()) {
+//                        // ensure position is encoded in NBT
+//                        // not sure if this is totally needed or not
+//                        packetNbt.put(new IntTag("x", packet.getPosition().getX()));
+//                        packetNbt.put(new IntTag("y", packet.getPosition().getY()));
+//                        packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
+//                        existingTileEntity.ifPresentOrElse(
+//                                tileEntity -> tileEntity.setCompoundTag(packetNbt),
+//                                () -> tileEntities.add(new TileEntity(packet.getPosition(), packetNbt))
+//                        );
+//                    } else {
+//                        existingTileEntity.ifPresent(tileEntities::remove);
+//                    }
+//                    lock.writeLock().unlock();
+//                }
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error applying tile entity update", e);
@@ -251,19 +249,24 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         try {
             if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                this.cache.values().parallelStream()
-                        .map(ServerChunkDataPacket::new)
-                        .forEach(consumer);
+                this.naiveCache.forEach(consumer);
                 lock.readLock().unlock();
             }
+
+//            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
+//                this.cache.values().parallelStream()
+//                        .map(ServerChunkDataPacket::new)
+//                        .forEach(consumer);
+//                lock.readLock().unlock();
+//            }
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }
-        consumer.accept(new ServerSpawnPositionPacket(spawnPosition));
+        consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(spawnPosition, 0.0f));
         if (isRaining) {
-            consumer.accept(new ServerNotifyClientPacket(ClientNotification.START_RAIN, null));
-            consumer.accept(new ServerNotifyClientPacket(ClientNotification.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
-            consumer.accept(new ServerNotifyClientPacket(ClientNotification.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
+//            consumer.accept(new ServerNotifyClientPacket(ClientNotification.START_RAIN, null));
+//            consumer.accept(new ServerNotifyClientPacket(ClientNotification.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
+//            consumer.accept(new ServerNotifyClientPacket(ClientNotification.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
         }
     }
 
@@ -271,6 +274,7 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     public void reset(boolean full) {
         try {
             if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                this.naiveCache.clear();
                 this.cache.clear();
                 lock.writeLock().unlock();
                 this.spawnPosition = DEFAULT_SPAWN_POSITION;
@@ -310,21 +314,32 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
         return (int) (l >> 32 & 4294967295L);
     }
 
-    public void add(@NonNull Column column) {
+    public void add(@NonNull ChunkSection column) {
         try {
-            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
-                lock.writeLock().unlock();
-            }
+//            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+//                this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
+//                lock.writeLock().unlock();
+//            }
         } catch (final Exception e) {
             CLIENT_LOG.error("Failed to merge chunk column", e);
         }
     }
 
-    public Column get(int x, int z) {
+    public void add(final ClientboundLevelChunkWithLightPacket p) {
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                this.naiveCache.add(p);
+                lock.writeLock().unlock();
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to acquire write lock", e);
+        }
+    }
+
+    public ChunkSection get(int x, int z) {
         try {
             if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                Column column = this.cache.get(chunkPosToLong(x, z));
+                ChunkSection column = this.cache.get(chunkPosToLong(x, z));
                 lock.readLock().unlock();
                 return column;
             }

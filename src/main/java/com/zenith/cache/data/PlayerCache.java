@@ -1,22 +1,22 @@
 package com.zenith.cache.data;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.GlobalPos;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
-import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
-import com.github.steveice10.mc.protocol.data.game.window.ClickItemParam;
-import com.github.steveice10.mc.protocol.data.game.window.WindowAction;
-import com.github.steveice10.mc.protocol.data.game.world.WorldType;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientWindowActionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
+import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
+import com.github.steveice10.mc.protocol.data.game.inventory.CreativeGrabAction;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetContentPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.entity.EntityPlayer;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -40,10 +40,19 @@ public class PlayerCache implements CachedData {
     protected boolean hardcore;
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
-    protected int dimension = Integer.MAX_VALUE;
+    protected String[] worldNames;
+    protected CompoundTag registryCodec;
+    protected String dimension;
+    protected String worldName;
+    protected long hashedSeed;
+    protected int viewDistance;
+    protected int simulationDistance;
+    protected boolean enableRespawnScreen;
+    protected boolean debug;
+    protected boolean flat;
+    protected GlobalPos lastDeathPos;
+    protected int portalCooldown;
     protected GameMode gameMode;
-    protected WorldType worldType;
-    protected Difficulty difficulty;
     protected int heldItemSlot = 0;
 
     protected EntityPlayer thePlayer;
@@ -58,9 +67,12 @@ public class PlayerCache implements CachedData {
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ServerWindowItemsPacket(0, this.inventory.clone()));
-        consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
-        consumer.accept(new ServerPlayerChangeHeldItemPacket(heldItemSlot));
+        consumer.accept(new ClientboundContainerSetContentPacket(0,
+                                                                 0, // todo: verify if this is correct
+                                                                 this.inventory.clone(),
+                                                                 new ItemStack(0, 0)));
+        consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ClientboundSetCarriedItemPacket(heldItemSlot));
     }
 
     @Override
@@ -72,10 +84,8 @@ public class PlayerCache implements CachedData {
             Arrays.fill(this.inventory, null);
             this.heldItemSlot = 0;
         }
-        this.dimension = Integer.MAX_VALUE;
+        this.dimension = "minecraft:overworld";
         this.gameMode = null;
-        this.worldType = null;
-        this.difficulty = null;
         this.thePlayer.setHealth(20.0f);
         this.thePlayer.setFood(20);
         this.thePlayer.setSaturation(5);
@@ -96,15 +106,22 @@ public class PlayerCache implements CachedData {
 
     public static void sync() {
         if (nonNull(Proxy.getInstance().getClient())) {
+            // todo: verify this still works
             try {
                 // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
                 // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
-                Proxy.getInstance().getClient().send(new ClientWindowActionPacket(0, -1337, 0, new ItemStack(1, 1), WindowAction.CREATIVE_GRAB_MAX_STACK, ClickItemParam.LEFT_CLICK));
+                Proxy.getInstance().getClient().send(new ServerboundContainerClickPacket(0,
+                                                                                         -1337,
+                                                                                         0,
+                                                                                         ContainerActionType.CREATIVE_GRAB_MAX_STACK,
+                                                                                         CreativeGrabAction.GRAB,
+                                                                                         new ItemStack(1, 1),
+                                                                                         Int2ObjectMaps.emptyMap()));
                 double x = CACHE.getPlayerCache().getX();
                 double y = CACHE.getPlayerCache().getY() + 1000d;
                 double z = CACHE.getPlayerCache().getZ();
                 // one of 2b2t's plugins requires this (as of 2022)
-                Proxy.getInstance().getClient().sendDirect(new ClientPlayerPositionPacket(true, x, y, z));
+//                Proxy.getInstance().getClient().sendDirect(new ServerboundMovePlayerPosPacket(true, x, y, z));
             } catch (final Exception e) {
                 CLIENT_LOG.warn("Failed Player Sync", e);
             }

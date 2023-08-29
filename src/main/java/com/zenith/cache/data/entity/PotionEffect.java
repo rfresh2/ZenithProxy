@@ -1,8 +1,11 @@
 package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.Effect;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import lombok.*;
 import lombok.experimental.Accessors;
+
+import javax.annotation.Nullable;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -17,4 +20,6 @@ public class PotionEffect {
     public int duration;
     public boolean ambient;
     public boolean showParticles;
+    @Nullable
+    public CompoundTag factorData;
 }

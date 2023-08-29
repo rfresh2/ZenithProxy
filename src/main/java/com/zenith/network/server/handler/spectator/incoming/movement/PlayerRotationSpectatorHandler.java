@@ -1,22 +1,22 @@
 package com.zenith.network.server.handler.spectator.incoming.movement;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
-public class PlayerRotationSpectatorHandler implements IncomingHandler<ClientPlayerRotationPacket, ServerConnection> {
+public class PlayerRotationSpectatorHandler implements IncomingHandler<ServerboundMovePlayerRotPacket, ServerConnection> {
     @Override
-    public boolean apply(@NonNull ClientPlayerRotationPacket packet, @NonNull ServerConnection session) {
+    public boolean apply(@NonNull ServerboundMovePlayerRotPacket packet, @NonNull ServerConnection session) {
         session.getSpectatorPlayerCache()
-                .setYaw((float) packet.getYaw())
-                .setPitch((float) packet.getPitch());
+                .setYaw(packet.getYaw())
+                .setPitch(packet.getPitch());
         PlayerPositionRotationSpectatorHandler.updateSpectatorPosition(session);
         return false;
     }
 
     @Override
-    public Class<ClientPlayerRotationPacket> getPacketClass() {
-        return ClientPlayerRotationPacket.class;
+    public Class<ServerboundMovePlayerRotPacket> getPacketClass() {
+        return ServerboundMovePlayerRotPacket.class;
     }
 }

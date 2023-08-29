@@ -1,6 +1,6 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.PrioStatusEvent;
 import com.zenith.event.proxy.QueueCompleteEvent;
@@ -18,9 +18,9 @@ import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
-public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerListDataPacket, ClientSession> {
+public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabListPacket, ClientSession> {
     @Override
-    public boolean applyAsync(@NonNull ServerPlayerListDataPacket packet, @NonNull ClientSession session) {
+    public boolean applyAsync(@NonNull ClientboundTabListPacket packet, @NonNull ClientSession session) {
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
@@ -41,12 +41,12 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
     }
 
     @Override
-    public Class<ServerPlayerListDataPacket> getPacketClass() {
-        return ServerPlayerListDataPacket.class;
+    public Class<ClientboundTabListPacket> getPacketClass() {
+        return ClientboundTabListPacket.class;
     }
 
-    private synchronized void parse2bQueueState(ServerPlayerListDataPacket packet, ClientSession session) {
-        Optional<String> queueHeader = Arrays.stream(packet.getHeader().split("\\\\n"))
+    private synchronized void parse2bQueueState(ClientboundTabListPacket packet, ClientSession session) {
+        Optional<String> queueHeader = Arrays.stream(packet.getHeaderRaw().split("\\\\n"))
                 .map(String::trim)
                 .map(m -> m.toLowerCase(Locale.ROOT))
                 .filter(m -> m.contains("2b2t is full") || m.contains("pending") || m.contains("in queue"))
@@ -67,8 +67,8 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
         }
     }
 
-    private void parse2bPrioQueueState(final ServerPlayerListDataPacket packet) {
-        parse2b2tTablistFooter(packet.getFooter())
+    private void parse2bPrioQueueState(final ClientboundTabListPacket packet) {
+        parse2b2tTablistFooter(packet.getFooterRaw())
                 .map(TextComponent::toRawString)
                 .map(textRaw -> textRaw.replace("\n", ""))
                 .filter(messageString -> messageString.contains("priority"))
@@ -84,8 +84,8 @@ public class TabListDataHandler implements AsyncIncomingHandler<ServerPlayerList
                 });
     }
 
-    private synchronized void parse2bPing(final ServerPlayerListDataPacket packet, ClientSession session) {
-        parse2b2tTablistFooter(packet.getFooter())
+    private synchronized void parse2bPing(final ClientboundTabListPacket packet, ClientSession session) {
+        parse2b2tTablistFooter(packet.getFooterRaw())
                 .map(TextComponent::toRawString)
                 .map(textRaw -> textRaw.replace("\n", ""))
                 .map(String::trim)

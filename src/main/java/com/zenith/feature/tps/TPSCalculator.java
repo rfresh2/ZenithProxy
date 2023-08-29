@@ -1,6 +1,6 @@
 package com.zenith.feature.tps;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTimePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
 import com.google.common.primitives.Floats;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -19,7 +19,7 @@ public class TPSCalculator {
         reset();
     }
 
-    public void handleTimeUpdate(final ServerUpdateTimePacket serverUpdateTimePacket) {
+    public void handleTimeUpdate(final ClientboundSetTimePacket serverUpdateTimePacket) {
         if (this.timeSinceLastTimeUpdate != -1L) {
             final double timeElapsed = (System.nanoTime() - timeSinceLastTimeUpdate) / 1E9;
             final Float tps = Floats.constrainToRange((float) (20.0 / timeElapsed), 0.0f, 20.0f);

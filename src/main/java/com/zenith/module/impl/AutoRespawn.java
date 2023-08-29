@@ -1,7 +1,7 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.ClientRequest;
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientRequestPacket;
+import com.github.steveice10.mc.protocol.data.game.ClientCommand;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.Proxy;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
@@ -54,7 +54,7 @@ public class AutoRespawn extends Module {
         if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0 && isNull(
                 Proxy.getInstance().getCurrentPlayer().get())) {
             MODULE_LOG.info("Performing AutoRespawn");
-            sendClientPacketAsync(new ClientRequestPacket(ClientRequest.RESPAWN));
+            sendClientPacketAsync(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
             CACHE.getPlayerCache().getThePlayer().setHealth(20.0f);
         }
     }

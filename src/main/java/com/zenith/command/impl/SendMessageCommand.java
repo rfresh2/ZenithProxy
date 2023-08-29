@@ -1,6 +1,5 @@
 package com.zenith.command.impl;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
@@ -25,7 +24,8 @@ public class SendMessageCommand extends Command {
                         .executes(c -> {
                             final String message = c.getArgument("message", String.class);
                             if (Proxy.getInstance().isConnected() && !message.isBlank()) {
-                                Proxy.getInstance().getClient().send(new ClientChatPacket(message));
+                                // todo: implement
+//                                Proxy.getInstance().getClient().send(new ServerboundChatPacket(message));
                                 c.getSource().getEmbedBuilder()
                                         .title("Sent Message!")
                                         .description(message);

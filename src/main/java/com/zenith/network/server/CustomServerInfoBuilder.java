@@ -1,8 +1,7 @@
 package com.zenith.network.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.data.message.Message;
+import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
 import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
 import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
 import com.github.steveice10.mc.protocol.data.status.VersionInfo;
@@ -10,8 +9,10 @@ import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.feature.queue.Queue;
+import net.kyori.adventure.text.Component;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CONFIG;
@@ -25,16 +26,16 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     @Override
     public ServerStatusInfo buildInfo(Session session) {
-
         return new ServerStatusInfo(
-                new VersionInfo(MinecraftConstants.GAME_VERSION, MinecraftConstants.PROTOCOL_VERSION),
-                new PlayerInfo(
+            new VersionInfo(MinecraftCodec.CODEC.getMinecraftVersion(), MinecraftCodec.CODEC.getProtocolVersion()),
+            new PlayerInfo(
                         CONFIG.server.ping.maxPlayers,
                         this.proxy.getActiveConnections().size(),
-                        getOnlinePlayerProfiles()
+                        List.of(getOnlinePlayerProfiles())
                 ),
-                Message.fromString(getMotd()),
-                this.proxy.getServerIcon()
+            Component.text(getMotd()),
+            this.proxy.getServerIcon(),
+            false
         );
     }
 

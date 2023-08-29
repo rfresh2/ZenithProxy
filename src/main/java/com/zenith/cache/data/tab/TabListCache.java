@@ -2,13 +2,14 @@ package com.zenith.cache.data.tab;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.util.EnumSet;
 import java.util.function.Consumer;
 
 
@@ -18,10 +19,10 @@ public class TabListCache implements CachedData {
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ServerPlayerListDataPacket(this.tabList.getHeader(), this.tabList.getFooter(), false));
-        consumer.accept(new ServerPlayerListEntryPacket(
-                PlayerListEntryAction.ADD_PLAYER,
-                this.tabList.getEntries().stream().map(PlayerEntry::toMCProtocolLibEntry).toArray(PlayerListEntry[]::new)
+        consumer.accept(new ClientboundTabListPacket(this.tabList.getHeader(), this.tabList.getFooter()));
+        consumer.accept(new ClientboundPlayerInfoUpdatePacket(
+            EnumSet.of(PlayerListEntryAction.ADD_PLAYER),
+            this.tabList.getEntries().stream().map(PlayerEntry::toMCProtocolLibEntry).toArray(PlayerListEntry[]::new)
         ));
     }
 

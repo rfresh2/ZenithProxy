@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerRespawnPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.client.ClientSession;
@@ -15,20 +15,27 @@ import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 
-public class RespawnHandler implements IncomingHandler<ServerRespawnPacket, ClientSession> {
+public class RespawnHandler implements IncomingHandler<ClientboundRespawnPacket, ClientSession> {
 
     private final AtomicBoolean isSpectatorRespawning = new AtomicBoolean(false);
 
     @Override
-    public boolean apply(@NonNull ServerRespawnPacket packet, @NonNull ClientSession session) {
+    public boolean apply(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
         // must send respawn packet before cache gets reset
         // lots of race conditions with packet sequence could happen
         Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.send(new ServerRespawnPacket(
+            connection.send(new ClientboundRespawnPacket(
                     packet.getDimension(),
-                    CACHE.getPlayerCache().getDifficulty(),
+                    packet.getWorldName(),
+                    packet.getHashedSeed(),
                     GameMode.SPECTATOR,
-                    CACHE.getPlayerCache().getWorldType()
+                    GameMode.SPECTATOR,
+                    true,
+                    packet.isFlat(),
+                    packet.isKeepMetadata(),
+                    packet.isKeepAttributes(),
+                    packet.getLastDeathPos(),
+                    packet.getPortalCooldown()
             ));
         });
         if (isSpectatorRespawning.compareAndSet(false, true)) {
@@ -49,16 +56,26 @@ public class RespawnHandler implements IncomingHandler<ServerRespawnPacket, Clie
             // only partial reset chunk and entity cache?
         }
         CACHE.getPlayerCache()
-                .setDimension(packet.getDimension())
-                .setGameMode(packet.getGameMode())
-                .setWorldType(packet.getWorldType())
-                .setDifficulty(packet.getDifficulty());
+            .setDimension(packet.getDimension())
+            .setWorldName(packet.getWorldName())
+            .setHashedSeed(packet.getHashedSeed())
+            .setGameMode(packet.getGamemode())
+            .setDebug(packet.isDebug())
+            .setFlat(packet.isFlat())
+            .setLastDeathPos(packet.getLastDeathPos())
+            .setPortalCooldown(packet.getPortalCooldown());
+        if (!packet.isKeepMetadata()) {
+            CACHE.getPlayerCache().getThePlayer().getMetadata().clear();
+        }
+        if (!packet.isKeepAttributes()) {
+            // todo: what do here?
+        }
         return true;
     }
 
     @Override
-    public Class<ServerRespawnPacket> getPacketClass() {
-        return ServerRespawnPacket.class;
+    public Class<ClientboundRespawnPacket> getPacketClass() {
+        return ClientboundRespawnPacket.class;
     }
 
     private void spectatorRespawn() {

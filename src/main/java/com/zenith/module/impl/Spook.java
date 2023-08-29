@@ -1,6 +1,6 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
@@ -110,7 +110,7 @@ public class Spook extends Module {
         final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
-            sendClientPacketAsync(new ClientPlayerRotationPacket(
+            sendClientPacketAsync(new ServerboundMovePlayerRotPacket(
                     true,
                     getYaw(nearestPlayer.get()),
                     getPitch(nearestPlayer.get())
@@ -125,7 +125,7 @@ public class Spook extends Module {
             if (!this.focusStack.isEmpty()) {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                sendClientPacketAsync(new ClientPlayerRotationPacket(
+                sendClientPacketAsync(new ServerboundMovePlayerRotPacket(
                         true,
                         getYaw(target),
                         getPitch(target)

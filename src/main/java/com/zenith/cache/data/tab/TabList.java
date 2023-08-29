@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.kyori.adventure.text.Component;
 
 import java.util.*;
 
@@ -19,9 +20,9 @@ import static com.zenith.Shared.CONFIG;
 public class TabList {
     protected final Map<UUID, PlayerEntry> entries = Collections.synchronizedMap(new Object2ObjectOpenHashMap<>());
     @NonNull
-    protected String header = "{\"text\":\"\"}";
+    protected Component header = Component.text("");
     @NonNull
-    protected String footer = "{\"text\":\"\"}";
+    protected Component footer = Component.text("");
 
     public void add(@NonNull PlayerListEntry entry) {
         PlayerEntry coolEntry = PlayerEntry.fromMCProtocolLibEntry(entry);
@@ -32,6 +33,14 @@ public class TabList {
         PlayerEntry removed = this.entries.remove(entry.getProfile().getId());
         if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
             CACHE_LOG.error("Could not remove player with UUID: {}", entry.getProfile().getId());
+        }
+        return Optional.ofNullable(removed);
+    }
+
+    public Optional<PlayerEntry> remove(@NonNull UUID uuid) {
+        PlayerEntry removed = this.entries.remove(uuid);
+        if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
+            CACHE_LOG.error("Could not remove player with UUID: {}", uuid);
         }
         return Optional.ofNullable(removed);
     }

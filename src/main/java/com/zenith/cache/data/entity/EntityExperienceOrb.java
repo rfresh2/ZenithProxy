@@ -1,6 +1,6 @@
 package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnExpOrbPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddExperienceOrbPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,7 +18,7 @@ public class EntityExperienceOrb extends Entity {
 
     @Override
     public void addPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ServerSpawnExpOrbPacket(
+        consumer.accept(new ClientboundAddExperienceOrbPacket(
                 this.getEntityId(),
                 this.getX(),
                 this.getY(),

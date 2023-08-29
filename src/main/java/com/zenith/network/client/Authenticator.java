@@ -4,6 +4,7 @@ import com.github.steveice10.mc.auth.service.AuthenticationService;
 import com.github.steveice10.mc.auth.service.MsaAuthenticationService;
 import com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
 import com.microsoft.aad.msal4j.DeviceCode;
 import com.zenith.event.proxy.MsaDeviceCodeLoginEvent;
 import com.zenith.util.Config.Authentication.AccountType;
@@ -36,7 +37,7 @@ public class Authenticator {
                     saveConfig();
                 }
                 return new MinecraftProtocol(
-                    auth.getSelectedProfile(), "", auth.getAccessToken()
+                    MinecraftCodec.CODEC, auth.getSelectedProfile(), auth.getAccessToken()
                 );
             } else {
                 throw new RuntimeException("No valid account type set.");
