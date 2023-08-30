@@ -226,6 +226,7 @@ $v burned to death whilst fighting $m
 $v burned up in lava whilst fighting $m
 $v tried to swim in lava and didn't get out quick enough whilst fighting $m
 $v was swarmed by $m.
+$v drowned in lava whilst fighting $m
 
 # technically a mob with a name but mob type is not reported
 $v fell to death after being pushed by $w
