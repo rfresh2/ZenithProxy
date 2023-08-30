@@ -33,8 +33,8 @@ public class TitlePacketHandler implements AsyncIncomingHandler<ServerTitlePacke
     private void parse2bRestart(ServerTitlePacket serverTitlePacket, final ClientSession session) {
         try {
             Optional.of(serverTitlePacket)
-                .filter(packet -> packet.getAction().equals(TitleAction.SUBTITLE))
-                .map(ServerTitlePacket::getSubtitle)
+                .filter(packet -> packet.getAction().equals(TitleAction.ACTION_BAR))
+                .map(ServerTitlePacket::getActionBar)
                 .map(title -> FORMAT_PARSER.parse(title).toRawString())
                 .filter(text -> text.toLowerCase().contains("restart"))
                 .ifPresent(text -> {
