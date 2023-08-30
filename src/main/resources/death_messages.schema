@@ -225,8 +225,12 @@ $v drowned whilst fighting $m
 $v burned to death whilst fighting $m
 $v burned up in lava whilst fighting $m
 $v tried to swim in lava and didn't get out quick enough whilst fighting $m
-# technically this is a mob with a name but the mob type is not reported
+$v was swarmed by $m.
+
+# technically a mob with a name but mob type is not reported
 $v fell to death after being pushed by $w
+$v couldn't swim up quick enough whilst fighting $w
+$v was thrown off a cliff by $w
 
 # suicides
 $v died stuck on a cactus.
@@ -324,3 +328,4 @@ $v was fireballed to death.
 $v was hit too hard by a fireball.
 $v fireballed themselves.
 $v was impaled by dripstone.
+$v died stuck in a berry bush.

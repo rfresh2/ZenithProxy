@@ -61,7 +61,7 @@ public class RestAutoUpdater extends AutoUpdater {
                     return Mono.empty();
                 }
                 if (versionLooksCorrect(releaseIdToTag.getSecond())) {
-                    if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
+                    if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond()) && versionIsLessThanCurrent(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
                         if (!getUpdateAvailable()) {
                             DEFAULT_LOG.info(
                                 "New update on release channel {}! Current: {} New: {}!",
@@ -79,6 +79,31 @@ public class RestAutoUpdater extends AutoUpdater {
 
     private boolean versionLooksCorrect(final String version) {
         return version != null && version.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\+.*") && version.endsWith("+" + LAUNCH_CONFIG.release_channel);
+    }
+
+    private boolean versionIsLessThanCurrent(final String current, final String newVersion) {
+        String[] currentSplit = current.split("\\.");
+        String[] newSplit = newVersion.split("\\.");
+        // replace any non-numeric characters with empty string
+        for (int i = 0; i < 3; i++) {
+            try {
+                currentSplit[i] = currentSplit[i].replaceAll("[^\\d]", "");
+                if (currentSplit[i].isEmpty()) {
+                    currentSplit[i] = "0";
+                }
+                newSplit[i] = newSplit[i].replaceAll("[^\\d]", "");
+                if (newSplit[i].isEmpty()) {
+                    newSplit[i] = "0";
+                }
+                if (Integer.parseInt(currentSplit[i]) > Integer.parseInt(newSplit[i])) {
+                    return false;
+                }
+            } catch (final Exception e) {
+                DEFAULT_LOG.error("Failed to parse version: {}", e.getMessage());
+                return false;
+            }
+        }
+        return true;
     }
 
     private Pair<String, String> parseLatestReleaseId(String response) {
