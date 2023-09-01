@@ -232,6 +232,9 @@ $v drowned in lava whilst fighting $m
 $v fell to death after being pushed by $w
 $v couldn't swim up quick enough whilst fighting $w
 $v was thrown off a cliff by $w
+$v fell into the void whilst fighting $m
+$v suffocated in water whilst fighting $w
+$v was killed by $w
 
 # suicides
 $v died stuck on a cactus.
@@ -330,3 +333,6 @@ $v was hit too hard by a fireball.
 $v fireballed themselves.
 $v was impaled by dripstone.
 $v died stuck in a berry bush.
+$v was smashed and reduced to mince.
+$v froze to death.
+$v died from bee allergies.
