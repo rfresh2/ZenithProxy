@@ -12,8 +12,6 @@ public class MCTextFormatANSIEncoder extends PatternLayoutEncoder {
 
     @Override
     public void start() {
-//        if (ImageInfo.inImageBuildtimeCode()) return;
-        // insert our converter for minecraft text components, also should work for normal log messages
         Map patternRuleRegistry = (Map) context.getObject(CoreConstants.PATTERN_RULE_REGISTRY);
         if (isNull(patternRuleRegistry)) {
             patternRuleRegistry = new Object2ObjectOpenHashMap<>();

@@ -3,6 +3,7 @@ package com.zenith.network.server;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.packetlib.Session;
@@ -18,6 +19,7 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
+import de.themoep.minedown.adventure.MineDown;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -170,8 +172,7 @@ public class ServerConnection implements Session, SessionListener {
             } else {
                 proxy.getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    // todo: fix chat
-//                    connection.send(new ClientboundSystemChatPacket("§9" + profileCache.getProfile().getName() + " disconnected§r", true));
+                    connection.send(new ClientboundSystemChatPacket(MineDown.parse("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
                 });
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }

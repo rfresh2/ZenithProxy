@@ -8,10 +8,12 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.DeathMessagesParser;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
-import com.zenith.util.Color;
+import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
-import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.zenith.Shared.*;
@@ -23,9 +25,9 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
     @Override
     public boolean applyAsync(@NonNull ClientboundSystemChatPacket packet, @NonNull ClientSession session) {
         try {
-            CHAT_LOG.info(packet.getRawContent().replace("\\n\\n", "")); // removes the chat clearing linebreaks from queue messages
-            final MCTextRoot mcTextRoot = FORMAT_PARSER.parse(packet.getRawContent());
-            final String messageString = mcTextRoot.toRawString();
+            CHAT_LOG.info(ComponentSerializer.serialize(packet.getContent()));
+            final Component component = packet.getContent();
+            final String messageString = ComponentSerializer.toRawString(component);
             /*
              * example death message:
              * {"extra":[{"text":""},{"color":"dark_aqua","text":""},
@@ -38,7 +40,8 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
              */
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
-                if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)))) {
+                if (component.children().stream().anyMatch(child -> nonNull(child.color())
+                    && Objects.equals(child.color(), TextColor.color(170, 0, 0)))) {
                     final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(messageString);
                     if (deathMessageParseResult.isPresent()) {
                         EVENT_BUS.postAsync(new DeathMessageEvent(deathMessageParseResult.get(), messageString));

@@ -3,6 +3,7 @@ package com.zenith;
 import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
@@ -21,6 +22,7 @@ import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
+import de.themoep.minedown.adventure.MineDown;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
@@ -593,8 +595,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                // todo: implement
-//                serverConnection.sendDirect(new ClientboundSystemChatPacket("§b" + event.playerEntry.getName() + "§r§e connected", true));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry.getName() + "&r&e connected"), false));
             }
         }
     }
@@ -603,8 +604,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                // todo: implement
-//                serverConnection.sendDirect(new ClientboundSystemChatPacket("§b" + event.playerEntry.getName() + "§r§e disconnected", true));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry.getName() + "&r&e disconnected"), false));
             }
         }
     }

@@ -83,6 +83,10 @@ repositories {
         name = "paper"
         url "https://papermc.io/repo/repository/maven-public/"
     }
+    maven {
+        name = "minebench"
+        url = "https://repo.minebench.de/"
+    }
     mavenLocal()
 }
 
@@ -213,6 +217,14 @@ dependencies {
     shade "io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64"
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
+    shade "de.themoep:minedown-adventure:1.7.2-SNAPSHOT"
+    shade "net.kyori:adventure-text-serializer-gson:4.14.0"
+    shade "net.kyori:adventure-text-serializer-gson-legacy-impl:4.14.0"
+    shade "net.kyori:adventure-text-serializer-legacy:4.14.0"
+    shade "net.kyori:adventure-text-serializer-ansi:4.14.0"
+    shade "net.kyori:adventure-text-logger-slf4j:4.14.0"
+    shade "org.cloudburstmc.math:api:2.0"
+    shade "org.cloudburstmc.math:immutable:2.0"
 
     shade('org.redisson:redisson:3.23.4') {
         exclude group: 'io.netty'
@@ -317,6 +329,8 @@ shadowJar {
         exclude(dependency("io.netty:netty-codec-http:.*"))
         exclude(dependency("io.netty:netty-codec-http2:.*"))
         exclude(dependency("io.netty:netty-resolver-dns:.*"))
+        exclude(dependency("org.cloudburstmc.math:api:.*"))
+        exclude(dependency("org.cloudburstmc.math:immutable:.*"))
     }
     manifest {
         attributes "Implementation-Title": "ZenithProxy",
@@ -389,6 +403,8 @@ graalvmNative {
                     "--initialize-at-build-time=com.nimbusds",
                     "--initialize-at-build-time=com.mojang",
                     "--initialize-at-build-time=com.googlecode",
+                    "--initialize-at-build-time=net.kyori.adventure",
+                    "--initialize-at-run-time=com.zenith.cache.data.chunk.ChunkCache",
                     "--initialize-at-run-time=reactor.netty.http.client.HttpClientFormEncoder",
                     "--initialize-at-run-time=reactor.netty.resources.DefaultLoopNativeDetector",
                     "--initialize-at-run-time=reactor.netty.resources.DefaultLoopEpoll",

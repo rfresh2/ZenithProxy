@@ -5,6 +5,7 @@ import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.util.ComponentSerializer;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -32,7 +33,7 @@ public class SetSubtitleTextPacketHandler implements AsyncIncomingHandler<Client
     private void parse2bRestart(ClientboundSetSubtitleTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional.of(serverTitlePacket)
-                .map(title -> FORMAT_PARSER.parse(title.getTextRaw()).toRawString())
+                .map(title -> ComponentSerializer.toRawString(title.getText()))
                 .filter(text -> text.toLowerCase().contains("restart"))
                 .ifPresent(text -> {
                     if (lastRestartEvent.isBefore(Instant.now().minus(15, ChronoUnit.MINUTES))) {
@@ -48,7 +49,7 @@ public class SetSubtitleTextPacketHandler implements AsyncIncomingHandler<Client
     private void parse2bQueuePos(ClientboundSetSubtitleTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional<Integer> position = Optional.of(serverTitlePacket)
-                    .map(title -> FORMAT_PARSER.parse(title.getTextRaw()).toRawString())
+                    .map(title -> ComponentSerializer.toRawString(title.getText()))
                     .map(text -> {
                         String[] split = text.split(":");
                         if (split.length > 1) {

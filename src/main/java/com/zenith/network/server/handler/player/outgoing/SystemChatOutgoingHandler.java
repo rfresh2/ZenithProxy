@@ -3,8 +3,11 @@ package com.zenith.network.server.handler.player.outgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.network.registry.OutgoingHandler;
 import com.zenith.network.server.ServerConnection;
-import com.zenith.util.Color;
-import net.daporkchop.lib.minecraft.text.component.MCTextRoot;
+import com.zenith.util.ComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+
+import java.util.Objects;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -14,8 +17,8 @@ public class SystemChatOutgoingHandler implements OutgoingHandler<ClientboundSys
     @Override
     public ClientboundSystemChatPacket apply(ClientboundSystemChatPacket packet, ServerConnection session) {
         try {
-            final MCTextRoot mcTextRoot = FORMAT_PARSER.parse(packet.getRawContent());
-            final String message = mcTextRoot.toRawString();
+            final Component component = packet.getContent();
+            final String message = ComponentSerializer.toRawString(component);
             if (message.startsWith("<")) {
                 if (CONFIG.client.extra.chat.hideChat) {
                     return null;
@@ -31,11 +34,11 @@ public class SystemChatOutgoingHandler implements OutgoingHandler<ClientboundSys
                 } else if (WHITELIST_MANAGER.isPlayerIgnored(message.substring(0, message.indexOf(" ")))) {
                     return null;
                 }
-            } else if (CONFIG.client.extra.chat.hideDeathMessages && isDeathMessage(mcTextRoot, message)) {
+            } else if (CONFIG.client.extra.chat.hideDeathMessages && isDeathMessage(component, message)) {
                 return null;
             }
         } catch (final Exception e) {
-            SERVER_LOG.error("Failed to parse chat message in ServerChatOutgoingHandler: {}", packet.getRawContent(), e);
+            SERVER_LOG.error("Failed to parse chat message in ServerChatOutgoingHandler: {}", ComponentSerializer.toRawString(packet.getContent()), e);
         }
         return packet;
     }
@@ -53,9 +56,10 @@ public class SystemChatOutgoingHandler implements OutgoingHandler<ClientboundSys
         return false;
     }
 
-    private boolean isDeathMessage(final MCTextRoot mcTextRoot, final String messageRaw) {
+    private boolean isDeathMessage(final Component component, final String messageRaw) {
         if (!messageRaw.startsWith("<")) {
-            return mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)));
+            return component.children().stream().anyMatch(child -> nonNull(child.color())
+                && Objects.equals(child.color(), TextColor.color(170, 0, 0)));
         }
         return false;
     }

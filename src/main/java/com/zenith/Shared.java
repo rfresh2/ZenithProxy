@@ -50,12 +50,14 @@ import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectato
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
-import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
-import net.daporkchop.lib.minecraft.text.util.TranslationSource;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.TranslationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -104,7 +106,6 @@ public class Shared {
     public static final TerminalManager TERMINAL_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
-    public static final AutoMCFormatParser FORMAT_PARSER;
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
         .setLogger(CLIENT_LOG)
         .allowUnhandled(true)
@@ -118,6 +119,7 @@ public class Shared {
         .registerInbound(new PlayerChatHandler())
         .registerInbound(new LevelChunkWithLightHandler())
         .registerInbound(new ClientKeepaliveHandler())
+        .registerInbound(new CommandsHandler())
         .registerInbound(new GameEventHandler())
         .registerInbound(new LoginHandler())
         .registerInbound(new GameProfileHandler())
@@ -263,62 +265,62 @@ public class Shared {
     }
 
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
-            .setLogger(SERVER_LOG)
-            .allowUnhandled(true)
-            //
-            // Inbound packets
-            //
-            .registerInbound(new ServerboundHelloHandler())
+        .setLogger(SERVER_LOG)
+        .allowUnhandled(true)
+        //
+        // Inbound packets
+        //
+        .registerInbound(new ServerboundHelloHandler())
         .registerInbound(new ServerboundKeepAliveHandler())
-            .registerInbound(new ServerboundChatHandler())
-            .registerInbound(new ClientSettingsPacketHandler())
-            .registerInbound(new ServerboundPongHandler())
-            //PLAYER MOVEMENT
-            .registerInbound(new PlayerSwingArmPacketHandler())
-            //
-            // Outbound packets
-            //
-            .registerOutbound(new GameProfileOutgoingHandler())
-            .registerOutbound(new ServerTablistDataOutgoingHandler())
-            .registerOutbound(new SystemChatOutgoingHandler())
-            //
-            // Post-outbound packets
-            //
-            .registerPostOutbound(new LoginPostHandler())
-            .registerPostOutbound(new ClientCommandPostHandler())
-            .build();
+        .registerInbound(new ServerboundChatHandler())
+        .registerInbound(new ClientSettingsPacketHandler())
+        .registerInbound(new ServerboundPongHandler())
+        //PLAYER MOVEMENT
+        .registerInbound(new PlayerSwingArmPacketHandler())
+        //
+        // Outbound packets
+        //
+        .registerOutbound(new GameProfileOutgoingHandler())
+        .registerOutbound(new ServerTablistDataOutgoingHandler())
+        .registerOutbound(new SystemChatOutgoingHandler())
+        //
+        // Post-outbound packets
+        //
+        .registerPostOutbound(new LoginPostHandler())
+        .registerPostOutbound(new ClientCommandPostHandler())
+        .build();
     public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
-            .setLogger(SERVER_LOG)
-            .allowUnhandled(false)
+        .setLogger(SERVER_LOG)
+        .allowUnhandled(false)
 
-            .registerInbound(new ServerboundHelloHandler())
+        .registerInbound(new ServerboundHelloHandler())
         .registerInbound(new ServerboundKeepAliveHandler())
-            .registerInbound(new ServerboundPongHandler())
-            .registerInbound(new PlayerPositionRotationSpectatorHandler())
-            .registerInbound(new PlayerPositionSpectatorHandler())
-            .registerInbound(new PlayerRotationSpectatorHandler())
-            .registerInbound(new ServerChatSpectatorHandler())
-            .registerInbound(new PlayerStateSpectatorHandler())
+        .registerInbound(new ServerboundPongHandler())
+        .registerInbound(new PlayerPositionRotationSpectatorHandler())
+        .registerInbound(new PlayerPositionSpectatorHandler())
+        .registerInbound(new PlayerRotationSpectatorHandler())
+        .registerInbound(new ServerChatSpectatorHandler())
+        .registerInbound(new PlayerStateSpectatorHandler())
 
-            .registerOutbound(new GameProfileOutgoingHandler())
+        .registerOutbound(new GameProfileOutgoingHandler())
 
-            .registerOutbound(new ClientboundContainerCloseSpectatorOutgoingHandler())
-            .registerOutbound(new ClientboundContainerSetContentSpectatorOutgoingHandler())
-            .registerOutbound(new PlaceGhostRecipeSpectatorOutgoingHandler())
-            .registerOutbound(new OpenScreenSpectatorOutgoingHandler())
-            .registerOutbound(new ClientboundSetCarriedItemSpectatorOutgoingHandler())
-            .registerOutbound(new SetHealthSpectatorOutgoingHandler())
-            .registerOutbound(new ClientboundPlayerPositionRotationSpectatorOutgoingHandler())
-            .registerOutbound(new ClientboundSetExperienceSpectatorOutgoingHandler())
-            .registerOutbound(new OpenBookSpectatorOutgoingHandler())
-            .registerOutbound(new ContainerSetSlotSpectatorOutgoingHandler())
-            .registerOutbound(new ClientboundVehicleMoveSpectatorOutgoingHandler())
-            .registerOutbound(new HorseScreenOpenSpectatorOutgoingHandler())
-            .registerOutbound(new ClientboundContainerSetDataSpectatorOutgoingHandler())
-            .registerOutbound(new ServerTablistDataOutgoingHandler())
+        .registerOutbound(new ClientboundContainerCloseSpectatorOutgoingHandler())
+        .registerOutbound(new ClientboundContainerSetContentSpectatorOutgoingHandler())
+        .registerOutbound(new PlaceGhostRecipeSpectatorOutgoingHandler())
+        .registerOutbound(new OpenScreenSpectatorOutgoingHandler())
+        .registerOutbound(new ClientboundSetCarriedItemSpectatorOutgoingHandler())
+        .registerOutbound(new SetHealthSpectatorOutgoingHandler())
+        .registerOutbound(new ClientboundPlayerPositionRotationSpectatorOutgoingHandler())
+        .registerOutbound(new ClientboundSetExperienceSpectatorOutgoingHandler())
+        .registerOutbound(new OpenBookSpectatorOutgoingHandler())
+        .registerOutbound(new ContainerSetSlotSpectatorOutgoingHandler())
+        .registerOutbound(new ClientboundVehicleMoveSpectatorOutgoingHandler())
+        .registerOutbound(new HorseScreenOpenSpectatorOutgoingHandler())
+        .registerOutbound(new ClientboundContainerSetDataSpectatorOutgoingHandler())
+        .registerOutbound(new ServerTablistDataOutgoingHandler())
 
-            .registerPostOutbound(new JoinGameSpectatorPostHandler())
-            .build();
+        .registerPostOutbound(new JoinGameSpectatorPostHandler())
+        .build();
 
     static {
         try {
@@ -340,7 +342,9 @@ public class Shared {
             TERMINAL_MANAGER = new TerminalManager();
             COMMAND_MANAGER = new CommandManager();
             LANGUAGE_MANAGER = new LanguageManager();
-            FORMAT_PARSER = new AutoMCFormatParser(TranslationSource.ofMap(LANGUAGE_MANAGER.getLanguageDataMap()));
+            TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
+            translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());
+            GlobalTranslator.translator().addSource(translationRegistry);
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to initialize!", e);
             throw e;

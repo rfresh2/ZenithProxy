@@ -5,10 +5,12 @@ import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCustomPayloadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.RefStrings;
+import de.themoep.minedown.adventure.MineDown;
 import lombok.NonNull;
 
 import java.util.EnumSet;
@@ -41,15 +43,14 @@ public class JoinGameSpectatorPostHandler implements PostOutgoingHandler<Clientb
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
-                    // todo: update packet
-//                    connection.send(new ClientboundSystemChatPacket(
-//                            "§9" + session.getProfileCache().getProfile().getName() + " connected!§r", true
-//                    ));
-//                    if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
-//                        connection.send(new ClientboundSystemChatPacket(
-//                                "§9Send private messages: \"!m <message>\"§r", true
-//                        ));
-//                    }
+                    connection.send(new ClientboundSystemChatPacket(
+                        MineDown.parse("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
+                    ));
+                    if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
+                        connection.send(new ClientboundSystemChatPacket(
+                            MineDown.parse("&9Send private messages: \"!m <message>\"&r"), false
+                        ));
+                    }
                 });
         session.setLoggedIn(true);
     }
