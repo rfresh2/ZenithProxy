@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
@@ -49,7 +50,7 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     private int renderDistance = 25;
     protected final Long2ObjectOpenHashMap<ChunkSection> cache = new Long2ObjectOpenHashMap<>();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
-    protected final List<ClientboundLevelChunkWithLightPacket> naiveCache = new ArrayList<>(100);
+    protected final List<ClientboundLevelChunkWithLightPacket> naiveCache = new ArrayList<>(2000);
 
     public ChunkCache() {
 //        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
@@ -328,7 +329,10 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     public void add(final ClientboundLevelChunkWithLightPacket p) {
         try {
             if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                this.naiveCache.add(p);
+                if (this.naiveCache.size() > 1000) {
+                    this.naiveCache.remove(0);
+                }
+                this.naiveCache.add(new ClientboundLevelChunkWithLightPacket(p.getX(), p.getZ(), p.getChunkData(), p.getHeightMaps(), p.getBlockEntities(), p.getLightData()));
                 lock.writeLock().unlock();
             }
         } catch (final Exception e) {
@@ -352,7 +356,16 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     public void remove(int x, int z) {
         try {
             if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                this.cache.remove(chunkPosToLong(x, z));
+                List<ClientboundLevelChunkWithLightPacket> toRemove = this.naiveCache.stream()
+                    .filter(p -> {
+                        if (p == null) {
+                            return false;
+                        }
+                        return p.getX() == x && p.getZ() == z;
+                    })
+                    .collect(Collectors.toList());
+                this.naiveCache.removeAll(toRemove);
+//                this.cache.remove(chunkPosToLong(x, z));
                 lock.writeLock().unlock();
             }
         } catch (final Exception e) {

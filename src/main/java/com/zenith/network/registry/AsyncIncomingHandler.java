@@ -16,6 +16,7 @@ public interface AsyncIncomingHandler<P extends Packet, S extends Session> exten
 
     @Override
     default boolean apply(P packet, S session) {
+        if (packet == null) return false;
         HandlerRegistry.ASYNC_EXECUTOR_SERVICE.submit(() -> {
             try {
                 int iterCount = 0;
