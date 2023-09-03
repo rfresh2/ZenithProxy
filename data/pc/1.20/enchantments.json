@@ -12,15 +12,15 @@
       "a": 11,
       "b": 1
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
-      "blast_protection",
       "fire_protection",
+      "blast_protection",
       "projectile_protection"
     ],
     "category": "armor",
     "weight": 10,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -37,15 +37,15 @@
       "a": 8,
       "b": 10
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
-      "blast_protection",
       "protection",
+      "blast_protection",
       "projectile_protection"
     ],
     "category": "armor",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -62,11 +62,11 @@
       "a": 6,
       "b": 5
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "armor_feet",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -83,15 +83,15 @@
       "a": 8,
       "b": 5
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
-      "fire_protection",
       "protection",
+      "fire_protection",
       "projectile_protection"
     ],
     "category": "armor",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -108,15 +108,15 @@
       "a": 6,
       "b": 3
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
       "protection",
-      "blast_protection",
-      "fire_protection"
+      "fire_protection",
+      "blast_protection"
     ],
     "category": "armor",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -133,11 +133,11 @@
       "a": 10,
       "b": 30
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "armor_head",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -154,11 +154,11 @@
       "a": 0,
       "b": 41
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "armor_head",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -175,11 +175,11 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "armor_chest",
     "weight": 1,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -196,13 +196,13 @@
       "a": 10,
       "b": 15
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
       "frost_walker"
     ],
     "category": "armor_feet",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -219,13 +219,13 @@
       "a": 10,
       "b": 15
     },
+    "treasureOnly": true,
+    "curse": false,
     "exclude": [
       "depth_strider"
     ],
     "category": "armor_feet",
     "weight": 2,
-    "treasureOnly": true,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
@@ -242,16 +242,58 @@
       "a": 0,
       "b": 50
     },
+    "treasureOnly": true,
+    "curse": true,
     "exclude": [],
     "category": "wearable",
     "weight": 1,
-    "treasureOnly": true,
-    "curse": true,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 16,
+    "id": 11,
+    "name": "soul_speed",
+    "displayName": "Soul Speed",
+    "maxLevel": 3,
+    "minCost": {
+      "a": 10,
+      "b": 0
+    },
+    "maxCost": {
+      "a": 10,
+      "b": 15
+    },
+    "treasureOnly": true,
+    "curse": false,
+    "exclude": [],
+    "category": "armor_feet",
+    "weight": 1,
+    "tradeable": false,
+    "discoverable": false
+  },
+  {
+    "id": 12,
+    "name": "swift_sneak",
+    "displayName": "Swift Sneak",
+    "maxLevel": 3,
+    "minCost": {
+      "a": 25,
+      "b": 0
+    },
+    "maxCost": {
+      "a": 25,
+      "b": 50
+    },
+    "treasureOnly": true,
+    "curse": false,
+    "exclude": [],
+    "category": "armor_legs",
+    "weight": 1,
+    "tradeable": false,
+    "discoverable": false
+  },
+  {
+    "id": 13,
     "name": "sharpness",
     "displayName": "Sharpness",
     "maxLevel": 5,
@@ -263,19 +305,19 @@
       "a": 11,
       "b": 10
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
       "smite",
       "bane_of_arthropods"
     ],
     "category": "weapon",
     "weight": 10,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 17,
+    "id": 14,
     "name": "smite",
     "displayName": "Smite",
     "maxLevel": 5,
@@ -287,19 +329,19 @@
       "a": 8,
       "b": 17
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
       "sharpness",
       "bane_of_arthropods"
     ],
     "category": "weapon",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 18,
+    "id": 15,
     "name": "bane_of_arthropods",
     "displayName": "Bane of Arthropods",
     "maxLevel": 5,
@@ -311,19 +353,19 @@
       "a": 8,
       "b": 17
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
-      "smite",
-      "sharpness"
+      "sharpness",
+      "smite"
     ],
     "category": "weapon",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 19,
+    "id": 16,
     "name": "knockback",
     "displayName": "Knockback",
     "maxLevel": 2,
@@ -335,16 +377,16 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "weapon",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 20,
+    "id": 17,
     "name": "fire_aspect",
     "displayName": "Fire Aspect",
     "maxLevel": 2,
@@ -356,16 +398,16 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "weapon",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 21,
+    "id": 18,
     "name": "looting",
     "displayName": "Looting",
     "maxLevel": 3,
@@ -377,16 +419,18 @@
       "a": 10,
       "b": 51
     },
-    "exclude": [],
-    "category": "weapon",
-    "weight": 2,
     "treasureOnly": false,
     "curse": false,
+    "exclude": [
+      "silk_touch"
+    ],
+    "category": "weapon",
+    "weight": 2,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 22,
+    "id": 19,
     "name": "sweeping",
     "displayName": "Sweeping Edge",
     "maxLevel": 3,
@@ -398,16 +442,16 @@
       "a": 9,
       "b": 11
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "weapon",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 32,
+    "id": 20,
     "name": "efficiency",
     "displayName": "Efficiency",
     "maxLevel": 5,
@@ -419,16 +463,16 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "digger",
     "weight": 10,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 33,
+    "id": 21,
     "name": "silk_touch",
     "displayName": "Silk Touch",
     "maxLevel": 1,
@@ -440,18 +484,20 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
-      "fortune"
+      "looting",
+      "fortune",
+      "luck_of_the_sea"
     ],
     "category": "digger",
     "weight": 1,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 34,
+    "id": 22,
     "name": "unbreaking",
     "displayName": "Unbreaking",
     "maxLevel": 3,
@@ -463,16 +509,16 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "breakable",
     "weight": 5,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 35,
+    "id": 23,
     "name": "fortune",
     "displayName": "Fortune",
     "maxLevel": 3,
@@ -484,18 +530,18 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
       "silk_touch"
     ],
     "category": "digger",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 48,
+    "id": 24,
     "name": "power",
     "displayName": "Power",
     "maxLevel": 5,
@@ -507,16 +553,16 @@
       "a": 10,
       "b": 6
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "bow",
     "weight": 10,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 49,
+    "id": 25,
     "name": "punch",
     "displayName": "Punch",
     "maxLevel": 2,
@@ -528,16 +574,16 @@
       "a": 20,
       "b": 17
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "bow",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 50,
+    "id": 26,
     "name": "flame",
     "displayName": "Flame",
     "maxLevel": 1,
@@ -549,16 +595,16 @@
       "a": 0,
       "b": 50
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "bow",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 51,
+    "id": 27,
     "name": "infinity",
     "displayName": "Infinity",
     "maxLevel": 1,
@@ -570,18 +616,18 @@
       "a": 0,
       "b": 50
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [
       "mending"
     ],
     "category": "bow",
     "weight": 1,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 61,
+    "id": 28,
     "name": "luck_of_the_sea",
     "displayName": "Luck of the Sea",
     "maxLevel": 3,
@@ -593,16 +639,18 @@
       "a": 10,
       "b": 51
     },
-    "exclude": [],
-    "category": "fishing_rod",
-    "weight": 2,
     "treasureOnly": false,
     "curse": false,
+    "exclude": [
+      "silk_touch"
+    ],
+    "category": "fishing_rod",
+    "weight": 2,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 62,
+    "id": 29,
     "name": "lure",
     "displayName": "Lure",
     "maxLevel": 3,
@@ -614,16 +662,174 @@
       "a": 10,
       "b": 51
     },
+    "treasureOnly": false,
+    "curse": false,
     "exclude": [],
     "category": "fishing_rod",
     "weight": 2,
-    "treasureOnly": false,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 70,
+    "id": 30,
+    "name": "loyalty",
+    "displayName": "Loyalty",
+    "maxLevel": 3,
+    "minCost": {
+      "a": 7,
+      "b": 5
+    },
+    "maxCost": {
+      "a": 0,
+      "b": 50
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [
+      "riptide"
+    ],
+    "category": "trident",
+    "weight": 5,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 31,
+    "name": "impaling",
+    "displayName": "Impaling",
+    "maxLevel": 5,
+    "minCost": {
+      "a": 8,
+      "b": -7
+    },
+    "maxCost": {
+      "a": 8,
+      "b": 13
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [],
+    "category": "trident",
+    "weight": 2,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 32,
+    "name": "riptide",
+    "displayName": "Riptide",
+    "maxLevel": 3,
+    "minCost": {
+      "a": 7,
+      "b": 10
+    },
+    "maxCost": {
+      "a": 0,
+      "b": 50
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [
+      "loyalty",
+      "channeling"
+    ],
+    "category": "trident",
+    "weight": 2,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 33,
+    "name": "channeling",
+    "displayName": "Channeling",
+    "maxLevel": 1,
+    "minCost": {
+      "a": 0,
+      "b": 25
+    },
+    "maxCost": {
+      "a": 0,
+      "b": 50
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [
+      "riptide"
+    ],
+    "category": "trident",
+    "weight": 1,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 34,
+    "name": "multishot",
+    "displayName": "Multishot",
+    "maxLevel": 1,
+    "minCost": {
+      "a": 0,
+      "b": 20
+    },
+    "maxCost": {
+      "a": 0,
+      "b": 50
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [
+      "piercing"
+    ],
+    "category": "crossbow",
+    "weight": 2,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 35,
+    "name": "quick_charge",
+    "displayName": "Quick Charge",
+    "maxLevel": 3,
+    "minCost": {
+      "a": 20,
+      "b": -8
+    },
+    "maxCost": {
+      "a": 0,
+      "b": 50
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [],
+    "category": "crossbow",
+    "weight": 5,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 36,
+    "name": "piercing",
+    "displayName": "Piercing",
+    "maxLevel": 4,
+    "minCost": {
+      "a": 10,
+      "b": -9
+    },
+    "maxCost": {
+      "a": 0,
+      "b": 50
+    },
+    "treasureOnly": false,
+    "curse": false,
+    "exclude": [
+      "multishot"
+    ],
+    "category": "crossbow",
+    "weight": 10,
+    "tradeable": true,
+    "discoverable": true
+  },
+  {
+    "id": 37,
     "name": "mending",
     "displayName": "Mending",
     "maxLevel": 1,
@@ -635,18 +841,18 @@
       "a": 25,
       "b": 50
     },
+    "treasureOnly": true,
+    "curse": false,
     "exclude": [
       "infinity"
     ],
     "category": "breakable",
     "weight": 2,
-    "treasureOnly": true,
-    "curse": false,
     "tradeable": true,
     "discoverable": true
   },
   {
-    "id": 71,
+    "id": 38,
     "name": "vanishing_curse",
     "displayName": "Curse of Vanishing",
     "maxLevel": 1,
@@ -658,11 +864,11 @@
       "a": 0,
       "b": 50
     },
+    "treasureOnly": true,
+    "curse": true,
     "exclude": [],
     "category": "vanishable",
     "weight": 1,
-    "treasureOnly": true,
-    "curse": true,
     "tradeable": true,
     "discoverable": true
   }

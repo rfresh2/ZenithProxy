@@ -3,25 +3,34 @@ package com.zenith.feature.pathing.blockdata;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.pathing.CollisionBox;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.zenith.Shared.DEFAULT_LOG;
 import static java.util.Objects.isNull;
 
+@Getter
+@Setter
 public class BlockDataManager {
     private final ObjectMapper objectMapper;
     private Map<Integer, Block> blockWithCollisionMap;
+    private int maxStates;
+    private int blockBitsPerEntry;
+    private List<String> stateIdToBlockName = new ArrayList<>(25000);
 
     public BlockDataManager() {
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        initBlockWithCollisions(getBlockData(), getBlockCollisionShapes());
+        List<BlockData> blockData = getBlockData();
+        initBlockPalette(blockData);
+        BlockCollisionShapes blockCollisionShapes = getBlockCollisionShapes();
+        initBlockWithCollisions(blockData, blockCollisionShapes);
     }
 
     public Optional<Block> getBlockFromId(int id) {
@@ -34,7 +43,7 @@ public class BlockDataManager {
 
     private List<BlockData> getBlockData() {
         try {
-            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.12/blocks.json"), new TypeReference<List<BlockData>>() {
+            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.20/blocks.json"), new TypeReference<List<BlockData>>() {
             });
         } catch (final Exception e) {
             throw new RuntimeException(e);
@@ -43,7 +52,7 @@ public class BlockDataManager {
 
     private BlockCollisionShapes getBlockCollisionShapes() {
         try {
-            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.12/blockCollisionShapes.json"), BlockCollisionShapes.class);
+            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"), BlockCollisionShapes.class);
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,6 +63,29 @@ public class BlockDataManager {
         this.blockWithCollisionMap = blockDataList.stream()
                 .map(blockData -> new Block(blockData.getId(), blockData.getDisplayName(), blockData.getName(), blockData.getBoundingBox(), getBlockVariationMapping(blockCollisionShapes, blockData)))
                 .collect(Collectors.toMap(Block::getId, v -> v));
+    }
+
+    private void initBlockPalette(List<BlockData> blockDataList) {
+        // todo: validate this works lol
+        this.maxStates = 1 + blockDataList.stream()
+            .mapToInt(blockData -> blockData.getMaxStateId())
+            .max()
+            .orElse(0);
+        DEFAULT_LOG.info("Max states: {}", this.maxStates);
+        for (int i = 0; i < this.maxStates; i++) {
+            this.stateIdToBlockName.add(null);
+        }
+        this.blockBitsPerEntry = ChunkCache.log2RoundUp(this.maxStates);
+        for (BlockData data : blockDataList) {
+            Integer minStateId = data.getMinStateId();
+            Integer maxStateId = data.getMaxStateId();
+            if (minStateId != null && maxStateId != null) {
+                for (int i = minStateId; i <= maxStateId; i++) {
+                    this.stateIdToBlockName.set(i, data.getName());
+                }
+            }
+        }
+        DEFAULT_LOG.info("State ID to Block Name size: {}", this.stateIdToBlockName.size());
     }
 
     private Map<Integer, List<CollisionBox>> getBlockVariationMapping(BlockCollisionShapes blockCollisionShapes, BlockData blockData) {

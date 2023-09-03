@@ -10,9 +10,7 @@ import static com.zenith.Shared.CACHE;
 public class LevelChunkWithLightHandler implements AsyncIncomingHandler<ClientboundLevelChunkWithLightPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundLevelChunkWithLightPacket packet, @NonNull ClientSession session) {
-        // todo: actually parse and cache
         CACHE.getChunkCache().add(packet);
-//        CACHE.getChunkCache().add(parseColumn(packet));
         return true;
     }
 

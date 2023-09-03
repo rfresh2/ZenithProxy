@@ -10,7 +10,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetContentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
@@ -40,16 +39,7 @@ public class PlayerCache implements CachedData {
     protected boolean hardcore;
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
-    protected String[] worldNames;
-    protected CompoundTag registryCodec;
-    protected String dimension;
-    protected String worldName;
-    protected long hashedSeed;
-    protected int viewDistance;
-    protected int simulationDistance;
     protected boolean enableRespawnScreen;
-    protected boolean debug;
-    protected boolean flat;
     protected GlobalPos lastDeathPos;
     protected int portalCooldown;
     protected GameMode gameMode;
@@ -84,7 +74,6 @@ public class PlayerCache implements CachedData {
             Arrays.fill(this.inventory, null);
             this.heldItemSlot = 0;
         }
-        this.dimension = "minecraft:overworld";
         this.gameMode = null;
         this.thePlayer.setHealth(20.0f);
         this.thePlayer.setFood(20);

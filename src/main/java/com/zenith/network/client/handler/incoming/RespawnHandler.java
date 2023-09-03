@@ -8,6 +8,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.IncomingHandler;
 import lombok.NonNull;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,19 +52,15 @@ public class RespawnHandler implements IncomingHandler<ClientboundRespawnPacket,
             // delay is a hacky workaround and might still get caught in race condition sometimes
             SCHEDULED_EXECUTOR_SERVICE.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
         }
-        if (CACHE.getPlayerCache().getDimension() != packet.getDimension()) {
+        if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().getDimensionName(), packet.getDimension())) {
             CACHE.reset(false);
             // only partial reset chunk and entity cache?
         }
         CACHE.getPlayerCache()
-            .setDimension(packet.getDimension())
-            .setWorldName(packet.getWorldName())
-            .setHashedSeed(packet.getHashedSeed())
             .setGameMode(packet.getGamemode())
-            .setDebug(packet.isDebug())
-            .setFlat(packet.isFlat())
             .setLastDeathPos(packet.getLastDeathPos())
             .setPortalCooldown(packet.getPortalCooldown());
+        CACHE.getChunkCache().updateCurrentDimension(packet);
         if (!packet.isKeepMetadata()) {
             CACHE.getPlayerCache().getThePlayer().getMetadata().clear();
         }

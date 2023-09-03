@@ -7,7 +7,40 @@
   {
     "name": "spawner",
     "description": "spawner is called spawner",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
+  },
+  {
+    "name": "hasElytraFlying",
+    "description": "the elytra exists and players can fly with it",
+    "versions": ["1.9", "latest"]
+  },
+  {
+    "name": "fireworkMetadataVarInt7",
+    "description": "firework attached entity metadata is at index 7 and is varint",
+    "versions": ["1.11", "1.13.2"]
+  },
+  {
+    "name": "fireworkMetadataOptVarInt8",
+    "description": "firework attached entity metadata is at index 8 and is optvarint",
+    "versions": ["1.14", "1.16.5"]
+  },
+  {
+    "name": "fireworkMetadataOptVarInt9",
+    "description": "firework attached entity metadata is at index 9 and is optvarint",
+    "versions": ["1.17", "latest"]
+  },
+  {
+    "name": "fireworkNamePlural",
+    "description": "the firework entity used for elytra boosting is named fireworks_rocket",
+    "versions": ["1.11", "1.12.2"]
+  },
+  {
+    "name": "fireworkNameSingular",
+    "description": "the firework entity used for elytra boosting is named firework_rocket",
+    "versions": ["1.13", "latest"]
   },
   {
     "name": "blockMetadata",
@@ -17,12 +50,18 @@
   {
     "name": "blockStateId",
     "description": "block metadata is encoded as state id",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "creativeSleepNearMobs",
     "description": "can sleep near mobs in creative",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "fixedPointPosition",
@@ -32,7 +71,10 @@
   {
     "name": "doublePosition",
     "description": "Entity positions are represented with double",
-    "versions": ["1.9", "1.19"]
+    "versions": [
+      "1.9",
+      "latest"
+    ]
   },
   {
     "name": "fixedPointDelta",
@@ -42,7 +84,10 @@
   {
     "name": "fixedPointDelta128",
     "description": "Delta of position are represented with fixed point numbers times 128",
-    "versions": ["1.9", "1.19"]
+    "versions": [
+      "1.9",
+      "latest"
+    ]
   },
   {
     "name": "customChannelMCPrefixed",
@@ -52,7 +97,10 @@
   {
     "name": "customChannelIdentifier",
     "description": "custom channel is an identifier starting in minecraft namespace",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "dimensionDataIsAvailable",
@@ -72,7 +120,10 @@
   {
     "name": "useItemWithOwnPacket",
     "description": "use item is done with its own packet",
-    "versions": ["1.9", "1.19"]
+    "versions": [
+      "1.9",
+      "latest"
+    ]
   },
   {
     "name": "blockPlaceHasHeldItem",
@@ -92,7 +143,10 @@
   {
     "name": "blockPlaceHasInsideBlock",
     "description": "block_place packet has inside block",
-    "versions": ["1.14", "1.19"]
+    "versions": [
+      "1.14",
+      "latest"
+    ]
   },
   {
     "name": "teleportUsesPositionPacket",
@@ -107,7 +161,10 @@
   {
     "name": "teleportUsesOwnPacket",
     "description": "teleport is done using its own packet",
-    "versions": ["1.9", "1.19"]
+    "versions": [
+      "1.9",
+      "latest"
+    ]
   },
   {
     "name": "oneBlockForSeveralVariations",
@@ -117,7 +174,10 @@
   {
     "name": "blockSchemeIsFlat",
     "description": "all variations of a packet have their own id",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "tabCompleteHasNoToolTip",
@@ -127,7 +187,10 @@
   {
     "name": "tabCompleteHasAToolTip",
     "description": "tab complete has a tool tip",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "effectAreMinecraftPrefixed",
@@ -137,7 +200,10 @@
   {
     "name": "effectAreNotPrefixed",
     "description": "effect are not prefixed",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "itemsAreAlsoBlocks",
@@ -147,12 +213,18 @@
   {
     "name": "itemsAreNotBlocks",
     "description": "items are not block",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "fishingBobberCorrectlyNamed",
     "description": "the fishing hook entity is named fishing_bobber",
-    "versions": ["1.14", "1.19"]
+    "versions": [
+      "1.14",
+      "latest"
+    ]
   },
   {
     "name": "editBookIsPluginChannel",
@@ -162,7 +234,10 @@
   {
     "name": "hasEditBookPacket",
     "description": "book editing is handled through a packet",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "clientUpdateBookIdWhenSign",
@@ -207,7 +282,10 @@
   {
     "name": "dimensionDataIsAvailable",
     "description": "dimensionData is available, describing additional dimension information",
-    "versions": ["1.17", "1.19"]
+    "versions": [
+      "1.17",
+      "latest"
+    ]
   },
   {
     "name": "doesntHaveChestType",
@@ -242,12 +320,18 @@
   {
     "name": "usesMultiblockSingleLong",
     "description": "in the multi_block_change packet is stored as a single number",
-    "versions": ["1.16.2", "1.19"]
+    "versions": [
+      "1.16.2",
+      "latest"
+    ]
   },
   {
     "name": "usesMultiblock3DChunkCoords",
     "description": "in the multi_block_change packet, all 3 axis coords are defined",
-    "versions": ["1.16.2", "1.19"]
+    "versions": [
+      "1.16.2",
+      "latest"
+    ]
   },
   {
     "name": "setBlockUsesMetadataNumber",
@@ -262,7 +346,10 @@
   {
     "name": "selectingTradeMovesItems",
     "description": "selecting a trade automatically puts the required items into trading slots",
-    "versions": ["1.14", "1.19"]
+    "versions": [
+      "1.14",
+      "latest"
+    ]
   },
   {
     "name": "resourcePackUsesHash",
@@ -277,7 +364,10 @@
   {
     "name": "teamUsesChatComponents",
     "description": "teams use chatcomponents for formatting",
-    "versions": ["1.13", "1.19"]
+    "versions": [
+      "1.13",
+      "latest"
+    ]
   },
   {
     "name": "teamUsesScoreboard",
@@ -292,7 +382,10 @@
   {
     "name": "enderCrystalNameNoCapsWithUnderscore",
     "description": "this is when the end_crystal's entity name is end_crystal",
-    "versions": ["1.14", "1.19"]
+    "versions": [
+      "1.14",
+      "latest"
+    ]
   },
   {
     "name": "entityNameUpperCaseNoUnderscore",
@@ -312,7 +405,10 @@
   {
     "name": "stateIdUsed",
     "description": "starting in 1.17.1, actionId has been replaced with stateId",
-    "versions": ["1.17.1", "1.19"]
+    "versions": [
+      "1.17.1",
+      "latest"
+    ]
   },
   {
     "name": "actionIdUsed",
@@ -322,7 +418,10 @@
   {
     "name": "setSlotAsTransaction",
     "description": "use setslot as transaction instead of just hoping it'll work",
-    "versions": ["1.17", "1.19"]
+    "versions": [
+      "1.17",
+      "latest"
+    ]
   },
   {
     "name": "armAnimationBeforeUse",
@@ -332,12 +431,155 @@
   {
     "name": "tallWorld",
     "description": "world y defaults to starts at -64 and ends at 384",
-    "versions": ["1.18", "1.19"]
+    "versions": [
+      "1.18",
+      "latest"
+    ]
   },
   {
     "name": "sendStringifiedSignText",
     "description": "sign text send when updating signs is send as stringified strings",
     "versions": ["1.8", "1.8.9"]
+  },
+  {
+    "name": "usesBlockStates",
+    "versions": [
+      "1.13",
+      "latest"
+    ]
+  },
+  {
+    "name": "effectNamesMatchRegistryName",
+    "versions": [
+      "1.17",
+      "latest"
+    ]
+  },
+  {
+    "name": "shieldSlot",
+    "versions": [
+      "1.9",
+      "latest"
+    ]
+  },
+  {
+    "name": "village&pillageInventoryWindows",
+    "versions": [
+      "1.14",
+      "latest"
+    ]
+  },
+  {
+    "name": "netherUpdateInventoryWindows",
+    "versions": [
+      "1.16",
+      "latest"
+    ]
+  },
+  {
+    "name": "unloadChunkByEmptyChunk",
+    "description": "Chunk unloading is done by sending an empty chunk",
+    "versions": ["1.8", "1.8"]
+  },
+  {
+    "name": "unloadChunkDirect",
+    "description": "Chunk unloading is done by sending directly an unload chunk packet",
+    "versions": ["1.9", "1.16"]
+  },
+  {
+    "name": "entityCamelCase",
+    "description": "entity names are in camel case",
+    "versions": ["1.8", "1.10"]
+  },
+  {
+    "name": "entitySnakeCase",
+    "description": "entity name are in snake case",
+    "versions": ["1.11", "1.16"]
+  },
+  {
+    "name": "respawnIsPayload",
+    "description": "respawn field is payload",
+    "versions": ["1.8", "1.8"]
+  },
+  {
+    "name": "respawnIsActionId",
+    "description": "respawn field is action id",
+    "versions": ["1.9", "1.16"]
+  },
+  {
+    "name": "attachStackEntity",
+    "description": "attach is used to stack entities",
+    "versions": ["1.8", "1.8"]
+  },
+  {
+    "name": "setPassengerStackEntity",
+    "description": "set passengers is used to stack entities",
+    "versions": ["1.9", "1.16"]
+  },
+  {
+    "name": "theFlattening",
+    "description": "many items got merged, separated or renamed",
+    "versions": ["1.13",  "1.16"]
+  },
+  {
+    "name": "blockPlaceHasIntCursor",
+    "description": "block_place packet has int cursor",
+    "versions": ["1.8", "1.10"]
+  },
+  {
+    "name": "updateViewPosition",
+    "description": "the client's chunk position must be updated to render chunks correctly",
+    "versions": ["1.14", "1.16"]
+  },
+  {
+    "name": "lightSentSeparately",
+    "description": "chunk light data is sent in a separate packet",
+    "versions": ["1.14", "1.16"]
+  },
+  {
+    "name": "difficultySentSeparately",
+    "description": "game difficulty is sent separately from the login packet",
+    "versions": ["1.14", "1.16"]
+  },
+  {
+    "name": "acknowledgePlayerDigging",
+    "description": "player digging packets should be responded to",
+    "versions": ["1.14", "1.16"]
+  },
+  {
+    "name": "multiTypeSigns",
+    "description": "there are 6 types of signs based on the different trees",
+    "versions": ["1.14", "1.16"]
+  },
+  {
+    "name": "entityMetadataSentSeparately",
+    "description": "entity metadata is sent separately from the spawn packets",
+    "versions": ["1.15", "1.16"]
+  },
+  {
+    "name": "attributeSnakeCase",
+    "description": "entity attributes are in snake case",
+    "versions": ["1.16", "1.16"]
+  },
+  {
+    "name": "allEntityEquipmentInOne",
+    "description": "entity equipment packet contains all equipment slots instead of just one",
+    "versions": ["1.16", "1.16"]
+  },
+  {
+    "name": "entityMCPrefixed",
+    "description": "entity prefixed with minecraft: on this versions",
+    "versions": ["1.12", "1.16"]
+  },
+  {
+    "name": "nbtOnMetadata",
+    "description": "in never versions its nbt but in 1.8 its on metadata",
+    "versions": ["1.8", "1.8"]
+  },
+  {
+    "name": "theShulkerBoxes",
+    "description": "added shulker boxes to the game",
+    "versions": ["1.13", "1.16"]
   },
   {
     "name": "metadataIxOfItem",
@@ -400,6 +642,11 @@
     ]
   },
   {
+    "name": "booksUseStoredEnchantments",
+    "description": "Enchanted books store enchantment data in a separate NBT tag called StoredEnchantments",
+    "versions": ["1.8_major", "latest"]
+  },
+  {
     "name": "typeOfValueForEnchantLevel",
     "description": "type of value that stores enchant lvl in the nbt",
     "values": [
@@ -428,6 +675,11 @@
     ]
   },
   {
+    "name": "itemLoreIsAString",
+    "description": "An item's custom Lore is stored as a string in NBT, in older versions it's a list of strings",
+    "versions": ["1.14_major", "latest"]
+  },
+  {
     "name": "spawnEggsUseInternalIdInNbt",
     "description": "in older versions, spawn eggs have a field in their nbt called 'internalId' which tells what entity they will spawn",
     "versions": ["1.8_major", "1.8_major"]
@@ -450,7 +702,15 @@
   {
     "name": "signatureEncryption",
     "description": "allows for usage of `signature` instead of verifyToken in serverbound packet_encryption_begin",
-    "versions": ["1.19_major", "latest"]
+    "versions": ["1.19", "1.19.2"]
+  },
+  {
+    "name": "profileKeySignatureV2",
+    "description": "uses `signatureV2` public key signature",
+    "versions": [
+      "1.19.2",
+      "latest"
+    ]
   },
   {
     "name": "clientboundChatHasSender",
@@ -461,5 +721,50 @@
     "name": "consolidatedEntitySpawnPacket",
     "description": "One packet to add living and non-living entities",
     "versions": ["1.19", "latest"]
+  },
+  {
+    "name": "chainedChatWithHashing",
+    "description": "Signed messages are ordered and depend on previous messages, and message payloads are hashed before generating a signature",
+    "version": "1.19.2"
+  },
+  {
+    "name": "useChatSessions",
+    "description": "Users generate a session with a unique ID upon login. Chat messages are signed using this ID and an index that is increased with each message",
+    "versions": ["1.19.3", "latest"]
+  },
+  {
+    "name": "playerInfoActionIsBitfield",
+    "description": "The player_info packet may contain multiple actions in one packet. The actions field is a bitfield signifying what actions are included",
+    "versions": ["1.19.3", "latest"]
+  },
+  {
+    "name": "clientsideChatFormatting",
+    "description": "Chat messages are formatted on the client side",
+    "versions": ["1.19_major", "latest"]
+  },
+  {
+    "name": "entityMetadataHasLong",
+    "description": "There exists a serializer of type long for entity metadata",
+    "versions": ["1.19.3", "latest"]
+  },
+  {
+    "name": "hasBundlePacket",
+    "description": "Has a Bundle Packet to group packets for processing at once",
+    "versions": ["1.19.4", "latest"]
+  },
+  {
+    "name": "mcDataHasEntityMetadata",
+    "description": "Entity Metadata is defined in mcdata",
+    "versions": ["1.19.4", "latest"]
+  },
+  {
+    "name": "multiSidedSigns",
+    "description": "Signs can have text on the front and back",
+    "versions": ["1.20", "latest"]
+  },
+  {
+    "name": "explicitMaxDurability",
+    "description": "Items with maximum durability have explicit NBT data Damage:0",
+    "versions": ["1.15_major", "latest"]
   }
 ]

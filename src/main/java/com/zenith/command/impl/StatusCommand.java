@@ -112,7 +112,7 @@ public class StatusCommand extends Command {
             }
             builder.addField("2b2t Queue", getQueueStatus(), true)
                     .addField("Dimension",
-                            CACHE.getPlayerCache().getDimension(),
+                            CACHE.getChunkCache().getCurrentDimension().getDimensionName(),
                             true);
             if (CONFIG.discord.reportCoords) {
                 builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);

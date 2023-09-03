@@ -121,7 +121,8 @@ public class State {
 
         ENUM("enum"),
         BOOL("bool"),
-        INT("int");
+        INT("int"),
+        DIRECTION("direction");
         private final static Map<String, Type> CONSTANTS = new Object2ObjectOpenHashMap<>();
 
         static {

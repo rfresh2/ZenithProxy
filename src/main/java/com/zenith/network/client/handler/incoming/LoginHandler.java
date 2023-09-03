@@ -21,20 +21,23 @@ public class LoginHandler implements IncomingHandler<ClientboundLoginPacket, Cli
         CACHE.getPlayerCache()
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
-            .setDimension(packet.getDimension())
-            .setGameMode(packet.getGameMode())
-            .setWorldNames(packet.getWorldNames())
-            .setWorldName(packet.getWorldName())
-            .setRegistryCodec(packet.getRegistry())
-            .setHashedSeed(packet.getHashedSeed())
-            .setViewDistance(packet.getViewDistance())
-            .setSimulationDistance(packet.getSimulationDistance())
-            .setEnableRespawnScreen(packet.isEnableRespawnScreen())
-            .setDebug(packet.isDebug())
-            .setFlat(packet.isFlat())
             .setLastDeathPos(packet.getLastDeathPos())
             .setPortalCooldown(packet.getPortalCooldown())
-            .setMaxPlayers(packet.getMaxPlayers());
+            .setMaxPlayers(packet.getMaxPlayers())
+            .setGameMode(packet.getGameMode())
+            .setEnableRespawnScreen(packet.isEnableRespawnScreen())
+            .setReducedDebugInfo(packet.isReducedDebugInfo());
+        CACHE.getChunkCache().updateRegistryTag(packet.getRegistry());
+        CACHE.getChunkCache().setCurrentWorld(
+            packet.getDimension(),
+            packet.getWorldName(),
+            packet.getHashedSeed(),
+            packet.isDebug(),
+            packet.isFlat()
+        );
+        CACHE.getChunkCache().setServerViewDistance(packet.getViewDistance());
+        CACHE.getChunkCache().setServerSimulationDistance(packet.getSimulationDistance());
+//        CACHE.getChunkCache().setDimension(packet.getDimension());
 
         session.send(new ServerboundClientInformationPacket(
             "en_US",

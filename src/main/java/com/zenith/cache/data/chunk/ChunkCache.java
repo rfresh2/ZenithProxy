@@ -1,59 +1,114 @@
 package com.zenith.cache.data.chunk;
 
+import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
+import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
+import com.github.steveice10.mc.protocol.data.game.chunk.DataPalette;
+import com.github.steveice10.mc.protocol.data.game.chunk.palette.PaletteType;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockChangeEntry;
+import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityInfo;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.IntTag;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
+import com.github.steveice10.opennbt.tag.builtin.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
+import com.zenith.Shared;
 import com.zenith.cache.CachedData;
 import com.zenith.network.server.ServerConnection;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector3i;
 
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSection, ChunkSection> {
+@Getter
+@Setter
+public class ChunkCache implements CachedData {
     private static final Vector3i DEFAULT_SPAWN_POSITION = Vector3i.from(8, 64, 8);
     private static final double maxDistanceExpected = Math.pow(32, 2); // squared to speed up calc, no need to sqrt
-    @Getter
-    @Setter
     protected Vector3i spawnPosition = DEFAULT_SPAWN_POSITION;
-    @Getter
-    @Setter
+    // todo: consider moving weather to a separate cache object
     private boolean isRaining = false;
-    @Getter
-    @Setter
     private float rainStrength = 0f;
-    @Getter
-    @Setter
     private float thunderStrength = 0f;
-    @Getter
-    @Setter
     private int renderDistance = 25;
-    protected final Long2ObjectOpenHashMap<ChunkSection> cache = new Long2ObjectOpenHashMap<>();
+    protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
-    protected final List<ClientboundLevelChunkWithLightPacket> naiveCache = new ArrayList<>(2000);
+    // todo: clear on cache reset
+    protected Map<String, Dimension> dimensionRegistry = new ConcurrentHashMap<>();
+    protected Dimension currentDimension = null;
+    protected Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
+    protected int biomesEntryBitsSize = -1;
+    protected WorldData worldData;
+    protected int serverViewDistance = -1;
+    protected int serverSimulationDistance = -1;
+    protected MinecraftCodecHelper codec;
+    protected CompoundTag registryTag;
+    protected int centerX;
+    protected int centerZ;
 
     public ChunkCache() {
 //        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
+        codec = MinecraftCodec.CODEC.getHelperFactory().get();
+    }
+
+    public void updateRegistryTag(final CompoundTag registryData) {
+        this.registryTag = registryData;
+        setDimensionRegistry(registryData);
+        setBiomes(registryData);
+    }
+
+    public void setDimensionRegistry(final CompoundTag registryData) {
+        ListTag dimensionList = registryData.<CompoundTag>get("minecraft:dimension_type").<ListTag>get("value");
+        for (Tag tag : dimensionList) {
+            CompoundTag dimension = (CompoundTag) tag;
+            String name = dimension.<StringTag>get("name").getValue();
+            int id = dimension.<IntTag>get("id").getValue();
+            CompoundTag element = dimension.<CompoundTag>get("element");
+            int height = element.<IntTag>get("height").getValue();
+            int minY = element.<IntTag>get("min_y").getValue();
+            // todo: cache more data from the nbt?
+            dimensionRegistry.put(name, new Dimension(name, id, height, minY));
+        }
+    }
+
+    public void setBiomes(final CompoundTag registryData) {
+        final CompoundTag biomeRegistry = registryData.<CompoundTag>get("minecraft:worldgen/biome");
+        for (Tag type : biomeRegistry.<ListTag>get("value").getValue()) {
+            CompoundTag biomeNBT = (CompoundTag) type;
+            String biomeName = biomeNBT.<StringTag>get("name").getValue();
+            int biomeId = biomeNBT.<IntTag>get("id").getValue();
+            Biome biome = new Biome(biomeName, biomeId);
+            biomes.put(biome.id(), biome);
+        }
+        biomesEntryBitsSize = log2RoundUp(biomes.size());
+    }
+
+    public void setCurrentWorld(final String dimensionType, final String worldName, long hashedSeed, boolean debug, boolean flat) {
+        worldData = new WorldData(dimensionType, worldName, hashedSeed, debug, flat);
+        currentDimension = dimensionRegistry.get(worldName);
+    }
+
+    public static int log2RoundUp(int num) {
+        return (int) Math.ceil(Math.log(num) / Math.log(2));
     }
 
     public static void sync() {
@@ -61,48 +116,21 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
         if (nonNull(currentPlayer)) {
             try {
                 if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-//                    CACHE.getChunkCache().cache.values().parallelStream()
-//                            .map(ServerChunkDataPacket::new)
-//                            .forEach(currentPlayer::send);
+                    CACHE.getChunkCache().cache.values().parallelStream()
+                            .map(chunk -> new ClientboundLevelChunkWithLightPacket(
+                                    chunk.x,
+                                    chunk.z,
+                                    chunk.serialize(CACHE.getChunkCache().getCodec()),
+                                    new CompoundTag("heightmap"), // todo: verify if we need to populate heightmaps
+                                    chunk.blockEntities.toArray(new BlockEntityInfo[0]),
+                                    chunk.lightUpdateData))
+                            .forEach(currentPlayer::send);
                     lock.readLock().unlock();
                 }
             } catch (final Exception e) {
                 CLIENT_LOG.error("Error sending chunk data", e);
             }
         }
-    }
-
-    /**
-     * @deprecated do not call this directly!
-     */
-    @Override
-    @Deprecated
-    public ChunkSection apply(@NonNull ChunkSection existing, @NonNull ChunkSection add) {
-//        try {
-//            existing.getChunkData().
-//            Chunk[] chunks = existing.getChunks();
-//            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-//                for (int chunkY = 0; chunkY < 16; chunkY++) {
-//                    Chunk addChunk = add.getChunks()[chunkY];
-//                    if (addChunk == null) {
-//                        continue;
-//                    } else if (add.hasSkylight()) {
-//                        chunks[chunkY] = addChunk;
-//                    } else {
-//                        chunks[chunkY] = new Chunk(addChunk.getBlocks(), addChunk.getBlockLight(), chunks[chunkY] == null ? null : chunks[chunkY].getSkyLight());
-//                    }
-//                }
-//                lock.writeLock().unlock();
-//            }
-//            return new ChunkSection(
-//                    add.getX(), add.getZ(),
-//                    chunks,
-//                    add.hasBiomeData() ? add.getBiomeData() : existing.getBiomeData(),
-//                    add.getTileEntities());
-//        } catch (final Exception e) {
-//            CLIENT_LOG.error("Error merging chunk data", e);
-//        }
-        return null;
     }
 
     private static long chunkPosToLong(final int x, final int z) {
@@ -171,6 +199,23 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
 //        }
     }
 
+    public void lightUpdate(final ClientboundLightUpdatePacket packet) {
+        try {
+            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
+                Chunk chunk = this.cache.get(chunkPosToLong(packet.getX(), packet.getZ()));
+                if (chunk == this.cache.defaultReturnValue()) {
+                    CLIENT_LOG.warn("Received light update packet for unknown chunk: {} {}", packet.getX(), packet.getZ());
+                } else {
+                    chunk.lightUpdateData = packet.getLightData();
+                }
+                lock.writeLock().unlock();
+            }
+
+        } catch (final Exception e) {
+            CLIENT_LOG.info("Error applying light update at chunk: {} {}", packet.getX(), packet.getZ(), e);
+        }
+    }
+
     public boolean multiBlockUpdate(final ClientboundSectionBlocksUpdatePacket packet) {
         for (BlockChangeEntry record : packet.getEntries()) {
             updateBlock(record);
@@ -211,11 +256,11 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     public boolean updateTileEntity(final ClientboundBlockEntityDataPacket packet) {
         try {
             if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                final ChunkSection column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
-                if (isNull(column)) {
-                    lock.readLock().unlock();
-                    return false;
-                }
+//                final ChunkSection column = get(packet.getPosition().getX() >> 4, packet.getPosition().getZ() >> 4);
+//                if (isNull(column)) {
+//                    lock.readLock().unlock();
+//                    return false;
+//                }
                 lock.readLock().unlock();
 //                if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
 //                    final List<TileEntity> tileEntities = column.getTileEntities();
@@ -249,17 +294,20 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         try {
+            consumer.accept(new ClientboundSetChunkCacheRadiusPacket(serverViewDistance));
+            consumer.accept(new ClientboundSetChunkCacheCenterPacket(centerX, centerZ));
             if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                this.naiveCache.forEach(consumer);
+                this.cache.values().parallelStream()
+                    .map(chunk -> new ClientboundLevelChunkWithLightPacket(
+                        chunk.x,
+                        chunk.z,
+                        chunk.serialize(CACHE.getChunkCache().getCodec()),
+                        new CompoundTag("heightmap"), // todo: verify if we need to populate heightmaps
+                        chunk.blockEntities.toArray(new BlockEntityInfo[0]),
+                        chunk.lightUpdateData))
+                    .forEach(consumer);
                 lock.readLock().unlock();
             }
-
-//            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-//                this.cache.values().parallelStream()
-//                        .map(ServerChunkDataPacket::new)
-//                        .forEach(consumer);
-//                lock.readLock().unlock();
-//            }
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }
@@ -275,7 +323,6 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     public void reset(boolean full) {
         try {
             if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                this.naiveCache.clear();
                 this.cache.clear();
                 lock.writeLock().unlock();
                 this.spawnPosition = DEFAULT_SPAWN_POSITION;
@@ -315,37 +362,83 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
         return (int) (l >> 32 & 4294967295L);
     }
 
-    public void add(@NonNull ChunkSection column) {
-        try {
-//            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-//                this.cache.merge(chunkPosToLong(column.getX(), column.getZ()), column, this);
-//                lock.writeLock().unlock();
-//            }
-        } catch (final Exception e) {
-            CLIENT_LOG.error("Failed to merge chunk column", e);
-        }
-    }
-
     public void add(final ClientboundLevelChunkWithLightPacket p) {
         try {
             if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                if (this.naiveCache.size() > 1000) {
-                    this.naiveCache.remove(0);
+                try {
+                    if (worldData == null) {
+                        CLIENT_LOG.error("Received chunk data packet while not in a dimension");
+                        return;
+                    }
+                    int chunkX = p.getX();
+                    int chunkZ = p.getZ();
+                    byte[] data = p.getChunkData();
+                    ByteBuf buf = Unpooled.wrappedBuffer(data);
+                    int sectionsCount = getSectionsCount();
+                    Chunk existing = cache.get(chunkPosToLong(chunkX, chunkZ));
+                    Chunk chunk = existing;
+                    if (existing == cache.defaultReturnValue()) {
+                        chunk = new Chunk(chunkX,
+                                          chunkZ,
+                                          new ChunkSection[sectionsCount],
+                                          sectionsCount,
+                                          new ArrayList<>(
+                                              List.of(p.getBlockEntities())),
+                                          p.getLightData());
+                    }
+                    // todo: verify we don't need a special merge function
+                    //  is it possible for servers to send partial chunk data here still?
+                    for (int i = 0; i < chunk.sectionsCount; i++) {
+                        chunk.sections[i] = readChunkSection(buf);
+                    }
+                    cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
+                    CLIENT_LOG.info("Cached chunk {} {}", chunkX, chunkZ);
+                } finally {
+                    lock.writeLock().unlock();
                 }
-                this.naiveCache.add(new ClientboundLevelChunkWithLightPacket(p.getX(), p.getZ(), p.getChunkData(), p.getHeightMaps(), p.getBlockEntities(), p.getLightData()));
-                lock.writeLock().unlock();
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Failed to acquire write lock", e);
         }
     }
 
-    public ChunkSection get(int x, int z) {
+    public ChunkSection readChunkSection(ByteBuf buf) throws UncheckedIOException {
+        if (biomesEntryBitsSize == -1) {
+            throw new IllegalStateException("Biome entry bits size is not set");
+        }
+
+        int blockCount = buf.readShort();
+        DataPalette chunkPalette = codec.readDataPalette(buf,
+                                                         PaletteType.CHUNK,
+                                                         Shared.BLOCK_DATA_MANAGER.getBlockBitsPerEntry());
+        DataPalette biomePalette = codec.readDataPalette(buf,
+                                                         PaletteType.BIOME,
+                                                         biomesEntryBitsSize);
+        return new ChunkSection(blockCount, chunkPalette, biomePalette);
+    }
+
+    public int getSectionsCount() {
+        return this.getMaxSection() - this.getMinSection();
+    }
+
+    public int getMaxSection() {
+        return ((this.getMaxBuildHeight() - 1) >> 4) + 1;
+    }
+
+    public int getMinSection() {
+        return currentDimension.minY >> 4;
+    }
+
+    public int getMaxBuildHeight() {
+        return currentDimension.minY + currentDimension.height;
+    }
+
+    public Chunk get(int x, int z) {
         try {
             if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                ChunkSection column = this.cache.get(chunkPosToLong(x, z));
+                Chunk chunk = this.cache.get(chunkPosToLong(x, z));
                 lock.readLock().unlock();
-                return column;
+                return chunk;
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Failed to acquire read lock", e);
@@ -356,16 +449,8 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
     public void remove(int x, int z) {
         try {
             if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                List<ClientboundLevelChunkWithLightPacket> toRemove = this.naiveCache.stream()
-                    .filter(p -> {
-                        if (p == null) {
-                            return false;
-                        }
-                        return p.getX() == x && p.getZ() == z;
-                    })
-                    .collect(Collectors.toList());
-                this.naiveCache.removeAll(toRemove);
-//                this.cache.remove(chunkPosToLong(x, z));
+                this.cache.remove(chunkPosToLong(x, z));
+                CLIENT_LOG.info("Removed cached chunk: {} {}", x, z);
                 lock.writeLock().unlock();
             }
         } catch (final Exception e) {
@@ -404,5 +489,14 @@ public class ChunkCache implements CachedData, BiFunction<ChunkSection, ChunkSec
 
     private boolean distanceOutOfRange(final int x1, final int y1, final int x2, final int y2) {
         return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) > maxDistanceExpected;
+    }
+
+    public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
+        this.currentDimension = dimensionRegistry.get(packet.getDimension());
+        this.worldData = new WorldData(currentDimension.dimensionName, // todo: verify if this is even relevant
+                                       currentDimension.dimensionName,
+                                       packet.getHashedSeed(),
+                                       packet.isDebug(),
+                                       packet.isFlat());
     }
 }
