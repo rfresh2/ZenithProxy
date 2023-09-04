@@ -218,7 +218,7 @@ dependencies {
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
 
-    shade('org.redisson:redisson:3.23.3') {
+    shade('org.redisson:redisson:3.23.4') {
         exclude group: 'io.netty'
     }
     shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
