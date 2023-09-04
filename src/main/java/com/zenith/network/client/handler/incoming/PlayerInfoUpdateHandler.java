@@ -21,6 +21,7 @@ public class PlayerInfoUpdateHandler implements AsyncIncomingHandler<Clientbound
                 EVENT_BUS.postAsync(new ServerPlayerConnectedEvent(CACHE.getTabListCache().getTabList().get(entry)));
             });
         }
+        // todo: cache other actions state
         return true;
     }
 
