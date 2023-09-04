@@ -22,7 +22,7 @@ public class JoinGameSpectatorPostHandler implements PostOutgoingHandler<Clientb
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
         // todo: verify brand channel
-        session.send(new ClientboundCustomPayloadPacket("brand", RefStrings.BRAND_SUPPLIER.get()));
+        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
         session.send(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER),
             new PlayerListEntry[]{new PlayerListEntry(

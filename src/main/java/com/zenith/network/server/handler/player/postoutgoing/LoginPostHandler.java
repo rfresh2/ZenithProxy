@@ -17,7 +17,7 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
         // todo: verify channel is correct
-        session.send(new ClientboundCustomPayloadPacket("brand", RefStrings.BRAND_SUPPLIER.get()));
+        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
 
 
         session.setLoggedIn(true); // allows server packets to start being sent to player

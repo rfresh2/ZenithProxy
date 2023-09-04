@@ -7,7 +7,7 @@ import com.zenith.network.registry.IncomingHandler;
 public class PluginMessageHandler implements IncomingHandler<ClientboundCustomPayloadPacket, ClientSession> {
     @Override
     public boolean apply(ClientboundCustomPayloadPacket packet, ClientSession session) {
-        return !packet.getChannel().equalsIgnoreCase("brand"); // todo: this might actually be "minecraft:brand" or similar
+        return !packet.getChannel().equalsIgnoreCase("minecraft:brand");
     }
 
     @Override

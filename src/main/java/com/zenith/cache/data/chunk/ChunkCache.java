@@ -124,7 +124,7 @@ public class ChunkCache implements CachedData {
                     chunk.x,
                     chunk.z,
                     chunk.serialize(CACHE.getChunkCache().getCodec()),
-                    new CompoundTag("heightmap"), // todo: verify if we need to populate heightmaps
+                    chunk.heightMaps,
                     chunk.blockEntities.toArray(new BlockEntityInfo[0]),
                     chunk.lightUpdateData))
                 .forEach(currentPlayer::send);
@@ -137,6 +137,7 @@ public class ChunkCache implements CachedData {
     }
 
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
+        // todo: recalculate chunk heightmaps NBT on each block update?
         Vec3i pos = Vec3i.from(record.getPosition());
         if (pos.getY() < currentDimension.minY || pos.getY() >= currentDimension.minY + currentDimension.height) {
             CLIENT_LOG.warn("Received block update packet for block outside of dimension bounds: pos: {}, minY: {}, height: {}", pos, currentDimension.minY, currentDimension.height);
@@ -339,7 +340,7 @@ public class ChunkCache implements CachedData {
                         chunk.x,
                         chunk.z,
                         chunk.serialize(CACHE.getChunkCache().getCodec()),
-                        new CompoundTag("heightmap"), // todo: verify if we need to populate heightmaps
+                        chunk.heightMaps,
                         chunk.blockEntities.toArray(new BlockEntityInfo[0]),
                         chunk.lightUpdateData))
                     .forEach(consumer);
@@ -422,7 +423,8 @@ public class ChunkCache implements CachedData {
                                   sectionsCount,
                                   new ArrayList<>(
                                       List.of(p.getBlockEntities())),
-                                  p.getLightData());
+                                  p.getLightData(),
+                                  p.getHeightMaps());
             }
             for (int i = 0; i < chunk.sectionsCount; i++) {
                 chunk.sections[i] = readChunkSection(buf);
