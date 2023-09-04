@@ -359,12 +359,14 @@ public class ChunkCache implements CachedData {
     @Override
     public void reset(boolean full) {
         writeCache(() -> {
+            CLIENT_LOG.info("Resetting chunk cache");
             this.cache.clear();
             this.spawnPosition = DEFAULT_SPAWN_POSITION;
             this.isRaining = false;
             this.thunderStrength = 0.0f;
             this.rainStrength = 0.0f;
             if (full) {
+                CLIENT_LOG.info("Full chunk cache reset");
                 this.biomes.clear();
                 this.biomesEntryBitsSize = -1;
                 this.dimensionRegistry.clear();
@@ -401,7 +403,7 @@ public class ChunkCache implements CachedData {
     }
 
     public void add(final ClientboundLevelChunkWithLightPacket p) {
-        readCache(() -> {
+        writeCache(() -> {
             if (worldData == null) {
                 CLIENT_LOG.error("Received chunk data packet while not in a dimension");
                 return false;
@@ -426,6 +428,7 @@ public class ChunkCache implements CachedData {
                 chunk.sections[i] = readChunkSection(buf);
             }
             cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
+            CLIENT_LOG.info("Cached chunk: {}, {}", chunkX, chunkZ);
             return true;
         });
     }
@@ -471,12 +474,20 @@ public class ChunkCache implements CachedData {
         return readCache(() -> {
             Chunk chunk = get(x >> 4, z >> 4);
             if (chunk == null) return null;
-            return chunk.sections[(y >> 4) - getMinSection()];
+            int sectionIndex = (y >> 4) - getMinSection();
+            if (sectionIndex < 0 || sectionIndex >= chunk.sections.length) {
+                CLIENT_LOG.error("Received request for section from blockPos {}, {}, {} outside of chunk bounds with index: {}, minY: {}, currentDimension: {}", x, y, z, sectionIndex, currentDimension.minY, currentDimension.dimensionName);
+                return null;
+            }
+            return chunk.sections[sectionIndex];
         });
     }
 
     public void remove(int x, int z) {
-        writeCache(() -> this.cache.remove(chunkPosToLong(x, z)));
+        writeCache(() -> {
+            CLIENT_LOG.info("Removing chunk: {}, {}", x, z);
+            return this.cache.remove(chunkPosToLong(x, z));
+        });
     }
 
     // reap any chunks we possibly didn't remove from the cache
@@ -512,5 +523,6 @@ public class ChunkCache implements CachedData {
                                        packet.getHashedSeed(),
                                        packet.isDebug(),
                                        packet.isFlat());
+        CLIENT_LOG.info("Updated current dimension to: {}", currentDimension.dimensionName);
     }
 }

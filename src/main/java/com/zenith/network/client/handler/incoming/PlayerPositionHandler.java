@@ -11,8 +11,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
 
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class PlayerPositionHandler implements AsyncIncomingHandler<ClientboundPlayerPositionPacket, ClientSession> {
@@ -25,6 +24,7 @@ public class PlayerPositionHandler implements AsyncIncomingHandler<ClientboundPl
                 .setZ((packet.getRelative().contains(PositionElement.Z) ? cache.getZ() : 0.0d) + packet.getZ())
                 .setYaw((packet.getRelative().contains(PositionElement.YAW) ? cache.getYaw() : 0.0f) + packet.getYaw())
                 .setPitch((packet.getRelative().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
+        CLIENT_LOG.info("Server set player position: {}, {}, {}", cache.getX(), cache.getY(), cache.getZ());
         if (isNull(session.getProxy().getCurrentPlayer().get())) {
             session.send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
             session.send(new ServerboundMovePlayerPosRotPacket(

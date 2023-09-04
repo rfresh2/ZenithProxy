@@ -28,16 +28,6 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
             CHAT_LOG.info(ComponentSerializer.serialize(packet.getContent()));
             final Component component = packet.getContent();
             final String messageString = ComponentSerializer.toRawString(component);
-            /*
-             * example death message:
-             * {"extra":[{"text":""},{"color":"dark_aqua","text":""},
-             * {"color":"dark_aqua","clickEvent":{"action":"suggest_command","value":"/w DCI5135 "},
-             * "hoverEvent":{"action":"show_text","value":[{"text":""},
-             * {"color":"gold","text":"Message "},{"color":"dark_aqua","text":""},
-             * {"color":"dark_aqua","text":"DCI5135"},{"color":"dark_aqua","text":""}]},"text":"DCI5135"},
-             * {"color":"dark_aqua","text":" "},
-             * {"color":"dark_red","text":"died inside lava somehow."}],"text":""}
-             */
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
                 if (component.children().stream().anyMatch(child -> nonNull(child.color())
