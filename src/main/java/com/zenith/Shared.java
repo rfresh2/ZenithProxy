@@ -31,6 +31,7 @@ import com.zenith.network.client.handler.postoutgoing.PostOutgoingSetCarriedItem
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.player.incoming.ClientSettingsPacketHandler;
+import com.zenith.network.server.handler.player.incoming.PlayerPongHandler;
 import com.zenith.network.server.handler.player.incoming.ServerboundChatHandler;
 import com.zenith.network.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
@@ -38,11 +39,11 @@ import com.zenith.network.server.handler.player.postoutgoing.ClientCommandPostHa
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.ServerboundHelloHandler;
 import com.zenith.network.server.handler.shared.incoming.ServerboundKeepAliveHandler;
-import com.zenith.network.server.handler.shared.incoming.ServerboundPongHandler;
 import com.zenith.network.server.handler.shared.outgoing.GameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
 import com.zenith.network.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
+import com.zenith.network.server.handler.spectator.incoming.SpectatorPongHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
@@ -282,7 +283,7 @@ public class Shared {
         .registerInbound(new ServerboundKeepAliveHandler())
         .registerInbound(new ServerboundChatHandler())
         .registerInbound(new ClientSettingsPacketHandler())
-        .registerInbound(new ServerboundPongHandler())
+        .registerInbound(new PlayerPongHandler())
         //PLAYER MOVEMENT
         .registerInbound(new PlayerSwingArmPacketHandler())
         //
@@ -303,7 +304,7 @@ public class Shared {
 
         .registerInbound(new ServerboundHelloHandler())
         .registerInbound(new ServerboundKeepAliveHandler())
-        .registerInbound(new ServerboundPongHandler())
+        .registerInbound(new SpectatorPongHandler())
         .registerInbound(new PlayerPositionRotationSpectatorHandler())
         .registerInbound(new PlayerPositionSpectatorHandler())
         .registerInbound(new PlayerRotationSpectatorHandler())
