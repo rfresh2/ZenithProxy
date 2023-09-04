@@ -148,6 +148,7 @@ public class Shared {
         .registerInbound(new UpdateTimePacketHandler())
         .registerInbound(new ServerCombatHandler())
         .registerInbound(new MapDataHandler())
+        .registerInbound(new PingHandler())
         .registerInbound(new PluginMessageHandler())
         //ENTITY
         .registerInbound(new SetEntityLinkHandler())

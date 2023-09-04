@@ -230,6 +230,7 @@ public class AntiAFK extends Module {
             final Position nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
             if (nextGravityMove != null) {
                 if (!nextGravityMove.equals(PATHING.getCurrentPlayerPos())) {
+//                    MODULE_LOG.info("Sending gravity move: {}", nextGravityMove);
                     sendClientPacketAsync(nextGravityMove.toPlayerPositionPacket());
                 }
                 gravityT++;

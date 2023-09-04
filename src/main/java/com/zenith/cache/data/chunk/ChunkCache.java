@@ -428,7 +428,7 @@ public class ChunkCache implements CachedData {
                 chunk.sections[i] = readChunkSection(buf);
             }
             cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
-            CLIENT_LOG.info("Cached chunk: {}, {}", chunkX, chunkZ);
+//            CLIENT_LOG.info("Cached chunk: {}, {}", chunkX, chunkZ);
             return true;
         });
     }
@@ -476,7 +476,7 @@ public class ChunkCache implements CachedData {
             if (chunk == null) return null;
             int sectionIndex = (y >> 4) - getMinSection();
             if (sectionIndex < 0 || sectionIndex >= chunk.sections.length) {
-                CLIENT_LOG.error("Received request for section from blockPos {}, {}, {} outside of chunk bounds with index: {}, minY: {}, currentDimension: {}", x, y, z, sectionIndex, currentDimension.minY, currentDimension.dimensionName);
+//                CLIENT_LOG.error("Received request for section from blockPos {}, {}, {} outside of chunk bounds with index: {}, minY: {}, currentDimension: {}", x, y, z, sectionIndex, currentDimension.minY, currentDimension.dimensionName);
                 return null;
             }
             return chunk.sections[sectionIndex];
@@ -485,7 +485,7 @@ public class ChunkCache implements CachedData {
 
     public void remove(int x, int z) {
         writeCache(() -> {
-            CLIENT_LOG.info("Removing chunk: {}, {}", x, z);
+//            CLIENT_LOG.info("Removing chunk: {}, {}", x, z);
             return this.cache.remove(chunkPosToLong(x, z));
         });
     }
