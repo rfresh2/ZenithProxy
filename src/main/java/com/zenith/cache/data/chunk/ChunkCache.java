@@ -518,7 +518,7 @@ public class ChunkCache implements CachedData {
 
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         this.currentDimension = dimensionRegistry.get(packet.getDimension());
-        this.worldData = new WorldData(currentDimension.dimensionName, // todo: verify if this is even relevant
+        this.worldData = new WorldData(packet.getDimension(), // todo: verify if this is even relevant
                                        currentDimension.dimensionName,
                                        packet.getHashedSeed(),
                                        packet.isDebug(),
