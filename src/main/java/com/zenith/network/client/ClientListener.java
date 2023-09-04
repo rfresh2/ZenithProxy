@@ -89,7 +89,6 @@ public class ClientListener implements SessionListener {
 
     @Override
     public void disconnected(DisconnectedEvent event) {
-        CLIENT_LOG.info("Disconnected: " + event.getReason());
         session.setDisconnected(true);
         String reason;
         try {
@@ -98,6 +97,7 @@ public class ClientListener implements SessionListener {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
             reason = isNull(event.getReason()) ? "Disconnected" : ComponentSerializer.serialize(event.getReason());
         }
+        CLIENT_LOG.info("Disconnected: " + reason);
         EVENT_BUS.post(new DisconnectEvent(reason));
     }
 }

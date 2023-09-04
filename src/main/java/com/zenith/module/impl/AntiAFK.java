@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -197,71 +198,70 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-//        if (startWalkTickTimer.tick(400L, true)) {
-//            shouldWalk = true;
-//            final WalkDirection directions = walkDirectionIterator.next();
-//            currentPathingGoal = PATHING.getCurrentPlayerPos()
-//                    .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.from)
-//                    .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.to)
-//                    .toBlockPos();
-//
-//        }
-//        if (shouldWalk) {
-//            if (reachedPathingGoal()) {
-//                shouldWalk = false;
-//            } else {
-//                Position nextMovePos = PATHING.calculateNextMove(currentPathingGoal);
-//                if (nextMovePos.equals(PATHING.getCurrentPlayerPos())) {
-//                    shouldWalk = false;
-//                }
-//                sendClientPacketAsync(nextMovePos.toPlayerPositionPacket());
-//                this.positionCache.put(nextMovePos, nextMovePos);
-//            }
-//        }
+        if (startWalkTickTimer.tick(400L, true)) {
+            shouldWalk = true;
+            final WalkDirection directions = walkDirectionIterator.next();
+            currentPathingGoal = PATHING.getCurrentPlayerPos()
+                    .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.from)
+                    .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.to)
+                    .toBlockPos();
+
+        }
+        if (shouldWalk) {
+            if (reachedPathingGoal()) {
+                shouldWalk = false;
+            } else {
+                Position nextMovePos = PATHING.calculateNextMove(currentPathingGoal);
+                if (nextMovePos.equals(PATHING.getCurrentPlayerPos())) {
+                    shouldWalk = false;
+                }
+                sendClientPacketAsync(nextMovePos.toPlayerPositionPacket());
+                this.positionCache.put(nextMovePos, nextMovePos);
+            }
+        }
     }
 
-//    private boolean reachedPathingGoal() {
-//        return Objects.equals(PATHING.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
-//    }
+    private boolean reachedPathingGoal() {
+        return Objects.equals(PATHING.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
+    }
 
     private void gravityTick() {
-//        synchronized (this) {
-//            final Position nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
-//            if (nextGravityMove != null) {
-//                if (!nextGravityMove.equals(PATHING.getCurrentPlayerPos())) {
-//                    sendClientPacketAsync(nextGravityMove.toPlayerPositionPacket());
-//                }
-//                gravityT++;
-//            } else {
-//                gravityT = 0;
-//            }
-//        }
+        synchronized (this) {
+            final Position nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
+            if (nextGravityMove != null) {
+                if (!nextGravityMove.equals(PATHING.getCurrentPlayerPos())) {
+                    sendClientPacketAsync(nextGravityMove.toPlayerPositionPacket());
+                }
+                gravityT++;
+            } else {
+                gravityT = 0;
+            }
+        }
     }
 
     private boolean antiStuckTick() {
         // jump in place until we die
-//        synchronized (this) {
-//            if (antiStuckT == 0) {
-//                if (!PATHING.isOnGround()) {
-//                    antiStuckT = -2;
-//                    return false;
-//                }
-//                antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
-//                // increases hunger loss by 4x if we're sprinting
-//                // todo: track this state so we don't flag grim
-////                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
-//            }
-//            final Position nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
-//            antiStuckT++;
-//            if (nextAntiStuckMove != null) {
-//                sendClientPacketAsync(nextAntiStuckMove.toPlayerPositionPacket());
-//            } else {
-//                antiStuckT = -2;
-//                return false;
-//            }
-//            return true;
-//        }
-        return false;
+        synchronized (this) {
+            if (antiStuckT == 0) {
+                if (!PATHING.isOnGround()) {
+                    antiStuckT = -2;
+                    return false;
+                }
+                antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
+                // increases hunger loss by 4x if we're sprinting
+                // todo: track this state so we don't flag grim
+//                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
+            }
+            final Position nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
+            antiStuckT++;
+            if (nextAntiStuckMove != null) {
+                sendClientPacketAsync(nextAntiStuckMove.toPlayerPositionPacket());
+            } else {
+                antiStuckT = -2;
+                return false;
+            }
+            return true;
+        }
     }
 
     private void swingTick() {

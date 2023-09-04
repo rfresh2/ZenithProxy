@@ -5,37 +5,45 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.pathing.CollisionBox;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.DEFAULT_LOG;
-import static java.util.Objects.isNull;
 
 @Getter
 @Setter
 public class BlockDataManager {
     private final ObjectMapper objectMapper;
-    private Map<Integer, Block> blockWithCollisionMap;
     private int maxStates;
     private int blockBitsPerEntry;
-    private List<String> stateIdToBlockName = new ArrayList<>(25000);
+    private Int2ObjectMap<Block> blockStateIdToBlock = new Int2ObjectOpenHashMap<>();
 
     public BlockDataManager() {
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        List<BlockData> blockData = getBlockData();
-        initBlockPalette(blockData);
+        List<BlockData> blockDataList = getBlockData();
         BlockCollisionShapes blockCollisionShapes = getBlockCollisionShapes();
-        initBlockWithCollisions(blockData, blockCollisionShapes);
+        for (BlockData data : blockDataList) {
+            Integer minStateId = data.getMinStateId();
+            Integer maxStateId = data.getMaxStateId();
+            Block block = new Block(data.getId(), data.getDisplayName(), data.getName(), data.getBoundingBox(), getBlockStateCollisionBoxes(blockCollisionShapes, data, minStateId, maxStateId));
+            for (int i = minStateId; i <= maxStateId; i++) {
+                this.blockStateIdToBlock.put(i, block);
+            }
+        }
+        this.maxStates = blockStateIdToBlock.size();
+        this.blockBitsPerEntry = ChunkCache.log2RoundUp(this.maxStates);
     }
 
-    public Optional<Block> getBlockFromId(int id) {
-        if (this.blockWithCollisionMap.containsKey(id)) {
-            return Optional.of(this.blockWithCollisionMap.get(id));
+    public Optional<Block> getBlockFromBlockStateId(int blockStateId) {
+        if (this.blockStateIdToBlock.containsKey(blockStateId)) {
+            return Optional.of(this.blockStateIdToBlock.get(blockStateId));
         } else {
             return Optional.empty();
         }
@@ -58,49 +66,20 @@ public class BlockDataManager {
         }
     }
 
-
-    private void initBlockWithCollisions(List<BlockData> blockDataList, BlockCollisionShapes blockCollisionShapes) {
-        this.blockWithCollisionMap = blockDataList.stream()
-                .map(blockData -> new Block(blockData.getId(), blockData.getDisplayName(), blockData.getName(), blockData.getBoundingBox(), getBlockVariationMapping(blockCollisionShapes, blockData)))
-                .collect(Collectors.toMap(Block::getId, v -> v));
-    }
-
-    private void initBlockPalette(List<BlockData> blockDataList) {
-        // todo: validate this works lol
-        this.maxStates = 1 + blockDataList.stream()
-            .mapToInt(blockData -> blockData.getMaxStateId())
-            .max()
-            .orElse(0);
-        DEFAULT_LOG.info("Max states: {}", this.maxStates);
-        for (int i = 0; i < this.maxStates; i++) {
-            this.stateIdToBlockName.add(null);
-        }
-        this.blockBitsPerEntry = ChunkCache.log2RoundUp(this.maxStates);
-        for (BlockData data : blockDataList) {
-            Integer minStateId = data.getMinStateId();
-            Integer maxStateId = data.getMaxStateId();
-            if (minStateId != null && maxStateId != null) {
-                for (int i = minStateId; i <= maxStateId; i++) {
-                    this.stateIdToBlockName.set(i, data.getName());
-                }
-            }
-        }
-        DEFAULT_LOG.info("State ID to Block Name size: {}", this.stateIdToBlockName.size());
-    }
-
-    private Map<Integer, List<CollisionBox>> getBlockVariationMapping(BlockCollisionShapes blockCollisionShapes, BlockData blockData) {
-        final Map<Integer, List<CollisionBox>> map = new Int2ObjectOpenHashMap<>();
-        if (isNull(blockData.getVariations())) {
-            map.put(0, getCollisionBoxesFromBlockState(blockCollisionShapes, blockData, 0).orElse(Collections.emptyList()));
-        } else {
-            blockData.getVariations().forEach(variation -> {
-                map.put(variation.getMetadata(), getCollisionBoxesFromBlockState(blockCollisionShapes, blockData, variation.getMetadata()).orElse(Collections.emptyList()));
-            });
+    private Int2ObjectMap<List<CollisionBox>> getBlockStateCollisionBoxes(BlockCollisionShapes blockCollisionShapes, BlockData blockData, final int minStateId, final int maxStateId) {
+        final Int2ObjectMap<List<CollisionBox>> map = new Int2ObjectOpenHashMap<>();
+        for (int i = 0; i <= maxStateId - minStateId; i++) {
+            final int currentStateId = minStateId + i;
+            getCollisionBoxesFromBlockState(blockCollisionShapes, blockData, i)
+                .ifPresent(collisionBoxes -> map.put(currentStateId, collisionBoxes));
         }
         return map;
     }
 
-    private Optional<List<CollisionBox>> getCollisionBoxesFromBlockState(BlockCollisionShapes blockCollisionShapes, final BlockData block, final int stateId) {
+    private Optional<List<CollisionBox>> getCollisionBoxesFromBlockState(BlockCollisionShapes blockCollisionShapes,
+                                                                         final BlockData block,
+                                                                         final int stateId // not actually block palette state id. index of min to max block state id
+    ) {
         final Object shapeIds = blockCollisionShapes.getBlocks().getAdditionalProperties().get(block.getName());
         if (shapeIds instanceof Integer) {
             return Optional.of(getCollisionBoxFromShapeId(blockCollisionShapes, (Integer) shapeIds));
@@ -108,9 +87,10 @@ public class BlockDataManager {
             final List<Integer> shapeIdList = (List<Integer>) shapeIds;
             final List<List<CollisionBox>> collisionList = shapeIdList.stream()
                     .map(shapeId -> getCollisionBoxFromShapeId(blockCollisionShapes, shapeId))
-                    .collect(Collectors.toList());
+                    .toList();
             return Optional.of(collisionList.get(stateId));
         } else {
+            DEFAULT_LOG.warn("Did not find collision box for block: {}", block.getName());
             return Optional.empty();
         }
     }

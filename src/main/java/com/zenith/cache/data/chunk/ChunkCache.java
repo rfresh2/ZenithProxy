@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.Shared;
 import com.zenith.cache.CachedData;
+import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Vec3i;
 import io.netty.buffer.ByteBuf;
@@ -170,7 +171,7 @@ public class ChunkCache implements CachedData {
                 tileEntity.getY() == pos.getY() &&
                 tileEntity.getZ() == pos.getZ());
         } else {
-            String blockName = BLOCK_DATA_MANAGER.getStateIdToBlockName().get(record.getBlock());
+            String blockName = BLOCK_DATA_MANAGER.getBlockFromBlockStateId(record.getBlock()).map(Block::getName).orElse(null);
             if (blockName == null) {
                 CLIENT_LOG.warn("Received block update packet for unknown block: {}", record.getBlock());
                 return;
@@ -462,6 +463,15 @@ public class ChunkCache implements CachedData {
         return readCache(() -> {
             Chunk chunk = this.cache.get(chunkPosToLong(x, z));
             return (chunk == this.cache.defaultReturnValue()) ? null : chunk;
+        });
+    }
+
+    // section for blockpos
+    public ChunkSection getChunkSection(int x, int y, int z) {
+        return readCache(() -> {
+            Chunk chunk = get(x >> 4, z >> 4);
+            if (chunk == null) return null;
+            return chunk.sections[(y >> 4) - getMinSection()];
         });
     }
 
