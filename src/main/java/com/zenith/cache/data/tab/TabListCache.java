@@ -21,7 +21,7 @@ public class TabListCache implements CachedData {
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ClientboundTabListPacket(this.tabList.getHeader(), this.tabList.getFooter()));
         consumer.accept(new ClientboundPlayerInfoUpdatePacket(
-            EnumSet.of(PlayerListEntryAction.ADD_PLAYER),
+            EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED),
             this.tabList.getEntries().stream().map(PlayerEntry::toMCProtocolLibEntry).toArray(PlayerListEntry[]::new)
         ));
     }
