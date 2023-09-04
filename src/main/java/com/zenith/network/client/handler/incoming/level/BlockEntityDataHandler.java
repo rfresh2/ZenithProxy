@@ -1,4 +1,4 @@
-package com.zenith.network.client.handler.incoming;
+package com.zenith.network.client.handler.incoming.level;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundBlockEntityDataPacket;
 import com.zenith.network.client.ClientSession;

@@ -1,4 +1,4 @@
-package com.zenith.network.client.handler.incoming;
+package com.zenith.network.client.handler.incoming.level;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;

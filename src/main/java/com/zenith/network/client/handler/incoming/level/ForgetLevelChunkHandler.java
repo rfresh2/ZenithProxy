@@ -1,4 +1,4 @@
-package com.zenith.network.client.handler.incoming;
+package com.zenith.network.client.handler.incoming.level;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundForgetLevelChunkPacket;
 import com.zenith.Proxy;

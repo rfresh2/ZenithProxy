@@ -19,6 +19,7 @@ import com.zenith.module.ModuleManager;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.client.handler.incoming.*;
 import com.zenith.network.client.handler.incoming.entity.*;
+import com.zenith.network.client.handler.incoming.level.*;
 import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
@@ -115,6 +116,7 @@ public class Shared {
         .registerInbound(new AdvancementsHandler())
         .registerInbound(new BlockChangeHandler())
         .registerInbound(new BossBarHandler())
+        .registerInbound(new ChunksBiomesHandler())
         .registerInbound(new SystemChatHandler())
         .registerInbound(new PlayerChatHandler())
         .registerInbound(new LevelChunkWithLightHandler())
@@ -128,6 +130,7 @@ public class Shared {
         .registerInbound(new SetCarriedItemHandler())
         .registerInbound(new SetChunkCacheCenterHandler())
         .registerInbound(new SetChunkCacheRadiusHandler())
+        .registerInbound(new SetSimulationDistanceHandler())
         .registerInbound(new SetHealthHandler())
         .registerInbound(new PlayerPositionHandler())
         .registerInbound(new SetExperienceHandler())

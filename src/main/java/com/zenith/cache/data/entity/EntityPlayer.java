@@ -18,9 +18,7 @@ import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -61,13 +59,14 @@ public class EntityPlayer extends Entity {
 
     public void setHealth(float health) {
         this.health = health;
-        final List<EntityMetadata> md = new ArrayList<>(this.getMetadata());
-        md.forEach(meta -> {
-            if (meta.getId() == 7) { // https://c4k3.github.io/wiki.vg/Entities.html#Living
-                meta.setValue(health);
-            }
-        });
-        this.metadata = md;
+        // todo: port to 1.20?
+//        final List<EntityMetadata> md = new ArrayList<>(this.getMetadata());
+//        md.forEach(meta -> {
+//            if (meta.getId() == 7) { // https://c4k3.github.io/wiki.vg/Entities.html#Living
+//                meta.setValue(health);
+//            }
+//        });
+//        this.metadata = md;
     }
 
     @Override

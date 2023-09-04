@@ -1,4 +1,4 @@
-package com.zenith.network.client.handler.incoming;
+package com.zenith.network.client.handler.incoming.level;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundLightUpdatePacket;
 import com.zenith.network.client.ClientSession;
@@ -9,8 +9,7 @@ import static com.zenith.Shared.CACHE;
 public class LightUpdateHandler implements AsyncIncomingHandler<ClientboundLightUpdatePacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundLightUpdatePacket packet, final ClientSession session) {
-        CACHE.getChunkCache().lightUpdate(packet);
-        return true;
+        return CACHE.getChunkCache().handleLightUpdate(packet);
     }
 
     @Override
