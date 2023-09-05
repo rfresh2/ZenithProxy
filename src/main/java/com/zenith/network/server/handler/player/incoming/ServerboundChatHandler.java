@@ -24,9 +24,7 @@ public class ServerboundChatHandler implements IncomingHandler<ServerboundChatPa
         if (message.startsWith("!")) {
             final String lowerCase = message.toLowerCase();
             if (message.startsWith("!!")) {
-                //allow sending ingame commands to bots or whatever
-                // todo: reimplement without reflection
-//                PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, message.substring(1));
+                packet.setMessage(message.substring(1));
                 return true;
             } else if (lowerCase.startsWith("!help")) {
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&9&lPlayer commands"), false));

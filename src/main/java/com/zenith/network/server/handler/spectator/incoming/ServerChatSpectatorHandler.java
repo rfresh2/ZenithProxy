@@ -31,8 +31,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&ce &7- &8List spectator entities. Change with \"!e <entity>\""), false));
         } else if (packet.getMessage().toLowerCase().startsWith("!m")) {
             if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
-                // todo: figure out how to send chat packets
-//                session.getProxy().getClient().send(new ServerboundChatPacket(MineDown.parse(packet.getMessage().substring(2).trim())));
+                session.getProxy().getClient().send(new ServerboundChatPacket(packet.getMessage().substring(2).trim()));
             } else {
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&cSpectator chat disabled&r"), false));
             }

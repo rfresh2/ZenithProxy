@@ -1,5 +1,6 @@
 package com.zenith.discord;
 
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
@@ -730,8 +731,7 @@ public class DiscordBot {
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (CONFIG.discord.chatRelay.enable) {
             if (Proxy.getInstance().isConnected() && !event.message.isEmpty()) {
-                // todo: new chat packet
-//                Proxy.getInstance().getClient().send(new ClientChatPacket(event.message));
+                Proxy.getInstance().getClient().send(new ServerboundChatPacket(event.message));
                 lastRelaymessage = Optional.of(Instant.now());
             }
         }

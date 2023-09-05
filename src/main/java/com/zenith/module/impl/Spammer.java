@@ -1,10 +1,12 @@
 package com.zenith.module.impl;
 
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.CONFIG;
@@ -38,8 +40,7 @@ public class Spammer extends Module {
         } else {
             spamIndex = (spamIndex + 1) % CONFIG.client.extra.spammer.messages.size();
         }
-        // todo: new chat packet
-//        sendClientPacketAsync(new ClientChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+        sendClientPacketAsync(new ServerboundChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
     }
 
     @Override
