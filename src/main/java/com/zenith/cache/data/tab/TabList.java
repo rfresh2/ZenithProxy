@@ -23,6 +23,7 @@ public class TabList {
     protected Component header = Component.text("");
     @NonNull
     protected Component footer = Component.text("");
+    protected long lastUpdate = 0L;
 
     public void add(@NonNull PlayerListEntry entry) {
         PlayerEntry coolEntry = PlayerEntry.fromMCProtocolLibEntry(entry);

@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.cache.data.PlayerCache;
@@ -143,22 +144,8 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             // health check on proxy server state.
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 5L, 5L, TimeUnit.MINUTES);
-//            if (CONFIG.client.extra.sixHourReconnect) {
-//                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
-//                    try {
-//                        if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
-//                            long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-//                            if (onlineSeconds > (21600 - (60 + ThreadLocalRandom.current().nextInt(120)))) { // 6 hrs - 60 seconds padding
-//                                this.disconnect(SYSTEM_DISCONNECT);
-//                                this.cancelAutoReconnect();
-//                                this.connect();
-//                            }
-//                        }
-//                    } catch (final Throwable e) {
-//                        DEFAULT_LOG.error("Error in reconnect executor service", e);
-//                    }
-//                }, 0, 10L, TimeUnit.SECONDS);
-//            }
+            // ensure we are continuously updating the tablist even on servers that don't frequently send updates
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             if (CONFIG.client.extra.twentyMinuteReconnectIfStuck) {
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     try {
@@ -224,6 +211,15 @@ public class Proxy {
                     stop();
                 }
             }
+        }
+    }
+
+    private void tablistUpdate() {
+        if (!this.isConnected() || currentPlayer.get() == null) return;
+        long lastUpdate = CACHE.getTabListCache().getTabList().getLastUpdate();
+        if (lastUpdate < System.currentTimeMillis() - 3000) {
+            currentPlayer.get().send(new ClientboundTabListPacket(CACHE.getTabListCache().getTabList().getHeader(), CACHE.getTabListCache().getTabList().getFooter()));
+            CACHE.getTabListCache().getTabList().setLastUpdate(System.currentTimeMillis());
         }
     }
 

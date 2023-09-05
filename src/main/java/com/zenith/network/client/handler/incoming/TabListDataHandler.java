@@ -21,8 +21,9 @@ public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabLi
     @Override
     public boolean applyAsync(@NonNull ClientboundTabListPacket packet, @NonNull ClientSession session) {
         CACHE.getTabListCache().getTabList()
-                .setHeader(packet.getHeader())
-                .setFooter(packet.getFooter());
+            .setHeader(packet.getHeader())
+            .setFooter(packet.getFooter())
+            .setLastUpdate(System.currentTimeMillis());
         if (CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) {
             parse2bQueueState(packet, session);
             if (session.isInQueue()) {
