@@ -199,7 +199,7 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-M2") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:2.0") {
+    shade("com.github.rfresh2:MCProtocolLib:f094ce9af6") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -222,7 +222,6 @@ dependencies {
     shade "net.kyori:adventure-text-serializer-gson-legacy-impl:4.14.0"
     shade "net.kyori:adventure-text-serializer-legacy:4.14.0"
     shade "net.kyori:adventure-text-serializer-ansi:4.14.0"
-    shade "net.kyori:adventure-text-logger-slf4j:4.14.0"
     shade "org.cloudburstmc.math:api:2.0"
     shade "org.cloudburstmc.math:immutable:2.0"
 
