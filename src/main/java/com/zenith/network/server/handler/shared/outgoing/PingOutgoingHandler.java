@@ -14,6 +14,6 @@ public class PingOutgoingHandler implements OutgoingHandler<ClientboundPingPacke
 
     @Override
     public Class<ClientboundPingPacket> getPacketClass() {
-        return null;
+        return ClientboundPingPacket.class;
     }
 }
