@@ -27,7 +27,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -41,7 +40,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -58,8 +56,7 @@ public class ChunkCache implements CachedData {
     private float rainStrength = 0f;
     private float thunderStrength = 0f;
     private int renderDistance = 25;
-    protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
-    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+    protected final ConcurrentHashMap<Long, Chunk> cache = new ConcurrentHashMap<>();
     protected Map<String, Dimension> dimensionRegistry = new ConcurrentHashMap<>();
     protected Dimension currentDimension = null;
     protected Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
@@ -222,7 +219,7 @@ public class ChunkCache implements CachedData {
         return writeCache(() -> {
             for (ChunkBiomeData biomeData: packet.getChunkBiomeData()) {
                 Chunk chunk = this.cache.get(chunkPosToLong(biomeData.getX(), biomeData.getZ()));
-                if (chunk == this.cache.defaultReturnValue()) {
+                if (chunk == null) {
                     CLIENT_LOG.warn("Received chunk biomes packet for unknown chunk: {} {}", biomeData.getX(), biomeData.getZ());
                     return false;
                 } else {
@@ -240,7 +237,7 @@ public class ChunkCache implements CachedData {
     public boolean handleLightUpdate(final ClientboundLightUpdatePacket packet) {
         return writeCache(() -> {
             Chunk chunk = get(packet.getX(), packet.getZ());
-            if (chunk != this.cache.defaultReturnValue()) {
+            if (chunk != null) {
                 chunk.lightUpdateData = packet.getLightData();
             }
             // todo: silently ignoring updates for uncached chunks. should we enqueue them to be processed later?
@@ -264,7 +261,7 @@ public class ChunkCache implements CachedData {
             int chunkX = packet.getPosition().getX() >> 4;
             int chunkZ = packet.getPosition().getZ() >> 4;
             final Chunk chunk = this.cache.get(chunkPosToLong(chunkX, chunkZ));
-            if (chunk == this.cache.defaultReturnValue()) {
+            if (chunk == null) {
 //                CLIENT_LOG.warn("Received tile entity update packet for unknown chunk: {} {}", chunkX, chunkZ);
                 return false;
             }
@@ -298,14 +295,10 @@ public class ChunkCache implements CachedData {
 
     public <T> T readCache(final Supplier<T> executable) {
         try {
-            if (lock.readLock().tryLock(1, TimeUnit.SECONDS)) {
-                try {
-                    return executable.get();
-                } catch (final Throwable e) {
-                    CLIENT_LOG.error("Error reading chunk cache", e);
-                } finally {
-                    lock.readLock().unlock();
-                }
+            try {
+                return executable.get();
+            } catch (final Throwable e) {
+                CLIENT_LOG.error("Error reading chunk cache", e);
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error reading chunk cache", e);
@@ -315,14 +308,10 @@ public class ChunkCache implements CachedData {
 
     public <T> T writeCache(final Supplier<T> executable) {
         try {
-            if (lock.writeLock().tryLock(1, TimeUnit.SECONDS)) {
-                try {
-                    return executable.get();
-                } catch (final Throwable e) {
-                    CLIENT_LOG.error("Error reading chunk cache", e);
-                } finally {
-                    lock.writeLock().unlock();
-                }
+            try {
+                return executable.get();
+            } catch (final Throwable e) {
+                CLIENT_LOG.error("Error reading chunk cache", e);
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error reading chunk cache", e);
@@ -417,7 +406,7 @@ public class ChunkCache implements CachedData {
             int sectionsCount = getSectionsCount();
             Chunk existing = cache.get(chunkPosToLong(chunkX, chunkZ));
             Chunk chunk = existing;
-            if (existing == cache.defaultReturnValue()) {
+            if (existing == null) {
                 chunk = new Chunk(chunkX,
                                   chunkZ,
                                   new ChunkSection[sectionsCount],
@@ -468,7 +457,7 @@ public class ChunkCache implements CachedData {
     public Chunk get(int x, int z) {
         return readCache(() -> {
             Chunk chunk = this.cache.get(chunkPosToLong(x, z));
-            return (chunk == this.cache.defaultReturnValue()) ? null : chunk;
+            return chunk;
         });
     }
 
@@ -502,14 +491,14 @@ public class ChunkCache implements CachedData {
         final int playerX = ((int) CACHE.getPlayerCache().getX()) >> 4;
         final int playerZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
         writeCache(() -> {
-            final long[] toRemove = cache.keySet().longStream()
+            final List<Long> toRemove = cache.keySet().stream()
                 .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
-                .toArray();
+                .toList();
             for (final long l : toRemove) {
                 cache.remove(l);
             }
-            if (toRemove.length > 0) {
-                CLIENT_LOG.warn("Reaped {} dead chunks", toRemove.length);
+            if (!toRemove.isEmpty()) {
+                CLIENT_LOG.warn("Reaped {} dead chunks", toRemove.size());
             }
             return true;
         });
