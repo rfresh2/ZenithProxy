@@ -34,9 +34,9 @@ tasks.withType(JavaCompile).configureEach {
     options.deprecation(true)
 }
 
-tasks.register('writeVersion') {
+tasks.register('writeCommitHash') {
     group 'build'
-    description 'Write version to file'
+    description 'Write commit hash / version to file'
 
     doLast {
         var ver = 'git rev-parse --short=8 HEAD'.execute().text.trim()
@@ -48,10 +48,6 @@ tasks.register('writeVersion') {
         } else {
             println "Unable to determine commit hash"
         }
-        var f = file(project.buildDir.absolutePath + '/resources/main/proxy_version.txt')
-        f.parentFile.mkdirs()
-        println "Writing version: " + project.version
-        f.write(project.version.toString())
     }
     outputs.upToDateWhen { false }
 }

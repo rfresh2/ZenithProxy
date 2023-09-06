@@ -9,6 +9,7 @@ import reactor.netty.http.client.HttpClient;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.zenith.Shared.DEFAULT_LOG;
 import static com.zenith.Shared.LAUNCH_CONFIG;
@@ -40,7 +41,7 @@ public class RestAutoUpdater extends AutoUpdater {
     }
 
     public boolean validReleaseChannel(final String in) {
-        return List.of("git", "java", "linux", "linux.pre").stream()
+        return Stream.of("git", "java", "linux")
             .anyMatch(in::startsWith);
     }
 

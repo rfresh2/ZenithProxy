@@ -152,8 +152,7 @@ def validate_launch_config():
 def valid_release_channel(channel):
     return channel.startswith("git") \
         or channel.startswith("java") \
-        or channel.startswith("linux") \
-        or channel.startswith("linux.pre")
+        or channel.startswith("linux")
 
 
 def get_latest_release_and_ver(channel):
@@ -369,8 +368,6 @@ def validate_system_with_config():
         return True
     elif release_channel.startswith("linux"):
         return system == "Linux"
-    elif release_channel.startswith("linux.pre"):
-        return system == "Linux"
     else:
         return False
 
@@ -395,8 +392,6 @@ if auto_update:
             java_update_check()
         elif release_channel.startswith("linux"):
             linux_native_update_check()
-        elif release_channel.startswith("linux.pre"):
-            linux_native_update_check()
     except UpdateError as e:
         print("Error performing update check:", e)
 elif release_channel != "git" and version != local_version:
@@ -405,8 +400,6 @@ elif release_channel != "git" and version != local_version:
         if release_channel.startswith("java"):
             java_get_version(version)
         elif release_channel.startswith("linux"):
-            linux_native_get_version(version)
-        elif release_channel.startswith("linux.pre"):
             linux_native_get_version(version)
     except UpdateError as e:
         print("Error performing update check:", e)
