@@ -67,11 +67,7 @@ public class AutoTotem extends Module {
     }
 
     private boolean playerHealthBelowThreshold() {
-        try {
-            return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoTotem.healthThreshold;
-        } catch (final Throwable e) {
-            return false;
-        }
+        return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoTotem.healthThreshold;
     }
 
     private boolean isTotemEquipped() {

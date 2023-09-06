@@ -27,14 +27,13 @@ public class FoodManager {
         return foodDataMap.containsKey(id);
     }
 
-    public boolean isSafeFood(final Integer id, final Integer metadata) {
+    public boolean isSafeFood(final Integer id) {
         final FoodData foodData = getFoodData(id);
         if (nonNull(foodData)) {
             return !Objects.equals(foodData.getName(), "chorus_fruit")
                     && !Objects.equals(foodData.getName(), "rotten_flesh")
                     && !Objects.equals(foodData.getName(), "spider_eye")
-                    && !Objects.equals(foodData.getName(), "poisonous_potato")
-                    && !((Objects.equals(foodData.getName(), "fish") || (Objects.equals(foodData.getName(), "cooked_fish"))) && (metadata == 2 || metadata == 3));
+                    && !Objects.equals(foodData.getName(), "poisonous_potato");
         }
         return false;
     }
