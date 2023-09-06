@@ -30,10 +30,13 @@ public class ServerTablistDataOutgoingHandler implements OutgoingHandler<Clientb
                 .append(Component.text()
                             .appendNewline()
                             .append(MineDown.parse(
-                             "&b&l " + session.getProfileCache().getProfile().getName() + " &r&7[&r&3" +
-                                 session.getPing() + "ms&r&7]&r&7 -> &r&b&l" +
-                                 CACHE.getProfileCache().getProfile().getName() + " &r&7[&r&3" +
-                                 Proxy.getInstance().getClient().getPing() + "ms&r&7]&r")).build())
+                             "&b&l " + session.getProfileCache().getProfile().getName()
+                             // todo: fix ping calc
+//                                 + " &r&7[&r&3" + session.getPing() + "ms&r&7]&r&7 "
+                                 + " -> &r&b&l" + CACHE.getProfileCache().getProfile().getName()
+                             // todo: this is actually correct but hiding it until we fix ping calc for aesthetic reasons
+//                                 + " &r&7[&r&3" + Proxy.getInstance().getClient().getPing() + "ms&r&7]&r"
+                            )).build())
                 .append(Component.text()
                          .appendNewline()
                          .append(MineDown.parse(
