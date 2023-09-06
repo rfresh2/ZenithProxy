@@ -1,4 +1,4 @@
-package com.zenith.network.client.handler.incoming;
+package com.zenith.network.client.handler.incoming.inventory;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetSlotPacket;
 import com.zenith.feature.spectator.SpectatorUtils;

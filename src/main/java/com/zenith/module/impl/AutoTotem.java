@@ -2,11 +2,15 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.inventory.ClickItemAction;
+import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -63,34 +67,37 @@ public class AutoTotem extends Module {
     }
 
     private boolean playerHealthBelowThreshold() {
-        return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoTotem.healthThreshold;
+        try {
+            return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoTotem.healthThreshold;
+        } catch (final Throwable e) {
+            return false;
+        }
     }
 
     private boolean isTotemEquipped() {
         final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
-        return nonNull(offhandStack) && offhandStack.getId() == 449;
+        return nonNull(offhandStack) && offhandStack.getId() == 1117;
     }
 
     private void swapToTotem() {
-        // todo: new packets
-//        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
-//        ItemStack offhand = inventory[45];
-//        for (int i = 44; i >= 9; i--) {
-//            final ItemStack stack = inventory[i];
-//            if (nonNull(stack) && stack.getId() == 449) {
-//                if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
-//                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, stack, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-//                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, 45, offhand, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-//                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, new ItemStack(0, 0), WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-//                } else {
-//                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, i, stack, WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-//                    sendClientPacketAsync(new ClientWindowActionPacket(0, actionId++, 45, new ItemStack(0, 0), WindowAction.CLICK_ITEM, ClickItemParam.LEFT_CLICK));
-//                }
-//                CLIENT_LOG.info("Swapping to totem");
-//                delay = 5;
-//                swapping = true;
-//                return;
-//            }
-//        }
+        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
+        ItemStack offhand = inventory[45];
+        for (int i = 44; i >= 9; i--) {
+            final ItemStack stack = inventory[i];
+            if (nonNull(stack) && stack.getId() == 1117) {
+                if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
+                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)));
+                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)));
+                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(i, offhand)));
+                } else {
+                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)));
+                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(45, stack)));
+                }
+                CLIENT_LOG.info("Swapping to totem");
+                delay = 5;
+                swapping = true;
+                return;
+            }
+        }
     }
 }
