@@ -1,5 +1,6 @@
 package com.zenith;
 
+import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zenith.cache.DataCache;
@@ -223,8 +224,13 @@ public class Shared {
             CONFIG = new Config().doPostLoad();
         }
 
-        try (Writer out = new FileWriter(CONFIG_FILE)) {
-            GSON.toJson(CONFIG, out);
+        try {
+            final File tempFile = new File(CONFIG_FILE.getAbsolutePath() + ".tmp");
+            if (tempFile.exists()) tempFile.delete();
+            try (Writer out = new FileWriter(tempFile)) {
+                GSON.toJson(CONFIG, out);
+            }
+            Files.move(tempFile, CONFIG_FILE);
         } catch (IOException e) {
             throw new RuntimeException("Unable to save config!", e);
         }
@@ -239,8 +245,13 @@ public class Shared {
             LAUNCH_CONFIG = new LaunchConfig();
         }
 
-        try (Writer out = new FileWriter(LAUNCH_CONFIG_FILE)) {
-            GSON.toJson(LAUNCH_CONFIG, out);
+        try {
+            final File tempFile = new File(LAUNCH_CONFIG_FILE.getAbsolutePath() + ".tmp");
+            if (tempFile.exists()) tempFile.delete();
+            try (Writer out = new FileWriter(tempFile)) {
+                GSON.toJson(LAUNCH_CONFIG, out);
+            }
+            Files.move(tempFile, LAUNCH_CONFIG_FILE);
         } catch (IOException e) {
             throw new RuntimeException("Unable to save launch config!", e);
         }
