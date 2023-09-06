@@ -154,6 +154,9 @@ public final class SpectatorUtils {
             .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
         session.setAllowSpectatorServerPlayerPosRotate(true);
         DataCache.sendCacheData(cacheSupplier.get(), session);
+        // todo: see LoginHandler for additional packets we need to send
+        //  currently unable to see self-entity
+        //  also not currently in spectator gamemode
         session.send(session.getEntitySpawnPacket());
         session.send(session.getSelfEntityMetadataPacket());
         session.getProxy().getActiveConnections().stream()
