@@ -8,9 +8,9 @@ import lombok.NonNull;
 public class SpectatorPongHandler implements IncomingHandler<ServerboundPongPacket, ServerConnection> {
     @Override
     public boolean apply(@NonNull ServerboundPongPacket packet, @NonNull ServerConnection session) {
-        final long serverSentPingTime = packet.getId();
-        final long clientReceivedPingTime = System.nanoTime();
-        session.setPing((clientReceivedPingTime - serverSentPingTime) / 1000000L);
+        if (packet.getId() == session.getLastPingId()) {
+            session.setPing(System.currentTimeMillis() - session.getLastPingTime());
+        }
         return false;
     }
 

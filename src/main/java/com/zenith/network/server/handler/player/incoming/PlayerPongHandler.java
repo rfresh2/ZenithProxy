@@ -8,11 +8,9 @@ import lombok.NonNull;
 public class PlayerPongHandler implements IncomingHandler<ServerboundPongPacket, ServerConnection> {
     @Override
     public boolean apply(@NonNull ServerboundPongPacket packet, @NonNull ServerConnection session) {
-        // todo: this is busted and needs to be fixed. packet.getId() is not the time the packet was sent anymore
-        //  we should calc this based on the time we sent the ping packet to the player
-//        final long serverSentPingTime = packet.getId();
-//        final long clientReceivedPingTime = System.nanoTime();
-//        session.setPing((clientReceivedPingTime - serverSentPingTime) / 1000000L);
+        if (packet.getId() == session.getLastPingId()) {
+            session.setPing(System.currentTimeMillis() - session.getLastPingTime());
+        }
         return true;
     }
 

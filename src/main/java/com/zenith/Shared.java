@@ -44,6 +44,7 @@ import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.ServerboundHelloHandler;
 import com.zenith.network.server.handler.shared.incoming.ServerboundKeepAliveHandler;
 import com.zenith.network.server.handler.shared.outgoing.GameProfileOutgoingHandler;
+import com.zenith.network.server.handler.shared.outgoing.PingOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
 import com.zenith.network.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
@@ -299,6 +300,7 @@ public class Shared {
         // Outbound packets
         //
         .registerOutbound(new GameProfileOutgoingHandler())
+        .registerOutbound(new PingOutgoingHandler())
         .registerOutbound(new ServerTablistDataOutgoingHandler())
         .registerOutbound(new SystemChatOutgoingHandler())
         //
@@ -321,6 +323,7 @@ public class Shared {
         .registerInbound(new PlayerStateSpectatorHandler())
 
         .registerOutbound(new GameProfileOutgoingHandler())
+        .registerOutbound(new PingOutgoingHandler())
 
         .registerOutbound(new ClientboundContainerCloseSpectatorOutgoingHandler())
         .registerOutbound(new ClientboundContainerSetContentSpectatorOutgoingHandler())

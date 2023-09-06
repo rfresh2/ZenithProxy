@@ -49,6 +49,8 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     protected long lastPacket = System.currentTimeMillis();
+    protected long lastPingId = 0L;
+    protected long lastPingTime = 0L;
     protected long ping = 0L;
 
     protected boolean whitelistChecked = false;
