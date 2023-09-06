@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.incoming.spawn;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
-import com.zenith.cache.data.entity.EntityLiving;
+import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
@@ -12,7 +12,7 @@ public class AddEntityHandler implements AsyncIncomingHandler<ClientboundAddEnti
 
     @Override
     public boolean applyAsync(@NonNull ClientboundAddEntityPacket packet, @NonNull ClientSession session) {
-        CACHE.getEntityCache().add(new EntityLiving()
+        CACHE.getEntityCache().add(new EntityStandard()
                                        .setEntityType(packet.getType())
                                        .setObjectData(packet.getData())
                                        .setEntityId(packet.getEntityId())

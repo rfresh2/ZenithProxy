@@ -3,7 +3,7 @@ package com.zenith.network.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateMobEffectPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityLiving;
-import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.cache.data.entity.PotionEffect;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
@@ -17,27 +17,15 @@ public class UpdateMobEffectHandler implements AsyncIncomingHandler<ClientboundU
     public boolean applyAsync(@NonNull ClientboundUpdateMobEffectPacket packet, @NonNull ClientSession session) {
         try {
             Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
-            if (entity != null) {
-                if (entity instanceof EntityLiving) {
-                    // todo: lol this class inheritance structure needs some rethinking
-                    ((EntityLiving) entity).getPotionEffectMap().put(packet.getEffect(), new PotionEffect(
-                        packet.getEffect(),
-                        packet.getAmplifier(),
-                        packet.getDuration(),
-                        packet.isAmbient(),
-                        packet.isShowParticles(),
-                        packet.getFactorData()
-                    ));
-                } else if (entity instanceof EntityPlayer) {
-                    ((EntityPlayer) entity).getPotionEffectMap().put(packet.getEffect(), new PotionEffect(
-                        packet.getEffect(),
-                        packet.getAmplifier(),
-                        packet.getDuration(),
-                        packet.isAmbient(),
-                        packet.isShowParticles(),
-                        packet.getFactorData()
-                    ));
-                }
+            if (entity instanceof EntityStandard) {
+                ((EntityLiving) entity).getPotionEffectMap().put(packet.getEffect(), new PotionEffect(
+                    packet.getEffect(),
+                    packet.getAmplifier(),
+                    packet.getDuration(),
+                    packet.isAmbient(),
+                    packet.isShowParticles(),
+                    packet.getFactorData()
+                ));
             } else {
                 CLIENT_LOG.warn("Received ServerEntityEffectPacket for invalid entity (id={})", packet.getEntityId());
                 return false;

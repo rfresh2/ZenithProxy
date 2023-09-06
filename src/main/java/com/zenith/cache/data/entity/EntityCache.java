@@ -2,17 +2,18 @@ package com.zenith.cache.data.entity;
 
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.NonNull;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.CACHE;
 
 public class EntityCache implements CachedData {
-    protected final Map<Integer, Entity> cachedEntities = Collections.synchronizedMap(new Int2ObjectOpenHashMap<>());
+    protected final Int2ObjectMap<Entity> cachedEntities = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 
 
     @Override
@@ -45,7 +46,9 @@ public class EntityCache implements CachedData {
 
     @SuppressWarnings("unchecked")
     public <E extends Entity> E get(int id)   {
-        return (E) this.cachedEntities.get(id);
+        Entity entity = this.cachedEntities.get(id);
+        if (entity == this.cachedEntities.defaultReturnValue()) return null;
+        return (E) entity;
     }
 
     public Map<Integer, Entity> getEntities() { return this.cachedEntities;}

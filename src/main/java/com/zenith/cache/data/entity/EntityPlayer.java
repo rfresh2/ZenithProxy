@@ -1,13 +1,8 @@
 package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateMobEffectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerCombatKillPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHealthPacket;
@@ -17,9 +12,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
-import javax.annotation.Nullable;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.SERVER_LOG;
@@ -30,7 +22,7 @@ import static com.zenith.Shared.SERVER_LOG;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class EntityPlayer extends Entity {
+public class EntityPlayer extends EntityLiving {
     @NonNull
     protected boolean selfPlayer;
 
@@ -39,10 +31,6 @@ public class EntityPlayer extends Entity {
     protected int totalExperience;
     protected int level;
     protected float experience;
-    protected Map<Effect, PotionEffect> potionEffectMap = new EnumMap<>(Effect.class);
-    protected Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
-    @Nullable
-    protected Float health;
 
     {
         //set health to maximum by default
@@ -55,18 +43,6 @@ public class EntityPlayer extends Entity {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.equipment.put(slot, null);
         }
-    }
-
-    public void setHealth(float health) {
-        this.health = health;
-        // todo: port to 1.20?
-//        final List<EntityMetadata> md = new ArrayList<>(this.getMetadata());
-//        md.forEach(meta -> {
-//            if (meta.getId() == 7) { // https://c4k3.github.io/wiki.vg/Entities.html#Living
-//                meta.setValue(health);
-//            }
-//        });
-//        this.metadata = md;
     }
 
     @Override
@@ -93,25 +69,7 @@ public class EntityPlayer extends Entity {
                     this.yaw,
                     this.pitch)
             );
-            if (!equipment.isEmpty()) {
-                // skip sending equipment packets for current player because we already send this in SetWindowsItem packet
-                consumer.accept(new ClientboundSetEquipmentPacket(this.entityId, this.equipment.entrySet().stream()
-                    .map(entry -> new Equipment(entry.getKey(), entry.getValue()))
-                    .toList()
-                    .toArray(new Equipment[0])));
-            }
             consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getMetadata().toArray(new EntityMetadata[0])));
-        }
-        if (!potionEffectMap.isEmpty()) {
-            this.getPotionEffectMap().forEach((effect, potionEffect) -> consumer.accept(new ClientboundUpdateMobEffectPacket(
-                this.entityId,
-                effect,
-                potionEffect.getAmplifier(),
-                potionEffect.getDuration(),
-                potionEffect.isAmbient(),
-                potionEffect.isShowParticles(),
-                null // todo: cache this
-            )));
         }
         super.addPackets(consumer);
     }

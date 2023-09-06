@@ -10,9 +10,8 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
@@ -23,11 +22,15 @@ public class SetEquipmentHandler implements AsyncIncomingHandler<ClientboundSetE
         try {
             Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
             if (entity != null) {
-                Map<EquipmentSlot, ItemStack> equipmentMap = Arrays.stream(packet.getEquipment())
-                    .collect(Collectors.toMap(
-                        Equipment::getSlot,
-                        Equipment::getItem));
                 if (entity instanceof EntityLiving e) {
+                    final Map<EquipmentSlot, ItemStack> equipmentMap = new HashMap<>();
+                    for (Equipment equipment : packet.getEquipment()) {
+                        if (equipment.getItem() != null) {
+                            equipmentMap.put(equipment.getSlot(), equipment.getItem());
+                        } else {
+                            equipmentMap.put(equipment.getSlot(), null);
+                        }
+                    }
                     e.setEquipment(equipmentMap);
                 }
             } else {
