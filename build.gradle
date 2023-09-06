@@ -52,7 +52,7 @@ tasks.register('writeCommitHash') {
     outputs.upToDateWhen { false }
 }
 
-processResources.finalizedBy writeVersion
+processResources.finalizedBy writeCommitHash
 
 repositories {
     maven {
