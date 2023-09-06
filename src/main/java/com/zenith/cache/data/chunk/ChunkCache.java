@@ -9,6 +9,9 @@ import com.github.steveice10.mc.protocol.data.game.chunk.palette.PaletteType;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockChangeEntry;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityInfo;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityType;
+import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
+import com.github.steveice10.mc.protocol.data.game.level.notify.RainStrengthValue;
+import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthValue;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.opennbt.tag.builtin.*;
@@ -236,13 +239,11 @@ public class ChunkCache implements CachedData {
 
     public boolean handleLightUpdate(final ClientboundLightUpdatePacket packet) {
         return writeCache(() -> {
-            Chunk chunk = this.cache.get(chunkPosToLong(packet.getX(), packet.getZ()));
-            if (chunk == this.cache.defaultReturnValue()) {
-                CLIENT_LOG.warn("Received light update packet for unknown chunk: {} {}", packet.getX(), packet.getZ());
-                return false;
-            } else {
+            Chunk chunk = get(packet.getX(), packet.getZ());
+            if (chunk != this.cache.defaultReturnValue()) {
                 chunk.lightUpdateData = packet.getLightData();
             }
+            // todo: silently ignoring updates for uncached chunks. should we enqueue them to be processed later?
             return true;
         });
     }
@@ -264,7 +265,7 @@ public class ChunkCache implements CachedData {
             int chunkZ = packet.getPosition().getZ() >> 4;
             final Chunk chunk = this.cache.get(chunkPosToLong(chunkX, chunkZ));
             if (chunk == this.cache.defaultReturnValue()) {
-                CLIENT_LOG.warn("Received tile entity update packet for unknown chunk: {} {}", chunkX, chunkZ);
+//                CLIENT_LOG.warn("Received tile entity update packet for unknown chunk: {} {}", chunkX, chunkZ);
                 return false;
             }
             final List<BlockEntityInfo> tileEntities = chunk.blockEntities;
@@ -351,9 +352,9 @@ public class ChunkCache implements CachedData {
         }
         consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(Vector3i.from(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ()), 0.0f));
         if (isRaining) {
-//            consumer.accept(new ServerNotifyClientPacket(ClientNotification.START_RAIN, null));
-//            consumer.accept(new ServerNotifyClientPacket(ClientNotification.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
-//            consumer.accept(new ServerNotifyClientPacket(ClientNotification.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
+            consumer.accept(new ClientboundGameEventPacket(GameEvent.START_RAIN, null));
+            consumer.accept(new ClientboundGameEventPacket(GameEvent.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
+            consumer.accept(new ClientboundGameEventPacket(GameEvent.THUNDER_STRENGTH, new ThunderStrengthValue(this.thunderStrength)));
         }
     }
 

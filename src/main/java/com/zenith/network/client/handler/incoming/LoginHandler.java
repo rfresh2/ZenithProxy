@@ -37,7 +37,6 @@ public class LoginHandler implements IncomingHandler<ClientboundLoginPacket, Cli
         );
         CACHE.getChunkCache().setServerViewDistance(packet.getViewDistance());
         CACHE.getChunkCache().setServerSimulationDistance(packet.getSimulationDistance());
-//        CACHE.getChunkCache().setDimension(packet.getDimension());
 
         session.send(new ServerboundClientInformationPacket(
             "en_US",

@@ -3,6 +3,7 @@ package com.zenith.network.client.handler.incoming.level;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.level.notify.RainStrengthValue;
+import com.github.steveice10.mc.protocol.data.game.level.notify.RespawnScreenValue;
 import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthValue;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import com.zenith.event.module.WeatherChangeEvent;
@@ -16,8 +17,6 @@ import static com.zenith.Shared.EVENT_BUS;
 public class GameEventHandler implements AsyncIncomingHandler<ClientboundGameEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundGameEventPacket packet, @NonNull ClientSession session) {
-        // todo: figure out if we need to cache more events
-
         if (packet.getNotification() == GameEvent.CHANGE_GAMEMODE) {
             CACHE.getPlayerCache().setGameMode((GameMode) packet.getValue());
         } else if (packet.getNotification() == GameEvent.START_RAIN) {
@@ -34,6 +33,8 @@ public class GameEventHandler implements AsyncIncomingHandler<ClientboundGameEve
         } else if (packet.getNotification() == GameEvent.THUNDER_STRENGTH) {
             CACHE.getChunkCache().setThunderStrength(((ThunderStrengthValue) packet.getValue()).getStrength());
             EVENT_BUS.postAsync(new WeatherChangeEvent());
+        } else if (packet.getNotification() == GameEvent.ENABLE_RESPAWN_SCREEN) {
+            CACHE.getPlayerCache().setEnableRespawnScreen(packet.getValue() == RespawnScreenValue.ENABLE_RESPAWN_SCREEN);
         }
         return true;
     }
