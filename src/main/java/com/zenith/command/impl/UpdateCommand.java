@@ -8,6 +8,8 @@ import com.zenith.command.CommandUsage;
 import com.zenith.event.proxy.UpdateStartEvent;
 import discord4j.rest.util.Color;
 
+import java.util.Optional;
+
 import static com.zenith.Shared.*;
 
 public class UpdateCommand extends Command {
@@ -23,7 +25,7 @@ public class UpdateCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("update").requires(Command::validateAccountOwner).executes(c -> {
             try {
-                EVENT_BUS.post(new UpdateStartEvent());
+                EVENT_BUS.post(new UpdateStartEvent(Optional.empty()));
                 CONFIG.discord.isUpdating = true;
                 if (Proxy.getInstance().isConnected()) {
                     CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
@@ -42,7 +44,7 @@ public class UpdateCommand extends Command {
         }).then(literal("c").executes(c -> {
             CONFIG.discord.isUpdating = true;
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
-            EVENT_BUS.post(new UpdateStartEvent());
+            EVENT_BUS.post(new UpdateStartEvent(Optional.empty()));
             Proxy.getInstance().stop();
         }));
     }
