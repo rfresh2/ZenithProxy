@@ -30,8 +30,10 @@ jobs:
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Build Native Binary
-        run: ./gradlew nativeCompile
+      - name: Build ZenithProxy
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: nativeCompile
 
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
