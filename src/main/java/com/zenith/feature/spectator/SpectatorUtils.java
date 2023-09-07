@@ -3,12 +3,12 @@ package com.zenith.feature.spectator;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.*;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.FloatEntityMetadata;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
@@ -122,23 +122,9 @@ public final class SpectatorUtils {
         final CompoundTag emptyNbtTag = new CompoundTag("");
         emptyNbtTag.clear();
         spectatorEntityPlayer.setMetadata(asList(
-                new ByteEntityMetadata(0, MetadataType.BYTE, (byte) (((byte) 0) | 0x20)),
-                new IntEntityMetadata(1, MetadataType.INT, 0),
-                new ObjectEntityMetadata<>(2, MetadataType.STRING, ""),
-                new BooleanEntityMetadata(3, MetadataType.BOOLEAN, false),
-                new BooleanEntityMetadata(4, MetadataType.BOOLEAN, false),
-                new BooleanEntityMetadata(5, MetadataType.BOOLEAN, false),
-                new ByteEntityMetadata(6, MetadataType.BYTE, (byte) 0),
-                new FloatEntityMetadata(7, MetadataType.FLOAT, 20f),
-                new IntEntityMetadata(8, MetadataType.INT, 0),
-                new BooleanEntityMetadata(9, MetadataType.BOOLEAN, false),
-                new IntEntityMetadata(10, MetadataType.INT, 0),
-                new FloatEntityMetadata(11, MetadataType.FLOAT, 0.0f),
-                new IntEntityMetadata(12, MetadataType.INT, 202),
-                new ByteEntityMetadata(13, MetadataType.BYTE, (byte) 0),
-                new ByteEntityMetadata(14, MetadataType.BYTE, (byte) 1),
-                new ObjectEntityMetadata<>(15, MetadataType.NBT_TAG, emptyNbtTag),
-                new ObjectEntityMetadata<>(16, MetadataType.NBT_TAG, emptyNbtTag)));
+            new FloatEntityMetadata(9, MetadataType.FLOAT, 20.0f), // health
+            new ByteEntityMetadata(17, MetadataType.BYTE, (byte) 255) // visible skin parts
+        ));
         return spectatorEntityPlayer;
     }
 
@@ -151,18 +137,27 @@ public final class SpectatorUtils {
             .setEnableRespawnScreen(CACHE.getPlayerCache().isEnableRespawnScreen())
             .setLastDeathPos(CACHE.getPlayerCache().getLastDeathPos())
             .setPortalCooldown(CACHE.getPlayerCache().getPortalCooldown())
+            .setHardcore(CACHE.getPlayerCache().isHardcore())
+            .setReducedDebugInfo(CACHE.getPlayerCache().isReducedDebugInfo())
+            .setHeldItemSlot(CACHE.getPlayerCache().getHeldItemSlot())
+            .setEnabledFeatures(CACHE.getPlayerCache().getEnabledFeatures())
+            .setDifficultyLocked(CACHE.getPlayerCache().isDifficultyLocked())
+            .setInvincible(true)
+            .setCanFly(true)
+            .setCreative(false)
+            .setFlying(true)
+            .setFlySpeed(0.05f)
+            .setWalkSpeed(0.1f)
+            .setTags(CACHE.getPlayerCache().getTags())
+            .setOpLevel(CACHE.getPlayerCache().getOpLevel())
             .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
         session.setAllowSpectatorServerPlayerPosRotate(true);
         DataCache.sendCacheData(cacheSupplier.get(), session);
-        // todo: see LoginHandler for additional packets we need to send
-        //  currently unable to see self-entity
-        //  also not currently in spectator gamemode
         session.send(session.getEntitySpawnPacket());
         session.send(session.getSelfEntityMetadataPacket());
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> spawnSpectatorForOtherSessions(session, connection));
-        session.send(new ClientboundPlayerAbilitiesPacket(true, true, true, false, 0.05f, 0.1f));
         session.send(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
         session.setAllowSpectatorServerPlayerPosRotate(false);
     }

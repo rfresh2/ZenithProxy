@@ -1,6 +1,5 @@
 package com.zenith.cache.data;
 
-import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
 import com.github.steveice10.mc.protocol.data.game.entity.EntityEvent;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.GlobalPos;
@@ -8,9 +7,9 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.data.game.inventory.CreativeGrabAction;
+import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundChangeDifficultyPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateEnabledFeaturesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateTagsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundEntityEventPacket;
@@ -18,6 +17,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetContentPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
@@ -60,7 +60,7 @@ public class PlayerCache implements CachedData {
     protected final ItemStack[] inventory = new ItemStack[46];
 
     protected final EntityCache entityCache;
-    protected String[] enabledFeatures = new String[0]; // todo: move this to chunk cache?
+    protected String[] enabledFeatures = new String[]{"minecraft:vanilla"};
     protected Difficulty difficulty = Difficulty.NORMAL;
     protected boolean isDifficultyLocked;
     protected boolean invincible;
@@ -71,9 +71,6 @@ public class PlayerCache implements CachedData {
     protected float walkSpeed;
     protected Map<String, Map<String, int[]>> tags = new HashMap<>();
     protected EntityEvent opLevel = EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0;
-    // todo: move these out to a separate cache so we can inject our own easily?
-    protected CommandNode[] commandNodes = new CommandNode[0];
-    protected int firstCommandNodeIndex;
 
     public PlayerCache(final EntityCache entityCache) {
         this.entityCache = entityCache;
@@ -86,9 +83,8 @@ public class PlayerCache implements CachedData {
         consumer.accept(new ClientboundPlayerAbilitiesPacket(this.invincible, this.canFly, this.flying, this.creative, this.flySpeed, this.walkSpeed));
         consumer.accept(new ClientboundChangeDifficultyPacket(this.difficulty, this.isDifficultyLocked));
         consumer.accept(new ClientboundUpdateTagsPacket(this.tags));
-        // todo: verify this is also correct for spectators
+        consumer.accept(new ClientboundGameEventPacket(GameEvent.CHANGE_GAMEMODE, this.gameMode));
         consumer.accept(new ClientboundEntityEventPacket(this.thePlayer.getEntityId(), this.opLevel));
-        consumer.accept(new ClientboundCommandsPacket(this.commandNodes, this.firstCommandNodeIndex));
         consumer.accept(new ClientboundContainerSetContentPacket(0,
                                                                  0, // todo: verify if this is correct
                                                                  this.inventory.clone(),
@@ -178,9 +174,10 @@ public class PlayerCache implements CachedData {
         }
     }
 
-    public void setHeldItemSlot(final int slot) {
+    public PlayerCache setHeldItemSlot(final int slot) {
         this.heldItemSlot = slot;
         getThePlayer().getEquipment().put(EquipmentSlot.MAIN_HAND, getInventory()[slot + 36]);
+        return this;
     }
 
     public double getX() {
