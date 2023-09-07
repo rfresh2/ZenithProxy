@@ -141,7 +141,7 @@ public class Shared {
         .registerInbound(new SetChunkCacheRadiusHandler())
         .registerInbound(new SetSimulationDistanceHandler())
         .registerInbound(new SetHealthHandler())
-        .registerInbound(new SetTitleTextHandler())
+        .registerInbound(new SetSubtitleTextHandler())
         .registerInbound(new PlayerPositionHandler())
         .registerInbound(new SetExperienceHandler())
         .registerInbound(new RespawnHandler())

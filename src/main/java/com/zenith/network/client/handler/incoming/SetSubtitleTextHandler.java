@@ -1,6 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetTitleTextPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
@@ -8,23 +9,24 @@ import com.zenith.util.ComponentSerializer;
 
 import java.util.Optional;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
-public class SetTitleTextHandler implements AsyncIncomingHandler<ClientboundSetTitleTextPacket, ClientSession> {
+public class SetSubtitleTextHandler implements AsyncIncomingHandler<ClientboundSetSubtitleTextPacket, ClientSession> {
     @Override
-    public boolean applyAsync(final ClientboundSetTitleTextPacket packet, final ClientSession session) {
-        if (CONFIG.client.server.address.contains("2b2t.org")) {
+    public boolean applyAsync(final ClientboundSetSubtitleTextPacket packet, final ClientSession session) {
+        if (Proxy.getInstance().isInQueue()) {
             parse2bQueuePos(packet, session);
         }
         return true;
     }
 
     @Override
-    public Class<ClientboundSetTitleTextPacket> getPacketClass() {
-        return ClientboundSetTitleTextPacket.class;
+    public Class<ClientboundSetSubtitleTextPacket> getPacketClass() {
+        return ClientboundSetSubtitleTextPacket.class;
     }
 
-    private void parse2bQueuePos(ClientboundSetTitleTextPacket serverTitlePacket, final ClientSession session) {
+    private void parse2bQueuePos(ClientboundSetSubtitleTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional<Integer> position = Optional.of(serverTitlePacket)
                 .map(title -> ComponentSerializer.toRawString(title.getText()))
