@@ -746,7 +746,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setBoundingBox","parameterTypes":["com.zenith.feature.pathing.blockdata.BlockData$BoundingBox"] }, {"name":"setDiggable","parameterTypes":["java.lang.Boolean"] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setDrops","parameterTypes":["java.util.List"] }, {"name":"setEmitLight","parameterTypes":["java.lang.Integer"] }, {"name":"setFilterLight","parameterTypes":["java.lang.Integer"] }, {"name":"setHardness","parameterTypes":["java.lang.Double"] }, {"name":"setId","parameterTypes":["java.lang.Integer"] }, {"name":"setMaterial","parameterTypes":["java.lang.String"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setResistance","parameterTypes":["java.lang.Double"] }, {"name":"setStackSize","parameterTypes":["java.lang.Integer"] }, {"name":"setTransparent","parameterTypes":["java.lang.Boolean"] }, {"name":"setVariations","parameterTypes":["java.util.List"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setBoundingBox","parameterTypes":["com.zenith.feature.pathing.blockdata.BlockData$BoundingBox"] }, {"name":"setDefaultState","parameterTypes":["java.lang.Integer"] }, {"name":"setDiggable","parameterTypes":["java.lang.Boolean"] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setDrops","parameterTypes":["java.util.List"] }, {"name":"setEmitLight","parameterTypes":["java.lang.Integer"] }, {"name":"setFilterLight","parameterTypes":["java.lang.Integer"] }, {"name":"setHardness","parameterTypes":["java.lang.Double"] }, {"name":"setId","parameterTypes":["java.lang.Integer"] }, {"name":"setMaterial","parameterTypes":["java.lang.String"] }, {"name":"setMaxStateId","parameterTypes":["java.lang.Integer"] }, {"name":"setMinStateId","parameterTypes":["java.lang.Integer"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setResistance","parameterTypes":["java.lang.Double"] }, {"name":"setStackSize","parameterTypes":["java.lang.Integer"] }, {"name":"setStates","parameterTypes":["java.util.List"] }, {"name":"setTransparent","parameterTypes":["java.lang.Boolean"] }, {"name":"setVariations","parameterTypes":["java.util.List"] }]
 },
 {
   "name":"com.zenith.feature.pathing.blockdata.BlockData$BoundingBox",
@@ -767,6 +767,19 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAdditionalProperty","parameterTypes":["java.lang.String","java.util.List"] }]
+},
+{
+  "name":"com.zenith.feature.pathing.blockdata.State",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setNumValues","parameterTypes":["java.lang.Double"] }, {"name":"setType","parameterTypes":["com.zenith.feature.pathing.blockdata.State$Type"] }, {"name":"setValues","parameterTypes":["java.util.List"] }]
+},
+{
+  "name":"com.zenith.feature.pathing.blockdata.State$Type",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"fromValue","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.zenith.feature.pathing.blockdata.Variation",
@@ -3259,6 +3272,10 @@
 {
   "name":"java.lang.Thread",
   "fields":[{"name":"threadLocalRandomProbe"}]
+},
+{
+  "name":"java.lang.Throwable",
+  "methods":[{"name":"addSuppressed","parameterTypes":["java.lang.Throwable"] }]
 },
 {
   "name":"java.lang.management.ManagementFactory",
