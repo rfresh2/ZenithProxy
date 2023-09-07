@@ -332,7 +332,15 @@ public final class Config {
         public boolean isUpdating = false; // internal use for update command state persistence
         public QueueWarning queueWarning = new QueueWarning();
         public ChatRelay chatRelay = new ChatRelay();
-
+        public WebhookProxy webhookProxy = new WebhookProxy();
+        public static final class WebhookProxy {
+                public boolean enabled = false;
+                public String schema = "http";
+                public String host = "127.0.0.1";
+                public int port = 7890;
+                public String user = "";
+                public String password = "";
+        }
         public static final class QueueWarning {
             public boolean enabled = true;
             public int position = 10; // Queue position to send warning message at

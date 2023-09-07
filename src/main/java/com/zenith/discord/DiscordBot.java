@@ -10,7 +10,9 @@ import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.queue.Queue;
+import discord4j.common.ReactorResources;
 import discord4j.common.util.Snowflake;
+import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
@@ -25,6 +27,7 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ImmutableUserModifyRequest;
 import discord4j.discordjson.json.MessageCreateRequest;
+import discord4j.gateway.GatewayReactorResources;
 import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.RestClient;
@@ -34,6 +37,8 @@ import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.transport.ProxyProvider;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -48,6 +53,8 @@ import java.util.function.Supplier;
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
 import static com.zenith.event.SimpleEventBus.pair;
+import static discord4j.common.ReactorResources.DEFAULT_BLOCKING_TASK_SCHEDULER;
+import static discord4j.common.ReactorResources.DEFAULT_TIMER_TASK_SCHEDULER;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -114,13 +121,14 @@ public class DiscordBot {
     }
 
     public void createClient() {
-        this.client = DiscordClientBuilder.create(CONFIG.discord.token)
-            .build()
-            .gateway()
-            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
-            .setInitialPresence(shardInfo -> disconnectedPresence.get())
-            .login()
-            .block();
+        DiscordClient discordClient = DiscordClientBuilder.create(CONFIG.discord.token).setReactorResources(getReactorResources()).build();
+        this.client = discordClient.gateway()
+                .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
+                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+                .setInitialPresence(shardInfo -> disconnectedPresence.get())
+                .login()
+                .block();
+
         restClient = client.getRestClient();
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
@@ -849,5 +857,31 @@ public class DiscordBot {
             "Update will be applied at next opportunity.\nOr apply the update now: `.update`",
             false);
         sendEmbedMessage(embedBuilder.build());
+    }
+
+    //Could've made this a lambda but its gonna clog up the discord client creator function
+    //also i know this looks ugly as fuck but there pretty much is no info regarding this that i could find
+    private ReactorResources getReactorResources(){
+        if(!CONFIG.discord.webhookProxy.enabled)
+            return new ReactorResources();
+        assert (CONFIG.discord.webhookProxy.host.length() != 0);
+
+        ReactorResources newReactorResources = new ReactorResources(HttpClient.create().compress(true).followRedirect(true).secure().proxy((ProxyProvider.TypeSpec provider) -> {
+            ProxyProvider.AddressSpec addressSpec;
+            switch (CONFIG.discord.webhookProxy.schema){
+                case "socks4" -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS4);
+                case "socks5" -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS5);
+                //defaults to http
+                default -> addressSpec = provider.type(ProxyProvider.Proxy.HTTP);
+
+            }
+            ProxyProvider.Builder proxyBuilder = addressSpec.host(CONFIG.discord.webhookProxy.host).port(CONFIG.discord.webhookProxy.port);
+            if(CONFIG.discord.webhookProxy.user.length() != 0)
+                proxyBuilder = proxyBuilder.username(CONFIG.discord.webhookProxy.user);
+            if(CONFIG.discord.webhookProxy.password.length() != 0)
+                proxyBuilder = proxyBuilder.password((String unused) -> CONFIG.discord.webhookProxy.password);
+
+        }), DEFAULT_TIMER_TASK_SCHEDULER.get(), DEFAULT_BLOCKING_TASK_SCHEDULER.get());
+        return newReactorResources;
     }
 }
