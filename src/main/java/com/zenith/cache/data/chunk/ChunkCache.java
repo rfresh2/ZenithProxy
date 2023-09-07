@@ -92,7 +92,6 @@ public class ChunkCache implements CachedData {
             CompoundTag element = dimension.<CompoundTag>get("element");
             int height = element.<IntTag>get("height").getValue();
             int minY = element.<IntTag>get("min_y").getValue();
-            // todo: cache more data from the nbt?
             dimensionRegistry.put(name, new Dimension(name, id, height, minY));
         }
     }
@@ -265,7 +264,6 @@ public class ChunkCache implements CachedData {
             int chunkZ = packet.getPosition().getZ() >> 4;
             final Chunk chunk = this.cache.get(chunkPosToLong(chunkX, chunkZ));
             if (chunk == null) {
-//                CLIENT_LOG.warn("Received tile entity update packet for unknown chunk: {} {}", chunkX, chunkZ);
                 return false;
             }
             final List<BlockEntityInfo> tileEntities = chunk.blockEntities;
@@ -353,14 +351,12 @@ public class ChunkCache implements CachedData {
     @Override
     public void reset(boolean full) {
         writeCache(() -> {
-            CLIENT_LOG.info("Resetting chunk cache");
             this.cache.clear();
             this.spawnPosition = DEFAULT_SPAWN_POSITION;
             this.isRaining = false;
             this.thunderStrength = 0.0f;
             this.rainStrength = 0.0f;
             if (full) {
-                CLIENT_LOG.info("Full chunk cache reset");
                 this.biomes.clear();
                 this.biomesEntryBitsSize = -1;
                 this.dimensionRegistry.clear();
@@ -399,7 +395,6 @@ public class ChunkCache implements CachedData {
     public void add(final ClientboundLevelChunkWithLightPacket p) {
         writeCache(() -> {
             if (worldData == null) {
-                CLIENT_LOG.error("Received chunk data packet while not in a dimension");
                 return false;
             }
             int chunkX = p.getX();
@@ -423,7 +418,6 @@ public class ChunkCache implements CachedData {
                 chunk.sections[i] = readChunkSection(buf);
             }
             cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
-//            CLIENT_LOG.info("Cached chunk: {}, {}", chunkX, chunkZ);
             return true;
         });
     }
@@ -471,7 +465,6 @@ public class ChunkCache implements CachedData {
             if (chunk == null) return null;
             int sectionIndex = (y >> 4) - getMinSection();
             if (sectionIndex < 0 || sectionIndex >= chunk.sections.length) {
-//                CLIENT_LOG.error("Received request for section from blockPos {}, {}, {} outside of chunk bounds with index: {}, minY: {}, currentDimension: {}", x, y, z, sectionIndex, currentDimension.minY, currentDimension.dimensionName);
                 return null;
             }
             return chunk.sections[sectionIndex];
@@ -480,7 +473,6 @@ public class ChunkCache implements CachedData {
 
     public void remove(int x, int z) {
         writeCache(() -> {
-//            CLIENT_LOG.info("Removing chunk: {}, {}", x, z);
             return this.cache.remove(chunkPosToLong(x, z));
         });
     }
@@ -518,6 +510,5 @@ public class ChunkCache implements CachedData {
                                        packet.getHashedSeed(),
                                        packet.isDebug(),
                                        packet.isFlat());
-        CLIENT_LOG.info("Updated current dimension to: {}", currentDimension.dimensionName);
     }
 }
