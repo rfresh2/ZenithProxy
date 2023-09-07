@@ -1,6 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.event.proxy.SelfDeathMessageEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
@@ -25,7 +26,9 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
     @Override
     public boolean applyAsync(@NonNull ClientboundSystemChatPacket packet, @NonNull ClientSession session) {
         try {
-            CHAT_LOG.info(ComponentSerializer.serialize(packet.getContent()));
+            String serializedChat = ComponentSerializer.serialize(packet.getContent());
+            if (Proxy.getInstance().isInQueue()) serializedChat = serializedChat.replace("\\n\\n", "");
+            CHAT_LOG.info(serializedChat);
             final Component component = packet.getContent();
             final String messageString = ComponentSerializer.toRawString(component);
             if (!messageString.startsWith("<")) { // normal chat msg
