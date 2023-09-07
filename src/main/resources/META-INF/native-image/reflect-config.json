@@ -1354,7 +1354,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"name","parameterTypes":[] }, {"name":"type","parameterTypes":[] }, {"name":"url","parameterTypes":[] }]
+  "methods":[{"name":"name","parameterTypes":[] }, {"name":"state","parameterTypes":[] }, {"name":"type","parameterTypes":[] }, {"name":"url","parameterTypes":[] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandInteractionData",

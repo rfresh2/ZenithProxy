@@ -61,8 +61,10 @@ public class DiscordBot {
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
     private final ConcurrentLinkedQueue<MessageCreateRequest> relayChannelMessageQueue;
-    private final Supplier<ClientPresence> disconnectedPresence = Suppliers.memoize(() -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.playing("Disconnected")));
-    private final Supplier<ClientPresence> defaultConnectedPresence = () -> ClientPresence.of(Status.ONLINE, ClientActivity.playing((CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
+    private final Supplier<ClientPresence> disconnectedPresence = Suppliers.memoize(() -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.custom(
+        "Disconnected")));
+    private final Supplier<ClientPresence> defaultConnectedPresence = () -> ClientPresence.of(Status.ONLINE, ClientActivity.custom(
+        (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
     public Optional<Instant> lastRelaymessage = Optional.empty();
 
     @Getter
@@ -230,7 +232,8 @@ public class DiscordBot {
 
     private ClientPresence getOnlinePresence() {
         long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
-        return ClientPresence.of(Status.ONLINE, ClientActivity.playing((CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
+        return ClientPresence.of(Status.ONLINE, ClientActivity.custom(
+      (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
     }
 
     private void handleProxyUpdateComplete() {
@@ -377,7 +380,7 @@ public class DiscordBot {
     }
 
     private ClientPresence getQueuePresence() {
-        return ClientPresence.of(Status.IDLE, ClientActivity.watching(queuePositionStr()));
+        return ClientPresence.of(Status.IDLE, ClientActivity.custom(queuePositionStr()));
     }
 
     public static String escape(String message) {
