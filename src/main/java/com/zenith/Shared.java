@@ -57,6 +57,7 @@ import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectato
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
+import lombok.experimental.UtilityClass;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -68,6 +69,7 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+@UtilityClass
 public class Shared {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

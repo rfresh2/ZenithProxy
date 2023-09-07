@@ -70,7 +70,10 @@ public class ChunkCache implements CachedData {
     protected int centerZ;
 
     public ChunkCache() {
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks, 5L, 5L, TimeUnit.MINUTES);
+        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks,
+                                                       5L,
+                                                       5L,
+                                                       TimeUnit.MINUTES);
         codec = MinecraftCodec.CODEC.getHelperFactory().get();
     }
 

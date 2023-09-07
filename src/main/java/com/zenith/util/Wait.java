@@ -1,9 +1,12 @@
 package com.zenith.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+@UtilityClass
 public class Wait {
     public static void waitALittle(int seconds) {
         try {
@@ -37,9 +40,6 @@ public class Wait {
             Wait.waitALittleMs(50);
         }
         return conditionSupplier.get();
-    }
-
-    private Wait() {
     }
 
     public static void waitRandomWithinMsBound(final int ms) {

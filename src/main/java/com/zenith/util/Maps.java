@@ -1,10 +1,12 @@
 package com.zenith.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@UtilityClass
 public final class Maps {
-    private Maps() { }
 
     public static <K, V> Map<K, V> of(K k1, V v1) {
         final Map<K, V> map = new HashMap<>();

@@ -1,5 +1,6 @@
 package com.zenith.util;
 
+import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -9,11 +10,8 @@ import java.util.Locale;
 import static net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson;
 import static net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand;
 
+@UtilityClass
 public final class ComponentSerializer {
-
-    public ComponentSerializer() {
-
-    }
 
     public static String serialize(Component component) {
         return gson().serialize(component);
