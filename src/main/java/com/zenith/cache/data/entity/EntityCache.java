@@ -9,11 +9,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.NonNull;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 
 public class EntityCache implements CachedData {
     protected final Int2ObjectMap<Entity> cachedEntities = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
@@ -22,11 +20,11 @@ public class EntityCache implements CachedData {
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         this.cachedEntities.values().forEach(entity -> entity.addPackets(consumer));
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
-            this::reapDeadEntities,
-            5L,
-            5L,
-            TimeUnit.MINUTES);
+//        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+//            this::reapDeadEntities,
+//            5L,
+//            5L,
+//            TimeUnit.MINUTES);
     }
 
 

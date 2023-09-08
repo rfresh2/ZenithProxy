@@ -37,7 +37,7 @@ public class MoveEntityPosRotHandler implements AsyncIncomingHandler<Clientbound
             trackPlayerVisualRangePosition(entity);
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityPositionRotationPacket for invalid entity (id={})", packet.getEntityId());
+//            CLIENT_LOG.warn("Received ServerEntityPositionRotationPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

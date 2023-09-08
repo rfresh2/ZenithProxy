@@ -111,6 +111,7 @@ public class ChunkCache implements CachedData {
     public void setCurrentWorld(final String dimensionType, final String worldName, long hashedSeed, boolean debug, boolean flat) {
         worldData = new WorldData(dimensionType, worldName, hashedSeed, debug, flat);
         currentDimension = dimensionRegistry.get(worldName);
+        CACHE_LOG.debug("Updated current world to {}", worldName);
     }
 
     public static int log2RoundUp(int num) {
@@ -472,9 +473,7 @@ public class ChunkCache implements CachedData {
     }
 
     public void remove(int x, int z) {
-        writeCache(() -> {
-            return this.cache.remove(chunkPosToLong(x, z));
-        });
+        writeCache(() -> this.cache.remove(chunkPosToLong(x, z)));
     }
 
     // reap any chunks we possibly didn't remove from the cache
@@ -510,5 +509,6 @@ public class ChunkCache implements CachedData {
                                        packet.getHashedSeed(),
                                        packet.isDebug(),
                                        packet.isFlat());
+        CACHE_LOG.debug("Updated current dimension to {}", currentDimension.dimensionName);
     }
 }
