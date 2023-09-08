@@ -32,6 +32,7 @@ import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
+import discord4j.rest.request.RouterOptions;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
@@ -121,7 +122,7 @@ public class DiscordBot {
     }
 
     public void createClient() {
-        DiscordClient discordClient = DiscordClientBuilder.create(CONFIG.discord.token).setReactorResources(getReactorResources()).build();
+        DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
         this.client = discordClient.gateway()
                 .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
                 .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
@@ -133,7 +134,7 @@ public class DiscordBot {
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
-            if (CONFIG.discord.chatRelay.channelId.length() > 0 && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
+            if (!CONFIG.discord.chatRelay.channelId.isEmpty() && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
                     EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent())));
                     return;
@@ -392,6 +393,33 @@ public class DiscordBot {
 
     public boolean isMessageQueueEmpty() {
         return mainChannelMessageQueue.isEmpty();
+    }
+
+    public DiscordClientBuilder<DiscordClient, RouterOptions> buildProxiedClient(final DiscordClientBuilder<DiscordClient, RouterOptions> builder) {
+        if (!CONFIG.discord.connectionProxy.enabled) return builder;
+        builder.setReactorResources(new ReactorResources(getProxiedHttpClient(),
+                                                         DEFAULT_TIMER_TASK_SCHEDULER.get(),
+                                                         DEFAULT_BLOCKING_TASK_SCHEDULER.get()));
+        return builder;
+    }
+
+    public HttpClient getProxiedHttpClient() {
+        return HttpClient.create().compress(true).followRedirect(true).secure().proxy((ProxyProvider.TypeSpec provider) -> {
+            ProxyProvider.AddressSpec addressSpec;
+            switch (CONFIG.discord.connectionProxy.type){
+                case SOCKS4 -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS4);
+                case SOCKS5 -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS5);
+                case HTTP -> addressSpec = provider.type(ProxyProvider.Proxy.HTTP);
+                default -> throw new RuntimeException("Invalid proxy type: " + CONFIG.discord.connectionProxy.type);
+            }
+            ProxyProvider.Builder proxyBuilder = addressSpec
+                .host(CONFIG.discord.connectionProxy.host)
+                .port(CONFIG.discord.connectionProxy.port);
+            if(!CONFIG.discord.connectionProxy.user.isEmpty())
+                proxyBuilder.username(CONFIG.discord.connectionProxy.user);
+            if(!CONFIG.discord.connectionProxy.password.isEmpty())
+                proxyBuilder.password(s -> CONFIG.discord.connectionProxy.password);
+        });
     }
 
     public void handleConnectEvent(ConnectEvent event) {
@@ -857,32 +885,5 @@ public class DiscordBot {
             "Update will be applied at next opportunity.\nOr apply the update now: `.update`",
             false);
         sendEmbedMessage(embedBuilder.build());
-    }
-
-    //Could've made this a lambda but its gonna clog up the discord client creator function
-    //also i know this looks ugly as fuck but there pretty much is no info regarding this that i could find
-    private ReactorResources getReactorResources(){
-        if(!CONFIG.discord.webhookProxy.enabled)
-            return new ReactorResources();
-        assert (CONFIG.discord.webhookProxy.host.length() != 0);
-
-        ReactorResources newReactorResources = new ReactorResources(HttpClient.create().compress(true).followRedirect(true).secure().proxy((ProxyProvider.TypeSpec provider) -> {
-            ProxyProvider.AddressSpec addressSpec;
-            switch (CONFIG.discord.webhookProxy.schema){
-                case "socks4" -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS4);
-                case "socks5" -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS5);
-                case "http" -> addressSpec = provider.type(ProxyProvider.Proxy.HTTP);
-                //defaults to http
-                default -> throw new IllegalArgumentException("Invalid proxy type: " + CONFIG.discord.webhookProxy.schema);
-
-            }
-            ProxyProvider.Builder proxyBuilder = addressSpec.host(CONFIG.discord.webhookProxy.host).port(CONFIG.discord.webhookProxy.port);
-            if(CONFIG.discord.webhookProxy.user.length() != 0)
-                proxyBuilder = proxyBuilder.username(CONFIG.discord.webhookProxy.user);
-            if(CONFIG.discord.webhookProxy.password.length() != 0)
-                proxyBuilder = proxyBuilder.password((String unused) -> CONFIG.discord.webhookProxy.password);
-
-        }), DEFAULT_TIMER_TASK_SCHEDULER.get(), DEFAULT_BLOCKING_TASK_SCHEDULER.get());
-        return newReactorResources;
     }
 }
