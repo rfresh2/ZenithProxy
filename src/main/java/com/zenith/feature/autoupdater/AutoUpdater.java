@@ -5,6 +5,7 @@ import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.UpdateAvailableEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
+import lombok.Getter;
 
 import javax.annotation.Nullable;
 import java.time.Instant;
@@ -19,6 +20,7 @@ import static com.zenith.Shared.*;
 public abstract class AutoUpdater {
 
     private boolean updateAvailable = false;
+    @Getter
     private Optional<String> newVersion = Optional.empty();
     ScheduledFuture<?> updateCheckFuture;
     private Subscription eventSubscription;
