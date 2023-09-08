@@ -32,7 +32,7 @@ public class ServerTablistDataOutgoingHandler implements OutgoingHandler<Clientb
                             .appendNewline()
                             .append(MineDown.parse(
                              "&b&l " + session.getProfileCache().getProfile().getName()
-                                 + " &r&7[&r&3" + session.getPing() + "ms&r&7]&r&7 "
+                                 + " &r&7[&r&3" + session.getPing() + "ms&r&7]&r&7"
                                  + " -> &r&b&l" + CACHE.getProfileCache().getProfile().getName()
                                  + " &r&7[&r&3" + Proxy.getInstance().getClient().getPing() + "ms&r&7]&r"
                             )).build())
