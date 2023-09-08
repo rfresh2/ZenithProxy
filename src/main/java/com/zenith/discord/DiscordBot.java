@@ -871,8 +871,9 @@ public class DiscordBot {
             switch (CONFIG.discord.webhookProxy.schema){
                 case "socks4" -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS4);
                 case "socks5" -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS5);
+                case "http" -> addressSpec = provider.type(ProxyProvider.Proxy.HTTP);
                 //defaults to http
-                default -> addressSpec = provider.type(ProxyProvider.Proxy.HTTP);
+                default -> throw new IllegalArgumentException("Invalid proxy type: " + CONFIG.discord.webhookProxy.schema);
 
             }
             ProxyProvider.Builder proxyBuilder = addressSpec.host(CONFIG.discord.webhookProxy.host).port(CONFIG.discord.webhookProxy.port);
