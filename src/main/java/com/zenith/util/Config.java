@@ -295,7 +295,7 @@ public final class Config {
                 public List<WhitelistEntry> whitelist = new ArrayList<>();
                 public boolean whitelistRefresh = true;
                 public long whitelistRefreshIntervalMins = 1440L; // one day as default
-                public String kickmsg = "get out of here you HECKING scrub";
+                public String kickmsg = "no whitelist?";
             }
 
             public static final class Timeout {
