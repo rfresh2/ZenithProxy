@@ -197,7 +197,10 @@ public class ServerConnection implements Session, SessionListener {
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
         }
-        this.proxy.getActiveConnections().forEach(ServerConnection::syncTeamMembers);
+        ServerConnection serverConnection = this.proxy.getCurrentPlayer().get();
+        if (serverConnection != null) {
+            serverConnection.syncTeamMembers();
+        }
     }
 
     public void send(@NonNull Packet packet) {
@@ -266,7 +269,7 @@ public class ServerConnection implements Session, SessionListener {
             .map(ServerConnection::getSpectatorEntityUUID)
             .map(UUID::toString)
             .collect(Collectors.toCollection(ArrayList::new));
-        teamMembers.add(profileCache.getProfile().getName());
+        if (!teamMembers.isEmpty()) teamMembers.add(profileCache.getProfile().getName());
         final List<String> toRemove = currentTeamMembers.stream()
             .filter(member -> !teamMembers.contains(member))
             .toList();
