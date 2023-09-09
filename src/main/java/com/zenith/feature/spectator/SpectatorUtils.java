@@ -22,7 +22,6 @@ import java.util.function.Supplier;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.SERVER_LOG;
 import static com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler.updateSpectatorPosition;
 import static java.util.Arrays.asList;
 
@@ -152,12 +151,10 @@ public final class SpectatorUtils {
             .setTags(CACHE.getPlayerCache().getTags())
             .setOpLevel(CACHE.getPlayerCache().getOpLevel())
             .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
-        SERVER_LOG.info("Spectator player pos: {}, {}, {}", spectatorEntityPlayer.getX(), spectatorEntityPlayer.getY(), spectatorEntityPlayer.getZ());
         session.setAllowSpectatorServerPlayerPosRotate(true);
         DataCache.sendCacheData(cacheSupplier.get(), session);
         session.setAllowSpectatorServerPlayerPosRotate(false);
         session.send(session.getEntitySpawnPacket());
-        SERVER_LOG.info("Spawning spectator entity: {}", session.getSpectatorEntityId());
         session.send(session.getSelfEntityMetadataPacket());
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))

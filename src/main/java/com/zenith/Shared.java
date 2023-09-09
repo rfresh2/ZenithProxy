@@ -342,6 +342,8 @@ public class Shared {
         .registerOutbound(new HorseScreenOpenSpectatorOutgoingHandler())
         .registerOutbound(new ClientboundContainerSetDataSpectatorOutgoingHandler())
         .registerOutbound(new ServerTablistDataOutgoingHandler())
+        .registerOutbound(new PlayerAbilitiesSpectatorOutgoingHandler())
+        .registerOutbound(new RespawnSpectatorOutgoingPacket())
 
         .registerPostOutbound(new JoinGameSpectatorPostHandler())
         .build();

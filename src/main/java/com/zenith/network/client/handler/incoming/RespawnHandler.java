@@ -1,6 +1,5 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
@@ -24,21 +23,6 @@ public class RespawnHandler implements IncomingHandler<ClientboundRespawnPacket,
     public boolean apply(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
         // must send respawn packet before cache gets reset
         // lots of race conditions with packet sequence could happen
-        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.send(new ClientboundRespawnPacket(
-                    packet.getDimension(),
-                    packet.getWorldName(),
-                    packet.getHashedSeed(),
-                    GameMode.SPECTATOR,
-                    GameMode.SPECTATOR,
-                    true,
-                    packet.isFlat(),
-                    packet.isKeepMetadata(),
-                    packet.isKeepAttributes(),
-                    packet.getLastDeathPos(),
-                    packet.getPortalCooldown()
-            ));
-        });
         if (isSpectatorRespawning.compareAndSet(false, true)) {
             /**
              * see https://c4k3.github.io/wiki.vg/Protocol.html#Respawn

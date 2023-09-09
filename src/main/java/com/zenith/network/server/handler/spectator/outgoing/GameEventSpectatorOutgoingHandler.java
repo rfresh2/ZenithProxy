@@ -8,7 +8,9 @@ import com.zenith.network.server.ServerConnection;
 public class GameEventSpectatorOutgoingHandler implements OutgoingHandler<ClientboundGameEventPacket, ServerConnection> {
     @Override
     public ClientboundGameEventPacket apply(final ClientboundGameEventPacket packet, final ServerConnection session) {
-        if (packet.getNotification() == GameEvent.CHANGE_GAMEMODE) return null;
+        if (packet.getNotification() == GameEvent.CHANGE_GAMEMODE) {
+            return null;
+        }
         return packet;
     }
 
