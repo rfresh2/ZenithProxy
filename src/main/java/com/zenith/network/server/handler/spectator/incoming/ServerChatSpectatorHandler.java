@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSy
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveMobEffectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.IncomingHandler;
@@ -71,6 +72,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                 session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
                 SpectatorUtils.syncSpectatorPositionToPlayer(session);
             }
+            Proxy.getInstance().getActiveConnections().forEach(ServerConnection::syncTeamMembers);
         } else if (packet.getMessage().toLowerCase().startsWith("!cleareffects")) {
             CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();
             asList(Effect.values()).forEach(effect -> {

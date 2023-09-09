@@ -3,9 +3,14 @@ package com.zenith.network.server;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
+import com.github.steveice10.mc.protocol.data.game.scoreboard.CollisionRule;
+import com.github.steveice10.mc.protocol.data.game.scoreboard.NameTagVisibility;
+import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamAction;
+import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamColor;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.codec.PacketCodecHelper;
 import com.github.steveice10.packetlib.event.session.*;
@@ -32,6 +37,8 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
 
@@ -63,12 +70,23 @@ public class ServerConnection implements Session, SessionListener {
     // need to persist state to allow them in and out of this
     protected boolean playerCam = false;
     protected boolean showSelfEntity = true;
-    protected int spectatorEntityId = 2147483647 - this.hashCode();
+    protected int spectatorEntityId = 2147483647 - ThreadLocalRandom.current().nextInt(1000000);
     protected int spectatorSelfEntityId = spectatorEntityId - 1;
     protected UUID spectatorEntityUUID = UUID.randomUUID();
     protected ServerProfileCache profileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
     protected SpectatorEntity spectatorEntity;
+
+    /**
+     * Team data
+     */
+    protected List<String> currentTeamMembers = new ArrayList<>();
+    private static final String teamName = "ZenithProxy";
+    private static final Component displayName = Component.text("ZenithProxy");
+    private static final Component prefix = Component.text("");
+    private static final Component suffix = Component.text("");
+    private static final boolean friendlyFire = false;
+    private static final boolean seeFriendlyInvisibles = false;
 
     @Override
     public void packetReceived(Session session, Packet packet) {
@@ -179,6 +197,7 @@ public class ServerConnection implements Session, SessionListener {
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
         }
+        this.proxy.getActiveConnections().forEach(ServerConnection::syncTeamMembers);
     }
 
     public void send(@NonNull Packet packet) {
@@ -225,6 +244,52 @@ public class ServerConnection implements Session, SessionListener {
         } else {
             return false;
         }
+    }
+
+    public void initializeTeam() {
+        session.send(new ClientboundSetPlayerTeamPacket(
+            teamName,
+            displayName,
+            prefix,
+            suffix,
+            friendlyFire,
+            seeFriendlyInvisibles,
+            NameTagVisibility.HIDE_FOR_OTHER_TEAMS,
+            CollisionRule.PUSH_OTHER_TEAMS,
+            TeamColor.AQUA,
+            currentTeamMembers.toArray(new String[0])
+        ));
+    }
+
+    public synchronized void syncTeamMembers() {
+        final List<String> teamMembers = proxy.getActiveConnections().stream()
+            .filter(connection -> connection.isSpectator)
+            .map(ServerConnection::getSpectatorEntityUUID)
+            .map(UUID::toString)
+            .collect(Collectors.toCollection(ArrayList::new));
+        teamMembers.add(CACHE.getProfileCache().getProfile().getName());
+        final List<String> toRemove = currentTeamMembers.stream()
+            .filter(member -> !teamMembers.contains(member))
+            .toList();
+        final List<String> toAdd = teamMembers.stream()
+            .filter(member -> !currentTeamMembers.contains(member))
+            .toList();
+        if (!toRemove.isEmpty()) {
+            send(new ClientboundSetPlayerTeamPacket(
+                teamName,
+                TeamAction.REMOVE_PLAYER,
+                toRemove.toArray(new String[0])
+            ));
+        }
+        if (!toAdd.isEmpty()) {
+            send(new ClientboundSetPlayerTeamPacket(
+                teamName,
+                TeamAction.ADD_PLAYER,
+                toAdd.toArray(new String[0])
+            ));
+        }
+        SERVER_LOG.info("Synced Team members: {} for {}", teamMembers, this.profileCache.getProfile().getName());
+        this.currentTeamMembers = teamMembers;
     }
 
     //

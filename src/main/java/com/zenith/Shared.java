@@ -337,6 +337,7 @@ public class Shared {
         .registerOutbound(new ClientboundSetExperienceSpectatorOutgoingHandler())
         .registerOutbound(new OpenBookSpectatorOutgoingHandler())
         .registerOutbound(new ContainerSetSlotSpectatorOutgoingHandler())
+        .registerOutbound(new GameEventSpectatorOutgoingHandler())
         .registerOutbound(new ClientboundVehicleMoveSpectatorOutgoingHandler())
         .registerOutbound(new HorseScreenOpenSpectatorOutgoingHandler())
         .registerOutbound(new ClientboundContainerSetDataSpectatorOutgoingHandler())

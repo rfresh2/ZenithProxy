@@ -9,6 +9,7 @@ import lombok.NonNull;
 public class PlayerPositionSpectatorHandler implements IncomingHandler<ServerboundMovePlayerPosPacket, ServerConnection> {
     @Override
     public boolean apply(@NonNull ServerboundMovePlayerPosPacket packet, @NonNull ServerConnection session) {
+        if (!session.isLoggedIn()) return false;
         session.getSpectatorPlayerCache()
                 .setX(packet.getX())
                 .setY(packet.getY())

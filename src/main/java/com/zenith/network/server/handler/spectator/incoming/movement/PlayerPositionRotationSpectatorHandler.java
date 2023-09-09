@@ -12,6 +12,7 @@ import lombok.NonNull;
 public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<ServerboundMovePlayerPosRotPacket, ServerConnection> {
     @Override
     public boolean apply(@NonNull ServerboundMovePlayerPosRotPacket packet, @NonNull ServerConnection session) {
+        if (!session.isLoggedIn()) return false;
         session.getSpectatorPlayerCache()
                 .setX(packet.getX())
                 .setY(packet.getY())

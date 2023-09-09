@@ -8,6 +8,7 @@ import lombok.NonNull;
 public class PlayerRotationSpectatorHandler implements IncomingHandler<ServerboundMovePlayerRotPacket, ServerConnection> {
     @Override
     public boolean apply(@NonNull ServerboundMovePlayerRotPacket packet, @NonNull ServerConnection session) {
+        if (session.isLoggedIn()) return false;
         session.getSpectatorPlayerCache()
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch());
