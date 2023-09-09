@@ -92,12 +92,16 @@ public class RestAutoUpdater extends AutoUpdater {
                 if (currentSplit[i].isEmpty()) {
                     currentSplit[i] = "0";
                 }
+                int currentInt = Integer.parseInt(currentSplit[i]);
                 newSplit[i] = newSplit[i].replaceAll("[^\\d]", "");
                 if (newSplit[i].isEmpty()) {
                     newSplit[i] = "0";
                 }
-                if (Integer.parseInt(currentSplit[i]) > Integer.parseInt(newSplit[i])) {
+                int newInt = Integer.parseInt(newSplit[i]);
+                if (currentInt > newInt) {
                     return false;
+                } else if (newInt > currentInt) {
+                    return true;
                 }
             } catch (final Exception e) {
                 DEFAULT_LOG.error("Failed to parse version: {}", e.getMessage());
