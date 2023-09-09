@@ -117,7 +117,7 @@ public final class Config {
                     public boolean gravity = true;
                     // avoid falls that could cause player death
                     public boolean safeGravity = true;
-                    public boolean stuckWarning = true;
+                    public boolean stuckWarning = false;
                     public boolean stuckWarningMention = false;
                     public boolean stuckReconnect = true;
                     public boolean antiStuck = false;
@@ -125,7 +125,7 @@ public final class Config {
             }
 
             public static final class Spook {
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public Long tickDelay = 0L;
                 public TargetingMode spookTargetingMode = TargetingMode.VISUAL_RANGE;
 
