@@ -262,12 +262,11 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public synchronized void syncTeamMembers() {
-        final List<String> teamMembers = proxy.getActiveConnections().stream()
-            .filter(connection -> connection.isSpectator)
+        final List<String> teamMembers = proxy.getSpectatorConnections().stream()
             .map(ServerConnection::getSpectatorEntityUUID)
             .map(UUID::toString)
             .collect(Collectors.toCollection(ArrayList::new));
-        teamMembers.add(CACHE.getProfileCache().getProfile().getName());
+        teamMembers.add(profileCache.getProfile().getName());
         final List<String> toRemove = currentTeamMembers.stream()
             .filter(member -> !teamMembers.contains(member))
             .toList();
@@ -288,8 +287,8 @@ public class ServerConnection implements Session, SessionListener {
                 toAdd.toArray(new String[0])
             ));
         }
-        SERVER_LOG.info("Synced Team members: {} for {}", teamMembers, this.profileCache.getProfile().getName());
         this.currentTeamMembers = teamMembers;
+        SERVER_LOG.debug("Synced Team members: {} for {}", currentTeamMembers, this.profileCache.getProfile().getName());
     }
 
     //

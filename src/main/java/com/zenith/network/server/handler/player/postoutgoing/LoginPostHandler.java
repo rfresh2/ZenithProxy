@@ -22,6 +22,7 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
         // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);
         session.initializeTeam();
+        session.syncTeamMembers();
         // init any active spectators
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
@@ -29,10 +30,8 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
                 .forEach(connection -> {
                     session.send(connection.getEntitySpawnPacket());
                     session.send(connection.getEntityMetadataPacket());
-                    session.syncTeamMembers();
                 });
         // add spectators and self to team
-        session.syncTeamMembers();
         if (CONFIG.client.extra.chat.hideChat) {
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));
         }
