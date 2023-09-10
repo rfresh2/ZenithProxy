@@ -45,27 +45,15 @@ public abstract class Entity {
         if (!this.properties.isEmpty()) {
             consumer.accept(new ClientboundUpdateAttributesPacket(this.entityId, this.properties));
         }
-        if (!this.passengerIds.isEmpty())   {
-            consumer.accept(new ClientboundSetPassengersPacket(this.entityId, this.getPassengerIdsAsArray()));
+        if (!this.passengerIds.isEmpty()) {
+            consumer.accept(new ClientboundSetPassengersPacket(this.entityId, passengerIds.toIntArray()));
         }
         if (!this.metadata.isEmpty()) {
-            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getEntityMetadataAsArray()));
+            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, metadata.toArray(new EntityMetadata[0])));
         }
-    }
-
-    public int[] getPassengerIdsAsArray()  {
-        int[] arr = new int[this.passengerIds.size()];
-        for (int i = 0; i < arr.length; i++)    {
-            arr[i] = this.passengerIds.get(i);
-        }
-        return arr;
     }
 
     public EntityMetadata[] getEntityMetadataAsArray() {
-        EntityMetadata[] arr = new EntityMetadata[this.metadata.size()];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = this.metadata.get(i);
-        }
-        return arr;
+        return metadata.toArray(new EntityMetadata[0]);
     }
 }

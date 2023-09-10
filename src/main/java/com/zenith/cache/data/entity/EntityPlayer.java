@@ -2,6 +2,7 @@ package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerCombatKillPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetExperiencePacket;
@@ -69,6 +70,10 @@ public class EntityPlayer extends EntityLiving {
                     this.yaw,
                     this.pitch)
             );
+            consumer.accept(new ClientboundRotateHeadPacket(
+                    this.entityId,
+                    this.headYaw
+            ));
             consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getMetadata().toArray(new EntityMetadata[0])));
         }
         super.addPackets(consumer);
