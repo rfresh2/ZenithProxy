@@ -2,6 +2,7 @@ package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -39,6 +40,10 @@ public class EntityStandard extends EntityLiving {
                 .toList()
                 .toArray(new Equipment[0])));
         }
+        consumer.accept(new ClientboundRotateHeadPacket(
+            this.entityId,
+            this.headYaw
+        ));
         super.addPackets(consumer);
     }
 }

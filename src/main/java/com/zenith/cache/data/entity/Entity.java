@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+
 
 @Getter
 @Setter
@@ -46,7 +48,10 @@ public abstract class Entity {
             consumer.accept(new ClientboundUpdateAttributesPacket(this.entityId, this.properties));
         }
         if (!this.passengerIds.isEmpty()) {
-            consumer.accept(new ClientboundSetPassengersPacket(this.entityId, passengerIds.toIntArray()));
+            // there's some packet ordering issue causing players not to process this, adding some delay here seems to fix it
+            SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+                consumer.accept(new ClientboundSetPassengersPacket(this.entityId, passengerIds.toIntArray()));
+            }, 100, java.util.concurrent.TimeUnit.MILLISECONDS);
         }
         if (!this.metadata.isEmpty()) {
             consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, metadata.toArray(new EntityMetadata[0])));

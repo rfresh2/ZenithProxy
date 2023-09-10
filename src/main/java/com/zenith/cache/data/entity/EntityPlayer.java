@@ -71,8 +71,8 @@ public class EntityPlayer extends EntityLiving {
                     this.pitch)
             );
             consumer.accept(new ClientboundRotateHeadPacket(
-                    this.entityId,
-                    this.headYaw
+                this.entityId,
+                this.headYaw
             ));
             consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getMetadata().toArray(new EntityMetadata[0])));
         }
