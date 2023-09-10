@@ -359,6 +359,8 @@ graalvmNative {
 //            quickBuild = true
             verbose = true
             buildArgs.addAll(
+                    "-Duser.country=US",
+                    "-Duser.language=en",
                     "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
                     "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
                     "--add-opens=java.base/java.nio=ALL-UNNAMED",
@@ -425,6 +427,7 @@ graalvmNative {
                     "--report-unsupported-elements-at-runtime",
                     "-H:+ReportExceptionStackTraces",
                     "-H:DeadlockWatchdogInterval=30",
+                    "-H:IncludeLocales=en",
 //                    "-H:DashboardDump=imageDashboardDump",
 //                    "-H:+DashboardAll",
                     "--static",
