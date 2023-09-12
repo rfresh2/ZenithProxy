@@ -1060,6 +1060,15 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Discord$ConnectionProxy",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Discord$ConnectionProxy$ConnectionProxyType",
+  "allDeclaredFields":true
+},
+{
   "name":"com.zenith.util.Config$Discord$QueueWarning",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -3448,6 +3457,10 @@
 },
 {
   "name":"org.eclipse.jgit.lib.CoreConfig$TrustPackedRefsStat",
+  "methods":[{"name":"values","parameterTypes":[] }]
+},
+{
+  "name":"org.eclipse.jgit.util.sha1.SHA1$Sha1Implementation",
   "methods":[{"name":"values","parameterTypes":[] }]
 },
 {
