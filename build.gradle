@@ -176,7 +176,7 @@ dependencies {
     shade "com.zaxxer:HikariCP:5.0.1"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.6.1.202309021850-r'
-    shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.6.1.202309021850-r'
+    shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.7.0.202309050840-r'
     shade 'com.github.mwiede:jsch:0.2.11'
     shade 'com.google.guava:guava:32.1.2-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
