@@ -61,7 +61,6 @@ public final class Config {
             public List<WhitelistEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
-            public boolean sixHourReconnect = true;
             public boolean twentyMinuteReconnectIfStuck = true;
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;

@@ -42,7 +42,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -147,22 +146,6 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 5L, 5L, TimeUnit.MINUTES);
             // ensure we are continuously updating the tablist even on servers that don't frequently send updates
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
-            if (CONFIG.client.extra.sixHourReconnect) {
-                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
-                    try {
-                        if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
-                            long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                            if (onlineSeconds > (21600 - (60 + ThreadLocalRandom.current().nextInt(120)))) { // 6 hrs - 60 seconds padding
-                                this.disconnect(SYSTEM_DISCONNECT);
-                                this.cancelAutoReconnect();
-                                this.connect();
-                            }
-                        }
-                    } catch (final Throwable e) {
-                        DEFAULT_LOG.error("Error in reconnect executor service", e);
-                    }
-                }, 0, 10L, TimeUnit.SECONDS);
-            }
             if (CONFIG.client.extra.twentyMinuteReconnectIfStuck) {
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     try {
