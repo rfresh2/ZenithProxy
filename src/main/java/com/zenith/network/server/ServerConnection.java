@@ -147,7 +147,12 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void packetError(PacketErrorEvent event) {
-        SERVER_LOG.error("", event.getCause());
+        if (isLoggedIn) {
+            SERVER_LOG.debug("", event.getCause());
+            event.setSuppress(true);
+        } else {
+            SERVER_LOG.error("", event.getCause());
+        }
     }
 
     @Override
