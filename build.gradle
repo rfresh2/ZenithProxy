@@ -405,6 +405,7 @@ graalvmNative {
                     "--initialize-at-build-time=com.mojang",
                     "--initialize-at-build-time=com.googlecode",
                     "--initialize-at-build-time=net.kyori",
+                    "--initialize-at-run-time=sun.text.resources.cldr",
                     "--initialize-at-run-time=reactor.netty.http.client.HttpClientFormEncoder",
                     "--initialize-at-run-time=reactor.netty.resources.DefaultLoopNativeDetector",
                     "--initialize-at-run-time=reactor.netty.resources.DefaultLoopEpoll",
