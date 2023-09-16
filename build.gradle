@@ -16,7 +16,7 @@ plugins {
     id 'nu.studer.jooq' version '8.2.1'
     id "com.github.johnrengelman.shadow" version "8.1.1"
     id 'java'
-    id 'org.graalvm.buildtools.native' version '0.9.25'
+    id 'org.graalvm.buildtools.native' version '0.9.26'
 }
 
 group "com.zenith"
@@ -192,7 +192,7 @@ dependencies {
     shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-    shade("com.discord4j:discord4j-core:3.3.0-M2") {
+    shade("com.discord4j:discord4j-core:3.3.0-RC1") {
         exclude group: 'io.netty'
     }
     shade("com.github.rfresh2:MCProtocolLib:f9755d5768") {
@@ -346,6 +346,8 @@ graalvmNative {
 //            quickBuild = true
             verbose = true
             buildArgs.addAll(
+                    "-Duser.country=US",
+                    "-Duser.language=en",
                     "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
                     "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
                     "--add-opens=java.base/java.nio=ALL-UNNAMED",
@@ -389,6 +391,7 @@ graalvmNative {
                     "--initialize-at-build-time=com.nimbusds",
                     "--initialize-at-build-time=com.mojang",
                     "--initialize-at-build-time=com.googlecode",
+                    "--initialize-at-run-time=sun.text.resources.cldr",
                     "--initialize-at-run-time=reactor.netty.http.client.HttpClientFormEncoder",
                     "--initialize-at-run-time=reactor.netty.resources.DefaultLoopNativeDetector",
                     "--initialize-at-run-time=reactor.netty.resources.DefaultLoopEpoll",
@@ -411,6 +414,7 @@ graalvmNative {
                     "--report-unsupported-elements-at-runtime",
                     "-H:+ReportExceptionStackTraces",
                     "-H:DeadlockWatchdogInterval=30",
+                    "-H:IncludeLocales=en",
 //                    "-H:DashboardDump=imageDashboardDump",
 //                    "-H:+DashboardAll",
                     "--static",

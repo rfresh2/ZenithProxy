@@ -280,9 +280,10 @@ public class DiscordBot {
     }
 
 
-    private EmbedCreateSpec getUpdateMessage() {
+    private EmbedCreateSpec getUpdateMessage(final Optional<String> newVersion) {
         return EmbedCreateSpec.builder()
             .title("Updating and restarting...")
+            .description("Current Version: " + escape(LAUNCH_CONFIG.version) + "\nNew Version: " + escape(newVersion.orElse("Unknown")))
             .color(Color.CYAN)
             .build();
     }
@@ -774,7 +775,7 @@ public class DiscordBot {
     }
 
     public void handleUpdateStartEvent(UpdateStartEvent event) {
-        sendEmbedMessage(getUpdateMessage());
+        sendEmbedMessage(getUpdateMessage(event.newVersion()));
     }
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {

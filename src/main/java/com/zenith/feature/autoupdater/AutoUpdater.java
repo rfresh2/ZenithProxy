@@ -5,10 +5,12 @@ import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.UpdateAvailableEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
+import lombok.Getter;
 
 import javax.annotation.Nullable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +20,8 @@ import static com.zenith.Shared.*;
 public abstract class AutoUpdater {
 
     private boolean updateAvailable = false;
+    @Getter
+    private Optional<String> newVersion = Optional.empty();
     ScheduledFuture<?> updateCheckFuture;
     private Subscription eventSubscription;
 
@@ -55,6 +59,7 @@ public abstract class AutoUpdater {
         }
         cancelUpdateCheck();
         this.updateAvailable = false;
+        this.newVersion = Optional.empty();
     }
 
     public synchronized void setUpdateAvailable(final boolean updateAvailable) {
@@ -63,6 +68,7 @@ public abstract class AutoUpdater {
 
     public synchronized void setUpdateAvailable(final boolean updateAvailable, @Nullable final String version) {
         if (!this.updateAvailable && updateAvailable) EVENT_BUS.postAsync(new UpdateAvailableEvent(version));
+        this.newVersion = Optional.ofNullable(version);
         this.updateAvailable = updateAvailable;
         if (this.updateAvailable) {
             if (!Proxy.getInstance().isConnected()
@@ -105,7 +111,7 @@ public abstract class AutoUpdater {
     }
 
     public void update() {
-        EVENT_BUS.post(new UpdateStartEvent());
+        EVENT_BUS.post(new UpdateStartEvent(newVersion));
         CONFIG.discord.isUpdating = true;
         Proxy.getInstance().stop();
     }

@@ -19,10 +19,6 @@
   }, {
     "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/jna\\E"
   }, {
-    "pattern":"\\Qcom/zenith/command/impl\\E"
-  }, {
-    "pattern":"\\Qcom/zenith/module/impl\\E"
-  }, {
     "pattern":"\\Qdeath_message_mobs.schema\\E"
   }, {
     "pattern":"\\Qdeath_messages.schema\\E"
@@ -60,8 +56,6 @@
     "pattern":"\\Qpc/1.12/language.json\\E"
   }, {
     "pattern":"\\Qproxy_commit.txt\\E"
-  }, {
-    "pattern":"\\Qproxy_version.txt\\E"
   }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
   }, {

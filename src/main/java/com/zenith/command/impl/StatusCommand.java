@@ -108,7 +108,7 @@ public class StatusCommand extends Command {
         return command("status").executes(c -> {
             final EmbedCreateSpec.Builder builder = c.getSource().getEmbedBuilder();
             builder
-                    .title("Proxy Status: " + CONFIG.authentication.username)
+                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " Status: " + CONFIG.authentication.username)
                     .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.CYAN) : Color.RUBY)
                     .addField("Status", getStatus(), true)
                     .addField("Connected User", getCurrentClientUserName(), true)

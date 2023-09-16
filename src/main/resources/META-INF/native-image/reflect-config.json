@@ -1341,7 +1341,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"name","parameterTypes":[] }, {"name":"type","parameterTypes":[] }, {"name":"url","parameterTypes":[] }]
+  "methods":[{"name":"name","parameterTypes":[] }, {"name":"state","parameterTypes":[] }, {"name":"type","parameterTypes":[] }, {"name":"url","parameterTypes":[] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandInteractionData",
@@ -1407,7 +1407,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setContentType","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setEphemeral","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFilename","parameterTypes":["java.lang.String"] }, {"name":"setHeight","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setProxyUrl","parameterTypes":["java.lang.String"] }, {"name":"setSize","parameterTypes":["int"] }, {"name":"setUrl","parameterTypes":["java.lang.String"] }, {"name":"setWidth","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setContentType","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDurationSeconds","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setEphemeral","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFilename","parameterTypes":["java.lang.String"] }, {"name":"setFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setHeight","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setProxyUrl","parameterTypes":["java.lang.String"] }, {"name":"setSize","parameterTypes":["int"] }, {"name":"setUrl","parameterTypes":["java.lang.String"] }, {"name":"setWaveform","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setWidth","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableChannelData",
@@ -1932,7 +1932,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setColor","parameterTypes":["int"] }, {"name":"setHoist","parameterTypes":["boolean"] }, {"name":"setIcon","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setManaged","parameterTypes":["boolean"] }, {"name":"setMentionable","parameterTypes":["boolean"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setPermissions","parameterTypes":["long"] }, {"name":"setPosition","parameterTypes":["int"] }, {"name":"setTags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUnicodeEmoji","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setColor","parameterTypes":["int"] }, {"name":"setFlags","parameterTypes":["int"] }, {"name":"setHoist","parameterTypes":["boolean"] }, {"name":"setIcon","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setManaged","parameterTypes":["boolean"] }, {"name":"setMentionable","parameterTypes":["boolean"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setPermissions","parameterTypes":["long"] }, {"name":"setPosition","parameterTypes":["int"] }, {"name":"setTags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUnicodeEmoji","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableRoleTagsData",
@@ -2521,14 +2521,14 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"channelId","parameterTypes":[] }, {"name":"emoji","parameterTypes":[] }, {"name":"fromJson","parameterTypes":["discord4j.discordjson.json.gateway.ImmutableMessageReactionAdd$Json"] }, {"name":"guildId","parameterTypes":[] }, {"name":"member","parameterTypes":[] }, {"name":"messageId","parameterTypes":[] }, {"name":"userId","parameterTypes":[] }]
+  "methods":[{"name":"channelId","parameterTypes":[] }, {"name":"emoji","parameterTypes":[] }, {"name":"fromJson","parameterTypes":["discord4j.discordjson.json.gateway.ImmutableMessageReactionAdd$Json"] }, {"name":"guildId","parameterTypes":[] }, {"name":"member","parameterTypes":[] }, {"name":"messageAuthorId","parameterTypes":[] }, {"name":"messageId","parameterTypes":[] }, {"name":"userId","parameterTypes":[] }]
 },
 {
   "name":"discord4j.discordjson.json.gateway.ImmutableMessageReactionAdd$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setChannelId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setEmoji","parameterTypes":["discord4j.discordjson.json.EmojiData"] }, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMember","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMessageId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setUserId","parameterTypes":["discord4j.discordjson.Id"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setChannelId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setEmoji","parameterTypes":["discord4j.discordjson.json.EmojiData"] }, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMember","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMessageAuthorId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setMessageId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setUserId","parameterTypes":["discord4j.discordjson.Id"] }]
 },
 {
   "name":"discord4j.discordjson.json.gateway.ImmutableMessageReactionRemove",
@@ -3259,6 +3259,10 @@
 {
   "name":"java.lang.Thread",
   "fields":[{"name":"threadLocalRandomProbe"}]
+},
+{
+  "name":"java.lang.Throwable",
+  "methods":[{"name":"addSuppressed","parameterTypes":["java.lang.Throwable"] }]
 },
 {
   "name":"java.lang.management.ManagementFactory",

@@ -8,8 +8,8 @@ import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 
 import java.time.Instant;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -29,7 +29,7 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     protected final Logger logger;
     protected final boolean allowUnhandled;
-    protected static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newFixedThreadPool(8);
+    protected static final ScheduledExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(8);
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {

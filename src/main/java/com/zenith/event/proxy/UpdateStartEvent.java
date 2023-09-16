@@ -1,4 +1,5 @@
 package com.zenith.event.proxy;
 
-public class UpdateStartEvent {
-}
+import java.util.Optional;
+
+public record UpdateStartEvent(Optional<String> newVersion) { }
