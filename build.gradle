@@ -41,7 +41,7 @@ tasks.register('writeCommitHash') {
     doLast {
         var ver = 'git rev-parse --short=8 HEAD'.execute().text.trim()
         if (ver.length() > 5) {
-            var f = file(project.buildDir.absolutePath + '/resources/main/proxy_commit.txt')
+            var f = file(layout.buildDirectory.getAsFile().get().absolutePath + '/resources/main/proxy_commit.txt')
             f.parentFile.mkdirs()
             println "Writing commit hash: " + ver
             f.write(ver)
@@ -274,15 +274,15 @@ tasks.register('java_path') {
     doLast {
         RegularFile execPath = javaToolchains.launcherFor(java.toolchain).get().getExecutablePath()
         // create a file symlinked to the java executable for use in scripts
-        project.buildDir.mkdirs()
+        layout.buildDirectory.getAsFile().get().mkdirs()
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-            File f = file(project.buildDir.toString() + "/java_toolchain.bat")
+            File f = file(layout.buildDirectory.getAsFile().get().toString() + "/java_toolchain.bat")
             if (f.exists()) {
                 f.delete()
             }
             f.write("@" + execPath.asFile.toString() + " %*")
         } else if (Os.isFamily(Os.FAMILY_UNIX)) {
-            File f = file(project.buildDir.toString() + "/java_toolchain")
+            File f = file(layout.buildDirectory.getAsFile().get().toString() + "/java_toolchain")
             if (f.exists()) {
                 f.delete()
             }
