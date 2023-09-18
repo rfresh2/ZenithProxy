@@ -191,7 +191,7 @@ dependencies {
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
-    shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
     shade("com.discord4j:discord4j-core:3.3.0-RC1") {
         exclude group: 'io.netty'
     }
