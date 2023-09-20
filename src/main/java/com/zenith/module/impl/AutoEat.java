@@ -33,6 +33,7 @@ public class AutoEat extends Module {
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
     @Getter
     private boolean isEating = false;
+    private static final int MOVEMENT_PRIORITY = 1000;
 
     public AutoEat() {
         super();
@@ -73,6 +74,10 @@ public class AutoEat extends Module {
                 } else {
                     isEating = false;
                 }
+            }
+            if (isEating) {
+                MODULE_MANAGER.get(PlayerSimulation.class).doMovementInput(false,
+                                                                           MOVEMENT_PRIORITY);
             }
         } else {
             isEating = false;

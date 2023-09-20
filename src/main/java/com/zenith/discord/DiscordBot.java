@@ -236,6 +236,8 @@ public class DiscordBot {
             } else {
                 throw e;
             }
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed updating discord presence", e);
         }
     }
 

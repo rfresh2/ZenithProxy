@@ -9,8 +9,6 @@ import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
 import com.zenith.feature.language.LanguageManager;
-import com.zenith.feature.pathing.Pathing;
-import com.zenith.feature.pathing.World;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
 import com.zenith.feature.prioban.PriorityBanChecker;
 import com.zenith.feature.tps.TPSCalculator;
@@ -28,10 +26,7 @@ import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
 import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
-import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerPositionHandler;
-import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerPositionRotationHandler;
-import com.zenith.network.client.handler.postoutgoing.PostOutgoingPlayerRotationHandler;
-import com.zenith.network.client.handler.postoutgoing.PostOutgoingSetCarriedItemHandler;
+import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.player.incoming.ClientSettingsPacketHandler;
@@ -106,12 +101,10 @@ public class Shared {
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
     public static final WhitelistManager WHITELIST_MANAGER;
     public static final PriorityBanChecker PRIORITY_BAN_CHECKER;
-    public static final World WORLD;
     public static final BlockDataManager BLOCK_DATA_MANAGER;
     public static final DatabaseManager DATABASE_MANAGER;
     public static final TPSCalculator TPS_CALCULATOR;
     public static final ModuleManager MODULE_MANAGER;
-    public static final Pathing PATHING;
     public static final TerminalManager TERMINAL_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
@@ -153,6 +146,7 @@ public class Shared {
         .registerInbound(new PlayerInfoUpdateHandler())
         .registerInbound(new PlayerInfoRemoveHandler())
         .registerInbound(new SetActionBarTextHandler())
+        .registerInbound(new SetEntityMotionHandler())
         .registerInbound(new ForgetLevelChunkHandler())
         .registerInbound(new UpdateRecipesHandler())
         .registerInbound(new UpdateTagsHandler())
@@ -189,6 +183,7 @@ public class Shared {
         .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
         .registerPostOutbound(new PostOutgoingPlayerPositionRotationHandler())
         .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
+        .registerPostOutbound(new PostOutgoingPlayerStatusOnlyHandler())
         .build();
 
     public static volatile boolean SHOULD_RECONNECT;
@@ -360,11 +355,9 @@ public class Shared {
             WHITELIST_MANAGER = new WhitelistManager();
             PRIORITY_BAN_CHECKER = new PriorityBanChecker();
             BLOCK_DATA_MANAGER = new BlockDataManager();
-            WORLD = new World(BLOCK_DATA_MANAGER);
             DATABASE_MANAGER = new DatabaseManager();
             TPS_CALCULATOR = new TPSCalculator();
             MODULE_MANAGER = new ModuleManager();
-            PATHING = new Pathing(WORLD);
             TERMINAL_MANAGER = new TerminalManager();
             COMMAND_MANAGER = new CommandManager();
             LANGUAGE_MANAGER = new LanguageManager();

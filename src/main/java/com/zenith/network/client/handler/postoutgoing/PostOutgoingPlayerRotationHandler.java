@@ -14,6 +14,7 @@ public class PostOutgoingPlayerRotationHandler implements PostOutgoingHandler<Se
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch());
         SpectatorUtils.syncPlayerPositionWithSpectators();
+//        CLIENT_LOG.info("Client set player rotation: {}, {}", packet.getYaw(), packet.getPitch());
     }
 
     @Override

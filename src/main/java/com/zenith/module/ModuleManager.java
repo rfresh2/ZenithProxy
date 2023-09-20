@@ -38,6 +38,7 @@ public class ModuleManager {
 
     public void init() {
         asList(
+            new PlayerSimulation(),
             new AntiAFK(),
             new AutoDisconnect(),
             new AutoEat(),
@@ -66,6 +67,15 @@ public class ModuleManager {
             return Optional.of((T) module);
         } catch (final ClassCastException e) {
             return Optional.empty();
+        }
+    }
+
+    // unsafe version of getModule, but without optional overhead
+    public <T extends Module> T get(final Class<T> clazz) {
+        try {
+            return (T) moduleClassMap.get(clazz);
+        } catch (final Throwable e) {
+            return null;
         }
     }
 

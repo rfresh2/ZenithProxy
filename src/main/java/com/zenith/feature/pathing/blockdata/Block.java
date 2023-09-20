@@ -29,4 +29,12 @@ public class Block {
     public List<CollisionBox> getCollisionBoxesForStateId(final int id) {
         return stateCollisionBoxes.getOrDefault(id, Collections.emptyList());
     }
+
+    public boolean isFluid() {
+        return name.equals("water") || name.equals("lava") || name.equals("bubble_column");
+    }
+
+    public boolean isWater() {
+        return name.equals("water") || name.equals("bubble_column");
+    }
 }

@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.cache.Cache;
@@ -14,16 +13,17 @@ import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
+import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.Position;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
+import com.zenith.util.math.MathHelper;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -48,16 +48,15 @@ public class AntiAFK extends Module {
             new WalkDirection(-1, 1), new WalkDirection(1, -1),
             new WalkDirection(-1, 0), new WalkDirection(1, 0),
             new WalkDirection(1, -1), new WalkDirection(-1, 1),
-            new WalkDirection(0, 1), new WalkDirection(0, -1));
+            new WalkDirection(0, 1), new WalkDirection(0, -1)
+    );
     private Instant lastDistanceDeltaWarningTime = Instant.EPOCH;
     private boolean stuck = false;
     private final Iterator<WalkDirection> walkDirectionIterator = Iterators.cycle(walkDirections);
     private BlockPos currentPathingGoal;
-    // tick time since we started falling
-    // can be negative, indicates pathing should wait until it reaches 0 to fall
-    private int gravityT = 0;
     private int antiStuckT = 0;
     private double antiStuckStartY = 0;
+    public static final int MOVEMENT_PRIORITY = 100;
 
     public AntiAFK() {
         super();
@@ -89,21 +88,23 @@ public class AntiAFK extends Module {
                 swingTick();
             }
 
-            if (CONFIG.client.extra.antiafk.actions.antiStuck && isStuck()) {
-                if (antiStuckT < 0) {
-                    antiStuckT++;
-                } else {
-                    if (antiStuckTick()) {
-                        return;
-                    }
-                }
-            }
+//            if (CONFIG.client.extra.antiafk.actions.antiStuck && isStuck()) {
+//                if (antiStuckT < 0) {
+//                    antiStuckT++;
+//                } else {
+//                    if (antiStuckTick()) {
+//                        return;
+//                    }
+//                }
+//            }
 
-            if (CONFIG.client.extra.antiafk.actions.gravity) {
-                gravityTick();
+            if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
+                rotateTick();
             }
-            if (CONFIG.client.extra.antiafk.actions.walk && (!CONFIG.client.extra.antiafk.actions.gravity || gravityT <= 0)) {
+            if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
+                Position currentPlayerPos = Pathing.getCurrentPlayerPos();
+                this.positionCache.put(currentPlayerPos, currentPlayerPos);
                 // check distance delta every 9 mins. Stuck kick should happen at 20 mins
                 if (distanceDeltaCheckTimer.tick(10800L, true) && CONFIG.client.server.address.toLowerCase().contains("2b2t.org") && CONFIG.client.extra.antiafk.actions.stuckWarning) {
                     final double distanceMovedDelta = getDistanceMovedDelta();
@@ -120,9 +121,7 @@ public class AntiAFK extends Module {
                     }
                 }
             }
-            if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
-                rotateTick();
-            }
+
         }
     }
 
@@ -153,7 +152,6 @@ public class AntiAFK extends Module {
             positionCache.invalidateAll();
             lastDistanceDeltaWarningTime = Instant.EPOCH;
             currentPathingGoal = null;
-            gravityT = 0;
             antiStuckT = 0;
             stuck = false;
         }
@@ -182,91 +180,52 @@ public class AntiAFK extends Module {
 
     private void rotateTick() {
         if (rotateTimer.tick(1500L, true)) {
-            sendClientPacketAsync(new ServerboundMovePlayerRotPacket(
-                    true,
-                    -90 + (180 * ThreadLocalRandom.current().nextFloat()),
-                    -90 + (180 * ThreadLocalRandom.current().nextFloat())
-            ));
+            MODULE_MANAGER.get(PlayerSimulation.class)
+                .doRotate(-20 + (20 * ThreadLocalRandom.current().nextFloat()),
+                          -20 + (20 * ThreadLocalRandom.current().nextFloat()),
+                          MOVEMENT_PRIORITY);
         }
     }
 
     public void handlePlayerPosRotate() {
         synchronized (this) {
-            this.gravityT = -2;
             this.antiStuckT = -2;
+            this.shouldWalk = false;
         }
     }
 
     private void walkTick() {
+        PlayerSimulation playerSimulation = MODULE_MANAGER.get(PlayerSimulation.class);
         if (startWalkTickTimer.tick(400L, true)) {
             shouldWalk = true;
             final WalkDirection directions = walkDirectionIterator.next();
-            currentPathingGoal = PATHING.getCurrentPlayerPos()
+            currentPathingGoal = Pathing.getCurrentPlayerPos()
                     .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.from)
                     .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.to)
                     .toBlockPos();
-
         }
         if (shouldWalk) {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                Position nextMovePos = PATHING.calculateNextMove(currentPathingGoal);
-                if (nextMovePos.equals(PATHING.getCurrentPlayerPos())) {
-                    shouldWalk = false;
-                }
-                sendClientPacketAsync(nextMovePos.toPlayerPositionPacket());
-                this.positionCache.put(nextMovePos, nextMovePos);
+                playerSimulation.doRotateYawToXZ(currentPathingGoal.getX(), currentPathingGoal.getZ(), MOVEMENT_PRIORITY);
+                playerSimulation.doMovementInput(
+                    true,
+                    MOVEMENT_PRIORITY
+                );
             }
         }
     }
 
     private boolean reachedPathingGoal() {
-        return Objects.equals(PATHING.getCurrentPlayerPos().toBlockPos(), currentPathingGoal);
-    }
-
-    private void gravityTick() {
-        synchronized (this) {
-            final Position nextGravityMove = PATHING.calculateNextGravityMove(gravityT);
-            if (nextGravityMove != null) {
-                if (!nextGravityMove.equals(PATHING.getCurrentPlayerPos())) {
-//                    MODULE_LOG.info("Sending gravity move: {}", nextGravityMove);
-                    sendClientPacketAsync(nextGravityMove.toPlayerPositionPacket());
-                }
-                gravityT++;
-            } else {
-                gravityT = 0;
-            }
-        }
-    }
-
-    private boolean antiStuckTick() {
-        // jump in place until we die
-        synchronized (this) {
-            if (antiStuckT == 0) {
-                if (!PATHING.isOnGround()) {
-                    antiStuckT = -2;
-                    return false;
-                }
-                antiStuckStartY = PATHING.getCurrentPlayerPos().getY();
-                // increases hunger loss by 4x if we're sprinting
-                // todo: track this state so we don't flag grim
-//                sendClientPacketAsync(new ClientPlayerStatePacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
-            }
-            final Position nextAntiStuckMove = PATHING.calculateNextJumpMove(antiStuckStartY, antiStuckT);
-            antiStuckT++;
-            if (nextAntiStuckMove != null) {
-                sendClientPacketAsync(nextAntiStuckMove.toPlayerPositionPacket());
-            } else {
-                antiStuckT = -2;
-                return false;
-            }
-            return true;
-        }
+        final int px = MathHelper.floorToInt(Pathing.getCurrentPlayerPos().getX());
+        final int pz = MathHelper.floorToInt(Pathing.getCurrentPlayerPos().getZ());
+        return px == currentPathingGoal.getX() && pz == currentPathingGoal.getZ();
     }
 
     private void swingTick() {
         if (swingTickTimer.tick(3000L, true)) {
+            // todo: move this to PlayerSimulation and assign priority so it doesn't conflict with other modules
             sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
         }
     }
@@ -276,6 +235,5 @@ public class AntiAFK extends Module {
     }
 
 
-    record WalkDirection(int from, int to) {
-    }
+    record WalkDirection(int from, int to) { }
 }

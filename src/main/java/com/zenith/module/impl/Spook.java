@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
@@ -25,6 +24,7 @@ public class Spook extends Module {
     public final AtomicBoolean hasTarget;
     private final TickTimer stareTimer;
     private final Stack<EntityPlayer> focusStack;
+    private static final int MOVEMENT_PRIORITY = 10;
 
     public Spook() {
         super();
@@ -110,11 +110,9 @@ public class Spook extends Module {
         final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
-            sendClientPacketAsync(new ServerboundMovePlayerRotPacket(
-                    true,
-                    getYaw(nearestPlayer.get()),
-                    getPitch(nearestPlayer.get())
-            ));
+            MODULE_MANAGER.get(PlayerSimulation.class).doRotate(getYaw(nearestPlayer.get()),
+                                                                getPitch(nearestPlayer.get()),
+                                                                MOVEMENT_PRIORITY);
         } else {
             this.hasTarget.set(false);
         }
@@ -125,11 +123,9 @@ public class Spook extends Module {
             if (!this.focusStack.isEmpty()) {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                sendClientPacketAsync(new ServerboundMovePlayerRotPacket(
-                        true,
-                        getYaw(target),
-                        getPitch(target)
-                ));
+                MODULE_MANAGER.get(PlayerSimulation.class).doRotate(getYaw(target),
+                                                                    getPitch(target),
+                                                                    MOVEMENT_PRIORITY);
             } else {
                 this.hasTarget.set(false);
             }

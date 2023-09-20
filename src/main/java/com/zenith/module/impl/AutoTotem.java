@@ -24,6 +24,7 @@ public class AutoTotem extends Module {
     private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
     private boolean swapping = false;
     private int delay = 0;
+    private static final int MOVEMENT_PRIORITY = 1000;
 
     public boolean isActive() {
         return CONFIG.client.extra.autoTotem.enabled && swapping;
@@ -62,6 +63,10 @@ public class AutoTotem extends Module {
             }
             if (!isTotemEquipped()) {
                 swapToTotem();
+            }
+            if (swapping) {
+                MODULE_MANAGER.get(PlayerSimulation.class).doMovementInput(false,
+                                                                           MOVEMENT_PRIORITY);
             }
         }
     }

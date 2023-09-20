@@ -22,7 +22,7 @@ import com.zenith.Shared;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.network.server.ServerConnection;
-import com.zenith.util.Vec3i;
+import com.zenith.util.math.MutableVec3i;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -48,9 +48,9 @@ import static com.zenith.Shared.*;
 @Getter
 @Setter
 public class ChunkCache implements CachedData {
-    private static final Vec3i DEFAULT_SPAWN_POSITION = new Vec3i(0, 0, 0);
+    private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     private static final double maxDistanceExpected = Math.pow(32, 2); // squared to speed up calc, no need to sqrt
-    protected Vec3i spawnPosition = DEFAULT_SPAWN_POSITION;
+    protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
     // todo: consider moving weather to a separate cache object
     private boolean isRaining = false;
     private float rainStrength = 0f;
@@ -135,13 +135,17 @@ public class ChunkCache implements CachedData {
         });
     }
 
+    public boolean isChunkLoaded(final int x, final int z) {
+        return cache.containsKey(chunkPosToLong(x, z));
+    }
+
     private static long chunkPosToLong(final int x, final int z) {
         return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
     }
 
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
         // todo: recalculate chunk heightmaps NBT on each block update?
-        Vec3i pos = Vec3i.from(record.getPosition());
+        MutableVec3i pos = MutableVec3i.from(record.getPosition());
         if (pos.getY() < currentDimension.minY || pos.getY() >= currentDimension.minY + currentDimension.height) {
             CLIENT_LOG.warn("Received block update packet for block outside of dimension bounds: pos: {}, minY: {}, height: {}", pos, currentDimension.minY, currentDimension.height);
             return false;
@@ -169,7 +173,7 @@ public class ChunkCache implements CachedData {
 
     // update any tile entities implicitly affected by this block update
     // server doesn't always send us tile entity update packets and relies on logic in client
-    private void handleBlockUpdateTileEntity(BlockChangeEntry record, Vec3i pos, ChunkSection section, Chunk chunk) {
+    private void handleBlockUpdateTileEntity(BlockChangeEntry record, MutableVec3i pos, ChunkSection section, Chunk chunk) {
         if (record.getBlock() == 0) {
             chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == pos.getX() &&
                 tileEntity.getY() == pos.getY() &&
@@ -193,7 +197,7 @@ public class ChunkCache implements CachedData {
         }
     }
 
-    private void writeTileEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final Vec3i position) {
+    private void writeTileEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final MutableVec3i position) {
         // todo: no idea if this compound tag is correct still
         final CompoundTag tileEntityTag = new CompoundTag(blockName, ImmutableMap.of(
             // there's probably more properties some tile entities need but this seems to work well enough

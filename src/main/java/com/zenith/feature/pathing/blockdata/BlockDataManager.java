@@ -101,4 +101,14 @@ public class BlockDataManager {
                 .map(shapeSublist -> new CollisionBox(shapeSublist.get(0), shapeSublist.get(3), shapeSublist.get(1), shapeSublist.get(4), shapeSublist.get(2), shapeSublist.get(5)))
                 .collect(Collectors.toList());
     }
+
+    public float getBlockSlipperiness(Block block) {
+        float slippy = 0.6f;
+        if (block.getName().equals("ice")) slippy = 0.98f;
+        if (block.getName().equals("slime_block")) slippy = 0.8f;
+        if (block.getName().equals("packed_ice")) slippy = 0.98f;
+        if (block.getName().equals("frosted_ice")) slippy = 0.98f;
+        if (block.getName().equals("blue_ice")) slippy = 0.989f;
+        return slippy;
+    }
 }
