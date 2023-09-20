@@ -180,10 +180,11 @@ public class AntiAFK extends Module {
 
     private void rotateTick() {
         if (rotateTimer.tick(1500L, true)) {
-            MODULE_MANAGER.get(PlayerSimulation.class)
-                .doRotate(-20 + (20 * ThreadLocalRandom.current().nextFloat()),
-                          -20 + (20 * ThreadLocalRandom.current().nextFloat()),
-                          MOVEMENT_PRIORITY);
+            PATHING.rotate(
+                -20 + (20 * ThreadLocalRandom.current().nextFloat()),
+                -20 + (20 * ThreadLocalRandom.current().nextFloat()),
+                MOVEMENT_PRIORITY - 1
+            );
         }
     }
 
@@ -195,8 +196,7 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-        PlayerSimulation playerSimulation = MODULE_MANAGER.get(PlayerSimulation.class);
-        if (startWalkTickTimer.tick(400L, true)) {
+        if (startWalkTickTimer.tick(100L, true)) {
             shouldWalk = true;
             final WalkDirection directions = walkDirectionIterator.next();
             currentPathingGoal = Pathing.getCurrentPlayerPos()
@@ -208,11 +208,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                playerSimulation.doRotateYawToXZ(currentPathingGoal.getX(), currentPathingGoal.getZ(), MOVEMENT_PRIORITY);
-                playerSimulation.doMovementInput(
-                    true,
-                    MOVEMENT_PRIORITY
-                );
+                PATHING.moveRotTowards(currentPathingGoal.getX(), currentPathingGoal.getZ(), MOVEMENT_PRIORITY);
             }
         }
     }

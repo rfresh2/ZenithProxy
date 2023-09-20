@@ -9,6 +9,7 @@ import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
 import com.zenith.feature.language.LanguageManager;
+import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
 import com.zenith.feature.prioban.PriorityBanChecker;
 import com.zenith.feature.tps.TPSCalculator;
@@ -105,6 +106,7 @@ public class Shared {
     public static final DatabaseManager DATABASE_MANAGER;
     public static final TPSCalculator TPS_CALCULATOR;
     public static final ModuleManager MODULE_MANAGER;
+    public static final Pathing PATHING;
     public static final TerminalManager TERMINAL_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
@@ -358,6 +360,7 @@ public class Shared {
             DATABASE_MANAGER = new DatabaseManager();
             TPS_CALCULATOR = new TPSCalculator();
             MODULE_MANAGER = new ModuleManager();
+            PATHING = new Pathing();
             TERMINAL_MANAGER = new TerminalManager();
             COMMAND_MANAGER = new CommandManager();
             LANGUAGE_MANAGER = new LanguageManager();

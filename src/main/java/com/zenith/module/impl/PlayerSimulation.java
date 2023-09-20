@@ -90,22 +90,18 @@ public class PlayerSimulation extends Module {
     //  current system with the priority int does not handle this correctly
 
     // todo: yaw/pitch stepping and clamping
-    public synchronized void doRotate(float yaw, float pitch, int priority) {
-        if (priority < this.setInputPriority) return;
-        this.setInputPriority = priority;
+    public synchronized void doRotate(float yaw, float pitch) {
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
-    public synchronized void doRotateYawToXZ(final double x, final double z, int priority) {
-        if (priority < this.setInputPriority) return;
-        this.setInputPriority = priority;
+    public synchronized void doRotateYawToXZ(final double x, final double z) {
         final double deltaX = x - this.x;
         final double deltaZ = z - this.z;
         final double yaw = ((Math.atan2(deltaZ, deltaX) * 180.0) / Math.PI) - 90.0;
         // smooths out small yaw changes. there doesn't seem to be any grimac penalty for rotating too small but better to be safe
         if (Math.abs(Math.abs(yaw) - Math.abs(this.yaw)) < 0.01) return;
-        this.doRotate((float) yaw, this.pitch, priority);
+        this.doRotate((float) yaw, this.pitch);
     }
 
     public synchronized void doMovementInput(boolean pressingForward,
@@ -113,21 +109,37 @@ public class PlayerSimulation extends Module {
                                              boolean pressingLeft,
                                              boolean pressingRight,
                                              boolean jumping,
-                                             boolean sneaking,
-                                             int priority) {
-        if (priority < this.setInputPriority) return;
-        this.setInputPriority = priority;
-        this.movementInput.pressingForward = pressingForward;
-        this.movementInput.pressingBack = pressingBack;
-        this.movementInput.pressingLeft = pressingLeft;
-        this.movementInput.pressingRight = pressingRight;
+                                             boolean sneaking) {
+        if (!pressingForward || !pressingBack) {
+            this.movementInput.pressingForward = pressingForward;
+            this.movementInput.pressingBack = pressingBack;
+        }
+        if (!pressingLeft || !pressingRight) {
+            this.movementInput.pressingLeft = pressingLeft;
+            this.movementInput.pressingRight = pressingRight;
+        }
         this.movementInput.jumping = jumping;
         this.movementInput.sneaking = sneaking;
     }
 
-    public synchronized void doMovementInput(boolean forward,
-                                             int priority) {
-        this.doMovementInput(forward, false, false, false, false, false, priority);
+    public synchronized void doMovementInput(final Input input) {
+        doMovementInput(input.pressingForward,
+                        input.pressingBack,
+                        input.pressingLeft,
+                        input.pressingRight,
+                        input.jumping,
+                        input.sneaking);
+    }
+
+    public void doMovement(final MovementInputRequest request) {
+        request.input().ifPresent(this::doMovementInput);
+        if (request.yaw().isPresent() || request.pitch().isPresent()) {
+            doRotate(request.yaw().orElse(this.yaw), request.pitch().orElse(this.pitch));
+        }
+    }
+
+    public double getEyeY() {
+        return playerCollisionBox.getMaxY() - 0.2;
     }
 
     // its important that we process certain packets in order. Grim tracks the order of "transactions"
@@ -372,7 +384,7 @@ public class PlayerSimulation extends Module {
         return this.onGround ? this.speed * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
     }
 
-    public float getBlockSpeedFactor() {
+    private float getBlockSpeedFactor() {
         if (this.isGliding || this.isFlying) return 1.0f;
         Block inBlock = World.getBlockAtBlockPos(Pathing.getCurrentPlayerPos().toBlockPos());
         float inBlockSpeedFactor = getBlockSpeedFactor(inBlock);
@@ -381,7 +393,7 @@ public class PlayerSimulation extends Module {
         return getBlockSpeedFactor(underPlayer);
     }
 
-    public float getBlockSpeedFactor(Block block) {
+    private float getBlockSpeedFactor(Block block) {
         if (block.getName().equals("honey_block")) return 0.4f;
         if (block.getName().equals("soul_sand")) {
             ItemStack bootsItemStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.BOOTS);
@@ -422,7 +434,7 @@ public class PlayerSimulation extends Module {
         syncPlayerCollisionBox();
     }
 
-    public void updateMovementState() {
+    private void updateMovementState() {
         float moveForward = 0.0f;
         float moveStrafe = 0.0f;
         if (movementInput.pressingForward) moveForward++;

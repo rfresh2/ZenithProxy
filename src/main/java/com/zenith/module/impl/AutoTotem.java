@@ -65,8 +65,7 @@ public class AutoTotem extends Module {
                 swapToTotem();
             }
             if (swapping) {
-                MODULE_MANAGER.get(PlayerSimulation.class).doMovementInput(false,
-                                                                           MOVEMENT_PRIORITY);
+                PATHING.stop(MOVEMENT_PRIORITY);
             }
         }
     }

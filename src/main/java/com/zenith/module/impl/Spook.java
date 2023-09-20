@@ -1,14 +1,14 @@
 package com.zenith.module.impl;
 
 import com.zenith.Proxy;
-import com.zenith.cache.data.PlayerCache;
-import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
+import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
+import net.daporkchop.lib.math.vector.Vec2f;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -76,23 +76,6 @@ public class Spook extends Module {
         }
     }
 
-    public static float getPitch(Entity entity) {
-        PlayerCache player = CACHE.getPlayerCache();
-        double y = entity.getY() + 1.6; // eye height
-        double diffX = entity.getX() - player.getX();
-        double diffY = y - (player.getY() + 1.6);
-        double diffZ = entity.getZ() - player.getZ();
-
-        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-        return player.getPitch() + wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - player.getPitch());
-    }
-
-    public static float getYaw(Entity entity) {
-        PlayerCache player = CACHE.getPlayerCache();
-        return player.getYaw() + wrapDegrees((float) Math.toDegrees(Math.atan2(entity.getZ() - player.getZ(), entity.getX() - player.getX())) - 90f - player.getYaw());
-    }
-
     private void stareTick() {
         if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay, true)) {
             switch (CONFIG.client.extra.spook.spookTargetingMode) {
@@ -110,9 +93,10 @@ public class Spook extends Module {
         final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
-            MODULE_MANAGER.get(PlayerSimulation.class).doRotate(getYaw(nearestPlayer.get()),
-                                                                getPitch(nearestPlayer.get()),
-                                                                MOVEMENT_PRIORITY);
+            Vec2f rotationTo = Pathing.rotationTo(nearestPlayer.get().getX(),
+                                             nearestPlayer.get().getY(),
+                                             nearestPlayer.get().getZ());
+            PATHING.rotate(rotationTo.x(), rotationTo.y(), MOVEMENT_PRIORITY);
         } else {
             this.hasTarget.set(false);
         }
@@ -123,26 +107,14 @@ public class Spook extends Module {
             if (!this.focusStack.isEmpty()) {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                MODULE_MANAGER.get(PlayerSimulation.class).doRotate(getYaw(target),
-                                                                    getPitch(target),
-                                                                    MOVEMENT_PRIORITY);
+                Vec2f rotationTo = Pathing.rotationTo(target.getX(),
+                                                      target.getY(),
+                                                      target.getZ());
+                PATHING.rotate(rotationTo.x(), rotationTo.y(), MOVEMENT_PRIORITY);
             } else {
                 this.hasTarget.set(false);
             }
         }
-    }
-
-    public static float wrapDegrees(float degrees) {
-        float f = degrees % 360.0F;
-        if (f >= 180.0F) {
-            f -= 360.0F;
-        }
-
-        if (f < -180.0F) {
-            f += 360.0F;
-        }
-
-        return f;
     }
 
     private Optional<EntityPlayer> getNearestPlayer() {

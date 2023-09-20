@@ -76,8 +76,7 @@ public class AutoEat extends Module {
                 }
             }
             if (isEating) {
-                MODULE_MANAGER.get(PlayerSimulation.class).doMovementInput(false,
-                                                                           MOVEMENT_PRIORITY);
+                PATHING.stop(MOVEMENT_PRIORITY);
             }
         } else {
             isEating = false;
@@ -97,7 +96,7 @@ public class AutoEat extends Module {
         final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (foodManager.isSafeFood(mainHandStack.getId())) {
-                return true;
+              return true;
             }
         }
 
