@@ -16,6 +16,7 @@ import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.Queue;
@@ -38,6 +39,7 @@ public class PlayerSimulation extends Module {
     private float pitch;
     private float lastYaw;
     private float lastPitch;
+    @Getter
     private boolean onGround;
     private boolean lastOnGround;
     private boolean isSneaking;

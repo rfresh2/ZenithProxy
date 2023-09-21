@@ -43,6 +43,11 @@ public class Pathing {
         this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority));
     }
 
+    public void moveRotTowards(final double x, final double y, final double z, final int priority) {
+        final Vec2f rotationTo = rotationTo(x, y, z);
+        this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(rotationTo.x()), Optional.of(rotationTo.y()), priority));
+    }
+
     public void moveRotTowardsBlockPos(final int x, final int z, final int priority) {
         final float yaw = yawToXZ(x + 0.5, z + 0.5);
         this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority));
@@ -54,6 +59,11 @@ public class Pathing {
 
     public void rotate(final float yaw, final float pitch, final int priority) {
         this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(yaw), Optional.of(pitch), priority));
+    }
+
+    public void rotateTowards(final double x, final double y, final double z, final int priority) {
+        final Vec2f rotationTo = rotationTo(x, y, z);
+        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(rotationTo.x()), Optional.of(rotationTo.y()), priority));
     }
 
     public void rotateYaw(final float yaw, final int priority) {
