@@ -40,4 +40,8 @@ public class MathHelper {
         if (f < -180.0F) f += 360.0F;
         return f;
     }
+
+    public static float clamp(final float value, final float min, final float max) {
+        return Math.max(min, Math.min(max, value));
+    }
 }

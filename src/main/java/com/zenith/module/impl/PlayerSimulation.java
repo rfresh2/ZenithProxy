@@ -82,16 +82,11 @@ public class PlayerSimulation extends Module {
         syncFromCache();
     }
 
-    // todo: create an interface to manage movement inputs
-    //  the order of modules executing on the tick event should not be assumed
-    //  handle case where a partial lower priority input is set and then a higher priority input is set
-    //  e.g. antiafk(1 priority) walks forward without setting rotation but then killaura(2 priority) sets rotation
-    //  we should reset the walk forward input and then set the rotation
-    //  current system with the priority int does not handle this correctly
-
-    // todo: yaw/pitch stepping and clamping
     public synchronized void doRotate(float yaw, float pitch) {
-        this.yaw = shortestRotation(yaw);
+        yaw = shortestRotation(yaw);
+        pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
+        pitch = ((int) pitch * 10.0f) / 10.0f; // always clamp pitch to 1 decimal place to avoid flagging for very small adjustments
+        this.yaw = yaw;
         this.pitch = pitch;
     }
 
