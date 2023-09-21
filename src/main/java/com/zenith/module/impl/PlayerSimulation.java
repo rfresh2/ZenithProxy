@@ -91,17 +91,15 @@ public class PlayerSimulation extends Module {
 
     // todo: yaw/pitch stepping and clamping
     public synchronized void doRotate(float yaw, float pitch) {
-        this.yaw = yaw;
+        this.yaw = shortestRotation(yaw);
         this.pitch = pitch;
     }
 
-    public synchronized void doRotateYawToXZ(final double x, final double z) {
-        final double deltaX = x - this.x;
-        final double deltaZ = z - this.z;
-        final double yaw = ((Math.atan2(deltaZ, deltaX) * 180.0) / Math.PI) - 90.0;
-        // smooths out small yaw changes. there doesn't seem to be any grimac penalty for rotating too small but better to be safe
-        if (Math.abs(Math.abs(yaw) - Math.abs(this.yaw)) < 0.01) return;
-        this.doRotate((float) yaw, this.pitch);
+    public float shortestRotation(float targetYaw) {
+        float difference = targetYaw - this.yaw;
+        if (difference > 180) difference -= 360;
+        else if (difference < -180) difference += 360;
+        return this.yaw + difference;
     }
 
     public synchronized void doMovementInput(boolean pressingForward,

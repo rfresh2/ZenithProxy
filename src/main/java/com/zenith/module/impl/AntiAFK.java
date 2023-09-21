@@ -208,7 +208,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                PATHING.moveRotTowards(currentPathingGoal.getX(), currentPathingGoal.getZ(), MOVEMENT_PRIORITY);
+                PATHING.moveRotTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()), MathHelper.floorToInt(currentPathingGoal.getZ()), MOVEMENT_PRIORITY);
             }
         }
     }

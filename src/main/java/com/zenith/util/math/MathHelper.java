@@ -26,4 +26,18 @@ public class MathHelper {
         final int i = (int)d;
         return d > i ? i + 1 : i;
     }
+
+    public static double wrapDegrees(double degrees) {
+        double d = degrees % 360.0;
+        if (d >= 180.0) d -= 360.0;
+        if (d < -180.0) d += 360.0;
+        return d;
+    }
+
+    public static float wrapDegrees(float degrees) {
+        float f = degrees % 360.0F;
+        if (f >= 180.0F) f -= 360.0F;
+        if (f < -180.0F) f += 360.0F;
+        return f;
+    }
 }
