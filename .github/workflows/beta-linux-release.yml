@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: node:20-bookworm
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -39,7 +40,7 @@ jobs:
         run: chmod +x build/native/nativeCompile/*
 
       - name: Zip Binary And Libs
-        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
+        run: apt update && apt install zip -y && zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Release Artifact
         uses: "marvinpinto/action-automatic-releases@latest"

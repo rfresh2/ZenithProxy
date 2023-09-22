@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: node:20-bookworm
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -21,11 +22,11 @@ jobs:
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-musl: true
-
-      - name: Set ACT Runner Env Variables
-        run: |
-          export GRAALVM_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
-          export JAVA_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1  
+#
+#      - name: Set ACT Runner Env Variables
+#        run: |
+#          export GRAALVM_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
+#          export JAVA_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
 
       - name: Echo Versions and Paths
         run: |
@@ -37,8 +38,10 @@ jobs:
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Build Native Binary
-        run: ./gradlew nativeCompile
+      - name: Build ZenithProxy
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: nativeCompile
 
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
@@ -53,7 +56,7 @@ jobs:
       #            build/native/nativeCompile/ZenithProxy
 
       - name: Zip Binary And Libs
-        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
+        run: apt update && apt install zip -y && zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Upload Binary
         uses: actions/upload-artifact@v3
