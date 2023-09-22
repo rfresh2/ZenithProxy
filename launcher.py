@@ -4,6 +4,7 @@ import os
 import platform
 import re
 import subprocess
+import sys
 import urllib.parse
 import zipfile
 
@@ -363,13 +364,18 @@ def validate_system_with_config():
     elif release_channel.startswith("java"):
         java_version = get_java_version()
         if java_version is None or java_version < 17:
-            print("Invalid Java version on PATH. Please install Java 17 or higher.")
+            print("Invalid Java version on PATH. Found: '" + java_version + "'Please install Java 17 or higher.")
             return False
         return True
     elif release_channel.startswith("linux"):
         return system == "Linux"
     else:
         return False
+
+
+def critical_error(message):
+    print("CRITICAL: " + message)
+    sys.exit(69)
 
 
 # Check our release channel and version
@@ -380,7 +386,7 @@ if json_data is None:
 read_launch_config(json_data)
 validate_launch_config()
 if not validate_system_with_config():
-    raise UpdateError("Invalid system for release channel: " + release_channel)
+    critical_error("Invalid system for release channel: " + release_channel)
 
 # Determine if there's a new update
 # Install new update if available
@@ -410,9 +416,9 @@ if release_channel == "git":
 write_launch_config()
 
 if version == "0.0.0" or local_version == "0.0.0":
-    print("Invalid version found:'", version, "'")
+    print("CRITICAL: Invalid version found:'", version, "'")
     print("Enable `auto_updater` or specify a valid version in launch_config.json.")
-    exit(1)
+    exit(69)
 
 # Launch application
 
@@ -437,7 +443,7 @@ if release_channel == "git":
         print("Error launching application:", e)
 elif release_channel.startswith("java"):
     if not os.path.isfile(launch_dir + "ZenithProxy.jar"):
-        raise RuntimeError("ZenithProxy.jar not found")
+        critical_error("ZenithProxy.jar not found")
     toolchain_command = ""
     jar_command = ""
     if custom_jvm_args is not None and custom_jvm_args != "":
@@ -454,12 +460,12 @@ elif release_channel.startswith("java"):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
-        print("Error launching application:", e)
+        critical_error("Error launching application:" + str(e))
 elif release_channel.startswith("linux"):
     if system != "Linux":
-        raise RuntimeError(f"Linux release channel is not supported on current system: {system}")
+        critical_error("Linux release channel is not supported on current system: " + system)
     if not os.path.isfile(launch_dir + "ZenithProxy"):
-        raise RuntimeError("ZenithProxy executable not found")
+        critical_error("ZenithProxy executable not found")
     if custom_jvm_args is not None and custom_jvm_args != "":
         jvm_args = custom_jvm_args
     else:
@@ -468,6 +474,6 @@ elif release_channel.startswith("linux"):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
-        print("Error launching application:", e)
+        critical_error("Error launching application:" + str(e))
 else:
-    raise RuntimeError("Invalid release channel:", release_channel)
+    critical_error("Invalid release channel:" + release_channel)
