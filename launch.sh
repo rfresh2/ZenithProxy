@@ -19,6 +19,9 @@ while true
 do
   $PYTHON_CMD update_launcher.py
   $PYTHON_CMD launcher.py
+  if [ $? -eq 69 ]; then
+    exit 1
+  fi
   echo "Restarting. Press Ctrl+C to stop"
   sleep 3
 done

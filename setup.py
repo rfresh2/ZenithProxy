@@ -2,39 +2,49 @@ import http.client
 import json
 import os
 
-if not os.path.exists("launch_config.json"):
+if os.path.exists("launch_config.json"):
     while True:
-        print("Select a ZenithProxy release channel: (1/2/3)")
-        print("1. java")
-        print("2. linux")
-        print("3. git")
-        i1 = input("> ")
-        if i1 == "1":
-            release_channel = "java"
-            break
-        elif i1 == "2":
-            release_channel = "linux"
-            break
-        elif i1 == "3":
-            release_channel = "git"
-            if not os.path.exists(".git"):
-                print("Local git repository not found. Please clone the repository and try again.")
-                exit(1)
+        print("launch_config.json already exists, overwrite and continue anyway? (y/n)")
+        i1 = input("> ").lower()
+        if i1 == "n":
+            exit(0)
+        elif i1 == "y":
             break
         else:
-            print("Invalid input. Enter 1, 2, or 3")
-    launch_config = {
-        "auto_update": True,
-        "auto_update_launcher": True,
-        "release_channel": release_channel,
-        "version": "0.0.0",
-        "local_version": "0.0.0",
-        "repo_owner": "rfresh2",
-        "repo_name": "ZenithProxy"
-    }
-    with open("launch_config.json", "w") as f:
-        f.write(json.dumps(launch_config, indent=2))
-        print("launch_config written successfully")
+            print("Invalid input. Enter y or n")
+
+while True:
+    print("Select a ZenithProxy release channel: (1/2/3)")
+    print("1. java")
+    print("2. linux")
+    print("3. git")
+    i1 = input("> ")
+    if i1 == "1":
+        release_channel = "java"
+        break
+    elif i1 == "2":
+        release_channel = "linux"
+        break
+    elif i1 == "3":
+        release_channel = "git"
+        if not os.path.exists(".git"):
+            print("Local git repository not found. Please clone the repository and try again.")
+            exit(1)
+        break
+    else:
+        print("Invalid input. Enter 1, 2, or 3")
+launch_config = {
+    "auto_update": True,
+    "auto_update_launcher": True,
+    "release_channel": release_channel,
+    "version": "0.0.0",
+    "local_version": "0.0.0",
+    "repo_owner": "rfresh2",
+    "repo_name": "ZenithProxy"
+}
+with open("launch_config.json", "w") as f:
+    f.write(json.dumps(launch_config, indent=2))
+    print("launch_config written successfully")
 
 if os.path.exists("config.json"):
     while True:
