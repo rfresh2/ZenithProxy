@@ -27,6 +27,7 @@ import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
 import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
+import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
@@ -180,6 +181,8 @@ public class Shared {
         .registerInbound(new AddEntityHandler())
         .registerInbound(new AddPlayerHandler())
         .registerInbound(new SpawnPositionHandler())
+        // Outbound
+        .registerOutbound(new OutgoingChatHandler())
         //Postoutgoing
         .registerPostOutbound(new PostOutgoingSetCarriedItemHandler())
         .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
