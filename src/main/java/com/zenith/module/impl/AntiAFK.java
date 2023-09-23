@@ -196,7 +196,7 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-        if (startWalkTickTimer.tick(100L, true)) {
+        if (startWalkTickTimer.tick(400L, true)) {
             shouldWalk = true;
             final WalkDirection directions = walkDirectionIterator.next();
             currentPathingGoal = Pathing.getCurrentPlayerPos()
