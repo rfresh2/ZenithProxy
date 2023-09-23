@@ -109,7 +109,7 @@ public class KillAura extends Module {
                 if (((EntityPlayer) entity).isSelfPlayer()) continue;
                 if (WHITELIST_MANAGER.isUUIDFriendWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(entity.getUuid())) continue;
             } else {
-                if (!CONFIG.client.extra.killAura.targetMobs) continue;
+                if (!CONFIG.client.extra.killAura.targetHostileMobs) continue;
                 if (!hostileEntities.contains(((EntityStandard) entity).getEntityType())) continue;
             }
             if (distanceToSelf(entity) > 4.5) continue;

@@ -83,8 +83,7 @@ public final class Config {
             public static final class KillAura {
                 public boolean enabled = true;
                 public boolean targetPlayers = false;
-                public boolean targetMobs = true;
-                public boolean avoidFriendlyMobs = true;
+                public boolean targetHostileMobs = true;
                 public boolean switchWeapon = true;
             }
 
@@ -113,13 +112,6 @@ public final class Config {
                     public boolean safeWalk = true;
                     public boolean swingHand = true;
                     public boolean rotate = true;
-                    public boolean gravity = true;
-                    // avoid falls that could cause player death
-                    public boolean safeGravity = true;
-                    public boolean stuckWarning = false;
-                    public boolean stuckWarningMention = false;
-                    public boolean stuckReconnect = true;
-                    public boolean antiStuck = false;
                 }
             }
 
@@ -216,7 +208,6 @@ public final class Config {
                         "I just skipped queue thanks to ZenithProxy!",
                         "I love undertime slopper!",
                         ">odpay supremacy"
-
                 );
             }
 

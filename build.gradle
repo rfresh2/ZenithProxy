@@ -437,6 +437,7 @@ graalvmNative {
 //                    "--pgo-instrument",
                     "-march=x86-64-v3",
                     "--gc=serial",
+                    "-J-XX:MaxRAMPercentage=90",
             )
 
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))

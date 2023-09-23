@@ -6,7 +6,6 @@ import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
 import com.zenith.command.DiscordCommandContext;
 import com.zenith.event.Subscription;
-import com.zenith.event.module.AntiAfkStuckEvent;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.queue.Queue;
@@ -115,7 +114,6 @@ public class DiscordBot {
             pair(StartConnectEvent.class, this::handleStartConnectEvent),
             pair(PrioStatusUpdateEvent.class, this::handlePrioStatusUpdateEvent),
             pair(PrioBanStatusUpdateEvent.class, this::handlePrioBanStatusUpdateEvent),
-            pair(AntiAfkStuckEvent.class, this::handleAntiAfkStuckEvent),
             pair(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
             pair(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
             pair(DeathMessageEvent.class, this::handleDeathMessageEvent),
@@ -836,16 +834,6 @@ public class DiscordBot {
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
-    }
-
-    public void handleAntiAfkStuckEvent(final AntiAfkStuckEvent event) {
-        sendEmbedMessage((CONFIG.client.extra.antiafk.actions.stuckWarningMention ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
-                .title("AntiAFK Warning")
-                .color(Color.RUBY)
-                .description("AntiAFK enabled but player may be stuck. "
-                        + "Log in and move player to a location with " + CONFIG.client.extra.antiafk.actions.walkDistance + "+ flat blocks to move within.")
-                .addField("Distance Walked", "" + (int) event.distanceMovedDelta, false)
-                .build());
     }
 
     public void handleAutoReconnectEvent(final AutoReconnectEvent event) {

@@ -14,7 +14,6 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.queue.Queue;
-import com.zenith.module.impl.AntiAFK;
 import com.zenith.network.client.Authenticator;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.CustomServerInfoBuilder;
@@ -146,27 +145,6 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 5L, 5L, TimeUnit.MINUTES);
             // ensure we are continuously updating the tablist even on servers that don't frequently send updates
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
-            if (CONFIG.client.extra.twentyMinuteReconnectIfStuck) {
-                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
-                    try {
-                        if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))
-                                && CONFIG.client.extra.antiafk.enabled
-                                && CONFIG.client.extra.antiafk.actions.stuckWarning // ensures we don't get into a weird state
-                                && CONFIG.client.extra.antiafk.actions.stuckReconnect
-                                && MODULE_MANAGER.getModule(AntiAFK.class).map(AntiAFK::isStuck).orElse(false)
-                                && isNull(getCurrentPlayer().get())) {
-                            long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                            if (onlineSeconds >= (1200 - 20)) { // 20 mins - 20 seconds padding
-                                this.disconnect(SYSTEM_DISCONNECT);
-                                this.cancelAutoReconnect();
-                                this.connect();
-                            }
-                        }
-                    } catch (final Exception e) {
-                        DEFAULT_LOG.error("Error in twenty minute reconnect executor", e);
-                    }
-                }, 0, 10L, TimeUnit.SECONDS);
-            }
             SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
