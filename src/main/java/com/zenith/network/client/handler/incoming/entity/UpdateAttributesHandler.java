@@ -14,7 +14,7 @@ public class UpdateAttributesHandler implements AsyncIncomingHandler<Clientbound
     public boolean applyAsync(@NonNull ClientboundUpdateAttributesPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (isNull(entity)) return false;
-        entity.setProperties(packet.getAttributes());
+        entity.updateAttributes(packet.getAttributes());
         return true;
     }
     @Override
