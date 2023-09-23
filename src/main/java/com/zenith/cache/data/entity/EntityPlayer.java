@@ -1,6 +1,10 @@
 package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
+import com.github.steveice10.mc.protocol.data.game.entity.attribute.AttributeModifier;
+import com.github.steveice10.mc.protocol.data.game.entity.attribute.AttributeType;
+import com.github.steveice10.mc.protocol.data.game.entity.attribute.ModifierOperation;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
@@ -13,8 +17,10 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
+import java.util.List;
 import java.util.function.Consumer;
 
+import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.SERVER_LOG;
 
 
@@ -27,23 +33,63 @@ public class EntityPlayer extends EntityLiving {
     @NonNull
     protected boolean selfPlayer;
 
-    protected int food;
-    protected float saturation;
+    protected int food = 20;
+    protected float saturation = 5;
     protected int totalExperience;
     protected int level;
     protected float experience;
+    protected float speed = 0.10000000149011612f;
 
     {
         //set health to maximum by default
         this.health = 20.0f;
-        this.food = 20;
-        this.saturation = 5;
-    }
-
-    {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.equipment.put(slot, null);
         }
+    }
+
+    @Override
+    public void updateAttributes(final List<Attribute> attributes) {
+        super.updateAttributes(attributes);
+        if (this.selfPlayer) {
+            // todo: apply and update any other relevant attributes for sim, e.g. health, attack speed, flying speed
+            attributes.stream()
+                .filter(attribute -> attribute.getType() == AttributeType.Builtin.GENERIC_MOVEMENT_SPEED)
+                .findAny()
+                .ifPresent(a -> updateSpeed());
+        }
+    }
+
+    private void updateSpeed() {
+        final Attribute movementSpeedAttribute = CACHE.getPlayerCache()
+            .getThePlayer()
+            .getAttributes()
+            .get(AttributeType.Builtin.GENERIC_MOVEMENT_SPEED);
+        if (movementSpeedAttribute == null)
+            this.speed = 0.10000000149011612f;
+        else
+            this.speed = applyAttributeModifiers(movementSpeedAttribute);
+    }
+
+    private float applyAttributeModifiers(final Attribute attribute) {
+        double value = attribute.getValue();
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD) {
+                value += modifier.getAmount();
+            }
+        }
+        double e = value;
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED) {
+                e += value * modifier.getAmount();
+            }
+        }
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.MULTIPLY) {
+                e *= 1.0 + modifier.getAmount();
+            }
+        }
+        return (float) e;
     }
 
     @Override

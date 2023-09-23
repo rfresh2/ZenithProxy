@@ -26,8 +26,6 @@ import static com.zenith.util.math.MathHelper.floorToInt;
 
 public class PlayerSimulation extends Module {
     private double gravity = 0.08;
-    private float speed = 0.10000000149011612f; // todo: server can update this in entity attributes
-    private float sneakSpeedMultiplier = 0.3f;
     private double x;
     private double y;
     private double z;
@@ -437,7 +435,7 @@ public class PlayerSimulation extends Module {
     }
 
     private float getMovementSpeed(float slipperiness) {
-        return this.onGround ? this.speed * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
+        return this.onGround ? getSpeed() * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
     }
 
     private float getBlockSpeedFactor() {
@@ -461,10 +459,6 @@ public class PlayerSimulation extends Module {
             return 0.4f;
         }
         return 1.0f;
-    }
-
-    private void onLanding() {
-        this.fallDistance = 0.0;
     }
 
     public void handleSetMotion(final double motionX, final double motionY, final double motionZ) {
@@ -508,5 +502,9 @@ public class PlayerSimulation extends Module {
         }
         movementInput.movementSideways = moveStrafe;
         movementInput.movementForward = moveForward;
+    }
+
+    private float getSpeed() {
+        return CACHE.getPlayerCache().getThePlayer().getSpeed();
     }
 }
