@@ -82,4 +82,19 @@ public class World {
         }
         return blockPosList;
     }
+
+    public static boolean isSpaceEmpty(final LocalizedCollisionBox cb) {
+        for (BlockPos blockPos : getBlockPosListInCollisionBox(cb)) {
+            final List<LocalizedCollisionBox> collisionBoxes = getBlockState(blockPos).getCollisionBoxes().stream()
+                .map(collisionBox -> new LocalizedCollisionBox(collisionBox,
+                                                               blockPos.getX(),
+                                                               blockPos.getY(),
+                                                               blockPos.getZ()))
+                .toList();
+            if (collisionBoxes.stream().anyMatch(collisionBox -> collisionBox.intersects(cb))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

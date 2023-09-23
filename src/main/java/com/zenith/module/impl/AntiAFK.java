@@ -196,7 +196,7 @@ public class AntiAFK extends Module {
     }
 
     private void walkTick() {
-        if (startWalkTickTimer.tick(400L, true)) {
+        if (startWalkTickTimer.tick(100L, true)) {
             shouldWalk = true;
             final WalkDirection directions = walkDirectionIterator.next();
             currentPathingGoal = Pathing.getCurrentPlayerPos()
@@ -208,7 +208,14 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                PATHING.moveRotTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()), MathHelper.floorToInt(currentPathingGoal.getZ()), MOVEMENT_PRIORITY);
+                if (CONFIG.client.extra.antiafk.actions.safeWalk)
+                    PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
+                                                        MathHelper.floorToInt(currentPathingGoal.getZ()),
+                                                        MOVEMENT_PRIORITY);
+                else
+                    PATHING.moveRotTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
+                                                    MathHelper.floorToInt(currentPathingGoal.getZ()),
+                                                    MOVEMENT_PRIORITY);
             }
         }
     }

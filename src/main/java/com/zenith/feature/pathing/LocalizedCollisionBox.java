@@ -60,17 +60,17 @@ public class LocalizedCollisionBox {
     }
 
     public double collideX(final LocalizedCollisionBox otherBoundingBox, double x) {
-        if (intersectsY(otherBoundingBox) || intersectsZ(otherBoundingBox)) return x;
+        if (noYIntersection(otherBoundingBox) || noZIntersection(otherBoundingBox)) return x;
         return collidePushOut(this.getMinX(), this.getMaxX(), otherBoundingBox.getMinX(), otherBoundingBox.getMaxX(), x);
     }
 
     public double collideY(final LocalizedCollisionBox otherBoundingBox, double y) {
-        if (intersectsX(otherBoundingBox) || intersectsZ(otherBoundingBox)) return y;
+        if (noXIntersection(otherBoundingBox) || noZIntersection(otherBoundingBox)) return y;
         return collidePushOut(this.getMinY(), this.getMaxY(), otherBoundingBox.getMinY(), otherBoundingBox.getMaxY(), y);
     }
 
     public double collideZ(final LocalizedCollisionBox otherBoundingBox, double z) {
-        if (intersectsX(otherBoundingBox) || intersectsY(otherBoundingBox)) return z;
+        if (noXIntersection(otherBoundingBox) || noYIntersection(otherBoundingBox)) return z;
         return collidePushOut(this.getMinZ(), this.getMaxZ(), otherBoundingBox.getMinZ(), otherBoundingBox.getMaxZ(), z);
     }
 
@@ -88,15 +88,21 @@ public class LocalizedCollisionBox {
         return speed;
     }
 
-    public boolean intersectsX(final LocalizedCollisionBox otherBoundingBox) {
+    public boolean noXIntersection(final LocalizedCollisionBox otherBoundingBox) {
         return otherBoundingBox.getMaxX() <= this.getMinX() || otherBoundingBox.getMinX() >= this.getMaxX();
     }
 
-    public boolean intersectsY(final LocalizedCollisionBox otherBoundingBox) {
+    public boolean noYIntersection(final LocalizedCollisionBox otherBoundingBox) {
         return otherBoundingBox.getMaxY() <= this.getMinY() || otherBoundingBox.getMinY() >= this.getMaxY();
     }
 
-    public boolean intersectsZ(final LocalizedCollisionBox otherBoundingBox) {
+    public boolean noZIntersection(final LocalizedCollisionBox otherBoundingBox) {
         return otherBoundingBox.getMaxZ() <= this.getMinZ() || otherBoundingBox.getMinZ() >= this.getMaxZ();
+    }
+
+    public boolean intersects(final LocalizedCollisionBox other) {
+        return this.maxX >= other.minX && this.minX <= other.maxX
+            && this.maxZ >= other.minZ && this.minZ <= other.maxZ
+            && this.maxY >= other.minY && this.minY <= other.maxY;
     }
 }

@@ -53,6 +53,11 @@ public class Pathing {
         this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority));
     }
 
+    public void moveRotSneakTowardsBlockPos(final int x, final int z, final int priority) {
+        final float yaw = yawToXZ(x + 0.5, z + 0.5);
+        this.moveReq(new MovementInputRequest(Optional.of(forwardSneakInput()), Optional.of(yaw), Optional.empty(), priority));
+    }
+
     public void move(final Input input, final int priority) {
         this.moveReq(new MovementInputRequest(Optional.of(input), Optional.empty(), Optional.empty(), priority));
     }
@@ -100,6 +105,17 @@ public class Pathing {
             false,
             false,
             false
+        );
+    }
+
+    public static Input forwardSneakInput() {
+        return new Input(
+            true,
+            false,
+            false,
+            false,
+            false,
+            true
         );
     }
 

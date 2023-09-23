@@ -2,11 +2,9 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosRotPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerStatusOnlyPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.Proxy;
 import com.zenith.event.SimpleEventBus;
 import com.zenith.event.Subscription;
@@ -29,6 +27,7 @@ import static com.zenith.util.math.MathHelper.floorToInt;
 public class PlayerSimulation extends Module {
     private double gravity = 0.08;
     private float speed = 0.10000000149011612f; // todo: server can update this in entity attributes
+    private float sneakSpeedMultiplier = 0.3f;
     private double x;
     private double y;
     private double z;
@@ -61,11 +60,10 @@ public class PlayerSimulation extends Module {
     private Input movementInput = new Input();
     private int waitTicks = 0;
     private Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<>();
-    private CollisionBox playerPoseCollisionBox = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
-    private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(playerPoseCollisionBox, 0, 0, 0);
+    private static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
+    private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
+    private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(STANDING_COLLISION_BOX, 0, 0, 0);
     private float stepHeight = 0.6F;
-    // this is kind of jank but we need to avoid multiple modules setting pos/rot at the same time
-    private int setInputPriority = 0;
 
     @Override
     public Subscription subscribeEvents() {
@@ -160,7 +158,7 @@ public class PlayerSimulation extends Module {
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
         updateMovementState();
-        // todo: apply sneaking
+        isSneaking = movementInput.sneaking;
         // todo: apply sprinting
         this.isTouchingWater = World.isTouchingWater(playerCollisionBox);
         this.movementInput.movementForward *= 0.98f;
@@ -169,6 +167,13 @@ public class PlayerSimulation extends Module {
         travel(movementInputVec);
 
         // send movement packets based on position
+        if (wasSneaking != isSneaking) {
+            if (isSneaking) {
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SNEAKING));
+            } else {
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
+            }
+        }
         double xDelta = this.x - this.lastX;
         double yDelta = this.y - this.lastY;
         double zDelta = this.z - this.lastZ;
@@ -200,8 +205,8 @@ public class PlayerSimulation extends Module {
         }
 
         this.lastOnGround = this.onGround;
+        this.wasSneaking = this.isSneaking;
         this.movementInput.reset();
-        this.setInputPriority = 0;
     }
 
     public synchronized void handlePlayerPosRotate(final int teleportId) {
@@ -247,7 +252,10 @@ public class PlayerSimulation extends Module {
 
     private void move() {
         // todo: movement slowing from certain blocks like cobweb
-        // todo: sneak movement and collisions
+
+        // in-place velocity update
+        adjustMovementForSneaking(velocity);
+
         List<LocalizedCollisionBox> blockCollisionBoxes = World.getSolidBlockCollisionBoxes(playerCollisionBox.stretch(velocity.getX(),
                                                                                                                        velocity.getY(),
                                                                                                                        velocity.getZ()));
@@ -284,6 +292,9 @@ public class PlayerSimulation extends Module {
                                                                   blockCollisionBoxes));
                 adjustedMovement = stepUpAdjustedVec;
             }
+        }
+        if (adjustedMovement.lengthSquared() > 1.0E-7) {
+
         }
 
         final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
@@ -342,10 +353,60 @@ public class PlayerSimulation extends Module {
         return new MutableVec3d(xVel, yVel, zVel);
     }
 
+    private boolean shouldAdjustLedgeSneak() {
+        return this.isOnGround()
+//            || this.fallDistance < this.stepHeight
+            && !World.isSpaceEmpty(playerCollisionBox.move(0.0, -this.stepHeight, 0.0));
+    }
+
+    protected void adjustMovementForSneaking(MutableVec3d movement) {
+        if (!this.isFlying
+            && movement.getY() <= 0.0
+            && isSneaking
+            && shouldAdjustLedgeSneak()) {
+            double xMovement = movement.getX();
+            double zMovement = movement.getZ();
+
+            while(xMovement != 0.0 && World.isSpaceEmpty(playerCollisionBox.move(xMovement, -this.stepHeight, 0.0))) {
+                if (xMovement < 0.05 && xMovement >= -0.05)
+                    xMovement = 0.0;
+                else if (xMovement > 0.0)
+                    xMovement -= 0.05;
+                else
+                    xMovement += 0.05;
+            }
+            while(zMovement != 0.0 && World.isSpaceEmpty(playerCollisionBox.move(0.0, -this.stepHeight, zMovement))) {
+                if (zMovement < 0.05 && zMovement >= -0.05)
+                    zMovement = 0.0;
+                else if (zMovement > 0.0)
+                    zMovement -= 0.05;
+                else
+                    zMovement += 0.05;
+            }
+            while(xMovement != 0.0 && zMovement != 0.0 && World.isSpaceEmpty(playerCollisionBox.move(xMovement, -this.stepHeight, zMovement))) {
+                if (xMovement < 0.05 && xMovement >= -0.05)
+                    xMovement = 0.0;
+                else if (xMovement > 0.0)
+                    xMovement -= 0.05;
+                else
+                    xMovement += 0.05;
+
+                if (zMovement < 0.05 && zMovement >= -0.05)
+                    zMovement = 0.0;
+                else if (zMovement > 0.0)
+                    zMovement -= 0.05;
+                else
+                    zMovement += 0.05;
+            }
+            movement.setX(xMovement);
+            movement.setZ(zMovement);
+        }
+    }
+
     private void syncPlayerCollisionBox() {
         // todo: handle sneaking collision box y change
         //  need to store some additional state about the player's sneaking status in the cb or elsewhere
-        playerCollisionBox = new LocalizedCollisionBox(playerPoseCollisionBox, x, y, z);
+        playerCollisionBox = new LocalizedCollisionBox(isSneaking ? SNEAKING_COLLISION_BOX : STANDING_COLLISION_BOX, x, y, z);
     }
 
     private void applyMovementInput(MutableVec3d movementInputVec, float slipperiness) {
@@ -402,6 +463,10 @@ public class PlayerSimulation extends Module {
         return 1.0f;
     }
 
+    private void onLanding() {
+        this.fallDistance = 0.0;
+    }
+
     public void handleSetMotion(final double motionX, final double motionY, final double motionZ) {
         addTask(() -> {
             this.velocity.setX(motionX);
@@ -425,7 +490,8 @@ public class PlayerSimulation extends Module {
         this.lastOnGround = true;
         this.velocity = new MutableVec3d(0, 0, 0);
         this.ticksSinceLastPositionPacketSent = 0;
-        this.setInputPriority = 0;
+        this.isSneaking = false;
+        this.wasSneaking = false;
         syncPlayerCollisionBox();
     }
 
