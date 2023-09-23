@@ -162,6 +162,7 @@ public class PlayerSimulation extends Module {
         this.movementInput.movementForward *= 0.98f;
         this.movementInput.movementSideways *= 0.98f;
         final MutableVec3d movementInputVec = new MutableVec3d(movementInput.movementSideways, 0, movementInput.movementForward);
+        if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         travel(movementInputVec);
 
         // send movement packets based on position
