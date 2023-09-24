@@ -301,6 +301,7 @@ public class Shared {
                 try (Reader reader = new FileReader(LAUNCH_CONFIG_FILE)) {
                     config = GSON.fromJson(reader, LaunchConfig.class);
                 } catch (IOException e) {
+                    DEFAULT_LOG.error("Unable to load launch config. Writing default config", e);
                     saveLaunchConfig();
                 }
             } else {
