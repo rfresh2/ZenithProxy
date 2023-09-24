@@ -317,10 +317,10 @@ public class ChunkCache implements CachedData {
             try {
                 return executable.get();
             } catch (final Throwable e) {
-                CLIENT_LOG.error("Error reading chunk cache", e);
+                CLIENT_LOG.error("Error writing chunk cache", e);
             }
         } catch (final Exception e) {
-            CLIENT_LOG.error("Error reading chunk cache", e);
+            CLIENT_LOG.error("Error writing chunk cache", e);
         }
         return null;
     }
