@@ -18,9 +18,4 @@ public class BlockEntityDataHandler implements AsyncIncomingHandler<ClientboundB
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundBlockEntityDataPacket> getPacketClass() {
-        return ClientboundBlockEntityDataPacket.class;
-    }
 }

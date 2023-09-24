@@ -4,14 +4,9 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.Cli
 import com.zenith.network.registry.OutgoingHandler;
 import com.zenith.network.server.ServerConnection;
 
-public class ClientboundContainerSetContentSpectatorOutgoingHandler implements OutgoingHandler<ClientboundContainerSetContentPacket, ServerConnection> {
+public class ContainerSetContentSpectatorOutgoingHandler implements OutgoingHandler<ClientboundContainerSetContentPacket, ServerConnection> {
     @Override
     public ClientboundContainerSetContentPacket apply(ClientboundContainerSetContentPacket packet, ServerConnection session) {
         return null;
-    }
-
-    @Override
-    public Class<ClientboundContainerSetContentPacket> getPacketClass() {
-        return ClientboundContainerSetContentPacket.class;
     }
 }

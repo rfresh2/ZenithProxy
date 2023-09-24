@@ -8,7 +8,7 @@ import com.zenith.network.registry.AsyncIncomingHandler;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class ServerCombatHandler implements AsyncIncomingHandler<ClientboundPlayerCombatKillPacket, ClientSession> {
+public class PlayerCombatKillHandler implements AsyncIncomingHandler<ClientboundPlayerCombatKillPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(ClientboundPlayerCombatKillPacket packet, ClientSession session) {
@@ -16,10 +16,5 @@ public class ServerCombatHandler implements AsyncIncomingHandler<ClientboundPlay
             EVENT_BUS.postAsync(new DeathEvent());
         }
         return true;
-    }
-
-    @Override
-    public Class<ClientboundPlayerCombatKillPacket> getPacketClass() {
-        return ClientboundPlayerCombatKillPacket.class;
     }
 }

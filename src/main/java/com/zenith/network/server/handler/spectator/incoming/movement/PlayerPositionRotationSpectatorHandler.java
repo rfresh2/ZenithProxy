@@ -24,11 +24,6 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<S
         return false;
     }
 
-    @Override
-    public Class<ServerboundMovePlayerPosRotPacket> getPacketClass() {
-        return ServerboundMovePlayerPosRotPacket.class;
-    }
-
     // might move this elsewhere, kinda awkward being here
     public static void updateSpectatorPosition(final ServerConnection selfSession) {
         if (selfSession.isPlayerCam()) {

@@ -17,8 +17,4 @@ public class ContainerSetSlotHandler implements AsyncIncomingHandler<Clientbound
         }
         return true;
     }
-    @Override
-    public Class<ClientboundContainerSetSlotPacket> getPacketClass() {
-        return ClientboundContainerSetSlotPacket.class;
-    }
 }

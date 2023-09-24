@@ -18,9 +18,4 @@ public class PingHandler implements IncomingHandler<ClientboundPingPacket, Clien
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundPingPacket> getPacketClass() {
-        return ClientboundPingPacket.class;
-    }
 }

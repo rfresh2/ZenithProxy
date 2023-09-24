@@ -32,9 +32,4 @@ public class PlayerPositionHandler implements IncomingHandler<ClientboundPlayerP
                 .ifPresent(AntiAFK::handlePlayerPosRotate);
         return true;
     }
-
-    @Override
-    public Class<ClientboundPlayerPositionPacket> getPacketClass() {
-        return ClientboundPlayerPositionPacket.class;
-    }
 }

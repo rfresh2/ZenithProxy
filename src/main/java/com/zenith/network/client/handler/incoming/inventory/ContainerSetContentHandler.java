@@ -9,7 +9,7 @@ import lombok.NonNull;
 import static com.zenith.Shared.CACHE;
 
 
-public class SetWindowItemsHandler implements AsyncIncomingHandler<ClientboundContainerSetContentPacket, ClientSession> {
+public class ContainerSetContentHandler implements AsyncIncomingHandler<ClientboundContainerSetContentPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundContainerSetContentPacket packet, @NonNull ClientSession session) {
         if (packet.getContainerId() == 0)  { //player inventory
@@ -17,10 +17,5 @@ public class SetWindowItemsHandler implements AsyncIncomingHandler<ClientboundCo
         }
         SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
         return true;
-    }
-
-    @Override
-    public Class<ClientboundContainerSetContentPacket> getPacketClass() {
-        return ClientboundContainerSetContentPacket.class;
     }
 }

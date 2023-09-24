@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.zenith.Shared.CACHE;
 
-public class AdvancementsHandler implements AsyncIncomingHandler<ClientboundUpdateAdvancementsPacket, ClientSession> {
+public class UpdateAdvancementsHandler implements AsyncIncomingHandler<ClientboundUpdateAdvancementsPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundUpdateAdvancementsPacket packet, @NonNull ClientSession session) {
         if (packet.isReset()) {
@@ -21,10 +21,5 @@ public class AdvancementsHandler implements AsyncIncomingHandler<ClientboundUpda
         CACHE.getStatsCache().getAdvancements().removeIf(advancement -> List.of(packet.getRemovedAdvancements()).contains(advancement.getId()));
         packet.getProgress().forEach((id, criterions) -> CACHE.getStatsCache().getProgress().computeIfAbsent(id, s -> new HashMap<>()).putAll(criterions));
         return true;
-    }
-
-    @Override
-    public Class<ClientboundUpdateAdvancementsPacket> getPacketClass() {
-        return ClientboundUpdateAdvancementsPacket.class;
     }
 }

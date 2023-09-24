@@ -13,9 +13,4 @@ public class SpectatorPongHandler implements IncomingHandler<ServerboundPongPack
         }
         return false;
     }
-
-    @Override
-    public Class<ServerboundPongPacket> getPacketClass() {
-        return ServerboundPongPacket.class;
-    }
 }

@@ -12,9 +12,4 @@ public class SetSimulationDistanceHandler implements AsyncIncomingHandler<Client
         CACHE.getChunkCache().setServerSimulationDistance(packet.getSimulationDistance());
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetSimulationDistancePacket> getPacketClass() {
-        return ClientboundSetSimulationDistancePacket.class;
-    }
 }

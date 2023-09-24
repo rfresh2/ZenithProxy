@@ -35,9 +35,4 @@ public class UpdateMobEffectHandler implements AsyncIncomingHandler<ClientboundU
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundUpdateMobEffectPacket> getPacketClass() {
-        return ClientboundUpdateMobEffectPacket.class;
-    }
 }

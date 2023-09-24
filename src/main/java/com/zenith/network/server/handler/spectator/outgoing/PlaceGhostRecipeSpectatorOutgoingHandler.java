@@ -9,9 +9,4 @@ public class PlaceGhostRecipeSpectatorOutgoingHandler implements OutgoingHandler
     public ClientboundPlaceGhostRecipePacket apply(ClientboundPlaceGhostRecipePacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundPlaceGhostRecipePacket> getPacketClass() {
-        return ClientboundPlaceGhostRecipePacket.class;
-    }
 }

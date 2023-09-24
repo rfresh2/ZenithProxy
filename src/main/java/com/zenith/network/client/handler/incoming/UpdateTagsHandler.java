@@ -12,9 +12,4 @@ public class UpdateTagsHandler implements AsyncIncomingHandler<ClientboundUpdate
         CACHE.getPlayerCache().setTags(packet.getTags());
         return true;
     }
-
-    @Override
-    public Class<ClientboundUpdateTagsPacket> getPacketClass() {
-        return ClientboundUpdateTagsPacket.class;
-    }
 }

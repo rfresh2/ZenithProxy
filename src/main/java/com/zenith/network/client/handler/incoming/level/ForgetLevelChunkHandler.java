@@ -23,9 +23,4 @@ public class ForgetLevelChunkHandler implements AsyncIncomingHandler<Clientbound
         });
         return true;
     }
-
-    @Override
-    public Class<ClientboundForgetLevelChunkPacket> getPacketClass() {
-        return ClientboundForgetLevelChunkPacket.class;
-    }
 }

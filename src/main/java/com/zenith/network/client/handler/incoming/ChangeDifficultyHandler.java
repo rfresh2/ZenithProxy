@@ -13,9 +13,4 @@ public class ChangeDifficultyHandler implements AsyncIncomingHandler<Clientbound
         CACHE.getPlayerCache().setDifficultyLocked(packet.isDifficultyLocked());
         return true;
     }
-
-    @Override
-    public Class<ClientboundChangeDifficultyPacket> getPacketClass() {
-        return ClientboundChangeDifficultyPacket.class;
-    }
 }

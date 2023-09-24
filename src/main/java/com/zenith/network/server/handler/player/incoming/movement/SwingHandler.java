@@ -8,7 +8,7 @@ import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.CACHE;
 
-public class PlayerSwingArmPacketHandler implements AsyncIncomingHandler<ServerboundSwingPacket, ServerConnection> {
+public class SwingHandler implements AsyncIncomingHandler<ServerboundSwingPacket, ServerConnection> {
     @Override
     public boolean applyAsync(ServerboundSwingPacket packet, ServerConnection session) {
         session.getProxy().getSpectatorConnections().forEach(connection -> {
@@ -18,10 +18,5 @@ public class PlayerSwingArmPacketHandler implements AsyncIncomingHandler<Serverb
             ));
         });
         return true;
-    }
-
-    @Override
-    public Class<ServerboundSwingPacket> getPacketClass() {
-        return ServerboundSwingPacket.class;
     }
 }

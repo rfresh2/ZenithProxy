@@ -22,9 +22,4 @@ public class MoveEntityRotHandler implements AsyncIncomingHandler<ClientboundMov
             return false;
         }
     }
-
-    @Override
-    public Class<ClientboundMoveEntityRotPacket> getPacketClass() {
-        return ClientboundMoveEntityRotPacket.class;
-    }
 }

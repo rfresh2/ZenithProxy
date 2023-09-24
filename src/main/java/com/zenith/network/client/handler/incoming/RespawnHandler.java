@@ -54,11 +54,6 @@ public class RespawnHandler implements IncomingHandler<ClientboundRespawnPacket,
         return true;
     }
 
-    @Override
-    public Class<ClientboundRespawnPacket> getPacketClass() {
-        return ClientboundRespawnPacket.class;
-    }
-
     private void spectatorRespawn() {
         try {
             // load world and init self

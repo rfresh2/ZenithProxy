@@ -9,9 +9,4 @@ public class OpenScreenSpectatorOutgoingHandler implements OutgoingHandler<Clien
     public ClientboundOpenScreenPacket apply(ClientboundOpenScreenPacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundOpenScreenPacket> getPacketClass() {
-        return ClientboundOpenScreenPacket.class;
-    }
 }

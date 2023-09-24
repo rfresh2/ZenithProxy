@@ -22,9 +22,4 @@ public class EntitySetPassengersHandler implements AsyncIncomingHandler<Clientbo
             return false;
         }
     }
-
-    @Override
-    public Class<ClientboundSetPassengersPacket> getPacketClass() {
-        return ClientboundSetPassengersPacket.class;
-    }
 }

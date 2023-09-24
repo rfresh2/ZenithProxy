@@ -4,14 +4,9 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.zenith.network.registry.OutgoingHandler;
 import com.zenith.network.server.ServerConnection;
 
-public class ClientboundVehicleMoveSpectatorOutgoingHandler implements OutgoingHandler<ClientboundMoveVehiclePacket, ServerConnection> {
+public class MoveVehicleSpectatorOutgoingHandler implements OutgoingHandler<ClientboundMoveVehiclePacket, ServerConnection> {
     @Override
     public ClientboundMoveVehiclePacket apply(ClientboundMoveVehiclePacket packet, ServerConnection session) {
         return null;
-    }
-
-    @Override
-    public Class<ClientboundMoveVehiclePacket> getPacketClass() {
-        return ClientboundMoveVehiclePacket.class;
     }
 }

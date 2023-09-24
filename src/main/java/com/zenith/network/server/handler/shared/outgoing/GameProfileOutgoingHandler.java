@@ -66,9 +66,4 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
             return null;
         }
     }
-
-    @Override
-    public Class<ClientboundGameProfilePacket> getPacketClass() {
-        return ClientboundGameProfilePacket.class;
-    }
 }

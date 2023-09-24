@@ -20,9 +20,4 @@ public class MoveEntityPosHandler implements AsyncIncomingHandler<ClientboundMov
         MoveEntityPosRotHandler.trackPlayerVisualRangePosition(entity);
         return true;
     }
-
-    @Override
-    public Class<ClientboundMoveEntityPosPacket> getPacketClass() {
-        return ClientboundMoveEntityPosPacket.class;
-    }
 }

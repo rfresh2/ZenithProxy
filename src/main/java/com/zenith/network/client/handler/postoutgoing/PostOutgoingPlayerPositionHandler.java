@@ -18,9 +18,4 @@ public class PostOutgoingPlayerPositionHandler implements PostOutgoingHandler<Se
         SpectatorUtils.syncPlayerPositionWithSpectators();
 //        CLIENT_LOG.info("Client set player position: {}, {}, {}", packet.getX(), packet.getY(), packet.getZ());
     }
-
-    @Override
-    public Class<ServerboundMovePlayerPosPacket> getPacketClass() {
-        return ServerboundMovePlayerPosPacket.class;
-    }
 }

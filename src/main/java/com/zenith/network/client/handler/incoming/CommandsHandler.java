@@ -13,9 +13,4 @@ public class CommandsHandler implements IncomingHandler<ClientboundCommandsPacke
         CACHE.getChatCache().setFirstCommandNodeIndex(packet.getFirstNodeIndex());
         return true;
     }
-
-    @Override
-    public Class<ClientboundCommandsPacket> getPacketClass() {
-        return ClientboundCommandsPacket.class;
-    }
 }

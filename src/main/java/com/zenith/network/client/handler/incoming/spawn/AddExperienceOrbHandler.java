@@ -20,9 +20,4 @@ public class AddExperienceOrbHandler implements AsyncIncomingHandler<Clientbound
         );
         return true;
     }
-
-    @Override
-    public Class<ClientboundAddExperienceOrbPacket> getPacketClass() {
-        return ClientboundAddExperienceOrbPacket.class;
-    }
 }

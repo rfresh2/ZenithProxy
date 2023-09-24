@@ -6,16 +6,11 @@ import com.zenith.network.registry.AsyncIncomingHandler;
 
 import static com.zenith.Shared.TPS_CALCULATOR;
 
-public class UpdateTimePacketHandler implements AsyncIncomingHandler<ClientboundSetTimePacket, ClientSession> {
+public class SetTimeHandler implements AsyncIncomingHandler<ClientboundSetTimePacket, ClientSession> {
 
     @Override
     public boolean applyAsync(ClientboundSetTimePacket packet, ClientSession session) {
         TPS_CALCULATOR.handleTimeUpdate(packet);
         return true;
-    }
-
-    @Override
-    public Class<ClientboundSetTimePacket> getPacketClass() {
-        return ClientboundSetTimePacket.class;
     }
 }

@@ -12,9 +12,4 @@ public class GameProfileHandler implements IncomingHandler<ClientboundGameProfil
         CACHE.getProfileCache().setProfile(packet.getProfile());
         return false;
     }
-
-    @Override
-    public Class<ClientboundGameProfilePacket> getPacketClass() {
-        return ClientboundGameProfilePacket.class;
-    }
 }

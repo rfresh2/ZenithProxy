@@ -18,8 +18,4 @@ public class TakeItemEntityHandler implements AsyncIncomingHandler<ClientboundTa
         return false;
     }
 
-    @Override
-    public Class<ClientboundTakeItemEntityPacket> getPacketClass() {
-        return ClientboundTakeItemEntityPacket.class;
-    }
 }

@@ -13,9 +13,4 @@ public class SyncRecipesHandler implements AsyncIncomingHandler<ClientboundUpdat
         CACHE.getRecipeCache().setRecipeRegistry(packet);
         return true;
     }
-
-    @Override
-    public Class<ClientboundUpdateRecipesPacket> getPacketClass() {
-        return ClientboundUpdateRecipesPacket.class;
-    }
 }

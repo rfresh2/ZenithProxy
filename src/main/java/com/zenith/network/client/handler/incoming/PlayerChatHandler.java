@@ -17,9 +17,4 @@ public class PlayerChatHandler implements AsyncIncomingHandler<ClientboundPlayer
             // we shouldn't receive any of these packets on 2b or any anarchy server due to no chat reports plugins
             return true;
         }
-
-        @Override
-        public Class<ClientboundPlayerChatPacket> getPacketClass() {
-            return ClientboundPlayerChatPacket.class;
-        }
 }

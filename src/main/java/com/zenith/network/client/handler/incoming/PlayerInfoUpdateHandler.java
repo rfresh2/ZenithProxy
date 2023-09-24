@@ -24,9 +24,4 @@ public class PlayerInfoUpdateHandler implements AsyncIncomingHandler<Clientbound
         // todo: cache other actions state
         return true;
     }
-
-    @Override
-    public Class<ClientboundPlayerInfoUpdatePacket> getPacketClass() {
-        return ClientboundPlayerInfoUpdatePacket.class;
-    }
 }

@@ -6,15 +6,10 @@ import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.CACHE;
 
-public class ClientSettingsPacketHandler implements AsyncIncomingHandler<ServerboundClientInformationPacket, ServerConnection> {
+public class ClientInformationHandler implements AsyncIncomingHandler<ServerboundClientInformationPacket, ServerConnection> {
     @Override
     public boolean applyAsync(ServerboundClientInformationPacket packet, ServerConnection session) {
         CACHE.getChunkCache().setRenderDistance(packet.getRenderDistance());
         return true;
-    }
-
-    @Override
-    public Class<ServerboundClientInformationPacket> getPacketClass() {
-        return ServerboundClientInformationPacket.class;
     }
 }

@@ -9,9 +9,4 @@ public class HorseScreenOpenSpectatorOutgoingHandler implements OutgoingHandler<
     public ClientboundHorseScreenOpenPacket apply(ClientboundHorseScreenOpenPacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundHorseScreenOpenPacket> getPacketClass() {
-        return ClientboundHorseScreenOpenPacket.class;
-    }
 }

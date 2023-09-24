@@ -69,11 +69,6 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
         return true;
     }
 
-    @Override
-    public Class<ClientboundSystemChatPacket> getPacketClass() {
-        return ClientboundSystemChatPacket.class;
-    }
-
     private String extractSenderNameNormalChat(final String message) {
         return message.substring(message.indexOf("<") + 1, message.indexOf(">"));
     }

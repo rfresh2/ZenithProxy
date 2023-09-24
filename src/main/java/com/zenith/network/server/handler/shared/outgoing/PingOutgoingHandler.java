@@ -11,9 +11,4 @@ public class PingOutgoingHandler implements OutgoingHandler<ClientboundPingPacke
         session.setLastPingTime(System.currentTimeMillis());
         return packet;
     }
-
-    @Override
-    public Class<ClientboundPingPacket> getPacketClass() {
-        return ClientboundPingPacket.class;
-    }
 }

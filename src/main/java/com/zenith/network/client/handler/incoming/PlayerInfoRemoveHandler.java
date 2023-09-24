@@ -20,9 +20,4 @@ public class PlayerInfoRemoveHandler implements AsyncIncomingHandler<Clientbound
         });
         return true;
     }
-
-    @Override
-    public Class<ClientboundPlayerInfoRemovePacket> getPacketClass() {
-        return ClientboundPlayerInfoRemovePacket.class;
-    }
 }

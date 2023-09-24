@@ -58,9 +58,4 @@ public class LoginHandler implements IncomingHandler<ClientboundLoginPacket, Cli
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundLoginPacket> getPacketClass() {
-        return ClientboundLoginPacket.class;
-    }
 }

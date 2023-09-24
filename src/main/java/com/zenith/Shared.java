@@ -1,5 +1,19 @@
 package com.zenith;
 
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddExperienceOrbPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
+import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
+import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,26 +42,26 @@ import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
-import com.zenith.network.server.handler.player.incoming.ClientSettingsPacketHandler;
-import com.zenith.network.server.handler.player.incoming.PlayerPongHandler;
-import com.zenith.network.server.handler.player.incoming.ServerboundChatHandler;
-import com.zenith.network.server.handler.player.incoming.movement.PlayerSwingArmPacketHandler;
+import com.zenith.network.server.handler.player.incoming.ChatHandler;
+import com.zenith.network.server.handler.player.incoming.ClientInformationHandler;
+import com.zenith.network.server.handler.player.incoming.PongHandler;
+import com.zenith.network.server.handler.player.incoming.movement.SwingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
-import com.zenith.network.server.handler.player.postoutgoing.ClientCommandPostHandler;
+import com.zenith.network.server.handler.player.postoutgoing.ClientCommandHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
-import com.zenith.network.server.handler.shared.incoming.ServerboundHelloHandler;
-import com.zenith.network.server.handler.shared.incoming.ServerboundKeepAliveHandler;
+import com.zenith.network.server.handler.shared.incoming.HelloHandler;
+import com.zenith.network.server.handler.shared.incoming.KeepAliveHandler;
 import com.zenith.network.server.handler.shared.outgoing.GameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.PingOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
-import com.zenith.network.server.handler.spectator.incoming.PlayerStateSpectatorHandler;
+import com.zenith.network.server.handler.spectator.incoming.PlayerCommandSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.SpectatorPongHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
 import com.zenith.network.server.handler.spectator.outgoing.*;
-import com.zenith.network.server.handler.spectator.postoutgoing.JoinGameSpectatorPostHandler;
+import com.zenith.network.server.handler.spectator.postoutgoing.LoginSpectatorPostHandler;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
@@ -108,88 +122,151 @@ public class Shared {
     public static final TerminalManager TERMINAL_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
+    public static volatile boolean SHOULD_RECONNECT;
+
+    public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
+        .setLogger(SERVER_LOG)
+        .allowUnhandled(true)
+        //
+        // Inbound packets
+        //
+        .registerInbound(ServerboundHelloPacket.class, new HelloHandler())
+        .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
+        .registerInbound(ServerboundChatPacket.class, new ChatHandler())
+        .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
+        .registerInbound(ServerboundPongPacket.class, new PongHandler())
+        .registerInbound(ServerboundClientCommandPacket.class, new ClientCommandHandler())
+        //PLAYER MOVEMENT
+        .registerInbound(ServerboundSwingPacket.class, new SwingHandler())
+        //
+        // Outbound packets
+        //
+        .registerOutbound(ClientboundGameProfilePacket.class, new GameProfileOutgoingHandler())
+        .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
+        .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
+        .registerOutbound(ClientboundSystemChatPacket.class, new SystemChatOutgoingHandler())
+        //
+        // Post-outbound packets
+        //
+        .registerPostOutbound(ClientboundLoginPacket.class, new LoginPostHandler())
+        .build();
+    public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
+        .setLogger(SERVER_LOG)
+        .allowUnhandled(false)
+
+        .registerInbound(ServerboundHelloPacket.class, new HelloHandler())
+        .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
+        .registerInbound(ServerboundPongPacket.class, new SpectatorPongHandler())
+        .registerInbound(ServerboundMovePlayerPosRotPacket.class, new PlayerPositionRotationSpectatorHandler())
+        .registerInbound(ServerboundMovePlayerPosPacket.class, new PlayerPositionSpectatorHandler())
+        .registerInbound(ServerboundMovePlayerRotPacket.class, new PlayerRotationSpectatorHandler())
+        .registerInbound(ServerboundChatPacket.class, new ServerChatSpectatorHandler())
+        .registerInbound(ServerboundPlayerCommandPacket.class, new PlayerCommandSpectatorHandler())
+
+        .registerOutbound(ClientboundGameProfilePacket.class, new GameProfileOutgoingHandler())
+        .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
+
+        .registerOutbound(ClientboundContainerClosePacket.class, new ContainerCloseSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundContainerSetContentPacket.class, new ContainerSetContentSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundPlaceGhostRecipePacket.class, new PlaceGhostRecipeSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundOpenScreenPacket.class, new OpenScreenSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundSetCarriedItemPacket.class, new SetCarriedItemSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundSetHealthPacket.class, new SetHealthSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundPlayerPositionPacket.class, new PlayerPositionSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundSetExperiencePacket.class, new SetExperienceSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundOpenBookPacket.class, new OpenBookSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundContainerSetSlotPacket.class, new ContainerSetSlotSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundGameEventPacket.class, new GameEventSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundMoveVehiclePacket.class, new MoveVehicleSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundHorseScreenOpenPacket.class, new HorseScreenOpenSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundContainerSetDataPacket.class, new ClientboundContainerSetDataSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
+        .registerOutbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundRespawnPacket.class, new RespawnSpectatorOutgoingPacket())
+
+        .registerPostOutbound(ClientboundLoginPacket.class, new LoginSpectatorPostHandler())
+        .build();
+
     public static final HandlerRegistry<ClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<ClientSession>()
         .setLogger(CLIENT_LOG)
         .allowUnhandled(true)
         //
         // Inbound packets
         //
-        .registerInbound(new AdvancementsHandler())
-        .registerInbound(new BlockChangeHandler())
-        .registerInbound(new ChangeDifficultyHandler())
-        .registerInbound(new BossBarHandler())
-        .registerInbound(new ChunksBiomesHandler())
-        .registerInbound(new SystemChatHandler())
-        .registerInbound(new PlayerChatHandler())
-        .registerInbound(new LevelChunkWithLightHandler())
-        .registerInbound(new LightUpdateHandler())
-        .registerInbound(new ClientKeepaliveHandler())
-        .registerInbound(new CommandsHandler())
-        .registerInbound(new GameEventHandler())
-        .registerInbound(new LoginHandler())
-        .registerInbound(new GameProfileHandler())
-        .registerInbound(new SectionBlocksUpdateHandler())
-        .registerInbound(new SetCarriedItemHandler())
-        .registerInbound(new SetChunkCacheCenterHandler())
-        .registerInbound(new SetChunkCacheRadiusHandler())
-        .registerInbound(new SetSimulationDistanceHandler())
-        .registerInbound(new SetHealthHandler())
-        .registerInbound(new SetSubtitleTextHandler())
-        .registerInbound(new PlayerPositionHandler())
-        .registerInbound(new SetExperienceHandler())
-        .registerInbound(new RespawnHandler())
-        .registerInbound(new ContainerSetSlotHandler())
-        .registerInbound(new SetWindowItemsHandler())
-        .registerInbound(new StatisticsHandler())
-        .registerInbound(new TabListDataHandler())
-        .registerInbound(new UpdateEnabledFeaturesHandler())
-        .registerInbound(new PlayerInfoUpdateHandler())
-        .registerInbound(new PlayerInfoRemoveHandler())
-        .registerInbound(new SetActionBarTextHandler())
-        .registerInbound(new SetEntityMotionHandler())
-        .registerInbound(new ForgetLevelChunkHandler())
-        .registerInbound(new SyncRecipesHandler())
-        .registerInbound(new UpdateTagsHandler())
-        .registerInbound(new BlockEntityDataHandler())
-        .registerInbound(new UpdateTimePacketHandler())
-        .registerInbound(new ServerCombatHandler())
-        .registerInbound(new MapDataHandler())
-        .registerInbound(new PingHandler())
-        .registerInbound(new PlayerAbilitiesHandler())
-        .registerInbound(new PluginMessageHandler())
-        .registerInbound(new UnlockRecipeHandler())
+        .registerInbound(ClientboundUpdateAdvancementsPacket.class, new UpdateAdvancementsHandler())
+        .registerInbound(ClientboundBlockUpdatePacket.class, new BlockUpdateHandler())
+        .registerInbound(ClientboundChangeDifficultyPacket.class, new ChangeDifficultyHandler())
+        .registerInbound(ClientboundBossEventPacket.class, new BossEventHandler())
+        .registerInbound(ClientboundChunksBiomesPacket.class, new ChunksBiomesHandler())
+        .registerInbound(ClientboundSystemChatPacket.class, new SystemChatHandler())
+        .registerInbound(ClientboundPlayerChatPacket.class, new PlayerChatHandler())
+        .registerInbound(ClientboundLevelChunkWithLightPacket.class, new LevelChunkWithLightHandler())
+        .registerInbound(ClientboundLightUpdatePacket.class, new LightUpdateHandler())
+        .registerInbound(ClientboundKeepAlivePacket.class, new ClientKeepaliveHandler())
+        .registerInbound(ClientboundCommandsPacket.class, new CommandsHandler())
+        .registerInbound(ClientboundGameEventPacket.class, new GameEventHandler())
+        .registerInbound(ClientboundLoginPacket.class, new LoginHandler())
+        .registerInbound(ClientboundGameProfilePacket.class, new GameProfileHandler())
+        .registerInbound(ClientboundSectionBlocksUpdatePacket.class, new SectionBlocksUpdateHandler())
+        .registerInbound(ClientboundSetCarriedItemPacket.class, new SetCarriedItemHandler())
+        .registerInbound(ClientboundSetChunkCacheCenterPacket.class, new SetChunkCacheCenterHandler())
+        .registerInbound(ClientboundSetChunkCacheRadiusPacket.class, new SetChunkCacheRadiusHandler())
+        .registerInbound(ClientboundSetSimulationDistancePacket.class, new SetSimulationDistanceHandler())
+        .registerInbound(ClientboundSetHealthPacket.class, new SetHealthHandler())
+        .registerInbound(ClientboundSetSubtitleTextPacket.class, new SetSubtitleTextHandler())
+        .registerInbound(ClientboundPlayerPositionPacket.class, new PlayerPositionHandler())
+        .registerInbound(ClientboundSetExperiencePacket.class, new SetExperienceHandler())
+        .registerInbound(ClientboundRespawnPacket.class, new RespawnHandler())
+        .registerInbound(ClientboundContainerSetSlotPacket.class, new ContainerSetSlotHandler())
+        .registerInbound(ClientboundContainerSetContentPacket.class, new ContainerSetContentHandler())
+        .registerInbound(ClientboundAwardStatsPacket.class, new AwardStatsHandler())
+        .registerInbound(ClientboundTabListPacket.class, new TabListDataHandler())
+        .registerInbound(ClientboundUpdateEnabledFeaturesPacket.class, new UpdateEnabledFeaturesHandler())
+        .registerInbound(ClientboundPlayerInfoUpdatePacket.class, new PlayerInfoUpdateHandler())
+        .registerInbound(ClientboundPlayerInfoRemovePacket.class, new PlayerInfoRemoveHandler())
+        .registerInbound(ClientboundSetActionBarTextPacket.class, new SetActionBarTextHandler())
+        .registerInbound(ClientboundSetEntityMotionPacket.class, new SetEntityMotionHandler())
+        .registerInbound(ClientboundForgetLevelChunkPacket.class, new ForgetLevelChunkHandler())
+        .registerInbound(ClientboundUpdateRecipesPacket.class, new SyncRecipesHandler())
+        .registerInbound(ClientboundUpdateTagsPacket.class, new UpdateTagsHandler())
+        .registerInbound(ClientboundBlockEntityDataPacket.class, new BlockEntityDataHandler())
+        .registerInbound(ClientboundSetTimePacket.class, new SetTimeHandler())
+        .registerInbound(ClientboundPlayerCombatKillPacket.class, new PlayerCombatKillHandler())
+        .registerInbound(ClientboundMapItemDataPacket.class, new MapDataHandler())
+        .registerInbound(ClientboundPingPacket.class, new PingHandler())
+        .registerInbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesHandler())
+        .registerInbound(ClientboundCustomPayloadPacket.class, new CustomPayloadHandler())
+        .registerInbound(ClientboundRecipePacket.class, new UnlockRecipeHandler())
         //ENTITY
-        .registerInbound(new EntityEventHandler())
-        .registerInbound(new SetEntityLinkHandler())
-        .registerInbound(new TakeItemEntityHandler())
-        .registerInbound(new RemoveEntitiesHandler())
-        .registerInbound(new UpdateMobEffectHandler())
-        .registerInbound(new RemoveMobEffectHandler())
-        .registerInbound(new SetEquipmentHandler())
-        .registerInbound(new RotateHeadHandler())
-        .registerInbound(new SetEntityDataHandler())
-        .registerInbound(new MoveEntityPosHandler())
-        .registerInbound(new MoveEntityPosRotHandler())
-        .registerInbound(new UpdateAttributesHandler())
-        .registerInbound(new MoveEntityRotHandler())
-        .registerInbound(new EntitySetPassengersHandler())
-        .registerInbound(new EntityTeleportHandler())
+        .registerInbound(ClientboundEntityEventPacket.class, new EntityEventHandler())
+        .registerInbound(ClientboundSetEntityLinkPacket.class, new SetEntityLinkHandler())
+        .registerInbound(ClientboundTakeItemEntityPacket.class, new TakeItemEntityHandler())
+        .registerInbound(ClientboundRemoveEntitiesPacket.class, new RemoveEntitiesHandler())
+        .registerInbound(ClientboundUpdateMobEffectPacket.class, new UpdateMobEffectHandler())
+        .registerInbound(ClientboundRemoveMobEffectPacket.class, new RemoveMobEffectHandler())
+        .registerInbound(ClientboundSetEquipmentPacket.class, new SetEquipmentHandler())
+        .registerInbound(ClientboundRotateHeadPacket.class, new RotateHeadHandler())
+        .registerInbound(ClientboundSetEntityDataPacket.class, new SetEntityDataHandler())
+        .registerInbound(ClientboundMoveEntityPosPacket.class, new MoveEntityPosHandler())
+        .registerInbound(ClientboundMoveEntityPosRotPacket.class, new MoveEntityPosRotHandler())
+        .registerInbound(ClientboundUpdateAttributesPacket.class, new UpdateAttributesHandler())
+        .registerInbound(ClientboundMoveEntityRotPacket.class, new MoveEntityRotHandler())
+        .registerInbound(ClientboundSetPassengersPacket.class, new EntitySetPassengersHandler())
+        .registerInbound(ClientboundTeleportEntityPacket.class, new TeleportEntityHandler())
         //SPAWN
-        .registerInbound(new AddExperienceOrbHandler())
-        .registerInbound(new AddEntityHandler())
-        .registerInbound(new AddPlayerHandler())
-        .registerInbound(new SpawnPositionHandler())
+        .registerInbound(ClientboundAddExperienceOrbPacket.class, new AddExperienceOrbHandler())
+        .registerInbound(ClientboundAddEntityPacket.class, new AddEntityHandler())
+        .registerInbound(ClientboundAddPlayerPacket.class, new AddPlayerHandler())
+        .registerInbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
         // Outbound
-        .registerOutbound(new OutgoingChatHandler())
+        .registerOutbound(ServerboundChatPacket.class, new OutgoingChatHandler())
         //Postoutgoing
-        .registerPostOutbound(new PostOutgoingSetCarriedItemHandler())
-        .registerPostOutbound(new PostOutgoingPlayerPositionHandler())
-        .registerPostOutbound(new PostOutgoingPlayerPositionRotationHandler())
-        .registerPostOutbound(new PostOutgoingPlayerRotationHandler())
-        .registerPostOutbound(new PostOutgoingPlayerStatusOnlyHandler())
+        .registerPostOutbound(ServerboundSetCarriedItemPacket.class, new PostOutgoingSetCarriedItemHandler())
+        .registerPostOutbound(ServerboundMovePlayerPosPacket.class, new PostOutgoingPlayerPositionHandler())
+        .registerPostOutbound(ServerboundMovePlayerPosRotPacket.class, new PostOutgoingPlayerPositionRotationHandler())
+        .registerPostOutbound(ServerboundMovePlayerRotPacket.class, new PostOutgoingPlayerRotationHandler())
+        .registerPostOutbound(ServerboundMovePlayerStatusOnlyPacket.class, new PostOutgoingPlayerStatusOnlyHandler())
         .build();
-
-    public static volatile boolean SHOULD_RECONNECT;
 
     public static synchronized void loadConfig() {
         try {
@@ -282,69 +359,6 @@ public class Shared {
 
         DEFAULT_LOG.debug("Launch config saved.");
     }
-
-    public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
-        .setLogger(SERVER_LOG)
-        .allowUnhandled(true)
-        //
-        // Inbound packets
-        //
-        .registerInbound(new ServerboundHelloHandler())
-        .registerInbound(new ServerboundKeepAliveHandler())
-        .registerInbound(new ServerboundChatHandler())
-        .registerInbound(new ClientSettingsPacketHandler())
-        .registerInbound(new PlayerPongHandler())
-        //PLAYER MOVEMENT
-        .registerInbound(new PlayerSwingArmPacketHandler())
-        //
-        // Outbound packets
-        //
-        .registerOutbound(new GameProfileOutgoingHandler())
-        .registerOutbound(new PingOutgoingHandler())
-        .registerOutbound(new ServerTablistDataOutgoingHandler())
-        .registerOutbound(new SystemChatOutgoingHandler())
-        //
-        // Post-outbound packets
-        //
-        .registerPostOutbound(new LoginPostHandler())
-        .registerPostOutbound(new ClientCommandPostHandler())
-        .build();
-    public static final HandlerRegistry<ServerConnection> SERVER_SPECTATOR_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
-        .setLogger(SERVER_LOG)
-        .allowUnhandled(false)
-
-        .registerInbound(new ServerboundHelloHandler())
-        .registerInbound(new ServerboundKeepAliveHandler())
-        .registerInbound(new SpectatorPongHandler())
-        .registerInbound(new PlayerPositionRotationSpectatorHandler())
-        .registerInbound(new PlayerPositionSpectatorHandler())
-        .registerInbound(new PlayerRotationSpectatorHandler())
-        .registerInbound(new ServerChatSpectatorHandler())
-        .registerInbound(new PlayerStateSpectatorHandler())
-
-        .registerOutbound(new GameProfileOutgoingHandler())
-        .registerOutbound(new PingOutgoingHandler())
-
-        .registerOutbound(new ClientboundContainerCloseSpectatorOutgoingHandler())
-        .registerOutbound(new ClientboundContainerSetContentSpectatorOutgoingHandler())
-        .registerOutbound(new PlaceGhostRecipeSpectatorOutgoingHandler())
-        .registerOutbound(new OpenScreenSpectatorOutgoingHandler())
-        .registerOutbound(new ClientboundSetCarriedItemSpectatorOutgoingHandler())
-        .registerOutbound(new SetHealthSpectatorOutgoingHandler())
-        .registerOutbound(new ClientboundPlayerPositionRotationSpectatorOutgoingHandler())
-        .registerOutbound(new ClientboundSetExperienceSpectatorOutgoingHandler())
-        .registerOutbound(new OpenBookSpectatorOutgoingHandler())
-        .registerOutbound(new ContainerSetSlotSpectatorOutgoingHandler())
-        .registerOutbound(new GameEventSpectatorOutgoingHandler())
-        .registerOutbound(new ClientboundVehicleMoveSpectatorOutgoingHandler())
-        .registerOutbound(new HorseScreenOpenSpectatorOutgoingHandler())
-        .registerOutbound(new ClientboundContainerSetDataSpectatorOutgoingHandler())
-        .registerOutbound(new ServerTablistDataOutgoingHandler())
-        .registerOutbound(new PlayerAbilitiesSpectatorOutgoingHandler())
-        .registerOutbound(new RespawnSpectatorOutgoingPacket())
-
-        .registerPostOutbound(new JoinGameSpectatorPostHandler())
-        .build();
 
     static {
         try {

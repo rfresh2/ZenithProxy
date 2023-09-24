@@ -12,9 +12,4 @@ public class UnlockRecipeHandler implements AsyncIncomingHandler<ClientboundReci
         CACHE.getRecipeCache().updateUnlockedRecipes(packet);
         return true;
     }
-
-    @Override
-    public Class<ClientboundRecipePacket> getPacketClass() {
-        return ClientboundRecipePacket.class;
-    }
 }

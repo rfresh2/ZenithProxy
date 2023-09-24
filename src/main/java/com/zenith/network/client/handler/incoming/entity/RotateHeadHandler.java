@@ -17,9 +17,4 @@ public class RotateHeadHandler implements AsyncIncomingHandler<ClientboundRotate
         entity.setHeadYaw(packet.getHeadYaw());
         return true;
     }
-
-    @Override
-    public Class<ClientboundRotateHeadPacket> getPacketClass() {
-        return ClientboundRotateHeadPacket.class;
-    }
 }

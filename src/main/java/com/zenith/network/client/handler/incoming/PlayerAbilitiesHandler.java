@@ -17,9 +17,4 @@ public class PlayerAbilitiesHandler implements AsyncIncomingHandler<ClientboundP
         CACHE.getPlayerCache().setWalkSpeed(packet.getWalkSpeed());
         return true;
     }
-
-    @Override
-    public Class<ClientboundPlayerAbilitiesPacket> getPacketClass() {
-        return ClientboundPlayerAbilitiesPacket.class;
-    }
 }

@@ -25,9 +25,4 @@ public class SetEntityLinkHandler implements AsyncIncomingHandler<ClientboundSet
             return false;
         }
     }
-
-    @Override
-    public Class<ClientboundSetEntityLinkPacket> getPacketClass() {
-        return ClientboundSetEntityLinkPacket.class;
-    }
 }

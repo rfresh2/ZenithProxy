@@ -43,11 +43,6 @@ public class SystemChatOutgoingHandler implements OutgoingHandler<ClientboundSys
         return packet;
     }
 
-    @Override
-    public Class<ClientboundSystemChatPacket> getPacketClass() {
-        return ClientboundSystemChatPacket.class;
-    }
-
     private boolean isWhisper(String message) {
         if (!message.startsWith("<")) {
             String[] split = message.split(" ");

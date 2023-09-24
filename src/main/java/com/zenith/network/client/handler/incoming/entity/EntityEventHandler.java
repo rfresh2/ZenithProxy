@@ -22,9 +22,4 @@ public class EntityEventHandler implements AsyncIncomingHandler<ClientboundEntit
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundEntityEventPacket> getPacketClass() {
-        return ClientboundEntityEventPacket.class;
-    }
 }

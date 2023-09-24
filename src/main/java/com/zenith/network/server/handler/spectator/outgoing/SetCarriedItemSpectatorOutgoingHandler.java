@@ -4,14 +4,9 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player
 import com.zenith.network.registry.OutgoingHandler;
 import com.zenith.network.server.ServerConnection;
 
-public class ClientboundSetCarriedItemSpectatorOutgoingHandler implements OutgoingHandler<ClientboundSetCarriedItemPacket, ServerConnection> {
+public class SetCarriedItemSpectatorOutgoingHandler implements OutgoingHandler<ClientboundSetCarriedItemPacket, ServerConnection> {
     @Override
     public ClientboundSetCarriedItemPacket apply(ClientboundSetCarriedItemPacket packet, ServerConnection session) {
         return null;
-    }
-
-    @Override
-    public Class<ClientboundSetCarriedItemPacket> getPacketClass() {
-        return ClientboundSetCarriedItemPacket.class;
     }
 }

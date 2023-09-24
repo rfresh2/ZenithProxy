@@ -12,9 +12,4 @@ public class SetChunkCacheRadiusHandler implements AsyncIncomingHandler<Clientbo
         CACHE.getChunkCache().setServerViewDistance(packet.getViewDistance());
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetChunkCacheRadiusPacket> getPacketClass() {
-        return ClientboundSetChunkCacheRadiusPacket.class;
-    }
 }

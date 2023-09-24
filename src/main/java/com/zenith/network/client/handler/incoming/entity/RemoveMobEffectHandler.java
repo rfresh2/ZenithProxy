@@ -26,9 +26,4 @@ public class RemoveMobEffectHandler implements AsyncIncomingHandler<ClientboundR
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundRemoveMobEffectPacket> getPacketClass() {
-        return ClientboundRemoveMobEffectPacket.class;
-    }
 }

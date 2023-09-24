@@ -23,11 +23,6 @@ public class SetActionBarTextHandler implements AsyncIncomingHandler<Clientbound
         return true;
     }
 
-    @Override
-    public Class<ClientboundSetActionBarTextPacket> getPacketClass() {
-        return ClientboundSetActionBarTextPacket.class;
-    }
-
     private void parse2bRestart(ClientboundSetActionBarTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional.of(serverTitlePacket)

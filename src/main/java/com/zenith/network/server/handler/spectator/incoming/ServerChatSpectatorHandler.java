@@ -84,9 +84,4 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
         }
         return false;
     }
-
-    @Override
-    public Class<ServerboundChatPacket> getPacketClass() {
-        return ServerboundChatPacket.class;
-    }
 }

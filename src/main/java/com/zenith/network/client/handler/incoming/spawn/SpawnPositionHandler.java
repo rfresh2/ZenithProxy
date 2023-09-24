@@ -16,9 +16,4 @@ public class SpawnPositionHandler implements AsyncIncomingHandler<ClientboundSet
         CACHE.getChunkCache().setSpawnPosition(MutableVec3i.from(packet.getPosition()));
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetDefaultSpawnPositionPacket> getPacketClass() {
-        return ClientboundSetDefaultSpawnPositionPacket.class;
-    }
 }

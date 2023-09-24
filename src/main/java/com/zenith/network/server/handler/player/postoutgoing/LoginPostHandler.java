@@ -45,9 +45,4 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7Death messages are currently disabled. To enable death messages, type &c/toggledeathmsgs&7."), false));
         }
     }
-
-    @Override
-    public Class<ClientboundLoginPacket> getPacketClass() {
-        return ClientboundLoginPacket.class;
-    }
 }

@@ -9,9 +9,4 @@ public class ContainerSetSlotSpectatorOutgoingHandler implements OutgoingHandler
     public ClientboundContainerSetSlotPacket apply(ClientboundContainerSetSlotPacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundContainerSetSlotPacket> getPacketClass() {
-        return ClientboundContainerSetSlotPacket.class;
-    }
 }

@@ -12,9 +12,4 @@ public class MapDataHandler implements AsyncIncomingHandler<ClientboundMapItemDa
         CACHE.getMapDataCache().upsert(packet);
         return true;
     }
-
-    @Override
-    public Class<ClientboundMapItemDataPacket> getPacketClass() {
-        return ClientboundMapItemDataPacket.class;
-    }
 }

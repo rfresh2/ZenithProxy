@@ -12,9 +12,4 @@ public class SectionBlocksUpdateHandler implements AsyncIncomingHandler<Clientbo
     public boolean applyAsync(@NonNull ClientboundSectionBlocksUpdatePacket packet, @NonNull ClientSession session) {
         return CACHE.getChunkCache().multiBlockUpdate(packet);
     }
-
-    @Override
-    public Class<ClientboundSectionBlocksUpdatePacket> getPacketClass() {
-        return ClientboundSectionBlocksUpdatePacket.class;
-    }
 }

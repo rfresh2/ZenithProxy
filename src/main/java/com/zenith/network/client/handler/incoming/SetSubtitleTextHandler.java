@@ -21,11 +21,6 @@ public class SetSubtitleTextHandler implements AsyncIncomingHandler<ClientboundS
         return true;
     }
 
-    @Override
-    public Class<ClientboundSetSubtitleTextPacket> getPacketClass() {
-        return ClientboundSetSubtitleTextPacket.class;
-    }
-
     private void parse2bQueuePos(ClientboundSetSubtitleTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional<Integer> position = Optional.of(serverTitlePacket)

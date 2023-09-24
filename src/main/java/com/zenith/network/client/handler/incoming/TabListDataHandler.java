@@ -39,11 +39,6 @@ public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabLi
         return true;
     }
 
-    @Override
-    public Class<ClientboundTabListPacket> getPacketClass() {
-        return ClientboundTabListPacket.class;
-    }
-
     private synchronized void parse2bQueueState(ClientboundTabListPacket packet, ClientSession session) {
         Optional<String> queueHeader = Arrays.stream(ComponentSerializer.toRawString(packet.getHeader()).split("\\\\n"))
                 .map(String::trim)

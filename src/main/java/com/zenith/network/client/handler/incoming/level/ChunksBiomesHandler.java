@@ -11,9 +11,4 @@ public class ChunksBiomesHandler implements AsyncIncomingHandler<ClientboundChun
     public boolean applyAsync(final ClientboundChunksBiomesPacket packet, final ClientSession session) {
         return CACHE.getChunkCache().handleChunkBiomes(packet);
     }
-
-    @Override
-    public Class<ClientboundChunksBiomesPacket> getPacketClass() {
-        return ClientboundChunksBiomesPacket.class;
-    }
 }

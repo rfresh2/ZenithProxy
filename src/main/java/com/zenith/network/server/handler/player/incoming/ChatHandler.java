@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.zenith.Shared.*;
 
-public class ServerboundChatHandler implements IncomingHandler<ServerboundChatPacket, ServerConnection> {
+public class ChatHandler implements IncomingHandler<ServerboundChatPacket, ServerConnection> {
 
     @Override
     public boolean apply(@NonNull ServerboundChatPacket packet, @NonNull ServerConnection session) {
@@ -143,10 +143,5 @@ public class ServerboundChatHandler implements IncomingHandler<ServerboundChatPa
             }
         }
         return true;
-    }
-
-    @Override
-    public Class<ServerboundChatPacket> getPacketClass() {
-        return ServerboundChatPacket.class;
     }
 }

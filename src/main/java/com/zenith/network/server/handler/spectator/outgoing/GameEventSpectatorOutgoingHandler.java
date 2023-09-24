@@ -13,9 +13,4 @@ public class GameEventSpectatorOutgoingHandler implements OutgoingHandler<Client
         }
         return packet;
     }
-
-    @Override
-    public Class<ClientboundGameEventPacket> getPacketClass() {
-        return ClientboundGameEventPacket.class;
-    }
 }

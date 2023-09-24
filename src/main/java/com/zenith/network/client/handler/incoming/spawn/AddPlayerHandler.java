@@ -33,9 +33,4 @@ public class AddPlayerHandler implements AsyncIncomingHandler<ClientboundAddPlay
 
         return true;
     }
-
-    @Override
-    public Class<ClientboundAddPlayerPacket> getPacketClass() {
-        return ClientboundAddPlayerPacket.class;
-    }
 }

@@ -100,4 +100,5 @@ public class ClientListener implements SessionListener {
         CLIENT_LOG.info("Disconnected: " + reason);
         EVENT_BUS.post(new DisconnectEvent(reason));
     }
+
 }

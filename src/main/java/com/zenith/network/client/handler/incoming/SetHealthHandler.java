@@ -26,9 +26,4 @@ public class SetHealthHandler implements AsyncIncomingHandler<ClientboundSetHeal
         CACHE_LOG.debug("Player health: {}", packet.getHealth());
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetHealthPacket> getPacketClass() {
-        return ClientboundSetHealthPacket.class;
-    }
 }

@@ -7,6 +7,4 @@ import java.util.function.BiConsumer;
 
 public interface PostOutgoingHandler<P extends Packet, S extends Session> extends BiConsumer<P, S> {
     void accept(P packet, S session);
-
-    Class<P> getPacketClass();
 }

@@ -19,7 +19,7 @@ import java.util.EnumSet;
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.CACHE;
 
-public class JoinGameSpectatorPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
+public class LoginSpectatorPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
         session.setSpectator(true);
@@ -57,10 +57,5 @@ public class JoinGameSpectatorPostHandler implements PostOutgoingHandler<Clientb
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
-    }
-
-    @Override
-    public Class<ClientboundLoginPacket> getPacketClass() {
-        return ClientboundLoginPacket.class;
     }
 }

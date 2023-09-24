@@ -12,9 +12,4 @@ public class UpdateEnabledFeaturesHandler implements AsyncIncomingHandler<Client
         CACHE.getPlayerCache().setEnabledFeatures(packet.getFeatures());
         return true;
     }
-
-    @Override
-    public Class<ClientboundUpdateEnabledFeaturesPacket> getPacketClass() {
-        return ClientboundUpdateEnabledFeaturesPacket.class;
-    }
 }

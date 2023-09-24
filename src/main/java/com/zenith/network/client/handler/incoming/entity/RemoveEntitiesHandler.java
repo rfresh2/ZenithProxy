@@ -31,9 +31,4 @@ public class RemoveEntitiesHandler implements AsyncIncomingHandler<ClientboundRe
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundRemoveEntitiesPacket> getPacketClass() {
-        return ClientboundRemoveEntitiesPacket.class;
-    }
 }

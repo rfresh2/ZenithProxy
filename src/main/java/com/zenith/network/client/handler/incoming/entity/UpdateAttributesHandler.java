@@ -17,8 +17,4 @@ public class UpdateAttributesHandler implements AsyncIncomingHandler<Clientbound
         entity.updateAttributes(packet.getAttributes());
         return true;
     }
-    @Override
-    public Class<ClientboundUpdateAttributesPacket> getPacketClass() {
-        return ClientboundUpdateAttributesPacket.class;
-    }
 }

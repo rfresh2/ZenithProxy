@@ -21,11 +21,6 @@ public class MoveEntityPosRotHandler implements AsyncIncomingHandler<Clientbound
     }
 
     @Override
-    public Class<ClientboundMoveEntityPosRotPacket> getPacketClass() {
-        return ClientboundMoveEntityPosRotPacket.class;
-    }
-
-    @Override
     public boolean applyAsync(@NonNull ClientboundMoveEntityPosRotPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {

@@ -20,11 +20,6 @@ public class ServerTablistDataOutgoingHandler implements OutgoingHandler<Clientb
         return new ClientboundTabListPacket(packet.getHeader(), insertProxyDataIntoFooter(packet.getFooter(), session));
     }
 
-    @Override
-    public Class<ClientboundTabListPacket> getPacketClass() {
-        return ClientboundTabListPacket.class;
-    }
-
     public Component insertProxyDataIntoFooter(final Component footer, final ServerConnection session) {
         try {
             return footer.append(Component.text().appendNewline().append(MineDown.parse("&b&lZenithProxy&r")).build())

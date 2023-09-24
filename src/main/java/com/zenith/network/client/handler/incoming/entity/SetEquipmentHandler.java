@@ -45,8 +45,4 @@ public class SetEquipmentHandler implements AsyncIncomingHandler<ClientboundSetE
         }
     }
 
-    @Override
-    public Class<ClientboundSetEquipmentPacket> getPacketClass() {
-        return ClientboundSetEquipmentPacket.class;
-    }
 }

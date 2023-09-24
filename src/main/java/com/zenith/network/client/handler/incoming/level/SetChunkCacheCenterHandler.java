@@ -13,9 +13,4 @@ public class SetChunkCacheCenterHandler implements AsyncIncomingHandler<Clientbo
         CACHE.getChunkCache().setCenterZ(packet.getChunkZ());
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetChunkCacheCenterPacket> getPacketClass() {
-        return ClientboundSetChunkCacheCenterPacket.class;
-    }
 }

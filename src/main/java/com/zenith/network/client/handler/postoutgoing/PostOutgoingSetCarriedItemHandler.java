@@ -18,9 +18,4 @@ public class PostOutgoingSetCarriedItemHandler implements PostOutgoingHandler<Se
             DEFAULT_LOG.error("failed updating main hand slot", e);
         }
     }
-
-    @Override
-    public Class<ServerboundSetCarriedItemPacket> getPacketClass() {
-        return ServerboundSetCarriedItemPacket.class;
-    }
 }

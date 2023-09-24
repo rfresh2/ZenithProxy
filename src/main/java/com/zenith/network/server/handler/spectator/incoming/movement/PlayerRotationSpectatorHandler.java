@@ -15,9 +15,4 @@ public class PlayerRotationSpectatorHandler implements IncomingHandler<Serverbou
         PlayerPositionRotationSpectatorHandler.updateSpectatorPosition(session);
         return false;
     }
-
-    @Override
-    public Class<ServerboundMovePlayerRotPacket> getPacketClass() {
-        return ServerboundMovePlayerRotPacket.class;
-    }
 }

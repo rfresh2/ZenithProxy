@@ -9,7 +9,7 @@ import lombok.NonNull;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class EntityTeleportHandler implements AsyncIncomingHandler<ClientboundTeleportEntityPacket, ClientSession> {
+public class TeleportEntityHandler implements AsyncIncomingHandler<ClientboundTeleportEntityPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundTeleportEntityPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
@@ -25,10 +25,5 @@ public class EntityTeleportHandler implements AsyncIncomingHandler<ClientboundTe
             CLIENT_LOG.warn("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
-    }
-
-    @Override
-    public Class<ClientboundTeleportEntityPacket> getPacketClass() {
-        return ClientboundTeleportEntityPacket.class;
     }
 }

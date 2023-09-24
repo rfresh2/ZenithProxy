@@ -15,9 +15,4 @@ public class SetExperienceHandler implements AsyncIncomingHandler<ClientboundSet
                 .setExperience(packet.getExperience());
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetExperiencePacket> getPacketClass() {
-        return ClientboundSetExperiencePacket.class;
-    }
 }

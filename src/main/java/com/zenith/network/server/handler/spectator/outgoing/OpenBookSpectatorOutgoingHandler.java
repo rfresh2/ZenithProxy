@@ -9,9 +9,4 @@ public class OpenBookSpectatorOutgoingHandler implements OutgoingHandler<Clientb
     public ClientboundOpenBookPacket apply(ClientboundOpenBookPacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundOpenBookPacket> getPacketClass() {
-        return ClientboundOpenBookPacket.class;
-    }
 }

@@ -9,9 +9,4 @@ public class ClientboundContainerSetDataSpectatorOutgoingHandler implements Outg
     public ClientboundContainerSetDataPacket apply(ClientboundContainerSetDataPacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundContainerSetDataPacket> getPacketClass() {
-        return ClientboundContainerSetDataPacket.class;
-    }
 }

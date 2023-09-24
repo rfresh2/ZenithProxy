@@ -19,9 +19,4 @@ public class SetCarriedItemHandler implements AsyncIncomingHandler<ClientboundSe
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetCarriedItemPacket> getPacketClass() {
-        return ClientboundSetCarriedItemPacket.class;
-    }
 }

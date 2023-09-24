@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import static com.zenith.Shared.CACHE;
 import static java.util.Objects.isNull;
 
-public class BossBarHandler implements AsyncIncomingHandler<ClientboundBossEventPacket, ClientSession> {
+public class BossEventHandler implements AsyncIncomingHandler<ClientboundBossEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundBossEventPacket packet, @NonNull ClientSession session) {
         Consumer<ClientboundBossEventPacket> consumer = p -> {
@@ -43,10 +43,5 @@ public class BossBarHandler implements AsyncIncomingHandler<ClientboundBossEvent
         }
         consumer.accept(packet);
         return true;
-    }
-
-    @Override
-    public Class<ClientboundBossEventPacket> getPacketClass() {
-        return ClientboundBossEventPacket.class;
     }
 }

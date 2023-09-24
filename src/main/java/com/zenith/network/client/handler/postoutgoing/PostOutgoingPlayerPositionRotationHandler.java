@@ -19,9 +19,4 @@ public class PostOutgoingPlayerPositionRotationHandler implements PostOutgoingHa
         SpectatorUtils.syncPlayerPositionWithSpectators();
 //        CLIENT_LOG.info("Client set player position rotation: {}, {}, {}, {}, {}", packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
     }
-
-    @Override
-    public Class<ServerboundMovePlayerPosRotPacket> getPacketClass() {
-        return ServerboundMovePlayerPosRotPacket.class;
-    }
 }

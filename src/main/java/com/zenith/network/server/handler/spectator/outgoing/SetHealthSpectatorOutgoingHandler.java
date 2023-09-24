@@ -9,9 +9,4 @@ public class SetHealthSpectatorOutgoingHandler implements OutgoingHandler<Client
     public ClientboundSetHealthPacket apply(ClientboundSetHealthPacket packet, ServerConnection session) {
         return null;
     }
-
-    @Override
-    public Class<ClientboundSetHealthPacket> getPacketClass() {
-        return ClientboundSetHealthPacket.class;
-    }
 }

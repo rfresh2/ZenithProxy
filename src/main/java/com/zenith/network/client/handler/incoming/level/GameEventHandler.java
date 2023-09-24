@@ -38,9 +38,4 @@ public class GameEventHandler implements AsyncIncomingHandler<ClientboundGameEve
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundGameEventPacket> getPacketClass() {
-        return ClientboundGameEventPacket.class;
-    }
 }

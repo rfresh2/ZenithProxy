@@ -18,9 +18,4 @@ public class PlayerPositionSpectatorHandler implements IncomingHandler<Serverbou
         SpectatorUtils.checkSpectatorPositionOutOfRender(session);
         return false;
     }
-
-    @Override
-    public Class<ServerboundMovePlayerPosPacket> getPacketClass() {
-        return ServerboundMovePlayerPosPacket.class;
-    }
 }

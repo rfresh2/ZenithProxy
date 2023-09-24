@@ -7,15 +7,10 @@ import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 
-public class BlockChangeHandler implements AsyncIncomingHandler<ClientboundBlockUpdatePacket, ClientSession> {
+public class BlockUpdateHandler implements AsyncIncomingHandler<ClientboundBlockUpdatePacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ClientboundBlockUpdatePacket packet, @NonNull ClientSession session) {
         return CACHE.getChunkCache().updateBlock(packet);
-    }
-
-    @Override
-    public Class<ClientboundBlockUpdatePacket> getPacketClass() {
-        return ClientboundBlockUpdatePacket.class;
     }
 }

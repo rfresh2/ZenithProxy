@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.Server
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
 
-public class PlayerStateSpectatorHandler implements IncomingHandler<ServerboundPlayerCommandPacket, ServerConnection> {
+public class PlayerCommandSpectatorHandler implements IncomingHandler<ServerboundPlayerCommandPacket, ServerConnection> {
 
     @Override
     public boolean apply(ServerboundPlayerCommandPacket packet, ServerConnection session) {
@@ -15,10 +15,5 @@ public class PlayerStateSpectatorHandler implements IncomingHandler<ServerboundP
             });
         }
         return false;
-    }
-
-    @Override
-    public Class<ServerboundPlayerCommandPacket> getPacketClass() {
-        return ServerboundPlayerCommandPacket.class;
     }
 }

@@ -17,9 +17,4 @@ public class PlayerAbilitiesSpectatorOutgoingHandler implements OutgoingHandler<
         );
         return packet;
     }
-
-    @Override
-    public Class<ClientboundPlayerAbilitiesPacket> getPacketClass() {
-        return ClientboundPlayerAbilitiesPacket.class;
-    }
 }

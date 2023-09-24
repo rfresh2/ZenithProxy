@@ -13,9 +13,4 @@ public class LevelChunkWithLightHandler implements AsyncIncomingHandler<Clientbo
         CACHE.getChunkCache().add(packet);
         return true;
     }
-
-    @Override
-    public Class<ClientboundLevelChunkWithLightPacket> getPacketClass() {
-        return ClientboundLevelChunkWithLightPacket.class;
-    }
 }

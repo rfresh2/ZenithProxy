@@ -3,7 +3,7 @@ package com.zenith.network.registry;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundKeepAlivePacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
-import com.zenith.network.server.handler.shared.incoming.ServerboundKeepAliveHandler;
+import com.zenith.network.server.handler.shared.incoming.KeepAliveHandler;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -36,7 +36,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.received)  {
-            if (!(packet instanceof ClientboundKeepAlivePacket || packet instanceof ServerboundKeepAliveHandler)) {
+            if (!(packet instanceof ClientboundKeepAlivePacket || packet instanceof KeepAliveHandler)) {
                 this.logger.debug("[{}] Received: {}", Instant.now().getEpochSecond(), CONFIG.debug.packet.receivedBody ? packet : packet.getClass());
             }
 //            if (allowedPackets.stream().anyMatch(allowPacket -> packet.getClass() == allowPacket)) {
@@ -68,7 +68,7 @@ public class HandlerRegistry<S extends Session> {
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.postSent) {
-            if (!(packet instanceof ClientboundKeepAlivePacket || packet instanceof ServerboundKeepAliveHandler))
+            if (!(packet instanceof ClientboundKeepAlivePacket || packet instanceof KeepAliveHandler))
                 this.logger.debug("[{}] Sent: {}", Instant.now().getEpochSecond(), CONFIG.debug.packet.postSentBody ? packet : packet.getClass());
 //            if (allowedPackets.stream().anyMatch(allowPacket -> packet.getClass() == allowPacket)) {
 //                this.logger.debug("Sent packet: {}@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
@@ -94,23 +94,23 @@ public class HandlerRegistry<S extends Session> {
         protected Logger logger;
         protected boolean allowUnhandled = true;
 
-        public Builder<S> registerInbound(@NonNull IncomingHandler<? extends Packet, S> handler) {
-            this.inboundHandlers.put(handler.getPacketClass(), handler);
+        public Builder<S> registerInbound(@NonNull Class<? extends Packet> packetClass, @NonNull IncomingHandler<? extends Packet, S> handler) {
+            this.inboundHandlers.put(packetClass, handler);
             return this;
         }
 
-        public Builder<S> registerInbound(@NonNull AsyncIncomingHandler<? extends Packet,S> handler) {
-            this.inboundHandlers.put(handler.getPacketClass(), handler);
+        public Builder<S> registerInbound(@NonNull Class<? extends Packet> packetClass, @NonNull AsyncIncomingHandler<? extends Packet,S> handler) {
+            this.inboundHandlers.put(packetClass, handler);
             return this;
         }
 
-        public Builder<S> registerOutbound(@NonNull OutgoingHandler<? extends Packet, S> handler) {
-            this.outboundHandlers.put(handler.getPacketClass(), handler);
+        public Builder<S> registerOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull OutgoingHandler<? extends Packet, S> handler) {
+            this.outboundHandlers.put(packetClass, handler);
             return this;
         }
 
-        public Builder<S> registerPostOutbound(@NonNull PostOutgoingHandler<? extends Packet, S> handler) {
-            this.postOutboundHandlers.put(handler.getPacketClass(), handler);
+        public Builder<S> registerPostOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull PostOutgoingHandler<? extends Packet, S> handler) {
+            this.postOutboundHandlers.put(packetClass, handler);
             return this;
         }
 

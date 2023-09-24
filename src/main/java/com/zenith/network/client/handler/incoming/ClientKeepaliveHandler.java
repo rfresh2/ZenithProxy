@@ -10,9 +10,4 @@ public class ClientKeepaliveHandler implements IncomingHandler<ClientboundKeepAl
     public boolean apply(@NonNull ClientboundKeepAlivePacket packet, @NonNull ClientSession session) {
         return false;
     }
-
-    @Override
-    public Class<ClientboundKeepAlivePacket> getPacketClass() {
-        return ClientboundKeepAlivePacket.class;
-    }
 }

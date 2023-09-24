@@ -22,9 +22,4 @@ public class RespawnSpectatorOutgoingPacket implements OutgoingHandler<Clientbou
             packet.getPortalCooldown()
             );
     }
-
-    @Override
-    public Class<ClientboundRespawnPacket> getPacketClass() {
-        return ClientboundRespawnPacket.class;
-    }
 }

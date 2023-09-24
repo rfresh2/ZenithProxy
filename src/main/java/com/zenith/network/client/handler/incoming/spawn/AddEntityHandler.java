@@ -29,9 +29,4 @@ public class AddEntityHandler implements AsyncIncomingHandler<ClientboundAddEnti
         );
         return true;
     }
-
-    @Override
-    public Class<ClientboundAddEntityPacket> getPacketClass() {
-        return ClientboundAddEntityPacket.class;
-    }
 }

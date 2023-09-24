@@ -17,9 +17,4 @@ public class SetEntityMotionHandler implements IncomingHandler<ClientboundSetEnt
         }
         return true;
     }
-
-    @Override
-    public Class<ClientboundSetEntityMotionPacket> getPacketClass() {
-        return ClientboundSetEntityMotionPacket.class;
-    }
 }

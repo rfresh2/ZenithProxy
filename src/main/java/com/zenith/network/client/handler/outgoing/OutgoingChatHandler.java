@@ -15,9 +15,4 @@ public class OutgoingChatHandler implements OutgoingHandler<ServerboundChatPacke
         }
         return packet;
     }
-
-    @Override
-    public Class<ServerboundChatPacket> getPacketClass() {
-        return ServerboundChatPacket.class;
-    }
 }

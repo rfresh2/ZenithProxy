@@ -11,9 +11,4 @@ public class PostOutgoingPlayerStatusOnlyHandler implements PostOutgoingHandler<
 
 //        CLIENT_LOG.info("Client set onGround: {}", packet.isOnGround());
     }
-
-    @Override
-    public Class<ServerboundMovePlayerStatusOnlyPacket> getPacketClass() {
-        return ServerboundMovePlayerStatusOnlyPacket.class;
-    }
 }

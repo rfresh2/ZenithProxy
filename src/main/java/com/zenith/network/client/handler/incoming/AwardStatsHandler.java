@@ -7,15 +7,10 @@ import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 
-public class StatisticsHandler implements AsyncIncomingHandler<ClientboundAwardStatsPacket, ClientSession> {
+public class AwardStatsHandler implements AsyncIncomingHandler<ClientboundAwardStatsPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundAwardStatsPacket packet, @NonNull ClientSession session) {
         CACHE.getStatsCache().getStatistics().putAll(packet.getStatistics()); //cache all locally
         return true;
-    }
-
-    @Override
-    public Class<ClientboundAwardStatsPacket> getPacketClass() {
-        return ClientboundAwardStatsPacket.class;
     }
 }
