@@ -80,6 +80,16 @@ public class PlayerSimulation extends Module {
         syncFromCache();
     }
 
+    @Override
+    public void clientTickStopping() {
+        if (isSneaking) {
+            sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
+        }
+        if (isSprinting) {
+            sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
+        }
+    }
+
     public synchronized void doRotate(float yaw, float pitch) {
         yaw = shortestRotation(yaw);
         pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);

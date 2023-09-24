@@ -124,10 +124,10 @@ public class ModuleManager {
         synchronized (this) {
             if (nonNull(this.clientTickFuture)) {
                 this.clientTickFuture.cancel(true);
-                getModules().forEach(Module::clientTickStopping);
                 while (!this.clientTickFuture.isDone()) {
                     Wait.waitALittleMs(50);
                 }
+                getModules().forEach(Module::clientTickStopping);
             }
         }
     }
