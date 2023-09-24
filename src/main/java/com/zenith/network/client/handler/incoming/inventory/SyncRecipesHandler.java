@@ -5,15 +5,12 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
 
-import java.util.Arrays;
-
 import static com.zenith.Shared.CACHE;
 
-public class UpdateRecipesHandler implements AsyncIncomingHandler<ClientboundUpdateRecipesPacket, ClientSession> {
+public class SyncRecipesHandler implements AsyncIncomingHandler<ClientboundUpdateRecipesPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundUpdateRecipesPacket packet, @NonNull ClientSession session) {
-        CACHE.getStatsCache().getRecipes().clear();
-        CACHE.getStatsCache().getRecipes().addAll(Arrays.asList(packet.getRecipes()));
+        CACHE.getRecipeCache().setRecipeRegistry(packet);
         return true;
     }
 

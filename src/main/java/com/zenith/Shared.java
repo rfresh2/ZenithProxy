@@ -18,10 +18,7 @@ import com.zenith.module.ModuleManager;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.client.handler.incoming.*;
 import com.zenith.network.client.handler.incoming.entity.*;
-import com.zenith.network.client.handler.incoming.inventory.ContainerSetSlotHandler;
-import com.zenith.network.client.handler.incoming.inventory.SetCarriedItemHandler;
-import com.zenith.network.client.handler.incoming.inventory.SetWindowItemsHandler;
-import com.zenith.network.client.handler.incoming.inventory.UpdateRecipesHandler;
+import com.zenith.network.client.handler.incoming.inventory.*;
 import com.zenith.network.client.handler.incoming.level.*;
 import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
@@ -151,7 +148,7 @@ public class Shared {
         .registerInbound(new SetActionBarTextHandler())
         .registerInbound(new SetEntityMotionHandler())
         .registerInbound(new ForgetLevelChunkHandler())
-        .registerInbound(new UpdateRecipesHandler())
+        .registerInbound(new SyncRecipesHandler())
         .registerInbound(new UpdateTagsHandler())
         .registerInbound(new BlockEntityDataHandler())
         .registerInbound(new UpdateTimePacketHandler())
@@ -160,6 +157,7 @@ public class Shared {
         .registerInbound(new PingHandler())
         .registerInbound(new PlayerAbilitiesHandler())
         .registerInbound(new PluginMessageHandler())
+        .registerInbound(new UnlockRecipeHandler())
         //ENTITY
         .registerInbound(new EntityEventHandler())
         .registerInbound(new SetEntityLinkHandler())

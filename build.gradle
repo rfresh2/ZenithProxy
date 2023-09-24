@@ -199,7 +199,7 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-RC1") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:4d04eec3e6") {
+    shade("com.github.rfresh2:MCProtocolLib:bfd8a17da0") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -252,20 +252,9 @@ tasks.register('run', JavaExec) {
     description = "Execute proxy"
     classpath = sourceSets.main.runtimeClasspath
     mainClass.set("com.zenith.Proxy")
-    jvmArgs = ["-server",
-               "-XX:MaxRAMPercentage=30", "-XX:MinRAMPercentage=30", // optimizing these for 3 instances per machine with varying amounts of ram
-               // base
-               "-XX:+UnlockExperimentalVMOptions", "-XX:+UnlockDiagnosticVMOptions", "-XX:+AlwaysActAsServerClassMachine",
-               "-XX:+AlwaysPreTouch", "-XX:+DisableExplicitGC", "-XX:+UseNUMA", "-XX:NmethodSweepActivity=1",
-               "-XX:+UseVectorCmov", "-XX:+PerfDisableSharedMem", "-XX:+UseFastUnorderedTimeStamps",
-               "-XX:+UseCriticalJavaThreadPriority", "-XX:ThreadPriorityPolicy=1", "-XX:AllocatePrefetchStyle=3",
+    jvmArgs = ["-XX:MaxRAMPercentage=30", "-XX:MinRAMPercentage=30", // optimizing these for 3 instances per machine with varying amounts of ram
                // memory
-               "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=37", "-XX:+PerfDisableSharedMem", "-XX:G1HeapRegionSize=16M",
-               "-XX:G1NewSizePercent=23", "-XX:G1ReservePercent=20", "-XX:SurvivorRatio=16",
-               "-XX:G1MixedGCCountTarget=3", "-XX:G1HeapWastePercent=20", "-XX:InitiatingHeapOccupancyPercent=10",
-               "-XX:G1RSetUpdatingPauseTimePercent=0", "-XX:MaxTenuringThreshold=1", "-XX:G1SATBBufferEnqueueingThresholdPercent=30",
-               "-XX:G1ConcMarkStepDurationMillis=5.0", "-XX:G1ConcRSHotCardLimit=16",
-               "-XX:GCTimeRatio=99", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=2",
+               "-XX:+UseG1GC", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=2",
                "-Djava.util.concurrent.ForkJoinPool.common.parallelism=8"]
 }
 

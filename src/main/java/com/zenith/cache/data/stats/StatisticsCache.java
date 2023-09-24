@@ -1,10 +1,8 @@
 package com.zenith.cache.data.stats;
 
 import com.github.steveice10.mc.protocol.data.game.advancement.Advancement;
-import com.github.steveice10.mc.protocol.data.game.recipe.Recipe;
 import com.github.steveice10.mc.protocol.data.game.statistic.Statistic;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateAdvancementsPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateRecipesPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -30,7 +28,6 @@ public class StatisticsCache implements CachedData {
     protected final List<Advancement> advancements = Collections.synchronizedList(new ArrayList<>());
     protected final Map<String, Map<String, Long>> progress = Collections.synchronizedMap(new Object2ObjectOpenHashMap<>());
 
-    protected List<Recipe> recipes = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
@@ -40,9 +37,6 @@ public class StatisticsCache implements CachedData {
                 new String[0],
                 this.progress
         ));
-        consumer.accept(new ClientboundUpdateRecipesPacket(
-                this.recipes.toArray(new Recipe[0])
-        ));
     }
 
     @Override
@@ -50,6 +44,5 @@ public class StatisticsCache implements CachedData {
         this.statistics.clear();
         this.advancements.clear();
         this.progress.clear();
-        this.recipes.clear();
     }
 }
