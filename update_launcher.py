@@ -107,5 +107,6 @@ if os.path.exists("launcher.py"):
 else:
     print("No launcher.py found. Downloading from GitHub.")
 
-with open("launcher.py", "w", newline='') as f:
+with open("launcher.py.tmp", "w", newline='') as f:
     f.write(contents)
+os.replace("launcher.py.tmp", "launcher.py")

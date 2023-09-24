@@ -93,8 +93,9 @@ def write_launch_config():
     }
     if (custom_jvm_args is not None) and (custom_jvm_args != ""):
         output["custom_jvm_args"] = custom_jvm_args
-    with open('launch_config.json', 'w') as f:
+    with open('launch_config.json.tmp', 'w') as f:
         f.write(json.dumps(output, indent=2))
+    os.replace('launch_config.json.tmp', 'launch_config.json')
 
 
 def git_update_check():
