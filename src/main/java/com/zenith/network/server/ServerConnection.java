@@ -464,11 +464,11 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void disconnect(@Nullable final Component reason) {
-
+        this.session.disconnect(reason);
     }
 
     @Override
     public void disconnect(@Nullable final Component reason, final Throwable cause) {
-
+        this.session.disconnect(reason, cause);
     }
 }
