@@ -12,18 +12,20 @@ public class Input {
     public boolean pressingRight;
     public boolean jumping;
     public boolean sneaking;
+    public boolean sprinting;
 
-    public Input(final boolean pressingForward, final boolean pressingBack, final boolean pressingLeft, final boolean pressingRight, final boolean jumping, final boolean sneaking) {
+    public Input(final boolean pressingForward, final boolean pressingBack, final boolean pressingLeft, final boolean pressingRight, final boolean jumping, final boolean sneaking, final boolean sprinting) {
         this.pressingForward = pressingForward;
         this.pressingBack = pressingBack;
         this.pressingLeft = pressingLeft;
         this.pressingRight = pressingRight;
         this.jumping = jumping;
         this.sneaking = sneaking;
+        this.sprinting = sprinting;
     }
 
     public Input() {
-        this(false, false, false, false, false, false);
+        this(false, false, false, false, false, false, false);
     }
 
     public void reset() {
@@ -35,5 +37,6 @@ public class Input {
         pressingRight = false;
         jumping = false;
         sneaking = false;
+        sprinting = false;
     }
 }

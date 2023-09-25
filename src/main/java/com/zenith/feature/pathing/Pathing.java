@@ -104,6 +104,7 @@ public class Pathing {
             false,
             false,
             false,
+            false,
             false
         );
     }
@@ -115,7 +116,8 @@ public class Pathing {
             false,
             false,
             false,
-            true
+            true,
+            false
         );
     }
 

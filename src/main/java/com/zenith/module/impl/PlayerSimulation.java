@@ -111,7 +111,9 @@ public class PlayerSimulation extends Module {
                                              boolean pressingLeft,
                                              boolean pressingRight,
                                              boolean jumping,
-                                             boolean sneaking) {
+                                             boolean sneaking,
+                                             boolean sprinting
+    ) {
         if (!pressingForward || !pressingBack) {
             this.movementInput.pressingForward = pressingForward;
             this.movementInput.pressingBack = pressingBack;
@@ -122,6 +124,7 @@ public class PlayerSimulation extends Module {
         }
         this.movementInput.jumping = jumping;
         this.movementInput.sneaking = sneaking;
+        this.movementInput.sprinting = sprinting;
     }
 
     public synchronized void doMovementInput(final Input input) {
@@ -130,7 +133,9 @@ public class PlayerSimulation extends Module {
                         input.pressingLeft,
                         input.pressingRight,
                         input.jumping,
-                        input.sneaking);
+                        input.sneaking,
+                        input.sprinting
+        );
     }
 
     public void doMovement(final MovementInputRequest request) {
@@ -168,7 +173,7 @@ public class PlayerSimulation extends Module {
 
         updateMovementState();
         isSneaking = movementInput.sneaking;
-        // todo: apply sprinting
+        isSprinting = movementInput.sprinting;
         this.isTouchingWater = World.isTouchingWater(playerCollisionBox);
         this.movementInput.movementForward *= 0.98f;
         this.movementInput.movementSideways *= 0.98f;
@@ -182,6 +187,13 @@ public class PlayerSimulation extends Module {
                 sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SNEAKING));
             } else {
                 sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
+            }
+        }
+        if (lastSprinting != isSprinting) {
+            if (isSprinting) {
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
+            } else {
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
             }
         }
         double xDelta = this.x - this.lastX;
@@ -216,6 +228,7 @@ public class PlayerSimulation extends Module {
 
         this.lastOnGround = this.onGround;
         this.wasSneaking = this.isSneaking;
+        this.lastSprinting = this.isSprinting;
         this.movementInput.reset();
     }
 
@@ -523,6 +536,11 @@ public class PlayerSimulation extends Module {
         }
         movementInput.movementSideways = moveStrafe;
         movementInput.movementForward = moveForward;
+        if (movementInput.sprinting) {
+            // cannot sprint any direction except forwards
+            if (moveForward <= 0.0f || movementInput.sneaking)
+                movementInput.sprinting = false;
+        }
     }
 
     private float getSpeed() {
