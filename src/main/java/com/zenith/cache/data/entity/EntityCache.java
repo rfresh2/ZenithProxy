@@ -44,8 +44,8 @@ public class EntityCache implements CachedData {
         this.cachedEntities.put(entity.getEntityId(), entity);
     }
 
-    public void remove(int id)  {
-        this.cachedEntities.remove(id);
+    public Entity remove(int id)  {
+        return this.cachedEntities.remove(id);
     }
 
     @SuppressWarnings("unchecked")

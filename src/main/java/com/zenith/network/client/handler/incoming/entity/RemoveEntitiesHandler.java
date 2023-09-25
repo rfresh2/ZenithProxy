@@ -27,7 +27,12 @@ public class RemoveEntitiesHandler implements AsyncIncomingHandler<ClientboundRe
                     });
                 }
             }
-            CACHE.getEntityCache().remove(id);
+            Entity removed = CACHE.getEntityCache().remove(id);
+            if (removed != null) {
+                for (int passenger : removed.getPassengerIds()) {
+                    CACHE.getEntityCache().get(passenger).dismountVehicle();
+                }
+            }
         }
         return true;
     }

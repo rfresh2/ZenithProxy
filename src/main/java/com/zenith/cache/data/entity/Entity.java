@@ -44,6 +44,8 @@ public abstract class Entity {
     protected Map<AttributeType, Attribute> attributes = new ConcurrentHashMap<>();
     protected List<EntityMetadata> metadata = new ArrayList<>();
     protected IntArrayList passengerIds = new IntArrayList();
+    protected boolean isInVehicle;
+    protected int vehicleId;
     protected ObjectData objectData;
 
     public void addPackets(@NonNull Consumer<Packet> consumer)  {
@@ -69,5 +71,15 @@ public abstract class Entity {
         for (Attribute attribute : attributes) {
             this.attributes.put(attribute.getType(), attribute);
         }
+    }
+
+    public void mountVehicle(int vehicleId) {
+        this.isInVehicle = true;
+        this.vehicleId = vehicleId;
+    }
+
+    public void dismountVehicle() {
+        this.isInVehicle = false;
+        this.vehicleId = -1;
     }
 }

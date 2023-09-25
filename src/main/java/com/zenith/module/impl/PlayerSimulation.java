@@ -4,6 +4,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.Proxy;
 import com.zenith.event.SimpleEventBus;
@@ -181,54 +182,60 @@ public class PlayerSimulation extends Module {
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         travel(movementInputVec);
 
-        // send movement packets based on position
-        if (wasSneaking != isSneaking) {
-            if (isSneaking) {
-                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SNEAKING));
-            } else {
-                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
+        if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            sendClientPacketAsync(new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch));
+            sendClientPacketAsync(new ServerboundPlayerInputPacket(0.0f, 0.0f, false, false));
+            // todo: handle vehicle travel movement
+        } else {
+            // send movement packets based on position
+            if (wasSneaking != isSneaking) {
+                if (isSneaking) {
+                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SNEAKING));
+                } else {
+                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
+                }
             }
-        }
-        if (lastSprinting != isSprinting) {
-            if (isSprinting) {
-                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
-            } else {
-                sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
+            if (lastSprinting != isSprinting) {
+                if (isSprinting) {
+                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
+                } else {
+                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
+                }
             }
-        }
-        double xDelta = this.x - this.lastX;
-        double yDelta = this.y - this.lastY;
-        double zDelta = this.z - this.lastZ;
-        double pitchDelta = this.pitch - this.lastPitch;
-        double yawDelta = this.yaw - this.lastYaw;
-        ++this.ticksSinceLastPositionPacketSent;
-        boolean shouldUpdatePos = MathHelper.squaredMagnitude(xDelta, yDelta, zDelta) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20;
-        boolean shouldUpdateRot = pitchDelta != 0.0 || yawDelta != 0.0;
-        if (shouldUpdatePos && shouldUpdateRot) {
-            sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(this.onGround, this.x, this.y, this.z, this.yaw, this.pitch));
-        } else if (shouldUpdatePos) {
-            sendClientPacketAsync(new ServerboundMovePlayerPosPacket(this.onGround, this.x, this.y, this.z));
-        } else if (shouldUpdateRot) {
-            sendClientPacketAsync(new ServerboundMovePlayerRotPacket(this.onGround, this.yaw, this.pitch));
-        } else if (this.lastOnGround != this.onGround) {
-            sendClientPacketAsync(new ServerboundMovePlayerStatusOnlyPacket(this.onGround));
-        }
+            double xDelta = this.x - this.lastX;
+            double yDelta = this.y - this.lastY;
+            double zDelta = this.z - this.lastZ;
+            double pitchDelta = this.pitch - this.lastPitch;
+            double yawDelta = this.yaw - this.lastYaw;
+            ++this.ticksSinceLastPositionPacketSent;
+            boolean shouldUpdatePos = MathHelper.squaredMagnitude(xDelta, yDelta, zDelta) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20;
+            boolean shouldUpdateRot = pitchDelta != 0.0 || yawDelta != 0.0;
+            if (shouldUpdatePos && shouldUpdateRot) {
+                sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(this.onGround, this.x, this.y, this.z, this.yaw, this.pitch));
+            } else if (shouldUpdatePos) {
+                sendClientPacketAsync(new ServerboundMovePlayerPosPacket(this.onGround, this.x, this.y, this.z));
+            } else if (shouldUpdateRot) {
+                sendClientPacketAsync(new ServerboundMovePlayerRotPacket(this.onGround, this.yaw, this.pitch));
+            } else if (this.lastOnGround != this.onGround) {
+                sendClientPacketAsync(new ServerboundMovePlayerStatusOnlyPacket(this.onGround));
+            }
 
-        if (shouldUpdatePos) {
-            this.lastX = this.x;
-            this.lastY = this.y;
-            this.lastZ = this.z;
-            this.ticksSinceLastPositionPacketSent = 0;
-        }
+            if (shouldUpdatePos) {
+                this.lastX = this.x;
+                this.lastY = this.y;
+                this.lastZ = this.z;
+                this.ticksSinceLastPositionPacketSent = 0;
+            }
 
-        if (shouldUpdateRot) {
-            this.lastYaw = this.yaw;
-            this.lastPitch = this.pitch;
-        }
+            if (shouldUpdateRot) {
+                this.lastYaw = this.yaw;
+                this.lastPitch = this.pitch;
+            }
 
-        this.lastOnGround = this.onGround;
-        this.wasSneaking = this.isSneaking;
-        this.lastSprinting = this.isSprinting;
+            this.lastOnGround = this.onGround;
+            this.wasSneaking = this.isSneaking;
+            this.lastSprinting = this.isSprinting;
+        }
         this.movementInput.reset();
     }
 
