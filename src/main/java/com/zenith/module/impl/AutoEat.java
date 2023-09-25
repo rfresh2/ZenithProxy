@@ -156,7 +156,7 @@ public class AutoEat extends Module {
     }
 
     @Override
-    public void clientTickStopping() {
+    public void clientTickStopped() {
         swapping = false;
         actionId = 0;
         delay = 0;

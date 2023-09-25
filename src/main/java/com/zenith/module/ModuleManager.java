@@ -123,11 +123,11 @@ public class ModuleManager {
     public synchronized void stopClientTicks() {
         synchronized (this) {
             if (nonNull(this.clientTickFuture)) {
-                this.clientTickFuture.cancel(true);
+                this.clientTickFuture.cancel(false);
                 while (!this.clientTickFuture.isDone()) {
                     Wait.waitALittleMs(50);
                 }
-                getModules().forEach(Module::clientTickStopping);
+                getModules().forEach(Module::clientTickStopped);
             }
         }
     }

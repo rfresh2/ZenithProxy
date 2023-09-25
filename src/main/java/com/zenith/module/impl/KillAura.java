@@ -119,7 +119,7 @@ public class KillAura extends Module {
     }
 
     @Override
-    public void clientTickStopping() {
+    public void clientTickStopped() {
         delay = 0;
         isAttacking = false;
     }

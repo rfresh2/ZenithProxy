@@ -71,7 +71,7 @@ public abstract class Module {
     public void clientTickStarting() {
     }
 
-    public void clientTickStopping() {
+    public void clientTickStopped() {
     }
 
     public void sendClientPacketAsync(final Packet packet) {

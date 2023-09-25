@@ -88,7 +88,7 @@ public class AntiAFK extends Module {
     }
 
     @Override
-    public void clientTickStopping() {
+    public void clientTickStopped() {
         reset();
     }
 

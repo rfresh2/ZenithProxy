@@ -69,6 +69,8 @@ public class PlayerCache implements CachedData {
     protected boolean creative;
     protected float flySpeed;
     protected float walkSpeed;
+    protected boolean isSneaking = false;
+    protected boolean isSprinting = false;
     protected Map<String, Map<String, int[]>> tags = new HashMap<>();
     protected EntityEvent opLevel = EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0;
 
@@ -108,6 +110,7 @@ public class PlayerCache implements CachedData {
         this.thePlayer.setFood(20);
         this.thePlayer.setSaturation(5);
         this.thePlayer.getPotionEffectMap().clear();
+        this.isSneaking = this.isSprinting = false;
     }
 
     @Override

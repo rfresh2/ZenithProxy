@@ -77,11 +77,12 @@ public class PlayerSimulation extends Module {
 
     @Override
     public synchronized void clientTickStarting() {
-        syncFromCache();
+        syncFromCache(false);
+
     }
 
     @Override
-    public void clientTickStopping() {
+    public synchronized void clientTickStopped() {
         if (isSneaking) {
             sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
         }
@@ -219,12 +220,16 @@ public class PlayerSimulation extends Module {
     }
 
     public synchronized void handlePlayerPosRotate(final int teleportId) {
-        syncFromCache();
+        syncFromCache(false);
         addTask(() -> {
             CLIENT_LOG.debug("Server teleport to: {}, {}, {}", this.x, this.y, this.z);
             Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(teleportId));
             Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
         });
+    }
+
+    public synchronized void handleRespawn() {
+        syncFromCache(true);
     }
 
     private void travel(MutableVec3d movementInputVec) {
@@ -480,7 +485,7 @@ public class PlayerSimulation extends Module {
         });
     }
 
-    private void syncFromCache() {
+    private void syncFromCache(boolean full) {
         this.x = CACHE.getPlayerCache().getX();
         this.lastX = this.x;
         this.y = CACHE.getPlayerCache().getY();
@@ -495,8 +500,13 @@ public class PlayerSimulation extends Module {
         this.lastOnGround = true;
         this.velocity = new MutableVec3d(0, 0, 0);
         this.ticksSinceLastPositionPacketSent = 0;
-        this.isSneaking = false;
-        this.wasSneaking = false;
+        if (full) {
+            this.isSneaking = this.wasSneaking = false;
+            this.isSprinting = this.lastSprinting = false;
+        } else {
+            this.isSneaking = CACHE.getPlayerCache().isSneaking();
+            this.isSprinting = CACHE.getPlayerCache().isSprinting();
+        }
         syncPlayerCollisionBox();
     }
 
