@@ -94,7 +94,7 @@ public class Spook extends Module {
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
             Vec2f rotationTo = Pathing.rotationTo(nearestPlayer.get().getX(),
-                                             nearestPlayer.get().getY(),
+                                             nearestPlayer.get().getY()+1.6,
                                              nearestPlayer.get().getZ());
             PATHING.rotate(rotationTo.x(), rotationTo.y(), MOVEMENT_PRIORITY);
         } else {
@@ -108,7 +108,7 @@ public class Spook extends Module {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
                 Vec2f rotationTo = Pathing.rotationTo(target.getX(),
-                                                      target.getY(),
+                                                      target.getY() +1.6,
                                                       target.getZ());
                 PATHING.rotate(rotationTo.x(), rotationTo.y(), MOVEMENT_PRIORITY);
             } else {
