@@ -103,7 +103,7 @@ ext {
     lombokVersion = "1.18.28"
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
-    nettyVersion = '4.1.97.Final'
+    nettyVersion = '4.1.98.Final'
     jooqVersion = "3.18.6"
 }
 
