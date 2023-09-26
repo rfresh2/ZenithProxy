@@ -4,12 +4,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundKe
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.network.server.handler.shared.incoming.KeepAliveHandler;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 
 import java.time.Instant;
+import java.util.IdentityHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiConsumer;
@@ -23,15 +23,15 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class HandlerRegistry<S extends Session> {
     @NonNull
-    protected final Object2ObjectOpenHashMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
+    protected final IdentityHashMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
     @NonNull
-    protected final Object2ObjectOpenHashMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
+    protected final IdentityHashMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
     @NonNull
-    protected final Object2ObjectOpenHashMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
+    protected final IdentityHashMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
     @NonNull
     protected final Logger logger;
     protected final boolean allowUnhandled;
-    protected static final ScheduledExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(8);
+    protected static final ScheduledExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(2);
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
@@ -85,11 +85,11 @@ public class HandlerRegistry<S extends Session> {
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
 
-        protected final Object2ObjectOpenHashMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new Object2ObjectOpenHashMap<>();
+        protected final IdentityHashMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
-        protected final Object2ObjectOpenHashMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new Object2ObjectOpenHashMap<>();
+        protected final IdentityHashMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
 
-        protected final Object2ObjectOpenHashMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new Object2ObjectOpenHashMap<>();
+        protected final IdentityHashMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
         @NonNull
         protected Logger logger;
         protected boolean allowUnhandled = true;
