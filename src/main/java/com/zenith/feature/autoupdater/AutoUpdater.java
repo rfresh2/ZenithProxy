@@ -12,7 +12,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
@@ -31,7 +30,7 @@ public abstract class AutoUpdater {
             DisconnectEvent.class, this::handleDisconnectEvent
         );
         scheduleUpdateCheck(this::updateCheck,
-                            ThreadLocalRandom.current().nextInt(300),
+                            0,
                             Math.max(CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, 300),
                             TimeUnit.SECONDS);
     }

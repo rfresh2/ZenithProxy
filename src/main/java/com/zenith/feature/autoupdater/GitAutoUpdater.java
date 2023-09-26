@@ -22,7 +22,6 @@ public class GitAutoUpdater extends AutoUpdater {
 
     @Override
     public void start() {
-        super.start();
         if (isNull(git)) { // lazily init
             try {
                 git = Git.open(new File(System.getProperty("user.dir")));
@@ -30,6 +29,7 @@ public class GitAutoUpdater extends AutoUpdater {
                 DEFAULT_LOG.error("Error starting AutoUpdater", e);
             }
         }
+        super.start();
     }
 
     @Override

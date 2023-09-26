@@ -69,7 +69,7 @@
   }]},
   "bundles":[{
     "name":"org.eclipse.jgit.internal.JGitText",
-    "locales":["und"]
+    "locales":["", "und"]
   }, {
     "name":"sun.awt.resources.awt",
     "classNames":["sun.awt.resources.awt"]
