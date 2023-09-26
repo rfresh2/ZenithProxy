@@ -11,6 +11,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
@@ -54,9 +55,7 @@ import com.zenith.network.server.handler.shared.incoming.KeepAliveHandler;
 import com.zenith.network.server.handler.shared.outgoing.GameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.PingOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
-import com.zenith.network.server.handler.spectator.incoming.PlayerCommandSpectatorHandler;
-import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
-import com.zenith.network.server.handler.spectator.incoming.SpectatorPongHandler;
+import com.zenith.network.server.handler.spectator.incoming.*;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
@@ -162,6 +161,8 @@ public class Shared {
         .registerInbound(ServerboundMovePlayerRotPacket.class, new PlayerRotationSpectatorHandler())
         .registerInbound(ServerboundChatPacket.class, new ServerChatSpectatorHandler())
         .registerInbound(ServerboundPlayerCommandPacket.class, new PlayerCommandSpectatorHandler())
+        .registerInbound(ServerboundTeleportToEntityPacket.class, new TeleportToEntitySpectatorHandler())
+        .registerInbound(ServerboundInteractPacket.class, new InteractEntitySpectatorHandler())
 
         .registerOutbound(ClientboundGameProfilePacket.class, new GameProfileOutgoingHandler())
         .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
