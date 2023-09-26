@@ -367,8 +367,8 @@ def validate_system_with_config():
         return True
     elif release_channel.startswith("java"):
         java_version = get_java_version()
-        if java_version is None or java_version < 17:
-            print("Invalid Java version on PATH. Found: '" + java_version + "'Please install Java 17 or higher.")
+        if java_version is None or java_version < 21:
+            print("Invalid Java version on PATH. Found: '" + java_version + "'Please install Java 21 or higher.")
             return False
         return True
     elif release_channel.startswith("linux"):

@@ -1,10 +1,8 @@
 # ZenithProxy
 
-Discord Server: [rfresh's dev server](https://discord.gg/nJZrSaRKtb)
+[Discord Server](https://discord.gg/nJZrSaRKtb)
 
-Minecraft 1.12.2 proxy/bot intended for use on 2b2t.org. 
-
-Minecraft 1.20 port is currently in beta, info and updates in the discord server linked above.
+Minecraft 1.20.1 proxy/bot intended for use on 2b2t.org. 
 
 The primary purpose is to have Minecraft accounts always online and securely shared by multiple people.
 
@@ -47,9 +45,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
     * Without discord, all commands are still supported in the interactive terminal
 * Spectator mode
   * Multiple players can connect to the proxy and spectate the player as entities in-game or playercam
-* Advanced AntiAFK with pathing and gravity
-* 2b2t Queue Skip
-  * Reconnects and skips the queue after the proxy is online for 6 hours (2b2t's max connection time). Can only be performed once.
+* Advanced AntiAFK with full player movement simulation
 * Modules including AutoEat, AutoDisconnect, AutoReconnect, AutoRespawn, AutoTotem, KillAura, Spammer, AutoReply
 * Many, many, more features.
 
@@ -73,10 +69,10 @@ OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
 ZenithProxy has 3 release channels:
 
 * (Default) `java` - Supports all operating systems
-  * Requires Java 17+ (20+ recommended). [Java Downloads](https://adoptium.net/)
+  * Requires Java 21+. [Java Downloads](https://adoptium.net/)
 * (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
 * `git` - Locally builds and runs the proxy from source in Java
-  * Requires Java 17+ (20+ recommended), plus [git](https://git-scm.com/downloads) installed and the repository cloned.
+  * Requires Java 21+, plus [git](https://git-scm.com/downloads) installed and the repository cloned.
 
 
 ### DNS Setup

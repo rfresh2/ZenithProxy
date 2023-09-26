@@ -14,7 +14,7 @@ buildscript {
 
 plugins {
     id 'nu.studer.jooq' version '8.2.1'
-    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "com.github.johnrengelman.shadow" version "8.2.0-SNAPSHOT"
     id 'java'
     id 'org.graalvm.buildtools.native' version '0.9.27'
 }
@@ -24,12 +24,11 @@ version = "1.0.0"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(20)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    sourceCompatibility = targetCompatibility = "17"
     options.encoding = "UTF-8"
     options.deprecation(true)
 }
@@ -305,6 +304,7 @@ shadowJar {
     exclude 'META-INF/proguard/**'
     exclude 'META-INF/gradle/**'
     exclude 'META-INF/versions/**'
+    // todo: this is broken until https://github.com/johnrengelman/shadow/pull/879 is merged
     minimize {
         exclude(dependency("org.slf4j:slf4j-api:.*"))
         exclude(dependency("ch.qos.logback:.*:.*"))

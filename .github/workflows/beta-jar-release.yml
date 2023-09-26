@@ -18,8 +18,8 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '20'
-          distribution: 'temurin'
+          java-version: '21'
+          distribution: 'zulu'
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
