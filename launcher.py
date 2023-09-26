@@ -349,9 +349,10 @@ def get_java_version():
     try:
         output = subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True)
         version_line = [line for line in output.split('\n') if "version" in line][0]
-        version_match = re.search(r'"(\d+\.\d+)\.', version_line)
+        version_match = re.search(r'"(\d+(\.\d+)?)', version_line)
         if version_match:
-            return float(version_match.group(1))
+            version = version_match.group(1)
+            return float(version) if '.' in version else int(version)
     except subprocess.CalledProcessError as e:
         print("Error:", e.output)
     return None
