@@ -104,7 +104,7 @@ configurations {
 }
 
 ext {
-    lombokVersion = "1.18.28"
+    lombokVersion = "1.18.30"
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
     nettyVersion = '4.1.98.Final'
