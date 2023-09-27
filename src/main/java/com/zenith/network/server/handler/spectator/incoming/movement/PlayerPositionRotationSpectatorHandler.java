@@ -7,6 +7,8 @@ import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.util.EntityStats;
+import com.zenith.util.math.MathHelper;
 import lombok.NonNull;
 
 public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<ServerboundMovePlayerPosRotPacket, ServerConnection> {
@@ -29,17 +31,27 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<S
         if (selfSession.isPlayerCam()) {
             return;
         }
+        double playerEyeHeight = 1.62;
+        EntityStats entityStats = new EntityStats();
+
+//        System.out.println(selfSession.getSpectatorEntity().getSelfEntityMetadata());
+// I don't know how to properly get the string "cat" or whatever the config is set to. I'm stupid. :)
+        double specEntityEyeHeight = entityStats.getEntityData("cat").getEyeHeight();
+        double specEntityTotalWidth = entityStats.getEntityData("cat").getTotalWidth();
         float yaw = getYaw(selfSession);
+        float pitch = selfSession.getSpectatorPlayerCache().getPitch();
+
+
         selfSession.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(selfSession))
                 .forEach(connection -> {
                     connection.send(new ClientboundTeleportEntityPacket(
                             selfSession.getSpectatorEntityId(),
                             selfSession.getSpectatorPlayerCache().getX(),
-                            selfSession.getSpectatorPlayerCache().getY(),
+                            selfSession.getSpectatorPlayerCache().getY()+playerEyeHeight-specEntityEyeHeight,
                             selfSession.getSpectatorPlayerCache().getZ(),
                             yaw,
-                            selfSession.getSpectatorPlayerCache().getPitch(),
+                            pitch,
                             false
                     ));
                     connection.send(new ClientboundRotateHeadPacket(
@@ -47,13 +59,19 @@ public class PlayerPositionRotationSpectatorHandler implements IncomingHandler<S
                             yaw
                     ));
                 });
+
+        double[] doubles = MathHelper.translateEntity(selfSession.getSpectatorPlayerCache().getX(),
+                selfSession.getSpectatorPlayerCache().getY() + playerEyeHeight - specEntityEyeHeight,
+                selfSession.getSpectatorPlayerCache().getZ(),
+                yaw, pitch,
+                (specEntityTotalWidth*-1)-0.25);
         selfSession.send(new ClientboundTeleportEntityPacket(
                 selfSession.getSpectatorEntityId(),
-                selfSession.getSpectatorPlayerCache().getX(),
-                selfSession.getSpectatorPlayerCache().getY(),
-                selfSession.getSpectatorPlayerCache().getZ(),
+                doubles[0],
+                doubles[1],
+                doubles[2],
                 yaw,
-                selfSession.getSpectatorPlayerCache().getPitch(),
+                pitch,
                 false
         ));
         selfSession.send(new ClientboundRotateHeadPacket(
