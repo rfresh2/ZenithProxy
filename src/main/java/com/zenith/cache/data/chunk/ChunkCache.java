@@ -185,15 +185,18 @@ public class ChunkCache implements CachedData {
                 return;
             }
             if (blockName.equals("chest")) {
-                writeTileEntity(chunk, "minecraft:chest", BlockEntityType.CHEST, pos);
+                writeTileEntity(chunk, blockName, BlockEntityType.CHEST, pos);
             } else if (blockName.equals("trapped_chest")) {
-                writeTileEntity(chunk, "minecraft:trapped_chest", BlockEntityType.TRAPPED_CHEST, pos);
+                writeTileEntity(chunk, blockName, BlockEntityType.TRAPPED_CHEST, pos);
             } else if (blockName.equals("ender_chest")) {
-                writeTileEntity(chunk, "minecraft:ender_chest", BlockEntityType.ENDER_CHEST, pos);
+                writeTileEntity(chunk, blockName, BlockEntityType.ENDER_CHEST, pos);
             } else if (blockName.equals("enchanting_table")) {
-                writeTileEntity(chunk, "minecraft:enchanting_table", BlockEntityType.ENCHANTING_TABLE, pos);
+                writeTileEntity(chunk, blockName, BlockEntityType.ENCHANTING_TABLE, pos);
+            } else if (blockName.endsWith("_bed")) {
+                writeTileEntity(chunk, blockName, BlockEntityType.BED, pos);
+            } else if (blockName.endsWith("_banner")) {
+                writeTileEntity(chunk, blockName, BlockEntityType.BANNER, pos);
             }
-            // todo: fill out for every BlockEntityType value?
         }
     }
 
@@ -201,7 +204,7 @@ public class ChunkCache implements CachedData {
         // todo: no idea if this compound tag is correct still
         final CompoundTag tileEntityTag = new CompoundTag(blockName, ImmutableMap.of(
             // there's probably more properties some tile entities need but this seems to work well enough
-            "id", new StringTag("id", blockName),
+            "id", new StringTag("id", "minecraft:" + blockName),
             "x", new IntTag("x", position.getX()),
             "y", new IntTag("y", position.getY()),
             "z", new IntTag("z", position.getZ())
