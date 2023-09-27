@@ -45,19 +45,4 @@ public class MathHelper {
         return Math.max(min, Math.min(max, value));
     }
 
-    public static double[] translateEntity(double x, double y, double z, float yaw, float pitch, double distance) {
-        double yawRadians = Math.toRadians(yaw);
-        double pitchRadians = Math.toRadians(pitch);
-
-        double xOffset = -Math.sin(yawRadians) * Math.cos(pitchRadians) * distance;
-        double yOffset = -Math.sin(pitchRadians) * distance;
-        double zOffset = Math.cos(yawRadians) * Math.cos(pitchRadians) * distance;
-
-        double newX = x + xOffset;
-        double newY = y + yOffset;
-        double newZ = z + zOffset;
-
-        return new double[]{newX,newY,newZ};
-    }
-
 }
