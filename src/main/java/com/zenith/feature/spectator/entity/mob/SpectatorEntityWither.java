@@ -38,6 +38,20 @@ public class SpectatorEntityWither extends SpectatorMob {
     EntityType getType() {
         return EntityType.WITHER;
     }
+    // A list of all minecraft mobs with eye height, total height, and total width (on 1.20)
+    // https://gist.github.com/bradcarnage/c894976345a0e57280c8619fe3ac0282
+    public double eyeHeight = 2.9750001;
+    public double totalHeight = 3.5;
+    public double totalWidth = 0.9;
+    public double getEyeHeight() {
+        return eyeHeight;
+    }
+    public double getTotalHeight() {
+        return totalHeight;
+    }
+    public double getTotalWidth() {
+        return totalWidth;
+    }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
