@@ -14,7 +14,7 @@ public class PlayerPositionSpectatorHandler implements IncomingHandler<Serverbou
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ());
-        PlayerPositionRotationSpectatorHandler.updateSpectatorPosition(session);
+        SpectatorUtils.updateSpectatorPosition(session);
         SpectatorUtils.checkSpectatorPositionOutOfRender(session);
         return false;
     }

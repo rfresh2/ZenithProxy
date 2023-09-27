@@ -53,6 +53,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                     if (!connection.equals(session) || session.isShowSelfEntity()) {
                         connection.send(session.getEntitySpawnPacket());
                         connection.send(session.getEntityMetadataPacket());
+                        SpectatorUtils.updateSpectatorPosition(session);
                     }
                 });
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Updated entity to: " + entityId + "&r"), false));

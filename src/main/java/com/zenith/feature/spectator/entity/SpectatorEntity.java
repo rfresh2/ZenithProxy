@@ -19,16 +19,7 @@ public abstract class SpectatorEntity {
     }
     // A list of all minecraft mobs with eye height, total height, and total width (on 1.20)
     // https://gist.github.com/bradcarnage/c894976345a0e57280c8619fe3ac0282
-    public double eyeHeight = 1.62;
-    public double totalHeight = 1.95;
-    public double totalWidth = 0.6;
-    public double getEyeHeight() {
-        return eyeHeight;
-    }
-    public double getTotalHeight() {
-        return totalHeight;
-    }
-    public double getTotalWidth() {
-        return totalWidth;
-    }
+    public abstract double getEyeHeight();
+    public abstract double getHeight();
+    public abstract double getWidth();
 }

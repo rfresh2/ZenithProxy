@@ -38,19 +38,18 @@ public class SpectatorEntityDog extends SpectatorMob {
     EntityType getType() {
         return EntityType.WOLF;
     }
-    // A list of all minecraft mobs with eye height, total height, and total width (on 1.20)
-    // https://gist.github.com/bradcarnage/c894976345a0e57280c8619fe3ac0282
-    public double eyeHeight = 0.68;
-    public double totalHeight = 0.85;
-    public double totalWidth = 0.6;
+
+    @Override
     public double getEyeHeight() {
-        return eyeHeight;
+        return 0.68;
     }
-    public double getTotalHeight() {
-        return totalHeight;
+    @Override
+    public double getHeight() {
+        return 0.85;
     }
-    public double getTotalWidth() {
-        return totalWidth;
+    @Override
+    public double getWidth() {
+        return 0.6;
     }
 
     @Override
