@@ -40,6 +40,19 @@ public class SpectatorEntityGhast extends SpectatorMob {
     }
 
     @Override
+    public double getEyeHeight() {
+        return 2;
+    }
+    @Override
+    public double getHeight() {
+        return 4.0;
+    }
+    @Override
+    public double getWidth() {
+        return 6;
+    }
+
+    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = ThreadLocalRandom.current().nextFloat();
         final int randInt = ThreadLocalRandom.current().nextInt(4);

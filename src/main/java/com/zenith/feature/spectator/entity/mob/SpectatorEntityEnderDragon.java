@@ -42,6 +42,19 @@ public class SpectatorEntityEnderDragon extends SpectatorMob {
     }
 
     @Override
+    public double getEyeHeight() {
+        return 1.0;
+    }
+    @Override
+    public double getHeight() {
+        return 8.0;
+    }
+    @Override
+    public double getWidth() {
+        return 16;
+    }
+
+    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = ThreadLocalRandom.current().nextFloat();
         final int randInt = ThreadLocalRandom.current().nextInt(4);

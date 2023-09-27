@@ -40,6 +40,19 @@ public class SpectatorEntityVex extends SpectatorMob {
     }
 
     @Override
+    public double getEyeHeight() {
+        return 0.51875;
+    }
+    @Override
+    public double getHeight() {
+        return 0.8;
+    }
+    @Override
+    public double getWidth() {
+        return 0.8;
+    }
+
+    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = ThreadLocalRandom.current().nextFloat();
         final int randInt = ThreadLocalRandom.current().nextInt(4);

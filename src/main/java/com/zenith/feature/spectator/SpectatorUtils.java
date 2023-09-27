@@ -15,14 +15,15 @@ import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.cache.DataCache;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.util.math.MathHelper;
 
 import java.util.Collection;
 import java.util.function.Supplier;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.CACHE;
-import static com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler.updateSpectatorPosition;
 import static java.util.Arrays.asList;
 
 public final class SpectatorUtils {
@@ -173,6 +174,55 @@ public final class SpectatorUtils {
         final int playerZ = (int) CACHE.getPlayerCache().getZ() >> 4;
         if (Math.abs(spectX - playerX) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1) || Math.abs(spectZ - playerZ) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1)) {
             SpectatorUtils.syncSpectatorPositionToPlayer(spectConnection);
+        }
+    }
+
+    public static void updateSpectatorPosition(final ServerConnection selfSession) {
+        if (selfSession.isPlayerCam()) {
+            return;
+        }
+        double playerEyeHeight = 1.6;
+        double specEntityEyeHeight = selfSession.getSpectatorEntity().getEyeHeight();
+        double specEntityTotalWidth = selfSession.getSpectatorEntity().getWidth();
+        // clamping avoids moving the spectator entity directly in view of the player in 1st person at steep pitches
+        float clampedPitch = MathHelper.clamp(selfSession.getSpectatorPlayerCache().getPitch(), -30, 30);
+
+        double distance = (specEntityTotalWidth * -0.5) - 0.5;
+        double yawRadians = Math.toRadians(selfSession.getSpectatorPlayerCache().getYaw());
+        double pitchRadians = Math.toRadians(clampedPitch);
+
+        double xOffset = -Math.sin(yawRadians) * Math.cos(pitchRadians) * distance;
+        double yOffset = -Math.sin(pitchRadians) * distance;
+        double zOffset = Math.cos(yawRadians) * Math.cos(pitchRadians) * distance;
+
+        double newX = selfSession.getSpectatorPlayerCache().getX() + xOffset;
+        double newY = selfSession.getSpectatorPlayerCache().getY() + playerEyeHeight - specEntityEyeHeight + yOffset;
+        double newZ = selfSession.getSpectatorPlayerCache().getZ() + zOffset;
+
+        Proxy.getInstance().getActiveConnections()
+                .forEach(connection -> {
+                    connection.send(new ClientboundTeleportEntityPacket(
+                        selfSession.getSpectatorEntityId(),
+                        newX,
+                        newY,
+                        newZ,
+                        getDisplayYaw(selfSession),
+                        selfSession.getSpectatorPlayerCache().getPitch(),
+                        false
+                    ));
+                    connection.send(new ClientboundRotateHeadPacket(
+                        selfSession.getSpectatorEntityId(),
+                        getDisplayYaw(selfSession)
+                    ));
+                });
+    }
+
+    public static float getDisplayYaw(final ServerConnection serverConnection) {
+        // idk why but dragon is displayed 180 degrees off from what you'd expect
+        if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityEnderDragon) {
+            return serverConnection.getSpectatorPlayerCache().getYaw() - 180f;
+        } else {
+            return serverConnection.getSpectatorPlayerCache().getYaw();
         }
     }
 }

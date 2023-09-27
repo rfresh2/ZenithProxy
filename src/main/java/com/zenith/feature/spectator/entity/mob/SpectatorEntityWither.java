@@ -40,6 +40,19 @@ public class SpectatorEntityWither extends SpectatorMob {
     }
 
     @Override
+    public double getEyeHeight() {
+        return 2.9750001;
+    }
+    @Override
+    public double getHeight() {
+        return 3.5;
+    }
+    @Override
+    public double getWidth() {
+        return 0.9;
+    }
+
+    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = ThreadLocalRandom.current().nextFloat();
         final int randInt = ThreadLocalRandom.current().nextInt(4);

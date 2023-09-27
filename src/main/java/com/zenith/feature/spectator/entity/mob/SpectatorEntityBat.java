@@ -38,6 +38,18 @@ public class SpectatorEntityBat extends SpectatorMob {
     EntityType getType() {
         return EntityType.BAT;
     }
+    @Override
+    public double getEyeHeight() {
+        return 0.45;
+    }
+    @Override
+    public double getHeight() {
+        return 0.9;
+    }
+    @Override
+    public double getWidth() {
+        return 0.5;
+    }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {

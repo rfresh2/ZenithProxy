@@ -40,6 +40,19 @@ public class SpectatorEntityCreeper extends SpectatorMob {
     }
 
     @Override
+    public double getEyeHeight() {
+        return 1.445;
+    }
+    @Override
+    public double getHeight() {
+        return 1.7;
+    }
+    @Override
+    public double getWidth() {
+        return 0.6;
+    }
+
+    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = ThreadLocalRandom.current().nextFloat();
         return Optional.of(new ClientboundSoundPacket(

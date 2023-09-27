@@ -42,6 +42,19 @@ public class SpectatorEntityParrot extends SpectatorMob {
     }
 
     @Override
+    public double getEyeHeight() {
+        return 0.54;
+    }
+    @Override
+    public double getHeight() {
+        return 0.9;
+    }
+    @Override
+    public double getWidth() {
+        return 0.5;
+    }
+
+    @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
         final float randFloat = ThreadLocalRandom.current().nextFloat();
         return Optional.of(new ClientboundSoundPacket(

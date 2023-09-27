@@ -39,6 +39,18 @@ public class SpectatorEntityCat extends SpectatorMob {
     EntityType getType() {
         return EntityType.CAT;
     }
+    @Override
+    public double getEyeHeight() {
+        return 0.35;
+    }
+    @Override
+    public double getHeight() {
+        return 0.7;
+    }
+    @Override
+    public double getWidth() {
+        return 0.6;
+    }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
