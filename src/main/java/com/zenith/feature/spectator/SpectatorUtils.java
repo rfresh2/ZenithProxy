@@ -112,7 +112,7 @@ public final class SpectatorUtils {
 
     public static EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {
         EntityPlayer spectatorEntityPlayer = new EntityPlayer();
-        spectatorEntityPlayer.setUuid(session.getProfileCache().getProfile().getId());
+        spectatorEntityPlayer.setUuid(session.getSpectatorFakeProfileCache().getProfile().getId());
         spectatorEntityPlayer.setSelfPlayer(true);
         spectatorEntityPlayer.setX(CACHE.getPlayerCache().getX());
         spectatorEntityPlayer.setY(CACHE.getPlayerCache().getY() + 3); // spawn above player

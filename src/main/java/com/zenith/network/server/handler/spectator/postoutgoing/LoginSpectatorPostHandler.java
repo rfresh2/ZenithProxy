@@ -27,8 +27,8 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
         session.send(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED, PlayerListEntryAction.UPDATE_GAME_MODE),
             new PlayerListEntry[]{new PlayerListEntry(
-                session.getProfileCache().getProfile().getId(),
-                session.getProfileCache().getProfile(),
+                session.getSpectatorFakeProfileCache().getProfile().getId(),
+                session.getSpectatorFakeProfileCache().getProfile(),
                 true,
                 0,
                 SPECTATOR,

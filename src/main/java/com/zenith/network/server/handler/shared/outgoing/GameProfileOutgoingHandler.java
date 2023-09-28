@@ -10,8 +10,6 @@ import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
 import lombok.NonNull;
 
-import java.util.UUID;
-
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
@@ -60,13 +58,10 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
                 if (isNull(session.getProxy().getCurrentPlayer().get())) {
                     return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
                 } else {
-                    // change UUID to fix the problem where you won't see the account you're logged in as during spectator mode.
-                    // UUID uuid = UUID.randomUUID();
-                    // set UUID to "camera" to get their dope skin rendered. We probably won't see them in any other instance ;P
-                    UUID uuid = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
-                    GameProfile profile = new GameProfile(uuid, packet.getProfile().getName());
-                    session.getProfileCache().setProfile(profile);
-                    return new ClientboundGameProfilePacket(profile);
+                    final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
+                                                              packet.getProfile().getName());
+                    session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
+                    return new ClientboundGameProfilePacket(spectatorFakeProfile);
                 }
             }
         } catch (final Throwable e) {
