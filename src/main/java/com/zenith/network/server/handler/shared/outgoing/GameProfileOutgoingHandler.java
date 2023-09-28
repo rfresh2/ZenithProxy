@@ -51,7 +51,7 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
             }
             SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(packet.getProfile());
-            if (!session.isOnlySpectator() && session.getProxy().getCurrentPlayer().compareAndSet(null, session)) {
+            if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
                 session.setSpectator(false);
                 return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
             } else {

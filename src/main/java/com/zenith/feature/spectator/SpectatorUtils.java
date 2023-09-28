@@ -90,7 +90,7 @@ public final class SpectatorUtils {
     }
 
     private static void spawnSpectatorForOtherSessions(ServerConnection session, ServerConnection connection) {
-        if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
+        if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
             session.send(new ClientboundAddPlayerPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getProfileCache().getProfile().getId(),
@@ -157,7 +157,7 @@ public final class SpectatorUtils {
         session.setAllowSpectatorServerPlayerPosRotate(false);
         session.send(session.getEntitySpawnPacket());
         session.send(session.getSelfEntityMetadataPacket());
-        session.getProxy().getActiveConnections().stream()
+        Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
                     spawnSpectatorForOtherSessions(session, connection);

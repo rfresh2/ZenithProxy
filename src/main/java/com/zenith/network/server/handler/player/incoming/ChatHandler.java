@@ -2,6 +2,7 @@ package com.zenith.network.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.queue.Queue;
@@ -42,25 +43,25 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cchunksync &7- &8Syncs server chunks to the current player"), false));
                 return false;
             } else if ("!dc".equalsIgnoreCase(message)) {
-                session.getProxy().getClient().disconnect(MANUAL_DISCONNECT);
+                Proxy.getInstance().getClient().disconnect(MANUAL_DISCONNECT);
                 return false;
             } else if ("!q".equalsIgnoreCase(message)) {
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &7Queue: &c" + Queue.getQueueStatus().regular + " &r- &7Prio: &a" + Queue.getQueueStatus().prio), false));
                 return false;
             } else if (lowerCase.startsWith("!m")) {
-                session.getProxy().getActiveConnections().forEach(connection -> {
+                Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundSystemChatPacket(MineDown.parse("&c" + session.getProfileCache().getProfile().getName() + " > " + message.substring(2).trim() + "&r"), false));
                 });
                 return false;
             } else if (lowerCase.startsWith("!kick")) {
                 List<String> args = Arrays.asList(lowerCase.split(" "));
                 if (args.size() == 1) {
-                    session.getProxy().getSpectatorConnections().forEach(connection ->
+                    Proxy.getInstance().getSpectatorConnections().forEach(connection ->
                             connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
                     session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cAll Spectators kicked&r"), false));
                 } else {
                     final String playerName = args.get(1);
-                    session.getProxy().getSpectatorConnections().stream()
+                    Proxy.getInstance().getSpectatorConnections().stream()
                             .filter(connection -> connection.getProfileCache().getProfile().getName().equalsIgnoreCase(playerName))
                             .forEach(connection -> {
                                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cKicked " + playerName + "&r"), true));
@@ -77,7 +78,7 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 CONFIG.server.spectator.allowSpectator = !CONFIG.server.spectator.allowSpectator;
                 saveConfig();
                 if (!CONFIG.server.spectator.allowSpectator) {
-                    session.getProxy().getSpectatorConnections().forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
+                    Proxy.getInstance().getSpectatorConnections().forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
                 }
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSpectators toggled " + (CONFIG.server.spectator.allowSpectator ? "on" : "off") + "&r"), false));
                 return false;

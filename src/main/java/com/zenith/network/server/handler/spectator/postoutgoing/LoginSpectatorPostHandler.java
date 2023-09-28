@@ -40,13 +40,13 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
         ));
         SpectatorUtils.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         //send cached data
-        session.getProxy().getActiveConnections().stream()
+        Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
                     connection.send(new ClientboundSystemChatPacket(
                         MineDown.parse("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
                     ));
-                    if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
+                    if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
                         connection.send(new ClientboundSystemChatPacket(
                             MineDown.parse("&9Send private messages: \"!m <message>\"&r"), false
                         ));

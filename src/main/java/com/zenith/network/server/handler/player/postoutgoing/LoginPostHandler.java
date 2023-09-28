@@ -3,6 +3,7 @@ package com.zenith.network.server.handler.player.postoutgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCustomPayloadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
@@ -24,7 +25,7 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
         session.initializeTeam();
         session.syncTeamMembers();
         // init any active spectators
-        session.getProxy().getActiveConnections().stream()
+        Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .filter(connection -> !connection.isPlayerCam())
                 .forEach(connection -> {
