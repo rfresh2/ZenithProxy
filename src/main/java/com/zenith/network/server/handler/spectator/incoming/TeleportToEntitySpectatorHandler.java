@@ -8,7 +8,6 @@ import com.zenith.network.server.ServerConnection;
 public class TeleportToEntitySpectatorHandler implements IncomingHandler<ServerboundTeleportToEntityPacket, ServerConnection> {
     @Override
     public boolean apply(final ServerboundTeleportToEntityPacket packet, final ServerConnection session) {
-        SpectatorUtils.syncSpectatorPositionToEntity(session, packet.getTarget());
-        return false;
+        return SpectatorUtils.syncSpectatorPositionToEntity(session, packet.getTarget());
     }
 }

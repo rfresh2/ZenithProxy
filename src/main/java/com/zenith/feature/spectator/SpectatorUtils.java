@@ -51,9 +51,9 @@ public final class SpectatorUtils {
         });
     }
 
-    public static void syncSpectatorPositionToEntity(final ServerConnection spectConnection, UUID target) {
+    public static boolean syncSpectatorPositionToEntity(final ServerConnection spectConnection, UUID target) {
+        boolean hasUpdatedPos = false;
         if (target != null) {
-            boolean hasUpdatedPos = false;
             if (CACHE.getProfileCache().getProfile().getId().equals(target)) {
                 spectConnection.getSpectatorPlayerCache()
                         .setX(CACHE.getPlayerCache().getX())
@@ -97,6 +97,7 @@ public final class SpectatorUtils {
                 });
             }
         }
+        return hasUpdatedPos;
     }
     public static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
         syncSpectatorPositionToEntity(spectConnection, CACHE.getProfileCache().getProfile().getId());
