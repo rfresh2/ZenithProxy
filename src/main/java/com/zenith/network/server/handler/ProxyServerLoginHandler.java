@@ -76,35 +76,37 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getPortalCooldown()
             ));
             if (!proxy.isInQueue()) { PlayerCache.sync(); }
+        } else if (clientGameProfile.getId().equals(CACHE.getProfileCache().getProfile().getId())) {
+            connection.disconnect("You can't spectate your own UUID.");
+        } else if (clientGameProfile.getName().equals(CACHE.getProfileCache().getProfile().getName())) {
+            connection.disconnect("You can't spectate your own Username.");
+        } else if (nonNull(this.proxy.getCurrentPlayer().get())) {
+            // if we have a current player, allow login but put in spectator
+            connection.setSpectator(true);
+            EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
+            session.send(new ClientboundLoginPacket(
+                    connection.getSpectatorSelfEntityId(),
+                    CACHE.getPlayerCache().isHardcore(),
+                    GameMode.SPECTATOR,
+                    GameMode.SPECTATOR,
+                    CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
+                    CACHE.getChunkCache().getRegistryTag(),
+                    CACHE.getChunkCache().getWorldData().dimensionType(),
+                    CACHE.getChunkCache().getWorldData().worldName(),
+                    CACHE.getChunkCache().getWorldData().hashedSeed(),
+                    CACHE.getPlayerCache().getMaxPlayers(),
+                    CACHE.getChunkCache().getServerViewDistance(),
+                    CACHE.getChunkCache().getServerSimulationDistance(),
+                    false,
+                    CACHE.getPlayerCache().isEnableRespawnScreen(),
+                    CACHE.getChunkCache().getWorldData().debug(),
+                    CACHE.getChunkCache().getWorldData().flat(),
+                    CACHE.getPlayerCache().getLastDeathPos(),
+                    CACHE.getPlayerCache().getPortalCooldown()
+            ));
         } else {
-            if (nonNull(this.proxy.getCurrentPlayer().get())) {
-                // if we have a current player, allow login but put in spectator
-                connection.setSpectator(true);
-                EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
-                session.send(new ClientboundLoginPacket(
-                        connection.getSpectatorSelfEntityId(),
-                        CACHE.getPlayerCache().isHardcore(),
-                        GameMode.SPECTATOR,
-                        GameMode.SPECTATOR,
-                        CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
-                        CACHE.getChunkCache().getRegistryTag(),
-                        CACHE.getChunkCache().getWorldData().dimensionType(),
-                        CACHE.getChunkCache().getWorldData().worldName(),
-                        CACHE.getChunkCache().getWorldData().hashedSeed(),
-                        CACHE.getPlayerCache().getMaxPlayers(),
-                        CACHE.getChunkCache().getServerViewDistance(),
-                        CACHE.getChunkCache().getServerSimulationDistance(),
-                        false,
-                        CACHE.getPlayerCache().isEnableRespawnScreen(),
-                        CACHE.getChunkCache().getWorldData().debug(),
-                        CACHE.getChunkCache().getWorldData().flat(),
-                        CACHE.getPlayerCache().getLastDeathPos(),
-                        CACHE.getPlayerCache().getPortalCooldown()
-                ));
-            } else {
-                // can probably make this state work with some more work but im just gonna block it for now
-                connection.disconnect("A player must be connected in order to spectate!");
-            }
+            // can probably make this state work with some more work but im just gonna block it for now
+            connection.disconnect("A player must be connected in order to spectate!");
         }
     }
 }
