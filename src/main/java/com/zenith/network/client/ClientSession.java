@@ -29,7 +29,7 @@ public class ClientSession extends TcpClientSession {
     public ClientSession(String host, int port, PacketProtocol protocol, @NonNull Proxy proxy) {
         super(host, port, protocol);
         this.proxy = proxy;
-        this.addListener(new ClientListener(this.proxy, this));
+        this.addListener(new ClientListener(this));
     }
 
     @Override

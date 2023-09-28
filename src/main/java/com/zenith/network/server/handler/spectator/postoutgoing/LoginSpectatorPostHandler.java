@@ -22,13 +22,12 @@ import static com.zenith.Shared.CACHE;
 public class LoginSpectatorPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
-        session.setSpectator(true);
         session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
         session.send(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED, PlayerListEntryAction.UPDATE_GAME_MODE),
             new PlayerListEntry[]{new PlayerListEntry(
-                session.getProfileCache().getProfile().getId(),
-                session.getProfileCache().getProfile(),
+                session.getSpectatorFakeProfileCache().getProfile().getId(),
+                session.getSpectatorFakeProfileCache().getProfile(),
                 true,
                 0,
                 SPECTATOR,
@@ -41,19 +40,19 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
         ));
         SpectatorUtils.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         //send cached data
-        session.getProxy().getActiveConnections().stream()
+        Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
                     connection.send(new ClientboundSystemChatPacket(
                         MineDown.parse("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
                     ));
-                    if (connection.equals(session.getProxy().getCurrentPlayer().get())) {
+                    if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
                         connection.send(new ClientboundSystemChatPacket(
                             MineDown.parse("&9Send private messages: \"!m <message>\"&r"), false
                         ));
                     }
                 });
-        session.setLoggedIn(true);
+        session.setLoggedIn();
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();

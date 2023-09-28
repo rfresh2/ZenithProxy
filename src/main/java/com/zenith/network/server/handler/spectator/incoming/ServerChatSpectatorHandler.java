@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveMobEffectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.cache.data.entity.Entity;
+import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.IncomingHandler;
@@ -32,7 +33,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&ce &7- &8List spectator entities. Change with \"!e <entity>\""), false));
         } else if (packet.getMessage().toLowerCase().startsWith("!m")) {
             if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
-                session.getProxy().getClient().send(new ServerboundChatPacket(packet.getMessage().substring(2).trim()));
+                Proxy.getInstance().getClient().send(new ServerboundChatPacket(packet.getMessage().substring(2).trim()));
             } else {
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&cSpectator chat disabled&r"), false));
             }
@@ -49,7 +50,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
             boolean spectatorEntitySet = session.setSpectatorEntity(entityId);
             if (spectatorEntitySet) {
                 // respawn entity on all connections
-                session.getProxy().getActiveConnections().forEach(connection -> {
+                Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                     if (!connection.equals(session) || session.isShowSelfEntity()) {
                         connection.send(session.getEntitySpawnPacket());
@@ -71,7 +72,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
             } else {
                 session.setCameraTarget(CACHE.getPlayerCache().getThePlayer());
                 session.send(new ClientboundSetCameraPacket(CACHE.getPlayerCache().getEntityId()));
-                session.getProxy().getActiveConnections().forEach(connection -> {
+                Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                 });
             }
@@ -82,7 +83,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
             });
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Cleared effects&r"), false));
         } else {
-            session.getProxy().getActiveConnections().forEach(connection -> {
+            Proxy.getInstance().getActiveConnections().forEach(connection -> {
                 connection.send(new ClientboundSystemChatPacket(MineDown.parse("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r"), false));
             });
         }

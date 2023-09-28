@@ -1,5 +1,6 @@
 package com.zenith;
 
+import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.*;
@@ -97,7 +98,7 @@ public class Shared {
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
     public static final String AUTO_DISCONNECT = "AutoDisconnect";
     public static boolean isReconnectableDisconnect(final String reason) {
-        if (reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT)) {
+        if (reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT) || reason.equals(MinecraftConstants.SERVER_CLOSING_MESSAGE)) {
             return false;
         } else if (reason.equals(AUTO_DISCONNECT)) {
             return !CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect;

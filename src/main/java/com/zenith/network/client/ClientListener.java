@@ -1,34 +1,24 @@
 package com.zenith.network.client;
 
 import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.event.session.*;
+import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.util.ComponentSerializer;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.text.Component;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
-
-@RequiredArgsConstructor
-@Getter
-public class ClientListener implements SessionListener {
-    @NonNull
-    protected final Proxy proxy;
-
-    @NonNull
-    protected final ClientSession session;
-
+public record ClientListener(@NonNull ClientSession session) implements SessionListener {
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
-                this.proxy.getActiveConnections().forEach(connection -> connection.send(packet));
+                Proxy.getInstance().getActiveConnections().forEach(connection -> connection.send(packet));
             }
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
@@ -37,15 +27,9 @@ public class ClientListener implements SessionListener {
     }
 
     @Override
-    public void packetSending(PacketSendingEvent event) {
+    public Packet packetSending(final Session session, final Packet packet) {
         try {
-            Packet p1 = event.getPacket();
-            Packet p2 = CLIENT_HANDLERS.handleOutgoing(p1, this.session);
-            if (p2 == null) {
-                event.setCancelled(true);
-            } else if (p1 != p2) {
-                event.setPacket(p2);
-            }
+            return CLIENT_HANDLERS.handleOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
@@ -63,42 +47,42 @@ public class ClientListener implements SessionListener {
     }
 
     @Override
-    public void packetError(PacketErrorEvent event) {
-        CLIENT_LOG.debug("", event.getCause());
-        event.setSuppress(true);
+    public boolean packetError(final Session session, final Throwable throwable) {
+        CLIENT_LOG.debug("", throwable);
+        return true;
     }
 
     @Override
-    public void connected(ConnectedEvent event) {
-        CLIENT_LOG.info("Connected to {}!", event.getSession().getRemoteAddress());
-        session.setDisconnected(false);
+    public void connected(final Session session) {
+        CLIENT_LOG.info("Connected to {}!", session.getRemoteAddress());
+        this.session.setDisconnected(false);
         EVENT_BUS.postAsync(new ConnectEvent());
     }
 
     @Override
-    public void disconnecting(DisconnectingEvent event) {
+    public void disconnecting(final Session session, final Component reason, final Throwable cause) {
         try {
             CLIENT_LOG.info("Disconnecting from server...");
-            CLIENT_LOG.trace("Disconnect reason: {}", event.getReason());
+            CLIENT_LOG.trace("Disconnect reason: {}", reason);
             // reason can be malformed for MC parser the logger uses
         } catch (final Exception e) {
             // fall through
         }
-        this.proxy.getActiveConnections().forEach(connection -> connection.disconnect(event.getReason()));
+        Proxy.getInstance().getActiveConnections().forEach(connection -> connection.disconnect(reason));
     }
 
     @Override
-    public void disconnected(DisconnectedEvent event) {
-        session.setDisconnected(true);
-        String reason;
+    public void disconnected(final Session session, final Component reason, final Throwable cause) {
+        this.session.setDisconnected(true);
+        String reasonStr;
         try {
-            reason = ComponentSerializer.toRawString(event.getReason());
+            reasonStr = ComponentSerializer.toRawString(reason);
         } catch (final Exception e) {
-            CLIENT_LOG.warn("Unable to parse disconnect reason: {}", event.getReason(), e);
-            reason = isNull(event.getReason()) ? "Disconnected" : ComponentSerializer.serialize(event.getReason());
+            CLIENT_LOG.warn("Unable to parse disconnect reason: {}", reason, e);
+            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serialize(reason);
         }
-        CLIENT_LOG.info("Disconnected: " + reason);
-        EVENT_BUS.post(new DisconnectEvent(reason));
+        CLIENT_LOG.info("Disconnected: " + reasonStr);
+        EVENT_BUS.post(new DisconnectEvent(reasonStr));
     }
 
 }

@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.zenith.cache.data.entity.Entity;
+import com.zenith.Proxy;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
 
@@ -18,7 +19,7 @@ public class InteractEntitySpectatorHandler implements IncomingHandler<Serverbou
             if (entity != null) {
                 session.setCameraTarget(entity);
                 session.send(new ClientboundSetCameraPacket(packet.getEntityId()));
-                session.getProxy().getActiveConnections().forEach(connection -> {
+                Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                 });
             }

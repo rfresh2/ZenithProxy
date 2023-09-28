@@ -51,60 +51,56 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             return;
         }
         connection.setPlayer(true);
-        if (!connection.isOnlySpectator() && this.proxy.getCurrentPlayer().compareAndSet(null, connection)) {
-            // if we don't have a current player, set player
-            connection.setSpectator(false);
-            EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
-            session.send(new ClientboundLoginPacket(
-                    CACHE.getPlayerCache().getEntityId(),
-                    CACHE.getPlayerCache().isHardcore(),
-                    CACHE.getPlayerCache().getGameMode(),
-                    CACHE.getPlayerCache().getGameMode(),
-                    CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
-                    CACHE.getChunkCache().getRegistryTag(),
-                    CACHE.getChunkCache().getWorldData().dimensionType(),
-                    CACHE.getChunkCache().getWorldData().worldName(),
-                    CACHE.getChunkCache().getWorldData().hashedSeed(),
-                    CACHE.getPlayerCache().getMaxPlayers(),
-                    CACHE.getChunkCache().getServerViewDistance(),
-                    CACHE.getChunkCache().getServerSimulationDistance(),
-                    false,
-                    CACHE.getPlayerCache().isEnableRespawnScreen(),
-                    CACHE.getChunkCache().getWorldData().debug(),
-                    CACHE.getChunkCache().getWorldData().flat(),
-                    CACHE.getPlayerCache().getLastDeathPos(),
-                    CACHE.getPlayerCache().getPortalCooldown()
-            ));
-            if (!proxy.isInQueue()) { PlayerCache.sync(); }
-        } else {
-            if (nonNull(this.proxy.getCurrentPlayer().get())) {
-                // if we have a current player, allow login but put in spectator
-                connection.setSpectator(true);
-                EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
-                session.send(new ClientboundLoginPacket(
-                        connection.getSpectatorSelfEntityId(),
-                        CACHE.getPlayerCache().isHardcore(),
-                        GameMode.SPECTATOR,
-                        GameMode.SPECTATOR,
-                        CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
-                        CACHE.getChunkCache().getRegistryTag(),
-                        CACHE.getChunkCache().getWorldData().dimensionType(),
-                        CACHE.getChunkCache().getWorldData().worldName(),
-                        CACHE.getChunkCache().getWorldData().hashedSeed(),
-                        CACHE.getPlayerCache().getMaxPlayers(),
-                        CACHE.getChunkCache().getServerViewDistance(),
-                        CACHE.getChunkCache().getServerSimulationDistance(),
-                        false,
-                        CACHE.getPlayerCache().isEnableRespawnScreen(),
-                        CACHE.getChunkCache().getWorldData().debug(),
-                        CACHE.getChunkCache().getWorldData().flat(),
-                        CACHE.getPlayerCache().getLastDeathPos(),
-                        CACHE.getPlayerCache().getPortalCooldown()
-                ));
-            } else {
+        if (connection.isSpectator()) {
+            if (Proxy.getInstance().getCurrentPlayer().get() == null) {
                 // can probably make this state work with some more work but im just gonna block it for now
                 connection.disconnect("A player must be connected in order to spectate!");
+                return;
             }
+            EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
+            session.send(new ClientboundLoginPacket(
+                connection.getSpectatorSelfEntityId(),
+                CACHE.getPlayerCache().isHardcore(),
+                GameMode.SPECTATOR,
+                GameMode.SPECTATOR,
+                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
+                CACHE.getChunkCache().getRegistryTag(),
+                CACHE.getChunkCache().getWorldData().dimensionType(),
+                CACHE.getChunkCache().getWorldData().worldName(),
+                CACHE.getChunkCache().getWorldData().hashedSeed(),
+                CACHE.getPlayerCache().getMaxPlayers(),
+                CACHE.getChunkCache().getServerViewDistance(),
+                CACHE.getChunkCache().getServerSimulationDistance(),
+                false,
+                CACHE.getPlayerCache().isEnableRespawnScreen(),
+                CACHE.getChunkCache().getWorldData().debug(),
+                CACHE.getChunkCache().getWorldData().flat(),
+                CACHE.getPlayerCache().getLastDeathPos(),
+                CACHE.getPlayerCache().getPortalCooldown()
+            ));
+        } else {
+            EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
+            session.send(new ClientboundLoginPacket(
+                CACHE.getPlayerCache().getEntityId(),
+                CACHE.getPlayerCache().isHardcore(),
+                CACHE.getPlayerCache().getGameMode(),
+                CACHE.getPlayerCache().getGameMode(),
+                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
+                CACHE.getChunkCache().getRegistryTag(),
+                CACHE.getChunkCache().getWorldData().dimensionType(),
+                CACHE.getChunkCache().getWorldData().worldName(),
+                CACHE.getChunkCache().getWorldData().hashedSeed(),
+                CACHE.getPlayerCache().getMaxPlayers(),
+                CACHE.getChunkCache().getServerViewDistance(),
+                CACHE.getChunkCache().getServerSimulationDistance(),
+                false,
+                CACHE.getPlayerCache().isEnableRespawnScreen(),
+                CACHE.getChunkCache().getWorldData().debug(),
+                CACHE.getChunkCache().getWorldData().flat(),
+                CACHE.getPlayerCache().getLastDeathPos(),
+                CACHE.getPlayerCache().getPortalCooldown()
+            ));
+            if (!proxy.isInQueue()) { PlayerCache.sync(); }
         }
     }
 }

@@ -47,7 +47,7 @@ public class ProxyServerListener implements ServerListener {
     @Override
     public void sessionAdded(SessionAddedEvent event) {
         if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getState() != ProtocolState.STATUS) {
-            ServerConnection connection = new ServerConnection(this.proxy, event.getSession());
+            ServerConnection connection = new ServerConnection(event.getSession());
             event.getSession().addListener(connection);
             this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
             this.connections.put(event.getSession(), connection);

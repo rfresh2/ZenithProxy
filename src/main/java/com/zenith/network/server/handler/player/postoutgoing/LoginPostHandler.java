@@ -3,6 +3,7 @@ package com.zenith.network.server.handler.player.postoutgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCustomPayloadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
@@ -18,13 +19,13 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
         session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
 
-        session.setLoggedIn(true); // allows server packets to start being sent to player
+        session.setLoggedIn(); // allows server packets to start being sent to player
         // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);
         session.initializeTeam();
         session.syncTeamMembers();
         // init any active spectators
-        session.getProxy().getActiveConnections().stream()
+        Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .filter(connection -> !connection.hasCameraTarget())
                 .forEach(connection -> {

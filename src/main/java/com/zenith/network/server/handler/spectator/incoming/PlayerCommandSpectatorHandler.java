@@ -4,6 +4,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.zenith.cache.data.entity.Entity;
+import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
@@ -22,7 +23,7 @@ public class PlayerCommandSpectatorHandler implements IncomingHandler<Serverboun
         } else {
             if (packet.getState() == PlayerState.START_SNEAKING || packet.getState() == PlayerState.START_SPRINTING) {
                 session.getSoundPacket().ifPresent(p -> {
-                    session.getProxy().getActiveConnections().forEach(connection -> connection.send(p));
+                    Proxy.getInstance().getActiveConnections().forEach(connection -> connection.send(p));
                 });
             }
         }
