@@ -30,10 +30,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
@@ -238,6 +235,11 @@ public class PlayerCache implements CachedData {
         }
         this.thePlayer.setEntityId(id);
         this.entityCache.add(this.thePlayer);
+        return this;
+    }
+
+    public PlayerCache setUuid(UUID uuid) {
+        this.thePlayer.setUuid(uuid);
         return this;
     }
 }

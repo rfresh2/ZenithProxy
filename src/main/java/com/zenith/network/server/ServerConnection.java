@@ -19,6 +19,7 @@ import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
@@ -66,7 +67,7 @@ public class ServerConnection implements Session, SessionListener {
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
-    protected boolean playerCam = false;
+    protected Entity cameraTarget = null;
     protected boolean showSelfEntity = true;
     protected int spectatorEntityId = 2147483647 - ThreadLocalRandom.current().nextInt(1000000);
     protected int spectatorSelfEntityId = spectatorEntityId - 1;
@@ -260,6 +261,10 @@ public class ServerConnection implements Session, SessionListener {
 
     public Optional<Packet> getSoundPacket() {
         return spectatorEntity.getSoundPacket(spectatorPlayerCache);
+    }
+
+    public boolean hasCameraTarget() {
+        return cameraTarget != null;
     }
 
     public void initSpectatorEntity() {

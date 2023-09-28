@@ -14,6 +14,7 @@ import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.cache.DataCache;
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.network.server.ServerConnection;
@@ -50,31 +51,34 @@ public final class SpectatorUtils {
         });
     }
 
-    public static void syncSpectatorPositionToPlayer(final ServerConnection spectConnection) {
+    public static void syncSpectatorPositionToEntity(final ServerConnection spectConnection, Entity target) {
         spectConnection.getSpectatorPlayerCache()
-                .setX(CACHE.getPlayerCache().getX())
-                .setY(CACHE.getPlayerCache().getY() + 3) // spawn above player
-                .setZ(CACHE.getPlayerCache().getZ())
-                .setYaw(CACHE.getPlayerCache().getYaw())
-                .setPitch(CACHE.getPlayerCache().getPitch());
+            .setX(target.getX())
+            .setY(target.getY() + 1) // spawn above entity
+            .setZ(target.getZ())
+            .setYaw(target.getYaw())
+            .setPitch(target.getPitch());
         spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
         spectConnection.send(new ClientboundPlayerPositionPacket(
-            spectConnection.getSpectatorPlayerCache().getX(),
-            spectConnection.getSpectatorPlayerCache().getY(),
-            spectConnection.getSpectatorPlayerCache().getZ(),
-            spectConnection.getSpectatorPlayerCache().getYaw(),
-            spectConnection.getSpectatorPlayerCache().getPitch(),
-            12345
+                spectConnection.getSpectatorPlayerCache().getX(),
+                spectConnection.getSpectatorPlayerCache().getY(),
+                spectConnection.getSpectatorPlayerCache().getZ(),
+                spectConnection.getSpectatorPlayerCache().getYaw(),
+                spectConnection.getSpectatorPlayerCache().getPitch(),
+                12345
         ));
         spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
         updateSpectatorPosition(spectConnection);
-
         Proxy.getInstance().getActiveConnections().forEach(c -> {
             if (!c.equals(spectConnection) || spectConnection.isShowSelfEntity()) {
                 c.send(spectConnection.getEntitySpawnPacket());
                 c.send(spectConnection.getEntityMetadataPacket());
             }
         });
+    }
+
+    public static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
+        syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer());
     }
 
     private static void sendSpectatorsEquipment() {
@@ -115,7 +119,7 @@ public final class SpectatorUtils {
         spectatorEntityPlayer.setUuid(session.getSpectatorFakeProfileCache().getProfile().getId());
         spectatorEntityPlayer.setSelfPlayer(true);
         spectatorEntityPlayer.setX(CACHE.getPlayerCache().getX());
-        spectatorEntityPlayer.setY(CACHE.getPlayerCache().getY() + 3); // spawn above player
+        spectatorEntityPlayer.setY(CACHE.getPlayerCache().getY() + 1); // spawn above player
         spectatorEntityPlayer.setZ(CACHE.getPlayerCache().getZ());
         spectatorEntityPlayer.setEntityId(session.getSpectatorSelfEntityId());
         spectatorEntityPlayer.setYaw(CACHE.getPlayerCache().getYaw());
@@ -173,12 +177,12 @@ public final class SpectatorUtils {
         final int playerX = (int) CACHE.getPlayerCache().getX() >> 4;
         final int playerZ = (int) CACHE.getPlayerCache().getZ() >> 4;
         if (Math.abs(spectX - playerX) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1) || Math.abs(spectZ - playerZ) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1)) {
-            SpectatorUtils.syncSpectatorPositionToPlayer(spectConnection);
+            SpectatorUtils.syncSpectatorPositionToProxiedPlayer(spectConnection);
         }
     }
 
     public static void updateSpectatorPosition(final ServerConnection selfSession) {
-        if (selfSession.isPlayerCam()) {
+        if (selfSession.hasCameraTarget()) {
             return;
         }
         double playerEyeHeight = 1.6;
