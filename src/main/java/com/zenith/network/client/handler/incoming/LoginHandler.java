@@ -21,6 +21,7 @@ public class LoginHandler implements IncomingHandler<ClientboundLoginPacket, Cli
         CACHE.getPlayerCache()
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
+            .setUuid(CACHE.getProfileCache().getProfile().getId())
             .setLastDeathPos(packet.getLastDeathPos())
             .setPortalCooldown(packet.getPortalCooldown())
             .setMaxPlayers(packet.getMaxPlayers())

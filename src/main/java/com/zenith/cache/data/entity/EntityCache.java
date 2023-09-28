@@ -6,6 +6,7 @@ import com.zenith.cache.CachedData;
 import lombok.NonNull;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -49,10 +50,20 @@ public class EntityCache implements CachedData {
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends Entity> E get(int id)   {
+    public <E extends Entity> E get(int id) {
         Entity entity = this.cachedEntities.get(id);
         if (entity == null) return null;
         return (E) entity;
+    }
+
+    // todo: this is not particularly efficient but is currently used infrequently.
+    //  if there are higher frequency use cases, consider building a secondary cached map of uuids to entity
+    public <E extends Entity> E get(UUID uuid) {
+        return this.cachedEntities.values().stream()
+            .filter(entity -> entity.getUuid().equals(uuid))
+            .map(entity -> (E) entity)
+            .findFirst()
+            .orElse(null);
     }
 
     public Map<Integer, Entity> getEntities() { return this.cachedEntities;}
