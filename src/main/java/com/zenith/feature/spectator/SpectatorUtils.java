@@ -19,9 +19,7 @@ import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
-
 import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
