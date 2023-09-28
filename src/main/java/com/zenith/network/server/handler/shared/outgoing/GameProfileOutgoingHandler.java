@@ -55,6 +55,10 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
                 session.setSpectator(false);
                 return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
             } else {
+                if (!CONFIG.server.spectator.allowSpectator) {
+                    session.disconnect("Spectator mode is disabled");
+                    return null;
+                }
                 SERVER_LOG.info("Logging in {} [{}] as spectator", packet.getProfile().getName(), packet.getProfile().getId().toString());
                 session.setSpectator(true);
                 final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
