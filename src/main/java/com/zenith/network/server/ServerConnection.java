@@ -225,6 +225,16 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
+    public void sendBundleDirect(@NonNull final List<Packet> packets) {
+        this.session.sendBundleDirect(packets);
+    }
+
+    @Override
+    public void sendBundle(@NonNull final List<Packet> packets) {
+        this.session.sendBundle(packets);
+    }
+
+    @Override
     public void sendBundle(@NotNull final @NonNull Packet... packets) {
         this.session.sendBundle(packets);
     }
