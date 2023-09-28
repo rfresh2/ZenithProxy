@@ -164,8 +164,8 @@ public class ServerConnection implements Session, SessionListener {
     public void disconnecting(DisconnectingEvent event) {
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        isLoggedIn = loggedIn;
+    public void setLoggedIn() {
+        this.isLoggedIn = true;
         this.proxy.getActiveConnections().add(this);
     }
 
