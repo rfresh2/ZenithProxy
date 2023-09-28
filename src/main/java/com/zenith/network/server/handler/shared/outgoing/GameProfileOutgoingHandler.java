@@ -35,31 +35,32 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
             }
             SERVER_LOG.info("Username: {} UUID: {} [{}] has passed the whitelist check!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
             session.setWhitelistChecked(true);
-            if (!Proxy.getInstance().isConnected()) {
-                if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
-                    Proxy.getInstance().connect();
-                } else {
-                    session.disconnect("Not connected to server!");
+            synchronized (this) {
+                if (!Proxy.getInstance().isConnected()) {
+                    if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
+                        Proxy.getInstance().connect();
+                    } else {
+                        session.disconnect("Not connected to server!");
+                    }
                 }
             }
 
-            // profile could be null at this point?
-            int tryCount = 0;
-            while (tryCount < 3 && CACHE.getProfileCache().getProfile() == null) {
-                Wait.waitALittleMs(500);
-                tryCount++;
-            }
-            if (CACHE.getProfileCache().getProfile() == null) {
-                session.disconnect(MANUAL_DISCONNECT);
+            if (!Wait.waitUntilCondition(() -> CACHE.getProfileCache().getProfile() != null, 3)) {
+                session.disconnect("Timed out waiting for the proxy to login");
                 return null;
+            }
+            SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+            session.getProfileCache().setProfile(packet.getProfile());
+            if (!session.isOnlySpectator() && session.getProxy().getCurrentPlayer().compareAndSet(null, session)) {
+                session.setSpectator(false);
+                return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
             } else {
-                SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-                session.getProfileCache().setProfile(packet.getProfile());
-                if (isNull(session.getProxy().getCurrentPlayer().get())) {
-                    return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
-                } else {
-                    return new ClientboundGameProfilePacket(session.getProfileCache().getProfile());
-                }
+                SERVER_LOG.info("Logging in {} [{}] as spectator", packet.getProfile().getName(), packet.getProfile().getId().toString());
+                session.setSpectator(true);
+                final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
+                                                                         packet.getProfile().getName());
+                session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
+                return new ClientboundGameProfilePacket(spectatorFakeProfile);
             }
         } catch (final Throwable e) {
             session.disconnect("Login Failed", e);

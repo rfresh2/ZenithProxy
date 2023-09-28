@@ -74,6 +74,7 @@ public class ServerConnection implements Session, SessionListener {
     protected int spectatorSelfEntityId = spectatorEntityId - 1;
     protected UUID spectatorEntityUUID = UUID.randomUUID();
     protected ServerProfileCache profileCache = new ServerProfileCache();
+    protected ServerProfileCache spectatorFakeProfileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
     protected SpectatorEntity spectatorEntity;
 
@@ -163,8 +164,8 @@ public class ServerConnection implements Session, SessionListener {
     public void disconnecting(DisconnectingEvent event) {
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        isLoggedIn = loggedIn;
+    public void setLoggedIn() {
+        this.isLoggedIn = true;
         this.proxy.getActiveConnections().add(this);
     }
 
@@ -224,15 +225,15 @@ public class ServerConnection implements Session, SessionListener {
     // Spectator helper methods
 
     public Packet getEntitySpawnPacket() {
-        return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, profileCache.getProfile());
+        return spectatorEntity.getSpawnPacket(spectatorEntityId, spectatorEntityUUID, spectatorPlayerCache, spectatorFakeProfileCache.getProfile());
     }
 
     public ClientboundSetEntityDataPacket getSelfEntityMetadataPacket() {
-        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(profileCache.getProfile(), spectatorEntityId));
+        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(spectatorFakeProfileCache.getProfile(), spectatorEntityId));
     }
 
     public ClientboundSetEntityDataPacket getEntityMetadataPacket() {
-        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(profileCache.getProfile(), spectatorEntityId));
+        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(spectatorFakeProfileCache.getProfile(), spectatorEntityId));
     }
 
     public Optional<Packet> getSoundPacket() {

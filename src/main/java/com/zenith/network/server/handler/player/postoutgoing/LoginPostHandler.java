@@ -18,7 +18,7 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
         session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
 
-        session.setLoggedIn(true); // allows server packets to start being sent to player
+        session.setLoggedIn(); // allows server packets to start being sent to player
         // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);
         session.initializeTeam();

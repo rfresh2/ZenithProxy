@@ -6,6 +6,7 @@ import com.zenith.feature.whitelist.WhitelistEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
 
@@ -266,6 +267,8 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
+            // skin shown in-game for spectators
+            public UUID spectatorUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
             public List<WhitelistEntry> whitelist = new ArrayList<>();
         }
