@@ -76,10 +76,6 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getPortalCooldown()
             ));
             if (!proxy.isInQueue()) { PlayerCache.sync(); }
-        } else if (clientGameProfile.getId().equals(CACHE.getProfileCache().getProfile().getId())) {
-            connection.disconnect("You can't spectate your own UUID.");
-        } else if (clientGameProfile.getName().equals(CACHE.getProfileCache().getProfile().getName())) {
-            connection.disconnect("You can't spectate your own Username.");
         } else if (nonNull(this.proxy.getCurrentPlayer().get())) {
             // if we have a current player, allow login but put in spectator
             connection.setSpectator(true);
