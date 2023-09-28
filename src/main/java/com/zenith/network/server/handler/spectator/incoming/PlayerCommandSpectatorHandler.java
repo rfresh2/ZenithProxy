@@ -15,7 +15,7 @@ public class PlayerCommandSpectatorHandler implements IncomingHandler<Serverboun
             if (packet.getState() == PlayerState.START_SNEAKING) {
                 session.setPlayerCam(false);
                 session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
-                SpectatorUtils.syncSpectatorPositionToPlayer(session);
+                SpectatorUtils.syncSpectatorPositionToProxiedPlayer(session);
             }
         } else {
             if (packet.getState() == PlayerState.START_SNEAKING || packet.getState() == PlayerState.START_SPRINTING) {

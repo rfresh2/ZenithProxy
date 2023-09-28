@@ -70,7 +70,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                 });
             } else {
                 session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
-                SpectatorUtils.syncSpectatorPositionToPlayer(session);
+                SpectatorUtils.syncSpectatorPositionToProxiedPlayer(session);
             }
         } else if (packet.getMessage().toLowerCase().startsWith("!cleareffects")) {
             CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();

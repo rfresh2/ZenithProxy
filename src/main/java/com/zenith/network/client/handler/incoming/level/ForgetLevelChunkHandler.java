@@ -18,7 +18,7 @@ public class ForgetLevelChunkHandler implements AsyncIncomingHandler<Clientbound
             final int spectZ = (int) connection.getSpectatorPlayerCache().getZ() >> 4;
             if ((spectX == packet.getX() || spectX + 1 == packet.getX() || spectX - 1 == packet.getX())
                     && (spectZ == packet.getZ() || spectZ + 1 == packet.getZ() || spectZ - 1 == packet.getZ())) {
-                SpectatorUtils.syncSpectatorPositionToPlayer(connection);
+                SpectatorUtils.syncSpectatorPositionToProxiedPlayer(connection);
             }
         });
         return true;
