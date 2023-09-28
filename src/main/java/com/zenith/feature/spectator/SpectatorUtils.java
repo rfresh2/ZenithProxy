@@ -19,8 +19,8 @@ import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
+
 import java.util.Collection;
-import java.util.UUID;
 import java.util.function.Supplier;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
@@ -51,56 +51,34 @@ public final class SpectatorUtils {
         });
     }
 
-    public static boolean syncSpectatorPositionToEntity(final ServerConnection spectConnection, UUID target) {
-        boolean hasUpdatedPos = false;
-        if (target != null) {
-            if (CACHE.getProfileCache().getProfile().getId().equals(target)) {
-                spectConnection.getSpectatorPlayerCache()
-                        .setX(CACHE.getPlayerCache().getX())
-                        .setY(CACHE.getPlayerCache().getY() + 1) // spawn above entity
-                        .setZ(CACHE.getPlayerCache().getZ())
-                        .setYaw(CACHE.getPlayerCache().getYaw())
-                        .setPitch(CACHE.getPlayerCache().getPitch());
-                hasUpdatedPos = true;
-            } else {
-                for (Entity entity: CACHE.getEntityCache().getEntities().values()) {
-                    if (entity.getUuid().equals(target)) {
-                        spectConnection.getSpectatorPlayerCache()
-                                .setX(entity.getX())
-                                .setY(entity.getY() + 1) // spawn above entity
-                                .setZ(entity.getZ())
-                                .setYaw(entity.getYaw())
-                                .setPitch(entity.getPitch());
-                        hasUpdatedPos = true;
-                        break;
-                    }
-                }
+    public static void syncSpectatorPositionToEntity(final ServerConnection spectConnection, Entity target) {
+        spectConnection.getSpectatorPlayerCache()
+            .setX(target.getX())
+            .setY(target.getY() + 1) // spawn above entity
+            .setZ(target.getZ())
+            .setYaw(target.getYaw())
+            .setPitch(target.getPitch());
+        spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
+        spectConnection.send(new ClientboundPlayerPositionPacket(
+                spectConnection.getSpectatorPlayerCache().getX(),
+                spectConnection.getSpectatorPlayerCache().getY(),
+                spectConnection.getSpectatorPlayerCache().getZ(),
+                spectConnection.getSpectatorPlayerCache().getYaw(),
+                spectConnection.getSpectatorPlayerCache().getPitch(),
+                12345
+        ));
+        spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
+        updateSpectatorPosition(spectConnection);
+        Proxy.getInstance().getActiveConnections().forEach(c -> {
+            if (!c.equals(spectConnection) || spectConnection.isShowSelfEntity()) {
+                c.send(spectConnection.getEntitySpawnPacket());
+                c.send(spectConnection.getEntityMetadataPacket());
             }
-            if (hasUpdatedPos) {
-                spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
-                spectConnection.send(new ClientboundPlayerPositionPacket(
-                        spectConnection.getSpectatorPlayerCache().getX(),
-                        spectConnection.getSpectatorPlayerCache().getY(),
-                        spectConnection.getSpectatorPlayerCache().getZ(),
-                        spectConnection.getSpectatorPlayerCache().getYaw(),
-                        spectConnection.getSpectatorPlayerCache().getPitch(),
-                        12345
-                ));
-                spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
-                updateSpectatorPosition(spectConnection);
-
-                Proxy.getInstance().getActiveConnections().forEach(c -> {
-                    if (!c.equals(spectConnection) || spectConnection.isShowSelfEntity()) {
-                        c.send(spectConnection.getEntitySpawnPacket());
-                        c.send(spectConnection.getEntityMetadataPacket());
-                    }
-                });
-            }
-        }
-        return hasUpdatedPos;
+        });
     }
+
     public static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
-        syncSpectatorPositionToEntity(spectConnection, CACHE.getProfileCache().getProfile().getId());
+        syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer());
     }
 
     private static void sendSpectatorsEquipment() {
@@ -204,7 +182,7 @@ public final class SpectatorUtils {
     }
 
     public static void updateSpectatorPosition(final ServerConnection selfSession) {
-        if (selfSession.isPlayerCam()) {
+        if (selfSession.hasCameraTarget()) {
             return;
         }
         double playerEyeHeight = 1.6;

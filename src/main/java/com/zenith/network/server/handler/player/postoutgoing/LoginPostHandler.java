@@ -26,7 +26,7 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
         // init any active spectators
         session.getProxy().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
-                .filter(connection -> !connection.isPlayerCam())
+                .filter(connection -> !connection.hasCameraTarget())
                 .forEach(connection -> {
                     session.send(connection.getEntitySpawnPacket());
                     session.send(connection.getEntityMetadataPacket());

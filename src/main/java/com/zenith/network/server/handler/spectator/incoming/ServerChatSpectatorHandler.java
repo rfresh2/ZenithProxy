@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSy
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveMobEffectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.IncomingHandler;
@@ -62,15 +63,17 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&cValid id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers()) + "&r"), false));
             }
         } else if (packet.getMessage().toLowerCase().startsWith("!playercam")) {
-            session.setPlayerCam(!session.isPlayerCam());
-            if (session.isPlayerCam()) {
+            final Entity existingTarget = session.getCameraTarget();
+            if (existingTarget != null) {
+                session.setCameraTarget(null);
+                session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
+                SpectatorUtils.syncSpectatorPositionToEntity(session, existingTarget);
+            } else {
+                session.setCameraTarget(CACHE.getPlayerCache().getThePlayer());
                 session.send(new ClientboundSetCameraPacket(CACHE.getPlayerCache().getEntityId()));
                 session.getProxy().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                 });
-            } else {
-                session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
-                SpectatorUtils.syncSpectatorPositionToProxiedPlayer(session);
             }
         } else if (packet.getMessage().toLowerCase().startsWith("!cleareffects")) {
             CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();
