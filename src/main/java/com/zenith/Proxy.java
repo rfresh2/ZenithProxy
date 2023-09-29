@@ -203,6 +203,9 @@ public class Proxy {
 
     public void stop() {
         DEFAULT_LOG.info("Shutting Down...");
+        if (nonNull(this.client)) {
+            this.client.disconnect(MinecraftConstants.SERVER_CLOSING_MESSAGE);
+        }
         if (nonNull(this.server)) {
             this.server.close(true);
         }

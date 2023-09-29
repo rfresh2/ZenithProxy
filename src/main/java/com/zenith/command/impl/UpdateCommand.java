@@ -6,7 +6,10 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.event.proxy.UpdateStartEvent;
+import com.zenith.feature.autoupdater.AutoUpdater;
 import discord4j.rest.util.Color;
+
+import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
@@ -23,7 +26,7 @@ public class UpdateCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("update").requires(Command::validateAccountOwner).executes(c -> {
             try {
-                EVENT_BUS.post(new UpdateStartEvent(Proxy.getInstance().getAutoUpdater().getNewVersion()));
+                EVENT_BUS.post(new UpdateStartEvent(Optional.ofNullable(Proxy.getInstance().getAutoUpdater()).flatMap(AutoUpdater::getNewVersion)));
                 CONFIG.discord.isUpdating = true;
                 if (Proxy.getInstance().isConnected()) {
                     CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
@@ -33,7 +36,6 @@ public class UpdateCommand extends Command {
                 DISCORD_LOG.error("Failed to update", e);
                 CONFIG.discord.isUpdating = false;
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
-                saveConfig();
                 c.getSource().getEmbedBuilder()
                         .title("Failed updating")
                         .color(Color.RUBY);
