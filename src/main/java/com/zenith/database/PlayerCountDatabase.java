@@ -1,14 +1,12 @@
 package com.zenith.database;
 
-import com.zenith.Proxy;
 import com.zenith.database.dto.tables.Playercount;
 import com.zenith.database.dto.tables.records.PlayercountRecord;
 import com.zenith.event.Subscription;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.proxy.DatabaseTickEvent;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,8 +14,6 @@ import java.time.ZoneOffset;
 import static com.zenith.Shared.*;
 
 public class PlayerCountDatabase extends LockingDatabase {
-    private static final Duration updateInterval = Duration.ofMinutes(5L);
-    private Instant lastUpdate = Instant.EPOCH;
 
     public PlayerCountDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
         super(queryExecutor, redisClient);
@@ -26,7 +22,7 @@ public class PlayerCountDatabase extends LockingDatabase {
     @Override
     public Subscription subscribeEvents() {
         return EVENT_BUS.subscribe(
-            ClientTickEvent.class, this::handleClientTickEvent
+            DatabaseTickEvent.class, this::handleDatabaseTickEvent
         );
     }
 
@@ -50,17 +46,13 @@ public class PlayerCountDatabase extends LockingDatabase {
         return timeRecordResult.get(0).value1().toInstant();
     }
 
-    public void handleClientTickEvent(final ClientTickEvent event) {
-        if (lastUpdate.isBefore(Instant.now().minus(updateInterval))) {
-            if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30L))) return;
-            lastUpdate = Instant.now();
-            final Integer count = CACHE.getTabListCache().getTabList().getEntries().size();
-            final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-            final Playercount p = Playercount.PLAYERCOUNT;
-            final InsertSetMoreStep<PlayercountRecord> query = context.insertInto(p)
-                    .set(p.TIME, Instant.now().atOffset(ZoneOffset.UTC))
-                    .set(p.COUNT, count.shortValue());
-            this.insert(Instant.now(), query);
-        }
+    public void handleDatabaseTickEvent(final DatabaseTickEvent event) {
+        final int count = CACHE.getTabListCache().getTabList().getEntries().size();
+        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
+        final Playercount p = Playercount.PLAYERCOUNT;
+        final InsertSetMoreStep<PlayercountRecord> query = context.insertInto(p)
+            .set(p.TIME, Instant.now().atOffset(ZoneOffset.UTC))
+            .set(p.COUNT, (short) count);
+        this.insert(Instant.now(), query);
     }
 }

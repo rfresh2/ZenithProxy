@@ -36,4 +36,13 @@ public class QueryExecutor {
             throw new RuntimeException(e);
         }
     }
+
+    public void executeTransaction(TransactionalRunnable transaction) {
+        try (final Connection connection = connectionPoolProvider.get().getWriteConnection()) {
+            final DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
+            context.transaction(transaction);
+        } catch (final Exception e) {
+            DATABASE_LOG.error("Failed executing transaction", e);
+        }
+    }
 }
