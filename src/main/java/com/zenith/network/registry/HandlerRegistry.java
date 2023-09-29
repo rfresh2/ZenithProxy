@@ -2,6 +2,7 @@ package com.zenith.network.registry;
 
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -29,7 +30,12 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     protected final Logger logger;
     protected final boolean allowUnhandled;
-    protected static final ScheduledExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(8);
+    protected static final ScheduledExecutorService ASYNC_EXECUTOR_SERVICE =
+        Executors.newScheduledThreadPool(2,
+                                         new ThreadFactoryBuilder()
+                                             .setNameFormat("ZenithProxy Async PacketHandler #%d")
+                                             .setDaemon(true)
+                                             .build());
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
