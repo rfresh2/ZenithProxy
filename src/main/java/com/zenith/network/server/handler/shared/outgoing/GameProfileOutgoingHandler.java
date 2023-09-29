@@ -26,7 +26,6 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
                 if (CONFIG.server.spectator.allowSpectator && WHITELIST_MANAGER.isProfileSpectatorWhitelisted(clientGameProfile)) {
                     session.setOnlySpectator(true);
                 } else {
-                    session.setWhitelistChecked(false);
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                     SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
                     EVENT_BUS.post(new NonWhitelistedPlayerConnectedEvent(clientGameProfile, session.getRemoteAddress()));
@@ -52,7 +51,6 @@ public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGa
             SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(packet.getProfile());
             if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
-                session.setSpectator(false);
                 return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
             } else {
                 if (!CONFIG.server.spectator.allowSpectator) {

@@ -18,10 +18,16 @@ import java.util.EnumSet;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CONFIG;
 
 public class LoginSpectatorPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
+        if (CONFIG.server.extra.whitelist.enable && !session.isWhitelistChecked()) {
+            // we shouldn't be able to get to this point without whitelist checking, but just in case
+            session.disconnect("Login without whitelist check?");
+            return;
+        }
         session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
         session.send(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED, PlayerListEntryAction.UPDATE_GAME_MODE),

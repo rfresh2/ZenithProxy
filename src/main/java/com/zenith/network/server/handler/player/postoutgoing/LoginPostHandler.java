@@ -17,8 +17,12 @@ import static com.zenith.Shared.CONFIG;
 public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
+        if (CONFIG.server.extra.whitelist.enable && !session.isWhitelistChecked()) {
+            // we shouldn't be able to get to this point without whitelist checking, but just in case
+            session.disconnect("Login without whitelist check?");
+            return;
+        }
         session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
-
         session.setLoggedIn(); // allows server packets to start being sent to player
         // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);
