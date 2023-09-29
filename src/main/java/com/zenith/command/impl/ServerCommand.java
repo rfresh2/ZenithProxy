@@ -26,28 +26,29 @@ public class ServerCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("server").requires(Command::validateAccountOwner)
-                .then(argument("ip", wordWithChars()).executes(c -> {
-                            final String ip = StringArgumentType.getString(c, "ip");
-                            CONFIG.client.server.address = ip;
-                            CONFIG.client.server.port = 25565;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Server Updated!")
-                                    .addField("IP", CONFIG.client.server.address, false)
-                                    .addField("Port", "" + CONFIG.client.server.port, true)
-                                    .color(Color.CYAN);
-                            return 1;
-                        })
-                        .then(argument("port", integer()).executes(c -> {
-                            final String ip = StringArgumentType.getString(c, "ip");
-                            final int port = IntegerArgumentType.getInteger(c, "port");
-                            CONFIG.client.server.address = ip;
-                            CONFIG.client.server.port = port;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Server Updated!")
-                                    .addField("IP", CONFIG.client.server.address, false)
-                                    .addField("Port", "" + CONFIG.client.server.port, true)
-                                    .color(Color.CYAN);
-                            return 1;
-                        })));
+            .then(argument("ip", wordWithChars())
+                      .then(argument("port", integer()).executes(c -> {
+                          final String ip = StringArgumentType.getString(c, "ip");
+                          final int port = IntegerArgumentType.getInteger(c, "port");
+                          CONFIG.client.server.address = ip;
+                          CONFIG.client.server.port = port;
+                          c.getSource().getEmbedBuilder()
+                              .title("Server Updated!")
+                              .addField("IP", CONFIG.client.server.address, false)
+                              .addField("Port", "" + CONFIG.client.server.port, true)
+                              .color(Color.CYAN);
+                          return 1;
+                      }))
+                      .executes(c -> {
+                          final String ip = StringArgumentType.getString(c, "ip");
+                          CONFIG.client.server.address = ip;
+                          CONFIG.client.server.port = 25565;
+                          c.getSource().getEmbedBuilder()
+                              .title("Server Updated!")
+                              .addField("IP", CONFIG.client.server.address, false)
+                              .addField("Port", "" + CONFIG.client.server.port, true)
+                              .color(Color.CYAN);
+                          return 1;
+                      }));
     }
 }

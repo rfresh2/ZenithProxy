@@ -43,9 +43,9 @@ public class CustomStringArgumentType implements ArgumentType<String> {
     public String readStringUntil(char terminator, final StringReader reader) {
         final StringBuilder result = new StringBuilder();
         while (reader.canRead()) {
-            final char c = reader.read();
-            result.append(c);
+            final char c = reader.peek();
             if (c == terminator) break;
+            result.append(reader.read());
         }
         return result.toString();
     }
