@@ -90,6 +90,11 @@ public class Public extends SchemaImpl {
     public final Restarts RESTARTS = Restarts.RESTARTS;
 
     /**
+     * The table <code>public.tablist</code>.
+     */
+    public final Tablist TABLIST = Tablist.TABLIST;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -119,6 +124,8 @@ public class Public extends SchemaImpl {
                 PlaytimeAll.PLAYTIME_ALL,
                 Queuelength.QUEUELENGTH,
                 Queuewait.QUEUEWAIT,
-                Restarts.RESTARTS);
+                Restarts.RESTARTS,
+                Tablist.TABLIST
+        );
     }
 }

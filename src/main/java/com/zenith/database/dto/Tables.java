@@ -78,4 +78,9 @@ public class Tables {
      * The table <code>public.restarts</code>.
      */
     public static final Restarts RESTARTS = Restarts.RESTARTS;
+
+    /**
+     * The table <code>public.tablist</code>.
+     */
+    public static final Tablist TABLIST = Tablist.TABLIST;
 }

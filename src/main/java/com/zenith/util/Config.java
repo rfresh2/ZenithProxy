@@ -377,6 +377,7 @@ public final class Config {
         public QueueLength queueLength = new QueueLength();
         public Restarts restarts = new Restarts();
         public PlayerCount playerCount = new PlayerCount();
+        public Tablist tablist = new Tablist();
         public Lock lock = new Lock();
 
         public static final class QueueWait {
@@ -413,6 +414,10 @@ public final class Config {
         }
 
         public static final class PlayerCount {
+            public boolean enabled = true;
+        }
+
+        public static final class Tablist {
             public boolean enabled = true;
         }
     }

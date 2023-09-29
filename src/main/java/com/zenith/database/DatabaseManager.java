@@ -1,9 +1,14 @@
 package com.zenith.database;
 
+import com.zenith.Proxy;
+import com.zenith.event.proxy.DatabaseTickEvent;
 import lombok.Getter;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.DATABASE_LOG;
+import java.time.Duration;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -17,8 +22,10 @@ public class DatabaseManager {
     private QueueLengthDatabase queueLengthDatabase;
     private RestartsDatabase restartsDatabase;
     private PlayerCountDatabase playerCountDatabase;
+    private TablistDatabase tablistDatabase;
     private QueryExecutor queryExecutor;
     private RedisClient redisClient;
+    private ScheduledFuture<?> databaseTickFuture;
 
     public DatabaseManager() {
 
@@ -48,8 +55,30 @@ public class DatabaseManager {
             if (CONFIG.database.playerCount.enabled) {
                 startPlayerCountDatabase();
             }
+            if (CONFIG.database.tablist.enabled) {
+                startTablistDatabase();
+            }
+            if (databaseTickFuture != null) {
+                databaseTickFuture.cancel(false);
+            }
+            databaseTickFuture = SCHEDULED_EXECUTOR_SERVICE
+                .scheduleAtFixedRate(this::postDatabaseTick,
+                                     1L,
+                                        5L,
+                                        TimeUnit.MINUTES);
         } catch (final Exception e) {
             DATABASE_LOG.error("Failed starting databases", e);
+        }
+    }
+
+    public void postDatabaseTick() {
+        try {
+            // todo: there's a (uncommon) race condition here, if the proxy disconnects and the cache resets during the tick event
+            //  the faster each handler executes the more unlikely that is to happen but its still possible
+            if (Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30)))
+                EVENT_BUS.post(new DatabaseTickEvent());
+        } catch (final Throwable e) {
+            DATABASE_LOG.error("Failed posting database tick event", e);
         }
     }
 
@@ -155,6 +184,21 @@ public class DatabaseManager {
     public void stopPlayerCountDatabase() {
         if (nonNull(this.playerCountDatabase)) {
             this.playerCountDatabase.stop();
+        }
+    }
+
+    public void startTablistDatabase() {
+        if (nonNull(this.tablistDatabase)) {
+            this.tablistDatabase.start();
+        } else {
+            this.tablistDatabase = new TablistDatabase(queryExecutor, getRedisClient());
+            this.tablistDatabase.start();
+        }
+    }
+
+    public void stopTablistDatabase() {
+        if (nonNull(this.tablistDatabase)) {
+            this.tablistDatabase.stop();
         }
     }
 
