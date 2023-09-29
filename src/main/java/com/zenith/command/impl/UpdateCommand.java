@@ -44,7 +44,7 @@ public class UpdateCommand extends Command {
         }).then(literal("c").executes(c -> {
             CONFIG.discord.isUpdating = true;
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
-            EVENT_BUS.post(new UpdateStartEvent(Proxy.getInstance().getAutoUpdater().getNewVersion()));
+            EVENT_BUS.post(new UpdateStartEvent(Optional.ofNullable(Proxy.getInstance().getAutoUpdater()).flatMap(AutoUpdater::getNewVersion)));
             Proxy.getInstance().stop();
         }));
     }
