@@ -412,6 +412,11 @@ public class Proxy {
         }
     }
 
+    public boolean hasActivePlayer() {
+        ServerConnection player = this.currentPlayer.get();
+        return player != null && player.isLoggedIn();
+    }
+
     public void updatePrioBanStatus() {
         if (!CONFIG.client.extra.prioBan2b2tCheck || !CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) return;
         this.isPrioBanned = PRIORITY_BAN_CHECKER.checkPrioBan();

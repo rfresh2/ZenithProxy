@@ -225,6 +225,7 @@ public class Shared {
         .registerInbound(ClientboundTabListPacket.class, new TabListDataHandler())
         .registerInbound(ClientboundUpdateEnabledFeaturesPacket.class, new UpdateEnabledFeaturesHandler())
         .registerInbound(ClientboundPlayerInfoUpdatePacket.class, new PlayerInfoUpdateHandler())
+        .registerInbound(ClientboundExplodePacket.class, new ExplodeHandler())
         .registerInbound(ClientboundPlayerInfoRemovePacket.class, new PlayerInfoRemoveHandler())
         .registerInbound(ClientboundSetActionBarTextPacket.class, new SetActionBarTextHandler())
         .registerInbound(ClientboundSetEntityMotionPacket.class, new SetEntityMotionHandler())

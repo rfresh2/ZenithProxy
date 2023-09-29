@@ -3,6 +3,7 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
@@ -78,8 +79,8 @@ public class PlayerSimulation extends Module {
 
     @Override
     public synchronized void clientTickStarting() {
+        this.taskQueue.clear();
         syncFromCache(false);
-
     }
 
     @Override
@@ -90,6 +91,7 @@ public class PlayerSimulation extends Module {
         if (isSprinting) {
             sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
         }
+        this.taskQueue.clear();
     }
 
     public synchronized void doRotate(float yaw, float pitch) {
@@ -159,7 +161,8 @@ public class PlayerSimulation extends Module {
     }
 
     public void addTask(Runnable task) {
-        taskQueue.add(task);
+        if (!Proxy.getInstance().hasActivePlayer())
+            taskQueue.add(task);
     }
 
     private synchronized void tick(final ClientTickEvent event) {
@@ -502,6 +505,12 @@ public class PlayerSimulation extends Module {
             this.velocity.setX(motionX);
             this.velocity.setY(motionY);
             this.velocity.setZ(motionZ);
+        });
+    }
+
+    public void handleExplosion(final ClientboundExplodePacket packet) {
+        addTask(() -> {
+            this.velocity.add(packet.getPushX(), packet.getPushY(), packet.getPushZ());
         });
     }
 

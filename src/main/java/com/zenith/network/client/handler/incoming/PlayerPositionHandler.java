@@ -34,7 +34,7 @@ public class PlayerPositionHandler implements IncomingHandler<ClientboundPlayerP
         } else if (!currentPlayer.isLoggedIn()) { // possible race condition during login where we get a position packet before we're fully logged in
             Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
             Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
-        }
+        } // else send to active player
         SpectatorUtils.syncPlayerPositionWithSpectators();
         MODULE_MANAGER.getModule(AntiAFK.class)
                 .ifPresent(AntiAFK::handlePlayerPosRotate);
