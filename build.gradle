@@ -9,16 +9,23 @@ buildscript {
             name = "Gradle"
             url = "https://plugins.gradle.org/m2/"
         }
+        maven {
+            url 'https://jitpack.io'
+        }
+    }
+    // todo: use non-jitpack'd version when https://github.com/johnrengelman/shadow/pull/879 is merged
+    dependencies {
+        classpath "com.github.rfresh2:shadow:3d1505e480"
     }
 }
 
 plugins {
     id 'nu.studer.jooq' version '8.2.1'
-    id "com.github.johnrengelman.shadow" version "8.2.0-SNAPSHOT"
     id 'java'
     id 'org.graalvm.buildtools.native' version '0.9.27'
 }
 
+apply plugin: "com.github.johnrengelman.shadow"
 group "com.zenith"
 version = "1.0.0"
 
@@ -304,7 +311,6 @@ shadowJar {
     exclude 'META-INF/proguard/**'
     exclude 'META-INF/gradle/**'
     exclude 'META-INF/versions/**'
-    // todo: this is broken until https://github.com/johnrengelman/shadow/pull/879 is merged
     minimize {
         exclude(dependency("org.slf4j:slf4j-api:.*"))
         exclude(dependency("ch.qos.logback:.*:.*"))
