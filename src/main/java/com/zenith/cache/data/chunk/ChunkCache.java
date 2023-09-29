@@ -33,10 +33,7 @@ import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector3i;
 
 import java.io.UncheckedIOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -175,9 +172,11 @@ public class ChunkCache implements CachedData {
     // server doesn't always send us tile entity update packets and relies on logic in client
     private void handleBlockUpdateTileEntity(BlockChangeEntry record, MutableVec3i pos, ChunkSection section, Chunk chunk) {
         if (record.getBlock() == 0) {
-            chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == pos.getX() &&
-                tileEntity.getY() == pos.getY() &&
-                tileEntity.getZ() == pos.getZ());
+            synchronized (chunk.blockEntities) {
+                chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == pos.getX() &&
+                    tileEntity.getY() == pos.getY() &&
+                    tileEntity.getZ() == pos.getZ());
+            }
         } else {
             String blockName = BLOCK_DATA_MANAGER.getBlockFromBlockStateId(record.getBlock()).map(Block::getName).orElse(null);
             if (blockName == null) {
@@ -209,19 +208,21 @@ public class ChunkCache implements CachedData {
             "y", new IntTag("y", position.getY()),
             "z", new IntTag("z", position.getZ())
         ));
-        Optional<BlockEntityInfo> foundTileEntity = chunk.blockEntities.stream()
-            .filter(tileEntity -> tileEntity.getX() == position.getX() &&
-                tileEntity.getY() == position.getY() &&
-                tileEntity.getZ() == position.getZ())
-            .findFirst();
-        if (foundTileEntity.isPresent()) {
-            foundTileEntity.get().setNbt(tileEntityTag);
-        } else {
-            chunk.blockEntities.add(new BlockEntityInfo(position.getX(),
-                                                        position.getY(),
-                                                        position.getZ(),
-                                                        type,
-                                                        tileEntityTag));
+        synchronized (chunk.blockEntities) {
+            Optional<BlockEntityInfo> foundTileEntity = chunk.blockEntities.stream()
+                .filter(tileEntity -> tileEntity.getX() == position.getX() &&
+                    tileEntity.getY() == position.getY() &&
+                    tileEntity.getZ() == position.getZ())
+                .findFirst();
+            if (foundTileEntity.isPresent()) {
+                foundTileEntity.get().setNbt(tileEntityTag);
+            } else {
+                chunk.blockEntities.add(new BlockEntityInfo(position.getX(),
+                                                            position.getY(),
+                                                            position.getZ(),
+                                                            type,
+                                                            tileEntityTag));
+            }
         }
     }
 
@@ -274,29 +275,30 @@ public class ChunkCache implements CachedData {
             if (chunk == null) {
                 return false;
             }
-            final List<BlockEntityInfo> tileEntities = chunk.blockEntities;
-            final Optional<BlockEntityInfo> existingTileEntity = tileEntities.stream()
-                .filter(tileEntity -> tileEntity.getX() == packet.getPosition().getX() &&
-                    tileEntity.getY() == packet.getPosition().getY() &&
-                    tileEntity.getZ() == packet.getPosition().getZ())
-                .findFirst();
-            final CompoundTag packetNbt = packet.getNbt();
-            if (packetNbt != null && !packetNbt.isEmpty()) {
-                // ensure position is encoded in NBT
-                // not sure if this is totally needed or not
-                packetNbt.put(new IntTag("x", packet.getPosition().getX()));
-                packetNbt.put(new IntTag("y", packet.getPosition().getY()));
-                packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
-                existingTileEntity.ifPresentOrElse(
-                    tileEntity -> tileEntity.setNbt(packetNbt),
-                    () -> tileEntities.add(new BlockEntityInfo(packet.getPosition().getX(),
-                                                               packet.getPosition().getY(),
-                                                               packet.getPosition().getZ(),
-                                                               packet.getType(),
-                                                               packetNbt))
-                );
-            } else {
-                existingTileEntity.ifPresent(tileEntities::remove);
+            synchronized (chunk.blockEntities) {
+                final Optional<BlockEntityInfo> existingTileEntity = chunk.blockEntities.stream()
+                    .filter(tileEntity -> tileEntity.getX() == packet.getPosition().getX() &&
+                        tileEntity.getY() == packet.getPosition().getY() &&
+                        tileEntity.getZ() == packet.getPosition().getZ())
+                    .findFirst();
+                final CompoundTag packetNbt = packet.getNbt();
+                if (packetNbt != null && !packetNbt.isEmpty()) {
+                    // ensure position is encoded in NBT
+                    // not sure if this is totally needed or not
+                    packetNbt.put(new IntTag("x", packet.getPosition().getX()));
+                    packetNbt.put(new IntTag("y", packet.getPosition().getY()));
+                    packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
+                    existingTileEntity.ifPresentOrElse(
+                        tileEntity -> tileEntity.setNbt(packetNbt),
+                        () -> chunk.blockEntities.add(new BlockEntityInfo(packet.getPosition().getX(),
+                                                                   packet.getPosition().getY(),
+                                                                   packet.getPosition().getZ(),
+                                                                   packet.getType(),
+                                                                   packetNbt))
+                    );
+                } else {
+                    existingTileEntity.ifPresent(chunk.blockEntities::remove);
+                }
             }
             return true;
         });
@@ -417,8 +419,8 @@ public class ChunkCache implements CachedData {
                                   chunkZ,
                                   new ChunkSection[sectionsCount],
                                   sectionsCount,
-                                  new ArrayList<>(
-                                      List.of(p.getBlockEntities())),
+                                  Collections.synchronizedList(new ArrayList<>(
+                                      List.of(p.getBlockEntities()))),
                                   p.getLightData(),
                                   p.getHeightMaps());
             }
