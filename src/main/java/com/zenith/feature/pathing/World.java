@@ -9,6 +9,7 @@ import lombok.experimental.UtilityClass;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
@@ -96,5 +97,18 @@ public class World {
             }
         }
         return true;
+    }
+
+    public static Optional<BlockPos> findSupportingBlockPos(final LocalizedCollisionBox cb) {
+        BlockPos supportingBlock = null;
+        double dist = Double.MAX_VALUE;
+        for (BlockPos blockPos2 : getBlockPosListInCollisionBox(cb)) {
+            final double curDist = blockPos2.squaredDistance(cb.getX(), cb.getY(), cb.getZ());
+            if (curDist < dist || curDist == dist && (supportingBlock == null || supportingBlock.compareTo(blockPos2) < 0)) {
+                supportingBlock = blockPos2;
+                dist = curDist;
+            }
+        }
+        return Optional.ofNullable(supportingBlock);
     }
 }

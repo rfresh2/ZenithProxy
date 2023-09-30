@@ -19,12 +19,12 @@ import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.math.MathHelper.floorToInt;
 
 public class PlayerSimulation extends Module {
     private double gravity = 0.08;
@@ -64,6 +64,8 @@ public class PlayerSimulation extends Module {
     private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
     private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(STANDING_COLLISION_BOX, 0, 0, 0);
     private float stepHeight = 0.6F;
+    private boolean forceUpdateSupportingBlockPos = false;
+    private Optional<BlockPos> supportingBlockPos = Optional.empty();
 
     @Override
     public Subscription subscribeEvents() {
@@ -276,8 +278,8 @@ public class PlayerSimulation extends Module {
 
             // todo: lava movement
         } else {
-            float floorSlipperiness = BLOCK_DATA_MANAGER.getBlockSlipperiness(World.getBlockAtBlockPos(new BlockPos(
-                floorToInt(this.x), floorToInt(this.y) - 1, floorToInt(this.z))));
+            final Block floorBlock = World.getBlockAtBlockPos(getVelocityAffectingPos());
+            float floorSlipperiness = BLOCK_DATA_MANAGER.getBlockSlipperiness(floorBlock);
             float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
             applyMovementInput(movementInputVec, floorSlipperiness);
             if (!isFlying) velocity.setY(velocity.getY() - gravity);
@@ -300,7 +302,6 @@ public class PlayerSimulation extends Module {
         boolean isYAdjusted = velocity.getY() != adjustedMovement.getY();
         boolean isXAdjusted = velocity.getX() != adjustedMovement.getX();
         boolean isZAdjusted = velocity.getZ() != adjustedMovement.getZ();
-        this.onGround = isYAdjusted && velocity.getY() < 0.0;
         if (onGround && (isXAdjusted || isZAdjusted)) {
             // attempt to step up in xz direction block
             MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(new MutableVec3d(velocity.getX(), stepHeight, velocity.getZ()),
@@ -330,9 +331,7 @@ public class PlayerSimulation extends Module {
                 adjustedMovement = stepUpAdjustedVec;
             }
         }
-        if (adjustedMovement.lengthSquared() > 1.0E-7) {
-
-        }
+        this.setOnGround(isYAdjusted && velocity.getY() < 0.0, adjustedMovement);
 
         final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
                                                                                             adjustedMovement.getY(),
@@ -349,7 +348,6 @@ public class PlayerSimulation extends Module {
         }
 
         // todo: apply block falling effects like bouncing off slime blocks
-        // todo: apply entity speed effects
 
         this.x = ((movedPlayerCollisionBox.getMinX() + movedPlayerCollisionBox.getMaxX()) / 2.0);
         this.y = movedPlayerCollisionBox.getMinY();
@@ -357,6 +355,70 @@ public class PlayerSimulation extends Module {
         syncPlayerCollisionBox();
         float velocityMultiplier = this.getBlockSpeedFactor();
         velocity.multiply(velocityMultiplier, 1.0, velocityMultiplier);
+    }
+
+    private void setOnGround(boolean onGround, MutableVec3d movement) {
+        this.onGround = onGround;
+        updateSupportingBlockPos(onGround, movement);
+    }
+
+    private void updateSupportingBlockPos(boolean onGround, MutableVec3d movement) {
+        if (onGround) {
+            LocalizedCollisionBox box = this.playerCollisionBox;
+            LocalizedCollisionBox box2 = new LocalizedCollisionBox(box.getMinX(), box.getMaxX(), box.getMinY() - 1.0E-6, box.getMinY(), box.getMinZ(), box.getMaxZ(), x, y, z);
+            Optional<BlockPos> optional = World.findSupportingBlockPos(box2);
+            if (optional.isPresent() || this.forceUpdateSupportingBlockPos) {
+                this.supportingBlockPos = optional;
+            } else if (movement != null) {
+                LocalizedCollisionBox box3 = new LocalizedCollisionBox(box2.getMinX() - movement.getX(),
+                                                                       box2.getMaxX() - movement.getX(),
+                                                                       box2.getMinY(),
+                                                                       box2.getMaxY(),
+                                                                       box2.getMinZ() - movement.getZ(),
+                                                                       box2.getMaxZ() - movement.getZ(),
+                                                                       x,
+                                                                       y,
+                                                                       z);
+                optional = World.findSupportingBlockPos(box3);
+                this.supportingBlockPos = optional;
+            }
+
+            this.forceUpdateSupportingBlockPos = optional.isEmpty();
+        } else {
+            this.forceUpdateSupportingBlockPos = false;
+            if (this.supportingBlockPos.isPresent()) {
+                this.supportingBlockPos = Optional.empty();
+            }
+        }
+    }
+
+    private BlockPos getVelocityAffectingPos() {
+        return this.getPosWithYOffset(0.500001F);
+    }
+
+    private BlockPos getPosWithYOffset(float offset) {
+        if (this.supportingBlockPos.isPresent()) {
+            BlockPos blockPos = this.supportingBlockPos.get();
+            if (!(offset > 1.0E-5F)) {
+                return blockPos;
+            } else {
+                // todo: fences and walls calcs
+//                BlockState blockState = World.getBlockState(blockPos);
+                return
+                    (!((double)offset <= 0.5)
+//                        || !blockState.isIn(BlockTags.FENCES)
+                    )
+//                    && !blockState.isIn(BlockTags.WALLS)
+//                    && !(blockState.getBlock() instanceof FenceGateBlock)
+                    ? new BlockPos(blockPos.getX(), MathHelper.floorToInt(this.y - (double)offset), blockPos.getZ())
+                    : blockPos;
+            }
+        } else {
+            int i = MathHelper.floorToInt(this.x);
+            int j = MathHelper.floorToInt(this.y - (double)offset);
+            int k = MathHelper.floorToInt(this.z);
+            return new BlockPos(i, j, k);
+        }
     }
 
     private MutableVec3d adjustMovementForCollisions(MutableVec3d movement, LocalizedCollisionBox pCollisionBox, List<LocalizedCollisionBox> blockCollisionBoxes) {
@@ -528,6 +590,8 @@ public class PlayerSimulation extends Module {
         this.onGround = true; // todo: cache
         this.lastOnGround = true;
         this.velocity = new MutableVec3d(0, 0, 0);
+        this.supportingBlockPos = Optional.empty();
+        this.forceUpdateSupportingBlockPos = false;
         this.ticksSinceLastPositionPacketSent = 0;
         if (full) {
             this.isSneaking = this.wasSneaking = false;
