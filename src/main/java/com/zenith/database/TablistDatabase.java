@@ -26,7 +26,10 @@ public class TablistDatabase extends LockingDatabase {
     }
 
     private void handleTickEvent(DatabaseTickEvent event) {
-        this.queryExecutor.executeTransaction(this::syncTablist);
+        // we aren't using the queue based insert system here so we need to check if we have the lock manually
+        if (this.lockAcquired.get()) {
+            this.queryExecutor.executeTransaction(this::syncTablist);
+        }
     }
 
     private void syncTablist(Configuration configuration) {
