@@ -103,10 +103,18 @@ public class World {
         BlockPos supportingBlock = null;
         double dist = Double.MAX_VALUE;
         for (BlockPos blockPos2 : getBlockPosListInCollisionBox(cb)) {
-            final double curDist = blockPos2.squaredDistance(cb.getX(), cb.getY(), cb.getZ());
-            if (curDist < dist || curDist == dist && (supportingBlock == null || supportingBlock.compareTo(blockPos2) < 0)) {
-                supportingBlock = blockPos2;
-                dist = curDist;
+            List<LocalizedCollisionBox> collisionBoxes = getBlockState(blockPos2).getCollisionBoxes().stream()
+                .map(collisionBox -> new LocalizedCollisionBox(collisionBox,
+                                                               blockPos2.getX(),
+                                                               blockPos2.getY(),
+                                                               blockPos2.getZ()))
+                .toList();
+            if (collisionBoxes.stream().anyMatch(collisionBox -> collisionBox.intersects(cb))) {
+                final double curDist = blockPos2.squaredDistance(cb.getX(), cb.getY(), cb.getZ());
+                if (curDist < dist || curDist == dist && (supportingBlock == null || supportingBlock.compareTo(blockPos2) < 0)) {
+                    supportingBlock = blockPos2;
+                    dist = curDist;
+                }
             }
         }
         return Optional.ofNullable(supportingBlock);
