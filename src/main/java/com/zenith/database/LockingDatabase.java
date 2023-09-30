@@ -23,7 +23,7 @@ import static java.util.Objects.nonNull;
 public abstract class LockingDatabase extends Database {
     private static final int defaultMaxQueueLen = 100;
     protected final Queue<InsertInstance> insertQueue = new ConcurrentLinkedQueue<>();
-    private final AtomicBoolean lockAcquired = new AtomicBoolean(false);
+    protected final AtomicBoolean lockAcquired = new AtomicBoolean(false);
     private final RedisClient redisClient;
     private RLock rLock;
     private ScheduledExecutorService lockExecutorService;
