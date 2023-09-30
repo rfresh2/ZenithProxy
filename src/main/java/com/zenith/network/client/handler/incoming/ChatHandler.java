@@ -39,7 +39,7 @@ public class ChatHandler implements AsyncIncomingHandler<ServerChatPacket, Clien
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
                 if (mcTextRoot.getChildren().stream().anyMatch(child -> nonNull(child.getColor()) && child.getColor().equals(new Color(170, 0, 0)))) {
-                    final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(messageString);
+                    final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(messageString, true);
                     if (deathMessageParseResult.isPresent()) {
                         EVENT_BUS.postAsync(new DeathMessageEvent(deathMessageParseResult.get(), messageString));
                         if (deathMessageParseResult.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {

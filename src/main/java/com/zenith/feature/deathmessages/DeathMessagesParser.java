@@ -48,10 +48,10 @@ public class DeathMessagesParser {
         deathMessageSchemaInstances = schemaInstancesTemp;
     }
 
-    public Optional<DeathMessageParseResult> parse(final String rawInput) {
+    public Optional<DeathMessageParseResult> parse(final String rawInput, final boolean verifyPlayers) {
         if (nonNull(deathMessageSchemaInstances)) {
             for (final DeathMessageSchemaInstance instance : deathMessageSchemaInstances) {
-                final Optional<DeathMessageParseResult> parse = instance.parse(rawInput);
+                final Optional<DeathMessageParseResult> parse = instance.parse(rawInput, verifyPlayers);
                 if (parse.isPresent()) {
                     return parse;
                 }

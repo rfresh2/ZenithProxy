@@ -145,7 +145,7 @@ public class DeathMessageParserTest {
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         Shared.loadConfig();
         Shared.loadLaunchConfig();
-        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(rawInput);
+        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(rawInput, false);
         assertTrue(deathMessageParseResult.isPresent());
         assertEquals(deathMessageParseResult.get().getVictim(), victim);
         if (nonNull(killerName)) {
