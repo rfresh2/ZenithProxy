@@ -1,8 +1,22 @@
 # ZenithProxy
 
-[Discord Server](https://discord.gg/nJZrSaRKtb)
+<p align="center">
+  <img alt="Discord" src="https://dcbadge.vercel.app/api/server/nJZrSaRKtb"
+</p>
 
-Minecraft 1.20.1 proxy/bot intended for use on 2b2t.org. 
+<p align="center">
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/rfresh2/ZenithProxy/total">
+  <img src="https://img.shields.io/badge/MC-1.12.2-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.20.1-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/github/languages/code-size/rfresh2/ZenithProxy.svg" alt="Code size"/>
+  <img src="https://img.shields.io/github/repo-size/rfresh2/ZenithProxy.svg" alt="GitHub repo size"/>
+  <img src="https://tokei.rs/b1/github/rfresh2/ZenithProxy?category=code&style=flat" alt="Lines of Code"/>
+</p>
+
+
+Minecraft proxy/bot intended for use on 2b2t.org.
+
+Currently supports 1.12.2 and 1.20.1
 
 The primary purpose is to have Minecraft accounts always online and securely shared by multiple people.
 
@@ -66,14 +80,17 @@ OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
 
 ### Release Channels
 
-ZenithProxy has 3 release channels:
+ZenithProxy has 2 release channels:
 
 * (Default) `java` - Supports all operating systems
   * Requires Java 21+. [Java Downloads](https://adoptium.net/)
 * (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
-* `git` - Locally builds and runs the proxy from source in Java
-  * Requires Java 21+, plus [git](https://git-scm.com/downloads) installed and the repository cloned.
 
+You also need to select a minecraft version. There are currently 2 options:
+* `1.20.1`
+* `1.12.2`
+
+The full valid release channel you select should be in this format: `linux.1.20.1` or `java.1.12.2`
 
 ### DNS Setup
 
