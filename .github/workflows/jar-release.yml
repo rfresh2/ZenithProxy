@@ -3,7 +3,7 @@ name: ZenithProxy Java Build And Release
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+java'
+      - '[0-9]+.[0-9]+.[0-9]+\+java.1.20-beta'
 
 jobs:
   build:
@@ -27,7 +27,6 @@ jobs:
       - name: Build ZenithProxy
         uses: gradle/gradle-build-action@v2
         with:
-          dependency-graph: generate-and-submit
           arguments: jarBuild
 
       - name: Release Artifact
@@ -35,6 +34,6 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ github.ref_name }}"
-          prerelease: false
+          prerelease: true
           files: |
             build/libs/ZenithProxy.jar
