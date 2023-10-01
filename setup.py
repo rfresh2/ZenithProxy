@@ -14,10 +14,9 @@ if os.path.exists("launch_config.json"):
             print("Invalid input. Enter y or n")
 
 while True:
-    print("Select a ZenithProxy release channel: (1/2/3)")
+    print("Select a ZenithProxy release channel: (1/2)")
     print("1. java")
     print("2. linux")
-    print("3. git")
     i1 = input("> ")
     if i1 == "1":
         release_channel = "java"
@@ -25,14 +24,8 @@ while True:
     elif i1 == "2":
         release_channel = "linux"
         break
-    elif i1 == "3":
-        release_channel = "git"
-        if not os.path.exists(".git"):
-            print("Local git repository not found. Please clone the repository and try again.")
-            exit(1)
-        break
     else:
-        print("Invalid input. Enter 1, 2, or 3")
+        print("Invalid input. Enter 1 or 2")
 
 while True:
     print("Select a Minecraft version: (1/2)")
