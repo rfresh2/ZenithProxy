@@ -33,15 +33,32 @@ while True:
         break
     else:
         print("Invalid input. Enter 1, 2, or 3")
+
+while True:
+    print("Select a Minecraft version: (1/2)")
+    print("1. 1.20.1")
+    print("2. 1.12.2")
+    i1 = input("> ")
+    if i1 == "1":
+        minecraft_version = "1.20.1"
+        break
+    elif i1 == "2":
+        minecraft_version = "1.12.2"
+        break
+    else:
+        print("Invalid input. Enter 1 or 2")
+
+
 launch_config = {
     "auto_update": True,
     "auto_update_launcher": True,
-    "release_channel": release_channel,
+    "release_channel": release_channel + "." + minecraft_version,
     "version": "0.0.0",
     "local_version": "0.0.0",
     "repo_owner": "rfresh2",
     "repo_name": "ZenithProxy"
 }
+
 with open("launch_config.json", "w") as f:
     f.write(json.dumps(launch_config, indent=2))
     print("launch_config written successfully")
