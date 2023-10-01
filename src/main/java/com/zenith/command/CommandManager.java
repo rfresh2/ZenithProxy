@@ -54,6 +54,7 @@ public class CommandManager {
            new ProxyClientConnectionCommand(),
            new QueueWarningCommand(),
            new ReconnectCommand(),
+           new ReleaseChannelCommand(),
            new RespawnCommand(),
            new SendMessageCommand(),
            new ServerCommand(),
