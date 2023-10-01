@@ -367,8 +367,9 @@ def validate_system_with_config():
         return True
     elif release_channel.startswith("java"):
         java_version = get_java_version()
-        if java_version is None or java_version < 21:
-            print("Invalid Java version on PATH. Found: '" + java_version + "'Please install Java 21 or higher.")
+        min_java_version = 21 if version.startswith("2") else 17
+        if java_version is None or java_version < min_java_version:
+            print("Invalid Java version on PATH. Found: '" + java_version + "'Please install Java " + min_java_version + "or higher.")
             return False
         return True
     elif release_channel.startswith("linux"):
@@ -389,8 +390,6 @@ if json_data is None:
     json_data = init_launch_config()
 read_launch_config(json_data)
 validate_launch_config()
-if not validate_system_with_config():
-    critical_error("Invalid system for release channel: " + release_channel)
 
 # Determine if there's a new update
 # Install new update if available
@@ -423,6 +422,9 @@ if version == "0.0.0" or local_version == "0.0.0":
     print("CRITICAL: Invalid version found:'", version, "'")
     print("Enable `auto_updater` or specify a valid version in launch_config.json.")
     exit(69)
+
+if not validate_system_with_config():
+    critical_error("Invalid system for release channel: " + release_channel)
 
 # Launch application
 
