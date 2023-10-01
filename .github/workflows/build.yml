@@ -5,7 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - "mainline"
+      - "1.20.1"
 
 jobs:
   build:
