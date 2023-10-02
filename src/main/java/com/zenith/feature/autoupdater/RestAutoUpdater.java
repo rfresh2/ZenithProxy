@@ -19,15 +19,14 @@ public class RestAutoUpdater extends AutoUpdater {
     private final ObjectMapper objectMapper;
 
     public RestAutoUpdater() {
+        String baseUrl = LAUNCH_CONFIG.repo_owner.equals("rfresh2") && LAUNCH_CONFIG.repo_name.equals("ZenithProxy")
+            ? "https://github.2b2t.vc"
+            : "https://api.github.com";
         this.httpClient = HttpClient.create()
             .secure()
-            .baseUrl("https://api.github.com/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name)
+            .baseUrl(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name)
             .headers(h -> h.add(HttpHeaderNames.ACCEPT, "application/vnd.github+json"))
             .headers(h -> h.add("X-GitHub-Api-Version", "2022-11-28"));
-        String githubToken = System.getenv("GITHUB_TOKEN");
-        if (githubToken != null) {
-            httpClient.headers(h -> h.add(HttpHeaderNames.AUTHORIZATION, "Bearer " + githubToken));
-        }
         this.objectMapper = new ObjectMapper();
     }
 
