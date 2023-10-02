@@ -80,7 +80,7 @@ OR clone the repository `git clone git@github.com:rfresh2/ZenithProxy.git`
 
 ### Release Channels
 
-ZenithProxy has 2 release channels:
+ZenithProxy has 2 system platforms:
 
 * (Default) `java` - Supports all operating systems
   * Requires Java 21+. [Java Downloads](https://adoptium.net/)
@@ -90,7 +90,7 @@ You also need to select a minecraft version. There are currently 2 options:
 * `1.20.1`
 * `1.12.2`
 
-The full valid release channel you select should be in this format: `linux.1.20.1` or `java.1.12.2`
+The release channel is based on a combination of the platform and minecraft version, examples: `linux.1.20.1` or `java.1.12.2`
 
 ### DNS Setup
 

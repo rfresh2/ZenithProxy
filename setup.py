@@ -14,7 +14,7 @@ if os.path.exists("launch_config.json"):
             print("Invalid input. Enter y or n")
 
 while True:
-    print("Select a ZenithProxy release channel: (1/2)")
+    print("Select a ZenithProxy platform: (1/2)")
     print("1. java")
     print("2. linux")
     i1 = input("> ")
