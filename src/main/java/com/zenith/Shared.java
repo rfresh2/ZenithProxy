@@ -44,6 +44,7 @@ import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.handler.player.incoming.ChatCommandHandler;
 import com.zenith.network.server.handler.player.incoming.ChatHandler;
 import com.zenith.network.server.handler.player.incoming.ClientInformationHandler;
 import com.zenith.network.server.handler.player.incoming.PongHandler;
@@ -132,6 +133,7 @@ public class Shared {
         //
         .registerInbound(ServerboundHelloPacket.class, new HelloHandler())
         .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
+        .registerInbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
         .registerInbound(ServerboundChatPacket.class, new ChatHandler())
         .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
         .registerInbound(ServerboundPongPacket.class, new PongHandler())
