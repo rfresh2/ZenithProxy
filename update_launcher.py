@@ -37,7 +37,11 @@ def get_github_base_headers():
 
 # Use our bundled SSL certs to avoid issues with any old operating systems
 def get_ssl_context():
-    context = ssl.create_default_context(cafile="cacert.pem")
+    # only set if file exists
+    if os.path.exists("cacert.pem"):
+        context = ssl.create_default_context(cafile="cacert.pem")
+    else:
+        context = ssl.create_default_context()
     return context
 
 
