@@ -117,12 +117,14 @@ public class Proxy {
                 DEFAULT_LOG.info("Started Databases");
             }
             if (CONFIG.discord.enable) {
+                boolean err = false;
                 try {
                     DISCORD_BOT.start();
                 } catch (final Throwable e) {
+                    err = true;
                     DISCORD_LOG.error("Failed starting discord bot", e);
                 }
-                DISCORD_LOG.info("Started Discord Bot");
+                if (!err) DISCORD_LOG.info("Started Discord Bot");
             }
             if (CONFIG.server.extra.whitelist.whitelistRefresh) {
                 WHITELIST_MANAGER.startRefreshTask();
