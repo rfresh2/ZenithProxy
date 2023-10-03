@@ -28,6 +28,7 @@ public class VisualRangeCommand extends Command {
                         "friend add/del <player>",
                         "friend list",
                         "friend clear",
+                        "ignoreFriends on/off",
                         "enemyTracking on/off"
                 ),
                 aliases()
@@ -37,81 +38,95 @@ public class VisualRangeCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("visualRange")
-                .then(literal("on").executes(c -> {
-                    CONFIG.client.extra.visualRangeAlert = true;
-                    c.getSource().getEmbedBuilder()
-                            .title("VisualRange On!")
-                            .color(Color.CYAN);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.client.extra.visualRangeAlert = false;
-                    c.getSource().getEmbedBuilder()
-                            .title("VisualRange Off!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("mention")
-                                .then(literal("on").executes(c -> {
-                                    CONFIG.client.extra.visualRangeAlertMention = true;
-                                    c.getSource().getEmbedBuilder()
-                                            .title("VisualRange Mentions On!")
-                                            .description("Friend List: \n " + friendListString())
-                                            .color(Color.CYAN);
-                                }))
-                                .then(literal("off").executes(c -> {
-                                    CONFIG.client.extra.visualRangeAlertMention = false;
-                                    c.getSource().getEmbedBuilder()
-                                            .title("VisualRange Mentions Off!")
-                                            .color(Color.CYAN);
-                                })))
-                        .then(literal("friend")
-                                .then(literal("add").then(argument("player", string()).executes(c -> {
-                                    final String player = StringArgumentType.getString(c, "player");
-                                    WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(player).ifPresentOrElse(e ->
-                                                    c.getSource().getEmbedBuilder()
-                                                            .title("Friend added")
-                                                            .description("Friend List: \n " + friendListString())
-                                                            .color(Color.CYAN),
-                                            () -> c.getSource().getEmbedBuilder()
-                                                    .title("Failed to add user: " + escape(player) + " to friends. Unable to lookup profile.")
-                                                    .description("Friend List: \n " + friendListString())
-                                                    .color(Color.CYAN));
-                                    return 1;
-                                })))
-                                .then(literal("del").then(argument("player", string()).executes(c -> {
-                                    final String player = StringArgumentType.getString(c, "player");
-                                    WHITELIST_MANAGER.removeFriendWhitelistEntryByUsername(player);
-                                    c.getSource().getEmbedBuilder()
-                                            .title("Friend deleted")
-                                            .description("Friend List: \n " + friendListString())
-                                            .color(Color.CYAN);
-                                    return 1;
-                                })))
-                                .then(literal("list").executes(c -> {
-                                    c.getSource().getEmbedBuilder()
-                                            .title("Friend list")
-                                            .description("Friend List: \n " + friendListString())
-                                            .color(Color.CYAN);
-                                }))
-                                .then(literal("clear").executes(c -> {
-                                    WHITELIST_MANAGER.clearFriendWhitelist();
-                                    c.getSource().getEmbedBuilder()
-                                            .title("Friend list cleared!")
-                                            .color(Color.CYAN);
-                                })))
-                .then(literal("enemytracking")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.visualRangePositionTracking = true;
+            .then(literal("on").executes(c -> {
+                CONFIG.client.extra.visualRangeAlert = true;
+                c.getSource().getEmbedBuilder()
+                    .title("VisualRange On!")
+                    .color(Color.CYAN);
+            }))
+            .then(literal("off").executes(c -> {
+                CONFIG.client.extra.visualRangeAlert = false;
+                c.getSource().getEmbedBuilder()
+                    .title("VisualRange Off!")
+                    .color(Color.CYAN);
+            }))
+            .then(literal("mention")
+                      .then(literal("on").executes(c -> {
+                          CONFIG.client.extra.visualRangeAlertMention = true;
+                          c.getSource().getEmbedBuilder()
+                              .title("VisualRange Mentions On!")
+                              .description("Friend List: \n " + friendListString())
+                              .color(Color.CYAN);
+                      }))
+                      .then(literal("off").executes(c -> {
+                          CONFIG.client.extra.visualRangeAlertMention = false;
+                          c.getSource().getEmbedBuilder()
+                              .title("VisualRange Mentions Off!")
+                              .color(Color.CYAN);
+                      })))
+            .then(literal("friend")
+                      .then(literal("add").then(argument("player", string()).executes(c -> {
+                          final String player = StringArgumentType.getString(c, "player");
+                          WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(player)
+                              .ifPresentOrElse(e ->
+                                                   c.getSource().getEmbedBuilder()
+                                                       .title("Friend added")
+                                                       .description("Friend List: \n " + friendListString())
+                                                       .color(Color.CYAN),
+                                               () -> c.getSource().getEmbedBuilder()
+                                                   .title("Failed to add user: " + escape(player) + " to friends. Unable to lookup profile.")
+                                                   .description("Friend List: \n " + friendListString())
+                                                   .color(Color.CYAN));
+                          return 1;
+                      })))
+                      .then(literal("del").then(argument("player", string()).executes(c -> {
+                          final String player = StringArgumentType.getString(c, "player");
+                          WHITELIST_MANAGER.removeFriendWhitelistEntryByUsername(player);
+                          c.getSource().getEmbedBuilder()
+                              .title("Friend deleted")
+                              .description("Friend List: \n " + friendListString())
+                              .color(Color.CYAN);
+                          return 1;
+                      })))
+                      .then(literal("list").executes(c -> {
+                          c.getSource().getEmbedBuilder()
+                              .title("Friend list")
+                              .description("Friend List: \n " + friendListString())
+                              .color(Color.CYAN);
+                      }))
+                      .then(literal("clear").executes(c -> {
+                          WHITELIST_MANAGER.clearFriendWhitelist();
+                          c.getSource().getEmbedBuilder()
+                              .title("Friend list cleared!")
+                              .color(Color.CYAN);
+                      })))
+            .then(literal("ignorefriends")
+                      .then(literal("on").executes(c -> {
+                          CONFIG.client.extra.visualRangeIgnoreFriends = true;
+                          c.getSource().getEmbedBuilder()
+                              .title("Ignore Friends On!")
+                              .color(Color.CYAN);
+                      }))
+                      .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.visualRangeIgnoreFriends = false;
                             c.getSource().getEmbedBuilder()
-                                    .title("Enemy Tracking On!")
-                                    .description("Request tracking data from the proxy admin")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.visualRangePositionTracking = false;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Enemy Tracking Off!")
-                                    .color(Color.CYAN);
-                        })));
+                                .title("Ignore Friends Off!")
+                                .color(Color.CYAN);
+                        })))
+            .then(literal("enemytracking")
+                      .then(literal("on").executes(c -> {
+                          CONFIG.client.extra.visualRangePositionTracking = true;
+                          c.getSource().getEmbedBuilder()
+                              .title("Enemy Tracking On!")
+                              .description("Request tracking data from the proxy admin")
+                              .color(Color.CYAN);
+                      }))
+                      .then(literal("off").executes(c -> {
+                          CONFIG.client.extra.visualRangePositionTracking = false;
+                          c.getSource().getEmbedBuilder()
+                              .title("Enemy Tracking Off!")
+                              .color(Color.CYAN);
+                      })));
     }
 
     @Override

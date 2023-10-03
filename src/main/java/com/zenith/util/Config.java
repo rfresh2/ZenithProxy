@@ -57,12 +57,12 @@ public final class Config {
             public AutoTotem autoTotem = new AutoTotem();
             public Chat chat = new Chat();
             public boolean visualRangeAlert = true;
+            public boolean visualRangeIgnoreFriends = false;
             public boolean visualRangeAlertMention = false;
             public boolean visualRangePositionTracking = false;
             public List<WhitelistEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
-            public boolean twentyMinuteReconnectIfStuck = true;
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;

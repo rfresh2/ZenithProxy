@@ -31,7 +31,7 @@ public abstract class AutoUpdater {
             DisconnectEvent.class, this::handleDisconnectEvent
         );
         scheduleUpdateCheck(this::updateCheck,
-                            30 + ThreadLocalRandom.current().nextInt(30),
+                            30 + ThreadLocalRandom.current().nextInt(150),
                             Math.max(CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, 300),
                             TimeUnit.SECONDS);
     }

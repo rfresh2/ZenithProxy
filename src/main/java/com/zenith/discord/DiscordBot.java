@@ -555,58 +555,61 @@ public class DiscordBot {
     }
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
-        if (CONFIG.client.extra.visualRangeAlert) {
-            boolean notFriend = CONFIG.client.extra.friendsList.stream()
-                    .noneMatch(friend -> friend.username.equalsIgnoreCase(event.playerEntry.getName()));
-            EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
-                    .title("Player In Visual Range")
-                    .color(notFriend ? Color.RUBY : Color.GREEN)
-                    .addField("Player Name", escape(event.playerEntry.getName()), true)
-                    .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
-                    .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString());
+        if (!CONFIG.client.extra.visualRangeAlert) return;
+        boolean isFriend = CONFIG.client.extra.friendsList.stream()
+                .anyMatch(friend -> friend.uuid.equals(event.playerEntry.getId()));
+        if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
+            DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry.getName());
+            return;
+        }
+        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
+                .title("Player In Visual Range")
+                .color(isFriend ? Color.GREEN : Color.RUBY)
+                .addField("Player Name", escape(event.playerEntry.getName()), true)
+                .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
+                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString());
 
-            if (CONFIG.discord.reportCoords) {
-                embedCreateSpec.addField("Coordinates", "||["
-                        + (int) event.playerEntity.getX() + ", "
-                        + (int) event.playerEntity.getY() + ", "
-                        + (int) event.playerEntity.getZ()
-                        + "]||", false);
+        if (CONFIG.discord.reportCoords) {
+            embedCreateSpec.addField("Coordinates", "||["
+                    + (int) event.playerEntity.getX() + ", "
+                    + (int) event.playerEntity.getY() + ", "
+                    + (int) event.playerEntity.getZ()
+                    + "]||", false);
+        }
+        final String buttonId = "addFriend" + ThreadLocalRandom.current().nextInt(1000000);
+        final List<Button> buttons = asList(Button.primary(buttonId, "Add Friend"));
+        final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
+            if (e.getCustomId().equals(buttonId)) {
+                DISCORD_LOG.info(e.getInteraction().getMember()
+                        .map(User::getTag).orElse("Unknown")
+                        + " added friend: " + event.playerEntry.getName() + " [" + event.playerEntry.getId() + "]");
+                WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
+                e.reply().withEmbeds(EmbedCreateSpec.builder()
+                        .title("Friend Added")
+                        .color(Color.GREEN)
+                        .addField("Player Name", escape(event.playerEntry.getName()), true)
+                        .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
+                        .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
+                        .build()).block();
+                saveConfig();
             }
-            final String buttonId = "addFriend" + ThreadLocalRandom.current().nextInt(1000000);
-            final List<Button> buttons = asList(Button.primary(buttonId, "Add Friend"));
-            final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
-                if (e.getCustomId().equals(buttonId)) {
-                    DISCORD_LOG.info(e.getInteraction().getMember()
-                            .map(User::getTag).orElse("Unknown")
-                            + " added friend: " + event.playerEntry.getName() + " [" + event.playerEntry.getId() + "]");
-                    WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
-                    e.reply().withEmbeds(EmbedCreateSpec.builder()
-                            .title("Friend Added")
-                            .color(Color.GREEN)
-                            .addField("Player Name", escape(event.playerEntry.getName()), true)
-                            .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
-                            .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
-                            .build()).block();
-                    saveConfig();
-                }
-                return Mono.empty();
-            };
-            if (CONFIG.client.extra.visualRangeAlertMention) {
-                if (notFriend) {
-                    if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
-                    } else {
-                        sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
-                    }
+            return Mono.empty();
+        };
+        if (CONFIG.client.extra.visualRangeAlertMention) {
+            if (!isFriend) {
+                if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
+                    sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                 } else {
-                    sendEmbedMessage(embedCreateSpec.build());
+                    sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                 }
             } else {
-                if (notFriend) {
-                    sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
-                } else {
-                    sendEmbedMessage(embedCreateSpec.build());
-                }
+                sendEmbedMessage(embedCreateSpec.build());
+            }
+        } else {
+            if (!isFriend) {
+                sendEmbedMessageWithButtons(embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
+            } else {
+                sendEmbedMessage(embedCreateSpec.build());
             }
         }
     }
