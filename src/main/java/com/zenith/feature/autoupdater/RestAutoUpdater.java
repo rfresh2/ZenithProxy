@@ -25,6 +25,7 @@ public class RestAutoUpdater extends AutoUpdater {
         this.httpClient = HttpClient.create()
             .secure()
             .baseUrl(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name)
+            .headers(h -> h.add(HttpHeaderNames.USER_AGENT, "ZenithProxy/" + LAUNCH_CONFIG.version))
             .headers(h -> h.add(HttpHeaderNames.ACCEPT, "application/vnd.github+json"))
             .headers(h -> h.add("X-GitHub-Api-Version", "2022-11-28"));
         this.objectMapper = new ObjectMapper();

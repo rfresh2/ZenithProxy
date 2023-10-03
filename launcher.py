@@ -34,13 +34,6 @@ default_linux_args = """\
 -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 \
 -Dio.netty.leakDetection.level=disabled"""
 
-github_headers = {
-    "User-Agent": "ZenithProxy/1.0",
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-    "Connection": "close"
-}
-
 
 def create_default_launch_config():
     print("Creating default launch_config.json")
@@ -163,12 +156,21 @@ def get_github_api_base_url():
         return "api.github.com"
 
 
+def get_github_base_headers():
+    return {
+        "User-Agent": "ZenithProxy/" + version,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "Connection": "close"
+    }
+
+
 def get_latest_release_and_ver(channel):
     latest_release = None
     url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100})}"
     try:
         connection = http.client.HTTPSConnection(get_github_api_base_url())
-        connection.request("GET", url, headers=github_headers)
+        connection.request("GET", url, headers=get_github_base_headers())
         response = connection.getresponse()
         if response.status == 200:
             releases = json.loads(response.read())
@@ -194,7 +196,7 @@ def get_release_for_ver(target_version):
     try:
         while not found_version and page < 10:
             connection = http.client.HTTPSConnection(get_github_api_base_url())
-            connection.request("GET", url, headers=github_headers)
+            connection.request("GET", url, headers=get_github_base_headers())
             response = connection.getresponse()
             if response.status == 200:
                 releases = json.loads(response.read())
@@ -219,7 +221,7 @@ def get_release_asset_id(release_id, asset_name):
     url = f"/repos/{repo_owner}/{repo_name}/releases/{release_id}"
     try:
         connection = http.client.HTTPSConnection(get_github_api_base_url())
-        connection.request("GET", url, headers=github_headers)
+        connection.request("GET", url, headers=get_github_base_headers())
         response = connection.getresponse()
         if response.status == 200:
             release_data = json.loads(response.read())
@@ -242,7 +244,7 @@ def download_release_asset(asset_id):
     url = f"/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
     try:
         connection = http.client.HTTPSConnection(get_github_api_base_url())
-        download_headers = github_headers.copy()
+        download_headers = get_github_base_headers()
         download_headers["Accept"] = "application/octet-stream"
         connection.request("GET", url, headers=download_headers)
         response = connection.getresponse()

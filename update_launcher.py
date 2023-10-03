@@ -11,17 +11,11 @@ release_channel = launch_config["release_channel"]
 auto_update_launcher = launch_config["auto_update_launcher"]
 repo_owner = launch_config["repo_owner"]
 repo_name = launch_config["repo_name"]
+version = launch_config["version"]
 launcher_tag = "launcher"
 
 if not auto_update_launcher or release_channel == "git":
     exit(0)
-
-github_headers = {
-    "User-Agent": "ZenithProxy/1.0",
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-    "Connection": "close"
-}
 
 
 def get_github_api_base_url():
@@ -31,11 +25,20 @@ def get_github_api_base_url():
         return "api.github.com"
 
 
+def get_github_base_headers():
+    return {
+        "User-Agent": "ZenithProxy/" + version,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "Connection": "close"
+    }
+
+
 def get_release_asset_id(tag, asset_name):
     url = f"/repos/{repo_owner}/{repo_name}/releases/tags/{tag}"
     try:
         connection = http.client.HTTPSConnection(get_github_api_base_url())
-        connection.request("GET", url, headers=github_headers)
+        connection.request("GET", url, headers=get_github_base_headers())
         response = connection.getresponse()
         if response.status == 200:
             release_data = json.loads(response.read())
@@ -58,7 +61,7 @@ def download_release_asset(asset_id):
     url = f"/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
     try:
         connection = http.client.HTTPSConnection(get_github_api_base_url())
-        download_headers = github_headers.copy()
+        download_headers = get_github_base_headers()
         download_headers["Accept"] = "application/octet-stream"
         connection.request("GET", url, headers=download_headers)
         response = connection.getresponse()
