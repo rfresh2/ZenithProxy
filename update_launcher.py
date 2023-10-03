@@ -2,6 +2,7 @@ import hashlib
 import http.client
 import json
 import os
+import ssl
 from urllib.parse import urlparse
 
 with open("launch_config.json", "r") as f:
@@ -34,10 +35,16 @@ def get_github_base_headers():
     }
 
 
+# Use our bundled SSL certs to avoid issues with any old operating systems
+def get_ssl_context():
+    context = ssl.create_default_context(cafile="cacert.pem")
+    return context
+
+
 def get_release_asset_id(tag, asset_name):
     url = f"/repos/{repo_owner}/{repo_name}/releases/tags/{tag}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url())
+        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
         connection.request("GET", url, headers=get_github_base_headers())
         response = connection.getresponse()
         if response.status == 200:
@@ -60,7 +67,7 @@ def get_release_asset_id(tag, asset_name):
 def download_release_asset(asset_id):
     url = f"/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url())
+        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
         download_headers = get_github_base_headers()
         download_headers["Accept"] = "application/octet-stream"
         connection.request("GET", url, headers=download_headers)

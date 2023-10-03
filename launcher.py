@@ -3,6 +3,7 @@ import json
 import os
 import platform
 import re
+import ssl
 import subprocess
 import sys
 import urllib.parse
@@ -165,11 +166,17 @@ def get_github_base_headers():
     }
 
 
+# Use our bundled SSL certs to avoid issues with any old operating systems
+def get_ssl_context():
+    context = ssl.create_default_context(cafile="cacert.pem")
+    return context
+
+
 def get_latest_release_and_ver(channel):
     latest_release = None
     url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100})}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url())
+        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
         connection.request("GET", url, headers=get_github_base_headers())
         response = connection.getresponse()
         if response.status == 200:
@@ -195,7 +202,7 @@ def get_release_for_ver(target_version):
     url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100, 'page': page})}"
     try:
         while not found_version and page < 10:
-            connection = http.client.HTTPSConnection(get_github_api_base_url())
+            connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
             connection.request("GET", url, headers=get_github_base_headers())
             response = connection.getresponse()
             if response.status == 200:
@@ -220,7 +227,7 @@ def get_release_for_ver(target_version):
 def get_release_asset_id(release_id, asset_name):
     url = f"/repos/{repo_owner}/{repo_name}/releases/{release_id}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url())
+        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
         connection.request("GET", url, headers=get_github_base_headers())
         response = connection.getresponse()
         if response.status == 200:
@@ -243,7 +250,7 @@ def get_release_asset_id(release_id, asset_name):
 def download_release_asset(asset_id):
     url = f"/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url())
+        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
         download_headers = get_github_base_headers()
         download_headers["Accept"] = "application/octet-stream"
         connection.request("GET", url, headers=download_headers)
