@@ -14,7 +14,7 @@ jobs:
         run: chmod +x ./launch.sh
 
       - name: Zip Launcher files
-        run: zip -j ZenithProxyLauncher.zip launch.sh launch.bat launcher.py update_launcher.py setup.py
+        run: zip -j ZenithProxyLauncher.zip launch.sh launch.bat launcher.py update_launcher.py setup.py cacert.pem
 
       - name: Release Artifacts
         uses: "marvinpinto/action-automatic-releases@latest"
