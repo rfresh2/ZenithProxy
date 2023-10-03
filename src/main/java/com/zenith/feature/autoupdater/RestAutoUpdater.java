@@ -47,9 +47,6 @@ public class RestAutoUpdater extends AutoUpdater {
 
     @Override
     public void updateCheck() {
-        // skip if we already found an update
-        // there are rate limits on the github api so its best to avoid calls where not needed
-        if (getUpdateAvailable()) return;
         httpClient
             .get()
             .uri("/releases?per_page=100")
@@ -69,8 +66,8 @@ public class RestAutoUpdater extends AutoUpdater {
                                 LAUNCH_CONFIG.release_channel,
                                 LAUNCH_CONFIG.version,
                                 releaseIdToTag.getSecond());
-                            setUpdateAvailable(true, releaseIdToTag.getSecond());
                         }
+                        setUpdateAvailable(true, releaseIdToTag.getSecond());
                     }
                 } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.getSecond());
                 return Mono.empty();
