@@ -1,14 +1,17 @@
 package com.zenith.cache.data.tab;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.zenith.Shared.CACHE_LOG;
 import static com.zenith.Shared.CONFIG;
@@ -18,7 +21,7 @@ import static com.zenith.Shared.CONFIG;
 @Setter
 @Accessors(chain = true)
 public class TabList {
-    protected final Map<UUID, PlayerEntry> entries = Collections.synchronizedMap(new Object2ObjectOpenHashMap<>());
+    protected final Map<UUID, PlayerEntry> entries = new ConcurrentHashMap<>();
     @NonNull
     protected Component header = Component.text("");
     @NonNull
