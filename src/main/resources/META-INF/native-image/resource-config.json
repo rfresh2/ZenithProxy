@@ -179,6 +179,8 @@
   }, {
     "pattern":"\\Qjndi.properties\\E"
   }, {
+    "pattern":"\\Qjooq-settings.xml\\E"
+  }, {
     "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl30x.so\\E"
   }, {
     "pattern":"\\Qlinux_x86_64/velocity-compress.so\\E"
