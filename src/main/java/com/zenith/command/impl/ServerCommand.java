@@ -41,7 +41,7 @@ public class ServerCommand extends Command {
                       }))
                       .executes(c -> {
                           final String ip = StringArgumentType.getString(c, "ip");
-                          CONFIG.client.server.address = ip;
+                          CONFIG.client.server.address = (ip.equalsIgnoreCase("2b2t") ? "connect.2b2t.org" : ip);
                           CONFIG.client.server.port = 25565;
                           c.getSource().getEmbedBuilder()
                               .title("Server Updated!")
