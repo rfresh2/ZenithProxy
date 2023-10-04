@@ -10,7 +10,8 @@ public class OutgoingChatHandler implements OutgoingHandler<ServerboundChatPacke
     public ServerboundChatPacket apply(final ServerboundChatPacket packet, final ClientSession session) {
         // allow us to dispatch commands just with chat packets
         if (packet.getMessage().startsWith("/")) {
-            session.send(new ServerboundChatCommandPacket(packet.getMessage().substring(1)));
+            String message = packet.getMessage();
+            session.send(new ServerboundChatCommandPacket(message.substring(1, (Math.min(message.length(), 257)))));
             return null;
         }
         return packet;
