@@ -253,7 +253,7 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                              .title("Update complete!")
                              .description("Current Version: " + escape(LAUNCH_CONFIG.version))
-                             .color(Color.CYAN)
+                             .color(Color.GREEN)
                              .build());
     }
 
@@ -429,7 +429,7 @@ public class DiscordBot {
     public void handleConnectEvent(ConnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Proxy Connected")
-                .color(Color.CYAN)
+                .color(Color.MOON_YELLOW)
                 .addField("Server", CONFIG.client.server.address, true)
                 .addField("Proxy IP", CONFIG.server.getProxyAddress(), false)
                 .build());
@@ -439,7 +439,7 @@ public class DiscordBot {
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Proxy Online")
-                .color(Color.CYAN)
+                .color(Color.MEDIUM_SEA_GREEN)
                 .build());
     }
 
@@ -448,7 +448,7 @@ public class DiscordBot {
         sendEmbedMessage((sus ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
                 .addField("Reason", event.reason, true)
-                .color(Color.CYAN)
+                .color(Color.RUBY)
                 .build());
         SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(disconnectedPresence.get()).block());
         if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
@@ -480,7 +480,7 @@ public class DiscordBot {
     public void handleStartQueueEvent(StartQueueEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Started Queuing")
-                .color(Color.CYAN)
+                .color(Color.MOON_YELLOW)
                 .addField("Regular Queue", "" + Queue.getQueueStatus().regular, true)
                 .addField("Priority Queue", "" + Queue.getQueueStatus().prio, true)
                 .build());
@@ -736,7 +736,7 @@ public class DiscordBot {
                     .ifPresent(player -> {
                         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Online!")
-                                .color(Color.GREEN)
+                                .color(Color.MEDIUM_SEA_GREEN)
                                 .addField("Player Name", event.playerEntry.getName(), true)
                                 .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
                                 .build());
@@ -799,7 +799,7 @@ public class DiscordBot {
     public void handleStartConnectEvent(StartConnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Connecting...")
-                .color(Color.CYAN)
+                .color(Color.MOON_YELLOW)
                 .build());
     }
 
@@ -813,7 +813,7 @@ public class DiscordBot {
         } else {
             embedCreateSpec
                     .title("Prio Queue Status Lost")
-                    .color(Color.RUBY);
+                    .color(Color.RED);
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
@@ -824,7 +824,7 @@ public class DiscordBot {
         if (event.prioBanned) {
             embedCreateSpec
                     .title("Prio Ban Detected")
-                    .color(Color.RUBY);
+                    .color(Color.RED);
         } else {
             embedCreateSpec
                     .title("Prio Unban Detected")
@@ -837,7 +837,7 @@ public class DiscordBot {
     public void handleAutoReconnectEvent(final AutoReconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("AutoReconnecting in " + event.delaySeconds + "s")
-                .color(Color.CYAN)
+                .color(Color.MOON_YELLOW)
                 .build());
     }
 
