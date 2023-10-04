@@ -42,20 +42,29 @@ public class Spammer extends Module {
         } else {
             spamIndex = (spamIndex + 1) % CONFIG.client.extra.spammer.messages.size();
         }
-        sendClientPacketAsync(new ServerboundChatPacket((CONFIG.client.extra.spammer.whisper ? ("/w " + getNextPlayer() + " ") : "" ) + CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+        if (CONFIG.client.extra.spammer.whisper) {
+            String player = getNextPlayer();
+            if (player != null) {
+                sendClientPacketAsync(new ServerboundChatPacket("/w " + player + " " + CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+            }
+        } else {
+            sendClientPacketAsync(new ServerboundChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+        }
+
     }
 
     private String getNextPlayer() {
         Set<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
                 .map(PlayerEntry::getName)
                 .collect(Collectors.toSet());
+        if (playerNames.size() == 1) { return null; } // no other players connected
         playerNames.removeAll(this.whisperedPlayers);
         playerNames.remove(CONFIG.authentication.username);
-        if (!playerNames.isEmpty()) {
+        if (!playerNames.isEmpty()) { // online players who haven't been messaged yet
             String nextPlayer = playerNames.stream().toList().getFirst();
             this.whisperedPlayers.add(nextPlayer);
             return nextPlayer;
-        } else {
+        } else { // every player has been messaged, restarting cycle
             this.whisperedPlayers.clear();
             return getNextPlayer();
         }
