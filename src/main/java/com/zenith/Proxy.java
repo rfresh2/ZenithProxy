@@ -283,12 +283,17 @@ public class Proxy {
         if (CONFIG.client.viaversion.enabled) {
             if (CONFIG.client.viaversion.autoProtocolVersion)
                 updateViaProtocolVersion();
-            ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
-            final MCProxyViaServerProxy viaProxy = new MCProxyViaServerProxy(this.client);
-            viaProxy.init();
-            ChannelInitializer<Channel> viaChannelInitializer = viaProxy.inject(originalChannelInitializer);
-            Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);
-            this.client.connect(true, bootstrap);
+            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20.getVersion()) {
+                CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20, connecting without ViaVersion");
+                this.client.connect(true);
+            } else {
+                ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
+                final MCProxyViaServerProxy viaProxy = new MCProxyViaServerProxy(this.client);
+                viaProxy.init();
+                ChannelInitializer<Channel> viaChannelInitializer = viaProxy.inject(originalChannelInitializer);
+                Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);
+                this.client.connect(true, bootstrap);
+            }
         } else {
             this.client.connect(true);
         }
