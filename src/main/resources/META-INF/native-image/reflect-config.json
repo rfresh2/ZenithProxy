@@ -217,6 +217,10 @@
   "methods":[{"name":"executeEvent","parameterTypes":["java.lang.Object"] }]
 },
 {
+  "name":"com.esotericsoftware.kryo.unsafe.UnsafeUtil",
+  "fields":[{"name":"unsafe"}]
+},
+{
   "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -3355,6 +3359,9 @@
   "methods":[{"name":"current","parameterTypes":[] }, {"name":"pid","parameterTypes":[] }]
 },
 {
+  "name":"java.lang.Record"
+},
+{
   "name":"java.lang.RuntimeException"
 },
 {
@@ -3486,6 +3493,48 @@
   "name":"java.sql.Timestamp"
 },
 {
+  "name":"java.time.Duration"
+},
+{
+  "name":"java.time.Instant"
+},
+{
+  "name":"java.time.LocalDate"
+},
+{
+  "name":"java.time.LocalDateTime"
+},
+{
+  "name":"java.time.LocalTime"
+},
+{
+  "name":"java.time.MonthDay"
+},
+{
+  "name":"java.time.OffsetDateTime"
+},
+{
+  "name":"java.time.OffsetTime"
+},
+{
+  "name":"java.time.Period"
+},
+{
+  "name":"java.time.Year"
+},
+{
+  "name":"java.time.YearMonth"
+},
+{
+  "name":"java.time.ZoneId"
+},
+{
+  "name":"java.time.ZoneOffset"
+},
+{
+  "name":"java.time.ZonedDateTime"
+},
+{
   "name":"java.util.Date"
 },
 {
@@ -3493,6 +3542,21 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"java.util.ImmutableCollections"
+},
+{
+  "name":"java.util.Optional"
+},
+{
+  "name":"java.util.OptionalDouble"
+},
+{
+  "name":"java.util.OptionalInt"
+},
+{
+  "name":"java.util.OptionalLong"
 },
 {
   "name":"java.util.PropertyPermission"
@@ -4387,6 +4451,10 @@
 },
 {
   "name":"org.redisson.client.handler.RedisPubSubConnectionHandler"
+},
+{
+  "name":"org.redisson.codec.Kryo5Codec",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.ClassLoader","org.redisson.codec.Kryo5Codec"] }]
 },
 {
   "name":"org.yaml.snakeyaml.constructor.SafeConstructor",

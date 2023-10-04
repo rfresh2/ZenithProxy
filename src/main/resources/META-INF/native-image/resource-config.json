@@ -205,6 +205,8 @@
   }, {
     "pattern":"\\Qorg/jline/utils/screen.caps\\E"
   }, {
+    "pattern":"\\Qorg/postgresql/driverconfig.properties\\E"
+  }, {
     "pattern":"\\Qpc/1.20/blockCollisionShapes.json\\E"
   }, {
     "pattern":"\\Qpc/1.20/blocks.json\\E"
