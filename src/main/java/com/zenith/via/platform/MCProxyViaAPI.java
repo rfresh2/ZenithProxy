@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 public class MCProxyViaAPI extends ViaAPIBase<MinecraftProtocol> {
     @Override
     public int getPlayerVersion(MinecraftProtocol player) {
-        return ProtocolVersion.v1_12_2.getVersion();
+        return ProtocolVersion.v1_20.getVersion();
     }
 
     @Override

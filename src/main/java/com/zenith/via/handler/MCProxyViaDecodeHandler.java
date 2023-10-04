@@ -3,6 +3,7 @@ package com.zenith.via.handler;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.exception.CancelCodecException;
 import com.viaversion.viaversion.exception.CancelDecoderException;
+import com.zenith.network.client.ClientSession;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,9 +14,11 @@ import java.util.List;
 @ChannelHandler.Sharable
 public class MCProxyViaDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     private final UserConnection info;
+    private final ClientSession client;
 
-    public MCProxyViaDecodeHandler(UserConnection info) {
+    public MCProxyViaDecodeHandler(UserConnection info, final ClientSession client) {
         this.info = info;
+        this.client = client;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class MCProxyViaDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (cause instanceof CancelCodecException) return;
-        super.exceptionCaught(ctx, cause);
+        if (!this.client.callPacketError(cause))
+            super.exceptionCaught(ctx, cause);
     }
 }

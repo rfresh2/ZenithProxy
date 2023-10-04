@@ -11,4 +11,10 @@ public class PingTest {
         // testing ping srv dns resolver
         assertEquals(ProtocolVersionDetector.getProtocolVersion("constantiam.net", 25565), 762);
     }
+
+//    @Test
+    public void nineb9tPing() {
+        // testing ping srv dns resolver
+        assertEquals(ProtocolVersionDetector.getProtocolVersion("9b9t.com", 25565), 757);
+    }
 }

@@ -13,6 +13,7 @@ import com.viaversion.viaversion.api.platform.ViaServerProxyPlatform;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import com.viaversion.viaversion.util.VersionInfo;
 import com.viaversion.viaversion.velocity.util.LoggerWrapper;
+import com.zenith.network.client.ClientSession;
 import com.zenith.via.handler.MCProxyViaChannelInitializer;
 import com.zenith.via.platform.*;
 import io.netty.channel.Channel;
@@ -33,6 +34,11 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
     private final MCProxyViaConfig config = new MCProxyViaConfig(Paths.get("via").resolve("via-config.yml").toFile());
     private final MCProxyViaBackwardsPlatform backwardsPlatform = new MCProxyViaBackwardsPlatform();
     private java.util.logging.Logger logger = new LoggerWrapper(LoggerFactory.getLogger("ViaVersion"));
+    private ClientSession client;
+
+    public MCProxyViaServerProxy(final ClientSession client) {
+        this.client = client;
+    }
 
     public void init() {
         config.reloadConfig();
@@ -60,7 +66,7 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
     }
 
     public ChannelInitializer<Channel> inject(final ChannelInitializer<Channel> original) {
-        return new MCProxyViaChannelInitializer(original);
+        return new MCProxyViaChannelInitializer(original, this.client);
     }
 
     @Override

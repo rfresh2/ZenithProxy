@@ -2,6 +2,7 @@ package com.zenith.via.handler;
 
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
+import com.zenith.network.client.ClientSession;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import lombok.NonNull;
@@ -21,9 +22,11 @@ public class MCProxyViaChannelInitializer extends ChannelInitializer<Channel> {
     }
 
     private final ChannelInitializer<Channel> original;
+    private final ClientSession client;
 
-    public MCProxyViaChannelInitializer(ChannelInitializer<Channel> original) {
+    public MCProxyViaChannelInitializer(ChannelInitializer<Channel> original, final ClientSession client) {
         this.original = original;
+        this.client = client;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class MCProxyViaChannelInitializer extends ChannelInitializer<Channel> {
 
         // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
         // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-encoder -> via-decoder -> codec -> manager
-        channel.pipeline().addBefore("codec", "via-encoder", new MCProxyViaEncodeHandler(userConnection));
-        channel.pipeline().addBefore("codec", "via-decoder", new MCProxyViaDecodeHandler(userConnection));
+        channel.pipeline().addBefore("codec", "via-encoder", new MCProxyViaEncodeHandler(userConnection, this.client));
+        channel.pipeline().addBefore("codec", "via-decoder", new MCProxyViaDecodeHandler(userConnection, this.client));
     }
 }
