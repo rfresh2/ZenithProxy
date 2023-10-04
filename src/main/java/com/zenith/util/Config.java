@@ -46,6 +46,7 @@ public final class Config {
 
         public static final class ViaVersion {
             public boolean enabled = false;
+            public boolean autoProtocolVersion = true;
             public int protocolVersion = 762; // 1.19.4
         }
 
