@@ -40,6 +40,7 @@ public class Queue {
         pingOptions.setPort(25565);
         pingOptions.setTimeout(3000);
         pingOptions.setProtocolVersion(340);
+        pingOptions.setResolveDns(false);
         httpClient = HttpClient.create()
             .secure()
             .baseUrl(apiUrl)
