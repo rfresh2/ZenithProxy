@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSy
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.*;
@@ -23,6 +24,7 @@ import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
 import com.zenith.via.MCProxyViaServerProxy;
+import com.zenith.via.ProtocolVersionDetector;
 import de.themoep.minedown.adventure.MineDown;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -279,6 +281,8 @@ public class Proxy {
         }
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
         if (CONFIG.client.viaversion.enabled) {
+            if (CONFIG.client.viaversion.autoProtocolVersion)
+                updateViaProtocolVersion();
             ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
             final MCProxyViaServerProxy viaProxy = new MCProxyViaServerProxy();
             viaProxy.init();
@@ -287,6 +291,31 @@ public class Proxy {
             this.client.connect(true, bootstrap);
         } else {
             this.client.connect(true);
+        }
+    }
+
+    private void updateViaProtocolVersion() {
+        try {
+            final int detectedVersion = ProtocolVersionDetector.getProtocolVersion(CONFIG.client.server.address,
+                                                                                   CONFIG.client.server.port);
+            if (!ProtocolVersion.isRegistered(detectedVersion)) {
+                CLIENT_LOG.error("Unknown protocol version {} detected for server: {}:{}",
+                                 detectedVersion,
+                                 CONFIG.client.server.address,
+                                 CONFIG.client.server.port);
+                return;
+            }
+            CLIENT_LOG.info("Updating detected protocol version {} for server: {}:{}",
+                            detectedVersion,
+                            CONFIG.client.server.address,
+                            CONFIG.client.server.port);
+            CONFIG.client.viaversion.protocolVersion = detectedVersion;
+            saveConfig();
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Failed to detect protocol version for server: {}:{}",
+                             CONFIG.client.server.address,
+                             CONFIG.client.server.port,
+                             e);
         }
     }
 
