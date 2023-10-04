@@ -141,12 +141,14 @@ public class StatusCommand extends Command {
                     .addField("Spectators", (CONFIG.server.spectator.allowSpectator ? "on" : "off")
                             + "\n[Public Chat: " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "on" : "off") + "]", true)
                     .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
-                    .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
+//                    .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
                     .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured")
                             + "\n[WhisperMention: " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "on" : "off") + "]"
                             + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", true)
                     .addField("AutoReply", (CONFIG.client.extra.autoReply.enabled ? "on" : "off")
                             + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
+                    .addField("Spammer", (CONFIG.client.extra.spammer.enabled ? "on" : "off")
+                            + "\n[Whisper: " + (CONFIG.client.extra.spammer.whisper ? "on" : "off") + "]", true)
                     .addField("AutoUpdate", (CONFIG.autoUpdater.autoUpdate ? "on" : "off"), false);
         });
     }

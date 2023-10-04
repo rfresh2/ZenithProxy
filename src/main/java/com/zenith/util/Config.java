@@ -201,6 +201,7 @@ public final class Config {
 
             public static final class Spammer {
                 public boolean enabled = false;
+                public boolean whisper = false;
                 public long delayTicks = 200;
                 public boolean randomOrder = false;
                 public boolean appendRandom = false;

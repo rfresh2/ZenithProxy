@@ -1,20 +1,22 @@
 package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 
 public class Spammer extends Module {
     private final TickTimer tickTimer = new TickTimer();
     private int spamIndex = 0;
+    private final HashSet<String> whisperedPlayers = new HashSet<>();
 
 
     @Override
@@ -40,7 +42,24 @@ public class Spammer extends Module {
         } else {
             spamIndex = (spamIndex + 1) % CONFIG.client.extra.spammer.messages.size();
         }
-        sendClientPacketAsync(new ServerboundChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+        sendClientPacketAsync(new ServerboundChatPacket((CONFIG.client.extra.spammer.whisper ? ("/w " + getNextPlayer() + " ") : "" ) + CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+    }
+
+    private String getNextPlayer() {
+        Set<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
+                .map(PlayerEntry::getName)
+                .collect(Collectors.toSet());
+        playerNames.removeAll(this.whisperedPlayers);
+        playerNames.remove(CONFIG.authentication.username);
+        if (!playerNames.isEmpty()) {
+            String nextPlayer = playerNames.stream().toList().getFirst();
+            this.whisperedPlayers.add(nextPlayer);
+            return nextPlayer;
+        } else {
+            this.whisperedPlayers.clear();
+            return getNextPlayer();
+        }
+
     }
 
     @Override

@@ -25,6 +25,7 @@ public class SpammerCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.full("spammer", "Spams messages", asList(
                 "on/off",
+                "whisper on/off",
                 "delayTicks <int>",
                 "randomOrder on/off",
                 "appendRandom on/off",
@@ -53,6 +54,21 @@ public class SpammerCommand extends Command {
                             .color(Color.CYAN)
                             .title("Spammer Off!");
                 }))
+                .then(literal("whisper")
+                        .then(literal("on").executes(c -> {
+                            CONFIG.client.extra.spammer.whisper = true;
+                            c.getSource().getEmbedBuilder()
+                                    .color(Color.CYAN)
+                                    .title("Spammer Whisper Mode On!");
+                            return 1;
+                        }))
+                        .then(literal("off").executes(c -> {
+                            CONFIG.client.extra.spammer.whisper = false;
+                            c.getSource().getEmbedBuilder()
+                                    .color(Color.CYAN)
+                                    .title("Spammer Whisper Mode Off!");
+                            return 1;
+                        })))
                 .then(literal("delayticks")
                         .then(argument("delayTicks", integer()).executes(c -> {
                             final int delayTicks = IntegerArgumentType.getInteger(c, "delayTicks");
