@@ -93,6 +93,10 @@ repositories {
         name = "minebench"
         url = "https://repo.minebench.de/"
     }
+    maven {
+        "ViaVersion"
+        url "https://repo.viaversion.com"
+    }
     mavenLocal()
 }
 
@@ -205,7 +209,7 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-RC1") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:1f7c299427") {
+    shade("com.github.rfresh2:MCProtocolLib:effb0ad890") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -238,6 +242,10 @@ dependencies {
     shade 'com.nukkitx.fastutil:fastutil-int-object-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
     shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
+
+    shade "com.viaversion:viaversion:4.8.1"
+    shade "com.viaversion:viaversion-api:4.8.1"
+    shade "com.viaversion:viabackwards:4.8.1"
 
     shade 'org.jline:jline:3.23.0'
     shade 'org.jline:jline-terminal-jansi:3.23.0'
