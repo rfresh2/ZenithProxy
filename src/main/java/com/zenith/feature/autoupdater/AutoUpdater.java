@@ -30,7 +30,7 @@ public abstract class AutoUpdater {
         if (eventSubscription == null) eventSubscription = EVENT_BUS.subscribe(
             DisconnectEvent.class, this::handleDisconnectEvent
         );
-        scheduleUpdateCheck(this::updateCheck,
+        scheduleUpdateCheck(this::executeUpdateCheck,
                             30 + ThreadLocalRandom.current().nextInt(150),
                             Math.max(CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, 300),
                             TimeUnit.SECONDS);
@@ -42,6 +42,14 @@ public abstract class AutoUpdater {
                                     initialDelay,
                                     interval,
                                     timeUnit);
+    }
+
+    public void executeUpdateCheck() {
+        try {
+            updateCheck();
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Error performing auto-updater update check", e);
+        }
     }
 
     public abstract void updateCheck();
@@ -84,7 +92,7 @@ public abstract class AutoUpdater {
     }
 
     public void handleDisconnectEvent(final DisconnectEvent event) {
-        if (updateAvailable) {
+        if (updateAvailable && !CONFIG.discord.isUpdating) {
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = !event.reason.equals(MANUAL_DISCONNECT);
             saveConfig();
             scheduleConditionalUpdate();
