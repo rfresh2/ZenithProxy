@@ -65,6 +65,7 @@ public class CommandManager {
            new StatusCommand(),
            new TablistCommand(),
            new UpdateCommand(),
+           new ViaVersionCommand(),
            new VisualRangeCommand(),
            new WhitelistCommand()
        ).forEach(this::addCommand);
