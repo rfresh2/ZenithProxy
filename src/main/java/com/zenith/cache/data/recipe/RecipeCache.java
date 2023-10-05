@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 @Getter
 @Setter
 public class RecipeCache implements CachedData {
+    // todo: still some issues with this to debug
     protected Set<Recipe> recipeRegistry = Collections.synchronizedSet(new HashSet<>());
     protected Set<String> knownRecipes = Collections.synchronizedSet(new HashSet<>());
     protected Set<String> displayedRecipes = Collections.synchronizedSet(new HashSet<>());
