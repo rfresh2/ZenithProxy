@@ -457,7 +457,7 @@ public class Proxy {
                 Wait.waitALittle(1);
             }
         } catch (Exception e) {
-            CLIENT_LOG.info("AutoReconnect stopped", e);
+            CLIENT_LOG.info("AutoReconnect stopped");
         }
     }
 
