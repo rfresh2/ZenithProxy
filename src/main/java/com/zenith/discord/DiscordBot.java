@@ -252,7 +252,7 @@ public class DiscordBot {
         saveConfig();
         sendEmbedMessage(EmbedCreateSpec.builder()
                              .title("Update complete!")
-                             .description("Current Version: " + escape(LAUNCH_CONFIG.version))
+                             .description("Current Version: `" + escape(LAUNCH_CONFIG.version) + "`")
                              .color(Color.GREEN)
                              .build());
     }
