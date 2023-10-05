@@ -1,4 +1,5 @@
-/.idea/
+/.idea/*
+!/.idea/runConfigurations
 *.iml
 /run/
 /log/

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run ZenithProxy" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.zenith.Proxy" />
+    <module name="ZenithProxy.main" />
+    <option name="VM_PARAMETERS" value="-Xmx300m -XX:+UseG1GC -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dio.netty.leakDetection.level=disabled" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

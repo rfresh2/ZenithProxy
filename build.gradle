@@ -266,10 +266,8 @@ tasks.register('run', JavaExec) {
     description = "Execute proxy"
     classpath = sourceSets.main.runtimeClasspath
     mainClass.set("com.zenith.Proxy")
-    jvmArgs = ["-XX:MaxRAMPercentage=30", "-XX:MinRAMPercentage=30", // optimizing these for 3 instances per machine with varying amounts of ram
-               // memory
-               "-XX:+UseG1GC", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=2",
-               "-Djava.util.concurrent.ForkJoinPool.common.parallelism=8"]
+    jvmArgs = ["-Xmx300m", "-XX:+UseG1GC", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=2",
+               "-Djava.util.concurrent.ForkJoinPool.common.parallelism=2", "-Dio.netty.leakDetection.level=disabled"]
 }
 
 tasks.register('java_path') {
