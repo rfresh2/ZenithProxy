@@ -16,8 +16,8 @@ import java.util.function.Consumer;
 @Getter
 @Setter
 public class RecipeCache implements CachedData {
-    // todo: still some issues with this to debug
     protected Set<Recipe> recipeRegistry = Collections.synchronizedSet(new HashSet<>());
+    // todo: still some issues with known/displayed to debug
     protected Set<String> knownRecipes = Collections.synchronizedSet(new HashSet<>());
     protected Set<String> displayedRecipes = Collections.synchronizedSet(new HashSet<>());
     private boolean openCraftingBook;
@@ -30,10 +30,14 @@ public class RecipeCache implements CachedData {
     private boolean activateSmokingFiltering;
 
     @Override
-    public void getPackets(@NonNull final Consumer<Packet> consumer) {
+    public synchronized void getPackets(@NonNull final Consumer<Packet> consumer) {
         consumer.accept(new ClientboundUpdateRecipesPacket(recipeRegistry.toArray(new Recipe[0])));
+        // just unlock all recipes instead of using what's cached lol
+        final String[] allRecipeIds = recipeRegistry.stream()
+            .map(Recipe::getIdentifier)
+            .toList().toArray(new String[0]);
         consumer.accept(new ClientboundRecipePacket(
-            displayedRecipes.toArray(new String[0]),
+            allRecipeIds,
             openCraftingBook,
             activateCraftingFiltering,
             openSmeltingBook,
@@ -42,12 +46,12 @@ public class RecipeCache implements CachedData {
             activateBlastingFiltering,
             openSmokingBook,
             activateSmokingFiltering,
-            knownRecipes.toArray(new String[0])
+            allRecipeIds
         ));
     }
 
     @Override
-    public void reset(final boolean full) {
+    public synchronized void reset(final boolean full) {
         if (full) {
             this.recipeRegistry.clear();
             this.knownRecipes.clear();
@@ -66,7 +70,6 @@ public class RecipeCache implements CachedData {
     public synchronized void setRecipeRegistry(final ClientboundUpdateRecipesPacket packet) {
         this.recipeRegistry.clear();
         this.recipeRegistry.addAll(List.of(packet.getRecipes()));
-
     }
 
     public synchronized void updateUnlockedRecipes(final ClientboundRecipePacket packet) {
