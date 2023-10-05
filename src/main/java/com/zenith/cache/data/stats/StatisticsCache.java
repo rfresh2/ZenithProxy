@@ -5,8 +5,6 @@ import com.github.steveice10.mc.protocol.data.game.statistic.Statistic;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateAdvancementsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 
@@ -23,10 +22,10 @@ import java.util.function.Consumer;
 @Setter
 @Accessors(chain = true)
 public class StatisticsCache implements CachedData {
-    protected final Map<Statistic, Integer> statistics = Collections.synchronizedMap(new Object2IntOpenHashMap<>());
+    protected final Map<Statistic, Integer> statistics = new ConcurrentHashMap<>();
 
     protected final List<Advancement> advancements = Collections.synchronizedList(new ArrayList<>());
-    protected final Map<String, Map<String, Long>> progress = Collections.synchronizedMap(new Object2ObjectOpenHashMap<>());
+    protected final Map<String, Map<String, Long>> progress = new ConcurrentHashMap<>();
 
 
     @Override

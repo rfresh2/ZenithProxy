@@ -3,16 +3,15 @@ package com.zenith.cache.data.bossbar;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.NonNull;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class BossBarCache implements CachedData {
-    protected final Map<UUID, BossBar> cachedBossBars = Collections.synchronizedMap(new Object2ObjectOpenHashMap<>());
+    protected final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
