@@ -327,7 +327,7 @@ public final class Config {
         public String accountOwnerRoleId = "";
         public String visualRangeMentionRoleId = "";
         public String prefix = ".";
-        public boolean reportCoords = false;
+        public boolean reportCoords = true;
         public boolean mentionRoleOnPrioUpdate = true;
         public boolean mentionRoleOnPrioBanUpdate = true;
         public boolean isUpdating = false; // internal use for update command state persistence
