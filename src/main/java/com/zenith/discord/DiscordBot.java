@@ -392,7 +392,7 @@ public class DiscordBot {
     }
 
     public static String escape(String message) {
-        return message.replaceAll("_", "\\\\_");
+        return message.replaceAll("_", "\\\\_").replaceAll("@", "\\\\@");
     }
 
     public boolean isMessageQueueEmpty() {
