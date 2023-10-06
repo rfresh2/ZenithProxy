@@ -5,7 +5,7 @@ import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.IncomingHandler;
+import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
 
 import java.util.Objects;
@@ -15,12 +15,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
-public class RespawnHandler implements IncomingHandler<ClientboundRespawnPacket, ClientSession> {
+public class RespawnHandler implements AsyncIncomingHandler<ClientboundRespawnPacket, ClientSession> {
 
     private final AtomicBoolean isSpectatorRespawning = new AtomicBoolean(false);
 
     @Override
-    public boolean apply(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
+    public boolean applyAsync(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
         // must send respawn packet before cache gets reset
         // lots of race conditions with packet sequence could happen
         if (isSpectatorRespawning.compareAndSet(false, true)) {

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.time.Instant;
 import java.util.IdentityHashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiConsumer;
@@ -32,10 +33,16 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     protected final Logger logger;
     protected final boolean allowUnhandled;
-    protected static final ScheduledExecutorService ASYNC_EXECUTOR_SERVICE =
-        Executors.newScheduledThreadPool(2,
+    protected static final ExecutorService ASYNC_EXECUTOR_SERVICE =
+        Executors.newFixedThreadPool(1,
+                                     new ThreadFactoryBuilder()
+                                       .setNameFormat("ZenithProxy Async PacketHandler #%d")
+                                       .setDaemon(true)
+                                       .build());
+    protected static final ScheduledExecutorService RETRY_EXECUTOR_SERVICE =
+        Executors.newScheduledThreadPool(1,
                                          new ThreadFactoryBuilder()
-                                             .setNameFormat("ZenithProxy Async PacketHandler #%d")
+                                             .setNameFormat("ZenithProxy Async PacketHandler Retry #%d")
                                              .setDaemon(true)
                                              .build());
 

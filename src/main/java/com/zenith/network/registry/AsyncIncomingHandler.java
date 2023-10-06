@@ -4,6 +4,7 @@ import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 
 import static com.zenith.Shared.CLIENT_LOG;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public interface AsyncIncomingHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
     /**
@@ -29,9 +30,9 @@ public interface AsyncIncomingHandler<P extends Packet, S extends Session> exten
                     CLIENT_LOG.warn("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
                     return;
                 }
-                HandlerRegistry.ASYNC_EXECUTOR_SERVICE.schedule(() -> {
+                HandlerRegistry.RETRY_EXECUTOR_SERVICE.schedule(() -> {
                     applyWithRetries(packet, session, tryCount + 1);
-                }, 200, java.util.concurrent.TimeUnit.MILLISECONDS);
+                }, 250, MILLISECONDS);
             }
         } catch (final Throwable e) {
             CLIENT_LOG.error("Async handler error", e);
