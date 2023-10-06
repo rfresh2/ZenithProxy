@@ -37,7 +37,7 @@ public class TablistCommand extends Command {
                         .color(Color.RUBY);
             } else {
                 // embeds will be too small for tablist
-                List<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
+                List<String> playerNames = CACHE.getTabListCache().getEntries().stream()
                         .map(PlayerListEntry::getName)
                         .distinct()
                         .sorted(String::compareTo)

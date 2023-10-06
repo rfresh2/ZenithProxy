@@ -17,7 +17,7 @@ public class RemoveEntitiesHandler implements AsyncIncomingHandler<ClientboundRe
                 if (CONFIG.client.extra.visualRangePositionTracking) {
                     final Entity entity = CACHE.getEntityCache().get(id);
                     if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSelfPlayer()) {
-                        CACHE.getTabListCache().getTabList().get(entity.getUuid()).ifPresentOrElse(playerEntry -> {
+                        CACHE.getTabListCache().get(entity.getUuid()).ifPresentOrElse(playerEntry -> {
                             if (!WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
                                 CLIENT_LOG.info("Tracking Leave {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
                             }

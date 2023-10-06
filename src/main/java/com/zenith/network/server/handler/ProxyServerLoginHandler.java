@@ -44,7 +44,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                         && nonNull(CACHE.getPlayerCache().getGameMode())
                         && nonNull(CACHE.getChunkCache().getCurrentDimension())
                         && nonNull(CACHE.getChunkCache().getWorldData())
-                        && nonNull(CACHE.getTabListCache().getTabList().get(CACHE.getProfileCache().getProfile().getId()))
+                        && nonNull(CACHE.getTabListCache().get(CACHE.getProfileCache().getProfile().getId()))
                         && connection.isWhitelistChecked(),
                 20)) {
             session.disconnect("Client login timed out.");

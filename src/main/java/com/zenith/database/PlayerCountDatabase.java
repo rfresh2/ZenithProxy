@@ -47,7 +47,7 @@ public class PlayerCountDatabase extends LockingDatabase {
     }
 
     public void handleDatabaseTickEvent(final DatabaseTickEvent event) {
-        final int count = CACHE.getTabListCache().getTabList().getEntries().size();
+        final int count = CACHE.getTabListCache().getEntries().size();
         final DSLContext context = DSL.using(SQLDialect.POSTGRES);
         final Playercount p = Playercount.PLAYERCOUNT;
         final InsertSetMoreStep<PlayercountRecord> query = context.insertInto(p)

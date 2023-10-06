@@ -8,33 +8,82 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import net.kyori.adventure.text.Component;
 
-import java.util.EnumSet;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+
+import static com.zenith.Shared.CACHE_LOG;
+import static com.zenith.Shared.CONFIG;
 
 
 @Getter
+@Setter
+@Accessors(chain = true)
 public class TabListCache implements CachedData {
-    protected TabList tabList = new TabList();
+    protected final Map<UUID, PlayerListEntry> tablist = new ConcurrentHashMap<>();
+    @NonNull
+    protected Component header = Component.text("");
+    @NonNull
+    protected Component footer = Component.text("");
+    protected long lastUpdate = 0L;
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ClientboundTabListPacket(this.tabList.getHeader(), this.tabList.getFooter()));
+        consumer.accept(new ClientboundTabListPacket(this.getHeader(), this.getFooter()));
         consumer.accept(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED),
-            this.tabList.getEntries().toArray(PlayerListEntry[]::new)
+            getEntries().toArray(PlayerListEntry[]::new)
         ));
     }
 
     @Override
     public void reset(boolean full) {
         if (full) {
-            this.tabList = new TabList();
+            this.tablist.clear();
+            this.header = Component.text("");
+            this.footer = Component.text("");
+            this.lastUpdate = 0L;
         }
     }
 
     @Override
     public String getSendingMessage() {
-        return "Sending tab list";
+        return "Sending " + tablist.size() + " tablist entries";
+    }
+
+    public void add(@NonNull PlayerListEntry entry) {
+        this.tablist.put(entry.getProfile().getId(), entry);
+    }
+
+    public Optional<PlayerListEntry> remove(@NonNull PlayerListEntry entry) {
+        PlayerListEntry removed = this.tablist.remove(entry.getProfile().getId());
+        if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
+            CACHE_LOG.error("Could not remove player with UUID: {}", entry.getProfile().getId());
+        }
+        return Optional.ofNullable(removed);
+    }
+
+    public Optional<PlayerListEntry> remove(@NonNull UUID uuid) {
+        PlayerListEntry removed = this.tablist.remove(uuid);
+        if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
+            CACHE_LOG.error("Could not remove player with UUID: {}", uuid);
+        }
+        return Optional.ofNullable(removed);
+    }
+
+    public Optional<PlayerListEntry> get(UUID uuid) {
+        return Optional.ofNullable(this.tablist.get(uuid));
+    }
+
+    public Optional<PlayerListEntry> getFromName(final String username) {
+        return this.tablist.values().stream().filter(v -> v.getName().equals(username)).findFirst();
+    }
+
+    public Collection<PlayerListEntry> getEntries() {
+        return this.tablist.values();
     }
 }

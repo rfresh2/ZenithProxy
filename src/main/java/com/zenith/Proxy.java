@@ -202,10 +202,10 @@ public class Proxy {
 
     private void tablistUpdate() {
         if (!this.isConnected() || currentPlayer.get() == null) return;
-        long lastUpdate = CACHE.getTabListCache().getTabList().getLastUpdate();
+        long lastUpdate = CACHE.getTabListCache().getLastUpdate();
         if (lastUpdate < System.currentTimeMillis() - 3000) {
-            currentPlayer.get().send(new ClientboundTabListPacket(CACHE.getTabListCache().getTabList().getHeader(), CACHE.getTabListCache().getTabList().getFooter()));
-            CACHE.getTabListCache().getTabList().setLastUpdate(System.currentTimeMillis());
+            currentPlayer.get().send(new ClientboundTabListPacket(CACHE.getTabListCache().getHeader(), CACHE.getTabListCache().getFooter()));
+            CACHE.getTabListCache().setLastUpdate(System.currentTimeMillis());
         }
     }
 

@@ -12,7 +12,7 @@ import static com.zenith.Shared.*;
 public class MoveEntityPosRotHandler implements AsyncIncomingHandler<ClientboundMoveEntityPosRotPacket, ClientSession> {
     public static void trackPlayerVisualRangePosition(final Entity entity) {
         if (CONFIG.client.extra.visualRangePositionTracking && entity instanceof EntityPlayer && !((EntityPlayer) entity).isSelfPlayer()) {
-            CACHE.getTabListCache().getTabList().get(entity.getUuid()).ifPresent(playerEntry -> {
+            CACHE.getTabListCache().get(entity.getUuid()).ifPresent(playerEntry -> {
                 if (!WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
                     CLIENT_LOG.info("Tracking {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
                 }

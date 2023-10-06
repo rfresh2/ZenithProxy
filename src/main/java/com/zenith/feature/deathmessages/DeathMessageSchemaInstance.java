@@ -148,6 +148,6 @@ public final class DeathMessageSchemaInstance {
     }
 
     public boolean isPlayerOnline(final String playerName) {
-        return CACHE.getTabListCache().getTabList().getFromName(playerName).isPresent();
+        return CACHE.getTabListCache().getFromName(playerName).isPresent();
     }
 }

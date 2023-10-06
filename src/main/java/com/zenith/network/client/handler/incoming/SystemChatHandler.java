@@ -61,7 +61,7 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
             if (playerName == null) {
                 EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper));
             } else {
-                EVENT_BUS.postAsync(new ServerChatReceivedEvent(CACHE.getTabListCache().getTabList().getFromName(playerName), messageString, isWhisper));
+                EVENT_BUS.postAsync(new ServerChatReceivedEvent(CACHE.getTabListCache().getFromName(playerName), messageString, isWhisper));
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);

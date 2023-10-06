@@ -36,7 +36,7 @@ public class TablistDatabase extends LockingDatabase {
         final Tablist t = Tablist.TABLIST;
         final DSLContext ctx = configuration.dsl();
         ctx.deleteFrom(t).execute();
-        ctx.batchInsert(CACHE.getTabListCache().getTabList().getEntries().stream()
+        ctx.batchInsert(CACHE.getTabListCache().getEntries().stream()
                             .map(e -> new TablistRecord(e.getName(),
                                                         e.getProfileId(),
                                                         Instant.now().atOffset(ZoneOffset.UTC)))

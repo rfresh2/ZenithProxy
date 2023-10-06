@@ -26,7 +26,7 @@ public class AddPlayerHandler implements AsyncIncomingHandler<ClientboundAddPlay
                 .setPitch(packet.getPitch());
         final Entity playerCachedAlready = CACHE.getEntityCache().get(packet.getEntityId());
         CACHE.getEntityCache().add(entity);
-        Optional<PlayerListEntry> foundPlayerEntry = CACHE.getTabListCache().getTabList().get(packet.getUuid());
+        Optional<PlayerListEntry> foundPlayerEntry = CACHE.getTabListCache().get(packet.getUuid());
         if (foundPlayerEntry.isEmpty() && playerCachedAlready == null) return false;
         PlayerListEntry playerEntry = foundPlayerEntry.orElse(new PlayerListEntry("", packet.getUuid()));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));

@@ -56,7 +56,7 @@ public class Spammer extends Module {
     }
 
     private String getNextPlayer() {
-        Set<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
+        Set<String> playerNames = CACHE.getTabListCache().getEntries().stream()
                 .map(PlayerListEntry::getName)
                 .collect(Collectors.toSet());
         if (playerNames.size() == 1) { return null; } // no other players connected

@@ -16,7 +16,7 @@ public class ServerTablistDataOutgoingHandler implements OutgoingHandler<Clientb
 
     @Override
     public ClientboundTabListPacket apply(ClientboundTabListPacket packet, ServerConnection session) {
-        CACHE.getTabListCache().getTabList().setLastUpdate(System.currentTimeMillis());
+        CACHE.getTabListCache().setLastUpdate(System.currentTimeMillis());
         return new ClientboundTabListPacket(packet.getHeader(), insertProxyDataIntoFooter(packet.getFooter(), session));
     }
 

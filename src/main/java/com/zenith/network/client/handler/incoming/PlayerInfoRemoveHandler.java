@@ -15,7 +15,7 @@ public class PlayerInfoRemoveHandler implements AsyncIncomingHandler<Clientbound
     @Override
     public boolean applyAsync(ClientboundPlayerInfoRemovePacket packet, ClientSession session) {
         packet.getProfileIds().forEach(profileId -> {
-            Optional<PlayerListEntry> playerEntry = CACHE.getTabListCache().getTabList().remove(profileId);
+            Optional<PlayerListEntry> playerEntry = CACHE.getTabListCache().remove(profileId);
             playerEntry.ifPresent(e -> EVENT_BUS.postAsync(new ServerPlayerDisconnectedEvent(e)));
         });
         return true;

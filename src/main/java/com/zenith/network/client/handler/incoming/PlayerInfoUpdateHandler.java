@@ -15,7 +15,7 @@ public class PlayerInfoUpdateHandler implements AsyncIncomingHandler<Clientbound
     public boolean applyAsync(@NonNull ClientboundPlayerInfoUpdatePacket packet, @NonNull ClientSession session) {
         if (packet.getActions().contains(ADD_PLAYER)) {
             for (var entry : packet.getEntries()) {
-                CACHE.getTabListCache().getTabList().add(entry);
+                CACHE.getTabListCache().add(entry);
                 EVENT_BUS.postAsync(new ServerPlayerConnectedEvent(entry));
             }
         }

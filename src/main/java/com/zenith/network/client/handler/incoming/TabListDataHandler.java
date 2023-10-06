@@ -20,7 +20,7 @@ import static com.zenith.Shared.*;
 public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabListPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundTabListPacket packet, @NonNull ClientSession session) {
-        CACHE.getTabListCache().getTabList()
+        CACHE.getTabListCache()
             .setHeader(packet.getHeader())
             .setFooter(packet.getFooter());
         if (CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) {

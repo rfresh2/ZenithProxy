@@ -102,7 +102,7 @@ public class DeathsDatabase extends LockingDatabase {
     }
 
     private Optional<PlayerListEntry> getPlayerEntryFromNameWithFallback(final String username) {
-        Optional<PlayerListEntry> tablistEntry = CACHE.getTabListCache().getTabList().getFromName(username);
+        Optional<PlayerListEntry> tablistEntry = CACHE.getTabListCache().getFromName(username);
         if (tablistEntry.isPresent()) {
             return tablistEntry;
         } else {
