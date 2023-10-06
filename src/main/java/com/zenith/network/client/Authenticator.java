@@ -34,7 +34,7 @@ public class Authenticator {
             if (CONFIG.authentication.accountType == AccountType.MSA || CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
                 if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
                     CONFIG.authentication.username = auth.getSelectedProfile().getName();
-                    saveConfig();
+                    saveConfigAsync();
                 }
                 return new MinecraftProtocol(
                     MinecraftCodec.CODEC, auth.getSelectedProfile(), auth.getAccessToken()

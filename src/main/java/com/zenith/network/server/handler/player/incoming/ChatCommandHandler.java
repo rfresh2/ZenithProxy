@@ -39,22 +39,22 @@ public class ChatCommandHandler implements IncomingHandler<ServerboundChatComman
             return false;
         } else if (lowerCase.startsWith("togglechat")) {
             CONFIG.client.extra.chat.hideChat = !CONFIG.client.extra.chat.hideChat;
-            saveConfig();
+            saveConfigAsync();
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cChat toggled " + (CONFIG.client.extra.chat.hideChat ? "off" : "on") + "&r"), false));
             return false;
         } else if (lowerCase.startsWith("toggleprivatemsgs")) {
             CONFIG.client.extra.chat.hideWhispers = !CONFIG.client.extra.chat.hideWhispers;
-            saveConfig();
+            saveConfigAsync();
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cWhispers messages toggled " + (CONFIG.client.extra.chat.hideWhispers ? "off" : "on") + "&r"), false));
             return false;
         } else if (lowerCase.startsWith("toggledeathmsgs")) {
             CONFIG.client.extra.chat.hideDeathMessages = !CONFIG.client.extra.chat.hideDeathMessages;
-            saveConfig();
+            saveConfigAsync();
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cDeath messages toggled " + (CONFIG.client.extra.chat.hideDeathMessages ? "off" : "on") + "&r"), false));
             return false;
         } else if (lowerCase.startsWith("toggleconnectionmsgs")) { // todo: this command no longer exists on 2b?
             CONFIG.client.extra.chat.showConnectionMessages = !CONFIG.client.extra.chat.showConnectionMessages;
-            saveConfig();
+            saveConfigAsync();
             session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cConnection messages toggled " + (CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off") + "&r"), false));
             return false;
         }

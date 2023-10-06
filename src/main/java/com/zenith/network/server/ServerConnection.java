@@ -38,7 +38,10 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
@@ -238,6 +241,21 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void sendBundle(@NotNull final @NonNull Packet... packets) {
         this.session.sendBundle(packets);
+    }
+
+    @Override
+    public void sendAsync(@NonNull final Packet packet) {
+        this.session.sendAsync(packet);
+    }
+
+    @Override
+    public void sendAsync(@NonNull final Packet packet, @NonNull final ExecutorService executorService) {
+        this.session.sendAsync(packet, executorService);
+    }
+
+    @Override
+    public void sendScheduledAsync(@NonNull final Packet packet, @NonNull final ScheduledExecutorService executorService, final long delay, final TimeUnit unit) {
+        this.session.sendScheduledAsync(packet, executorService, delay, unit);
     }
 
     public boolean isActivePlayer() {

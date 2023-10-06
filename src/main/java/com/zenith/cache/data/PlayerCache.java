@@ -34,8 +34,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 
@@ -128,13 +127,13 @@ public class PlayerCache implements CachedData {
             try {
                 // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
                 // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
-                Proxy.getInstance().getClient().send(new ServerboundContainerClickPacket(0,
+                Proxy.getInstance().getClient().sendAsync(new ServerboundContainerClickPacket(0,
                                                                                          -1337,
                                                                                          0,
                                                                                          ContainerActionType.CREATIVE_GRAB_MAX_STACK,
                                                                                          CreativeGrabAction.GRAB,
                                                                                          new ItemStack(1, 1),
-                                                                                         Int2ObjectMaps.emptyMap()));
+                                                                                         Int2ObjectMaps.emptyMap()), SCHEDULED_EXECUTOR_SERVICE);
                 double x = CACHE.getPlayerCache().getX();
                 double y = CACHE.getPlayerCache().getY() + 1000d;
                 double z = CACHE.getPlayerCache().getZ();

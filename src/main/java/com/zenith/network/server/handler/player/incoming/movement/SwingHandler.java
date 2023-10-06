@@ -8,15 +8,16 @@ import com.zenith.network.registry.AsyncIncomingHandler;
 import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 
 public class SwingHandler implements AsyncIncomingHandler<ServerboundSwingPacket, ServerConnection> {
     @Override
     public boolean applyAsync(ServerboundSwingPacket packet, ServerConnection session) {
         Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.send(new ClientboundAnimatePacket(
+            connection.sendAsync(new ClientboundAnimatePacket(
                     CACHE.getPlayerCache().getEntityId(),
                     Animation.SWING_ARM
-            ));
+            ), SCHEDULED_EXECUTOR_SERVICE);
         });
         return true;
     }

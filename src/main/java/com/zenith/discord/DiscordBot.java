@@ -249,7 +249,7 @@ public class DiscordBot {
 
     private void handleProxyUpdateComplete() {
         CONFIG.discord.isUpdating = false;
-        saveConfig();
+        saveConfigAsync();
         sendEmbedMessage(EmbedCreateSpec.builder()
                              .title("Update complete!")
                              .description("Current Version: `" + escape(LAUNCH_CONFIG.version) + "`")
@@ -583,7 +583,7 @@ public class DiscordBot {
                         .addField("Player UUID", ("[" + event.playerEntry().getProfileId() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId() + ")"), true)
                         .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                         .build()).block();
-                saveConfig();
+                saveConfigAsync();
             }
             return Mono.empty();
         };
@@ -634,7 +634,7 @@ public class DiscordBot {
                                 .addField("Player UUID", ("[" + event.gameProfile().getId().toString() + "](https://namemc.com/profile/" + event.gameProfile().getId().toString() + ")"), true)
                                 .thumbnail(Proxy.getInstance().getAvatarURL(event.gameProfile().getId()).toString())
                                 .build()).block();
-                        saveConfig();
+                        saveConfigAsync();
                     } else {
                         DISCORD_LOG.error(e.getInteraction().getMember()
                                 .map(User::getTag).orElse("Unknown")

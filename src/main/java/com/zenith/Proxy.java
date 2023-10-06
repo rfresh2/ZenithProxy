@@ -137,7 +137,7 @@ public class Proxy {
             }
             MODULE_MANAGER.init();
             Queue.start();
-            saveConfig();
+            saveConfigAsync();
             if (CONFIG.server.extra.timeout.enable) {
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     ServerConnection currentPlayer = this.currentPlayer.get();
@@ -162,7 +162,7 @@ public class Proxy {
             }
             if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
-                saveConfig();
+                saveConfigAsync();
                 if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
                     this.connectAndCatchExceptions();
                 }
@@ -315,7 +315,7 @@ public class Proxy {
                             CONFIG.client.server.address,
                             CONFIG.client.server.port);
             CONFIG.client.viaversion.protocolVersion = detectedVersion;
-            saveConfig();
+            saveConfigAsync();
         } catch (final Exception e) {
             CLIENT_LOG.error("Failed to detect protocol version for server: {}:{}",
                              CONFIG.client.server.address,
@@ -472,7 +472,7 @@ public class Proxy {
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.postAsync(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
             CONFIG.authentication.prioBanned = this.isPrioBanned.get();
-            saveConfig();
+            saveConfigAsync();
             CLIENT_LOG.info("Prio Ban Change Detected: " + this.isPrioBanned.get());
         }
     }
@@ -617,7 +617,7 @@ public class Proxy {
                 EVENT_BUS.postAsync(new PrioStatusUpdateEvent(event.prio));
                 this.isPrio = Optional.of(event.prio);
                 CONFIG.authentication.prio = event.prio;
-                saveConfig();
+                saveConfigAsync();
             }
         }
     }

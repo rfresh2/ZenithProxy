@@ -50,7 +50,7 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 return false;
             } else if (lowerCase.startsWith("!m")) {
                 Proxy.getInstance().getActiveConnections().forEach(connection -> {
-                    connection.send(new ClientboundSystemChatPacket(MineDown.parse("&c" + session.getProfileCache().getProfile().getName() + " > " + message.substring(2).trim() + "&r"), false));
+                    connection.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&c" + session.getProfileCache().getProfile().getName() + " > " + message.substring(2).trim() + "&r"), false));
                 });
                 return false;
             } else if (lowerCase.startsWith("!kick")) {
@@ -71,12 +71,12 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 return false;
             } else if (lowerCase.startsWith("!schat")) {
                 CONFIG.server.spectator.spectatorPublicChatEnabled = !CONFIG.server.spectator.spectatorPublicChatEnabled;
-                saveConfig();
+                saveConfigAsync();
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSpectators public chat toggled " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "on" : "off") + "&r"), false));
                 return false;
             } else if (lowerCase.startsWith("!spectator")) {
                 CONFIG.server.spectator.allowSpectator = !CONFIG.server.spectator.allowSpectator;
-                saveConfig();
+                saveConfigAsync();
                 if (!CONFIG.server.spectator.allowSpectator) {
                     Proxy.getInstance().getSpectatorConnections().forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
                 }

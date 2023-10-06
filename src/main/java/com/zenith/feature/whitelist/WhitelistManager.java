@@ -165,7 +165,7 @@ public class WhitelistManager {
         CONFIG.server.spectator.whitelist.forEach(this::refreshWhitelistEntry);
         CONFIG.client.extra.friendsList.forEach(this::refreshWhitelistEntry);
         SERVER_LOG.info("Whitelist refresh complete");
-        saveConfig();
+        saveConfigAsync();
     }
 
     public void kickNonWhitelistedPlayers() {

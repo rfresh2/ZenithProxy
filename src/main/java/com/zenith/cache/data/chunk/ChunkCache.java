@@ -127,7 +127,7 @@ public class ChunkCache implements CachedData {
                     chunk.heightMaps,
                     chunk.blockEntities.toArray(new BlockEntityInfo[0]),
                     chunk.lightUpdateData))
-                .forEach(currentPlayer::send);
+                .forEach(currentPlayer::sendAsync);
             return true;
         });
     }

@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 
 public final class SpectatorUtils {
@@ -34,8 +35,9 @@ public final class SpectatorUtils {
     }
 
     public static void syncPlayerPositionWithSpectators() {
-        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.send(new ClientboundTeleportEntityPacket(
+        SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+            Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
+                connection.send(new ClientboundTeleportEntityPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getX(),
                     CACHE.getPlayerCache().getY(),
@@ -43,11 +45,12 @@ public final class SpectatorUtils {
                     CACHE.getPlayerCache().getYaw(),
                     CACHE.getPlayerCache().getPitch(),
                     false // idk if this will break any rendering or not
-            ));
-            connection.send(new ClientboundRotateHeadPacket(
+                ));
+                connection.send(new ClientboundRotateHeadPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getYaw()
-            ));
+                ));
+            });
         });
     }
 
@@ -78,11 +81,11 @@ public final class SpectatorUtils {
     }
 
     public static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
-        syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer());
+        SCHEDULED_EXECUTOR_SERVICE.execute(() -> syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer()));
     }
 
     private static void sendSpectatorsEquipment() {
-        Proxy.getInstance().getSpectatorConnections().forEach(SpectatorUtils::sendSpectatorsEquipment);
+        SCHEDULED_EXECUTOR_SERVICE.execute(() -> Proxy.getInstance().getSpectatorConnections().forEach(SpectatorUtils::sendSpectatorsEquipment));
     }
 
     private static void sendSpectatorsEquipment(final ServerConnection connection) {
@@ -202,22 +205,23 @@ public final class SpectatorUtils {
         double newX = selfSession.getSpectatorPlayerCache().getX() + xOffset;
         double newY = selfSession.getSpectatorPlayerCache().getY() + playerEyeHeight - specEntityEyeHeight + yOffset;
         double newZ = selfSession.getSpectatorPlayerCache().getZ() + zOffset;
-
         Proxy.getInstance().getActiveConnections()
                 .forEach(connection -> {
-                    connection.send(new ClientboundTeleportEntityPacket(
-                        selfSession.getSpectatorEntityId(),
-                        newX,
-                        newY,
-                        newZ,
-                        getDisplayYaw(selfSession),
-                        selfSession.getSpectatorPlayerCache().getPitch(),
-                        false
-                    ));
-                    connection.send(new ClientboundRotateHeadPacket(
-                        selfSession.getSpectatorEntityId(),
-                        getDisplayYaw(selfSession)
-                    ));
+                    SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+                        connection.send(new ClientboundTeleportEntityPacket(
+                            selfSession.getSpectatorEntityId(),
+                            newX,
+                            newY,
+                            newZ,
+                            getDisplayYaw(selfSession),
+                            selfSession.getSpectatorPlayerCache().getPitch(),
+                            false
+                        ));
+                        connection.send(new ClientboundRotateHeadPacket(
+                            selfSession.getSpectatorEntityId(),
+                            getDisplayYaw(selfSession)
+                        ));
+                    });
                 });
     }
 

@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.saveConfig;
+import static com.zenith.Shared.saveConfigAsync;
 import static java.util.Arrays.asList;
 
 @Getter
@@ -98,7 +98,7 @@ public class CommandManager {
             // errors handled by delegate
             // and if this not a matching root command we want to fallback to original commands
         }
-        saveConfig();
+        saveConfigAsync();
     }
 
     private String downcaseFirstWord(final String sentence) {
