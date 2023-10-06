@@ -1,8 +1,11 @@
 package com.zenith.feature.whitelist;
 
+import lombok.Data;
+
 import java.util.Objects;
 import java.util.UUID;
 
+@Data
 public class WhitelistEntry {
     public String username;
     public UUID uuid;

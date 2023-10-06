@@ -191,7 +191,7 @@ public class WhitelistManager {
         }
     }
 
-    private Optional<WhitelistEntry> getWhitelistEntryFromUUID(final UUID uuid) {
+    public Optional<WhitelistEntry> getWhitelistEntryFromUUID(final UUID uuid) {
         final ProfileService profileService = new ProfileService();
         final Optional<GameProfile> profileOptional = Optional.ofNullable(profileService.findProfileByUUID(uuid));
         if (profileOptional.isPresent()) {

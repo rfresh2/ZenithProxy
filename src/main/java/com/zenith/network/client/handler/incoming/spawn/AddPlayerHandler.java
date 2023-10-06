@@ -28,7 +28,13 @@ public class AddPlayerHandler implements AsyncIncomingHandler<ClientboundAddPlay
         CACHE.getEntityCache().add(entity);
         Optional<PlayerListEntry> foundPlayerEntry = CACHE.getTabListCache().get(packet.getUuid());
         if (foundPlayerEntry.isEmpty() && playerCachedAlready == null) return false;
-        PlayerListEntry playerEntry = foundPlayerEntry.orElse(new PlayerListEntry("", packet.getUuid()));
+        PlayerListEntry playerEntry = foundPlayerEntry
+            .orElseGet(() ->
+                // may occur at login if this packet is received before the tablist is populated
+                // this function performs a mojang api call so it will take awhile
+                WHITELIST_MANAGER.getWhitelistEntryFromUUID(packet.getUuid())
+                    .map(entry -> new PlayerListEntry(entry.username, entry.uuid))
+                    .orElseGet(() -> new PlayerListEntry("", packet.getUuid())));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));
         if (CONFIG.client.extra.visualRangePositionTracking && !WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
             CLIENT_LOG.info("Tracking Spawn {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
