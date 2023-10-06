@@ -31,14 +31,15 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
             CHAT_LOG.info(serializedChat);
             final Component component = packet.getContent();
             final String messageString = ComponentSerializer.toRawString(component);
+            Optional<DeathMessageParseResult> deathMessage = Optional.empty();
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b
                 if (component.children().stream().anyMatch(child -> nonNull(child.color())
                     && Objects.equals(child.color(), TextColor.color(170, 0, 0)))) {
-                    final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesHelper.parse(messageString, true);
-                    if (deathMessageParseResult.isPresent()) {
-                        EVENT_BUS.postAsync(new DeathMessageEvent(deathMessageParseResult.get(), messageString));
-                        if (deathMessageParseResult.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {
+                    deathMessage = deathMessagesHelper.parse(messageString, true);
+                    if (deathMessage.isPresent()) {
+                        EVENT_BUS.postAsync(new DeathMessageEvent(deathMessage.get(), messageString));
+                        if (deathMessage.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {
                             EVENT_BUS.postAsync(new SelfDeathMessageEvent(messageString));
                         }
                     } else {
@@ -59,9 +60,9 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
                 }
             }
             if (playerName == null) {
-                EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper));
+                EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper, deathMessage));
             } else {
-                EVENT_BUS.postAsync(new ServerChatReceivedEvent(CACHE.getTabListCache().getFromName(playerName), messageString, isWhisper));
+                EVENT_BUS.postAsync(new ServerChatReceivedEvent(CACHE.getTabListCache().getFromName(playerName), messageString, isWhisper, deathMessage));
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);

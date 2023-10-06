@@ -1,5 +1,6 @@
 package com.zenith.discord;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
@@ -8,6 +9,8 @@ import com.zenith.command.DiscordCommandContext;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
+import com.zenith.feature.deathmessages.DeathMessageParseResult;
+import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.queue.Queue;
 import discord4j.common.ReactorResources;
 import discord4j.common.util.Snowflake;
@@ -40,6 +43,7 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
 
+import java.text.DateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -67,7 +71,7 @@ public class DiscordBot {
     private GatewayDiscordClient client;
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
-    private final ConcurrentLinkedQueue<MessageCreateRequest> relayChannelMessageQueue;
+    private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> relayChannelMessageQueue;
     private final Supplier<ClientPresence> disconnectedPresence = Suppliers.memoize(() -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.custom(
         "Disconnected")));
     private final Supplier<ClientPresence> defaultConnectedPresence = () -> ClientPresence.of(Status.ONLINE, ClientActivity.custom(
@@ -214,8 +218,10 @@ public class DiscordBot {
 
     private void processRelayMessageQueue() {
         try {
-            MessageCreateRequest message = relayChannelMessageQueue.poll();
-            if (nonNull(message) && !message.content().isAbsent() && !message.content().get().isBlank())
+            MultipartRequest<MessageCreateRequest> message = relayChannelMessageQueue.poll();
+            if (nonNull(message)
+                && (!message.getJsonPayload().embeds().isAbsent()
+                    || !(message.getJsonPayload().content().isAbsent() || message.getJsonPayload().content().get().isEmpty())))
                 this.relayRestChannel.createMessage(message).block();
         } catch (final Throwable e) {
             DISCORD_LOG.error("Message processor error", e);
@@ -327,6 +333,16 @@ public class DiscordBot {
         }
     }
 
+    public void sendRelayEmbedMessage(EmbedCreateSpec embedCreateSpec) {
+        try {
+            relayChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .addEmbed(embedCreateSpec)
+                                            .build().asRequest());
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord embed message to relay", e);
+        }
+    }
+
     private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
         try {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
@@ -340,6 +356,17 @@ public class DiscordBot {
         }
     }
 
+    private void sendRelayEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
+        try {
+            relayChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .content(message)
+                                            .addEmbed(embedCreateSpec)
+                                            .build().asRequest());
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord embed message to relay", e);
+        }
+    }
+
     public void sendMessage(final String message) {
         try {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
@@ -348,6 +375,16 @@ public class DiscordBot {
             TERMINAL_LOG.info(message);
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord message", e);
+        }
+    }
+
+    public void sendRelayMessage(final String message) {
+        try {
+            relayChannelMessageQueue.add(MessageCreateSpec.builder()
+                                            .content(message)
+                                            .build().asRequest());
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord message to relay", e);
         }
     }
 
@@ -692,7 +729,8 @@ public class DiscordBot {
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
-            String message = escape(event.message());
+            String message = event.message();
+            String ping = "";
             if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                 if (CONFIG.discord.chatRelay.mentionRoleOnWhisper || CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                     if (!message.startsWith("<")) {
@@ -700,20 +738,40 @@ public class DiscordBot {
                             && CONFIG.discord.chatRelay.mentionRoleOnWhisper
                             && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")
                             && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)) {
-                            message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                            ping = "<@&" + CONFIG.discord.accountOwnerRoleId + "> ";
                         }
                     } else {
                         if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                             if (event.sender().filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
                                 && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
                                 && Arrays.asList(message.toLowerCase().split(" ")).contains(CONFIG.authentication.username.toLowerCase())) {
-                                message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
+                                ping = "<@&" + CONFIG.discord.accountOwnerRoleId + "> ";
                             }
                         }
                     }
                 }
             }
-            relayChannelMessageQueue.add(MessageCreateRequest.builder().content(message).build());
+            if (event.isPublicChat() && event.sender().isPresent()) {
+                message = "**" + event.sender().get().getName() + ":** " + message.substring(message.indexOf(" ") + 1);
+            } else if (event.isDeathMessage()) {
+                DeathMessageParseResult death = event.deathMessage().get();
+                message = message.replace(death.getVictim(), "**" + death.getVictim() + "**");
+                var k = death.getKiller().filter(killer -> killer.getType() == KillerType.PLAYER);
+                if (k.isPresent()) message = message.replace(k.get().getName(), "**" + k.get().getName() + "**");
+            }
+            final String senderName = event.sender().map(PlayerListEntry::getName)
+                .orElse(event.deathMessage().map(DeathMessageParseResult::getVictim)
+                            .orElse("Hausemaster"));
+            final EmbedCreateSpec embed = EmbedCreateSpec.builder()
+                .description(escape(message))
+                .footer(DateFormat.getInstance().format(Date.from(Instant.now())), Proxy.getInstance().getAvatarURL(senderName).toString())
+                .color(event.isPublicChat() ? Color.BLACK : event.isDeathMessage() ? Color.RUBY : event.isWhisper() ? Color.MAGENTA : Color.MOON_YELLOW)
+                .build();
+            if (ping.isEmpty()) {
+                sendRelayEmbedMessage(embed);
+            } else {
+                sendRelayEmbedMessage(ping, embed);
+            }
         } catch (final Throwable e) {
             DISCORD_LOG.error("", e);
         }
@@ -722,11 +780,11 @@ public class DiscordBot {
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && !CONFIG.discord.chatRelay.channelId.isEmpty()) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
-            try {
-                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry().getName() + " connected")).build());
-            } catch (final Throwable e) {
-                DISCORD_LOG.error("", e);
-            }
+            sendRelayEmbedMessage(EmbedCreateSpec.builder()
+                                      .description(escape(event.playerEntry().getName() + " connected"))
+                                      .color(Color.MEDIUM_SEA_GREEN)
+                                      .footer(DateFormat.getInstance().format(Date.from(Instant.now())), Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .build());
         }
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
             CONFIG.client.extra.stalk.stalkList.stream()
@@ -747,11 +805,11 @@ public class DiscordBot {
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && !CONFIG.discord.chatRelay.channelId.isEmpty()) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
-            try {
-                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry().getName()) + " disconnected").build());
-            } catch (final Throwable e) {
-                DISCORD_LOG.error("", e);
-            }
+            sendRelayEmbedMessage(EmbedCreateSpec.builder()
+                                      .description(escape(event.playerEntry().getName() + " disconnected"))
+                                      .color(Color.RUBY)
+                                      .footer(DateFormat.getInstance().format(Date.from(Instant.now())), Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .build());
         }
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
             CONFIG.client.extra.stalk.stalkList.stream()
