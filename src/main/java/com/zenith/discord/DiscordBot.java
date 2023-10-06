@@ -282,8 +282,8 @@ public class DiscordBot {
 
 
     private EmbedCreateSpec getUpdateMessage(final Optional<String> newVersion) {
-        String verString = "Current Version: " + escape(LAUNCH_CONFIG.version);
-        if (newVersion.isPresent()) verString += "\nNew Version: " + escape(newVersion.get());
+        String verString = "Current Version: `" + escape(LAUNCH_CONFIG.version) + "`";
+        if (newVersion.isPresent()) verString += "\nNew Version: `" + escape(newVersion.get()) + "`";
         return EmbedCreateSpec.builder()
             .title("Updating and restarting...")
             .description(verString)
