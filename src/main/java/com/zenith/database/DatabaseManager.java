@@ -76,7 +76,7 @@ public class DatabaseManager {
             // todo: there's a (uncommon) race condition here, if the proxy disconnects and the cache resets during the tick event
             //  the faster each handler executes the more unlikely that is to happen but its still possible
             if (Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30)))
-                EVENT_BUS.post(new DatabaseTickEvent());
+                EVENT_BUS.post(DatabaseTickEvent.INSTANCE);
         } catch (final Throwable e) {
             DATABASE_LOG.error("Failed posting database tick event", e);
         }

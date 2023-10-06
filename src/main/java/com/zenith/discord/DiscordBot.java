@@ -491,10 +491,10 @@ public class DiscordBot {
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {
-        boolean sus = event.reason.startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
+        boolean sus = event.reason().startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
         sendEmbedMessage((sus ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
-                .addField("Reason", event.reason, true)
+                .addField("Reason", event.reason(), true)
                 .color(Color.RUBY)
                 .build());
         SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(disconnectedPresence.get()).block());
@@ -503,9 +503,9 @@ public class DiscordBot {
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         if (CONFIG.discord.queueWarning.enabled) {
-            if (event.position == CONFIG.discord.queueWarning.position) {
+            if (event.position() == CONFIG.discord.queueWarning.position) {
                 sendQueueWarning();
-            } else if (event.position <= 3) {
+            } else if (event.position() <= 3) {
                 sendQueueWarning();
             }
         }
@@ -546,7 +546,7 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Death Message")
                 .color(Color.RUBY)
-                .addField("Message", event.message, false)
+                .addField("Message", event.message(), false)
                 .build());
     }
 
@@ -562,7 +562,7 @@ public class DiscordBot {
         if (CONFIG.client.extra.clientConnectionMessages) {
             sendEmbedMessage(EmbedCreateSpec.builder()
                     .title("Client Connected")
-                    .addField("Username", event.clientGameProfile.getName(), true)
+                    .addField("Username", event.clientGameProfile().getName(), true)
                     .color(Color.CYAN)
                     .build());
         }
@@ -572,7 +572,7 @@ public class DiscordBot {
         if (CONFIG.client.extra.clientConnectionMessages) {
             sendEmbedMessage(EmbedCreateSpec.builder()
                     .title("Spectator Connected")
-                    .addField("Username", escape(event.clientGameProfile.getName()), true)
+                    .addField("Username", escape(event.clientGameProfile().getName()), true)
                     .color(Color.CYAN)
                     .build());
         }
@@ -583,11 +583,11 @@ public class DiscordBot {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                 .title("Client Disconnected")
                 .color(Color.RUBY);
-        if (nonNull(event.clientGameProfile)) {
-            builder = builder.addField("Username", escape(event.clientGameProfile.getName()), false);
+        if (nonNull(event.clientGameProfile())) {
+            builder = builder.addField("Username", escape(event.clientGameProfile().getName()), false);
         }
-        if (nonNull(event.reason)) {
-            builder = builder.addField("Reason", escape(event.reason), false);
+        if (nonNull(event.reason())) {
+            builder = builder.addField("Reason", escape(event.reason()), false);
         }
         sendEmbedMessage(builder
             .build());
@@ -713,8 +713,8 @@ public class DiscordBot {
             EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                     .title("Spectator Disconnected")
                     .color(Color.RUBY);
-            if (nonNull(event.clientGameProfile)) {
-                builder = builder.addField("Username", escape(event.clientGameProfile.getName()), false);
+            if (nonNull(event.clientGameProfile())) {
+                builder = builder.addField("Username", escape(event.clientGameProfile().getName()), false);
             }
             sendEmbedMessage(builder
                     .build());
@@ -839,8 +839,8 @@ public class DiscordBot {
 
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (!CONFIG.discord.chatRelay.enable) return;
-        if (!Proxy.getInstance().isConnected() || event.message.isEmpty()) return;
-        Proxy.getInstance().getClient().send(new ServerboundChatPacket(event.message));
+        if (!Proxy.getInstance().isConnected() || event.message().isEmpty()) return;
+        Proxy.getInstance().getClient().send(new ServerboundChatPacket(event.message()));
         lastRelaymessage = Optional.of(Instant.now());
     }
 
@@ -852,7 +852,7 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Server Restarting")
                 .color(Color.RUBY)
-                .addField("Message", event.message, true)
+                .addField("Message", event.message(), true)
                 .build());
     }
 
@@ -874,7 +874,7 @@ public class DiscordBot {
     public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
         if (!CONFIG.client.extra.prioStatusChangeMention) return;
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
-        if (event.prio) {
+        if (event.prio()) {
             embedCreateSpec
                     .title("Prio Queue Status Detected")
                     .color(Color.GREEN);
@@ -889,7 +889,7 @@ public class DiscordBot {
 
     public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder();
-        if (event.prioBanned) {
+        if (event.prioBanned()) {
             embedCreateSpec
                     .title("Prio Ban Detected")
                     .color(Color.RED);
@@ -904,7 +904,7 @@ public class DiscordBot {
 
     public void handleAutoReconnectEvent(final AutoReconnectEvent event) {
         sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("AutoReconnecting in " + event.delaySeconds + "s")
+                .title("AutoReconnecting in " + event.delaySeconds() + "s")
                 .color(Color.MOON_YELLOW)
                 .build());
     }
@@ -914,20 +914,20 @@ public class DiscordBot {
             .title("Microsoft Device Code Login")
             .color(Color.CYAN)
             .description("Login [here]("
-                             + event.getDeviceCode().verificationUri()
-                             + ") with code: " + event.getDeviceCode().userCode())
+                             + event.deviceCode().verificationUri()
+                             + ") with code: " + event.deviceCode().userCode())
             .build());
     }
 
     public void handleDeathMessageEvent(final DeathMessageEvent event) {
         if (!CONFIG.client.extra.killMessage) return;
-        event.deathMessageParseResult.getKiller().ifPresent(killer -> {
+        event.deathMessageParseResult().getKiller().ifPresent(killer -> {
             if (!killer.getName().equals(CONFIG.authentication.username)) return;
             sendEmbedMessage(EmbedCreateSpec.builder()
                                  .title("Kill Detected")
                                  .color(Color.CYAN)
-                                 .addField("Victim", escape(event.deathMessageParseResult.getVictim()), false)
-                                 .addField("Message", escape(event.deathMessageRaw), false)
+                                 .addField("Victim", escape(event.deathMessageParseResult().getVictim()), false)
+                                 .addField("Message", escape(event.deathMessageRaw()), false)
                     .build());
         });
     }

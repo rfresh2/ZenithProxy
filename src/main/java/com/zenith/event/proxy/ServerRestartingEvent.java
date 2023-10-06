@@ -1,7 +1,3 @@
 package com.zenith.event.proxy;
 
-public class ServerRestartingEvent {
-    public final String message;
-
-    public ServerRestartingEvent(String message) { this.message = message; }
-}
+public record ServerRestartingEvent(String message) { }

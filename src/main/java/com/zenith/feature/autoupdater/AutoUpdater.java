@@ -93,7 +93,7 @@ public abstract class AutoUpdater {
 
     public void handleDisconnectEvent(final DisconnectEvent event) {
         if (updateAvailable && !CONFIG.discord.isUpdating) {
-            CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = !event.reason.equals(MANUAL_DISCONNECT);
+            CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = !event.reason().equals(MANUAL_DISCONNECT);
             saveConfigAsync();
             scheduleConditionalUpdate();
         }

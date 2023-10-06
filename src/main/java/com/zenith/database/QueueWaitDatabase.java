@@ -58,7 +58,7 @@ public class QueueWaitDatabase extends Database {
     public void handleQueuePosition(final QueuePositionUpdateEvent event) {
         // record only first position update
         if (shouldUpdateQueueLen.compareAndSet(true, false)) {
-            initialQueueLen = event.position;
+            initialQueueLen = event.position();
             initialQueueTime = Instant.now();
         }
     }

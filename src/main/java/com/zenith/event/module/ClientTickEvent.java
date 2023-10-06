@@ -1,4 +1,5 @@
 package com.zenith.event.module;
 
-public class ClientTickEvent {
+public record ClientTickEvent() {
+    public static final ClientTickEvent INSTANCE = new ClientTickEvent();
 }

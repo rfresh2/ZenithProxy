@@ -1,4 +1,3 @@
 package com.zenith.event.proxy;
 
-public class HealthAutoDisconnectEvent {
-}
+public record HealthAutoDisconnectEvent() { }

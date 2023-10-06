@@ -57,7 +57,7 @@ public class DeathsDatabase extends LockingDatabase {
 
     public void handleDeathMessageEvent(DeathMessageEvent event) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org")) return;
-        writeDeath(event.deathMessageParseResult, event.deathMessageRaw, Instant.now().atOffset(ZoneOffset.UTC));
+        writeDeath(event.deathMessageParseResult(), event.deathMessageRaw(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time) {

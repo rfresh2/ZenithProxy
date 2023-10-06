@@ -549,7 +549,7 @@ public class Proxy {
         this.queuePosition = 0;
         if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             // skip autoreconnect when we want to sync client disconnect
-            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason)) {
+            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason())) {
                 if (autoReconnectIsInProgress()) {
                     return;
                 }
@@ -578,7 +578,7 @@ public class Proxy {
     }
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
-        this.queuePosition = event.position;
+        this.queuePosition = event.position();
     }
 
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
@@ -607,16 +607,16 @@ public class Proxy {
 
     public void handlePrioStatusEvent(PrioStatusEvent event) {
         if (CONFIG.client.server.address.toLowerCase().contains("2b2t.org")) {
-            if (event.prio == CONFIG.authentication.prio) {
+            if (event.prio() == CONFIG.authentication.prio) {
                 if (isPrio.isEmpty()) {
-                    CLIENT_LOG.info("Prio Detected: " + event.prio);
-                    this.isPrio = Optional.of(event.prio);
+                    CLIENT_LOG.info("Prio Detected: " + event.prio());
+                    this.isPrio = Optional.of(event.prio());
                 }
             } else {
-                CLIENT_LOG.info("Prio Change Detected: " + event.prio);
-                EVENT_BUS.postAsync(new PrioStatusUpdateEvent(event.prio));
-                this.isPrio = Optional.of(event.prio);
-                CONFIG.authentication.prio = event.prio;
+                CLIENT_LOG.info("Prio Change Detected: " + event.prio());
+                EVENT_BUS.postAsync(new PrioStatusUpdateEvent(event.prio()));
+                this.isPrio = Optional.of(event.prio());
+                CONFIG.authentication.prio = event.prio();
                 saveConfigAsync();
             }
         }

@@ -41,7 +41,7 @@ public class AutoDisconnect extends Module {
 
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {
         if (Shared.CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
-            if (event.newHealth <= Shared.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
+            if (event.newHealth() <= Shared.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
                 if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                     EVENT_BUS.postAsync(new HealthAutoDisconnectEvent());
                     Proxy.getInstance().disconnect(AUTO_DISCONNECT);
@@ -65,7 +65,7 @@ public class AutoDisconnect extends Module {
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             ServerConnection currentConnection = Proxy.getInstance().getCurrentPlayer().get();
-            if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile)) {
+            if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
                 Proxy.getInstance().disconnect();
             }
         }

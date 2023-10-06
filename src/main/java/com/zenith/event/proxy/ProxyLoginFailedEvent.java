@@ -1,8 +1,3 @@
 package com.zenith.event.proxy;
 
-public class ProxyLoginFailedEvent {
-
-    public ProxyLoginFailedEvent() {
-
-    }
-}
+public record ProxyLoginFailedEvent() { }

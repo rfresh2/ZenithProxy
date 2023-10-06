@@ -110,7 +110,7 @@ public class ModuleManager {
                 clientTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         try {
-                            EVENT_BUS.post(new ClientTickEvent());
+                            EVENT_BUS.post(ClientTickEvent.INSTANCE);
                         } catch (final Exception e) {
                             CLIENT_LOG.error("Client Tick Error", e);
                         }

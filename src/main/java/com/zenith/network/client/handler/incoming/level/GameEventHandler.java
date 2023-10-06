@@ -21,18 +21,18 @@ public class GameEventHandler implements AsyncIncomingHandler<ClientboundGameEve
             CACHE.getPlayerCache().setGameMode((GameMode) packet.getValue());
         } else if (packet.getNotification() == GameEvent.START_RAIN) {
             CACHE.getChunkCache().setRaining(true);
-            EVENT_BUS.postAsync(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
         } else if (packet.getNotification() == GameEvent.STOP_RAIN) {
             CACHE.getChunkCache().setRaining(false);
             CACHE.getChunkCache().setThunderStrength(0.0f);
             CACHE.getChunkCache().setRainStrength(0.0f);
-            EVENT_BUS.postAsync(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
         } else if (packet.getNotification() == GameEvent.RAIN_STRENGTH) {
             CACHE.getChunkCache().setRainStrength(((RainStrengthValue) packet.getValue()).getStrength());
-            EVENT_BUS.postAsync(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
         } else if (packet.getNotification() == GameEvent.THUNDER_STRENGTH) {
             CACHE.getChunkCache().setThunderStrength(((ThunderStrengthValue) packet.getValue()).getStrength());
-            EVENT_BUS.postAsync(new WeatherChangeEvent());
+            EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
         } else if (packet.getNotification() == GameEvent.ENABLE_RESPAWN_SCREEN) {
             CACHE.getPlayerCache().setEnableRespawnScreen(packet.getValue() == RespawnScreenValue.ENABLE_RESPAWN_SCREEN);
         }

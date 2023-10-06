@@ -1,4 +1,5 @@
 package com.zenith.event.module;
 
-public class WeatherChangeEvent {
+public record WeatherChangeEvent() {
+    public static final WeatherChangeEvent INSTANCE = new WeatherChangeEvent();
 }
