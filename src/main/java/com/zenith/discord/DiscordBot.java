@@ -751,7 +751,7 @@ public class DiscordBot {
                     }
                 }
             }
-            if (event.isPublicChat() && event.sender().isPresent()) {
+            if ((event.isPublicChat() || event.isWhisper()) && event.sender().isPresent()) {
                 message = "**" + event.sender().get().getName() + ":** " + message.substring(message.indexOf(" ") + 1);
             } else if (event.isDeathMessage()) {
                 DeathMessageParseResult death = event.deathMessage().get();
