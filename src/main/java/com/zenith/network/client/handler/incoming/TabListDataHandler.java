@@ -1,6 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.PrioStatusEvent;
 import com.zenith.event.proxy.QueueCompleteEvent;
@@ -10,6 +11,8 @@ import com.zenith.network.registry.AsyncIncomingHandler;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +21,8 @@ import java.util.Optional;
 import static com.zenith.Shared.*;
 
 public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabListPacket, ClientSession> {
+    private Optional<Duration> queueDuration = Optional.empty();
+
     @Override
     public boolean applyAsync(@NonNull ClientboundTabListPacket packet, @NonNull ClientSession session) {
         CACHE.getTabListCache()
@@ -48,16 +53,20 @@ public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabLi
         if (queueHeader.isPresent()) {
             if (!session.isInQueue()) {
                 EVENT_BUS.postAsync(new StartQueueEvent());
+                queueDuration = Optional.empty();
             }
             session.setInQueue(true);
             session.setOnline(false);
         } else if (session.isInQueue()) {
             session.setInQueue(false);
             session.setLastQueuePosition(Integer.MAX_VALUE);
-            EVENT_BUS.postAsync(new QueueCompleteEvent());
+            // need to calculate and store duration here as proxy connect time gets reset in the queue complete event handler
+            queueDuration = Optional.of(Duration.between(Proxy.getInstance().getConnectTime(), Instant.now()));
+            EVENT_BUS.postAsync(new QueueCompleteEvent(queueDuration.get()));
         } else if (!session.isOnline()) {
             session.setOnline(true);
-            EVENT_BUS.postAsync(new PlayerOnlineEvent());
+            EVENT_BUS.postAsync(new PlayerOnlineEvent(queueDuration));
+            queueDuration = Optional.empty();
         }
     }
 

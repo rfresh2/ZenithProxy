@@ -474,10 +474,20 @@ public class DiscordBot {
     }
 
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
-        sendEmbedMessage(EmbedCreateSpec.builder()
-                .title("Proxy Online")
-                .color(Color.MEDIUM_SEA_GREEN)
-                .build());
+        final EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
+            .title("Proxy Online")
+            .color(Color.MEDIUM_SEA_GREEN);
+        event.queueWait()
+            .ifPresent(duration -> embedBuilder.addField("Queue Duration", formatDuration(duration), true));
+        sendEmbedMessage(embedBuilder.build());
+    }
+
+    private String formatDuration(Duration duration) {
+        final StringBuilder sb = new StringBuilder();
+        if (duration.toHoursPart() > 0) sb.append(duration.toHoursPart()).append("h ");
+        if (duration.toMinutesPart() > 0) sb.append(duration.toMinutesPart()).append("m ");
+        sb.append(duration.toSecondsPart()).append("s");
+        return sb.toString();
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {

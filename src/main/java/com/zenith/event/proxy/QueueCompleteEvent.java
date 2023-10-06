@@ -1,4 +1,5 @@
 package com.zenith.event.proxy;
 
-public class QueueCompleteEvent {
-}
+import java.time.Duration;
+
+public record QueueCompleteEvent(Duration queueDuration) { }
