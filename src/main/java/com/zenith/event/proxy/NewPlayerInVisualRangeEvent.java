@@ -1,14 +1,6 @@
 package com.zenith.event.proxy;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.cache.data.tab.PlayerEntry;
 
-public class NewPlayerInVisualRangeEvent {
-    public final PlayerEntry playerEntry;
-    public final EntityPlayer playerEntity;
-
-    public NewPlayerInVisualRangeEvent(PlayerEntry playerEntry, EntityPlayer entity) {
-        this.playerEntry = playerEntry;
-        this.playerEntity = entity;
-    }
-}
+public record NewPlayerInVisualRangeEvent(PlayerListEntry playerEntry, EntityPlayer playerEntity) { }

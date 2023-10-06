@@ -549,23 +549,23 @@ public class DiscordBot {
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeAlert) return;
         boolean isFriend = CONFIG.client.extra.friendsList.stream()
-                .anyMatch(friend -> friend.uuid.equals(event.playerEntry.getId()));
+                .anyMatch(friend -> friend.uuid.equals(event.playerEntry().getProfileId()));
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
-            DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry.getName());
+            DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry().getName());
             return;
         }
         EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
                 .title("Player In Visual Range")
                 .color(isFriend ? Color.GREEN : Color.RUBY)
-                .addField("Player Name", escape(event.playerEntry.getName()), true)
-                .addField("Player UUID", ("[" + event.playerEntry.getId().toString() + "](https://namemc.com/profile/" + event.playerEntry.getId().toString() + ")"), true)
-                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString());
+                .addField("Player Name", escape(event.playerEntry().getName()), true)
+                .addField("Player UUID", ("[" + event.playerEntry().getProfileId().toString() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
+                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString());
 
         if (CONFIG.discord.reportCoords) {
             embedCreateSpec.addField("Coordinates", "||["
-                    + (int) event.playerEntity.getX() + ", "
-                    + (int) event.playerEntity.getY() + ", "
-                    + (int) event.playerEntity.getZ()
+                    + (int) event.playerEntity().getX() + ", "
+                    + (int) event.playerEntity().getY() + ", "
+                    + (int) event.playerEntity().getZ()
                     + "]||", false);
         }
         final String buttonId = "addFriend" + ThreadLocalRandom.current().nextInt(1000000);
@@ -574,14 +574,14 @@ public class DiscordBot {
             if (e.getCustomId().equals(buttonId)) {
                 DISCORD_LOG.info(e.getInteraction().getMember()
                         .map(User::getTag).orElse("Unknown")
-                        + " added friend: " + event.playerEntry.getName() + " [" + event.playerEntry.getId() + "]");
-                WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry.getName());
+                        + " added friend: " + event.playerEntry().getName() + " [" + event.playerEntry().getProfileId() + "]");
+                WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry().getName());
                 e.reply().withEmbeds(EmbedCreateSpec.builder()
                         .title("Friend Added")
                         .color(Color.GREEN)
-                        .addField("Player Name", escape(event.playerEntry.getName()), true)
-                        .addField("Player UUID", ("[" + event.playerEntry.getId() + "](https://namemc.com/profile/" + event.playerEntry.getId() + ")"), true)
-                        .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
+                        .addField("Player Name", escape(event.playerEntry().getName()), true)
+                        .addField("Player UUID", ("[" + event.playerEntry().getProfileId() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId() + ")"), true)
+                        .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                         .build()).block();
                 saveConfig();
             }
@@ -692,20 +692,20 @@ public class DiscordBot {
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
-            String message = escape(event.message);
+            String message = escape(event.message());
             if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                 if (CONFIG.discord.chatRelay.mentionRoleOnWhisper || CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                     if (!message.startsWith("<")) {
-                        if (event.isWhisper
+                        if (event.isWhisper()
                             && CONFIG.discord.chatRelay.mentionRoleOnWhisper
                             && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")
-                            && event.sender.map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)) {
+                            && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)) {
                             message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
                         }
                     } else {
                         if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
-                            if (event.sender.filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
-                                && event.sender.map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
+                            if (event.sender().filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
+                                && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
                                 && Arrays.asList(message.toLowerCase().split(" ")).contains(CONFIG.authentication.username.toLowerCase())) {
                                 message = "<@&" + CONFIG.discord.accountOwnerRoleId + "> " + message;
                             }
@@ -723,7 +723,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && !CONFIG.discord.chatRelay.channelId.isEmpty()) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             try {
-                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry.getName() + " connected")).build());
+                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry().getName() + " connected")).build());
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }
@@ -731,24 +731,24 @@ public class DiscordBot {
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
             CONFIG.client.extra.stalk.stalkList.stream()
                     .map(s -> s.toLowerCase(Locale.ROOT))
-                    .filter(s -> s.equalsIgnoreCase(event.playerEntry.getName()))
+                    .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
                     .findFirst()
                     .ifPresent(player -> {
                         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Online!")
                                 .color(Color.MEDIUM_SEA_GREEN)
-                                .addField("Player Name", event.playerEntry.getName(), true)
-                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
+                                .addField("Player Name", event.playerEntry().getName(), true)
+                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                 .build());
                     });
         }
     }
 
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
-        if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && CONFIG.discord.chatRelay.channelId.length() > 0) {
+        if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && !CONFIG.discord.chatRelay.channelId.isEmpty()) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             try {
-                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry.getName()) + " disconnected").build());
+                relayChannelMessageQueue.add(MessageCreateRequest.builder().content(escape(event.playerEntry().getName()) + " disconnected").build());
             } catch (final Throwable e) {
                 DISCORD_LOG.error("", e);
             }
@@ -756,14 +756,14 @@ public class DiscordBot {
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
             CONFIG.client.extra.stalk.stalkList.stream()
                     .map(s -> s.toLowerCase(Locale.ROOT))
-                    .filter(s -> s.equalsIgnoreCase(event.playerEntry.getName()))
+                    .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
                     .findFirst()
                     .ifPresent(player -> {
                         sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
                                 .title("Stalked Player Offline!")
                                 .color(Color.RUBY)
-                                .addField("Player Name", event.playerEntry.getName(), true)
-                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry.getId()).toString())
+                                .addField("Player Name", event.playerEntry().getName(), true)
+                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                 .build());
                     });
         }

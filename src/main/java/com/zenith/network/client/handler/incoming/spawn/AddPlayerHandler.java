@@ -1,9 +1,9 @@
 package com.zenith.network.client.handler.incoming.spawn;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
@@ -26,11 +26,11 @@ public class AddPlayerHandler implements AsyncIncomingHandler<ClientboundAddPlay
                 .setPitch(packet.getPitch());
         final Entity playerCachedAlready = CACHE.getEntityCache().get(packet.getEntityId());
         CACHE.getEntityCache().add(entity);
-        Optional<PlayerEntry> foundPlayerEntry = CACHE.getTabListCache().getTabList().get(packet.getUuid());
+        Optional<PlayerListEntry> foundPlayerEntry = CACHE.getTabListCache().getTabList().get(packet.getUuid());
         if (foundPlayerEntry.isEmpty() && playerCachedAlready == null) return false;
-        PlayerEntry playerEntry = foundPlayerEntry.orElse(new PlayerEntry("?", packet.getUuid()));
+        PlayerListEntry playerEntry = foundPlayerEntry.orElse(new PlayerListEntry("", packet.getUuid()));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));
-        if (CONFIG.client.extra.visualRangePositionTracking && !WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getId())) {
+        if (CONFIG.client.extra.visualRangePositionTracking && !WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
             CLIENT_LOG.info("Tracking Spawn {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
         }
         return true;

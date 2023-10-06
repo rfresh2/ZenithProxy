@@ -1,9 +1,9 @@
 package com.zenith.command.impl;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.google.common.collect.Lists;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
-import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
@@ -38,11 +38,11 @@ public class TablistCommand extends Command {
             } else {
                 // embeds will be too small for tablist
                 List<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
-                        .map(PlayerEntry::getName)
+                        .map(PlayerListEntry::getName)
                         .distinct()
                         .sorted(String::compareTo)
                         .collect(Collectors.toList());
-                final int longestPlayerNameSize = playerNames.stream().map(String::length).max(Integer::compareTo).get();
+                final int longestPlayerNameSize = playerNames.stream().map(String::length).max(Integer::compareTo).orElse(1);
                 final int colSize = 4; // num cols of playernames
                 final int paddingSize = 1; // num spaces between names
                 List<List<String>> playerNamesColumnized = Lists.partition(playerNames, colSize);

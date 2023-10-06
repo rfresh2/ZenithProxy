@@ -38,7 +38,7 @@ public class TablistDatabase extends LockingDatabase {
         ctx.deleteFrom(t).execute();
         ctx.batchInsert(CACHE.getTabListCache().getTabList().getEntries().stream()
                             .map(e -> new TablistRecord(e.getName(),
-                                                        e.getId(),
+                                                        e.getProfileId(),
                                                         Instant.now().atOffset(ZoneOffset.UTC)))
                             .toList())
             .execute();

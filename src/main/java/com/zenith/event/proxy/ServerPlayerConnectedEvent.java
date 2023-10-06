@@ -1,10 +1,5 @@
 package com.zenith.event.proxy;
 
-import com.zenith.cache.data.tab.PlayerEntry;
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 
-public class ServerPlayerConnectedEvent {
-    public final PlayerEntry playerEntry;
-    public ServerPlayerConnectedEvent(final PlayerEntry playerEntry) {
-        this.playerEntry = playerEntry;
-    }
-}
+public record ServerPlayerConnectedEvent(PlayerListEntry playerEntry) { }

@@ -1,6 +1,6 @@
 package com.zenith.database;
 
-import com.zenith.cache.data.tab.PlayerEntry;
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.zenith.database.dto.tables.Deaths;
 import com.zenith.database.dto.tables.records.DeathsRecord;
 import com.zenith.event.Subscription;
@@ -64,8 +64,8 @@ public class DeathsDatabase extends LockingDatabase {
         try {
             final DSLContext context = DSL.using(SQLDialect.POSTGRES);
             final Deaths d = Deaths.DEATHS;
-            final Optional<PlayerEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
-            if (!victimEntry.isPresent()) {
+            final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
+            if (victimEntry.isEmpty()) {
                 DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
                 return;
             }
@@ -73,19 +73,19 @@ public class DeathsDatabase extends LockingDatabase {
                     .set(d.TIME, time)
                     .set(d.DEATH_MESSAGE, rawDeathMessage)
                     .set(d.VICTIM_PLAYER_NAME, victimEntry.get().getName())
-                    .set(d.VICTIM_PLAYER_UUID, victimEntry.get().getId());
+                    .set(d.VICTIM_PLAYER_UUID, victimEntry.get().getProfileId());
             if (deathMessageParseResult.getKiller().isPresent()) {
                 final Killer killer = deathMessageParseResult.getKiller().get();
                 if (killer.getType().equals(KillerType.PLAYER)) {
-                    final Optional<PlayerEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
-                    if (!killerEntry.isPresent()) {
+                    final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
+                    if (killerEntry.isEmpty()) {
                         query
                                 .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName());
                         DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
                     } else {
                         query
                                 .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName())
-                                .set(d.KILLER_PLAYER_UUID, killerEntry.get().getId());
+                                .set(d.KILLER_PLAYER_UUID, killerEntry.get().getProfileId());
                     }
                 } else if (killer.getType().equals(KillerType.MOB)) {
                     query
@@ -101,15 +101,15 @@ public class DeathsDatabase extends LockingDatabase {
         }
     }
 
-    private Optional<PlayerEntry> getPlayerEntryFromNameWithFallback(final String username) {
-        Optional<PlayerEntry> tablistEntry = CACHE.getTabListCache().getTabList().getFromName(username);
+    private Optional<PlayerListEntry> getPlayerEntryFromNameWithFallback(final String username) {
+        Optional<PlayerListEntry> tablistEntry = CACHE.getTabListCache().getTabList().getFromName(username);
         if (tablistEntry.isPresent()) {
             return tablistEntry;
         } else {
             // note: this doesn't actually add them to the whitelist, just using this as a convenience function
             final Optional<WhitelistEntry> whitelistEntryFromUsername = WHITELIST_MANAGER.getWhitelistEntryFromUsername(username);
             if (whitelistEntryFromUsername.isPresent()) {
-                return Optional.of(new PlayerEntry(whitelistEntryFromUsername.get().username, whitelistEntryFromUsername.get().uuid));
+                return Optional.of(new PlayerListEntry(whitelistEntryFromUsername.get().username, whitelistEntryFromUsername.get().uuid));
             }
         }
         return Optional.empty();

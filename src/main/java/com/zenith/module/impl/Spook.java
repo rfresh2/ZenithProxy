@@ -72,7 +72,7 @@ public class Spook extends Module {
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         synchronized (this.focusStack) {
-            this.focusStack.push(event.playerEntity);
+            this.focusStack.push(event.playerEntity());
         }
     }
 

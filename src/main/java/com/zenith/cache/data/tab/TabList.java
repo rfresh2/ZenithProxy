@@ -21,7 +21,7 @@ import static com.zenith.Shared.CONFIG;
 @Setter
 @Accessors(chain = true)
 public class TabList {
-    protected final Map<UUID, PlayerEntry> entries = new ConcurrentHashMap<>();
+    protected final Map<UUID, PlayerListEntry> entries = new ConcurrentHashMap<>();
     @NonNull
     protected Component header = Component.text("");
     @NonNull
@@ -29,46 +29,34 @@ public class TabList {
     protected long lastUpdate = 0L;
 
     public void add(@NonNull PlayerListEntry entry) {
-        PlayerEntry coolEntry = PlayerEntry.fromMCProtocolLibEntry(entry);
-        this.entries.put(entry.getProfile().getId(), coolEntry);
+        this.entries.put(entry.getProfile().getId(), entry);
     }
 
-    public Optional<PlayerEntry> remove(@NonNull PlayerListEntry entry) {
-        PlayerEntry removed = this.entries.remove(entry.getProfile().getId());
+    public Optional<PlayerListEntry> remove(@NonNull PlayerListEntry entry) {
+        PlayerListEntry removed = this.entries.remove(entry.getProfile().getId());
         if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
             CACHE_LOG.error("Could not remove player with UUID: {}", entry.getProfile().getId());
         }
         return Optional.ofNullable(removed);
     }
 
-    public Optional<PlayerEntry> remove(@NonNull UUID uuid) {
-        PlayerEntry removed = this.entries.remove(uuid);
+    public Optional<PlayerListEntry> remove(@NonNull UUID uuid) {
+        PlayerListEntry removed = this.entries.remove(uuid);
         if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
             CACHE_LOG.error("Could not remove player with UUID: {}", uuid);
         }
         return Optional.ofNullable(removed);
     }
 
-    public PlayerEntry get(@NonNull PlayerListEntry entry) {
-        PlayerEntry e = this.entries.get(entry.getProfile().getId());
-        if (e == null) {
-            if (CONFIG.debug.server.cache.unknownplayers) {
-                CACHE_LOG.error("Could not find player with UUID: {}", entry.getProfile().getId());
-            }
-            return new PlayerEntry("", entry.getProfile().getId());
-        }
-        return e;
-    }
-
-    public Optional<PlayerEntry> get(UUID uuid) {
+    public Optional<PlayerListEntry> get(UUID uuid) {
         return Optional.ofNullable(this.entries.get(uuid));
     }
 
-    public Optional<PlayerEntry> getFromName(final String username) {
-        return this.entries.values().stream().filter(v -> v.name.equals(username)).findFirst();
+    public Optional<PlayerListEntry> getFromName(final String username) {
+        return this.entries.values().stream().filter(v -> v.getName().equals(username)).findFirst();
     }
 
-    public Collection<PlayerEntry> getEntries() {
+    public Collection<PlayerListEntry> getEntries() {
         return this.entries.values();
     }
 }

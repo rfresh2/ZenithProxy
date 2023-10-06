@@ -52,15 +52,15 @@ public class AutoReply extends Module {
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
             try {
-                if (event.isWhisper && event.sender.isPresent()) {
-                    if (!event.sender.get().getName().equalsIgnoreCase(CONFIG.authentication.username)
+                if (event.isWhisper() && event.sender().isPresent()) {
+                    if (!event.sender().get().getName().equalsIgnoreCase(CONFIG.authentication.username)
                             && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)
                             && (DISCORD_BOT.lastRelaymessage.isEmpty()
                             || Instant.now().minus(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds)).isAfter(DISCORD_BOT.lastRelaymessage.get()))) {
-                        if (isNull(repliedPlayersCache.getIfPresent(event.sender.get().getName()))) {
-                            repliedPlayersCache.put(event.sender.get().getName(), event.sender.get().getName());
+                        if (isNull(repliedPlayersCache.getIfPresent(event.sender().get().getName()))) {
+                            repliedPlayersCache.put(event.sender().get().getName(), event.sender().get().getName());
                             // 236 char max ( 256 - 4(command) - 16(max name length) )
-                            sendClientPacketAsync(new ServerboundChatPacket("/w " + event.sender.get().getName() + " " + CONFIG.client.extra.autoReply.message.substring(0, Math.min(CONFIG.client.extra.autoReply.message.length(), 236))));
+                            sendClientPacketAsync(new ServerboundChatPacket("/w " + event.sender().get().getName() + " " + CONFIG.client.extra.autoReply.message.substring(0, Math.min(CONFIG.client.extra.autoReply.message.length(), 236))));
                             this.lastReply = Instant.now();
                         }
                     }

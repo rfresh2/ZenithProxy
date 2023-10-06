@@ -1,13 +1,15 @@
 package com.zenith.module.impl;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -55,7 +57,7 @@ public class Spammer extends Module {
 
     private String getNextPlayer() {
         Set<String> playerNames = CACHE.getTabListCache().getTabList().getEntries().stream()
-                .map(PlayerEntry::getName)
+                .map(PlayerListEntry::getName)
                 .collect(Collectors.toSet());
         if (playerNames.size() == 1) { return null; } // no other players connected
         playerNames.removeAll(this.whisperedPlayers);

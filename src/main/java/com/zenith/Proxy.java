@@ -626,7 +626,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry.getName() + "&r&e connected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry().getName() + "&r&e connected"), false));
             }
         }
     }
@@ -635,7 +635,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry.getName() + "&r&e disconnected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
             }
         }
     }

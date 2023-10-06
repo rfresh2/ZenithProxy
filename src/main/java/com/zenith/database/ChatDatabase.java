@@ -54,16 +54,16 @@ public class ChatDatabase extends LockingDatabase {
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (!CONFIG.client.server.address.endsWith("2b2t.org") // only write on 2b2t
                 || Proxy.getInstance().isInQueue()  // ignore queue
-                || !event.message.startsWith("<")) return; // don't write whispers or system messages
+                || !event.message().startsWith("<")) return; // don't write whispers or system messages
         try {
-            if (event.sender.isPresent()) {
-                final String msg = event.message.substring(event.message.indexOf(">") + 2); // skip leading space
-                writeChat(event.sender.get().getId(), event.sender.get().getName(), msg, Instant.now().atOffset(ZoneOffset.UTC));
+            if (event.sender().isPresent()) {
+                final String msg = event.message().substring(event.message().indexOf(">") + 2); // skip leading space
+                writeChat(event.sender().get().getProfileId(), event.sender().get().getName(), msg, Instant.now().atOffset(ZoneOffset.UTC));
             } else {
-                DATABASE_LOG.error("Unable to extract sender for chat message: {}", event.message);
+                DATABASE_LOG.error("Unable to extract sender for chat message: {}", event.message());
             }
         } catch (final Exception e) {
-            DATABASE_LOG.error("Failed handling chat: {}", event.message, e);
+            DATABASE_LOG.error("Failed handling chat: {}", event.message(), e);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoRemovePacket;
-import com.zenith.cache.data.tab.PlayerEntry;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
@@ -15,7 +15,7 @@ public class PlayerInfoRemoveHandler implements AsyncIncomingHandler<Clientbound
     @Override
     public boolean applyAsync(ClientboundPlayerInfoRemovePacket packet, ClientSession session) {
         packet.getProfileIds().forEach(profileId -> {
-            Optional<PlayerEntry> playerEntry = CACHE.getTabListCache().getTabList().remove(profileId);
+            Optional<PlayerListEntry> playerEntry = CACHE.getTabListCache().getTabList().remove(profileId);
             playerEntry.ifPresent(e -> EVENT_BUS.postAsync(new ServerPlayerDisconnectedEvent(e)));
         });
         return true;
