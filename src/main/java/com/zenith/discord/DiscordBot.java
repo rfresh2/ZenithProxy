@@ -1,6 +1,5 @@
 package com.zenith.discord;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
@@ -760,17 +759,23 @@ public class DiscordBot {
                     }
                 }
             }
-            if ((event.isPublicChat() || event.isWhisper()) && event.sender().isPresent()) {
+            final String senderName;
+            if (event.isPublicChat()) {
                 message = "**" + event.sender().get().getName() + ":** " + message.substring(message.indexOf(" ") + 1);
+                senderName = event.sender().get().getName();
+            } else if (event.isWhisper()) {
+                message = message.replace(event.sender().get().getName(), "**" + event.sender().get().getName() + "**");
+                message = message.replace(event.whisperTarget().get().getName(), "**" + event.whisperTarget().get().getName() + "**");
+                senderName = event.sender().get().getName();
             } else if (event.isDeathMessage()) {
                 DeathMessageParseResult death = event.deathMessage().get();
                 message = message.replace(death.getVictim(), "**" + death.getVictim() + "**");
                 var k = death.getKiller().filter(killer -> killer.getType() == KillerType.PLAYER);
                 if (k.isPresent()) message = message.replace(k.get().getName(), "**" + k.get().getName() + "**");
+                senderName = death.getVictim();
+            } else {
+                senderName = "Hausemaster";
             }
-            final String senderName = event.sender().map(PlayerListEntry::getName)
-                .orElse(event.deathMessage().map(DeathMessageParseResult::getVictim)
-                            .orElse("Hausemaster"));
             final EmbedCreateSpec embed = EmbedCreateSpec.builder()
                 .description(escape(message))
                 .footer("\u200b", Proxy.getInstance().getAvatarURL(senderName).toString())

@@ -48,22 +48,26 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
                 }
             }
 
-            boolean isWhisper = false;
-            String playerName = null;
+            String senderName = null;
+            String whisperTarget = null;
             if (messageString.startsWith("<")) {
-                playerName = extractSenderNameNormalChat(messageString);
-            } else {
+                senderName = extractSenderNameNormalChat(messageString);
+            } else if (deathMessage.isEmpty()) {
                 final String[] split = messageString.split(" ");
-                if (split.length > 2 && split[1].startsWith("whispers")) {
-                    isWhisper = true;
-                    playerName = extractSenderNameWhisper(split);
+                if (split.length > 2) {
+                    if (split[1].startsWith("whispers")) {
+                        senderName = extractSenderNameReceivedWhisper(split);
+                        whisperTarget = CONFIG.authentication.username;
+                    } else if (messageString.startsWith("to ")) {
+                        senderName = CONFIG.authentication.username;
+                        whisperTarget = split[1].replace(":", "");
+                    }
                 }
             }
-            if (playerName == null) {
-                EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.empty(), messageString, isWhisper, deathMessage));
-            } else {
-                EVENT_BUS.postAsync(new ServerChatReceivedEvent(CACHE.getTabListCache().getFromName(playerName), messageString, isWhisper, deathMessage));
-            }
+            EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.ofNullable(senderName).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
+                                                            messageString,
+                                                            Optional.ofNullable(whisperTarget).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
+                                                            deathMessage));
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);
         }
@@ -74,7 +78,11 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
         return message.substring(message.indexOf("<") + 1, message.indexOf(">"));
     }
 
-    private String extractSenderNameWhisper(final String[] messageSplit) {
+    private String extractSenderNameReceivedWhisper(final String[] messageSplit) {
         return messageSplit[0].trim();
+    }
+
+    private String extractReceiverNameSentWhisper(final String[] messageSplit) {
+        return messageSplit[1].replace(":", "");
     }
 }

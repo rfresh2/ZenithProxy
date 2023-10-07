@@ -5,13 +5,17 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 
 import java.util.Optional;
 
-public record ServerChatReceivedEvent(Optional<PlayerListEntry> sender, String message, boolean isWhisper, Optional<DeathMessageParseResult> deathMessage) {
+public record ServerChatReceivedEvent(Optional<PlayerListEntry> sender, String message, Optional<PlayerListEntry> whisperTarget, Optional<DeathMessageParseResult> deathMessage) {
 
     public boolean isDeathMessage() {
         return deathMessage.isPresent();
     }
 
     public boolean isPublicChat() {
-        return !isWhisper && !isDeathMessage() && sender.isPresent() && message.startsWith("<" + sender.get().getName() + ">");
+        return !isWhisper() && !isDeathMessage() && sender.isPresent() && message.startsWith("<" + sender.get().getName() + ">");
+    }
+
+    public boolean isWhisper() {
+        return whisperTarget.isPresent();
     }
 }
