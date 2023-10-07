@@ -10,9 +10,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.zenith.Shared.DEFAULT_LOG;
 
@@ -26,6 +26,7 @@ public class BlockDataManager {
 
     public BlockDataManager() {
         this.objectMapper = new ObjectMapper();
+        // todo: re-encode our parsed json into smile format so we can make this more efficient
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<BlockData> blockDataList = getBlockData();
         BlockCollisionShapes blockCollisionShapes = getBlockCollisionShapes();
@@ -60,6 +61,7 @@ public class BlockDataManager {
 
     private BlockCollisionShapes getBlockCollisionShapes() {
         try {
+            // todo: write a custom deserializer for this so we don't need to convert it into our own pojo's later
             return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"), BlockCollisionShapes.class);
         } catch (final Exception e) {
             throw new RuntimeException(e);
@@ -85,9 +87,10 @@ public class BlockDataManager {
             return Optional.of(getCollisionBoxFromShapeId(blockCollisionShapes, (Integer) shapeIds));
         } else if (shapeIds instanceof List) {
             final List<Integer> shapeIdList = (List<Integer>) shapeIds;
-            final List<List<CollisionBox>> collisionList = shapeIdList.stream()
-                    .map(shapeId -> getCollisionBoxFromShapeId(blockCollisionShapes, shapeId))
-                    .toList();
+            final List<List<CollisionBox>> collisionList = new ArrayList<>(shapeIdList.size());
+            for (int shapeId : shapeIdList) {
+                collisionList.add(getCollisionBoxFromShapeId(blockCollisionShapes, shapeId));
+            }
             return Optional.of(collisionList.get(stateId));
         } else {
             DEFAULT_LOG.warn("Did not find collision box for block: {}", block.getName());
@@ -97,18 +100,20 @@ public class BlockDataManager {
 
     private List<CollisionBox> getCollisionBoxFromShapeId(BlockCollisionShapes blockCollisionShapes, final Integer shapeId) {
         final List<List<Double>> shapeList = blockCollisionShapes.getShapes().getAdditionalProperties().get("" + shapeId);
-        return shapeList.stream()
-                .map(shapeSublist -> new CollisionBox(shapeSublist.get(0), shapeSublist.get(3), shapeSublist.get(1), shapeSublist.get(4), shapeSublist.get(2), shapeSublist.get(5)))
-                .collect(Collectors.toList());
+        final List<CollisionBox> collisionBoxes = new ArrayList<>(shapeList.size());
+        for (List<Double> shape : shapeList) {
+            collisionBoxes.add(new CollisionBox(shape.get(0), shape.get(3), shape.get(1), shape.get(4), shape.get(2), shape.get(5)));
+        }
+        return collisionBoxes;
     }
 
     public float getBlockSlipperiness(Block block) {
         float slippy = 0.6f;
-        if (block.getName().equals("ice")) slippy = 0.98f;
-        if (block.getName().equals("slime_block")) slippy = 0.8f;
-        if (block.getName().equals("packed_ice")) slippy = 0.98f;
-        if (block.getName().equals("frosted_ice")) slippy = 0.98f;
-        if (block.getName().equals("blue_ice")) slippy = 0.989f;
+        if (block.name().equals("ice")) slippy = 0.98f;
+        if (block.name().equals("slime_block")) slippy = 0.8f;
+        if (block.name().equals("packed_ice")) slippy = 0.98f;
+        if (block.name().equals("frosted_ice")) slippy = 0.98f;
+        if (block.name().equals("blue_ice")) slippy = 0.989f;
         return slippy;
     }
 }

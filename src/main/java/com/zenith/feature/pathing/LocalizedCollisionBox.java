@@ -24,12 +24,12 @@ public class LocalizedCollisionBox {
                                  final double x,
                                  final double y,
                                  final double z) {
-        this.minX = cb.getMinX() + x;
-        this.maxX = cb.getMaxX() + x;
-        this.minY = cb.getMinY() + y;
-        this.maxY = cb.getMaxY() + y;
-        this.minZ = cb.getMinZ() + z;
-        this.maxZ = cb.getMaxZ() + z;
+        this.minX = cb.minX() + x;
+        this.maxX = cb.maxX() + x;
+        this.minY = cb.minY() + y;
+        this.maxY = cb.maxY() + y;
+        this.minZ = cb.minZ() + z;
+        this.maxZ = cb.maxZ() + z;
         this.x = x;
         this.y = y;
         this.z = z;

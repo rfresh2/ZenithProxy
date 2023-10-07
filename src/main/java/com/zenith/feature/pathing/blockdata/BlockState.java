@@ -10,7 +10,7 @@ import java.util.List;
  */
 public record BlockState(Block block, int id, BlockPos blockPos) {
     public boolean isSolidBlock() {
-        return block.getBoundingBox() == BlockData.BoundingBox.BLOCK;
+        return block.boundingBox() == BlockData.BoundingBox.BLOCK;
     }
 
     public List<CollisionBox> getCollisionBoxes() {

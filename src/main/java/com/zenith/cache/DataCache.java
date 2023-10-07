@@ -1,6 +1,5 @@
 package com.zenith.cache;
 
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.bossbar.BossBarCache;
@@ -14,10 +13,8 @@ import com.zenith.cache.data.tab.TabListCache;
 import com.zenith.network.server.ServerConnection;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static com.zenith.Shared.*;
 
@@ -68,9 +65,7 @@ public class DataCache {
                     SERVER_LOG.debug(msg);
                 }
             }
-            final List<Packet> cachePackets = new ArrayList<>(64);
-            data.getPackets(cachePackets::add);
-            connection.sendBundle(cachePackets);
+            data.getPackets(connection::send);
         });
     }
 }

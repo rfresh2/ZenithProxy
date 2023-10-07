@@ -178,7 +178,7 @@ public class ChunkCache implements CachedData {
                     tileEntity.getZ() == pos.getZ());
             }
         } else {
-            String blockName = BLOCK_DATA_MANAGER.getBlockFromBlockStateId(record.getBlock()).map(Block::getName).orElse(null);
+            String blockName = BLOCK_DATA_MANAGER.getBlockFromBlockStateId(record.getBlock()).map(Block::name).orElse(null);
             if (blockName == null) {
                 CLIENT_LOG.warn("Received block update packet for unknown block: {}", record.getBlock());
                 return;
