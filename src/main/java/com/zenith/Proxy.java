@@ -225,6 +225,7 @@ public class Proxy {
                 while (!DISCORD_BOT.isMessageQueueEmpty() && count++ < 10) {
                     Wait.waitALittleMs(100);
                 }
+                DISCORD_BOT.stop();
             }).get(10L, TimeUnit.SECONDS);
         } catch (final Exception e) {
             DEFAULT_LOG.error("Error shutting down gracefully", e);

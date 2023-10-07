@@ -179,7 +179,7 @@ public class DiscordBot {
         });
     }
 
-    public void start() {
+    public synchronized void start() {
         createClient();
         initEventHandlers();
 
@@ -192,6 +192,24 @@ public class DiscordBot {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
+    }
+
+    public synchronized void stop() {
+        if (!this.isRunning) return;
+        if (eventSubscription != null) {
+            eventSubscription.unsubscribe();
+            eventSubscription = null;
+        }
+        if (client != null) {
+            client.logout().block();
+            client = null;
+        }
+        if (restClient != null) restClient = null;
+        if (mainRestChannel != null) mainRestChannel = null;
+        if (relayRestChannel != null) relayRestChannel = null;
+        this.mainChannelMessageQueue.clear();
+        this.relayChannelMessageQueue.clear();
+        this.isRunning = false;
     }
 
     private MultipartRequest<MessageCreateRequest> commandEmbedOutputToMessage(final CommandContext context) {
