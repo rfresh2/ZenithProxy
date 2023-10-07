@@ -45,6 +45,7 @@ import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -211,18 +212,29 @@ public class Proxy {
 
     public void stop() {
         DEFAULT_LOG.info("Shutting Down...");
-        if (nonNull(this.client)) {
-            this.client.disconnect(MinecraftConstants.SERVER_CLOSING_MESSAGE);
+        try {
+            CompletableFuture.runAsync(() -> {
+                if (nonNull(this.client)) {
+                    this.client.disconnect(MinecraftConstants.SERVER_CLOSING_MESSAGE);
+                }
+                if (nonNull(this.server)) {
+                    this.server.close(true);
+                }
+                saveConfig();
+                int count = 0;
+                while (!DISCORD_BOT.isMessageQueueEmpty() && count++ < 10) {
+                    Wait.waitALittleMs(100);
+                }
+            }).get(10L, TimeUnit.SECONDS);
+        } catch (final Exception e) {
+            DEFAULT_LOG.error("Error shutting down gracefully", e);
+        } finally {
+            try {
+                ((LoggerContext) LoggerFactory.getILoggerFactory()).stop();
+            } finally {
+                System.exit(0);
+            }
         }
-        if (nonNull(this.server)) {
-            this.server.close(true);
-        }
-        saveConfig();
-        while (!DISCORD_BOT.isMessageQueueEmpty()) {
-            Wait.waitALittleMs(100);
-        }
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).stop();
-        System.exit(0);
     }
 
     public void disconnect() {
