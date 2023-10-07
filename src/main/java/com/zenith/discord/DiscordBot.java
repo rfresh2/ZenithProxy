@@ -43,7 +43,6 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
 
-import java.text.DateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -774,8 +773,9 @@ public class DiscordBot {
                             .orElse("Hausemaster"));
             final EmbedCreateSpec embed = EmbedCreateSpec.builder()
                 .description(escape(message))
-                .footer(DateFormat.getInstance().format(Date.from(Instant.now())), Proxy.getInstance().getAvatarURL(senderName).toString())
+                .footer("\u200b", Proxy.getInstance().getAvatarURL(senderName).toString())
                 .color(event.isPublicChat() ? Color.BLACK : event.isDeathMessage() ? Color.RUBY : event.isWhisper() ? Color.MAGENTA : Color.MOON_YELLOW)
+                .timestamp(Instant.now())
                 .build();
             if (ping.isEmpty()) {
                 sendRelayEmbedMessage(embed);
@@ -793,7 +793,8 @@ public class DiscordBot {
             sendRelayEmbedMessage(EmbedCreateSpec.builder()
                                       .description(escape(event.playerEntry().getName() + " connected"))
                                       .color(Color.MEDIUM_SEA_GREEN)
-                                      .footer(DateFormat.getInstance().format(Date.from(Instant.now())), Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .timestamp(Instant.now())
                                       .build());
         }
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
@@ -818,7 +819,8 @@ public class DiscordBot {
             sendRelayEmbedMessage(EmbedCreateSpec.builder()
                                       .description(escape(event.playerEntry().getName() + " disconnected"))
                                       .color(Color.RUBY)
-                                      .footer(DateFormat.getInstance().format(Date.from(Instant.now())), Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .timestamp(Instant.now())
                                       .build());
         }
         if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
