@@ -60,7 +60,7 @@ public class SystemChatHandler implements AsyncIncomingHandler<ClientboundSystem
                         whisperTarget = CONFIG.authentication.username;
                     } else if (messageString.startsWith("to ")) {
                         senderName = CONFIG.authentication.username;
-                        whisperTarget = split[1].replace(":", "");
+                        whisperTarget = extractReceiverNameSentWhisper(split);
                     }
                 }
             }

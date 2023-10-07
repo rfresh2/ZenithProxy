@@ -1,5 +1,6 @@
 package com.zenith.discord;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
@@ -759,26 +760,32 @@ public class DiscordBot {
                     }
                 }
             }
+            final UUID senderUUID;
             final String senderName;
             if (event.isPublicChat()) {
                 message = "**" + event.sender().get().getName() + ":** " + message.substring(message.indexOf(" ") + 1);
                 senderName = event.sender().get().getName();
+                senderUUID = event.sender().get().getProfileId();
             } else if (event.isWhisper()) {
                 message = message.replace(event.sender().get().getName(), "**" + event.sender().get().getName() + "**");
                 message = message.replace(event.whisperTarget().get().getName(), "**" + event.whisperTarget().get().getName() + "**");
                 senderName = event.sender().get().getName();
+                senderUUID = event.sender().get().getProfileId();
             } else if (event.isDeathMessage()) {
                 DeathMessageParseResult death = event.deathMessage().get();
                 message = message.replace(death.getVictim(), "**" + death.getVictim() + "**");
                 var k = death.getKiller().filter(killer -> killer.getType() == KillerType.PLAYER);
                 if (k.isPresent()) message = message.replace(k.get().getName(), "**" + k.get().getName() + "**");
                 senderName = death.getVictim();
+                senderUUID = CACHE.getTabListCache().getFromName(death.getVictim()).map(PlayerListEntry::getProfileId).orElse(null);
             } else {
                 senderName = "Hausemaster";
+                senderUUID = null;
             }
+            final String avatarURL = senderUUID != null ? Proxy.getInstance().getAvatarURL(senderUUID).toString() : Proxy.getInstance().getAvatarURL(senderName).toString();
             final EmbedCreateSpec embed = EmbedCreateSpec.builder()
                 .description(escape(message))
-                .footer("\u200b", Proxy.getInstance().getAvatarURL(senderName).toString())
+                .footer("\u200b", avatarURL)
                 .color(event.isPublicChat() ? Color.BLACK : event.isDeathMessage() ? Color.RUBY : event.isWhisper() ? Color.MAGENTA : Color.MOON_YELLOW)
                 .timestamp(Instant.now())
                 .build();
@@ -798,7 +805,7 @@ public class DiscordBot {
             sendRelayEmbedMessage(EmbedCreateSpec.builder()
                                       .description(escape(event.playerEntry().getName() + " connected"))
                                       .color(Color.MEDIUM_SEA_GREEN)
-                                      .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                       .timestamp(Instant.now())
                                       .build());
         }
@@ -824,7 +831,7 @@ public class DiscordBot {
             sendRelayEmbedMessage(EmbedCreateSpec.builder()
                                       .description(escape(event.playerEntry().getName() + " disconnected"))
                                       .color(Color.RUBY)
-                                      .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getName()).toString())
+                                      .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                       .timestamp(Instant.now())
                                       .build());
         }
