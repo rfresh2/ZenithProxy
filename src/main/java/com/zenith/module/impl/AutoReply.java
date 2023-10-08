@@ -52,7 +52,7 @@ public class AutoReply extends Module {
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
             try {
-                if (event.isWhisper() && event.sender().isPresent()) {
+                if (event.isIncomingWhisper()) {
                     if (!event.sender().get().getName().equalsIgnoreCase(CONFIG.authentication.username)
                             && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)
                             && (DISCORD_BOT.lastRelaymessage.isEmpty()

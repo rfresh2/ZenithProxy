@@ -5,6 +5,8 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 
 import java.util.Optional;
 
+import static com.zenith.Shared.CONFIG;
+
 public record ServerChatReceivedEvent(Optional<PlayerListEntry> sender, String message, Optional<PlayerListEntry> whisperTarget, Optional<DeathMessageParseResult> deathMessage) {
 
     public boolean isDeathMessage() {
@@ -17,5 +19,13 @@ public record ServerChatReceivedEvent(Optional<PlayerListEntry> sender, String m
 
     public boolean isWhisper() {
         return whisperTarget.isPresent();
+    }
+
+    public boolean isOutgoingWhisper() {
+        return isWhisper() && sender.isPresent() && sender.get().getName().equalsIgnoreCase(CONFIG.authentication.username);
+    }
+
+    public boolean isIncomingWhisper() {
+        return isWhisper() && sender.isPresent() && !sender.get().getName().equalsIgnoreCase(CONFIG.authentication.username);
     }
 }
