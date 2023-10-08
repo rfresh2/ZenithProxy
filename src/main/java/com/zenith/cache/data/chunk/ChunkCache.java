@@ -178,11 +178,12 @@ public class ChunkCache implements CachedData {
                     tileEntity.getZ() == pos.getZ());
             }
         } else {
-            String blockName = BLOCK_DATA_MANAGER.getBlockFromBlockStateId(record.getBlock()).map(Block::name).orElse(null);
-            if (blockName == null) {
+            final Block block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(record.getBlock());
+            if (block == null) {
                 CLIENT_LOG.warn("Received block update packet for unknown block: {}", record.getBlock());
                 return;
             }
+            final String blockName = block.name();
             if (blockName.equals("chest")) {
                 writeTileEntity(chunk, blockName, BlockEntityType.CHEST, pos);
             } else if (blockName.equals("trapped_chest")) {

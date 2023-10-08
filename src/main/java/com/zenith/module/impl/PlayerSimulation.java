@@ -543,7 +543,7 @@ public class PlayerSimulation extends Module {
         if (this.isGliding || this.isFlying) return 1.0f;
         Block inBlock = World.getBlockAtBlockPos(Pathing.getCurrentPlayerPos().toBlockPos());
         float inBlockSpeedFactor = getBlockSpeedFactor(inBlock);
-        if (inBlockSpeedFactor != 1.0f || inBlock.isWater()) return inBlockSpeedFactor;
+        if (inBlockSpeedFactor != 1.0f || World.isWater(inBlock)) return inBlockSpeedFactor;
         Block underPlayer = World.getBlockAtBlockPos(Pathing.getCurrentPlayerPos().toBlockPos().addY(-1));
         return getBlockSpeedFactor(underPlayer);
     }

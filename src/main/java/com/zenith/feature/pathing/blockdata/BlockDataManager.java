@@ -1,20 +1,25 @@
 package com.zenith.feature.pathing.blockdata;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.viaversion.viaversion.libs.fastutil.ints.Int2IntOpenHashMap;
 import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.pathing.CollisionBox;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-
-import static com.zenith.Shared.DEFAULT_LOG;
 
 @Getter
 @Setter
@@ -22,88 +27,103 @@ public class BlockDataManager {
     private final ObjectMapper objectMapper;
     private int maxStates;
     private int blockBitsPerEntry;
-    private Int2ObjectMap<Block> blockStateIdToBlock = new Int2ObjectOpenHashMap<>();
+
+    private final Int2IntOpenHashMap blockStateIdToBlockId = new Int2IntOpenHashMap(24135);
+    private final Int2ObjectOpenHashMap<Block> blockIdToBlockData = new Int2ObjectOpenHashMap<>(1003);
+    private final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
+    private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(24135);
+
 
     public BlockDataManager() {
         this.objectMapper = new ObjectMapper();
-        // todo: re-encode our parsed json into smile format so we can make this more efficient
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        List<BlockData> blockDataList = getBlockData();
-        BlockCollisionShapes blockCollisionShapes = getBlockCollisionShapes();
-        for (BlockData data : blockDataList) {
-            Integer minStateId = data.getMinStateId();
-            Integer maxStateId = data.getMaxStateId();
-            Block block = new Block(data.getId(), data.getDisplayName(), data.getName(), data.getBoundingBox(), getBlockStateCollisionBoxes(blockCollisionShapes, data, minStateId, maxStateId));
-            for (int i = minStateId; i <= maxStateId; i++) {
-                this.blockStateIdToBlock.put(i, block);
-            }
-        }
-        this.maxStates = blockStateIdToBlock.size();
+        init();
+        this.maxStates = blockStateIdToBlockId.size();
         this.blockBitsPerEntry = ChunkCache.log2RoundUp(this.maxStates);
     }
 
-    public Optional<Block> getBlockFromBlockStateId(int blockStateId) {
-        if (this.blockStateIdToBlock.containsKey(blockStateId)) {
-            return Optional.of(this.blockStateIdToBlock.get(blockStateId));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    private List<BlockData> getBlockData() {
-        try {
-            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.20/blocks.json"), new TypeReference<List<BlockData>>() {
-            });
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private BlockCollisionShapes getBlockCollisionShapes() {
-        try {
-            // todo: write a custom deserializer for this so we don't need to convert it into our own pojo's later
-            return objectMapper.readValue(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"), BlockCollisionShapes.class);
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Int2ObjectMap<List<CollisionBox>> getBlockStateCollisionBoxes(BlockCollisionShapes blockCollisionShapes, BlockData blockData, final int minStateId, final int maxStateId) {
-        final Int2ObjectMap<List<CollisionBox>> map = new Int2ObjectOpenHashMap<>();
-        for (int i = 0; i <= maxStateId - minStateId; i++) {
-            final int currentStateId = minStateId + i;
-            getCollisionBoxesFromBlockState(blockCollisionShapes, blockData, i)
-                .ifPresent(collisionBoxes -> map.put(currentStateId, collisionBoxes));
-        }
-        return map;
-    }
-
-    private Optional<List<CollisionBox>> getCollisionBoxesFromBlockState(BlockCollisionShapes blockCollisionShapes,
-                                                                         final BlockData block,
-                                                                         final int stateId // not actually block palette state id. index of min to max block state id
-    ) {
-        final Object shapeIds = blockCollisionShapes.getBlocks().getAdditionalProperties().get(block.getName());
-        if (shapeIds instanceof Integer) {
-            return Optional.of(getCollisionBoxFromShapeId(blockCollisionShapes, (Integer) shapeIds));
-        } else if (shapeIds instanceof List) {
-            final List<Integer> shapeIdList = (List<Integer>) shapeIds;
-            final List<List<CollisionBox>> collisionList = new ArrayList<>(shapeIdList.size());
-            for (int shapeId : shapeIdList) {
-                collisionList.add(getCollisionBoxFromShapeId(blockCollisionShapes, shapeId));
+    private void init() {
+        try (JsonParser blocksParser = objectMapper.createParser(getClass().getResourceAsStream("/pc/1.20/blocks.json"))) {
+            TreeNode node = blocksParser.getCodec().readTree(blocksParser);
+            for (Iterator<JsonNode> it = ((ArrayNode) node).elements(); it.hasNext(); ) {
+                final var e = it.next();
+                int blockId = e.get("id").asInt();
+                String blockName = e.get("name").asText();
+                blockNameToId.put(blockName, blockId);
+                int minStateId = e.get("minStateId").asInt();
+                int maxStateId = e.get("maxStateId").asInt();
+                String boundingBoxType = e.get("boundingBox").asText();
+                boolean isBlock = boundingBoxType.equals("block"); // empty otherwise
+                for (int i = minStateId; i <= maxStateId; i++) {
+                    blockStateIdToBlockId.put(i, blockId);
+                }
+                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId));
             }
-            return Optional.of(collisionList.get(stateId));
-        } else {
-            DEFAULT_LOG.warn("Did not find collision box for block: {}", block.getName());
-            return Optional.empty();
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        try (JsonParser shapesParser = objectMapper.createParser(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"))) {
+            final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
+            TreeNode node = shapesParser.getCodec().readTree(shapesParser);
+            ObjectNode shapesNode = (ObjectNode) node.get("shapes");
+            for (Iterator<String> it = shapesNode.fieldNames(); it.hasNext(); ) {
+                String shapeIdName = it.next();
+                int shapeId = Integer.parseInt(shapeIdName);
+                final List<CollisionBox> collisionBoxes = new ArrayList<>(2);
+                ArrayNode outerCbArray = (ArrayNode) shapesNode.get(shapeIdName);
+                for (Iterator<JsonNode> it2 = outerCbArray.elements(); it2.hasNext(); ) {
+                    ArrayNode innerCbArray = (ArrayNode) it2.next();
+                    double[] cbArr = new double[6];
+                    int i = 0;
+                    for (Iterator<JsonNode> it3 = innerCbArray.elements(); it3.hasNext(); ) {
+                        DoubleNode doubleNode = (DoubleNode) it3.next();
+                        cbArr[i++] = doubleNode.asDouble();
+                    }
+                    collisionBoxes.add(new CollisionBox(cbArr[0], cbArr[3], cbArr[1], cbArr[4], cbArr[2], cbArr[5]));
+                }
+                shapeIdToCollisionBoxes.put(shapeId, collisionBoxes);
+            }
+
+            ObjectNode blocksNode = (ObjectNode) node.get("blocks");
+            for (Iterator<String> it = blocksNode.fieldNames(); it.hasNext(); ) {
+                String blockName = it.next();
+                int blockId = blockNameToId.getInt(blockName);
+                JsonNode shapeNode = blocksNode.get(blockName);
+                final IntArrayList shapeIds = new IntArrayList(2);
+                if (shapeNode.isInt()) {
+                    int shapeId = shapeNode.asInt();
+                    shapeIds.add(shapeId);
+                } else if (shapeNode.isArray()) {
+                    ArrayNode shapeIdArray = (ArrayNode) shapeNode;
+                    for (Iterator<JsonNode> it2 = shapeIdArray.elements(); it2.hasNext(); ) {
+                        int shapeId = it2.next().asInt();
+                        shapeIds.add(shapeId);
+                    }
+                } else throw new RuntimeException("Unexpected shape node type: " + shapeNode.getNodeType());
+
+                Block blockData = blockIdToBlockData.get(blockId);
+                for (int i = blockData.minStateId(); i <= blockData.maxStateId(); i++) {
+                    int nextShapeId = shapeIds.getInt(0);
+                    if (shapeIds.size() > 1)
+                        nextShapeId = shapeIds.getInt(i - blockData.minStateId());
+                    List<CollisionBox> collisionBoxes = shapeIdToCollisionBoxes.get(nextShapeId);
+                    blockStateIdToCollisionBoxes.put(i, collisionBoxes);
+                }
+            }
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private List<CollisionBox> getCollisionBoxFromShapeId(BlockCollisionShapes blockCollisionShapes, final Integer shapeId) {
-        final List<List<Double>> shapeList = blockCollisionShapes.getShapes().getAdditionalProperties().get("" + shapeId);
-        final List<CollisionBox> collisionBoxes = new ArrayList<>(shapeList.size());
-        for (List<Double> shape : shapeList) {
-            collisionBoxes.add(new CollisionBox(shape.get(0), shape.get(3), shape.get(1), shape.get(4), shape.get(2), shape.get(5)));
-        }
+    public @Nullable Block getBlockDataFromBlockStateId(int blockStateId) {
+        Block blockData2 = blockIdToBlockData.get(blockStateIdToBlockId.get(blockStateId));
+        if (blockData2 == blockIdToBlockData.defaultReturnValue()) return null;
+        return blockData2;
+    }
+
+    public @Nullable List<CollisionBox> getCollisionBoxesFromBlockStateId(int blockStateId) {
+        List<CollisionBox> collisionBoxes = blockStateIdToCollisionBoxes.get(blockStateId);
+        if (collisionBoxes == blockStateIdToCollisionBoxes.defaultReturnValue()) return null;
         return collisionBoxes;
     }
 

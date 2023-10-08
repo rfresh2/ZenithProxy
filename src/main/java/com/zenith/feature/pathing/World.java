@@ -36,7 +36,10 @@ public class World {
     }
 
     public Block getBlockAtBlockPos(final BlockPos blockPos) {
-        return BLOCK_DATA_MANAGER.getBlockFromBlockStateId(getBlockStateId(blockPos)).orElse(Block.AIR);
+        Block blockData = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(getBlockStateId(blockPos));
+        if (blockData == null)
+            return Block.AIR;
+        return blockData;
     }
 
     public List<LocalizedCollisionBox> getSolidBlockCollisionBoxes(final LocalizedCollisionBox cb) {
@@ -57,13 +60,18 @@ public class World {
         final LocalizedCollisionBox box = cb.stretch(-0.001, -0.001, -0.001);
         for (BlockPos blockPos : getBlockPosListInCollisionBox(box)) {
             final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
-            if (blockAtBlockPos.isWater()) {
+            if (isWater(blockAtBlockPos)) {
                 if (blockPos.getY() + 1.0 >= box.getMinY()) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    public boolean isWater(Block block) {
+        return block.id() == 32 // water
+            || block.id() == 731; // bubble column
     }
 
     public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {

@@ -1,25 +1,24 @@
 package com.zenith.feature.prioban;
 
+import com.google.common.base.Suppliers;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.http.client.HttpClientResponse;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DEFAULT_LOG;
 
 public class PriorityBanChecker {
-    private final HttpClient client;
-
-    public PriorityBanChecker() {
-        this.client = HttpClient.create()
-                .followRedirect(false)
-                .secure();
-    }
+    // lazily init client
+    private final Supplier<HttpClient> clientSupplier = Suppliers.memoize(() -> HttpClient.create()
+            .followRedirect(false)
+            .secure());
 
     public Optional<Boolean> checkPrioBan() {
         try {
-            HttpClientResponse response = client
+            HttpClientResponse response = clientSupplier.get()
                     .post()
                     .uri("https://shop.2b2t.org/checkout/packages/add/1994962/single?ign=" + CONFIG.authentication.username)
                     .response()
