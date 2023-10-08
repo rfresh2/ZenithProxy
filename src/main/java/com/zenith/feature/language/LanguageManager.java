@@ -1,8 +1,6 @@
 package com.zenith.feature.language;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 import java.text.MessageFormat;
@@ -11,21 +9,20 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.zenith.Shared.OBJECT_MAPPER;
+
 public class LanguageManager {
     public static final Pattern PATTERN = Pattern.compile("%((\\d+)\\$)?s");
-    private final ObjectMapper objectMapper;
     @Getter
     private Map<String, MessageFormat> languageDataMap = new HashMap<>();
 
     public LanguageManager() {
-        this.objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         init();
     }
 
     private void init() {
         try {
-            Map<String, String> dataMap = objectMapper.readValue(
+            Map<String, String> dataMap = OBJECT_MAPPER.readValue(
                 getClass().getResourceAsStream("/pc/1.20/language.json"),
                 new TypeReference<Map<String, String>>() {
                 });

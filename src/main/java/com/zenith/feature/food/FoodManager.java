@@ -1,8 +1,6 @@
 package com.zenith.feature.food;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,16 +8,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.zenith.Shared.OBJECT_MAPPER;
 import static java.util.Objects.nonNull;
 
 public class FoodManager {
-    private final ObjectMapper objectMapper;
     // key = item ID
     private Map<Integer, FoodData> foodDataMap = Collections.emptyMap();
 
     public FoodManager() {
-        this.objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         init();
     }
 
@@ -44,7 +40,7 @@ public class FoodManager {
 
     private void init() {
         try {
-            this.foodDataMap = objectMapper.readValue(getClass().getResourceAsStream("/pc/1.20/foods.json"), new TypeReference<List<FoodData>>() {
+            this.foodDataMap = OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/pc/1.20/foods.json"), new TypeReference<List<FoodData>>() {
                     }).stream()
                     .collect(Collectors.toMap(FoodData::getId, v -> v, (k1, k2) -> k1));
         } catch (final Exception e) {

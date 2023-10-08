@@ -1,6 +1,5 @@
 package com.zenith.feature.queue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenith.feature.queue.mcping.MCPing;
 import com.zenith.feature.queue.mcping.PingOptions;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -15,15 +14,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.SERVER_LOG;
+import static com.zenith.Shared.*;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.Objects.isNull;
 
 public class Queue {
     private static final String apiUrl = "https://2bqueue.info/queue";
     private static HttpClient httpClient;
-    private static final ObjectMapper mapper = new ObjectMapper();
     private static QueueStatus queueStatus;
     private static final ScheduledExecutorService refreshExecutorService = new ScheduledThreadPoolExecutor(1);
     private static final Pattern digitPattern = Pattern.compile("\\d+");
@@ -122,7 +119,7 @@ public class Queue {
                     .aggregate()
                     .asString()
                     .block();
-            queueStatus = mapper.readValue(response, QueueStatus.class);
+            queueStatus = OBJECT_MAPPER.readValue(response, QueueStatus.class);
             return true;
         } catch (final Exception e) {
             SERVER_LOG.error("Failed updating queue status from API", e);

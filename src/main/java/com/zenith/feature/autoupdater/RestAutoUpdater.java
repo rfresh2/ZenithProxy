@@ -1,7 +1,6 @@
 package com.zenith.feature.autoupdater;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import org.apache.commons.math3.util.Pair;
 import reactor.core.publisher.Mono;
@@ -11,12 +10,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static com.zenith.Shared.DEFAULT_LOG;
-import static com.zenith.Shared.LAUNCH_CONFIG;
+import static com.zenith.Shared.*;
 
 public class RestAutoUpdater extends AutoUpdater {
     private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
 
     public RestAutoUpdater() {
         String baseUrl = LAUNCH_CONFIG.repo_owner.equals("rfresh2") && LAUNCH_CONFIG.repo_name.equals("ZenithProxy")
@@ -28,7 +25,6 @@ public class RestAutoUpdater extends AutoUpdater {
             .headers(h -> h.add(HttpHeaderNames.USER_AGENT, "ZenithProxy/" + LAUNCH_CONFIG.version))
             .headers(h -> h.add(HttpHeaderNames.ACCEPT, "application/vnd.github+json"))
             .headers(h -> h.add("X-GitHub-Api-Version", "2022-11-28"));
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -110,7 +106,7 @@ public class RestAutoUpdater extends AutoUpdater {
 
     private Pair<String, String> parseLatestReleaseId(String response) {
         try {
-            JsonNode releases = objectMapper.readTree(response);
+            JsonNode releases = OBJECT_MAPPER.readTree(response);
 
             List<JsonNode> releaseNodes = releases.findParents("tag_name");
             releaseNodes.removeIf(node -> node.get("draft").asBoolean());

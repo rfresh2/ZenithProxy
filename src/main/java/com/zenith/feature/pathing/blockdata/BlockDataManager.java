@@ -3,7 +3,6 @@ package com.zenith.feature.pathing.blockdata;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,8 +19,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.zenith.Shared.OBJECT_MAPPER;
+
 public class BlockDataManager {
-    private final ObjectMapper objectMapper;
     @Getter
     private final int maxStates;
     @Getter
@@ -33,7 +33,6 @@ public class BlockDataManager {
 
 
     public BlockDataManager() {
-        this.objectMapper = new ObjectMapper();
         init();
         this.maxStates = blockStateIdToBlockId.size();
         this.blockBitsPerEntry = ChunkCache.log2RoundUp(this.maxStates);
@@ -41,7 +40,7 @@ public class BlockDataManager {
 
     private void init() {
         final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
-        try (JsonParser blocksParser = objectMapper.createParser(getClass().getResourceAsStream("/pc/1.20/blocks.json"))) {
+        try (JsonParser blocksParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/pc/1.20/blocks.json"))) {
             TreeNode node = blocksParser.getCodec().readTree(blocksParser);
             for (Iterator<JsonNode> it = ((ArrayNode) node).elements(); it.hasNext(); ) {
                 final var e = it.next();
@@ -61,7 +60,7 @@ public class BlockDataManager {
             throw new RuntimeException(e);
         }
 
-        try (JsonParser shapesParser = objectMapper.createParser(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"))) {
+        try (JsonParser shapesParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"))) {
             final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
             TreeNode node = shapesParser.getCodec().readTree(shapesParser);
             ObjectNode shapesNode = (ObjectNode) node.get("shapes");
