@@ -93,6 +93,8 @@ public final class Config {
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
                 public boolean switchWeapon = true;
+                public boolean targetArmorStands = false;
+                public int attackDelayTicks = 10;
             }
 
             public static final class AutoEat {

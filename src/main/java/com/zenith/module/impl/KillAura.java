@@ -88,7 +88,7 @@ public class KillAura extends Module {
                     if (rotateTo(target)) {
                         // attack
                         attack(target);
-                        delay = 10;
+                        delay = CONFIG.client.extra.killAura.attackDelayTicks;
                     }
                 }
             } else {
@@ -109,10 +109,12 @@ public class KillAura extends Module {
                 if (((EntityPlayer) entity).isSelfPlayer()) continue;
                 if (WHITELIST_MANAGER.isUUIDFriendWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(entity.getUuid())) continue;
             } else {
-                if (!CONFIG.client.extra.killAura.targetHostileMobs) continue;
-                if (!hostileEntities.contains(((EntityStandard) entity).getEntityType())) continue;
+                if (!CONFIG.client.extra.killAura.targetHostileMobs)
+                    if (hostileEntities.contains(((EntityStandard) entity).getEntityType())) continue;
+                if (!CONFIG.client.extra.killAura.targetArmorStands)
+                    if (((EntityStandard) entity).getEntityType() == EntityType.ARMOR_STAND) continue;
             }
-            if (distanceToSelf(entity) > 4.5) continue;
+            if (distanceToSelf(entity) > 3.5) continue;
             return entity;
         }
         return null;
@@ -132,18 +134,6 @@ public class KillAura extends Module {
     private boolean rotateTo(Entity entity) {
         PATHING.rotateTowards(entity.getX(), entity.getY() + 0.2, entity.getZ(), MOVEMENT_PRIORITY);
         return true;
-    }
-
-    private double normalizeAngle(double angleIn) {
-        double angle = angleIn;
-        angle %= 360.0;
-        if (angle >= 180.0) {
-            angle -= 360.0;
-        }
-        if (angle < -180.0) {
-            angle += 360.0;
-        }
-        return angle;
     }
 
     private double distanceToSelf(final Entity entity) {
