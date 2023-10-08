@@ -14,23 +14,21 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Getter
-@Setter
 public class BlockDataManager {
     private final ObjectMapper objectMapper;
-    private int maxStates;
-    private int blockBitsPerEntry;
+    @Getter
+    private final int maxStates;
+    @Getter
+    private final int blockBitsPerEntry;
 
     private final Int2IntOpenHashMap blockStateIdToBlockId = new Int2IntOpenHashMap(24135);
     private final Int2ObjectOpenHashMap<Block> blockIdToBlockData = new Int2ObjectOpenHashMap<>(1003);
-    private final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
     private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(24135);
 
 
@@ -42,6 +40,7 @@ public class BlockDataManager {
     }
 
     private void init() {
+        final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
         try (JsonParser blocksParser = objectMapper.createParser(getClass().getResourceAsStream("/pc/1.20/blocks.json"))) {
             TreeNode node = blocksParser.getCodec().readTree(blocksParser);
             for (Iterator<JsonNode> it = ((ArrayNode) node).elements(); it.hasNext(); ) {
