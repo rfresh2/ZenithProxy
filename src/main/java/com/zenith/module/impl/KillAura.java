@@ -103,21 +103,29 @@ public class KillAura extends Module {
     @Nullable
     private Entity findTarget() {
         for (Entity entity : CACHE.getEntityCache().getEntities().values()) {
-            if (!(entity instanceof EntityPlayer || entity instanceof EntityStandard)) continue;
-            if (entity instanceof EntityPlayer) {
-                if (!CONFIG.client.extra.killAura.targetPlayers) continue;
-                if (((EntityPlayer) entity).isSelfPlayer()) continue;
-                if (WHITELIST_MANAGER.isUUIDFriendWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDWhitelisted(entity.getUuid()) || WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(entity.getUuid())) continue;
-            } else {
-                if (!CONFIG.client.extra.killAura.targetHostileMobs)
-                    if (hostileEntities.contains(((EntityStandard) entity).getEntityType())) continue;
-                if (!CONFIG.client.extra.killAura.targetArmorStands)
-                    if (((EntityStandard) entity).getEntityType() == EntityType.ARMOR_STAND) continue;
-            }
+            if (!validTarget(entity)) continue;
             if (distanceToSelf(entity) > 3.5) continue;
             return entity;
         }
         return null;
+    }
+
+    private boolean validTarget(Entity entity) {
+        if (CONFIG.client.extra.killAura.targetPlayers && entity instanceof EntityPlayer player) {
+            if (player.isSelfPlayer()) return false;
+            return !WHITELIST_MANAGER.isUUIDFriendWhitelisted(player.getUuid())
+                && !WHITELIST_MANAGER.isUUIDWhitelisted(player.getUuid())
+                && !WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(player.getUuid());
+
+        } else if (entity instanceof EntityStandard e) {
+            if (CONFIG.client.extra.killAura.targetHostileMobs) {
+                if (hostileEntities.contains(e.getEntityType())) return true;
+            }
+            if (CONFIG.client.extra.killAura.targetArmorStands) {
+                if (e.getEntityType() == EntityType.ARMOR_STAND) return true;
+            }
+        }
+        return false;
     }
 
     @Override
