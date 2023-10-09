@@ -1,3 +1,5 @@
 package com.zenith.event.proxy;
 
-public record DiscordMessageSentEvent(String message) { }
+import discord4j.core.event.domain.message.MessageCreateEvent;
+
+public record DiscordMessageSentEvent(String message, MessageCreateEvent event) { }

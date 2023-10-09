@@ -27,8 +27,11 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.EmbedData;
 import discord4j.discordjson.json.ImmutableUserModifyRequest;
 import discord4j.discordjson.json.MessageCreateRequest;
+import discord4j.discordjson.json.MessageData;
+import discord4j.discordjson.possible.Possible;
 import discord4j.gateway.GatewayReactorResources;
 import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
@@ -145,7 +148,7 @@ public class DiscordBot {
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.enable && !CONFIG.discord.chatRelay.channelId.isEmpty() && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
-                    EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent())));
+                    EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent()), event));
                     return;
                 }
             }
@@ -478,6 +481,21 @@ public class DiscordBot {
             if(!CONFIG.discord.connectionProxy.password.isEmpty())
                 proxyBuilder.password(s -> CONFIG.discord.connectionProxy.password);
         });
+    }
+
+    private String extractSenderFromMessage(final Possible<Integer> color, final String msgContent) {
+        final String sender;
+        if (!color.isAbsent() && color.get() == Color.MAGENTA.getRGB()) {
+            // extract whisper sender
+            sender = msgContent.split("\\*\\*")[1];
+        } else if (!color.isAbsent() && color.get().equals(Color.BLACK.getRGB())) {
+            // extract public chat sender
+            sender = msgContent.split("\\*\\*")[1].replace(":", "");
+        // todo: we could support death messages here if we remove any bolded discord formatting and feed the message content into the parser
+        } else {
+            throw new RuntimeException("Unhandled message being replied to, aborting relay");
+        }
+        return sender;
     }
 
     public void handleConnectEvent(ConnectEvent event) {
@@ -872,7 +890,21 @@ public class DiscordBot {
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (!CONFIG.discord.chatRelay.enable) return;
         if (!Proxy.getInstance().isConnected() || event.message().isEmpty()) return;
-        Proxy.getInstance().getClient().send(new ServerboundChatPacket(event.message()));
+        // determine if this message is a reply
+        if (event.event().getMessage().getReferencedMessage().isPresent()) {
+            // we could do a bunch of if statements checking everything's in order and in expected format
+            // ...or we could just throw an exception wherever it fails and catch it
+            try {
+                final MessageData messageData = event.event().getMessage().getReferencedMessage().get().getData();
+                // abort if reply is not to a message sent by us
+                if (this.client.getSelfId().asLong() != messageData.author().id().asLong()) return;
+                final EmbedData embed = messageData.embeds().get(0);
+                final String sender = extractSenderFromMessage(embed.color(), embed.description().get());
+                Proxy.getInstance().getClient().send(new ServerboundChatPacket("/w " + sender + " " + event.message()));
+            } catch (final Exception e) {
+                DISCORD_LOG.error("Error performing chat relay reply", e);
+            }
+        } else Proxy.getInstance().getClient().send(new ServerboundChatPacket(event.message()));
         lastRelaymessage = Optional.of(Instant.now());
     }
 
