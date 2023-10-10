@@ -20,6 +20,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import com.google.common.io.Files;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zenith.cache.DataCache;
@@ -384,9 +385,15 @@ public class Shared {
             Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
                 DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e);
             });
-            SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(16);
+            SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(4, new ThreadFactoryBuilder()
+                .setNameFormat("ZenithProxy Scheduled Executor - #%d")
+                .setDaemon(true)
+                .build());
             DISCORD_BOT = new DiscordBot();
-            EVENT_BUS = new SimpleEventBus();
+            EVENT_BUS = new SimpleEventBus(Executors.newFixedThreadPool(2, new ThreadFactoryBuilder()
+                .setNameFormat("ZenithProxy Async EventBus - #%d")
+                .setDaemon(true)
+                .build()));
             CACHE = new DataCache();
             WHITELIST_MANAGER = new WhitelistManager();
             PRIORITY_BAN_CHECKER = new PriorityBanChecker();

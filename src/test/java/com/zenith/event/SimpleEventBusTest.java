@@ -3,6 +3,8 @@ package com.zenith.event;
 import com.zenith.util.Wait;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.zenith.event.SimpleEventBus.pair;
@@ -10,9 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SimpleEventBusTest {
 
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
     @Test
     public void unsubscribeTest() {
-        final SimpleEventBus bus = new SimpleEventBus();
+        final SimpleEventBus bus = new SimpleEventBus(executorService);
         final Foo foo = new Foo();
         final Bar bar = new Bar();
         Subscription fooSubscription = foo.subscribe(bus);
@@ -31,7 +35,7 @@ public class SimpleEventBusTest {
 
     @Test
     public void subscribeMultipleEventsTest() {
-        final SimpleEventBus bus = new SimpleEventBus();
+        final SimpleEventBus bus = new SimpleEventBus(executorService);
         final Baz baz = new Baz();
         final Bar bar = new Bar();
         Subscription barSubscription = bar.subscribe(bus);
@@ -49,7 +53,7 @@ public class SimpleEventBusTest {
 
     @Test
     public void postAsyncTest() {
-        final SimpleEventBus bus = new SimpleEventBus();
+        final SimpleEventBus bus = new SimpleEventBus(executorService);
         final Foo foo = new Foo();
         Subscription fooSubscription = foo.subscribe(bus);
         bus.postAsync(new TestEvent());

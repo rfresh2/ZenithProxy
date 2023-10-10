@@ -5,8 +5,10 @@ import com.zenith.util.Pair;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
+
+import static com.zenith.Shared.DEFAULT_LOG;
 
 /**
  * A simple event bus without reflection.
@@ -21,7 +23,13 @@ import java.util.function.Consumer;
  */
 public class SimpleEventBus {
 
+    private final ExecutorService executorService;
+
     private final ConcurrentHashMap<Class<?>, List<Consumer<?>>> handlers = new ConcurrentHashMap<>();
+
+    public SimpleEventBus(final ExecutorService executorService) {
+        this.executorService = executorService;
+    }
 
     public <T> Subscription subscribe(Class<T> eventType, Consumer<T> handler) {
         handlers.computeIfAbsent(eventType, key -> new CopyOnWriteArrayList<>()).add(handler);
@@ -54,6 +62,7 @@ public class SimpleEventBus {
         }
     }
 
+    // handlers can throw and return exceptions - cancelling subsequent event executions
     public <T> void post(T event) {
         List<Consumer<?>> consumers = handlers.get(event.getClass());
         if (consumers != null) {
@@ -66,9 +75,13 @@ public class SimpleEventBus {
     public <T> void postAsync(T event) {
         List<Consumer<?>> consumers = handlers.get(event.getClass());
         if (consumers != null) {
-            ForkJoinPool.commonPool().execute(() -> {
-                for (Consumer<?> consumer : consumers) {
-                    ((Consumer<T>) consumer).accept(event);
+            executorService.execute(() -> {
+                try {
+                    for (Consumer<?> consumer : consumers) {
+                        ((Consumer<T>) consumer).accept(event);
+                    }
+                } catch (final Throwable e) { // swallow exception so we don't kill the executor
+                    DEFAULT_LOG.debug("Error handling async event", e);
                 }
             });
         }
