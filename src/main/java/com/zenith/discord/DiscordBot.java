@@ -483,7 +483,7 @@ public class DiscordBot {
         });
     }
 
-    private String extractSenderFromMessage(final Possible<Integer> color, final String msgContent) {
+    private String extractRelayEmbedSenderUsername(final Possible<Integer> color, final String msgContent) {
         final String sender;
         if (!color.isAbsent() && color.get() == Color.MAGENTA.getRGB()) {
             // extract whisper sender
@@ -899,7 +899,7 @@ public class DiscordBot {
                 // abort if reply is not to a message sent by us
                 if (this.client.getSelfId().asLong() != messageData.author().id().asLong()) return;
                 final EmbedData embed = messageData.embeds().get(0);
-                final String sender = extractSenderFromMessage(embed.color(), embed.description().get());
+                final String sender = extractRelayEmbedSenderUsername(embed.color(), embed.description().get());
                 Proxy.getInstance().getClient().send(new ServerboundChatPacket("/w " + sender + " " + event.message()));
             } catch (final Exception e) {
                 DISCORD_LOG.error("Error performing chat relay reply", e);

@@ -39,7 +39,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         );
     }
 
-    private GameProfile[] getOnlinePlayerProfiles() {
+    public GameProfile[] getOnlinePlayerProfiles() {
         try {
             return this.proxy.getActiveConnections().stream()
                     .map(connection -> connection.profileCache.getProfile())
@@ -50,7 +50,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         return new GameProfile[0];
     }
 
-    private String getMotd() {
+    public String getMotd() {
         String result = "§f[§r§b" + CONFIG.authentication.username + "§r§f]§r - ";
         if (this.proxy.isConnected()) {
             result += getMotdStatus();
