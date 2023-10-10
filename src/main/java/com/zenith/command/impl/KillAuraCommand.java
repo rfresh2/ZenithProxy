@@ -76,7 +76,7 @@ public class KillAuraCommand extends Command {
                               .color(Color.CYAN));
                       }))
                       .then(literal("off").executes(c -> {
-                          CONFIG.client.extra.killAura.targetHostileMobs = true;
+                          CONFIG.client.extra.killAura.targetHostileMobs = false;
                           populate(c.getSource().getEmbedBuilder()
                               .title("Target Mobs Off!")
                               .color(Color.CYAN));
