@@ -11,6 +11,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
@@ -240,6 +241,7 @@ public class Shared {
         .registerInbound(ClientboundForgetLevelChunkPacket.class, new ForgetLevelChunkHandler())
         .registerInbound(ClientboundUpdateRecipesPacket.class, new SyncRecipesHandler())
         .registerInbound(ClientboundUpdateTagsPacket.class, new UpdateTagsHandler())
+        .registerInbound(ClientboundInitializeBorderPacket.class, new WorldBorderInitializeHandler())
         .registerInbound(ClientboundBlockEntityDataPacket.class, new BlockEntityDataHandler())
         .registerInbound(ClientboundSetTimePacket.class, new SetTimeHandler())
         .registerInbound(ClientboundPlayerCombatKillPacket.class, new PlayerCombatKillHandler())

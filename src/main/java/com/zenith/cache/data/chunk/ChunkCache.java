@@ -14,6 +14,7 @@ import com.github.steveice10.mc.protocol.data.game.level.notify.RainStrengthValu
 import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthValue;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 import com.github.steveice10.opennbt.tag.builtin.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
@@ -65,6 +66,9 @@ public class ChunkCache implements CachedData {
     protected CompoundTag registryTag;
     protected int centerX;
     protected int centerZ;
+    // todo: also cache world border size changes
+    //  doesn't particularly matter on 2b2t tho
+    protected WorldBorderData worldBorderData = WorldBorderData.DEFAULT;
 
     public ChunkCache() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks,
@@ -334,6 +338,14 @@ public class ChunkCache implements CachedData {
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         try {
+            consumer.accept(new ClientboundInitializeBorderPacket(worldBorderData.getCenterX(),
+                                                                   worldBorderData.getCenterZ(),
+                                                                   worldBorderData.getSize(),
+                                                                   worldBorderData.getSize(),
+                                                                   0,
+                                                                   worldBorderData.getPortalTeleportBoundary(),
+                                                                   worldBorderData.getWarningBlocks(),
+                                                                   worldBorderData.getWarningTime()));
             consumer.accept(new ClientboundSetChunkCacheRadiusPacket(serverViewDistance));
             consumer.accept(new ClientboundSetChunkCacheCenterPacket(centerX, centerZ));
             readCache(() -> {
@@ -376,6 +388,7 @@ public class ChunkCache implements CachedData {
                 this.serverViewDistance = -1;
                 this.serverSimulationDistance = -1;
                 this.registryTag = null;
+                this.worldBorderData = WorldBorderData.DEFAULT;
             }
             return true;
         });
