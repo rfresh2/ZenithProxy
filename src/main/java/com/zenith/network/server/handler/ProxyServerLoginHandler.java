@@ -5,14 +5,17 @@ import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundServerDataPacket;
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
+import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ProxyServerListener;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
+import net.kyori.adventure.text.Component;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -101,6 +104,12 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().getPortalCooldown()
             ));
             if (!proxy.isInQueue()) { PlayerCache.sync(); }
+            CustomServerInfoBuilder serverInfoBuilder = Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
+            session.send(new ClientboundServerDataPacket(
+                Component.text(serverInfoBuilder.getMotd()),
+                Proxy.getInstance().getServerIcon(),
+                false
+            ));
         }
     }
 }
