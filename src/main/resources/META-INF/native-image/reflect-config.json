@@ -3431,7 +3431,7 @@
 },
 {
   "name":"java.nio.Bits",
-  "fields":[{"name":"UNALIGNED"}]
+  "fields":[{"name":"MAX_MEMORY"}, {"name":"UNALIGNED"}]
 },
 {
   "name":"java.nio.Buffer",
