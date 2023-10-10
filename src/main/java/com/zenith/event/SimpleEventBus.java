@@ -75,15 +75,18 @@ public class SimpleEventBus {
     public <T> void postAsync(T event) {
         List<Consumer<?>> consumers = handlers.get(event.getClass());
         if (consumers != null) {
-            executorService.execute(() -> {
-                try {
-                    for (Consumer<?> consumer : consumers) {
-                        ((Consumer<T>) consumer).accept(event);
-                    }
-                } catch (final Throwable e) { // swallow exception so we don't kill the executor
-                    DEFAULT_LOG.debug("Error handling async event", e);
-                }
-            });
+            executorService.execute(() -> this.postAsyncInternal(event, consumers));
+        }
+    }
+
+
+    private <T> void postAsyncInternal(T event, List<Consumer<?>> consumers) {
+        try {
+            for (Consumer<?> consumer : consumers) {
+                ((Consumer<T>) consumer).accept(event);
+            }
+        } catch (final Throwable e) { // swallow exception so we don't kill the executor
+            DEFAULT_LOG.debug("Error handling async event", e);
         }
     }
 }
