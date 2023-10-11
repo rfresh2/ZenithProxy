@@ -149,7 +149,7 @@ public final class Config {
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
                     public boolean thunder = false;
-                    public boolean cancelAutoReconnect = true;
+                    public boolean cancelAutoReconnect = false;
                 }
 
                 public static final class ActiveHours {

@@ -110,7 +110,7 @@ public class Shared {
         if (reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT) || reason.equals(MinecraftConstants.SERVER_CLOSING_MESSAGE)) {
             return false;
         } else if (reason.equals(AUTO_DISCONNECT)) {
-            return !CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect;
+            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance().getIsPrio().orElse(false));
         } else {
             return true;
         }
