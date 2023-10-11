@@ -50,6 +50,7 @@ public class DiscordManageCommand extends Command {
                     CONFIG.discord.channelId = channelId;
                     populate(c.getSource().getEmbedBuilder()
                                  .title("Channel set!")
+                                 .color(Color.CYAN)
                                  .description("Discord bot will now restart if enabled"));
                     if (DISCORD_BOT.isRunning())
                         SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
@@ -71,6 +72,7 @@ public class DiscordManageCommand extends Command {
                           CONFIG.discord.chatRelay.channelId = channelId;
                           populate(c.getSource().getEmbedBuilder()
                                        .title("Relay Channel set!")
+                                       .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled"));
                           if (DISCORD_BOT.isRunning())
                               SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
@@ -80,33 +82,39 @@ public class DiscordManageCommand extends Command {
                       .then(literal("on").executes(c -> {
                             CONFIG.discord.manageProfileImage = true;
                             populate(c.getSource().getEmbedBuilder()
+                                         .color(Color.CYAN)
                                          .title("Manage Profile Image On!"));
                       }))
                       .then(literal("off").executes(c -> {
                             CONFIG.discord.manageProfileImage = false;
                             populate(c.getSource().getEmbedBuilder()
+                                         .color(Color.CYAN)
                                          .title("Manage Profile Image Off!"));
                       })))
             .then(literal("managenickname")
                       .then(literal("on").executes(c -> {
                             CONFIG.discord.manageNickname = true;
                             populate(c.getSource().getEmbedBuilder()
+                                         .color(Color.CYAN)
                                          .title("Manage Nickname On!"));
                       }))
                       .then(literal("off").executes(c -> {
                             CONFIG.discord.manageNickname = false;
                             populate(c.getSource().getEmbedBuilder()
+                                         .color(Color.CYAN)
                                          .title("Manage Nickname Off!"));
                       })))
             .then(literal("managedescription")
                       .then(literal("on").executes(c -> {
                             CONFIG.discord.manageDescription = true;
                             populate(c.getSource().getEmbedBuilder()
+                                         .color(Color.CYAN)
                                          .title("Manage Description On!"));
                       }))
                       .then(literal("off").executes(c -> {
                           CONFIG.discord.manageDescription = false;
                           populate(c.getSource().getEmbedBuilder()
+                                       .color(Color.CYAN)
                                        .title("Manage Description Off!"));
                         })));
     }
