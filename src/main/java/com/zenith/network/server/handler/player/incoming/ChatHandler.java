@@ -46,7 +46,7 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 Proxy.getInstance().getClient().disconnect(MANUAL_DISCONNECT);
                 return false;
             } else if ("!q".equalsIgnoreCase(message)) {
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &7Queue: &c" + Queue.getQueueStatus().regular + " &r- &7Prio: &a" + Queue.getQueueStatus().prio), false));
+                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &7Queue: &c" + Queue.getQueueStatus().regular() + " &r- &7Prio: &a" + Queue.getQueueStatus().prio()), false));
                 return false;
             } else if (lowerCase.startsWith("!m")) {
                 Proxy.getInstance().getActiveConnections().forEach(connection -> {

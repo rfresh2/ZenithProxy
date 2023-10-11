@@ -2,6 +2,7 @@ package com.zenith;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.*;
@@ -89,6 +90,7 @@ public class Shared {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     static {
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
     }
     public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
     public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");

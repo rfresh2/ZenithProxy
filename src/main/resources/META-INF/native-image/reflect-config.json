@@ -866,6 +866,13 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setMetadata","parameterTypes":["java.lang.Integer"] }]
 },
 {
+  "name":"com.zenith.feature.queue.Queue$QueueApiResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.queue.QueueStatus",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
