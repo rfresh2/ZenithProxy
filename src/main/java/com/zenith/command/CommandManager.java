@@ -44,6 +44,7 @@ public class CommandManager {
            new DatabaseCommand(),
            new DebugCommand(),
            new DisconnectCommand(),
+           new DiscordManageCommand(),
            new DisplayCoordsCommand(),
            new ExtraChatCommand(),
            new HelpCommand(),
