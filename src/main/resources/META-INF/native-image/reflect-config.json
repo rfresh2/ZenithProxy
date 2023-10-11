@@ -1292,6 +1292,22 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"discord4j.discordjson.json.ApplicationInfoData",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"discord4j.discordjson.json.ApplicationInfoRequest",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"discord4j.discordjson.json.ApplicationTeamData",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"discord4j.discordjson.json.ApplicationTeamMemberData",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"discord4j.discordjson.json.AttachmentData",
   "queryAllDeclaredMethods":true
 },
@@ -1309,6 +1325,10 @@
 },
 {
   "name":"discord4j.discordjson.json.ComponentData",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"discord4j.discordjson.json.CurrentMemberModifyData",
   "queryAllDeclaredMethods":true
 },
 {
@@ -1523,6 +1543,55 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setPermission","parameterTypes":["boolean"] }, {"name":"setType","parameterTypes":["int"] }]
 },
 {
+  "name":"discord4j.discordjson.json.ImmutableApplicationInfoData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableApplicationInfoData$Json"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableApplicationInfoData$Json",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setBotPublic","parameterTypes":["boolean"] }, {"name":"setBotRequireCodeGrant","parameterTypes":["boolean"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setIcon","parameterTypes":["java.util.Optional"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setOwner","parameterTypes":["discord4j.discordjson.json.UserData"] }, {"name":"setSummary","parameterTypes":["java.lang.String"] }, {"name":"setTeam","parameterTypes":["java.util.Optional"] }, {"name":"setVerifyKey","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableApplicationInfoRequest",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"coverImage","parameterTypes":[] }, {"name":"customInstallUrl","parameterTypes":[] }, {"name":"description","parameterTypes":[] }, {"name":"flags","parameterTypes":[] }, {"name":"icon","parameterTypes":[] }, {"name":"installParams","parameterTypes":[] }, {"name":"interactionsEndpointUrl","parameterTypes":[] }, {"name":"roleConnectionsVerificationUrl","parameterTypes":[] }, {"name":"tags","parameterTypes":[] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableApplicationTeamData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableApplicationTeamData$Json"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableApplicationTeamData$Json",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setIcon","parameterTypes":["java.util.Optional"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setMembers","parameterTypes":["java.util.List"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setOwnerUserId","parameterTypes":["discord4j.discordjson.Id"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableApplicationTeamMemberData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableApplicationTeamMemberData$Json"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableApplicationTeamMemberData$Json",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setMembershipState","parameterTypes":["int"] }, {"name":"setPermissions","parameterTypes":["java.util.List"] }, {"name":"setTeamId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setUser","parameterTypes":["discord4j.discordjson.json.UserData"] }]
+},
+{
   "name":"discord4j.discordjson.json.ImmutableAttachmentData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1591,6 +1660,13 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setComponents","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setCustomId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setLabel","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setStyle","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["int"] }]
+},
+{
+  "name":"discord4j.discordjson.json.ImmutableCurrentMemberModifyData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"nick","parameterTypes":[] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableDefaultReactionData",

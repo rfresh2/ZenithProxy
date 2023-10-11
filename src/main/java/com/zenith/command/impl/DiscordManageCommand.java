@@ -126,7 +126,7 @@ public class DiscordManageCommand extends Command {
             DISCORD_BOT.stop(false);
             DISCORD_BOT.start();
             DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
-                                             .title("Bot Restarted")
+                                             .title("Discord Bot Restarted")
                                              .color(Color.GREEN)
                                              .build());
         } catch (final Exception e) {
