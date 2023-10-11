@@ -104,7 +104,7 @@ public class KillAura extends Module {
     private Entity findTarget() {
         for (Entity entity : CACHE.getEntityCache().getEntities().values()) {
             if (!validTarget(entity)) continue;
-            if (distanceToSelf(entity) > 3.5) continue;
+            if (distanceToSelf(entity) > CONFIG.client.extra.killAura.attackRange) continue;
             return entity;
         }
         return null;

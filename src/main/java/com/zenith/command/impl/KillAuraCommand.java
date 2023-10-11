@@ -11,6 +11,8 @@ import discord4j.rest.util.Color;
 
 import java.util.List;
 
+import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
+import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
@@ -26,7 +28,8 @@ public class KillAuraCommand extends Command {
                        "targetPlayers on/off",
                        "targetMobs on/off",
                        "targetArmorStands on/off",
-                       "weaponSwitch on/off"),
+                       "weaponSwitch on/off",
+                       "range <number>"),
                 aliases());
     }
 
@@ -106,7 +109,14 @@ public class KillAuraCommand extends Command {
                           populate(c.getSource().getEmbedBuilder()
                               .title("Weapon Switching Off!")
                               .color(Color.CYAN));
-                      })));
+                      })))
+            .then(literal("range").then(argument("range", doubleArg(0.01, 5.0)).executes(c -> {
+                CONFIG.client.extra.killAura.attackRange = getDouble(c, "range");
+                populate(c.getSource().getEmbedBuilder()
+                    .title("Attack Range Set!")
+                    .color(Color.CYAN));
+                return 1;
+            })));
     }
 
     @Override
@@ -120,6 +130,7 @@ public class KillAuraCommand extends Command {
             .addField("Target Hostile Mobs", CONFIG.client.extra.killAura.targetHostileMobs ? "on" : "off", false)
             .addField("Target Armor Stands", CONFIG.client.extra.killAura.targetArmorStands ? "on" : "off", false)
             .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false)
-            .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks+"", false);
+            .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks+"", false)
+            .addField("Attack Range", CONFIG.client.extra.killAura.attackRange+"", false);
     }
 }
