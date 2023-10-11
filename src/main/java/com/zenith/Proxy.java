@@ -225,7 +225,7 @@ public class Proxy {
                 while (!DISCORD_BOT.isMessageQueueEmpty() && count++ < 10) {
                     Wait.waitALittleMs(100);
                 }
-                DISCORD_BOT.stop();
+                DISCORD_BOT.stop(true);
             }).get(10L, TimeUnit.SECONDS);
         } catch (final Exception e) {
             DEFAULT_LOG.error("Error shutting down gracefully", e);
@@ -547,7 +547,9 @@ public class Proxy {
                 }
                 this.serverIcon = netInputStream.readAllBytes();
                 if (DISCORD_BOT.isRunning()) {
-                    DISCORD_BOT.updateProfileImage(this.serverIcon);
+                    if (CONFIG.discord.manageProfileImage) DISCORD_BOT.updateProfileImage(this.serverIcon);
+                    if (CONFIG.discord.manageNickname) DISCORD_BOT.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
+                    if (CONFIG.discord.manageDescription) DISCORD_BOT.setBotDescription("ZenithProxy " + LAUNCH_CONFIG.version);
                 }
             }
         } catch (Exception e) {

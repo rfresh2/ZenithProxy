@@ -206,7 +206,9 @@ dependencies {
     shade 'com.mojang:brigadier:1.1.8'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
-    shade("com.discord4j:discord4j-core:3.3.0-RC1") {
+    // todo: replace when https://github.com/Discord4J/Discord4J/pull/1164 is merged
+    //    shade("com.discord4j:discord4j-core:3.3.0-SNAPSHOT") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:18ccb50958") {
         exclude group: 'io.netty'
     }
     shade("com.github.rfresh2:MCProtocolLib:8025978ed0") {
@@ -324,7 +326,7 @@ shadowJar {
         exclude(dependency("org.jline:jline-terminal-jansi:.*"))
         exclude(dependency("com.github.mwiede:jsch:.*"))
         exclude(dependency("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:.*"))
-        exclude(dependency("com.discord4j:discord4j-core:.*"))
+        exclude(dependency("com.github.rfresh2.Discord4j:discord4j-core:.*"))
         exclude(dependency("org.postgresql:postgresql:.*"))
         exclude(dependency("io.netty:netty-codec-http:.*"))
         exclude(dependency("io.netty:netty-codec-http2:.*"))

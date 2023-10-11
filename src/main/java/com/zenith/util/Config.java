@@ -333,6 +333,9 @@ public final class Config {
         public boolean reportCoords = true;
         public boolean mentionRoleOnPrioUpdate = true;
         public boolean mentionRoleOnPrioBanUpdate = true;
+        public boolean manageProfileImage = true;
+        public boolean manageNickname = true;
+        public boolean manageDescription = true;
         public boolean isUpdating = false; // internal use for update command state persistence
         public QueueWarning queueWarning = new QueueWarning();
         public ChatRelay chatRelay = new ChatRelay();
