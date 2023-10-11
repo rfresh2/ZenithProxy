@@ -549,7 +549,9 @@ public class Proxy {
                 if (DISCORD_BOT.isRunning()) {
                     if (CONFIG.discord.manageProfileImage) DISCORD_BOT.updateProfileImage(this.serverIcon);
                     if (CONFIG.discord.manageNickname) DISCORD_BOT.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
-                    if (CONFIG.discord.manageDescription) DISCORD_BOT.setBotDescription("ZenithProxy " + LAUNCH_CONFIG.version);
+                    if (CONFIG.discord.manageDescription) DISCORD_BOT.setBotDescription("ZenithProxy " + LAUNCH_CONFIG.version
+                                                                                            + "\n\n**Discord**: https://discord.gg/nJZrSaRKtb"
+                                                                                            + "\n\nhttps://github.com/rfresh2/ZenithProxy");
                 }
             }
         } catch (Exception e) {
