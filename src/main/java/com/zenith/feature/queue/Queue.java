@@ -8,8 +8,6 @@ import reactor.netty.http.client.HttpClient;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,14 +20,13 @@ public class Queue {
     private static final String apiUrl = "https://2bqueue.info/queue";
     private static HttpClient httpClient;
     private static QueueStatus queueStatus;
-    private static final ScheduledExecutorService refreshExecutorService = new ScheduledThreadPoolExecutor(1);
     private static final Pattern digitPattern = Pattern.compile("\\d+");
     private static final MCPing mcPing = new MCPing();
     private static final PingOptions pingOptions = new PingOptions();
 
     public static void start() {
-        refreshExecutorService.scheduleAtFixedRate(
-            Queue::updateQueueStatus,
+        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+            Thread.ofVirtual().name("Queue Update").start(Queue::updateQueueStatus),
             500L,
             Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES).toMillis(),
             TimeUnit.MILLISECONDS);

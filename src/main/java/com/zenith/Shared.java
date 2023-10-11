@@ -334,7 +334,7 @@ public class Shared {
     }
 
     public static void saveConfigAsync() {
-        Thread.ofVirtual().start(Shared::saveConfig);
+        Thread.ofVirtual().name("Async Config Save").start(Shared::saveConfig);
     }
 
     public static synchronized void saveConfig() {
