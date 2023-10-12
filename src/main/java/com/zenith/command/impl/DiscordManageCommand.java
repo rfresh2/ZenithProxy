@@ -128,8 +128,8 @@ public class DiscordManageCommand extends Command {
 
     private EmbedCreateSpec.Builder populate(final EmbedCreateSpec.Builder builder) {
         return builder
-            .addField("Channel ID", CONFIG.discord.channelId, false)
-            .addField("Relay Channel ID", CONFIG.discord.chatRelay.channelId, false)
+            .addField("Channel ID", "<#" + CONFIG.discord.channelId + ">", false)
+            .addField("Relay Channel ID", "<#" + CONFIG.discord.chatRelay.channelId + ">", false)
             .addField("Manage Profile Image", CONFIG.discord.manageProfileImage ? "on" : "off", false)
             .addField("Manage Nickname", CONFIG.discord.manageNickname ? "on" : "off", false)
             .addField("Manage Description", CONFIG.discord.manageDescription ? "on" : "off", false);
