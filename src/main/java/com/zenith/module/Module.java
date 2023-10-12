@@ -80,4 +80,16 @@ public abstract class Module {
             clientSession.sendAsync(packet, SCHEDULED_EXECUTOR_SERVICE);
         }
     }
+
+    // preserves packet order
+    public void sendClientPacketsAsync(final Packet... packets) {
+        ClientSession clientSession = Proxy.getInstance().getClient();
+        if (clientSession != null && clientSession.isConnected()) {
+            SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+                for (Packet packet : packets) {
+                    clientSession.send(packet);
+                }
+            });
+        }
+    }
 }
