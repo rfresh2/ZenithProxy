@@ -52,6 +52,13 @@ public class DiscordManageCommand extends Command {
                             .color(Color.RUBY);
                         return 1;
                     }
+                    if (channelId.equals(CONFIG.discord.chatRelay.channelId)) {
+                        c.getSource().getEmbedBuilder()
+                            .title("Invalid Channel ID")
+                            .description("Cannot use the same channel ID for both the relay and main channel")
+                            .color(Color.RUBY);
+                        return 1;
+                    }
                     CONFIG.discord.channelId = channelId;
                     populate(c.getSource().getEmbedBuilder()
                                  .title("Channel set!")
@@ -73,6 +80,13 @@ public class DiscordManageCommand extends Command {
                               c.getSource().getEmbedBuilder()
                                   .title("Invalid Channel ID")
                                   .description("The channel ID provided is invalid")
+                                  .color(Color.RUBY);
+                              return 1;
+                          }
+                          if (channelId.equals(CONFIG.discord.channelId)) {
+                              c.getSource().getEmbedBuilder()
+                                  .title("Invalid Channel ID")
+                                  .description("Cannot use the same channel ID for both the relay and main channel")
                                   .color(Color.RUBY);
                               return 1;
                           }
