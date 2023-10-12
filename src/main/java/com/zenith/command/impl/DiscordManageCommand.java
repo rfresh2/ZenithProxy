@@ -9,13 +9,16 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
-import static com.mojang.brigadier.arguments.StringArgumentType.getString;
-import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.*;
+import static com.zenith.command.CustomStringArgumentType.getString;
+import static com.zenith.command.CustomStringArgumentType.wordWithChars;
 import static java.util.Arrays.asList;
 
 public class DiscordManageCommand extends Command {
+    private static final Pattern CHANNEL_ID_PATTERN = Pattern.compile("<#\\d+>");
+
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
@@ -35,8 +38,10 @@ public class DiscordManageCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("discord")
             .then(literal("channel").requires(Command::validateAccountOwner)
-                .then(argument("channel ID", string()).executes(c -> {
+                .then(argument("channel ID", wordWithChars()).executes(c -> {
                     String channelId = getString(c, "channel ID");
+                    if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
+                        channelId = channelId.substring(2, channelId.length() - 1);
                     try {
                         Snowflake.of(channelId);
                     } catch (final Exception e) {
@@ -57,8 +62,10 @@ public class DiscordManageCommand extends Command {
                     return 1;
                     })))
             .then(literal("relaychannel").requires(Command::validateAccountOwner)
-                      .then(argument("channel ID", string()).executes(c -> {
+                      .then(argument("channel ID", wordWithChars()).executes(c -> {
                           String channelId = getString(c, "channel ID");
+                          if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
+                              channelId = channelId.substring(2, channelId.length() - 1);
                           try {
                               Snowflake.of(channelId);
                           } catch (final Exception e) {
