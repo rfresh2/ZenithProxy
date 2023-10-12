@@ -86,12 +86,12 @@ public class AutoTotem extends Module {
             final ItemStack stack = inventory[i];
             if (nonNull(stack) && stack.getId() == 1117) {
                 if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
-                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)));
-                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)));
-                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(i, offhand)));
+                    sendClientPacketsAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
+                                           new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)),
+                                           new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(i, offhand)));
                 } else {
-                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)));
-                    sendClientPacketAsync(new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(45, stack)));
+                    sendClientPacketsAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
+                                           new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(45, stack)));
                 }
                 CLIENT_LOG.info("Swapping to totem");
                 delay = 5;

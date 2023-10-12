@@ -188,8 +188,8 @@ public class PlayerSimulation extends Module {
         travel(movementInputVec);
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-            sendClientPacketAsync(new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch));
-            sendClientPacketAsync(new ServerboundPlayerInputPacket(0.0f, 0.0f, false, false));
+            sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch),
+                                   new ServerboundPlayerInputPacket(0.0f, 0.0f, false, false));
             // todo: handle vehicle travel movement
         } else {
             // send movement packets based on position
