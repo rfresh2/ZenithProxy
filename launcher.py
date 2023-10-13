@@ -370,7 +370,7 @@ def get_java_version():
         if version_match:
             version = version_match.group(1)
             return float(version) if '.' in version else int(version)
-    except subprocess.CalledProcessError as e:
+    except (subprocess.CalledProcessError, OSError) as e:
         critical_error("Error checking Java version, do you have Java installed?\n" + str(e))
     return None
 
