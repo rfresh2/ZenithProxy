@@ -5,6 +5,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class ServerProfileCache implements CachedData {
@@ -14,7 +15,7 @@ public class ServerProfileCache implements CachedData {
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {}
 
-    public GameProfile getProfile() {
+    public @Nullable GameProfile getProfile() {
         synchronized (this) {
             return profile;
         }

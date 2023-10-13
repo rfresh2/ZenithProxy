@@ -1,6 +1,7 @@
 package com.zenith;
 
 import ch.qos.logback.classic.LoggerContext;
+import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
@@ -534,14 +535,21 @@ public class Proxy {
 
     public void updateFavicon() {
         try {
+            final GameProfile profile = CACHE.getProfileCache().getProfile();
+            final URL avatarURL;
+            if (profile != null && profile.getId() != null)
+                avatarURL = getAvatarURL(profile.getId());
+            else
+                avatarURL = getAvatarURL(CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username);
             try (InputStream netInputStream = HttpClient.create()
-                    .secure()
-                    .get()
-                    .uri(getAvatarURL((CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username)).toURI())
-                    .responseContent()
-                    .aggregate()
-                    .asInputStream()
-                    .block()) {
+                .secure()
+                .followRedirect(true)
+                .get()
+                .uri(avatarURL.toURI())
+                .responseContent()
+                .aggregate()
+                .asInputStream()
+                .block()) {
                 if (netInputStream == null) {
                     throw new IOException("Unable to download server icon for \"" + CONFIG.authentication.username + "\"");
                 }
