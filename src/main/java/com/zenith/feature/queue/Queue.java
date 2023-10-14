@@ -43,7 +43,7 @@ public class Queue {
 
     public static void start() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
-            Thread.ofVirtual().name("Queue Update").start(Queue::updateQueueStatus),
+            Queue::updateQueueStatus,
             500L,
             Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES).toMillis(),
             TimeUnit.MILLISECONDS);
@@ -56,7 +56,7 @@ public class Queue {
         return queueStatus;
     }
 
-    private static void updateQueueStatus() {
+    public static void updateQueueStatus() {
         if (!pingUpdate()) {
             if (!apiUpdate()) {
                 SERVER_LOG.error("Failed updating queue status. Is the network down?");
@@ -87,7 +87,7 @@ public class Queue {
         return getEtaStringFromSeconds(getQueueWait(queuePos));
     }
 
-    private static boolean pingUpdate() {
+    public static boolean pingUpdate() {
         try {
             final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
             final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(1).getName();
