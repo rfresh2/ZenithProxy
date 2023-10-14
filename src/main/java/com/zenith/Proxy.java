@@ -451,7 +451,8 @@ public class Proxy {
         try {
             final int countdown;
             countdown = CONFIG.client.extra.autoReconnect.delaySeconds
-                    + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
+                // random jitter to help prevent multiple clients from logging in at the same time
+                + ((int) (Math.random() * 5));
             // todo: improve offline server detection
             //  currently it's based on null exception thrown during the last disconnect
             //  however, when the Proxy.disconnect method is called with only a string reason this also trips it
@@ -624,9 +625,11 @@ public class Proxy {
     }
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
-        if (!CONFIG.authentication.prio && isNull(getCurrentPlayer().get())) {
-            Wait.waitRandomWithinMsBound(30000);
-            disconnect(SERVER_RESTARTING, new Exception());
+        if (!this.isPrio.orElse(false) && isNull(getCurrentPlayer().get())) {
+            SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+                if (isNull(getCurrentPlayer().get()))
+                    disconnect(SERVER_RESTARTING);
+            }, ((int) (Math.random() * 20)), TimeUnit.SECONDS);
         }
     }
 
