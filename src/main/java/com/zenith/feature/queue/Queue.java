@@ -43,7 +43,7 @@ public class Queue {
 
     public static void start() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
-            Queue::updateQueueStatus,
+            () -> Thread.ofVirtual().name("Queue Update").start(Queue::updateQueueStatus),
             500L,
             Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES).toMillis(),
             TimeUnit.MILLISECONDS);
