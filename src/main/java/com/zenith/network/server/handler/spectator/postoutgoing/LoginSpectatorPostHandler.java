@@ -10,7 +10,6 @@ import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
-import com.zenith.util.RefStrings;
 import de.themoep.minedown.adventure.MineDown;
 import lombok.NonNull;
 
@@ -28,7 +27,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
             session.disconnect("Login without whitelist check?");
             return;
         }
-        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
+        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()));
         session.send(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED, PlayerListEntryAction.UPDATE_GAME_MODE),
             new PlayerListEntry[]{new PlayerListEntry(
