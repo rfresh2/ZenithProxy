@@ -70,7 +70,7 @@ public class ChunkCache implements CachedData {
     // todo: also cache world border size changes
     //  doesn't particularly matter on 2b2t tho
     protected WorldBorderData worldBorderData = WorldBorderData.DEFAULT;
-    protected byte[] serverBrand = BRAND_SUPPLIER.get(); // just so its not null by default
+    protected byte[] serverBrand = BRAND_SUPPLIER.get();
 
     public ChunkCache() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks,
