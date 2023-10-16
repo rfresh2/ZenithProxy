@@ -4,8 +4,11 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.game.level.sound.BuiltinSound;
+import com.github.steveice10.mc.protocol.data.game.level.sound.SoundCategory;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
@@ -46,10 +49,7 @@ import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -156,6 +156,35 @@ public class Proxy {
             // ensure we are continuously updating the tablist even on servers that don't frequently send updates
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
+            // time warning
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
+                try {
+                    if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
+                        long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
+                        if (onlineSeconds > (21600 - (600))) { // 28800 - 600 (6h - 10 minutes)
+                            for (int i=0; i<10; i++) { //Sends the message 10 times, so you don't miss it. It also sends it every minute from then
+                                Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                                    connection.send(new ClientboundSystemChatPacket(MineDown.parse("&9You only have 10 minutes left"), false));
+                                    final float randFloat = ThreadLocalRandom.current().nextFloat();
+                                    connection.send(new ClientboundSoundPacket(
+                                            BuiltinSound.BLOCK_ANVIL_PLACE,
+                                            SoundCategory.AMBIENT,
+                                            CACHE.getPlayerCache().getX(),
+                                            CACHE.getPlayerCache().getY(),
+                                            CACHE.getPlayerCache().getZ(),
+                                            1.0f - (randFloat / 2f),
+                                            1.0f + (randFloat / 10f), // slight pitch variations
+                                            0L
+                                    ));
+                                });
+                            }
+                        }
+                    }
+                } catch (final Throwable e) {
+                    DEFAULT_LOG.error("Error in time warning executor service", e);
+                }
+            }, 0, 60L, TimeUnit.SECONDS);
+
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }
