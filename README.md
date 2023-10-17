@@ -51,6 +51,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 # Features
 
 * High performance and efficiency on minimal hardware, <300MB RAM per java instance or <150MB on linux.
+* ViaVersion integration - connect to any MC server
 * Secure Whitelist system - share MC accounts without sharing passwords
 * Extensive discord integration
     * Chat relay
@@ -71,6 +72,12 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
    minimal ping to 2b2t. 2b2t allows a maximum of 3 accounts concurrently connected per IP address.
    [Free DigitalOcean $200 credit for new accounts](https://m.do.co/c/3a3a226e4936).
 2. [Python 3](https://www.python.org/downloads/) installed.
+
+## Basics and Step-by-Step Guides
+
+* [DigitalOcean Setup Guide](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide)
+  * Includes a script to automatically setup a DigitalOcean droplet with ZenithProxy
+* [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide)
 
 ## Setup
 
