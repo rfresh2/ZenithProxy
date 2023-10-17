@@ -157,8 +157,8 @@ public class Proxy {
             // ensure we are continuously updating the tablist even on servers that don't frequently send updates
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
-            // time warning
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::warnTimeLeft, 1L, 60L, TimeUnit.SECONDS);
+            // 6hr kick warning
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::sixHourKickWarningTick, 350L, 1L, TimeUnit.MINUTES);
 
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
@@ -571,30 +571,35 @@ public class Proxy {
             SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
         }
     }
-    public void warnTimeLeft() {
+
+    public void sixHourKickWarningTick() {
         try {
-            if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60)) || this.isPrio.orElse(false)) { //Prio players don't have 6h kick.
-                long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                if (onlineSeconds > (21600 - 600)) { // (6h - 10 minutes)
-                    final ServerConnection playerConnection = this.currentPlayer.get();
-                    if (playerConnection != null || this.isConnected() || this.hasActivePlayer()) { //If player is not connected to proxy, no need to send a message.
-                        final float randFloat = ThreadLocalRandom.current().nextFloat();
-                        playerConnection.send(new ClientboundSetActionBarTextPacket(MineDown.parse("&9You only have 10 minutes left")));
-                        playerConnection.send(new ClientboundSoundPacket(
-                                BuiltinSound.BLOCK_ANVIL_PLACE,
-                                SoundCategory.AMBIENT,
-                                CACHE.getPlayerCache().getX(),
-                                CACHE.getPlayerCache().getY(),
-                                CACHE.getPlayerCache().getZ(),
-                                1.0f - (randFloat / 2f),
-                                1.0f + (randFloat / 10f), // slight pitch variations
-                                0L
-                        ));
-                    }
-                }
+            if (this.isPrio.orElse(false) // Prio players don't have 6h kick.
+                || !this.hasActivePlayer() // If no player is connected, nobody to warn
+                || !isOnlineOn2b2tForAtLeastDuration(Duration.ofMinutes(350)) // 6hrs - 10 mins
+            ) return;
+            final ServerConnection playerConnection = this.currentPlayer.get();
+            final int minsUntil6Hrs = (int) ((21600 - (Instant.now().getEpochSecond() - connectTime.getEpochSecond())) / 60);
+            if (minsUntil6Hrs < 0) return; // sanity check just in case 2b's plugin changes
+            var actionBarPacket = new ClientboundSetActionBarTextPacket(
+                MineDown.parse((minsUntil6Hrs <= 3 ? "&c" : "&9") + "6hr kick in: " + minsUntil6Hrs + "m"));
+            playerConnection.send(actionBarPacket);
+            // each packet will reset text render timer for 3 seconds
+            for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
+                playerConnection.sendScheduledAsync(actionBarPacket, SCHEDULED_EXECUTOR_SERVICE, i, TimeUnit.SECONDS);
             }
+            playerConnection.send(new ClientboundSoundPacket(
+                BuiltinSound.BLOCK_ANVIL_PLACE,
+                SoundCategory.AMBIENT,
+                CACHE.getPlayerCache().getX(),
+                CACHE.getPlayerCache().getY(),
+                CACHE.getPlayerCache().getZ(),
+                1.0f,
+                1.0f + (ThreadLocalRandom.current().nextFloat() / 10f), // slight pitch variations
+                0L
+            ));
         } catch (final Throwable e) {
-            DEFAULT_LOG.error("Error in time warning executor service", e);
+            DEFAULT_LOG.error("Error in 6 hr kick warning tick", e);
         }
     }
 
