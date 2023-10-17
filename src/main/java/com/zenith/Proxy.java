@@ -9,6 +9,7 @@ import com.github.steveice10.mc.protocol.data.game.level.sound.SoundCategory;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
@@ -157,33 +158,7 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
             // time warning
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
-                try {
-                    if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))) {
-                        long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
-                        if (onlineSeconds > (21600 - (600))) { // 28800 - 600 (6h - 10 minutes)
-                            for (int i=0; i<10; i++) { //Sends the message 10 times, so you don't miss it. It also sends it every minute from then
-                                Proxy.getInstance().getActiveConnections().forEach(connection -> {
-                                    connection.send(new ClientboundSystemChatPacket(MineDown.parse("&9You only have 10 minutes left"), false));
-                                    final float randFloat = ThreadLocalRandom.current().nextFloat();
-                                    connection.send(new ClientboundSoundPacket(
-                                            BuiltinSound.BLOCK_ANVIL_PLACE,
-                                            SoundCategory.AMBIENT,
-                                            CACHE.getPlayerCache().getX(),
-                                            CACHE.getPlayerCache().getY(),
-                                            CACHE.getPlayerCache().getZ(),
-                                            1.0f - (randFloat / 2f),
-                                            1.0f + (randFloat / 10f), // slight pitch variations
-                                            0L
-                                    ));
-                                });
-                            }
-                        }
-                    }
-                } catch (final Throwable e) {
-                    DEFAULT_LOG.error("Error in time warning executor service", e);
-                }
-            }, 0, 60L, TimeUnit.SECONDS);
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::warnTimeLeft, 1L, 60L, TimeUnit.SECONDS);
 
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
@@ -594,6 +569,32 @@ public class Proxy {
             }
         } catch (Exception e) {
             SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
+        }
+    }
+    public void warnTimeLeft() {
+        try {
+            if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))|| this.isPrio.orElse(false)) { //Prio players don't have 6h kick.
+                long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
+                if (onlineSeconds > (21600 - 600)) { // (6h - 10 minutes)
+                    final ServerConnection playerConnection = this.currentPlayer.get();
+                    if (playerConnection != null|| this.isConnected() || this.hasActivePlayer()) { //If player is not connected to proxy, no need to send a message.
+                        final float randFloat = ThreadLocalRandom.current().nextFloat();
+                        playerConnection.send(new ClientboundSetActionBarTextPacket(MineDown.parse("&9You only have 10 minutes left")));
+                        playerConnection.send(new ClientboundSoundPacket(
+                                BuiltinSound.BLOCK_ANVIL_PLACE,
+                                SoundCategory.AMBIENT,
+                                CACHE.getPlayerCache().getX(),
+                                CACHE.getPlayerCache().getY(),
+                                CACHE.getPlayerCache().getZ(),
+                                1.0f - (randFloat / 2f),
+                                1.0f + (randFloat / 10f), // slight pitch variations
+                                0L
+                        ));
+                    }
+                }
+            }
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Error in time warning executor service", e);
         }
     }
 
