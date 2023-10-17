@@ -7,7 +7,6 @@ import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
-import com.zenith.util.RefStrings;
 import de.themoep.minedown.adventure.MineDown;
 import lombok.NonNull;
 
@@ -22,7 +21,7 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
             session.disconnect("Login without whitelist check?");
             return;
         }
-        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", RefStrings.BRAND_SUPPLIER.get()));
+        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()));
         session.setLoggedIn(); // allows server packets to start being sent to player
         // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);

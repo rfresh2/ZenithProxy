@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 
 @UtilityClass
 public class RefStrings {
-    protected final String BRAND = "ZenithProxy";
+    protected static final String BRAND = "ZenithProxy";
 
-    public Supplier<byte[]> BRAND_SUPPLIER = Suppliers.memoize(() -> {
+    public static Supplier<byte[]> BRAND_SUPPLIER = Suppliers.memoize(() -> {
         ByteBuf buf = Unpooled.buffer(5 + BRAND.length());
         try {
             writeUTF8(buf, BRAND);
