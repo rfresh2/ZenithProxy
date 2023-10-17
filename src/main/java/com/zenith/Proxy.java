@@ -573,11 +573,11 @@ public class Proxy {
     }
     public void warnTimeLeft() {
         try {
-            if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60))|| this.isPrio.orElse(false)) { //Prio players don't have 6h kick.
+            if (isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(60)) || this.isPrio.orElse(false)) { //Prio players don't have 6h kick.
                 long onlineSeconds = Instant.now().getEpochSecond() - connectTime.getEpochSecond();
                 if (onlineSeconds > (21600 - 600)) { // (6h - 10 minutes)
                     final ServerConnection playerConnection = this.currentPlayer.get();
-                    if (playerConnection != null|| this.isConnected() || this.hasActivePlayer()) { //If player is not connected to proxy, no need to send a message.
+                    if (playerConnection != null || this.isConnected() || this.hasActivePlayer()) { //If player is not connected to proxy, no need to send a message.
                         final float randFloat = ThreadLocalRandom.current().nextFloat();
                         playerConnection.send(new ClientboundSetActionBarTextPacket(MineDown.parse("&9You only have 10 minutes left")));
                         playerConnection.send(new ClientboundSoundPacket(
