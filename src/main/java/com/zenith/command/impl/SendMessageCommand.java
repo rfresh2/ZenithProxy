@@ -21,20 +21,20 @@ public class SendMessageCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("sendMessage")
-                .then(argument("message", greedyString())
-                        .executes(c -> {
-                            final String message = c.getArgument("message", String.class);
-                            if (Proxy.getInstance().isConnected() && !message.isBlank()) {
-                                Proxy.getInstance().getClient().send(new ServerboundChatPacket(message));
-                                c.getSource().getEmbedBuilder()
-                                        .title("Sent Message!")
-                                        .description(message);
-                            } else {
-                                c.getSource().getEmbedBuilder()
-                                        .title("Failed to send message");
-                            }
-                            return 1;
-                        }));
+            .then(argument("message", greedyString())
+                      .executes(c -> {
+                          final String message = c.getArgument("message", String.class);
+                          if (Proxy.getInstance().isConnected() && !message.isBlank()) {
+                              Proxy.getInstance().getClient().send(new ServerboundChatPacket(message));
+                              c.getSource().getEmbedBuilder()
+                                  .title("Sent Message!")
+                                  .description(message);
+                          } else {
+                              c.getSource().getEmbedBuilder()
+                                  .title("Failed to send message");
+                          }
+                          return 1;
+                      }));
     }
 
     @Override

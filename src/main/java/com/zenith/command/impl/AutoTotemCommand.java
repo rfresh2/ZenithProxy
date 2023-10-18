@@ -6,11 +6,14 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
 import com.zenith.module.impl.AutoTotem;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class AutoTotemCommand extends Command {
@@ -25,31 +28,27 @@ public class AutoTotemCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("autototem")
-                .then(literal("on").executes(c -> {
-                    CONFIG.client.extra.autoTotem.enabled = true;
-                    MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);
-                    c.getSource().getEmbedBuilder()
-                            .title("Auto Totem On!")
-                            .color(Color.CYAN)
-                            .addField("Health Threshold", String.valueOf(CONFIG.client.extra.autoTotem.healthThreshold), false);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.client.extra.autoTotem.enabled = false;
-                    MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);
-                    c.getSource().getEmbedBuilder()
-                            .title("Auto Totem Off!")
-                            .color(Color.CYAN)
-                            .addField("Health Threshold", String.valueOf(CONFIG.client.extra.autoTotem.healthThreshold), false);
-                }))
-                .then(literal("health")
-                        .then(argument("healthArg", integer(0, 20)).executes(c -> {
-                            CONFIG.client.extra.autoTotem.healthThreshold = c.getArgument("healthArg", Integer.class);
-                            c.getSource().getEmbedBuilder()
-                                    .title("Auto Totem Health Threshold Set!")
-                                    .color(Color.CYAN)
-                                    .addField("Auto Totem", CONFIG.client.extra.autoTotem.enabled ? "on" : "off", false)
-                                    .addField("Health Threshold", String.valueOf(CONFIG.client.extra.autoTotem.healthThreshold), false);
-                            return 1;
-                        })));
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.autoTotem.enabled = getToggle(c, "toggle");
+                MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);
+                c.getSource().getEmbedBuilder()
+                    .title("AutoTotem " + (CONFIG.client.extra.autoTotem.enabled ? "On!" : "Off!"));
+                return 1;
+            }))
+            .then(literal("health")
+                      .then(argument("healthArg", integer(0, 20)).executes(c -> {
+                          CONFIG.client.extra.autoTotem.healthThreshold = c.getArgument("healthArg", Integer.class);
+                          c.getSource().getEmbedBuilder()
+                              .title("Auto Totem Health Threshold Set!");
+                          return 1;
+                      })));
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("Auto Totem", toggleStr(CONFIG.client.extra.autoTotem.enabled), false)
+            .addField("Health Threshold", "" + CONFIG.client.extra.autoTotem.healthThreshold, true)
+            .color(Color.CYAN);
     }
 }

@@ -5,12 +5,15 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.List;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class QueueWarningCommand extends Command {
@@ -27,54 +30,39 @@ public class QueueWarningCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("queueWarning")
-                .then(literal("on").executes(c -> {
-                    CONFIG.discord.queueWarning.enabled = true;
-                    c.getSource().getEmbedBuilder()
-                            .title("QueueWarning On!")
-                            .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
-                            .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
-                            .color(Color.CYAN);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.discord.queueWarning.enabled = false;
-                    c.getSource().getEmbedBuilder()
-                            .title("QueueWarning Off!")
-                            .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
-                            .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
-                            .color(Color.CYAN);
-                }))
-                .then(literal("position").then(argument("pos", integer()).executes(c -> {
-                    final int position = IntegerArgumentType.getInteger(c, "pos");
-                    CONFIG.discord.queueWarning.position = position;
-                    c.getSource().getEmbedBuilder()
-                            .title("QueueWarning Position Updated!")
-                            .addField("Status", (CONFIG.discord.queueWarning.enabled ? "on" : "off"), false)
-                            .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
-                            .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
-                            .color(Color.CYAN);
-                    return 1;
-                })))
-                .then(literal("mention")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.discord.queueWarning.mentionRole = true;
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.discord.queueWarning.enabled = getToggle(c, "toggle");
+                c.getSource().getEmbedBuilder()
+                    .title("QueueWarning " + (CONFIG.discord.queueWarning.enabled ? "On!" : "Off!"));
+                return 1;
+            }))
+            .then(literal("position").then(argument("pos", integer()).executes(c -> {
+                final int position = IntegerArgumentType.getInteger(c, "pos");
+                CONFIG.discord.queueWarning.position = position;
+                c.getSource().getEmbedBuilder()
+                    .title("Position Updated!");
+                return 1;
+            })))
+            .then(literal("mention")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.queueWarning.mentionRole = getToggle(c, "toggle");
                             c.getSource().getEmbedBuilder()
-                                    .title("QueueWarning Mention On!")
-                                    .addField("Status", (CONFIG.discord.queueWarning.enabled ? "on" : "off"), false)
-                                    .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.discord.queueWarning.mentionRole = false;
-                            c.getSource().getEmbedBuilder()
-                                    .title("QueueWarning Mention Off!")
-                                    .addField("Status", (CONFIG.discord.queueWarning.enabled ? "on" : "off"), false)
-                                    .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
-                                    .color(Color.CYAN);
-                        })));
+                                .title("Mention " + (CONFIG.discord.queueWarning.mentionRole ? "On!" : "Off!"));
+                            return 1;
+                      })));
     }
 
     @Override
     public List<String> aliases() {
         return asList("queue", "q");
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("QueueWarning", toggleStr(CONFIG.discord.queueWarning.enabled), false)
+            .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
+            .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
+            .color(Color.CYAN);
     }
 }

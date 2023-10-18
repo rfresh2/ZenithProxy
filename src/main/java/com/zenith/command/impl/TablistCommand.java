@@ -33,15 +33,15 @@ public class TablistCommand extends Command {
         return command("tablist").executes(c -> {
             if (!Proxy.getInstance().isConnected()) {
                 c.getSource().getEmbedBuilder()
-                        .title("Proxy is not online!")
-                        .color(Color.RUBY);
+                    .title("Proxy is not online!")
+                    .color(Color.RUBY);
             } else {
                 // embeds will be too small for tablist
                 List<String> playerNames = CACHE.getTabListCache().getEntries().stream()
-                        .map(PlayerListEntry::getName)
-                        .distinct()
-                        .sorted(String::compareTo)
-                        .collect(Collectors.toList());
+                    .map(PlayerListEntry::getName)
+                    .distinct()
+                    .sorted(String::compareTo)
+                    .collect(Collectors.toList());
                 final int longestPlayerNameSize = playerNames.stream().map(String::length).max(Integer::compareTo).orElse(1);
                 final int colSize = 4; // num cols of playernames
                 final int paddingSize = 1; // num spaces between names
@@ -50,7 +50,7 @@ public class TablistCommand extends Command {
 
                 final List<List<String>> colOrderedNames = new ArrayList<>();
                 IntStream.range(0, playerNamesColumnized.size())
-                        .forEach(i -> colOrderedNames.add(new ArrayList<>()));
+                    .forEach(i -> colOrderedNames.add(new ArrayList<>()));
                 // iterate down col, then row
                 final ListIterator<String> pNameIterator = playerNames.listIterator();
                 for (int i = 0; i < colSize; i++) {
@@ -67,8 +67,8 @@ public class TablistCommand extends Command {
                     final StringBuilder stringBuilder = new StringBuilder();
                     final Formatter formatter = new Formatter(stringBuilder);
                     final String formatting = IntStream.range(0, row.size())
-                            .mapToObj(i -> "%-" + (longestPlayerNameSize + paddingSize) + "." + (longestPlayerNameSize + paddingSize) + "s")
-                            .collect(Collectors.joining(" "));
+                        .mapToObj(i -> "%-" + (longestPlayerNameSize + paddingSize) + "." + (longestPlayerNameSize + paddingSize) + "s")
+                        .collect(Collectors.joining(" "));
                     formatter.format(formatting, row.toArray());
                     stringBuilder.append("\n");
                     rows.add(stringBuilder.toString());

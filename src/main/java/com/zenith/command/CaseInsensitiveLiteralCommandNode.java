@@ -16,14 +16,27 @@ import java.util.function.Predicate;
 
 public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> {
     private final Function<CommandContext, Void> errorHandler;
+    private final Function<CommandContext, Void> successHandler;
 
-    public CaseInsensitiveLiteralCommandNode(String literal, Command<S> command, Predicate<S> requirement, CommandNode<S> redirect, RedirectModifier<S> modifier, boolean forks, Function<CommandContext, Void> errorHandler) {
+    public CaseInsensitiveLiteralCommandNode(String literal,
+                                             Command<S> command,
+                                             Predicate<S> requirement,
+                                             CommandNode<S> redirect,
+                                             RedirectModifier<S> modifier,
+                                             boolean forks,
+                                             Function<CommandContext, Void> errorHandler,
+                                             Function<CommandContext, Void> successHandler) {
         super(literal.toLowerCase(), command, requirement, redirect, modifier, forks);
         this.errorHandler = errorHandler;
+        this.successHandler = successHandler;
     }
 
     public Optional<Function<CommandContext, Void>> getErrorHandler() {
         return Optional.ofNullable(errorHandler);
+    }
+
+    public Optional<Function<CommandContext, Void>> getSuccessHandler() {
+        return Optional.ofNullable(successHandler);
     }
 
     @Override

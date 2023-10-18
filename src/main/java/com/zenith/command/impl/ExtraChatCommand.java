@@ -10,6 +10,8 @@ import discord4j.rest.util.Color;
 import java.util.Arrays;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 
 public class ExtraChatCommand extends Command {
     @Override
@@ -25,65 +27,44 @@ public class ExtraChatCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("extrachat")
-                .then(literal("hidechat")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.chat.hideChat = true;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Chat hidden!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.chat.hideChat = false;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Chat shown!")
-                                    .color(Color.CYAN);
+            .then(literal("hidechat")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.chat.hideChat = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Chat " + (CONFIG.client.extra.chat.hideChat ? "hidden!" : "shown!"));
+                            return 1;
                         })))
-                .then(literal("hidewhispers")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.chat.hideWhispers = true;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Whispers hidden!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.chat.hideWhispers = false;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Whispers shown!")
-                                    .color(Color.CYAN);
+            .then(literal("hidewhispers")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.chat.hideWhispers = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Whispers " + (CONFIG.client.extra.chat.hideWhispers ? "hidden!" : "shown!"));
+                            return 1;
                         })))
-                .then(literal("hidedeathmessages")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.chat.hideDeathMessages = true;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Death messages hidden!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.chat.hideDeathMessages = false;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Death messages shown!")
-                                    .color(Color.CYAN);
+            .then(literal("hidedeathmessages")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.chat.hideDeathMessages = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Death messages " + (CONFIG.client.extra.chat.hideDeathMessages ? "hidden!" : "shown!"));
+                            return 1;
                         })))
-                .then(literal("showconnectionmessages")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.chat.showConnectionMessages = true;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Connection messages shown!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.chat.showConnectionMessages = false;
-                            addStatus(c.getSource().getEmbedBuilder())
-                                    .title("Connection messages hidden!")
-                                    .color(Color.CYAN);
+            .then(literal("showconnectionmessages")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.chat.showConnectionMessages = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Connection messages " + (CONFIG.client.extra.chat.showConnectionMessages ? "shown!" : "hidden!"));
+                            return 1;
                         })));
     }
 
-    public EmbedCreateSpec.Builder addStatus(final EmbedCreateSpec.Builder builder) {
-        return builder
-                .addField("Hide chat", CONFIG.client.extra.chat.hideChat ? "on" : "off", true)
-                .addField("Hide whispers", CONFIG.client.extra.chat.hideWhispers ? "on" : "off", true)
-                .addField("Hide death messages", CONFIG.client.extra.chat.hideDeathMessages ? "on" : "off", true)
-                .addField("Show connection messages", CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off", true);
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("Hide chat", CONFIG.client.extra.chat.hideChat ? "on" : "off", true)
+            .addField("Hide whispers", CONFIG.client.extra.chat.hideWhispers ? "on" : "off", true)
+            .addField("Hide death messages", CONFIG.client.extra.chat.hideDeathMessages ? "on" : "off", true)
+            .addField("Connection messages", CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off", true)
+            .color(Color.CYAN);
     }
 }

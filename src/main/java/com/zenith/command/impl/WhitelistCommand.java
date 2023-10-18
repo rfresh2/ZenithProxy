@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.List;
@@ -34,36 +35,27 @@ public class WhitelistCommand extends Command {
                     final String player = StringArgumentType.getString(c, "player");
                     WHITELIST_MANAGER.addWhitelistEntryByUsername(player).ifPresentOrElse(e ->
                                     c.getSource().getEmbedBuilder()
-                                            .title("Added user: " + escape(e.username) + " To Whitelist")
-                                            .color(Color.CYAN)
-                                            .description(whitelistToString()),
+                                            .title("Added user: " + escape(e.username) + " To Whitelist"),
                             () -> c.getSource().getEmbedBuilder()
-                                    .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile.")
-                                    .color(Color.RUBY));
+                                    .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile."));
                     return 1;
                 })))
                 .then(literal("del").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");
                     WHITELIST_MANAGER.removeWhitelistEntryByUsername(player);
                     c.getSource().getEmbedBuilder()
-                            .title("Removed user: " + escape(player) + " From Whitelist")
-                            .color(Color.CYAN)
-                            .description(whitelistToString());
+                            .title("Removed user: " + escape(player) + " From Whitelist");
                     WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                     return 1;
                 })))
                 .then(literal("list").executes(c -> {
                     c.getSource().getEmbedBuilder()
-                            .title("Whitelist List")
-                            .color(Color.CYAN)
-                            .description(whitelistToString());
+                            .title("Whitelist List");
                 }))
                 .then(literal("clear").requires(Command::validateAccountOwner).executes(c -> {
                     WHITELIST_MANAGER.clearWhitelist();
                     c.getSource().getEmbedBuilder()
-                            .title("Whitelist Cleared")
-                            .color(Color.RUBY)
-                            .description(whitelistToString());
+                            .title("Whitelist Cleared");
                     WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                     return 1;
                 }));
@@ -80,5 +72,12 @@ public class WhitelistCommand extends Command {
     @Override
     public List<String> aliases() {
         return asList("wl");
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .description(whitelistToString())
+            .color(Color.CYAN);
     }
 }

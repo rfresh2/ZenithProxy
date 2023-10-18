@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -33,10 +34,7 @@ public class ServerCommand extends Command {
                           CONFIG.client.server.address = ip;
                           CONFIG.client.server.port = port;
                           c.getSource().getEmbedBuilder()
-                              .title("Server Updated!")
-                              .addField("IP", CONFIG.client.server.address, false)
-                              .addField("Port", "" + CONFIG.client.server.port, true)
-                              .color(Color.CYAN);
+                              .title("Server Updated!");
                           return 1;
                       }))
                       .executes(c -> {
@@ -44,11 +42,16 @@ public class ServerCommand extends Command {
                           CONFIG.client.server.address = (ip.equalsIgnoreCase("2b2t") ? "connect.2b2t.org" : ip);
                           CONFIG.client.server.port = 25565;
                           c.getSource().getEmbedBuilder()
-                              .title("Server Updated!")
-                              .addField("IP", CONFIG.client.server.address, false)
-                              .addField("Port", "" + CONFIG.client.server.port, true)
-                              .color(Color.CYAN);
+                              .title("Server Updated!");
                           return 1;
                       }));
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("IP", CONFIG.client.server.address, false)
+            .addField("Port", "" + CONFIG.client.server.port, true)
+            .color(Color.CYAN);
     }
 }

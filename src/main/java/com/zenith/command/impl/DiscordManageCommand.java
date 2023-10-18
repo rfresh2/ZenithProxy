@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 import static com.zenith.Shared.*;
 import static com.zenith.command.CustomStringArgumentType.getString;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class DiscordManageCommand extends Command {
@@ -38,36 +40,36 @@ public class DiscordManageCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("discord")
             .then(literal("channel").requires(Command::validateAccountOwner)
-                .then(argument("channel ID", wordWithChars()).executes(c -> {
-                    String channelId = getString(c, "channel ID");
-                    if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
-                        channelId = channelId.substring(2, channelId.length() - 1);
-                    try {
-                        Snowflake.of(channelId);
-                    } catch (final Exception e) {
-                        // invalid id
-                        c.getSource().getEmbedBuilder()
-                            .title("Invalid Channel ID")
-                            .description("The channel ID provided is invalid")
-                            .color(Color.RUBY);
-                        return 1;
-                    }
-                    if (channelId.equals(CONFIG.discord.chatRelay.channelId)) {
-                        c.getSource().getEmbedBuilder()
-                            .title("Invalid Channel ID")
-                            .description("Cannot use the same channel ID for both the relay and main channel")
-                            .color(Color.RUBY);
-                        return 1;
-                    }
-                    CONFIG.discord.channelId = channelId;
-                    populate(c.getSource().getEmbedBuilder()
-                                 .title("Channel set!")
-                                 .color(Color.CYAN)
-                                 .description("Discord bot will now restart if enabled"));
-                    if (DISCORD_BOT.isRunning())
-                        SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
-                    return 1;
-                    })))
+                      .then(argument("channel ID", wordWithChars()).executes(c -> {
+                          String channelId = getString(c, "channel ID");
+                          if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
+                              channelId = channelId.substring(2, channelId.length() - 1);
+                          try {
+                              Snowflake.of(channelId);
+                          } catch (final Exception e) {
+                              // invalid id
+                              c.getSource().getEmbedBuilder()
+                                  .title("Invalid Channel ID")
+                                  .description("The channel ID provided is invalid")
+                                  .color(Color.RUBY);
+                              return 1;
+                          }
+                          if (channelId.equals(CONFIG.discord.chatRelay.channelId)) {
+                              c.getSource().getEmbedBuilder()
+                                  .title("Invalid Channel ID")
+                                  .description("Cannot use the same channel ID for both the relay and main channel")
+                                  .color(Color.RUBY);
+                              return 1;
+                          }
+                          CONFIG.discord.channelId = channelId;
+                          c.getSource().getEmbedBuilder()
+                                       .title("Channel set!")
+                                       .color(Color.CYAN)
+                                       .description("Discord bot will now restart if enabled");
+                          if (DISCORD_BOT.isRunning())
+                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          return 1;
+                      })))
             .then(literal("relaychannel").requires(Command::validateAccountOwner)
                       .then(argument("channel ID", wordWithChars()).executes(c -> {
                           String channelId = getString(c, "channel ID");
@@ -91,62 +93,48 @@ public class DiscordManageCommand extends Command {
                               return 1;
                           }
                           CONFIG.discord.chatRelay.channelId = channelId;
-                          populate(c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbedBuilder()
                                        .title("Relay Channel set!")
                                        .color(Color.CYAN)
-                                       .description("Discord bot will now restart if enabled"));
+                                       .description("Discord bot will now restart if enabled");
                           if (DISCORD_BOT.isRunning())
                               SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("manageprofileimage")
-                      .then(literal("on").executes(c -> {
-                            CONFIG.discord.manageProfileImage = true;
-                            populate(c.getSource().getEmbedBuilder()
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.manageProfileImage = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
                                          .color(Color.CYAN)
-                                         .title("Manage Profile Image On!"));
-                      }))
-                      .then(literal("off").executes(c -> {
-                            CONFIG.discord.manageProfileImage = false;
-                            populate(c.getSource().getEmbedBuilder()
-                                         .color(Color.CYAN)
-                                         .title("Manage Profile Image Off!"));
+                                         .title("Manage Profile Image " + (CONFIG.discord.manageProfileImage ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("managenickname")
-                      .then(literal("on").executes(c -> {
-                            CONFIG.discord.manageNickname = true;
-                            populate(c.getSource().getEmbedBuilder()
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.manageNickname = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
                                          .color(Color.CYAN)
-                                         .title("Manage Nickname On!"));
-                      }))
-                      .then(literal("off").executes(c -> {
-                            CONFIG.discord.manageNickname = false;
-                            populate(c.getSource().getEmbedBuilder()
-                                         .color(Color.CYAN)
-                                         .title("Manage Nickname Off!"));
+                                         .title("Manage Nickname " + (CONFIG.discord.manageNickname ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("managedescription")
-                      .then(literal("on").executes(c -> {
-                            CONFIG.discord.manageDescription = true;
-                            populate(c.getSource().getEmbedBuilder()
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.manageDescription = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
                                          .color(Color.CYAN)
-                                         .title("Manage Description On!"));
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.discord.manageDescription = false;
-                          populate(c.getSource().getEmbedBuilder()
-                                       .color(Color.CYAN)
-                                       .title("Manage Description Off!"));
-                        })));
+                                         .title("Manage Description " + (CONFIG.discord.manageDescription ? "On!" : "Off!"));
+                            return 1;
+                      })));
     }
 
-    private EmbedCreateSpec.Builder populate(final EmbedCreateSpec.Builder builder) {
-        return builder
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
             .addField("Channel ID", "<#" + CONFIG.discord.channelId + ">", false)
             .addField("Relay Channel ID", "<#" + CONFIG.discord.chatRelay.channelId + ">", false)
-            .addField("Manage Profile Image", CONFIG.discord.manageProfileImage ? "on" : "off", false)
-            .addField("Manage Nickname", CONFIG.discord.manageNickname ? "on" : "off", false)
-            .addField("Manage Description", CONFIG.discord.manageDescription ? "on" : "off", false);
+            .addField("Manage Profile Image", toggleStr(CONFIG.discord.manageProfileImage), false)
+            .addField("Manage Nickname", toggleStr(CONFIG.discord.manageNickname), false)
+            .addField("Manage Description", toggleStr(CONFIG.discord.manageDescription), false);
     }
 
     private void restartDiscordBot() {

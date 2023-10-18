@@ -7,6 +7,8 @@ import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class DebugCommand extends Command {
@@ -25,36 +27,31 @@ public class DebugCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("debug").requires(Command::validateAccountOwner)
-                .then(literal("autoconnect")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.autoConnect = true;
+            .then(literal("autoconnect")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.autoConnect = getToggle(c, "toggle");
                             c.getSource().getEmbedBuilder()
-                                    .title("Auto Connect On!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.autoConnect = false;
+                                .title("Auto Connect " + (CONFIG.client.autoConnect ? "On!" : "Off!"))
+                                .color(Color.CYAN);
+                            return 1;
+                      })))
+            .then(literal("packetlog")
+                        .then(argument("toggle", toggle()).executes(c -> {
+                            boolean toggle = getToggle(c, "toggle");
+                            if (toggle) {
+                                CONFIG.debug.packet.received = true;
+                                CONFIG.debug.packet.receivedBody = true;
+                                CONFIG.debug.packet.preSent = false;
+                                CONFIG.debug.packet.postSent = true;
+                                CONFIG.debug.packet.postSentBody = true;
+                            } else {
+                                CONFIG.debug.packet.received = false;
+                                CONFIG.debug.packet.postSent = false;
+                            }
                             c.getSource().getEmbedBuilder()
-                                    .title("Auto Connect Off!")
+                                    .title("Packet Log " + (toggle ? "On!" : "Off!"))
                                     .color(Color.CYAN);
-                        })))
-                .then(literal("packetlog")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.debug.packet.received = true;
-                            CONFIG.debug.packet.receivedBody = true;
-                            CONFIG.debug.packet.preSent = false;
-                            CONFIG.debug.packet.postSent = true;
-                            CONFIG.debug.packet.postSentBody = true;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Packet Log On!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.debug.packet.received = false;
-                            CONFIG.debug.packet.postSent = false;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Packet Log Off!")
-                                    .color(Color.CYAN);
+                                return 1;
                         })));
     }
 }

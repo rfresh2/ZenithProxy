@@ -9,6 +9,8 @@ import discord4j.rest.util.Color;
 import java.util.List;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class DisplayCoordsCommand extends Command {
@@ -25,18 +27,13 @@ public class DisplayCoordsCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("displayCoords").requires(Command::validateAccountOwner)
-                .then(literal("on").executes(c -> {
-                    CONFIG.discord.reportCoords = true;
-                    c.getSource().getEmbedBuilder()
-                            .title("Coordinates On!")
-                            .color(Color.CYAN);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.discord.reportCoords = false;
-                    c.getSource().getEmbedBuilder()
-                            .title("Coordinates Off!")
-                            .color(Color.CYAN);
-                }));
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.discord.reportCoords = getToggle(c, "toggle");
+                c.getSource().getEmbedBuilder()
+                    .title("Coordinates " + (CONFIG.discord.reportCoords ? "On!" : "Off!"))
+                    .color(Color.CYAN);
+                return 1;
+            }));
     }
 
     @Override

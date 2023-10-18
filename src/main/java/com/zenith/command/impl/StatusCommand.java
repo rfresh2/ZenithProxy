@@ -96,14 +96,14 @@ public class StatusCommand extends Command {
         return command("status").executes(c -> {
             final EmbedCreateSpec.Builder builder = c.getSource().getEmbedBuilder();
             builder
-                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " Status: " + CONFIG.authentication.username)
-                    .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
-                    .addField("Status", getStatus(), true)
-                    .addField("Connected User", getCurrentClientUserName(), true)
-                    .addField("Online Time", getOnlineTime(), true)
-                    .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
-                    .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
-                    .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
+                .title("ZenithProxy " + LAUNCH_CONFIG.version + " Status: " + CONFIG.authentication.username)
+                .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
+                .addField("Status", getStatus(), true)
+                .addField("Connected User", getCurrentClientUserName(), true)
+                .addField("Online Time", getOnlineTime(), true)
+                .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
+                .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
+                .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
             if (Proxy.getInstance().isConnected()) {
                 builder.addField("TPS", TPS_CALCULATOR.getTPS(), true);
             }
@@ -111,45 +111,45 @@ public class StatusCommand extends Command {
                 builder.addField("Spectators", String.join(", ", getSpectatorUserNames()), true);
             }
             builder.addField("2b2t Queue", getQueueStatus(), true)
-                    .addField("Dimension",
-                            (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().getDimensionName().replace("minecraft:", ""): "None"),
-                            true);
+                .addField("Dimension",
+                          (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().getDimensionName().replace("minecraft:", ""): "None"),
+                          true);
             if (CONFIG.discord.reportCoords) {
                 builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
             }
             builder.addField("Health", "" + (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
-                    .addField("AutoDisconnect",
-                            "[Health: " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off")
-                                    + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"
-                                    + "\n[CancelAutoReconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "on" : "off") + "]"
-                                    + "\n[AutoClientDisconnect: " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off") + "]"
-                                    + "\n[Thunder: " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off") + "]"
-                            , true)
-                    .addField("AutoReconnect",
-                            (CONFIG.client.extra.autoReconnect.enabled ? "on" : "off")
-                                    + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
-                    .addField("AutoRespawn",
-                            (CONFIG.client.extra.autoRespawn.enabled ? "on" : "off")
-                                    + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
-                    .addField("AntiAFK",
-                            (CONFIG.client.extra.antiafk.enabled ? "on" : "off"), true)
-                    .addField("AutoEat", (CONFIG.client.extra.autoEat.enabled ? "on" : "off"), true)
-                    .addField("VisualRange Notifications", (CONFIG.client.extra.visualRangeAlert ? "on" : "off")
-                            + "\n[Mention: " + (CONFIG.client.extra.visualRangeAlertMention ? "on" : "off") + "]", true)
-                    .addField("Client Connection Notifications", (CONFIG.client.extra.clientConnectionMessages ? "on" : "off"), true)
-                    .addField("Stalk", (CONFIG.client.extra.stalk.enabled ? "on" : "off"), true)
-                    .addField("Spectators", (CONFIG.server.spectator.allowSpectator ? "on" : "off")
-                            + "\n[Public Chat: " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "on" : "off") + "]", true)
-                    .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.enabled ? "on" : "off"), true)
+                .addField("AutoDisconnect",
+                          "[Health: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled)
+                              + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"
+                              + "\n[CancelAutoReconnect: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect) + "]"
+                              + "\n[AutoClientDisconnect: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) + "]"
+                              + "\n[Thunder: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.thunder) + "]"
+                    , true)
+                .addField("AutoReconnect",
+                          toggleStr(CONFIG.client.extra.autoReconnect.enabled)
+                              + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
+                .addField("AutoRespawn",
+                          toggleStr(CONFIG.client.extra.autoRespawn.enabled)
+                              + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
+                .addField("AntiAFK",
+                          toggleStr(CONFIG.client.extra.antiafk.enabled), true)
+                .addField("AutoEat", toggleStr(CONFIG.client.extra.autoEat.enabled), true)
+                .addField("VisualRange Notifications", toggleStr(CONFIG.client.extra.visualRangeAlert)
+                    + "\n[Mention: " + toggleStr(CONFIG.client.extra.visualRangeAlertMention) + "]", true)
+                .addField("Client Connection Notifications", toggleStr(CONFIG.client.extra.clientConnectionMessages), true)
+                .addField("Stalk", toggleStr(CONFIG.client.extra.stalk.enabled), true)
+                .addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator)
+                    + "\n[Public Chat: " + toggleStr(CONFIG.server.spectator.spectatorPublicChatEnabled) + "]", true)
+                .addField("Active Hours", toggleStr(CONFIG.client.extra.utility.actions.activeHours.enabled), true)
 //                    .addField("Display Coordinates", (CONFIG.discord.reportCoords ? "on" : "off"), true)
-                    .addField("Chat Relay", (CONFIG.discord.chatRelay.channelId.length() > 0 ? (CONFIG.discord.chatRelay.enable ? "on" : "off") : "Not Configured")
-                            + "\n[WhisperMention: " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "on" : "off") + "]"
-                            + "\n[NameMention: " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "on" : "off") + "]", true)
-                    .addField("AutoReply", (CONFIG.client.extra.autoReply.enabled ? "on" : "off")
-                            + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
-                    .addField("Spammer", (CONFIG.client.extra.spammer.enabled ? "on" : "off")
-                            + "\n[Whisper: " + (CONFIG.client.extra.spammer.whisper ? "on" : "off") + "]", true)
-                    .addField("AutoUpdate", (CONFIG.autoUpdater.autoUpdate ? "on" : "off"), false);
+                .addField("Chat Relay", (!CONFIG.discord.chatRelay.channelId.isEmpty() ? toggleStr(CONFIG.discord.chatRelay.enable) : "Not Configured")
+                    + "\n[WhisperMention: " + toggleStr(CONFIG.discord.chatRelay.mentionRoleOnWhisper) + "]"
+                    + "\n[NameMention: " + toggleStr(CONFIG.discord.chatRelay.mentionRoleOnNameMention) + "]", true)
+                .addField("AutoReply", toggleStr(CONFIG.client.extra.autoReply.enabled)
+                    + "\n[Cooldown: " + CONFIG.client.extra.autoReply.cooldownSeconds + "]", true)
+                .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled)
+                    + "\n[Whisper: " + toggleStr(CONFIG.client.extra.spammer.whisper) + "]", true)
+                .addField("AutoUpdate", toggleStr(CONFIG.autoUpdater.autoUpdate), false);
         });
     }
 

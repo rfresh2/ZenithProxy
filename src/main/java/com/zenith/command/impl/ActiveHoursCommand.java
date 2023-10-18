@@ -7,6 +7,7 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.CustomStringArgumentType;
 import com.zenith.util.Config.Client.Extra.Utility.ActiveHours.ActiveTime;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.time.ZoneId;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ActiveHoursCommand extends Command {
@@ -40,88 +43,65 @@ public class ActiveHoursCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("activeHours")
-                .then(literal("on").executes(c -> {
-                    CONFIG.client.extra.utility.actions.activeHours.enabled = true;
+            .then(argument("toggle", toggle()).executes(c -> {
+                boolean toggle = getToggle(c, "toggle");
+                CONFIG.client.extra.utility.actions.activeHours.enabled = toggle;
+                c.getSource().getEmbedBuilder()
+                    .title("Active Hours " + (toggle ? "On!" : "Off!"));
+                return 1;
+            }))
+            .then(literal("timezone").then(argument("tz", wordWithChars()).executes(c -> {
+                final String timeZoneId = CustomStringArgumentType.getString(c, "tz");
+                if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(timeZoneId))) {
+                    return -1;
+                } else {
+                    CONFIG.client.extra.utility.actions.activeHours.timeZoneId = ZoneId.of(timeZoneId).getId();
                     c.getSource().getEmbedBuilder()
-                            .title("Active Hours On!")
-                            .color(Color.CYAN);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.client.extra.utility.actions.activeHours.enabled = false;
+                        .title("Set timezone: " + timeZoneId);
+                    return 1;
+                }
+            })))
+            .then(literal("add").then(argument("time", wordWithChars()).executes(c -> {
+                final String time = StringArgumentType.getString(c, "time");
+                if (!timeMatchesRegex(time)) {
+                    return -1;
+                } else {
+                    final ActiveTime activeTime = ActiveTime.fromString(time);
+                    if (!CONFIG.client.extra.utility.actions.activeHours.activeTimes.contains(activeTime)) {
+                        CONFIG.client.extra.utility.actions.activeHours.activeTimes.add(activeTime);
+                    }
                     c.getSource().getEmbedBuilder()
-                            .title("Active Hours Off!")
-                            .color(Color.CYAN);
-                }))
-                .then(literal("timezone").then(argument("tz", wordWithChars()).executes(c -> {
-                    final String timeZoneId = CustomStringArgumentType.getString(c, "tz");
-                    if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(timeZoneId))) {
-                        return -1;
-                    } else {
-                        CONFIG.client.extra.utility.actions.activeHours.timeZoneId = ZoneId.of(timeZoneId).getId();
-                        c.getSource().getEmbedBuilder()
-                                .title("Set timezone: " + timeZoneId)
-                                .color(Color.CYAN)
-                                .addField("Time Zone", CONFIG.client.extra.utility.actions.activeHours.timeZoneId, false)
-                                .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
-                                .addField("Force Reconnect", (CONFIG.client.extra.utility.actions.activeHours.forceReconnect ? "on" : "off"), false);
-                        return 1;
-                    }
-                })))
-                .then(literal("add").then(argument("time", wordWithChars()).executes(c -> {
-                    final String time = StringArgumentType.getString(c, "time");
-                    if (!timeMatchesRegex(time)) {
-                        return -1;
-                    } else {
-                        final ActiveTime activeTime = ActiveTime.fromString(time);
-                        if (!CONFIG.client.extra.utility.actions.activeHours.activeTimes.contains(activeTime)) {
-                            CONFIG.client.extra.utility.actions.activeHours.activeTimes.add(activeTime);
-                        }
-                        c.getSource().getEmbedBuilder()
-                                .title("Added time: " + time)
-                                .color(Color.CYAN)
-                                .addField("Time Zone", CONFIG.client.extra.utility.actions.activeHours.timeZoneId, false)
-                                .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
-                                .addField("Force Reconnect", (CONFIG.client.extra.utility.actions.activeHours.forceReconnect ? "on" : "off"), false);
-                        return 1;
-                    }
-                })))
-                .then(literal("del").then(argument("time", wordWithChars()).executes(c -> {
-                    final String time = StringArgumentType.getString(c, "time");
-                    if (!timeMatchesRegex(time)) {
-                        return -1;
-                    } else {
-                        final ActiveTime activeTime = ActiveTime.fromString(time);
-                        CONFIG.client.extra.utility.actions.activeHours.activeTimes.removeIf(s -> s.equals(activeTime));
-                        c.getSource().getEmbedBuilder()
-                                .title("Removed time: " + time)
-                                .color(Color.CYAN)
-                                .addField("Time Zone", CONFIG.client.extra.utility.actions.activeHours.timeZoneId, false)
-                                .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
-                                .addField("Force Reconnect", (CONFIG.client.extra.utility.actions.activeHours.forceReconnect ? "on" : "off"), false);
-                        return 1;
-                    }
-                })))
-                .then(literal("status").executes(c -> {
+                                 .title("Added time: " + time);
+                    return 1;
+                }
+            })))
+            .then(literal("del").then(argument("time", wordWithChars()).executes(c -> {
+                final String time = StringArgumentType.getString(c, "time");
+                if (!timeMatchesRegex(time)) {
+                    return -1;
+                } else {
+                    final ActiveTime activeTime = ActiveTime.fromString(time);
+                    CONFIG.client.extra.utility.actions.activeHours.activeTimes.removeIf(s -> s.equals(activeTime));
                     c.getSource().getEmbedBuilder()
-                            .title("Active Hours Status")
-                            .color(Color.CYAN)
-                            .addField("Time Zone", CONFIG.client.extra.utility.actions.activeHours.timeZoneId, false)
-                            .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.activeTimes.isEmpty() ? "None set!" : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
-                            .addField("Force Reconnect", (CONFIG.client.extra.utility.actions.activeHours.forceReconnect ? "on" : "off"), false);
-                }))
-                .then(literal("forceReconnect")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.utility.actions.activeHours.forceReconnect = true;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Force Reconnect On!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.utility.actions.activeHours.forceReconnect = false;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Force Reconnect Off!")
-                                    .color(Color.CYAN);
-                        })));
+                        .title("Removed time: " + time);
+                    return 1;
+                }
+            })))
+            .then(literal("status").executes(c -> {
+                c.getSource().getEmbedBuilder()
+                    .title("Active Hours Status");
+            }))
+            .then(literal("forceReconnect")
+                      .then(literal("on").executes(c -> {
+                          CONFIG.client.extra.utility.actions.activeHours.forceReconnect = true;
+                          c.getSource().getEmbedBuilder()
+                              .title("Force Reconnect On!");
+                      }))
+                      .then(literal("off").executes(c -> {
+                          CONFIG.client.extra.utility.actions.activeHours.forceReconnect = false;
+                          c.getSource().getEmbedBuilder()
+                              .title("Force Reconnect Off!");
+                      })));
     }
 
     private boolean timeMatchesRegex(final String arg) {
@@ -143,5 +123,17 @@ public class ActiveHoursCommand extends Command {
                 })
                 .map(ActiveTime::toString)
                 .collect(Collectors.joining(", "));
+    }
+
+    @Override
+    public void postPopulate(EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("ActiveHours", toggleStr(CONFIG.client.extra.utility.actions.activeHours.enabled), false)
+            .addField("Time Zone", CONFIG.client.extra.utility.actions.activeHours.timeZoneId, false)
+            .addField("Active Hours", (CONFIG.client.extra.utility.actions.activeHours.activeTimes.isEmpty()
+                ? "None set!"
+                : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
+            .addField("Force Reconnect", toggleStr(CONFIG.client.extra.utility.actions.activeHours.forceReconnect), false)
+            .color(Color.CYAN);
     }
 }

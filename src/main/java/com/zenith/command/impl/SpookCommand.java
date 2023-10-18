@@ -8,11 +8,14 @@ import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
 import com.zenith.module.impl.Spook;
 import com.zenith.util.Config;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class SpookCommand extends Command {
@@ -28,55 +31,39 @@ public class SpookCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("spook")
-                .then(literal("on").executes(c -> {
-                    CONFIG.client.extra.spook.enabled = true;
-                    MODULE_MANAGER.getModule(Spook.class).ifPresent(Module::syncEnabledFromConfig);
-                    c.getSource().getEmbedBuilder()
-                            .title("Spook On!")
-                            .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
-                            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
-                            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
-                            .color(Color.TAHITI_GOLD);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.client.extra.spook.enabled = false;
-                    MODULE_MANAGER.getModule(Spook.class).ifPresent(Module::syncEnabledFromConfig);
-                    c.getSource().getEmbedBuilder()
-                            .title("Spook Off!")
-                            .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
-                            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
-                            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
-                            .color(Color.TAHITI_GOLD);
-                }))
-                .then(literal("delay").then(argument("delayTicks", integer()).executes(c -> {
-                    final int delay = IntegerArgumentType.getInteger(c, "delayTicks");
-                    CONFIG.client.extra.spook.tickDelay = (long) delay;
-                    c.getSource().getEmbedBuilder()
-                            .title("Spook Delay Updated!")
-                            .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
-                            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
-                            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
-                            .color(Color.TAHITI_GOLD);
-                    return 1;
-                })))
-                .then(literal("mode")
-                        .then(literal("nearest").executes(c -> {
-                            CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.NEAREST;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Spook Mode Updated!")
-                                    .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
-                                    .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
-                                    .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
-                                    .color(Color.TAHITI_GOLD);
-                        }))
-                        .then(literal("visualrange").executes(c -> {
-                            CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.VISUAL_RANGE;
-                            c.getSource().getEmbedBuilder()
-                                    .title("Spook Mode Updated!")
-                                    .addField("Status", (CONFIG.client.extra.spook.enabled ? "on" : "off"), false)
-                                    .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " Tick(s)", false)
-                                    .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
-                                    .color(Color.TAHITI_GOLD);
-                        })));
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.spook.enabled = getToggle(c, "toggle");
+                MODULE_MANAGER.getModule(Spook.class).ifPresent(Module::syncEnabledFromConfig);
+                c.getSource().getEmbedBuilder()
+                    .title("Spook " + (CONFIG.client.extra.spook.enabled ? "On!" : "Off!"));
+                return 1;
+            }))
+            .then(literal("delay").then(argument("delayTicks", integer()).executes(c -> {
+                final int delay = IntegerArgumentType.getInteger(c, "delayTicks");
+                CONFIG.client.extra.spook.tickDelay = (long) delay;
+                c.getSource().getEmbedBuilder()
+                    .title("Spook Delay Updated!");
+                return 1;
+            })))
+            .then(literal("mode")
+                      .then(literal("nearest").executes(c -> {
+                          CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.NEAREST;
+                          c.getSource().getEmbedBuilder()
+                              .title("Spook Mode Updated!");
+                      }))
+                      .then(literal("visualrange").executes(c -> {
+                          CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.VISUAL_RANGE;
+                          c.getSource().getEmbedBuilder()
+                              .title("Spook Mode Updated!");
+                      })));
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("Spook", toggleStr(CONFIG.client.extra.spook.enabled), false)
+            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " tick(s)", false)
+            .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
+            .color(Color.CYAN);
     }
 }

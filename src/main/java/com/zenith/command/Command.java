@@ -7,11 +7,13 @@ import com.mojang.brigadier.tree.CommandNode;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.zenith.Shared.CONFIG;
 
@@ -36,8 +38,7 @@ public abstract class Command {
                     .color(Color.RUBY)
                     .addField("Error",
                             "User: " + event.getMember().map(User::getTag).orElse("Unknown")
-                                    + " is not authorized to execute this command! Contact the account owner", true)
-                    .build();
+                                    + " is not authorized to execute this command! Contact the account owner", true);
             return false;
         }
         return true;
@@ -51,6 +52,14 @@ public abstract class Command {
         return literal(literal).withErrorHandler(errorHandler);
     }
 
+    public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> requires(String literal, Predicate<CommandContext> requirement) {
+        return literal(literal).requires(requirement);
+    }
+
+    public static String toggleStr(boolean state) {
+        return state ? "on" : "off";
+    }
+
     /**
      * Required. Registers {@link CommandUsage}
      */
@@ -62,6 +71,11 @@ public abstract class Command {
     public abstract LiteralArgumentBuilder<CommandContext> register();
 
     /**
+     * Override to populate the embed builder after every successful execution
+     */
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {}
+
+    /**
      * Optional override to register command aliases.
      * Also check these are set in {@link #commandUsage()}
      * todo: auto-set these in commandUsage
@@ -71,7 +85,12 @@ public abstract class Command {
     }
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> command(String literal) {
-        return literal(literal).withErrorHandler(this::usageErrorHandler);
+        return literal(literal)
+            .withErrorHandler(this::usageErrorHandler)
+            .withSuccesshandler((context) -> {
+                postPopulate(context.getEmbedBuilder());
+                return null;
+            });
     }
 
     /**

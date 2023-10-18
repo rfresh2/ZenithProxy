@@ -8,8 +8,12 @@ import com.zenith.command.CommandUsage;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.*;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class AutoUpdateCommand extends Command {
@@ -23,26 +27,31 @@ public class AutoUpdateCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("autoupdate").requires(Command::validateAccountOwner)
-                .then(literal("on").executes(c -> {
-                    CONFIG.autoUpdater.autoUpdate = true;
-                    AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
+            .then(argument("toggle", toggle()).executes(c -> {
+                final boolean toggle = getToggle(c, "toggle");
+                CONFIG.autoUpdater.autoUpdate = toggle;
+                AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
+                if (toggle) {
                     if (autoUpdater == null) {
                         if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
                         else autoUpdater = new RestAutoUpdater();
                         Proxy.getInstance().setAutoUpdater(autoUpdater);
                     }
-                    LAUNCH_CONFIG.auto_update = true;
-                    saveLaunchConfig();
                     autoUpdater.start();
-                    c.getSource().getEmbedBuilder().title("AutoUpdater On!");
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.autoUpdater.autoUpdate = false;
-                    AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
+                } else {
                     if (autoUpdater != null) autoUpdater.stop();
-                    LAUNCH_CONFIG.auto_update = false;
-                    saveLaunchConfig();
-                    c.getSource().getEmbedBuilder().title("AutoUpdater Off!");
-                }));
+                }
+                LAUNCH_CONFIG.auto_update = toggle;
+                saveLaunchConfig();
+                c.getSource().getEmbedBuilder().title("AutoUpdater " + (toggle ? "On!" : "Off!"));
+                return 1;
+            }));
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("AutoUpdater", toggleStr(CONFIG.autoUpdater.autoUpdate), false)
+            .color(Color.CYAN);
     }
 }

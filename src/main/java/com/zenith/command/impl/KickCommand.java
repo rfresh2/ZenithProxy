@@ -29,23 +29,23 @@ public class KickCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("kick").requires(Command::validateAccountOwner)
-                .then(argument("player", string()).executes(c -> {
-                    final String playerName = StringArgumentType.getString(c, "player");
-                    List<ServerConnection> connections = Proxy.getInstance().getActiveConnections().stream()
-                            .filter(connection -> connection.getProfileCache().getProfile().getName().equalsIgnoreCase(playerName))
-                            .collect(Collectors.toList());
-                    if (!connections.isEmpty()) {
-                        connections.forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
-                        c.getSource().getEmbedBuilder()
-                                .title("Kicked " + escape(playerName))
-                                .color(Color.CYAN);
-                    } else {
-                        c.getSource().getEmbedBuilder()
-                                .title("Unable to kick " + escape(playerName))
-                                .color(Color.RUBY)
-                                .addField("Reason", "Player is not connected", false);
-                    }
-                    return 1;
-                }));
+            .then(argument("player", string()).executes(c -> {
+                final String playerName = StringArgumentType.getString(c, "player");
+                List<ServerConnection> connections = Proxy.getInstance().getActiveConnections().stream()
+                    .filter(connection -> connection.getProfileCache().getProfile().getName().equalsIgnoreCase(playerName))
+                    .collect(Collectors.toList());
+                if (!connections.isEmpty()) {
+                    connections.forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
+                    c.getSource().getEmbedBuilder()
+                        .title("Kicked " + escape(playerName))
+                        .color(Color.CYAN);
+                } else {
+                    c.getSource().getEmbedBuilder()
+                        .title("Unable to kick " + escape(playerName))
+                        .color(Color.RUBY)
+                        .addField("Reason", "Player is not connected", false);
+                }
+                return 1;
+            }));
     }
 }

@@ -23,18 +23,18 @@ public class RespawnCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("respawn")
-                .executes(c -> {
-                    final ClientSession client = Proxy.getInstance().getClient();
-                    if (nonNull(client)) {
-                        client.send(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
-                    }
-                    final EntityPlayer player = CACHE.getPlayerCache().getThePlayer();
-                    if (nonNull(player)) {
-                        player.setHealth(20.0f);
-                    }
-                    c.getSource().getEmbedBuilder()
-                            .title("Respawn performed")
-                            .color(Color.CYAN);
-                });
+            .executes(c -> {
+                final ClientSession client = Proxy.getInstance().getClient();
+                if (nonNull(client)) {
+                    client.send(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
+                }
+                final EntityPlayer player = CACHE.getPlayerCache().getThePlayer();
+                if (nonNull(player)) {
+                    player.setHealth(20.0f);
+                }
+                c.getSource().getEmbedBuilder()
+                    .title("Respawn performed")
+                    .color(Color.CYAN);
+            });
     }
 }

@@ -16,6 +16,8 @@ import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class KillAuraCommand extends Command {
@@ -36,85 +38,52 @@ public class KillAuraCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("killaura")
-            .then(literal("on").executes(c -> {
-                CONFIG.client.extra.killAura.enabled = true;
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.killAura.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.getModule(KillAura.class).ifPresent(Module::syncEnabledFromConfig);
-                populate(c.getSource().getEmbedBuilder()
-                    .title("Kill Aura On!")
-                    .color(Color.CYAN));
-            }))
-            .then(literal("off").executes(c -> {
-                CONFIG.client.extra.killAura.enabled = false;
-                MODULE_MANAGER.getModule(KillAura.class).ifPresent(Module::syncEnabledFromConfig);
-                populate(c.getSource().getEmbedBuilder()
-                             .title("Kill Aura Off!")
-                             .color(Color.CYAN));
+                c.getSource().getEmbedBuilder()
+                             .title("Kill Aura " + (CONFIG.client.extra.killAura.enabled ? "On!" : "Off!"));
+                return 1;
             }))
             .then(literal("attackdelay")
                       .then(argument("ticks", integer()).executes(c -> {
-                            CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
-                            populate(c.getSource().getEmbedBuilder()
-                                .title("Attack Delay Ticks Set!")
-                                .color(Color.CYAN));
-                            return 1;
+                          CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
+                          c.getSource().getEmbedBuilder()
+                                       .title("Attack Delay Ticks Set!");
+                          return 1;
                       })))
             .then(literal("targetplayers")
-                      .then(literal("on").executes(c -> {
-                          CONFIG.client.extra.killAura.targetPlayers = true;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Target Players On!")
-                              .color(Color.CYAN));
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.client.extra.killAura.targetPlayers = false;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Target Players Off!")
-                              .color(Color.CYAN));
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.killAura.targetPlayers = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                         .title("Target Players " + (CONFIG.client.extra.killAura.targetPlayers ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("targetmobs")
-                      .then(literal("on").executes(c -> {
-                          CONFIG.client.extra.killAura.targetHostileMobs = true;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Target Mobs On!")
-                              .color(Color.CYAN));
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.client.extra.killAura.targetHostileMobs = false;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Target Mobs Off!")
-                              .color(Color.CYAN));
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                         .title("Target Mobs " + (CONFIG.client.extra.killAura.targetHostileMobs ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("targetarmorstands")
-                      .then(literal("on").executes(c -> {
-                          CONFIG.client.extra.killAura.targetArmorStands = true;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Target Armor Stands On!")
-                              .color(Color.CYAN));
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.client.extra.killAura.targetArmorStands = false;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Target Armor Stands Off!")
-                              .color(Color.CYAN));
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.killAura.targetArmorStands = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                         .title("Target Armor Stands " + (CONFIG.client.extra.killAura.targetArmorStands ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("weaponswitch")
-                      .then(literal("on").executes(c -> {
-                          CONFIG.client.extra.killAura.switchWeapon = true;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Weapon Switching On!")
-                              .color(Color.CYAN));
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.client.extra.killAura.switchWeapon = false;
-                          populate(c.getSource().getEmbedBuilder()
-                              .title("Weapon Switching Off!")
-                              .color(Color.CYAN));
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.killAura.switchWeapon = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                         .title("Weapon Switching " + (CONFIG.client.extra.killAura.switchWeapon ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("range").then(argument("range", doubleArg(0.01, 5.0)).executes(c -> {
                 CONFIG.client.extra.killAura.attackRange = getDouble(c, "range");
-                populate(c.getSource().getEmbedBuilder()
-                    .title("Attack Range Set!")
-                    .color(Color.CYAN));
+                c.getSource().getEmbedBuilder()
+                             .title("Attack Range Set!");
                 return 1;
             })));
     }
@@ -124,13 +93,16 @@ public class KillAuraCommand extends Command {
         return asList("ka");
     }
 
-    private EmbedCreateSpec.Builder populate(EmbedCreateSpec.Builder builder) {
-        return builder
-            .addField("Target Players", CONFIG.client.extra.killAura.targetPlayers ? "on" : "off", false)
-            .addField("Target Hostile Mobs", CONFIG.client.extra.killAura.targetHostileMobs ? "on" : "off", false)
-            .addField("Target Armor Stands", CONFIG.client.extra.killAura.targetArmorStands ? "on" : "off", false)
-            .addField("Weapon Switching", CONFIG.client.extra.killAura.switchWeapon ? "on" : "off", false)
-            .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks+"", false)
-            .addField("Attack Range", CONFIG.client.extra.killAura.attackRange+"", false);
+    @Override
+    public void postPopulate(EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled), false)
+            .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers), false)
+            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs), false)
+            .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands), false)
+            .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon), false)
+            .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks + "", false)
+            .addField("Attack Range", CONFIG.client.extra.killAura.attackRange + "", false)
+            .color(Color.CYAN);
     }
 }

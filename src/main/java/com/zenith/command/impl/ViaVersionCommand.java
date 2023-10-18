@@ -11,6 +11,8 @@ import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ViaVersionCommand extends Command {
@@ -30,26 +32,18 @@ public class ViaVersionCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("via")
-            .then(literal("on").executes(c -> {
-                CONFIG.client.viaversion.enabled = true;
-                defaultEmbedPopulate(c.getSource().getEmbedBuilder()
-                    .title("ViaVersion Enabled!"));
-            }))
-            .then(literal("off").executes(c -> {
-                CONFIG.client.viaversion.enabled = false;
-                defaultEmbedPopulate(c.getSource().getEmbedBuilder()
-                    .title("ViaVersion Disabled!"));
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.viaversion.enabled = getToggle(c, "toggle");
+                c.getSource().getEmbedBuilder()
+                    .title("ViaVersion " + (CONFIG.client.viaversion.enabled ? "On!" : "Off!"));
+                return 1;
             }))
             .then(literal("autoconfig")
-                      .then(literal("on").executes(c -> {
-                          CONFIG.client.viaversion.autoProtocolVersion = true;
-                          defaultEmbedPopulate(c.getSource().getEmbedBuilder()
-                              .title("ViaVersion AutoConfig Enabled!"));
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.client.viaversion.autoProtocolVersion = false;
-                          defaultEmbedPopulate(c.getSource().getEmbedBuilder()
-                              .title("ViaVersion AutoConfig Disabled!"));
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("ViaVersion AutoConfig " + (CONFIG.client.viaversion.autoProtocolVersion ? "On!" : "Off!"));
+                            return 1;
                       })))
             .then(literal("version")
                       .then(argument("version", wordWithChars()).executes(c -> {
@@ -62,15 +56,16 @@ public class ViaVersionCommand extends Command {
                                   .color(Color.RED);
                           } else {
                               CONFIG.client.viaversion.protocolVersion = closest.getVersion();
-                              defaultEmbedPopulate(c.getSource().getEmbedBuilder()
-                                  .title("ViaVersion Version Updated!"));
+                              c.getSource().getEmbedBuilder()
+                                  .title("ViaVersion Version Updated!");
                           }
                           return 1;
                       })));
     }
 
-    private EmbedCreateSpec.Builder defaultEmbedPopulate(final EmbedCreateSpec.Builder embedBuilder) {
-        return embedBuilder
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder embedBuilder) {
+        embedBuilder
             .addField("ViaVersion", CONFIG.client.viaversion.enabled ? "on" : "off", false)
             .addField("AutoConfig", CONFIG.client.viaversion.autoProtocolVersion ? "on" : "off", false)
             .addField("Version", ProtocolVersion.getProtocol(CONFIG.client.viaversion.protocolVersion).getName(), false)

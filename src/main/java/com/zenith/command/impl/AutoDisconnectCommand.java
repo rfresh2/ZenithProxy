@@ -7,6 +7,7 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
 import com.zenith.module.impl.AutoDisconnect;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class AutoDisconnectCommand extends Command {
@@ -35,84 +38,55 @@ public class AutoDisconnectCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("autoDisconnect")
-                .then(literal("on").executes(c -> {
-                    CONFIG.client.extra.utility.actions.autoDisconnect.enabled = true;
-                    MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
-                    c.getSource().getEmbedBuilder()
-                            .title("AutoDisconnect On!")
-                            .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
-                            .addField("CancelAutoReconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "on" : "off"), false)
-                            .addField("AutoClientDisconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), false)
-                            .addField("Thunder", (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off"), false)
-                            .color(Color.CYAN);
-                }))
-                .then(literal("off").executes(c -> {
-                    CONFIG.client.extra.utility.actions.autoDisconnect.enabled = false;
-                    MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
-                    c.getSource().getEmbedBuilder()
-                            .title("AutoDisconnect Off!")
-                            .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
-                            .addField("CancelAutoReconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "on" : "off"), false)
-                            .addField("AutoClientDisconnect", (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "on" : "off"), false)
-                            .addField("Thunder", (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "on" : "off"), false)
-                            .color(Color.CYAN);
-                }))
-                .then(literal("health").then(argument("healthLevel", integer()).executes(c -> {
-                    CONFIG.client.extra.utility.actions.autoDisconnect.health = IntegerArgumentType.getInteger(c, "healthLevel");
-                    c.getSource().getEmbedBuilder()
-                            .title("AutoDisconnect Health Updated!")
-                            .addField("Status", (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "on" : "off"), false)
-                            .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
-                            .color(Color.CYAN);
-                    return 1;
-                })))
-                .then(literal("cancelAutoReconnect")
-                          .then(literal("on").executes(c -> {
-                                CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = true;
-                                c.getSource().getEmbedBuilder()
-                                        .title("AutoDisconnect CancelAutoReconnect On!")
-                                        .color(Color.CYAN);
-                          }))
-                          .then(literal("off").executes(c -> {
-                                CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = false;
-                                c.getSource().getEmbedBuilder()
-                                        .title("AutoDisconnect CancelAutoReconnect Off!")
-                                        .color(Color.CYAN);
-                          })))
-                .then(literal("autoClientDisconnect")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = true;
-                            MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.utility.actions.autoDisconnect.enabled = getToggle(c, "toggle");
+                MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
+                c.getSource().getEmbedBuilder()
+                    .title("AutoDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "On!" : "Off!"));
+                return 1;
+            }))
+            .then(literal("health").then(argument("healthLevel", integer()).executes(c -> {
+                CONFIG.client.extra.utility.actions.autoDisconnect.health = IntegerArgumentType.getInteger(c, "healthLevel");
+                c.getSource().getEmbedBuilder()
+                    .title("AutoDisconnect Health Updated!");
+                return 1;
+            })))
+            .then(literal("cancelAutoReconnect")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = getToggle(c, "toggle");
                             c.getSource().getEmbedBuilder()
-                                    .title("AutoDisconnect AutoClientDisconnect On!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = false;
-                            MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
+                                .title("AutoDisconnect CancelAutoReconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "On!" : "Off!"));
+                            return 1;
+                      })))
+            .then(literal("autoClientDisconnect")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = getToggle(c, "toggle");
                             c.getSource().getEmbedBuilder()
-                                    .title("AutoDisconnect AutoClientDisconnect Off!")
-                                    .color(Color.CYAN);
-                        })))
-                .then(literal("thunder")
-                        .then(literal("on").executes(c -> {
-                            CONFIG.client.extra.utility.actions.autoDisconnect.thunder = true;
-                            MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
+                                .title("AutoDisconnect AutoClientDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "On!" : "Off!"));
+                            return 1;
+                      })))
+            .then(literal("thunder")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.utility.actions.autoDisconnect.thunder = getToggle(c, "toggle");
                             c.getSource().getEmbedBuilder()
-                                    .title("AutoDisconnect Thunder On!")
-                                    .color(Color.CYAN);
-                        }))
-                        .then(literal("off").executes(c -> {
-                            CONFIG.client.extra.utility.actions.autoDisconnect.thunder = false;
-                            MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
-                            c.getSource().getEmbedBuilder()
-                                    .title("AutoDisconnect Thunder Off!")
-                                    .color(Color.CYAN);
-                        })));
+                                .title("AutoDisconnect Thunder " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "On!" : "Off!"));
+                            return 1;
+                      })));
     }
 
     @Override
     public List<String> aliases() {
         return asList("autoLog");
+    }
+
+    @Override
+    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+        builder
+            .addField("AutoDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled), false)
+            .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
+            .addField("CancelAutoReconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect), false)
+            .addField("AutoClientDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect), false)
+            .addField("Thunder", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.thunder), false)
+            .color(Color.CYAN);
     }
 }
