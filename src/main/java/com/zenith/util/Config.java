@@ -121,8 +121,13 @@ public final class Config {
                     public int walkDistance = 8;
                     // avoid going off ledges even when falls are non-fatal
                     public boolean safeWalk = true;
+                    public long walkDelayTicks = 400;
                     public boolean swingHand = true;
+                    public long swingDelayTicks = 3000;
                     public boolean rotate = true;
+                    public long rotateDelayTicks = 300L;
+                    public boolean jump = false;
+                    public long jumpDelayTicks = 1000L;
                 }
             }
 

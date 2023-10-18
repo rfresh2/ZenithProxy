@@ -29,6 +29,7 @@ public class AntiAFK extends Module {
     private final TickTimer swingTickTimer = new TickTimer();
     private final TickTimer startWalkTickTimer = new TickTimer();
     private final TickTimer rotateTimer = new TickTimer();
+    private final TickTimer jumpTimer = new TickTimer();
     private boolean shouldWalk = false;
     private final List<WalkDirection> walkDirections = asList(
             new WalkDirection(1, 0), new WalkDirection(-1, 0),
@@ -65,9 +66,11 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
-
-            if (CONFIG.client.extra.antiafk.actions.rotate && (!CONFIG.client.extra.spook.enabled || !spookHasTarget())) {
+            if (CONFIG.client.extra.antiafk.actions.rotate) {
                 rotateTick();
+            }
+            if (CONFIG.client.extra.antiafk.actions.jump) {
+                jumpTick();
             }
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
@@ -99,17 +102,12 @@ public class AntiAFK extends Module {
             rotateTimer.reset();
             shouldWalk = false;
             currentPathingGoal = null;
+            jumpTimer.reset();
         }
     }
 
-    private boolean spookHasTarget() {
-        return MODULE_MANAGER.getModule(Spook.class)
-                .map(m -> m.hasTarget.get())
-                .orElse(false);
-    }
-
     private void rotateTick() {
-        if (rotateTimer.tick(300L, true)) {
+        if (rotateTimer.tick(CONFIG.client.extra.antiafk.actions.rotateDelayTicks, true)) {
             PATHING.rotate(
                 -180 + (360 * ThreadLocalRandom.current().nextFloat()),
                 -90 + (180 * ThreadLocalRandom.current().nextFloat()),
@@ -118,12 +116,18 @@ public class AntiAFK extends Module {
         }
     }
 
+    private void jumpTick() {
+        if (jumpTimer.tick(CONFIG.client.extra.antiafk.actions.jumpDelayTicks, true)) {
+            PATHING.jump(MOVEMENT_PRIORITY + 1);
+        }
+    }
+
     public synchronized void handlePlayerPosRotate() {
         this.shouldWalk = false;
     }
 
     private void walkTick() {
-        if (startWalkTickTimer.tick(400L, true)) {
+        if (startWalkTickTimer.tick(CONFIG.client.extra.antiafk.actions.walkDelayTicks, true)) {
             shouldWalk = true;
             final WalkDirection directions = walkDirectionIterator.next();
             currentPathingGoal = Pathing.getCurrentPlayerPos()
@@ -154,7 +158,7 @@ public class AntiAFK extends Module {
     }
 
     private void swingTick() {
-        if (swingTickTimer.tick(3000L, true)) {
+        if (swingTickTimer.tick(CONFIG.client.extra.antiafk.actions.swingDelayTicks, true)) {
             // todo: move this to PlayerSimulation and assign priority so it doesn't conflict with other modules
             sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
         }

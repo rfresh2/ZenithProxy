@@ -25,10 +25,15 @@ public class AntiAFKCommand extends Command {
             "Configure the AntiAFK feature",
             asList("on/off",
                    "rotate on/off",
+                   "rotate delay <int>",
                    "swing on/off",
+                   "swing delay <int>",
                    "walk on/off",
+                   "walk delay <int>",
                    "safeWalk on/off",
-                   "walkDistance <int>"
+                   "walkDistance <int>",
+                   "jump on/off",
+                   "jump delay <int>"
             ),
             aliases()
         );
@@ -59,7 +64,13 @@ public class AntiAFKCommand extends Command {
                           CONFIG.client.extra.antiafk.actions.rotate = false;
                           defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                               .title("Rotate Off!");
-                      })))
+                      }))
+                      .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.rotateDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                          defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                              .title("Rotate Delay Set!");
+                          return 1;
+                      }))))
             .then(literal("swing")
                       .then(literal("on").executes(c -> {
                           CONFIG.client.extra.antiafk.actions.swingHand = true;
@@ -70,7 +81,13 @@ public class AntiAFKCommand extends Command {
                           CONFIG.client.extra.antiafk.actions.swingHand = false;
                           defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                               .title("Swing Off!");
-                      })))
+                      }))
+                      .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.swingDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                          defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                              .title("Swing Delay Set!");
+                          return 1;
+                      }))))
             .then(literal("walk")
                       .then(literal("on").executes(c -> {
                           CONFIG.client.extra.antiafk.actions.walk = true;
@@ -81,7 +98,13 @@ public class AntiAFKCommand extends Command {
                             CONFIG.client.extra.antiafk.actions.walk = false;
                             defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                                 .title("Walk Off!");
-                        })))
+                        }))
+                      .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.walkDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                          defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                              .title("Walk Delay Set!");
+                          return 1;
+                      }))))
             .then(literal("safewalk")
                       .then(literal("on").executes(c -> {
                           CONFIG.client.extra.antiafk.actions.safeWalk = true;
@@ -99,7 +122,24 @@ public class AntiAFKCommand extends Command {
                           defaultEmbedPopulate(c.getSource().getEmbedBuilder())
                               .title("Walk Distance Set!");
                           return 1;
-                      })));
+                      })))
+            .then(literal("jump")
+                      .then(literal("on").executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.jump = true;
+                          defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                              .title("Jump On!");
+                      }))
+                      .then(literal("off").executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.jump = false;
+                          defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                              .title("Jump Off!");
+                      }))
+                      .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.jumpDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                          defaultEmbedPopulate(c.getSource().getEmbedBuilder())
+                              .title("Jump Delay Set!");
+                          return 1;
+                      }))));
     }
 
     @Override
@@ -110,11 +150,16 @@ public class AntiAFKCommand extends Command {
     private EmbedCreateSpec.Builder defaultEmbedPopulate(final EmbedCreateSpec.Builder embedBuilder) {
         return embedBuilder
             .addField("AntiAFK", CONFIG.client.extra.antiafk.enabled ? "on" : "off", false)
-            .addField("Rotate", CONFIG.client.extra.antiafk.actions.rotate ? "on" : "off", false)
-            .addField("Swing", CONFIG.client.extra.antiafk.actions.swingHand ? "on" : "off", false)
-            .addField("Walk", CONFIG.client.extra.antiafk.actions.walk ? "on" : "off", false)
+            .addField("Rotate", (CONFIG.client.extra.antiafk.actions.rotate ? "on" : "off")
+                + " - Delay: " + CONFIG.client.extra.antiafk.actions.rotateDelayTicks, false)
+            .addField("Swing", (CONFIG.client.extra.antiafk.actions.swingHand ? "on" : "off")
+                + " - Delay: " + CONFIG.client.extra.antiafk.actions.swingDelayTicks, false)
+            .addField("Walk", (CONFIG.client.extra.antiafk.actions.walk ? "on" : "off")
+                + " - Delay: " + CONFIG.client.extra.antiafk.actions.walkDelayTicks, false)
             .addField("Safe Walk", CONFIG.client.extra.antiafk.actions.safeWalk ? "on" : "off", false)
             .addField("Walk Distance", "" + CONFIG.client.extra.antiafk.actions.walkDistance, false)
+            .addField("Jump", (CONFIG.client.extra.antiafk.actions.jump ? "on" : "off")
+                + " - Delay: " + CONFIG.client.extra.antiafk.actions.jumpDelayTicks, false)
             .color(Color.CYAN);
     }
 }
