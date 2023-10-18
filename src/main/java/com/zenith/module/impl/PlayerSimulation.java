@@ -185,11 +185,14 @@ public class PlayerSimulation extends Module {
         this.isTouchingWater = World.isTouchingWater(playerCollisionBox);
 
         if (movementInput.isJumping()) {
-            // todo: water jumping physics
-            if (this.onGround && jumpingCooldown == 0) {
+            if (this.onGround && jumpingCooldown == 0 && !isTouchingWater) {
                 jump();
                 jumpingCooldown = 10;
+            } else if (isTouchingWater) {
+                this.velocity.setY(this.velocity.getY() + 0.04F);
             }
+            // todo: lava swimming
+            // todo: full jump when at water surface
         } else jumpingCooldown = 0;
 
         this.movementInput.movementForward *= 0.98f;
