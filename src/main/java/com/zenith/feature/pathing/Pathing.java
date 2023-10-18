@@ -83,6 +83,10 @@ public class Pathing {
         this.moveReq(new MovementInputRequest(Optional.empty(), Optional.empty(), Optional.empty(), priority));
     }
 
+    public void jump(final int priority) {
+        this.moveReq(new MovementInputRequest(Optional.of(jumpInput()), Optional.empty(), Optional.empty(), priority));
+    }
+
     public void handleTick(final ClientTickEvent event) {
         this.movementInputRequests.stream()
             .max(Comparator.comparingInt(MovementInputRequest::priority))
@@ -117,6 +121,18 @@ public class Pathing {
             false,
             false,
             true,
+            false
+        );
+    }
+
+    public static Input jumpInput() {
+        return new Input(
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
             false
         );
     }

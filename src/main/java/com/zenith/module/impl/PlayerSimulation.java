@@ -66,6 +66,7 @@ public class PlayerSimulation extends Module {
     private float stepHeight = 0.6F;
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
+    private int jumpingCooldown;
 
     @Override
     public Subscription subscribeEvents() {
@@ -168,6 +169,7 @@ public class PlayerSimulation extends Module {
     }
 
     private synchronized void tick(final ClientTickEvent event) {
+        if (this.jumpingCooldown > 0) --this.jumpingCooldown;
         processTaskQueue();
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) return;
         if (waitTicks-- > 0) return;
@@ -181,6 +183,15 @@ public class PlayerSimulation extends Module {
         isSneaking = movementInput.sneaking;
         isSprinting = movementInput.sprinting;
         this.isTouchingWater = World.isTouchingWater(playerCollisionBox);
+
+        if (movementInput.isJumping()) {
+            // todo: water jumping physics
+            if (this.onGround && jumpingCooldown == 0) {
+                jump();
+                jumpingCooldown = 10;
+            }
+        } else jumpingCooldown = 0;
+
         this.movementInput.movementForward *= 0.98f;
         this.movementInput.movementSideways *= 0.98f;
         final MutableVec3d movementInputVec = new MutableVec3d(movementInput.movementSideways, 0, movementInput.movementForward);
@@ -242,6 +253,15 @@ public class PlayerSimulation extends Module {
             this.lastSprinting = this.isSprinting;
         }
         this.movementInput.reset();
+    }
+
+    private void jump() {
+        this.velocity.setY(0.42);
+        if (this.isSprinting) {
+            float sprintAngle = yaw * (float) (Math.PI / 180.0);
+            this.velocity.setX(this.velocity.getX() - (Math.sin(sprintAngle) * 0.2F));
+            this.velocity.setY(Math.cos(sprintAngle) * 0.2F);
+        }
     }
 
     public synchronized void handlePlayerPosRotate(final int teleportId) {
