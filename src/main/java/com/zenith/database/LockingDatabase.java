@@ -66,6 +66,7 @@ public abstract class LockingDatabase extends Database {
 
     @Override
     public void start() {
+        if (this.isRunning) return;
         super.start();
         this.lockAcquired.set(false);
         synchronized (this) {

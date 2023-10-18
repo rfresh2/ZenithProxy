@@ -5,13 +5,16 @@ import com.zenith.event.Subscription;
 public abstract class Database {
     protected final QueryExecutor queryExecutor;
     private Subscription eventSubscription;
+    boolean isRunning = false;
 
     public Database(final QueryExecutor queryExecutor) {
         this.queryExecutor = queryExecutor;
     }
 
     public void start() {
-        subscribeEvents();
+        if (!isRunning)
+            subscribeEvents();
+        isRunning = true;
     }
 
     public void stop() {
