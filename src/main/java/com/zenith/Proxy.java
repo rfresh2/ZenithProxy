@@ -51,6 +51,7 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,6 +83,7 @@ public class Proxy {
     private Optional<Boolean> isPrioBanned = Optional.empty();
     volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
+    private AtomicBoolean loggingIn = new AtomicBoolean(false);
     @Getter
     @Setter
     private AutoUpdater autoUpdater;
@@ -193,17 +195,16 @@ public class Proxy {
     }
 
     private void serverHealthCheck() {
-        if (CONFIG.server.enabled && CONFIG.server.healthCheck) {
+        if (!CONFIG.server.enabled || !CONFIG.server.healthCheck) return;
+        if (server != null && server.isListening()) return;
+        this.startServer();
+        SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
             if (server == null || !server.isListening()) {
-                this.startServer();
-                Wait.waitALittle(30);
-                if (server == null || !server.isListening()) {
-                    SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
-                    CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
-                    stop();
-                }
+                SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
+                CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
+                stop();
             }
-        }
+        }, 30, TimeUnit.SECONDS);
     }
 
     private void tablistUpdate() {
@@ -280,7 +281,7 @@ public class Proxy {
             EVENT_BUS.post(new ProxyLoginFailedEvent());
             getActiveConnections().forEach(connection -> connection.disconnect("Login failed"));
             SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
-                EVENT_BUS.post(new DisconnectEvent("Login Failed"));
+                EVENT_BUS.post(new DisconnectEvent(LOGIN_FAILED));
             }, 1L, TimeUnit.SECONDS);
             return;
         }
@@ -289,11 +290,8 @@ public class Proxy {
             throw new IllegalStateException("Already connected!");
         }
 
-        String address = CONFIG.client.server.address;
-        int port = CONFIG.client.server.port;
-
-        CLIENT_LOG.info("Connecting to {}:{}...", address, port);
-        this.client = new ClientSession(address, port, this.protocol, this);
+        CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
+        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, this.protocol, this);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
@@ -376,17 +374,21 @@ public class Proxy {
     }
 
     public void logIn() {
+        loggingIn.set(true);
         AUTH_LOG.info("Logging in {}...", CONFIG.authentication.username);
         if (this.authenticator == null) {
             this.authenticator = new Authenticator();
         }
         int tries = 0;
         while (tries < 3 && !retrieveLoginTaskResult(loginTask())) {
+            if (!loggingIn.get()) break;
             tries++;
             AUTH_LOG.warn("Failed login attempt " + tries);
             // wait random time between 3 and 10 seconds
             Wait.waitALittle((int) (3 + (Math.random() * 7.0)));
         }
+        if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
+        loggingIn.set(false);
         if (tries == 3) {
             throw new RuntimeException("Auth failed");
         }
@@ -409,7 +411,17 @@ public class Proxy {
 
     public boolean retrieveLoginTaskResult(Future<Boolean> loginTask) {
         try {
-            return loginTask.get(CONFIG.authentication.accountType == Config.Authentication.AccountType.DEVICE_CODE ? 300L : 10L, TimeUnit.SECONDS);
+            long maxWait = CONFIG.authentication.accountType == Config.Authentication.AccountType.DEVICE_CODE ? 300L : 10L;
+            long currentWait = 0;
+            while (!loginTask.isDone() && currentWait < maxWait) {
+                if (!loggingIn.get()) { // allow login to be cancelled
+                    loginTask.cancel(true);
+                    return false;
+                }
+                Wait.waitALittle(1);
+                currentWait++;
+            }
+            return loginTask.get(1L, TimeUnit.SECONDS);
         } catch (Exception e) {
             loginTask.cancel(true);
             return false;
@@ -443,6 +455,11 @@ public class Proxy {
 
     private boolean autoReconnectIsInProgress() {
         return this.autoReconnectFuture.isPresent();
+    }
+
+    // returns true if we were previously trying to log in
+    public boolean cancelLogin() {
+        return this.loggingIn.getAndSet(false);
     }
 
     public List<ServerConnection> getSpectatorConnections() {
@@ -524,8 +541,7 @@ public class Proxy {
                         EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
                         this.lastActiveHoursConnect = Instant.now();
                         disconnect(SYSTEM_DISCONNECT);
-                        Wait.waitALittle(30);
-                        connectAndCatchExceptions();
+                        SCHEDULED_EXECUTOR_SERVICE.schedule(this::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
                     });
         }
     }

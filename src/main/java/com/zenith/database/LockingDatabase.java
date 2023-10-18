@@ -2,7 +2,6 @@ package com.zenith.database;
 
 import com.zenith.Proxy;
 import com.zenith.util.Wait;
-import lombok.Data;
 import org.jooq.Query;
 import org.redisson.api.RLock;
 
@@ -54,7 +53,7 @@ public abstract class LockingDatabase extends Database {
         try {
             final long lastRecordSeenTimeEpochMs = getLastEntryTime().toEpochMilli();
             synchronized (this.insertQueue) {
-                while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().getInstant().toEpochMilli()
+                while (nonNull(this.insertQueue.peek()) && this.insertQueue.peek().instant().toEpochMilli()
                         <= lastRecordSeenTimeEpochMs + 5000 // buffer for latency or time shift
                 ) {
                     this.insertQueue.poll();
@@ -103,7 +102,7 @@ public abstract class LockingDatabase extends Database {
     public void onLockAcquired() {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
         writeLockInfo();
-        Wait.waitALittleMs(20000); // buffer for any lock releasers to finish up remaining writes
+        Wait.waitALittle(20); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
             queryExecutorFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
@@ -220,7 +219,7 @@ public abstract class LockingDatabase extends Database {
             try {
                 final LockingDatabase.InsertInstance insertInstance = insertQueue.peek();
                 if (nonNull(insertInstance)) {
-                    queryExecutor.execute(() -> Objects.requireNonNull(insertQueue.poll()).getQuery());
+                    queryExecutor.execute(() -> Objects.requireNonNull(insertQueue.poll()).query());
                 }
             } catch (final Exception e) {
                 DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);
@@ -229,9 +228,6 @@ public abstract class LockingDatabase extends Database {
         Wait.waitRandomWithinMsBound(100); // adds some jitter
     }
 
-    @Data
-    public static final class InsertInstance {
-        private final Instant instant;
-        private final Query query;
-    }
+
+    public record InsertInstance(Instant instant, Query query) { }
 }

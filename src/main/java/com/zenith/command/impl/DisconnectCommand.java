@@ -25,9 +25,16 @@ public class DisconnectCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("disconnect").executes(c -> {
             if (!Proxy.getInstance().isConnected()) {
-                if (Proxy.getInstance().cancelAutoReconnect()) {
+                boolean loginCancelled = Proxy.getInstance().cancelLogin();
+                boolean autoReconnectCancelled = Proxy.getInstance().cancelAutoReconnect();
+                if (autoReconnectCancelled) {
                     c.getSource().getEmbedBuilder()
-                            .title("AutoReconnect Cancelled");
+                        .title("AutoReconnect Cancelled");
+                    return;
+                }
+                if (loginCancelled) {
+                    c.getSource().getEmbedBuilder()
+                            .title("Login Cancelled");
                     return;
                 }
                 c.getSource().getEmbedBuilder()

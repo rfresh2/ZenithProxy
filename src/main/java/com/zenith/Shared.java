@@ -108,11 +108,18 @@ public class Shared {
     public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
     public static final String AUTO_DISCONNECT = "AutoDisconnect";
+    public static final String LOGIN_FAILED = "Login Failed";
     public static boolean isReconnectableDisconnect(final String reason) {
-        if (reason.equals(SYSTEM_DISCONNECT) || reason.equals(MANUAL_DISCONNECT) || reason.equals(MinecraftConstants.SERVER_CLOSING_MESSAGE)) {
+        if (reason.equals(SYSTEM_DISCONNECT)
+            || reason.equals(MANUAL_DISCONNECT)
+            || reason.equals(MinecraftConstants.SERVER_CLOSING_MESSAGE)
+            || reason.equals(LOGIN_FAILED)
+        ) {
             return false;
         } else if (reason.equals(AUTO_DISCONNECT)) {
-            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance().getIsPrio().orElse(false));
+            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance()
+                .getIsPrio()
+                .orElse(false));
         } else {
             return true;
         }

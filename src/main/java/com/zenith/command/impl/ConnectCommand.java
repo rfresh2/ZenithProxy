@@ -5,12 +5,10 @@ import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.rest.util.Color;
 
 import java.util.List;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.DISCORD_LOG;
+import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 
 public class ConnectCommand extends Command {
@@ -30,16 +28,7 @@ public class ConnectCommand extends Command {
                 c.getSource().getEmbedBuilder()
                         .title("Already Connected!");
             } else {
-                try {
-                    Proxy.getInstance().connect();
-                } catch (final Exception e) {
-                    DISCORD_LOG.error("Failed to connect", e);
-                    c.getSource().getEmbedBuilder()
-                            .title("Proxy Failed to Connect")
-                            .color(Color.RUBY)
-                            .addField("Server", CONFIG.client.server.address, true)
-                            .addField("Proxy IP", CONFIG.server.getProxyAddress(), false);
-                }
+                SCHEDULED_EXECUTOR_SERVICE.execute(Proxy.getInstance()::connectAndCatchExceptions);
             }
         });
     }

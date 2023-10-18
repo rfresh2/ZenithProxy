@@ -7,8 +7,8 @@ import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
-import com.zenith.util.Wait;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
@@ -38,8 +38,7 @@ public class AutoRespawn extends Module {
 
     public void handleDeathEvent(final DeathEvent event) {
         tickCounter = -tickEventRespawnDelay - (CONFIG.client.extra.autoRespawn.delayMillis / 50);
-        Wait.waitALittleMs(Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000));
-        checkAndRespawn();
+        SCHEDULED_EXECUTOR_SERVICE.schedule(this::checkAndRespawn, Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000), TimeUnit.MILLISECONDS);
     }
 
 
