@@ -16,6 +16,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
@@ -46,6 +47,7 @@ import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
 import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
+import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
@@ -236,6 +238,7 @@ public class Shared {
         .registerInbound(ClientboundSetHealthPacket.class, new SetHealthHandler())
         .registerInbound(ClientboundSetSubtitleTextPacket.class, new SetSubtitleTextHandler())
         .registerInbound(ClientboundPlayerPositionPacket.class, new PlayerPositionHandler())
+        .registerInbound(ClientboundSoundPacket.class, new SoundHandler())
         .registerInbound(ClientboundSetExperiencePacket.class, new SetExperienceHandler())
         .registerInbound(ClientboundRespawnPacket.class, new RespawnHandler())
         .registerInbound(ClientboundContainerSetSlotPacket.class, new ContainerSetSlotHandler())
@@ -283,6 +286,7 @@ public class Shared {
         .registerInbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
         // Outbound
         .registerOutbound(ServerboundChatPacket.class, new OutgoingChatHandler())
+        .registerOutbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())
         //Postoutgoing
         .registerPostOutbound(ServerboundPlayerCommandPacket.class, new PostOutgoingPlayerCommandHandler())
         .registerPostOutbound(ServerboundSetCarriedItemPacket.class, new PostOutgoingSetCarriedItemHandler())

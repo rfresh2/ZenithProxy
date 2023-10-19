@@ -12,9 +12,10 @@ import static com.zenith.Shared.CACHE;
 public class ContainerSetContentHandler implements AsyncIncomingHandler<ClientboundContainerSetContentPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundContainerSetContentPacket packet, @NonNull ClientSession session) {
-        if (packet.getContainerId() == 0)  { //player inventory
+        if (packet.getContainerId() == 0)  { // player inventory
             CACHE.getPlayerCache().setInventory(packet.getItems());
         }
+        CACHE.getPlayerCache().getActionId().set(packet.getStateId());
         SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
         return true;
     }

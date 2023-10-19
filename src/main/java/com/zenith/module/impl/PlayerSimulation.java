@@ -100,7 +100,7 @@ public class PlayerSimulation extends Module {
     public void doRotate(float yaw, float pitch) {
         yaw = shortestRotation(yaw);
         pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
-        pitch = ((int) pitch * 10.0f) / 10.0f; // always clamp pitch to 1 decimal place to avoid flagging for very small adjustments
+        pitch = ((int) (pitch * 10.0f)) / 10.0f; // always clamp pitch to 1 decimal place to avoid flagging for very small adjustments
         this.yaw = yaw;
         this.pitch = pitch;
     }

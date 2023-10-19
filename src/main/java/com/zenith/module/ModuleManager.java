@@ -38,14 +38,15 @@ public class ModuleManager {
 
     public void init() {
         asList(
-            new PlayerSimulation(),
             new AntiAFK(),
             new AutoDisconnect(),
             new AutoEat(),
+            new AutoFish(),
             new AutoReply(),
             new AutoRespawn(),
             new AutoTotem(),
             new KillAura(),
+            new PlayerSimulation(),
             new Spammer(),
             new Spook()
         ).forEach(m -> {

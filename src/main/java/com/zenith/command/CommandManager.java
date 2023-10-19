@@ -33,6 +33,7 @@ public class CommandManager {
            new AuthCommand(),
            new AutoDisconnectCommand(),
            new AutoEatCommand(),
+           new AutoFishCommand(),
            new AutoReconnectCommand(),
            new AutoReplyCommand(),
            new AutoRespawnCommand(),

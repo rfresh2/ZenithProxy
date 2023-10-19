@@ -21,7 +21,6 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoTotem extends Module {
-    private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
     private boolean swapping = false;
     private int delay = 0;
     private static final int MOVEMENT_PRIORITY = 1000;
@@ -86,12 +85,12 @@ public class AutoTotem extends Module {
             final ItemStack stack = inventory[i];
             if (nonNull(stack) && stack.getId() == 1117) {
                 if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
-                    sendClientPacketsAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
-                                           new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)),
-                                           new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(i, offhand)));
+                    sendClientPacketsAsync(new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
+                                           new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)),
+                                           new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(i, offhand)));
                 } else {
-                    sendClientPacketsAsync(new ServerboundContainerClickPacket(0, actionId++, i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
-                                           new ServerboundContainerClickPacket(0, actionId++, 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(45, stack)));
+                    sendClientPacketsAsync(new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
+                                           new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(45, stack)));
                 }
                 CLIENT_LOG.info("Swapping to totem");
                 delay = 5;

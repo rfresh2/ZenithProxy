@@ -60,6 +60,7 @@ public final class Config {
             public AutoReply autoReply = new AutoReply();
             public Stalk stalk = new Stalk();
             public AutoEat autoEat = new AutoEat();
+            public AutoFish autoFish = new AutoFish();
             public KillAura killAura = new KillAura();
             public AutoTotem autoTotem = new AutoTotem();
             public Chat chat = new Chat();
@@ -108,6 +109,13 @@ public final class Config {
             public static final class Stalk {
                 public boolean enabled = false;
                 public List<String> stalkList = new ArrayList<>();
+            }
+
+            public static final class AutoFish {
+                public boolean enabled = false;
+                public long castDelay = 20;
+                public float yaw = 0.0f;
+                public float pitch = 0.0f;
             }
 
             public static final class AntiAFK {

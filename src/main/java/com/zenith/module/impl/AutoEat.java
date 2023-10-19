@@ -26,7 +26,6 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class AutoEat extends Module {
-    private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
     private final FoodManager foodManager = new FoodManager();
     private int delay = 0;
     private boolean swapping = false;
@@ -107,7 +106,7 @@ public class AutoEat extends Module {
             if (nonNull(itemStack)) {
                 if (foodManager.isSafeFood(itemStack.getId())) {
                     sendClientPacketAsync(new ServerboundContainerClickPacket(0,
-                                                                              actionId++,
+                                                                              CACHE.getPlayerCache().getActionId().incrementAndGet(),
                                                                               i,
                                                                               ContainerActionType.MOVE_TO_HOTBAR_SLOT,
                                                                               MoveToHotbarAction.SLOT_1,
@@ -140,7 +139,7 @@ public class AutoEat extends Module {
             if (foodManager.isFood(offhandStack.getId())) {
                 isEating = true;
                 delay = 50;
-                sendClientPacketAsync(new ServerboundUseItemPacket(Hand.OFF_HAND, actionId++));
+                sendClientPacketAsync(new ServerboundUseItemPacket(Hand.OFF_HAND, CACHE.getPlayerCache().getActionId().incrementAndGet()));
                 return;
             }
         }
@@ -150,7 +149,7 @@ public class AutoEat extends Module {
             if (foodManager.isFood(mainHandStack.getId())) {
                 isEating = true;
                 delay = 50;
-                sendClientPacketAsync(new ServerboundUseItemPacket(Hand.MAIN_HAND, actionId++));
+                sendClientPacketAsync(new ServerboundUseItemPacket(Hand.MAIN_HAND, CACHE.getPlayerCache().getActionId().incrementAndGet()));
             }
         }
     }
@@ -158,7 +157,6 @@ public class AutoEat extends Module {
     @Override
     public void clientTickStopped() {
         swapping = false;
-        actionId = 0;
         delay = 0;
         lastAutoEatOutOfFoodWarning = Instant.EPOCH;
         isEating = false;

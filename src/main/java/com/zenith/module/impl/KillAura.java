@@ -45,7 +45,6 @@ public class KillAura extends Module {
     private int delay = 0;
     private boolean isAttacking = false;
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
-    private int actionId = 0; // todo: might need to track this in cache. this will be inaccurate incrementing in many cases
     private boolean swapping = false;
     private static final int MOVEMENT_PRIORITY = 500;
 
@@ -104,7 +103,7 @@ public class KillAura extends Module {
     private Entity findTarget() {
         for (Entity entity : CACHE.getEntityCache().getEntities().values()) {
             if (!validTarget(entity)) continue;
-            if (distanceToSelf(entity) > CONFIG.client.extra.killAura.attackRange) continue;
+            if (CACHE.getPlayerCache().distanceToSelf(entity) > CONFIG.client.extra.killAura.attackRange) continue;
             return entity;
         }
         return null;
@@ -146,13 +145,6 @@ public class KillAura extends Module {
         return true;
     }
 
-    private double distanceToSelf(final Entity entity) {
-        return Math.sqrt(
-                Math.pow(CACHE.getPlayerCache().getX() - entity.getX(), 2)
-                        + Math.pow(CACHE.getPlayerCache().getY() - entity.getY(), 2)
-                        + Math.pow(CACHE.getPlayerCache().getZ() - entity.getZ(), 2));
-    }
-
     public boolean switchToWeapon() {
         if (!CONFIG.client.extra.killAura.switchWeapon) {
             return true;
@@ -181,7 +173,7 @@ public class KillAura extends Module {
             final ItemStack stack = inventory[i];
             if (nonNull(stack) && isWeapon(stack.getId())) {
                 sendClientPacketAsync(new ServerboundContainerClickPacket(0,
-                                                                          actionId++,
+                                                                          CACHE.getPlayerCache().getActionId().incrementAndGet(),
                                                                           i,
                                                                           ContainerActionType.MOVE_TO_HOTBAR_SLOT,
                                                                           MoveToHotbarAction.SLOT_2,

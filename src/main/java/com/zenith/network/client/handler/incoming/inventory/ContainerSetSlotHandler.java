@@ -15,6 +15,7 @@ public class ContainerSetSlotHandler implements AsyncIncomingHandler<Clientbound
             CACHE.getPlayerCache().setInventorySlot(packet.getItem(), packet.getSlot());
             SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
         }
+        CACHE.getPlayerCache().getActionId().set(packet.getStateId());
         return true;
     }
 }

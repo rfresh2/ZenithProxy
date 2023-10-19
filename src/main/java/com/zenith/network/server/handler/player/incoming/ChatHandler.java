@@ -3,6 +3,7 @@ package com.zenith.network.server.handler.player.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.Proxy;
+import com.zenith.Shared;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.queue.Queue;
@@ -41,6 +42,7 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cschat &7- &8Toggles if spectators are allowed to send public chats."), false));
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&csync &7- &8Syncs current player inventory with server"), false));
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cchunksync &7- &8Syncs server chunks to the current player"), false));
+                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cautofish sync &7- &8Sets the AutoFish rotation to the current player's rotation"), false));
                 return false;
             } else if ("!dc".equalsIgnoreCase(message)) {
                 Proxy.getInstance().getClient().disconnect(MANUAL_DISCONNECT);
@@ -88,7 +90,15 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 return false;
             } else if (lowerCase.startsWith("!chunksync")) {
                 ChunkCache.sync();
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSync chunks complete"), false));
+                session.send(new ClientboundSystemChatPacket(MineDown.parse(
+                    "&7[&9ZenithProxy&7]&r &cSync chunks complete"), false));
+                return false;
+            } else if (lowerCase.startsWith("!autofish sync")) {
+                // normalize yaw and pitch to -180 to 180 and -90 to 90
+                CONFIG.client.extra.autoFish.yaw = ((180.0f + CACHE.getPlayerCache().getYaw()) % 360.0f) - 180.0f;
+                CONFIG.client.extra.autoFish.pitch = ((90.0f + CACHE.getPlayerCache().getPitch()) % 180.0f) - 90.0f;
+                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cAutoFish rotation synced to player!"), false));
+                Shared.saveConfigAsync();
                 return false;
             } else {
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cUnknown command: &o%msg%", "msg", message), false));
