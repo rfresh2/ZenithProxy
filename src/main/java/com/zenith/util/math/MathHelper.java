@@ -41,6 +41,17 @@ public class MathHelper {
         return f;
     }
 
+    public static float wrapPitch(float pitch) {
+        float f = pitch % 180.0F;
+        if (f >= 90.0F) f -= 180.0F;
+        if (f < -90.0F) f += 180.0F;
+        return f;
+    }
+
+    public static float wrapYaw(float yaw) {
+        return wrapDegrees(yaw);
+    }
+
     public static float clamp(final float value, final float min, final float max) {
         return Math.max(min, Math.min(max, value));
     }

@@ -9,6 +9,7 @@ import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.queue.Queue;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.util.math.MathHelper;
 import de.themoep.minedown.adventure.MineDown;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
@@ -95,8 +96,8 @@ public class ChatHandler implements IncomingHandler<ServerboundChatPacket, Serve
                 return false;
             } else if (lowerCase.startsWith("!autofish sync")) {
                 // normalize yaw and pitch to -180 to 180 and -90 to 90
-                CONFIG.client.extra.autoFish.yaw = ((180.0f + CACHE.getPlayerCache().getYaw()) % 360.0f) - 180.0f;
-                CONFIG.client.extra.autoFish.pitch = ((90.0f + CACHE.getPlayerCache().getPitch()) % 180.0f) - 90.0f;
+                CONFIG.client.extra.autoFish.yaw = MathHelper.wrapYaw(CACHE.getPlayerCache().getYaw());
+                CONFIG.client.extra.autoFish.pitch = MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch());
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cAutoFish rotation synced to player!"), false));
                 Shared.saveConfigAsync();
                 return false;

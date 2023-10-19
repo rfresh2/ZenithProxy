@@ -7,7 +7,9 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
 import com.zenith.module.impl.AutoFish;
+import com.zenith.util.math.MathHelper;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.*;
@@ -48,8 +50,8 @@ public class AutoFishCommand extends Command {
             .then(literal("rotation")
                       .then(literal("sync").executes(c -> {
                           // normalize yaw and pitch to -180 to 180 and -90 to 90
-                          CONFIG.client.extra.autoFish.yaw = ((180.0f + CACHE.getPlayerCache().getYaw()) % 360.0f) - 180.0f;
-                          CONFIG.client.extra.autoFish.pitch = ((90.0f + CACHE.getPlayerCache().getPitch()) % 180.0f) - 90.0f;
+                          CONFIG.client.extra.autoFish.yaw = MathHelper.wrapYaw(CACHE.getPlayerCache().getYaw());
+                          CONFIG.client.extra.autoFish.pitch = MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch());
                             c.getSource().getEmbedBuilder()
                                 .title("Rotation synced to player!");
                       }))
@@ -69,6 +71,7 @@ public class AutoFishCommand extends Command {
             .addField("AutoFish", toggleStr(CONFIG.client.extra.autoFish.enabled), false)
             .addField("Cast Delay", CONFIG.client.extra.autoFish.castDelay + " ticks", false)
             .addField("Yaw", ""+CONFIG.client.extra.autoFish.yaw, false)
-            .addField("Pitch", ""+CONFIG.client.extra.autoFish.pitch, false);
+            .addField("Pitch", ""+CONFIG.client.extra.autoFish.pitch, false)
+            .color(Color.CYAN);
     }
 }
