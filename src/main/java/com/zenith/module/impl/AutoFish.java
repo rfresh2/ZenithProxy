@@ -57,12 +57,20 @@ public class AutoFish extends Module {
 
     @Override
     public void clientTickStarting() {
-        fishHookEntityId = -1;
+        reset();
     }
 
     @Override
     public void clientTickStopped() {
+        reset();
+    }
+
+    private void reset() {
         fishHookEntityId = -1;
+        castTimer.reset();
+        delay = 0;
+        swapping = false;
+        castTime = Instant.EPOCH;
     }
 
     public void handleEntityFishHookSpawnEvent(final EntityFishHookSpawnEvent event) {
