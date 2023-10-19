@@ -301,8 +301,10 @@ public class DiscordBot {
         } catch (final IllegalStateException e) {
             if (e.getMessage().contains("Backpressure overflow")) {
                 DISCORD_LOG.error("Caught backpressure overflow, restarting discord session", e);
-                this.stop(false);
-                this.start();
+                SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+                    this.stop(false);
+                    this.start();
+                });
             } else throw e;
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating discord presence", e);
