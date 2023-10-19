@@ -118,8 +118,11 @@ public class AutoFish extends Module {
 
     private void cast() {
         // rotate to water if needed
-        if (Math.abs(MathHelper.wrapPitch(CACHE.getPlayerCache().getYaw()) - MathHelper.wrapDegrees(CONFIG.client.extra.autoFish.yaw)) > 1.0
-            || Math.abs(MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch()) - MathHelper.wrapDegrees(CONFIG.client.extra.autoFish.pitch)) > 1.0) {
+        float yawDiff = Math.abs(MathHelper.wrapPitch(CACHE.getPlayerCache()
+                                                      .getYaw()) - MathHelper.wrapDegrees(CONFIG.client.extra.autoFish.yaw));
+        float pitchDiff = Math.abs(MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch()) - MathHelper.wrapDegrees(CONFIG.client.extra.autoFish.pitch));
+        if ((yawDiff > 1.0 && yawDiff < 180.0f)
+            || (pitchDiff > 1.0 && pitchDiff < 90.0f)) {
             PATHING.rotate(CONFIG.client.extra.autoFish.yaw, CONFIG.client.extra.autoFish.pitch, MOVEMENT_PRIORITY);
             delay = 5;
             return;
