@@ -48,10 +48,7 @@ import reactor.netty.transport.ProxyProvider;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -81,6 +78,9 @@ public class DiscordBot {
 
     @Getter
     private boolean isRunning;
+    private ScheduledFuture<?> presenceUpdateFuture;
+    private ScheduledFuture<?> mainChannelMessageQueueProcessFuture;
+    private ScheduledFuture<?> relayChannelMessageQueueProcessFuture;
     private Subscription eventSubscription;
 
     public DiscordBot() {
@@ -187,11 +187,11 @@ public class DiscordBot {
         if (CONFIG.discord.isUpdating) {
             handleProxyUpdateComplete();
         }
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePresence, 0L,
+        this.presenceUpdateFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePresence, 0L,
                 15L, // discord rate limit
                 TimeUnit.SECONDS);
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        this.mainChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        this.relayChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
     }
 
@@ -221,6 +221,12 @@ public class DiscordBot {
 
     public synchronized void stop(boolean clearQueue) {
         if (!this.isRunning) return;
+        if (this.presenceUpdateFuture != null)
+            this.presenceUpdateFuture.cancel(true);
+        if (this.mainChannelMessageQueueProcessFuture != null)
+            this.mainChannelMessageQueueProcessFuture.cancel(true);
+        if (this.relayChannelMessageQueueProcessFuture != null)
+            this.relayChannelMessageQueueProcessFuture.cancel(true);
         if (eventSubscription != null) {
             eventSubscription.unsubscribe();
             eventSubscription = null;
@@ -295,8 +301,8 @@ public class DiscordBot {
         } catch (final IllegalStateException e) {
             if (e.getMessage().contains("Backpressure overflow")) {
                 DISCORD_LOG.error("Caught backpressure overflow, restarting discord session", e);
-                this.client.logout().block();
-                createClient();
+                this.stop(false);
+                this.start();
             } else throw e;
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating discord presence", e);
