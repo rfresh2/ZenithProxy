@@ -9,6 +9,7 @@ import com.zenith.command.DiscordCommandContext;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
+import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.queue.Queue;
@@ -273,6 +274,18 @@ public class DiscordBot {
 
     private void updatePresence() {
         try {
+            if (CONFIG.autoUpdater.autoUpdate) {
+                final AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
+                if (autoUpdater != null
+                    && autoUpdater.getUpdateAvailable()
+                    && Math.random() > 0.75 // 25% chance to show update available
+                ) {
+                    this.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.custom(
+                        "Update Available" + autoUpdater.getNewVersion().map(v -> ": " + v).orElse(""))))
+                        .block();
+                    return;
+                }
+            }
             if (Proxy.getInstance().isInQueue())
                 this.client.updatePresence(getQueuePresence()).block();
             else if (Proxy.getInstance().isConnected())
