@@ -43,12 +43,7 @@ public class Authenticator {
                 throw new RuntimeException("No valid account type set.");
             }
         } catch (Exception e) {
-            try {
-                Files.deleteIfExists(Paths.get("msal_serialized_cache.json"));
-            } catch (IOException ex) {
-                CLIENT_LOG.error("Unable to delete msal cache file", ex);
-            }
-            this.auth = null;
+            reset();
             throw new RuntimeException("Unable to log in", e);
         }
     }
@@ -76,5 +71,14 @@ public class Authenticator {
         } else {
             throw new RuntimeException("Invalid authentication type set.");
         }
+    }
+
+    public void reset() {
+        try {
+            Files.deleteIfExists(Paths.get("msal_serialized_cache.json"));
+        } catch (IOException ex) {
+            CLIENT_LOG.error("Unable to delete msal cache file", ex);
+        }
+        this.auth = null;
     }
 }
