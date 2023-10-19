@@ -1003,6 +1003,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$AutoFish",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$AutoReconnect",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
