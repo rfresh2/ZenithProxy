@@ -138,6 +138,10 @@ public class CommandManager {
         // todo: tie this to each output instead because multiple outputs can be used regardless of source
         //  insert a string that gets replaced?
         //      abstract the embed builder output to a mutable intermediary?
-        return source == CommandSource.DISCORD ? CONFIG.discord.prefix : "";
+        return switch (source) {
+            case DISCORD -> CONFIG.discord.prefix;
+            case IN_GAME_PLAYER -> CONFIG.inGameCommands.prefix;
+            case TERMINAL -> "";
+        };
     }
 }

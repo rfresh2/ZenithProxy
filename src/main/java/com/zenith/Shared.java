@@ -51,6 +51,7 @@ import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.handler.player.InGameCommandManager;
 import com.zenith.network.server.handler.player.incoming.ChatCommandHandler;
 import com.zenith.network.server.handler.player.incoming.ChatHandler;
 import com.zenith.network.server.handler.player.incoming.ClientInformationHandler;
@@ -140,6 +141,7 @@ public class Shared {
     public static final ModuleManager MODULE_MANAGER;
     public static final Pathing PATHING;
     public static final TerminalManager TERMINAL_MANAGER;
+    public static final InGameCommandManager IN_GAME_COMMAND_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
     public static volatile boolean SHOULD_RECONNECT;
@@ -416,6 +418,7 @@ public class Shared {
             MODULE_MANAGER = new ModuleManager();
             PATHING = new Pathing();
             TERMINAL_MANAGER = new TerminalManager();
+            IN_GAME_COMMAND_MANAGER = new InGameCommandManager();
             COMMAND_MANAGER = new CommandManager();
             LANGUAGE_MANAGER = new LanguageManager();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));

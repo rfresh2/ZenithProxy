@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
+import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.DiscordCommandContext;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
@@ -55,6 +56,7 @@ import java.util.function.Supplier;
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
 import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.util.math.MathHelper.formatDuration;
 import static discord4j.common.ReactorResources.DEFAULT_BLOCKING_TASK_SCHEDULER;
 import static discord4j.common.ReactorResources.DEFAULT_TIMER_TASK_SCHEDULER;
 import static java.util.Arrays.asList;
@@ -166,13 +168,13 @@ public class DiscordBot {
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
                     mainChannelMessageQueue.add(request);
-                    if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.logEmbedOutput(context.getEmbedBuilder().build());
+                    CommandOutputHelper.logEmbedOutputToTerminal(context.getEmbedBuilder().build());
                 }
                 if (!context.getMultiLineOutput().isEmpty()) {
                     for (final String line : context.getMultiLineOutput()) {
                         mainChannelMessageQueue.add(MessageCreateSpec.builder().content(line).build().asRequest());
                     }
-                    if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.logMultiLineOutput(context);
+                    CommandOutputHelper.logMultiLineOutputToTerminal(context);
                 }
             } catch (final Exception e) {
                 DISCORD_LOG.error("Failed processing discord command: {}", message, e);
@@ -391,7 +393,7 @@ public class DiscordBot {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
                                             .addEmbed(embedCreateSpec)
                                             .build().asRequest());
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord embed message", e);
         }
@@ -414,7 +416,7 @@ public class DiscordBot {
                                             .addEmbed(embedCreateSpec)
                                             .build().asRequest());
             TERMINAL_LOG.info(message);
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed sending discord embed message", e);
         }
@@ -460,7 +462,7 @@ public class DiscordBot {
                                             .components(ActionRow.of(buttons))
                                             .build().asRequest());
             TERMINAL_LOG.info(message);
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
             client.getEventDispatcher()
                 .on(ButtonInteractionEvent.class, mapper)
                 .timeout(timeout)
@@ -477,7 +479,7 @@ public class DiscordBot {
                                             .addEmbed(embedCreateSpec)
                                             .components(ActionRow.of(buttons))
                                             .build().asRequest());
-            TERMINAL_MANAGER.logEmbedOutput(embedCreateSpec);
+            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
             client.getEventDispatcher()
                 .on(ButtonInteractionEvent.class, mapper)
                 .timeout(timeout)
@@ -559,14 +561,6 @@ public class DiscordBot {
         event.queueWait()
             .ifPresent(duration -> embedBuilder.addField("Queue Duration", formatDuration(duration), true));
         sendEmbedMessage(embedBuilder.build());
-    }
-
-    private String formatDuration(Duration duration) {
-        final StringBuilder sb = new StringBuilder();
-        if (duration.toHoursPart() > 0) sb.append(duration.toHoursPart()).append("h ");
-        if (duration.toMinutesPart() > 0) sb.append(duration.toMinutesPart()).append("m ");
-        sb.append(duration.toSecondsPart()).append("s");
-        return sb.toString();
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {

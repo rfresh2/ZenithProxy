@@ -1186,6 +1186,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$InGameCommands",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$InteractiveTerminal",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

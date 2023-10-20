@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCu
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.PostOutgoingHandler;
@@ -16,8 +17,7 @@ import lombok.NonNull;
 import java.util.EnumSet;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.*;
 
 public class LoginSpectatorPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
@@ -61,5 +61,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
+        // send command help
+        SERVER_SPECTATOR_HANDLERS.handleInbound(new ServerboundChatPacket(CONFIG.inGameCommands.prefix + "help"), session);
     }
 }

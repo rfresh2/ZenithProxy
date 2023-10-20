@@ -17,6 +17,7 @@ public final class Config {
     public Debug debug = new Debug();
     public Server server = new Server();
     public InteractiveTerminal interactiveTerminal = new InteractiveTerminal();
+    public InGameCommands inGameCommands = new InGameCommands();
     public Discord discord = new Discord();
     public Database database = new Database();
     public AutoUpdater autoUpdater = new AutoUpdater();
@@ -295,6 +296,9 @@ public final class Config {
             public UUID spectatorUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
             public List<WhitelistEntry> whitelist = new ArrayList<>();
+            // todo: log spectator chats to discord relay and terminal
+            //  both from spectators and to spectators from controlling player
+            public boolean logSpectatorChats = false;
         }
 
 
@@ -334,6 +338,11 @@ public final class Config {
 
     public static final class InteractiveTerminal {
         public boolean enable = true;
+        public boolean logToDiscord = true;
+    }
+    public static final class InGameCommands {
+        public boolean enable = true;
+        public String prefix = "!";
         public boolean logToDiscord = true;
     }
     public static final class Discord {

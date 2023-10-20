@@ -5,10 +5,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandContext;
+import com.zenith.command.CommandSource;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.DiscordBot;
 import com.zenith.network.server.ServerConnection;
 import discord4j.rest.util.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +32,19 @@ public class KickCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("kick").requires(Command::validateAccountOwner)
+            .executes(c -> {
+                final boolean kickCurrentPlayer = c.getSource().getCommandSource() != CommandSource.IN_GAME_PLAYER;
+                final List<String> kickedPlayers = new ArrayList<>();
+                for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
+                    if (connection.equals(Proxy.getInstance().getCurrentPlayer().get()) && !kickCurrentPlayer) continue;
+                    kickedPlayers.add(connection.getProfileCache().getProfile().getName());
+                    connection.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+                }
+                c.getSource().getEmbedBuilder()
+                    .title("Kicked " + kickedPlayers.size() + " players")
+                    .addField("Players", kickedPlayers.stream().map(DiscordBot::escape).collect(Collectors.joining(", ")), false);
+                return 1;
+            })
             .then(argument("player", string()).executes(c -> {
                 final String playerName = StringArgumentType.getString(c, "player");
                 List<ServerConnection> connections = Proxy.getInstance().getActiveConnections().stream()

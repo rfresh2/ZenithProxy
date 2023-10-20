@@ -2,5 +2,6 @@ package com.zenith.command;
 
 public enum CommandSource {
     TERMINAL,
-    DISCORD
+    DISCORD,
+    IN_GAME_PLAYER
 }
