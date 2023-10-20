@@ -8,8 +8,6 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
-
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.ToggleArgumentType.getToggle;
@@ -19,11 +17,10 @@ import static java.util.Arrays.asList;
 public class QueueWarningCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.full(
+        return CommandUsage.args(
                 "queueWarning",
                 "Configure warning messages for when 2b2t queue positions are reached",
-                asList("on/off", "position <integer>", "mention on/off"),
-                aliases()
+                asList("on/off", "position <integer>", "mention on/off")
         );
     }
 
@@ -50,11 +47,6 @@ public class QueueWarningCommand extends Command {
                                 .title("Mention " + (CONFIG.discord.queueWarning.mentionRole ? "On!" : "Off!"));
                             return 1;
                       })));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("queue", "q");
     }
 
     @Override
