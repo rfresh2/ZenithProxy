@@ -44,6 +44,7 @@ public final class Config {
         public Server server = new Server();
         public boolean autoConnect = false; // auto-connect proxy on process start
         public ViaVersion viaversion = new ViaVersion();
+        public String bindAddress = "0.0.0.0";
 
         public static final class ViaVersion {
             public boolean enabled = false;

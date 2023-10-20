@@ -26,8 +26,8 @@ public class ClientSession extends TcpClientSession {
     private boolean online = false;
     private boolean disconnected = true;
 
-    public ClientSession(String host, int port, PacketProtocol protocol, @NonNull Proxy proxy) {
-        super(host, port, protocol);
+    public ClientSession(String host, int port, String bindAddress, PacketProtocol protocol, @NonNull Proxy proxy) {
+        super(host, port, bindAddress, 0, protocol);
         this.proxy = proxy;
         this.addListener(new ClientListener(this));
     }

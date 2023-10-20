@@ -291,7 +291,7 @@ public class Proxy {
         }
 
         CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
-        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, this.protocol, this);
+        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol, this);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
