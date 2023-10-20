@@ -42,6 +42,8 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
                 session.send(new ClientboundSystemChatPacket(Component.text(""), false));
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&chelp &7- &8Display help menu"), false));
+                if (CONFIG.server.spectator.spectatorPublicChatEnabled)
+                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cm &7- &8Send public chats"), false));
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cplayercam &7- &8Set camera to the player"), false));
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cetoggle &7- &8Hide your entity from yourself"), false));
                 session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&ce &7- &8List spectator entities. Change with \"!e <entity>\""), false));
