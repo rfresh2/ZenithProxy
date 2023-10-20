@@ -249,6 +249,8 @@ dependencies {
     shade "com.viaversion:viaversion:4.8.1"
     shade "com.viaversion:viabackwards:4.8.1"
 
+    shade 'io.prometheus:prometheus-metrics-core:1.0.0'
+
     shade 'org.jline:jline:3.23.0'
     shade 'org.jline:jline-terminal-jansi:3.23.0'
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.0"
