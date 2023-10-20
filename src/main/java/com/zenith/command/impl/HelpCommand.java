@@ -20,7 +20,7 @@ public class HelpCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.simpleAliases(
                 "help",
-                "Proxy command list",
+                "ZenithProxy command list",
                 aliases());
     }
 
@@ -28,7 +28,7 @@ public class HelpCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("help").executes(c -> {
                 c.getSource().getEmbedBuilder()
-                    .title("Proxy Commands")
+                    .title("Commands")
                     .color(Color.CYAN);
                 final String brigadierCommands = COMMAND_MANAGER.getCommands().stream()
                     .sorted((c1, c2) -> c1.commandUsage().getName().compareToIgnoreCase(c2.commandUsage().getName()))
