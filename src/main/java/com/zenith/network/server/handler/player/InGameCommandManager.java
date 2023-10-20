@@ -15,6 +15,8 @@ import discord4j.core.spec.EmbedCreateSpec;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 
+import java.util.regex.Pattern;
+
 import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
@@ -54,6 +56,11 @@ public class InGameCommandManager {
             }
             default -> executeInGameCommand(command, session);
         }
+    }
+
+    // todo: we could memoize this as long as we update it when the prefix is updated
+    public Pattern getCommandPattern() {
+        return Pattern.compile("[" + CONFIG.inGameCommands.prefix + "]\\w+");
     }
 
     private void executeInGameCommand(final String command, final ServerConnection session) {

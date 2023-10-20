@@ -8,12 +8,11 @@ import lombok.NonNull;
 import static com.zenith.Shared.*;
 
 public class ChatHandler implements IncomingHandler<ServerboundChatPacket, ServerConnection> {
-
     @Override
     public boolean apply(@NonNull ServerboundChatPacket packet, @NonNull ServerConnection session) {
         if (CONFIG.inGameCommands.enable) {
             final String message = packet.getMessage();
-            if (message.startsWith(CONFIG.inGameCommands.prefix)) {
+            if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(message).find()) {
                 SCHEDULED_EXECUTOR_SERVICE.execute(() -> IN_GAME_COMMAND_MANAGER.handleInGameCommand(message.substring(CONFIG.inGameCommands.prefix.length()), session));
                 return false;
             }

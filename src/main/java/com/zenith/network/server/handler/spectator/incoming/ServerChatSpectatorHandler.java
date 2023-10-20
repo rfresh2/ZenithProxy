@@ -16,12 +16,11 @@ import net.kyori.adventure.text.Component;
 import static com.zenith.Shared.*;
 
 public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundChatPacket, ServerConnection> {
-
     @Override
     public boolean apply(ServerboundChatPacket packet, ServerConnection session) {
         if (CONFIG.inGameCommands.enable) {
             SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
-                if (packet.getMessage().startsWith(CONFIG.inGameCommands.prefix)) {
+                if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(packet.getMessage()).find()) {
                     TERMINAL_LOG.info(session.getProfileCache().getProfile().getName() + " executed spectator command: " + packet.getMessage());
                     handleCommandInput(packet.getMessage(), session);
                 } else {
