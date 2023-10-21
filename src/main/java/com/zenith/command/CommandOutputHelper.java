@@ -18,6 +18,7 @@ import static com.zenith.Shared.TERMINAL_LOG;
 
 @UtilityClass
 public class CommandOutputHelper {
+    // todo: we could skip the minedown parsing and just use adventure TextFormat RGB coloring
     private static final Map<Color, String> discordColorToMCFormatCodeMap = ImmutableMap.of(
         Color.BLACK, "&0",
         Color.RED, "&c",
@@ -43,10 +44,10 @@ public class CommandOutputHelper {
         }
     }
 
-    public void logInputToDiscord(String command) {
+    public void logInputToDiscord(String command, CommandSource source) {
         if (DISCORD_BOT.isRunning()) {
             DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
-                                             .title("Terminal Command Executed")
+                                             .title(source.getName() + " Command Executed")
                                              .description(command)
                                              .build());
         }
@@ -59,6 +60,7 @@ public class CommandOutputHelper {
             output.append(discordColorToMCFormatCodeMap.getOrDefault(embed.color().get(), ""));
         }
         output.append("\n");
+        // todo: handle discord formatted bold, italicized, or underlined text
         output.append(embed.title().get());
         if (embed.isDescriptionPresent()) {
             output.append("\n");

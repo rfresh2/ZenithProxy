@@ -71,11 +71,10 @@ public class InGameCommandManager {
         CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
         if (!embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty())
             session.send(new ClientboundSystemChatPacket(MineDown.parse(
-                "&7[&9ZenithProxy&7]&r "
-                    + "&cUnknown command! Command Prefix: \"" + CONFIG.inGameCommands.prefix + "\""), false));
+                "&7[&9ZenithProxy&7]&r &cUnknown command!"), false));
         if (CONFIG.inGameCommands.logToDiscord && DISCORD_BOT.isRunning()) {
             // will also log to terminal
-            CommandOutputHelper.logInputToDiscord(command);
+            CommandOutputHelper.logInputToDiscord(command, CommandSource.IN_GAME_PLAYER);
             CommandOutputHelper.logEmbedOutputToDiscord(embed);
             CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
         } else {

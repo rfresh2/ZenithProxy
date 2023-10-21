@@ -97,7 +97,7 @@ public class TerminalManager {
     }
 
     private void executeDiscordCommand(final String command) {
-        if (CONFIG.interactiveTerminal.logToDiscord) CommandOutputHelper.logInputToDiscord(command);
+        if (CONFIG.interactiveTerminal.logToDiscord) CommandOutputHelper.logInputToDiscord(command, CommandSource.TERMINAL);
         CommandContext commandContext = CommandContext.create(command, CommandSource.TERMINAL);
         COMMAND_MANAGER.execute(commandContext);
         EmbedCreateSpec embed = commandContext.getEmbedBuilder().build();

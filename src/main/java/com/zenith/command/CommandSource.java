@@ -1,7 +1,15 @@
 package com.zenith.command;
 
+import lombok.Getter;
+
+@Getter
 public enum CommandSource {
-    TERMINAL,
-    DISCORD,
-    IN_GAME_PLAYER
+    TERMINAL("Terminal"),
+    DISCORD("Discord"),
+    IN_GAME_PLAYER("In-Game");
+    private final String name;
+    CommandSource(final String name) {
+        this.name = name;
+    }
+
 }
