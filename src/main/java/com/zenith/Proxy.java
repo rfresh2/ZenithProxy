@@ -602,7 +602,7 @@ public class Proxy {
             playerConnection.send(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
-                playerConnection.sendScheduledAsync(actionBarPacket, SCHEDULED_EXECUTOR_SERVICE, i, TimeUnit.SECONDS);
+                playerConnection.sendScheduledAsync(actionBarPacket, i, TimeUnit.SECONDS);
             }
             playerConnection.send(new ClientboundSoundPacket(
                 BuiltinSound.BLOCK_ANVIL_PLACE,

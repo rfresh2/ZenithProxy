@@ -208,10 +208,10 @@ dependencies {
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
     // todo: replace when https://github.com/Discord4J/Discord4J/pull/1164 is merged
     //    shade("com.discord4j:discord4j-core:3.3.0-SNAPSHOT") {
-    shade("com.github.rfresh2.Discord4j:discord4j-core:18ccb50958") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:91ea5b52fc") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:8025978ed0") {
+    shade("com.github.rfresh2:MCProtocolLib:1eb2734203") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }

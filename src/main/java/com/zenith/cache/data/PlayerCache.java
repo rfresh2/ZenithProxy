@@ -36,7 +36,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
 
@@ -136,7 +137,7 @@ public class PlayerCache implements CachedData {
                                                                                          ContainerActionType.CREATIVE_GRAB_MAX_STACK,
                                                                                          CreativeGrabAction.GRAB,
                                                                                          new ItemStack(1, 1),
-                                                                                         Int2ObjectMaps.emptyMap()), SCHEDULED_EXECUTOR_SERVICE);
+                                                                                         Int2ObjectMaps.emptyMap()));
                 double x = CACHE.getPlayerCache().getX();
                 double y = CACHE.getPlayerCache().getY() + 1000d;
                 double z = CACHE.getPlayerCache().getZ();

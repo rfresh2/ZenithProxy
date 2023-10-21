@@ -6,6 +6,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
@@ -18,7 +19,9 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     public void packetReceived(Session session, Packet packet) {
         try {
             if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
-                Proxy.getInstance().getActiveConnections().forEach(connection -> connection.send(packet));
+                for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
+                    connection.sendAsync(packet); // sends on each connection's own event loop
+                }
             }
         } catch (Exception e) {
             CLIENT_LOG.error("", e);

@@ -38,8 +38,6 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -100,14 +98,14 @@ public class ServerConnection implements Session, SessionListener {
                         && ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() == ProtocolState.GAME
                         && this.isLoggedIn
                         && SERVER_PLAYER_HANDLERS.handleInbound(packet, this)) {
-                    Proxy.getInstance().getClient().send(packet);
+                    Proxy.getInstance().getClient().sendAsync(packet);
                 }
             } else {
                 if (((MinecraftProtocol) this.session.getPacketProtocol()).getState() == ProtocolState.GAME
                         && ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() == ProtocolState.GAME
                         && this.isLoggedIn
                         && SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)) {
-                    Proxy.getInstance().getClient().send(packet);
+                    Proxy.getInstance().getClient().sendAsync(packet);
                 }
             }
         } catch (final Exception e) {
@@ -249,13 +247,8 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void sendAsync(@NonNull final Packet packet, @NonNull final ExecutorService executorService) {
-        this.session.sendAsync(packet, executorService);
-    }
-
-    @Override
-    public void sendScheduledAsync(@NonNull final Packet packet, @NonNull final ScheduledExecutorService executorService, final long delay, final TimeUnit unit) {
-        this.session.sendScheduledAsync(packet, executorService, delay, unit);
+    public void sendScheduledAsync(@NonNull final Packet packet, final long delay, final TimeUnit unit) {
+        this.session.sendScheduledAsync(packet, delay, unit);
     }
 
     public boolean isActivePlayer() {

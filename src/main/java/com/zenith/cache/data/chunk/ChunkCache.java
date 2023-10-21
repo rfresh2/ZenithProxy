@@ -351,15 +351,15 @@ public class ChunkCache implements CachedData {
             consumer.accept(new ClientboundSetChunkCacheRadiusPacket(serverViewDistance));
             consumer.accept(new ClientboundSetChunkCacheCenterPacket(centerX, centerZ));
             readCache(() -> {
-                this.cache.values().parallelStream()
-                    .map(chunk -> new ClientboundLevelChunkWithLightPacket(
+                for (final Chunk chunk : this.cache.values()) {
+                    consumer.accept(new ClientboundLevelChunkWithLightPacket(
                         chunk.x,
                         chunk.z,
                         chunk.serialize(CACHE.getChunkCache().getCodec()),
                         chunk.heightMaps,
                         chunk.blockEntities.toArray(new BlockEntityInfo[0]),
-                        chunk.lightUpdateData))
-                    .forEach(consumer);
+                        chunk.lightUpdateData));
+                }
                 return true;
             });
         } catch (Exception e) {

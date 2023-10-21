@@ -77,7 +77,7 @@ public abstract class Module {
     public void sendClientPacketAsync(final Packet packet) {
         ClientSession clientSession = Proxy.getInstance().getClient();
         if (clientSession != null && clientSession.isConnected()) {
-            clientSession.sendAsync(packet, SCHEDULED_EXECUTOR_SERVICE);
+            clientSession.sendAsync(packet);
         }
     }
 
