@@ -108,21 +108,21 @@ public class AntiAFKCommand extends Command {
                                     c.getSource().getEmbedBuilder()
                                         .title("Walk Distance Set!");
                                     return 1;
-                                })))
-                      .then(literal("jump")
-                                .then(argument("toggle", toggle()).executes(c -> {
-                                    boolean toggle = getToggle(c, "toggle");
-                                    CONFIG.client.extra.antiafk.actions.jump = toggle;
-                                    c.getSource().getEmbedBuilder()
-                                        .title("Jump " + (toggle ? "On!" : "Off!"));
-                                    return 1;
-                                }))
-                                .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
-                                    CONFIG.client.extra.antiafk.actions.jumpDelayTicks = IntegerArgumentType.getInteger(c, "delay");
-                                    c.getSource().getEmbedBuilder()
-                                        .title("Jump Delay Set!");
-                                    return 1;
-                                })))));
+                                }))))
+            .then(literal("jump")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          boolean toggle = getToggle(c, "toggle");
+                          CONFIG.client.extra.antiafk.actions.jump = toggle;
+                          c.getSource().getEmbedBuilder()
+                              .title("Jump " + (toggle ? "On!" : "Off!"));
+                          return 1;
+                      }))
+                      .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
+                          CONFIG.client.extra.antiafk.actions.jumpDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                          c.getSource().getEmbedBuilder()
+                              .title("Jump Delay Set!");
+                          return 1;
+                      }))));
     }
 
     @Override
