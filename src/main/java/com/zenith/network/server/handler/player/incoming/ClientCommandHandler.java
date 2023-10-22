@@ -1,4 +1,4 @@
-package com.zenith.network.server.handler.player.postoutgoing;
+package com.zenith.network.server.handler.player.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.ClientCommand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;

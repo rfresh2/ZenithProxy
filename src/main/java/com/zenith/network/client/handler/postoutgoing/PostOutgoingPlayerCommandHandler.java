@@ -2,13 +2,13 @@ package com.zenith.network.client.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.PostOutgoingHandler;
+import com.zenith.network.registry.PostOutgoingAsyncHandler;
 
 import static com.zenith.Shared.CACHE;
 
-public class PostOutgoingPlayerCommandHandler implements PostOutgoingHandler<ServerboundPlayerCommandPacket, ClientSession> {
+public class PostOutgoingPlayerCommandHandler implements PostOutgoingAsyncHandler<ServerboundPlayerCommandPacket, ClientSession> {
     @Override
-    public void accept(final ServerboundPlayerCommandPacket packet, final ClientSession session) {
+    public void acceptAsync(final ServerboundPlayerCommandPacket packet, final ClientSession session) {
         if (packet.getEntityId() != CACHE.getPlayerCache().getEntityId()) return;
         switch (packet.getState()) {
             case START_SNEAKING -> CACHE.getPlayerCache().setSneaking(true);
