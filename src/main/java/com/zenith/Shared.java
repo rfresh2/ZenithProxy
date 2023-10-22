@@ -57,7 +57,6 @@ import com.zenith.network.server.handler.player.incoming.ChatCommandHandler;
 import com.zenith.network.server.handler.player.incoming.ChatHandler;
 import com.zenith.network.server.handler.player.incoming.ClientInformationHandler;
 import com.zenith.network.server.handler.player.incoming.PongHandler;
-import com.zenith.network.server.handler.player.incoming.movement.SwingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.ClientCommandHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
@@ -161,8 +160,6 @@ public class Shared {
         .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
         .registerInbound(ServerboundPongPacket.class, new PongHandler())
         .registerInbound(ServerboundClientCommandPacket.class, new ClientCommandHandler())
-        //PLAYER MOVEMENT
-        .registerInbound(ServerboundSwingPacket.class, new SwingHandler())
         //
         // Outbound packets
         //
@@ -298,6 +295,7 @@ public class Shared {
         .registerPostOutbound(ServerboundMovePlayerPosRotPacket.class, new PostOutgoingPlayerPositionRotationHandler())
         .registerPostOutbound(ServerboundMovePlayerRotPacket.class, new PostOutgoingPlayerRotationHandler())
         .registerPostOutbound(ServerboundMovePlayerStatusOnlyPacket.class, new PostOutgoingPlayerStatusOnlyHandler())
+        .registerPostOutbound(ServerboundSwingPacket.class, new PostOutgoingSwingHandler())
         .build();
 
     public static synchronized void loadConfig() {
