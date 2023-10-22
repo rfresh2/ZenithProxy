@@ -85,7 +85,7 @@ public class ModuleManager {
     }
 
     public void handlePlayerOnlineEvent(final PlayerOnlineEvent event) {
-        if (Proxy.getInstance().getActiveConnections().isEmpty()) {
+        if (!Proxy.getInstance().hasActivePlayer()) {
             startClientTicks();
         }
     }
