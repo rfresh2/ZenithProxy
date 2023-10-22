@@ -30,6 +30,7 @@ import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
+import com.zenith.feature.api.VcApi;
 import com.zenith.feature.language.LanguageManager;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
@@ -144,6 +145,7 @@ public class Shared {
     public static final InGameCommandManager IN_GAME_COMMAND_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
+    public static final VcApi VC_API;
     public static volatile boolean SHOULD_RECONNECT;
 
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
@@ -421,6 +423,7 @@ public class Shared {
             IN_GAME_COMMAND_MANAGER = new InGameCommandManager();
             COMMAND_MANAGER = new CommandManager();
             LANGUAGE_MANAGER = new LanguageManager();
+            VC_API = new VcApi();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
             translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);

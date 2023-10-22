@@ -61,6 +61,7 @@ public class MathHelper {
     // is this math? no, but idk where else to put it
     public static String formatDuration(Duration duration) {
         final StringBuilder sb = new StringBuilder();
+        if (duration.toDaysPart() > 0) sb.append(duration.toDaysPart()).append("d ");
         if (duration.toHoursPart() > 0) sb.append(duration.toHoursPart()).append("h ");
         if (duration.toMinutesPart() > 0) sb.append(duration.toMinutesPart()).append("m ");
         sb.append(duration.toSecondsPart()).append("s");
