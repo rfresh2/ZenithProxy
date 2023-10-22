@@ -30,6 +30,7 @@ public class CommandManager {
        asList(
            new ActiveHoursCommand(),
            new AntiAFKCommand(),
+           new AntiLeakCommand(),
            new AuthCommand(),
            new AutoDisconnectCommand(),
            new AutoEatCommand(),

@@ -65,6 +65,7 @@ public final class Config {
             public AutoFish autoFish = new AutoFish();
             public KillAura killAura = new KillAura();
             public AutoTotem autoTotem = new AutoTotem();
+            public AntiLeak antiLeak = new AntiLeak();
             public Chat chat = new Chat();
             public boolean visualRangeAlert = true;
             public boolean visualRangeIgnoreFriends = false;
@@ -89,6 +90,14 @@ public final class Config {
             public static final class AutoTotem {
                 public boolean enabled = true;
                 public int healthThreshold = 20;
+            }
+
+            public static final class AntiLeak {
+                public boolean enabled = true;
+                // checks if numbers in chat are within a range from your coords
+                public boolean rangeCheck = true;
+                // the factor to divide and multiply your coords by to get the range
+                public double rangeFactor = 10.0;
             }
 
             public static final class KillAura {
