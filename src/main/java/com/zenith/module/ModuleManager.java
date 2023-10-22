@@ -125,9 +125,7 @@ public class ModuleManager {
         synchronized (this) {
             if (nonNull(this.clientTickFuture)) {
                 this.clientTickFuture.cancel(false);
-                while (!this.clientTickFuture.isDone()) {
-                    Wait.waitALittleMs(50);
-                }
+                Wait.waitUntilCondition(() -> this.clientTickFuture.isDone(), 1);
                 getModules().forEach(Module::clientTickStopped);
             }
         }
