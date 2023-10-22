@@ -35,6 +35,7 @@ public class TablistDatabase extends LockingDatabase {
     private void syncTablist(Configuration configuration) {
         final Tablist t = Tablist.TABLIST;
         final DSLContext ctx = configuration.dsl();
+        ctx.execute("LOCK TABLE " + t.getName() + ";");
         ctx.deleteFrom(t).execute();
         ctx.batchInsert(CACHE.getTabListCache().getEntries().stream()
                             .map(e -> new TablistRecord(e.getName(),
