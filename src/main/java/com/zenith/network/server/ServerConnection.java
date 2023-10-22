@@ -304,7 +304,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public synchronized void syncTeamMembers() {
-        final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections().stream()
+        final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections()
             .map(ServerConnection::getSpectatorEntityUUID)
             .map(UUID::toString)
             .collect(Collectors.toCollection(ArrayList::new));
@@ -316,14 +316,14 @@ public class ServerConnection implements Session, SessionListener {
             .filter(member -> !currentTeamMembers.contains(member))
             .toList();
         if (!toRemove.isEmpty()) {
-            send(new ClientboundSetPlayerTeamPacket(
+            sendAsync(new ClientboundSetPlayerTeamPacket(
                 teamName,
                 TeamAction.REMOVE_PLAYER,
                 toRemove.toArray(new String[0])
             ));
         }
         if (!toAdd.isEmpty()) {
-            send(new ClientboundSetPlayerTeamPacket(
+            sendAsync(new ClientboundSetPlayerTeamPacket(
                 teamName,
                 TeamAction.ADD_PLAYER,
                 toAdd.toArray(new String[0])

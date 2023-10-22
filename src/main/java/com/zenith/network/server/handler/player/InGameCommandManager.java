@@ -27,13 +27,13 @@ public class InGameCommandManager {
         TERMINAL_LOG.info(session.getProfileCache().getProfile().getName() + " executed in-game command: " + command);
         switch (command) {
             case "help" -> {
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&9&lIn Game commands"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
-                session.send(new ClientboundSystemChatPacket(Component.text(""), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cm &7- &8Sends a message to spectators"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&csync &7- &8Syncs current player inventory with server"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cchunksync &7- &8Syncs server chunks to the current player"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&ccleareffects &7- &8Clears all effects from the current player"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&9&lIn Game commands"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+                session.sendAsync(new ClientboundSystemChatPacket(Component.text(""), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7&cm &7- &8Sends a message to spectators"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7&csync &7- &8Syncs current player inventory with server"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7&cchunksync &7- &8Syncs server chunks to the current player"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7&ccleareffects &7- &8Clears all effects from the current player"), false));
                 executeInGameCommand("help", session);
             }
             case "m" -> Proxy.getInstance().getActiveConnections().forEach(connection -> {
@@ -41,18 +41,18 @@ public class InGameCommandManager {
             });
             case "sync" -> {
                 PlayerCache.sync();
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSync inventory complete"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSync inventory complete"), false));
             }
             case "chunksync" -> {
                 ChunkCache.sync();
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSync chunks complete"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &cSync chunks complete"), false));
             }
             case "cleareffects" -> {
                 CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();
                 asList(Effect.values()).forEach(effect -> {
-                    session.send(new ClientboundRemoveMobEffectPacket(CACHE.getPlayerCache().getEntityId(), effect));
+                    session.sendAsync(new ClientboundRemoveMobEffectPacket(CACHE.getPlayerCache().getEntityId(), effect));
                 });
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Cleared effects&r"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&9Cleared effects&r"), false));
             }
             default -> executeInGameCommand(command, session);
         }
@@ -70,7 +70,7 @@ public class InGameCommandManager {
         CommandOutputHelper.logEmbedOutputToInGame(embed, session);
         CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
         if (!embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty())
-            session.send(new ClientboundSystemChatPacket(MineDown.parse(
+            session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse(
                 "&7[&9ZenithProxy&7]&r &cUnknown command!"), false));
         if (CONFIG.inGameCommands.logToDiscord && DISCORD_BOT.isRunning()) {
             // will also log to terminal

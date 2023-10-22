@@ -271,8 +271,8 @@ public class PlayerSimulation extends Module {
         syncFromCache(false);
         addTask(() -> {
             CLIENT_LOG.debug("Server teleport to: {}, {}, {}", this.x, this.y, this.z);
-            Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(teleportId));
-            Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
+            Proxy.getInstance().getClient().sendAsync(new ServerboundAcceptTeleportationPacket(teleportId));
+            Proxy.getInstance().getClient().sendAsync(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
         });
     }
 

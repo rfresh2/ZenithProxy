@@ -8,8 +8,6 @@ import com.zenith.network.client.ClientSession;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
-
 /**
  * Module system base class.
  */
@@ -85,11 +83,9 @@ public abstract class Module {
     public void sendClientPacketsAsync(final Packet... packets) {
         ClientSession clientSession = Proxy.getInstance().getClient();
         if (clientSession != null && clientSession.isConnected()) {
-            SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
-                for (Packet packet : packets) {
-                    clientSession.send(packet);
-                }
-            });
+            for (Packet packet : packets) {
+                clientSession.sendAsync(packet);
+            }
         }
     }
 }

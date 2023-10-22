@@ -25,7 +25,7 @@ public class SendMessageCommand extends Command {
                       .executes(c -> {
                           final String message = c.getArgument("message", String.class);
                           if (Proxy.getInstance().isConnected() && !message.isBlank()) {
-                              Proxy.getInstance().getClient().send(new ServerboundChatPacket(message));
+                              Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(message));
                               c.getSource().getEmbedBuilder()
                                   .title("Sent Message!")
                                   .description(message);

@@ -53,7 +53,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
@@ -211,7 +210,7 @@ public class Proxy {
         if (!this.isConnected() || currentPlayer.get() == null) return;
         long lastUpdate = CACHE.getTabListCache().getLastUpdate();
         if (lastUpdate < System.currentTimeMillis() - 3000) {
-            currentPlayer.get().send(new ClientboundTabListPacket(CACHE.getTabListCache().getHeader(), CACHE.getTabListCache().getFooter()));
+            currentPlayer.get().sendAsync(new ClientboundTabListPacket(CACHE.getTabListCache().getHeader(), CACHE.getTabListCache().getFooter()));
             CACHE.getTabListCache().setLastUpdate(System.currentTimeMillis());
         }
     }
@@ -462,10 +461,9 @@ public class Proxy {
         return this.loggingIn.getAndSet(false);
     }
 
-    public List<ServerConnection> getSpectatorConnections() {
+    public Stream<ServerConnection> getSpectatorConnections() {
         return getActiveConnections().stream()
-                .filter(ServerConnection::isSpectator)
-                .collect(Collectors.toList());
+                .filter(ServerConnection::isSpectator);
     }
 
     public void delayBeforeReconnect() {
@@ -599,12 +597,12 @@ public class Proxy {
             if (minsUntil6Hrs < 0) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
                 MineDown.parse((minsUntil6Hrs <= 3 ? "&c" : "&9") + "6hr kick in: " + minsUntil6Hrs + "m"));
-            playerConnection.send(actionBarPacket);
+            playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
                 playerConnection.sendScheduledAsync(actionBarPacket, i, TimeUnit.SECONDS);
             }
-            playerConnection.send(new ClientboundSoundPacket(
+            playerConnection.sendAsync(new ClientboundSoundPacket(
                 BuiltinSound.BLOCK_ANVIL_PLACE,
                 SoundCategory.AMBIENT,
                 CACHE.getPlayerCache().getX(),

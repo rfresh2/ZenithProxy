@@ -51,7 +51,7 @@ public class StatusCommand extends Command {
     }
 
     private List<String> getSpectatorUserNames() {
-        return Proxy.getInstance().getSpectatorConnections().stream()
+        return Proxy.getInstance().getSpectatorConnections()
                 .map(connection -> connection.getProfileCache().getProfile().getName())
                 .collect(Collectors.toList());
     }

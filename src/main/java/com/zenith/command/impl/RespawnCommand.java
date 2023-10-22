@@ -26,7 +26,7 @@ public class RespawnCommand extends Command {
             .executes(c -> {
                 final ClientSession client = Proxy.getInstance().getClient();
                 if (nonNull(client)) {
-                    client.send(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
+                    client.sendAsync(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
                 }
                 final EntityPlayer player = CACHE.getPlayerCache().getThePlayer();
                 if (nonNull(player)) {

@@ -938,11 +938,11 @@ public class DiscordBot {
                 if (this.client.getSelfId().asLong() != messageData.author().id().asLong()) return;
                 final EmbedData embed = messageData.embeds().get(0);
                 final String sender = extractRelayEmbedSenderUsername(embed.color(), embed.description().get());
-                Proxy.getInstance().getClient().send(new ServerboundChatPacket("/w " + sender + " " + event.message()));
+                Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket("/w " + sender + " " + event.message()));
             } catch (final Exception e) {
                 DISCORD_LOG.error("Error performing chat relay reply", e);
             }
-        } else Proxy.getInstance().getClient().send(new ServerboundChatPacket(event.message()));
+        } else Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(event.message()));
         lastRelaymessage = Optional.of(Instant.now());
     }
 

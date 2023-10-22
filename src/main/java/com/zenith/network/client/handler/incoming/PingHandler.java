@@ -14,7 +14,7 @@ public class PingHandler implements AsyncIncomingHandler<ClientboundPingPacket, 
     public boolean applyAsync(final ClientboundPingPacket packet, final ClientSession session) {
         // grim ac uses this to determine leniency in player movements. should be synced to actual ping from player
         if (Proxy.getInstance().getCurrentPlayer().get() == null) {
-            MODULE_MANAGER.get(PlayerSimulation.class).addTask(() -> session.send(new ServerboundPongPacket(packet.getId())));
+            MODULE_MANAGER.get(PlayerSimulation.class).addTask(() -> session.sendAsync(new ServerboundPongPacket(packet.getId())));
         }
         return true;
     }
