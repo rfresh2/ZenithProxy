@@ -22,7 +22,7 @@ buildscript {
 plugins {
     id 'nu.studer.jooq' version '8.2.1'
     id 'java'
-    id 'org.graalvm.buildtools.native' version '0.9.27'
+    id 'org.graalvm.buildtools.native' version '0.9.28'
 }
 
 apply plugin: "com.github.johnrengelman.shadow"
