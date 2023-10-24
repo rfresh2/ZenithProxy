@@ -62,7 +62,7 @@ public class AntiLeak extends Module {
             MODULE_LOG.info("AntiLeak cancelled chat message: " + message);
             if (Proxy.getInstance().hasActivePlayer())
                 Proxy.getInstance().getCurrentPlayer().get()
-                    .sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7[&9AntiLeak&7]&r &cChat Cancelled"), false));
+                    .sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7[&ZenithProxy&7]&r &cAntiLeak Cancelled Chat"), false));
         }
     }
 }
