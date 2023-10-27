@@ -730,7 +730,7 @@ public class DiscordBot {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
                 .title("Non-Whitelisted Player Connected")
                 .color(Color.RUBY);
-        if (nonNull(event.remoteAddress())) {
+        if (nonNull(event.remoteAddress()) && CONFIG.discord.showNonWhitelistLoginIP) {
             builder = builder.addField("IP", escape(event.remoteAddress().toString()), false);
         }
         if (nonNull(event.gameProfile()) && nonNull(event.gameProfile().getId()) && nonNull(event.gameProfile().getName())) {

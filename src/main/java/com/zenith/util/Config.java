@@ -368,6 +368,7 @@ public final class Config {
         public boolean manageProfileImage = true;
         public boolean manageNickname = true;
         public boolean manageDescription = true;
+        public boolean showNonWhitelistLoginIP = true;
         public boolean isUpdating = false; // internal use for update command state persistence
         public QueueWarning queueWarning = new QueueWarning();
         public ChatRelay chatRelay = new ChatRelay();

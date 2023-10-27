@@ -31,7 +31,8 @@ public class DiscordManageCommand extends Command {
                 "relayChannel <channel ID>",
                 "manageProfileImage on/off",
                 "manageNickname on/off",
-                "manageDescription on/off"
+                "manageDescription on/off",
+                "showNonWhitelistIP on/off"
             )
         );
     }
@@ -124,6 +125,14 @@ public class DiscordManageCommand extends Command {
                                          .color(Color.CYAN)
                                          .title("Manage Description " + (CONFIG.discord.manageDescription ? "On!" : "Off!"));
                             return 1;
+                      })))
+            .then(literal("shownonwhitelistip").requires(Command::validateAccountOwner)
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.showNonWhitelistLoginIP = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                         .color(Color.CYAN)
+                                         .title("Show Non-Whitelist IP " + (CONFIG.discord.showNonWhitelistLoginIP ? "On!" : "Off!"));
+                            return 1;
                       })));
     }
 
@@ -134,7 +143,8 @@ public class DiscordManageCommand extends Command {
             .addField("Relay Channel ID", "<#" + CONFIG.discord.chatRelay.channelId + ">", false)
             .addField("Manage Profile Image", toggleStr(CONFIG.discord.manageProfileImage), false)
             .addField("Manage Nickname", toggleStr(CONFIG.discord.manageNickname), false)
-            .addField("Manage Description", toggleStr(CONFIG.discord.manageDescription), false);
+            .addField("Manage Description", toggleStr(CONFIG.discord.manageDescription), false)
+            .addField("Show Non-Whitelist IP", toggleStr(CONFIG.discord.showNonWhitelistLoginIP), false);
     }
 
     private void restartDiscordBot() {
