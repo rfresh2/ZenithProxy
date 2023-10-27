@@ -458,6 +458,7 @@ public class Proxy {
 
     // returns true if we were previously trying to log in
     public boolean cancelLogin() {
+        this.reconnectCounter = 0;
         return this.loggingIn.getAndSet(false);
     }
 
@@ -472,19 +473,7 @@ public class Proxy {
             countdown = CONFIG.client.extra.autoReconnect.delaySeconds
                 // random jitter to help prevent multiple clients from logging in at the same time
                 + ((int) (Math.random() * 5));
-            // todo: improve offline server detection
-            //  currently it's based on null exception thrown during the last disconnect
-            //  however, when the Proxy.disconnect method is called with only a string reason this also trips it
-            //  those situations need to be differentiated
-            //  also there is no way to configure the delaySecondsOffline in the discord command currently
-            //  Maybe send an mcping?
-//            if (nonNull(client) && ((ClientSession) client).isServerProbablyOff()) {
-//                countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
-//                this.reconnectCounter = 0;
-//            } else {
-//                countdown = CONFIG.client.extra.autoReconnect.delaySeconds
-//                        + CONFIG.client.extra.autoReconnect.linearIncrease * this.reconnectCounter++;
-//            }
+            reconnectCounter++;
             EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
             for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
                 if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
@@ -649,6 +638,7 @@ public class Proxy {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
         this.queuePosition = 0;
+        this.reconnectCounter = 0;
         updatePrioBanStatus();
     }
 
@@ -666,6 +656,7 @@ public class Proxy {
             // assume we are prio if we skipped queuing
             EVENT_BUS.postAsync(new PrioStatusEvent(true));
         }
+        this.reconnectCounter = 0;
         PlayerCache.sync();
     }
 

@@ -20,7 +20,7 @@ public class AutoReconnectCommand extends Command {
         return CommandUsage.args(
                 "autoReconnect",
                 "Configure the AutoReconnect feature",
-                asList("on/off", "delay <seconds>"));
+                asList("on/off", "delay <seconds>", "maxAttempts <number>"));
     }
 
     @Override
@@ -38,8 +38,14 @@ public class AutoReconnectCommand extends Command {
                           c.getSource().getEmbedBuilder()
                               .title("AutoReconnect Delay Updated!");
                           return 1;
-                      }))
-            );
+                      })))
+            .then(literal("maxattempts")
+                      .then(argument("maxAttempts", integer(1)).executes(c -> {
+                          CONFIG.client.extra.autoReconnect.maxAttempts = IntegerArgumentType.getInteger(c, "maxAttempts");
+                          c.getSource().getEmbedBuilder()
+                              .title("AutoReconnect Max Attempts Updated!");
+                          return 1;
+                      })));
     }
 
     @Override
@@ -47,6 +53,7 @@ public class AutoReconnectCommand extends Command {
         builder
             .addField("AutoReconnect", toggleStr(CONFIG.client.extra.autoReconnect.enabled), false)
             .addField("Delay", "" + CONFIG.client.extra.autoReconnect.delaySeconds, true)
+            .addField("Max Attempts", "" + CONFIG.client.extra.autoReconnect.maxAttempts, true)
             .color(Color.CYAN);
     }
 }

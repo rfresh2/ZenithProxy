@@ -221,11 +221,8 @@ public final class Config {
 
             public static final class AutoReconnect {
                 public boolean enabled = true;
-                // todo: idk delete this seems useless
-                public int delaySecondsOffline = 120;
                 public int delaySeconds = 120;
-                // todo: delete?
-                public int linearIncrease = 0;
+                public int maxAttempts = 200;
             }
 
             public static final class AutoRespawn {
