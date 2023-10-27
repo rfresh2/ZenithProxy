@@ -452,7 +452,7 @@ public class Proxy {
         return false;
     }
 
-    private boolean autoReconnectIsInProgress() {
+    public boolean autoReconnectIsInProgress() {
         return this.autoReconnectFuture.isPresent();
     }
 

@@ -294,6 +294,12 @@ public class DiscordBot {
                     return;
                 }
             }
+            if (Proxy.getInstance().autoReconnectIsInProgress()) {
+                this.client.updatePresence(ClientPresence.of(Status.IDLE, ClientActivity.custom(
+                    "AutoReconnecting...")))
+                    .block();
+                return;
+            }
             if (Proxy.getInstance().isInQueue())
                 this.client.updatePresence(getQueuePresence()).block();
             else if (Proxy.getInstance().isConnected())
