@@ -15,6 +15,8 @@ import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthV
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
+import com.github.steveice10.opennbt.MNBTIO;
+import com.github.steveice10.opennbt.mini.MNBT;
 import com.github.steveice10.opennbt.tag.builtin.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
@@ -33,6 +35,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector3i;
 
+import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -215,21 +218,26 @@ public class ChunkCache implements CachedData {
             "y", new IntTag("y", position.getY()),
             "z", new IntTag("z", position.getZ())
         ));
-        synchronized (chunk.blockEntities) {
-            Optional<BlockEntityInfo> foundTileEntity = chunk.blockEntities.stream()
-                .filter(tileEntity -> tileEntity.getX() == position.getX() &&
-                    tileEntity.getY() == position.getY() &&
-                    tileEntity.getZ() == position.getZ())
-                .findFirst();
-            if (foundTileEntity.isPresent()) {
-                foundTileEntity.get().setNbt(tileEntityTag);
-            } else {
-                chunk.blockEntities.add(new BlockEntityInfo(position.getX(),
-                                                            position.getY(),
-                                                            position.getZ(),
-                                                            type,
-                                                            tileEntityTag));
+        try {
+            // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
+            final MNBT nbt = MNBTIO.write(tileEntityTag);
+            synchronized (chunk.blockEntities) {
+                Optional<BlockEntityInfo> foundTileEntity = chunk.blockEntities.stream()
+                    .filter(tileEntity -> tileEntity.getX() == position.getX() &&
+                        tileEntity.getY() == position.getY() &&
+                        tileEntity.getZ() == position.getZ())
+                    .findFirst();
+                foundTileEntity.ifPresentOrElse(
+                    tileEntity -> tileEntity.setNbt(nbt),
+                    () -> chunk.blockEntities.add(new BlockEntityInfo(position.getX(),
+                                                                      position.getY(),
+                                                                      position.getZ(),
+                                                                      type,
+                                                                      nbt))
+                );
             }
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -282,30 +290,24 @@ public class ChunkCache implements CachedData {
             if (chunk == null) {
                 return false;
             }
+            // todo: when we place certain tile entities like beds, the server sends us a block entity update packet with empty nbt
+            //  wiki.vg says this should mean the tile entity gets removed
+            //  however that doesn't seem to be correct in this case
+            //  it's possible there's some interaction with block updates and block change ack packets clients are sent that diverge from this behavior
             synchronized (chunk.blockEntities) {
                 final Optional<BlockEntityInfo> existingTileEntity = chunk.blockEntities.stream()
                     .filter(tileEntity -> tileEntity.getX() == packet.getPosition().getX() &&
                         tileEntity.getY() == packet.getPosition().getY() &&
                         tileEntity.getZ() == packet.getPosition().getZ())
                     .findFirst();
-                final CompoundTag packetNbt = packet.getNbt();
-                if (packetNbt != null && !packetNbt.isEmpty()) {
-                    // ensure position is encoded in NBT
-                    // not sure if this is totally needed or not
-                    packetNbt.put(new IntTag("x", packet.getPosition().getX()));
-                    packetNbt.put(new IntTag("y", packet.getPosition().getY()));
-                    packetNbt.put(new IntTag("z", packet.getPosition().getZ()));
-                    existingTileEntity.ifPresentOrElse(
-                        tileEntity -> tileEntity.setNbt(packetNbt),
-                        () -> chunk.blockEntities.add(new BlockEntityInfo(packet.getPosition().getX(),
-                                                                   packet.getPosition().getY(),
-                                                                   packet.getPosition().getZ(),
-                                                                   packet.getType(),
-                                                                   packetNbt))
-                    );
-                } else {
-                    existingTileEntity.ifPresent(chunk.blockEntities::remove);
-                }
+                existingTileEntity.ifPresentOrElse(
+                    tileEntity -> tileEntity.setNbt(packet.getNbt()),
+                    () -> chunk.blockEntities.add(new BlockEntityInfo(packet.getPosition().getX(),
+                                                                      packet.getPosition().getY(),
+                                                                      packet.getPosition().getZ(),
+                                                                      packet.getType(),
+                                                                      packet.getNbt()))
+                );
             }
             return true;
         });

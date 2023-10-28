@@ -33,6 +33,8 @@
   }, {
     "pattern":"\\QMETA-INF/services/org.eclipse.jgit.transport.SshSessionFactory\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/org.eclipse.jgit.transport.Transport\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/exec\\E"

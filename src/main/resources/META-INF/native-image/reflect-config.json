@@ -1012,6 +1012,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$AntiLeak",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$AutoEat",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

@@ -211,7 +211,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:91ea5b52fc") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:4ca5bb4db2") {
+    shade("com.github.rfresh2:MCProtocolLib:c13f2fdcbb") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
