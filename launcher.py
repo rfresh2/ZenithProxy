@@ -30,7 +30,7 @@ default_java_args = """\
 -Dio.netty.leakDetection.level=disabled"""
 
 default_linux_args = """\
--Xmx150m \
+-Xmx200m \
 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 \
 -Dio.netty.allocator.maxOrder=9 \
 -Dio.netty.leakDetection.level=disabled"""

@@ -41,12 +41,13 @@ public class DebugCommand extends Command {
                             if (toggle) {
                                 CONFIG.debug.packet.received = true;
                                 CONFIG.debug.packet.receivedBody = true;
-                                CONFIG.debug.packet.preSent = false;
+                                CONFIG.debug.packet.preSent = true;
                                 CONFIG.debug.packet.postSent = true;
-                                CONFIG.debug.packet.postSentBody = true;
+//                                CONFIG.debug.packet.postSentBody = true;
                             } else {
                                 CONFIG.debug.packet.received = false;
                                 CONFIG.debug.packet.postSent = false;
+                                CONFIG.debug.packet.preSent = false;
                             }
                             c.getSource().getEmbedBuilder()
                                     .title("Packet Log " + (toggle ? "On!" : "Off!"))
