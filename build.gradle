@@ -427,6 +427,8 @@ graalvmNative {
                     "--initialize-at-run-time=io.netty.channel.unix.Socket",
                     "--initialize-at-run-time=io.netty.channel.ChannelHandlerMask",
                     "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl",
+                    "--initialize-at-run-time=org.jline.nativ",
+                    "--initialize-at-run-time=com.velocitypowered.natives",
                     "--enable-url-protocols=https,http",
                     "--report-unsupported-elements-at-runtime",
                     "-H:+ReportExceptionStackTraces",
