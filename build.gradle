@@ -216,7 +216,7 @@ dependencies {
         exclude group: 'io.netty'
         exclude group: 'com.velocitypowered'
     }
-    shade "com.github.rfresh2.Velocity:velocity-native:a2282d4d1c"
+    shade "com.github.rfresh2.Velocity:velocity-native:f7fecb4ea5"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"
