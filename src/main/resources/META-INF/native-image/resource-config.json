@@ -27,6 +27,8 @@
   }, {
     "pattern":"\\QMETA-INF/services/java.time.zone.ZoneRulesProvider\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/java.util.spi.ResourceBundleControlProvider\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer$Provider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider\\E"
@@ -191,6 +193,8 @@
   }, {
     "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl30x.so\\E"
   }, {
+    "pattern":"\\Qlinux_x86_64/velocity-cipher.so\\E"
+  }, {
     "pattern":"\\Qlinux_x86_64/velocity-compress.so\\E"
   }, {
     "pattern":"\\Qlogback-test.scmo\\E"
@@ -204,6 +208,8 @@
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Windows/x86_64/jansi.dll\\E"
   }, {
     "pattern":"\\Qorg/fusesource/jansi/jansi.properties\\E"
+  }, {
+    "pattern":"\\Qorg/jline/nativ/Linux/x86_64/libjlinenative.so\\E"
   }, {
     "pattern":"\\Qorg/jline/nativ/Windows/x86_64/jlinenative.dll\\E"
   }, {
@@ -239,7 +245,7 @@
   }]},
   "bundles":[{
     "name":"org.eclipse.jgit.internal.JGitText",
-    "locales":["und"]
+    "locales":["", "und"]
   }, {
     "name":"sun.awt.resources.awt",
     "classNames":["sun.awt.resources.awt"]
