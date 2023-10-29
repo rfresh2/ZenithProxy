@@ -10,7 +10,7 @@ import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
-import de.themoep.minedown.adventure.MineDown;
+import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 
 import java.util.EnumSet;
@@ -49,11 +49,11 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
                     connection.send(new ClientboundSystemChatPacket(
-                        MineDown.parse("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
+                        ComponentSerializer.mineDownParse("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
                     ));
                     if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
                         connection.send(new ClientboundSystemChatPacket(
-                            MineDown.parse("&9Send private messages: \"!m <message>\"&r"), false
+                            ComponentSerializer.mineDownParse("&9Send private messages: \"!m <message>\"&r"), false
                         ));
                     }
                 });
@@ -62,10 +62,10 @@ public class LoginSpectatorPostHandler implements PostOutgoingHandler<Clientboun
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
         // send command help
-        session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &2Spectating &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
+        session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &2Spectating &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
         if (CONFIG.inGameCommands.enable) {
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&chelp &7- &8List Commands"), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&chelp &7- &8List Commands"), false));
         }
     }
 }

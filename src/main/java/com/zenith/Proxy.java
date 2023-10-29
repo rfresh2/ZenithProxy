@@ -26,11 +26,11 @@ import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ProxyServerListener;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.ProxyServerLoginHandler;
+import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
 import com.zenith.via.MCProxyViaServerProxy;
 import com.zenith.via.ProtocolVersionDetector;
-import de.themoep.minedown.adventure.MineDown;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -585,7 +585,7 @@ public class Proxy {
             final int minsUntil8Hrs = (int) ((28800 - (Instant.now().getEpochSecond() - connectTime.getEpochSecond())) / 60);
             if (minsUntil8Hrs < 0) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
-                MineDown.parse((minsUntil8Hrs <= 3 ? "&c" : "&9") + "8hr kick in: " + minsUntil8Hrs + "m"));
+                ComponentSerializer.mineDownParse((minsUntil8Hrs <= 3 ? "&c" : "&9") + "8hr kick in: " + minsUntil8Hrs + "m"));
             playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
@@ -694,7 +694,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry().getName() + "&r&e connected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&b" + event.playerEntry().getName() + "&r&e connected"), false));
             }
         }
     }
@@ -703,7 +703,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(MineDown.parse("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
             }
         }
     }

@@ -436,7 +436,7 @@ graalvmNative {
 //                    "-H:+DashboardAll",
                     "--static",
                     "--libc=musl",
-                    "-R:MaxHeapSize=150m",
+                    "-R:MaxHeapSize=200m",
 //                    "--pgo-instrument",
                     "-march=x86-64-v3",
                     "--gc=serial",

@@ -7,7 +7,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.network.registry.PostOutgoingHandler;
 import com.zenith.network.server.ServerConnection;
-import de.themoep.minedown.adventure.MineDown;
+import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
@@ -37,21 +37,21 @@ public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPac
                 });
         // add spectators and self to team
         if (CONFIG.client.extra.chat.hideChat) {
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));
         }
         if (CONFIG.client.extra.chat.hideWhispers) {
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&7Whispers are currently disabled. To enable whispers, type &c/toggleprivatemsgs&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Whispers are currently disabled. To enable whispers, type &c/toggleprivatemsgs&7."), false));
         }
         if (CONFIG.client.extra.chat.showConnectionMessages) {
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&7Connection messages enabled. To disable, type &c/toggleconnectionmsgs&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Connection messages enabled. To disable, type &c/toggleconnectionmsgs&7."), false));
         }
         if (CONFIG.client.extra.chat.hideDeathMessages) {
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&7Death messages are currently disabled. To enable death messages, type &c/toggledeathmsgs&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Death messages are currently disabled. To enable death messages, type &c/toggledeathmsgs&7."), false));
         }
-        session.send(new ClientboundSystemChatPacket(MineDown.parse("&7[&9ZenithProxy&7]&r &2Connected to &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
+        session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &2Connected to &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
         if (CONFIG.inGameCommands.enable) {
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
-            session.send(new ClientboundSystemChatPacket(MineDown.parse("&chelp &7- &8List Commands"), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&chelp &7- &8List Commands"), false));
         }
     }
 }

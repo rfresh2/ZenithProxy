@@ -10,7 +10,7 @@ import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.registry.IncomingHandler;
 import com.zenith.network.server.ServerConnection;
-import de.themoep.minedown.adventure.MineDown;
+import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 
 import static com.zenith.Shared.*;
@@ -25,7 +25,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                     handleCommandInput(packet.getMessage(), session);
                 } else {
                     Proxy.getInstance().getActiveConnections().forEach(connection -> {
-                        connection.send(new ClientboundSystemChatPacket(MineDown.parse("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r"), false));
+                        connection.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r"), false));
                     });
                 }
             });
@@ -38,22 +38,22 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
         final String command = fullCommandAndArgs.split(" ")[0]; // first word is the command
         switch (command) {
             case "help" -> {
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&9&lSpectator commands:"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9&lSpectator commands:"), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
                 session.send(new ClientboundSystemChatPacket(Component.text(""), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&chelp &7- &8Display help menu"), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&chelp &7- &8Display help menu"), false));
                 if (CONFIG.server.spectator.spectatorPublicChatEnabled)
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cm &7- &8Send public chats"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cplayercam &7- &8Set camera to the player"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&cetoggle &7- &8Hide your entity from yourself"), false));
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&7&ce &7- &8List spectator entities. Change with \"!e <entity>\""), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&cm &7- &8Send public chats"), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&cplayercam &7- &8Set camera to the player"), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&cetoggle &7- &8Hide your entity from yourself"), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&ce &7- &8List spectator entities. Change with \"!e <entity>\""), false));
             }
             case "m" -> {
                 if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
                     String chatMessageContent = fullCommandAndArgs.substring(1).trim();
                     Proxy.getInstance().getClient().send(new ServerboundChatPacket(chatMessageContent));
                 } else {
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&cSpectator chat disabled&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&cSpectator chat disabled&r"), false));
                 }
             }
             case "etoggle" -> {
@@ -64,7 +64,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                 } else {
                     session.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                 }
-                session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Show self entity toggled " + (session.isShowSelfEntity() ? "on!" : "off!") + "&r"), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9Show self entity toggled " + (session.isShowSelfEntity() ? "on!" : "off!") + "&r"), false));
             }
             case "e" -> {
                 String entityId = fullCommandAndArgs.substring(1).trim();
@@ -79,10 +79,10 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                             SpectatorUtils.updateSpectatorPosition(session);
                         }
                     });
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Updated entity to: " + entityId + "&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9Updated entity to: " + entityId + "&r"), false));
                 } else {
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&cNo entity found with id: " + entityId + "&r"), false));
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&cValid id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers()) + "&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&cNo entity found with id: " + entityId + "&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&cValid id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers()) + "&r"), false));
                 }
             }
             case "playercam" -> {
@@ -91,14 +91,14 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                     session.setCameraTarget(null);
                     session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
                     SpectatorUtils.syncSpectatorPositionToEntity(session, existingTarget);
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Exited playercam!&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9Exited playercam!&r"), false));
                 } else {
                     session.setCameraTarget(CACHE.getPlayerCache().getThePlayer());
                     session.send(new ClientboundSetCameraPacket(CACHE.getPlayerCache().getEntityId()));
                     Proxy.getInstance().getActiveConnections().forEach(connection -> {
                         connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                     });
-                    session.send(new ClientboundSystemChatPacket(MineDown.parse("&9Entered playercam!&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9Entered playercam!&r"), false));
                 }
             }
             default -> handleCommandInput("help", session);

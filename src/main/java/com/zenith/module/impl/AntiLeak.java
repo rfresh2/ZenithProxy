@@ -5,7 +5,7 @@ import com.zenith.Proxy;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.OutboundChatEvent;
 import com.zenith.module.Module;
-import de.themoep.minedown.adventure.MineDown;
+import com.zenith.util.ComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class AntiLeak extends Module {
             MODULE_LOG.info("AntiLeak cancelled chat message: " + message);
             if (Proxy.getInstance().hasActivePlayer())
                 Proxy.getInstance().getCurrentPlayer().get()
-                    .sendAsync(new ClientboundSystemChatPacket(MineDown.parse("&7[&ZenithProxy&7]&r &cAntiLeak Cancelled Chat"), false));
+                    .sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&ZenithProxy&7]&r &cAntiLeak Cancelled Chat"), false));
         }
     }
 }

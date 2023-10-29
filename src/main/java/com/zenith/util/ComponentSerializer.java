@@ -1,5 +1,6 @@
 package com.zenith.util;
 
+import de.themoep.minedown.adventure.MineDown;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
@@ -31,5 +32,12 @@ public final class ComponentSerializer {
 
     public static Component translate(Component component) {
         return GlobalTranslator.render(component, Locale.ENGLISH);
+    }
+
+    public static Component mineDownParse(String message, String... replacements) {
+        return new MineDown(message)
+            .urlDetection(false) // this uses a url matching regex by default that adds mem usage and isn't needed
+            .replace(replacements)
+            .toComponent();
     }
 }

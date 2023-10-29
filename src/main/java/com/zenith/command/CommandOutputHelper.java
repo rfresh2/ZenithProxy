@@ -3,7 +3,7 @@ package com.zenith.command;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.google.common.collect.ImmutableMap;
 import com.zenith.network.server.ServerConnection;
-import de.themoep.minedown.adventure.MineDown;
+import com.zenith.util.ComponentSerializer;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import lombok.experimental.UtilityClass;
@@ -77,7 +77,7 @@ public class CommandOutputHelper {
             output.append(": ");
             output.append(field.value());
         });
-        session.sendAsync(new ClientboundSystemChatPacket(MineDown.parse(output.toString()), false));
+        session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse(output.toString()), false));
     }
 
     public void logMultiLineOutputToInGame(final CommandContext commandContext, final ServerConnection session) {

@@ -26,7 +26,6 @@ import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.util.ComponentSerializer;
-import de.themoep.minedown.adventure.MineDown;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -182,7 +181,7 @@ public class ServerConnection implements Session, SessionListener {
             } else {
                 Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    connection.send(new ClientboundSystemChatPacket(MineDown.parse("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
+                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
                 });
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
