@@ -3,6 +3,8 @@
   "includes":[{
     "pattern":"\\QMETA-INF/MANIFEST.MF\\E"
   }, {
+    "pattern":"\\QMETA-INF/maven/org.jline/jline-native/pom.properties\\E"
+  }, {
     "pattern":"\\QMETA-INF/native/libnetty_transport_native_epoll_x86_64.so\\E"
   }, {
     "pattern":"\\QMETA-INF/services/ch.qos.logback.classic.spi.Configurator\\E"
@@ -39,9 +41,13 @@
   }, {
     "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/exec\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/ffm\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/jansi\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/jna\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/jni\\E"
   }, {
     "pattern":"\\Qassets/viabackwards/config.yml\\E"
   }, {
@@ -199,6 +205,8 @@
   }, {
     "pattern":"\\Qorg/fusesource/jansi/jansi.properties\\E"
   }, {
+    "pattern":"\\Qorg/jline/nativ/Windows/x86_64/jlinenative.dll\\E"
+  }, {
     "pattern":"\\Qorg/jline/utils/*.caps\\E"
   }, {
     "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"
@@ -206,6 +214,8 @@
     "pattern":"\\Qorg/jline/utils/dumb-color.caps\\E"
   }, {
     "pattern":"\\Qorg/jline/utils/screen.caps\\E"
+  }, {
+    "pattern":"\\Qorg/jline/utils/windows-vtp.caps\\E"
   }, {
     "pattern":"\\Qorg/postgresql/driverconfig.properties\\E"
   }, {
