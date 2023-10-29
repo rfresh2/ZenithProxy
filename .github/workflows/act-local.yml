@@ -21,7 +21,6 @@ jobs:
           java-version: '21'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          native-image-musl: true
 #
 #      - name: Set ACT Runner Env Variables
 #        run: |

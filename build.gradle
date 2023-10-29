@@ -434,8 +434,6 @@ graalvmNative {
                     "-H:IncludeLocales=en",
 //                    "-H:DashboardDump=imageDashboardDump",
 //                    "-H:+DashboardAll",
-                    "--static",
-                    "--libc=musl",
                     "-R:MaxHeapSize=200m",
 //                    "--pgo-instrument",
                     "-march=x86-64-v3",

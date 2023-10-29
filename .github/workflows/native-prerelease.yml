@@ -19,7 +19,6 @@ jobs:
           java-version: '21'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          native-image-musl: true
 
       - name: Echo Versions and Paths
         run: |
