@@ -3738,6 +3738,10 @@
   "methods":[{"name":"getUnsafe","parameterTypes":[] }]
 },
 {
+  "name":"jdk.net.ExtendedSocketOptions",
+  "fields":[{"name":"TCP_KEEPCOUNT"}, {"name":"TCP_KEEPIDLE"}, {"name":"TCP_KEEPINTERVAL"}]
+},
+{
   "name":"org.eclipse.jgit.internal.JGitText",
   "allPublicFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
