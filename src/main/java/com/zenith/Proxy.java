@@ -12,6 +12,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.Clientb
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
+import com.velocitypowered.natives.util.Natives;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.Subscription;
@@ -32,8 +33,6 @@ import com.zenith.util.Wait;
 import com.zenith.via.MCProxyViaServerProxy;
 import com.zenith.via.ProtocolVersionDetector;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import lombok.Getter;
@@ -154,16 +153,8 @@ public class Proxy {
             }
             this.startServer();
             CACHE.reset(true);
-            DEFAULT_LOG.info("OS Arch: {} ", System.getProperty("os.arch", ""));
-            DEFAULT_LOG.info("OS Name: {} ", System.getProperty("os.name", ""));
-            ByteBuf test = Unpooled.directBuffer();
-            boolean canGetMemAddress = false;
-            try {
-                canGetMemAddress = test.hasMemoryAddress();
-            } finally {
-                test.release();
-            }
-            DEFAULT_LOG.info("Can get memory address: {}", canGetMemAddress);
+            DEFAULT_LOG.info("compress: {}", Natives.compress.getLoadedVariant());
+            DEFAULT_LOG.info("encrypt: {}", Natives.cipher.getLoadedVariant());
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             // health check on proxy server state.
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
