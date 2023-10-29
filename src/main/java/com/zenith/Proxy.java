@@ -23,6 +23,8 @@ import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
 import de.themoep.minedown.adventure.MineDown;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.rest.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
@@ -140,6 +142,20 @@ public class Proxy {
             }
             this.startServer();
             CACHE.reset(true);
+            if (CONFIG.betaIsOverWarning) {
+                if (DISCORD_BOT.isRunning()) {
+                    DISCORD_BOT.sendEmbedMessage(
+                        "<@&" + CONFIG.discord.accountOwnerRoleId + ">",
+                        EmbedCreateSpec.builder()
+                            .title("The 1.20 beta is over!")
+                            .color(Color.RUBY)
+                            .description("Update using the command: `channel set java 1.20.1` or `channel set linux 1.20.1`")
+                            .build());
+                } else {
+                    DEFAULT_LOG.error("The 1.20 beta is over!");
+                    DEFAULT_LOG.error("Update to the latest version with `channel set java 1.20.1` or `channel set linux 1.20.1");
+                }
+            }
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             // health check on proxy server state.
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);

@@ -328,7 +328,7 @@ public class DiscordBot {
         }
     }
 
-    private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
+    public void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
         try {
             mainChannelMessageQueue.add(MessageCreateSpec.builder()
                                             .content(message)

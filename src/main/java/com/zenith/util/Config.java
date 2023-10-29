@@ -20,7 +20,7 @@ public final class Config {
     public Discord discord = new Discord();
     public Database database = new Database();
     public AutoUpdater autoUpdater = new AutoUpdater();
-
+    public boolean betaIsOverWarning = true;
     public static final class Authentication {
         public AccountType accountType = AccountType.DEVICE_CODE;
         // only used for MSA
