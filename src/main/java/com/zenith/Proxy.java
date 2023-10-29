@@ -32,6 +32,8 @@ import com.zenith.util.Wait;
 import com.zenith.via.MCProxyViaServerProxy;
 import com.zenith.via.ProtocolVersionDetector;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import lombok.Getter;
@@ -152,6 +154,16 @@ public class Proxy {
             }
             this.startServer();
             CACHE.reset(true);
+            DEFAULT_LOG.info("OS Arch: {} ", System.getProperty("os.arch", ""));
+            DEFAULT_LOG.info("OS Name: {} ", System.getProperty("os.name", ""));
+            ByteBuf test = Unpooled.directBuffer();
+            boolean canGetMemAddress = false;
+            try {
+                canGetMemAddress = test.hasMemoryAddress();
+            } finally {
+                test.release();
+            }
+            DEFAULT_LOG.info("Can get memory address: {}", canGetMemAddress);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
             // health check on proxy server state.
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
