@@ -341,7 +341,12 @@ public final class Config {
         }
 
         public String getProxyAddress() {
-            return this.proxyIP;
+            // if the proxy IP is not a DNS name, also return the port appended
+            if (!this.proxyIP.contains(":") // port already appended
+                && this.proxyIP.contains("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+")) // IP address
+                return this.proxyIP + ":" + this.bind.port;
+             else
+                return this.proxyIP;
         }
     }
 

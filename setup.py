@@ -191,7 +191,7 @@ config["server"] = {
     "bind": {
         "port": port,
     },
-    "proxyIP": ip
+    "proxyIP": ip + ":" + str(port)
 }
 
 if discord_bot:
