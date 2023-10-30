@@ -32,6 +32,8 @@ public class VisualRangeCommand extends Command {
                         "friend list",
                         "friend clear",
                         "ignoreFriends on/off",
+                        "leave on/off",
+                        "logout on/off",
                         "enemyTracking on/off"
                 ),
                 aliases()
@@ -88,6 +90,20 @@ public class VisualRangeCommand extends Command {
                                 .title("Ignore Friends " + (CONFIG.client.extra.visualRangeIgnoreFriends ? "On!" : "Off!"));
                             return 1;
                       })))
+            .then(literal("leave")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.visualRangeLeftAlert = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Leave Alerts " + (CONFIG.client.extra.visualRangeLeftAlert ? "On!" : "Off!"));
+                            return 1;
+                      })))
+            .then(literal("logout")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.visualRangeLeftLogoutAlert = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Logout Alerts " + (CONFIG.client.extra.visualRangeLeftLogoutAlert ? "On!" : "Off!"));
+                            return 1;
+                      })))
             .then(literal("enemytracking")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangePositionTracking = getToggle(c, "toggle");
@@ -117,6 +133,8 @@ public class VisualRangeCommand extends Command {
             .addField("VisualRange Alerts", toggleStr(CONFIG.client.extra.visualRangeAlert), false)
             .addField("Mentions", toggleStr(CONFIG.client.extra.visualRangeAlertMention), false)
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRangeIgnoreFriends), false)
+            .addField("Leave Alerts", toggleStr(CONFIG.client.extra.visualRangeLeftAlert), false)
+            .addField("Logout Alerts", toggleStr(CONFIG.client.extra.visualRangeLeftLogoutAlert), false)
             .addField("Enemy Tracking", toggleStr(CONFIG.client.extra.visualRangePositionTracking), false)
             .color(Color.CYAN);
     }

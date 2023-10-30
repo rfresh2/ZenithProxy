@@ -1,11 +1,15 @@
 package com.zenith.cache.data.entity;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
 
+import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -14,6 +18,10 @@ import static com.zenith.Shared.CACHE;
 
 public class EntityCache implements CachedData {
     protected final ConcurrentHashMap<Integer, Entity> cachedEntities = new ConcurrentHashMap<>();
+    protected final Cache<UUID, EntityPlayer> recentlyRemovedPlayers = Caffeine.newBuilder()
+        // really we're looking for players in the last tick (with generous headroom for async scheduling)
+        .expireAfterWrite(Duration.ofSeconds(2))
+        .build();
     private static final double maxDistanceExpected = Math.pow(32, 2); // squared to speed up calc, no need to sqrt
 
     @Override
@@ -34,6 +42,7 @@ public class EntityCache implements CachedData {
         } else {
             this.cachedEntities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
         }
+        this.recentlyRemovedPlayers.invalidateAll();
     }
 
     @Override
@@ -46,7 +55,14 @@ public class EntityCache implements CachedData {
     }
 
     public Entity remove(int id)  {
-        return this.cachedEntities.remove(id);
+        Entity entity = this.cachedEntities.remove(id);
+        if (entity instanceof EntityPlayer player)
+            this.recentlyRemovedPlayers.put(player.getUuid(), player);
+        return entity;
+    }
+
+    public Optional<EntityPlayer> getRecentlyRemovedPlayer(UUID uuid) {
+        return Optional.ofNullable(this.recentlyRemovedPlayers.getIfPresent(uuid));
     }
 
     @SuppressWarnings("unchecked")

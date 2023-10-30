@@ -71,6 +71,8 @@ public final class Config {
             public boolean visualRangeIgnoreFriends = false;
             public boolean visualRangeAlertMention = false;
             public boolean visualRangePositionTracking = false;
+            public boolean visualRangeLeftAlert = true;
+            public boolean visualRangeLeftLogoutAlert = true;
             public List<WhitelistEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;

@@ -108,6 +108,8 @@ public class DiscordBot {
             pair(ProxySpectatorConnectedEvent.class, this::handleProxySpectatorConnectedEvent),
             pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
             pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
+            pair(PlayerLeftVisualRangeEvent.class, this::handlePlayerLeftVisualRangeEvent),
+            pair(PlayerLogoutInVisualRangeEvent.class, this::handlePlayerLogoutInVisualRangeEvent),
             pair(NonWhitelistedPlayerConnectedEvent.class, this::handleNonWhitelistedPlayerConnectedEvent),
             pair(ProxySpectatorDisconnectedEvent.class, this::handleProxySpectatorDisconnectedEvent),
             pair(ActiveHoursConnectEvent.class, this::handleActiveHoursConnectEvent),
@@ -674,8 +676,7 @@ public class DiscordBot {
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeAlert) return;
-        boolean isFriend = CONFIG.client.extra.friendsList.stream()
-                .anyMatch(friend -> friend.uuid.equals(event.playerEntry().getProfileId()));
+        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry().getName());
             return;
@@ -730,6 +731,54 @@ public class DiscordBot {
                 sendEmbedMessage(embedCreateSpec.build());
             }
         }
+    }
+
+    public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
+        if (!CONFIG.client.extra.visualRangeLeftAlert) return;
+        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntity().getUuid());
+        if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
+            DISCORD_LOG.debug("Ignoring visual range left alert for friend: " + event.playerEntry().getName());
+            return;
+        }
+        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
+            .title("Player Left Visual Range")
+            .color(isFriend ? Color.GREEN : Color.RUBY)
+            .addField("Player Name", escape(event.playerEntry().getName()), true)
+            .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
+            .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
+
+        if (CONFIG.discord.reportCoords) {
+            embedCreateSpec.addField("Coordinates", "||["
+                + (int) event.playerEntity().getX() + ", "
+                + (int) event.playerEntity().getY() + ", "
+                + (int) event.playerEntity().getZ()
+                + "]||", false);
+        }
+        sendEmbedMessage(embedCreateSpec.build());
+    }
+
+    public void handlePlayerLogoutInVisualRangeEvent(final PlayerLogoutInVisualRangeEvent event) {
+        if (!CONFIG.client.extra.visualRangeLeftAlert || !CONFIG.client.extra.visualRangeLeftLogoutAlert) return;
+        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntry().getProfileId());
+        if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
+            DISCORD_LOG.debug("Ignoring visual range logout alert for friend: " + event.playerEntry().getName());
+            return;
+        }
+        EmbedCreateSpec.Builder embedCreateSpec = EmbedCreateSpec.builder()
+            .title("Player Logout In Visual Range")
+            .color(isFriend ? Color.GREEN : Color.RUBY)
+            .addField("Player Name", escape(event.playerEntry().getName()), true)
+            .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
+            .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
+
+        if (CONFIG.discord.reportCoords) {
+            embedCreateSpec.addField("Coordinates", "||["
+                + (int) event.playerEntity().getX() + ", "
+                + (int) event.playerEntity().getY() + ", "
+                + (int) event.playerEntity().getZ()
+                + "]||", false);
+        }
+        sendEmbedMessage(embedCreateSpec.build());
     }
 
     public void handleNonWhitelistedPlayerConnectedEvent(NonWhitelistedPlayerConnectedEvent event) {

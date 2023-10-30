@@ -32,6 +32,7 @@ public class AddPlayerHandler implements AsyncIncomingHandler<ClientboundAddPlay
             .orElseGet(() ->
                 // may occur at login if this packet is received before the tablist is populated
                 // this function performs a mojang api call so it will take awhile
+                // alternate solution would be to just wait another tick or so for the tablist to be populated
                 WHITELIST_MANAGER.getWhitelistEntryFromUUID(packet.getUuid())
                     .map(entry -> new PlayerListEntry(entry.username, entry.uuid))
                     .orElseGet(() -> new PlayerListEntry("", packet.getUuid())));

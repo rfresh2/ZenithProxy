@@ -1,8 +1,10 @@
 package com.zenith.network.client.handler.incoming.entity;
 
+import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.event.proxy.PlayerLeftVisualRangeEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncIncomingHandler;
 import lombok.NonNull;
@@ -35,6 +37,15 @@ public class RemoveEntitiesHandler implements AsyncIncomingHandler<ClientboundRe
                         if (passengerEntity != null) {
                             passengerEntity.dismountVehicle();
                         }
+                    }
+                    if (removed instanceof EntityPlayer player && !player.isSelfPlayer()) {
+                        EVENT_BUS.postAsync(new PlayerLeftVisualRangeEvent(
+                            CACHE.getTabListCache()
+                                .get(player.getUuid())
+                                // todo: this packet seems to always be received first and we shouldn't hit the orElse, but this could change based on the server
+                                .orElse(new PlayerListEntry("", player.getUuid())),
+                            player
+                        ));
                     }
                 }
             } catch (final Exception e) {
