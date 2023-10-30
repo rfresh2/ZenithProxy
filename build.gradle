@@ -13,19 +13,16 @@ buildscript {
             url 'https://jitpack.io'
         }
     }
-    // todo: use non-jitpack'd version when https://github.com/johnrengelman/shadow/pull/879 is merged
-    dependencies {
-        classpath "com.github.rfresh2:shadow:3d1505e480"
-    }
 }
 
 plugins {
     id 'nu.studer.jooq' version '8.2.1'
     id 'java'
     id 'org.graalvm.buildtools.native' version '0.9.28'
+    // todo: use non-jitpack'd version when https://github.com/johnrengelman/shadow/pull/879 is merged
+    id 'io.github.goooler.shadow' version '8.1.2'
 }
 
-apply plugin: "com.github.johnrengelman.shadow"
 group "com.zenith"
 version = "1.0.0"
 
