@@ -211,7 +211,9 @@ dependencies {
     shade("com.github.rfresh2:MCProtocolLib:6a550339b8") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
+        exclude group: 'com.github.rfresh2', module: 'MCAuthLib'
     }
+    shade "com.github.rfresh2:MCAuthLib:736019231d"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"

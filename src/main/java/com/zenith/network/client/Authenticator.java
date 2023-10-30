@@ -14,13 +14,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Getter
 public class Authenticator {
     protected AuthenticationService auth;
+    protected ScheduledFuture<?> refreshTask;
 
     private AuthenticationService getAuth() {
         if (nonNull(this.auth)) return this.auth;
@@ -31,6 +35,13 @@ public class Authenticator {
         this.auth = this.getAuth();
         try {
             this.auth.login();
+            if (auth instanceof MsaDeviceAuthenticationService) {
+                if (this.refreshTask != null) {
+                    this.refreshTask.cancel(true);
+                }
+                if (CONFIG.authentication.msaDeviceCodeTokenRefresh)
+                    scheduleDeviceCodeRefresh();
+            }
             if (CONFIG.authentication.accountType == AccountType.MSA || CONFIG.authentication.accountType == AccountType.DEVICE_CODE) {
                 if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
                     CONFIG.authentication.username = auth.getSelectedProfile().getName();
@@ -45,6 +56,33 @@ public class Authenticator {
         } catch (Exception e) {
             reset();
             throw new RuntimeException("Unable to log in", e);
+        }
+    }
+
+    private void scheduleDeviceCodeRefresh() {
+        if (this.auth instanceof MsaDeviceAuthenticationService deviceService) {
+            deviceService.getExpiryDate()
+                .ifPresent(date -> {
+                    final long time = date.getTime() - System.currentTimeMillis();
+                    if (time <= 0) {
+                        CLIENT_LOG.error("Device code refresh time is negative? {}", time);
+                        return;
+                    }
+                    this.refreshTask = SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+                        try {
+                            CLIENT_LOG.info("Running background device code token refresh..");
+                            deviceService.refreshMsalToken();
+                            if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
+                                CONFIG.authentication.username = auth.getSelectedProfile().getName();
+                                saveConfigAsync();
+                            }
+                            scheduleDeviceCodeRefresh();
+                        } catch (Throwable e) {
+                            CLIENT_LOG.error("Error refreshing device code token", e);
+                        }
+                    }, time, MILLISECONDS);
+                    CLIENT_LOG.info("Device code refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
+                });
         }
     }
 
