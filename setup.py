@@ -1,6 +1,7 @@
 import http.client
 import json
 import os
+import re
 
 if os.path.exists("launch_config.json"):
     while True:
@@ -187,11 +188,14 @@ if auth_method == "msa":
         "password": password
     }
 
+ipPattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+proxyAddress = ip + ":" + str(port) if ipPattern.match(ip) else ip
+
 config["server"] = {
     "bind": {
         "port": port,
     },
-    "proxyIP": ip + ":" + str(port)
+    "proxyIP": proxyAddress
 }
 
 if discord_bot:
