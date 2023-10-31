@@ -59,19 +59,10 @@ else:
     print("Auto-selecting the java release channel based on current system")
     release_channel = "java"
 
-while True:
-    print("Select a Minecraft version: (1/2)")
-    print("1. 1.20.1")
-    print("2. 1.12.2")
-    i1 = input("> ")
-    if i1 == "1":
-        minecraft_version = "1.20.1"
-        break
-    elif i1 == "2":
-        minecraft_version = "1.12.2"
-        break
-    else:
-        print("Invalid input. Enter 1 or 2")
+# Auto-selecting 1.20.1 for now
+# 1.12.2 is deprecated
+# may return this option we support future versions
+minecraft_version = "1.20.1"
 
 launch_config = {
     "auto_update": True,
