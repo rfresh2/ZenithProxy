@@ -54,7 +54,7 @@ jobs:
       #            build/native/nativeCompile/ZenithProxy
 
       - name: Zip Binary And Libs
-        run: apt update && apt install zip -y && zip -j ZenithProxy.zip build/native/nativeCompile/*
+        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Upload Binary
         uses: actions/upload-artifact@v3
