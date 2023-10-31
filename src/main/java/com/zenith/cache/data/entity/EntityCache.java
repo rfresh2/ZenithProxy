@@ -1,8 +1,8 @@
 package com.zenith.cache.data.entity;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
@@ -18,7 +18,7 @@ import static com.zenith.Shared.CACHE;
 
 public class EntityCache implements CachedData {
     protected final ConcurrentHashMap<Integer, Entity> cachedEntities = new ConcurrentHashMap<>();
-    protected final Cache<UUID, EntityPlayer> recentlyRemovedPlayers = Caffeine.newBuilder()
+    protected final Cache<UUID, EntityPlayer> recentlyRemovedPlayers = CacheBuilder.newBuilder()
         // really we're looking for players in the last tick (with generous headroom for async scheduling)
         .expireAfterWrite(Duration.ofSeconds(2))
         .build();
