@@ -375,6 +375,24 @@ def get_java_version():
     return None
 
 
+def validate_linux_cpu_flags():
+    x86_64_v3_flags = ["avx", "avx2", "bmi1", "bmi2", "fma", "sse4_1", "sse4_2", "ssse3"]
+    try:
+        output = subprocess.check_output(['lscpu'], stderr=subprocess.STDOUT, text=True)
+        flags_line = [line for line in output.split('\n') if "Flags" in line][0]
+        flags = flags_line.split(":")[1].strip().split(" ")
+        for flag in x86_64_v3_flags:
+            if flag not in flags:
+                print("Unsupported CPU. "
+                      + "Use the Java release channel instead. Re-run setup.py to change the release channel. "
+                      + "\nFlag not found: " + flag)
+                return False
+        return True
+    except subprocess.CalledProcessError as e:
+        print("Error checking CPU flags:", e)
+        return False
+
+
 def validate_system_with_config():
     if release_channel == "git":
         # check if we have a .git directory
@@ -386,11 +404,12 @@ def validate_system_with_config():
         java_version = get_java_version()
         min_java_version = 21 if version.startswith("2") else 17
         if java_version is None or java_version < min_java_version:
-            print("Invalid Java version on PATH. Found: '" + str(java_version) + "' Please install Java " + str(min_java_version) + " or higher.")
+            print("Invalid Java version on PATH. Found: '" + str(java_version) + "' Please install Java " + str(
+                min_java_version) + " or higher.")
             return False
         return True
     elif release_channel.startswith("linux"):
-        return system == "Linux"
+        return system == "Linux" and validate_linux_cpu_flags()
     else:
         return False
 
