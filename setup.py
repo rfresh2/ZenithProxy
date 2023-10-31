@@ -12,6 +12,8 @@ if os.path.exists("launch_config.json"):
         print("launch_config.json already exists, overwrite and continue anyway? (y/n)")
         i1 = input("> ").lower()
         if i1 == "n":
+            print("Setup complete!")
+            print("Run './launch.sh' (Unix) or '.\\launch.bat` (Windows) to start ZenithProxy!")
             exit(0)
         elif i1 == "y":
             break
@@ -83,6 +85,8 @@ if os.path.exists("config.json"):
         print("config.json already exists, overwrite and continue anyway? (y/n)")
         i1 = input("> ").lower()
         if i1 == "n":
+            print("Setup complete!")
+            print("Run './launch.sh' (Unix) or '.\\launch.bat` (Windows) to start ZenithProxy!")
             exit(0)
         elif i1 == "y":
             break
