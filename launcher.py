@@ -388,7 +388,7 @@ def validate_linux_cpu_flags():
                       + "\nFlag not found: " + flag)
                 return False
         return True
-    except (subprocess.CalledProcessError, OSError) as e:
+    except Exception as e:
         print("Error checking CPU flags:", e)
         return False
 
