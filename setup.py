@@ -1,9 +1,9 @@
 import http.client
 import json
 import os
+import platform
 import re
 import subprocess
-from sys import platform
 
 system = platform.system()
 
