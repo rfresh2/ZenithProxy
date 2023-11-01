@@ -378,9 +378,12 @@ def get_java_version():
 def validate_linux_cpu_flags():
     x86_64_v3_flags = ["avx", "avx2", "bmi1", "bmi2", "fma", "sse4_1", "sse4_2", "ssse3"]
     try:
-        output = subprocess.check_output(['lscpu'], stderr=subprocess.STDOUT, text=True)
-        flags_line = [line for line in output.split('\n') if "Flags" in line][0]
-        flags = flags_line.split(":")[1].strip().split(" ")
+        output = subprocess.check_output(['cat', '/proc/cpuinfo'], stderr=subprocess.STDOUT, text=True)
+        flags = []
+        for line in output.splitlines():
+            if line.startswith("flags"):
+                flags = line.split(": ")[1].split(" ")
+                break
         for flag in x86_64_v3_flags:
             if flag not in flags:
                 print("Unsupported CPU. "
