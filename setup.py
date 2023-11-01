@@ -29,13 +29,12 @@ def validate_linux_cpu_flags():
         flags = flags_line.split(":")[1].strip().split(" ")
         for flag in x86_64_v3_flags:
             if flag not in flags:
-                print("Unsupported CPU. "
-                      + "Use the Java release channel instead. Re-run setup.py to change the release channel. "
+                print("Unsupported CPU for linux release channel. "
                       + "\nFlag not found: " + flag)
                 return False
         return True
-    except subprocess.CalledProcessError as e:
-        print("Error checking CPU flags:", e)
+    except Exception as e:
+        print("Error checking CPU flags.")
         return False
 
 
