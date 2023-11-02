@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -24,6 +25,7 @@ public class AntiAFKCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.full(
             "antiAFK",
+            CommandCategory.MODULE,
             "Configure the AntiAFK feature",
             asList("on/off",
                    "rotate on/off",

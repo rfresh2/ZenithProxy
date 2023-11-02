@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -18,11 +19,14 @@ import static java.util.Arrays.asList;
 public class IgnoreCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("ignore", "Ignores a player", asList(
-                "add/del <player>",
-                "list",
-                "clear"
-        ));
+        return CommandUsage.args("ignore",
+                                 CommandCategory.MODULE,
+                                 "Ignores a player",
+                                 asList(
+                                     "add/del <player>",
+                                     "list",
+                                     "clear"
+                                 ));
     }
 
     @Override

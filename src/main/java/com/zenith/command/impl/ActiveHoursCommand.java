@@ -2,10 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.Command;
-import com.zenith.command.CommandContext;
-import com.zenith.command.CommandUsage;
-import com.zenith.command.CustomStringArgumentType;
+import com.zenith.command.*;
 import com.zenith.util.Config.Client.Extra.Utility.ActiveHours.ActiveTime;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
@@ -28,11 +25,12 @@ public class ActiveHoursCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "activeHours",
-                "Set active hours for the proxy to automatically be logged in at."
+            "activeHours",
+            CommandCategory.MODULE,
+            "Set active hours for the proxy to automatically be logged in at."
                         + "\n Time zone Ids (\"TZ database name\" column): https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
                         + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
-                asList("on/off",
+            asList("on/off",
                         "timezone <timezone ID>",
                         "add/del <time>",
                         "status",

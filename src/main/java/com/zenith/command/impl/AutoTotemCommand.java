@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -19,10 +20,13 @@ import static java.util.Arrays.asList;
 public class AutoTotemCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("autoTotem", "Automatically equips totems in the offhand", asList(
-                "on/off",
-                "health <int>"
-        ));
+        return CommandUsage.args("autoTotem",
+                                 CommandCategory.MODULE,
+                                 "Automatically equips totems in the offhand",
+                                 asList(
+                                     "on/off",
+                                     "health <int>"
+                                 ));
     }
 
     @Override

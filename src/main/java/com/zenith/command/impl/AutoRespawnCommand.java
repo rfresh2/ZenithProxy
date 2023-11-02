@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -21,9 +22,10 @@ public class AutoRespawnCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "autoRespawn",
-                "Automatically respawn the player after dying.",
-                asList("on/off", "delay <milliseconds>")
+            "autoRespawn",
+            CommandCategory.MODULE,
+            "Automatically respawn the player after dying.",
+            asList("on/off", "delay <milliseconds>")
         );
     }
 

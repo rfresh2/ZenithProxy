@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
@@ -15,9 +16,10 @@ public class ConnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.simpleAliases(
-                "connect",
-                "Connect the current player to the server",
-                aliases()
+            "connect",
+            CommandCategory.CORE,
+            "Connect the current player to the server",
+            aliases()
         );
     }
 

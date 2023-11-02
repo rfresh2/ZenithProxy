@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
@@ -15,9 +16,10 @@ public class DisconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.simpleAliases(
-                "disconnect",
-                "Disconnect the current player from the server",
-                aliases()
+            "disconnect",
+            CommandCategory.CORE,
+            "Disconnect the current player from the server",
+            aliases()
         );
     }
 

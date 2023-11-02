@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -20,6 +21,7 @@ public class ViaVersionCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args(
             "via",
+            CommandCategory.MODULE,
             "Configure ViaVersion",
             asList(
                 "on/off",

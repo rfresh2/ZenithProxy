@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -23,9 +24,10 @@ public class VisualRangeCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full(
-                "visualRange",
-                "Configure the VisualRange notification feature",
-                asList(
+            "visualRange",
+            CommandCategory.MODULE,
+            "Configure the VisualRange notification feature",
+            asList(
                         "on/off",
                         "mention on/off",
                         "friend add/del <player>",
@@ -36,7 +38,7 @@ public class VisualRangeCommand extends Command {
                         "logout on/off",
                         "enemyTracking on/off"
                 ),
-                aliases()
+            aliases()
         );
     }
 

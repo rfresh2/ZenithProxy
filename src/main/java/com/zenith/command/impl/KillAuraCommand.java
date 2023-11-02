@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -24,15 +25,16 @@ public class KillAuraCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("killAura",
-                "Attacks entities near the player",
-                asList("on/off",
+                                 CommandCategory.MODULE,
+                                 "Attacks entities near the player",
+                                 asList("on/off",
                        "attackDelay <ticks>",
                        "targetPlayers on/off",
                        "targetMobs on/off",
                        "targetArmorStands on/off",
                        "weaponSwitch on/off",
                        "range <number>"),
-                aliases());
+                                 aliases());
     }
 
     @Override

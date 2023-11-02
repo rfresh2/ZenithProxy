@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -16,12 +17,15 @@ import static com.zenith.command.ToggleArgumentType.toggle;
 public class ExtraChatCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("extraChat", "Extra chat commands", Arrays.asList(
-                "hideChat on/off",
-                "hideWhispers on/off",
-                "hideDeathMessages on/off",
-                "showConnectionMessages on/off"
-        ));
+        return CommandUsage.args("extraChat",
+                                 CommandCategory.MODULE,
+                                 "Extra chat commands",
+                                 Arrays.asList(
+                                     "hideChat on/off",
+                                     "hideWhispers on/off",
+                                     "hideDeathMessages on/off",
+                                     "showConnectionMessages on/off"
+                                 ));
     }
 
     @Override

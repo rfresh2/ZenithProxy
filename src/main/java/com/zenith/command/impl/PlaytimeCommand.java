@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.util.math.MathHelper;
@@ -20,6 +21,7 @@ public class PlaytimeCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("playtime",
+                                 CommandCategory.STATUS,
                                  "Gets the playtime of someone on 2b2t",
                                  asList(
                                      "<playerName>"

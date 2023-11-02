@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -18,9 +19,10 @@ public class ServerCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "server",
-                "Change the server the proxy connects to.",
-                asList("<IP>", "<IP> <port>")
+            "server",
+            CommandCategory.MANAGE,
+            "Change the server the proxy connects to.",
+            asList("<IP>", "<IP> <port>")
         );
     }
 

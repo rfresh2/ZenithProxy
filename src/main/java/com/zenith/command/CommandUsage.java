@@ -13,31 +13,33 @@ import static com.zenith.Shared.COMMAND_MANAGER;
 @Setter
 public class CommandUsage {
     private final String name;
+    private final CommandCategory category;
     private final String description;
     private final List<String> usageLines;
     private final List<String> aliases;
 
-    private CommandUsage(final String name, final String description, final List<String> usageLines, final List<String> aliases) {
+    private CommandUsage(final String name, final CommandCategory category, final String description, final List<String> usageLines, final List<String> aliases) {
         this.name = name;
+        this.category = category;
         this.description = description;
         this.usageLines = usageLines;
         this.aliases = aliases;
     }
 
-    public static CommandUsage simple(final String name, final String description) {
-        return new CommandUsage(name, description, Collections.emptyList(), Collections.emptyList());
+    public static CommandUsage simple(final String name, final CommandCategory category, final String description) {
+        return new CommandUsage(name, category, description, Collections.emptyList(), Collections.emptyList());
     }
 
-    public static CommandUsage simpleAliases(final String name, final String description, final List<String> aliases) {
-        return new CommandUsage(name, description, Collections.emptyList(), aliases);
+    public static CommandUsage simpleAliases(final String name, final CommandCategory category, final String description, final List<String> aliases) {
+        return new CommandUsage(name, category, description, Collections.emptyList(), aliases);
     }
 
-    public static CommandUsage args(final String name, final String description, final List<String> usageLines) {
-        return new CommandUsage(name, description, usageLines, Collections.emptyList());
+    public static CommandUsage args(final String name, final CommandCategory category, final String description, final List<String> usageLines) {
+        return new CommandUsage(name, category, description, usageLines, Collections.emptyList());
     }
 
-    public static CommandUsage full(final String name, final String description, final List<String> usageLines, final List<String> aliases) {
-        return new CommandUsage(name, description, usageLines, aliases);
+    public static CommandUsage full(final String name, final CommandCategory category, final String description, final List<String> usageLines, final List<String> aliases) {
+        return new CommandUsage(name, category, description, usageLines, aliases);
     }
 
     public String serialize(CommandSource commandSource) {

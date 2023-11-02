@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
@@ -26,9 +27,10 @@ public class SpectatorCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "spectator",
-                "Configure the Spectator feature",
-                asList("on/off",
+            "spectator",
+            CommandCategory.CORE,
+            "Configure the Spectator feature",
+            asList("on/off",
                         "whitelist add/del <player>", "whitelist list", "whitelist clear",
                         "entity list", "entity <entity>",
                         "chat on/off")

@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.event.proxy.UpdateStartEvent;
@@ -17,8 +18,9 @@ public class UpdateCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.simple(
-                "update",
-                "Restarts and updates the proxy software"
+            "update",
+            CommandCategory.CORE,
+            "Restarts and updates the proxy software"
         );
     }
 

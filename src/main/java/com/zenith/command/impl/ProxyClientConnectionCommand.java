@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
@@ -15,9 +16,10 @@ public class ProxyClientConnectionCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "clientConnectionMessages",
-                "Send notification messages when a client connects to the proxy",
-                asList("on/off")
+            "clientConnectionMessages",
+            CommandCategory.STATUS,
+            "Send notification messages when a client connects to the proxy",
+            asList("on/off")
         );
     }
 

@@ -3,10 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
-import com.zenith.command.Command;
-import com.zenith.command.CommandContext;
-import com.zenith.command.CommandSource;
-import com.zenith.command.CommandUsage;
+import com.zenith.command.*;
 import com.zenith.discord.DiscordBot;
 import com.zenith.network.server.ServerConnection;
 import discord4j.rest.util.Color;
@@ -24,9 +21,10 @@ public class KickCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "kick",
-                "Kick a user from the proxy. Only usable by account owners",
-                asList("<player>"));
+            "kick",
+            CommandCategory.MANAGE,
+            "Kick a user from the proxy. Only usable by account owners",
+            asList("<player>"));
     }
 
     @Override

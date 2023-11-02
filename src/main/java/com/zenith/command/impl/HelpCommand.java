@@ -2,11 +2,10 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.Command;
-import com.zenith.command.CommandContext;
-import com.zenith.command.CommandUsage;
+import com.zenith.command.*;
 import discord4j.rest.util.Color;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,10 +17,16 @@ import static java.util.Arrays.asList;
 public class HelpCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simpleAliases(
-                "help",
-                "ZenithProxy command list",
-                aliases());
+        return CommandUsage.full(
+            "help",
+            CommandCategory.CORE,
+            "ZenithProxy command list",
+            asList(
+                "",
+                "<category>",
+                "<command>"
+            ),
+            aliases());
     }
 
     @Override
@@ -30,27 +35,31 @@ public class HelpCommand extends Command {
                 c.getSource().getEmbedBuilder()
                     .title("Commands")
                     .color(Color.CYAN);
-                final String brigadierCommands = COMMAND_MANAGER.getCommands().stream()
-                    .sorted((c1, c2) -> c1.commandUsage().getName().compareToIgnoreCase(c2.commandUsage().getName()))
-                    .map(command -> command.commandUsage().shortSerialize(c.getSource().getCommandSource()))
-                    .collect(Collectors.joining("\n"));
+                final String commandUsages = getCommandUsages(c.getSource().getCommandSource(), CommandCategory.CORE);
+                final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource().getCommandSource());
                 c.getSource().getEmbedBuilder()
-                    .description("**More info:** \n  " + COMMAND_MANAGER.getCommandPrefix(c.getSource().getCommandSource()) + "help <command>\n\n**Command List**\n" + brigadierCommands);
+                    .description("**More info:** "
+                                     + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
+                                     + "\n\n**Categories**\n"
+                                     + Arrays.stream(CommandCategory.values())
+                                            .map(CommandCategory::getName)
+                                            .collect(Collectors.joining(", "))
+                                     + "\n"
+                                     + "\n**Core Commands**"
+                                     + "\n" + commandUsages
+                    );
             })
             .then(argument("commandName", string()).executes(c -> {
+                final String commandName = StringArgumentType.getString(c, "commandName");
                 c.getSource().getEmbedBuilder()
                     .title("Command Usage")
                     .color(Color.CYAN);
-                final String commandName = StringArgumentType.getString(c, "commandName");
-                final Optional<Command> foundCommand = COMMAND_MANAGER.getCommands().stream()
-                    .filter(command -> command.commandUsage().getName().equalsIgnoreCase(commandName)
-                        || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
-                    .findFirst();
-                if (foundCommand.isPresent()) {
-                    c.getSource().getEmbedBuilder().description(foundCommand.get().commandUsage().serialize(c.getSource().getCommandSource()));
-                } else {
-                    c.getSource().getEmbedBuilder().description("Unknown command");
-                }
+                Arrays.stream(CommandCategory.values())
+                    .filter(category -> category.getName().equalsIgnoreCase(commandName))
+                    .findFirst()
+                    .ifPresentOrElse(
+                        category -> populateCategory(c.getSource(), category),
+                        () -> populateCommand(c.getSource(), commandName));
                 return 1;
             }));
     }
@@ -59,4 +68,35 @@ public class HelpCommand extends Command {
     public List<String> aliases() {
         return asList("h");
     } // I love undertime slopper
+
+    private String getCommandUsages(final CommandSource src, final CommandCategory category) {
+        return COMMAND_MANAGER.getCommands(category).stream()
+            .sorted((c1, c2) -> c1.commandUsage().getName().compareToIgnoreCase(c2.commandUsage().getName()))
+            .map(command -> command.commandUsage().shortSerialize(src))
+            .collect(Collectors.joining("\n"));
+    }
+
+    private void populateCategory(final CommandContext c, final CommandCategory category) {
+        final String commandUsages = getCommandUsages(c.getCommandSource(), category);
+        final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getCommandSource());
+        c.getEmbedBuilder()
+            .description("**More info:** "
+                             + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
+                             + "\n"
+                             + "\n**" + category.getName() + " Commands**"
+                             + "\n" + commandUsages
+            );
+    }
+
+    private void populateCommand(final CommandContext c, final String commandName) {
+        final Optional<Command> foundCommand = COMMAND_MANAGER.getCommands().stream()
+            .filter(command -> command.commandUsage().getName().equalsIgnoreCase(commandName)
+                || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
+            .findFirst();
+        if (foundCommand.isPresent()) {
+            c.getEmbedBuilder().description(foundCommand.get().commandUsage().serialize(c.getCommandSource()));
+        } else {
+            c.getEmbedBuilder().description("Unknown command or category");
+        }
+    }
 }

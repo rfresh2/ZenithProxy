@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.feature.queue.Queue;
@@ -21,6 +22,7 @@ public class QueueStatusCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.simpleAliases("queueStatus",
+                                          CommandCategory.STATUS,
                                           "Prints the current 2b2t queue status",
                                           aliases());
     }

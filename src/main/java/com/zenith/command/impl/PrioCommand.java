@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -17,9 +18,10 @@ public class PrioCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "prio",
-                "Configure the mentions for 2b2t priority & priority ban updates",
-                asList("mentions on/off", "banMentions on/off", "check")
+            "prio",
+            CommandCategory.STATUS,
+            "Configure the mentions for 2b2t priority & priority ban updates",
+            asList("mentions on/off", "banMentions on/off", "check")
         );
     }
 

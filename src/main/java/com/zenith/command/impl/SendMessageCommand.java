@@ -4,6 +4,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
@@ -15,7 +16,10 @@ import static java.util.Arrays.asList;
 public class SendMessageCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simpleAliases("sendMessage", "Sends a message in-game.", asList("say", "msg", "m"));
+        return CommandUsage.simpleAliases("sendMessage",
+                                          CommandCategory.MODULE,
+                                          "Sends a message in-game.",
+                                          asList("say", "msg", "m"));
     }
 
     @Override

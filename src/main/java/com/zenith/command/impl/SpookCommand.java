@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -22,9 +23,10 @@ public class SpookCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "spook",
-                "Automatically spooks nearby players",
-                asList("on/off", "delay <ticks>", "mode <visualRange/nearest>")
+            "spook",
+            CommandCategory.MODULE,
+            "Automatically spooks nearby players",
+            asList("on/off", "delay <ticks>", "mode <visualRange/nearest>")
         );
     }
 

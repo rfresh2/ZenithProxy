@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.feature.queue.Queue;
@@ -23,9 +24,10 @@ public class StatusCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.simpleAliases(
-                "status",
-                "Gets the current proxy status",
-                aliases()
+            "status",
+            CommandCategory.CORE,
+            "Gets the current proxy status",
+            aliases()
         );
     }
 

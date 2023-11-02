@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
@@ -17,10 +18,11 @@ public class DisplayCoordsCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full(
-                "displayCoords",
-                "Sets whether proxy status commands should display coordinates. Only usable by account owner(s).",
-                asList("on/off"),
-                aliases()
+            "displayCoords",
+            CommandCategory.MANAGE,
+            "Sets whether proxy status commands should display coordinates. Only usable by account owner(s).",
+            asList("on/off"),
+            aliases()
         );
     }
 

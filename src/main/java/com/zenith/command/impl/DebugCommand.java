@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
@@ -15,9 +16,10 @@ public class DebugCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "debug",
-                "Debug settings for developers",
-                asList(
+            "debug",
+            CommandCategory.MANAGE,
+            "Debug settings for developers",
+            asList(
                         "autoConnect on/off",
                         "packetLog on/off"
                         // todo: packet filter setting

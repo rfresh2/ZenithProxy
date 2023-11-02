@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.network.client.ClientSession;
@@ -17,7 +18,9 @@ import static java.util.Objects.nonNull;
 public class RespawnCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simple("respawn", "Performs a player respawn");
+        return CommandUsage.simple("respawn",
+                                   CommandCategory.MODULE,
+                                   "Performs a player respawn");
     }
 
     @Override

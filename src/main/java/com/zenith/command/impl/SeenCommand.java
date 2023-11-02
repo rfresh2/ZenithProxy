@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.feature.api.model.SeenResponse;
@@ -22,6 +23,7 @@ public class SeenCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("seen",
+                                 CommandCategory.STATUS,
                                  "Gets the first and last times a player was seen on 2b2t",
                                  asList(
                                      "<playerName>"

@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.DiscordBot;
@@ -24,9 +25,10 @@ public class AutoReplyCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "autoReply",
-                "Configure the AutoReply feature",
-                asList("on/off", "cooldown <seconds>", "message <message>")
+            "autoReply",
+            CommandCategory.MODULE,
+            "Configure the AutoReply feature",
+            asList("on/off", "cooldown <seconds>", "message <message>")
         );
     }
 

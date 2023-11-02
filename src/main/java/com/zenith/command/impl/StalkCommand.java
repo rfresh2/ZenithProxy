@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -19,9 +20,10 @@ public class StalkCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "stalk",
-                "Configures the stalk module which sends discord mentions when a player connects",
-                asList("on/off", "list", "add/del <player>")
+            "stalk",
+            CommandCategory.MODULE,
+            "Configures the stalk module which sends discord mentions when a player connects",
+            asList("on/off", "list", "add/del <player>")
         );
     }
 

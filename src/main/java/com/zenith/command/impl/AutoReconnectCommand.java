@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -18,9 +19,10 @@ public class AutoReconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "autoReconnect",
-                "Configure the AutoReconnect feature",
-                asList("on/off", "delay <seconds>", "maxAttempts <number>"));
+            "autoReconnect",
+            CommandCategory.MODULE,
+            "Configure the AutoReconnect feature",
+            asList("on/off", "delay <seconds>", "maxAttempts <number>"));
     }
 
     @Override

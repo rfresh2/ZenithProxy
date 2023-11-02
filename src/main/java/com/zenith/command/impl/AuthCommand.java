@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
@@ -13,6 +14,7 @@ public class AuthCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args("auth",
+                                 CommandCategory.MANAGE,
                                  "Configures the proxy's authentication settings",
                                  asList("clear")
         );

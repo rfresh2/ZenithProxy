@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -23,15 +24,16 @@ public class AutoDisconnectCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full(
-                "autoDisconnect",
-                "Configures the AutoDisconnect feature",
-                asList(
+            "autoDisconnect",
+            CommandCategory.MODULE,
+            "Configures the AutoDisconnect feature",
+            asList(
                         "on/off",
                         "health <integer>",
                         "cancelAutoReconnect on/off",
                         "autoClientDisconnect on/off",
                         "thunder on/off"),
-                aliases()
+            aliases()
         );
     }
 

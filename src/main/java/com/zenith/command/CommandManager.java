@@ -90,6 +90,12 @@ public class CommandManager {
         return commandsClassMap.values().stream().toList();
     }
 
+    public List<Command> getCommands(final CommandCategory category) {
+        return commandsClassMap.values().stream()
+            .filter(command -> category == CommandCategory.ALL || command.commandUsage().getCategory() == category)
+            .toList();
+    }
+
     private void registerCommand(final Command command) {
         final LiteralCommandNode<CommandContext> node = dispatcher.register(command.register());
         command.aliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));

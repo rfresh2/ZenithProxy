@@ -3,6 +3,7 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -18,9 +19,10 @@ public class QueueWarningCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-                "queueWarning",
-                "Configure warning messages for when 2b2t queue positions are reached",
-                asList("on/off", "position <integer>", "mention on/off")
+            "queueWarning",
+            CommandCategory.STATUS,
+            "Configure warning messages for when 2b2t queue positions are reached",
+            asList("on/off", "position <integer>", "mention on/off")
         );
     }
 

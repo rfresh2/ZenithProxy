@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -17,6 +18,7 @@ public class CommandConfigCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args("commandConfig",
+                                 CommandCategory.MANAGE,
                                  "Configures settings related to ZenithProxy commands",
                                  asList(
                                      "discord prefix <string>",

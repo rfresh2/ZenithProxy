@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.module.Module;
@@ -25,18 +26,21 @@ import static java.util.Arrays.asList;
 public class SpammerCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.full("spammer", "Spams messages", asList(
-                "on/off",
-                "whisper on/off",
-                "delayTicks <int>",
-                "randomOrder on/off",
-                "appendRandom on/off",
-                "list",
-                "clear",
-                "add <message>",
-                "addAt <index> <message>",
-                "del <index>"),
-                aliases());
+        return CommandUsage.full("spammer",
+                                 CommandCategory.MODULE,
+                                 "Spams messages",
+                                 asList(
+                                     "on/off",
+                                     "whisper on/off",
+                                     "delayTicks <int>",
+                                     "randomOrder on/off",
+                                     "appendRandom on/off",
+                                     "list",
+                                     "clear",
+                                     "add <message>",
+                                     "addAt <index> <message>",
+                                     "del <index>"),
+                                 aliases());
     }
 
     @Override

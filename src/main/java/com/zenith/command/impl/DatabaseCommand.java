@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -19,6 +20,7 @@ public class DatabaseCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("database",
+                                 CommandCategory.MANAGE,
                                  "Configures what 2b2t server data is collected by the proxy. No database logs personal data.",
                                  asList(
                                      "queueWait on/off",

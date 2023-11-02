@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
+import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.common.util.Snowflake;
@@ -25,6 +26,7 @@ public class DiscordManageCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args(
             "discord",
+            CommandCategory.MANAGE,
             "Manages the discord bot configuration",
             asList(
                 "channel <channel ID>",
