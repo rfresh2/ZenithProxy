@@ -29,6 +29,7 @@ public class DiscordManageCommand extends Command {
             CommandCategory.MANAGE,
             "Manages the discord bot configuration",
             asList(
+                "on/off",
                 "channel <channel ID>",
                 "relayChannel <channel ID>",
                 "token <token",
@@ -43,6 +44,19 @@ public class DiscordManageCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("discord")
+            .then(argument("toggle", toggle()).requires(Command::validateAccountOwner).executes(c -> {
+                CONFIG.discord.enable = getToggle(c, "toggle");
+                c.getSource().getEmbedBuilder()
+                    .title("Discord Bot " + (CONFIG.discord.enable ? "On!" : "Off!"))
+                    .color(Color.CYAN);
+                if (CONFIG.discord.enable) {
+                    c.getSource().getEmbedBuilder()
+                        .description("Discord bot will now start");
+                }
+                // will stop/start depending on if the bot is enabled
+                SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                return 1;
+            }))
             .then(literal("channel").requires(Command::validateAccountOwner)
                       .then(argument("channel ID", wordWithChars()).executes(c -> {
                           String channelId = getString(c, "channel ID");
@@ -165,11 +179,15 @@ public class DiscordManageCommand extends Command {
         DISCORD_LOG.info("Restarting discord bot");
         try {
             DISCORD_BOT.stop(false);
-            DISCORD_BOT.start();
-            DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
-                                             .title("Discord Bot Restarted")
-                                             .color(Color.GREEN)
-                                             .build());
+            if (CONFIG.discord.enable) {
+                DISCORD_BOT.start();
+                DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
+                                                 .title("Discord Bot Restarted")
+                                                 .color(Color.GREEN)
+                                                 .build());
+            } else {
+                DISCORD_LOG.info("Discord bot is disabled, not starting");
+            }
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to restart discord bot", e);
         }
