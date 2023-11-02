@@ -31,6 +31,7 @@ public class DiscordManageCommand extends Command {
             asList(
                 "channel <channel ID>",
                 "relayChannel <channel ID>",
+                "token <token",
                 "manageProfileImage on/off",
                 "manageNickname on/off",
                 "manageDescription on/off",
@@ -98,6 +99,17 @@ public class DiscordManageCommand extends Command {
                           CONFIG.discord.chatRelay.channelId = channelId;
                           c.getSource().getEmbedBuilder()
                                        .title("Relay Channel set!")
+                                       .color(Color.CYAN)
+                                       .description("Discord bot will now restart if enabled");
+                          if (DISCORD_BOT.isRunning())
+                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          return 1;
+                      })))
+            .then(literal("token").requires(Command::validateAccountOwner)
+                      .then(argument("token", wordWithChars()).executes(c -> {
+                          CONFIG.discord.token = getString(c, "token");
+                          c.getSource().getEmbedBuilder()
+                                       .title("Token set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
                           if (DISCORD_BOT.isRunning())
