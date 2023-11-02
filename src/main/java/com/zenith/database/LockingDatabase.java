@@ -5,12 +5,14 @@ import com.zenith.util.Wait;
 import org.jooq.Query;
 import org.redisson.api.RLock;
 
+import javax.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -204,6 +206,10 @@ public abstract class LockingDatabase extends Database {
     }
 
     public void insert(final Instant instant, final Query query) {
+        insert(instant, null, query);
+    }
+
+    public void insert(final Instant instant, final Consumer<RedisClient> redisQuery, final Query query) {
         final int size = insertQueue.size();
         if (size > getMaxQueueLength()) {
             synchronized (insertQueue) {
@@ -212,15 +218,18 @@ public abstract class LockingDatabase extends Database {
                 }
             }
         }
-        insertQueue.offer(new InsertInstance(instant, query));
+        insertQueue.offer(new InsertInstance(instant, redisQuery, query));
     }
 
     private void processQueue() {
         if (lockAcquired.get() && nonNull(lockExecutorService) && !lockExecutorService.isShutdown()) {
             try {
-                final LockingDatabase.InsertInstance insertInstance = insertQueue.peek();
+                final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
                 if (nonNull(insertInstance)) {
-                    queryExecutor.execute(() -> Objects.requireNonNull(insertQueue.poll()).query());
+                    queryExecutor.execute(() -> Objects.requireNonNull(insertInstance).query());
+                    if (nonNull(insertInstance.redisQuery())) {
+                        insertInstance.redisQuery().accept(redisClient);
+                    }
                 }
             } catch (final Exception e) {
                 DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);
@@ -230,5 +239,5 @@ public abstract class LockingDatabase extends Database {
     }
 
 
-    public record InsertInstance(Instant instant, Query query) { }
+    public record InsertInstance(Instant instant, @Nullable Consumer<RedisClient> redisQuery, Query query) { }
 }

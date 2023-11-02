@@ -9,18 +9,22 @@ import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.redisson.api.RBoundedBlockingQueue;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.DATABASE_LOG;
 import static com.zenith.Shared.EVENT_BUS;
 import static com.zenith.event.SimpleEventBus.pair;
+import static java.util.Objects.isNull;
 
 public class ConnectionsDatabase extends LockingDatabase {
+    private RBoundedBlockingQueue<com.zenith.database.dto.tables.pojos.Connections> connectionsQueue = null;
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
     }
@@ -85,6 +89,23 @@ public class ConnectionsDatabase extends LockingDatabase {
                 .set(c.CONNECTION, connectiontype)
                 .set(c.PLAYER_NAME, playerName)
                 .set(c.PLAYER_UUID, playerUUID);
-        this.insert(time.toInstant(), query);
+        this.insert(time.toInstant(),
+                    queueConnection(new com.zenith.database.dto.tables.pojos.Connections(time, connectiontype, playerName, playerUUID)),
+                    query);
+    }
+
+    public Consumer<RedisClient> queueConnection(final com.zenith.database.dto.tables.pojos.Connections connection) {
+        return redisClient -> {
+            if (isNull(connectionsQueue)) {
+                connectionsQueue = redisClient.getRedissonClient().getBoundedBlockingQueue(getLockKey());
+                connectionsQueue.trySetCapacity(50);
+            }
+            connectionsQueue.offerAsync(connection).thenAcceptAsync((success) -> {
+                if (!success) {
+                    DATABASE_LOG.warn("Chats queue reached capacity, flushing queue");
+                    connectionsQueue.clear();
+                }
+            });
+        };
     }
 }

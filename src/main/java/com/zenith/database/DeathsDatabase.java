@@ -14,15 +14,19 @@ import org.jooq.InsertSetMoreStep;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import org.redisson.api.RBoundedBlockingQueue;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
+import static java.util.Objects.isNull;
 
 public class DeathsDatabase extends LockingDatabase {
+    private RBoundedBlockingQueue<com.zenith.database.dto.tables.pojos.Deaths> deathsQueue = null;
 
     public DeathsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
@@ -95,7 +99,17 @@ public class DeathsDatabase extends LockingDatabase {
             if (deathMessageParseResult.getWeapon().isPresent()) {
                 query.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());
             }
-            this.insert(time.toInstant(), query);
+            this.insert(time.toInstant(),
+                        queueDeath(new com.zenith.database.dto.tables.pojos.Deaths(time,
+                                                                                   rawDeathMessage,
+                                                                                   // todo: setting these to null for now
+                                                                                   null,
+                                                                                   null,
+                                                                                   null,
+                                                                                   null,
+                                                                                   null,
+                                                                                   null)),
+                        query);
         } catch (final Exception e) {
             DATABASE_LOG.error("Error writing death: {}", rawDeathMessage, e);
         }
@@ -113,5 +127,20 @@ public class DeathsDatabase extends LockingDatabase {
             }
         }
         return Optional.empty();
+    }
+
+    public Consumer<RedisClient> queueDeath(final com.zenith.database.dto.tables.pojos.Deaths death) {
+        return redisClient -> {
+            if (isNull(deathsQueue)) {
+                deathsQueue = redisClient.getRedissonClient().getBoundedBlockingQueue(getLockKey());
+                deathsQueue.trySetCapacity(50);
+            }
+            deathsQueue.offerAsync(death).thenAcceptAsync((success) -> {
+                if (!success) {
+                    DATABASE_LOG.warn("Deaths queue reached capacity, flushing queue");
+                    deathsQueue.clear();
+                }
+            });
+        };
     }
 }
