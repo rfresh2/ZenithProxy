@@ -10,18 +10,15 @@ import org.jooq.InsertSetMoreStep;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.redisson.api.RBoundedBlockingQueue;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
 
-public class ChatDatabase extends LockingDatabase {
-    private RBoundedBlockingQueue<com.zenith.database.dto.tables.pojos.Chats> chatsQueue = null;
+public class ChatDatabase extends LiveDatabase {
     public ChatDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
         super(queryExecutor, redisClient);
     }
@@ -73,26 +70,13 @@ public class ChatDatabase extends LockingDatabase {
     public void writeChat(final UUID playerUUID, final String playerName, final String message, final OffsetDateTime time) {
         final DSLContext context = DSL.using(SQLDialect.POSTGRES);
         final Chats c = Chats.CHATS;
+        var record = context.newRecord(c)
+            .setTime(time)
+            .setChat(message)
+            .setPlayerUuid(playerUUID)
+            .setPlayerName(playerName);
         InsertSetMoreStep<ChatsRecord> query = context.insertInto(c)
-                .set(c.TIME, time)
-                .set(c.CHAT, message)
-                .set(c.PLAYER_UUID, playerUUID)
-                .set(c.PLAYER_NAME, playerName);
-        this.insert(time.toInstant(), queueChat(new com.zenith.database.dto.tables.pojos.Chats(time, message, playerName, playerUUID)), query);
-    }
-
-    public Consumer<RedisClient> queueChat(final com.zenith.database.dto.tables.pojos.Chats chat) {
-        return redisClient -> {
-            if (chatsQueue == null) {
-                chatsQueue = redisClient.getRedissonClient().getBoundedBlockingQueue(getLockKey());
-                chatsQueue.trySetCapacity(50);
-            }
-            chatsQueue.offerAsync(chat).thenAcceptAsync((success) -> {
-                if (!success) {
-                    DATABASE_LOG.warn("Chats queue reached capacity, flushing queue");
-                    chatsQueue.clear();
-                }
-            });
-        };
+                .set(record);
+        this.insert(time.toInstant(), record.into(com.zenith.database.dto.tables.pojos.Chats.class), query);
     }
 }

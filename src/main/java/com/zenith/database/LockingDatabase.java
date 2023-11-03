@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -25,9 +24,9 @@ public abstract class LockingDatabase extends Database {
     private static final int defaultMaxQueueLen = 100;
     protected final Queue<InsertInstance> insertQueue = new ConcurrentLinkedQueue<>();
     protected final AtomicBoolean lockAcquired = new AtomicBoolean(false);
-    private final RedisClient redisClient;
+    protected final RedisClient redisClient;
     private RLock rLock;
-    private ScheduledExecutorService lockExecutorService;
+    protected ScheduledExecutorService lockExecutorService;
     private ScheduledFuture<?> queryExecutorFuture;
 
     public LockingDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
@@ -209,7 +208,7 @@ public abstract class LockingDatabase extends Database {
         insert(instant, null, query);
     }
 
-    public void insert(final Instant instant, final Consumer<RedisClient> redisQuery, final Query query) {
+    protected void insert(final Instant instant, final Runnable liveRunnable, final Query query) {
         final int size = insertQueue.size();
         if (size > getMaxQueueLength()) {
             synchronized (insertQueue) {
@@ -218,17 +217,17 @@ public abstract class LockingDatabase extends Database {
                 }
             }
         }
-        insertQueue.offer(new InsertInstance(instant, redisQuery, query));
+        insertQueue.offer(new InsertInstance(instant, liveRunnable, query));
     }
 
-    private void processQueue() {
+    protected void processQueue() {
         if (lockAcquired.get() && nonNull(lockExecutorService) && !lockExecutorService.isShutdown()) {
             try {
                 final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
                 if (nonNull(insertInstance)) {
                     queryExecutor.execute(() -> Objects.requireNonNull(insertInstance).query());
                     if (nonNull(insertInstance.redisQuery())) {
-                        insertInstance.redisQuery().accept(redisClient);
+                        insertInstance.redisQuery().run();
                     }
                 }
             } catch (final Exception e) {
@@ -239,5 +238,5 @@ public abstract class LockingDatabase extends Database {
     }
 
 
-    public record InsertInstance(Instant instant, @Nullable Consumer<RedisClient> redisQuery, Query query) { }
+    public record InsertInstance(Instant instant, @Nullable Runnable redisQuery, Query query) { }
 }

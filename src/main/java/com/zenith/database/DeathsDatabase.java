@@ -10,24 +10,18 @@ import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.whitelist.WhitelistEntry;
 import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.redisson.api.RBoundedBlockingQueue;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 
-public class DeathsDatabase extends LockingDatabase {
-    private RBoundedBlockingQueue<com.zenith.database.dto.tables.pojos.Deaths> deathsQueue = null;
-
+public class DeathsDatabase extends LiveDatabase {
     public DeathsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
     }
@@ -73,42 +67,36 @@ public class DeathsDatabase extends LockingDatabase {
                 DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
                 return;
             }
-            final InsertSetMoreStep<DeathsRecord> query = context.insertInto(d)
-                    .set(d.TIME, time)
-                    .set(d.DEATH_MESSAGE, rawDeathMessage)
-                    .set(d.VICTIM_PLAYER_NAME, victimEntry.get().getName())
-                    .set(d.VICTIM_PLAYER_UUID, victimEntry.get().getProfileId());
+            final DeathsRecord record = context.newRecord(d)
+                    .setTime(time)
+                    .setDeathMessage(rawDeathMessage)
+                    .setVictimPlayerName(victimEntry.get().getName())
+                    .setVictimPlayerUuid(victimEntry.get().getProfileId());
             if (deathMessageParseResult.getKiller().isPresent()) {
                 final Killer killer = deathMessageParseResult.getKiller().get();
                 if (killer.getType().equals(KillerType.PLAYER)) {
                     final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
                     if (killerEntry.isEmpty()) {
-                        query
-                                .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName());
+                        record
+                                .setKillerPlayerName(killerEntry.get().getName());
                         DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
                     } else {
-                        query
-                                .set(d.KILLER_PLAYER_NAME, killerEntry.get().getName())
-                                .set(d.KILLER_PLAYER_UUID, killerEntry.get().getProfileId());
+                        record
+                                .setKillerPlayerName(killerEntry.get().getName())
+                                .setKillerPlayerUuid(killerEntry.get().getProfileId());
                     }
                 } else if (killer.getType().equals(KillerType.MOB)) {
-                    query
-                            .set(d.KILLER_MOB, killer.getName());
+                    record
+                            .setKillerMob(killer.getName());
                 }
             }
             if (deathMessageParseResult.getWeapon().isPresent()) {
-                query.set(d.WEAPON_NAME, deathMessageParseResult.getWeapon().get());
+                record.setWeaponName(deathMessageParseResult.getWeapon().get());
             }
+            var query = context.insertInto(d)
+                .set(record);
             this.insert(time.toInstant(),
-                        queueDeath(new com.zenith.database.dto.tables.pojos.Deaths(time,
-                                                                                   rawDeathMessage,
-                                                                                   // todo: setting these to null for now
-                                                                                   null,
-                                                                                   null,
-                                                                                   null,
-                                                                                   null,
-                                                                                   null,
-                                                                                   null)),
+                        record.into(com.zenith.database.dto.tables.pojos.Deaths.class),
                         query);
         } catch (final Exception e) {
             DATABASE_LOG.error("Error writing death: {}", rawDeathMessage, e);
@@ -127,20 +115,5 @@ public class DeathsDatabase extends LockingDatabase {
             }
         }
         return Optional.empty();
-    }
-
-    public Consumer<RedisClient> queueDeath(final com.zenith.database.dto.tables.pojos.Deaths death) {
-        return redisClient -> {
-            if (isNull(deathsQueue)) {
-                deathsQueue = redisClient.getRedissonClient().getBoundedBlockingQueue(getLockKey());
-                deathsQueue.trySetCapacity(50);
-            }
-            deathsQueue.offerAsync(death).thenAcceptAsync((success) -> {
-                if (!success) {
-                    DATABASE_LOG.warn("Deaths queue reached capacity, flushing queue");
-                    deathsQueue.clear();
-                }
-            });
-        };
     }
 }
