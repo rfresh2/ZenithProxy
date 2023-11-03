@@ -744,6 +744,32 @@
   "fields":[{"name":"state"}]
 },
 {
+  "name":"com.zenith.database.dto.enums.Connectiontype",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.zenith.database.dto.tables.pojos.Chats",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.lang.String","java.lang.String","java.util.UUID"] }, {"name":"getChat","parameterTypes":[] }, {"name":"getPlayerName","parameterTypes":[] }, {"name":"getPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.database.dto.tables.pojos.Connections",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.time.OffsetDateTime","com.zenith.database.dto.enums.Connectiontype","java.lang.String","java.util.UUID"] }, {"name":"getConnection","parameterTypes":[] }, {"name":"getPlayerName","parameterTypes":[] }, {"name":"getPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.database.dto.tables.pojos.Deaths",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.lang.String","java.lang.String","java.util.UUID","java.lang.String","java.util.UUID","java.lang.String","java.lang.String"] }, {"name":"getDeathMessage","parameterTypes":[] }, {"name":"getKillerMob","parameterTypes":[] }, {"name":"getKillerPlayerName","parameterTypes":[] }, {"name":"getKillerPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }, {"name":"getVictimPlayerName","parameterTypes":[] }, {"name":"getVictimPlayerUuid","parameterTypes":[] }, {"name":"getWeaponName","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.database.dto.tables.records.ChatsRecord",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
@@ -3468,6 +3494,10 @@
   "methods":[{"name":"getRecordComponents","parameterTypes":[] }, {"name":"isRecord","parameterTypes":[] }]
 },
 {
+  "name":"java.lang.Comparable",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"java.lang.Object",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
@@ -3689,6 +3719,12 @@
   "name":"java.util.PropertyPermission"
 },
 {
+  "name":"java.util.UUID",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
   "name":"java.util.concurrent.ForkJoinTask",
   "fields":[{"name":"aux"}, {"name":"status"}]
 },
@@ -3735,6 +3771,9 @@
   "methods":[{"name":"setApplicationProtocols","parameterTypes":["java.lang.String[]"] }]
 },
 {
+  "name":"javax.persistence.Column"
+},
+{
   "name":"javax.security.auth.x500.X500Principal",
   "fields":[{"name":"thisX500Name"}],
   "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
@@ -3749,6 +3788,9 @@
 {
   "name":"jdk.net.ExtendedSocketOptions",
   "fields":[{"name":"TCP_KEEPCOUNT"}, {"name":"TCP_KEEPIDLE"}, {"name":"TCP_KEEPINTERVAL"}]
+},
+{
+  "name":"kotlin.jvm.JvmClassMappingKt"
 },
 {
   "name":"org.eclipse.jgit.internal.JGitText",
