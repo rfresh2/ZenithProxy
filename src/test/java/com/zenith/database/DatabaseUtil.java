@@ -14,7 +14,7 @@ public class DatabaseUtil {
 
         RLock lock = redisClient.getLock(
             // replace with whatever database key to unlock
-            "QueueLength"
+            "Connections"
         );
         if (lock.forceUnlock()) {
             System.out.println("Unlocked");

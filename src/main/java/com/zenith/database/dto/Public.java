@@ -5,8 +5,9 @@ package com.zenith.database.dto;
 
 
 import com.zenith.database.dto.tables.*;
-import com.zenith.database.dto.tables.records.PlaytimeAllRecord;
-import org.jooq.*;
+import org.jooq.Catalog;
+import org.jooq.Sequence;
+import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
 import java.util.Arrays;
@@ -41,38 +42,12 @@ public class Public extends SchemaImpl {
      */
     public final Deaths DEATHS = Deaths.DEATHS;
 
-    /**
-     * The table <code>public.names</code>.
-     */
-    public final Names NAMES = Names.NAMES;
 
     /**
      * The table <code>public.playercount</code>.
      */
     public final Playercount PLAYERCOUNT = Playercount.PLAYERCOUNT;
 
-    /**
-     * The table <code>public.playtime_all</code>.
-     */
-    public final PlaytimeAll PLAYTIME_ALL = PlaytimeAll.PLAYTIME_ALL;
-
-    /**
-     * Call <code>public.playtime_all</code>.
-     */
-    public static Result<PlaytimeAllRecord> PLAYTIME_ALL(
-            Configuration configuration
-    ) {
-        return configuration.dsl().selectFrom(com.zenith.database.dto.tables.PlaytimeAll.PLAYTIME_ALL.call(
-        )).fetch();
-    }
-
-    /**
-     * Get <code>public.playtime_all</code> as a table.
-     */
-    public static PlaytimeAll PLAYTIME_ALL() {
-        return com.zenith.database.dto.tables.PlaytimeAll.PLAYTIME_ALL.call(
-        );
-    }
 
     /**
      * The table <code>public.queuelength</code>.
@@ -119,9 +94,7 @@ public class Public extends SchemaImpl {
                 Chats.CHATS,
                 Connections.CONNECTIONS,
                 Deaths.DEATHS,
-                Names.NAMES,
                 Playercount.PLAYERCOUNT,
-                PlaytimeAll.PLAYTIME_ALL,
                 Queuelength.QUEUELENGTH,
                 Queuewait.QUEUEWAIT,
                 Restarts.RESTARTS,
