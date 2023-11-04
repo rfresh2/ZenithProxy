@@ -41,8 +41,29 @@ def validate_linux_cpu_flags():
         return False
 
 
+def validate_linux_glibc_version():
+    try:
+        output = subprocess.check_output(['ldd', '--version'], stderr=subprocess.STDOUT, text=True)
+        # ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
+        # get the version from the last word of the first line
+        version = output.splitlines()[0].split(" ")[-1]
+        version = version.split(".")
+        if int(version[0]) != 2:
+            print("Unsupported OS for linux release channel. "
+                  + "\nglibc version too low: " + ".".join(version))
+            return False
+        if int(version[1]) < 31:
+            print("Unsupported OS for linux release channel. "
+                  + "\nglibc version too low: " + ".".join(version))
+            return False
+        return True
+    except Exception as e:
+        print("Error checking GLIBC version.")
+        return False
+
+
 def validate_linux_system():
-    return system == "Linux" and validate_linux_cpu_flags()
+    return system == "Linux" and validate_linux_cpu_flags() and validate_linux_glibc_version()
 
 
 if validate_linux_system():  # otherwise we will always select java
