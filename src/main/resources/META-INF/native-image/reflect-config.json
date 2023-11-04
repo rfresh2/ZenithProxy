@@ -1479,73 +1479,85 @@
   "name":"discord4j.discordjson.json.ImmutableActivityAssetsData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableActivityAssetsData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityAssetsData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setLargeImage","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setLargeText","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSmallImage","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSmallText","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableActivityData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setApplicationId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setAssets","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setCreatedAt","parameterTypes":["long"] }, {"name":"setDetails","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setEmoji","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setInstance","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setParty","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSecrets","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setState","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTimestamps","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["int"] }, {"name":"setUrl","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityEmojiData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableActivityEmojiData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityEmojiData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAnimated","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setName","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityPartyData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableActivityPartyData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityPartyData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSize","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivitySecretsData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableActivitySecretsData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivitySecretsData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setJoin","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMatch","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSpectate","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityTimestampsData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableActivityTimestampsData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityTimestampsData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setEnd","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setStart","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableActivityUpdateRequest",
@@ -1572,25 +1584,29 @@
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandInteractionOptionData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableApplicationCommandInteractionOptionData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandInteractionOptionData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setFocused","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setOptions","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["int"] }, {"name":"setValue","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandInteractionResolvedData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableApplicationCommandInteractionResolvedData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandInteractionResolvedData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAttachments","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setChannels","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMembers","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMessages","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setRoles","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUsers","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableApplicationCommandPermissionsData",
@@ -1986,25 +2002,29 @@
   "name":"discord4j.discordjson.json.ImmutableMessageActivityData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableMessageActivityData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableMessageActivityData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setPartyId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["int"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableMessageApplicationData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableMessageApplicationData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableMessageApplicationData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setCoverImage","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setIcon","parameterTypes":["java.util.Optional"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setName","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableMessageCreateRequest",
@@ -2129,25 +2149,29 @@
   "name":"discord4j.discordjson.json.ImmutablePartialUserData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutablePartialUserData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutablePartialUserData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAccentColor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setAvatar","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setBanner","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setBot","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDiscriminator","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setEmail","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setGlobalName","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setLocale","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMfaEnabled","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPremiumType","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPublicFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSystem","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUsername","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setVerified","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutablePresenceData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutablePresenceData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutablePresenceData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setActivities","parameterTypes":["java.util.List"] }, {"name":"setClientStatus","parameterTypes":["discord4j.discordjson.json.ClientStatusData"] }, {"name":"setStatus","parameterTypes":["java.lang.String"] }, {"name":"setUser","parameterTypes":["discord4j.discordjson.json.PartialUserData"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableReactionData",
@@ -2167,25 +2191,29 @@
   "name":"discord4j.discordjson.json.ImmutableResolvedChannelData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableResolvedChannelData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableResolvedChannelData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setPermissions","parameterTypes":["java.lang.String"] }, {"name":"setType","parameterTypes":["int"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableResolvedMemberData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableResolvedMemberData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableResolvedMemberData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setCommunicationDisabledUntil","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFlags","parameterTypes":["long"] }, {"name":"setJoinedAt","parameterTypes":["java.lang.String"] }, {"name":"setNick","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPending","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPermissions","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPremiumSince","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setRoles","parameterTypes":["java.util.List"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableRoleData",
@@ -2219,13 +2247,15 @@
   "name":"discord4j.discordjson.json.ImmutableSelectOptionData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableSelectOptionData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableSelectOptionData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDescription","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setEmoji","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setIsDefault","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setLabel","parameterTypes":["java.lang.String"] }, {"name":"setValue","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableSessionStartLimitData",
@@ -2245,13 +2275,15 @@
   "name":"discord4j.discordjson.json.ImmutableStickerData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableStickerData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableStickerData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAsset","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setAvailable","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDescription","parameterTypes":["java.util.Optional"] }, {"name":"setFormatType","parameterTypes":["int"] }, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setPackId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSortValue","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setTags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setType","parameterTypes":["int"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableThreadMemberData",
@@ -2271,13 +2303,15 @@
   "name":"discord4j.discordjson.json.ImmutableThreadMetadata",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableThreadMetadata$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableThreadMetadata$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"archived","parameterTypes":["boolean"] }, {"name":"setArchiveTimestamp","parameterTypes":["java.lang.String"] }, {"name":"setAutoArchiveDuration","parameterTypes":["int"] }, {"name":"setLocked","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableUnavailableGuildData",
@@ -2318,49 +2352,57 @@
   "name":"discord4j.discordjson.json.ImmutableUserWithMemberData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableUserWithMemberData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableUserWithMemberData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAccentColor","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setAvatar","parameterTypes":["java.util.Optional"] }, {"name":"setBanner","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setBot","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setDiscriminator","parameterTypes":["java.lang.String"] }, {"name":"setEmail","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setGlobalName","parameterTypes":["java.util.Optional"] }, {"name":"setId","parameterTypes":["discord4j.discordjson.Id"] }, {"name":"setLocale","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMember","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMfaEnabled","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPremiumType","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setPublicFlags","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSystem","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setUsername","parameterTypes":["java.lang.String"] }, {"name":"setVerified","parameterTypes":["discord4j.discordjson.possible.Possible"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableVoiceStateData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableVoiceStateData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableVoiceStateData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setChannelId","parameterTypes":["java.util.Optional"] }, {"name":"setDeaf","parameterTypes":["boolean"] }, {"name":"setGuildId","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMember","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setMute","parameterTypes":["boolean"] }, {"name":"setRequestToSpeakTimestamp","parameterTypes":["java.util.Optional"] }, {"name":"setSelfDeaf","parameterTypes":["boolean"] }, {"name":"setSelfMute","parameterTypes":["boolean"] }, {"name":"setSelfStream","parameterTypes":["discord4j.discordjson.possible.Possible"] }, {"name":"setSelfVideo","parameterTypes":["boolean"] }, {"name":"setSessionId","parameterTypes":["java.lang.String"] }, {"name":"setSuppress","parameterTypes":["boolean"] }, {"name":"setUserId","parameterTypes":["discord4j.discordjson.Id"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableWelcomeScreenChannelData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableWelcomeScreenChannelData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableWelcomeScreenChannelData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setChannelId","parameterTypes":["java.lang.String"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setEmojiId","parameterTypes":["java.util.Optional"] }, {"name":"setEmojiName","parameterTypes":["java.util.Optional"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableWelcomeScreenData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"fromJson","parameterTypes":["discord4j.discordjson.json.ImmutableWelcomeScreenData$Json"] }]
 },
 {
   "name":"discord4j.discordjson.json.ImmutableWelcomeScreenData$Json",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDescription","parameterTypes":["java.util.Optional"] }, {"name":"setWelcomeChannels","parameterTypes":["java.util.List"] }]
 },
 {
   "name":"discord4j.discordjson.json.InteractionApplicationCommandCallbackData",
