@@ -227,7 +227,7 @@ public abstract class LockingDatabase extends Database {
                 if (nonNull(insertInstance)) {
                     queryExecutor.execute(() -> Objects.requireNonNull(insertInstance).query());
                     if (nonNull(insertInstance.redisQuery())) {
-                        insertInstance.redisQuery().run();
+                        SCHEDULED_EXECUTOR_SERVICE.execute(() -> insertInstance.redisQuery().run());
                     }
                 }
             } catch (final Exception e) {
