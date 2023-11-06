@@ -954,7 +954,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && !CONFIG.discord.chatRelay.channelId.isEmpty()) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             sendRelayEmbedMessage(EmbedCreateSpec.builder()
-                                      .description(escape(event.playerEntry().getName() + " connected"))
+                                      .description(escape("**" + event.playerEntry().getName() + "** connected"))
                                       .color(Color.MEDIUM_SEA_GREEN)
                                       .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                       .timestamp(Instant.now())
@@ -980,7 +980,7 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.connectionMessages && !CONFIG.discord.chatRelay.channelId.isEmpty()) {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             sendRelayEmbedMessage(EmbedCreateSpec.builder()
-                                      .description(escape(event.playerEntry().getName() + " disconnected"))
+                                      .description(escape("**" + event.playerEntry().getName() + "** disconnected"))
                                       .color(Color.RUBY)
                                       .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                       .timestamp(Instant.now())
