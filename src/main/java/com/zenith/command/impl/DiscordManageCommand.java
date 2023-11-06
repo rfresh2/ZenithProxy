@@ -7,6 +7,7 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.common.util.Snowflake;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.util.MentionUtil;
 import discord4j.rest.util.Color;
 
 import java.util.concurrent.TimeUnit;
@@ -167,12 +168,22 @@ public class DiscordManageCommand extends Command {
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .addField("Channel ID", "<#" + CONFIG.discord.channelId + ">", false)
-            .addField("Relay Channel ID", "<#" + CONFIG.discord.chatRelay.channelId + ">", false)
+            .addField("Channel ID", getChannelMention(CONFIG.discord.channelId), false)
+            .addField("Relay Channel ID", getChannelMention(CONFIG.discord.chatRelay.channelId), false)
             .addField("Manage Profile Image", toggleStr(CONFIG.discord.manageProfileImage), false)
             .addField("Manage Nickname", toggleStr(CONFIG.discord.manageNickname), false)
             .addField("Manage Description", toggleStr(CONFIG.discord.manageDescription), false)
             .addField("Show Non-Whitelist IP", toggleStr(CONFIG.discord.showNonWhitelistLoginIP), false);
+    }
+
+    private String getChannelMention(final String channelId) {
+        try {
+            return MentionUtil.forChannel(Snowflake.of(channelId));
+        } catch (final Exception e) {
+            // these channels might be unset on purpose
+            DEFAULT_LOG.debug("Invalid channel ID: " + channelId, e);
+            return "";
+        }
     }
 
     private void restartDiscordBot() {

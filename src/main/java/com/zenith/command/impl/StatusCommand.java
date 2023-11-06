@@ -9,9 +9,11 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.feature.queue.Queue;
 import com.zenith.network.server.ServerConnection;
+import discord4j.common.util.TimestampFormat;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,9 +65,13 @@ public class StatusCommand extends Command {
             if (Proxy.getInstance().isInQueue()) {
                 if (Proxy.getInstance().getIsPrio().isPresent()) {
                     if (Proxy.getInstance().getIsPrio().get()) {
-                        return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
+                        return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\n"
+                            + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
+                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds((long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
                     } else {
-                        return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
+                        return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\n"
+                            + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
+                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds((long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
                     }
                 } else {
                     return "Queueing";

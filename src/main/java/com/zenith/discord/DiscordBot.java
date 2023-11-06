@@ -29,6 +29,7 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.util.MentionUtil;
 import discord4j.discordjson.Id;
 import discord4j.discordjson.json.*;
 import discord4j.discordjson.possible.Possible;
@@ -136,7 +137,12 @@ public class DiscordBot {
             if (CONFIG.discord.chatRelay.channelId.isEmpty()) throw new RuntimeException("Discord chat relay is enabled and channel id is not set");
             if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
         }
-
+        if (CONFIG.discord.accountOwnerRoleId.isEmpty()) throw new RuntimeException("Discord account owner role id is not set");
+        try {
+            Snowflake.of(CONFIG.discord.accountOwnerRoleId);
+        } catch (final NumberFormatException e) {
+            throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
+        }
         DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
         this.client = discordClient.gateway()
                 .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
@@ -338,11 +344,24 @@ public class DiscordBot {
     }
 
     private void sendQueueWarning() {
-        sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
+        sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? mentionAccountOwner() : ""), EmbedCreateSpec.builder()
             .title("Queue Warning")
             .addField("Queue Position", "[" + queuePositionStr() + "]", false)
             .color(Color.MOON_YELLOW)
             .build());
+    }
+
+    private String mentionAccountOwner() {
+        return mentionRole(CONFIG.discord.accountOwnerRoleId);
+    }
+
+    private String mentionRole(final String roleId) {
+        try {
+            return MentionUtil.forRole(Snowflake.of(roleId));
+        } catch (final NumberFormatException e) {
+            DISCORD_LOG.error("Unable to generate mention for role ID: {}", roleId, e);
+            return "";
+        }
     }
 
     private String queuePositionStr() {
@@ -573,7 +592,7 @@ public class DiscordBot {
 
     public void handleDisconnectEvent(DisconnectEvent event) {
         boolean sus = event.reason().startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
-        sendEmbedMessage((sus ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), EmbedCreateSpec.builder()
+        sendEmbedMessage((sus ? MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId)) : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
                 .addField("Reason", event.reason(), true)
                 .color(Color.RUBY)
@@ -717,9 +736,9 @@ public class DiscordBot {
         if (CONFIG.client.extra.visualRangeAlertMention) {
             if (!isFriend) {
                 if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                    sendEmbedMessageWithButtons("<@&" + CONFIG.discord.visualRangeMentionRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
+                    sendEmbedMessageWithButtons(mentionRole(CONFIG.discord.visualRangeMentionRoleId), embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                 } else {
-                    sendEmbedMessageWithButtons("<@&" + CONFIG.discord.accountOwnerRoleId + ">", embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
+                    sendEmbedMessageWithButtons(mentionAccountOwner(), embedCreateSpec.build(), buttons, mapper, Duration.ofHours(1));
                 }
             } else {
                 sendEmbedMessage(embedCreateSpec.build());
@@ -876,14 +895,14 @@ public class DiscordBot {
                             && CONFIG.discord.chatRelay.mentionRoleOnWhisper
                             && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")
                             && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)) {
-                            ping = "<@&" + CONFIG.discord.accountOwnerRoleId + "> ";
+                            ping = mentionAccountOwner();
                         }
                     } else {
                         if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                             if (event.sender().filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
                                 && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
                                 && Arrays.asList(message.toLowerCase().split(" ")).contains(CONFIG.authentication.username.toLowerCase())) {
-                                ping = "<@&" + CONFIG.discord.accountOwnerRoleId + "> ";
+                                ping = mentionAccountOwner();
                             }
                         }
                     }
@@ -944,7 +963,7 @@ public class DiscordBot {
                     .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
                     .findFirst()
                     .ifPresent(player -> {
-                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
+                        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
                                 .title("Stalked Player Online!")
                                 .color(Color.MEDIUM_SEA_GREEN)
                                 .addField("Player Name", event.playerEntry().getName(), true)
@@ -970,7 +989,7 @@ public class DiscordBot {
                     .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
                     .findFirst()
                     .ifPresent(player -> {
-                        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
+                        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
                                 .title("Stalked Player Offline!")
                                 .color(Color.RUBY)
                                 .addField("Player Name", event.playerEntry().getName(), true)
@@ -1041,7 +1060,7 @@ public class DiscordBot {
                     .color(Color.RED);
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
-        sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
+        sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? mentionAccountOwner() : ""), embedCreateSpec.build());
     }
 
     public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
@@ -1056,7 +1075,7 @@ public class DiscordBot {
                     .color(Color.GREEN);
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
-        sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? "<@&" + CONFIG.discord.accountOwnerRoleId + ">" : ""), embedCreateSpec.build());
+        sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? mentionAccountOwner() : ""), embedCreateSpec.build());
     }
 
     public void handleAutoReconnectEvent(final AutoReconnectEvent event) {
@@ -1067,7 +1086,7 @@ public class DiscordBot {
     }
 
     public void handleMsaDeviceCodeLoginEvent(final MsaDeviceCodeLoginEvent event) {
-        sendEmbedMessage("<@&" + CONFIG.discord.accountOwnerRoleId + ">", EmbedCreateSpec.builder()
+        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
             .title("Microsoft Device Code Login")
             .color(Color.CYAN)
             .description("Login [here]("
