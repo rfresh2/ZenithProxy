@@ -141,7 +141,11 @@ public abstract class LockingDatabase extends Database {
      **/
 
     public boolean hasLock() {
-        return rLock.isLocked() && rLock.isHeldByCurrentThread();
+        try {
+            return rLock.isLocked() && rLock.isHeldByCurrentThread();
+        } catch (final Exception e) {
+            return false;
+        }
     }
 
     public boolean tryLock() {
@@ -149,14 +153,12 @@ public abstract class LockingDatabase extends Database {
     }
 
     public void releaseLock() {
-        if (hasLock()) {
-            try {
-                redisClient.unlock(rLock);
-            } catch (final Exception e) {
-                DATABASE_LOG.warn("Error unlocking {} database", getLockKey(), e);
-            }
-            lockAcquired.set(false);
+        try {
+            redisClient.unlock(rLock);
+        } catch (final Exception e) {
+            DATABASE_LOG.warn("Error unlocking {} database", getLockKey(), e);
         }
+        lockAcquired.set(false);
     }
 
     public void tryLockProcess() {
@@ -194,12 +196,10 @@ public abstract class LockingDatabase extends Database {
         } catch (final Throwable e) {
             DATABASE_LOG.warn("Try lock process exception", e);
             try {
-                if (hasLock() || lockAcquired.get()) {
-                    releaseLock();
-                    onLockReleased();
-                }
+                releaseLock();
+                onLockReleased();
             } catch (final Exception e2) {
-                DATABASE_LOG.warn("Error releasing lock in try lock process exception", e2);
+                DATABASE_LOG.error("Error releasing lock in try lock process exception", e2);
             }
         }
     }
