@@ -31,7 +31,6 @@ public abstract class LiveDatabase extends LockingDatabase {
     void liveQueueRunnable(Object pojo) {
         if (isNull(queue)) {
             queue = redisClient.getRedissonClient().getBoundedBlockingQueue(getQueueKey());
-            queue.trySetCapacity(500);
         }
         try {
             String json = OBJECT_MAPPER.writeValueAsString(pojo);
