@@ -23,7 +23,7 @@ public class SeenCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("seen",
-                                 CommandCategory.STATUS,
+                                 CommandCategory.INFO,
                                  "Gets the first and last times a player was seen on 2b2t",
                                  asList(
                                      "<playerName>"
@@ -44,7 +44,9 @@ public class SeenCommand extends Command {
                         .color(Color.RUBY);
                     return -1;
                 }
-                c.getSource().getEmbedBuilder().title("Seen: " + escape(playerName)).color(Color.CYAN);
+                c.getSource().getEmbedBuilder()
+                    .title("Seen: " + escape(playerName))
+                    .color(Color.CYAN);
                 firstSeen.ifPresent((response) -> c.getSource().getEmbedBuilder()
                     .addField("First Seen", response.time().format(formatter), false));
                 lastSeen.ifPresent((response) -> c.getSource().getEmbedBuilder()

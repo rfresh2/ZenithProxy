@@ -21,7 +21,7 @@ public class PlaytimeCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("playtime",
-                                 CommandCategory.STATUS,
+                                 CommandCategory.INFO,
                                  "Gets the playtime of someone on 2b2t",
                                  asList(
                                      "<playerName>"

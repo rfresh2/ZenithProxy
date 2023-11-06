@@ -68,6 +68,7 @@ public class CommandManager {
            new SpectatorCommand(),
            new SpookCommand(),
            new StalkCommand(),
+           new StatsCommand(),
            new StatusCommand(),
            new TablistCommand(),
            new UpdateCommand(),

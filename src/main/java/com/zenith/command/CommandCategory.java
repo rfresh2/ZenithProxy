@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum CommandCategory {
     // We should keep the number of categories small
     CORE("Core"),
-    STATUS("Status"),
+    INFO("Info"),
     MANAGE("Manage"),
     MODULE("Module"),
     ALL("All"); // this shouldn't be assigned to any command, used as an info wildcard

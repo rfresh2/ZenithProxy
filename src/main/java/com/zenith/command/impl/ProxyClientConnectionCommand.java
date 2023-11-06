@@ -17,7 +17,7 @@ public class ProxyClientConnectionCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args(
             "clientConnectionMessages",
-            CommandCategory.STATUS,
+            CommandCategory.INFO,
             "Send notification messages when a client connects to the proxy",
             asList("on/off")
         );

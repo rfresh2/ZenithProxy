@@ -4,6 +4,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSy
 import com.google.common.collect.ImmutableMap;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
+import discord4j.core.spec.EmbedCreateFields;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import lombok.experimental.UtilityClass;
@@ -70,13 +71,15 @@ public class CommandOutputHelper {
             output.append("\n");
             output.append(embed.url().get());
         }
-        embed.fields().forEach(field -> {
+        for (EmbedCreateFields.Field field : embed.fields()) {
+            if (field.name().equals("\u200B")) continue; // ignore empty fields (used for spacing)
             // todo: format fields as in discord where there can be multiple on a line
             output.append("\n");
             output.append(field.name());
             output.append(": ");
+            if (field.value().equals("\u200B")) continue;
             output.append(field.value());
-        });
+        }
         session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse(output.toString()), false));
     }
 
@@ -102,13 +105,15 @@ public class CommandOutputHelper {
             output.append("\n");
             output.append(embed.url().get());
         }
-        embed.fields().forEach(field -> {
+        for (EmbedCreateFields.Field field : embed.fields()) {
+            if (field.name().equals("\u200B")) continue; // ignore empty fields (used for spacing)
             // todo: format fields as in discord where there can be multiple on a line
             output.append("\n");
             output.append(field.name());
             output.append(": ");
+            if (field.value().equals("\u200B")) continue;
             output.append(field.value());
-        });
+        }
         TERMINAL_LOG.info(unescape(output.toAnsi()));
     }
 

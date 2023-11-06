@@ -19,7 +19,7 @@ public class PrioCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args(
             "prio",
-            CommandCategory.STATUS,
+            CommandCategory.INFO,
             "Configure the mentions for 2b2t priority & priority ban updates",
             asList("mentions on/off", "banMentions on/off", "check")
         );

@@ -3,6 +3,7 @@ package com.zenith.feature.api;
 import com.google.common.base.Suppliers;
 import com.zenith.feature.api.model.PlaytimeResponse;
 import com.zenith.feature.api.model.SeenResponse;
+import com.zenith.feature.api.model.StatsResponse;
 import reactor.netty.http.client.HttpClient;
 
 import java.io.InputStream;
@@ -28,6 +29,10 @@ public class VcApi {
 
     public Optional<PlaytimeResponse> getPlaytime(final String playerName) {
         return get("/playtime?playerName=" + playerName, PlaytimeResponse.class);
+    }
+
+    public Optional<StatsResponse> getStats(final String playerName) {
+        return get("/stats/player?playerName=" + playerName, StatsResponse.class);
     }
 
     private <T> Optional<T> get(final String uri, final Class<T> clazz) {

@@ -847,6 +847,13 @@
   "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime"] }]
 },
 {
+  "name":"com.zenith.feature.api.model.StatsResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["int","int","int","int","java.time.OffsetDateTime","java.time.OffsetDateTime","int","int","int"] }]
+},
+{
   "name":"com.zenith.feature.food.FoodData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,

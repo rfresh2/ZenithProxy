@@ -22,7 +22,7 @@ public class QueueStatusCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.simpleAliases("queueStatus",
-                                          CommandCategory.STATUS,
+                                          CommandCategory.INFO,
                                           "Prints the current 2b2t queue status",
                                           aliases());
     }

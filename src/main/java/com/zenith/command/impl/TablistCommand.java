@@ -25,7 +25,7 @@ public class TablistCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.simple(
             "tablist",
-            CommandCategory.STATUS,
+            CommandCategory.INFO,
             "Displays the current server's tablist"
         );
     }
