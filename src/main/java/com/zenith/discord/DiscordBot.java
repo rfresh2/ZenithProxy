@@ -934,7 +934,11 @@ public class DiscordBot {
             final EmbedCreateSpec embed = EmbedCreateSpec.builder()
                 .description(escape(message))
                 .footer("\u200b", avatarURL)
-                .color(event.isPublicChat() ? Color.BLACK : event.isDeathMessage() ? Color.RUBY : event.isWhisper() ? Color.MAGENTA : Color.MOON_YELLOW)
+                .color(event.isPublicChat()
+                           ? (event.message().startsWith(">") ? Color.MEDIUM_SEA_GREEN : Color.BLACK)
+                           : event.isDeathMessage() ? Color.RUBY
+                    : event.isWhisper() ? Color.MAGENTA
+                    : Color.MOON_YELLOW)
                 .timestamp(Instant.now())
                 .build();
             if (ping.isEmpty()) {
