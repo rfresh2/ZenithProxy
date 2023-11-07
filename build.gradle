@@ -184,7 +184,7 @@ jooq {
 dependencies {
     jooqGenerator "org.postgresql:postgresql:$postgresVersion"
     shade "org.jooq:jooq:$jooqVersion"
-    shade "com.zaxxer:HikariCP:5.0.1"
+    shade "com.zaxxer:HikariCP:5.1.0"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.7.0.202309050840-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.7.0.202309050840-r'
@@ -246,9 +246,9 @@ dependencies {
     shade "com.viaversion:viaversion:4.8.1"
     shade "com.viaversion:viabackwards:4.8.1"
 
-    shade 'org.jline:jline:3.24.0'
-    shade 'org.jline:jline-terminal-jansi:3.24.0'
-    testImplementation "org.junit.jupiter:junit-jupiter:5.10.0"
+    shade 'org.jline:jline:3.24.1'
+    shade 'org.jline:jline-terminal-jansi:3.24.1'
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.1"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
