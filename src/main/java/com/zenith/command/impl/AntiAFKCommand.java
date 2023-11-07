@@ -103,14 +103,14 @@ public class AntiAFKCommand extends Command {
                           c.getSource().getEmbedBuilder()
                               .title("SafeWalk " + (toggle ? "On!" : "Off!"));
                           return 1;
-                      }))
-                      .then(literal("walkdistance")
+                      })))
+            .then(literal("walkdistance")
                                 .then(argument("walkdist", integer(1)).executes(c -> {
                                     CONFIG.client.extra.antiafk.actions.walkDistance = IntegerArgumentType.getInteger(c, "walkdist");
                                     c.getSource().getEmbedBuilder()
                                         .title("Walk Distance Set!");
                                     return 1;
-                                }))))
+                                })))
             .then(literal("jump")
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
