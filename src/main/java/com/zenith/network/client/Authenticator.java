@@ -65,12 +65,12 @@ public class Authenticator {
                 .ifPresent(date -> {
                     final long time = date.getTime() - System.currentTimeMillis();
                     if (time <= 0) {
-                        CLIENT_LOG.error("Device code refresh time is negative? {}", time);
+                        CLIENT_LOG.debug("Device code refresh time is negative? {}", time);
                         return;
                     }
                     this.refreshTask = SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
                         try {
-                            CLIENT_LOG.info("Running background device code token refresh..");
+                            CLIENT_LOG.debug("Running background device code token refresh..");
                             deviceService.refreshMsalToken();
                             if (!Objects.equals(CONFIG.authentication.username, auth.getSelectedProfile().getName())) {
                                 CONFIG.authentication.username = auth.getSelectedProfile().getName();
@@ -81,7 +81,7 @@ public class Authenticator {
                             CLIENT_LOG.error("Error refreshing device code token", e);
                         }
                     }, time, MILLISECONDS);
-                    CLIENT_LOG.info("Device code refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
+                    CLIENT_LOG.debug("Device code refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
                 });
         }
     }
