@@ -87,7 +87,7 @@ public class Authenticator {
     }
 
     public void onDeviceCode(final DeviceCode code) {
-        CLIENT_LOG.error("Please go to " + code.verificationUri() + " and enter " + code.userCode() + " to authenticate.");
+        CLIENT_LOG.error("Login Here: https://microsoft.com/link?otc=" + code.userCode());
         EVENT_BUS.postAsync(new MsaDeviceCodeLoginEvent(code));
     }
 
