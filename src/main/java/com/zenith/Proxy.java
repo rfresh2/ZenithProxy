@@ -159,7 +159,7 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
             // 6hr kick warning
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::eightHourKickWarningTick, (60 * 8) - 10, 1L, TimeUnit.MINUTES);
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::sixHourKickWarningTick, 350L, 1L, TimeUnit.MINUTES);
 
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
@@ -575,17 +575,17 @@ public class Proxy {
         }
     }
 
-    public void eightHourKickWarningTick() {
+    public void sixHourKickWarningTick() {
         try {
-            if (this.isPrio.orElse(false) // Prio players don't have 8h kick.
+            if (this.isPrio.orElse(false) // Prio players don't have 6h kick.
                 || !this.hasActivePlayer() // If no player is connected, nobody to warn
-                || !isOnlineOn2b2tForAtLeastDuration(Duration.ofMinutes(470)) // 8hrs - 10 mins
+                || !isOnlineOn2b2tForAtLeastDuration(Duration.ofMinutes(350)) // 6hrs - 10 mins
             ) return;
             final ServerConnection playerConnection = this.currentPlayer.get();
-            final int minsUntil8Hrs = (int) ((28800 - (Instant.now().getEpochSecond() - connectTime.getEpochSecond())) / 60);
-            if (minsUntil8Hrs < 0) return; // sanity check just in case 2b's plugin changes
+            final int minsUntil6Hrs = (int) ((21600 - (Instant.now().getEpochSecond() - connectTime.getEpochSecond())) / 60);
+            if (minsUntil6Hrs < 0) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
-                ComponentSerializer.mineDownParse((minsUntil8Hrs <= 3 ? "&c" : "&9") + "8hr kick in: " + minsUntil8Hrs + "m"));
+                ComponentSerializer.mineDownParse((minsUntil6Hrs <= 3 ? "&c" : "&9") + "6hr kick in: " + minsUntil6Hrs + "m"));
             playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
@@ -602,7 +602,7 @@ public class Proxy {
                 0L
             ));
         } catch (final Throwable e) {
-            DEFAULT_LOG.error("Error in 8 hr kick warning tick", e);
+            DEFAULT_LOG.error("Error in 6 hr kick warning tick", e);
         }
     }
 
