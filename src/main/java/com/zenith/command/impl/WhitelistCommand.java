@@ -67,8 +67,16 @@ public class WhitelistCommand extends Command {
         return CONFIG.server.extra.whitelist.whitelist.isEmpty()
                 ? "Empty"
                 : CONFIG.server.extra.whitelist.whitelist.stream()
-                .map(mp -> escape(mp.username + " [[" + mp.uuid.toString() + "](" + mp.getNameMCLink() + ")]"))
+                .map(mp -> escape(mp.username + " [[Link](" + mp.getNameMCLink() + ")]"))
                 .collect(Collectors.joining("\n"));
+    }
+
+    private String whitelistToStringShort() {
+        return CONFIG.server.extra.whitelist.whitelist.isEmpty()
+            ? "Empty"
+            : CONFIG.server.extra.whitelist.whitelist.stream()
+            .map(mp -> escape(mp.username))
+            .collect(Collectors.joining("\n"));
     }
 
     @Override
@@ -79,7 +87,8 @@ public class WhitelistCommand extends Command {
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description(whitelistToString())
+            // max chars is 4096. just using size here to approximate randomly. still possible to overflow the description with the "short" version
+            .description(CONFIG.server.extra.whitelist.whitelist.size() < 10 ? whitelistToString() : whitelistToStringShort())
             .color(Color.CYAN);
     }
 }
