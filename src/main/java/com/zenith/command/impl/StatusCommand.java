@@ -67,11 +67,11 @@ public class StatusCommand extends Command {
                     if (Proxy.getInstance().getIsPrio().get()) {
                         return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\n"
                             + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
-                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds((long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
+                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
                     } else {
                         return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\n"
                             + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
-                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds((long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
+                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
                     }
                 } else {
                     return "Queueing";

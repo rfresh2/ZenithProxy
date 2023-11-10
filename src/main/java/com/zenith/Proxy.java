@@ -510,7 +510,7 @@ public class Proxy {
                             || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected()))) {
             // get current queue wait time
             int queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio() : Queue.getQueueStatus().regular());
-            double queueWaitSeconds = Queue.getQueueWait(queueLength);
+            long queueWaitSeconds = Queue.getQueueWait(queueLength);
             activeHoursConfig.activeTimes.stream()
                     .flatMap(activeTime -> {
                         ZonedDateTime activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(activeTime.hour, activeTime.minute), ZoneId.of(activeHoursConfig.timeZoneId));
