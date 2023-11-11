@@ -114,12 +114,15 @@ public class Authenticator {
     }
 
     public void reset() {
-        if (this.auth instanceof MsaDeviceAuthenticationService
-            && tryCount < CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe) {
-            CLIENT_LOG.error("Failed to login with device code attempt {}", tryCount++);
-            return;
+        if (this.auth instanceof MsaDeviceAuthenticationService) {
+            if (tryCount < CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe) {
+                CLIENT_LOG.error("Failed to login with device code attempt {}", tryCount++);
+                return;
+            } else {
+                CLIENT_LOG.debug("Failed to login with device code {} times, clearing cache", tryCount);
+                tryCount = 0;
+            }
         }
-        CLIENT_LOG.debug("Resetting device code token cache");
         try {
             Files.deleteIfExists(Paths.get("msal_serialized_cache.json"));
         } catch (IOException ex) {
