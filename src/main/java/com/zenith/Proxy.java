@@ -463,6 +463,8 @@ public class Proxy {
     }
 
     public Stream<ServerConnection> getSpectatorConnections() {
+        if (getActiveConnections().isEmpty()) return Stream.empty();
+        if (getActiveConnections().size() == 1 && getCurrentPlayer().get() != null) return Stream.empty();
         return getActiveConnections().stream()
                 .filter(ServerConnection::isSpectator);
     }
