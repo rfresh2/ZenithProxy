@@ -33,6 +33,7 @@ public final class Config {
         public boolean prioBanned = false;
         public String msaClientId = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
         public boolean msaDeviceCodeTokenRefresh = true;
+        public int msaLoginAttemptsBeforeCacheWipe = 2;
 
         public enum AccountType {
             @SerializedName("msa") MSA,

@@ -8,6 +8,8 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
 
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.zenith.Shared.CONFIG;
 import static java.util.Arrays.asList;
 
 public class AuthCommand extends Command {
@@ -16,7 +18,10 @@ public class AuthCommand extends Command {
         return CommandUsage.args("auth",
                                  CommandCategory.MANAGE,
                                  "Configures the proxy's authentication settings",
-                                 asList("clear")
+                                 asList(
+                                     "clear",
+                                     "attempts <int>"
+                                 )
         );
     }
 
@@ -34,11 +39,19 @@ public class AuthCommand extends Command {
                     .title("Authentication Cleared")
                     .description("Cached tokens and authentication state cleared. Full re-auth will occur on next login.")
                     .color(Color.CYAN);
-            })
+            }))
+            .then(literal("attempts").then(argument("attempts", integer(1, 10)).executes(c -> {
+                CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe = c.getArgument("attempts", Integer.class);
+                c.getSource().getEmbedBuilder()
+                    .title("Authentication Max Attempts Set")
+                    .color(Color.CYAN)
+                    .addField("Attempts", ""+CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, true);
+                return 1;
+            })));
                   // todo: add ability to change account type and enter user/pass?
                   //    ideally we'd delete the messages containing credentials
                   //    or we configure this through DM's
                   //    or its a terminal only command
-        );
+
     }
 }

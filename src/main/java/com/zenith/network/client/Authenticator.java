@@ -25,6 +25,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Authenticator {
     protected AuthenticationService auth;
     protected ScheduledFuture<?> refreshTask;
+    protected int tryCount = 0;
 
     private AuthenticationService getAuth() {
         if (nonNull(this.auth)) return this.auth;
@@ -35,6 +36,7 @@ public class Authenticator {
         this.auth = this.getAuth();
         try {
             this.auth.login();
+            tryCount = 0;
             if (auth instanceof MsaDeviceAuthenticationService) {
                 if (this.refreshTask != null) {
                     this.refreshTask.cancel(true);
@@ -112,6 +114,12 @@ public class Authenticator {
     }
 
     public void reset() {
+        if (this.auth instanceof MsaDeviceAuthenticationService
+            && tryCount < CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe) {
+            CLIENT_LOG.error("Failed to login with device code attempt {}", tryCount++);
+            return;
+        }
+        CLIENT_LOG.debug("Resetting device code token cache");
         try {
             Files.deleteIfExists(Paths.get("msal_serialized_cache.json"));
         } catch (IOException ex) {
