@@ -114,7 +114,7 @@ ext {
     lombokVersion = "1.18.30"
     porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
-    nettyVersion = '4.1.100.Final'
+    nettyVersion = '4.1.101.Final'
     jooqVersion = "3.18.7"
 }
 
@@ -208,7 +208,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:f7c6f49111") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:16454f5e6f") {
+    shade("com.github.rfresh2:MCProtocolLib:8bef1263bc") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
