@@ -142,14 +142,6 @@ public class Proxy {
             MODULE_MANAGER.init();
             Queue.start();
             saveConfigAsync();
-            if (CONFIG.server.extra.timeout.enable) {
-                SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
-                    ServerConnection currentPlayer = this.currentPlayer.get();
-                    if (currentPlayer != null && currentPlayer.isConnected() && System.currentTimeMillis() - currentPlayer.getLastPacket() >= CONFIG.server.extra.timeout.ms) {
-                        currentPlayer.disconnect("Timed out");
-                    }
-                }, 0, CONFIG.server.extra.timeout.interval, TimeUnit.MILLISECONDS);
-            }
             this.startServer();
             CACHE.reset(true);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
@@ -294,6 +286,10 @@ public class Proxy {
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
+        if (CONFIG.server.extra.timeout.enable)
+            this.client.setReadTimeout(CONFIG.server.extra.timeout.seconds);
+        else
+            this.client.setReadTimeout(0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
         if (CONFIG.client.viaversion.enabled) {
             if (CONFIG.client.viaversion.autoProtocolVersion)

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SERVER_LOG;
 
 
@@ -51,6 +52,10 @@ public class ProxyServerListener implements ServerListener {
             event.getSession().addListener(connection);
             this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
             this.connections.put(event.getSession(), connection);
+            if (CONFIG.server.extra.timeout.enable)
+                connection.setReadTimeout(CONFIG.server.extra.timeout.seconds);
+            else
+                connection.setReadTimeout(0);
         }
     }
 
