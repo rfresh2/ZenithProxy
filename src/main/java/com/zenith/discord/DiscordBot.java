@@ -911,15 +911,18 @@ public class DiscordBot {
             final UUID senderUUID;
             final String senderName;
             if (event.isPublicChat()) {
+                if (!CONFIG.discord.chatRelay.publicChats) return;
                 message = "**" + event.sender().get().getName() + ":** " + message.substring(message.indexOf(" ") + 1);
                 senderName = event.sender().get().getName();
                 senderUUID = event.sender().get().getProfileId();
             } else if (event.isWhisper()) {
+                if (!CONFIG.discord.chatRelay.whispers) return;
                 message = message.replace(event.sender().get().getName(), "**" + event.sender().get().getName() + "**");
                 message = message.replace(event.whisperTarget().get().getName(), "**" + event.whisperTarget().get().getName() + "**");
                 senderName = event.sender().get().getName();
                 senderUUID = event.sender().get().getProfileId();
             } else if (event.isDeathMessage()) {
+                if (!CONFIG.discord.chatRelay.deathMessages) return;
                 DeathMessageParseResult death = event.deathMessage().get();
                 message = message.replace(death.getVictim(), "**" + death.getVictim() + "**");
                 var k = death.getKiller().filter(killer -> killer.getType() == KillerType.PLAYER);
@@ -927,6 +930,7 @@ public class DiscordBot {
                 senderName = death.getVictim();
                 senderUUID = CACHE.getTabListCache().getFromName(death.getVictim()).map(PlayerListEntry::getProfileId).orElse(null);
             } else {
+                if (!CONFIG.discord.chatRelay.serverMessages) return;
                 senderName = "Hausemaster";
                 senderUUID = null;
             }
@@ -1004,6 +1008,7 @@ public class DiscordBot {
 
     public void handleDiscordMessageSentEvent(DiscordMessageSentEvent event) {
         if (!CONFIG.discord.chatRelay.enable) return;
+        if (!CONFIG.discord.chatRelay.sendMessages) return;
         if (!Proxy.getInstance().isConnected() || event.message().isEmpty()) return;
         // determine if this message is a reply
         if (event.event().getMessage().getReferencedMessage().isPresent()) {

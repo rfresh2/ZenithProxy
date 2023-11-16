@@ -403,6 +403,11 @@ public final class Config {
             public boolean mentionRoleOnNameMention = true;
             public boolean mentionWhileConnected = false;
             public boolean connectionMessages = false;
+            public boolean publicChats = true;
+            public boolean whispers = true;
+            public boolean serverMessages = true;
+            public boolean deathMessages = true;
+            public boolean sendMessages = true;
             public String channelId = "";
         }
     }

@@ -20,8 +20,17 @@ public class ChatRelayCommand extends Command {
             "chatRelay",
             CommandCategory.MANAGE,
             "Configures the ChatRelay feature",
-            asList("on/off", "connectionMessages on/off", "whisperMentions on/off",
-                        "nameMentions on/off", "mentionsWhileConnected on/off")
+            asList("on/off",
+                   "connectionMessages on/off",
+                   "whispers on/off",
+                   "publicChat on/off",
+                   "deathMessages on/off",
+                   "serverMessages on/off",
+                   "whisperMentions on/off",
+                   "nameMentions on/off",
+                   "mentionsWhileConnected on/off",
+                   "sendMessages on/off"
+            )
         );
     }
 
@@ -40,6 +49,34 @@ public class ChatRelayCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                 .title("Connection Messages " + (CONFIG.discord.chatRelay.connectionMessages ? "On!" : "Off!"));
                             return 1;
+                      })))
+            .then(literal("whispers")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.chatRelay.whispers = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Whispers " + (CONFIG.discord.chatRelay.whispers ? "On!" : "Off!"));
+                            return 1;
+                      })))
+            .then(literal("publicChat")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.chatRelay.publicChats = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Public Chat " + (CONFIG.discord.chatRelay.publicChats ? "On!" : "Off!"));
+                            return 1;
+                      })))
+            .then(literal("deathMessages")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.discord.chatRelay.deathMessages = getToggle(c, "toggle");
+                          c.getSource().getEmbedBuilder()
+                              .title("Death Messages " + (CONFIG.discord.chatRelay.deathMessages ? "On!" : "Off!"));
+                          return 1;
+                      })))
+            .then(literal("serverMessages")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.discord.chatRelay.serverMessages = getToggle(c, "toggle");
+                          c.getSource().getEmbedBuilder()
+                              .title("Server Messages " + (CONFIG.discord.chatRelay.serverMessages ? "On!" : "Off!"));
+                          return 1;
                       })))
             .then(literal("whisperMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
@@ -61,6 +98,13 @@ public class ChatRelayCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                 .title("Mentions While Connected " + (CONFIG.discord.chatRelay.mentionWhileConnected ? "On!" : "Off!"));
                             return 1;
+                      })))
+            .then(literal("sendMessages")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.chatRelay.sendMessages = getToggle(c, "toggle");
+                            c.getSource().getEmbedBuilder()
+                                .title("Send Messages " + (CONFIG.discord.chatRelay.sendMessages ? "On!" : "Off!"));
+                            return 1;
                       })));
     }
 
@@ -69,9 +113,14 @@ public class ChatRelayCommand extends Command {
         builder
             .addField("Chat Relay", toggleStr(CONFIG.discord.chatRelay.enable), false)
             .addField("Connection Messages", toggleStr(CONFIG.discord.chatRelay.connectionMessages), false)
+            .addField("Public Chats", toggleStr(CONFIG.discord.chatRelay.publicChats), false)
+            .addField("Whispers", toggleStr(CONFIG.discord.chatRelay.whispers), false)
+            .addField("Death Messages", toggleStr(CONFIG.discord.chatRelay.deathMessages), false)
+            .addField("Server Messages", toggleStr(CONFIG.discord.chatRelay.serverMessages), false)
             .addField("Whisper Mentions", toggleStr(CONFIG.discord.chatRelay.mentionRoleOnWhisper), false)
             .addField("Name Mentions", toggleStr(CONFIG.discord.chatRelay.mentionRoleOnNameMention), false)
             .addField("Mentions While Connected", toggleStr(CONFIG.discord.chatRelay.mentionWhileConnected), false)
+            .addField("Send Messages", toggleStr(CONFIG.discord.chatRelay.sendMessages), false)
             .color(Color.CYAN);
     }
 }
