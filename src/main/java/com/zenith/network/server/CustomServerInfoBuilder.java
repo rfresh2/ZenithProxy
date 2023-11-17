@@ -12,8 +12,8 @@ import com.zenith.feature.queue.Queue;
 import net.kyori.adventure.text.Component;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CONFIG;
 
@@ -26,24 +26,37 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     @Override
     public ServerStatusInfo buildInfo(Session session) {
+        if (!CONFIG.server.ping.enabled) return null;
         return new ServerStatusInfo(
             new VersionInfo(MinecraftCodec.CODEC.getMinecraftVersion(), MinecraftCodec.CODEC.getProtocolVersion()),
-            new PlayerInfo(
-                        CONFIG.server.ping.maxPlayers,
-                        this.proxy.getActiveConnections().size(),
-                        List.of(getOnlinePlayerProfiles())
-                ),
+            getPlayerInfo(),
             Component.text(getMotd()),
             this.proxy.getServerIcon(),
             false
         );
     }
 
+    private PlayerInfo getPlayerInfo() {
+        if (CONFIG.server.ping.onlinePlayers) {
+            return new PlayerInfo(
+                CONFIG.server.ping.maxPlayers,
+                this.proxy.getActiveConnections().size(),
+                List.of(getOnlinePlayerProfiles())
+            );
+        } else {
+            return new PlayerInfo(
+                CONFIG.server.ping.maxPlayers,
+                0,
+                Collections.emptyList()
+            );
+        }
+    }
+
     public GameProfile[] getOnlinePlayerProfiles() {
         try {
             return this.proxy.getActiveConnections().stream()
                     .map(connection -> connection.profileCache.getProfile())
-                    .collect(Collectors.toList()).toArray(new GameProfile[0]);
+                    .toArray(GameProfile[]::new);
         } catch (final RuntimeException e) {
             // do nothing, failsafe if we get some race condition
         }
