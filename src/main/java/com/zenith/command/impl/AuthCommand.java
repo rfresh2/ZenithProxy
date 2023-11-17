@@ -34,7 +34,7 @@ public class AuthCommand extends Command {
              */
             .then(literal("clear").executes(c -> {
                 Proxy.getInstance().cancelLogin();
-                Proxy.getInstance().getAuthenticator().reset();
+                Proxy.getInstance().getAuthenticator().clearAuth();
                 c.getSource().getEmbedBuilder()
                     .title("Authentication Cleared")
                     .description("Cached tokens and authentication state cleared. Full re-auth will occur on next login.")

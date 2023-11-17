@@ -123,6 +123,10 @@ public class Authenticator {
                 tryCount = 0;
             }
         }
+        clearAuth();
+    }
+
+    public void clearAuth() {
         try {
             Files.deleteIfExists(Paths.get("msal_serialized_cache.json"));
         } catch (IOException ex) {
