@@ -33,7 +33,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.cloudburstmc.math.vector.Vector3i;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -50,9 +49,7 @@ import static com.zenith.util.RefStrings.BRAND_SUPPLIER;
 @Getter
 @Setter
 public class ChunkCache implements CachedData {
-    private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     private static final double maxDistanceExpected = Math.pow(32, 2); // squared to speed up calc, no need to sqrt
-    protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
     // todo: consider moving weather to a separate cache object
     private boolean isRaining = false;
     private float rainStrength = 0f;
@@ -367,7 +364,6 @@ public class ChunkCache implements CachedData {
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }
-        consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(Vector3i.from(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ()), 0.0f));
         if (isRaining) {
             consumer.accept(new ClientboundGameEventPacket(GameEvent.START_RAIN, null));
             consumer.accept(new ClientboundGameEventPacket(GameEvent.RAIN_STRENGTH, new RainStrengthValue(this.rainStrength)));
@@ -379,7 +375,6 @@ public class ChunkCache implements CachedData {
     public void reset(boolean full) {
         writeCache(() -> {
             this.cache.clear();
-            this.spawnPosition = DEFAULT_SPAWN_POSITION;
             this.isRaining = false;
             this.thunderStrength = 0.0f;
             this.rainStrength = 0.0f;
@@ -403,11 +398,7 @@ public class ChunkCache implements CachedData {
     public String getSendingMessage() {
         final AtomicReference<String> format = new AtomicReference<String>();
         readCache(() -> {
-            format.set(String.format("Sending %d chunks, world spawn position [%d, %d, %d]",
-                                     this.cache.size(),
-                                     this.spawnPosition.getX(),
-                                     this.spawnPosition.getY(),
-                                     this.spawnPosition.getZ()));
+            format.set(String.format("Sending %d chunks", this.cache.size()));
             return true;
         });
         return format.get();

@@ -18,6 +18,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetContentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetDefaultSpawnPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
@@ -25,18 +26,19 @@ import com.zenith.cache.CachedData;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.util.math.MutableVec3i;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.cloudburstmc.math.vector.Vector3i;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.Objects.nonNull;
 
@@ -73,6 +75,8 @@ public class PlayerCache implements CachedData {
     protected Map<String, Map<String, int[]>> tags = new HashMap<>();
     protected EntityEvent opLevel = EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0;
     protected AtomicInteger actionId = new AtomicInteger(0);
+    private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
+    protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
 
     public PlayerCache(final EntityCache entityCache) {
         this.entityCache = entityCache;
@@ -92,6 +96,7 @@ public class PlayerCache implements CachedData {
                                                                  this.inventory.clone(),
                                                                  new ItemStack(0, 0)));
         consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(Vector3i.from(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ()), 0.0f));
         consumer.accept(new ClientboundSetCarriedItemPacket(heldItemSlot));
     }
 
@@ -105,6 +110,7 @@ public class PlayerCache implements CachedData {
             this.heldItemSlot = 0;
             this.enabledFeatures = new String[0];
         }
+        this.spawnPosition = DEFAULT_SPAWN_POSITION;
         this.gameMode = null;
         this.thePlayer.setHealth(20.0f);
         this.thePlayer.setFood(20);
@@ -138,11 +144,6 @@ public class PlayerCache implements CachedData {
                                                                                          CreativeGrabAction.GRAB,
                                                                                          new ItemStack(1, 1),
                                                                                          Int2ObjectMaps.emptyMap()));
-                double x = CACHE.getPlayerCache().getX();
-                double y = CACHE.getPlayerCache().getY() + 1000d;
-                double z = CACHE.getPlayerCache().getZ();
-                // one of 2b2t's plugins requires this (as of 2022)
-//                Proxy.getInstance().getClient().sendDirect(new ServerboundMovePlayerPosPacket(true, x, y, z));
             } catch (final Exception e) {
                 CLIENT_LOG.warn("Failed Player Sync", e);
             }
