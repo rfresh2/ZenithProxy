@@ -34,7 +34,8 @@ public class ActionLimiterCommand extends Command {
                 "allowBlockBreaking on/off",
                 "allowInteract on/off",
                 "allowEnderChest on/off",
-                "allowUseItem on/off"
+                "allowUseItem on/off",
+                "allowChat on/off"
             )
         );
     }
@@ -83,6 +84,10 @@ public class ActionLimiterCommand extends Command {
             .then(literal("allowUseItem").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.allowUseItem = getToggle(c, "toggle");
                 return 1;
+            })))
+            .then(literal("allowChat").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.actionLimiter.allowChat = getToggle(c, "toggle");
+                return 1;
             })));
     }
 
@@ -100,6 +105,7 @@ public class ActionLimiterCommand extends Command {
             .addField("Allow Interact", toggleStr(CONFIG.client.extra.actionLimiter.allowInteract), true)
             .addField("Allow Ender Chest", toggleStr(CONFIG.client.extra.actionLimiter.allowEnderChest), true)
             .addField("Allow Use Item", toggleStr(CONFIG.client.extra.actionLimiter.allowUseItem), true)
+            .addField("Allow Chat", toggleStr(CONFIG.client.extra.actionLimiter.allowChat), true)
             .color(Color.CYAN);
     }
 }

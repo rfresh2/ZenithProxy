@@ -3,6 +3,8 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
@@ -38,6 +40,8 @@ public class ActionLimiter extends Module {
         handlerRegistry = new HandlerRegistry.Builder<ServerConnection>()
             .setLogger(MODULE_LOG)
             .allowUnhandled(true)
+            .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
+            .registerInbound(ServerboundChatPacket.class, new ALChatHandler())
             .registerInbound(ServerboundClientCommandPacket.class, new ALClientCommandHandler())
             .registerInbound(ServerboundContainerClickPacket.class, new ALContainerClickHandler())
             .registerInbound(ServerboundInteractPacket.class, new ALInteractHandler())

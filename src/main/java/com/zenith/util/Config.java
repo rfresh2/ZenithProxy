@@ -271,6 +271,7 @@ public final class Config {
                 public boolean allowInventory = true;
                 public boolean allowUseItem = true;
                 public boolean allowInteract = true;
+                public boolean allowChat = true; // outbound chats, including commands
             }
         }
 
