@@ -1,5 +1,6 @@
 package com.zenith.cache.data.entity;
 
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -8,9 +9,7 @@ import com.zenith.cache.CachedData;
 import lombok.NonNull;
 
 import java.time.Duration;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -26,7 +25,17 @@ public class EntityCache implements CachedData {
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        this.cachedEntities.values().forEach(entity -> entity.addPackets(consumer));
+        // it would be preferable to not have this intermediary list :/ could impact memory if there are a lot of entities
+        final List<Packet> packets = new ArrayList<>();
+        this.cachedEntities.values().forEach(entity -> entity.addPackets(packets::add));
+        // sort ClientboundAddEntityPacket first
+        // some entity metadata references other entities that need to exist first
+        packets.sort((p1, p2) -> {
+            if (p1 instanceof ClientboundAddEntityPacket) return -1;
+            if (p2 instanceof ClientboundAddEntityPacket) return 1;
+            return 0;
+        });
+        packets.forEach(consumer);
 //        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
 //            this::reapDeadEntities,
 //            5L,
