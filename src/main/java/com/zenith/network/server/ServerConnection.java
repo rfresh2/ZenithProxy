@@ -25,6 +25,7 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
+import com.zenith.module.impl.ActionLimiter;
 import com.zenith.util.ComponentSerializer;
 import lombok.Getter;
 import lombok.NonNull;
@@ -91,19 +92,20 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
+            if (!this.isLoggedIn || ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() != ProtocolState.GAME) return;
+            if (CONFIG.client.extra.actionLimiter.enabled && !MODULE_MANAGER.get(ActionLimiter.class).bypassesLimits(this)) {
+                if (!MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleInbound(packet, this))
+                    return;
+            }
             if (isSpectator()) {
-                if (this.isLoggedIn
-                    && ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() == ProtocolState.GAME
-                    && SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)) {
+                if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)) {
                     // there's no use case for this so I'm just disabling sending it to the client
                     // we still want spectator handlers to process the packet though
 //                    Proxy.getInstance().getClient().sendAsync(packet);
                 }
             } else {
                 this.lastPacket = System.currentTimeMillis();
-                if (this.isLoggedIn // also checks if we're in the game state
-                    && ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() == ProtocolState.GAME
-                    && SERVER_PLAYER_HANDLERS.handleInbound(packet, this)) {
+                if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)) {
                     Proxy.getInstance().getClient().sendAsync(packet);
                 }
             }
@@ -115,9 +117,13 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            return isSpectator()
+            Packet p = isSpectator()
                 ? SERVER_SPECTATOR_HANDLERS.handleOutgoing(packet, this)
                 : SERVER_PLAYER_HANDLERS.handleOutgoing(packet, this);
+            if (p != null && CONFIG.client.extra.actionLimiter.enabled) {
+                p = MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleOutgoing(p, this);
+            }
+            return p;
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling packet sending: " + packet.getClass().getSimpleName(), e);
         }

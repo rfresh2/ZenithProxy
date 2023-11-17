@@ -58,4 +58,10 @@ public class MutableVec3d {
     public double horizontalLengthSquared() {
         return this.x * this.x + this.z * this.z;
     }
+
+    public double distance2d(double x, double z) {
+        double d = x - this.x;
+        double e = z - this.z;
+        return Math.sqrt(d * d + e * e);
+    }
 }

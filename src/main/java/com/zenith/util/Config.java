@@ -81,6 +81,7 @@ public final class Config {
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
+            public ActionLimiter actionLimiter = new ActionLimiter();
 
             public static final class Chat {
                 public List<WhitelistEntry> ignoreList = new ArrayList<>();
@@ -252,6 +253,24 @@ public final class Config {
                 public boolean enabled = false;
                 public int cooldownSeconds = 15;
                 public String message = "I am currently AFK, check back later or message me on discord.";
+            }
+            public static class ActionLimiter {
+                public boolean enabled = false;
+                // be careful with this, auto respawn will still respawn after they disconnect
+                //  there is a position check at login so it should be ok, but the respawn will still go through
+                public boolean allowRespawn = true;
+                public boolean allowMovement = true;
+                public int movementDistance = 1000; // distance from home coords
+                public int movementHomeX = 0;
+                public int movementHomeZ = 0;
+                public int movementMinY = -64;
+                public boolean allowEnderChest = true;
+                public boolean allowBlockBreaking = true;
+                // todo: dunno how to block this but still allow other interactions
+//                public boolean allowBlockPlacing = true;
+                public boolean allowInventory = true;
+                public boolean allowUseItem = true;
+                public boolean allowInteract = true;
             }
         }
 

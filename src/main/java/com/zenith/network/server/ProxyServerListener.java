@@ -5,6 +5,8 @@ import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.server.*;
 import com.zenith.Proxy;
+import com.zenith.event.proxy.ServerConnectionAddedEvent;
+import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.SERVER_LOG;
+import static com.zenith.Shared.*;
 
 
 @RequiredArgsConstructor
@@ -56,6 +57,7 @@ public class ProxyServerListener implements ServerListener {
                 connection.setReadTimeout(CONFIG.server.extra.timeout.seconds);
             else
                 connection.setReadTimeout(0);
+            EVENT_BUS.post(new ServerConnectionAddedEvent(connection));
         }
     }
 
@@ -66,5 +68,6 @@ public class ProxyServerListener implements ServerListener {
         if (connection != null) {
             this.proxy.getCurrentPlayer().compareAndSet(connection, null);
         }
+        EVENT_BUS.post(new ServerConnectionRemovedEvent(connection));
     }
 }

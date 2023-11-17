@@ -1050,6 +1050,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$ActionLimiter",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$AntiAFK",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

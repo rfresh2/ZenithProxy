@@ -38,6 +38,7 @@ public class ModuleManager {
 
     public void init() {
         asList(
+            new ActionLimiter(),
             new AntiAFK(),
             new AntiLeak(),
             new AutoDisconnect(),

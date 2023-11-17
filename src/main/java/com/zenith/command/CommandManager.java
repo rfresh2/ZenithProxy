@@ -28,6 +28,7 @@ public class CommandManager {
 
     public void init() {
        asList(
+           new ActionLimiterCommand(),
            new ActiveHoursCommand(),
            new AntiAFKCommand(),
            new AntiLeakCommand(),

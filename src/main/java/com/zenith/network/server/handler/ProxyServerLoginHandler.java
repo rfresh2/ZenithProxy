@@ -9,6 +9,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.network.server.CustomServerInfoBuilder;
@@ -54,6 +55,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             return;
         }
         connection.setPlayer(true);
+        EVENT_BUS.post(new PlayerLoginEvent(connection));
         if (connection.isSpectator()) {
             if (Proxy.getInstance().getCurrentPlayer().get() == null) {
                 // can probably make this state work with some more work but im just gonna block it for now
