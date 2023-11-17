@@ -17,6 +17,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
@@ -274,6 +275,7 @@ public class Shared {
         .registerInbound(ClientboundMoveEntityPosRotPacket.class, new MoveEntityPosRotHandler())
         .registerInbound(ClientboundUpdateAttributesPacket.class, new UpdateAttributesHandler())
         .registerInbound(ClientboundMoveEntityRotPacket.class, new MoveEntityRotHandler())
+        .registerInbound(ClientboundMoveVehiclePacket.class, new MoveVehicleHandler())
         .registerInbound(ClientboundSetPassengersPacket.class, new EntitySetPassengersHandler())
         .registerInbound(ClientboundTeleportEntityPacket.class, new TeleportEntityHandler())
         //SPAWN
@@ -285,6 +287,7 @@ public class Shared {
         .registerOutbound(ServerboundChatPacket.class, new OutgoingChatHandler())
         .registerOutbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())
         //Postoutgoing
+        .registerPostOutbound(ServerboundMoveVehiclePacket.class, new PostOutgoingMoveVehicleHandler())
         .registerPostOutbound(ServerboundPlayerCommandPacket.class, new PostOutgoingPlayerCommandHandler())
         .registerPostOutbound(ServerboundSetCarriedItemPacket.class, new PostOutgoingSetCarriedItemHandler())
         .registerPostOutbound(ServerboundMovePlayerPosPacket.class, new PostOutgoingPlayerPositionHandler())
