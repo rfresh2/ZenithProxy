@@ -33,13 +33,13 @@ public class DataCache {
     protected final RecipeCache recipeCache = new RecipeCache();
 
     public Collection<CachedData> getAllData() {
-        return Arrays.asList(profileCache, chunkCache, statsCache, tabListCache, bossBarCache, entityCache, playerCache, chatCache, mapDataCache, recipeCache);
+        return Arrays.asList(profileCache, playerCache, chunkCache, statsCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache);
     }
 
     // get a limited selection of cache data
     // mainly we don't want to not send the proxy client's player cache
     public Collection<CachedData> getAllDataSpectator(final PlayerCache spectatorPlayerCache) {
-        return Arrays.asList(chunkCache, tabListCache, bossBarCache, entityCache, spectatorPlayerCache, chatCache, mapDataCache, recipeCache);
+        return Arrays.asList(spectatorPlayerCache, chunkCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache);
     }
 
     public boolean reset(boolean full) {
