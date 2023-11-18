@@ -9,8 +9,9 @@ import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.impl.*;
 import com.zenith.util.Wait;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
@@ -25,7 +26,7 @@ import static java.util.Objects.nonNull;
 public class ModuleManager {
     protected ScheduledFuture<?> clientTickFuture;
     private Subscription eventSubscription;
-    private final IdentityHashMap<Class<? extends Module>, Module> moduleClassMap = new IdentityHashMap<>(16);
+    private final Reference2ObjectMap<Class<? extends Module>, Module> moduleClassMap = new Reference2ObjectOpenHashMap<>();
 
     public ModuleManager() {
         eventSubscription = EVENT_BUS.subscribe(

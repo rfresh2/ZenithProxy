@@ -7,14 +7,11 @@ import com.github.steveice10.packetlib.event.server.*;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerConnectionAddedEvent;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import java.net.SocketAddress;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Map;
 
 import static com.zenith.Shared.*;
 
@@ -25,11 +22,7 @@ public class ProxyServerListener implements ServerListener {
     @NonNull
     protected final Proxy proxy;
 
-    public final Map<Session, ServerConnection> connections = Collections.synchronizedMap(new IdentityHashMap<>());
-
-    //this isn't really needed, but it lets me print the correct address to the log
-    //TODO: ip-ban specific clients?
-    protected final Map<Session, SocketAddress> addresses = Collections.synchronizedMap(new IdentityHashMap<>());
+    public final Reference2ObjectMap<Session, ServerConnection> connections = new Reference2ObjectOpenHashMap<>();
 
     @Override
     public void serverBound(ServerBoundEvent event) {
@@ -51,7 +44,6 @@ public class ProxyServerListener implements ServerListener {
         if (((MinecraftProtocol) event.getSession().getPacketProtocol()).getState() != ProtocolState.STATUS) {
             ServerConnection connection = new ServerConnection(event.getSession());
             event.getSession().addListener(connection);
-            this.addresses.put(event.getSession(), event.getSession().getRemoteAddress());
             this.connections.put(event.getSession(), connection);
             if (CONFIG.server.extra.timeout.enable)
                 connection.setReadTimeout(CONFIG.server.extra.timeout.seconds);
@@ -63,7 +55,6 @@ public class ProxyServerListener implements ServerListener {
 
     @Override
     public void sessionRemoved(SessionRemovedEvent event) {
-        this.addresses.remove(event.getSession());
         ServerConnection connection = this.connections.remove(event.getSession());
         if (connection != null) {
             this.proxy.getCurrentPlayer().compareAndSet(connection, null);

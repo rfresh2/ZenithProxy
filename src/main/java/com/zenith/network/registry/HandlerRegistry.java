@@ -5,12 +5,13 @@ import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zenith.network.server.handler.shared.incoming.KeepAliveHandler;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 
 import java.time.Instant;
-import java.util.IdentityHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,18 +19,16 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import static com.zenith.Shared.CONFIG;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class HandlerRegistry<S extends Session> {
     @NonNull
-    protected final IdentityHashMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
+    protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
     @NonNull
-    protected final IdentityHashMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
+    protected final Reference2ObjectMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
     @NonNull
-    protected final IdentityHashMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
+    protected final Reference2ObjectMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
     @NonNull
     protected final Logger logger;
     protected final boolean allowUnhandled;
@@ -57,7 +56,7 @@ public class HandlerRegistry<S extends Session> {
 //            }
         }
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
-        if (isNull(handler)) {
+        if (handler == null) {
             return allowUnhandled;
         } else {
             return handler.apply(packet, session);
@@ -70,7 +69,7 @@ public class HandlerRegistry<S extends Session> {
             this.logger.debug("[{}] Sending: {}", Instant.now().toEpochMilli(), CONFIG.debug.packet.preSentBody ? packet : packet.getClass());
         }
         BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
-        if (isNull(handler)) {
+        if (handler == null) {
             // allowUnhandled has no effect here
             return packet;
         } else {
@@ -88,7 +87,7 @@ public class HandlerRegistry<S extends Session> {
 //            }
         }
         PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
-        if (nonNull(handler)) {
+        if (handler != null) {
             handler.accept(packet, session);
         }
     }
@@ -98,11 +97,11 @@ public class HandlerRegistry<S extends Session> {
     @Accessors(chain = true)
     public static class Builder<S extends Session> {
 
-        protected final IdentityHashMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
+        protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new Reference2ObjectOpenHashMap<>();
 
-        protected final IdentityHashMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new IdentityHashMap<>();
+        protected final Reference2ObjectMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new Reference2ObjectOpenHashMap<>();
 
-        protected final IdentityHashMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
+        protected final Reference2ObjectMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new Reference2ObjectOpenHashMap<>();
         @NonNull
         protected Logger logger;
         protected boolean allowUnhandled = true;
