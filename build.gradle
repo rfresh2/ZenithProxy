@@ -79,6 +79,10 @@ repositories {
         url "https://repo.opencollab.dev/maven-releases/"
     }
     maven {
+        "opencollab-snapshot"
+        url "https://repo.opencollab.dev/maven-snapshots/"
+    }
+    maven {
         name = "paper"
         url "https://papermc.io/repo/repository/maven-public/"
     }
@@ -108,73 +112,10 @@ configurations {
 
 ext {
     lombokVersion = "1.18.30"
-    porklibVersion = "0.5.8-SNAPSHOT"
     postgresVersion = '42.6.0'
     nettyVersion = '4.1.101.Final'
     jooqVersion = "3.18.7"
-}
-
-jooq {
-    version = project.ext.jooqVersion
-    // read from config.json (will fail if config doesn't exist)
-    def dbUrl = ''
-    def dbUser = ''
-    def dbPass = ''
-    try {
-        def inputFile = new File(projectDir.getAbsolutePath() + "/config.json")
-        def jsonFile = new JsonSlurper().parseText(inputFile.text)
-        dbUrl = 'jdbc:postgresql://' + jsonFile.database.host + ':' + jsonFile.database.port + '/postgres'
-        dbUser = jsonFile.database.username
-        dbPass = jsonFile.database.password
-    } catch (Exception ex) {
-        // fall through
-        println("config.json does not exist, unable to set database credentials. generateJooq will fail if run.")
-    }
-
-    configurations {
-        main {  // name of the jOOQ configuration
-            generateSchemaSourceOnCompilation = false  // disable auto-execution in build task
-
-            generationTool {
-                logging = org.jooq.meta.jaxb.Logging.WARN
-                jdbc {
-                    driver = 'org.postgresql.Driver'
-                    url = dbUrl
-                    user = dbUser
-                    password = dbPass
-                    properties {
-                        property {
-                            key = 'ssl'
-                            value = 'false'
-                        }
-                    }
-                }
-                generator {
-                    name = 'org.jooq.codegen.DefaultGenerator'
-                    database {
-                        name = 'org.jooq.meta.postgres.PostgresDatabase'
-                        inputSchema = 'public'
-                        forcedTypes {
-                        }
-                    }
-                    generate {
-                        deprecated = false
-                        records = true
-                        immutablePojos = true
-                        fluentSetters = true
-                        routines = false
-                    }
-                    target {
-                        packageName = 'com.zenith.database.dto'
-                        // you need to manually move these generated files into main src set
-                        // only needs to be done on db schema changes
-                        directory = 'build/jooq/main'
-                    }
-                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-                }
-            }
-        }
-    }
+    fastutilVersion = "8.5.13-SNAPSHOT"
 }
 
 dependencies {
@@ -198,7 +139,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:d836c454ab") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:e8d5bd409d") {
+    shade("com.github.rfresh2:MCProtocolLib:fec9e60384") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -227,12 +168,12 @@ dependencies {
     shade('org.redisson:redisson:3.24.3') {
         exclude group: 'io.netty'
     }
-    shade 'com.nukkitx.fastutil:fastutil-object-object-maps:8.5.3'
-    shade 'com.nukkitx.fastutil:fastutil-int-object-maps:8.5.3'
-    shade 'com.nukkitx.fastutil:fastutil-object-int-maps:8.5.3'
-    shade 'com.nukkitx.fastutil:fastutil-long-object-maps:8.5.3'
-    shade 'com.nukkitx.fastutil:fastutil-int-int-maps:8.5.3'
-    shade 'com.nukkitx.fastutil:fastutil-reference-object-maps:8.5.3'
+    shade "org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion"
+    shade "org.cloudburstmc.fastutil.maps:int-object-maps:$fastutilVersion"
+    shade "org.cloudburstmc.fastutil.maps:object-int-maps:$fastutilVersion"
+    shade "org.cloudburstmc.fastutil.maps:long-object-maps:$fastutilVersion"
+    shade "org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion"
+    shade "org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion"
 
     shade "com.viaversion:viaversion:4.8.1"
     shade "com.viaversion:viabackwards:4.8.1"
@@ -438,6 +379,70 @@ graalvmNative {
         enabled = true
     }
 }
+
+jooq {
+    version = project.ext.jooqVersion
+    // read from config.json (will fail if config doesn't exist)
+    def dbUrl = ''
+    def dbUser = ''
+    def dbPass = ''
+    try {
+        def inputFile = new File(projectDir.getAbsolutePath() + "/config.json")
+        def jsonFile = new JsonSlurper().parseText(inputFile.text)
+        dbUrl = 'jdbc:postgresql://' + jsonFile.database.host + ':' + jsonFile.database.port + '/postgres'
+        dbUser = jsonFile.database.username
+        dbPass = jsonFile.database.password
+    } catch (Exception ex) {
+        // fall through
+        println("config.json does not exist, unable to set database credentials. generateJooq will fail if run.")
+    }
+
+    configurations {
+        main {  // name of the jOOQ configuration
+            generateSchemaSourceOnCompilation = false  // disable auto-execution in build task
+
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = dbUrl
+                    user = dbUser
+                    password = dbPass
+                    properties {
+                        property {
+                            key = 'ssl'
+                            value = 'false'
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                        forcedTypes {
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                        routines = false
+                    }
+                    target {
+                        packageName = 'com.zenith.database.dto'
+                        // you need to manually move these generated files into main src set
+                        // only needs to be done on db schema changes
+                        directory = 'build/jooq/main'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+
 
 compileJava.dependsOn([clearJooqBuild])
 tasks.named('generateJooq').configure { allInputsDeclared = false }
