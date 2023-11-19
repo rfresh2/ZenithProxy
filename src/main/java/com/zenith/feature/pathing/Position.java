@@ -2,7 +2,6 @@ package com.zenith.feature.pathing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosPacket;
 import lombok.Data;
-import net.daporkchop.lib.math.vector.Vec3i;
 
 @Data
 public class Position {
@@ -25,10 +24,6 @@ public class Position {
 
     public BlockPos toBlockPos() {
         return new BlockPos(floor(x), floor(y), floor(z));
-    }
-
-    public Vec3i toDirectionVector() {
-        return Vec3i.of((int) Math.signum(x), (int) Math.signum(y), (int) Math.signum(z));
     }
 
     public Position addX(double delta) {

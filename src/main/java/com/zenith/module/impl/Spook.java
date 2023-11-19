@@ -8,7 +8,7 @@ import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
-import net.daporkchop.lib.math.vector.Vec2f;
+import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -93,10 +93,10 @@ public class Spook extends Module {
         final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
         if (nearestPlayer.isPresent()) {
             this.hasTarget.set(true);
-            Vec2f rotationTo = Pathing.rotationTo(nearestPlayer.get().getX(),
-                                             nearestPlayer.get().getY()+1.6,
-                                             nearestPlayer.get().getZ());
-            PATHING.rotate(rotationTo.x(), rotationTo.y(), MOVEMENT_PRIORITY);
+            Vector2f rotationTo = Pathing.rotationTo(nearestPlayer.get().getX(),
+                                                     nearestPlayer.get().getY()+1.6,
+                                                     nearestPlayer.get().getZ());
+            PATHING.rotate(rotationTo.getX(), rotationTo.getY(), MOVEMENT_PRIORITY);
         } else {
             this.hasTarget.set(false);
         }
@@ -107,10 +107,10 @@ public class Spook extends Module {
             if (!this.focusStack.isEmpty()) {
                 final EntityPlayer target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                Vec2f rotationTo = Pathing.rotationTo(target.getX(),
+                Vector2f rotationTo = Pathing.rotationTo(target.getX(),
                                                       target.getY() +1.6,
                                                       target.getZ());
-                PATHING.rotate(rotationTo.x(), rotationTo.y(), MOVEMENT_PRIORITY);
+                PATHING.rotate(rotationTo.getX(), rotationTo.getY(), MOVEMENT_PRIORITY);
             } else {
                 this.hasTarget.set(false);
             }

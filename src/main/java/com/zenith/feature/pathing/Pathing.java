@@ -4,7 +4,7 @@ import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
-import net.daporkchop.lib.math.vector.Vec2f;
+import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.*;
 
@@ -44,8 +44,8 @@ public class Pathing {
     }
 
     public void moveRotTowards(final double x, final double y, final double z, final int priority) {
-        final Vec2f rotationTo = rotationTo(x, y, z);
-        this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(rotationTo.x()), Optional.of(rotationTo.y()), priority));
+        final Vector2f rotationTo = rotationTo(x, y, z);
+        this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(rotationTo.getX()), Optional.of(rotationTo.getY()), priority));
     }
 
     public void moveRotTowardsBlockPos(final int x, final int z, final int priority) {
@@ -67,8 +67,8 @@ public class Pathing {
     }
 
     public void rotateTowards(final double x, final double y, final double z, final int priority) {
-        final Vec2f rotationTo = rotationTo(x, y, z);
-        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(rotationTo.x()), Optional.of(rotationTo.y()), priority));
+        final Vector2f rotationTo = rotationTo(x, y, z);
+        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(rotationTo.getX()), Optional.of(rotationTo.getY()), priority));
     }
 
     public void rotateYaw(final float yaw, final int priority) {
@@ -144,14 +144,14 @@ public class Pathing {
         return (float) yaw;
     }
 
-    public static Vec2f rotationTo(final double x, final double y, final double z) {
+    public static Vector2f rotationTo(final double x, final double y, final double z) {
         final double dx = x - CACHE.getPlayerCache().getX();
         final double dy = y - (MODULE_MANAGER.get(PlayerSimulation.class).getEyeY());
         final double dz = z - CACHE.getPlayerCache().getZ();
         final double distance = Math.sqrt(dx * dx + dz * dz);
         final double yaw = Math.toDegrees(Math.atan2(dz, dx)) - 90.0;
         final double pitch = -Math.toDegrees(Math.atan2(dy, distance));
-        return Vec2f.of((float) yaw, (float) pitch);
+        return Vector2f.from((float) yaw, (float) pitch);
     }
 
     public static Position getCurrentPlayerPos() {
