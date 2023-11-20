@@ -112,7 +112,7 @@ configurations {
 
 ext {
     lombokVersion = "1.18.30"
-    postgresVersion = '42.6.0'
+    postgresVersion = '42.7.0'
     nettyVersion = '4.1.101.Final'
     jooqVersion = "3.18.7"
     fastutilVersion = "8.5.13-SNAPSHOT"
@@ -134,7 +134,7 @@ dependencies {
     shade 'org.slf4j:jul-to-slf4j:2.0.9'
     shade 'org.fusesource.jansi:jansi:2.4.1'
     shade 'com.mojang:brigadier:1.1.8'
-    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
+    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
     shade("com.github.rfresh2.Discord4j:discord4j-core:d836c454ab") {
         exclude group: 'io.netty'
