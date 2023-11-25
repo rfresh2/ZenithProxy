@@ -1,7 +1,8 @@
 # ZenithProxy
 
 <p align="center">
-  <img alt="Discord" src="https://dcbadge.vercel.app/api/server/nJZrSaRKtb"
+  <a href="https://discord.gg/nJZrSaRKtb">
+  <img alt="Discord" src="https://dcbadge.vercel.app/api/server/nJZrSaRKtb">
 </p>
 
 <p align="center">
