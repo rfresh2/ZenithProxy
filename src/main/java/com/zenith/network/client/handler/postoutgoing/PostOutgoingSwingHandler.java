@@ -5,18 +5,19 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.PostOutgoingAsyncHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 
-public class PostOutgoingSwingHandler implements PostOutgoingAsyncHandler<ServerboundSwingPacket, ClientSession> {
+public class PostOutgoingSwingHandler implements AsyncPacketHandler<ServerboundSwingPacket, ClientSession> {
     @Override
-    public void acceptAsync(final ServerboundSwingPacket packet, final ClientSession session) {
+    public boolean applyAsync(final ServerboundSwingPacket packet, final ClientSession session) {
         Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
             connection.sendAsync(new ClientboundAnimatePacket(
                 CACHE.getPlayerCache().getEntityId(),
                 Animation.SWING_ARM
             ));
         });
+        return true;
     }
 }

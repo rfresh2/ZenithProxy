@@ -1,10 +1,10 @@
 package com.zenith.network.server.handler.spectator.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerAbilitiesPacket;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 
-public class PlayerAbilitiesSpectatorOutgoingHandler implements OutgoingHandler<ClientboundPlayerAbilitiesPacket, ServerConnection> {
+public class PlayerAbilitiesSpectatorOutgoingHandler implements PacketHandler<ClientboundPlayerAbilitiesPacket, ServerConnection> {
     @Override
     public ClientboundPlayerAbilitiesPacket apply(final ClientboundPlayerAbilitiesPacket packet, final ServerConnection session) {
         if (session.isLoggedIn()) return new ClientboundPlayerAbilitiesPacket(

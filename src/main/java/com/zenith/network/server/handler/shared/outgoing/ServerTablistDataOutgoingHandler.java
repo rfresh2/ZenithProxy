@@ -3,7 +3,7 @@ package com.zenith.network.server.handler.shared.outgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.zenith.Proxy;
 import com.zenith.feature.queue.Queue;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -12,7 +12,7 @@ import java.time.Instant;
 
 import static com.zenith.Shared.*;
 
-public class ServerTablistDataOutgoingHandler implements OutgoingHandler<ClientboundTabListPacket, ServerConnection> {
+public class ServerTablistDataOutgoingHandler implements PacketHandler<ClientboundTabListPacket, ServerConnection> {
 
     @Override
     public ClientboundTabListPacket apply(ClientboundTabListPacket packet, ServerConnection session) {

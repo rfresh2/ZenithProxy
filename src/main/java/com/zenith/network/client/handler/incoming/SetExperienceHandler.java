@@ -2,11 +2,11 @@ package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetExperiencePacket;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 
-public class SetExperienceHandler implements AsyncIncomingHandler<ClientboundSetExperiencePacket, ClientSession> {
+public class SetExperienceHandler implements AsyncPacketHandler<ClientboundSetExperiencePacket, ClientSession> {
     @Override
     public boolean applyAsync(ClientboundSetExperiencePacket packet, ClientSession session) {
         CACHE.getPlayerCache().getThePlayer()

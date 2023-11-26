@@ -5,13 +5,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class AddEntityHandler implements AsyncIncomingHandler<ClientboundAddEntityPacket, ClientSession> {
+public class AddEntityHandler implements AsyncPacketHandler<ClientboundAddEntityPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ClientboundAddEntityPacket packet, @NonNull ClientSession session) {

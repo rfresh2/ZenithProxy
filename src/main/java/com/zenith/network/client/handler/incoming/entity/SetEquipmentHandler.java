@@ -7,7 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.Map;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class SetEquipmentHandler implements AsyncIncomingHandler<ClientboundSetEquipmentPacket, ClientSession> {
+public class SetEquipmentHandler implements AsyncPacketHandler<ClientboundSetEquipmentPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundSetEquipmentPacket packet, @NonNull ClientSession session) {
         try {

@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLo
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
-import com.zenith.network.registry.PostOutgoingHandler;
+import com.zenith.network.registry.PostOutgoingPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
@@ -13,7 +13,7 @@ import lombok.NonNull;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CONFIG;
 
-public class LoginPostHandler implements PostOutgoingHandler<ClientboundLoginPacket, ServerConnection> {
+public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
         if (CONFIG.server.extra.whitelist.enable && !session.isWhitelistChecked()) {

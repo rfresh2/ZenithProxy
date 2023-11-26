@@ -200,7 +200,7 @@ public class Shared {
         .registerOutbound(ClientboundGameEventPacket.class, new GameEventSpectatorOutgoingHandler())
         .registerOutbound(ClientboundMoveVehiclePacket.class, new MoveVehicleSpectatorOutgoingHandler())
         .registerOutbound(ClientboundHorseScreenOpenPacket.class, new HorseScreenOpenSpectatorOutgoingHandler())
-        .registerOutbound(ClientboundContainerSetDataPacket.class, new ClientboundContainerSetDataSpectatorOutgoingHandler())
+        .registerOutbound(ClientboundContainerSetDataPacket.class, new ContainerSetDataSpectatorOutgoingHandler())
         .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
         .registerOutbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesSpectatorOutgoingHandler())
         .registerOutbound(ClientboundRespawnPacket.class, new RespawnSpectatorOutgoingPacket())

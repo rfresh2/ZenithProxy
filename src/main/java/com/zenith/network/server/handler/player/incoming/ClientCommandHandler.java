@@ -3,12 +3,12 @@ package com.zenith.network.server.handler.player.incoming;
 import com.github.steveice10.mc.protocol.data.game.ClientCommand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.CACHE;
 
-public class ClientCommandHandler implements AsyncIncomingHandler<ServerboundClientCommandPacket, ServerConnection> {
+public class ClientCommandHandler implements AsyncPacketHandler<ServerboundClientCommandPacket, ServerConnection> {
     @Override
     public boolean applyAsync(ServerboundClientCommandPacket packet, ServerConnection session) {
         if (packet.getRequest() == ClientCommand.RESPAWN) {

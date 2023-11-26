@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
 import lombok.NonNull;
@@ -13,7 +13,7 @@ import lombok.NonNull;
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
-public class GameProfileOutgoingHandler implements OutgoingHandler<ClientboundGameProfilePacket, ServerConnection> {
+public class GameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerConnection> {
     @Override
     public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerConnection session) {
         try {

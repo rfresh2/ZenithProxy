@@ -6,12 +6,12 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.proxy.PlayerLeftVisualRangeEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.*;
 
-public class RemoveEntitiesHandler implements AsyncIncomingHandler<ClientboundRemoveEntitiesPacket, ClientSession> {
+public class RemoveEntitiesHandler implements AsyncPacketHandler<ClientboundRemoveEntitiesPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundRemoveEntitiesPacket packet, @NonNull ClientSession session) {
         for (int id : packet.getEntityIds()) {

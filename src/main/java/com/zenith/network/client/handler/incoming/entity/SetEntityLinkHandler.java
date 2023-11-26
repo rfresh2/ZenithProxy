@@ -3,12 +3,12 @@ package com.zenith.network.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityLinkPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class SetEntityLinkHandler implements AsyncIncomingHandler<ClientboundSetEntityLinkPacket, ClientSession> {
+public class SetEntityLinkHandler implements AsyncPacketHandler<ClientboundSetEntityLinkPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(ClientboundSetEntityLinkPacket packet, ClientSession session) {

@@ -4,12 +4,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.Clientb
 import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 
-public class ForgetLevelChunkHandler implements AsyncIncomingHandler<ClientboundForgetLevelChunkPacket, ClientSession> {
+public class ForgetLevelChunkHandler implements AsyncPacketHandler<ClientboundForgetLevelChunkPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundForgetLevelChunkPacket packet, @NonNull ClientSession session) {
         CACHE.getChunkCache().remove(packet.getX(), packet.getZ());

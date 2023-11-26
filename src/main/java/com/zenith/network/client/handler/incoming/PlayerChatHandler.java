@@ -2,11 +2,11 @@ package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerChatPacket;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class PlayerChatHandler implements AsyncIncomingHandler<ClientboundPlayerChatPacket, ClientSession> {
+public class PlayerChatHandler implements AsyncPacketHandler<ClientboundPlayerChatPacket, ClientSession> {
 
         @Override
         public boolean applyAsync(ClientboundPlayerChatPacket packet, ClientSession session) {

@@ -7,7 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLo
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientInformationPacket;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.IncomingHandler;
+import com.zenith.network.registry.PacketHandler;
 import lombok.NonNull;
 
 import java.util.List;
@@ -15,9 +15,9 @@ import java.util.Locale;
 
 import static com.zenith.Shared.*;
 
-public class LoginHandler implements IncomingHandler<ClientboundLoginPacket, ClientSession> {
+public class LoginHandler implements PacketHandler<ClientboundLoginPacket, ClientSession> {
     @Override
-    public boolean apply(@NonNull ClientboundLoginPacket packet, @NonNull ClientSession session) {
+    public ClientboundLoginPacket apply(@NonNull ClientboundLoginPacket packet, @NonNull ClientSession session) {
         CACHE.getPlayerCache()
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
@@ -57,6 +57,6 @@ public class LoginHandler implements IncomingHandler<ClientboundLoginPacket, Cli
                 EVENT_BUS.post(new PlayerOnlineEvent());
             }
         }
-        return true;
+        return packet;
     }
 }

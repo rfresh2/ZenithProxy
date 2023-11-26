@@ -1,13 +1,13 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ALPlayerPositionHandler implements OutgoingHandler<ClientboundPlayerPositionPacket, ServerConnection> {
+public class ALPlayerPositionHandler implements PacketHandler<ClientboundPlayerPositionPacket, ServerConnection> {
     @Override
     public ClientboundPlayerPositionPacket apply(final ClientboundPlayerPositionPacket packet, final ServerConnection session) {
         if (CONFIG.client.extra.actionLimiter.allowMovement)

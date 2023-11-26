@@ -4,14 +4,14 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorUtils;
-import com.zenith.network.registry.IncomingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.CACHE;
 
-public class TeleportToEntitySpectatorHandler implements IncomingHandler<ServerboundTeleportToEntityPacket, ServerConnection> {
+public class TeleportToEntitySpectatorHandler implements PacketHandler<ServerboundTeleportToEntityPacket, ServerConnection> {
     @Override
-    public boolean apply(final ServerboundTeleportToEntityPacket packet, final ServerConnection session) {
+    public ServerboundTeleportToEntityPacket apply(final ServerboundTeleportToEntityPacket packet, final ServerConnection session) {
         final Entity targetEntity = CACHE.getEntityCache().get(packet.getTarget());
         if (targetEntity != null) {
             if (session.hasCameraTarget()) {
@@ -20,6 +20,6 @@ public class TeleportToEntitySpectatorHandler implements IncomingHandler<Serverb
             }
             SpectatorUtils.syncSpectatorPositionToEntity(session, targetEntity);
         }
-        return false;
+        return null;
     }
 }

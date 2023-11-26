@@ -8,16 +8,16 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorUtils;
-import com.zenith.network.registry.IncomingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 
 import static com.zenith.Shared.*;
 
-public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundChatPacket, ServerConnection> {
+public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChatPacket, ServerConnection> {
     @Override
-    public boolean apply(ServerboundChatPacket packet, ServerConnection session) {
+    public ServerboundChatPacket apply(ServerboundChatPacket packet, ServerConnection session) {
         if (CONFIG.inGameCommands.enable) {
             SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
                 if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(packet.getMessage()).find()) {
@@ -30,7 +30,7 @@ public class ServerChatSpectatorHandler implements IncomingHandler<ServerboundCh
                 }
             });
         }
-        return false;
+        return null;
     }
 
     private void handleCommandInput(final String message, final ServerConnection session) {

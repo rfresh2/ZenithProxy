@@ -4,12 +4,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.*;
 
-public class MoveEntityPosRotHandler implements AsyncIncomingHandler<ClientboundMoveEntityPosRotPacket, ClientSession> {
+public class MoveEntityPosRotHandler implements AsyncPacketHandler<ClientboundMoveEntityPosRotPacket, ClientSession> {
     public static void trackPlayerVisualRangePosition(final Entity entity) {
         if (CONFIG.client.extra.visualRangePositionTracking && entity instanceof EntityPlayer && !((EntityPlayer) entity).isSelfPlayer()) {
             CACHE.getTabListCache().get(entity.getUuid()).ifPresent(playerEntry -> {

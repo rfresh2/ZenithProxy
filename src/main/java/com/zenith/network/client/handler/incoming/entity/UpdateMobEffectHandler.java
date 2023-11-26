@@ -5,13 +5,13 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.cache.data.entity.PotionEffect;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class UpdateMobEffectHandler implements AsyncIncomingHandler<ClientboundUpdateMobEffectPacket, ClientSession> {
+public class UpdateMobEffectHandler implements AsyncPacketHandler<ClientboundUpdateMobEffectPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundUpdateMobEffectPacket packet, @NonNull ClientSession session) {
         try {

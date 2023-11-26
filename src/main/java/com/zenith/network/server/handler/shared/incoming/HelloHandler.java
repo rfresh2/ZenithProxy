@@ -1,13 +1,13 @@
 package com.zenith.network.server.handler.shared.incoming;
 
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
-import com.zenith.network.registry.IncomingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
-public class HelloHandler implements IncomingHandler<ServerboundHelloPacket, ServerConnection> {
+public class HelloHandler implements PacketHandler<ServerboundHelloPacket, ServerConnection> {
     @Override
-    public boolean apply(@NonNull ServerboundHelloPacket packet, @NonNull ServerConnection session) {
-        return false;
+    public ServerboundHelloPacket apply(@NonNull ServerboundHelloPacket packet, @NonNull ServerConnection session) {
+        return null;
     }
 }

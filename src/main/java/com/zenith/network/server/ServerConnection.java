@@ -93,20 +93,23 @@ public class ServerConnection implements Session, SessionListener {
     public void packetReceived(Session session, Packet packet) {
         try {
             if (!this.isLoggedIn || ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() != ProtocolState.GAME) return;
+            Packet p = packet;
             if (CONFIG.client.extra.actionLimiter.enabled && !MODULE_MANAGER.get(ActionLimiter.class).bypassesLimits(this)) {
-                if (!MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleInbound(packet, this))
-                    return;
+                p = MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleInbound(p, this);
+                if (p == null) return;
             }
             if (isSpectator()) {
-                if (SERVER_SPECTATOR_HANDLERS.handleInbound(packet, this)) {
+                p = SERVER_SPECTATOR_HANDLERS.handleInbound(p, this);
+                if (p != null) {
                     // there's no use case for this so I'm just disabling sending it to the client
                     // we still want spectator handlers to process the packet though
 //                    Proxy.getInstance().getClient().sendAsync(packet);
                 }
             } else {
                 this.lastPacket = System.currentTimeMillis();
-                if (SERVER_PLAYER_HANDLERS.handleInbound(packet, this)) {
-                    Proxy.getInstance().getClient().sendAsync(packet);
+                p = SERVER_PLAYER_HANDLERS.handleInbound(p, this);
+                if (p != null) {
+                    Proxy.getInstance().getClient().sendAsync(p);
                 }
             }
         } catch (final Exception e) {

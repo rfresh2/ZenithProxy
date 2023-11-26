@@ -18,7 +18,8 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
-            if (CLIENT_HANDLERS.handleInbound(packet, this.session)) {
+            Packet p = CLIENT_HANDLERS.handleInbound(packet, this.session);
+            if (p != null) {
                 for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
                     connection.sendAsync(packet); // sends on each connection's own event loop
                 }

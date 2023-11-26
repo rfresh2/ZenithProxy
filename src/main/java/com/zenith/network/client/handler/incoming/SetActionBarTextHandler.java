@@ -3,7 +3,7 @@ package com.zenith.network.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.util.ComponentSerializer;
 
 import java.time.Instant;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
-public class SetActionBarTextHandler implements AsyncIncomingHandler<ClientboundSetActionBarTextPacket, ClientSession> {
+public class SetActionBarTextHandler implements AsyncPacketHandler<ClientboundSetActionBarTextPacket, ClientSession> {
     private Instant lastRestartEvent = Instant.EPOCH;
 
     @Override

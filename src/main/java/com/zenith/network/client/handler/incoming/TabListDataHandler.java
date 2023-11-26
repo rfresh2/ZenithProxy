@@ -7,7 +7,7 @@ import com.zenith.event.proxy.PrioStatusEvent;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.StartQueueEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
-public class TabListDataHandler implements AsyncIncomingHandler<ClientboundTabListPacket, ClientSession> {
+public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabListPacket, ClientSession> {
     private Optional<Duration> queueDuration = Optional.empty();
 
     @Override

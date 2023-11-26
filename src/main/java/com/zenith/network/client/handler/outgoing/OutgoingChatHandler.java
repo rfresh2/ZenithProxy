@@ -4,11 +4,11 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.event.module.OutboundChatEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 
 import static com.zenith.Shared.EVENT_BUS;
 
-public class OutgoingChatHandler implements OutgoingHandler<ServerboundChatPacket, ClientSession> {
+public class OutgoingChatHandler implements PacketHandler<ServerboundChatPacket, ClientSession> {
     @Override
     public ServerboundChatPacket apply(final ServerboundChatPacket packet, final ClientSession session) {
         // allow us to dispatch commands just with chat packets

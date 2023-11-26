@@ -6,14 +6,14 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
-public class AddPlayerHandler implements AsyncIncomingHandler<ClientboundAddPlayerPacket, ClientSession> {
+public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayerPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundAddPlayerPacket packet, @NonNull ClientSession session) {
         final EntityPlayer entity = (EntityPlayer) new EntityPlayer()

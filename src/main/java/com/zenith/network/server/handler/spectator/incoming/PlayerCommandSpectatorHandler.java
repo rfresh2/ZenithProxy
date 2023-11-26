@@ -3,16 +3,16 @@ package com.zenith.network.server.handler.spectator.incoming;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
-import com.zenith.cache.data.entity.Entity;
 import com.zenith.Proxy;
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorUtils;
-import com.zenith.network.registry.IncomingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 
-public class PlayerCommandSpectatorHandler implements IncomingHandler<ServerboundPlayerCommandPacket, ServerConnection> {
+public class PlayerCommandSpectatorHandler implements PacketHandler<ServerboundPlayerCommandPacket, ServerConnection> {
 
     @Override
-    public boolean apply(ServerboundPlayerCommandPacket packet, ServerConnection session) {
+    public ServerboundPlayerCommandPacket apply(ServerboundPlayerCommandPacket packet, ServerConnection session) {
         Entity cameraTarget = session.getCameraTarget();
         if (cameraTarget != null) {
             if (packet.getState() == PlayerState.START_SNEAKING) {
@@ -27,6 +27,6 @@ public class PlayerCommandSpectatorHandler implements IncomingHandler<Serverboun
                 });
             }
         }
-        return false;
+        return null;
     }
 }

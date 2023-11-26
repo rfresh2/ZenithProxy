@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.player.outgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -13,7 +13,7 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 // todo: also handle regular player chat packets although they should be disabled on 2b2t
-public class SystemChatOutgoingHandler implements OutgoingHandler<ClientboundSystemChatPacket, ServerConnection> {
+public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSystemChatPacket, ServerConnection> {
     @Override
     public ClientboundSystemChatPacket apply(ClientboundSystemChatPacket packet, ServerConnection session) {
         try {
@@ -38,7 +38,7 @@ public class SystemChatOutgoingHandler implements OutgoingHandler<ClientboundSys
                 return null;
             }
         } catch (final Exception e) {
-            SERVER_LOG.error("Failed to parse chat message in ServerChatOutgoingHandler: {}", ComponentSerializer.toRawString(packet.getContent()), e);
+            SERVER_LOG.error("Failed to parse chat message in ServerChatPacketHandler: {}", ComponentSerializer.toRawString(packet.getContent()), e);
         }
         return packet;
     }

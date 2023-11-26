@@ -6,21 +6,15 @@ import com.github.steveice10.packetlib.packet.Packet;
 import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public interface AsyncIncomingHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
-    /**
-     * Call async (non-cancellable)
-     * @param packet packet to handle
-     * @param session Session the packet was received on
-     */
+public interface AsyncPacketHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
     boolean applyAsync(P packet, S session);
 
-    @Override
-    default boolean apply(P packet, S session) {
-        if (packet == null) return false;
+    default P apply(P packet, S session) {
+        if (packet == null) return null;
         HandlerRegistry.ASYNC_EXECUTOR_SERVICE.execute(() -> {
             applyWithRetries(packet, session, 0);
         });
-        return true;
+        return packet;
     }
 
     private void applyWithRetries(P packet, S session, final int tryCount) {

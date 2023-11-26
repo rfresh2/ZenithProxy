@@ -1,13 +1,13 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ALCMoveVehicleHandler implements OutgoingHandler<ClientboundMoveVehiclePacket, ServerConnection> {
+public class ALCMoveVehicleHandler implements PacketHandler<ClientboundMoveVehiclePacket, ServerConnection> {
     @Override
     public ClientboundMoveVehiclePacket apply(final ClientboundMoveVehiclePacket packet, final ServerConnection session) {
         if (CONFIG.client.extra.actionLimiter.allowMovement)

@@ -15,8 +15,6 @@ import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 import static com.zenith.Shared.CONFIG;
 
@@ -26,9 +24,9 @@ public class HandlerRegistry<S extends Session> {
     @NonNull
     protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
     @NonNull
-    protected final Reference2ObjectMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers;
+    protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers;
     @NonNull
-    protected final Reference2ObjectMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers;
+    protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers;
     @NonNull
     protected final Logger logger;
     protected final boolean allowUnhandled;
@@ -46,7 +44,7 @@ public class HandlerRegistry<S extends Session> {
                                              .build());
 
     @SuppressWarnings("unchecked")
-    public <P extends Packet> boolean handleInbound(@NonNull P packet, @NonNull S session) {
+    public <P extends Packet> P handleInbound(@NonNull P packet, @NonNull S session) {
         if (CONFIG.debug.packet.received)  {
             if (!(packet instanceof ClientboundKeepAlivePacket || packet instanceof KeepAliveHandler)) {
                 this.logger.debug("[{}] Received: {}", Instant.now().toEpochMilli(), CONFIG.debug.packet.receivedBody ? packet : packet.getClass());
@@ -57,7 +55,8 @@ public class HandlerRegistry<S extends Session> {
         }
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
         if (handler == null) {
-            return allowUnhandled;
+            if (allowUnhandled) return packet;
+            else return null;
         } else {
             return handler.apply(packet, session);
         }
@@ -68,7 +67,7 @@ public class HandlerRegistry<S extends Session> {
         if (CONFIG.debug.packet.preSent)  {
             this.logger.debug("[{}] Sending: {}", Instant.now().toEpochMilli(), CONFIG.debug.packet.preSentBody ? packet : packet.getClass());
         }
-        BiFunction<P, S, P> handler = (BiFunction<P, S, P>) this.outboundHandlers.get(packet.getClass());
+        PacketHandler<P, S> handler = (PacketHandler<P, S>) this.outboundHandlers.get(packet.getClass());
         if (handler == null) {
             // allowUnhandled has no effect here
             return packet;
@@ -86,9 +85,9 @@ public class HandlerRegistry<S extends Session> {
 //                this.logger.debug("Sent packet: {}@%08x", CONFIG.debug.packet.postSentBody ? packet : packet.getClass(), System.identityHashCode(packet));
 //            }
         }
-        PostOutgoingHandler<P, S> handler = (PostOutgoingHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
+        PacketHandler<P, S> handler = (PacketHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (handler != null) {
-            handler.accept(packet, session);
+            handler.apply(packet, session);
         }
     }
 
@@ -99,29 +98,29 @@ public class HandlerRegistry<S extends Session> {
 
         protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new Reference2ObjectOpenHashMap<>();
 
-        protected final Reference2ObjectMap<Class<? extends Packet>, BiFunction<? extends Packet, S, ? extends Packet>> outboundHandlers = new Reference2ObjectOpenHashMap<>();
+        protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers = new Reference2ObjectOpenHashMap<>();
 
-        protected final Reference2ObjectMap<Class<? extends Packet>, BiConsumer<? extends Packet, S>> postOutboundHandlers = new Reference2ObjectOpenHashMap<>();
+        protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers = new Reference2ObjectOpenHashMap<>();
         @NonNull
         protected Logger logger;
         protected boolean allowUnhandled = true;
 
-        public Builder<S> registerInbound(@NonNull Class<? extends Packet> packetClass, @NonNull IncomingHandler<? extends Packet, S> handler) {
+        public Builder<S> registerInbound(@NonNull Class<? extends Packet> packetClass, @NonNull PacketHandler<? extends Packet, S> handler) {
             this.inboundHandlers.put(packetClass, handler);
             return this;
         }
 
-        public Builder<S> registerInbound(@NonNull Class<? extends Packet> packetClass, @NonNull AsyncIncomingHandler<? extends Packet,S> handler) {
-            this.inboundHandlers.put(packetClass, handler);
-            return this;
-        }
-
-        public Builder<S> registerOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull OutgoingHandler<? extends Packet, S> handler) {
+        public Builder<S> registerOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull PacketHandler<? extends Packet, S> handler) {
             this.outboundHandlers.put(packetClass, handler);
             return this;
         }
 
-        public Builder<S> registerPostOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull PostOutgoingHandler<? extends Packet, S> handler) {
+        public Builder<S> registerPostOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull PostOutgoingPacketHandler<? extends Packet, S> handler) {
+            this.postOutboundHandlers.put(packetClass, handler);
+            return this;
+        }
+
+        public Builder<S> registerPostOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull AsyncPacketHandler<? extends Packet, S> handler) {
             this.postOutboundHandlers.put(packetClass, handler);
             return this;
         }

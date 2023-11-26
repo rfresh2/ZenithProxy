@@ -4,7 +4,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.zenith.Proxy;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.util.ComponentSerializer;
 
 import java.util.Optional;
@@ -12,7 +12,7 @@ import java.util.Optional;
 import static com.zenith.Shared.CLIENT_LOG;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class SetSubtitleTextHandler implements AsyncIncomingHandler<ClientboundSetSubtitleTextPacket, ClientSession> {
+public class SetSubtitleTextHandler implements AsyncPacketHandler<ClientboundSetSubtitleTextPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundSetSubtitleTextPacket packet, final ClientSession session) {
         if (Proxy.getInstance().isInQueue()) {

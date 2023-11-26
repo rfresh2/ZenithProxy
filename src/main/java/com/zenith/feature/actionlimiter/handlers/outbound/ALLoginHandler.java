@@ -1,14 +1,14 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
-import com.zenith.network.registry.OutgoingHandler;
+import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CONFIG;
 
-public class ALLoginHandler implements OutgoingHandler<ClientboundLoginPacket, ServerConnection> {
+public class ALLoginHandler implements PacketHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public ClientboundLoginPacket apply(final ClientboundLoginPacket packet, final ServerConnection session) {
         if (CONFIG.client.extra.actionLimiter.allowMovement)

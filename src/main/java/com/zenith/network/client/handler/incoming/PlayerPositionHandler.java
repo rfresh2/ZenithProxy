@@ -10,7 +10,7 @@ import com.zenith.feature.spectator.SpectatorUtils;
 import com.zenith.module.impl.AntiAFK;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncIncomingHandler;
+import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
@@ -18,7 +18,7 @@ import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.MODULE_MANAGER;
 import static java.util.Objects.isNull;
 
-public class PlayerPositionHandler implements AsyncIncomingHandler<ClientboundPlayerPositionPacket, ClientSession> {
+public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlayerPositionPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundPlayerPositionPacket packet, @NonNull ClientSession session) {
         PlayerCache cache = CACHE.getPlayerCache();
