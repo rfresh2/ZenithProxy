@@ -145,14 +145,11 @@ public class Proxy {
             this.startServer();
             CACHE.reset(true);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
-            // health check on proxy server state.
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
-            // ensure we are continuously updating the tablist even on servers that don't frequently send updates
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
-            SCHEDULED_EXECUTOR_SERVICE.submit(this::updatePrioBanStatus);
-            // 6hr kick warning
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::sixHourKickWarningTick, 350L, 1L, TimeUnit.MINUTES);
-
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
             }
@@ -188,6 +185,7 @@ public class Proxy {
     private void serverHealthCheck() {
         if (!CONFIG.server.enabled || !CONFIG.server.healthCheck) return;
         if (server != null && server.isListening()) return;
+        SERVER_LOG.error("Server is not listening! Is another service on this port?");
         this.startServer();
         SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
             if (server == null || !server.isListening()) {
@@ -196,6 +194,15 @@ public class Proxy {
                 stop();
             }
         }, 30, TimeUnit.SECONDS);
+    }
+
+    private void maxPlaytimeTick() {
+        if (CONFIG.client.maxPlaytimeReconnect && isOnlineForAtLeastDuration(Duration.ofMinutes(CONFIG.client.maxPlaytimeReconnectMins))) {
+            CLIENT_LOG.info("Max playtime minutes reached: {}, reconnecting...", CONFIG.client.maxPlaytimeReconnectMins);
+            disconnect(SYSTEM_DISCONNECT);
+            cancelAutoReconnect();
+            connect();
+        }
     }
 
     private void tablistUpdate() {
@@ -532,11 +539,14 @@ public class Proxy {
     }
 
     public boolean isOnlineOn2b2tForAtLeastDuration(Duration duration) {
-        return CONFIG.client.server.address.endsWith("2b2t.org")
-                && isConnected()
-                && !isInQueue()
-                && nonNull(getConnectTime())
-                && getConnectTime().isBefore(Instant.now().minus(duration));
+        return CONFIG.client.server.address.endsWith("2b2t.org") && isOnlineForAtLeastDuration(duration);
+    }
+
+    public boolean isOnlineForAtLeastDuration(Duration duration) {
+        return isConnected()
+            && !isInQueue()
+            && nonNull(getConnectTime())
+            && getConnectTime().isBefore(Instant.now().minus(duration));
     }
 
     public void updateFavicon() {

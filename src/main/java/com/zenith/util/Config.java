@@ -47,6 +47,8 @@ public final class Config {
         public boolean autoConnect = false; // auto-connect proxy on process start
         public ViaVersion viaversion = new ViaVersion();
         public String bindAddress = "0.0.0.0";
+        public boolean maxPlaytimeReconnect = false;
+        public long maxPlaytimeReconnectMins = 1440;
 
         public static final class ViaVersion {
             public boolean enabled = false;
