@@ -11,7 +11,7 @@ import zipfile
 
 auto_update = True
 auto_update_launcher = True
-release_channel = "git"
+release_channel = "java"
 version = "0.0.0"
 local_version = "0.0.0"
 repo_owner = "rfresh2"
@@ -482,9 +482,11 @@ if release_channel == "git":
 write_launch_config()
 
 if version == "0.0.0" or local_version == "0.0.0":
-    print("CRITICAL: Invalid version found:'", version, "'")
-    print("Enable `auto_updater` or specify a valid version in launch_config.json.")
-    exit(69)
+    if release_channel == "git":
+        critical_error("Invalid version found for git release channel:" + version
+                       + "\nRe-run setup.py and select another release channel.")
+    critical_error("Invalid version found:'" + version + "'"
+                   + "\nEnable `auto_updater` or specify a valid version in launch_config.json.")
 
 if not validate_system_with_config():
     critical_error("Invalid system for release channel: " + release_channel)
