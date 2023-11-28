@@ -628,8 +628,11 @@ public class Proxy {
                 this.autoReconnectFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
                     delayBeforeReconnect();
                     synchronized (this.autoReconnectFuture) {
-                        if (this.autoReconnectFuture.isPresent()) this.connect();
-                        this.autoReconnectFuture = Optional.empty();
+                        if (this.autoReconnectFuture.isPresent()) {
+                            this.autoReconnectFuture = Optional.empty();
+                            this.connect();
+                        } else
+                            this.autoReconnectFuture = Optional.empty();
                     }
                 }));
             }
