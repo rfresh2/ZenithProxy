@@ -29,7 +29,7 @@ public class StatusCommand extends Command {
             "status",
             CommandCategory.CORE,
             "Gets the current proxy status",
-            aliases()
+            asList("s")
         );
     }
 
@@ -159,10 +159,5 @@ public class StatusCommand extends Command {
                     + "\n[Whisper: " + toggleStr(CONFIG.client.extra.spammer.whisper) + "]", true)
                 .addField("AutoUpdate", toggleStr(CONFIG.autoUpdater.autoUpdate), false);
         });
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("s");
     }
 }

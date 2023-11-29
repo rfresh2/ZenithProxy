@@ -13,8 +13,6 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -118,15 +116,6 @@ public abstract class Command {
      * Don't include sensitive info in this embed population, there is no account owner check
      */
     public void postPopulate(final EmbedCreateSpec.Builder builder) {}
-
-    /**
-     * Optional override to register command aliases.
-     * Also check these are set in {@link #commandUsage()}
-     * todo: auto-set these in commandUsage
-     */
-    public List<String> aliases() {
-        return Collections.emptyList();
-    }
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> command(String literal) {
         return literal(literal)

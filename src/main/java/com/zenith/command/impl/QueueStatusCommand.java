@@ -13,7 +13,6 @@ import discord4j.rest.util.Color;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -24,7 +23,8 @@ public class QueueStatusCommand extends Command {
         return CommandUsage.simpleAliases("queueStatus",
                                           CommandCategory.INFO,
                                           "Prints the current 2b2t queue status",
-                                          aliases());
+                                          asList("queue", "q")
+        );
     }
 
     @Override
@@ -45,10 +45,5 @@ public class QueueStatusCommand extends Command {
                     .addField("Current Wait Duration", MathHelper.formatDuration(currentWaitDuration), false);
             }
         });
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("queue", "q");
     }
 }

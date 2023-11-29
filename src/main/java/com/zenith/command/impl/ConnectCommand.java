@@ -7,8 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
-import java.util.List;
-
 import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.Arrays.asList;
 
@@ -19,7 +17,7 @@ public class ConnectCommand extends Command {
             "connect",
             CommandCategory.CORE,
             "Connect the current player to the server",
-            aliases()
+            asList("c")
         );
     }
 
@@ -33,10 +31,5 @@ public class ConnectCommand extends Command {
                 SCHEDULED_EXECUTOR_SERVICE.execute(Proxy.getInstance()::connectAndCatchExceptions);
             }
         });
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("c");
     }
 }

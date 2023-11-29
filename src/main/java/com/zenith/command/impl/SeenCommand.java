@@ -9,7 +9,6 @@ import com.zenith.feature.api.model.SeenResponse;
 import discord4j.rest.util.Color;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 import static com.zenith.Shared.VC_API;
@@ -28,7 +27,8 @@ public class SeenCommand extends Command {
                                  asList(
                                      "<playerName>"
                                  ),
-                                 aliases());
+                                 asList("firstseen", "lastseen")
+        );
     }
 
     @Override
@@ -53,10 +53,5 @@ public class SeenCommand extends Command {
                     .addField("Last Seen", response.time().format(formatter), false));
                 return 1;
             }));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("firstseen", "lastseen");
     }
 }

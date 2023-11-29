@@ -7,8 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
-import java.util.List;
-
 import static com.zenith.Shared.DISCORD_LOG;
 import static java.util.Arrays.asList;
 
@@ -19,7 +17,7 @@ public class DisconnectCommand extends Command {
             "disconnect",
             CommandCategory.CORE,
             "Disconnect the current player from the server",
-            aliases()
+            asList("dc")
         );
     }
 
@@ -52,10 +50,5 @@ public class DisconnectCommand extends Command {
                 }
             }
         });
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("dc");
     }
 }

@@ -11,8 +11,6 @@ import com.zenith.module.impl.AutoDisconnect;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
-
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
@@ -33,7 +31,7 @@ public class AutoDisconnectCommand extends Command {
                         "cancelAutoReconnect on/off",
                         "autoClientDisconnect on/off",
                         "thunder on/off"),
-            aliases()
+            asList("autoLog")
         );
     }
 
@@ -74,11 +72,6 @@ public class AutoDisconnectCommand extends Command {
                                 .title("AutoDisconnect Thunder " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "On!" : "Off!"));
                             return 1;
                       })));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("autoLog");
     }
 
     @Override

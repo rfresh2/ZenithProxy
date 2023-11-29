@@ -6,7 +6,6 @@ import com.zenith.command.*;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,8 @@ public class HelpCommand extends Command {
                 "<category>",
                 "<command>"
             ),
-            aliases());
+            asList("h")
+        );
     }
 
     @Override
@@ -63,11 +63,6 @@ public class HelpCommand extends Command {
                 return 1;
             }));
     }
-
-    @Override
-    public List<String> aliases() {
-        return asList("h");
-    } // I love undertime slopper
 
     private String getCommandUsages(final CommandSource src, final CommandCategory category) {
         return COMMAND_MANAGER.getCommands(category).stream()

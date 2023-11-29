@@ -11,8 +11,6 @@ import com.zenith.module.impl.AntiAFK;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
-
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
@@ -39,7 +37,7 @@ public class AntiAFKCommand extends Command {
                    "jump on/off",
                    "jump delay <int>"
             ),
-            aliases()
+            asList("afk")
         );
     }
 
@@ -125,11 +123,6 @@ public class AntiAFKCommand extends Command {
                               .title("Jump Delay Set!");
                           return 1;
                       }))));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("afk");
     }
 
     @Override

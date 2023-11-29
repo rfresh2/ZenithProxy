@@ -100,7 +100,7 @@ public class CommandManager {
 
     private void registerCommand(final Command command) {
         final LiteralCommandNode<CommandContext> node = dispatcher.register(command.register());
-        command.aliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));
+        command.commandUsage().getAliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));
     }
 
     public void execute(final CommandContext context) {

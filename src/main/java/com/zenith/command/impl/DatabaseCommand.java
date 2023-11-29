@@ -8,8 +8,6 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
-
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DATABASE_MANAGER;
 import static com.zenith.command.ToggleArgumentType.getToggle;
@@ -32,7 +30,8 @@ public class DatabaseCommand extends Command {
                                      "playerCount on/off",
                                      "tablist on/off"
                                  ),
-                                 aliases());
+                                 asList("db")
+        );
     }
 
     @Override
@@ -110,11 +109,6 @@ public class DatabaseCommand extends Command {
                                     .title("Tablist Database " + (CONFIG.database.tablist.enabled ? "On!" : "Off!"));
                                 return 1;
                         })));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("db");
     }
 
     @Override

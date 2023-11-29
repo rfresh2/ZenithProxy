@@ -9,7 +9,6 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -38,7 +37,7 @@ public class VisualRangeCommand extends Command {
                         "logout on/off",
                         "enemyTracking on/off"
                 ),
-            aliases()
+            asList("vr")
         );
     }
 
@@ -113,11 +112,6 @@ public class VisualRangeCommand extends Command {
                                 .title("Enemy Tracking " + (CONFIG.client.extra.visualRangePositionTracking ? "On!" : "Off!"));
                             return 1;
                       })));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("vr");
     }
 
     private String friendListString() {

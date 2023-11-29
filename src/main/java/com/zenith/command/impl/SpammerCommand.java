@@ -40,7 +40,8 @@ public class SpammerCommand extends Command {
                                      "add <message>",
                                      "addAt <index> <message>",
                                      "del <index>"),
-                                 aliases());
+                                 asList("spam")
+        );
     }
 
     @Override
@@ -131,11 +132,6 @@ public class SpammerCommand extends Command {
                                 return -1;
                           }
                       })));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("spam");
     }
 
     @Override

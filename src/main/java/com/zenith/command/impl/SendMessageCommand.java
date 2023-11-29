@@ -8,8 +8,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 
-import java.util.List;
-
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static java.util.Arrays.asList;
 
@@ -39,10 +37,5 @@ public class SendMessageCommand extends Command {
                           }
                           return 1;
                       }));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("msg", "m");
     }
 }

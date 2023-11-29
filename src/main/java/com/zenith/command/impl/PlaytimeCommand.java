@@ -9,7 +9,6 @@ import com.zenith.util.math.MathHelper;
 import discord4j.rest.util.Color;
 
 import java.time.Duration;
-import java.util.List;
 
 import static com.zenith.Shared.VC_API;
 import static com.zenith.command.CustomStringArgumentType.getString;
@@ -26,7 +25,8 @@ public class PlaytimeCommand extends Command {
                                  asList(
                                      "<playerName>"
                                  ),
-                                 aliases());
+                                 asList("pt")
+        );
     }
 
     @Override
@@ -45,10 +45,5 @@ public class PlaytimeCommand extends Command {
                                          .color(Color.RUBY));
                 return 1;
             }));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("pt");
     }
 }

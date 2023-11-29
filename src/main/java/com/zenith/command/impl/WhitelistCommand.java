@@ -9,7 +9,6 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -26,7 +25,7 @@ public class WhitelistCommand extends Command {
             CommandCategory.CORE,
             "Manage the proxy's whitelist. Only usable by users with the account owner role.",
             asList("add/del <player>", "list", "clear"),
-            aliases()
+            asList("wl")
         );
     }
 
@@ -77,11 +76,6 @@ public class WhitelistCommand extends Command {
             : CONFIG.server.extra.whitelist.whitelist.stream()
             .map(mp -> escape(mp.username))
             .collect(Collectors.joining("\n"));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("wl");
     }
 
     @Override

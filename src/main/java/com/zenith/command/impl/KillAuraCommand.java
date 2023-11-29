@@ -10,8 +10,6 @@ import com.zenith.module.impl.KillAura;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.List;
-
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -34,7 +32,8 @@ public class KillAuraCommand extends Command {
                        "targetArmorStands on/off",
                        "weaponSwitch on/off",
                        "range <number>"),
-                                 aliases());
+                                 asList("ka")
+        );
     }
 
     @Override
@@ -88,11 +87,6 @@ public class KillAuraCommand extends Command {
                              .title("Attack Range Set!");
                 return 1;
             })));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("ka");
     }
 
     @Override

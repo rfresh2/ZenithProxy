@@ -7,8 +7,6 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import discord4j.rest.util.Color;
 
-import java.util.List;
-
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
@@ -22,7 +20,7 @@ public class DisplayCoordsCommand extends Command {
             CommandCategory.MANAGE,
             "Sets whether proxy status commands should display coordinates. Only usable by account owner(s).",
             asList("on/off"),
-            aliases()
+            asList("coords")
         );
     }
 
@@ -36,10 +34,5 @@ public class DisplayCoordsCommand extends Command {
                     .color(Color.CYAN);
                 return 1;
             }));
-    }
-
-    @Override
-    public List<String> aliases() {
-        return asList("coords");
     }
 }
