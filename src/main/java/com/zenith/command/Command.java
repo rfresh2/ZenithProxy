@@ -113,6 +113,9 @@ public abstract class Command {
 
     /**
      * Override to populate the embed builder after every successful execution
+     *
+     * Also is populated onto command usage error messages.
+     * Don't include sensitive info in this embed population, there is no account owner check
      */
     public void postPopulate(final EmbedCreateSpec.Builder builder) {}
 
@@ -151,6 +154,7 @@ public abstract class Command {
     }
 
     public Void usageErrorHandler(final CommandContext context) {
+        postPopulate(context.getEmbedBuilder());
         context.getEmbedBuilder()
                 .title("Invalid command usage")
                 .addField("Usage", commandUsage().serialize(context.getCommandSource()), false)
