@@ -5,5 +5,5 @@ java --enable-preview -server -XX:MaxRAMPercentage=30 -XX:MinRAMPercentage=30 -X
  -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem^
  -XX:MaxTenuringThreshold=1 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2^
  -Dio.netty.allocator.maxOrder=9^
- -agentlib:native-image-agent=config-merge-dir=src\main\resources\META-INF\native-image^
+ -agentlib:native-image-agent=config-merge-dir=src\main\resources\META-INF\native-image,access-filter-file=src/main/resources/META-INF/native-image/agent-access-filter.json^
  -jar build\libs\ZenithProxy.jar

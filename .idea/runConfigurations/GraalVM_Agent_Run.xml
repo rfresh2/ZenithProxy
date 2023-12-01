@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="GraalVM Agent Run" type="JarApplication">
     <option name="JAR_PATH" value="$PROJECT_DIR$/build/libs/ZenithProxy.jar" />
-    <option name="VM_PARAMETERS" value="-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image -Xmx300m -XX:+UseG1GC -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dio.netty.leakDetection.level=disabled" />
+    <option name="VM_PARAMETERS" value="-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image,access-filter-file=src/main/resources/META-INF/native-image/agent-access-filter.json -Xmx300m -XX:+UseG1GC -Dio.netty.allocator.maxOrder=9 -Dio.netty.eventLoopThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dio.netty.leakDetection.level=disabled" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-jdk-21" />
     <method v="2">

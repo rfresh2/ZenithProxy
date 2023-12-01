@@ -1,0 +1,6 @@
+{
+  "rules": [
+    {"excludeClasses": "discord4j.**"}
+  ],
+  "regexRules": []
+}
