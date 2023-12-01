@@ -30,13 +30,14 @@ public class QueueStatusCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("queueStatus").executes(c -> {
+            final boolean inQueue = Proxy.getInstance().isInQueue();
             final QueueStatus queueStatus = Queue.getQueueStatus();
             c.getSource().getEmbedBuilder()
                 .title("2b2t Queue Status")
-                .addField("Regular", ""+queueStatus.regular(), false)
+                .addField("Regular", ""+queueStatus.regular()+(inQueue ? "" : " [ETA "+Queue.getQueueEta(queueStatus.regular())+"]"), false)
                 .addField("Priority", ""+queueStatus.prio(), false)
                 .color(Color.CYAN);
-            if (Proxy.getInstance().isInQueue()) {
+            if (inQueue) {
                 final int queuePosition = Proxy.getInstance().getQueuePosition();
                 final Duration currentWaitDuration = Duration.between(Proxy.getInstance().getConnectTime(), Instant.now());
                 c.getSource().getEmbedBuilder()
