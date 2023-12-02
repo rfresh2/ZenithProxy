@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.data.game.chunk.ChunkBiomeData;
 import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
 import com.github.steveice10.mc.protocol.data.game.chunk.DataPalette;
 import com.github.steveice10.mc.protocol.data.game.chunk.palette.PaletteType;
+import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerSpawnInfo;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockChangeEntry;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityInfo;
 import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityType;
@@ -125,6 +126,7 @@ public class ChunkCache implements CachedData {
         final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return;
         CACHE.getChunkCache().readCache(() -> {
+            currentPlayer.sendAsync(new ClientboundChunkBatchStartPacket());
             CACHE.getChunkCache().cache.values().parallelStream()
                 .map(chunk -> new ClientboundLevelChunkWithLightPacket(
                     chunk.x,
@@ -134,6 +136,7 @@ public class ChunkCache implements CachedData {
                     chunk.blockEntities.toArray(new BlockEntityInfo[0]),
                     chunk.lightUpdateData))
                 .forEach(currentPlayer::sendAsync);
+            currentPlayer.sendAsync(new ClientboundChunkBatchFinishedPacket(CACHE.getChunkCache().cache.values().size()));
             return true;
         });
     }
@@ -350,6 +353,8 @@ public class ChunkCache implements CachedData {
             consumer.accept(new ClientboundSetChunkCacheRadiusPacket(serverViewDistance));
             consumer.accept(new ClientboundSetChunkCacheCenterPacket(centerX, centerZ));
             readCache(() -> {
+                consumer.accept(new ClientboundGameEventPacket(GameEvent.LEVEL_CHUNKS_LOAD_START, null));
+                consumer.accept(new ClientboundChunkBatchStartPacket());
                 for (final Chunk chunk : this.cache.values()) {
                     consumer.accept(new ClientboundLevelChunkWithLightPacket(
                         chunk.x,
@@ -359,6 +364,7 @@ public class ChunkCache implements CachedData {
                         chunk.blockEntities.toArray(new BlockEntityInfo[0]),
                         chunk.lightUpdateData));
                 }
+                consumer.accept(new ClientboundChunkBatchFinishedPacket(this.cache.size()));
                 return true;
             });
         } catch (Exception e) {
@@ -522,12 +528,13 @@ public class ChunkCache implements CachedData {
     }
 
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
-        this.currentDimension = dimensionRegistry.get(packet.getDimension());
-        this.worldData = new WorldData(packet.getDimension(), // todo: verify if this is even relevant
+        PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
+        this.currentDimension = dimensionRegistry.get(info.getDimension());
+        this.worldData = new WorldData(info.getDimension(), // todo: verify if this is even relevant
                                        currentDimension.dimensionName,
-                                       packet.getHashedSeed(),
-                                       packet.isDebug(),
-                                       packet.isFlat());
+                                       info.getHashedSeed(),
+                                       info.isDebug(),
+                                       info.isFlat());
         CACHE_LOG.debug("Updated current dimension to {}", currentDimension.dimensionName);
     }
 }

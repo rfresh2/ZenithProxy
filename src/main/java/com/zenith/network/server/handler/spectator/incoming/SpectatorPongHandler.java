@@ -1,6 +1,6 @@
 package com.zenith.network.server.handler.spectator.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundPongPacket;
+import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundPongPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;

@@ -9,7 +9,7 @@ import static com.zenith.Shared.CACHE;
 public class UpdateEnabledFeaturesHandler implements AsyncPacketHandler<ClientboundUpdateEnabledFeaturesPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundUpdateEnabledFeaturesPacket packet, final ClientSession session) {
-        CACHE.getPlayerCache().setEnabledFeatures(packet.getFeatures());
+        CACHE.getConfigurationCache().setEnabledFeatures(packet.getFeatures());
         return true;
     }
 }

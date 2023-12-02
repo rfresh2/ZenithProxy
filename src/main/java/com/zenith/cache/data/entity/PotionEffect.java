@@ -20,6 +20,7 @@ public class PotionEffect {
     public int duration;
     public boolean ambient;
     public boolean showParticles;
+    public boolean showIcon;
     @Nullable
     public CompoundTag factorData;
 }

@@ -145,7 +145,6 @@ public final class SpectatorUtils {
             .setHardcore(CACHE.getPlayerCache().isHardcore())
             .setReducedDebugInfo(CACHE.getPlayerCache().isReducedDebugInfo())
             .setHeldItemSlot(CACHE.getPlayerCache().getHeldItemSlot())
-            .setEnabledFeatures(CACHE.getPlayerCache().getEnabledFeatures())
             .setDifficultyLocked(CACHE.getPlayerCache().isDifficultyLocked())
             .setInvincible(true)
             .setCanFly(true)

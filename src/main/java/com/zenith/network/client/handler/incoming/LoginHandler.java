@@ -3,8 +3,8 @@ package com.zenith.network.client.handler.incoming;
 import com.github.steveice10.mc.protocol.data.game.entity.player.HandPreference;
 import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
 import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
+import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientInformationPacket;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
@@ -22,19 +22,20 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
             .setUuid(CACHE.getProfileCache().getProfile().getId())
-            .setLastDeathPos(packet.getLastDeathPos())
-            .setPortalCooldown(packet.getPortalCooldown())
+            .setLastDeathPos(packet.getCommonPlayerSpawnInfo().getLastDeathPos())
+            .setPortalCooldown(packet.getCommonPlayerSpawnInfo().getPortalCooldown())
             .setMaxPlayers(packet.getMaxPlayers())
-            .setGameMode(packet.getGameMode())
+            .setGameMode(packet.getCommonPlayerSpawnInfo().getGameMode())
             .setEnableRespawnScreen(packet.isEnableRespawnScreen())
             .setReducedDebugInfo(packet.isReducedDebugInfo());
-        CACHE.getChunkCache().updateRegistryTag(packet.getRegistry());
+        // todo: set this in configuration phase ?
+//        CACHE.getChunkCache().updateRegistryTag(packet.getRegistry());
         CACHE.getChunkCache().setCurrentWorld(
-            packet.getDimension(),
-            packet.getWorldName(),
-            packet.getHashedSeed(),
-            packet.isDebug(),
-            packet.isFlat()
+            packet.getCommonPlayerSpawnInfo().getDimension(),
+            packet.getCommonPlayerSpawnInfo().getWorldName(),
+            packet.getCommonPlayerSpawnInfo().getHashedSeed(),
+            packet.getCommonPlayerSpawnInfo().isDebug(),
+            packet.getCommonPlayerSpawnInfo().isFlat()
         );
         CACHE.getChunkCache().setServerViewDistance(packet.getViewDistance());
         CACHE.getChunkCache().setServerSimulationDistance(packet.getSimulationDistance());

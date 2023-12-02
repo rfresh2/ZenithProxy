@@ -5,6 +5,7 @@ import com.zenith.cache.data.ServerProfileCache;
 import com.zenith.cache.data.bossbar.BossBarCache;
 import com.zenith.cache.data.chat.ChatCache;
 import com.zenith.cache.data.chunk.ChunkCache;
+import com.zenith.cache.data.config.ConfigurationCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.map.MapDataCache;
 import com.zenith.cache.data.recipe.RecipeCache;
@@ -31,6 +32,7 @@ public class DataCache {
     protected final StatisticsCache statsCache = new StatisticsCache();
     protected final MapDataCache mapDataCache = new MapDataCache();
     protected final RecipeCache recipeCache = new RecipeCache();
+    protected final ConfigurationCache configurationCache = new ConfigurationCache();
 
     public Collection<CachedData> getAllData() {
         return Arrays.asList(profileCache, playerCache, chunkCache, statsCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache);

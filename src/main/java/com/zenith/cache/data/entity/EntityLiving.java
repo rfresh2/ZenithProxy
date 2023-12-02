@@ -35,6 +35,7 @@ public class EntityLiving extends Entity {
                 potionEffect.getDuration(),
                 potionEffect.isAmbient(),
                 potionEffect.isShowParticles(),
+                potionEffect.isShowIcon(),
                 potionEffect.getFactorData()
             )));
         }

@@ -4,6 +4,7 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.ServerLoginHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
+import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerSpawnInfo;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundServerDataPacket;
 import com.github.steveice10.packetlib.Session;
@@ -64,46 +65,50 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             }
             EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
-                connection.getSpectatorSelfEntityId(),
+                connection.getSpectatorEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                GameMode.SPECTATOR,
-                GameMode.SPECTATOR,
-                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
-                CACHE.getChunkCache().getRegistryTag(),
-                CACHE.getChunkCache().getWorldData().dimensionType(),
-                CACHE.getChunkCache().getWorldData().worldName(),
-                CACHE.getChunkCache().getWorldData().hashedSeed(),
+                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]), // todo: is this correct?
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
-                false,
+                CACHE.getPlayerCache().isReducedDebugInfo(),
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
-                CACHE.getChunkCache().getWorldData().debug(),
-                CACHE.getChunkCache().getWorldData().flat(),
-                CACHE.getPlayerCache().getLastDeathPos(),
-                CACHE.getPlayerCache().getPortalCooldown()
+                CACHE.getPlayerCache().isDoLimitedCrafting(),
+                new PlayerSpawnInfo(
+                    CACHE.getChunkCache().getCurrentDimension().getDimensionName(),
+                    CACHE.getChunkCache().getWorldData().worldName(),
+                    CACHE.getChunkCache().getWorldData().hashedSeed(),
+                    GameMode.SPECTATOR,
+                    GameMode.SPECTATOR,
+                    CACHE.getChunkCache().getWorldData().debug(),
+                    CACHE.getChunkCache().getWorldData().flat(),
+                    CACHE.getPlayerCache().getLastDeathPos(),
+                    CACHE.getPlayerCache().getPortalCooldown()
+                )
             ));
         } else {
             EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
-                CACHE.getPlayerCache().getEntityId(),
+                connection.getSpectatorEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getPlayerCache().getGameMode(),
-                CACHE.getPlayerCache().getGameMode(),
-                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
-                CACHE.getChunkCache().getRegistryTag(),
-                CACHE.getChunkCache().getWorldData().dimensionType(),
-                CACHE.getChunkCache().getWorldData().worldName(),
-                CACHE.getChunkCache().getWorldData().hashedSeed(),
+                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]), // todo: is this correct?
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
-                false,
+                CACHE.getPlayerCache().isReducedDebugInfo(),
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
-                CACHE.getChunkCache().getWorldData().debug(),
-                CACHE.getChunkCache().getWorldData().flat(),
-                CACHE.getPlayerCache().getLastDeathPos(),
-                CACHE.getPlayerCache().getPortalCooldown()
+                CACHE.getPlayerCache().isDoLimitedCrafting(),
+                new PlayerSpawnInfo(
+                    CACHE.getChunkCache().getCurrentDimension().getDimensionName(),
+                    CACHE.getChunkCache().getWorldData().worldName(),
+                    CACHE.getChunkCache().getWorldData().hashedSeed(),
+                    CACHE.getPlayerCache().getGameMode(),
+                    CACHE.getPlayerCache().getGameMode(),
+                    CACHE.getChunkCache().getWorldData().debug(),
+                    CACHE.getChunkCache().getWorldData().flat(),
+                    CACHE.getPlayerCache().getLastDeathPos(),
+                    CACHE.getPlayerCache().getPortalCooldown()
+                )
             ));
             if (!proxy.isInQueue()) { PlayerCache.sync(); }
             CustomServerInfoBuilder serverInfoBuilder = Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);

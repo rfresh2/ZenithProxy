@@ -10,6 +10,7 @@
   <img alt="Downloads" src="https://img.shields.io/github/downloads/rfresh2/ZenithProxy/total">
   <img src="https://img.shields.io/badge/MC-1.12.2-brightgreen.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/badge/MC-1.20.1-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.20.3-brightgreen.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/github/languages/code-size/rfresh2/ZenithProxy.svg" alt="Code size"/>
   <img src="https://img.shields.io/github/repo-size/rfresh2/ZenithProxy.svg" alt="GitHub repo size"/>
   <img src="https://tokei.rs/b1/github/rfresh2/ZenithProxy?category=code&style=flat" alt="Lines of Code"/>
@@ -18,7 +19,7 @@
 
 Minecraft proxy/bot intended for use on 2b2t.org.
 
-Currently supports 1.12.2 and 1.20.1
+Currently supports 1.12.2, 1.20.1, and 1.20.3
 
 The primary purpose is to have Minecraft accounts always online and securely shared by multiple people.
 

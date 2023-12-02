@@ -363,13 +363,15 @@ public class Proxy {
                 int port = CONFIG.server.bind.port;
 
                 SERVER_LOG.info("Starting server on {}:{}...", address, port);
-                this.server = new TcpServer(address, port, MinecraftProtocol::new);
+                MinecraftProtocol minecraftProtocol = new MinecraftProtocol();
+                minecraftProtocol.setUseDefaultListeners(false); // very important
+                this.server = new TcpServer(address, port, () -> minecraftProtocol);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
-                this.server.addListener(new ProxyServerListener(this));
+                this.server.addListener(new ProxyServerListener());
                 this.server.bind(false);
             }
         }
@@ -403,6 +405,7 @@ public class Proxy {
         return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
                 this.protocol = this.authenticator.handleRelog();
+                this.protocol.setUseDefaultListeners(false); // very important
                 return true;
             } catch (final Exception e) {
                 CLIENT_LOG.error("", e);

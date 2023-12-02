@@ -9,9 +9,8 @@ import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType
 import com.github.steveice10.mc.protocol.data.game.inventory.CreativeGrabAction;
 import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundUpdateTagsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundChangeDifficultyPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateEnabledFeaturesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateTagsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundEntityEventPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
@@ -51,6 +50,7 @@ public class PlayerCache implements CachedData {
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
     protected boolean enableRespawnScreen;
+    protected boolean doLimitedCrafting;
     protected GlobalPos lastDeathPos;
     protected int portalCooldown;
     protected GameMode gameMode;
@@ -61,7 +61,6 @@ public class PlayerCache implements CachedData {
     protected final ItemStack[] inventory = new ItemStack[46];
 
     protected final EntityCache entityCache;
-    protected String[] enabledFeatures = new String[]{"minecraft:vanilla"};
     protected Difficulty difficulty = Difficulty.NORMAL;
     protected boolean isDifficultyLocked;
     protected boolean invincible;
@@ -84,7 +83,6 @@ public class PlayerCache implements CachedData {
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        consumer.accept(new ClientboundUpdateEnabledFeaturesPacket(this.enabledFeatures));
         // todo: may need to move this out so spectators don't get sent wrong abilities
         consumer.accept(new ClientboundPlayerAbilitiesPacket(this.invincible, this.canFly, this.flying, this.creative, this.flySpeed, this.walkSpeed));
         consumer.accept(new ClientboundChangeDifficultyPacket(this.difficulty, this.isDifficultyLocked));
@@ -108,7 +106,7 @@ public class PlayerCache implements CachedData {
             this.maxPlayers = -1;
             Arrays.fill(this.inventory, null);
             this.heldItemSlot = 0;
-            this.enabledFeatures = new String[0];
+            this.doLimitedCrafting = false;
         }
         this.spawnPosition = DEFAULT_SPAWN_POSITION;
         this.gameMode = null;

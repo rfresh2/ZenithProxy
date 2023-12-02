@@ -1,6 +1,6 @@
 package com.zenith.network.server.handler.shared.outgoing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPingPacket;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundPingPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 

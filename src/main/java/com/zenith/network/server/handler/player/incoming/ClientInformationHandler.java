@@ -1,6 +1,6 @@
 package com.zenith.network.server.handler.player.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientInformationPacket;
+import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.network.server.ServerConnection;
 

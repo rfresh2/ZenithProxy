@@ -23,6 +23,7 @@ public class UpdateMobEffectHandler implements AsyncPacketHandler<ClientboundUpd
                     packet.getDuration(),
                     packet.isAmbient(),
                     packet.isShowParticles(),
+                    packet.isShowIcon(),
                     packet.getFactorData()
                 ));
             } else {

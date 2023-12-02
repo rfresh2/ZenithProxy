@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPingPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundPongPacket;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundPingPacket;
+import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundPongPacket;
 import com.zenith.Proxy;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;

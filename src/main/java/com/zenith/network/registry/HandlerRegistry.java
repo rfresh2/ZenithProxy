@@ -1,6 +1,6 @@
 package com.zenith.network.registry;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundKeepAlivePacket;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
