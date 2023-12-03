@@ -14,7 +14,6 @@ import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.network.server.CustomServerInfoBuilder;
-import com.zenith.network.server.ProxyServerListener;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
 import net.kyori.adventure.text.Component;
@@ -37,10 +36,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
     public void loggedIn(Session session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
         SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
-        ServerConnection connection = ((ProxyServerListener) this.proxy.getServer().getListeners().stream()
-                .filter(ProxyServerListener.class::isInstance)
-                .findAny().orElseThrow(IllegalStateException::new))
-                .getConnections().get(session);
+        ServerConnection connection = (ServerConnection) session;
 
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
                         && this.proxy.getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS)))
@@ -89,7 +85,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         } else {
             EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
-                connection.getSpectatorEntityId(),
+                CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
                 CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]), // todo: is this correct?
                 CACHE.getPlayerCache().getMaxPlayers(),

@@ -1,9 +1,9 @@
 package com.zenith.cache.data.config;
 
 import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundResourcePackPushPacket;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundUpdateEnabledFeaturesPacket;
 import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundUpdateTagsPacket;
 import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
-import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundUpdateEnabledFeaturesPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;

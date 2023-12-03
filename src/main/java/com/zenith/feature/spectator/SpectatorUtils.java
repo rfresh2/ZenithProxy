@@ -152,7 +152,6 @@ public final class SpectatorUtils {
             .setFlying(true)
             .setFlySpeed(0.05f)
             .setWalkSpeed(0.1f)
-            .setTags(CACHE.getPlayerCache().getTags())
             .setOpLevel(CACHE.getPlayerCache().getOpLevel())
             .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
         session.setAllowSpectatorServerPlayerPosRotate(true);
