@@ -139,7 +139,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:33c208f6ac") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:4d1be8669e") {
+    shade("com.github.rfresh2:MCProtocolLib:9af70ad9ce") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -327,6 +327,7 @@ graalvmNative {
                     "--initialize-at-build-time=com.zenith.event",
                     "--initialize-at-build-time=com.zenith.cache",
                     "--initialize-at-build-time=com.zenith.feature.spectator",
+                    "--initialize-at-run-time=com.zenith.network.registry.ZenithHandlerCodec",
                     "--initialize-at-run-time=com.zenith.module",
                     "--initialize-at-run-time=com.zenith.feature.autoupdater",
                     "--initialize-at-build-time=com.google",
@@ -370,6 +371,7 @@ graalvmNative {
                     "-march=x86-64-v3",
                     "--gc=serial",
                     "-J-XX:MaxRAMPercentage=90",
+                    "--trace-object-instantiation=com.zenith.feature.deathmessages.DeathMessageSchemaInstance",
             )
 
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
