@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+@FunctionalInterface
 public interface AsyncPacketHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
     static final ExecutorService ASYNC_EXECUTOR_SERVICE =
         Executors.newFixedThreadPool(1,
