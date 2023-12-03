@@ -6,6 +6,7 @@ import com.github.steveice10.packetlib.packet.Packet;
 import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+@FunctionalInterface
 public interface AsyncPacketHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
     boolean applyAsync(P packet, S session);
 
