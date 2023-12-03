@@ -22,8 +22,10 @@ public class PacketHandlerCodec {
         return new Builder();
     }
 
-    public <S extends Session> PacketHandlerStateCodec<S> getCodec(ProtocolState state) {
-        return (PacketHandlerStateCodec<S>) this.stateCodecs.get(state);
+    private static final PacketHandlerStateCodec defaultStateCodec = PacketHandlerStateCodec.builder().build();
+
+    public <S extends Session> @NonNull PacketHandlerStateCodec<S> getCodec(ProtocolState state) {
+        return this.stateCodecs.getOrDefault(state, defaultStateCodec);
     }
 
     public <P extends Packet, S extends Session> P handleInbound(@NonNull P packet, @NonNull S session) {
