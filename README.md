@@ -72,22 +72,22 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 ## Setup and Download
 
 1. Download `ZenithProxyLauncher.zip` [here](https://github.com/rfresh2/ZenithProxy/releases/launcher) and unzip to a new folder:
-    2. Linux CLI:
-        3. Download: `wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher/ZenithProxyLauncher.zip`
-        4. Unzip: `unzip ZenithProxyLauncher.zip`
-2. Open a terminal to the launcher folder and run `python3 setup.py`, and follow the prompts. (if `python3` is not recognized, try `python` or `py`)
+    * Linux CLI:
+        * Download: `wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher/ZenithProxyLauncher.zip`
+        * Unzip: `unzip ZenithProxyLauncher.zip`
+2. Open a terminal to the launcher folder and run `python3 setup.py` (if `python3` is not recognized, try `python` or `py`)
 
 ## System Requirements
 
 1. Linux or Windows computer. I recommend DigitalOcean: 
-   4. [$200 Free DigitalOcean Credits](https://m.do.co/c/3a3a226e4936).
-   3. [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
+   * [$200 Free DigitalOcean Credits](https://m.do.co/c/3a3a226e4936).
+   * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
 2. [Python 3.10+](https://www.python.org/downloads/)
 3. Java 21+ (Not required for `linux` release channel on supported CPU)
-   4. Linux Installation: 
-      5. Install: https://sdkman.io/install
-      6. Run `sdk install java 21-zulu`
-   7. Windows Installation: https://adoptium.net/
+   * Linux Installation: 
+      * Install: https://sdkman.io/install
+      * Run: `sdk install java 21-zulu`
+   * Windows Installation: https://adoptium.net/
 
 ## Run
 
