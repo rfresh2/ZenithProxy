@@ -40,7 +40,7 @@ public class FoodManager {
 
     private void init() {
         try {
-            this.foodDataMap = OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/pc/1.20/foods.json"), new TypeReference<List<FoodData>>() {
+            this.foodDataMap = OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/pc/1.20.4/foods.json"), new TypeReference<List<FoodData>>() {
                     }).stream()
                     .collect(Collectors.toMap(FoodData::getId, v -> v, (k1, k2) -> k1));
         } catch (final Exception e) {

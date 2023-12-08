@@ -23,7 +23,7 @@ public class LanguageManager {
     private void init() {
         try {
             Map<String, String> dataMap = OBJECT_MAPPER.readValue(
-                getClass().getResourceAsStream("/pc/1.20/language.json"),
+                getClass().getResourceAsStream("/pc/1.20.4/language.json"),
                 new TypeReference<Map<String, String>>() {
                 });
             dataMap.forEach((key, value) -> {
