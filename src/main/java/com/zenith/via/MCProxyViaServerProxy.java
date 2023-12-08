@@ -5,7 +5,6 @@ import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
-import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
 import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
 import com.viaversion.viaversion.api.platform.PlatformTask;
 import com.viaversion.viaversion.api.platform.ProtocolDetectorService;
@@ -41,7 +40,7 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
     }
 
     public void init() {
-        config.reloadConfig();
+        config.reload();
         try {
             Via.init(ViaManagerImpl.builder()
                     .platform(this)
@@ -155,11 +154,6 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
 
     @Override
     public ViaVersionConfig getConf() {
-        return config;
-    }
-
-    @Override
-    public ConfigurationProvider getConfigurationProvider() {
         return config;
     }
 

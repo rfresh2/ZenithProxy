@@ -951,6 +951,11 @@
   "allDeclaredFields":true
 },
 {
+  "name":"com.zenith.feature.queue.mcping.data.OldResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.queue.mcping.rawData.Extra",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
