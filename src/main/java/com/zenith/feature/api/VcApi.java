@@ -19,12 +19,8 @@ public class VcApi {
         .followRedirect(true)
         .baseUrl("https://api.2b2t.vc"));
 
-    public Optional<SeenResponse> getLastSeen(final String playerName) {
+    public Optional<SeenResponse> getSeen(final String playerName) {
         return get("/seen?playerName=" + playerName, SeenResponse.class);
-    }
-
-    public Optional<SeenResponse> getFirstSeen(final String playerName) {
-        return get("/firstSeen?playerName=" + playerName, SeenResponse.class);
     }
 
     public Optional<PlaytimeResponse> getPlaytime(final String playerName) {

@@ -850,7 +850,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime"] }]
+  "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime", "java.time.OffsetDateTime"] }]
 },
 {
   "name":"com.zenith.feature.api.model.StatsResponse",
