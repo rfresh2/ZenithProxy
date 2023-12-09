@@ -57,6 +57,9 @@
   "name":"[Lcom.zenith.feature.queue.mcping.rawData.Extra;"
 },
 {
+  "name":"[Lcom.zenith.feature.queue.mcping.rawData.ForgeDataListItem;"
+},
+{
   "name":"[Lfr.litarvan.openauth.microsoft.model.response.MinecraftProfile$MinecraftSkin;"
 },
 {
@@ -850,7 +853,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime", "java.time.OffsetDateTime"] }]
+  "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.time.OffsetDateTime"] }]
 },
 {
   "name":"com.zenith.feature.api.model.StatsResponse",
@@ -951,12 +954,37 @@
   "allDeclaredFields":true
 },
 {
+  "name":"com.zenith.feature.queue.mcping.data.NewResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.Description",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.queue.mcping.rawData.Extra",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.feature.queue.mcping.rawData.ExtraDescription",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ForgeData",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ForgeDataListItem",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ModpackData",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -1516,11 +1544,15 @@
 },
 {
   "name":"io.netty.handler.codec.ByteToMessageDecoder",
-  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
+  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"decode","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.buffer.ByteBuf","java.util.List"] }, {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageAggregator",
   "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
+},
+{
+  "name":"io.netty.handler.codec.MessageToByteEncoder",
+  "methods":[{"name":"encode","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.buffer.ByteBuf"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageCodec",
@@ -1528,7 +1560,7 @@
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageDecoder",
-  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
+  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"decode","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","java.util.List"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageEncoder",
