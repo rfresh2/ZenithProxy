@@ -42,6 +42,7 @@ public class MCProxyViaChannelInitializer extends ChannelInitializer<Channel> {
 
         // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
         // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-encoder -> via-decoder -> codec -> manager
+        channel.pipeline().replace("codec", "codec", new MCProxyClientViaCodecHandler(client));
         channel.pipeline().addBefore("codec", "via-encoder", new MCProxyViaEncodeHandler(userConnection, this.client));
         channel.pipeline().addBefore("codec", "via-decoder", new MCProxyViaDecodeHandler(userConnection, this.client));
     }

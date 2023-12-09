@@ -23,25 +23,27 @@ public class MCProxyViaDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> out) throws Exception {
-        if (!info.checkIncomingPacket()) throw CancelDecoderException.generate(null);
-        if (!info.shouldTransformPacket()) {
-            out.add(bytebuf.retain());
-            return;
-        }
-
-        ByteBuf transformedBuf = ctx.alloc().buffer().writeBytes(bytebuf);
         try {
-            info.transformIncoming(transformedBuf, CancelDecoderException::generate);
-            out.add(transformedBuf.retain());
-        } finally {
-            transformedBuf.release();
-        }
-    }
+            if (!info.checkIncomingPacket()) throw CancelDecoderException.generate(null);
+            if (!info.shouldTransformPacket()) {
+                out.add(bytebuf.retain());
+                return;
+            }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (cause instanceof CancelCodecException) return;
-        if (!this.client.callPacketError(cause))
-            super.exceptionCaught(ctx, cause);
+            ByteBuf transformedBuf = ctx.alloc().buffer().writeBytes(bytebuf);
+            try {
+                info.transformIncoming(transformedBuf, CancelDecoderException::generate);
+                out.add(transformedBuf.retain());
+            } finally {
+                transformedBuf.release();
+            }
+        } catch (final Exception e) {
+            if (e instanceof CancelCodecException) {
+                out.add(bytebuf.retain());
+                return;
+            }
+            if (!this.client.callPacketError(e))
+                throw e;
+        }
     }
 }

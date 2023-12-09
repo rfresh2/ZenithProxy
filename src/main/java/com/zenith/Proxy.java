@@ -301,7 +301,7 @@ public class Proxy {
         if (CONFIG.client.viaversion.enabled) {
             if (CONFIG.client.viaversion.autoProtocolVersion)
                 updateViaProtocolVersion();
-            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20.getVersion()) {
+            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20_3.getVersion()) {
                 CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20, connecting without ViaVersion");
                 this.client.connect(true);
             } else {
