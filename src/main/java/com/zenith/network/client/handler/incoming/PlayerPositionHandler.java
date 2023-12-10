@@ -30,7 +30,12 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
                 .setPitch((packet.getRelative().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
         ServerConnection currentPlayer = session.getProxy().getCurrentPlayer().get();
         if (isNull(currentPlayer)) {
-            MODULE_MANAGER.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getTeleportId());
+            if (session.isOnline()) {
+                MODULE_MANAGER.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getTeleportId());
+            } else { // todo: handle PlayerOnline state transition better with 1.20.2 configuration phase
+                Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
+                Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
+            }
         } else if (!currentPlayer.isLoggedIn()) { // possible race condition during login where we get a position packet before we're fully logged in
             Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
             Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));

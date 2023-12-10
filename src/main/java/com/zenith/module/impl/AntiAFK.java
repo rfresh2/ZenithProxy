@@ -1,8 +1,6 @@
 package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.collect.Iterators;
 import com.zenith.Proxy;
@@ -87,7 +85,6 @@ public class AntiAFK extends Module {
     @Override
     public void clientTickStarting() {
         reset();
-        sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
     }
 
     @Override
