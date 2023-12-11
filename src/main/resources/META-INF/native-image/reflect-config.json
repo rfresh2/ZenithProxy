@@ -1336,6 +1336,9 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.via.handler.MCProxyClientViaCodecHandler"
+},
+{
   "name":"com.zenith.via.handler.MCProxyViaChannelInitializer"
 },
 {
