@@ -80,7 +80,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 ## System Requirements
 
 1. Linux or Windows computer. I recommend DigitalOcean: 
-   * [$200 Free DigitalOcean Credits](https://m.do.co/c/3a3a226e4936).
+   * [$200 Free Digital](https://m.do.co/c/f3afffef9a46)[Ocean Credits](https://m.do.co/c/3a3a226e4936).
    * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
 2. [Python 3.10+](https://www.python.org/downloads/)
 3. Java 21+ (Not required for `linux` release channel on supported CPU)
