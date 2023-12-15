@@ -243,12 +243,12 @@ public final class Config {
                 public long delayTicks = 200;
                 public boolean randomOrder = false;
                 public boolean appendRandom = false;
-                public List<String> messages = asList(
+                public ArrayList<String> messages = new ArrayList<>(asList(
                         "ZenithProxy on top!",
                         "I just skipped queue thanks to ZenithProxy!",
                         "I love undertime slopper!",
                         ">odpay supremacy"
-                );
+                ));
             }
 
             public static final class AutoReply {
