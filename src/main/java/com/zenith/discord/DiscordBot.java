@@ -603,6 +603,7 @@ public class DiscordBot {
         sendEmbedMessage((sus ? MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId)) : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
                 .addField("Reason", event.reason(), true)
+                .addField("Online Duration", formatDuration(event.onlineDuration()), true)
                 .color(Color.RUBY)
                 .build());
         SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
