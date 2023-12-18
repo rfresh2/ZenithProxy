@@ -149,6 +149,8 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/identifiers-1.20.3.nbt\\E"
   }, {
+    "pattern":"\\Qassets/viaversion/data/identifiers-1.20.5.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viaversion/data/identifiers-1.20.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/identifiers-1.9.4.nbt\\E"
@@ -182,6 +184,8 @@
     "pattern":"\\Qassets/viaversion/data/mappings-1.19to1.19.3.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20.2to1.20.3.nbt\\E"
+  }, {
+    "pattern":"\\Qassets/viaversion/data/mappings-1.20.3to1.20.5.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20to1.20.2.nbt\\E"
   }, {

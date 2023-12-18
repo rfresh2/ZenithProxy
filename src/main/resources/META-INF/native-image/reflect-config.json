@@ -1930,6 +1930,10 @@
   "name":"java.time.ZonedDateTime"
 },
 {
+  "name":"java.util.ArrayList",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"java.util.Date"
 },
 {
