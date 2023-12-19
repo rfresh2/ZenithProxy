@@ -136,7 +136,7 @@ public class CommandManager {
         var errorHandler = commandNodeOptional.flatMap(CaseInsensitiveLiteralCommandNode::getErrorHandler);
         var successHandler = commandNodeOptional.flatMap(CaseInsensitiveLiteralCommandNode::getSuccessHandler);
 
-        if (!parse.getExceptions().isEmpty()) {
+        if (!parse.getExceptions().isEmpty() || parse.getReader().canRead()) {
             errorHandler.ifPresent(handler -> handler.handle(parse.getExceptions(), context));
             return -1;
         }
