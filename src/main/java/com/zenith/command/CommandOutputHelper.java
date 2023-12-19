@@ -2,6 +2,7 @@ package com.zenith.command;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.google.common.collect.ImmutableMap;
+import com.zenith.feature.whitelist.WhitelistEntry;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import discord4j.core.spec.EmbedCreateFields;
@@ -12,10 +13,12 @@ import net.kyori.adventure.text.Component;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.zenith.Shared.DISCORD_BOT;
 import static com.zenith.Shared.TERMINAL_LOG;
+import static com.zenith.discord.DiscordBot.escape;
 
 @UtilityClass
 public class CommandOutputHelper {
@@ -123,5 +126,20 @@ public class CommandOutputHelper {
 
     public void logMultiLineOutputToTerminal(CommandContext context) {
         context.getMultiLineOutput().forEach(TERMINAL_LOG::info);
+    }
+
+    // intended for use in embed descriptions
+    public String whitelistEntriesToString(final List<WhitelistEntry> entries) {
+        if (entries.isEmpty()) return "Empty";
+        var output = new StringBuilder();
+        for (int i = 0; i < entries.size(); i++) {
+            var entry = entries.get(i);
+            var line = "[" + escape(entry.username) + "](" + entry.getNameMCLink() + ")\n";
+            if (output.length() + line.length() > 4000) { // 4096 max len + some buffer for more text before/after
+                output.append("and ").append(entries.size() - i).append(" more...");
+                break;
+            } else output.append(line);
+        }
+        return output.toString();
     }
 }

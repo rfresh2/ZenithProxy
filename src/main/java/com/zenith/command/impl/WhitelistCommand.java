@@ -9,11 +9,10 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.stream.Collectors;
-
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.WHITELIST_MANAGER;
+import static com.zenith.command.CommandOutputHelper.whitelistEntriesToString;
 import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
@@ -62,27 +61,10 @@ public class WhitelistCommand extends Command {
                 }));
     }
 
-    private String whitelistToString() {
-        return CONFIG.server.extra.whitelist.whitelist.isEmpty()
-                ? "Empty"
-                : CONFIG.server.extra.whitelist.whitelist.stream()
-                .map(mp -> escape(mp.username + " [[Link](" + mp.getNameMCLink() + ")]"))
-                .collect(Collectors.joining("\n"));
-    }
-
-    private String whitelistToStringShort() {
-        return CONFIG.server.extra.whitelist.whitelist.isEmpty()
-            ? "Empty"
-            : CONFIG.server.extra.whitelist.whitelist.stream()
-            .map(mp -> escape(mp.username))
-            .collect(Collectors.joining("\n"));
-    }
-
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            // max chars is 4096. just using size here to approximate randomly. still possible to overflow the description with the "short" version
-            .description(CONFIG.server.extra.whitelist.whitelist.size() < 10 ? whitelistToString() : whitelistToStringShort())
+            .description(whitelistEntriesToString(CONFIG.server.extra.whitelist.whitelist))
             .color(Color.CYAN);
     }
 }

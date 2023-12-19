@@ -9,11 +9,10 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.stream.Collectors;
-
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.WHITELIST_MANAGER;
+import static com.zenith.command.CommandOutputHelper.whitelistEntriesToString;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
@@ -114,18 +113,10 @@ public class VisualRangeCommand extends Command {
                       })));
     }
 
-    private String friendListString() {
-        return CONFIG.client.extra.friendsList.isEmpty()
-                ? "Empty"
-                : CONFIG.client.extra.friendsList.stream()
-                .map(e -> escape(e.username + " [[" + e.uuid.toString() + "](" + e.getNameMCLink() + ")]"))
-                .collect(Collectors.joining("\n"));
-    }
-
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description("Friend List: \n " + friendListString())
+            .description("Friend List: \n " + whitelistEntriesToString(CONFIG.client.extra.friendsList))
             .addField("VisualRange Alerts", toggleStr(CONFIG.client.extra.visualRangeAlert), false)
             .addField("Mentions", toggleStr(CONFIG.client.extra.visualRangeAlertMention), false)
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRangeIgnoreFriends), false)

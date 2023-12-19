@@ -13,11 +13,11 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.WHITELIST_MANAGER;
+import static com.zenith.command.CommandOutputHelper.whitelistEntriesToString;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
@@ -48,7 +48,7 @@ public class SpectatorCommand extends Command {
                 c.getSource().getEmbedBuilder()
                     .title("Spectators " + (CONFIG.server.spectator.allowSpectator ? "On!" : "Off!"))
                     .color(Color.CYAN)
-                    .description("Spectator Whitelist:\n " + whitelistToString());;
+                    .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist));
                 return 1;
             }))
             .then(literal("whitelist")
@@ -59,11 +59,11 @@ public class SpectatorCommand extends Command {
                                                    c.getSource().getEmbedBuilder()
                                                        .title("Added user: " + escape(e.username) + " To Spectator Whitelist")
                                                        .color(Color.CYAN)
-                                                       .description("Spectator Whitelist:\n " + whitelistToString()),
+                                                       .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist)),
                                                () -> c.getSource().getEmbedBuilder()
                                                    .title("Failed to add user: " + escape(playerName) + " to whitelist. Unable to lookup profile.")
                                                    .color(Color.RUBY)
-                                                   .description("Spectator Whitelist:\n " + whitelistToString()));
+                                                   .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist)));
                           return 1;
                       })))
                       .then(literal("del").then(argument("player", string()).executes(c -> {
@@ -72,7 +72,7 @@ public class SpectatorCommand extends Command {
                           c.getSource().getEmbedBuilder()
                               .title("Removed user: " + escape(playerName) + " From Spectator Whitelist")
                               .color(Color.CYAN)
-                              .description("Spectator Whitelist:\n " + whitelistToString());
+                              .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist));
                           WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                           return 1;
                       })))
@@ -81,14 +81,14 @@ public class SpectatorCommand extends Command {
                           c.getSource().getEmbedBuilder()
                               .title("Spectator Whitelist Cleared")
                               .color(Color.RUBY)
-                              .description("Spectator Whitelist:\n " + whitelistToString());;
+                              .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist));
                           WHITELIST_MANAGER.kickNonWhitelistedPlayers();
                       }))
                       .then(literal("list").executes(c -> {
                           c.getSource().getEmbedBuilder()
                               .title("Spectator Whitelist")
                               .color(Color.CYAN)
-                              .description("Spectator Whitelist:\n " + whitelistToString());
+                              .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist));
                       })))
             .then(literal("entity")
                       .then(literal("list").executes(c -> {
@@ -119,17 +119,9 @@ public class SpectatorCommand extends Command {
                             c.getSource().getEmbedBuilder()
                                 .title("Spectator Chat " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "On!" : "Off!"))
                                 .color(Color.CYAN)
-                                .description("Spectator Whitelist:\n " + whitelistToString());
+                                .description("Spectator Whitelist:\n " + whitelistEntriesToString(CONFIG.server.spectator.whitelist));
                             return 1;
                       })));
-    }
-
-    private String whitelistToString() {
-        return CONFIG.server.spectator.whitelist.isEmpty()
-                ? "Empty"
-                : CONFIG.server.spectator.whitelist.stream()
-                .map(mp -> escape(mp.username + " [[" + mp.uuid.toString() + "](" + mp.getNameMCLink() + ")]"))
-                .collect(Collectors.joining("\n"));
     }
 
     @Override

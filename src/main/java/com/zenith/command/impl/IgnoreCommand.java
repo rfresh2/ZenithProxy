@@ -8,11 +8,10 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.stream.Collectors;
-
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.WHITELIST_MANAGER;
+import static com.zenith.command.CommandOutputHelper.whitelistEntriesToString;
 import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
@@ -61,18 +60,10 @@ public class IgnoreCommand extends Command {
                 }));
     }
 
-    private String ignoreListToString() {
-        return CONFIG.client.extra.chat.ignoreList.isEmpty()
-                ? "Empty"
-                : CONFIG.client.extra.chat.ignoreList.stream()
-                .map(mp -> escape(mp.username + " [[" + mp.uuid.toString() + "](" + mp.getNameMCLink() + ")]"))
-                .collect(Collectors.joining("\n"));
-    }
-
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description(ignoreListToString())
+            .description(whitelistEntriesToString(CONFIG.client.extra.chat.ignoreList))
             .color(Color.CYAN);
     }
 }
