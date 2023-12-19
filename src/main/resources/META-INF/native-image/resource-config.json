@@ -87,6 +87,10 @@
   }, {
     "pattern":"\\Qassets/viabackwards/data/mappings-1.20.2to1.20.nbt\\E"
   }, {
+    "pattern":"\\Qassets/viabackwards/data/mappings-1.20.3to1.20.2.nbt\\E"
+  }, {
+    "pattern":"\\Qassets/viabackwards/data/mappings-1.20.5to1.20.3.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viabackwards/data/mappings-1.20to1.19.4.nbt\\E"
   }, {
     "pattern":"\\Qassets/viabackwards/data/sounds-1.19.json\\E"

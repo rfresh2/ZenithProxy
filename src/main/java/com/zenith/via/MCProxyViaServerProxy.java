@@ -12,6 +12,7 @@ import com.viaversion.viaversion.api.platform.ViaServerProxyPlatform;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import com.viaversion.viaversion.util.VersionInfo;
 import com.viaversion.viaversion.velocity.util.LoggerWrapper;
+import com.zenith.Shared;
 import com.zenith.network.client.ClientSession;
 import com.zenith.via.handler.MCProxyViaChannelInitializer;
 import com.zenith.via.platform.*;
@@ -30,8 +31,9 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftProtocol> {
     private final ProtocolDetectorService protocolDetectorService = new MCProxyProtocolDetectorService();
     private final MCProxyViaAPI api = new MCProxyViaAPI();
-    private final MCProxyViaConfig config = new MCProxyViaConfig(Paths.get("via").resolve("via-config.yml").toFile());
-    private final MCProxyViaBackwardsPlatform backwardsPlatform = new MCProxyViaBackwardsPlatform();
+    private final File configDirectory = Paths.get("via").resolve("via-config.yml").toFile().getAbsoluteFile();
+    private final MCProxyViaConfig config = new MCProxyViaConfig(configDirectory);
+    private final MCProxyViaBackwardsPlatform backwardsPlatform = new MCProxyViaBackwardsPlatform(configDirectory);
     private java.util.logging.Logger logger = new LoggerWrapper(LoggerFactory.getLogger("ViaVersion"));
     private ClientSession client;
 
@@ -55,6 +57,7 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
             backwardsPlatform.initViaBackwards();
         } catch (final Exception e) {
             // fall through
+            Shared.DEFAULT_LOG.error("Error initializing ViaBackwards", e);
         }
         try {
             ((ViaManagerImpl) Via.getManager()).init();

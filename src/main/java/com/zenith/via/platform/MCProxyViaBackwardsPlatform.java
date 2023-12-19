@@ -10,6 +10,11 @@ import java.util.logging.Logger;
 
 public class MCProxyViaBackwardsPlatform implements ViaBackwardsPlatform {
     private java.util.logging.Logger logger = new LoggerWrapper(LoggerFactory.getLogger("ViaBackwards"));
+    private final File configDirectory;
+
+    public MCProxyViaBackwardsPlatform(final File configDirectory) {
+        this.configDirectory = configDirectory;
+    }
 
     public void initViaBackwards() {
         Via.getManager().addEnableListener(() -> this.init(getDataFolder()));
@@ -27,6 +32,6 @@ public class MCProxyViaBackwardsPlatform implements ViaBackwardsPlatform {
 
     @Override
     public File getDataFolder() {
-        return new File("via/");
+        return configDirectory;
     }
 }
