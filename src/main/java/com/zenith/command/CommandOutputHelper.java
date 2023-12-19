@@ -129,7 +129,7 @@ public class CommandOutputHelper {
     }
 
     // intended for use in embed descriptions
-    public String whitelistEntriesToString(final List<WhitelistEntry> entries) {
+    public static String whitelistEntriesToString(final List<WhitelistEntry> entries) {
         if (entries.isEmpty()) return "Empty";
         var output = new StringBuilder();
         for (int i = 0; i < entries.size(); i++) {
