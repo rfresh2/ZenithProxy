@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class MCProxyViaConfig extends AbstractViaConfig {
-    public MCProxyViaConfig(File configFile) {
+public class ZViaConfig extends AbstractViaConfig {
+    public ZViaConfig(File configFile) {
         super(configFile);
     }
 

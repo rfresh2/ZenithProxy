@@ -29,8 +29,8 @@ import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
-import com.zenith.via.MCProxyViaServerProxy;
 import com.zenith.via.ProtocolVersionDetector;
+import com.zenith.via.ZViaServerProxyPlatform;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -306,7 +306,7 @@ public class Proxy {
                 this.client.connect(true);
             } else {
                 ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
-                final MCProxyViaServerProxy viaProxy = new MCProxyViaServerProxy(this.client);
+                final ZViaServerProxyPlatform viaProxy = new ZViaServerProxyPlatform(this.client);
                 viaProxy.init();
                 ChannelInitializer<Channel> viaChannelInitializer = viaProxy.inject(originalChannelInitializer);
                 Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);

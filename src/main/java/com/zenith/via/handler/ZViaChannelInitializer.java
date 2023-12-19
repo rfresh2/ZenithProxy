@@ -9,7 +9,7 @@ import lombok.NonNull;
 
 import java.lang.reflect.Method;
 
-public class MCProxyViaChannelInitializer extends ChannelInitializer<Channel> {
+public class ZViaChannelInitializer extends ChannelInitializer<Channel> {
     private static final Method INIT_CHANNEL;
 
     static {
@@ -24,7 +24,7 @@ public class MCProxyViaChannelInitializer extends ChannelInitializer<Channel> {
     private final ChannelInitializer<Channel> original;
     private final ClientSession client;
 
-    public MCProxyViaChannelInitializer(ChannelInitializer<Channel> original, final ClientSession client) {
+    public ZViaChannelInitializer(ChannelInitializer<Channel> original, final ClientSession client) {
         this.original = original;
         this.client = client;
     }
@@ -42,7 +42,7 @@ public class MCProxyViaChannelInitializer extends ChannelInitializer<Channel> {
 
         // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
         // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-encoder -> via-decoder -> codec -> manager
-        channel.pipeline().addBefore("codec", "via-encoder", new MCProxyViaEncodeHandler(userConnection, this.client));
-        channel.pipeline().addBefore("codec", "via-decoder", new MCProxyViaDecodeHandler(userConnection, this.client));
+        channel.pipeline().addBefore("codec", "via-encoder", new ZViaEncodeHandler(userConnection, this.client));
+        channel.pipeline().addBefore("codec", "via-decoder", new ZViaDecodeHandler(userConnection, this.client));
     }
 }

@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.logging.Logger;
 
-public class MCProxyViaBackwardsPlatform implements ViaBackwardsPlatform {
+public class ZViaBackwardsPlatform implements ViaBackwardsPlatform {
     private java.util.logging.Logger logger = new LoggerWrapper(LoggerFactory.getLogger("ViaBackwards"));
     private final File configDirectory;
 
-    public MCProxyViaBackwardsPlatform(final File configDirectory) {
+    public ZViaBackwardsPlatform(final File configDirectory) {
         this.configDirectory = configDirectory;
     }
 

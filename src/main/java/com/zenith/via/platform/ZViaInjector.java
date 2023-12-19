@@ -6,9 +6,9 @@ import com.viaversion.viaversion.libs.gson.JsonObject;
 
 import static com.zenith.Shared.CONFIG;
 
-public class MCProxyViaInjector implements ViaInjector {
+public class ZViaInjector implements ViaInjector {
 
-    public MCProxyViaInjector() {
+    public ZViaInjector() {
     }
 
     @Override

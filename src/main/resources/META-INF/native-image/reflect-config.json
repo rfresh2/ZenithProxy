@@ -1341,17 +1341,17 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.via.handler.MCProxyClientViaCodecHandler"
+  "name":"com.zenith.via.handler.ZViaClientViaCodecHandler"
 },
 {
-  "name":"com.zenith.via.handler.MCProxyViaChannelInitializer"
+  "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
 },
 {
-  "name":"com.zenith.via.handler.MCProxyViaDecodeHandler",
+  "name":"com.zenith.via.handler.ZViaDecodeHandler",
   "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
-  "name":"com.zenith.via.handler.MCProxyViaEncodeHandler",
+  "name":"com.zenith.via.handler.ZViaEncodeHandler",
   "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {

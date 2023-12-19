@@ -14,7 +14,7 @@ import com.viaversion.viaversion.util.VersionInfo;
 import com.viaversion.viaversion.velocity.util.LoggerWrapper;
 import com.zenith.Shared;
 import com.zenith.network.client.ClientSession;
-import com.zenith.via.handler.MCProxyViaChannelInitializer;
+import com.zenith.via.handler.ZViaChannelInitializer;
 import com.zenith.via.platform.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -28,16 +28,16 @@ import java.util.logging.Logger;
 import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftProtocol> {
-    private final ProtocolDetectorService protocolDetectorService = new MCProxyProtocolDetectorService();
-    private final MCProxyViaAPI api = new MCProxyViaAPI();
+public class ZViaServerProxyPlatform implements ViaServerProxyPlatform<MinecraftProtocol> {
+    private final ProtocolDetectorService protocolDetectorService = new ZViaProtocolDetectorService();
+    private final ZViaAPI api = new ZViaAPI();
     private final File configDirectory = Paths.get("via").resolve("via-config.yml").toFile().getAbsoluteFile();
-    private final MCProxyViaConfig config = new MCProxyViaConfig(configDirectory);
-    private final MCProxyViaBackwardsPlatform backwardsPlatform = new MCProxyViaBackwardsPlatform(configDirectory);
+    private final ZViaConfig config = new ZViaConfig(configDirectory);
+    private final ZViaBackwardsPlatform backwardsPlatform = new ZViaBackwardsPlatform(configDirectory);
     private java.util.logging.Logger logger = new LoggerWrapper(LoggerFactory.getLogger("ViaVersion"));
     private ClientSession client;
 
-    public MCProxyViaServerProxy(final ClientSession client) {
+    public ZViaServerProxyPlatform(final ClientSession client) {
         this.client = client;
     }
 
@@ -46,9 +46,9 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
         try {
             Via.init(ViaManagerImpl.builder()
                     .platform(this)
-                    .commandHandler(new MCProxyViaCommandHandler())
-                    .loader(new MCProxyViaLoader())
-                    .injector(new MCProxyViaInjector())
+                    .commandHandler(new ZViaCommandHandler())
+                    .loader(new ZViaLoader())
+                    .injector(new ZViaInjector())
                     .build());
         } catch (final Exception e) {
             // fall through
@@ -68,7 +68,7 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
     }
 
     public ChannelInitializer<Channel> inject(final ChannelInitializer<Channel> original) {
-        return new MCProxyViaChannelInitializer(original, this.client);
+        return new ZViaChannelInitializer(original, this.client);
     }
 
     @Override
@@ -98,14 +98,14 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
 
     @Override
     public PlatformTask runAsync(Runnable runnable) {
-        return new MCProxyPlatformTask(
+        return new ZViaPlatformTask(
                 SCHEDULED_EXECUTOR_SERVICE.submit(runnable)
         );
     }
 
     @Override
     public PlatformTask runRepeatingAsync(Runnable runnable, long ticks) {
-        return new MCProxyPlatformTask(
+        return new ZViaPlatformTask(
                 SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(runnable, 0, ticks * 50, MILLISECONDS)
         );
     }
@@ -117,7 +117,7 @@ public class MCProxyViaServerProxy implements ViaServerProxyPlatform<MinecraftPr
 
     @Override
     public PlatformTask runSync(Runnable runnable, long ticks) {
-        return new MCProxyPlatformTask(
+        return new ZViaPlatformTask(
                 SCHEDULED_EXECUTOR_SERVICE.schedule(runnable, ticks * 50, MILLISECONDS)
         );
     }

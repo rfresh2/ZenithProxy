@@ -5,10 +5,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.concurrent.Future;
 
-public class MCProxyPlatformTask implements PlatformTask<Future<?>> {
+public class ZViaPlatformTask implements PlatformTask<Future<?>> {
     private final Future<?> future;
 
-    public MCProxyPlatformTask(Future<?> future) {
+    public ZViaPlatformTask(Future<?> future) {
         this.future = future;
     }
 
