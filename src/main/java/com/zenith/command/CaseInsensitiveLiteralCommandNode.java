@@ -11,12 +11,11 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> {
-    private final Function<CommandContext, Void> errorHandler;
-    private final Function<CommandContext, Void> successHandler;
+    private final CommandErrorHandler errorHandler;
+    private final CommandSuccessHandler successHandler;
 
     public CaseInsensitiveLiteralCommandNode(String literal,
                                              Command<S> command,
@@ -24,18 +23,18 @@ public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> 
                                              CommandNode<S> redirect,
                                              RedirectModifier<S> modifier,
                                              boolean forks,
-                                             Function<CommandContext, Void> errorHandler,
-                                             Function<CommandContext, Void> successHandler) {
+                                             CommandErrorHandler errorHandler,
+                                             CommandSuccessHandler successHandler) {
         super(literal.toLowerCase(), command, requirement, redirect, modifier, forks);
         this.errorHandler = errorHandler;
         this.successHandler = successHandler;
     }
 
-    public Optional<Function<CommandContext, Void>> getErrorHandler() {
+    public Optional<CommandErrorHandler> getErrorHandler() {
         return Optional.ofNullable(errorHandler);
     }
 
-    public Optional<Function<CommandContext, Void>> getSuccessHandler() {
+    public Optional<CommandSuccessHandler> getSuccessHandler() {
         return Optional.ofNullable(successHandler);
     }
 
