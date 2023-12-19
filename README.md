@@ -7,12 +7,11 @@
 </p>
 
 <p align="center">
-  <img alt="Downloads" src="https://img.shields.io/github/downloads/rfresh2/ZenithProxy/total">
-  <img src="https://img.shields.io/badge/MC-1.12.2-brightgreen.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/badge/MC-1.20.1-brightgreen.svg" alt="Minecraft"/>
-  <img src="https://img.shields.io/badge/MC-1.20.3-yellow.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.12.2-brightgreen.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/github/languages/code-size/rfresh2/ZenithProxy.svg" alt="Code size"/>
   <img src="https://img.shields.io/github/repo-size/rfresh2/ZenithProxy.svg" alt="GitHub repo size"/>
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/rfresh2/ZenithProxy/total">
   <img src="https://tokei.rs/b1/github/rfresh2/ZenithProxy?category=code&style=flat" alt="Lines of Code"/>
 </p>
 
@@ -130,6 +129,14 @@ If you do not use one, **ZenithProxy will be killed after you exit your SSH sess
 * Create a role for users to manage the proxy, a channel to manage the 
   proxy in, and a channel for the chat relay. The bot's role must have permissions to send and receive messages in both channels
 * Run `setup.py` or configure with the `discord` command.
+
+## Running Multiple Instances
+
+Create a new folder for each instance with its own copy of the launcher files. [Example](https://i.imgur.com/OTkKIti.png)
+
+Instances must be independently run and configured. i.e. separate terminal sessions, discord bots, ports, config files, etc.
+
+See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide) for help copying files, creating folders, etc.
 
 ## Special Thanks
 
