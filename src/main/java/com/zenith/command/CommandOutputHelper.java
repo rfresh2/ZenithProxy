@@ -18,7 +18,6 @@ import java.util.Map;
 
 import static com.zenith.Shared.DISCORD_BOT;
 import static com.zenith.Shared.TERMINAL_LOG;
-import static com.zenith.discord.DiscordBot.escape;
 
 @UtilityClass
 public class CommandOutputHelper {
@@ -134,7 +133,7 @@ public class CommandOutputHelper {
         var output = new StringBuilder();
         for (int i = 0; i < entries.size(); i++) {
             var entry = entries.get(i);
-            var line = "[" + escape(entry.username) + "](" + entry.getNameMCLink() + ")\n";
+            var line = "[" + entry.username + "](" + entry.getNameMCLink() + ")\n";
             if (output.length() + line.length() > 4000) { // 4096 max len + some buffer for more text before/after
                 output.append("and ").append(entries.size() - i).append(" more...");
                 break;
