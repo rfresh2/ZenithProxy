@@ -139,7 +139,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:333428da4b") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:7c5c4b0b34") {
+    shade("com.github.rfresh2:MCProtocolLib:85ae808c2c") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
@@ -158,10 +158,10 @@ dependencies {
     // uncomment to use io_uring
 //    shade 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64'
     shade "de.themoep:minedown-adventure:1.7.2-SNAPSHOT"
-    shade "net.kyori:adventure-text-serializer-gson:4.15.0"
-    shade "net.kyori:adventure-text-serializer-gson-legacy-impl:4.15.0"
-    shade "net.kyori:adventure-text-serializer-legacy:4.15.0"
-    shade "net.kyori:adventure-text-serializer-ansi:4.15.0"
+    shade "net.kyori:adventure-text-serializer-gson:4.14.0"
+    shade "net.kyori:adventure-text-serializer-gson-legacy-impl:4.14.0"
+    shade "net.kyori:adventure-text-serializer-legacy:4.14.0"
+    shade "net.kyori:adventure-text-serializer-ansi:4.14.0"
     shade "org.cloudburstmc.math:api:2.0"
     shade "org.cloudburstmc.math:immutable:2.0"
 
