@@ -55,7 +55,7 @@ public class AutoEat extends Module {
                 && playerHealthBelowThreshold()
                 && !Proxy.getInstance().isInQueue()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())
-                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActive).orElse(false)) {
+                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
             if (delay > 0) {
                 delay--;
                 return;

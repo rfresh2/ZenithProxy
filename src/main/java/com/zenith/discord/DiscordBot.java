@@ -704,7 +704,7 @@ public class DiscordBot {
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeAlert) return;
-        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntity().getUuid());
+        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry().getName());
             return;
@@ -730,7 +730,7 @@ public class DiscordBot {
                 DISCORD_LOG.info(e.getInteraction().getMember()
                         .map(User::getTag).orElse("Unknown")
                         + " added friend: " + event.playerEntry().getName() + " [" + event.playerEntry().getProfileId() + "]");
-                WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry().getName());
+                PLAYER_LISTS.getFriendsList().add(event.playerEntry().getName());
                 e.reply().withEmbeds(EmbedCreateSpec.builder()
                         .title("Friend Added")
                         .color(Color.GREEN)
@@ -763,7 +763,7 @@ public class DiscordBot {
 
     public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeLeftAlert) return;
-        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntity().getUuid());
+        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range left alert for friend: " + event.playerEntry().getName());
             return;
@@ -787,7 +787,7 @@ public class DiscordBot {
 
     public void handlePlayerLogoutInVisualRangeEvent(final PlayerLogoutInVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeLeftAlert || !CONFIG.client.extra.visualRangeLeftLogoutAlert) return;
-        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntry().getProfileId());
+        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntry().getProfileId());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range logout alert for friend: " + event.playerEntry().getName());
             return;
@@ -829,7 +829,7 @@ public class DiscordBot {
                         DISCORD_LOG.info(e.getInteraction().getMember()
                                 .map(User::getTag).orElse("Unknown")
                                 + " whitelisted " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "]");
-                        WHITELIST_MANAGER.addWhitelistEntryByUsername(event.gameProfile().getName());
+                        PLAYER_LISTS.getWhitelist().add(event.gameProfile().getName());
                         e.reply().withEmbeds(EmbedCreateSpec.builder()
                                 .title("Player Whitelisted")
                                 .color(Color.GREEN)
@@ -903,13 +903,13 @@ public class DiscordBot {
                         if (event.isIncomingWhisper()
                             && CONFIG.discord.chatRelay.mentionRoleOnWhisper
                             && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")
-                            && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)) {
+                            && event.sender().map(s -> !PLAYER_LISTS.getIgnoreList().contains(s.getName())).orElse(true)) {
                             ping = mentionAccountOwner();
                         }
                     } else {
                         if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                             if (event.sender().filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
-                                && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
+                                && event.sender().map(s -> !PLAYER_LISTS.getIgnoreList().contains(s.getName())).orElse(true)
                                 && Arrays.asList(message.toLowerCase().split(" ")).contains(CONFIG.authentication.username.toLowerCase())) {
                                 ping = mentionAccountOwner();
                             }
@@ -973,19 +973,13 @@ public class DiscordBot {
                                       .timestamp(Instant.now())
                                       .build());
         }
-        if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
-            CONFIG.client.extra.stalk.stalkList.stream()
-                    .map(s -> s.toLowerCase(Locale.ROOT))
-                    .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
-                    .findFirst()
-                    .ifPresent(player -> {
-                        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
-                                .title("Stalked Player Online!")
-                                .color(Color.MEDIUM_SEA_GREEN)
-                                .addField("Player Name", event.playerEntry().getName(), true)
-                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
-                                .build());
-                    });
+        if (CONFIG.client.extra.stalk.enabled && PLAYER_LISTS.getStalkList().contains(event.playerEntry().getProfile())) {
+            sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
+                .title("Stalked Player Online!")
+                .color(Color.MEDIUM_SEA_GREEN)
+                .addField("Player Name", event.playerEntry().getName(), true)
+                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
+                .build());
         }
     }
 
@@ -999,19 +993,13 @@ public class DiscordBot {
                                       .timestamp(Instant.now())
                                       .build());
         }
-        if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
-            CONFIG.client.extra.stalk.stalkList.stream()
-                    .map(s -> s.toLowerCase(Locale.ROOT))
-                    .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
-                    .findFirst()
-                    .ifPresent(player -> {
-                        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
-                                .title("Stalked Player Offline!")
-                                .color(Color.RUBY)
-                                .addField("Player Name", event.playerEntry().getName(), true)
-                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
-                                .build());
-                    });
+        if (CONFIG.client.extra.stalk.enabled && PLAYER_LISTS.getStalkList().contains(event.playerEntry().getProfile())) {
+            sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
+                .title("Stalked Player Offline!")
+                .color(Color.RUBY)
+                .addField("Player Name", event.playerEntry().getName(), true)
+                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
+                .build());
         }
     }
 

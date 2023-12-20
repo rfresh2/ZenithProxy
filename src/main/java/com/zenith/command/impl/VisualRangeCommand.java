@@ -11,8 +11,8 @@ import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.WHITELIST_MANAGER;
-import static com.zenith.command.CommandOutputHelper.whitelistEntriesToString;
+import static com.zenith.Shared.PLAYER_LISTS;
+import static com.zenith.command.CommandOutputHelper.playerListEntriesToString;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
@@ -59,7 +59,7 @@ public class VisualRangeCommand extends Command {
             .then(literal("friend")
                       .then(literal("add").then(argument("player", string()).executes(c -> {
                           final String player = StringArgumentType.getString(c, "player");
-                          WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(player)
+                          PLAYER_LISTS.getFriendsList().add(player)
                               .ifPresentOrElse(e ->
                                                    c.getSource().getEmbedBuilder()
                                                        .title("Friend added"),
@@ -69,7 +69,7 @@ public class VisualRangeCommand extends Command {
                       })))
                       .then(literal("del").then(argument("player", string()).executes(c -> {
                           final String player = StringArgumentType.getString(c, "player");
-                          WHITELIST_MANAGER.removeFriendWhitelistEntryByUsername(player);
+                          PLAYER_LISTS.getFriendsList().remove(player);
                           c.getSource().getEmbedBuilder()
                               .title("Friend deleted");
                           return 1;
@@ -79,7 +79,7 @@ public class VisualRangeCommand extends Command {
                               .title("Friend list");
                       }))
                       .then(literal("clear").executes(c -> {
-                          WHITELIST_MANAGER.clearFriendWhitelist();
+                          PLAYER_LISTS.getFriendsList().clear();
                           c.getSource().getEmbedBuilder()
                               .title("Friend list cleared!");
                       })))
@@ -116,7 +116,7 @@ public class VisualRangeCommand extends Command {
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description("Friend List: \n " + whitelistEntriesToString(CONFIG.client.extra.friendsList))
+            .description("Friend List: \n " + playerListEntriesToString(CONFIG.client.extra.friendsList))
             .addField("VisualRange Alerts", toggleStr(CONFIG.client.extra.visualRangeAlert), false)
             .addField("Mentions", toggleStr(CONFIG.client.extra.visualRangeAlertMention), false)
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRangeIgnoreFriends), false)

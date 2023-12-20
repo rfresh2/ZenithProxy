@@ -22,7 +22,7 @@ public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSyste
             if (message.startsWith("<")) {
                 if (CONFIG.client.extra.chat.hideChat) {
                     return null;
-                } else if (WHITELIST_MANAGER.isPlayerIgnored(message.substring(message.indexOf("<") + 1, message.indexOf(">")))) {
+                } else if (PLAYER_LISTS.getIgnoreList().contains(message.substring(message.indexOf("<") + 1, message.indexOf(">")))) {
                     return null;
                 }
             }
@@ -31,7 +31,7 @@ public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSyste
             } else if (isWhisper(message)) {
                 if (CONFIG.client.extra.chat.hideWhispers) {
                     return null;
-                } else if (WHITELIST_MANAGER.isPlayerIgnored(message.substring(0, message.indexOf(" ")))) {
+                } else if (PLAYER_LISTS.getIgnoreList().contains(message.substring(0, message.indexOf(" ")))) {
                     return null;
                 }
             } else if (CONFIG.client.extra.chat.hideDeathMessages && isDeathMessage(component, message)) {

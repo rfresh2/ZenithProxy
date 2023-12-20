@@ -2,7 +2,7 @@ package com.zenith.command;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.google.common.collect.ImmutableMap;
-import com.zenith.feature.whitelist.WhitelistEntry;
+import com.zenith.feature.whitelist.PlayerEntry;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import discord4j.core.spec.EmbedCreateFields;
@@ -128,12 +128,12 @@ public class CommandOutputHelper {
     }
 
     // intended for use in embed descriptions
-    public static String whitelistEntriesToString(final List<WhitelistEntry> entries) {
+    public static String playerListEntriesToString(final List<PlayerEntry> entries) {
         if (entries.isEmpty()) return "Empty";
         var output = new StringBuilder();
         for (int i = 0; i < entries.size(); i++) {
             var entry = entries.get(i);
-            var line = "[" + entry.username + "](" + entry.getNameMCLink() + ")\n";
+            var line = "[" + entry.getUsername() + "](" + entry.getNameMCLink() + ")\n";
             if (output.length() + line.length() > 4000) { // 4096 max len + some buffer for more text before/after
                 output.append("and ").append(entries.size() - i).append(" more...");
                 break;

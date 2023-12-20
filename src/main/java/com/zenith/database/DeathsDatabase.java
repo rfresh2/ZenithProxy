@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.zenith.database.dto.tables.Deaths;
 import com.zenith.database.dto.tables.records.DeathsRecord;
 import com.zenith.event.Subscription;
@@ -8,7 +7,8 @@ import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
-import com.zenith.feature.whitelist.WhitelistEntry;
+import com.zenith.feature.whitelist.PlayerEntry;
+import com.zenith.feature.whitelist.PlayerList;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
@@ -62,7 +62,7 @@ public class DeathsDatabase extends LiveDatabase {
         try {
             final DSLContext context = DSL.using(SQLDialect.POSTGRES);
             final Deaths d = Deaths.DEATHS;
-            final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
+            final Optional<com.github.steveice10.mc.protocol.data.game.PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
             if (victimEntry.isEmpty()) {
                 DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
                 return;
@@ -75,7 +75,7 @@ public class DeathsDatabase extends LiveDatabase {
             if (deathMessageParseResult.getKiller().isPresent()) {
                 final Killer killer = deathMessageParseResult.getKiller().get();
                 if (killer.getType().equals(KillerType.PLAYER)) {
-                    final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
+                    final Optional<com.github.steveice10.mc.protocol.data.game.PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
                     if (killerEntry.isEmpty()) {
                         record
                                 .setKillerPlayerName(killerEntry.get().getName());
@@ -103,15 +103,15 @@ public class DeathsDatabase extends LiveDatabase {
         }
     }
 
-    private Optional<PlayerListEntry> getPlayerEntryFromNameWithFallback(final String username) {
-        Optional<PlayerListEntry> tablistEntry = CACHE.getTabListCache().getFromName(username);
+    private Optional<com.github.steveice10.mc.protocol.data.game.PlayerListEntry> getPlayerEntryFromNameWithFallback(final String username) {
+        Optional<com.github.steveice10.mc.protocol.data.game.PlayerListEntry> tablistEntry = CACHE.getTabListCache().getFromName(username);
         if (tablistEntry.isPresent()) {
             return tablistEntry;
         } else {
             // note: this doesn't actually add them to the whitelist, just using this as a convenience function
-            final Optional<WhitelistEntry> whitelistEntryFromUsername = WHITELIST_MANAGER.getWhitelistEntryFromUsername(username);
+            final Optional<PlayerEntry> whitelistEntryFromUsername = PlayerList.createPlayerListEntry(username);
             if (whitelistEntryFromUsername.isPresent()) {
-                return Optional.of(new PlayerListEntry(whitelistEntryFromUsername.get().username, whitelistEntryFromUsername.get().uuid));
+                return Optional.of(new com.github.steveice10.mc.protocol.data.game.PlayerListEntry(whitelistEntryFromUsername.get().getUsername(), whitelistEntryFromUsername.get().getUuid()));
             }
         }
         return Optional.empty();

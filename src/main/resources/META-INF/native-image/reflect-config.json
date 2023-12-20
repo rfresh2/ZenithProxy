@@ -1009,7 +1009,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.feature.whitelist.WhitelistEntry",
+  "name":"com.zenith.feature.whitelist.PlayerEntry",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },

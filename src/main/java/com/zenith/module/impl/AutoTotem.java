@@ -25,7 +25,7 @@ public class AutoTotem extends Module {
     private int delay = 0;
     private static final int MOVEMENT_PRIORITY = 1000;
 
-    public boolean isActive() {
+    public boolean isActivelySwapping() {
         return CONFIG.client.extra.autoTotem.enabled && swapping;
     }
 

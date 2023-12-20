@@ -136,9 +136,6 @@ public class Proxy {
                 }
                 if (!err) DISCORD_LOG.info("Started Discord Bot");
             }
-            if (CONFIG.server.extra.whitelist.whitelistRefresh) {
-                WHITELIST_MANAGER.startRefreshTask();
-            }
             MODULE_MANAGER.init();
             Queue.start();
             saveConfigAsync();
@@ -503,6 +500,14 @@ public class Proxy {
             saveConfigAsync();
             CLIENT_LOG.info("Prio Ban Change Detected: " + this.isPrioBanned.get());
         }
+    }
+
+    public void kickNonWhitelistedPlayers() {
+        Proxy.getInstance().getActiveConnections().stream()
+            .filter(con -> nonNull(con.getProfileCache().getProfile()))
+            .filter(con -> !PLAYER_LISTS.getWhitelist().contains(con.getProfileCache().getProfile()))
+            .filter(con -> !(PLAYER_LISTS.getSpectatorWhitelist().contains(con.getProfileCache().getProfile()) && con.isSpectator()))
+            .forEach(con -> con.disconnect("Not whitelisted"));
     }
 
     private void handleActiveHoursTick() {

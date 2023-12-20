@@ -37,7 +37,7 @@ import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
 import com.zenith.feature.prioban.PriorityBanChecker;
 import com.zenith.feature.tps.TPSCalculator;
-import com.zenith.feature.whitelist.WhitelistManager;
+import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.module.ModuleManager;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.client.handler.incoming.*;
@@ -130,7 +130,7 @@ public class Shared {
     public static final DiscordBot DISCORD_BOT;
     public static final SimpleEventBus EVENT_BUS;
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
-    public static final WhitelistManager WHITELIST_MANAGER;
+    public static final PlayerListsManager PLAYER_LISTS;
     public static final PriorityBanChecker PRIORITY_BAN_CHECKER;
     public static final BlockDataManager BLOCK_DATA_MANAGER;
     public static final DatabaseManager DATABASE_MANAGER;
@@ -314,6 +314,7 @@ public class Shared {
 
             CONFIG = config.doPostLoad();
             SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
+            PLAYER_LISTS.init();
             DEFAULT_LOG.info("Config loaded.");
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to load config!", e);
@@ -409,7 +410,7 @@ public class Shared {
                 .setDaemon(true)
                 .build()));
             CACHE = new DataCache();
-            WHITELIST_MANAGER = new WhitelistManager();
+            PLAYER_LISTS = new PlayerListsManager();
             PRIORITY_BAN_CHECKER = new PriorityBanChecker();
             BLOCK_DATA_MANAGER = new BlockDataManager();
             DATABASE_MANAGER = new DatabaseManager();

@@ -1,7 +1,7 @@
 package com.zenith.util;
 
 import com.google.gson.annotations.SerializedName;
-import com.zenith.feature.whitelist.WhitelistEntry;
+import com.zenith.feature.whitelist.PlayerEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public final class Config {
             public boolean visualRangePositionTracking = false;
             public boolean visualRangeLeftAlert = true;
             public boolean visualRangeLeftLogoutAlert = true;
-            public List<WhitelistEntry> friendsList = new ArrayList<>();
+            public ArrayList<PlayerEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
             public boolean prioBan2b2tCheck = true;
@@ -86,7 +86,7 @@ public final class Config {
             public ActionLimiter actionLimiter = new ActionLimiter();
 
             public static final class Chat {
-                public List<WhitelistEntry> ignoreList = new ArrayList<>();
+                public ArrayList<PlayerEntry> ignoreList = new ArrayList<>();
                 public boolean hideChat = false;
                 public boolean hideWhispers = false;
                 public boolean hideDeathMessages = false;
@@ -126,7 +126,7 @@ public final class Config {
 
             public static final class Stalk {
                 public boolean enabled = false;
-                public List<String> stalkList = new ArrayList<>();
+                public ArrayList<PlayerEntry> stalking = new ArrayList<>();
             }
 
             public static final class AutoFish {
@@ -317,7 +317,7 @@ public final class Config {
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
         public boolean healthCheck = true;
-
+        public long playerListsRefreshIntervalMins = 1440L; // one day as default
 
         public Spectator spectator = new Spectator();
 
@@ -328,7 +328,7 @@ public final class Config {
             // skin shown in-game for spectators
             public UUID spectatorUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
-            public List<WhitelistEntry> whitelist = new ArrayList<>();
+            public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
             // todo: log spectator chats to discord relay and terminal
             //  both from spectators and to spectators from controlling player
             public boolean logSpectatorChats = false;
@@ -346,9 +346,7 @@ public final class Config {
 
             public static final class Whitelist {
                 public boolean enable = true;
-                public List<WhitelistEntry> whitelist = new ArrayList<>();
-                public boolean whitelistRefresh = true;
-                public long whitelistRefreshIntervalMins = 1440L; // one day as default
+                public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
                 public String kickmsg = "no whitelist?";
             }
 
