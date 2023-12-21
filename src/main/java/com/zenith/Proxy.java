@@ -301,6 +301,9 @@ public class Proxy {
             if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20.getVersion()) {
                 CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20, connecting without ViaVersion");
                 this.client.connect(true);
+            } else if (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org")) {
+                CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
+                this.client.connect(true);
             } else {
                 ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
                 final ZViaServerProxyPlatform viaProxy = new ZViaServerProxyPlatform(this.client);
