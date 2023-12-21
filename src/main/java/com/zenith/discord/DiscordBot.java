@@ -602,8 +602,8 @@ public class DiscordBot {
         boolean sus = event.reason().startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
         sendEmbedMessage((sus ? MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId)) : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
-                .addField("Reason", event.reason(), true)
-                .addField("Online Duration", formatDuration(event.onlineDuration()), true)
+                .addField("Reason", event.reason(), false)
+                .addField("Online Duration", formatDuration(event.onlineDuration()), false)
                 .color(Color.RUBY)
                 .build());
         SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
