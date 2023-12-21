@@ -1344,15 +1344,15 @@
   "name":"com.zenith.via.handler.ZViaClientViaCodecHandler"
 },
 {
-  "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
-},
-{
   "name":"com.zenith.via.handler.ZViaDecodeHandler",
   "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
   "name":"com.zenith.via.handler.ZViaEncodeHandler",
   "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
+},
+{
+  "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
 },
 {
   "name":"fr.litarvan.openauth.microsoft.model.request.MinecraftLoginRequest",
@@ -2778,6 +2778,12 @@
 },
 {
   "name":"org.jooq.impl.SQLDataType"
+},
+{
+  "name":"org.jooq.impl.SQLDataTypes$DuckDBDataType"
+},
+{
+  "name":"org.jooq.impl.SQLDataTypes$TrinoDataType"
 },
 {
   "name":"org.jooq.util.cubrid.CUBRIDDataType"
