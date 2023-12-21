@@ -21,6 +21,6 @@ public class PingTest {
 //    @Test
     public void twob2tPing() {
         // testing ping srv dns resolver
-        assertEquals(ProtocolVersionDetector.getProtocolVersion("2b2t.org", 25565), 763);
+        assertEquals(ProtocolVersionDetector.getProtocolVersion("2b2t.org", 25565), 765);
     }
 }

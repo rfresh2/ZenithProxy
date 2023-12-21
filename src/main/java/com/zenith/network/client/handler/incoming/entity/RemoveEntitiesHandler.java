@@ -20,11 +20,11 @@ public class RemoveEntitiesHandler implements AsyncPacketHandler<ClientboundRemo
                     final Entity entity = CACHE.getEntityCache().get(id);
                     if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSelfPlayer()) {
                         CACHE.getTabListCache().get(entity.getUuid()).ifPresentOrElse(playerEntry -> {
-                            if (!WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
+                            if (!PLAYER_LISTS.getFriendsList().contains(playerEntry.getProfileId())) {
                                 CLIENT_LOG.info("Tracking Leave {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
                             }
                         }, () -> { // might happen if the player logs out while in visual range and tablist packet is processed first
-                            if (!WHITELIST_MANAGER.isUUIDFriendWhitelisted(entity.getUuid())) {
+                            if (!PLAYER_LISTS.getFriendsList().contains(entity.getUuid())) {
                                 CLIENT_LOG.info("Tracking Logout Leave {}: {}, {}. {}", entity.getUuid().toString(), entity.getX(), entity.getY(), entity.getZ());
                             }
                         });

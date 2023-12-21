@@ -8,7 +8,7 @@ import java.util.Map;
 import static com.zenith.Shared.CONFIG;
 
 // todo: might not need this
-public class MCProxyProtocolDetectorService extends AbstractProtocolDetectorService {
+public class ZViaProtocolDetectorService extends AbstractProtocolDetectorService {
     @Override
     protected Map<String, Integer> configuredServers() {
         final Map<String, Integer> map = Maps.newHashMap();

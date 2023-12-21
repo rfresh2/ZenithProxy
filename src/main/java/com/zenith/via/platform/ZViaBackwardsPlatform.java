@@ -8,8 +8,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.logging.Logger;
 
-public class MCProxyViaBackwardsPlatform implements ViaBackwardsPlatform {
+public class ZViaBackwardsPlatform implements ViaBackwardsPlatform {
     private java.util.logging.Logger logger = new LoggerWrapper(LoggerFactory.getLogger("ViaBackwards"));
+    private final File configDirectory;
+
+    public ZViaBackwardsPlatform(final File configDirectory) {
+        this.configDirectory = configDirectory;
+    }
 
     public void initViaBackwards() {
         Via.getManager().addEnableListener(() -> this.init(getDataFolder()));
@@ -27,6 +32,6 @@ public class MCProxyViaBackwardsPlatform implements ViaBackwardsPlatform {
 
     @Override
     public File getDataFolder() {
-        return new File("via/");
+        return configDirectory;
     }
 }

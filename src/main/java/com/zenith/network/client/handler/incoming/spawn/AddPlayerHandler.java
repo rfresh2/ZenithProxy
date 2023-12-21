@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
+import com.zenith.feature.whitelist.PlayerList;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
@@ -33,11 +34,11 @@ public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayer
                 // may occur at login if this packet is received before the tablist is populated
                 // this function performs a mojang api call so it will take awhile
                 // alternate solution would be to just wait another tick or so for the tablist to be populated
-                WHITELIST_MANAGER.getWhitelistEntryFromUUID(packet.getUuid())
-                    .map(entry -> new PlayerListEntry(entry.username, entry.uuid))
+                PlayerList.createPlayerListEntry(packet.getUuid())
+                    .map(entry -> new PlayerListEntry(entry.getUsername(), entry.getUuid()))
                     .orElseGet(() -> new PlayerListEntry("", packet.getUuid())));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));
-        if (CONFIG.client.extra.visualRangePositionTracking && !WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
+        if (CONFIG.client.extra.visualRangePositionTracking && !PLAYER_LISTS.getFriendsList().contains(playerEntry.getProfileId())) {
             CLIENT_LOG.info("Tracking Spawn {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
         }
         return true;

@@ -11,6 +11,8 @@ import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.PLAYER_LISTS;
+import static com.zenith.command.CommandOutputHelper.playerListToString;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
@@ -42,16 +44,16 @@ public class StalkCommand extends Command {
             }))
             .then(literal("add").then(argument("player", string()).executes(c -> {
                 final String player = StringArgumentType.getString(c, "player");
-                if (!CONFIG.client.extra.stalk.stalkList.contains(player)) {
-                    CONFIG.client.extra.stalk.stalkList.add(player);
-                }
-                c.getSource().getEmbedBuilder()
-                    .title("Added player: " + escape(player) + " To Stalk List");
+                PLAYER_LISTS.getStalkList().add(player).ifPresentOrElse(e ->
+                    c.getSource().getEmbedBuilder()
+                            .title("Added player: " + escape(e.getUsername()) + " To Stalk List"),
+                        () -> c.getSource().getEmbedBuilder()
+                            .title("Failed to add player: " + escape(player) + " to stalk list. Unable to lookup profile."));
                 return 1;
             })))
             .then(literal("del").then(argument("player", string()).executes(c -> {
                 final String player = StringArgumentType.getString(c, "player");
-                CONFIG.client.extra.stalk.stalkList.removeIf(s -> s.equalsIgnoreCase(player));
+                PLAYER_LISTS.getStalkList().remove(player);
                 c.getSource().getEmbedBuilder()
                     .title("Removed player: " + escape(player) + " From Stalk List");
                 return 1;
@@ -62,10 +64,7 @@ public class StalkCommand extends Command {
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
             .addField("Stalk", toggleStr(CONFIG.client.extra.stalk.enabled), false)
-            .addField("List", (CONFIG.client.extra.stalk.stalkList.isEmpty()
-                          ? "Stalk list is empty"
-                          : escape(String.join(", ", CONFIG.client.extra.stalk.stalkList))),
-                      false)
+            .description("**Stalk List**\n" + playerListToString(PLAYER_LISTS.getStalkList()))
             .color(Color.CYAN);
     }
 }

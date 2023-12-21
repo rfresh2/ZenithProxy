@@ -5,14 +5,22 @@ import os
 import ssl
 from urllib.parse import urlparse
 
-with open("launch_config.json", "r") as f:
-    launch_config = json.load(f)
+try:
+    with open("launch_config.json", "r") as f:
+        launch_config = json.load(f)
+        release_channel = launch_config["release_channel"]
+        auto_update_launcher = launch_config["auto_update_launcher"]
+        repo_owner = launch_config["repo_owner"]
+        repo_name = launch_config["repo_name"]
+        version = launch_config["version"]
+except FileNotFoundError:
+    print("launch_config.json not found.")
+    auto_update_launcher = True
+    release_channel = "java.1.20.1"
+    version = "0.0.0"
+    repo_owner = "rfresh2"
+    repo_name = "ZenithProxy"
 
-release_channel = launch_config["release_channel"]
-auto_update_launcher = launch_config["auto_update_launcher"]
-repo_owner = launch_config["repo_owner"]
-repo_name = launch_config["repo_name"]
-version = launch_config["version"]
 launcher_tag = "launcher"
 
 if not auto_update_launcher or release_channel == "git":

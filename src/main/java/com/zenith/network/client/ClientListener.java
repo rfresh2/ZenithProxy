@@ -15,6 +15,10 @@ import com.zenith.util.ComponentSerializer;
 import lombok.Getter;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 import static com.zenith.Shared.CLIENT_LOG;
@@ -102,7 +106,10 @@ public class ClientListener implements SessionListener {
             reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serialize(reason);
         }
         CLIENT_LOG.info("Disconnected: " + reasonStr);
-        EVENT_BUS.post(new DisconnectEvent(reasonStr));
+        var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());
+        var disconnectTime = Instant.now();
+        var onlineDuration = Duration.between(connectTime, disconnectTime);
+        EVENT_BUS.post(new DisconnectEvent(reasonStr, onlineDuration));
     }
 
 }

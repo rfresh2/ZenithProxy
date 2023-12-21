@@ -57,6 +57,9 @@
   "name":"[Lcom.zenith.feature.queue.mcping.rawData.Extra;"
 },
 {
+  "name":"[Lcom.zenith.feature.queue.mcping.rawData.ForgeDataListItem;"
+},
+{
   "name":"[Lfr.litarvan.openauth.microsoft.model.response.MinecraftProfile$MinecraftSkin;"
 },
 {
@@ -850,7 +853,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime"] }]
+  "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.time.OffsetDateTime"] }]
 },
 {
   "name":"com.zenith.feature.api.model.StatsResponse",
@@ -951,7 +954,17 @@
   "allDeclaredFields":true
 },
 {
+  "name":"com.zenith.feature.queue.mcping.data.NewResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.queue.mcping.data.OldResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.Description",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -962,6 +975,21 @@
 },
 {
   "name":"com.zenith.feature.queue.mcping.rawData.ExtraDescription",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ForgeData",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ForgeDataListItem",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ModpackData",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -981,7 +1009,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.feature.whitelist.WhitelistEntry",
+  "name":"com.zenith.feature.whitelist.PlayerEntry",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -1313,18 +1341,18 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.via.handler.MCProxyClientViaCodecHandler"
+  "name":"com.zenith.via.handler.ZViaClientViaCodecHandler"
 },
 {
-  "name":"com.zenith.via.handler.MCProxyViaChannelInitializer"
-},
-{
-  "name":"com.zenith.via.handler.MCProxyViaDecodeHandler",
+  "name":"com.zenith.via.handler.ZViaDecodeHandler",
   "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
-  "name":"com.zenith.via.handler.MCProxyViaEncodeHandler",
+  "name":"com.zenith.via.handler.ZViaEncodeHandler",
   "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
+},
+{
+  "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
 },
 {
   "name":"fr.litarvan.openauth.microsoft.model.request.MinecraftLoginRequest",
@@ -1905,6 +1933,10 @@
 },
 {
   "name":"java.time.ZonedDateTime"
+},
+{
+  "name":"java.util.ArrayList",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"java.util.Date"
@@ -2746,6 +2778,12 @@
 },
 {
   "name":"org.jooq.impl.SQLDataType"
+},
+{
+  "name":"org.jooq.impl.SQLDataTypes$DuckDBDataType"
+},
+{
+  "name":"org.jooq.impl.SQLDataTypes$TrinoDataType"
 },
 {
   "name":"org.jooq.util.cubrid.CUBRIDDataType"

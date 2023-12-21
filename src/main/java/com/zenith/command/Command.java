@@ -4,6 +4,7 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.zenith.Proxy;
 import com.zenith.network.server.ServerConnection;
@@ -13,8 +14,8 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
+import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.zenith.Shared.*;
@@ -87,7 +88,7 @@ public abstract class Command {
         return CaseInsensitiveLiteralArgumentBuilder.literal(literal);
     }
 
-    public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal, Function<CommandContext, Void> errorHandler) {
+    public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal, CommandErrorHandler errorHandler) {
         return literal(literal).withErrorHandler(errorHandler);
     }
 
@@ -119,11 +120,8 @@ public abstract class Command {
 
     public CaseInsensitiveLiteralArgumentBuilder<CommandContext> command(String literal) {
         return literal(literal)
-            .withErrorHandler(this::usageErrorHandler)
-            .withSuccesshandler((context) -> {
-                postPopulate(context.getEmbedBuilder());
-                return null;
-            });
+            .withErrorHandler(this::commandErrorHandler)
+            .withSuccesshandler(this::commandSuccessHandler);
     }
 
     /**
@@ -142,12 +140,19 @@ public abstract class Command {
         return builder;
     }
 
-    public Void usageErrorHandler(final CommandContext context) {
+    public void commandSuccessHandler(CommandContext context) {
+        postPopulate(context.getEmbedBuilder());
+    }
+
+    public void commandErrorHandler(Map<CommandNode<CommandContext>, CommandSyntaxException> exceptions, CommandContext context) {
+        exceptions.values().stream()
+            .findFirst()
+            .ifPresent(exception -> context.getEmbedBuilder()
+                .addField("Error", exception.getMessage(), true));
         postPopulate(context.getEmbedBuilder());
         context.getEmbedBuilder()
                 .title("Invalid command usage")
-                .addField("Usage", commandUsage().serialize(context.getCommandSource()), false)
+                .addField("Usage", commandUsage().serialize(context.getCommandSource()), true)
                 .color(Color.RUBY);
-        return null;
     }
 }

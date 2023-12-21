@@ -4,7 +4,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.zenith.Shared;
 import com.zenith.feature.queue.mcping.data.*;
+import com.zenith.feature.queue.mcping.rawData.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.AddressedEnvelope;
 import io.netty.channel.EventLoopGroup;
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.zenith.Shared.CLIENT_LOG;
 
@@ -26,7 +30,9 @@ public class MCPing {
      * If the client is pinging to determine what version to use, by convention -1 should be set.
      */
     public static final int PROTOCOL_VERSION_DISCOVERY = -1;
-    private static final Gson GSON = new GsonBuilder().setLenient().create();
+    private static final Gson GSON = new GsonBuilder()
+        .setLenient()
+        .create();
     private static final String IP_REGEX = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b";
     private static final EventLoopGroup EVENT_LOOP_GROUP = new NioEventLoopGroup(1, new ThreadFactoryBuilder().setNameFormat("MCPing-%d").build());
     private static final Class<NioDatagramChannel> DATAGRAM_CHANNEL_CLASS = NioDatagramChannel.class;
@@ -44,6 +50,9 @@ public class MCPing {
         try {
             if (json != null) {
                 if (json.contains("{")) {
+                    if (options.getHostname().endsWith("2b2t.org")) { // wtfbbq
+                        return parse2b2t(json);
+                    }
                     if (json.contains("\"modid\"") && json.contains("\"translate\"")) { //it's a forge response translate
                         ForgeResponseTranslate forgeResponseTranslate = GSON.fromJson(json, ForgeResponseTranslate.class);
                         return new ResponseDetails(forgeResponseTranslate.toFinalResponse(), forgeResponseTranslate, null, null, null, null, null, json);
@@ -144,6 +153,61 @@ public class MCPing {
             this.response = response;
             this.oldResponse = oldResponse;
             this.json = json;
+        }
+    }
+
+    public ResponseDetails parse2b2t(final String json) {
+        try {
+            var jsonTree = Shared.OBJECT_MAPPER.readTree(json);
+            var versionNode = jsonTree.get("version");
+            var protocol = versionNode.get("protocol").asInt();
+            var versionName = versionNode.get("name").asText();
+            var version = new Version();
+            version.setName(versionName);
+            version.setProtocol(protocol);
+            var playersNode = jsonTree.get("players");
+            var online = playersNode.get("online").asInt();
+            var max = playersNode.get("max").asInt();
+            var sampleNode = playersNode.get("sample");
+            var inGameNode = sampleNode.get(0);
+            var inGame = inGameNode.get("name").asText();
+            var regularQNode = sampleNode.get(1);
+            var regularQName = regularQNode.get("name").asText();
+            var prioQNode = sampleNode.get(2);
+            var prioQName = prioQNode.get("name").asText();
+            var sample = new ArrayList<Player>();
+            sample.add(new Player(inGame, ""));
+            sample.add(new Player(regularQName, ""));
+            sample.add(new Player(prioQName, ""));
+            var players = new Players();
+            players.setMax(max);
+            players.setOnline(online);
+            players.setSample(sample);
+
+            var descriptionNode = jsonTree.get("description");
+            var descriptionExtraNode = descriptionNode.withArrayProperty("extra");
+            final List<Extra> extras = new ArrayList<>();
+            descriptionExtraNode.forEach(node -> {
+                if (node.isObject()) {
+                    var extra = new Extra();
+                    extra.setColor(node.get("color").asText());
+                    extra.setText(node.get("text").asText());
+                    extras.add(extra);
+                }
+            });
+            var description = new ExtraDescription();
+            description.setText(descriptionNode.get("text").asText());
+            description.setExtra(extras.toArray(new Extra[0]));
+            var favicon = jsonTree.get("favicon").asText();
+            var extraResponse = new ExtraResponse();
+            extraResponse.setVersion(version);
+            extraResponse.setPlayers(players);
+            extraResponse.setDescription(description);
+            extraResponse.setFavicon(favicon);
+
+            return new ResponseDetails(extraResponse.toFinalResponse(), null, null, null, extraResponse, null, null, json);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

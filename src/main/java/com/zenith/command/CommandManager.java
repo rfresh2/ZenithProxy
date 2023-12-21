@@ -6,7 +6,8 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.command.impl.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectCollection;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import static java.util.Arrays.asList;
 
 @Getter
 public class CommandManager {
-    private final Object2ObjectOpenHashMap<Class<? extends Command>, Command> commandsClassMap = new Object2ObjectOpenHashMap<>();
+    private final Reference2ObjectOpenHashMap<Class<? extends Command>, Command> commandsClassMap = new Reference2ObjectOpenHashMap<>();
     private final CommandDispatcher<CommandContext> dispatcher;
 
     public CommandManager() {
@@ -88,8 +89,8 @@ public class CommandManager {
         return (T) commandsClassMap.get(clazz);
     }
 
-    public List<Command> getCommands() {
-        return commandsClassMap.values().stream().toList();
+    public ObjectCollection<Command> getCommands() {
+        return commandsClassMap.values();
     }
 
     public List<Command> getCommands(final CommandCategory category) {
@@ -118,7 +119,7 @@ public class CommandManager {
     private String downcaseFirstWord(final String sentence) {
         List<String> words = asList(sentence.split(" "));
         if (words.size() > 1) {
-            return words.get(0).toLowerCase() + words.stream().skip(1).collect(Collectors.joining(" ", " ", ""));
+            return words.getFirst().toLowerCase() + words.stream().skip(1).collect(Collectors.joining(" ", " ", ""));
         } else {
             return sentence.toLowerCase();
         }
@@ -135,13 +136,13 @@ public class CommandManager {
         var errorHandler = commandNodeOptional.flatMap(CaseInsensitiveLiteralCommandNode::getErrorHandler);
         var successHandler = commandNodeOptional.flatMap(CaseInsensitiveLiteralCommandNode::getSuccessHandler);
 
-        if (parse.getReader().canRead()) {
-            errorHandler.ifPresent(handler -> handler.apply(context));
+        if (!parse.getExceptions().isEmpty() || parse.getReader().canRead()) {
+            errorHandler.ifPresent(handler -> handler.handle(parse.getExceptions(), context));
             return -1;
         }
         dispatcher.setConsumer((commandContext, success, result) -> {
-            if (success) successHandler.ifPresent(handler -> handler.apply(context));
-            else errorHandler.ifPresent(handler -> handler.apply(context));
+            if (success) successHandler.ifPresent(handler -> handler.handle(context));
+            else errorHandler.ifPresent(handler -> handler.handle(parse.getExceptions(), context));
         });
 
         return dispatcher.execute(parse);

@@ -19,15 +19,8 @@ public class VcApiTests {
     }
 
 //    @Test
-    public void lastSeen() {
-        SeenResponse seenResponse = api.getLastSeen("rfresh2").get();
-        assertNotNull(seenResponse);
-        System.out.println(seenResponse);
-    }
-
-//    @Test
-    public void firstSeen() {
-        SeenResponse seenResponse = api.getFirstSeen("rfresh2").get();
+    public void seen() {
+        SeenResponse seenResponse = api.getSeen("rfresh2").get();
         assertNotNull(seenResponse);
         System.out.println(seenResponse);
     }

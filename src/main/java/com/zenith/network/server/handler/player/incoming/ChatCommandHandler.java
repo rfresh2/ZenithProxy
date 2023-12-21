@@ -18,7 +18,7 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
             case "ignorelist" -> {
                 CONFIG.client.extra.chat.ignoreList.forEach(s -> session.send(new ClientboundSystemChatPacket(
                     ComponentSerializer.mineDownParse(
-                    "&c" + s.username), true)));
+                    "&c" + s.getUsername()), true)));
                 yield null;
             }
             case "ignoredeathmsgs" -> {
@@ -29,13 +29,13 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
                 String[] split = command.split(" ");
                 if (split.length == 2) {
                     final String player = split[1];
-                    if (WHITELIST_MANAGER.isPlayerIgnored(player)) {
-                        WHITELIST_MANAGER.removeIgnoreWhitelistEntryByUsername(player);
+                    if (PLAYER_LISTS.getIgnoreList().contains(player)) {
+                        PLAYER_LISTS.getIgnoreList().remove(player);
                         session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &cRemoved " + player + " from ignore list"), false));
                         yield null;
                     }
-                    WHITELIST_MANAGER.addIgnoreWhitelistEntryByUsername(player).ifPresentOrElse(
-                        ignoreEntry -> session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &cAdded " + ignoreEntry.username + " to ignore list"), false)),
+                    PLAYER_LISTS.getIgnoreList().add(player).ifPresentOrElse(
+                        ignoreEntry -> session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &cAdded " + ignoreEntry.getUsername() + " to ignore list"), false)),
                         () -> session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &cFailed to add " + player + " to ignore list"), false))
                     );
                 } else {

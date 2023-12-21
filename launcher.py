@@ -11,7 +11,7 @@ import zipfile
 
 auto_update = True
 auto_update_launcher = True
-release_channel = "java"
+release_channel = "java.1.20.1"
 version = "0.0.0"
 local_version = "0.0.0"
 repo_owner = "rfresh2"

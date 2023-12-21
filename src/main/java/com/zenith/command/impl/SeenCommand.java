@@ -5,11 +5,11 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import com.zenith.feature.api.model.SeenResponse;
 import discord4j.rest.util.Color;
 
+import javax.annotation.Nullable;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 import static com.zenith.Shared.VC_API;
 import static com.zenith.command.CustomStringArgumentType.getString;
@@ -36,9 +36,8 @@ public class SeenCommand extends Command {
         return command("seen")
             .then(argument("playerName", wordWithChars()).executes(c -> {
                 final String playerName = getString(c, "playerName");
-                Optional<SeenResponse> firstSeen = VC_API.getFirstSeen(playerName);
-                Optional<SeenResponse> lastSeen = VC_API.getLastSeen(playerName);
-                if (firstSeen.isEmpty() && lastSeen.isEmpty()) {
+                var seenResponse = VC_API.getSeen(playerName);
+                if (seenResponse.isEmpty()) {
                     c.getSource().getEmbedBuilder()
                         .title(escape(playerName) + " not found")
                         .color(Color.RUBY);
@@ -47,11 +46,14 @@ public class SeenCommand extends Command {
                 c.getSource().getEmbedBuilder()
                     .title("Seen: " + escape(playerName))
                     .color(Color.CYAN);
-                firstSeen.ifPresent((response) -> c.getSource().getEmbedBuilder()
-                    .addField("First Seen", response.time().format(formatter), false));
-                lastSeen.ifPresent((response) -> c.getSource().getEmbedBuilder()
-                    .addField("Last Seen", response.time().format(formatter), false));
+                seenResponse.ifPresent((response) -> c.getSource().getEmbedBuilder()
+                    .addField("First Seen", getSeenString(response.firstSeen()), false)
+                    .addField("Last Seen", getSeenString(response.lastSeen()), false));
                 return 1;
             }));
+    }
+
+    private String getSeenString(@Nullable final OffsetDateTime time) {
+        return time != null ? time.format(formatter) : "Never";
     }
 }

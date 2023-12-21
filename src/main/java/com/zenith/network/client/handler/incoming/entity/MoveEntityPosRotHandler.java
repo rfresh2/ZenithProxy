@@ -13,7 +13,7 @@ public class MoveEntityPosRotHandler implements AsyncPacketHandler<ClientboundMo
     public static void trackPlayerVisualRangePosition(final Entity entity) {
         if (CONFIG.client.extra.visualRangePositionTracking && entity instanceof EntityPlayer && !((EntityPlayer) entity).isSelfPlayer()) {
             CACHE.getTabListCache().get(entity.getUuid()).ifPresent(playerEntry -> {
-                if (!WHITELIST_MANAGER.isUUIDFriendWhitelisted(playerEntry.getProfileId())) {
+                if (!PLAYER_LISTS.getFriendsList().contains(playerEntry.getProfileId())) {
                     CLIENT_LOG.info("Tracking {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
                 }
             });

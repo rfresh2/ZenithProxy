@@ -4,12 +4,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CaseInsensitiveLiteralArgumentBuilder<S> extends LiteralArgumentBuilder<S> {
-    private Function<CommandContext, Void> errorHandler;
-    private Function<CommandContext, Void> successHandler;
+    private CommandErrorHandler errorHandler;
+    private CommandSuccessHandler successHandler;
 
     protected CaseInsensitiveLiteralArgumentBuilder(String literal) {
         super(literal);
@@ -19,17 +18,17 @@ public class CaseInsensitiveLiteralArgumentBuilder<S> extends LiteralArgumentBui
         return new CaseInsensitiveLiteralArgumentBuilder<>(name);
     }
 
-    public static <S> CaseInsensitiveLiteralArgumentBuilder<S> literal(final String name, Function<CommandContext, Void> errorHandler) {
+    public static <S> CaseInsensitiveLiteralArgumentBuilder<S> literal(final String name, CommandErrorHandler errorHandler) {
         final CaseInsensitiveLiteralArgumentBuilder<S> builder = literal(name);
         return builder.withErrorHandler(errorHandler);
     }
 
-    public CaseInsensitiveLiteralArgumentBuilder<S> withErrorHandler(Function<CommandContext, Void> errorHandler) {
+    public CaseInsensitiveLiteralArgumentBuilder<S> withErrorHandler(CommandErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
         return this;
     }
 
-    public CaseInsensitiveLiteralArgumentBuilder<S> withSuccesshandler(Function<CommandContext, Void> successHandler) {
+    public CaseInsensitiveLiteralArgumentBuilder<S> withSuccesshandler(CommandSuccessHandler successHandler) {
         this.successHandler = successHandler;
         return this;
     }

@@ -22,8 +22,8 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 session.disconnect("Failed to Login");
                 return null;
             }
-            if (CONFIG.server.extra.whitelist.enable && !WHITELIST_MANAGER.isProfileWhitelisted(clientGameProfile)) {
-                if (CONFIG.server.spectator.allowSpectator && WHITELIST_MANAGER.isProfileSpectatorWhitelisted(clientGameProfile)) {
+            if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
+                if (CONFIG.server.spectator.allowSpectator && PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
                     session.setOnlySpectator(true);
                 } else {
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);

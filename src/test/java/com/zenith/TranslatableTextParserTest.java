@@ -13,6 +13,8 @@ public class TranslatableTextParserTest {
 
     @Test
     public void translatableTextComponentParseTest() {
+        Shared.loadConfig();
+        Shared.loadLaunchConfig();
         Logger blah = Shared.CLIENT_LOG; // init in shared static block
         final String chatText = "{\"translate\":\"chat.type.text\",\"with\":[{\"text\":\"bonk2b2t\"},{\"text\":\"you should never talk about that with them\"}]}";
         Component deserialize = ComponentSerializer.deserialize(chatText);

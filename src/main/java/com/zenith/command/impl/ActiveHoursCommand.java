@@ -28,7 +28,7 @@ public class ActiveHoursCommand extends Command {
             "activeHours",
             CommandCategory.MODULE,
             "Set active hours for the proxy to automatically be logged in at."
-                        + "\n Time zone Ids (\"TZ database name\" column): https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+                        + "\n Time zone Ids (\"TZ identifier\" column): https://w.wiki/8Yif"
                         + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
             asList("on/off",
                         "timezone <timezone ID>",

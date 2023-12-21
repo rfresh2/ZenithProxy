@@ -68,7 +68,7 @@ public class MathHelper {
         if (duration.toDaysPart() > 0) sb.append(duration.toDaysPart()).append("d ");
         if (duration.toHoursPart() > 0) sb.append(duration.toHoursPart()).append("h ");
         if (duration.toMinutesPart() > 0) sb.append(duration.toMinutesPart()).append("m ");
-        sb.append(duration.toSecondsPart()).append("s");
-        return sb.toString();
+        if (duration.toSecondsPart() > 0 || sb.isEmpty()) sb.append(duration.toSecondsPart()).append("s");
+        return sb.toString().trim();
     }
 }

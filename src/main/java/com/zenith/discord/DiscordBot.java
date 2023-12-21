@@ -2,7 +2,6 @@ package com.zenith.discord;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.google.common.base.Suppliers;
 import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandOutputHelper;
@@ -27,11 +26,15 @@ import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
+import discord4j.core.spec.ApplicationEditSpec;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.UserEditSpec;
 import discord4j.core.util.MentionUtil;
 import discord4j.discordjson.Id;
-import discord4j.discordjson.json.*;
+import discord4j.discordjson.json.EmbedData;
+import discord4j.discordjson.json.MessageCreateRequest;
+import discord4j.discordjson.json.MessageData;
 import discord4j.discordjson.possible.Possible;
 import discord4j.gateway.GatewayReactorResources;
 import discord4j.gateway.intent.Intent;
@@ -40,6 +43,7 @@ import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
 import discord4j.rest.request.RouterOptions;
 import discord4j.rest.util.Color;
+import discord4j.rest.util.Image;
 import discord4j.rest.util.MultipartRequest;
 import lombok.Getter;
 import org.reactivestreams.Publisher;
@@ -66,6 +70,8 @@ import static java.util.Objects.nonNull;
 
 public class DiscordBot {
 
+    public static final ClientPresence autoReconnectingPresence = ClientPresence.of(Status.IDLE, ClientActivity.custom(
+        "AutoReconnecting..."));
     private RestClient restClient;
     private RestChannel mainRestChannel;
     private RestChannel relayRestChannel;
@@ -73,8 +79,8 @@ public class DiscordBot {
     // Main channel discord message FIFO queue
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> mainChannelMessageQueue;
     private final ConcurrentLinkedQueue<MultipartRequest<MessageCreateRequest>> relayChannelMessageQueue;
-    private final Supplier<ClientPresence> disconnectedPresence = Suppliers.memoize(() -> ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.custom(
-        "Disconnected")));
+    private final ClientPresence disconnectedPresence = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.custom(
+        "Disconnected"));
     private final Supplier<ClientPresence> defaultConnectedPresence = () -> ClientPresence.of(Status.ONLINE, ClientActivity.custom(
         (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
     public Optional<Instant> lastRelaymessage = Optional.empty();
@@ -147,7 +153,7 @@ public class DiscordBot {
         this.client = discordClient.gateway()
                 .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
                 .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
-                .setInitialPresence(shardInfo -> disconnectedPresence.get())
+                .setInitialPresence(shardInfo -> disconnectedPresence)
                 .login()
                 .block();
         restClient = client.getRestClient();
@@ -208,10 +214,8 @@ public class DiscordBot {
     public void setBotNickname(final String nick) {
         try {
             final Id guildId = mainRestChannel.getData().block().guildId().get();
-            restClient.getGuildById(Snowflake.of(guildId))
-                .modifyCurrentMember(ImmutableCurrentMemberModifyData.builder()
-                                         .nick(nick)
-                                         .build())
+            this.client.getGuildById(Snowflake.of(guildId))
+                .flatMap(g -> g.changeSelfNickname(nick))
                 .block();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating bot's nickname", e);
@@ -220,9 +224,11 @@ public class DiscordBot {
 
     public void setBotDescription(String description) {
         try {
-            restClient.getApplicationService().setCurrentApplicationInfo(ImmutableApplicationInfoRequest.builder()
-                                                                             .description(description)
-                                                                             .build())
+            restClient.getApplicationService()
+                .setCurrentApplicationInfo(ApplicationEditSpec.builder()
+                                               .description(description)
+                                               .build()
+                                               .asRequest())
                 .block();
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating bot's description", e);
@@ -296,15 +302,13 @@ public class DiscordBot {
                     && autoUpdater.getUpdateAvailable()
                     && Math.random() > 0.75 // 25% chance to show update available
                 ) {
-                    this.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.custom(
-                        "Update Available" + autoUpdater.getNewVersion().map(v -> ": " + v).orElse(""))))
+                    this.client.updatePresence(getUpdateAvailablePresence(autoUpdater))
                         .block();
                     return;
                 }
             }
             if (Proxy.getInstance().autoReconnectIsInProgress()) {
-                this.client.updatePresence(ClientPresence.of(Status.IDLE, ClientActivity.custom(
-                    "AutoReconnecting...")))
+                this.client.updatePresence(autoReconnectingPresence)
                     .block();
                 return;
             }
@@ -313,7 +317,7 @@ public class DiscordBot {
             else if (Proxy.getInstance().isConnected())
                 this.client.updatePresence(getOnlinePresence()).block();
             else
-                this.client.updatePresence(disconnectedPresence.get()).block();
+                this.client.updatePresence(disconnectedPresence).block();
         } catch (final IllegalStateException e) {
             if (e.getMessage().contains("Backpressure overflow")) {
                 DISCORD_LOG.error("Caught backpressure overflow, restarting discord session", e);
@@ -325,6 +329,11 @@ public class DiscordBot {
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed updating discord presence", e);
         }
+    }
+
+    private ClientPresence getUpdateAvailablePresence(final AutoUpdater autoUpdater) {
+        return ClientPresence.of(Status.ONLINE, ClientActivity.custom(
+            "Update Available" + autoUpdater.getNewVersion().map(v -> ": " + v).orElse("")));
     }
 
     private ClientPresence getOnlinePresence() {
@@ -379,7 +388,6 @@ public class DiscordBot {
             .orElse(false);
     }
 
-
     private EmbedCreateSpec getUpdateMessage(final Optional<String> newVersion) {
         String verString = "Current Version: `" + escape(LAUNCH_CONFIG.version) + "`";
         if (newVersion.isPresent()) verString += "\nNew Version: `" + escape(newVersion.get()) + "`";
@@ -406,8 +414,8 @@ public class DiscordBot {
 
     public void updateProfileImage(final byte[] imageBytes) {
         try {
-            this.restClient.edit(ImmutableUserModifyRequest.builder()
-                                     .avatar("data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes))
+            this.client.edit(UserEditSpec.builder()
+                                     .avatar(Image.ofRaw(imageBytes, Image.Format.PNG))
                                      .build())
                 .block();
         } catch (final Exception e) {
@@ -594,10 +602,11 @@ public class DiscordBot {
         boolean sus = event.reason().startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
         sendEmbedMessage((sus ? MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId)) : ""), EmbedCreateSpec.builder()
                 .title("Proxy Disconnected")
-                .addField("Reason", event.reason(), true)
+                .addField("Reason", event.reason(), false)
+                .addField("Online Duration", formatDuration(event.onlineDuration()), false)
                 .color(Color.RUBY)
                 .build());
-        SCHEDULED_EXECUTOR_SERVICE.submit(() -> this.client.updatePresence(disconnectedPresence.get()).block());
+        SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
         if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
     }
 
@@ -695,7 +704,7 @@ public class DiscordBot {
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeAlert) return;
-        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntity().getUuid());
+        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry().getName());
             return;
@@ -721,7 +730,7 @@ public class DiscordBot {
                 DISCORD_LOG.info(e.getInteraction().getMember()
                         .map(User::getTag).orElse("Unknown")
                         + " added friend: " + event.playerEntry().getName() + " [" + event.playerEntry().getProfileId() + "]");
-                WHITELIST_MANAGER.addFriendWhitelistEntryByUsername(event.playerEntry().getName());
+                PLAYER_LISTS.getFriendsList().add(event.playerEntry().getName());
                 e.reply().withEmbeds(EmbedCreateSpec.builder()
                         .title("Friend Added")
                         .color(Color.GREEN)
@@ -754,7 +763,7 @@ public class DiscordBot {
 
     public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeLeftAlert) return;
-        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntity().getUuid());
+        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range left alert for friend: " + event.playerEntry().getName());
             return;
@@ -778,7 +787,7 @@ public class DiscordBot {
 
     public void handlePlayerLogoutInVisualRangeEvent(final PlayerLogoutInVisualRangeEvent event) {
         if (!CONFIG.client.extra.visualRangeLeftAlert || !CONFIG.client.extra.visualRangeLeftLogoutAlert) return;
-        boolean isFriend = WHITELIST_MANAGER.isUUIDFriendWhitelisted(event.playerEntry().getProfileId());
+        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntry().getProfileId());
         if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
             DISCORD_LOG.debug("Ignoring visual range logout alert for friend: " + event.playerEntry().getName());
             return;
@@ -820,7 +829,7 @@ public class DiscordBot {
                         DISCORD_LOG.info(e.getInteraction().getMember()
                                 .map(User::getTag).orElse("Unknown")
                                 + " whitelisted " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "]");
-                        WHITELIST_MANAGER.addWhitelistEntryByUsername(event.gameProfile().getName());
+                        PLAYER_LISTS.getWhitelist().add(event.gameProfile().getName());
                         e.reply().withEmbeds(EmbedCreateSpec.builder()
                                 .title("Player Whitelisted")
                                 .color(Color.GREEN)
@@ -894,13 +903,13 @@ public class DiscordBot {
                         if (event.isIncomingWhisper()
                             && CONFIG.discord.chatRelay.mentionRoleOnWhisper
                             && !message.toLowerCase(Locale.ROOT).contains("discord.gg/")
-                            && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)) {
+                            && event.sender().map(s -> !PLAYER_LISTS.getIgnoreList().contains(s.getName())).orElse(true)) {
                             ping = mentionAccountOwner();
                         }
                     } else {
                         if (CONFIG.discord.chatRelay.mentionRoleOnNameMention) {
                             if (event.sender().filter(sender -> sender.getName().equals(CONFIG.authentication.username)).isEmpty()
-                                && event.sender().map(s -> !WHITELIST_MANAGER.isPlayerIgnored(s.getName())).orElse(true)
+                                && event.sender().map(s -> !PLAYER_LISTS.getIgnoreList().contains(s.getName())).orElse(true)
                                 && Arrays.asList(message.toLowerCase().split(" ")).contains(CONFIG.authentication.username.toLowerCase())) {
                                 ping = mentionAccountOwner();
                             }
@@ -964,19 +973,13 @@ public class DiscordBot {
                                       .timestamp(Instant.now())
                                       .build());
         }
-        if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
-            CONFIG.client.extra.stalk.stalkList.stream()
-                    .map(s -> s.toLowerCase(Locale.ROOT))
-                    .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
-                    .findFirst()
-                    .ifPresent(player -> {
-                        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
-                                .title("Stalked Player Online!")
-                                .color(Color.MEDIUM_SEA_GREEN)
-                                .addField("Player Name", event.playerEntry().getName(), true)
-                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
-                                .build());
-                    });
+        if (CONFIG.client.extra.stalk.enabled && PLAYER_LISTS.getStalkList().contains(event.playerEntry().getProfile())) {
+            sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
+                .title("Stalked Player Online!")
+                .color(Color.MEDIUM_SEA_GREEN)
+                .addField("Player Name", event.playerEntry().getName(), true)
+                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
+                .build());
         }
     }
 
@@ -990,19 +993,13 @@ public class DiscordBot {
                                       .timestamp(Instant.now())
                                       .build());
         }
-        if (CONFIG.client.extra.stalk.enabled && !CONFIG.client.extra.stalk.stalkList.isEmpty()) {
-            CONFIG.client.extra.stalk.stalkList.stream()
-                    .map(s -> s.toLowerCase(Locale.ROOT))
-                    .filter(s -> s.equalsIgnoreCase(event.playerEntry().getName()))
-                    .findFirst()
-                    .ifPresent(player -> {
-                        sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
-                                .title("Stalked Player Offline!")
-                                .color(Color.RUBY)
-                                .addField("Player Name", event.playerEntry().getName(), true)
-                                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
-                                .build());
-                    });
+        if (CONFIG.client.extra.stalk.enabled && PLAYER_LISTS.getStalkList().contains(event.playerEntry().getProfile())) {
+            sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
+                .title("Stalked Player Offline!")
+                .color(Color.RUBY)
+                .addField("Player Name", event.playerEntry().getName(), true)
+                .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
+                .build());
         }
     }
 

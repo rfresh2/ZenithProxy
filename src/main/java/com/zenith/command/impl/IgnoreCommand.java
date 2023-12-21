@@ -8,11 +8,9 @@ import com.zenith.command.CommandUsage;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
-import java.util.stream.Collectors;
-
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.WHITELIST_MANAGER;
+import static com.zenith.Shared.PLAYER_LISTS;
+import static com.zenith.command.CommandOutputHelper.playerListToString;
 import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
@@ -34,9 +32,9 @@ public class IgnoreCommand extends Command {
         return command("ignore")
                 .then(literal("add").then(argument("player", string()).executes(c -> {
                     String player = c.getArgument("player", String.class);
-                    WHITELIST_MANAGER.addIgnoreWhitelistEntryByUsername(player).ifPresentOrElse(
+                    PLAYER_LISTS.getIgnoreList().add(player).ifPresentOrElse(
                             ignored -> c.getSource().getEmbedBuilder()
-                                    .title(escape(ignored.username) + " ignored!"),
+                                    .title(escape(ignored.getUsername()) + " ignored!"),
                             () -> c.getSource().getEmbedBuilder()
                                     .title("Failed to add " + escape(player) + " to ignore list. Unable to lookup profile.")
                                     .color(Color.RUBY));
@@ -44,7 +42,7 @@ public class IgnoreCommand extends Command {
                 })))
                 .then(literal("del").then(argument("player", string()).executes(c -> {
                     String player = c.getArgument("player", String.class);
-                    WHITELIST_MANAGER.removeIgnoreWhitelistEntryByUsername(player);
+                    PLAYER_LISTS.getIgnoreList().remove(player);
                     c.getSource().getEmbedBuilder()
                             .title(escape(player) + " removed from ignore list!");
                     return 1;
@@ -54,25 +52,17 @@ public class IgnoreCommand extends Command {
                             .title("Ignore List");
                 }))
                 .then(literal("clear").executes(c -> {
-                    WHITELIST_MANAGER.clearIgnoreWhitelist();
+                    PLAYER_LISTS.getIgnoreList().clear();
                     c.getSource().getEmbedBuilder()
                             .title("Ignore list cleared!");
                     return 1;
                 }));
     }
 
-    private String ignoreListToString() {
-        return CONFIG.client.extra.chat.ignoreList.isEmpty()
-                ? "Empty"
-                : CONFIG.client.extra.chat.ignoreList.stream()
-                .map(mp -> escape(mp.username + " [[" + mp.uuid.toString() + "](" + mp.getNameMCLink() + ")]"))
-                .collect(Collectors.joining("\n"));
-    }
-
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description(ignoreListToString())
+            .description("**Ignore List**\n" + playerListToString(PLAYER_LISTS.getIgnoreList()))
             .color(Color.CYAN);
     }
 }

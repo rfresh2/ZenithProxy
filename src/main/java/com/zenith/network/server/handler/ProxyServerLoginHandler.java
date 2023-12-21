@@ -39,7 +39,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         ServerConnection connection = (ServerConnection) session;
 
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
-                        && this.proxy.getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS)))
+                        && (this.proxy.getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())

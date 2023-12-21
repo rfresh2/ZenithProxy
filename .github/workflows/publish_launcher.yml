@@ -16,17 +16,12 @@ jobs:
       - name: Zip Launcher files
         run: zip -j ZenithProxyLauncher.zip launch.sh launch.bat launcher.py update_launcher.py setup.py cacert.pem
 
-      - name: Release Artifacts
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Publish Release Artifacts
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "launcher"
-          prerelease: false
-          files: |
-            launch.sh
-            launch.bat
-            launcher.py
-            update_launcher.py
-            setup.py
-            ZenithProxyLauncher.zip
-            cacert.pem
+          tag: "launcher"
+          artifacts: "launcher.py,ZenithProxyLauncher.zip"
+          allowUpdates: true
+          replacesArtifacts: true
+          omitBodyDuringUpdate: true
+          makeLatest: true

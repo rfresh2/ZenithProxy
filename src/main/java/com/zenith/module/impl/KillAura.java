@@ -67,7 +67,7 @@ public class KillAura extends Module {
                 && !Proxy.getInstance().isInQueue()
                 && isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)
-                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActive).orElse(false)) {
+                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
             if (delay > 0) {
                 delay--;
                 return;
@@ -112,9 +112,9 @@ public class KillAura extends Module {
     private boolean validTarget(Entity entity) {
         if (CONFIG.client.extra.killAura.targetPlayers && entity instanceof EntityPlayer player) {
             if (player.isSelfPlayer()) return false;
-            return !WHITELIST_MANAGER.isUUIDFriendWhitelisted(player.getUuid())
-                && !WHITELIST_MANAGER.isUUIDWhitelisted(player.getUuid())
-                && !WHITELIST_MANAGER.isUUIDSpectatorWhitelisted(player.getUuid());
+            return !PLAYER_LISTS.getFriendsList().contains(player.getUuid())
+                && !PLAYER_LISTS.getWhitelist().contains(player.getUuid())
+                && !PLAYER_LISTS.getSpectatorWhitelist().contains(player.getUuid());
 
         } else if (entity instanceof EntityStandard e) {
             if (CONFIG.client.extra.killAura.targetHostileMobs) {

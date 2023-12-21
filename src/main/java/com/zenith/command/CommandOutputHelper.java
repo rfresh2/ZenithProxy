@@ -2,6 +2,7 @@ package com.zenith.command;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.google.common.collect.ImmutableMap;
+import com.zenith.feature.whitelist.PlayerList;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import discord4j.core.spec.EmbedCreateFields;
@@ -123,5 +124,21 @@ public class CommandOutputHelper {
 
     public void logMultiLineOutputToTerminal(CommandContext context) {
         context.getMultiLineOutput().forEach(TERMINAL_LOG::info);
+    }
+
+    // intended for use in embed descriptions
+    public static String playerListToString(final PlayerList playerList) {
+        var entries = playerList.getEntries();
+        if (entries.isEmpty()) return "Empty";
+        var output = new StringBuilder();
+        for (int i = 0; i < entries.size(); i++) {
+            var entry = entries.get(i);
+            var line = "[" + entry.getUsername() + "](" + entry.getNameMCLink() + ")\n";
+            if (output.length() + line.length() > 4000) { // 4096 max len + some buffer for more text before/after
+                output.append("and ").append(entries.size() - i).append(" more...");
+                break;
+            } else output.append(line);
+        }
+        return output.toString();
     }
 }
