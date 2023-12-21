@@ -62,7 +62,7 @@ public class PlayerList {
 
     public boolean contains(final GameProfile clientGameProfile) {
         final Optional<PlayerEntry> presentOptional = entries.stream()
-            .filter(whitelistEntry -> whitelistEntry.getUuid().equals(clientGameProfile.getId()))
+            .filter(entry -> entry.getUuid().equals(clientGameProfile.getId()))
             .findFirst();
         if (presentOptional.isPresent()) {
             // player is present
@@ -94,10 +94,10 @@ public class PlayerList {
     }
 
     private void refreshEntry(final PlayerEntry playerEntry) {
-        final Optional<PlayerEntry> whitelistEntryFromUUID = createPlayerListEntry(playerEntry.getUuid());
-        if (whitelistEntryFromUUID.isPresent()) {
+        final Optional<PlayerEntry> entryFromUUID = createPlayerListEntry(playerEntry.getUuid());
+        if (entryFromUUID.isPresent()) {
             // in-place update
-            playerEntry.setUsername(whitelistEntryFromUUID.get().getUsername());
+            playerEntry.setUsername(entryFromUUID.get().getUsername());
             playerEntry.setLastRefreshed(Instant.now().getEpochSecond());
         } else {
             SERVER_LOG.error("{}} refresh: unable to refresh player with username: {} and uuid: {}", name, playerEntry.getUsername(), playerEntry.getUuid().toString());
