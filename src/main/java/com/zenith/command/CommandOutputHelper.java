@@ -2,7 +2,7 @@ package com.zenith.command;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.google.common.collect.ImmutableMap;
-import com.zenith.feature.whitelist.PlayerEntry;
+import com.zenith.feature.whitelist.PlayerList;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import discord4j.core.spec.EmbedCreateFields;
@@ -13,7 +13,6 @@ import net.kyori.adventure.text.Component;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.zenith.Shared.DISCORD_BOT;
@@ -128,7 +127,8 @@ public class CommandOutputHelper {
     }
 
     // intended for use in embed descriptions
-    public static String playerListEntriesToString(final List<PlayerEntry> entries) {
+    public static String playerListToString(final PlayerList playerList) {
+        var entries = playerList.getEntries();
         if (entries.isEmpty()) return "Empty";
         var output = new StringBuilder();
         for (int i = 0; i < entries.size(); i++) {

@@ -9,9 +9,8 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.PLAYER_LISTS;
-import static com.zenith.command.CommandOutputHelper.playerListEntriesToString;
+import static com.zenith.command.CommandOutputHelper.playerListToString;
 import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
@@ -63,7 +62,7 @@ public class IgnoreCommand extends Command {
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description(playerListEntriesToString(CONFIG.client.extra.chat.ignoreList))
+            .description("**Ignore List**\n" + playerListToString(PLAYER_LISTS.getIgnoreList()))
             .color(Color.CYAN);
     }
 }

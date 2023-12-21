@@ -12,7 +12,7 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.PLAYER_LISTS;
-import static com.zenith.command.CommandOutputHelper.playerListEntriesToString;
+import static com.zenith.command.CommandOutputHelper.playerListToString;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
@@ -64,7 +64,7 @@ public class StalkCommand extends Command {
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
             .addField("Stalk", toggleStr(CONFIG.client.extra.stalk.enabled), false)
-            .description("Stalk List:\n: " + playerListEntriesToString(CONFIG.client.extra.stalk.stalking))
+            .description("**Stalk List**\n" + playerListToString(PLAYER_LISTS.getStalkList()))
             .color(Color.CYAN);
     }
 }

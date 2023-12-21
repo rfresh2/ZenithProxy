@@ -12,7 +12,7 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.PLAYER_LISTS;
-import static com.zenith.command.CommandOutputHelper.playerListEntriesToString;
+import static com.zenith.command.CommandOutputHelper.playerListToString;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
@@ -116,7 +116,7 @@ public class VisualRangeCommand extends Command {
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
         builder
-            .description("Friend List: \n " + playerListEntriesToString(CONFIG.client.extra.friendsList))
+            .description("**Friend List**\n" + playerListToString(PLAYER_LISTS.getFriendsList()))
             .addField("VisualRange Alerts", toggleStr(CONFIG.client.extra.visualRangeAlert), false)
             .addField("Mentions", toggleStr(CONFIG.client.extra.visualRangeAlertMention), false)
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRangeIgnoreFriends), false)

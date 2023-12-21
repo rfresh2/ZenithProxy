@@ -13,7 +13,7 @@ public class PlayerListsManager {
     private PlayerList stalkList;
 
     public void init() { // must be called after config is loaded
-        whitelist = new PlayerList("whitelist",CONFIG.server.extra.whitelist.whitelist);
+        whitelist = new PlayerList("whitelist", CONFIG.server.extra.whitelist.whitelist);
         spectatorWhitelist = new PlayerList("spectatorWhitelist", CONFIG.server.spectator.whitelist);
         friendsList = new PlayerList("friendsList", CONFIG.client.extra.friendsList);
         ignoreList = new PlayerList("ignoreList", CONFIG.client.extra.chat.ignoreList);
@@ -21,6 +21,9 @@ public class PlayerListsManager {
         startRefreshTasks();
     }
 
+    // todo: refactor refresh task into a single task that refreshes all lists
+    //  duplicate players in multiple lists should not need their own refresh
+    //  also move out the game profile contains cache update so it updates all lists
     public void startRefreshTasks() {
         getWhitelist().startRefreshTask();
         getSpectatorWhitelist().startRefreshTask();
