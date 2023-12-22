@@ -12,7 +12,7 @@ public class PingTest {
         pingOptions.setHostname("connect.2b2t.org");
         pingOptions.setPort(25565);
         pingOptions.setTimeout(3000);
-        pingOptions.setProtocolVersion(340);
+        pingOptions.setProtocolVersion(-1);
         final Pattern digitPattern = Pattern.compile("\\d+");
         final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
         final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(1).getName();
