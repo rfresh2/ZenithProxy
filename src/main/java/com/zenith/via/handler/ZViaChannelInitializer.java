@@ -42,7 +42,7 @@ public class ZViaChannelInitializer extends ChannelInitializer<Channel> {
 
         // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
         // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-encoder -> via-decoder -> codec -> manager
-        channel.pipeline().replace("codec", "codec", new MCProxyClientViaCodecHandler(client));
+        channel.pipeline().replace("codec", "codec", new ZViaClientCodecHandler(client));
         channel.pipeline().addBefore("codec", "via-encoder", new ZViaEncodeHandler(userConnection, this.client));
         channel.pipeline().addBefore("codec", "via-decoder", new ZViaDecodeHandler(userConnection, this.client));
     }

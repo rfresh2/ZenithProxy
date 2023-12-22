@@ -15,9 +15,9 @@ import io.netty.handler.codec.ByteToMessageCodec;
 
 import java.util.List;
 
-public class MCProxyClientViaCodecHandler extends ByteToMessageCodec<Packet> {
+public class ZViaClientCodecHandler extends ByteToMessageCodec<Packet> {
     private final Session session;
-    public MCProxyClientViaCodecHandler(Session session) {
+    public ZViaClientCodecHandler(Session session) {
         this.session = session;
     }
 
