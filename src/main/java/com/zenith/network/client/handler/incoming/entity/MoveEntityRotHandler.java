@@ -18,7 +18,7 @@ public class MoveEntityRotHandler implements AsyncPacketHandler<ClientboundMoveE
                     .setPitch(packet.getPitch());
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityRotationPacket for invalid entity (id={})", packet.getEntityId());
+            CLIENT_LOG.debug("Received ServerEntityRotationPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

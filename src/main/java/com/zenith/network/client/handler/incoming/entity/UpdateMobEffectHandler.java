@@ -26,11 +26,11 @@ public class UpdateMobEffectHandler implements AsyncPacketHandler<ClientboundUpd
                     packet.getFactorData()
                 ));
             } else {
-                CLIENT_LOG.warn("Received ServerEntityEffectPacket for invalid entity (id={})", packet.getEntityId());
+                CLIENT_LOG.debug("Received ServerEntityEffectPacket for invalid entity (id={})", packet.getEntityId());
                 return false;
             }
         } catch (ClassCastException e)  {
-            CLIENT_LOG.warn("Received ServerEntityEffectPacket for non-equipment entity (id={})", packet.getEntityId(), e);
+            CLIENT_LOG.debug("Received ServerEntityEffectPacket for non-equipment entity (id={})", packet.getEntityId(), e);
             return false;
         }
         return true;

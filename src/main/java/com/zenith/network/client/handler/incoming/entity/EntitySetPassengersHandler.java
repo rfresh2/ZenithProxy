@@ -23,7 +23,7 @@ public class EntitySetPassengersHandler implements AsyncPacketHandler<Clientboun
                 if (passengerEntity != null) {
                     passengerEntity.mountVehicle(packet.getEntityId());
                 } else {
-                    CLIENT_LOG.warn("Received SetPassengersPacket with unknown passenger (id={})", passenger);
+                    CLIENT_LOG.debug("Received SetPassengersPacket with unknown passenger (id={})", passenger);
                 }
             }
             for (int passenger : beforePassengerIds) {
@@ -34,12 +34,12 @@ public class EntitySetPassengersHandler implements AsyncPacketHandler<Clientboun
                 if (passengerEntity != null) {
                     passengerEntity.dismountVehicle();
                 } else {
-                    CLIENT_LOG.warn("Received SetPassengersPacket with unknown passenger (id={})", passenger);
+                    CLIENT_LOG.debug("Received SetPassengersPacket with unknown passenger (id={})", passenger);
                 }
             }
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntitySetPassengersPacket for invalid entity (id={})", packet.getEntityId());
+            CLIENT_LOG.debug("Received ServerEntitySetPassengersPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }
