@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'nu.studer.jooq' version '8.2.2'
+    id 'nu.studer.jooq' version '9.0'
     id 'java'
     id 'org.graalvm.buildtools.native' version '0.9.28'
     // todo: use non-jitpack'd version when https://github.com/johnrengelman/shadow/pull/879 is merged
@@ -130,8 +130,8 @@ dependencies {
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
     shade "ch.qos.logback:logback-classic:1.4.14"
-    shade 'org.slf4j:slf4j-api:2.0.9'
-    shade 'org.slf4j:jul-to-slf4j:2.0.9'
+    shade 'org.slf4j:slf4j-api:2.0.10'
+    shade 'org.slf4j:jul-to-slf4j:2.0.10'
     shade 'org.fusesource.jansi:jansi:2.4.1'
     shade 'com.mojang:brigadier:1.2.9'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
