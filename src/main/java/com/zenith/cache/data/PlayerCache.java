@@ -56,7 +56,7 @@ public class PlayerCache implements CachedData {
     protected GameMode gameMode;
     protected int heldItemSlot = 0;
 
-    protected EntityPlayer thePlayer;
+    protected EntityPlayer thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
 
     protected final ItemStack[] inventory = new ItemStack[46];
 

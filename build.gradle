@@ -132,11 +132,10 @@ dependencies {
     shade "ch.qos.logback:logback-classic:1.4.14"
     shade 'org.slf4j:slf4j-api:2.0.10'
     shade 'org.slf4j:jul-to-slf4j:2.0.10'
-    shade 'org.fusesource.jansi:jansi:2.4.1'
     shade 'com.mojang:brigadier:1.2.9'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
-    shade("com.github.rfresh2.Discord4j:discord4j-core:333428da4b") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:09fa6b43f9") {
         exclude group: 'io.netty'
     }
     shade("com.github.rfresh2:MCProtocolLib:f1d861005a") {

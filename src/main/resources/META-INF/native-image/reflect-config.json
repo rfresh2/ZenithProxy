@@ -1341,6 +1341,9 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.via.handler.ZViaChannelInitializer"
+},
+{
   "name":"com.zenith.via.handler.ZViaClientViaCodecHandler"
 },
 {
@@ -2062,6 +2065,10 @@
 },
 {
   "name":"org.jline.terminal.impl.exec.ExecTerminalProvider",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jline.terminal.impl.ffm.FfmTerminalProvider",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
