@@ -40,7 +40,7 @@ public class BlockDataManager {
 
     private void init() {
         final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
-        try (JsonParser blocksParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/pc/1.20/blocks.json"))) {
+        try (JsonParser blocksParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/mcdata/blocks.json"))) {
             TreeNode node = blocksParser.getCodec().readTree(blocksParser);
             for (Iterator<JsonNode> it = ((ArrayNode) node).elements(); it.hasNext(); ) {
                 final var e = it.next();
@@ -60,7 +60,8 @@ public class BlockDataManager {
             throw new RuntimeException(e);
         }
 
-        try (JsonParser shapesParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/pc/1.20/blockCollisionShapes.json"))) {
+        try (JsonParser shapesParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream(
+            "/mcdata/blockCollisionShapes.json"))) {
             final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
             TreeNode node = shapesParser.getCodec().readTree(shapesParser);
             ObjectNode shapesNode = (ObjectNode) node.get("shapes");

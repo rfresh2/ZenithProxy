@@ -97,14 +97,6 @@ repositories {
     mavenLocal()
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs("data/")
-        }
-    }
-}
-
 configurations {
     shade
     implementation.extendsFrom shade

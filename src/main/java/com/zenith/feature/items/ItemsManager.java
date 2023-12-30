@@ -20,7 +20,7 @@ public class ItemsManager {
 
     public void init() {
         try {
-            OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/pc/1.20/items.json"), new TypeReference<List<ItemsData>>() {} )
+            OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/mcdata/items.json"), new TypeReference<List<ItemsData>>() {} )
                 .forEach(data -> itemsData.put(data.getId(), data));
         } catch (final Exception e) {
             throw new RuntimeException(e);

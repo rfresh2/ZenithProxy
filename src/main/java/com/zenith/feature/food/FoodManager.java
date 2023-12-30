@@ -39,7 +39,7 @@ public class FoodManager {
 
     private void init() {
         try {
-            OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/pc/1.20/foods.json"), new TypeReference<List<FoodData>>() {} )
+            OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/mcdata/foods.json"), new TypeReference<List<FoodData>>() {} )
                 .forEach(foodData -> foodDataMap.put(foodData.getId().intValue(), foodData));
         } catch (final Exception e) {
             throw new RuntimeException(e);
