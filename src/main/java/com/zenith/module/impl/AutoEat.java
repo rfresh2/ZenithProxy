@@ -16,7 +16,6 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.feature.food.FoodManager;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
-import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -30,7 +29,6 @@ public class AutoEat extends Module {
     private int delay = 0;
     private boolean swapping = false;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
-    @Getter
     private boolean isEating = false;
     private static final int MOVEMENT_PRIORITY = 1000;
 
@@ -43,6 +41,10 @@ public class AutoEat extends Module {
         return EVENT_BUS.subscribe(
             ClientTickEvent.class, this::handleClientTick
         );
+    }
+
+    public boolean isEating() {
+        return CONFIG.client.extra.autoEat.enabled && (isEating || swapping);
     }
 
     @Override
