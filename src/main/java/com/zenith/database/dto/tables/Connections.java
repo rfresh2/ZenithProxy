@@ -8,7 +8,6 @@ import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.tables.records.ConnectionsRecord;
-import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -16,9 +15,9 @@ import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 
 /**
@@ -50,7 +49,7 @@ public class Connections extends TableImpl<ConnectionsRecord> {
     /**
      * The column <code>public.connections.connection</code>.
      */
-    public final TableField<ConnectionsRecord, Connectiontype> CONNECTION = createField(DSL.name("connection"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(com.zenith.database.dto.enums.Connectiontype.class), this, "");
+    public final TableField<ConnectionsRecord, Connectiontype> CONNECTION = createField(DSL.name("connection"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(Connectiontype.class), this, "");
 
     /**
      * The column <code>public.connections.player_name</code>.
@@ -63,11 +62,11 @@ public class Connections extends TableImpl<ConnectionsRecord> {
     public final TableField<ConnectionsRecord, UUID> PLAYER_UUID = createField(DSL.name("player_uuid"), SQLDataType.UUID, this, "");
 
     private Connections(Name alias, Table<ConnectionsRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Connections(Name alias, Table<ConnectionsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Connections(Name alias, Table<ConnectionsRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -89,10 +88,6 @@ public class Connections extends TableImpl<ConnectionsRecord> {
      */
     public Connections() {
         this(DSL.name("connections"), null);
-    }
-
-    public <O extends Record> Connections(Table<O> child, ForeignKey<O, ConnectionsRecord> key) {
-        super(child, key, CONNECTIONS);
     }
 
     @Override
@@ -144,27 +139,87 @@ public class Connections extends TableImpl<ConnectionsRecord> {
         return new Connections(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row4<OffsetDateTime, Connectiontype, String, UUID> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Connections where(Condition condition) {
+        return new Connections(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function4<? super OffsetDateTime, ? super Connectiontype, ? super String, ? super UUID, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Connections where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super OffsetDateTime, ? super Connectiontype, ? super String, ? super UUID, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Connections where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Connections where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Connections where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Connections where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Connections where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Connections where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Connections whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Connections whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

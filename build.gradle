@@ -350,8 +350,7 @@ jooq {
                     database {
                         name = 'org.jooq.meta.postgres.PostgresDatabase'
                         inputSchema = 'public'
-                        forcedTypes {
-                        }
+                        includes = 'Chats | Connections | Connectiontype | Deaths | Playercount | Queuelength | Queuewait | Restarts | Tablist'
                     }
                     generate {
                         deprecated = false

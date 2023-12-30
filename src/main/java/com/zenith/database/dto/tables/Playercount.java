@@ -7,7 +7,6 @@ package com.zenith.database.dto.tables;
 import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.PlayercountRecord;
-import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -15,8 +14,8 @@ import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 
 /**
@@ -51,11 +50,11 @@ public class Playercount extends TableImpl<PlayercountRecord> {
     public final TableField<PlayercountRecord, Short> COUNT = createField(DSL.name("count"), SQLDataType.SMALLINT.nullable(false), this, "");
 
     private Playercount(Name alias, Table<PlayercountRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Playercount(Name alias, Table<PlayercountRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Playercount(Name alias, Table<PlayercountRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -77,10 +76,6 @@ public class Playercount extends TableImpl<PlayercountRecord> {
      */
     public Playercount() {
         this(DSL.name("playercount"), null);
-    }
-
-    public <O extends Record> Playercount(Table<O> child, ForeignKey<O, PlayercountRecord> key) {
-        super(child, key, PLAYERCOUNT);
     }
 
     @Override
@@ -132,27 +127,87 @@ public class Playercount extends TableImpl<PlayercountRecord> {
         return new Playercount(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row2<OffsetDateTime, Short> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Playercount where(Condition condition) {
+        return new Playercount(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function2<? super OffsetDateTime, ? super Short, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Playercount where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super OffsetDateTime, ? super Short, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Playercount where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Playercount where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Playercount where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Playercount where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Playercount where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Playercount where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Playercount whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Playercount whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }
