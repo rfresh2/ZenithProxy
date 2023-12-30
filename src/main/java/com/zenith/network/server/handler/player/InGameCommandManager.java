@@ -23,8 +23,9 @@ import static java.util.Arrays.asList;
 public class InGameCommandManager {
 
     // this is specific to CONTROLLING account commands - not spectator player commands!
-    public void handleInGameCommand(final String command, final @NonNull ServerConnection session) {
-        TERMINAL_LOG.info(session.getProfileCache().getProfile().getName() + " executed in-game command: " + command);
+    public void handleInGameCommand(final String message, final @NonNull ServerConnection session) {
+        TERMINAL_LOG.info(session.getProfileCache().getProfile().getName() + " executed in-game command: " + message);
+        final String command = message.split(" ")[0]; // first word is the command
         switch (command) {
             case "help" -> {
                 session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9&lIn Game commands"), false));
@@ -34,10 +35,10 @@ public class InGameCommandManager {
                 session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&csync &7- &8Syncs current player inventory with server"), false));
                 session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&cchunksync &7- &8Syncs server chunks to the current player"), false));
                 session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7&ccleareffects &7- &8Clears all effects from the current player"), false));
-                executeInGameCommand("help", session);
+                executeInGameCommand(message, session);
             }
             case "m" -> Proxy.getInstance().getActiveConnections().forEach(connection -> {
-                connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&c" + session.getProfileCache().getProfile().getName() + " > " + command.substring(1).trim() + "&r"), false));
+                connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&c" + session.getProfileCache().getProfile().getName() + " > " + message.substring(1).trim() + "&r"), false));
             });
             case "sync" -> {
                 PlayerCache.sync();
@@ -54,7 +55,7 @@ public class InGameCommandManager {
                 });
                 session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9Cleared effects&r"), false));
             }
-            default -> executeInGameCommand(command, session);
+            default -> executeInGameCommand(message, session);
         }
     }
 
