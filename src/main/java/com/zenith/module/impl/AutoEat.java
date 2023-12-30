@@ -13,7 +13,6 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
-import com.zenith.feature.food.FoodManager;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
 
@@ -25,7 +24,6 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class AutoEat extends Module {
-    private final FoodManager foodManager = new FoodManager();
     private int delay = 0;
     private boolean swapping = false;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
@@ -88,7 +86,7 @@ public class AutoEat extends Module {
         // check if offhand has a food
         final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
-            if (foodManager.isSafeFood(offhandStack.getId())) {
+            if (FOOD_MANAGER.isSafeFood(offhandStack.getId())) {
                 return true;
             }
         }
@@ -96,7 +94,7 @@ public class AutoEat extends Module {
         // check if selected hotbar item has a food
         final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
-            if (foodManager.isSafeFood(mainHandStack.getId())) {
+            if (FOOD_MANAGER.isSafeFood(mainHandStack.getId())) {
               return true;
             }
         }
@@ -106,7 +104,7 @@ public class AutoEat extends Module {
         for (int i = 44; i >= 9; i--) {
             ItemStack itemStack = inventory[i];
             if (nonNull(itemStack)) {
-                if (foodManager.isSafeFood(itemStack.getId())) {
+                if (FOOD_MANAGER.isSafeFood(itemStack.getId())) {
                     sendClientPacketAsync(new ServerboundContainerClickPacket(0,
                                                                               CACHE.getPlayerCache().getActionId().incrementAndGet(),
                                                                               i,
@@ -138,20 +136,22 @@ public class AutoEat extends Module {
     public void startEating() {
         final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
-            if (foodManager.isFood(offhandStack.getId())) {
+            if (FOOD_MANAGER.isFood(offhandStack.getId())) {
                 isEating = true;
                 delay = 50;
                 sendClientPacketAsync(new ServerboundUseItemPacket(Hand.OFF_HAND, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+                CLIENT_LOG.debug("AutoEat: Eating {} from offhand", offhandStack.getId());
                 return;
             }
         }
 
         final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
-            if (foodManager.isFood(mainHandStack.getId())) {
+            if (FOOD_MANAGER.isFood(mainHandStack.getId())) {
                 isEating = true;
                 delay = 50;
                 sendClientPacketAsync(new ServerboundUseItemPacket(Hand.MAIN_HAND, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+                CLIENT_LOG.debug("AutoEat: Eating {} from mainhand", mainHandStack.getId());
             }
         }
     }

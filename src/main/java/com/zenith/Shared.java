@@ -32,6 +32,8 @@ import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
 import com.zenith.feature.api.VcApi;
+import com.zenith.feature.food.FoodManager;
+import com.zenith.feature.items.ItemsManager;
 import com.zenith.feature.language.LanguageManager;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
@@ -141,6 +143,8 @@ public class Shared {
     public static final InGameCommandManager IN_GAME_COMMAND_MANAGER;
     public static final CommandManager COMMAND_MANAGER;
     public static final LanguageManager LANGUAGE_MANAGER;
+    public static final FoodManager FOOD_MANAGER;
+    public static final ItemsManager ITEMS_MANAGER;
     public static final VcApi VC_API;
     public static volatile boolean SHOULD_RECONNECT;
 
@@ -421,6 +425,8 @@ public class Shared {
             IN_GAME_COMMAND_MANAGER = new InGameCommandManager();
             COMMAND_MANAGER = new CommandManager();
             LANGUAGE_MANAGER = new LanguageManager();
+            FOOD_MANAGER = new FoodManager();
+            ITEMS_MANAGER = new ItemsManager();
             VC_API = new VcApi();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
             translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());

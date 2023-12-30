@@ -24,6 +24,7 @@ public class AutoTotem extends Module {
     private boolean swapping = false;
     private int delay = 0;
     private static final int MOVEMENT_PRIORITY = 1000;
+    private int totemId = ITEMS_MANAGER.getItemId("totem_of_undying");
 
     public boolean isActivelySwapping() {
         return CONFIG.client.extra.autoTotem.enabled && swapping;
@@ -75,7 +76,7 @@ public class AutoTotem extends Module {
 
     private boolean isTotemEquipped() {
         final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
-        return nonNull(offhandStack) && offhandStack.getId() == 1117;
+        return nonNull(offhandStack) && offhandStack.getId() == totemId;
     }
 
     private void swapToTotem() {
@@ -83,7 +84,7 @@ public class AutoTotem extends Module {
         ItemStack offhand = inventory[45];
         for (int i = 44; i >= 9; i--) {
             final ItemStack stack = inventory[i];
-            if (nonNull(stack) && stack.getId() == 1117) {
+            if (nonNull(stack) && stack.getId() == totemId) {
                 if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
                     sendClientPacketsAsync(new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
                                            new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)),
@@ -92,7 +93,7 @@ public class AutoTotem extends Module {
                     sendClientPacketsAsync(new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
                                            new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(45, stack)));
                 }
-                CLIENT_LOG.info("Swapping to totem");
+                CLIENT_LOG.info("AutoTotem: Swapping to totem");
                 delay = 5;
                 swapping = true;
                 return;

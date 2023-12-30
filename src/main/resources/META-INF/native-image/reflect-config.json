@@ -877,6 +877,19 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setMetadata","parameterTypes":["java.lang.Integer"] }]
 },
 {
+  "name":"com.zenith.feature.items.ItemsData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setEnchantCategories","parameterTypes":["java.util.Set"] }, {"name":"setId","parameterTypes":["int"] }, {"name":"setMaxDurability","parameterTypes":["int"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setRepairWith","parameterTypes":["java.util.Set"] }, {"name":"setStackSize","parameterTypes":["int"] }]
+},
+{
+  "name":"com.zenith.feature.items.ItemsVariation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
   "name":"com.zenith.feature.pathing.blockdata.BlockCollisionShapes",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1952,6 +1965,12 @@
 },
 {
   "name":"java.util.ImmutableCollections"
+},
+{
+  "name":"java.util.LinkedHashSet",
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"java.util.Optional"

@@ -243,6 +243,8 @@
   }, {
     "pattern":"\\Qpc/1.20/foods.json\\E"
   }, {
+    "pattern":"\\Qpc/1.20/items.json\\E"
+  }, {
     "pattern":"\\Qpc/1.20/language.json\\E"
   }, {
     "pattern":"\\Qproxy_commit.txt\\E"

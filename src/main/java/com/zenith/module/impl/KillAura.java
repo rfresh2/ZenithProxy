@@ -21,6 +21,7 @@ import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
+import it.unimi.dsi.fastutil.ints.IntList;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class KillAura extends Module {
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
     private boolean swapping = false;
     private static final int MOVEMENT_PRIORITY = 500;
+    private IntList swords = ITEMS_MANAGER.getItemsContaining("_sword");
+    private IntList axes = ITEMS_MANAGER.getItemsContaining("_axe");
 
     public boolean isActive() {
         return CONFIG.client.extra.killAura.enabled && isAttacking;
@@ -197,18 +200,7 @@ public class KillAura extends Module {
     }
 
     private boolean isWeapon(int id) {
-        return id == 802 // netherite sword
-            || id == 797 // diamond sword
-            || id == 787 // gold sword
-            || id == 792 // iron sword
-            || id == 782 // stone sword
-            || id == 777 // wooden sword
-            || id == 780 // wooden axe
-            || id == 785 // stone axe
-            || id == 795 // iron axe
-            || id == 790 // gold axe
-            || id == 800 // diamond axe
-            || id == 805; // netherite axe
+        return swords.contains(id) || axes.contains(id);
     }
 
 }
