@@ -26,6 +26,7 @@ import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.module.impl.ActionLimiter;
+import com.zenith.module.impl.ProxyForwarding;
 import com.zenith.util.ComponentSerializer;
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,6 +79,9 @@ public class ServerConnection implements Session, SessionListener {
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
     protected SpectatorEntity spectatorEntity;
 
+    protected UUID spoofedUuid;
+    protected List<GameProfile.Property> spoofedProperties;
+
     /**
      * Team data
      */
@@ -92,8 +96,12 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
-            if (!this.isLoggedIn || ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() != ProtocolState.GAME) return;
             Packet p = packet;
+            if (CONFIG.client.extra.proxyForwarding.enabled) {
+                p = MODULE_MANAGER.get(ProxyForwarding.class).getHandlerRegistry().handleInbound(p, this);
+                if (p == null) return;
+            }
+            if (!this.isLoggedIn || ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() != ProtocolState.GAME) return;
             if (CONFIG.client.extra.actionLimiter.enabled && !MODULE_MANAGER.get(ActionLimiter.class).bypassesLimits(this)) {
                 p = MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleInbound(p, this);
                 if (p == null) return;
@@ -120,9 +128,15 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            Packet p = isSpectator()
-                ? SERVER_SPECTATOR_HANDLERS.handleOutgoing(packet, this)
-                : SERVER_PLAYER_HANDLERS.handleOutgoing(packet, this);
+            Packet p = packet;
+            if (CONFIG.client.extra.proxyForwarding.enabled) {
+                p = MODULE_MANAGER.get(ProxyForwarding.class).getHandlerRegistry().handleOutgoing(p, this);
+            }
+            if (p != null) {
+                p = isSpectator()
+                        ? SERVER_SPECTATOR_HANDLERS.handleOutgoing(p, this)
+                        : SERVER_PLAYER_HANDLERS.handleOutgoing(p, this);
+            }
             if (p != null && CONFIG.client.extra.actionLimiter.enabled) {
                 p = MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleOutgoing(p, this);
             }

@@ -84,6 +84,7 @@ public final class Config {
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
+            public ProxyForwarding proxyForwarding = new ProxyForwarding();
 
             public static final class Chat {
                 public ArrayList<PlayerEntry> ignoreList = new ArrayList<>();
@@ -274,6 +275,17 @@ public final class Config {
                 public boolean allowUseItem = true;
                 public boolean allowInteract = true;
                 public boolean allowChat = true; // outbound chats, including commands
+            }
+
+            public static class ProxyForwarding {
+                public boolean enabled = false;
+                public ForwardingMode mode = ForwardingMode.VELOCITY;
+                public String secret = "YOUR-SECRET-HERE";
+
+                public enum ForwardingMode {
+                    BUNGEECORD,
+                    VELOCITY,
+                }
             }
         }
 
