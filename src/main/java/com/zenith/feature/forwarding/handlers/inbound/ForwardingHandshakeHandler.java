@@ -9,6 +9,7 @@ import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Config;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
 import static com.zenith.Shared.CONFIG;
@@ -23,6 +24,12 @@ public class ForwardingHandshakeHandler implements PacketHandler<ClientIntention
                 session.disconnect("This server requires you to connect with BungeeCord.");
                 return packet;
             }
+
+            int remotePort = 0;
+            if (session.getRemoteAddress() instanceof InetSocketAddress address) {
+                remotePort = address.getPort();
+            }
+            session.setSpoofedAddress(new InetSocketAddress(split[1], remotePort));
 
             session.setSpoofedUuid(UUIDSerializer.fromString(split[2]));
             if (split.length == 4) {

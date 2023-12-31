@@ -11,6 +11,7 @@ import io.netty.buffer.Unpooled;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.InetSocketAddress;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,7 +41,12 @@ public class ForwardingLoginQueryResponseHandler implements PacketHandler<Server
                 return packet;
             }
 
-            session.getCodecHelper().readString(buf); // spoofed address, TODO use?
+            int remotePort = 0;
+            if (session.getRemoteAddress() instanceof InetSocketAddress address) {
+                remotePort = address.getPort();
+            }
+            final String address = session.getCodecHelper().readString(buf);
+            session.setSpoofedAddress(new InetSocketAddress(address, remotePort));
 
             final GameProfile profile = createProfile(buf, (MinecraftCodecHelper) session.getCodecHelper());
             session.setSpoofedUuid(profile.getId());
