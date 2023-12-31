@@ -237,11 +237,16 @@ shadowJar {
     exclude 'META-INF/gradle/**'
     exclude 'META-INF/versions/**'
     exclude 'META-INF/native-image/io.netty/**/native-image.properties'
+    // todo: remove when jline 3.25.1 released https://github.com/jline/jline3/issues/923
+    exclude 'META-INF/native-image/jansi/native-image.properties'
     minimize {
         exclude(dependency("org.slf4j:slf4j-api:.*"))
         exclude(dependency("ch.qos.logback:.*:.*"))
         exclude(dependency("org.jline:jline:.*"))
         exclude(dependency("org.jline:jline-terminal-jansi:.*"))
+        exclude(dependency("org.jline:jline-native:.*"))
+        exclude(dependency("org.jline:jline-terminal:.*"))
+        exclude(dependency("org.fusesource.jansi:jansi:.*"))
         exclude(dependency("com.github.mwiede:jsch:.*"))
         exclude(dependency("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:.*"))
         exclude(dependency("com.github.rfresh2.Discord4j:discord4j-core:.*"))
