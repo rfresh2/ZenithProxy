@@ -22,7 +22,7 @@ public class TeleportEntityHandler implements AsyncPacketHandler<ClientboundTele
             MoveEntityPosRotHandler.trackPlayerVisualRangePosition(entity);
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());
+            CLIENT_LOG.debug("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

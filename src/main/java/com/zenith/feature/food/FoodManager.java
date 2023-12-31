@@ -1,29 +1,28 @@
 package com.zenith.feature.food;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.zenith.Shared.OBJECT_MAPPER;
 import static java.util.Objects.nonNull;
 
 public class FoodManager {
     // key = item ID
-    private Map<Integer, FoodData> foodDataMap = Collections.emptyMap();
+    private Int2ObjectMap<FoodData> foodDataMap = new Int2ObjectOpenHashMap<>();
 
     public FoodManager() {
         init();
     }
 
-    public boolean isFood(final Integer id) {
+    public boolean isFood(final int id) {
         return foodDataMap.containsKey(id);
     }
 
-    public boolean isSafeFood(final Integer id) {
+    public boolean isSafeFood(final int id) {
         final FoodData foodData = getFoodData(id);
         if (nonNull(foodData)) {
             return !Objects.equals(foodData.getName(), "chorus_fruit")
@@ -34,15 +33,14 @@ public class FoodManager {
         return false;
     }
 
-    public FoodData getFoodData(final Integer id) {
+    public FoodData getFoodData(final int id) {
         return foodDataMap.get(id);
     }
 
     private void init() {
         try {
-            this.foodDataMap = OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/pc/1.20.4/foods.json"), new TypeReference<List<FoodData>>() {
-                    }).stream()
-                    .collect(Collectors.toMap(FoodData::getId, v -> v, (k1, k2) -> k1));
+            OBJECT_MAPPER.readValue(getClass().getResourceAsStream("/mcdata/foods.json"), new TypeReference<List<FoodData>>() {} )
+                .forEach(foodData -> foodDataMap.put(foodData.getId().intValue(), foodData));
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

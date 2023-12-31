@@ -1,5 +1,7 @@
 package com.zenith.feature.queue.mcping;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -168,21 +170,22 @@ public class MCPing {
             var playersNode = jsonTree.get("players");
             var online = playersNode.get("online").asInt();
             var max = playersNode.get("max").asInt();
-            var sampleNode = playersNode.get("sample");
-            var inGameNode = sampleNode.get(0);
-            var inGame = inGameNode.get("name").asText();
-            var regularQNode = sampleNode.get(1);
-            var regularQName = regularQNode.get("name").asText();
-            var prioQNode = sampleNode.get(2);
-            var prioQName = prioQNode.get("name").asText();
-            var sample = new ArrayList<Player>();
-            sample.add(new Player(inGame, ""));
-            sample.add(new Player(regularQName, ""));
-            sample.add(new Player(prioQName, ""));
+            var sampleNode = (ArrayNode) (playersNode.get("sample"));
+            var playersList = new ArrayList<Player>();
+            sampleNode.forEach(playerListNode -> {
+                var player = new Player();
+                JsonNode nameNode = playerListNode.get("name");
+                if (nameNode != null && nameNode.isTextual())
+                    player.setName(nameNode.asText());
+                JsonNode idNode = playerListNode.get("id");
+                if (idNode != null && idNode.isTextual())
+                    player.setId(idNode.asText());
+                playersList.add(player);
+            });
             var players = new Players();
             players.setMax(max);
             players.setOnline(online);
-            players.setSample(sample);
+            players.setSample(playersList);
 
             var descriptionNode = jsonTree.get("description");
             var descriptionExtraNode = descriptionNode.withArrayProperty("extra");
@@ -190,8 +193,15 @@ public class MCPing {
             descriptionExtraNode.forEach(node -> {
                 if (node.isObject()) {
                     var extra = new Extra();
-                    extra.setColor(node.get("color").asText());
-                    extra.setText(node.get("text").asText());
+                    JsonNode colorNode = node.get("color");
+                    if (colorNode != null && colorNode.isTextual())
+                        extra.setColor(colorNode.asText());
+                    JsonNode boldNode = node.get("bold");
+                    if (boldNode != null && boldNode.isBoolean())
+                        extra.setBold(boldNode.asBoolean());
+                    JsonNode textNode = node.get("text");
+                    if (textNode != null && textNode.isTextual())
+                        extra.setText(textNode.asText());
                     extras.add(extra);
                 }
             });

@@ -40,7 +40,7 @@ public class SetEquipmentHandler implements AsyncPacketHandler<ClientboundSetEqu
             }
             return true;
         } catch (ClassCastException e)  {
-            CLIENT_LOG.warn("Received ServerEntityEquipmentPacket for non-equipment entity (id={})", packet.getEntityId(), e);
+            CLIENT_LOG.debug("Received ServerEntityEquipmentPacket for non-equipment entity (id={})", packet.getEntityId(), e);
             return false;
         }
     }

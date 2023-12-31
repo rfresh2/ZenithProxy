@@ -21,7 +21,7 @@ public class SetEntityLinkHandler implements AsyncPacketHandler<ClientboundSetEn
             }
             return true;
         } else {
-            CLIENT_LOG.warn("Received ServerEntityAttachPacket for invalid entity (id={})", packet.getEntityId());
+            CLIENT_LOG.debug("Received ServerEntityAttachPacket for invalid entity (id={})", packet.getEntityId());
             return false;
         }
     }

@@ -18,11 +18,11 @@ public class RemoveMobEffectHandler implements AsyncPacketHandler<ClientboundRem
             if (entity instanceof EntityLiving e) {
                 e.getPotionEffectMap().remove(packet.getEffect());
             } else {
-                CLIENT_LOG.warn("Received ClientboundRemoveMobEffectPacket for invalid entity (id={})", packet.getEntityId());
+                CLIENT_LOG.debug("Received ClientboundRemoveMobEffectPacket for invalid entity (id={})", packet.getEntityId());
                 return false;
             }
         } catch (Exception e) {
-            CLIENT_LOG.warn("Failed handling ClientboundRemoveMobEffectPacket for entity (id={})", packet.getEntityId(), e);
+            CLIENT_LOG.debug("Failed handling ClientboundRemoveMobEffectPacket for entity (id={})", packet.getEntityId(), e);
         }
         return true;
     }

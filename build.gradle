@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'nu.studer.jooq' version '8.2.1'
+    id 'nu.studer.jooq' version '9.0'
     id 'java'
     id 'org.graalvm.buildtools.native' version '0.9.28'
     // todo: use non-jitpack'd version when https://github.com/johnrengelman/shadow/pull/879 is merged
@@ -97,14 +97,6 @@ repositories {
     mavenLocal()
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs("data/")
-        }
-    }
-}
-
 configurations {
     shade
     implementation.extendsFrom shade
@@ -114,7 +106,7 @@ ext {
     lombokVersion = "1.18.30"
     postgresVersion = '42.7.1'
     nettyVersion = '4.1.104.Final'
-    jooqVersion = "3.19.0"
+    jooqVersion = "3.19.1"
     fastutilVersion = "8.5.13-SNAPSHOT"
 }
 
@@ -125,18 +117,17 @@ dependencies {
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r'
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.8.0.202311291450-r'
-    shade 'com.github.mwiede:jsch:0.2.14'
+    shade 'com.github.mwiede:jsch:0.2.15'
     shade 'com.google.guava:guava:33.0.0-jre'
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
     shade "ch.qos.logback:logback-classic:1.4.14"
-    shade 'org.slf4j:slf4j-api:2.0.9'
-    shade 'org.slf4j:jul-to-slf4j:2.0.9'
-    shade 'org.fusesource.jansi:jansi:2.4.1'
+    shade 'org.slf4j:slf4j-api:2.0.10'
+    shade 'org.slf4j:jul-to-slf4j:2.0.10'
     shade 'com.mojang:brigadier:1.2.9'
-    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0'
+    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
-    shade("com.github.rfresh2.Discord4j:discord4j-core:333428da4b") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:09fa6b43f9") {
         exclude group: 'io.netty'
     }
     shade("com.github.rfresh2:MCProtocolLib:77e4f8ef1f") {
@@ -161,7 +152,7 @@ dependencies {
     shade "org.cloudburstmc.math:api:2.0"
     shade "org.cloudburstmc.math:immutable:2.0"
 
-    shade('org.redisson:redisson:3.25.1') {
+    shade('org.redisson:redisson:3.25.2') {
         exclude group: 'io.netty'
     }
     shade "org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion"
@@ -171,11 +162,11 @@ dependencies {
     shade "org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion"
     shade "org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion"
 
-    shade "com.viaversion:viaversion:4.9.2"
-    shade "com.viaversion:viabackwards:4.9.1"
+    shade "com.viaversion:viaversion:4.10.0-23w51b-SNAPSHOT"
+    shade "com.viaversion:viabackwards:4.10.0-23w51b-SNAPSHOT"
 
-    shade 'org.jline:jline:3.24.1'
-    shade 'org.jline:jline-terminal-jansi:3.24.1'
+    shade 'org.jline:jline:3.25.0'
+    shade 'org.jline:jline-terminal-jansi:3.25.0'
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.1"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -246,11 +237,16 @@ shadowJar {
     exclude 'META-INF/gradle/**'
     exclude 'META-INF/versions/**'
     exclude 'META-INF/native-image/io.netty/**/native-image.properties'
+    // todo: remove when jline 3.25.1 released https://github.com/jline/jline3/issues/923
+    exclude 'META-INF/native-image/jansi/native-image.properties'
     minimize {
         exclude(dependency("org.slf4j:slf4j-api:.*"))
         exclude(dependency("ch.qos.logback:.*:.*"))
         exclude(dependency("org.jline:jline:.*"))
         exclude(dependency("org.jline:jline-terminal-jansi:.*"))
+        exclude(dependency("org.jline:jline-native:.*"))
+        exclude(dependency("org.jline:jline-terminal:.*"))
+        exclude(dependency("org.fusesource.jansi:jansi:.*"))
         exclude(dependency("com.github.mwiede:jsch:.*"))
         exclude(dependency("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:.*"))
         exclude(dependency("com.github.rfresh2.Discord4j:discord4j-core:.*"))
@@ -351,8 +347,7 @@ jooq {
                     database {
                         name = 'org.jooq.meta.postgres.PostgresDatabase'
                         inputSchema = 'public'
-                        forcedTypes {
-                        }
+                        includes = 'Chats | Connections | Connectiontype | Deaths | Playercount | Queuelength | Queuewait | Restarts | Tablist'
                     }
                     generate {
                         deprecated = false

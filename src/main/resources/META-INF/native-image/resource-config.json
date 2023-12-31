@@ -215,6 +215,16 @@
   }, {
     "pattern":"\\Qlogback.xml\\E"
   }, {
+    "pattern":"\\Qmcdata/blockCollisionShapes.json\\E"
+  }, {
+    "pattern":"\\Qmcdata/blocks.json\\E"
+  }, {
+    "pattern":"\\Qmcdata/foods.json\\E"
+  }, {
+    "pattern":"\\Qmcdata/items.json\\E"
+  }, {
+    "pattern":"\\Qmcdata/language.json\\E"
+  }, {
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Linux/x86_64/libjansi.so\\E"
   }, {
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Windows/x86_64/jansi.dll\\E"
@@ -236,14 +246,6 @@
     "pattern":"\\Qorg/jline/utils/windows-vtp.caps\\E"
   }, {
     "pattern":"\\Qorg/postgresql/driverconfig.properties\\E"
-  }, {
-    "pattern":"\\Qpc/1.20.4/blockCollisionShapes.json\\E"
-  }, {
-    "pattern":"\\Qpc/1.20.4/blocks.json\\E"
-  }, {
-    "pattern":"\\Qpc/1.20.4/foods.json\\E"
-  }, {
-    "pattern":"\\Qpc/1.20.4/language.json\\E"
   }, {
     "pattern":"\\Qproxy_commit.txt\\E"
   }, {

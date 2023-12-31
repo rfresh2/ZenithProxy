@@ -7,7 +7,6 @@ package com.zenith.database.dto.tables;
 import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.DeathsRecord;
-import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -15,9 +14,9 @@ import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 
 /**
@@ -82,11 +81,11 @@ public class Deaths extends TableImpl<DeathsRecord> {
     public final TableField<DeathsRecord, String> KILLER_MOB = createField(DSL.name("killer_mob"), SQLDataType.CLOB, this, "");
 
     private Deaths(Name alias, Table<DeathsRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Deaths(Name alias, Table<DeathsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Deaths(Name alias, Table<DeathsRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -110,10 +109,6 @@ public class Deaths extends TableImpl<DeathsRecord> {
         this(DSL.name("deaths"), null);
     }
 
-    public <O extends Record> Deaths(Table<O> child, ForeignKey<O, DeathsRecord> key) {
-        super(child, key, DEATHS);
-    }
-
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
@@ -121,7 +116,7 @@ public class Deaths extends TableImpl<DeathsRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.DEATHS_TIME_IDX);
+        return Arrays.asList(Indexes.DEATHS_KILLER_UUID_IDX, Indexes.DEATHS_TIME_IDX, Indexes.DEATHS_VICTIM_UUID_IDX);
     }
 
     @Override
@@ -163,27 +158,87 @@ public class Deaths extends TableImpl<DeathsRecord> {
         return new Deaths(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row8 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row8<OffsetDateTime, String, String, UUID, String, UUID, String, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Deaths where(Condition condition) {
+        return new Deaths(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function8<? super OffsetDateTime, ? super String, ? super String, ? super UUID, ? super String, ? super UUID, ? super String, ? super String, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Deaths where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super OffsetDateTime, ? super String, ? super String, ? super UUID, ? super String, ? super UUID, ? super String, ? super String, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Deaths where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Deaths where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Deaths where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Deaths where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Deaths where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Deaths where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Deaths whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Deaths whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

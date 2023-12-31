@@ -40,6 +40,7 @@ public class AutoFish extends Module {
     private boolean swapping = false;
     public static final int MOVEMENT_PRIORITY = 10;
     private Instant castTime = Instant.EPOCH;
+    private int fishingRodId = ITEMS_MANAGER.getItemId("fishing_rod");
 
     @Override
     public Subscription subscribeEvents() {
@@ -135,7 +136,7 @@ public class AutoFish extends Module {
         // check if offhand has rod
         final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
-            if (offhandStack.getId() == 891) {
+            if (offhandStack.getId() == fishingRodId) {
                 rodHand = Hand.OFF_HAND;
                 return true;
             }
@@ -143,7 +144,7 @@ public class AutoFish extends Module {
         // check mainhand
         final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
-            if (mainHandStack.getId() == 891) {
+            if (mainHandStack.getId() == fishingRodId) {
                 rodHand = Hand.MAIN_HAND;
                 return true;
             }
@@ -153,7 +154,7 @@ public class AutoFish extends Module {
         final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
         for (int i = 44; i >= 9; i--) {
             final ItemStack stack = inventory[i];
-            if (nonNull(stack) && stack.getId() == 891) {
+            if (nonNull(stack) && stack.getId() == fishingRodId) {
                 sendClientPacketAsync(new ServerboundContainerClickPacket(0,
                                                                           CACHE.getPlayerCache().getActionId().incrementAndGet(),
                                                                           i,

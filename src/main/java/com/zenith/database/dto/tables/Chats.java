@@ -7,7 +7,6 @@ package com.zenith.database.dto.tables;
 import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.ChatsRecord;
-import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -15,9 +14,9 @@ import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 
 /**
@@ -62,11 +61,11 @@ public class Chats extends TableImpl<ChatsRecord> {
     public final TableField<ChatsRecord, UUID> PLAYER_UUID = createField(DSL.name("player_uuid"), SQLDataType.UUID, this, "");
 
     private Chats(Name alias, Table<ChatsRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Chats(Name alias, Table<ChatsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Chats(Name alias, Table<ChatsRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -88,10 +87,6 @@ public class Chats extends TableImpl<ChatsRecord> {
      */
     public Chats() {
         this(DSL.name("chats"), null);
-    }
-
-    public <O extends Record> Chats(Table<O> child, ForeignKey<O, ChatsRecord> key) {
-        super(child, key, CHATS);
     }
 
     @Override
@@ -143,27 +138,87 @@ public class Chats extends TableImpl<ChatsRecord> {
         return new Chats(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row4<OffsetDateTime, String, String, UUID> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Chats where(Condition condition) {
+        return new Chats(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function4<? super OffsetDateTime, ? super String, ? super String, ? super UUID, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Chats where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super OffsetDateTime, ? super String, ? super String, ? super UUID, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Chats where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Chats where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Chats where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Chats where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Chats where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Chats where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Chats whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Chats whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

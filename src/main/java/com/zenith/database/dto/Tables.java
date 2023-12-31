@@ -10,7 +10,7 @@ import com.zenith.database.dto.tables.*;
 /**
  * Convenience access to all tables in public.
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**
@@ -28,12 +28,10 @@ public class Tables {
      */
     public static final Deaths DEATHS = Deaths.DEATHS;
 
-
     /**
      * The table <code>public.playercount</code>.
      */
     public static final Playercount PLAYERCOUNT = Playercount.PLAYERCOUNT;
-
 
     /**
      * The table <code>public.queuelength</code>.

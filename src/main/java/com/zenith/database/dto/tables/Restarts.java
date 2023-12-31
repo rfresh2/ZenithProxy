@@ -8,7 +8,6 @@ import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Keys;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.RestartsRecord;
-import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -16,8 +15,8 @@ import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 
 /**
@@ -52,11 +51,11 @@ public class Restarts extends TableImpl<RestartsRecord> {
     public final TableField<RestartsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     private Restarts(Name alias, Table<RestartsRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Restarts(Name alias, Table<RestartsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Restarts(Name alias, Table<RestartsRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -78,10 +77,6 @@ public class Restarts extends TableImpl<RestartsRecord> {
      */
     public Restarts() {
         this(DSL.name("restarts"), null);
-    }
-
-    public <O extends Record> Restarts(Table<O> child, ForeignKey<O, RestartsRecord> key) {
-        super(child, key, RESTARTS);
     }
 
     @Override
@@ -143,27 +138,87 @@ public class Restarts extends TableImpl<RestartsRecord> {
         return new Restarts(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row2<OffsetDateTime, Integer> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Restarts where(Condition condition) {
+        return new Restarts(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function2<? super OffsetDateTime, ? super Integer, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Restarts where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super OffsetDateTime, ? super Integer, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Restarts where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Restarts where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Restarts where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Restarts where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Restarts where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Restarts where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Restarts whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Restarts whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

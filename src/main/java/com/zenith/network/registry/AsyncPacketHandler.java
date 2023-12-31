@@ -40,7 +40,7 @@ public interface AsyncPacketHandler<P extends Packet, S extends Session> extends
         try {
             if (!applyAsync(packet, session)) {
                 if (tryCount < 0 || tryCount > 1) {
-                    CLIENT_LOG.warn("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
+                    CLIENT_LOG.debug("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
                     return;
                 }
                 RETRY_EXECUTOR_SERVICE.schedule(() -> {

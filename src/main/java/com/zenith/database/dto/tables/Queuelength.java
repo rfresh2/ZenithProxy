@@ -7,7 +7,6 @@ package com.zenith.database.dto.tables;
 import com.zenith.database.dto.Indexes;
 import com.zenith.database.dto.Public;
 import com.zenith.database.dto.tables.records.QueuelengthRecord;
-import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -15,8 +14,8 @@ import org.jooq.impl.TableImpl;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 
 /**
@@ -56,11 +55,11 @@ public class Queuelength extends TableImpl<QueuelengthRecord> {
     public final TableField<QueuelengthRecord, Short> REGULAR = createField(DSL.name("regular"), SQLDataType.SMALLINT, this, "");
 
     private Queuelength(Name alias, Table<QueuelengthRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Queuelength(Name alias, Table<QueuelengthRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Queuelength(Name alias, Table<QueuelengthRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -82,10 +81,6 @@ public class Queuelength extends TableImpl<QueuelengthRecord> {
      */
     public Queuelength() {
         this(DSL.name("queuelength"), null);
-    }
-
-    public <O extends Record> Queuelength(Table<O> child, ForeignKey<O, QueuelengthRecord> key) {
-        super(child, key, QUEUELENGTH);
     }
 
     @Override
@@ -137,27 +132,87 @@ public class Queuelength extends TableImpl<QueuelengthRecord> {
         return new Queuelength(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row3 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row3<OffsetDateTime, Short, Short> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Queuelength where(Condition condition) {
+        return new Queuelength(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function3<? super OffsetDateTime, ? super Short, ? super Short, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Queuelength where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super OffsetDateTime, ? super Short, ? super Short, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Queuelength where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Queuelength where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Queuelength where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Queuelength where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Queuelength where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Queuelength where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Queuelength whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Queuelength whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }
