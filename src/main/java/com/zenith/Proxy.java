@@ -220,9 +220,7 @@ public class Proxy {
                 if (nonNull(this.client)) {
                     this.client.disconnect(MinecraftConstants.SERVER_CLOSING_MESSAGE);
                 }
-                if (nonNull(this.server)) {
-                    this.server.close(true);
-                }
+                stopServer();
                 saveConfig();
                 int count = 0;
                 while (!DISCORD_BOT.isMessageQueueEmpty() && count++ < 10) {
@@ -378,6 +376,19 @@ public class Proxy {
                 this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
                 this.server.addListener(new ProxyServerListener(this));
                 this.server.bind(false);
+            }
+        }
+    }
+
+    public void stopServer() {
+        synchronized (this) {
+            SERVER_LOG.info("Stopping server...");
+            if (this.server != null && this.server.isListening()) {
+                this.server.close(true);
+            }
+            if (this.lanBroadcaster != null) {
+                this.lanBroadcaster.stop();
+                this.lanBroadcaster = null;
             }
         }
     }

@@ -55,6 +55,7 @@ public class LanBroadcaster {
             datagramSocket.setBroadcast(true);
             var bytes = motdSupplier.get();
             datagramSocket.send(new DatagramPacket(bytes, bytes.length, InetAddress.getByName("224.0.2.60"), 4445));
+            this.errorCount.set(0);
         } catch (final Exception e) {
             SERVER_LOG.error("Error broadcasting LAN server", e);
             var count = errorCount.incrementAndGet();
