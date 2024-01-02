@@ -90,15 +90,11 @@ public class ActiveHoursCommand extends Command {
                     .title("Active Hours Status");
             }))
             .then(literal("forceReconnect")
-                      .then(literal("on").executes(c -> {
-                          CONFIG.client.extra.utility.actions.activeHours.forceReconnect = true;
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.utility.actions.activeHours.forceReconnect = getToggle(c, "toggle");
                           c.getSource().getEmbedBuilder()
-                              .title("Force Reconnect On!");
-                      }))
-                      .then(literal("off").executes(c -> {
-                          CONFIG.client.extra.utility.actions.activeHours.forceReconnect = false;
-                          c.getSource().getEmbedBuilder()
-                              .title("Force Reconnect Off!");
+                              .title("Force Reconnect Set!");
+                          return 1;
                       })));
     }
 

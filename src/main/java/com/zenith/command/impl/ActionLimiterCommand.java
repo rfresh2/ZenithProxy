@@ -61,7 +61,7 @@ public class ActionLimiterCommand extends Command {
                 CONFIG.client.extra.actionLimiter.movementHomeZ = getInteger(c, "z");
                 return 1;
             }))))
-            .then(literal("movementMinY").then(argument("y", integer()).executes(c -> {
+            .then(literal("movementMinY").then(argument("y", integer(-64, 400)).executes(c -> {
                 CONFIG.client.extra.actionLimiter.movementMinY = getInteger(c, "y");
                 return 1;
             })))

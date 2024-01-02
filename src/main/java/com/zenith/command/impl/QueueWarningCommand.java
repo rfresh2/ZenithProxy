@@ -35,9 +35,8 @@ public class QueueWarningCommand extends Command {
                     .title("QueueWarning " + (CONFIG.discord.queueWarning.enabled ? "On!" : "Off!"));
                 return 1;
             }))
-            .then(literal("position").then(argument("pos", integer()).executes(c -> {
-                final int position = IntegerArgumentType.getInteger(c, "pos");
-                CONFIG.discord.queueWarning.position = position;
+            .then(literal("position").then(argument("pos", integer(1, 100)).executes(c -> {
+                CONFIG.discord.queueWarning.position = IntegerArgumentType.getInteger(c, "pos");
                 c.getSource().getEmbedBuilder()
                     .title("Position Updated!");
                 return 1;

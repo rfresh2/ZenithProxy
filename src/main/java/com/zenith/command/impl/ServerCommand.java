@@ -30,7 +30,7 @@ public class ServerCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("server").requires(Command::validateAccountOwner)
             .then(argument("ip", wordWithChars())
-                      .then(argument("port", integer()).executes(c -> {
+                      .then(argument("port", integer(1, 65535)).executes(c -> {
                           final String ip = StringArgumentType.getString(c, "ip");
                           final int port = IntegerArgumentType.getInteger(c, "port");
                           CONFIG.client.server.address = ip;

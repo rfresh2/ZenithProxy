@@ -42,7 +42,7 @@ public class AutoReplyCommand extends Command {
                     .title("AutoReply " + (CONFIG.client.extra.autoReply.enabled ? "On!" : "Off!"));
                 return 1;
             }))
-            .then(literal("cooldown").then(argument("secs", integer()).executes(c -> {
+            .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {
                 int delay = IntegerArgumentType.getInteger(c, "secs");
                 MODULE_MANAGER.getModule(AutoReply.class).ifPresent(m -> m.updateCooldown(delay));
                 c.getSource().getEmbedBuilder()

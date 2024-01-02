@@ -35,7 +35,7 @@ public class AutoReconnectCommand extends Command {
                 return 1;
             }))
             .then(literal("delay")
-                      .then(argument("delaySec", integer()).executes(c -> {
+                      .then(argument("delaySec", integer(0, 1000)).executes(c -> {
                           CONFIG.client.extra.autoReconnect.delaySeconds = IntegerArgumentType.getInteger(c, "delaySec");
                           c.getSource().getEmbedBuilder()
                               .title("AutoReconnect Delay Updated!");

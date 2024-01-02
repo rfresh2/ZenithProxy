@@ -62,7 +62,7 @@ public class ServerConfigCommand extends Command {
                                         .title("Ping Reports Online Players Set!");
                                     return 1;
                                 })))
-                      .then(literal("maxPlayers").then(argument("maxPlayers", integer()).executes(context -> {
+                      .then(literal("maxPlayers").then(argument("maxPlayers", integer(0)).executes(context -> {
                           CONFIG.server.ping.maxPlayers = getInteger(context, "maxPlayers");
                           context.getSource().getEmbedBuilder()
                               .title("Ping Max Players Set!");

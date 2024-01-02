@@ -103,7 +103,7 @@ public class SpammerCommand extends Command {
                           return 1;
                       })))
             .then(literal("addAt")
-                      .then(argument("index", integer())
+                      .then(argument("index", integer(0))
                                 .then(argument("message", greedyString()).executes(c -> {
                                     final int index = IntegerArgumentType.getInteger(c, "index");
                                     final String message = StringArgumentType.getString(c, "message");
@@ -119,7 +119,7 @@ public class SpammerCommand extends Command {
                                     }
                                 }))))
             .then(literal("del")
-                      .then(argument("index", integer()).executes(c -> {
+                      .then(argument("index", integer(0)).executes(c -> {
                           final int index = IntegerArgumentType.getInteger(c, "index");
                           try {
                               CONFIG.client.extra.spammer.messages.remove(index);
