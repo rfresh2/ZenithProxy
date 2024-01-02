@@ -23,6 +23,7 @@ import com.zenith.feature.queue.Queue;
 import com.zenith.network.client.Authenticator;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.CustomServerInfoBuilder;
+import com.zenith.network.server.LanBroadcaster;
 import com.zenith.network.server.ProxyServerListener;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.ProxyServerLoginHandler;
@@ -87,6 +88,7 @@ public class Proxy {
     @Setter
     private AutoUpdater autoUpdater;
     private Subscription eventSubscription;
+    private LanBroadcaster lanBroadcaster;
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -365,7 +367,12 @@ public class Proxy {
                 SERVER_LOG.info("Starting server on {}:{}...", address, port);
                 this.server = new TcpServer(address, port, MinecraftProtocol::new);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
-                this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, new CustomServerInfoBuilder(this));
+                var serverInfoBuilder = new CustomServerInfoBuilder(this);
+                this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);
+                if (this.lanBroadcaster == null && CONFIG.server.ping.lanBroadcast) {
+                    this.lanBroadcaster = new LanBroadcaster(serverInfoBuilder);
+                    lanBroadcaster.start();
+                }
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
