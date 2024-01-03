@@ -78,10 +78,7 @@ public class ServerConnection implements Session, SessionListener {
     protected ServerProfileCache spectatorFakeProfileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
     protected SpectatorEntity spectatorEntity;
-
-    protected SocketAddress spoofedAddress;
-    protected UUID spoofedUuid;
-    protected List<GameProfile.Property> spoofedProperties;
+    protected SocketAddress remoteAddress;
 
     /**
      * Team data
@@ -173,7 +170,9 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void connected(final Session session) { }
+    public void connected(final Session session) {
+        this.remoteAddress = session.getRemoteAddress();
+    }
 
     @Override
     public void disconnecting(final Session session, final Component reason, final Throwable cause) { }
@@ -391,7 +390,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public SocketAddress getRemoteAddress() {
-        return this.spoofedAddress != null ? this.spoofedAddress : this.session.getRemoteAddress();
+        return this.remoteAddress;
     }
 
     @Override

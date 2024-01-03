@@ -12,11 +12,13 @@ import io.netty.buffer.Unpooled;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE_MANAGER;
 
 public class ForwardingLoginQueryResponseHandler implements PacketHandler<ServerboundCustomQueryPacket, ServerConnection> {
     @Override
@@ -45,12 +47,12 @@ public class ForwardingLoginQueryResponseHandler implements PacketHandler<Server
             if (session.getRemoteAddress() instanceof InetSocketAddress address) {
                 remotePort = address.getPort();
             }
-            final String address = session.getCodecHelper().readString(buf);
-            session.setSpoofedAddress(new InetSocketAddress(address, remotePort));
 
+            final SocketAddress remoteAddress = new InetSocketAddress(session.getCodecHelper().readString(buf), remotePort);
             final GameProfile profile = createProfile(buf, (MinecraftCodecHelper) session.getCodecHelper());
-            session.setSpoofedUuid(profile.getId());
-            session.setSpoofedProperties(profile.getProperties());
+
+            session.setRemoteAddress(remoteAddress);
+            MODULE_MANAGER.get(ProxyForwarding.class).setForwardedInfo(session, new ProxyForwarding.ForwardedInfo(profile, remoteAddress));
         }
         return packet;
     }

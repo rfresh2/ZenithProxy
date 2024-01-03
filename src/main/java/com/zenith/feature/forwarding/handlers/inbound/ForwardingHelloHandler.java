@@ -13,7 +13,6 @@ public class ForwardingHelloHandler implements PacketHandler<ServerboundHelloPac
     @Override
     public ServerboundHelloPacket apply(ServerboundHelloPacket packet, ServerConnection session) {
         if (CONFIG.client.extra.proxyForwarding.mode == Config.Client.Extra.ProxyForwarding.ForwardingMode.VELOCITY) {
-//            session.getCodecHelper().
             final byte[] data = new byte[]{ProxyForwarding.VELOCITY_MAX_SUPPORTED_FORWARDING_VERSION};
             session.sendAsync(new ClientboundCustomQueryPacket(ProxyForwarding.VELOCITY_QUERY_ID, ProxyForwarding.VELOCITY_PLAYER_INFO_CHANNEL.asString(), data));
         }
