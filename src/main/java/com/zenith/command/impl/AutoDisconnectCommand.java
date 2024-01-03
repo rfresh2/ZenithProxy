@@ -45,7 +45,7 @@ public class AutoDisconnectCommand extends Command {
                     .title("AutoDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "On!" : "Off!"));
                 return 1;
             }))
-            .then(literal("health").then(argument("healthLevel", integer()).executes(c -> {
+            .then(literal("health").then(argument("healthLevel", integer(1, 19)).executes(c -> {
                 CONFIG.client.extra.utility.actions.autoDisconnect.health = IntegerArgumentType.getInteger(c, "healthLevel");
                 c.getSource().getEmbedBuilder()
                     .title("AutoDisconnect Health Updated!");

@@ -361,6 +361,7 @@ public final class Config {
             public boolean onlinePlayers = true;
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
+            public boolean lanBroadcast = true;
         }
 
         public String getProxyAddress() {

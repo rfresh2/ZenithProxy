@@ -40,7 +40,7 @@ public class SpookCommand extends Command {
                     .title("Spook " + (CONFIG.client.extra.spook.enabled ? "On!" : "Off!"));
                 return 1;
             }))
-            .then(literal("delay").then(argument("delayTicks", integer()).executes(c -> {
+            .then(literal("delay").then(argument("delayTicks", integer(0, 1000)).executes(c -> {
                 final int delay = IntegerArgumentType.getInteger(c, "delayTicks");
                 CONFIG.client.extra.spook.tickDelay = (long) delay;
                 c.getSource().getEmbedBuilder()

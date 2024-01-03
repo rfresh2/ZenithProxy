@@ -26,12 +26,12 @@ public class KillAuraCommand extends Command {
                                  CommandCategory.MODULE,
                                  "Attacks entities near the player",
                                  asList("on/off",
-                       "attackDelay <ticks>",
-                       "targetPlayers on/off",
-                       "targetMobs on/off",
-                       "targetArmorStands on/off",
-                       "weaponSwitch on/off",
-                       "range <number>"),
+                                        "attackDelay <ticks>",
+                                        "targetPlayers on/off",
+                                        "targetMobs on/off",
+                                        "targetArmorStands on/off",
+                                        "weaponSwitch on/off",
+                                        "range <number>"),
                                  asList("ka")
         );
     }
@@ -47,7 +47,7 @@ public class KillAuraCommand extends Command {
                 return 1;
             }))
             .then(literal("attackdelay")
-                      .then(argument("ticks", integer()).executes(c -> {
+                      .then(argument("ticks", integer(0, 1000)).executes(c -> {
                           CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
                           c.getSource().getEmbedBuilder()
                                        .title("Attack Delay Ticks Set!");
