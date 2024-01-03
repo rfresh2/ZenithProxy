@@ -19,7 +19,7 @@ public class ForwardingGameProfileHandler implements PacketHandler<ClientboundGa
         if (forwardedInfo == null) {
             // Client didn't send any forwarded info, so disconnect.
             session.disconnect("This server requires you to connect with " +
-                    (CONFIG.client.extra.proxyForwarding.mode == Config.Client.Extra.ProxyForwarding.ForwardingMode.BUNGEECORD ? "BungeeCord" : "Velocity") + ".");
+                    (CONFIG.server.extra.proxyForwarding.mode == Config.Server.Extra.ProxyForwarding.ForwardingMode.BUNGEECORD ? "BungeeCord" : "Velocity") + ".");
             return packet;
         } else {
             GameProfile profile = forwardedInfo.profile();

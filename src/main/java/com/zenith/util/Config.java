@@ -84,7 +84,6 @@ public final class Config {
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
-            public ProxyForwarding proxyForwarding = new ProxyForwarding();
 
             public static final class Chat {
                 public ArrayList<PlayerEntry> ignoreList = new ArrayList<>();
@@ -276,17 +275,6 @@ public final class Config {
                 public boolean allowInteract = true;
                 public boolean allowChat = true; // outbound chats, including commands
             }
-
-            public static class ProxyForwarding {
-                public boolean enabled = false;
-                public ForwardingMode mode = ForwardingMode.VELOCITY;
-                public String secret = "YOUR-SECRET-HERE";
-
-                public enum ForwardingMode {
-                    BUNGEECORD,
-                    VELOCITY,
-                }
-            }
         }
 
         public static final class Server {
@@ -355,6 +343,7 @@ public final class Config {
         public static final class Extra {
             public Timeout timeout = new Timeout();
             public Whitelist whitelist = new Whitelist();
+            public ProxyForwarding proxyForwarding = new ProxyForwarding();
 
             public static final class Whitelist {
                 public boolean enable = true;
@@ -365,6 +354,17 @@ public final class Config {
             public static final class Timeout {
                 public boolean enable = true;
                 public int seconds = 30;
+            }
+
+            public static final class ProxyForwarding {
+                public boolean enabled = false;
+                public ForwardingMode mode = ForwardingMode.VELOCITY;
+                public String secret = "YOUR-SECRET-HERE";
+
+                public enum ForwardingMode {
+                    BUNGEECORD,
+                    VELOCITY,
+                }
             }
         }
 

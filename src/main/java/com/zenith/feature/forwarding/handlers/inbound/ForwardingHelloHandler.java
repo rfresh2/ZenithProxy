@@ -12,7 +12,7 @@ import static com.zenith.Shared.CONFIG;
 public class ForwardingHelloHandler implements PacketHandler<ServerboundHelloPacket, ServerConnection> {
     @Override
     public ServerboundHelloPacket apply(ServerboundHelloPacket packet, ServerConnection session) {
-        if (CONFIG.client.extra.proxyForwarding.mode == Config.Client.Extra.ProxyForwarding.ForwardingMode.VELOCITY) {
+        if (CONFIG.server.extra.proxyForwarding.mode == Config.Server.Extra.ProxyForwarding.ForwardingMode.VELOCITY) {
             final byte[] data = new byte[]{ProxyForwarding.VELOCITY_MAX_SUPPORTED_FORWARDING_VERSION};
             session.sendAsync(new ClientboundCustomQueryPacket(ProxyForwarding.VELOCITY_QUERY_ID, ProxyForwarding.VELOCITY_PLAYER_INFO_CHANNEL.asString(), data));
         }

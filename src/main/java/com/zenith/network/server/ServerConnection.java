@@ -95,7 +95,7 @@ public class ServerConnection implements Session, SessionListener {
     public void packetReceived(Session session, Packet packet) {
         try {
             Packet p = packet;
-            if (CONFIG.client.extra.proxyForwarding.enabled) {
+            if (CONFIG.server.extra.proxyForwarding.enabled) {
                 p = MODULE_MANAGER.get(ProxyForwarding.class).getHandlerRegistry().handleInbound(p, this);
                 if (p == null) return;
             }
@@ -127,7 +127,7 @@ public class ServerConnection implements Session, SessionListener {
     public Packet packetSending(final Session session, final Packet packet) {
         try {
             Packet p = packet;
-            if (CONFIG.client.extra.proxyForwarding.enabled) {
+            if (CONFIG.server.extra.proxyForwarding.enabled) {
                 p = MODULE_MANAGER.get(ProxyForwarding.class).getHandlerRegistry().handleOutgoing(p, this);
             }
             if (p != null) {

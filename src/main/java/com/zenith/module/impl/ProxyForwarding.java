@@ -61,7 +61,7 @@ public class ProxyForwarding extends Module {
 
     @Override
     public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.proxyForwarding.enabled;
+        return () -> CONFIG.server.extra.proxyForwarding.enabled;
     }
 
     public ForwardedInfo popForwardedInfo(final ServerConnection session) {
