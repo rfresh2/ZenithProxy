@@ -2,6 +2,8 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.packet.handshake.serverbound.ClientIntentionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoRemovePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundCustomQueryPacket;
 import com.zenith.event.Subscription;
@@ -9,6 +11,8 @@ import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import com.zenith.feature.forwarding.handlers.inbound.ForwardingHandshakeHandler;
 import com.zenith.feature.forwarding.handlers.inbound.ForwardingLoginQueryResponseHandler;
 import com.zenith.feature.forwarding.handlers.outbound.ForwardingGameProfileHandler;
+import com.zenith.feature.forwarding.handlers.outbound.ForwardingPlayerInfoRemoveHandler;
+import com.zenith.feature.forwarding.handlers.outbound.ForwardingPlayerInfoUpdateHandler;
 import com.zenith.module.Module;
 import com.zenith.network.registry.HandlerRegistry;
 import com.zenith.network.server.ServerConnection;
@@ -46,6 +50,8 @@ public class ProxyForwarding extends Module {
                 .registerInbound(ClientIntentionPacket.class, new ForwardingHandshakeHandler())
                 .registerInbound(ServerboundCustomQueryPacket.class, new ForwardingLoginQueryResponseHandler())
                 .registerOutbound(ClientboundGameProfilePacket.class, new ForwardingGameProfileHandler())
+                .registerOutbound(ClientboundPlayerInfoUpdatePacket.class, new ForwardingPlayerInfoUpdateHandler())
+                .registerOutbound(ClientboundPlayerInfoRemovePacket.class, new ForwardingPlayerInfoRemoveHandler())
                 .build();
     }
 
