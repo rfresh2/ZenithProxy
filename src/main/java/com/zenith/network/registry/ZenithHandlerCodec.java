@@ -18,6 +18,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
@@ -161,6 +162,7 @@ public class ZenithHandlerCodec {
             .registerInbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesHandler())
             .registerInbound(ClientboundCustomPayloadPacket.class, new CustomPayloadHandler())
             .registerInbound(ClientboundRecipePacket.class, new UnlockRecipeHandler())
+            .registerInbound(ClientboundSetPlayerTeamPacket.class, new TeamHandler())
             //ENTITY
             .registerInbound(ClientboundEntityEventPacket.class, new EntityEventHandler())
             .registerInbound(ClientboundSetEntityLinkPacket.class, new SetEntityLinkHandler())
