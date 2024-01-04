@@ -8,6 +8,7 @@ import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.map.MapDataCache;
 import com.zenith.cache.data.recipe.RecipeCache;
+import com.zenith.cache.data.scoreboard.ScoreboardCache;
 import com.zenith.cache.data.stats.StatisticsCache;
 import com.zenith.cache.data.tab.TabListCache;
 import com.zenith.cache.data.team.TeamCache;
@@ -33,15 +34,16 @@ public class DataCache {
     protected final MapDataCache mapDataCache = new MapDataCache();
     protected final RecipeCache recipeCache = new RecipeCache();
     protected final TeamCache teamCache = new TeamCache();
+    protected final ScoreboardCache scoreboardCache = new ScoreboardCache();
 
     public Collection<CachedData> getAllData() {
-        return Arrays.asList(profileCache, playerCache, chunkCache, statsCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache, teamCache);
+        return Arrays.asList(profileCache, playerCache, chunkCache, statsCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache, teamCache, scoreboardCache);
     }
 
     // get a limited selection of cache data
     // mainly we don't want to not send the proxy client's player cache
     public Collection<CachedData> getAllDataSpectator(final PlayerCache spectatorPlayerCache) {
-        return Arrays.asList(spectatorPlayerCache, chunkCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache, teamCache);
+        return Arrays.asList(spectatorPlayerCache, chunkCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache, teamCache, scoreboardCache);
     }
 
     public boolean reset(boolean full) {
