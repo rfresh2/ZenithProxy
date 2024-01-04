@@ -18,7 +18,10 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetDisplayObjectivePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
@@ -45,6 +48,7 @@ import com.zenith.network.client.handler.incoming.*;
 import com.zenith.network.client.handler.incoming.entity.*;
 import com.zenith.network.client.handler.incoming.inventory.*;
 import com.zenith.network.client.handler.incoming.level.*;
+import com.zenith.network.client.handler.incoming.scoreboard.*;
 import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
@@ -163,6 +167,9 @@ public class ZenithHandlerCodec {
             .registerInbound(ClientboundCustomPayloadPacket.class, new CustomPayloadHandler())
             .registerInbound(ClientboundRecipePacket.class, new UnlockRecipeHandler())
             .registerInbound(ClientboundSetPlayerTeamPacket.class, new TeamHandler())
+            .registerInbound(ClientboundSetObjectivePacket.class, new SetObjectiveHandler())
+            .registerInbound(ClientboundSetDisplayObjectivePacket.class, new SetDisplayObjectiveHandler())
+            .registerInbound(ClientboundSetScorePacket.class, new SetScoreHandler())
             //ENTITY
             .registerInbound(ClientboundEntityEventPacket.class, new EntityEventHandler())
             .registerInbound(ClientboundSetEntityLinkPacket.class, new SetEntityLinkHandler())
