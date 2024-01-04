@@ -2,6 +2,7 @@ package com.zenith.feature.forwarding.handlers.outbound;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
+import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundCustomQueryPacket;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.zenith.module.impl.ProxyForwarding;
 import com.zenith.network.registry.PacketHandler;
@@ -16,11 +17,16 @@ public class ForwardingGameProfileHandler implements PacketHandler<ClientboundGa
     public ClientboundGameProfilePacket apply(ClientboundGameProfilePacket packet, ServerConnection session) {
         final ProxyForwarding.ForwardedInfo forwardedInfo = MODULE_MANAGER.get(ProxyForwarding.class).popForwardedInfo(session);
 
-        if (forwardedInfo == null) {
-            // Client didn't send any forwarded info, so disconnect.
-            session.disconnect("This server requires you to connect with " +
-                    (CONFIG.server.extra.proxyForwarding.mode == Config.Server.Extra.ProxyForwarding.ForwardingMode.BUNGEECORD ? "BungeeCord" : "Velocity") + ".");
-            return packet;
+        if (forwardedInfo == null || forwardedInfo.profile() == null) {
+            if (forwardedInfo == null && CONFIG.server.extra.proxyForwarding.mode == Config.Server.Extra.ProxyForwarding.ForwardingMode.VELOCITY) {
+                final byte[] data = new byte[]{ProxyForwarding.VELOCITY_MAX_SUPPORTED_FORWARDING_VERSION};
+                session.sendAsync(new ClientboundCustomQueryPacket(ProxyForwarding.VELOCITY_QUERY_ID, ProxyForwarding.VELOCITY_PLAYER_INFO_CHANNEL.asString(), data));
+
+                MODULE_MANAGER.get(ProxyForwarding.class).setForwardedInfo(session, new ProxyForwarding.ForwardedInfo(null, null));
+            } else {
+                session.disconnect("No proxy forwarding info received.");
+            }
+            return null;
         } else {
             GameProfile profile = forwardedInfo.profile();
 

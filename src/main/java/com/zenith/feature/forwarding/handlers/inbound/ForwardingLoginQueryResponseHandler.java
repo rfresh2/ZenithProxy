@@ -3,6 +3,7 @@ package com.zenith.feature.forwarding.handlers.inbound;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundCustomQueryPacket;
+import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import com.zenith.module.impl.ProxyForwarding;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
@@ -53,6 +54,8 @@ public class ForwardingLoginQueryResponseHandler implements PacketHandler<Server
 
             session.setRemoteAddress(remoteAddress);
             MODULE_MANAGER.get(ProxyForwarding.class).setForwardedInfo(session, new ProxyForwarding.ForwardedInfo(profile, remoteAddress));
+
+            session.callPacketReceived(new ServerboundHelloPacket(profile.getName(), profile.getId()));
         }
         return packet;
     }

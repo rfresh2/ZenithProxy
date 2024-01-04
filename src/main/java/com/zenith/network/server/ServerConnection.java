@@ -170,9 +170,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void connected(final Session session) {
-        this.remoteAddress = session.getRemoteAddress();
-    }
+    public void connected(final Session session) {}
 
     @Override
     public void disconnecting(final Session session, final Component reason, final Throwable cause) { }
@@ -390,7 +388,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public SocketAddress getRemoteAddress() {
-        return this.remoteAddress;
+        return this.remoteAddress != null ? this.remoteAddress : this.session.getRemoteAddress();
     }
 
     @Override

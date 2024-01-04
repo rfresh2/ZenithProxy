@@ -4,11 +4,9 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundCustomQueryPacket;
-import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import com.zenith.feature.forwarding.handlers.inbound.ForwardingHandshakeHandler;
-import com.zenith.feature.forwarding.handlers.inbound.ForwardingHelloHandler;
 import com.zenith.feature.forwarding.handlers.inbound.ForwardingLoginQueryResponseHandler;
 import com.zenith.feature.forwarding.handlers.outbound.ForwardingGameProfileHandler;
 import com.zenith.module.Module;
@@ -46,7 +44,6 @@ public class ProxyForwarding extends Module {
                 .setLogger(MODULE_LOG)
                 .allowUnhandled(true)
                 .registerInbound(ClientIntentionPacket.class, new ForwardingHandshakeHandler())
-                .registerInbound(ServerboundHelloPacket.class, new ForwardingHelloHandler())
                 .registerInbound(ServerboundCustomQueryPacket.class, new ForwardingLoginQueryResponseHandler())
                 .registerOutbound(ClientboundGameProfilePacket.class, new ForwardingGameProfileHandler())
                 .build();

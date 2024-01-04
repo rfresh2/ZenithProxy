@@ -35,11 +35,11 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
     @Override
     public void loggedIn(Session session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-        SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
         ServerConnection connection = ((ProxyServerListener) this.proxy.getServer().getListeners().stream()
                 .filter(ProxyServerListener.class::isInstance)
                 .findAny().orElseThrow(IllegalStateException::new))
                 .getConnections().get(session);
+        SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), connection.getRemoteAddress());
 
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
                         && (this.proxy.getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())
