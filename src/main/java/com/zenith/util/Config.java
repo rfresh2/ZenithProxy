@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -188,7 +187,7 @@ public final class Config {
                     public boolean enabled = false;
                     public boolean forceReconnect = false;
                     public String timeZoneId = "Universal";
-                    public List<ActiveTime> activeTimes = new ArrayList<>();
+                    public ArrayList<ActiveTime> activeTimes = new ArrayList<>();
 
                     public static class ActiveTime {
                         public int hour;

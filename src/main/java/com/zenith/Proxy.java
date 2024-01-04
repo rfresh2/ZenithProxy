@@ -49,7 +49,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -532,35 +532,38 @@ public class Proxy {
     }
 
     private void handleActiveHoursTick() {
-        Config.Client.Extra.Utility.ActiveHours activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
-        if (activeHoursConfig.enabled
-                // prevent rapid reconnects
-                && this.lastActiveHoursConnect.isBefore(Instant.now().minus(1L, ChronoUnit.HOURS))
-                // only force reconnect an active session if config enabled
-                && ((nonNull(this.currentPlayer.get()) && this.currentPlayer.get().isConnected() && activeHoursConfig.forceReconnect)
-                            || (isNull(this.currentPlayer.get()) || !this.currentPlayer.get().isConnected()))) {
-            // get current queue wait time
-            int queueLength = (CONFIG.authentication.prio ? Queue.getQueueStatus().prio() : Queue.getQueueStatus().regular());
-            long queueWaitSeconds = Queue.getQueueWait(queueLength);
-            activeHoursConfig.activeTimes.stream()
-                    .flatMap(activeTime -> {
-                        ZonedDateTime activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(activeTime.hour, activeTime.minute), ZoneId.of(activeHoursConfig.timeZoneId));
-                        ZonedDateTime activeHourTomorrow = activeHourToday.plusDays(1L);
-                        return Stream.of(activeHourToday, activeHourTomorrow);
-                    })
-                    .filter(activeHourDateTime -> {
-                        long nowPlusQueueWaitEpoch = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId)).plusSeconds((long)queueWaitSeconds).atZone(ZoneId.of(activeHoursConfig.timeZoneId)).toEpochSecond();
-                        long activeHoursEpoch = activeHourDateTime.toEpochSecond();
-                        // active hour within 8 mins range of now
-                        return nowPlusQueueWaitEpoch > activeHoursEpoch - 240 && nowPlusQueueWaitEpoch < activeHoursEpoch + 240;
-                    })
-                    .findAny()
-                    .ifPresent(t -> {
-                        EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
-                        this.lastActiveHoursConnect = Instant.now();
-                        disconnect(SYSTEM_DISCONNECT);
-                        SCHEDULED_EXECUTOR_SERVICE.schedule(this::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
-                    });
+        var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
+        if (!activeHoursConfig.enabled) return;
+        if (this.isPrio.orElse(false) && isConnected()) return;
+        if (hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
+        if (this.lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
+
+        var queueLength = Queue.getQueueStatus().regular();
+        var queueWaitSeconds = Queue.getQueueWait(queueLength);
+        var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
+            .plusSeconds(queueWaitSeconds)
+            .atZone(ZoneId.of(activeHoursConfig.timeZoneId))
+            .toInstant();
+        var activeTimes = activeHoursConfig.activeTimes.stream()
+            .flatMap(activeTime -> {
+                var activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(activeTime.hour, activeTime.minute), ZoneId.of(activeHoursConfig.timeZoneId));
+                var activeHourTomorrow = activeHourToday.plusDays(1L);
+                return Stream.of(activeHourToday, activeHourTomorrow);
+            })
+            .map(ChronoZonedDateTime::toInstant)
+            .toList();
+        // active hour within 10 mins range of now
+        var timeRange = Duration.ofMinutes(5); // x2
+        for (Instant activeTime : activeTimes) {
+            if (nowPlusQueueWait.isBefore(activeTime.minus(timeRange))
+                && nowPlusQueueWait.isAfter(activeTime.plus(timeRange))) {
+                MODULE_LOG.info("ActiveHours triggered for time: {}", activeTime);
+                EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
+                this.lastActiveHoursConnect = Instant.now();
+                disconnect(SYSTEM_DISCONNECT);
+                SCHEDULED_EXECUTOR_SERVICE.schedule(this::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
+                break;
+            }
         }
     }
 
