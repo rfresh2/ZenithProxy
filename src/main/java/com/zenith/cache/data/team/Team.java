@@ -40,9 +40,9 @@ public class Team {
                 this.suffix,
                 this.friendlyFire,
                 this.seeFriendlyInvisibles,
-                this.nameTagVisibility,
-                this.collisionRule,
-                this.color,
+                this.nameTagVisibility != null ? this.nameTagVisibility : NameTagVisibility.HIDE_FOR_OTHER_TEAMS,
+                this.collisionRule != null ? this.collisionRule : CollisionRule.ALWAYS,
+                this.color != null ? this.color : TeamColor.WHITE,
                 this.players.toArray(new String[0])
         );
     }
