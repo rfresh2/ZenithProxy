@@ -392,6 +392,7 @@ public class ChunkCache implements CachedData {
                 this.serverSimulationDistance = -1;
                 this.registryTag = null;
                 this.worldBorderData = WorldBorderData.DEFAULT;
+                this.worldTimeData = null;
                 this.serverBrand = BRAND_SUPPLIER.get();
             }
             return true;
