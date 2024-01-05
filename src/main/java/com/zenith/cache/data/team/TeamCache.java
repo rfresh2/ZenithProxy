@@ -3,10 +3,9 @@ package com.zenith.cache.data.team;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -43,7 +42,7 @@ public class TeamCache implements CachedData {
                         .setNameTagVisibility(packet.getNameTagVisibility())
                         .setCollisionRule(packet.getCollisionRule())
                         .setColor(packet.getColor())
-                        .setPlayers(new ArrayList<>(Arrays.asList(packet.getPlayers())))
+                        .setPlayers(ObjectArraySet.of(packet.getPlayers()))
         );
     }
 

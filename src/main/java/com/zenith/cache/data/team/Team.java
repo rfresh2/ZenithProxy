@@ -4,14 +4,13 @@ import com.github.steveice10.mc.protocol.data.game.scoreboard.CollisionRule;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.NameTagVisibility;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamColor;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
-
-import java.util.List;
 
 
 @Getter
@@ -30,7 +29,7 @@ public class Team {
     protected NameTagVisibility nameTagVisibility;
     protected CollisionRule collisionRule;
     protected TeamColor color;
-    protected List<String> players;
+    protected ObjectSet<String> players;
 
     public ClientboundSetPlayerTeamPacket toPacket() {
         return new ClientboundSetPlayerTeamPacket(
