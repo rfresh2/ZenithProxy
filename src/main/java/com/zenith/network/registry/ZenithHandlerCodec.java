@@ -18,6 +18,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundResetScorePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetDisplayObjectivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
@@ -170,6 +171,7 @@ public class ZenithHandlerCodec {
             .registerInbound(ClientboundSetObjectivePacket.class, new SetObjectiveHandler())
             .registerInbound(ClientboundSetDisplayObjectivePacket.class, new SetDisplayObjectiveHandler())
             .registerInbound(ClientboundSetScorePacket.class, new SetScoreHandler())
+            .registerInbound(ClientboundResetScorePacket.class, new ResetScoreHandler())
             //ENTITY
             .registerInbound(ClientboundEntityEventPacket.class, new EntityEventHandler())
             .registerInbound(ClientboundSetEntityLinkPacket.class, new SetEntityLinkHandler())

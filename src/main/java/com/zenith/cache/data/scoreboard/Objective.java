@@ -1,12 +1,12 @@
 package com.zenith.cache.data.scoreboard;
 
+import com.github.steveice10.mc.protocol.data.game.chat.numbers.NumberFormat;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.ObjectiveAction;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.ScoreType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +26,20 @@ public class Objective {
 
     protected Component displayName;
     protected ScoreType scoreType;
+    protected NumberFormat numberFormat;
 
-    protected final Object2IntMap<String> scores = new Object2IntOpenHashMap<>();
+    protected final Object2ObjectMap<String, Score> scores = new Object2ObjectOpenHashMap<>();
 
     public void addPackets(Consumer<Packet> consumer) {
         consumer.accept(new ClientboundSetObjectivePacket(
                 this.name,
                 ObjectiveAction.ADD,
                 this.displayName,
-                this.scoreType
+                this.scoreType,
+                this.numberFormat
         ));
-        for (var entry : this.scores.object2IntEntrySet()) {
-            consumer.accept(new ClientboundSetScorePacket(entry.getKey(), this.name, entry.getIntValue()));
+        for (var score : this.scores.values()) {
+            consumer.accept(score.toPacket(this.name));
         }
     }
 }

@@ -21,7 +21,8 @@ public class SetObjectiveHandler implements AsyncPacketHandler<ClientboundSetObj
                 }
                 objective
                     .setDisplayName(packet.getDisplayName())
-                    .setScoreType(packet.getType());
+                    .setScoreType(packet.getType())
+                    .setNumberFormat(packet.getNumberFormat());
             }
         }
 

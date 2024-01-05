@@ -54,9 +54,9 @@ public class ScoreboardCache implements CachedData {
         this.cachedObjectives.remove(packet.getName());
     }
 
-    public void removeEntry(@NonNull String entry) {
+    public void removeEntry(@NonNull String owner) {
         for (final Objective objective : this.cachedObjectives.values()) {
-            objective.getScores().removeInt(entry);
+            objective.getScores().remove(owner);
         }
     }
 
