@@ -23,9 +23,6 @@ public class Score {
     }
 
     public ClientboundSetScorePacket toPacket(String objective) {
-        return new ClientboundSetScorePacket(this.owner, objective, this.value)
-                // full constructor is private for some reason?
-                .withDisplay(this.display)
-                .withNumberFormat(this.numberFormat);
+        return new ClientboundSetScorePacket(this.owner, objective, this.value, this.display, this.numberFormat);
     }
 }
