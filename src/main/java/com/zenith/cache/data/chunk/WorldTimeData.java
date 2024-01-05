@@ -2,9 +2,15 @@ package com.zenith.cache.data.chunk;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
 
-public record WorldTimeData(long lastUpdate, long worldAge, long time) {
-    public WorldTimeData(ClientboundSetTimePacket packet) {
-        this(System.nanoTime(), packet.getWorldAge(), packet.getTime());
+public class WorldTimeData {
+    private long lastUpdate;
+    private long worldAge;
+    private long time;
+
+    public void update(ClientboundSetTimePacket packet) {
+        this.lastUpdate = System.nanoTime();
+        this.worldAge = packet.getWorldAge();
+        this.time = packet.getTime();
     }
 
     public ClientboundSetTimePacket toPacket() {
