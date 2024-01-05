@@ -4,12 +4,14 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoRemovePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundCustomQueryPacket;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import com.zenith.feature.forwarding.handlers.inbound.ForwardingHandshakeHandler;
 import com.zenith.feature.forwarding.handlers.inbound.ForwardingLoginQueryResponseHandler;
+import com.zenith.feature.forwarding.handlers.outbound.ForwardingAddPlayerHandler;
 import com.zenith.feature.forwarding.handlers.outbound.ForwardingGameProfileHandler;
 import com.zenith.feature.forwarding.handlers.outbound.ForwardingPlayerInfoRemoveHandler;
 import com.zenith.feature.forwarding.handlers.outbound.ForwardingPlayerInfoUpdateHandler;
@@ -21,6 +23,7 @@ import net.kyori.adventure.key.Key;
 
 import java.net.SocketAddress;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -52,6 +55,7 @@ public class ProxyForwarding extends Module {
                 .registerOutbound(ClientboundGameProfilePacket.class, new ForwardingGameProfileHandler())
                 .registerOutbound(ClientboundPlayerInfoUpdatePacket.class, new ForwardingPlayerInfoUpdateHandler())
                 .registerOutbound(ClientboundPlayerInfoRemovePacket.class, new ForwardingPlayerInfoRemoveHandler())
+                .registerOutbound(ClientboundAddPlayerPacket.class, new ForwardingAddPlayerHandler())
                 .build();
     }
 
@@ -77,6 +81,10 @@ public class ProxyForwarding extends Module {
 
     private void onServerConnectionRemoved(final ServerConnectionRemovedEvent event) {
         this.pendingForwardedInfo.remove(event.serverConnection());
+    }
+
+    public static UUID getFakeUuid(UUID original) {
+        return UUID.nameUUIDFromBytes(("SpoofedId:" + original).getBytes());
     }
 
     public record ForwardedInfo(GameProfile profile, SocketAddress remoteAddress) {
