@@ -3,7 +3,6 @@ package com.zenith.cache.data.scoreboard;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.ScoreboardPosition;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetDisplayObjectivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
@@ -20,8 +19,7 @@ public class ScoreboardCache implements CachedData {
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         for (final Objective objective : this.cachedObjectives.values()) {
-            consumer.accept(objective.toPacket());
-            objective.getScores().forEach((entry, value) -> consumer.accept(new ClientboundSetScorePacket(entry, objective.getName(), value)));
+            objective.addPackets(consumer);
         }
         this.cachedPositionObjectives.forEach((pos, objective) -> consumer.accept(new ClientboundSetDisplayObjectivePacket(pos, objective)));
     }

@@ -19,9 +19,9 @@ public class SetObjectiveHandler implements AsyncPacketHandler<ClientboundSetObj
                 if (objective == null) {
                     return false;
                 }
-
-                objective.setDisplayName(packet.getDisplayName());
-                objective.setScoreType(packet.getType());
+                objective
+                    .setDisplayName(packet.getDisplayName())
+                    .setScoreType(packet.getType());
             }
         }
 
