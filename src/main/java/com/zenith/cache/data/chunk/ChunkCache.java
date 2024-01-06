@@ -535,4 +535,9 @@ public class ChunkCache implements CachedData {
                                        packet.isFlat());
         CACHE_LOG.debug("Updated current dimension to {}", currentDimension.dimensionName);
     }
+
+    public void updateWorldTime(final ClientboundSetTimePacket packet) {
+        if (this.worldTimeData == null) this.worldTimeData = new WorldTimeData();
+        else this.worldTimeData.update(packet);
+    }
 }

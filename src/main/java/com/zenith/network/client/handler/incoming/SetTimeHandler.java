@@ -1,7 +1,6 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
-import com.zenith.cache.data.chunk.WorldTimeData;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
@@ -12,11 +11,7 @@ public class SetTimeHandler implements AsyncPacketHandler<ClientboundSetTimePack
 
     @Override
     public boolean applyAsync(ClientboundSetTimePacket packet, ClientSession session) {
-        if (CACHE.getChunkCache().getWorldTimeData() == null) {
-            CACHE.getChunkCache().setWorldTimeData(new WorldTimeData());
-        }
-        CACHE.getChunkCache().getWorldTimeData().update(packet);
-
+        CACHE.getChunkCache().updateWorldTime(packet);
         TPS_CALCULATOR.handleTimeUpdate(packet);
         return true;
     }
