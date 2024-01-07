@@ -71,6 +71,7 @@ public class ChunkCache implements CachedData {
     // todo: also cache world border size changes
     //  doesn't particularly matter on 2b2t tho
     protected WorldBorderData worldBorderData = WorldBorderData.DEFAULT;
+    protected WorldTimeData worldTimeData;
     protected byte[] serverBrand = BRAND_SUPPLIER.get();
 
     public ChunkCache() {
@@ -352,6 +353,9 @@ public class ChunkCache implements CachedData {
                                                                    worldBorderData.getWarningTime()));
             consumer.accept(new ClientboundSetChunkCacheRadiusPacket(serverViewDistance));
             consumer.accept(new ClientboundSetChunkCacheCenterPacket(centerX, centerZ));
+            if (this.worldTimeData != null) {
+                consumer.accept(this.worldTimeData.toPacket());
+            }
             readCache(() -> {
                 consumer.accept(new ClientboundGameEventPacket(GameEvent.LEVEL_CHUNKS_LOAD_START, null));
                 consumer.accept(new ClientboundChunkBatchStartPacket());
@@ -394,6 +398,7 @@ public class ChunkCache implements CachedData {
                 this.serverSimulationDistance = -1;
                 this.registryTag = null;
                 this.worldBorderData = WorldBorderData.DEFAULT;
+                this.worldTimeData = null;
                 this.serverBrand = BRAND_SUPPLIER.get();
             }
             return true;
@@ -536,5 +541,10 @@ public class ChunkCache implements CachedData {
                                        info.isDebug(),
                                        info.isFlat());
         CACHE_LOG.debug("Updated current dimension to {}", currentDimension.dimensionName);
+    }
+
+    public void updateWorldTime(final ClientboundSetTimePacket packet) {
+        if (this.worldTimeData == null) this.worldTimeData = new WorldTimeData();
+        else this.worldTimeData.update(packet);
     }
 }
