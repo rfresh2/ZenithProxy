@@ -56,12 +56,12 @@ processResources.finalizedBy writeCommitHash
 
 repositories {
     maven {
-        name = "jitpack.io"
-        url = "https://jitpack.io"
-    }
-    maven {
         name = "maven central"
         url = "https://repo1.maven.org/maven2/"
+    }
+    maven {
+        name = "jitpack.io"
+        url = "https://jitpack.io"
     }
     maven {
         name = "DaPorkchop_"
@@ -195,7 +195,7 @@ dependencies {
     shade("com.discord4j:discord4j-core:3.3.0-RC1") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:f9755d5768") {
+    shade("com.github.rfresh2:MCProtocolLib:8152aae86e") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
