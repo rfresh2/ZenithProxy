@@ -842,6 +842,27 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.zenith.feature.api.minetools.model.MinetoolsProfileResponseDecoded"] }]
+},
+{
+  "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponseDecoded",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String", "java.lang.String"] }]
+},
+{
+  "name":"com.zenith.feature.api.minetools.model.MinetoolsUuidResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String", "java.lang.String", "java.lang.String"] }]
+},
+{
   "name":"com.zenith.feature.api.mojang.model.MojangProfileResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
