@@ -34,8 +34,8 @@ public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayer
                 // may occur at login if this packet is received before the tablist is populated
                 // this function performs a mojang api call so it will take awhile
                 // alternate solution would be to just wait another tick or so for the tablist to be populated
-                PlayerList.createPlayerListEntry(packet.getUuid())
-                    .map(entry -> new PlayerListEntry(entry.getUsername(), entry.getUuid()))
+                PlayerList.getProfileFromUUID(packet.getUuid())
+                    .map(entry -> new PlayerListEntry(entry.name(), entry.uuid()))
                     .orElseGet(() -> new PlayerListEntry("", packet.getUuid())));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));
         if (CONFIG.client.extra.visualRangePositionTracking && !PLAYER_LISTS.getFriendsList().contains(playerEntry.getProfileId())) {

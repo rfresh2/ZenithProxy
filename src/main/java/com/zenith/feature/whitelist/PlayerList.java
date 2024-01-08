@@ -1,6 +1,7 @@
 package com.zenith.feature.whitelist;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
+import com.zenith.feature.api.ProfileData;
 import lombok.Data;
 
 import java.time.Instant;
@@ -104,17 +105,22 @@ public class PlayerList {
     }
 
     public static Optional<PlayerEntry> createPlayerListEntry(final String username) {
-        return MOJANG_API.getProfileFromUsername(username)
-            .map(profile -> new PlayerEntry(profile.name(),
-                                            profile.uuid(),
-                                            Instant.now().getEpochSecond()));
+        return getProfileFromUsername(username)
+            .map(profile -> new PlayerEntry(profile.name(), profile.uuid(), Instant.now().getEpochSecond()));
     }
 
     public static Optional<PlayerEntry> createPlayerListEntry(final UUID uuid) {
-        return SESSION_SERVER_API.getProfileFromUUID(uuid)
-            .map(profile -> new PlayerEntry(
-                profile.name(),
-                profile.uuid(),
-                Instant.now().getEpochSecond()));
+        return getProfileFromUUID(uuid)
+            .map(profile -> new PlayerEntry(profile.name(), profile.uuid(), Instant.now().getEpochSecond()));
+    }
+
+    public static Optional<ProfileData> getProfileFromUsername(final String username) {
+        return MOJANG_API.getProfileFromUsername(username).map(o -> (ProfileData) o)
+            .or(() -> MINETOOLS_API.getProfileFromUsername(username));
+    }
+
+    public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
+        return SESSION_SERVER_API.getProfileFromUUID(uuid).map(o -> (ProfileData) o)
+            .or(() -> MINETOOLS_API.getProfileFromUUID(uuid));
     }
 }

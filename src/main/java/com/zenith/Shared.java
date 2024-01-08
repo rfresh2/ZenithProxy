@@ -35,6 +35,7 @@ import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
+import com.zenith.feature.api.minetools.MinetoolsApi;
 import com.zenith.feature.api.mojang.MojangApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.api.vcapi.VcApi;
@@ -158,6 +159,7 @@ public class Shared {
     public static final VcApi VC_API;
     public static final MojangApi MOJANG_API;
     public static final SessionServerApi SESSION_SERVER_API;
+    public static final MinetoolsApi MINETOOLS_API;
     public static volatile boolean SHOULD_RECONNECT;
 
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
@@ -446,6 +448,7 @@ public class Shared {
             VC_API = new VcApi();
             MOJANG_API = new MojangApi();
             SESSION_SERVER_API = new SessionServerApi();
+            MINETOOLS_API = new MinetoolsApi();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
             translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);
