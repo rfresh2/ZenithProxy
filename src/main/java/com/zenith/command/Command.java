@@ -14,6 +14,7 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -79,9 +80,28 @@ public abstract class Command {
                 .addField("Error",
                           "User: " + event.getMember().map(User::getTag).orElse("Unknown")
                               + " is not authorized to execute this command! Contact the account owner", true);
-            return false;
         }
-        return true;
+        return hasAccountOwnerRole;
+    }
+
+    public static boolean validateCommandSource(final CommandContext context, final List<CommandSource> allowedSources) {
+        var allowed = allowedSources.contains(context.getCommandSource());
+        if (!allowed)
+            context.getEmbedBuilder()
+                .addField("Error",
+                          "Command source: " + context.getCommandSource().getName()
+                              + " is not authorized to execute this command!", true);
+        return allowed;
+    }
+
+    public static boolean validateCommandSource(final CommandContext context, final CommandSource allowedSource) {
+        var allowed = allowedSource.equals(context.getCommandSource());
+        if (!allowed)
+            context.getEmbedBuilder()
+                .addField("Error",
+                          "Command source: " + context.getCommandSource().getName()
+                              + " is not authorized to execute this command!", true);
+        return allowed;
     }
 
     public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {
