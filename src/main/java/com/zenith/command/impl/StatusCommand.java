@@ -61,9 +61,9 @@ public class StatusCommand extends Command {
             if (Proxy.getInstance().isInQueue()) {
                 if (Proxy.getInstance().getIsPrio().isPresent()) {
                     if (Proxy.getInstance().getIsPrio().get()) {
-                        return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
+                        return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
                     } else {
-                        return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
+                        return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\nETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n(<t:" + (Instant.now().getEpochSecond() + (long) Queue.getQueueWait(Proxy.getInstance().getQueuePosition())) +":T>)";
                     }
                 } else {
                     return "Queueing";
@@ -77,8 +77,8 @@ public class StatusCommand extends Command {
     }
 
     private String getQueueStatus() {
-        return "Priority: " + Queue.getQueueStatus().prio + " [" + Queue.getQueueEta(Queue.getQueueStatus().prio) + "]"
-                + "\nRegular: " + Queue.getQueueStatus().regular + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular) + "]";
+        return "Priority: " + Queue.getQueueStatus().prio() + " [" + Queue.getQueueEta(Queue.getQueueStatus().prio()) + "]"
+                + "\nRegular: " + Queue.getQueueStatus().regular() + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular()) + "]";
     }
 
     private String dimensionIdToString(final int dimension) {

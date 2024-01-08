@@ -776,6 +776,13 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setMetadata","parameterTypes":["java.lang.Integer"] }]
 },
 {
+  "name":"com.zenith.feature.queue.Queue$QueueApiResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.queue.QueueStatus",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -792,12 +799,42 @@
   "allDeclaredFields":true
 },
 {
+  "name":"com.zenith.feature.queue.mcping.data.NewResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.data.OldResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.Description",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.queue.mcping.rawData.Extra",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.feature.queue.mcping.rawData.ExtraDescription",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ForgeData",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ForgeDataListItem",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.queue.mcping.rawData.ModpackData",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },

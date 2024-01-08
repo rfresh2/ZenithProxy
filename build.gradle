@@ -179,6 +179,12 @@ dependencies {
     shade 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.7.0.202309050840-r'
     shade 'com.github.mwiede:jsch:0.2.11'
     shade 'com.google.guava:guava:32.1.2-jre'
+    shade 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
+    shade 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    shade 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+    shade 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1'
+    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.16.1'
+    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     shade "org.apache.commons:commons-math3:3.6.1"
     shade "org.apache.commons:commons-collections4:4.4"
     shade ("net.daporkchop.lib:math:$porklibVersion") {
@@ -190,7 +196,6 @@ dependencies {
     shade 'org.slf4j:jul-to-slf4j:2.0.9'
     shade 'org.fusesource.jansi:jansi:2.4.0'
     shade 'com.mojang:brigadier:1.1.8'
-    shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
     shade("com.discord4j:discord4j-core:3.3.0-RC1") {
         exclude group: 'io.netty'

@@ -54,8 +54,8 @@ public class QueueLengthDatabase extends LockingDatabase {
         final Queuelength q = Queuelength.QUEUELENGTH;
         final InsertSetMoreStep<QueuelengthRecord> query = context.insertInto(q)
             .set(q.TIME, Instant.now().atOffset(ZoneOffset.UTC))
-            .set(q.REGULAR, queueStatus.regular.shortValue())
-            .set(q.PRIO, queueStatus.prio.shortValue());
+            .set(q.REGULAR, (short) queueStatus.regular())
+            .set(q.PRIO, (short) queueStatus.prio());
         this.insert(Instant.now(), query);
     }
 }

@@ -1,6 +1,9 @@
 package com.zenith.feature.queue.mcping;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -50,47 +53,35 @@ class Pinger {
     }
 
     public String fetchData() throws IOException {
-        Socket socket = new Socket();
-        socket.setSoTimeout(this.timeout);
-        socket.connect(this.host, this.timeout);
+        try (Socket socket = new Socket()) {
+            socket.setSoTimeout(this.timeout);
+            socket.connect(this.host, this.timeout);
+            try (DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                 DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                 ByteArrayOutputStream b = new ByteArrayOutputStream();
+                 DataOutputStream handshake = new DataOutputStream(b)) {
+                handshake.writeByte(0);
+                writeVarInt(handshake, protocolVersion);
+                writeVarInt(handshake, this.host.getHostString().length());
+                handshake.writeBytes(this.host.getHostString());
+                handshake.writeShort(this.host.getPort());
+                writeVarInt(handshake, 1);
+                writeVarInt(dataOutputStream, b.size());
+                dataOutputStream.write(b.toByteArray());
+                dataOutputStream.writeByte(1);
+                dataOutputStream.writeByte(0);
 
-        OutputStream outputStream = socket.getOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        InputStream inputStream = socket.getInputStream();
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream handshake = new DataOutputStream(b);
+                int size = readVarInt(dataInputStream);
+                int id = readVarInt(dataInputStream);
+                int length = readVarInt(dataInputStream);
 
-        handshake.writeByte(0);
-        writeVarInt(handshake, protocolVersion);
-        writeVarInt(handshake, this.host.getHostString().length());
-        handshake.writeBytes(this.host.getHostString());
-        handshake.writeShort(this.host.getPort());
-        writeVarInt(handshake, 1);
-
-        writeVarInt(dataOutputStream, b.size());
-        dataOutputStream.write(b.toByteArray());
-        dataOutputStream.writeByte(1);
-        dataOutputStream.writeByte(0);
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-
-        int size = readVarInt(dataInputStream);
-        int id = readVarInt(dataInputStream);
-        int length = readVarInt(dataInputStream);
-
-        if (size < 0 || id < 0 || length <= 0) {
-            closeAll(b, dataInputStream, handshake, dataOutputStream, outputStream, inputStream, socket);
-            return null;
-        }
-
-        byte[] in = new byte[length];
-        dataInputStream.readFully(in);
-        closeAll(b, dataInputStream, handshake, dataOutputStream, outputStream, inputStream, socket);
-        return new String(in, StandardCharsets.UTF_8); //JSON
-    }
-
-    public void closeAll(Closeable... closeables) throws IOException {
-        for (Closeable closeable : closeables) {
-            closeable.close();
+                if (size < 0 || id < 0 || length <= 0) {
+                    return null;
+                }
+                byte[] in = new byte[length];
+                dataInputStream.readFully(in);
+                return new String(in, StandardCharsets.UTF_8); //JSON
+            }
         }
     }
 }

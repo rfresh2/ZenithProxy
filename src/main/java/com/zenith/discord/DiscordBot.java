@@ -262,9 +262,9 @@ public class DiscordBot {
     private String queuePositionStr() {
         if (Proxy.getInstance().getIsPrio().isPresent()) {
             if (Proxy.getInstance().getIsPrio().get()) {
-                return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
+                return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
             } else {
-                return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
+                return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
             }
         } else {
             return "?";
@@ -478,8 +478,8 @@ public class DiscordBot {
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Started Queuing")
                 .color(Color.CYAN)
-                .addField("Regular Queue", "" + Queue.getQueueStatus().regular, true)
-                .addField("Priority Queue", "" + Queue.getQueueStatus().prio, true)
+                .addField("Regular Queue", "" + Queue.getQueueStatus().prio(), true)
+                .addField("Priority Queue", "" + Queue.getQueueStatus().prio(), true)
                 .build());
         this.client.updatePresence(getQueuePresence()).block();
     }
@@ -672,9 +672,9 @@ public class DiscordBot {
     public void handleActiveHoursConnectEvent(ActiveHoursConnectEvent event) {
         int queueLength;
         if (Proxy.getInstance().getIsPrio().orElse(false)) {
-            queueLength = Queue.getQueueStatus().prio;
+            queueLength = Queue.getQueueStatus().prio();
         } else {
-            queueLength = Queue.getQueueStatus().regular;
+            queueLength = Queue.getQueueStatus().prio();
         }
         sendEmbedMessage(EmbedCreateSpec.builder()
                 .title("Active Hours Connect Triggered")

@@ -1,5 +1,8 @@
 package com.zenith;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,6 +61,11 @@ import java.util.concurrent.ScheduledExecutorService;
 public class Shared {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    static {
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+    }
     public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
     public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");
     public static final Logger CACHE_LOG = LoggerFactory.getLogger("Cache");

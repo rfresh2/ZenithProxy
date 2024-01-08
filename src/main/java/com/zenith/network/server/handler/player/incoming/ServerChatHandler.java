@@ -45,7 +45,7 @@ public class ServerChatHandler implements IncomingHandler<ClientChatPacket, Serv
                 session.getProxy().getClient().disconnect(MANUAL_DISCONNECT);
                 return false;
             } else if ("!q".equalsIgnoreCase(message)) {
-                session.send(new ServerChatPacket(String.format("§7[§9ZenithProxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular + " §r- §7Prio: §a" + Queue.getQueueStatus().prio, message), true));
+                session.send(new ServerChatPacket(String.format("§7[§9ZenithProxy§7]§r §7Queue: §c" + Queue.getQueueStatus().regular() + " §r- §7Prio: §a" + Queue.getQueueStatus().prio(), message), true));
                 return false;
             } else if (lowerCase.startsWith("!m")) {
                 session.getProxy().getActiveConnections().forEach(connection -> {

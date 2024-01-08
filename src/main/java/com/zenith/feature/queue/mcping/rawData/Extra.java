@@ -1,8 +1,10 @@
 package com.zenith.feature.queue.mcping.rawData;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 
-class Extra {
+@Data
+public class Extra {
 
     @SerializedName("color")
     private String color;
@@ -10,9 +12,5 @@ class Extra {
     private boolean bold;
     @SerializedName("text")
     private String text;
-
-    public String getText() {
-        return text;
-    }
 
 }

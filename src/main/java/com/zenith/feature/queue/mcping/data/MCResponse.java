@@ -3,7 +3,9 @@ package com.zenith.feature.queue.mcping.data;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.queue.mcping.rawData.Players;
 import com.zenith.feature.queue.mcping.rawData.Version;
+import lombok.Data;
 
+@Data
 class MCResponse {
     @SerializedName("players")
     Players players;
