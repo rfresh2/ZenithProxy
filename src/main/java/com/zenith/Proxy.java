@@ -35,6 +35,7 @@ import com.zenith.via.ZViaServerProxyPlatform;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
@@ -587,6 +588,7 @@ public class Proxy {
             else
                 avatarURL = getAvatarURL(CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username);
             try (InputStream netInputStream = HttpClient.create()
+                .resolver(DefaultAddressResolverGroup.INSTANCE)
                 .secure()
                 .followRedirect(true)
                 .get()

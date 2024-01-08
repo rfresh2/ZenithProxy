@@ -45,6 +45,7 @@ import discord4j.rest.request.RouterOptions;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
 import discord4j.rest.util.MultipartRequest;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
@@ -546,7 +547,7 @@ public class DiscordBot {
     }
 
     public HttpClient getProxiedHttpClient() {
-        return HttpClient.create().compress(true).followRedirect(true).secure().proxy((ProxyProvider.TypeSpec provider) -> {
+        return HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE).compress(true).followRedirect(true).secure().proxy((ProxyProvider.TypeSpec provider) -> {
             ProxyProvider.AddressSpec addressSpec;
             switch (CONFIG.discord.connectionProxy.type){
                 case SOCKS4 -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS4);
