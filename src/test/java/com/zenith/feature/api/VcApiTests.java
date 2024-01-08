@@ -1,8 +1,9 @@
 package com.zenith.feature.api;
 
 import com.zenith.Shared;
-import com.zenith.feature.api.model.PlaytimeResponse;
-import com.zenith.feature.api.model.SeenResponse;
+import com.zenith.feature.api.vcapi.VcApi;
+import com.zenith.feature.api.vcapi.model.PlaytimeResponse;
+import com.zenith.feature.api.vcapi.model.SeenResponse;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

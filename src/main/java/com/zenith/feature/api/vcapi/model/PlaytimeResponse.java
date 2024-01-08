@@ -1,4 +1,4 @@
-package com.zenith.feature.api.model;
+package com.zenith.feature.api.vcapi.model;
 
 import java.util.UUID;
 

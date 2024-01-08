@@ -35,7 +35,9 @@ import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
-import com.zenith.feature.api.VcApi;
+import com.zenith.feature.api.mojang.MojangApi;
+import com.zenith.feature.api.sessionserver.SessionServerApi;
+import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.food.FoodManager;
 import com.zenith.feature.items.ItemsManager;
 import com.zenith.feature.language.LanguageManager;
@@ -154,6 +156,8 @@ public class Shared {
     public static final FoodManager FOOD_MANAGER;
     public static final ItemsManager ITEMS_MANAGER;
     public static final VcApi VC_API;
+    public static final MojangApi MOJANG_API;
+    public static final SessionServerApi SESSION_SERVER_API;
     public static volatile boolean SHOULD_RECONNECT;
 
     public static final HandlerRegistry<ServerConnection> SERVER_PLAYER_HANDLERS = new HandlerRegistry.Builder<ServerConnection>()
@@ -440,6 +444,8 @@ public class Shared {
             FOOD_MANAGER = new FoodManager();
             ITEMS_MANAGER = new ItemsManager();
             VC_API = new VcApi();
+            MOJANG_API = new MojangApi();
+            SESSION_SERVER_API = new SessionServerApi();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
             translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);

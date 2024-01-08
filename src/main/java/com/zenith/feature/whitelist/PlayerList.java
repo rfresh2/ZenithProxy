@@ -1,7 +1,6 @@
 package com.zenith.feature.whitelist;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.auth.service.ProfileService;
 import lombok.Data;
 
 import java.time.Instant;
@@ -104,53 +103,18 @@ public class PlayerList {
         }
     }
 
-    public static Optional<PlayerEntry> createPlayerListEntry(final UUID uuid) {
-        final ProfileService profileService = new ProfileService();
-        final Optional<GameProfile> profileOptional = Optional.ofNullable(profileService.findProfileByUUID(uuid));
-        if (profileOptional.isPresent()) {
-            final GameProfile gameProfile = profileOptional.get();
-            return Optional.of(new PlayerEntry(gameProfile.getName(), gameProfile.getId(), Instant.now().getEpochSecond()));
-        } else {
-            return Optional.empty();
-        }
-    }
-
     public static Optional<PlayerEntry> createPlayerListEntry(final String username) {
-        final ProfileService profileService = new ProfileService();
-        int tries = 0;
-        final SingleLookupProfileLookupCallbackHelper callbackHelper = new SingleLookupProfileLookupCallbackHelper();
-        while (tries++ < 3 && !callbackHelper.completed) {
-            profileService.findProfilesByName(new String[]{username}, callbackHelper, false);
-            if (callbackHelper.completed && callbackHelper.errorException.isEmpty() && callbackHelper.gameProfile.isPresent()) {
-                GameProfile gameProfile = callbackHelper.gameProfile.get();
-                return Optional.of(new PlayerEntry(gameProfile.getName(), gameProfile.getId(), Instant.now().getEpochSecond()));
-            } else {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-        callbackHelper.errorException
-            .ifPresent(e -> SERVER_LOG.error("Failed getting PlayerListEntry for username: {}", username, e));
-        return Optional.empty();
+        return MOJANG_API.getProfileFromUsername(username)
+            .map(profile -> new PlayerEntry(profile.name(),
+                                            profile.uuid(),
+                                            Instant.now().getEpochSecond()));
     }
 
-    private static final class SingleLookupProfileLookupCallbackHelper implements ProfileService.ProfileLookupCallback {
-        public Optional<GameProfile> gameProfile = Optional.empty();
-        public Optional<Exception> errorException = Optional.empty();
-        public boolean completed = false;
-
-        @Override
-        public void onProfileLookupSucceeded(GameProfile profile) {
-            gameProfile = Optional.of(profile);
-            completed = true;
-        }
-
-        @Override
-        public void onProfileLookupFailed(GameProfile profile, Exception e) {
-            completed = true;
-        }
+    public static Optional<PlayerEntry> createPlayerListEntry(final UUID uuid) {
+        return SESSION_SERVER_API.getProfileFromUUID(uuid)
+            .map(profile -> new PlayerEntry(
+                profile.name(),
+                profile.uuid(),
+                Instant.now().getEpochSecond()));
     }
 }

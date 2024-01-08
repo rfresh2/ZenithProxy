@@ -842,21 +842,35 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.feature.api.model.PlaytimeResponse",
+  "name":"com.zenith.feature.api.mojang.model.MojangProfileResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"com.zenith.feature.api.sessionserver.model.SessionProfileResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"com.zenith.feature.api.vcapi.model.PlaytimeResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["java.util.UUID","int"] }]
 },
 {
-  "name":"com.zenith.feature.api.model.SeenResponse",
+  "name":"com.zenith.feature.api.vcapi.model.SeenResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.time.OffsetDateTime"] }]
 },
 {
-  "name":"com.zenith.feature.api.model.StatsResponse",
+  "name":"com.zenith.feature.api.vcapi.model.StatsResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
