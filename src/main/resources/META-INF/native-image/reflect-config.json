@@ -27,15 +27,6 @@
   "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
 },
 {
-  "name":"[Lcom.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McProfileResponse$Skin;"
-},
-{
-  "name":"[Lcom.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse$Xui;"
-},
-{
-  "name":"[Lcom.microsoft.aad.msal4j.InstanceDiscoveryMetadataEntry;"
-},
-{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
 },
 {
@@ -319,61 +310,6 @@
   "unsafeAllocated":true
 },
 {
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McLoginRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McLoginResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McProfileResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McProfileResponse$Skin",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthRequest$Properties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse$DisplayClaims",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse$Xui",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XstsAuthRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XstsAuthRequest$Properties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.github.steveice10.mc.auth.service.SessionService$HasJoinedResponse",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -542,107 +478,6 @@
 },
 {
   "name":"com.jcraft.jsch.jce.SignatureRSASHA512",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AadInstanceDiscoveryResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AccessTokenCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AccountCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AppMetadataCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"com.microsoft.aad.msal4j.ClientInfo",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.Credential",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.DeviceCode",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.ErrorResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.ITokenCache",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"com.microsoft.aad.msal4j.IdToken",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.IdTokenCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.InstanceDiscoveryMetadataEntry",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.RefreshTokenCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.TokenCache",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.UserDiscoveryResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1406,77 +1241,7 @@
   "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
 },
 {
-  "name":"fr.litarvan.openauth.microsoft.model.request.MinecraftLoginRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.request.XSTSAuthorizationProperties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.request.XboxLiveLoginProperties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.request.XboxLoginRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MicrosoftRefreshResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftLoginResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftProfile",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftProfile$MinecraftSkin",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftStoreResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftStoreResponse$StoreProduct",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.XboxLoginResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.XboxLoginResponse$XboxLiveLoginResponseClaims",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.XboxLoginResponse$XboxLiveUserInfo",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
+  "name":"io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1932,10 +1697,22 @@
   "name":"java.security.interfaces.ECPublicKey"
 },
 {
+  "name":"java.security.interfaces.EdECKey",
+  "methods":[{"name":"getParams","parameterTypes":[] }]
+},
+{
   "name":"java.security.interfaces.RSAPrivateKey"
 },
 {
   "name":"java.security.interfaces.RSAPublicKey"
+},
+{
+  "name":"java.security.interfaces.XECKey",
+  "methods":[{"name":"getParams","parameterTypes":[] }]
+},
+{
+  "name":"java.security.spec.NamedParameterSpec",
+  "methods":[{"name":"getName","parameterTypes":[] }]
 },
 {
   "name":"java.sql.Date"
@@ -2041,6 +1818,10 @@
   "fields":[{"name":"value"}]
 },
 {
+  "name":"java.util.concurrent.atomic.AtomicMarkableReference",
+  "fields":[{"name":"pair"}]
+},
+{
   "name":"java.util.concurrent.atomic.AtomicReference",
   "fields":[{"name":"value"}]
 },
@@ -2099,6 +1880,24 @@
 },
 {
   "name":"kotlin.jvm.JvmClassMappingKt"
+},
+{
+  "name":"org.apache.commons.logging.LogFactory"
+},
+{
+  "name":"org.apache.commons.logging.impl.Jdk14Logger",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }, {"name":"setLogFactory","parameterTypes":["org.apache.commons.logging.LogFactory"] }]
+},
+{
+  "name":"org.apache.commons.logging.impl.Log4JLogger"
+},
+{
+  "name":"org.apache.commons.logging.impl.LogFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.apache.commons.logging.impl.WeakHashtable",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"org.eclipse.jgit.internal.JGitText",
@@ -3315,6 +3114,10 @@
 {
   "name":"reactor.util.concurrent.SpscLinkedArrayQueue",
   "fields":[{"name":"consumerIndex"}, {"name":"producerIndex"}]
+},
+{
+  "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.misc.Signal",

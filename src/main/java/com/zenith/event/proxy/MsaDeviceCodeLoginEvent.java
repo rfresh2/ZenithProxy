@@ -1,5 +1,5 @@
 package com.zenith.event.proxy;
 
-import com.microsoft.aad.msal4j.DeviceCode;
+import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
 
-public record MsaDeviceCodeLoginEvent(DeviceCode deviceCode) { }
+public record MsaDeviceCodeLoginEvent(StepMsaDeviceCode.MsaDeviceCode deviceCode) { }

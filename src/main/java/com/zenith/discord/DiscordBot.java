@@ -1095,7 +1095,7 @@ public class DiscordBot {
         sendEmbedMessage(mentionAccountOwner(), EmbedCreateSpec.builder()
             .title("Microsoft Device Code Login")
             .color(Color.CYAN)
-            .description("Login Here: https://microsoft.com/link?otc=" + event.deviceCode().userCode())
+            .description("Login Here: " + event.deviceCode().getDirectVerificationUri())
             .build());
     }
 

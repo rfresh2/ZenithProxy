@@ -423,7 +423,7 @@ public class Proxy {
     public Future<Boolean> loginTask() {
         return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
-                this.protocol = this.authenticator.handleRelog();
+                this.protocol = this.authenticator.login();
                 this.protocol.setUseDefaultListeners(false); // very important
                 return true;
             } catch (final Exception e) {

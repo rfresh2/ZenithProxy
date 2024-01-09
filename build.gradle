@@ -134,6 +134,7 @@ dependencies {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
     }
+    shade "net.raphimc:MinecraftAuth:3.1.0"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"
@@ -257,6 +258,10 @@ shadowJar {
         exclude(dependency("io.netty:netty-resolver-dns:.*"))
         exclude(dependency("org.cloudburstmc.math:api:.*"))
         exclude(dependency("org.cloudburstmc.math:immutable:.*"))
+        exclude(dependency("commons-logging:commons-logging:.*"))
+        exclude(dependency("io.jsonwebtoken:jjwt-api:.*"))
+        exclude(dependency("io.jsonwebtoken:jjwt-gson:.*"))
+        exclude(dependency("io.jsonwebtoken:jjwt-impl:.*"))
     }
     manifest {
         attributes "Implementation-Title": "ZenithProxy",

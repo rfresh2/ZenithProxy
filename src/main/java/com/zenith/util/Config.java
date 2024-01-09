@@ -30,13 +30,14 @@ public final class Config {
         public String username = "Unknown";
         public boolean prio = false;
         public boolean prioBanned = false;
-        public String msaClientId = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
-        public boolean msaDeviceCodeTokenRefresh = true;
+        public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
+        public boolean openBrowserOnLogin = true;
 
         public enum AccountType {
             @SerializedName("msa") MSA,
-            @SerializedName("device_code") DEVICE_CODE
+            @SerializedName("device_code") DEVICE_CODE,
+            @SerializedName("local_webserver") LOCAL_WEBSERVER
         }
     }
 
