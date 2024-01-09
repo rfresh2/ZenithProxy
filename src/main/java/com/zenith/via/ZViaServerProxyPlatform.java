@@ -53,18 +53,19 @@ public class ZViaServerProxyPlatform implements ViaServerProxyPlatform<Minecraft
         } catch (final Exception e) {
             // fall through
         }
-        try {
-            backwardsPlatform.initViaBackwards();
-        } catch (final Exception e) {
-            // fall through
-            Shared.DEFAULT_LOG.error("Error initializing ViaBackwards", e);
+        if (!Via.getManager().isInitialized()) {
+            try {
+                backwardsPlatform.initViaBackwards();
+            } catch (final Exception e) {
+                // fall through
+                Shared.DEFAULT_LOG.error("Error initializing ViaBackwards", e);
+            }
         }
         try {
             ((ViaManagerImpl) Via.getManager()).init();
         } catch (final Exception e) {
             // fall through
         }
-
     }
 
     public ChannelInitializer<Channel> inject(final ChannelInitializer<Channel> original) {
