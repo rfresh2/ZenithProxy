@@ -452,12 +452,19 @@ public class ChunkCache implements CachedData {
             throw new IllegalStateException("Biome entry bits size is not set");
         }
 
-        int blockCount = buf.readShort();
-        DataPalette chunkPalette = codec
-            .readDataPalette(buf, PaletteType.CHUNK, Shared.BLOCK_DATA_MANAGER.getBlockBitsPerEntry());
-        DataPalette biomePalette = codec
-            .readDataPalette(buf, PaletteType.BIOME, biomesEntryBitsSize);
-        return new ChunkSection(blockCount, chunkPalette, biomePalette);
+        try {
+            int blockCount = buf.readShort();
+            DataPalette chunkPalette = codec
+                .readDataPalette(buf, PaletteType.CHUNK, Shared.BLOCK_DATA_MANAGER.getBlockBitsPerEntry());
+            DataPalette biomePalette = codec
+                .readDataPalette(buf, PaletteType.BIOME, biomesEntryBitsSize);
+            return new ChunkSection(blockCount, chunkPalette, biomePalette);
+        } catch (final IndexOutOfBoundsException e) {
+            CACHE_LOG.debug("Error reading chunk section, no data", e);
+            return new ChunkSection(0,
+                                    DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
+                                    DataPalette.createForBiome(biomesEntryBitsSize));
+        }
     }
 
     public int getSectionsCount() {
