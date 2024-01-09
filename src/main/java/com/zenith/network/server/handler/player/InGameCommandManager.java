@@ -21,6 +21,8 @@ import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
 public class InGameCommandManager {
+    private Pattern commandPattern;
+    private String commandPatternPrefix = "";
 
     // this is specific to CONTROLLING account commands - not spectator player commands!
     public void handleInGameCommand(final String message, final @NonNull ServerConnection session) {
@@ -59,8 +61,14 @@ public class InGameCommandManager {
         }
     }
 
-    // todo: we could memoize this as long as we update it when the prefix is updated
     public Pattern getCommandPattern() {
+        if (!this.commandPatternPrefix.equals(CONFIG.inGameCommands.prefix))
+            this.commandPattern = buildCommandPattern();
+        return this.commandPattern;
+    }
+
+    private Pattern buildCommandPattern() {
+        this.commandPatternPrefix = CONFIG.inGameCommands.prefix;
         return Pattern.compile("[" + CONFIG.inGameCommands.prefix + "]\\w+");
     }
 
