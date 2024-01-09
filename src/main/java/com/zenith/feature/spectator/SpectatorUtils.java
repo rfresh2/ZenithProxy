@@ -59,7 +59,7 @@ public final class SpectatorUtils {
             .setYaw(target.getYaw())
             .setPitch(target.getPitch());
         spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
-        spectConnection.sendAsync(new ClientboundPlayerPositionPacket(
+        spectConnection.send(new ClientboundPlayerPositionPacket(
                 spectConnection.getSpectatorPlayerCache().getX(),
                 spectConnection.getSpectatorPlayerCache().getY(),
                 spectConnection.getSpectatorPlayerCache().getZ(),
