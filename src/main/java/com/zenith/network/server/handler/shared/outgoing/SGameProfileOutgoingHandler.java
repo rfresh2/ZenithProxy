@@ -13,7 +13,7 @@ import lombok.NonNull;
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
-public class GameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerConnection> {
+public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerConnection> {
     @Override
     public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerConnection session) {
         try {

@@ -1,5 +1,6 @@
 package com.zenith.module.impl;
 
+import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
@@ -17,7 +18,8 @@ import com.zenith.feature.actionlimiter.handlers.outbound.ALCMoveVehicleHandler;
 import com.zenith.feature.actionlimiter.handlers.outbound.ALLoginHandler;
 import com.zenith.feature.actionlimiter.handlers.outbound.ALPlayerPositionHandler;
 import com.zenith.module.Module;
-import com.zenith.network.registry.HandlerRegistry;
+import com.zenith.network.registry.PacketHandlerCodec;
+import com.zenith.network.registry.PacketHandlerStateCodec;
 import com.zenith.network.server.ServerConnection;
 import lombok.Getter;
 
@@ -29,7 +31,7 @@ import static com.zenith.event.SimpleEventBus.pair;
 
 public class ActionLimiter extends Module {
     @Getter
-    private HandlerRegistry<ServerConnection> handlerRegistry;
+    private PacketHandlerCodec codec;
     private final HashSet<ServerConnection> limitedConnections = new HashSet<>();
 
     public ActionLimiter() {
@@ -37,23 +39,25 @@ public class ActionLimiter extends Module {
     }
 
     private void initializeHandlers() {
-        handlerRegistry = new HandlerRegistry.Builder<ServerConnection>()
+        codec = PacketHandlerCodec.builder()
             .setLogger(MODULE_LOG)
-            .allowUnhandled(true)
-            .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
-            .registerInbound(ServerboundChatPacket.class, new ALChatHandler())
-            .registerInbound(ServerboundClientCommandPacket.class, new ALClientCommandHandler())
-            .registerInbound(ServerboundContainerClickPacket.class, new ALContainerClickHandler())
-            .registerInbound(ServerboundInteractPacket.class, new ALInteractHandler())
-            .registerInbound(ServerboundMovePlayerPosPacket.class, new ALMovePlayerPosHandler())
-            .registerInbound(ServerboundMovePlayerPosRotPacket.class, new ALMovePlayerPosRotHandler())
-            .registerInbound(ServerboundMoveVehiclePacket.class, new ALMoveVehicleHandler())
-            .registerInbound(ServerboundPlayerActionPacket.class, new ALPlayerActionHandler())
-            .registerInbound(ServerboundUseItemOnPacket.class, new ALUseItemOnHandler())
-            .registerInbound(ServerboundUseItemPacket.class, new ALUseItemHandler())
-            .registerOutbound(ClientboundMoveVehiclePacket.class, new ALCMoveVehicleHandler())
-            .registerOutbound(ClientboundLoginPacket.class, new ALLoginHandler())
-            .registerOutbound(ClientboundPlayerPositionPacket.class, new ALPlayerPositionHandler())
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+                .allowUnhandled(true)
+                .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
+                .registerInbound(ServerboundChatPacket.class, new ALChatHandler())
+                .registerInbound(ServerboundClientCommandPacket.class, new ALClientCommandHandler())
+                .registerInbound(ServerboundContainerClickPacket.class, new ALContainerClickHandler())
+                .registerInbound(ServerboundInteractPacket.class, new ALInteractHandler())
+                .registerInbound(ServerboundMovePlayerPosPacket.class, new ALMovePlayerPosHandler())
+                .registerInbound(ServerboundMovePlayerPosRotPacket.class, new ALMovePlayerPosRotHandler())
+                .registerInbound(ServerboundMoveVehiclePacket.class, new ALMoveVehicleHandler())
+                .registerInbound(ServerboundPlayerActionPacket.class, new ALPlayerActionHandler())
+                .registerInbound(ServerboundUseItemOnPacket.class, new ALUseItemOnHandler())
+                .registerInbound(ServerboundUseItemPacket.class, new ALUseItemHandler())
+                .registerOutbound(ClientboundMoveVehiclePacket.class, new ALCMoveVehicleHandler())
+                .registerOutbound(ClientboundLoginPacket.class, new ALLoginHandler())
+                .registerOutbound(ClientboundPlayerPositionPacket.class, new ALPlayerPositionHandler())
+                .build())
             .build();
     }
 

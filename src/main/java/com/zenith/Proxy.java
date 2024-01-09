@@ -287,7 +287,7 @@ public class Proxy {
         }
 
         CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
-        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol, this);
+        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
@@ -364,7 +364,9 @@ public class Proxy {
                 int port = CONFIG.server.bind.port;
 
                 SERVER_LOG.info("Starting server on {}:{}...", address, port);
-                this.server = new TcpServer(address, port, MinecraftProtocol::new);
+                var minecraftProtocol = new MinecraftProtocol();
+                minecraftProtocol.setUseDefaultListeners(false);
+                this.server = new TcpServer(address, port, () -> minecraftProtocol);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 var serverInfoBuilder = new CustomServerInfoBuilder(this);
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);
@@ -372,10 +374,10 @@ public class Proxy {
                     this.lanBroadcaster = new LanBroadcaster(serverInfoBuilder);
                     lanBroadcaster.start();
                 }
-                this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
+                this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler());
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
-                this.server.addListener(new ProxyServerListener(this));
+                this.server.addListener(new ProxyServerListener());
                 this.server.bind(false);
             }
         }
@@ -422,6 +424,7 @@ public class Proxy {
         return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
                 this.protocol = this.authenticator.handleRelog();
+                this.protocol.setUseDefaultListeners(false); // very important
                 return true;
             } catch (final Exception e) {
                 CLIENT_LOG.error("", e);
