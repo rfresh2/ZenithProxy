@@ -163,8 +163,8 @@ dependencies {
     shade "org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion"
     shade "org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion"
 
-    shade "com.viaversion:viaversion:4.10.0-23w51b-SNAPSHOT"
-    shade "com.viaversion:viabackwards:4.10.0-23w51b-SNAPSHOT"
+    shade "com.viaversion:viaversion:4.9.3-SNAPSHOT"
+    shade "com.viaversion:viabackwards:4.9.2-SNAPSHOT"
 
     shade 'org.jline:jline:3.25.0'
     shade 'org.jline:jline-terminal-jansi:3.25.0'
