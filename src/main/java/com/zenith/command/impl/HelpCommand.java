@@ -35,8 +35,8 @@ public class HelpCommand extends Command {
                 c.getSource().getEmbedBuilder()
                     .title("Commands")
                     .color(Color.CYAN);
-                final String commandUsages = getCommandUsages(c.getSource().getCommandSource(), CommandCategory.CORE);
-                final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource().getCommandSource());
+                final String commandUsages = getCommandUsages(c.getSource().getSource(), CommandCategory.CORE);
+                final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource().getSource());
                 c.getSource().getEmbedBuilder()
                     .description("**More info:** "
                                      + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
@@ -72,8 +72,8 @@ public class HelpCommand extends Command {
     }
 
     private void populateCategory(final CommandContext c, final CommandCategory category) {
-        final String commandUsages = getCommandUsages(c.getCommandSource(), category);
-        final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getCommandSource());
+        final String commandUsages = getCommandUsages(c.getSource(), category);
+        final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource());
         c.getEmbedBuilder()
             .description("**More info:** "
                              + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
@@ -89,7 +89,7 @@ public class HelpCommand extends Command {
                 || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
             .findFirst();
         if (foundCommand.isPresent()) {
-            c.getEmbedBuilder().description(foundCommand.get().commandUsage().serialize(c.getCommandSource()));
+            c.getEmbedBuilder().description(foundCommand.get().commandUsage().serialize(c.getSource()));
         } else {
             c.getEmbedBuilder().description("Unknown command or category");
         }

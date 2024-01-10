@@ -122,6 +122,7 @@ public class DiscordManageCommand extends Command {
                       })))
             .then(literal("token").requires(DiscordManageCommand::validateTerminalSource)
                       .then(argument("token", wordWithChars()).executes(c -> {
+                          c.getSource().setSensitiveInput(true);
                           CONFIG.discord.token = getString(c, "token");
                           c.getSource().getEmbedBuilder()
                                        .title("Token set!")
@@ -133,6 +134,7 @@ public class DiscordManageCommand extends Command {
                       })))
             .then(literal("role").requires(DiscordManageCommand::validateTerminalSource)
                       .then(argument("roleId", wordWithChars()).executes(c -> {
+                          c.getSource().setSensitiveInput(true);
                           var roleId = getString(c, "roleId");
                           try {
                               Snowflake.of(roleId);

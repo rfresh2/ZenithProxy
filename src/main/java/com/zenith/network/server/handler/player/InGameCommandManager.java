@@ -81,7 +81,7 @@ public class InGameCommandManager {
         if (!embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty())
             session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse(
                 "&7[&9ZenithProxy&7]&r &cUnknown command!"), false));
-        if (CONFIG.inGameCommands.logToDiscord && DISCORD_BOT.isRunning()) {
+        if (CONFIG.inGameCommands.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
             // will also log to terminal
             CommandOutputHelper.logInputToDiscord(command, CommandSource.IN_GAME_PLAYER);
             CommandOutputHelper.logEmbedOutputToDiscord(embed);

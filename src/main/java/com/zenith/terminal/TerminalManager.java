@@ -97,13 +97,16 @@ public class TerminalManager {
     }
 
     private void executeDiscordCommand(final String command) {
-        if (CONFIG.interactiveTerminal.logToDiscord) CommandOutputHelper.logInputToDiscord(command, CommandSource.TERMINAL);
         CommandContext commandContext = CommandContext.create(command, CommandSource.TERMINAL);
         COMMAND_MANAGER.execute(commandContext);
+        if (CONFIG.interactiveTerminal.logToDiscord && !commandContext.isSensitiveInput()) CommandOutputHelper.logInputToDiscord(command, CommandSource.TERMINAL);
         EmbedCreateSpec embed = commandContext.getEmbedBuilder().build();
-        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD_BOT.isRunning()) CommandOutputHelper.logEmbedOutputToDiscord(embed);
-            else CommandOutputHelper.logEmbedOutputToTerminal(embed);
-        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD_BOT.isRunning()) CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
-            else CommandOutputHelper.logMultiLineOutputToTerminal(commandContext);
+        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
+            CommandOutputHelper.logEmbedOutputToDiscord(embed);
+            CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
+        } else {
+            CommandOutputHelper.logEmbedOutputToTerminal(embed);
+            CommandOutputHelper.logMultiLineOutputToTerminal(commandContext);
+        }
     }
 }

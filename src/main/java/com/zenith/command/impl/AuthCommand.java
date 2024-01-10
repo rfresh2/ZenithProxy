@@ -79,6 +79,7 @@ public class AuthCommand extends Command {
                       })))
             .then(literal("email").requires(this::validateTerminalSource)
                       .then(argument("email", wordWithChars()).executes(c -> {
+                          c.getSource().setSensitiveInput(true);
                           var emailStr = getString(c, "email").trim();
                           // validate email str is an email
                           if (!emailStr.contains("@") || emailStr.length() < 3) {
@@ -95,6 +96,7 @@ public class AuthCommand extends Command {
                       })))
             .then(literal("password").requires(this::validateTerminalSource)
                       .then(argument("password", wordWithChars()).executes(c -> {
+                          c.getSource().setSensitiveInput(true);
                           var passwordStr = getString(c, "password").trim();
                           // validate password str is a password
                           if (passwordStr.isBlank()) {

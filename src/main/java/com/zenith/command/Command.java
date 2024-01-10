@@ -28,7 +28,7 @@ public abstract class Command {
 
     public static boolean validateAccountOwner(final CommandContext context) {
         try {
-            final boolean allowed = switch (context.getCommandSource()) {
+            final boolean allowed = switch (context.getSource()) {
                 case DISCORD -> validateAccountOwnerDiscord(context);
                 case TERMINAL -> true;
                 case IN_GAME_PLAYER -> validateAccountOwnerInGame(context);
@@ -85,21 +85,21 @@ public abstract class Command {
     }
 
     public static boolean validateCommandSource(final CommandContext context, final List<CommandSource> allowedSources) {
-        var allowed = allowedSources.contains(context.getCommandSource());
+        var allowed = allowedSources.contains(context.getSource());
         if (!allowed)
             context.getEmbedBuilder()
                 .addField("Error",
-                          "Command source: " + context.getCommandSource().getName()
+                          "Command source: " + context.getSource().getName()
                               + " is not authorized to execute this command!", false);
         return allowed;
     }
 
     public static boolean validateCommandSource(final CommandContext context, final CommandSource allowedSource) {
-        var allowed = allowedSource.equals(context.getCommandSource());
+        var allowed = allowedSource.equals(context.getSource());
         if (!allowed)
             context.getEmbedBuilder()
                 .addField("Error",
-                          "Command source: " + context.getCommandSource().getName()
+                          "Command source: " + context.getSource().getName()
                               + " is not authorized to execute this command!", false);
         return allowed;
     }
@@ -172,7 +172,7 @@ public abstract class Command {
         postPopulate(context.getEmbedBuilder());
         context.getEmbedBuilder()
                 .title("Invalid command usage")
-                .addField("Usage", commandUsage().serialize(context.getCommandSource()), false)
+                .addField("Usage", commandUsage().serialize(context.getSource()), false)
                 .color(Color.RUBY);
     }
 }
