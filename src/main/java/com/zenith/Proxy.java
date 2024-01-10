@@ -90,6 +90,8 @@ public class Proxy {
     private AutoUpdater autoUpdater;
     private Subscription eventSubscription;
     private LanBroadcaster lanBroadcaster;
+    // might move to config and make the user deal with it when it changes
+    private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -148,7 +150,7 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::eightHourKickWarningTick, 350L, 1L, TimeUnit.MINUTES);
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::twoB2tTimeLimitKickWarningTick, twoB2tTimeLimit.minusMinutes(10L).toMinutes(), 1L, TimeUnit.MINUTES);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
@@ -617,17 +619,17 @@ public class Proxy {
         }
     }
 
-    public void eightHourKickWarningTick() {
+    public void twoB2tTimeLimitKickWarningTick() {
         try {
             if (this.isPrio.orElse(false) // Prio players don't get kicked
                 || !this.hasActivePlayer() // If no player is connected, nobody to warn
-                || !isOnlineOn2b2tForAtLeastDuration(Duration.ofMinutes(470)) // 8hrs - 10 mins
+                || !isOnlineOn2b2tForAtLeastDuration(twoB2tTimeLimit.minusMinutes(10L))
             ) return;
             final ServerConnection playerConnection = this.currentPlayer.get();
-            final int minsUntil8Hrs = (int) ((28800 - (Instant.now().getEpochSecond() - connectTime.getEpochSecond())) / 60);
-            if (minsUntil8Hrs < 0) return; // sanity check just in case 2b's plugin changes
+            final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.between(this.connectTime, Instant.now()));
+            if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
-                ComponentSerializer.mineDownParse((minsUntil8Hrs <= 3 ? "&c" : "&9") + "8hr kick in: " + minsUntil8Hrs + "m"));
+                ComponentSerializer.mineDownParse((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
             playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
@@ -644,7 +646,7 @@ public class Proxy {
                 0L
             ));
         } catch (final Throwable e) {
-            DEFAULT_LOG.error("Error in 8 hr kick warning tick", e);
+            DEFAULT_LOG.error("Error in 2b2t time limit kick warning tick", e);
         }
     }
 
