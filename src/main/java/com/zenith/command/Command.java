@@ -61,7 +61,7 @@ public abstract class Command {
             context.getEmbedBuilder()
                 .addField("Error",
                           "Player: " + playerProfile.getName()
-                              + " is not authorized to execute this command! You must be logged in with the proxy's MC account!", true);
+                              + " is not authorized to execute this command! You must be logged in with the proxy's MC account!", false);
         }
         return allowed;
     }
@@ -79,7 +79,7 @@ public abstract class Command {
             context.getEmbedBuilder()
                 .addField("Error",
                           "User: " + event.getMember().map(User::getTag).orElse("Unknown")
-                              + " is not authorized to execute this command! Contact the account owner", true);
+                              + " is not authorized to execute this command! Contact the account owner", false);
         }
         return hasAccountOwnerRole;
     }
@@ -90,7 +90,7 @@ public abstract class Command {
             context.getEmbedBuilder()
                 .addField("Error",
                           "Command source: " + context.getCommandSource().getName()
-                              + " is not authorized to execute this command!", true);
+                              + " is not authorized to execute this command!", false);
         return allowed;
     }
 
@@ -100,7 +100,7 @@ public abstract class Command {
             context.getEmbedBuilder()
                 .addField("Error",
                           "Command source: " + context.getCommandSource().getName()
-                              + " is not authorized to execute this command!", true);
+                              + " is not authorized to execute this command!", false);
         return allowed;
     }
 
@@ -168,11 +168,11 @@ public abstract class Command {
         exceptions.values().stream()
             .findFirst()
             .ifPresent(exception -> context.getEmbedBuilder()
-                .addField("Error", exception.getMessage(), true));
+                .addField("Error", exception.getMessage(), false));
         postPopulate(context.getEmbedBuilder());
         context.getEmbedBuilder()
                 .title("Invalid command usage")
-                .addField("Usage", commandUsage().serialize(context.getCommandSource()), true)
+                .addField("Usage", commandUsage().serialize(context.getCommandSource()), false)
                 .color(Color.RUBY);
     }
 }
