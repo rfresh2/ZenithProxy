@@ -91,12 +91,8 @@ public class Authenticator {
             this.refreshTryCount = 0;
             saveAuthCacheAsync(authSession);
             updateConfig(authSession);
-            if (CONFIG.authentication.authTokenRefresh) {
-                scheduleAuthCacheRefresh(authSession);
-            }
-            if (this.refreshTask != null) {
-                this.refreshTask.cancel(true);
-            }
+            if (this.refreshTask != null) this.refreshTask.cancel(true);
+            if (CONFIG.authentication.authTokenRefresh) scheduleAuthCacheRefresh(authSession);
             return createMinecraftProtocol(authSession);
         } catch (final Exception e) {
             throw new RuntimeException("Login failed", e);
