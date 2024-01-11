@@ -539,23 +539,24 @@ public class DiscordBot {
     }
 
     public DiscordClientBuilder<DiscordClient, RouterOptions> buildProxiedClient(final DiscordClientBuilder<DiscordClient, RouterOptions> builder) {
-        if (!CONFIG.discord.connectionProxy.enabled) return builder;
-        builder.setReactorResources(new ReactorResources(getProxiedHttpClient(),
+        HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE).compress(true).followRedirect(true).secure();
+        if (CONFIG.discord.connectionProxy.enabled)
+            httpClient = getProxiedHttpClient(httpClient);
+        builder.setReactorResources(new ReactorResources(httpClient,
                                                          DEFAULT_TIMER_TASK_SCHEDULER.get(),
                                                          DEFAULT_BLOCKING_TASK_SCHEDULER.get()));
         return builder;
     }
 
-    public HttpClient getProxiedHttpClient() {
-        return HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE).compress(true).followRedirect(true).secure().proxy((ProxyProvider.TypeSpec provider) -> {
-            ProxyProvider.AddressSpec addressSpec;
-            switch (CONFIG.discord.connectionProxy.type){
-                case SOCKS4 -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS4);
-                case SOCKS5 -> addressSpec = provider.type(ProxyProvider.Proxy.SOCKS5);
-                case HTTP -> addressSpec = provider.type(ProxyProvider.Proxy.HTTP);
-                default -> throw new RuntimeException("Invalid proxy type: " + CONFIG.discord.connectionProxy.type);
-            }
-            ProxyProvider.Builder proxyBuilder = addressSpec
+    public HttpClient getProxiedHttpClient(HttpClient baseClient) {
+        return baseClient.proxy((ProxyProvider.TypeSpec provider) -> {
+            var proxy = switch (CONFIG.discord.connectionProxy.type){
+                case SOCKS4 -> ProxyProvider.Proxy.SOCKS4;
+                case SOCKS5 -> ProxyProvider.Proxy.SOCKS5;
+                case HTTP -> ProxyProvider.Proxy.HTTP;
+            };
+            var proxyBuilder = provider
+                .type(proxy)
                 .host(CONFIG.discord.connectionProxy.host)
                 .port(CONFIG.discord.connectionProxy.port);
             if(!CONFIG.discord.connectionProxy.user.isEmpty())
