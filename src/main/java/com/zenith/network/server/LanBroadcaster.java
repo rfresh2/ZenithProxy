@@ -37,9 +37,9 @@ public class LanBroadcaster {
     }
 
     public void start() {
-        SERVER_LOG.info("Starting LAN server broadcaster");
         errorCount.set(0);
         broadcastFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::broadcast, 0, 1500, TimeUnit.MILLISECONDS);
+        SERVER_LOG.info("Started LAN server broadcaster");
     }
 
     public void stop() {
