@@ -45,7 +45,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
     }
 
     private synchronized void parse2bQueueState(ClientboundTabListPacket packet, ClientSession session) {
-        Optional<String> queueHeader = Arrays.stream(ComponentSerializer.toRawString(packet.getHeader()).split("\\\\n"))
+        Optional<String> queueHeader = Arrays.stream(ComponentSerializer.serializePlain(packet.getHeader()).split("\\\\n"))
                 .map(String::trim)
                 .map(m -> m.toLowerCase(Locale.ROOT))
                 .filter(m -> m.contains("2b2t is full") || m.contains("pending") || m.contains("in queue"))
@@ -72,7 +72,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
 
     private void parse2bPrioQueueState(final ClientboundTabListPacket packet) {
         Optional.of(packet.getFooter())
-                .map(ComponentSerializer::toRawString)
+                .map(ComponentSerializer::serializePlain)
                 .map(textRaw -> textRaw.replace("\n", ""))
                 .filter(messageString -> messageString.contains("priority"))
                 .ifPresent(messageString -> {
@@ -89,7 +89,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
 
     private synchronized void parse2bPing(final ClientboundTabListPacket packet, ClientSession session) {
         Optional.of(packet.getFooter())
-                .map(ComponentSerializer::toRawString)
+                .map(ComponentSerializer::serializePlain)
                 .map(textRaw -> textRaw.replace("\n", ""))
                 .map(String::trim)
                 .filter(textRaw -> textRaw.contains("ping"))

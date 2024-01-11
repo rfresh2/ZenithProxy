@@ -629,7 +629,7 @@ public class Proxy {
             final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.between(this.connectTime, Instant.now()));
             if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
-                ComponentSerializer.mineDownParse((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
+                ComponentSerializer.minedown((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
             playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
@@ -741,7 +741,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&b" + event.playerEntry().getName() + "&r&e connected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e connected"), false));
             }
         }
     }
@@ -750,7 +750,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
             }
         }
     }

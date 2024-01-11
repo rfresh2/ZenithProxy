@@ -26,7 +26,7 @@ public class SetActionBarTextHandler implements AsyncPacketHandler<ClientboundSe
     private void parse2bRestart(ClientboundSetActionBarTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional.of(serverTitlePacket)
-                .map(title -> ComponentSerializer.toRawString(title.getText()))
+                .map(title -> ComponentSerializer.serializePlain(title.getText()))
                 .filter(text -> text.toLowerCase().contains("restart"))
                 .ifPresent(text -> {
                     if (lastRestartEvent.isBefore(Instant.now().minus(15, ChronoUnit.MINUTES))) {

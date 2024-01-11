@@ -91,10 +91,10 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
         this.session.setDisconnected(true);
         String reasonStr;
         try {
-            reasonStr = ComponentSerializer.toRawString(reason);
+            reasonStr = ComponentSerializer.serializePlain(reason);
         } catch (final Exception e) {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", reason, e);
-            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serialize(reason);
+            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serializeJson(reason);
         }
         CLIENT_LOG.info("Disconnected: " + reasonStr);
         var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());

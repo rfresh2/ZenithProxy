@@ -209,7 +209,7 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
-            final String reasonStr = ComponentSerializer.toRawString(reason);
+            final String reasonStr = ComponentSerializer.serializePlain(reason);
 
             if (!isSpectator()) {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
@@ -227,7 +227,7 @@ public class ServerConnection implements Session, SessionListener {
             } else {
                 Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
+                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
                 });
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
