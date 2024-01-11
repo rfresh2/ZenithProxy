@@ -18,6 +18,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -199,8 +200,11 @@ public class Authenticator {
             AUTH_LOG.debug("Auth token refresh time is negative? {}", time);
             return;
         }
-        this.refreshTask = SCHEDULED_EXECUTOR_SERVICE.schedule(this::executeAuthCacheRefresh, time, MILLISECONDS);
-        AUTH_LOG.debug("Device code refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
+        this.refreshTask = SCHEDULED_EXECUTOR_SERVICE.schedule(
+            this::executeAuthCacheRefresh,
+            Math.min(time, Duration.ofHours(6).toMillis()),
+            MILLISECONDS);
+        AUTH_LOG.debug("Auth cache refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
     }
 
     private void executeAuthCacheRefresh() {
