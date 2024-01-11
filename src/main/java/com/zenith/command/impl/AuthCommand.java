@@ -119,9 +119,7 @@ public class AuthCommand extends Command {
 
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder builder) {
-        builder.title("Authentication")
-            .description("Configure authentication settings")
-            .color(Color.CYAN)
+        builder
             .addField("Account Type", CONFIG.authentication.accountType.toString(), true)
             .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), true)
             .addField("Attempts", ""+CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, true);
