@@ -4,14 +4,14 @@
 /run/
 /log/
 /build/
-/config*.json
-launch_config.json
 /.gradle/
 *.class
 *.ipr
 /out/
 .DS_Store
 gradle.properties
-msal*.json
-/.vscode/settings.json
+# any json-like file in top directory, including configs, auth cache, etc.
+/*.json*
+*.tmp
+/.vscode
 launcher/

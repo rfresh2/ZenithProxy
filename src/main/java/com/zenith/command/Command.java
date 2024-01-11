@@ -14,6 +14,7 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -27,7 +28,7 @@ public abstract class Command {
 
     public static boolean validateAccountOwner(final CommandContext context) {
         try {
-            final boolean allowed = switch (context.getCommandSource()) {
+            final boolean allowed = switch (context.getSource()) {
                 case DISCORD -> validateAccountOwnerDiscord(context);
                 case TERMINAL -> true;
                 case IN_GAME_PLAYER -> validateAccountOwnerInGame(context);
@@ -60,7 +61,7 @@ public abstract class Command {
             context.getEmbedBuilder()
                 .addField("Error",
                           "Player: " + playerProfile.getName()
-                              + " is not authorized to execute this command! You must be logged in with the proxy's MC account!", true);
+                              + " is not authorized to execute this command! You must be logged in with the proxy's MC account!", false);
         }
         return allowed;
     }
@@ -78,10 +79,29 @@ public abstract class Command {
             context.getEmbedBuilder()
                 .addField("Error",
                           "User: " + event.getMember().map(User::getTag).orElse("Unknown")
-                              + " is not authorized to execute this command! Contact the account owner", true);
-            return false;
+                              + " is not authorized to execute this command! Contact the account owner", false);
         }
-        return true;
+        return hasAccountOwnerRole;
+    }
+
+    public static boolean validateCommandSource(final CommandContext context, final List<CommandSource> allowedSources) {
+        var allowed = allowedSources.contains(context.getSource());
+        if (!allowed)
+            context.getEmbedBuilder()
+                .addField("Error",
+                          "Command source: " + context.getSource().getName()
+                              + " is not authorized to execute this command!", false);
+        return allowed;
+    }
+
+    public static boolean validateCommandSource(final CommandContext context, final CommandSource allowedSource) {
+        var allowed = allowedSource.equals(context.getSource());
+        if (!allowed)
+            context.getEmbedBuilder()
+                .addField("Error",
+                          "Command source: " + context.getSource().getName()
+                              + " is not authorized to execute this command!", false);
+        return allowed;
     }
 
     public static CaseInsensitiveLiteralArgumentBuilder<CommandContext> literal(String literal) {
@@ -148,11 +168,11 @@ public abstract class Command {
         exceptions.values().stream()
             .findFirst()
             .ifPresent(exception -> context.getEmbedBuilder()
-                .addField("Error", exception.getMessage(), true));
+                .addField("Error", exception.getMessage(), false));
         postPopulate(context.getEmbedBuilder());
         context.getEmbedBuilder()
                 .title("Invalid command usage")
-                .addField("Usage", commandUsage().serialize(context.getCommandSource()), true)
+                .addField("Usage", commandUsage().serialize(context.getSource()), false)
                 .color(Color.RUBY);
     }
 }

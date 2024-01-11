@@ -1,13 +1,8 @@
 package com.zenith.database;
 
-import com.zenith.database.dto.tables.Queuelength;
-import com.zenith.database.dto.tables.records.QueuelengthRecord;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DatabaseTickEvent;
 import com.zenith.feature.queue.Queue;
-import com.zenith.feature.queue.QueueStatus;
-import org.jooq.*;
-import org.jooq.impl.DSL;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -35,27 +30,25 @@ public class QueueLengthDatabase extends LockingDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Queuelength q = Queuelength.QUEUELENGTH;
-        Result<Record1<OffsetDateTime>> timeRecordResult = this.queryExecutor.fetch(context.select(q.TIME)
-                .from(q)
-                .orderBy(q.TIME.desc())
-                .limit(1));
-        if (timeRecordResult.isEmpty()) {
-            DATABASE_LOG.warn("QueueLength database unable to sync. Database empty?");
-            return Instant.EPOCH;
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            var result = handle.select("SELECT time FROM queuelength ORDER BY time DESC LIMIT 1;")
+                .mapTo(OffsetDateTime.class)
+                .findOne();
+            if (result.isEmpty()) {
+                DATABASE_LOG.warn("QueueLength database unable to sync. Database empty?");
+                return Instant.EPOCH;
+            }
+            return result.get().toInstant();
         }
-        return timeRecordResult.get(0).value1().toInstant();
     }
 
     public void handleTickEvent(final DatabaseTickEvent event) {
-        final QueueStatus queueStatus = Queue.getQueueStatus();
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Queuelength q = Queuelength.QUEUELENGTH;
-        final InsertSetMoreStep<QueuelengthRecord> query = context.insertInto(q)
-            .set(q.TIME, Instant.now().atOffset(ZoneOffset.UTC))
-            .set(q.REGULAR, Integer.valueOf(queueStatus.regular()).shortValue())
-            .set(q.PRIO, Integer.valueOf(queueStatus.prio()).shortValue());
-        this.insert(Instant.now(), query);
+        var queueStatus = Queue.getQueueStatus();
+        this.insert(Instant.now(), handle ->
+            handle.createUpdate("INSERT INTO queuelength (time, regular, prio) VALUES (:time, :regular, :prio)")
+                .bind("time", Instant.now().atOffset(ZoneOffset.UTC))
+                .bind("regular", (short) queueStatus.regular())
+                .bind("prio", (short) queueStatus.prio())
+                .execute());
     }
 }

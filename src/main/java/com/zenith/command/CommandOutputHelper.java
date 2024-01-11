@@ -81,7 +81,7 @@ public class CommandOutputHelper {
             if (field.value().equals("\u200B")) continue;
             output.append(field.value());
         }
-        session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse(output.toString()), false));
+        session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown(output.toString()), false));
     }
 
     public void logMultiLineOutputToInGame(final CommandContext commandContext, final ServerConnection session) {

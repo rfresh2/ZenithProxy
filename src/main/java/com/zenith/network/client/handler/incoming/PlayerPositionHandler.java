@@ -28,7 +28,7 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
                 .setZ((packet.getRelative().contains(PositionElement.Z) ? cache.getZ() : 0.0d) + packet.getZ())
                 .setYaw((packet.getRelative().contains(PositionElement.YAW) ? cache.getYaw() : 0.0f) + packet.getYaw())
                 .setPitch((packet.getRelative().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
-        ServerConnection currentPlayer = session.getProxy().getCurrentPlayer().get();
+        ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (isNull(currentPlayer)) {
             if (session.isOnline()) {
                 MODULE_MANAGER.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getTeleportId());

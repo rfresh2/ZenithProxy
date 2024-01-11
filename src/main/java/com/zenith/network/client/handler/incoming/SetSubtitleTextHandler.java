@@ -24,7 +24,7 @@ public class SetSubtitleTextHandler implements AsyncPacketHandler<ClientboundSet
     private void parse2bQueuePos(ClientboundSetSubtitleTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional<Integer> position = Optional.of(serverTitlePacket)
-                .map(title -> ComponentSerializer.toRawString(title.getText()))
+                .map(title -> ComponentSerializer.serializePlain(title.getText()))
                 .map(text -> {
                     String[] split = text.split(":");
                     if (split.length > 1) {

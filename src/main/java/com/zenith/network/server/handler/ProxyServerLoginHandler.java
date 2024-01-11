@@ -26,12 +26,6 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class ProxyServerLoginHandler implements ServerLoginHandler {
-    private final Proxy proxy;
-
-    public ProxyServerLoginHandler(final Proxy proxy) {
-        this.proxy = proxy;
-    }
-
     @Override
     public void loggedIn(Session session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
@@ -39,7 +33,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         ServerConnection connection = (ServerConnection) session;
 
         if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
-                        && (this.proxy.getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())
+                        && (Proxy.getInstance().getConnectTime() != null && Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())
@@ -106,7 +100,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getPlayerCache().getPortalCooldown()
                 )
             ));
-            if (!proxy.isInQueue()) { PlayerCache.sync(); }
+            if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
             CustomServerInfoBuilder serverInfoBuilder = Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
             session.send(new ClientboundServerDataPacket(
                 Component.text(serverInfoBuilder.getMotd()),

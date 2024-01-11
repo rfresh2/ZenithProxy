@@ -2,6 +2,7 @@ package com.zenith.feature.autoupdater;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import org.apache.commons.math3.util.Pair;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -20,6 +21,7 @@ public class RestAutoUpdater extends AutoUpdater {
             ? "https://github.2b2t.vc"
             : "https://api.github.com";
         this.httpClient = HttpClient.create()
+            .resolver(DefaultAddressResolverGroup.INSTANCE)
             .secure()
             .baseUrl(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name)
             .headers(h -> h.add(HttpHeaderNames.USER_AGENT, "ZenithProxy/" + LAUNCH_CONFIG.version))

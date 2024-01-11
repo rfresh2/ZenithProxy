@@ -81,6 +81,7 @@ public class ClientListener implements SessionListener {
         this.session.setDisconnected(false);
         session.send(new ClientIntentionPacket(session.getPacketProtocol().getCodec().getProtocolVersion(), session.getHost(), session.getPort(), HandshakeIntent.LOGIN));
         EVENT_BUS.postAsync(new ConnectEvent());
+        session.send(new ClientIntentionPacket(session.getPacketProtocol().getCodec().getProtocolVersion(), session.getHost(), session.getPort(), HandshakeIntent.LOGIN));
     }
 
     @Override
@@ -100,10 +101,10 @@ public class ClientListener implements SessionListener {
         this.session.setDisconnected(true);
         String reasonStr;
         try {
-            reasonStr = ComponentSerializer.toRawString(reason);
+            reasonStr = ComponentSerializer.serializePlain(reason);
         } catch (final Exception e) {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", reason, e);
-            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serialize(reason);
+            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serializeJson(reason);
         }
         CLIENT_LOG.info("Disconnected: " + reasonStr);
         var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());

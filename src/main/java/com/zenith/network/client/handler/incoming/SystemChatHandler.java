@@ -26,11 +26,11 @@ public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemCh
     @Override
     public boolean applyAsync(@NonNull ClientboundSystemChatPacket packet, @NonNull ClientSession session) {
         try {
-            String serializedChat = ComponentSerializer.serialize(packet.getContent());
+            String serializedChat = ComponentSerializer.serializeJson(packet.getContent());
             if (Proxy.getInstance().isInQueue()) serializedChat = serializedChat.replace("\\n\\n", "");
             CHAT_LOG.info(serializedChat);
             final Component component = packet.getContent();
-            final String messageString = ComponentSerializer.toRawString(component);
+            final String messageString = ComponentSerializer.serializePlain(component);
             Optional<DeathMessageParseResult> deathMessage = Optional.empty();
             if (!messageString.startsWith("<")) { // normal chat msg
                 // death message color on 2b

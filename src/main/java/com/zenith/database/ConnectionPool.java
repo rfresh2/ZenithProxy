@@ -7,37 +7,17 @@ import java.sql.Connection;
 import java.time.Duration;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.DATABASE_LOG;
 
 public final class ConnectionPool {
 
     private final HikariDataSource writePool;
-    private final HikariDataSource readPool;
 
     public ConnectionPool() {
-        HikariDataSource wPool = null;
-        try {
-            if (CONFIG.database.writePool > 0) {
-                wPool = createDataSource(CONFIG.database.writePool);
-            }
-        } catch (final Exception e) {
-            DATABASE_LOG.error("Error initializing database write connection pool", e);
-        }
-        writePool = wPool;
-        HikariDataSource rPool = null;
-        try {
-            if (CONFIG.database.readPool > 0) {
-                rPool = createDataSource(CONFIG.database.readPool);
-            }
-        } catch (final Exception e) {
-            DATABASE_LOG.error("Error initializing database read connection pool", e);
-        }
-        readPool = rPool;
+        writePool = createDataSource(CONFIG.database.writePool);
     }
 
     public ConnectionPool(final String customUrl, final String customUser, final String customPass) {
         writePool = createDataSource(1, customUrl, customUser, customPass);
-        readPool = null;
     }
 
     private static HikariDataSource createDataSource(int maxPoolSize, String url, String user, String pass) {
@@ -69,16 +49,6 @@ public final class ConnectionPool {
     public Connection getWriteConnection() {
         try {
             return writePool.getConnection();
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Connection getReadConnection() {
-        try {
-            Connection connection = readPool.getConnection();
-            connection.setReadOnly(true);
-            return connection;
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

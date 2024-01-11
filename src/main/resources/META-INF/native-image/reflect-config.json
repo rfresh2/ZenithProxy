@@ -27,15 +27,6 @@
   "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
 },
 {
-  "name":"[Lcom.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McProfileResponse$Skin;"
-},
-{
-  "name":"[Lcom.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse$Xui;"
-},
-{
-  "name":"[Lcom.microsoft.aad.msal4j.InstanceDiscoveryMetadataEntry;"
-},
-{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
 },
 {
@@ -319,61 +310,6 @@
   "unsafeAllocated":true
 },
 {
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McLoginRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McLoginResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McProfileResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$McProfileResponse$Skin",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthRequest$Properties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse$DisplayClaims",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XblAuthResponse$Xui",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XstsAuthRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.MsaDeviceAuthenticationService$XstsAuthRequest$Properties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.github.steveice10.mc.auth.service.SessionService$HasJoinedResponse",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -545,107 +481,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.microsoft.aad.msal4j.AadInstanceDiscoveryResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AccessTokenCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AccountCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.AppMetadataCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"com.microsoft.aad.msal4j.ClientInfo",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.Credential",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.DeviceCode",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.ErrorResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.ITokenCache",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"com.microsoft.aad.msal4j.IdToken",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.IdTokenCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.InstanceDiscoveryMetadataEntry",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.RefreshTokenCacheEntity",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.TokenCache",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.microsoft.aad.msal4j.UserDiscoveryResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.sun.crypto.provider.AESCipher$General",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -758,105 +593,75 @@
   "queryAllDeclaredMethods":true
 },
 {
-  "name":"com.zenith.database.dto.tables.pojos.Chats",
+  "name":"com.zenith.database.dto.records.ChatsRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"chat","parameterTypes":[] }, {"name":"playerName","parameterTypes":[] }, {"name":"playerUuid","parameterTypes":[] }, {"name":"time","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.database.dto.records.ConnectionsRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"connection","parameterTypes":[] }, {"name":"playerName","parameterTypes":[] }, {"name":"playerUuid","parameterTypes":[] }, {"name":"time","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.database.dto.records.DeathsRecord",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.lang.String","java.lang.String","java.util.UUID"] }, {"name":"getChat","parameterTypes":[] }, {"name":"getPlayerName","parameterTypes":[] }, {"name":"getPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }]
+  "methods":[{"name":"getDeathMessage","parameterTypes":[] }, {"name":"getKillerMob","parameterTypes":[] }, {"name":"getKillerPlayerName","parameterTypes":[] }, {"name":"getKillerPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }, {"name":"getVictimPlayerName","parameterTypes":[] }, {"name":"getVictimPlayerUuid","parameterTypes":[] }, {"name":"getWeaponName","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.database.dto.tables.pojos.Connections",
+  "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.time.OffsetDateTime","com.zenith.database.dto.enums.Connectiontype","java.lang.String","java.util.UUID"] }, {"name":"getConnection","parameterTypes":[] }, {"name":"getPlayerName","parameterTypes":[] }, {"name":"getPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.zenith.feature.api.minetools.model.MinetoolsProfileResponseDecoded"] }]
 },
 {
-  "name":"com.zenith.database.dto.tables.pojos.Deaths",
+  "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponseDecoded",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.lang.String","java.lang.String","java.util.UUID","java.lang.String","java.util.UUID","java.lang.String","java.lang.String"] }, {"name":"getDeathMessage","parameterTypes":[] }, {"name":"getKillerMob","parameterTypes":[] }, {"name":"getKillerPlayerName","parameterTypes":[] }, {"name":"getKillerPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }, {"name":"getVictimPlayerName","parameterTypes":[] }, {"name":"getVictimPlayerUuid","parameterTypes":[] }, {"name":"getWeaponName","parameterTypes":[] }]
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
 },
 {
-  "name":"com.zenith.database.dto.tables.records.ChatsRecord",
+  "name":"com.zenith.feature.api.minetools.model.MinetoolsUuidResponse",
+  "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String"] }]
 },
 {
-  "name":"com.zenith.database.dto.tables.records.ConnectionsRecord",
+  "name":"com.zenith.feature.api.mojang.model.MojangProfileResponse",
+  "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
 },
 {
-  "name":"com.zenith.database.dto.tables.records.DeathsRecord",
+  "name":"com.zenith.feature.api.sessionserver.model.SessionProfileResponse",
+  "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
 },
 {
-  "name":"com.zenith.database.dto.tables.records.NamesRecord",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.database.dto.tables.records.PlayercountRecord",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.database.dto.tables.records.PlaytimeAllRecord",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.database.dto.tables.records.QueuelengthRecord",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.database.dto.tables.records.QueuewaitRecord",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.database.dto.tables.records.RestartsRecord",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.zenith.feature.api.model.PlaytimeResponse",
+  "name":"com.zenith.feature.api.vcapi.model.PlaytimeResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["java.util.UUID","int"] }]
 },
 {
-  "name":"com.zenith.feature.api.model.SeenResponse",
+  "name":"com.zenith.feature.api.vcapi.model.SeenResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["java.time.OffsetDateTime","java.time.OffsetDateTime"] }]
 },
 {
-  "name":"com.zenith.feature.api.model.StatsResponse",
+  "name":"com.zenith.feature.api.vcapi.model.StatsResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1371,77 +1176,7 @@
   "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
 },
 {
-  "name":"fr.litarvan.openauth.microsoft.model.request.MinecraftLoginRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.request.XSTSAuthorizationProperties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.request.XboxLiveLoginProperties",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.request.XboxLoginRequest",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MicrosoftRefreshResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftLoginResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftProfile",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftProfile$MinecraftSkin",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftStoreResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.MinecraftStoreResponse$StoreProduct",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.XboxLoginResponse",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.XboxLoginResponse$XboxLiveLoginResponseClaims",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"fr.litarvan.openauth.microsoft.model.response.XboxLoginResponse$XboxLiveUserInfo",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
+  "name":"io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1754,7 +1489,8 @@
 {
   "name":"java.lang.Object",
   "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"hashCode","parameterTypes":[] }, {"name":"toString","parameterTypes":[] }]
 },
 {
   "name":"java.lang.OutOfMemoryError"
@@ -1897,10 +1633,22 @@
   "name":"java.security.interfaces.ECPublicKey"
 },
 {
+  "name":"java.security.interfaces.EdECKey",
+  "methods":[{"name":"getParams","parameterTypes":[] }]
+},
+{
   "name":"java.security.interfaces.RSAPrivateKey"
 },
 {
   "name":"java.security.interfaces.RSAPublicKey"
+},
+{
+  "name":"java.security.interfaces.XECKey",
+  "methods":[{"name":"getParams","parameterTypes":[] }]
+},
+{
+  "name":"java.security.spec.NamedParameterSpec",
+  "methods":[{"name":"getName","parameterTypes":[] }]
 },
 {
   "name":"java.sql.Date"
@@ -2006,6 +1754,10 @@
   "fields":[{"name":"value"}]
 },
 {
+  "name":"java.util.concurrent.atomic.AtomicMarkableReference",
+  "fields":[{"name":"pair"}]
+},
+{
   "name":"java.util.concurrent.atomic.AtomicReference",
   "fields":[{"name":"value"}]
 },
@@ -2016,6 +1768,10 @@
 {
   "name":"java.util.concurrent.atomic.Striped64$Cell",
   "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.stream.Collectors",
+  "methods":[{"name":"toUnmodifiableSet","parameterTypes":[] }]
 },
 {
   "name":"java.util.zip.Adler32",
@@ -2066,6 +1822,24 @@
   "name":"kotlin.jvm.JvmClassMappingKt"
 },
 {
+  "name":"org.apache.commons.logging.LogFactory"
+},
+{
+  "name":"org.apache.commons.logging.impl.Jdk14Logger",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }, {"name":"setLogFactory","parameterTypes":["org.apache.commons.logging.LogFactory"] }]
+},
+{
+  "name":"org.apache.commons.logging.impl.Log4JLogger"
+},
+{
+  "name":"org.apache.commons.logging.impl.LogFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.apache.commons.logging.impl.WeakHashtable",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"org.eclipse.jgit.internal.JGitText",
   "allPublicFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -2081,6 +1855,85 @@
 {
   "name":"org.eclipse.jgit.util.sha1.SHA1$Sha1Implementation",
   "methods":[{"name":"values","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.Handles",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.argument.Arguments",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.jdbi.v3.core.config.ConfigRegistry"] }]
+},
+{
+  "name":"org.jdbi.v3.core.argument.NullArgument",
+  "methods":[{"name":"toString","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.argument.ObjectArgument",
+  "methods":[{"name":"toString","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.argument.internal.strategies.LoggableBinderArgument",
+  "methods":[{"name":"toString","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.array.SqlArrayTypes",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.collector.JdbiCollectors",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.config.internal.ConfigCaches",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.internal.CopyOnWriteHashMap",
+  "fields":[{"name":"m"}]
+},
+{
+  "name":"org.jdbi.v3.core.mapper.ColumnMappers",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.mapper.Mappers",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.mapper.RowMappers",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.mapper.reflect.internal.PojoTypes",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.qualifier.Qualifiers",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.core.statement.SqlStatements",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jdbi.v3.json.JsonConfig"
+},
+{
+  "name":"org.jdbi.v3.postgres.PostgresTypes",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"org.jline.terminal.impl.exec.ExecTerminalProvider",
@@ -2101,748 +1954,6 @@
 {
   "name":"org.jline.terminal.impl.jni.JniTerminalProvider",
   "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.jooq.AlterDatabaseStep"
-},
-{
-  "name":"org.jooq.AlterDomainStep"
-},
-{
-  "name":"org.jooq.AlterIndexOnStep"
-},
-{
-  "name":"org.jooq.AlterSchemaStep"
-},
-{
-  "name":"org.jooq.AlterSequenceStep"
-},
-{
-  "name":"org.jooq.AlterTableStep"
-},
-{
-  "name":"org.jooq.AlterTypeStep"
-},
-{
-  "name":"org.jooq.AlterViewStep"
-},
-{
-  "name":"org.jooq.Attachable"
-},
-{
-  "name":"org.jooq.Batch"
-},
-{
-  "name":"org.jooq.BatchBindStep"
-},
-{
-  "name":"org.jooq.BatchedCallable"
-},
-{
-  "name":"org.jooq.BatchedRunnable"
-},
-{
-  "name":"org.jooq.BindContext"
-},
-{
-  "name":"org.jooq.Block"
-},
-{
-  "name":"org.jooq.Catalog"
-},
-{
-  "name":"org.jooq.CommentOnIsStep"
-},
-{
-  "name":"org.jooq.CommonTableExpression"
-},
-{
-  "name":"org.jooq.Condition"
-},
-{
-  "name":"org.jooq.Configuration"
-},
-{
-  "name":"org.jooq.ConnectionCallable"
-},
-{
-  "name":"org.jooq.ConnectionProvider",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
-},
-{
-  "name":"org.jooq.ConnectionRunnable"
-},
-{
-  "name":"org.jooq.ContextTransactionalCallable"
-},
-{
-  "name":"org.jooq.ContextTransactionalRunnable"
-},
-{
-  "name":"org.jooq.CreateDatabaseFinalStep"
-},
-{
-  "name":"org.jooq.CreateDomainAsStep"
-},
-{
-  "name":"org.jooq.CreateIndexStep"
-},
-{
-  "name":"org.jooq.CreateSchemaFinalStep"
-},
-{
-  "name":"org.jooq.CreateSequenceFlagsStep"
-},
-{
-  "name":"org.jooq.CreateTableElementListStep"
-},
-{
-  "name":"org.jooq.CreateTypeStep"
-},
-{
-  "name":"org.jooq.CreateViewAsStep"
-},
-{
-  "name":"org.jooq.Cursor"
-},
-{
-  "name":"org.jooq.DDLExportConfiguration"
-},
-{
-  "name":"org.jooq.DDLFlag"
-},
-{
-  "name":"org.jooq.DSLContext",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
-},
-{
-  "name":"org.jooq.DataType"
-},
-{
-  "name":"org.jooq.DeleteQuery"
-},
-{
-  "name":"org.jooq.DeleteUsingStep"
-},
-{
-  "name":"org.jooq.Domain"
-},
-{
-  "name":"org.jooq.DropDatabaseFinalStep"
-},
-{
-  "name":"org.jooq.DropDomainCascadeStep"
-},
-{
-  "name":"org.jooq.DropIndexOnStep"
-},
-{
-  "name":"org.jooq.DropSchemaStep"
-},
-{
-  "name":"org.jooq.DropSequenceFinalStep"
-},
-{
-  "name":"org.jooq.DropTableStep"
-},
-{
-  "name":"org.jooq.DropTypeStep"
-},
-{
-  "name":"org.jooq.DropViewFinalStep"
-},
-{
-  "name":"org.jooq.EnumType",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"org.jooq.ExecuteListener"
-},
-{
-  "name":"org.jooq.ExecuteListenerProvider",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
-},
-{
-  "name":"org.jooq.Explain"
-},
-{
-  "name":"org.jooq.Field"
-},
-{
-  "name":"org.jooq.GrantOnStep"
-},
-{
-  "name":"org.jooq.Index"
-},
-{
-  "name":"org.jooq.InsertQuery"
-},
-{
-  "name":"org.jooq.InsertSetStep"
-},
-{
-  "name":"org.jooq.InsertValuesStep1"
-},
-{
-  "name":"org.jooq.InsertValuesStep10"
-},
-{
-  "name":"org.jooq.InsertValuesStep11"
-},
-{
-  "name":"org.jooq.InsertValuesStep12"
-},
-{
-  "name":"org.jooq.InsertValuesStep13"
-},
-{
-  "name":"org.jooq.InsertValuesStep14"
-},
-{
-  "name":"org.jooq.InsertValuesStep15"
-},
-{
-  "name":"org.jooq.InsertValuesStep16"
-},
-{
-  "name":"org.jooq.InsertValuesStep17"
-},
-{
-  "name":"org.jooq.InsertValuesStep18"
-},
-{
-  "name":"org.jooq.InsertValuesStep19"
-},
-{
-  "name":"org.jooq.InsertValuesStep2"
-},
-{
-  "name":"org.jooq.InsertValuesStep20"
-},
-{
-  "name":"org.jooq.InsertValuesStep21"
-},
-{
-  "name":"org.jooq.InsertValuesStep22"
-},
-{
-  "name":"org.jooq.InsertValuesStep3"
-},
-{
-  "name":"org.jooq.InsertValuesStep4"
-},
-{
-  "name":"org.jooq.InsertValuesStep5"
-},
-{
-  "name":"org.jooq.InsertValuesStep6"
-},
-{
-  "name":"org.jooq.InsertValuesStep7"
-},
-{
-  "name":"org.jooq.InsertValuesStep8"
-},
-{
-  "name":"org.jooq.InsertValuesStep9"
-},
-{
-  "name":"org.jooq.InsertValuesStepN"
-},
-{
-  "name":"org.jooq.LoaderOptionsStep"
-},
-{
-  "name":"org.jooq.MergeKeyStep1"
-},
-{
-  "name":"org.jooq.MergeKeyStep10"
-},
-{
-  "name":"org.jooq.MergeKeyStep11"
-},
-{
-  "name":"org.jooq.MergeKeyStep12"
-},
-{
-  "name":"org.jooq.MergeKeyStep13"
-},
-{
-  "name":"org.jooq.MergeKeyStep14"
-},
-{
-  "name":"org.jooq.MergeKeyStep15"
-},
-{
-  "name":"org.jooq.MergeKeyStep16"
-},
-{
-  "name":"org.jooq.MergeKeyStep17"
-},
-{
-  "name":"org.jooq.MergeKeyStep18"
-},
-{
-  "name":"org.jooq.MergeKeyStep19"
-},
-{
-  "name":"org.jooq.MergeKeyStep2"
-},
-{
-  "name":"org.jooq.MergeKeyStep20"
-},
-{
-  "name":"org.jooq.MergeKeyStep21"
-},
-{
-  "name":"org.jooq.MergeKeyStep22"
-},
-{
-  "name":"org.jooq.MergeKeyStep3"
-},
-{
-  "name":"org.jooq.MergeKeyStep4"
-},
-{
-  "name":"org.jooq.MergeKeyStep5"
-},
-{
-  "name":"org.jooq.MergeKeyStep6"
-},
-{
-  "name":"org.jooq.MergeKeyStep7"
-},
-{
-  "name":"org.jooq.MergeKeyStep8"
-},
-{
-  "name":"org.jooq.MergeKeyStep9"
-},
-{
-  "name":"org.jooq.MergeKeyStepN"
-},
-{
-  "name":"org.jooq.MergeUsingStep"
-},
-{
-  "name":"org.jooq.Meta"
-},
-{
-  "name":"org.jooq.Migrations"
-},
-{
-  "name":"org.jooq.Name"
-},
-{
-  "name":"org.jooq.OrderField"
-},
-{
-  "name":"org.jooq.Param"
-},
-{
-  "name":"org.jooq.Parser"
-},
-{
-  "name":"org.jooq.PlainSQL",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"org.jooq.Privilege"
-},
-{
-  "name":"org.jooq.Publisher"
-},
-{
-  "name":"org.jooq.Queries"
-},
-{
-  "name":"org.jooq.Query"
-},
-{
-  "name":"org.jooq.QueryPart"
-},
-{
-  "name":"org.jooq.Record"
-},
-{
-  "name":"org.jooq.Record1"
-},
-{
-  "name":"org.jooq.Record10"
-},
-{
-  "name":"org.jooq.Record11"
-},
-{
-  "name":"org.jooq.Record12"
-},
-{
-  "name":"org.jooq.Record13"
-},
-{
-  "name":"org.jooq.Record14"
-},
-{
-  "name":"org.jooq.Record15"
-},
-{
-  "name":"org.jooq.Record16"
-},
-{
-  "name":"org.jooq.Record17"
-},
-{
-  "name":"org.jooq.Record18"
-},
-{
-  "name":"org.jooq.Record19"
-},
-{
-  "name":"org.jooq.Record2"
-},
-{
-  "name":"org.jooq.Record20"
-},
-{
-  "name":"org.jooq.Record21"
-},
-{
-  "name":"org.jooq.Record22"
-},
-{
-  "name":"org.jooq.Record3"
-},
-{
-  "name":"org.jooq.Record4"
-},
-{
-  "name":"org.jooq.Record5"
-},
-{
-  "name":"org.jooq.Record6"
-},
-{
-  "name":"org.jooq.Record7"
-},
-{
-  "name":"org.jooq.Record8"
-},
-{
-  "name":"org.jooq.Record9"
-},
-{
-  "name":"org.jooq.RenderContext"
-},
-{
-  "name":"org.jooq.Result"
-},
-{
-  "name":"org.jooq.ResultQuery"
-},
-{
-  "name":"org.jooq.Results"
-},
-{
-  "name":"org.jooq.RevokeOnStep"
-},
-{
-  "name":"org.jooq.RollbackToSavepointStep"
-},
-{
-  "name":"org.jooq.Row"
-},
-{
-  "name":"org.jooq.Row2"
-},
-{
-  "name":"org.jooq.Row3"
-},
-{
-  "name":"org.jooq.Row4"
-},
-{
-  "name":"org.jooq.Row8"
-},
-{
-  "name":"org.jooq.RowCountQuery"
-},
-{
-  "name":"org.jooq.SQL"
-},
-{
-  "name":"org.jooq.SQLDialect"
-},
-{
-  "name":"org.jooq.Schema"
-},
-{
-  "name":"org.jooq.Scope",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
-},
-{
-  "name":"org.jooq.Select"
-},
-{
-  "name":"org.jooq.SelectConditionStep"
-},
-{
-  "name":"org.jooq.SelectField"
-},
-{
-  "name":"org.jooq.SelectFieldOrAsterisk"
-},
-{
-  "name":"org.jooq.SelectForUpdateStep"
-},
-{
-  "name":"org.jooq.SelectLimitPercentStep"
-},
-{
-  "name":"org.jooq.SelectQuery"
-},
-{
-  "name":"org.jooq.SelectSeekStep1"
-},
-{
-  "name":"org.jooq.SelectSelectStep"
-},
-{
-  "name":"org.jooq.SelectWhereStep"
-},
-{
-  "name":"org.jooq.Sequence"
-},
-{
-  "name":"org.jooq.SortField"
-},
-{
-  "name":"org.jooq.Source"
-},
-{
-  "name":"org.jooq.Statement"
-},
-{
-  "name":"org.jooq.Support",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"org.jooq.Table"
-},
-{
-  "name":"org.jooq.TableField"
-},
-{
-  "name":"org.jooq.TableLike"
-},
-{
-  "name":"org.jooq.TableOptions"
-},
-{
-  "name":"org.jooq.TableRecord"
-},
-{
-  "name":"org.jooq.TransactionContext"
-},
-{
-  "name":"org.jooq.TransactionProvider",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true
-},
-{
-  "name":"org.jooq.TransactionalCallable"
-},
-{
-  "name":"org.jooq.TransactionalPublishable"
-},
-{
-  "name":"org.jooq.TransactionalRunnable"
-},
-{
-  "name":"org.jooq.TruncateIdentityStep"
-},
-{
-  "name":"org.jooq.UDT"
-},
-{
-  "name":"org.jooq.UDTRecord"
-},
-{
-  "name":"org.jooq.UpdatableRecord"
-},
-{
-  "name":"org.jooq.UpdateQuery"
-},
-{
-  "name":"org.jooq.UpdateSetFirstStep"
-},
-{
-  "name":"org.jooq.WithAsStep"
-},
-{
-  "name":"org.jooq.WithAsStep1"
-},
-{
-  "name":"org.jooq.WithAsStep10"
-},
-{
-  "name":"org.jooq.WithAsStep11"
-},
-{
-  "name":"org.jooq.WithAsStep12"
-},
-{
-  "name":"org.jooq.WithAsStep13"
-},
-{
-  "name":"org.jooq.WithAsStep14"
-},
-{
-  "name":"org.jooq.WithAsStep15"
-},
-{
-  "name":"org.jooq.WithAsStep16"
-},
-{
-  "name":"org.jooq.WithAsStep17"
-},
-{
-  "name":"org.jooq.WithAsStep18"
-},
-{
-  "name":"org.jooq.WithAsStep19"
-},
-{
-  "name":"org.jooq.WithAsStep2"
-},
-{
-  "name":"org.jooq.WithAsStep20"
-},
-{
-  "name":"org.jooq.WithAsStep21"
-},
-{
-  "name":"org.jooq.WithAsStep22"
-},
-{
-  "name":"org.jooq.WithAsStep3"
-},
-{
-  "name":"org.jooq.WithAsStep4"
-},
-{
-  "name":"org.jooq.WithAsStep5"
-},
-{
-  "name":"org.jooq.WithAsStep6"
-},
-{
-  "name":"org.jooq.WithAsStep7"
-},
-{
-  "name":"org.jooq.WithAsStep8"
-},
-{
-  "name":"org.jooq.WithAsStep9"
-},
-{
-  "name":"org.jooq.WithStep"
-},
-{
-  "name":"org.jooq.conf.Settings"
-},
-{
-  "name":"org.jooq.exception.DataAccessException"
-},
-{
-  "name":"org.jooq.impl.AbstractRoutine"
-},
-{
-  "name":"org.jooq.impl.AbstractScope",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"configuration","parameterTypes":[] }, {"name":"creationTime","parameterTypes":[] }, {"name":"data","parameterTypes":[] }, {"name":"data","parameterTypes":["java.lang.Object"] }, {"name":"data","parameterTypes":["java.lang.Object","java.lang.Object"] }, {"name":"dialect","parameterTypes":[] }, {"name":"dsl","parameterTypes":[] }, {"name":"family","parameterTypes":[] }, {"name":"settings","parameterTypes":[] }]
-},
-{
-  "name":"org.jooq.impl.CatalogImpl"
-},
-{
-  "name":"org.jooq.impl.DSL"
-},
-{
-  "name":"org.jooq.impl.DataSourceConnectionProvider",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"acquire","parameterTypes":[] }, {"name":"close","parameterTypes":[] }, {"name":"release","parameterTypes":["java.sql.Connection"] }, {"name":"shutdown","parameterTypes":[] }]
-},
-{
-  "name":"org.jooq.impl.DefaultConfiguration"
-},
-{
-  "name":"org.jooq.impl.DefaultDSLContext",
-  "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allDeclaredMethods":true,
-  "allPublicMethods":true,
-  "allDeclaredConstructors":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"org.jooq.impl.DefaultExecuteContext"
-},
-{
-  "name":"org.jooq.impl.DefaultExecuteListenerProvider",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"close","parameterTypes":[] }, {"name":"provide","parameterTypes":[] }, {"name":"shutdown","parameterTypes":[] }, {"name":"toString","parameterTypes":[] }]
-},
-{
-  "name":"org.jooq.impl.Internal"
-},
-{
-  "name":"org.jooq.impl.SQLDataType"
-},
-{
-  "name":"org.jooq.impl.SQLDataTypes$DuckDBDataType"
-},
-{
-  "name":"org.jooq.impl.SQLDataTypes$TrinoDataType"
-},
-{
-  "name":"org.jooq.util.cubrid.CUBRIDDataType"
-},
-{
-  "name":"org.jooq.util.derby.DerbyDataType"
-},
-{
-  "name":"org.jooq.util.firebird.FirebirdDataType"
-},
-{
-  "name":"org.jooq.util.h2.H2DataType"
-},
-{
-  "name":"org.jooq.util.hsqldb.HSQLDBDataType"
-},
-{
-  "name":"org.jooq.util.ignite.IgniteDataType"
-},
-{
-  "name":"org.jooq.util.mariadb.MariaDBDataType"
-},
-{
-  "name":"org.jooq.util.mysql.MySQLDataType"
-},
-{
-  "name":"org.jooq.util.postgres.PostgresDataType"
-},
-{
-  "name":"org.jooq.util.sqlite.SQLiteDataType"
-},
-{
-  "name":"org.jooq.util.yugabytedb.YugabyteDBDataType"
 },
 {
   "name":"org.postgresql.Driver",
@@ -3280,6 +2391,10 @@
 {
   "name":"reactor.util.concurrent.SpscLinkedArrayQueue",
   "fields":[{"name":"consumerIndex"}, {"name":"producerIndex"}]
+},
+{
+  "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.misc.Signal",

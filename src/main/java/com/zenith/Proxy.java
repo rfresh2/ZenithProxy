@@ -35,6 +35,7 @@ import com.zenith.via.ZViaServerProxyPlatform;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.LoggerFactory;
@@ -89,6 +90,8 @@ public class Proxy {
     private AutoUpdater autoUpdater;
     private Subscription eventSubscription;
     private LanBroadcaster lanBroadcaster;
+    // might move to config and make the user deal with it when it changes
+    private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -147,7 +150,7 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::eightHourKickWarningTick, 350L, 1L, TimeUnit.MINUTES);
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::twoB2tTimeLimitKickWarningTick, twoB2tTimeLimit.minusMinutes(10L).toMinutes(), 1L, TimeUnit.MINUTES);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon) {
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
@@ -286,7 +289,7 @@ public class Proxy {
         }
 
         CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
-        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol, this);
+        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         }
@@ -298,7 +301,7 @@ public class Proxy {
         if (CONFIG.client.viaversion.enabled) {
             if (CONFIG.client.viaversion.autoProtocolVersion)
                 updateViaProtocolVersion();
-            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20_3.getVersion()) {
+            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20.getVersion()) {
                 CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20, connecting without ViaVersion");
                 this.client.connect(true);
             } else if (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org")) {
@@ -363,8 +366,8 @@ public class Proxy {
                 int port = CONFIG.server.bind.port;
 
                 SERVER_LOG.info("Starting server on {}:{}...", address, port);
-                MinecraftProtocol minecraftProtocol = new MinecraftProtocol();
-                minecraftProtocol.setUseDefaultListeners(false); // very important
+                var minecraftProtocol = new MinecraftProtocol();
+                minecraftProtocol.setUseDefaultListeners(false);
                 this.server = new TcpServer(address, port, () -> minecraftProtocol);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 var serverInfoBuilder = new CustomServerInfoBuilder(this);
@@ -373,7 +376,7 @@ public class Proxy {
                     this.lanBroadcaster = new LanBroadcaster(serverInfoBuilder);
                     lanBroadcaster.start();
                 }
-                this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler(this));
+                this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler());
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
                 this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
                 this.server.addListener(new ProxyServerListener());
@@ -422,7 +425,7 @@ public class Proxy {
     public Future<Boolean> loginTask() {
         return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
             try {
-                this.protocol = this.authenticator.handleRelog();
+                this.protocol = this.authenticator.login();
                 this.protocol.setUseDefaultListeners(false); // very important
                 return true;
             } catch (final Exception e) {
@@ -590,6 +593,7 @@ public class Proxy {
             else
                 avatarURL = getAvatarURL(CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username);
             try (InputStream netInputStream = HttpClient.create()
+                .resolver(DefaultAddressResolverGroup.INSTANCE)
                 .secure()
                 .followRedirect(true)
                 .get()
@@ -615,17 +619,17 @@ public class Proxy {
         }
     }
 
-    public void eightHourKickWarningTick() {
+    public void twoB2tTimeLimitKickWarningTick() {
         try {
             if (this.isPrio.orElse(false) // Prio players don't get kicked
                 || !this.hasActivePlayer() // If no player is connected, nobody to warn
-                || !isOnlineOn2b2tForAtLeastDuration(Duration.ofMinutes(470)) // 8hrs - 10 mins
+                || !isOnlineOn2b2tForAtLeastDuration(twoB2tTimeLimit.minusMinutes(10L))
             ) return;
             final ServerConnection playerConnection = this.currentPlayer.get();
-            final int minsUntil8Hrs = (int) ((28800 - (Instant.now().getEpochSecond() - connectTime.getEpochSecond())) / 60);
-            if (minsUntil8Hrs < 0) return; // sanity check just in case 2b's plugin changes
+            final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.between(this.connectTime, Instant.now()));
+            if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
-                ComponentSerializer.mineDownParse((minsUntil8Hrs <= 3 ? "&c" : "&9") + "8hr kick in: " + minsUntil8Hrs + "m"));
+                ComponentSerializer.minedown((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
             playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
@@ -642,7 +646,7 @@ public class Proxy {
                 0L
             ));
         } catch (final Throwable e) {
-            DEFAULT_LOG.error("Error in 8 hr kick warning tick", e);
+            DEFAULT_LOG.error("Error in 2b2t time limit kick warning tick", e);
         }
     }
 
@@ -737,7 +741,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&b" + event.playerEntry().getName() + "&r&e connected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e connected"), false));
             }
         }
     }
@@ -746,7 +750,7 @@ public class Proxy {
         if (CONFIG.client.extra.chat.showConnectionMessages) {
             ServerConnection serverConnection = getCurrentPlayer().get();
             if (nonNull(serverConnection) && serverConnection.isLoggedIn()) {
-                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
+                serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
             }
         }
     }

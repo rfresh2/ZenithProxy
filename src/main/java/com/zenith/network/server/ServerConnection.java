@@ -81,7 +81,6 @@ public class ServerConnection implements Session, SessionListener {
         initSpectatorEntity();
     }
 
-    protected long lastPacket = System.currentTimeMillis();
     protected long lastPingId = 0L;
     protected long lastPingTime = 0L;
     protected long ping = 0L;
@@ -135,7 +134,6 @@ public class ServerConnection implements Session, SessionListener {
                 p = ZenithHandlerCodec.SERVER_SPECTATOR_CODEC.handleInbound(p, this);
                 // not passing through ever
             } else {
-                this.lastPacket = System.currentTimeMillis();
                 var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
                 p = ZenithHandlerCodec.SERVER_PLAYER_CODEC.handleInbound(p, this);
                 if (p != null && state == ProtocolState.GAME) {
@@ -211,7 +209,7 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
-            final String reasonStr = ComponentSerializer.toRawString(reason);
+            final String reasonStr = ComponentSerializer.serializePlain(reason);
 
             if (!isSpectator()) {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
@@ -229,7 +227,7 @@ public class ServerConnection implements Session, SessionListener {
             } else {
                 Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
+                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
                 });
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
@@ -572,5 +570,4 @@ public class ServerConnection implements Session, SessionListener {
     public void disconnect(@Nullable final Component reason, final Throwable cause) {
         this.session.disconnect(reason, cause);
     }
-
 }

@@ -27,7 +27,7 @@ public class LanBroadcaster {
         // micro-optimization to reduce cpu load
         this.motdSupplier = Suppliers.memoizeWithExpiration(() -> {
             try {
-                return ("[MOTD]" + stripLegacyFormatting(ComponentSerializer.toRawString(this.serverInfoBuilder.buildInfo(null).getDescription())) + "[/MOTD]"
+                return ("[MOTD]" + stripLegacyFormatting(ComponentSerializer.serializePlain(this.serverInfoBuilder.buildInfo(null).getDescription())) + "[/MOTD]"
                     + "[AD]" + CONFIG.server.bind.port + "[/AD]")
                     .getBytes();
             } catch (final Exception e) {
@@ -37,9 +37,9 @@ public class LanBroadcaster {
     }
 
     public void start() {
-        SERVER_LOG.info("Starting LAN server broadcaster");
         errorCount.set(0);
         broadcastFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::broadcast, 0, 1500, TimeUnit.MILLISECONDS);
+        SERVER_LOG.info("Started LAN server broadcaster");
     }
 
     public void stop() {

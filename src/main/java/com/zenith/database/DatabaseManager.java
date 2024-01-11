@@ -3,6 +3,8 @@ package com.zenith.database;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.DatabaseTickEvent;
 import lombok.Getter;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.postgres.PostgresPlugin;
 
 import java.time.Duration;
 import java.util.concurrent.ScheduledFuture;
@@ -18,7 +20,7 @@ public class DatabaseManager {
     private ConnectionsDatabase connectionsDatabase;
     private ChatDatabase chatDatabase;
     private DeathsDatabase deathsDatabase;
-    private ConnectionPool connectionPool;
+    private Jdbi jdbi;
     private QueueLengthDatabase queueLengthDatabase;
     private RestartsDatabase restartsDatabase;
     private PlayerCountDatabase playerCountDatabase;
@@ -33,7 +35,7 @@ public class DatabaseManager {
 
     public void start() {
         try {
-            this.queryExecutor = new QueryExecutor(this::getConnectionPool);
+            this.queryExecutor = new QueryExecutor(getJdbi());
             if (CONFIG.database.queueWait.enabled) {
                 startQueueWaitDatabase();
             }
@@ -202,9 +204,12 @@ public class DatabaseManager {
         }
     }
 
-    private synchronized ConnectionPool getConnectionPool() {
-        if (isNull(this.connectionPool)) this.connectionPool = new ConnectionPool();
-        return connectionPool;
+    private synchronized Jdbi getJdbi() {
+        if (isNull(this.jdbi)) {
+            this.jdbi = Jdbi.create(new HikariConnectionFactory(new ConnectionPool()));
+            this.jdbi.installPlugin(new PostgresPlugin());
+        }
+        return jdbi;
     }
 
     private synchronized RedisClient getRedisClient() {

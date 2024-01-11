@@ -18,7 +18,7 @@ public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSyste
     public ClientboundSystemChatPacket apply(ClientboundSystemChatPacket packet, ServerConnection session) {
         try {
             final Component component = packet.getContent();
-            final String message = ComponentSerializer.toRawString(component);
+            final String message = ComponentSerializer.serializePlain(component);
             if (message.startsWith("<")) {
                 if (CONFIG.client.extra.chat.hideChat) {
                     return null;
@@ -38,7 +38,7 @@ public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSyste
                 return null;
             }
         } catch (final Exception e) {
-            SERVER_LOG.error("Failed to parse chat message in ServerChatPacketHandler: {}", ComponentSerializer.toRawString(packet.getContent()), e);
+            SERVER_LOG.error("Failed to parse chat message in ServerChatPacketHandler: {}", ComponentSerializer.serializePlain(packet.getContent()), e);
         }
         return packet;
     }

@@ -2,9 +2,7 @@ package com.zenith.network.client;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
-import com.zenith.Proxy;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 
@@ -16,7 +14,6 @@ import static com.zenith.Shared.CLIENT_LOG;
 @Getter
 @Setter
 public class ClientSession extends TcpClientSession {
-    protected final Proxy proxy;
     protected boolean serverProbablyOff;
     protected long ping = 0L;
 
@@ -26,9 +23,8 @@ public class ClientSession extends TcpClientSession {
     private boolean online = false;
     private boolean disconnected = true;
 
-    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, @NonNull Proxy proxy) {
+    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol) {
         super(host, port, bindAddress, 0, protocol);
-        this.proxy = proxy;
         this.addListener(new ClientListener(this));
     }
 

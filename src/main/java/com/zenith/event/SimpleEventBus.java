@@ -1,9 +1,10 @@
 package com.zenith.event;
 
 import com.zenith.util.Pair;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -24,8 +25,7 @@ import static com.zenith.Shared.DEFAULT_LOG;
 public class SimpleEventBus {
 
     private final ExecutorService executorService;
-
-    private final ConcurrentHashMap<Class<?>, List<Consumer<?>>> handlers = new ConcurrentHashMap<>();
+    private final Reference2ObjectMap<Class<?>, List<Consumer<?>>> handlers = new Reference2ObjectOpenHashMap<>();
 
     public SimpleEventBus(final ExecutorService executorService) {
         this.executorService = executorService;
@@ -38,13 +38,10 @@ public class SimpleEventBus {
 
     @SafeVarargs
     public final Subscription subscribe(Pair<Class<?>, Consumer<?>>... pairs) {
-        for (Pair<Class<?>, Consumer<?>> pair : pairs) {
+        for (var pair : pairs)
             handlers.computeIfAbsent(pair.left(), key -> new CopyOnWriteArrayList<>()).add(pair.right());
-        }
         return new Subscription(() -> {
-            for (Pair<Class<?>, Consumer<?>> pair : pairs) {
-                unsubscribe(pair.left(), pair.right());
-            }
+            for (var pair : pairs) unsubscribe(pair.left(), pair.right());
         });
     }
 
@@ -53,38 +50,30 @@ public class SimpleEventBus {
     }
 
     public void unsubscribe(Class<?> eventType, Consumer<?> handler) {
-        List<Consumer<?>> consumers = handlers.get(eventType);
-        if (consumers != null) {
+        var consumers = handlers.get(eventType);
+        if (consumers != handlers.defaultReturnValue()) {
             consumers.remove(handler);
-            if (consumers.isEmpty()) {
-                handlers.remove(eventType);
-            }
+            if (consumers.isEmpty()) handlers.remove(eventType);
         }
     }
 
     // handlers can throw and return exceptions - cancelling subsequent event executions
     public <T> void post(T event) {
-        List<Consumer<?>> consumers = handlers.get(event.getClass());
-        if (consumers != null) {
-            for (Consumer<?> consumer : consumers) {
-                ((Consumer<T>) consumer).accept(event);
-            }
-        }
+        var consumers = handlers.get(event.getClass());
+        if (consumers != handlers.defaultReturnValue())
+            for (var consumer : consumers) ((Consumer<T>) consumer).accept(event);
     }
 
     public <T> void postAsync(T event) {
-        List<Consumer<?>> consumers = handlers.get(event.getClass());
-        if (consumers != null) {
+        var consumers = handlers.get(event.getClass());
+        if (consumers != handlers.defaultReturnValue())
             executorService.execute(() -> this.postAsyncInternal(event, consumers));
-        }
     }
 
 
     private <T> void postAsyncInternal(T event, List<Consumer<?>> consumers) {
         try {
-            for (Consumer<?> consumer : consumers) {
-                ((Consumer<T>) consumer).accept(event);
-            }
+            for (var consumer : consumers) ((Consumer<T>) consumer).accept(event);
         } catch (final Throwable e) { // swallow exception so we don't kill the executor
             DEFAULT_LOG.debug("Error handling async event", e);
         }

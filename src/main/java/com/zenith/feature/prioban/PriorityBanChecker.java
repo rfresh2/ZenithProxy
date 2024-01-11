@@ -1,6 +1,7 @@
 package com.zenith.feature.prioban;
 
 import com.google.common.base.Suppliers;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.http.client.HttpClientResponse;
 
@@ -13,8 +14,9 @@ import static com.zenith.Shared.DEFAULT_LOG;
 public class PriorityBanChecker {
     // lazily init client
     private final Supplier<HttpClient> clientSupplier = Suppliers.memoize(() -> HttpClient.create()
-            .followRedirect(false)
-            .secure());
+        .resolver(DefaultAddressResolverGroup.INSTANCE)
+        .followRedirect(false)
+        .secure());
 
     public Optional<Boolean> checkPrioBan() {
         try {

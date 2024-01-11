@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import com.zenith.feature.api.model.StatsResponse;
+import com.zenith.feature.api.vcapi.model.StatsResponse;
 import discord4j.rest.util.Color;
 
 import java.time.Duration;

@@ -30,13 +30,14 @@ public final class Config {
         public String username = "Unknown";
         public boolean prio = false;
         public boolean prioBanned = false;
-        public String msaClientId = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
-        public boolean msaDeviceCodeTokenRefresh = true;
+        public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
+        public boolean openBrowserOnLogin = true;
 
         public enum AccountType {
             @SerializedName("msa") MSA,
-            @SerializedName("device_code") DEVICE_CODE
+            @SerializedName("device_code") DEVICE_CODE,
+            @SerializedName("local_webserver") LOCAL_WEBSERVER
         }
     }
 
@@ -441,7 +442,6 @@ public final class Config {
         public String username = "";
         public String password = "";
         public int writePool = 1;
-        public int readPool = 0; // no database actually needs a read pool currently
         public QueueWait queueWait = new QueueWait();
         public Connections connections = new Connections();
         public Chats chats = new Chats();
