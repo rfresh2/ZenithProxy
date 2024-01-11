@@ -2,7 +2,7 @@ package com.zenith.database;
 
 import com.zenith.Proxy;
 import com.zenith.util.Wait;
-import org.jooq.Query;
+import org.jdbi.v3.core.HandleConsumer;
 import org.redisson.api.RLock;
 
 import javax.annotation.Nullable;
@@ -204,11 +204,11 @@ public abstract class LockingDatabase extends Database {
         }
     }
 
-    public void insert(final Instant instant, final Query query) {
+    public void insert(final Instant instant, final HandleConsumer query) {
         insert(instant, null, query);
     }
 
-    protected void insert(final Instant instant, final Runnable liveRunnable, final Query query) {
+    protected void insert(final Instant instant, final Runnable liveRunnable, final HandleConsumer query) {
         final int size = insertQueue.size();
         if (size > getMaxQueueLength()) {
             synchronized (insertQueue) {
@@ -238,5 +238,5 @@ public abstract class LockingDatabase extends Database {
     }
 
 
-    public record InsertInstance(Instant instant, @Nullable Runnable redisQuery, Query query) { }
+    public record InsertInstance(Instant instant, @Nullable Runnable redisQuery, HandleConsumer query) { }
 }

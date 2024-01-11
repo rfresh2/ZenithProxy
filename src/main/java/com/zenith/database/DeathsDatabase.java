@@ -1,8 +1,7 @@
 package com.zenith.database;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.zenith.database.dto.tables.Deaths;
-import com.zenith.database.dto.tables.records.DeathsRecord;
+import com.zenith.database.dto.records.DeathsRecord;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.feature.api.ProfileData;
@@ -10,10 +9,6 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.whitelist.PlayerList;
-import org.jooq.DSLContext;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -41,17 +36,16 @@ public class DeathsDatabase extends LiveDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Deaths d = Deaths.DEATHS;
-        final Result<DeathsRecord> recordResult = this.queryExecutor.fetch(context.selectFrom(d)
-                .orderBy(d.TIME.desc())
-                .limit(1));
-        if (recordResult.isEmpty()) {
-            DATABASE_LOG.warn("Deaths database unable to sync. Database empty?");
-            return Instant.EPOCH;
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            var result = handle.select("SELECT time FROM deaths ORDER BY time DESC LIMIT 1;")
+                .mapTo(OffsetDateTime.class)
+                .findOne();
+            if (result.isEmpty()) {
+                DATABASE_LOG.warn("Deaths database unable to sync. Database empty?");
+                return Instant.EPOCH;
+            }
+            return result.get().toInstant();
         }
-        final DeathsRecord deathsRecord = recordResult.get(0);
-        return deathsRecord.get(d.TIME).toInstant();
     }
 
     public void handleDeathMessageEvent(DeathMessageEvent event) {
@@ -60,48 +54,48 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time) {
-        try {
-            final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-            final Deaths d = Deaths.DEATHS;
-            final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
-            if (victimEntry.isEmpty()) {
-                DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
-                return;
-            }
-            final DeathsRecord record = context.newRecord(d)
-                    .setTime(time)
-                    .setDeathMessage(rawDeathMessage)
-                    .setVictimPlayerName(victimEntry.get().getName())
-                    .setVictimPlayerUuid(victimEntry.get().getProfileId());
-            if (deathMessageParseResult.getKiller().isPresent()) {
-                final Killer killer = deathMessageParseResult.getKiller().get();
-                if (killer.getType().equals(KillerType.PLAYER)) {
-                    final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
-                    if (killerEntry.isEmpty()) {
-                        record
-                                .setKillerPlayerName(killerEntry.get().getName());
-                        DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
-                    } else {
-                        record
-                                .setKillerPlayerName(killerEntry.get().getName())
-                                .setKillerPlayerUuid(killerEntry.get().getProfileId());
-                    }
-                } else if (killer.getType().equals(KillerType.MOB)) {
-                    record
-                            .setKillerMob(killer.getName());
-                }
-            }
-            if (deathMessageParseResult.getWeapon().isPresent()) {
-                record.setWeaponName(deathMessageParseResult.getWeapon().get());
-            }
-            var query = context.insertInto(d)
-                .set(record);
-            this.insert(time.toInstant(),
-                        record.into(com.zenith.database.dto.tables.pojos.Deaths.class),
-                        query);
-        } catch (final Exception e) {
-            DATABASE_LOG.error("Error writing death: {}", rawDeathMessage, e);
+        final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
+        if (victimEntry.isEmpty()) {
+            DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
+            return;
         }
+        var victimPlayerName = victimEntry.get().getName();
+        var victimPlayerUuid = victimEntry.get().getProfileId();
+        var pojo = new DeathsRecord(time, rawDeathMessage, victimPlayerName, victimPlayerUuid, null, null, null, null);
+
+        if (deathMessageParseResult.getKiller().isPresent()) {
+            final Killer killer = deathMessageParseResult.getKiller().get();
+            if (killer.getType().equals(KillerType.PLAYER)) {
+                final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
+                if (killerEntry.isEmpty()) {
+                    pojo
+                        .setKillerPlayerName(killer.getName());
+                    DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
+                } else {
+                    pojo
+                        .setKillerPlayerName(killerEntry.get().getName())
+                        .setKillerPlayerUuid(killerEntry.get().getProfileId());
+                }
+            } else if (killer.getType().equals(KillerType.MOB)) {
+                pojo
+                    .setKillerMob(killer.getName());
+            }
+        }
+        if (deathMessageParseResult.getWeapon().isPresent()) {
+            pojo.setWeaponName(deathMessageParseResult.getWeapon().get());
+        }
+        this.insert(time.toInstant(), pojo, handle ->
+            handle.createUpdate("INSERT INTO deaths (time, death_message, victim_player_name, victim_player_uuid, killer_player_name, killer_player_uuid, weapon_name, killer_mob) VALUES (:time, :deathMessage, :victimPlayerName, :victimPlayerUuid, :killerPlayerName, :killerPlayerUuid, :weaponName, :killerMob)")
+                .bind("time", pojo.getTime())
+                .bind("deathMessage", pojo.getDeathMessage())
+                .bind("victimPlayerName", pojo.getVictimPlayerName())
+                .bind("victimPlayerUuid", pojo.getVictimPlayerUuid())
+                .bind("killerPlayerName", pojo.getKillerPlayerName())
+                .bind("killerPlayerUuid", pojo.getKillerPlayerUuid())
+                .bind("weaponName", pojo.getWeaponName())
+                .bind("killerMob", pojo.getKillerMob())
+                .execute()
+        );
     }
 
     private Optional<PlayerListEntry> getPlayerEntryFromNameWithFallback(final String username) {

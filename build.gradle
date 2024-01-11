@@ -1,4 +1,3 @@
-import groovy.json.JsonSlurper
 import org.apache.tools.ant.taskdefs.condition.Os
 
 import java.nio.file.Files
@@ -16,7 +15,6 @@ buildscript {
 }
 
 plugins {
-    id 'nu.studer.jooq' version '9.0'
     id 'java'
     id 'org.graalvm.buildtools.native' version '0.9.28'
     // todo: use non-jitpack'd version when https://github.com/johnrengelman/shadow/pull/879 is merged
@@ -106,13 +104,13 @@ ext {
     lombokVersion = "1.18.30"
     postgresVersion = '42.7.1'
     nettyVersion = '4.1.104.Final'
-    jooqVersion = "3.19.1"
     fastutilVersion = "8.5.13-SNAPSHOT"
+    jdbiVersion = "3.43.0"
 }
 
 dependencies {
-    jooqGenerator "org.postgresql:postgresql:$postgresVersion"
-    shade "org.jooq:jooq:$jooqVersion"
+    shade "org.jdbi:jdbi3-core:$jdbiVersion"
+    shade "org.jdbi:jdbi3-postgres:$jdbiVersion"
     shade "com.zaxxer:HikariCP:5.1.0"
     shade "org.postgresql:postgresql:$postgresVersion"
     shade 'org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r'
@@ -270,14 +268,6 @@ shadowJar {
     }
 }
 
-tasks.register('clearJooqBuild') {
-    // clear any jooq generated classes in the build directory
-    // we already have these classes in our src
-    // can't configure jooq generator to not auto-add these generated dirs to gradle source sets
-    group = "build"
-    new File('build/jooq').deleteDir()
-}
-
 tasks.named("nativeCompile") {
     classpathJar = shadowJar.archiveFile
 }
@@ -312,71 +302,6 @@ graalvmNative {
     }
 }
 
-jooq {
-    version = project.ext.jooqVersion
-    // read from config.json (will fail if config doesn't exist)
-    def dbUrl = ''
-    def dbUser = ''
-    def dbPass = ''
-    try {
-        def inputFile = new File(projectDir.getAbsolutePath() + "/config.json")
-        def jsonFile = new JsonSlurper().parseText(inputFile.text)
-        dbUrl = 'jdbc:postgresql://' + jsonFile.database.host + ':' + jsonFile.database.port + '/postgres'
-        dbUser = jsonFile.database.username
-        dbPass = jsonFile.database.password
-    } catch (Exception ex) {
-        // fall through
-        println("config.json does not exist, unable to set database credentials. generateJooq will fail if run.")
-    }
-
-    configurations {
-        main {  // name of the jOOQ configuration
-            generateSchemaSourceOnCompilation = false  // disable auto-execution in build task
-
-            generationTool {
-                logging = org.jooq.meta.jaxb.Logging.WARN
-                jdbc {
-                    driver = 'org.postgresql.Driver'
-                    url = dbUrl
-                    user = dbUser
-                    password = dbPass
-                    properties {
-                        property {
-                            key = 'ssl'
-                            value = 'false'
-                        }
-                    }
-                }
-                generator {
-                    name = 'org.jooq.codegen.DefaultGenerator'
-                    database {
-                        name = 'org.jooq.meta.postgres.PostgresDatabase'
-                        inputSchema = 'public'
-                        includes = 'Chats | Connections | Connectiontype | Deaths | Playercount | Queuelength | Queuewait | Restarts | Tablist'
-                    }
-                    generate {
-                        deprecated = false
-                        records = true
-                        immutablePojos = true
-                        fluentSetters = true
-                        routines = false
-                    }
-                    target {
-                        packageName = 'com.zenith.database.dto'
-                        // you need to manually move these generated files into main src set
-                        // only needs to be done on db schema changes
-                        directory = 'build/jooq/main'
-                    }
-                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-                }
-            }
-        }
-    }
-}
-
-
-compileJava.dependsOn([clearJooqBuild])
-tasks.named('generateJooq').configure { allInputsDeclared = false }
 tasks.register('jarBuild') {
     group = "build"
 }

@@ -1,16 +1,10 @@
 package com.zenith.database;
 
-import com.zenith.database.dto.tables.Queuewait;
-import com.zenith.database.dto.tables.records.QueuewaitRecord;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.event.proxy.StartQueueEvent;
-import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -86,14 +80,14 @@ public class QueueWaitDatabase extends Database {
     }
 
     private void writeQueueWait(int initialQueueLen, Instant initialQueueTime, Instant endQueueTime) {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Queuewait q = Queuewait.QUEUEWAIT;
-        InsertSetMoreStep<QueuewaitRecord> query = context.insertInto(q)
-                .set(q.PLAYER_NAME, CONFIG.authentication.username)
-                .set(q.PRIO, CONFIG.authentication.prio)
-                .set(q.INITIAL_QUEUE_LEN, initialQueueLen)
-                .set(q.START_QUEUE_TIME, initialQueueTime.atOffset(ZoneOffset.UTC)) // must be UTC
-                .set(q.END_QUEUE_TIME, endQueueTime.atOffset(ZoneOffset.UTC));
-        queryExecutor.execute(() -> query);
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            handle.createUpdate("INSERT INTO queuewait (player_name, prio, initial_queue_len, start_queue_time, end_queue_time) VALUES (:player_name, :prio, :initial_queue_len, :start_queue_time, :end_queue_time)")
+                    .bind("player_name", CONFIG.authentication.username)
+                    .bind("prio", CONFIG.authentication.prio)
+                    .bind("initial_queue_len", initialQueueLen)
+                    .bind("start_queue_time", initialQueueTime.atOffset(ZoneOffset.UTC))
+                    .bind("end_queue_time", endQueueTime.atOffset(ZoneOffset.UTC))
+                    .execute();
+        }
     }
 }

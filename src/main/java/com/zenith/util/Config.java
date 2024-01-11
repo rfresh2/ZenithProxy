@@ -442,7 +442,6 @@ public final class Config {
         public String username = "";
         public String password = "";
         public int writePool = 1;
-        public int readPool = 0; // no database actually needs a read pool currently
         public QueueWait queueWait = new QueueWait();
         public Connections connections = new Connections();
         public Chats chats = new Chats();

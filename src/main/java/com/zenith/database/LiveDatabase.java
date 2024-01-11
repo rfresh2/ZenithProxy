@@ -1,6 +1,6 @@
 package com.zenith.database;
 
-import org.jooq.Query;
+import org.jdbi.v3.core.HandleConsumer;
 import org.redisson.api.RBoundedBlockingQueue;
 
 import java.time.Instant;
@@ -17,7 +17,7 @@ public abstract class LiveDatabase extends LockingDatabase {
         super(queryExecutor, redisClient);
     }
 
-    public void insert(final Instant instant, final Object pojo, final Query query) {
+    public void insert(final Instant instant, final Object pojo, final HandleConsumer query) {
         insert(instant, () -> liveQueueRunnable(pojo), query);
     }
 
