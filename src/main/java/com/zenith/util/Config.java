@@ -1,5 +1,6 @@
 package com.zenith.util;
 
+import com.github.steveice10.packetlib.ProxyInfo;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
 
@@ -44,6 +45,7 @@ public final class Config {
     public static final class Client {
         public Extra extra = new Extra();
         public Server server = new Server();
+        public ConnectionProxy connectionProxy = new ConnectionProxy();
         public boolean autoConnect = false; // auto-connect proxy on process start
         public ClientViaVersion viaversion = new ClientViaVersion();
         public String bindAddress = "0.0.0.0";
@@ -280,6 +282,15 @@ public final class Config {
         public static final class Server {
             public String address = "connect.2b2t.org";
             public int port = 25565;
+        }
+
+        public static final class ConnectionProxy {
+            public boolean enabled = false;
+            public ProxyInfo.Type type = ProxyInfo.Type.SOCKS5;
+            public String host = "127.0.0.1";
+            public int port = 7890;
+            public String user = "";
+            public String password = "";
         }
     }
 

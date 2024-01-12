@@ -1,6 +1,7 @@
 package com.zenith.network.client;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,9 +24,13 @@ public class ClientSession extends TcpClientSession {
     private boolean online = false;
     private boolean disconnected = true;
 
-    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol) {
-        super(host, port, bindAddress, 0, protocol);
+    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo) {
+        super(host, port, bindAddress, 0, protocol, proxyInfo);
         this.addListener(new ClientListener(this));
+    }
+
+    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol) {
+        this(host, port, bindAddress, protocol, null);
     }
 
     @Override

@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
 import com.github.steveice10.mc.protocol.data.game.level.sound.BuiltinSound;
 import com.github.steveice10.mc.protocol.data.game.level.sound.SoundCategory;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
@@ -11,6 +12,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTa
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
+import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
@@ -41,6 +43,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.raphimc.vialoader.netty.VLPipeline;
 import net.raphimc.vialoader.netty.ViaCodec;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import reactor.netty.http.client.HttpClient;
@@ -49,6 +52,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -293,10 +297,9 @@ public class Proxy {
         }
 
         CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
-        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol);
-        if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org")) {
+        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, this.protocol, getClientProxyInfo());
+        if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org"))
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
-        }
         if (CONFIG.server.extra.timeout.enable)
             this.client.setReadTimeout(CONFIG.server.extra.timeout.seconds);
         else
@@ -305,8 +308,8 @@ public class Proxy {
         if (CONFIG.client.viaversion.enabled) {
             if (CONFIG.client.viaversion.autoProtocolVersion)
                 updateViaProtocolVersion();
-            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20.getVersion()) {
-                CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20, connecting without ViaVersion");
+            if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
+                CLIENT_LOG.warn("ViaVersion enabled but the protocol is the same as ours, connecting without ViaVersion");
                 this.client.connect(true);
             } else if (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org")) {
                 CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
@@ -319,6 +322,23 @@ public class Proxy {
         } else {
             this.client.connect(true);
         }
+    }
+
+    @Nullable
+    private static ProxyInfo getClientProxyInfo() {
+        ProxyInfo proxyInfo = null;
+        if (CONFIG.client.connectionProxy.enabled) {
+            if (!CONFIG.client.connectionProxy.user.isEmpty() || !CONFIG.client.connectionProxy.password.isEmpty())
+                proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
+                                          InetSocketAddress.createUnresolved(CONFIG.client.connectionProxy.host,
+                                                                             CONFIG.client.connectionProxy.port),
+                                          CONFIG.client.connectionProxy.user,
+                                          CONFIG.client.connectionProxy.password);
+            else proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
+                                             InetSocketAddress.createUnresolved(CONFIG.client.connectionProxy.host,
+                                                                                CONFIG.client.connectionProxy.port));
+        }
+        return proxyInfo;
     }
 
     private void updateViaProtocolVersion() {
