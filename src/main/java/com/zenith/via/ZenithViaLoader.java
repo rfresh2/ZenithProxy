@@ -6,7 +6,7 @@ import net.raphimc.vialoader.impl.viaversion.VLLoader;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ZenithVLLLoader extends VLLoader {
+public class ZenithViaLoader extends VLLoader {
 
     @Override
     public void load() {

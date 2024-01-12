@@ -14,7 +14,7 @@ public class ZenithViaInitializer {
         }
         ViaLoader.init(
             null,
-            new ZenithVLLLoader(),
+            new ZenithViaLoader(),
             null,
             null,
             ViaBackwardsPlatformImpl::new
