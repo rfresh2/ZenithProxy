@@ -45,12 +45,13 @@ import java.util.concurrent.ScheduledExecutorService;
 @UtilityClass
 public class Shared {
 
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    static {
-        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        OBJECT_MAPPER.registerModule(new JavaTimeModule());
-    }
+    public static final Gson GSON = new GsonBuilder()
+        .disableHtmlEscaping()
+        .setPrettyPrinting()
+        .create();
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerModule(new JavaTimeModule());
     public static final Logger DEFAULT_LOG = LoggerFactory.getLogger("Proxy");
     public static final Logger AUTH_LOG = LoggerFactory.getLogger("Auth");
     public static final Logger CACHE_LOG = LoggerFactory.getLogger("Cache");
