@@ -15,8 +15,7 @@ public class ProtocolVersionDetector {
             pingOptions.setTimeout(3000);
             pingOptions.setProtocolVersion(MCPing.PROTOCOL_VERSION_DISCOVERY);
             pingOptions.setResolveDns(true);
-            final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
-            return pingWithDetails.standard.getVersion().getProtocol();
+            return mcPing.getProtocolVersion(pingOptions);
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

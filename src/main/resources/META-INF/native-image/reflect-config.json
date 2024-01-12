@@ -1159,21 +1159,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.zenith.via.handler.ZViaChannelInitializer"
-},
-{
-  "name":"com.zenith.via.handler.ZViaClientViaCodecHandler"
-},
-{
-  "name":"com.zenith.via.handler.ZViaDecodeHandler",
-  "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
-},
-{
-  "name":"com.zenith.via.handler.ZViaEncodeHandler",
-  "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
-},
-{
-  "name":"com.zenith.via.handler.ZViaViaChannelInitializer"
+  "name":"com.zenith.via.handler.ZenithViaChannelInitializer"
 },
 {
   "name":"io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms",
@@ -1820,6 +1806,19 @@
 },
 {
   "name":"kotlin.jvm.JvmClassMappingKt"
+},
+{
+  "name":"net.raphimc.viaaprilfools.api.AprilFoolsProtocolVersion"
+},
+{
+  "name":"net.raphimc.viabedrock.api.BedrockProtocolVersion"
+},
+{
+  "name":"net.raphimc.vialegacy.api.LegacyProtocolVersion"
+},
+{
+  "name":"net.raphimc.vialoader.netty.ViaCodec",
+  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
 },
 {
   "name":"org.apache.commons.logging.LogFactory"

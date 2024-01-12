@@ -75,6 +75,14 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
+    <logger name="ViaVersion" level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <logger name="ViaBackwards" level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
     <logger name="Proxy" level="TRACE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
