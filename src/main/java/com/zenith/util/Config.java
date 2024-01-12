@@ -363,6 +363,9 @@ public final class Config {
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public boolean lanBroadcast = true;
+            public boolean responseCaching = true;
+            // could probably be increased 2-3x without issue
+            public int responseCacheSeconds = 10;
         }
 
         public static final class ServerViaVersion {

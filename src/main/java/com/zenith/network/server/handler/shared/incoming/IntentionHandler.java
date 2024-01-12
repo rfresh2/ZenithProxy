@@ -24,6 +24,7 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
             }
             default -> session.disconnect("Invalid client intention: " + packet.getIntent());
         }
+        session.setProtocolVersion(packet.getProtocolVersion());
         return null;
     }
 }
