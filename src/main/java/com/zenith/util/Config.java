@@ -45,12 +45,12 @@ public final class Config {
         public Extra extra = new Extra();
         public Server server = new Server();
         public boolean autoConnect = false; // auto-connect proxy on process start
-        public ViaVersion viaversion = new ViaVersion();
+        public ClientViaVersion viaversion = new ClientViaVersion();
         public String bindAddress = "0.0.0.0";
         public boolean maxPlaytimeReconnect = false;
         public long maxPlaytimeReconnectMins = 1440;
 
-        public static final class ViaVersion {
+        public static final class ClientViaVersion {
             public boolean enabled = false;
             public boolean autoProtocolVersion = true;
             public int protocolVersion = 762; // 1.19.4
@@ -312,6 +312,7 @@ public final class Config {
         public boolean enabled = true;
         public Extra extra = new Extra();
         public Ping ping = new Ping();
+        public ServerViaVersion viaversion = new ServerViaVersion();
         public boolean verifyUsers = true;
         public boolean kickPrevious = false;
         public String proxyIP = "localhost";
@@ -362,6 +363,10 @@ public final class Config {
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public boolean lanBroadcast = true;
+        }
+
+        public static final class ServerViaVersion {
+            public boolean enabled = false;
         }
 
         public String getProxyAddress() {

@@ -22,11 +22,12 @@ public class ViaVersionCommand extends Command {
         return CommandUsage.args(
             "via",
             CommandCategory.MODULE,
-            "Configure ViaVersion",
+            "Configure ViaVersion. 'Client' = ZenithProxy connecting to the MC server. 'Server' = players connecting to ZenithProxy",
             asList(
-                "on/off",
-                "autoConfig on/off",
-                "version <MC version>"
+                "client on/off",
+                "client autoConfig on/off",
+                "client version <MC version>",
+                "server on/off"
             )
         );
     }
@@ -34,42 +35,51 @@ public class ViaVersionCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("via")
-            .then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.client.viaversion.enabled = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
-                    .title("ViaVersion " + (CONFIG.client.viaversion.enabled ? "On!" : "Off!"));
-                return 1;
-            }))
-            .then(literal("autoconfig")
+            .then(literal("client")
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.viaversion.enabled = getToggle(c, "toggle");
+                    c.getSource().getEmbedBuilder()
+                        .title("Client ViaVersion " + (CONFIG.client.viaversion.enabled ? "On!" : "Off!"));
+                    return 1;
+                }))
+                .then(literal("autoconfig")
+                          .then(argument("toggle", toggle()).executes(c -> {
+                                CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
+                                c.getSource().getEmbedBuilder()
+                                    .title("Client ViaVersion AutoConfig " + (CONFIG.client.viaversion.autoProtocolVersion ? "On!" : "Off!"));
+                                return 1;
+                          })))
+                .then(literal("version")
+                          .then(argument("version", wordWithChars()).executes(c -> {
+                              final String version = StringArgumentType.getString(c, "version");
+                              ProtocolVersion closest = ProtocolVersion.getClosest(version);
+                              if (closest == null) {
+                                  c.getSource().getEmbedBuilder()
+                                      .title("Invalid Version!")
+                                      .description("Please select a valid version. Example: 1.19.4")
+                                      .color(Color.RED);
+                              } else {
+                                  CONFIG.client.viaversion.protocolVersion = closest.getVersion();
+                                  c.getSource().getEmbedBuilder()
+                                      .title("Client ViaVersion Version Updated!");
+                              }
+                              return 1;
+                          }))))
+            .then(literal("server")
                       .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
+                            CONFIG.server.viaversion.enabled = getToggle(c, "toggle");
                             c.getSource().getEmbedBuilder()
-                                .title("ViaVersion AutoConfig " + (CONFIG.client.viaversion.autoProtocolVersion ? "On!" : "Off!"));
+                                .title("Server ViaVersion " + (CONFIG.server.viaversion.enabled ? "On!" : "Off!"));
                             return 1;
-                      })))
-            .then(literal("version")
-                      .then(argument("version", wordWithChars()).executes(c -> {
-                          final String version = StringArgumentType.getString(c, "version");
-                          ProtocolVersion closest = ProtocolVersion.getClosest(version);
-                          if (closest == null) {
-                              c.getSource().getEmbedBuilder()
-                                  .title("Invalid Version!")
-                                  .description("Please select a valid version. Example: 1.19.4")
-                                  .color(Color.RED);
-                          } else {
-                              CONFIG.client.viaversion.protocolVersion = closest.getVersion();
-                              c.getSource().getEmbedBuilder()
-                                  .title("ViaVersion Version Updated!");
-                          }
-                          return 1;
                       })));
     }
 
     @Override
     public void postPopulate(final EmbedCreateSpec.Builder embedBuilder) {
         embedBuilder
-            .addField("ViaVersion", CONFIG.client.viaversion.enabled ? "on" : "off", false)
-            .addField("AutoConfig", CONFIG.client.viaversion.autoProtocolVersion ? "on" : "off", false)
-            .addField("Version", ProtocolVersion.getProtocol(CONFIG.client.viaversion.protocolVersion).getName(), false)
+            .addField("Client ViaVersion", toggleStr(CONFIG.client.viaversion.enabled), false)
+            .addField("Client AutoConfig", toggleStr(CONFIG.client.viaversion.autoProtocolVersion), false)
+            .addField("Client Version", ProtocolVersion.getProtocol(CONFIG.client.viaversion.protocolVersion).getName(), false)
+            .addField("Server ViaVersion", toggleStr(CONFIG.server.viaversion.enabled), false)
             .color(Color.CYAN);
     }}

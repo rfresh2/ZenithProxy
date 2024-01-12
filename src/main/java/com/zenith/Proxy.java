@@ -13,6 +13,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import com.viaversion.viaversion.connection.UserConnectionImpl;
+import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.Subscription;
 import com.zenith.event.proxy.*;
@@ -33,9 +35,12 @@ import com.zenith.util.Wait;
 import com.zenith.via.ProtocolVersionDetector;
 import com.zenith.via.ZenithViaInitializer;
 import com.zenith.via.handler.ZenithViaChannelInitializer;
+import io.netty.channel.Channel;
 import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import lombok.Setter;
+import net.raphimc.vialoader.netty.VLPipeline;
+import net.raphimc.vialoader.netty.ViaCodec;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import reactor.netty.http.client.HttpClient;
@@ -90,7 +95,7 @@ public class Proxy {
     private LanBroadcaster lanBroadcaster;
     // might move to config and make the user deal with it when it changes
     private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
-    private ZenithViaInitializer viaInitializer = new ZenithViaInitializer();
+    private final ZenithViaInitializer viaInitializer = new ZenithViaInitializer();
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -365,8 +370,9 @@ public class Proxy {
                 var minecraftProtocol = new MinecraftProtocol();
                 minecraftProtocol.setUseDefaultListeners(false);
                 this.server = new TcpServer(address, port, () -> minecraftProtocol);
+                this.server.setInitChannelConsumer(this::serverInitChannelCallback);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
-                var serverInfoBuilder = new CustomServerInfoBuilder(this);
+                var serverInfoBuilder = new CustomServerInfoBuilder();
                 this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);
                 if (this.lanBroadcaster == null && CONFIG.server.ping.lanBroadcast) {
                     this.lanBroadcaster = new LanBroadcaster(serverInfoBuilder);
@@ -379,6 +385,16 @@ public class Proxy {
                 this.server.bind(false);
             }
         }
+    }
+
+    public void serverInitChannelCallback(final Channel channel) {
+        if (!CONFIG.server.viaversion.enabled) return;
+        this.viaInitializer.init();
+        var userConnection = new UserConnectionImpl(channel, false);
+        new ProtocolPipelineImpl(userConnection);
+        // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
+        // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-codec -> codec -> manager
+        channel.pipeline().addBefore("codec", VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
     }
 
     public void stopServer() {
