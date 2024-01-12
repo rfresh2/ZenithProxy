@@ -31,10 +31,8 @@ import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
 import com.zenith.via.ProtocolVersionDetector;
-import com.zenith.via.ZViaServerProxyPlatform;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
+import com.zenith.via.ZenithViaInitializer;
+import com.zenith.via.handler.ZenithViaChannelInitializer;
 import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,6 +90,7 @@ public class Proxy {
     private LanBroadcaster lanBroadcaster;
     // might move to config and make the user deal with it when it changes
     private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
+    private ZenithViaInitializer viaInitializer = new ZenithViaInitializer();
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -301,19 +300,16 @@ public class Proxy {
         if (CONFIG.client.viaversion.enabled) {
             if (CONFIG.client.viaversion.autoProtocolVersion)
                 updateViaProtocolVersion();
-            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20.getVersion()) {
-                CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20, connecting without ViaVersion");
+            if (CONFIG.client.viaversion.protocolVersion == ProtocolVersion.v1_20_3.getVersion()) {
+                CLIENT_LOG.warn("ViaVersion enabled but server protocol is 1.20.4, connecting without ViaVersion");
                 this.client.connect(true);
             } else if (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org")) {
                 CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
                 this.client.connect(true);
             } else {
-                ChannelInitializer<Channel> originalChannelInitializer = this.client.buildChannelInitializer();
-                final ZViaServerProxyPlatform viaProxy = new ZViaServerProxyPlatform(this.client);
-                viaProxy.init();
-                ChannelInitializer<Channel> viaChannelInitializer = viaProxy.inject(originalChannelInitializer);
-                Bootstrap bootstrap = this.client.buildBootstrap(viaChannelInitializer);
-                this.client.connect(true, bootstrap);
+                this.viaInitializer.init();
+                var viaChannelInitializer = new ZenithViaChannelInitializer(this.client.buildChannelInitializer(), this.client);
+                this.client.connect(true, this.client.buildBootstrap(viaChannelInitializer));
             }
         } else {
             this.client.connect(true);

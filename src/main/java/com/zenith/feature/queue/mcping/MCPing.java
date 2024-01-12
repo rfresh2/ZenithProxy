@@ -6,7 +6,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.zenith.Shared;
 import com.zenith.feature.queue.mcping.data.*;
 import com.zenith.feature.queue.mcping.rawData.*;
 import io.netty.buffer.ByteBuf;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class MCPing {
     /**
@@ -38,6 +38,21 @@ public class MCPing {
     private static final String IP_REGEX = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b";
     private static final EventLoopGroup EVENT_LOOP_GROUP = new NioEventLoopGroup(1, new ThreadFactoryBuilder().setNameFormat("MCPing-%d").build());
     private static final Class<NioDatagramChannel> DATAGRAM_CHANNEL_CLASS = NioDatagramChannel.class;
+
+    public int getProtocolVersion(PingOptions options) throws IOException {
+        Pinger a = new Pinger();
+        if (options.isResolveDns()) {
+            a.setAddress(resolveAddress(options.getHostname(), options.getPort()));
+        } else {
+            a.setAddress(new InetSocketAddress(options.getHostname(), options.getPort()));
+        }
+        a.setTimeout(options.getTimeout());
+        a.setProtocolVersion(options.getProtocolVersion());
+        String json = a.fetchData();
+        var jsonTree = OBJECT_MAPPER.readTree(json);
+        var versionNode = jsonTree.get("version");
+        return versionNode.get("protocol").asInt();
+    }
 
     public ResponseDetails getPingWithDetails(PingOptions options) throws IOException {
         Pinger a = new Pinger();
@@ -160,7 +175,7 @@ public class MCPing {
 
     public ResponseDetails parse2b2t(final String json) {
         try {
-            var jsonTree = Shared.OBJECT_MAPPER.readTree(json);
+            var jsonTree = OBJECT_MAPPER.readTree(json);
             var versionNode = jsonTree.get("version");
             var protocol = versionNode.get("protocol").asInt();
             var versionName = versionNode.get("name").asText();
