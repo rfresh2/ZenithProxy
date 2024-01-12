@@ -387,9 +387,11 @@ public class Proxy {
                 int port = CONFIG.server.bind.port;
 
                 SERVER_LOG.info("Starting server on {}:{}...", address, port);
-                var minecraftProtocol = new MinecraftProtocol();
-                minecraftProtocol.setUseDefaultListeners(false);
-                this.server = new TcpServer(address, port, () -> minecraftProtocol);
+                this.server = new TcpServer(address, port, () -> {
+                    var protocol = new MinecraftProtocol();
+                    protocol.setUseDefaultListeners(false);
+                    return protocol;
+                });
                 this.server.setInitChannelConsumer(this::serverInitChannelCallback);
                 this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
                 var serverInfoBuilder = new CustomServerInfoBuilder();
