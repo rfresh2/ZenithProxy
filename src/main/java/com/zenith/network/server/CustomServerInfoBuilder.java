@@ -11,6 +11,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.feature.queue.Queue;
+import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 
 import java.time.Duration;
@@ -59,7 +60,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         return new ServerStatusInfo(
             getVersionInfo(session),
             getPlayerInfo(),
-            Component.text(getMotd()),
+            getMotd(),
             Proxy.getInstance().getServerIcon(),
             false
         );
@@ -98,40 +99,42 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         return new GameProfile[0];
     }
 
-    public String getMotd() {
-        String result = "§f[§r§b" + CONFIG.authentication.username + "§r§f]§r - ";
+    public Component getMotd() {
+        var sb = new StringBuilder();
+        sb.append("&f[&r&b").append(CONFIG.authentication.username).append("&r&f]&r - ");
         if (Proxy.getInstance().isConnected()) {
-            result += getMotdStatus();
-            result += "\n§bOnline for:§r §f[§r" + getOnlineTime() + "§f]§r";
-        } else {
-            result += "§cDisconnected§r";
-        }
-        return result;
+            sb
+                .append(getMotdStatus())
+                .append("\n&bOnline for:&r &f[&r").append(getOnlineTime()).append("&f]&r");
+        } else sb.append("&cDisconnected&r");
+        return ComponentSerializer.minedown(sb.toString());
     }
 
-    public String getMotdStatus() {
+    private String getMotdStatus() { // in minedown formatted string
         var proxy = Proxy.getInstance();
         if (proxy.isInQueue()) {
-            return (proxy.getIsPrio().isPresent()
-                ? (proxy.getIsPrio().get()
-                            ? "§cIn Prio Queue§r"
-                            : "§cIn Queue§r")
-                        + " §f[§r§b"
-                          + (proxy.getQueuePosition() != Integer.MAX_VALUE
-                                ? proxy.getQueuePosition() + " / "
-                                    + (proxy.getIsPrio().get() ? Queue.getQueueStatus().prio() : Queue.getQueueStatus().regular())
-                                : "Queueing")
-                        + "§r§f]§r"
-                        + ((proxy.getQueuePosition() != Integer.MAX_VALUE)
-                    ? " - §cETA§r §f[§r§b" + Queue.getQueueEta(proxy.getQueuePosition()) + "§r§f]§r"
-                    : "")
-                    : "§cQueuing§r");
+            if (proxy.getIsPrio().isEmpty()) return "&cQueuing&r";
+            var sb = new StringBuilder();
+            var prio = proxy.getIsPrio().get();
+            if (prio) sb.append("&cIn Prio Queue&r");
+            else sb.append("&cIn Queue&r");
+            sb.append(" &f[&r&b");
+            var qPos = proxy.getQueuePosition();
+            var qUndefined = qPos == Integer.MAX_VALUE;
+            if (!qUndefined) {
+                sb.append(qPos).append(" / ");
+                sb.append(prio ? Queue.getQueueStatus().prio() : Queue.getQueueStatus().regular());
+            } else sb.append("Queueing");
+            sb.append("&r&f]&r");
+            if (!qUndefined)
+                sb.append(" - &cETA&r &f[&r&b").append(Queue.getQueueEta(qPos)).append("&r&f]&r");
+            return sb.toString();
         } else {
-            return "§aIn Game§r";
+            return "&aIn Game&r";
         }
     }
 
-    public String getOnlineTime() {
+    private String getOnlineTime() {
         long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
         return Queue.getEtaStringFromSeconds(onlineSeconds);
     }
