@@ -25,7 +25,7 @@ import static com.zenith.Shared.SERVER_LOG;
 public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     private final Cache<String, ServerStatusInfo> infoCache = CacheBuilder.newBuilder()
-        .expireAfterAccess(Duration.ofSeconds(CONFIG.server.ping.responseCacheSeconds))
+        .expireAfterWrite(Duration.ofSeconds(CONFIG.server.ping.responseCacheSeconds))
         .maximumSize(10)
         .build();
 
