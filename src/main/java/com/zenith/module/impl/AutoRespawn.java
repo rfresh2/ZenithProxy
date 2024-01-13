@@ -3,7 +3,6 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.ClientCommand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
@@ -23,8 +22,8 @@ public class AutoRespawn extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(ClientTickEvent.class, this::handleClientTickEvent),
             pair(DeathEvent.class, this::handleDeathEvent)
         );

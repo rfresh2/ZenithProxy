@@ -101,7 +101,7 @@ public class DiscordBot {
 
     public void initEventHandlers() {
         if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
-        eventSubscription = EVENT_BUS.subscribe(
+        EVENT_BUS.subscribe(this,
             pair(ConnectEvent.class, this::handleConnectEvent),
             pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
             pair(DisconnectEvent.class, this::handleDisconnectEvent),

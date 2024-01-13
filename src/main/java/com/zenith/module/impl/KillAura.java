@@ -17,7 +17,6 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
@@ -56,8 +55,8 @@ public class KillAura extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTick);
     }
 
     @Override

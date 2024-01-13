@@ -7,7 +7,6 @@ import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -35,8 +34,8 @@ public class AutoTotem extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTick);
     }
 
     @Override

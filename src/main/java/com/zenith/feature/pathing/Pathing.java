@@ -17,7 +17,7 @@ public class Pathing {
     private Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
 
     public Pathing() {
-        eventSubscription = EVENT_BUS.subscribe(
+        EVENT_BUS.subscribe(this,
             pair(ClientTickEvent.class, this::handleTick)
         );
     }

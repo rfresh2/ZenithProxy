@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DatabaseTickEvent;
 import com.zenith.feature.queue.Queue;
 
@@ -17,8 +16,8 @@ public class QueueLengthDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             DatabaseTickEvent.class, this::handleTickEvent
         );
     }

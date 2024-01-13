@@ -13,7 +13,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.Server
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityStandard;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
@@ -43,8 +42,8 @@ public class AutoFish extends Module {
     private int fishingRodId = ITEMS_MANAGER.getItemId("fishing_rod");
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(EntityFishHookSpawnEvent.class, this::handleEntityFishHookSpawnEvent),
             pair(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
             pair(ClientTickEvent.class, this::handleClientTick)

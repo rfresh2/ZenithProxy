@@ -2,7 +2,6 @@ package com.zenith.database;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.zenith.database.dto.records.DeathsRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.feature.api.ProfileData;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
@@ -23,8 +22,8 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             DeathMessageEvent.class, this::handleDeathMessageEvent
         );
     }

@@ -10,7 +10,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCl
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import com.zenith.feature.actionlimiter.handlers.inbound.*;
@@ -62,8 +61,8 @@ public class ActionLimiter extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(PlayerLoginEvent.class, this::onPlayerLoginEvent),
             pair(ServerConnectionRemovedEvent.class, this::onServerConnectionRemoved)
         );

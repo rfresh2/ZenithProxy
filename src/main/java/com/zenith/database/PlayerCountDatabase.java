@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DatabaseTickEvent;
 
 import java.time.Instant;
@@ -16,8 +15,8 @@ public class PlayerCountDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             DatabaseTickEvent.class, this::handleDatabaseTickEvent
         );
     }

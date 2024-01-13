@@ -19,14 +19,14 @@ public class SimpleEventBusTest {
         final SimpleEventBus bus = new SimpleEventBus(executorService);
         final Foo foo = new Foo();
         final Bar bar = new Bar();
-        Subscription fooSubscription = foo.subscribe(bus);
-        Subscription barSubscription = bar.subscribe(bus);
+        foo.subscribe(bus);
+        bar.subscribe(bus);
         bus.post(new TestEvent());
 
         assertEquals(1, foo.counter.get());
         assertEquals(1, bar.counter.get());
 
-        fooSubscription.unsubscribe();
+        bus.unsubscribe(foo);
         bus.post(new TestEvent());
 
         assertEquals(1, foo.counter.get());
@@ -38,13 +38,13 @@ public class SimpleEventBusTest {
         final SimpleEventBus bus = new SimpleEventBus(executorService);
         final Baz baz = new Baz();
         final Bar bar = new Bar();
-        Subscription barSubscription = bar.subscribe(bus);
-        Subscription bazSubscription = baz.subscribe(bus);
+        bar.subscribe(bus);
+        baz.subscribe(bus);
         bus.post(new TestEvent());
         bus.post(new AnotherTestEvent());
         assertEquals(2, baz.counter.get());
         assertEquals(1, bar.counter.get());
-        bazSubscription.unsubscribe();
+        bus.unsubscribe(baz);
         bus.post(new TestEvent());
         bus.post(new AnotherTestEvent());
         assertEquals(2, baz.counter.get());
@@ -55,11 +55,11 @@ public class SimpleEventBusTest {
     public void postAsyncTest() {
         final SimpleEventBus bus = new SimpleEventBus(executorService);
         final Foo foo = new Foo();
-        Subscription fooSubscription = foo.subscribe(bus);
+        foo.subscribe(bus);
         bus.postAsync(new TestEvent());
         Wait.waitUntilCondition(() -> foo.counter.get() == 1, 1000);
         assertEquals(1, foo.counter.get());
-        fooSubscription.unsubscribe();
+        bus.unsubscribe(foo);
         bus.postAsync(new TestEvent());
         Wait.waitALittle(1);
         assertEquals(1, foo.counter.get());
@@ -71,8 +71,8 @@ public class SimpleEventBusTest {
     public static class Foo {
         AtomicInteger counter = new AtomicInteger(0);
 
-        public Subscription subscribe(SimpleEventBus bus) {
-            return bus.subscribe(TestEvent.class, this::handleTestEvent);
+        public void subscribe(SimpleEventBus bus) {
+            bus.subscribe(this, TestEvent.class, this::handleTestEvent);
         }
 
         public void handleTestEvent(final TestEvent testEvent) {
@@ -83,8 +83,8 @@ public class SimpleEventBusTest {
     public static class Bar {
         AtomicInteger counter = new AtomicInteger(0);
 
-        public Subscription subscribe(SimpleEventBus bus) {
-            return bus.subscribe(TestEvent.class, this::handleTestEvent);
+        public void subscribe(SimpleEventBus bus) {
+            bus.subscribe(this, TestEvent.class, this::handleTestEvent);
         }
 
         public void handleTestEvent(final TestEvent testEvent) {
@@ -95,8 +95,8 @@ public class SimpleEventBusTest {
     public static class Baz {
         AtomicInteger counter = new AtomicInteger(0);
 
-        public Subscription subscribe(SimpleEventBus bus) {
-            return bus.subscribe(
+        public void subscribe(SimpleEventBus bus) {
+            bus.subscribe(this,
                 pair(TestEvent.class, this::handleTestEvent),
                 pair(AnotherTestEvent.class, this::handleAnotherTestEvent));
         }

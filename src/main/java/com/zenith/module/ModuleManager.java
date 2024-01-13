@@ -29,7 +29,7 @@ public class ModuleManager {
     private final Reference2ObjectMap<Class<? extends Module>, Module> moduleClassMap = new Reference2ObjectOpenHashMap<>();
 
     public ModuleManager() {
-        eventSubscription = EVENT_BUS.subscribe(
+        EVENT_BUS.subscribe(this,
             pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
             pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
             pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),

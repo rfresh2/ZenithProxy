@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerRestartingEvent;
 
 import java.time.Duration;
@@ -21,8 +20,8 @@ public class RestartsDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
                 ServerRestartingEvent.class, this::handleServerRestartEvent
         );
     }

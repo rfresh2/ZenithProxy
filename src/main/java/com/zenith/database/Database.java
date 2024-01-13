@@ -24,5 +24,5 @@ public abstract class Database {
         }
     }
 
-    public abstract Subscription subscribeEvents();
+    public abstract void subscribeEvents();
 }

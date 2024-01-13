@@ -2,7 +2,6 @@ package com.zenith.database;
 
 import com.zenith.Proxy;
 import com.zenith.database.dto.records.ChatsRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 
 import java.time.Instant;
@@ -37,8 +36,8 @@ public class ChatDatabase extends LiveDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent
         );
     }

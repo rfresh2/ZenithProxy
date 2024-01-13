@@ -1,7 +1,6 @@
 package com.zenith.feature.autoupdater;
 
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.UpdateAvailableEvent;
 import com.zenith.event.proxy.UpdateStartEvent;
@@ -23,11 +22,10 @@ public abstract class AutoUpdater {
     @Getter
     private Optional<String> newVersion = Optional.empty();
     ScheduledFuture<?> updateCheckFuture;
-    private Subscription eventSubscription;
 
     public void start() {
         if (updateCheckFuture != null) return;
-        if (eventSubscription == null) eventSubscription = EVENT_BUS.subscribe(
+        if (!EVENT_BUS.isSubscribed(this)) EVENT_BUS.subscribe(this,
             DisconnectEvent.class, this::handleDisconnectEvent
         );
         scheduleUpdateCheck(this::executeUpdateCheck,
@@ -61,10 +59,7 @@ public abstract class AutoUpdater {
     }
 
     public void stop() {
-        if (eventSubscription != null) {
-            eventSubscription.unsubscribe();
-            eventSubscription = null;
-        }
+        EVENT_BUS.unsubscribe(this);
         cancelUpdateCheck();
         this.updateAvailable = false;
         this.newVersion = Optional.empty();

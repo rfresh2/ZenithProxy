@@ -110,8 +110,7 @@ public class Proxy {
 
     @SuppressWarnings("unchecked")
     public void initEventHandlers() {
-        if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
-        eventSubscription = EVENT_BUS.subscribe(
+        EVENT_BUS.subscribe(this,
             pair(DisconnectEvent.class, this::handleDisconnectEvent),
             pair(ConnectEvent.class, this::handleConnectEvent),
             pair(StartQueueEvent.class, this::handleStartQueueEvent),

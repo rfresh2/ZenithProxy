@@ -4,7 +4,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.module.Module;
 
@@ -30,8 +29,8 @@ public class AutoReply extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent);
     }
 
     @Override

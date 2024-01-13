@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.pathing.Pathing;
@@ -34,8 +33,8 @@ public class Spook extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(ClientTickEvent.class, this::handleClientTickEvent),
             pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
     }

@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.QueueCompleteEvent;
 import com.zenith.event.proxy.QueuePositionUpdateEvent;
 import com.zenith.event.proxy.ServerRestartingEvent;
@@ -30,8 +29,8 @@ public class QueueWaitDatabase extends Database {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(ServerRestartingEvent.class, this::handleServerRestart),
             pair(StartQueueEvent.class, this::handleStartQueue),
             pair(QueuePositionUpdateEvent.class, this::handleQueuePosition),
