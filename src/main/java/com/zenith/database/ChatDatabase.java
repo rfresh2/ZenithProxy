@@ -9,7 +9,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class ChatDatabase extends LiveDatabase {
     public ChatDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
@@ -44,7 +45,7 @@ public class ChatDatabase extends LiveDatabase {
 
 
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org") // only write on 2b2t
+        if (!Proxy.getInstance().isOn2b2t() // only write on 2b2t
                 || Proxy.getInstance().isInQueue()  // ignore queue
                 || !event.message().startsWith("<")) return; // don't write whispers or system messages
         try {

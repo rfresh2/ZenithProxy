@@ -1,6 +1,7 @@
 package com.zenith.database;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
+import com.zenith.Proxy;
 import com.zenith.database.dto.records.DeathsRecord;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.feature.api.ProfileData;
@@ -48,7 +49,7 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     public void handleDeathMessageEvent(DeathMessageEvent event) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org")) return;
+        if (!Proxy.getInstance().isOn2b2t()) return;
         writeDeath(event.deathMessageParseResult(), event.deathMessageRaw(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 

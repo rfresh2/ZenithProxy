@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabListPacket, ClientSession> {
     private Optional<Duration> queueDuration = Optional.empty();
@@ -28,7 +29,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
         CACHE.getTabListCache()
             .setHeader(packet.getHeader())
             .setFooter(packet.getFooter());
-        if (CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) {
+        if (Proxy.getInstance().isOn2b2t()) {
             parse2bQueueState(packet, session);
             if (session.isInQueue()) {
                 parse2bPrioQueueState(packet);

@@ -5,15 +5,16 @@ import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
 import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientInformationPacket;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import lombok.NonNull;
 
 import java.util.List;
-import java.util.Locale;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class LoginHandler implements PacketHandler<ClientboundLoginPacket, ClientSession> {
     @Override
@@ -51,7 +52,7 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
             false,
             false
         ));
-        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).endsWith("2b2t.org")) {
+        if (!Proxy.getInstance().isOn2b2t()) {
             if (!session.isOnline()) {
                 session.setOnline(true);
                 EVENT_BUS.post(new PlayerOnlineEvent());

@@ -128,9 +128,11 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:09fa6b43f9") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:7c7d32ba08") {
+    shade("com.github.rfresh2:MCProtocolLib:f4c52132e6") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
+        exclude group: 'com.microsoft.azure'
+        exclude group: 'fr.litarvan'
     }
     shade "net.raphimc:MinecraftAuth:3.1.0"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
@@ -230,15 +232,23 @@ shadowJar {
 
     configurations = [project.configurations.shade]
 
-    exclude 'module-info.class'
-    exclude 'META-INF/licenses/**'
-    exclude 'META-INF/maven/**'
-    exclude 'META-INF/proguard/**'
-    exclude 'META-INF/gradle/**'
-    exclude 'META-INF/versions/**'
-    exclude 'META-INF/native-image/io.netty/**/native-image.properties'
-    // todo: remove when jline 3.25.1 released https://github.com/jline/jline3/issues/923
-    exclude 'META-INF/native-image/jansi/native-image.properties'
+    excludes = [
+            "module-info.class",
+            "META-INF/licenses/**",
+            "META-INF/maven/**",
+            "META-INF/proguard/**",
+            "META-INF/gradle/**",
+            "META-INF/versions/**",
+            "META-INF/native-image/io.netty/**/native-image.properties",
+            // todo: remove when jline 3.25.1 released
+            "META-INF/native-image/jansi/native-image.properties",
+            "about.html",
+            "bungee.yml",
+            "plugin.yml",
+            "velocity-plugin.json",
+            "fabric.mod.json",
+            "OSGI-INF/**"
+    ]
     minimize {
         exclude(dependency("org.slf4j:slf4j-api:.*"))
         exclude(dependency("ch.qos.logback:.*:.*"))

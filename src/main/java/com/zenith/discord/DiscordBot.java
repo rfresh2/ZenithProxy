@@ -83,7 +83,7 @@ public class DiscordBot {
     private final ClientPresence disconnectedPresence = ClientPresence.of(Status.DO_NOT_DISTURB, ClientActivity.custom(
         "Disconnected"));
     private final Supplier<ClientPresence> defaultConnectedPresence = () -> ClientPresence.of(Status.ONLINE, ClientActivity.custom(
-        (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address)));
+        (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address)));
     public Optional<Instant> lastRelaymessage = Optional.empty();
 
     @Getter
@@ -340,7 +340,7 @@ public class DiscordBot {
     private ClientPresence getOnlinePresence() {
         long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
         return ClientPresence.of(Status.ONLINE, ClientActivity.custom(
-      (CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org") ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
+      (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
     }
 
     private void handleProxyUpdateComplete() {
