@@ -3,10 +3,8 @@ package com.zenith.feature.queue.mcping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.zenith.feature.queue.mcping.data.*;
+import com.zenith.feature.queue.mcping.data.ExtraResponse;
+import com.zenith.feature.queue.mcping.data.FinalResponse;
 import com.zenith.feature.queue.mcping.rawData.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.AddressedEnvelope;
@@ -24,7 +22,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zenith.Shared.CLIENT_LOG;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class MCPing {
@@ -32,72 +29,26 @@ public class MCPing {
      * If the client is pinging to determine what version to use, by convention -1 should be set.
      */
     public static final int PROTOCOL_VERSION_DISCOVERY = -1;
-    private static final Gson GSON = new GsonBuilder()
-        .setLenient()
-        .create();
     private static final String IP_REGEX = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b";
     private static final EventLoopGroup EVENT_LOOP_GROUP = new NioEventLoopGroup(1, new ThreadFactoryBuilder().setNameFormat("MCPing-%d").build());
     private static final Class<NioDatagramChannel> DATAGRAM_CHANNEL_CLASS = NioDatagramChannel.class;
 
-    public int getProtocolVersion(PingOptions options) throws IOException {
-        Pinger a = new Pinger();
-        if (options.isResolveDns()) {
-            a.setAddress(resolveAddress(options.getHostname(), options.getPort()));
-        } else {
-            a.setAddress(new InetSocketAddress(options.getHostname(), options.getPort()));
-        }
-        a.setTimeout(options.getTimeout());
-        a.setProtocolVersion(options.getProtocolVersion());
-        String json = a.fetchData();
+    public int getProtocolVersion(String hostname, int port, int timeout, boolean resolveDns) throws IOException {
+        final InetSocketAddress address;
+        if (resolveDns) address = resolveAddress(hostname, port);
+        else address = new InetSocketAddress(hostname, port);
+        var json = Pinger.fetchData(address, timeout, PROTOCOL_VERSION_DISCOVERY);
         var jsonTree = OBJECT_MAPPER.readTree(json);
         var versionNode = jsonTree.get("version");
         return versionNode.get("protocol").asInt();
     }
 
-    public ResponseDetails getPingWithDetails(PingOptions options) throws IOException {
-        Pinger a = new Pinger();
-        if (options.isResolveDns()) {
-            a.setAddress(resolveAddress(options.getHostname(), options.getPort()));
-        } else {
-            a.setAddress(new InetSocketAddress(options.getHostname(), options.getPort()));
-        }
-        a.setTimeout(options.getTimeout());
-        a.setProtocolVersion(options.getProtocolVersion());
-        String json = a.fetchData();
-        try {
-            if (json != null) {
-                if (json.contains("{")) {
-                    if (options.getHostname().endsWith("2b2t.org")) { // wtfbbq
-                        return parse2b2t(json);
-                    }
-                    if (json.contains("\"modid\"") && json.contains("\"translate\"")) { //it's a forge response translate
-                        ForgeResponseTranslate forgeResponseTranslate = GSON.fromJson(json, ForgeResponseTranslate.class);
-                        return new ResponseDetails(forgeResponseTranslate.toFinalResponse(), forgeResponseTranslate, null, null, null, null, null, json);
-                    } else if (json.contains("\"modid\"") && json.contains("\"text\"")) { //it's a normal forge response
-                        ForgeResponse forgeResponse = GSON.fromJson(json, ForgeResponse.class);
-                        return new ResponseDetails(forgeResponse.toFinalResponse(), null, forgeResponse, null, null, null, null, json);
-                    } else if (json.contains("\"modid\"")) {  //it's an old forge response
-                        ForgeResponseOld forgeResponseOld = GSON.fromJson(json, ForgeResponseOld.class);
-                        return new ResponseDetails(forgeResponseOld.toFinalResponse(), null, null, forgeResponseOld, null, null, null, json);
-                    } else if (json.contains("\"extra\"")) { //it's an extra response
-                        ExtraResponse extraResponse = GSON.fromJson(json, ExtraResponse.class);
-                        return new ResponseDetails(extraResponse.toFinalResponse(), null, null, null, extraResponse, null, null, json);
-                    } else if (json.contains("\"text\"")) { //it's a new response
-                        NewResponse newResponse = GSON.fromJson(json, NewResponse.class);
-                        return new ResponseDetails(newResponse.toFinalResponse(), null, null, null, null, newResponse, null, json);
-                    } else { //it's an old response
-                        OldResponse oldResponse = GSON.fromJson(json, OldResponse.class);
-                        return new ResponseDetails(oldResponse.toFinalResponse(), null, null, null, null, null, oldResponse, json);
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            CLIENT_LOG.error("Failed to ping " + options, e);
-            if (e instanceof JsonSyntaxException) {
-                throw e;
-            }
-        }
-        return null;
+    public FinalResponse ping(String hostname, int port, int timeout, boolean resolveDns) throws IOException {
+        final InetSocketAddress address;
+        if (resolveDns) address = resolveAddress(hostname, port);
+        else address = new InetSocketAddress(hostname, port);
+        var json = Pinger.fetchData(address, timeout, PROTOCOL_VERSION_DISCOVERY);
+        return parsePing(json);
     }
 
     private InetSocketAddress resolveAddress(final String hostname, final int defaultPort) {
@@ -144,36 +95,7 @@ public class MCPing {
         }
     }
 
-    public static class ResponseDetails {
-        public final FinalResponse standard;
-        public final ForgeResponseTranslate forgeTranslate;
-        public final ForgeResponse forge;
-        public final ForgeResponseOld oldForge;
-        public final ExtraResponse extraResponse;
-        public final NewResponse response;
-        public final OldResponse oldResponse;
-        public final String json;
-
-        public ResponseDetails(FinalResponse standard,
-                               ForgeResponseTranslate forgeTranslate,
-                               ForgeResponse forge,
-                               ForgeResponseOld oldForge,
-                               ExtraResponse extraResponse,
-                               NewResponse response,
-                               OldResponse oldResponse,
-                               String json) {
-            this.standard = standard;
-            this.forgeTranslate = forgeTranslate;
-            this.forge = forge;
-            this.oldForge = oldForge;
-            this.extraResponse = extraResponse;
-            this.response = response;
-            this.oldResponse = oldResponse;
-            this.json = json;
-        }
-    }
-
-    public ResponseDetails parse2b2t(final String json) {
+    public FinalResponse parsePing(final String json) {
         try {
             var jsonTree = OBJECT_MAPPER.readTree(json);
             var versionNode = jsonTree.get("version");
@@ -229,8 +151,7 @@ public class MCPing {
             extraResponse.setPlayers(players);
             extraResponse.setDescription(description);
             extraResponse.setFavicon(favicon);
-
-            return new ResponseDetails(extraResponse.toFinalResponse(), null, null, null, extraResponse, null, null, json);
+            return extraResponse.toFinalResponse();
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

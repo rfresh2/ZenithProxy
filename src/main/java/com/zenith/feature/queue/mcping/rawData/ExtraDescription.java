@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class ExtraDescription {
-
     @SerializedName("extra")
     private Extra[] extra = new Extra[0];
     @SerializedName("text")
