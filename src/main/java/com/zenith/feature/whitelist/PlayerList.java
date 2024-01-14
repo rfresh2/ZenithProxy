@@ -1,42 +1,19 @@
 package com.zenith.feature.whitelist;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.zenith.feature.api.ProfileData;
-import lombok.Data;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
-import static com.zenith.Shared.*;
-import static java.util.Objects.nonNull;
+import static com.zenith.feature.whitelist.PlayerListsManager.createPlayerListEntry;
 
-@Data
-public class PlayerList {
-    private final String name;
-    private final ArrayList<PlayerEntry> entries;
-    private ScheduledFuture<?> refreshScheduledFuture;
-
-    public void startRefreshTask() {
-        stopRefreshTask();
-        refreshScheduledFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::refresh,
-                                                                                // todo: move these configs to more central config
-                                                                                ThreadLocalRandom.current().nextInt(Math.max(1, (int) (CONFIG.server.playerListsRefreshIntervalMins / 2))),
-                                                                                Math.max(10L, CONFIG.server.playerListsRefreshIntervalMins),
-                                                                                TimeUnit.MINUTES);
-    }
-
-    public void stopRefreshTask() {
-        if (nonNull(refreshScheduledFuture)) {
-            refreshScheduledFuture.cancel(true);
-        }
-    }
-
+public record PlayerList(
+    String name,
+    ArrayList<PlayerEntry> entries
+) {
     public Optional<PlayerEntry> add(final String username) {
         final Optional<PlayerEntry> playerListEntryOptional = createPlayerListEntry(username);
         if (playerListEntryOptional.isPresent()) {
@@ -85,42 +62,5 @@ public class PlayerList {
         return entries.stream()
             .map(PlayerEntry::getUsername)
             .anyMatch(name::equalsIgnoreCase);
-    }
-
-
-    private void refresh() {
-        SERVER_LOG.debug("Refreshing {} entries...", name);
-        entries.forEach(this::refreshEntry);
-    }
-
-    private void refreshEntry(final PlayerEntry playerEntry) {
-        final Optional<PlayerEntry> entryFromUUID = createPlayerListEntry(playerEntry.getUuid());
-        if (entryFromUUID.isPresent()) {
-            // in-place update
-            playerEntry.setUsername(entryFromUUID.get().getUsername());
-            playerEntry.setLastRefreshed(Instant.now().getEpochSecond());
-        } else {
-            SERVER_LOG.error("{}} refresh: unable to refresh player with username: {} and uuid: {}", name, playerEntry.getUsername(), playerEntry.getUuid().toString());
-        }
-    }
-
-    public static Optional<PlayerEntry> createPlayerListEntry(final String username) {
-        return getProfileFromUsername(username)
-            .map(profile -> new PlayerEntry(profile.name(), profile.uuid(), Instant.now().getEpochSecond()));
-    }
-
-    public static Optional<PlayerEntry> createPlayerListEntry(final UUID uuid) {
-        return getProfileFromUUID(uuid)
-            .map(profile -> new PlayerEntry(profile.name(), profile.uuid(), Instant.now().getEpochSecond()));
-    }
-
-    public static Optional<ProfileData> getProfileFromUsername(final String username) {
-        return MOJANG_API.getProfileFromUsername(username).map(o -> (ProfileData) o)
-            .or(() -> MINETOOLS_API.getProfileFromUsername(username));
-    }
-
-    public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
-        return SESSION_SERVER_API.getProfileFromUUID(uuid).map(o -> (ProfileData) o)
-            .or(() -> MINETOOLS_API.getProfileFromUUID(uuid));
     }
 }

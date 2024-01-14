@@ -8,7 +8,7 @@ import com.zenith.feature.api.ProfileData;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
-import com.zenith.feature.whitelist.PlayerList;
+import com.zenith.feature.whitelist.PlayerListsManager;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -104,7 +104,7 @@ public class DeathsDatabase extends LiveDatabase {
             return tablistEntry;
         } else {
             // note: this doesn't actually add them to the whitelist, just using this as a convenience function
-            final Optional<ProfileData> profileData = PlayerList.getProfileFromUsername(username);
+            final Optional<ProfileData> profileData = PlayerListsManager.getProfileFromUsername(username);
             if (profileData.isPresent()) {
                 return Optional.of(new PlayerListEntry(profileData.get().name(), profileData.get().uuid()));
             }
