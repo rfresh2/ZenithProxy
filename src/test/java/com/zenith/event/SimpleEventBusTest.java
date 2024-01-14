@@ -31,6 +31,12 @@ public class SimpleEventBusTest {
 
         assertEquals(1, foo.counter.get());
         assertEquals(2, bar.counter.get());
+
+        bus.unsubscribe(bar);
+        bus.post(new TestEvent());
+
+        assertEquals(1, foo.counter.get());
+        assertEquals(2, bar.counter.get());
     }
 
     @Test

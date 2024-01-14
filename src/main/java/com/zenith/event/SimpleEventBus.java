@@ -4,8 +4,6 @@ import com.zenith.util.Pair;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
@@ -23,7 +21,7 @@ import static com.zenith.Shared.DEFAULT_LOG;
 public class SimpleEventBus {
 
     private final ExecutorService asyncEventExecutor;
-    private final Reference2ObjectMap<Class<?>, List<Consumer<?>>> handlers = new Reference2ObjectOpenHashMap<>();
+    private final Reference2ObjectMap<Class<?>, Consumer<?>[]> handlers = new Reference2ObjectOpenHashMap<>();
     private final Reference2ObjectMap<Object, Subscription> subscribers = new Reference2ObjectOpenHashMap<>();
 
     public SimpleEventBus(final ExecutorService asyncEventExecutor) {
@@ -61,8 +59,12 @@ public class SimpleEventBus {
     // handlers can throw and return exceptions - cancelling subsequent event executions
     public <T> void post(T event) {
         var consumers = handlers.get(event.getClass());
-        if (consumers != handlers.defaultReturnValue())
-            for (var consumer : consumers) ((Consumer<T>) consumer).accept(event);
+        if (consumers != handlers.defaultReturnValue()) {
+            for (int i = 0; i < consumers.length; i++) {
+                var consumer = consumers[i];
+                ((Consumer<T>) consumer).accept(event);
+            }
+        }
     }
 
     public <T> void postAsync(T event) {
@@ -71,31 +73,71 @@ public class SimpleEventBus {
             asyncEventExecutor.execute(() -> this.postAsyncInternal(event, consumers));
     }
 
-    private void removeHandler(Class<?> eventType, Consumer<?> handler) {
+    private synchronized void removeHandler(Class<?> eventType, Consumer<?> handler) {
         var consumers = handlers.get(eventType);
         if (consumers != handlers.defaultReturnValue()) {
-            consumers.remove(handler);
-            if (consumers.isEmpty()) handlers.remove(eventType);
+            int index = -1;
+            for (int i = 0; i < consumers.length; i++) {
+                if (consumers[i] == handler) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index == -1) return;
+            if (consumers.length == 1) {
+                handlers.remove(eventType);
+                return;
+            }
+            final Consumer<?>[] newConsumers = new Consumer[consumers.length - 1];
+            System.arraycopy(consumers, 0, newConsumers, 0, index);
+            System.arraycopy(consumers, index + 1, newConsumers, index, consumers.length - index - 1);
+            handlers.put(eventType, newConsumers);
         }
     }
 
-    private <T> Subscription subscribe(Class<T> eventType, Consumer<T> handler) {
-        handlers.computeIfAbsent(eventType, key -> new CopyOnWriteArrayList<>()).add(handler);
+    private synchronized <T> Subscription subscribe(Class<T> eventType, Consumer<T> handler) {
+        handlers.compute(eventType, (key, consumers) -> {
+            if (consumers == null) {
+                return new Consumer<?>[]{handler};
+            } else {
+                final Consumer<?>[] newConsumers = new Consumer[consumers.length + 1];
+                System.arraycopy(consumers, 0, newConsumers, 0, consumers.length);
+                newConsumers[consumers.length] = handler;
+                return newConsumers;
+            }
+        });
         return new Subscription(() -> removeHandler(eventType, handler));
     }
 
     @SafeVarargs
-    private Subscription subscribe(Pair<Class<?>, Consumer<?>>... pairs) {
-        for (var pair : pairs)
-            handlers.computeIfAbsent(pair.left(), key -> new CopyOnWriteArrayList<>()).add(pair.right());
+    private synchronized Subscription subscribe(Pair<Class<?>, Consumer<?>>... pairs) {
+        for (int i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            handlers.compute(pair.left(), (key, consumers) -> {
+                if (consumers == null) {
+                    return new Consumer<?>[]{pair.right()};
+                } else {
+                    final Consumer<?>[] newConsumers = new Consumer[consumers.length + 1];
+                    System.arraycopy(consumers, 0, newConsumers, 0, consumers.length);
+                    newConsumers[consumers.length] = pair.right();
+                    return newConsumers;
+                }
+            });
+        }
         return new Subscription(() -> {
-            for (var pair : pairs) removeHandler(pair.left(), pair.right());
+            for (int i = 0; i < pairs.length; i++) {
+                var pair = pairs[i];
+                removeHandler(pair.left(), pair.right());
+            }
         });
     }
 
-    private <T> void postAsyncInternal(T event, List<Consumer<?>> consumers) {
+    private <T> void postAsyncInternal(T event, Consumer<?>[] consumers) {
         try {
-            for (var consumer : consumers) ((Consumer<T>) consumer).accept(event);
+            for (int i = 0; i < consumers.length; i++) {
+                var consumer = consumers[i];
+                ((Consumer<T>) consumer).accept(event);
+            }
         } catch (final Throwable e) { // swallow exception so we don't kill the executor
             DEFAULT_LOG.debug("Error handling async event", e);
         }
