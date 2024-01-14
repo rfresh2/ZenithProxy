@@ -10,6 +10,7 @@ import com.zenith.util.WebBrowserHelper;
 import lombok.Getter;
 import net.raphimc.minecraftauth.MinecraftAuth;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession;
+import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaSession;
 import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
 import net.raphimc.minecraftauth.step.msa.StepLocalWebServer;
 import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
@@ -83,11 +84,12 @@ public class Authenticator {
 
     public MinecraftProtocol login()  {
         try {
-            var cachedAuth = loadAuthCache();
-            var authSession = cachedAuth.isPresent()
-                // throws on failed login
-                ? refreshOrFullLogin(cachedAuth.get())
-                : fullLogin();
+            var cachedAuth = loadAuthCache()
+                .flatMap(this::checkAuthCacheMatchesConfig);
+            // throws on failed login
+            var authSession = cachedAuth
+                .map(this::refreshOrFullLogin)
+                .orElseGet(this::fullLogin);
             this.refreshTryCount = 0;
             saveAuthCacheAsync(authSession);
             updateConfig(authSession);
@@ -99,7 +101,7 @@ public class Authenticator {
         }
     }
 
-    private StepFullJavaSession.FullJavaSession refreshOrFullLogin(StepFullJavaSession.FullJavaSession session) {
+    private FullJavaSession refreshOrFullLogin(FullJavaSession session) {
         var refreshSession = tryRefresh(session);
         if (refreshSession.isPresent()) {
             return refreshSession.get();
@@ -115,14 +117,14 @@ public class Authenticator {
         }
     }
 
-    private MinecraftProtocol createMinecraftProtocol(StepFullJavaSession.FullJavaSession authSession) {
+    private MinecraftProtocol createMinecraftProtocol(FullJavaSession authSession) {
         var javaProfile = authSession.getMcProfile();
         var gameProfile = new GameProfile(javaProfile.getId(), javaProfile.getName());
         var accessToken = javaProfile.getMcToken().getAccessToken();
         return new MinecraftProtocol(MinecraftCodec.CODEC, gameProfile, accessToken);
     }
 
-    private StepFullJavaSession.FullJavaSession deviceCodeLogin() {
+    private FullJavaSession deviceCodeLogin() {
         try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
             return deviceCodeAuthStep.getFromInput(httpClient, new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
         } catch (Exception e) {
@@ -130,7 +132,7 @@ public class Authenticator {
         }
     }
 
-    private StepFullJavaSession.FullJavaSession msaLogin() {
+    private FullJavaSession msaLogin() {
         try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
             return msaAuthStep.getFromInput(httpClient, new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
         } catch (Exception e) {
@@ -138,7 +140,7 @@ public class Authenticator {
         }
     }
 
-    private StepFullJavaSession.FullJavaSession localWebserverLogin() {
+    private FullJavaSession localWebserverLogin() {
         try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
             return localWebserverStep.getFromInput(httpClient, new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
         } catch (Exception e) {
@@ -146,7 +148,7 @@ public class Authenticator {
         }
     }
 
-    private Optional<StepFullJavaSession.FullJavaSession> tryRefresh(final StepFullJavaSession.FullJavaSession session) {
+    private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
         try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
             return Optional.of(getAuthStep().refresh(httpClient, session));
         } catch (Exception e) {
@@ -163,7 +165,7 @@ public class Authenticator {
         };
     }
 
-    private StepFullJavaSession.FullJavaSession fullLogin() {
+    private FullJavaSession fullLogin() {
         return switch (CONFIG.authentication.accountType) {
             case MSA -> msaLogin();
             case DEVICE_CODE -> deviceCodeLogin();
@@ -190,7 +192,7 @@ public class Authenticator {
         }
     }
 
-    private void scheduleAuthCacheRefresh(StepFullJavaSession.FullJavaSession session) {
+    private void scheduleAuthCacheRefresh(FullJavaSession session) {
         var time = session.getMcProfile().getMcToken().getExpireTimeMs() - System.currentTimeMillis();
         if (time <= 0) {
             AUTH_LOG.debug("Auth token refresh time is negative? {}", time);
@@ -225,7 +227,7 @@ public class Authenticator {
         }
     }
 
-    private void saveAuthCache(final StepFullJavaSession.FullJavaSession session) {
+    private void saveAuthCache(final FullJavaSession session) {
         final JsonObject json = getAuthStep().toJson(session);
         try {
             final File tempFile = new File(AUTH_CACHE_FILE.getAbsolutePath() + ".tmp");
@@ -240,7 +242,7 @@ public class Authenticator {
         AUTH_LOG.debug("Auth cache saved!");
     }
 
-    private void updateConfig(StepFullJavaSession.FullJavaSession javaSession) {
+    private void updateConfig(FullJavaSession javaSession) {
         var javaProfile = javaSession.getMcProfile();
         if (!CONFIG.authentication.username.equals(javaProfile.getName())) {
             CONFIG.authentication.username = javaProfile.getName();
@@ -248,11 +250,11 @@ public class Authenticator {
         }
     }
 
-    private void saveAuthCacheAsync(final StepFullJavaSession.FullJavaSession session) {
+    private void saveAuthCacheAsync(final FullJavaSession session) {
         Thread.ofVirtual().name("Auth Cache Writer").start(() -> saveAuthCache(session));
     }
 
-    private Optional<StepFullJavaSession.FullJavaSession> loadAuthCache() {
+    private Optional<FullJavaSession> loadAuthCache() {
         if (!AUTH_CACHE_FILE.exists()) return Optional.empty();
         try (Reader reader = new FileReader(AUTH_CACHE_FILE)) {
             final JsonObject json = GSON.fromJson(reader, JsonObject.class);
@@ -261,5 +263,14 @@ public class Authenticator {
             AUTH_LOG.debug("Unable to load auth cache!", e);
             return Optional.empty();
         }
+    }
+
+    private Optional<FullJavaSession> checkAuthCacheMatchesConfig(FullJavaSession authCacheSession) {
+        if (!authCacheSession.getMcProfile().getName().equals(CONFIG.authentication.username)) {
+            AUTH_LOG.info("Cached auth username does not match config username, clearing cache");
+            clearAuthCache();
+            return Optional.empty();
+        }
+        return Optional.of(authCacheSession);
     }
 }
