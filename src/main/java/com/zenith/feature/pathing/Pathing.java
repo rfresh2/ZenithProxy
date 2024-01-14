@@ -1,6 +1,5 @@
 package com.zenith.feature.pathing;
 
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
@@ -12,12 +11,10 @@ import static com.zenith.Shared.*;
 import static com.zenith.event.SimpleEventBus.pair;
 
 public class Pathing {
-    private Subscription eventSubscription;
-
-    private Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
+    private final Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
 
     public Pathing() {
-        eventSubscription = EVENT_BUS.subscribe(
+        EVENT_BUS.subscribe(this,
             pair(ClientTickEvent.class, this::handleTick)
         );
     }

@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
-import com.zenith.feature.whitelist.PlayerList;
+import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
@@ -34,7 +34,7 @@ public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayer
                 // may occur at login if this packet is received before the tablist is populated
                 // this function performs a mojang api call so it will take awhile
                 // alternate solution would be to just wait another tick or so for the tablist to be populated
-                PlayerList.getProfileFromUUID(packet.getUuid())
+                PlayerListsManager.getProfileFromUUID(packet.getUuid())
                     .map(entry -> new PlayerListEntry(entry.name(), entry.uuid()))
                     .orElseGet(() -> new PlayerListEntry("", packet.getUuid())));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));

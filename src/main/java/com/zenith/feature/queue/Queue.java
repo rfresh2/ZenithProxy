@@ -3,7 +3,7 @@ package com.zenith.feature.queue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Suppliers;
 import com.zenith.feature.queue.mcping.MCPing;
-import com.zenith.feature.queue.mcping.PingOptions;
+import com.zenith.feature.queue.mcping.data.FinalResponse;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import reactor.netty.http.client.HttpClient;
@@ -32,14 +32,6 @@ public class Queue {
     private static QueueStatus queueStatus;
     private static final Pattern digitPattern = Pattern.compile("\\d+");
     private static final MCPing mcPing = new MCPing();
-    private static final PingOptions pingOptions = new PingOptions();
-    static {
-        pingOptions.setHostname("connect.2b2t.org");
-        pingOptions.setPort(25565);
-        pingOptions.setTimeout(3000);
-        pingOptions.setProtocolVersion(763);
-        pingOptions.setResolveDns(false);
-    }
 
     public static void start() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
@@ -89,10 +81,10 @@ public class Queue {
 
     public static boolean pingUpdate() {
         try {
-            final MCPing.ResponseDetails pingWithDetails = mcPing.getPingWithDetails(pingOptions);
-            final String queueStr = pingWithDetails.standard.getPlayers().getSample().get(1).getName();
+            final FinalResponse pingWithDetails = mcPing.ping("connect.2b2t.org", 25565, 3000, false);
+            final String queueStr = pingWithDetails.getPlayers().getSample().get(1).getName();
             final Matcher regularQMatcher = digitPattern.matcher(queueStr.substring(queueStr.lastIndexOf(" ")));
-            final String prioQueueStr = pingWithDetails.standard.getPlayers().getSample().get(2).getName();
+            final String prioQueueStr = pingWithDetails.getPlayers().getSample().get(2).getName();
             final Matcher prioQMatcher = digitPattern.matcher(prioQueueStr.substring(prioQueueStr.lastIndexOf(" ")));
             if (!queueStr.contains("Queue")) {
                 throw new IOException("Queue string doesn't contain Queue: " + queueStr);

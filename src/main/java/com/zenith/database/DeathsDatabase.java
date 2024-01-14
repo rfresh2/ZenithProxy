@@ -1,14 +1,14 @@
 package com.zenith.database;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
+import com.zenith.Proxy;
 import com.zenith.database.dto.records.DeathsRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.feature.api.ProfileData;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
-import com.zenith.feature.whitelist.PlayerList;
+import com.zenith.feature.whitelist.PlayerListsManager;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -23,8 +23,8 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             DeathMessageEvent.class, this::handleDeathMessageEvent
         );
     }
@@ -49,7 +49,7 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     public void handleDeathMessageEvent(DeathMessageEvent event) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org")) return;
+        if (!Proxy.getInstance().isOn2b2t()) return;
         writeDeath(event.deathMessageParseResult(), event.deathMessageRaw(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
@@ -104,7 +104,7 @@ public class DeathsDatabase extends LiveDatabase {
             return tablistEntry;
         } else {
             // note: this doesn't actually add them to the whitelist, just using this as a convenience function
-            final Optional<ProfileData> profileData = PlayerList.getProfileFromUsername(username);
+            final Optional<ProfileData> profileData = PlayerListsManager.getProfileFromUsername(username);
             if (profileData.isPresent()) {
                 return Optional.of(new PlayerListEntry(profileData.get().name(), profileData.get().uuid()));
             }

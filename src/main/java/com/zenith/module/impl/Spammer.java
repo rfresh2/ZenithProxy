@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
@@ -22,8 +21,8 @@ public class Spammer extends Module {
 
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTickEvent);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTickEvent);
     }
 
     @Override

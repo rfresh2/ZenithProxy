@@ -4,7 +4,6 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.collect.Iterators;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
@@ -43,8 +42,8 @@ public class AntiAFK extends Module {
     public static final int MOVEMENT_PRIORITY = 100;
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(ClientTickEvent.class, this::handleClientTickEvent),
             pair(DeathEvent.class, this::handleDeathEvent)
         );

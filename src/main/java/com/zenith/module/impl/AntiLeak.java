@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.OutboundChatEvent;
 import com.zenith.module.Module;
 import com.zenith.util.ComponentSerializer;
@@ -18,8 +17,8 @@ public class AntiLeak extends Module {
     private final Pattern notNumber = Pattern.compile("[^0-9]");
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(OutboundChatEvent.class, this::handleOutgoingChat);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, OutboundChatEvent.class, this::handleOutgoingChat);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.zenith.database;
 import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.records.ConnectionsRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 
@@ -23,8 +22,8 @@ public class ConnectionsDatabase extends LiveDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
             pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );

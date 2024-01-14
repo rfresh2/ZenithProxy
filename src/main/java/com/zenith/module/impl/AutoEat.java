@@ -10,7 +10,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.Server
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
@@ -35,8 +34,8 @@ public class AutoEat extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             ClientTickEvent.class, this::handleClientTick
         );
     }

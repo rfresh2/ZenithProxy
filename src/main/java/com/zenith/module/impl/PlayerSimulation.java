@@ -9,7 +9,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.Proxy;
 import com.zenith.event.SimpleEventBus;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
@@ -69,8 +68,8 @@ public class PlayerSimulation extends Module {
     private int jumpingCooldown;
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             SimpleEventBus.pair(ClientTickEvent.class, this::tick)
         );
     }

@@ -40,9 +40,7 @@ import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static com.zenith.util.RefStrings.BRAND_SUPPLIER;
@@ -126,20 +124,17 @@ public class ChunkCache implements CachedData {
     public static void sync() {
         final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return;
-        CACHE.getChunkCache().readCache(() -> {
-            currentPlayer.sendAsync(new ClientboundChunkBatchStartPacket());
-            CACHE.getChunkCache().cache.values().parallelStream()
-                .map(chunk -> new ClientboundLevelChunkWithLightPacket(
-                    chunk.x,
-                    chunk.z,
-                    chunk.serialize(CACHE.getChunkCache().getCodec()),
-                    chunk.heightMaps,
-                    chunk.blockEntities.toArray(new BlockEntityInfo[0]),
-                    chunk.lightUpdateData))
-                .forEach(currentPlayer::sendAsync);
-            currentPlayer.sendAsync(new ClientboundChunkBatchFinishedPacket(CACHE.getChunkCache().cache.values().size()));
-            return true;
-        });
+        currentPlayer.sendAsync(new ClientboundChunkBatchStartPacket());
+        CACHE.getChunkCache().cache.values().parallelStream()
+            .map(chunk -> new ClientboundLevelChunkWithLightPacket(
+                chunk.x,
+                chunk.z,
+                chunk.serialize(CACHE.getChunkCache().getCodec()),
+                chunk.heightMaps,
+                chunk.blockEntities.toArray(new BlockEntityInfo[0]),
+                chunk.lightUpdateData))
+            .forEach(currentPlayer::sendAsync);
+        currentPlayer.sendAsync(new ClientboundChunkBatchFinishedPacket(CACHE.getChunkCache().cache.values().size()));
     }
 
     public boolean isChunkLoaded(final int x, final int z) {
@@ -157,21 +152,18 @@ public class ChunkCache implements CachedData {
             CLIENT_LOG.warn("Received block update packet for block outside of dimension bounds: pos: {}, minY: {}, height: {}", pos, currentDimension.minY, currentDimension.height);
             return false;
         }
-        Boolean b = writeCache(() -> {
-            Chunk chunk = get(pos.getX() >> 4, pos.getZ() >> 4);
-            if (chunk != null) {
-                ChunkSection chunkSection = chunk.sections[(pos.getY() >> 4) - getMinSection()];
-                if (chunkSection == null) {
-                    chunkSection = new ChunkSection(0,
-                                                    DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
-                                                    DataPalette.createForBiome(biomesEntryBitsSize));
-                }
-                chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
-                handleBlockUpdateTileEntity(record, pos, chunkSection, chunk);
+
+        Chunk chunk = get(pos.getX() >> 4, pos.getZ() >> 4);
+        if (chunk != null) {
+            ChunkSection chunkSection = chunk.sections[(pos.getY() >> 4) - getMinSection()];
+            if (chunkSection == null) {
+                chunkSection = new ChunkSection(0,
+                                                DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
+                                                DataPalette.createForBiome(biomesEntryBitsSize));
             }
-            return Boolean.TRUE;
-        });
-        if (b == null || !b) {
+            chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+            handleBlockUpdateTileEntity(record, pos, chunkSection, chunk);
+        } else {
             CLIENT_LOG.warn("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
             return false;
         }
@@ -243,33 +235,29 @@ public class ChunkCache implements CachedData {
     }
 
     public boolean handleChunkBiomes(final ClientboundChunksBiomesPacket packet) {
-        return writeCache(() -> {
-            for (ChunkBiomeData biomeData: packet.getChunkBiomeData()) {
-                Chunk chunk = this.cache.get(chunkPosToLong(biomeData.getX(), biomeData.getZ()));
-                if (chunk == null) {
-                    CLIENT_LOG.warn("Received chunk biomes packet for unknown chunk: {} {}", biomeData.getX(), biomeData.getZ());
-                    return false;
-                } else {
-                    ByteBuf buf = Unpooled.wrappedBuffer(biomeData.getBuffer());
-                    for (int i = 0; i < chunk.sectionsCount; i++) {
-                        DataPalette biomesData = codec.readDataPalette(buf, PaletteType.BIOME, biomesEntryBitsSize);
-                        chunk.sections[i].setBiomeData(biomesData);
-                    }
+        for (ChunkBiomeData biomeData: packet.getChunkBiomeData()) {
+            Chunk chunk = this.cache.get(chunkPosToLong(biomeData.getX(), biomeData.getZ()));
+            if (chunk == null) {
+                CLIENT_LOG.warn("Received chunk biomes packet for unknown chunk: {} {}", biomeData.getX(), biomeData.getZ());
+                return false;
+            } else {
+                ByteBuf buf = Unpooled.wrappedBuffer(biomeData.getBuffer());
+                for (int i = 0; i < chunk.sectionsCount; i++) {
+                    DataPalette biomesData = codec.readDataPalette(buf, PaletteType.BIOME, biomesEntryBitsSize);
+                    chunk.sections[i].setBiomeData(biomesData);
                 }
             }
-            return true;
-        });
+        }
+        return true;
     }
 
     public boolean handleLightUpdate(final ClientboundLightUpdatePacket packet) {
-        return writeCache(() -> {
-            Chunk chunk = get(packet.getX(), packet.getZ());
-            if (chunk != null) {
-                chunk.lightUpdateData = packet.getLightData();
-            }
-            // todo: silently ignoring updates for uncached chunks. should we enqueue them to be processed later?
-            return true;
-        });
+        Chunk chunk = get(packet.getX(), packet.getZ());
+        if (chunk != null) {
+            chunk.lightUpdateData = packet.getLightData();
+        }
+        // todo: silently ignoring updates for uncached chunks. should we enqueue them to be processed later?
+        return true;
     }
 
     public boolean multiBlockUpdate(final ClientboundSectionBlocksUpdatePacket packet) {
@@ -284,60 +272,32 @@ public class ChunkCache implements CachedData {
     }
 
     public boolean updateTileEntity(final ClientboundBlockEntityDataPacket packet) {
-        return writeCache(() -> {
-            int chunkX = packet.getPosition().getX() >> 4;
-            int chunkZ = packet.getPosition().getZ() >> 4;
-            final Chunk chunk = this.cache.get(chunkPosToLong(chunkX, chunkZ));
-            if (chunk == null) {
-                return false;
-            }
-            // todo: when we place certain tile entities like beds, the server sends us a block entity update packet with empty nbt
-            //  wiki.vg says this should mean the tile entity gets removed
-            //  however that doesn't seem to be correct in this case
-            //  it's possible there's some interaction with block updates and block change ack packets clients are sent that diverge from this behavior
-            synchronized (chunk.blockEntities) {
-                final Optional<BlockEntityInfo> existingTileEntity = chunk.blockEntities.stream()
-                    .filter(tileEntity -> tileEntity.getX() == packet.getPosition().getX() &&
-                        tileEntity.getY() == packet.getPosition().getY() &&
-                        tileEntity.getZ() == packet.getPosition().getZ())
-                    .findFirst();
-                existingTileEntity.ifPresentOrElse(
-                    tileEntity -> tileEntity.setNbt(packet.getNbt()),
-                    () -> chunk.blockEntities.add(new BlockEntityInfo(packet.getPosition().getX(),
-                                                                      packet.getPosition().getY(),
-                                                                      packet.getPosition().getZ(),
-                                                                      packet.getType(),
-                                                                      packet.getNbt()))
-                );
-            }
-            return true;
-        });
-    }
-
-    public <T> T readCache(final Supplier<T> executable) {
-        try {
-            try {
-                return executable.get();
-            } catch (final Throwable e) {
-                CLIENT_LOG.error("Error reading chunk cache", e);
-            }
-        } catch (final Exception e) {
-            CLIENT_LOG.error("Error reading chunk cache", e);
+        int chunkX = packet.getPosition().getX() >> 4;
+        int chunkZ = packet.getPosition().getZ() >> 4;
+        final Chunk chunk = this.cache.get(chunkPosToLong(chunkX, chunkZ));
+        if (chunk == null) {
+            return false;
         }
-        return null;
-    }
-
-    public <T> T writeCache(final Supplier<T> executable) {
-        try {
-            try {
-                return executable.get();
-            } catch (final Throwable e) {
-                CLIENT_LOG.error("Error writing chunk cache", e);
-            }
-        } catch (final Exception e) {
-            CLIENT_LOG.error("Error writing chunk cache", e);
+        // todo: when we place certain tile entities like beds, the server sends us a block entity update packet with empty nbt
+        //  wiki.vg says this should mean the tile entity gets removed
+        //  however that doesn't seem to be correct in this case
+        //  it's possible there's some interaction with block updates and block change ack packets clients are sent that diverge from this behavior
+        synchronized (chunk.blockEntities) {
+            final Optional<BlockEntityInfo> existingTileEntity = chunk.blockEntities.stream()
+                .filter(tileEntity -> tileEntity.getX() == packet.getPosition().getX() &&
+                    tileEntity.getY() == packet.getPosition().getY() &&
+                    tileEntity.getZ() == packet.getPosition().getZ())
+                .findFirst();
+            existingTileEntity.ifPresentOrElse(
+                tileEntity -> tileEntity.setNbt(packet.getNbt()),
+                () -> chunk.blockEntities.add(new BlockEntityInfo(packet.getPosition().getX(),
+                                                                  packet.getPosition().getY(),
+                                                                  packet.getPosition().getZ(),
+                                                                  packet.getType(),
+                                                                  packet.getNbt()))
+            );
         }
-        return null;
+        return true;
     }
 
     @Override
@@ -356,21 +316,18 @@ public class ChunkCache implements CachedData {
             if (this.worldTimeData != null) {
                 consumer.accept(this.worldTimeData.toPacket());
             }
-            readCache(() -> {
-                consumer.accept(new ClientboundGameEventPacket(GameEvent.LEVEL_CHUNKS_LOAD_START, null));
-                consumer.accept(new ClientboundChunkBatchStartPacket());
-                for (final Chunk chunk : this.cache.values()) {
-                    consumer.accept(new ClientboundLevelChunkWithLightPacket(
-                        chunk.x,
-                        chunk.z,
-                        chunk.serialize(CACHE.getChunkCache().getCodec()),
-                        chunk.heightMaps,
-                        chunk.blockEntities.toArray(new BlockEntityInfo[0]),
-                        chunk.lightUpdateData));
-                }
-                consumer.accept(new ClientboundChunkBatchFinishedPacket(this.cache.size()));
-                return true;
-            });
+            consumer.accept(new ClientboundGameEventPacket(GameEvent.LEVEL_CHUNKS_LOAD_START, null));
+            consumer.accept(new ClientboundChunkBatchStartPacket());
+            for (final Chunk chunk : this.cache.values()) {
+                consumer.accept(new ClientboundLevelChunkWithLightPacket(
+                    chunk.x,
+                    chunk.z,
+                    chunk.serialize(CACHE.getChunkCache().getCodec()),
+                    chunk.heightMaps,
+                    chunk.blockEntities.toArray(new BlockEntityInfo[0]),
+                    chunk.lightUpdateData));
+            }
+            consumer.accept(new ClientboundChunkBatchFinishedPacket(this.cache.size()));
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }
@@ -383,36 +340,28 @@ public class ChunkCache implements CachedData {
 
     @Override
     public void reset(boolean full) {
-        writeCache(() -> {
-            this.cache.clear();
-            this.isRaining = false;
-            this.thunderStrength = 0.0f;
-            this.rainStrength = 0.0f;
-            if (full) {
-                this.biomes.clear();
-                this.biomesEntryBitsSize = -1;
-                this.dimensionRegistry.clear();
-                this.worldData = null;
-                this.currentDimension = null;
-                this.serverViewDistance = -1;
-                this.serverSimulationDistance = -1;
-                this.registryTag = null;
-                this.worldBorderData = WorldBorderData.DEFAULT;
-                this.worldTimeData = null;
-                this.serverBrand = BRAND_SUPPLIER.get();
-            }
-            return true;
-        });
+        this.cache.clear();
+        this.isRaining = false;
+        this.thunderStrength = 0.0f;
+        this.rainStrength = 0.0f;
+        if (full) {
+            this.biomes.clear();
+            this.biomesEntryBitsSize = -1;
+            this.dimensionRegistry.clear();
+            this.worldData = null;
+            this.currentDimension = null;
+            this.serverViewDistance = -1;
+            this.serverSimulationDistance = -1;
+            this.registryTag = null;
+            this.worldBorderData = WorldBorderData.DEFAULT;
+            this.worldTimeData = null;
+            this.serverBrand = BRAND_SUPPLIER.get();
+        }
     }
 
     @Override
     public String getSendingMessage() {
-        final AtomicReference<String> format = new AtomicReference<String>();
-        readCache(() -> {
-            format.set(String.format("Sending %d chunks", this.cache.size()));
-            return true;
-        });
-        return format.get();
+        return String.format("Sending %d chunks", this.cache.size());
     }
 
     private static int longToChunkX(final long l) {
@@ -424,33 +373,28 @@ public class ChunkCache implements CachedData {
     }
 
     public void add(final ClientboundLevelChunkWithLightPacket p) {
-        writeCache(() -> {
-            if (worldData == null) {
-                return false;
-            }
-            int chunkX = p.getX();
-            int chunkZ = p.getZ();
-            byte[] data = p.getChunkData();
-            ByteBuf buf = Unpooled.wrappedBuffer(data);
-            int sectionsCount = getSectionsCount();
-            Chunk existing = cache.get(chunkPosToLong(chunkX, chunkZ));
-            Chunk chunk = existing;
-            if (existing == null) {
-                chunk = new Chunk(chunkX,
-                                  chunkZ,
-                                  new ChunkSection[sectionsCount],
-                                  sectionsCount,
-                                  Collections.synchronizedList(new ArrayList<>(
-                                      List.of(p.getBlockEntities()))),
-                                  p.getLightData(),
-                                  p.getHeightMaps());
-            }
-            for (int i = 0; i < chunk.sectionsCount; i++) {
-                chunk.sections[i] = readChunkSection(buf);
-            }
-            cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
-            return true;
-        });
+        if (worldData == null) return;
+        int chunkX = p.getX();
+        int chunkZ = p.getZ();
+        byte[] data = p.getChunkData();
+        ByteBuf buf = Unpooled.wrappedBuffer(data);
+        int sectionsCount = getSectionsCount();
+        Chunk existing = cache.get(chunkPosToLong(chunkX, chunkZ));
+        Chunk chunk = existing;
+        if (existing == null) {
+            chunk = new Chunk(chunkX,
+                              chunkZ,
+                              new ChunkSection[sectionsCount],
+                              sectionsCount,
+                              Collections.synchronizedList(new ArrayList<>(
+                                  List.of(p.getBlockEntities()))),
+                              p.getLightData(),
+                              p.getHeightMaps());
+        }
+        for (int i = 0; i < chunk.sectionsCount; i++) {
+            chunk.sections[i] = readChunkSection(buf);
+        }
+        cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
     }
 
     public ChunkSection readChunkSection(ByteBuf buf) throws UncheckedIOException {
@@ -490,27 +434,22 @@ public class ChunkCache implements CachedData {
     }
 
     public Chunk get(int x, int z) {
-        return readCache(() -> {
-            Chunk chunk = this.cache.get(chunkPosToLong(x, z));
-            return chunk;
-        });
+        return this.cache.get(chunkPosToLong(x, z));
     }
 
     // section for blockpos
     public ChunkSection getChunkSection(int x, int y, int z) {
-        return readCache(() -> {
-            Chunk chunk = get(x >> 4, z >> 4);
-            if (chunk == null) return null;
-            int sectionIndex = (y >> 4) - getMinSection();
-            if (sectionIndex < 0 || sectionIndex >= chunk.sections.length) {
-                return null;
-            }
-            return chunk.sections[sectionIndex];
-        });
+        Chunk chunk = get(x >> 4, z >> 4);
+        if (chunk == null) return null;
+        int sectionIndex = (y >> 4) - getMinSection();
+        if (sectionIndex < 0 || sectionIndex >= chunk.sections.length) {
+            return null;
+        }
+        return chunk.sections[sectionIndex];
     }
 
     public void remove(int x, int z) {
-        writeCache(() -> this.cache.remove(chunkPosToLong(x, z)));
+        this.cache.remove(chunkPosToLong(x, z));
     }
 
     // reap any chunks we possibly didn't remove from the cache
@@ -521,18 +460,15 @@ public class ChunkCache implements CachedData {
         if (!Proxy.getInstance().isConnected()) return;
         final int playerX = ((int) CACHE.getPlayerCache().getX()) >> 4;
         final int playerZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
-        writeCache(() -> {
-            final List<Long> toRemove = cache.keySet().stream()
-                .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
-                .toList();
-            for (final long l : toRemove) {
-                cache.remove(l);
-            }
-            if (!toRemove.isEmpty()) {
-                CLIENT_LOG.warn("Reaped {} dead chunks", toRemove.size());
-            }
-            return true;
-        });
+        final List<Long> toRemove = cache.keySet().stream()
+            .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
+            .toList();
+        for (final long l : toRemove) {
+            cache.remove(l);
+        }
+        if (!toRemove.isEmpty()) {
+            CLIENT_LOG.debug("Reaped {} dead chunks", toRemove.size());
+        }
     }
 
     private boolean distanceOutOfRange(final int x1, final int y1, final int x2, final int y2) {

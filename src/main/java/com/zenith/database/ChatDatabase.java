@@ -2,7 +2,6 @@ package com.zenith.database;
 
 import com.zenith.Proxy;
 import com.zenith.database.dto.records.ChatsRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 
 import java.time.Instant;
@@ -10,7 +9,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class ChatDatabase extends LiveDatabase {
     public ChatDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
@@ -37,15 +37,15 @@ public class ChatDatabase extends LiveDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent
         );
     }
 
 
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org") // only write on 2b2t
+        if (!Proxy.getInstance().isOn2b2t() // only write on 2b2t
                 || Proxy.getInstance().isInQueue()  // ignore queue
                 || !event.message().startsWith("<")) return; // don't write whispers or system messages
         try {

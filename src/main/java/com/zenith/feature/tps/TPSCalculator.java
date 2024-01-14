@@ -1,6 +1,5 @@
 package com.zenith.feature.tps;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
 import com.google.common.primitives.Floats;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -19,10 +18,10 @@ public class TPSCalculator {
         reset();
     }
 
-    public void handleTimeUpdate(final ClientboundSetTimePacket serverUpdateTimePacket) {
+    public void handleTimeUpdate() {
         if (this.timeSinceLastTimeUpdate != -1L) {
             final double timeElapsed = (System.nanoTime() - timeSinceLastTimeUpdate) / 1E9;
-            final Float tps = Floats.constrainToRange((float) (20.0 / timeElapsed), 0.0f, 20.0f);
+            final float tps = Floats.constrainToRange((float) (20.0 / timeElapsed), 0.0f, 20.0f);
             synchronized (this.tickRates) {
                 this.tickRates.add(tps);
             }
@@ -42,7 +41,7 @@ public class TPSCalculator {
 
     private Float getTickRatesAverage() {
         synchronized (this.tickRates) {
-            if (this.tickRates.size() == 0) return 0.0f;
+            if (this.tickRates.isEmpty()) return 0.0f;
             return this.tickRates.stream()
                     .reduce(Float::sum)
                     .map(sum -> sum / this.tickRates.size())

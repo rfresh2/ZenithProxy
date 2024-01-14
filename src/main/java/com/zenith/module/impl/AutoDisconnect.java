@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.zenith.Proxy;
 import com.zenith.Shared;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.event.proxy.HealthAutoDisconnectEvent;
@@ -24,8 +23,8 @@ public class AutoDisconnect extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             pair(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
             pair(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
             pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)

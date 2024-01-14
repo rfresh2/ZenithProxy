@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class Extra {
-
     @SerializedName("color")
     private String color;
     @SerializedName("bold")

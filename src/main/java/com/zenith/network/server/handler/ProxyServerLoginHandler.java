@@ -16,7 +16,6 @@ import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
-import net.kyori.adventure.text.Component;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -103,7 +102,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
             CustomServerInfoBuilder serverInfoBuilder = Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
             session.send(new ClientboundServerDataPacket(
-                Component.text(serverInfoBuilder.getMotd()),
+                serverInfoBuilder.getMotd(),
                 Proxy.getInstance().getServerIcon(),
                 false
             ));
