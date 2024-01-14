@@ -12,7 +12,7 @@ public class SetTimeHandler implements AsyncPacketHandler<ClientboundSetTimePack
     @Override
     public boolean applyAsync(ClientboundSetTimePacket packet, ClientSession session) {
         CACHE.getChunkCache().updateWorldTime(packet);
-        TPS_CALCULATOR.handleTimeUpdate(packet);
+        TPS_CALCULATOR.handleTimeUpdate();
         return true;
     }
 }

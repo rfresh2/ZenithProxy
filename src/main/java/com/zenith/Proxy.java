@@ -78,6 +78,7 @@ public class Proxy {
     private int reconnectCounter;
     private boolean inQueue = false;
     private int queuePosition = 0;
+    @Setter
     private Instant connectTime;
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
