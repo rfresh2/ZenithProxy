@@ -66,7 +66,7 @@ public class PlayerListsManager {
             Wait.waitALittleMs(250); // trying to avoid mojang API rate limiting
             refreshEntry(entry.getValue())
                 .ifPresentOrElse(
-                    e -> uniquePlayers.put(entry.getKey(), e),
+                    entry::setValue,
                     () -> SERVER_LOG.error("PlayerLists refresh: unable to refresh player with username: {} and uuid: {}", entry.getValue().getUsername(), entry.getValue().getUuid().toString())
                 );
         }
