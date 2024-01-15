@@ -1,5 +1,6 @@
 package com.zenith;
 
+import com.zenith.command.CommandOutputHelper;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -21,5 +22,16 @@ public class TranslatableTextParserTest {
         assertTrue(deserialize instanceof TranslatableComponent);
         String serialize = ComponentSerializer.serializePlain(deserialize);
         assertEquals("<bonk2b2t> you should never talk about that with them", serialize);
+    }
+
+    @Test
+    public void replaceDiscordTimeTest() {
+        final String discordTimeString = "(<t:1629475200:T>)";
+        var out = CommandOutputHelper.replaceDiscordTime(discordTimeString);
+        assertEquals("(2021-08-20 16:00:00)", out);
+
+        final String notDiscordTimeString = "(hello what's up)";
+        var out2 = CommandOutputHelper.replaceDiscordTime(notDiscordTimeString);
+        assertEquals("(hello what's up)", out2);
     }
 }
