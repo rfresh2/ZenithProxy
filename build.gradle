@@ -125,7 +125,7 @@ dependencies {
     shade 'com.mojang:brigadier:1.2.9'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
-    shade("com.github.rfresh2.Discord4j:discord4j-core:09fa6b43f9") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:2504d08b5d") {
         exclude group: 'io.netty'
     }
     shade("com.github.rfresh2:MCProtocolLib:5b6d0b61dc") {
