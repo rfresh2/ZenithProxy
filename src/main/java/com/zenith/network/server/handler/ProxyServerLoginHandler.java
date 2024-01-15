@@ -54,7 +54,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             }
             EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
-                connection.getSpectatorEntityId(),
+                connection.getSpectatorSelfEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
                 CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]), // todo: is this correct?
                 CACHE.getPlayerCache().getMaxPlayers(),

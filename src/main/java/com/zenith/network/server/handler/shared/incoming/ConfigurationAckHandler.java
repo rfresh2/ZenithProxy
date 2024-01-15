@@ -8,7 +8,7 @@ import com.zenith.network.server.ServerConnection;
 public class ConfigurationAckHandler implements PacketHandler<ServerboundConfigurationAcknowledgedPacket, ServerConnection> {
     @Override
     public ServerboundConfigurationAcknowledgedPacket apply(final ServerboundConfigurationAcknowledgedPacket packet, final ServerConnection session) {
-        session.getPacketProtocol()  .setState(ProtocolState.CONFIGURATION);
+        session.getPacketProtocol().setState(ProtocolState.CONFIGURATION);
         return packet;
     }
 }

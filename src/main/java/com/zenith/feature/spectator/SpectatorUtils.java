@@ -4,12 +4,13 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.FloatEntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
@@ -95,14 +96,16 @@ public final class SpectatorUtils {
 
     private static void spawnSpectatorForOtherSessions(ServerConnection session, ServerConnection connection) {
         if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
-            session.sendAsync(new ClientboundAddPlayerPacket(
-                    CACHE.getPlayerCache().getEntityId(),
-                    CACHE.getProfileCache().getProfile().getId(),
-                    CACHE.getPlayerCache().getX(),
-                    CACHE.getPlayerCache().getY(),
-                    CACHE.getPlayerCache().getZ(),
-                    CACHE.getPlayerCache().getYaw(),
-                    CACHE.getPlayerCache().getPitch()));
+            session.sendAsync(new ClientboundAddEntityPacket(
+                CACHE.getPlayerCache().getEntityId(),
+                CACHE.getProfileCache().getProfile().getId(),
+                EntityType.PLAYER,
+                CACHE.getPlayerCache().getX(),
+                CACHE.getPlayerCache().getY(),
+                CACHE.getPlayerCache().getZ(),
+                CACHE.getPlayerCache().getYaw(),
+                CACHE.getPlayerCache().getPitch(),
+                CACHE.getPlayerCache().getThePlayer().getHeadYaw()));
             session.sendAsync(new ClientboundSetEntityDataPacket(
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));

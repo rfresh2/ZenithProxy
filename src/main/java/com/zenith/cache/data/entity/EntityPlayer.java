@@ -6,12 +6,13 @@ import com.github.steveice10.mc.protocol.data.game.entity.attribute.AttributeMod
 import com.github.steveice10.mc.protocol.data.game.entity.attribute.AttributeType;
 import com.github.steveice10.mc.protocol.data.game.entity.attribute.ModifierOperation;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerCombatKillPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHealthPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -123,15 +124,17 @@ public class EntityPlayer extends EntityLiving {
                 consumer.accept(new ClientboundPlayerCombatKillPacket(this.entityId, Component.text("")));
             }
         } else {
-            consumer.accept(new ClientboundAddPlayerPacket(
-                    this.entityId,
-                    this.uuid,
-                    this.x,
-                    this.y,
-                    this.z,
-                    this.yaw,
-                    this.pitch)
-            );
+            consumer.accept(new ClientboundAddEntityPacket(
+                this.entityId,
+                this.uuid,
+                EntityType.PLAYER,
+                this.x,
+                this.y,
+                this.z,
+                this.yaw,
+                this.pitch,
+                this.headYaw
+            ));
             consumer.accept(new ClientboundRotateHeadPacket(
                 this.entityId,
                 this.headYaw

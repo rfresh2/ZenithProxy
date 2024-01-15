@@ -15,11 +15,11 @@ import com.zenith.util.ComponentSerializer;
 import lombok.Getter;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 import static com.zenith.Shared.CLIENT_LOG;
 import static com.zenith.Shared.EVENT_BUS;
@@ -40,7 +40,8 @@ public class ClientListener implements SessionListener {
             Packet p = ZenithHandlerCodec.CLIENT_CODEC.handleInbound(packet, this.session);
             if (p != null && state == ProtocolState.GAME) {
                 for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
-                    connection.sendAsync(packet); // sends on each connection's own event loop
+                    if (connection.getPacketProtocol().getState() == ProtocolState.GAME)
+                        connection.sendAsync(packet); // sends on each connection's own event loop
                 }
             }
         } catch (Exception e) {

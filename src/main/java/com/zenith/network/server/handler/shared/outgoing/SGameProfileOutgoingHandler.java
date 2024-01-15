@@ -1,6 +1,7 @@
 package com.zenith.network.server.handler.shared.outgoing;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
+import com.github.steveice10.mc.auth.service.SessionService;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.zenith.Proxy;
@@ -10,10 +11,15 @@ import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
 import lombok.NonNull;
 
+import java.util.List;
+
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerConnection> {
+
+    private static List<GameProfile.Property> spectatorProfileProperties = null;
+
     @Override
     public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerConnection session) {
         try {
@@ -48,8 +54,8 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 session.disconnect("Timed out waiting for the proxy to login");
                 return null;
             }
-            SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", packet.getProfile().getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-            session.getProfileCache().setProfile(packet.getProfile());
+            SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+            session.getProfileCache().setProfile(clientGameProfile);
             if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
                 return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
             } else {
@@ -57,10 +63,18 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     session.disconnect("Spectator mode is disabled");
                     return null;
                 }
-                SERVER_LOG.info("Logging in {} [{}] as spectator", packet.getProfile().getName(), packet.getProfile().getId().toString());
+                SERVER_LOG.info("Logging in {} [{}] as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString());
                 session.setSpectator(true);
                 final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
-                                                                         packet.getProfile().getName());
+                                                                         clientGameProfile.getName());
+                // caching assumes the spectatorUUID is immutable
+                if (spectatorProfileProperties == null) {
+                    SessionService sessionService = new SessionService();
+                    sessionService.fillProfileProperties(spectatorFakeProfile);
+                    spectatorProfileProperties = spectatorFakeProfile.getProperties();
+                } else {
+                    spectatorFakeProfile.setProperties(spectatorProfileProperties);
+                }
                 session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
                 return new ClientboundGameProfilePacket(spectatorFakeProfile);
             }

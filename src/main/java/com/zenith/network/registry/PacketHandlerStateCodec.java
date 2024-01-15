@@ -44,7 +44,6 @@ public class PacketHandlerStateCodec<S extends Session> {
 
     @SuppressWarnings("unchecked")
     public <P extends Packet> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
-
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.postOutboundHandlers.get(packet.getClass());
         if (handler != null) {
             handler.apply(packet, session);

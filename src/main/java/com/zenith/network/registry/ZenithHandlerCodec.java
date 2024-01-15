@@ -14,15 +14,10 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddExperienceOrbPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundResetScorePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetDisplayObjectivePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
@@ -52,7 +47,6 @@ import com.zenith.network.client.handler.incoming.level.*;
 import com.zenith.network.client.handler.incoming.scoreboard.*;
 import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
-import com.zenith.network.client.handler.incoming.spawn.AddPlayerHandler;
 import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
@@ -134,7 +128,6 @@ public class ZenithHandlerCodec {
             .registerInbound(ClientboundCommandsPacket.class, new CommandsHandler())
             .registerInbound(ClientboundGameEventPacket.class, new GameEventHandler())
             .registerInbound(ClientboundLoginPacket.class, new LoginHandler())
-            .registerInbound(ClientboundGameProfilePacket.class, new GameProfileHandler())
             .registerInbound(ClientboundSectionBlocksUpdatePacket.class, new SectionBlocksUpdateHandler())
             .registerInbound(ClientboundSetCarriedItemPacket.class, new SetCarriedItemHandler())
             .registerInbound(ClientboundSetChunkCacheCenterPacket.class, new SetChunkCacheCenterHandler())
@@ -192,7 +185,6 @@ public class ZenithHandlerCodec {
             //SPAWN
             .registerInbound(ClientboundAddExperienceOrbPacket.class, new AddExperienceOrbHandler())
             .registerInbound(ClientboundAddEntityPacket.class, new AddEntityHandler())
-            .registerInbound(ClientboundAddPlayerPacket.class, new AddPlayerHandler())
             .registerInbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
             // Outbound
             .registerOutbound(ServerboundChatPacket.class, new OutgoingChatHandler())
@@ -263,6 +255,16 @@ public class ZenithHandlerCodec {
 
     public final PacketHandlerCodec SERVER_SPECTATOR_CODEC = PacketHandlerCodec.builder()
         .setLogger(SERVER_LOG)
+        .state(ProtocolState.LOGIN, PacketHandlerStateCodec.<ServerConnection>builder()
+            .allowUnhandled(false)
+            .registerInbound(ServerboundLoginAcknowledgedPacket.class, new LoginAckHandler())
+            .build())
+        .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ServerConnection>builder()
+            .allowUnhandled(false)
+            .registerInbound(ServerboundFinishConfigurationPacket.class, new FinishConfigurationHandler())
+//            .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
+            .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
+            .build())
         .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
             .allowUnhandled(false)
 
