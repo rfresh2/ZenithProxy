@@ -295,7 +295,7 @@ graalvmNative {
             var pgoPath = System.getenv("GRAALVM_PGO_PATH")
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
-                buildArgs.add("--pgo-instrument-path=$pgoPath")
+                buildArgs.add("--pgo=$pgoPath")
             }
             var pgoInstrument = System.getenv("GRAALVM_PGO_INSTRUMENT")
             if (pgoInstrument != null) {
