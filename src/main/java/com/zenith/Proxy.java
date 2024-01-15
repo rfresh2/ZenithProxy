@@ -361,7 +361,6 @@ public class Proxy {
         if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
         loggingIn.set(false);
         if (minecraftProtocol == null) throw new RuntimeException("Auth failed");
-        CACHE.getProfileCache().setProfile(minecraftProtocol.getProfile());
         AUTH_LOG.info("Logged in as {} [{}].", minecraftProtocol.getProfile().getName(), minecraftProtocol.getProfile().getId());
         SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
         return minecraftProtocol;

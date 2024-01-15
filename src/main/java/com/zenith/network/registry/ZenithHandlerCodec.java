@@ -267,8 +267,6 @@ public class ZenithHandlerCodec {
             .build())
         .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
             .allowUnhandled(false)
-
-            .registerInbound(ServerboundHelloPacket.class, new SHelloHandler())
             .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
             .registerInbound(ServerboundPongPacket.class, new SpectatorPongHandler())
             .registerInbound(ServerboundMovePlayerPosRotPacket.class, new PlayerPositionRotationSpectatorHandler())
