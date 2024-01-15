@@ -144,24 +144,31 @@ public class ChunkCache implements CachedData {
 
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
         // todo: recalculate chunk heightmaps NBT on each block update?
-        MutableVec3i pos = MutableVec3i.from(record.getPosition());
-        if (pos.getY() < currentDimension.minY || pos.getY() >= currentDimension.minY + currentDimension.height) {
-            CLIENT_LOG.warn("Received block update packet for block outside of dimension bounds: pos: {}, minY: {}, height: {}", pos, currentDimension.minY, currentDimension.height);
-            return false;
-        }
-
-        Chunk chunk = get(pos.getX() >> 4, pos.getZ() >> 4);
-        if (chunk != null) {
-            ChunkSection chunkSection = chunk.sections[(pos.getY() >> 4) - getMinSection()];
-            if (chunkSection == null) {
-                chunkSection = new ChunkSection(0,
-                                                DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
-                                                DataPalette.createForBiome(biomesEntryBitsSize));
+        try {
+            MutableVec3i pos = MutableVec3i.from(record.getPosition());
+            if (pos.getY() < currentDimension.minY || pos.getY() >= currentDimension.minY + currentDimension.height) {
+                // CLIENT_LOG.debug("Received block update packet for block outside of dimension bounds: pos: {}, minY: {}, height: {}", pos, currentDimension.minY, currentDimension.height);
+                // certain client modules might cause the server to send us block updates out of bounds if we send illegal dig packets
+                // instead of causing a retry of the block update, just return true and ignore it
+                return true;
             }
-            chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
-            handleBlockUpdateTileEntity(record, pos, chunkSection, chunk);
-        } else {
-            CLIENT_LOG.warn("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
+
+            Chunk chunk = get(pos.getX() >> 4, pos.getZ() >> 4);
+            if (chunk != null) {
+                ChunkSection chunkSection = chunk.sections[(pos.getY() >> 4) - getMinSection()];
+                if (chunkSection == null) {
+                    chunkSection = new ChunkSection(0,
+                                                    DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
+                                                    DataPalette.createForBiome(biomesEntryBitsSize));
+                }
+                chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+                handleBlockUpdateTileEntity(record, pos, chunkSection, chunk);
+            } else {
+                CLIENT_LOG.warn("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
+                return false;
+            }
+        } catch (final Exception e) {
+            CLIENT_LOG.debug("Error updating block", e);
             return false;
         }
         return true;
