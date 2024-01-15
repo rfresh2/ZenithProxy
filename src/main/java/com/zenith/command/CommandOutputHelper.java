@@ -13,7 +13,11 @@ import net.kyori.adventure.text.Component;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.zenith.Shared.DISCORD_BOT;
 import static com.zenith.Shared.TERMINAL_LOG;
@@ -31,6 +35,8 @@ public class CommandOutputHelper {
         Color.RUBY, "&c",
         Color.MOON_YELLOW, "&e"
     );
+
+    private static final Pattern DISCORD_TIMESTAMP_PATTERN = Pattern.compile("<t:(\\d+):.>");
 
     public void logMultiLineOutputToDiscord(CommandContext commandContext) {
         if (DISCORD_BOT.isRunning()) {
@@ -66,7 +72,7 @@ public class CommandOutputHelper {
         output.append(embed.title().get());
         if (embed.isDescriptionPresent()) {
             output.append("\n");
-            output.append(embed.description().get());
+            output.append(replaceDiscordTime(embed.description().get()));
         }
         if (embed.isUrlPresent()) {
             output.append("\n");
@@ -79,7 +85,7 @@ public class CommandOutputHelper {
             output.append(field.name());
             output.append(": ");
             if (field.value().equals("\u200B")) continue;
-            output.append(field.value());
+            output.append(replaceDiscordTime(field.value()));
         }
         session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown(output.toString()), false));
     }
@@ -100,7 +106,7 @@ public class CommandOutputHelper {
         output.append(embed.title().get());
         if (embed.isDescriptionPresent()) {
             output.append("\n");
-            output.append(embed.description().get());
+            output.append(replaceDiscordTime(embed.description().get()));
         }
         if (embed.isUrlPresent()) {
             output.append("\n");
@@ -113,7 +119,7 @@ public class CommandOutputHelper {
             output.append(field.name());
             output.append(": ");
             if (field.value().equals("\u200B")) continue;
-            output.append(field.value());
+            output.append(replaceDiscordTime(field.value()));
         }
         TERMINAL_LOG.info(unescape(output.toAnsi()));
     }
@@ -140,5 +146,15 @@ public class CommandOutputHelper {
             } else output.append(line);
         }
         return output.toString();
+    }
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String replaceDiscordTime(final String input) {
+        return DISCORD_TIMESTAMP_PATTERN.matcher(input).replaceAll(matchResult -> {
+            var timestamp = Long.parseLong(matchResult.group(1));
+            var instant = Instant.ofEpochSecond(timestamp);
+            return dateTimeFormatter.format(instant.atOffset(ZoneOffset.UTC));
+        });
     }
 }
