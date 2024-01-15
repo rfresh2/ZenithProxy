@@ -292,7 +292,17 @@ graalvmNative {
                     "--gc=serial",
                     "-J-XX:MaxRAMPercentage=90",
             )
-
+            var pgoPath = System.getenv("GRAALVM_PGO_PATH")
+            if (pgoPath != null) {
+                println("Using PGO profile: $pgoPath")
+                buildArgs.add("--pgo=$pgoPath")
+            } else {
+                var pgoInstrument = System.getenv("GRAALVM_PGO_INSTRUMENT")
+                if (pgoInstrument != null) {
+                    println("Instrumenting PGO")
+                    buildArgs.add("--pgo-instrument")
+                }
+            }
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }

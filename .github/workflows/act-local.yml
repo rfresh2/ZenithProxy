@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -35,6 +35,15 @@ jobs:
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
+
+      - name: Download GraalVM Profile
+        run: |
+          wget https://cdn.2b2t.vc/profile.iprof
+          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
+
+#      - name: Enable GraalVM Profile Instrumenting
+#        run: |
+#          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy
         uses: gradle/gradle-build-action@v2
