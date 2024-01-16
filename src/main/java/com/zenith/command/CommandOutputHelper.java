@@ -1,22 +1,19 @@
 package com.zenith.command;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
-import com.google.common.collect.ImmutableMap;
 import com.zenith.feature.whitelist.PlayerList;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import discord4j.core.spec.EmbedCreateFields;
 import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.rest.util.Color;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
-import org.jline.utils.AttributedStringBuilder;
-import org.jline.utils.AttributedStyle;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.zenith.Shared.DISCORD_BOT;
@@ -24,18 +21,6 @@ import static com.zenith.Shared.TERMINAL_LOG;
 
 @UtilityClass
 public class CommandOutputHelper {
-    // todo: we could skip the minedown parsing and just use adventure TextFormat RGB coloring
-    private static final Map<Color, String> discordColorToMCFormatCodeMap = ImmutableMap.of(
-        Color.BLACK, "&0",
-        Color.RED, "&c",
-        Color.CYAN, "&b",
-        Color.GREEN, "&a",
-        Color.MAGENTA, "&d",
-        Color.MEDIUM_SEA_GREEN, "&a",
-        Color.RUBY, "&c",
-        Color.MOON_YELLOW, "&e"
-    );
-
     private static final Pattern DISCORD_TIMESTAMP_PATTERN = Pattern.compile("<t:(\\d+):.>");
 
     public void logMultiLineOutputToDiscord(CommandContext commandContext) {
@@ -63,31 +48,38 @@ public class CommandOutputHelper {
 
     public void logEmbedOutputToInGame(final EmbedCreateSpec embed, final ServerConnection session) {
         if (!embed.isTitlePresent()) return;
-        final StringBuilder output = new StringBuilder();
+        var component = serializeDiscordEmbed(embed);
+        session.sendAsync(new ClientboundSystemChatPacket(component, false));
+    }
+
+    private Component serializeDiscordEmbed(final EmbedCreateSpec embed) {
+        Component c = Component.newline();
         if (embed.isColorPresent()) {
-            output.append(discordColorToMCFormatCodeMap.getOrDefault(embed.color().get(), ""));
+            var color = embed.color().get();
+            c = c.applyFallbackStyle(Style.style(TextColor.color(
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue())));
         }
-        output.append("\n");
         // todo: handle discord formatted bold, italicized, or underlined text
-        output.append(embed.title().get());
+        c = c.append(Component.text(embed.title().get()));
         if (embed.isDescriptionPresent()) {
-            output.append("\n");
-            output.append(replaceDiscordTime(embed.description().get()));
+            c = c
+                .appendNewline()
+                .append(Component.text(replaceDiscordTime(embed.description().get())));
         }
         if (embed.isUrlPresent()) {
-            output.append("\n");
-            output.append(embed.url().get());
+            c = c
+                .appendNewline()
+                .append(Component.text(embed.url().get()));
         }
         for (EmbedCreateFields.Field field : embed.fields()) {
             if (field.name().equals("\u200B")) continue; // ignore empty fields (used for spacing)
-            // todo: format fields as in discord where there can be multiple on a line
-            output.append("\n");
-            output.append(field.name());
-            output.append(": ");
-            if (field.value().equals("\u200B")) continue;
-            output.append(replaceDiscordTime(field.value()));
+            c = c
+                .appendNewline()
+                .append(Component.text(field.name() + ": " + replaceDiscordTime(field.value())));
         }
-        session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown(output.toString()), false));
+        return c;
     }
 
     public void logMultiLineOutputToInGame(final CommandContext commandContext, final ServerConnection session) {
@@ -97,31 +89,9 @@ public class CommandOutputHelper {
     public void logEmbedOutputToTerminal(final EmbedCreateSpec embed) {
         // todo: handle formatted bold, italicized, or underlined text
         if (!embed.isTitlePresent()) return;
-        final AttributedStringBuilder output = new AttributedStringBuilder();
-        if (embed.isColorPresent()) {
-            final Color color = embed.color().get();
-            output.style(AttributedStyle.DEFAULT.foreground(color.getRed(), color.getBlue(), color.getGreen()));
-        }
-        output.append("\n");
-        output.append(embed.title().get());
-        if (embed.isDescriptionPresent()) {
-            output.append("\n");
-            output.append(replaceDiscordTime(embed.description().get()));
-        }
-        if (embed.isUrlPresent()) {
-            output.append("\n");
-            output.append(embed.url().get());
-        }
-        for (EmbedCreateFields.Field field : embed.fields()) {
-            if (field.name().equals("\u200B")) continue; // ignore empty fields (used for spacing)
-            // todo: format fields as in discord where there can be multiple on a line
-            output.append("\n");
-            output.append(field.name());
-            output.append(": ");
-            if (field.value().equals("\u200B")) continue;
-            output.append(replaceDiscordTime(field.value()));
-        }
-        TERMINAL_LOG.info(unescape(output.toAnsi()));
+        var component = serializeDiscordEmbed(embed);
+        var serializedAnsi = ComponentSerializer.serializeAnsi(component);
+        TERMINAL_LOG.info(serializedAnsi);
     }
 
     public String unescape(String s) {
