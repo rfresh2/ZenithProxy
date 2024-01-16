@@ -87,11 +87,9 @@ public class CommandOutputHelper {
     }
 
     public void logEmbedOutputToTerminal(final EmbedCreateSpec embed) {
-        // todo: handle formatted bold, italicized, or underlined text
         if (!embed.isTitlePresent()) return;
         var component = serializeDiscordEmbed(embed);
-        var serializedAnsi = ComponentSerializer.serializeAnsi(component);
-        TERMINAL_LOG.info(serializedAnsi);
+        TERMINAL_LOG.info(ComponentSerializer.serializeJson(component));
     }
 
     public String unescape(String s) {
