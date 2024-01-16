@@ -219,7 +219,8 @@ public class DiscordBot {
                 .flatMap(g -> g.changeSelfNickname(nick))
                 .block();
         } catch (final Exception e) {
-            DISCORD_LOG.error("Failed updating bot's nickname", e);
+            DISCORD_LOG.warn("Failed updating bot's nickname. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed updating bot's nickname. Check that the bot has correct permissions", e);
         }
     }
 
@@ -232,7 +233,8 @@ public class DiscordBot {
                                                .asRequest())
                 .block();
         } catch (final Exception e) {
-            DISCORD_LOG.error("Failed updating bot's description", e);
+            DISCORD_LOG.warn("Failed updating bot's description. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed updating bot's description", e);
         }
     }
 
@@ -279,7 +281,8 @@ public class DiscordBot {
                 this.mainRestChannel.createMessage(message).block();
             }
         } catch (final Throwable e) {
-            DISCORD_LOG.error("Message processor error", e);
+            DISCORD_LOG.error("Failed sending message to main channel. Check that the bot has correct permissions.");
+            DISCORD_LOG.debug("Failed sending message to main channel. Check that the bot has correct permissions.", e);
         }
     }
 
@@ -291,7 +294,8 @@ public class DiscordBot {
                     || !(message.getJsonPayload().content().isAbsent() || message.getJsonPayload().content().get().isEmpty())))
                 this.relayRestChannel.createMessage(message).block();
         } catch (final Throwable e) {
-            DISCORD_LOG.error("Message processor error", e);
+            DISCORD_LOG.error("Failed sending message to relay channel. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed sending message to relay channel. Check that the bot has correct permissions", e);
         }
     }
 
@@ -321,14 +325,15 @@ public class DiscordBot {
                 this.client.updatePresence(disconnectedPresence).block();
         } catch (final IllegalStateException e) {
             if (e.getMessage().contains("Backpressure overflow")) {
-                DISCORD_LOG.error("Caught backpressure overflow, restarting discord session", e);
+                DISCORD_LOG.error("Caught backpressure overflow, restarting discord session");
                 SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
                     this.stop(false);
                     this.start();
                 });
             } else throw e;
         } catch (final Exception e) {
-            DISCORD_LOG.error("Failed updating discord presence", e);
+            DISCORD_LOG.error("Failed updating discord presence. Check that the bot has correct permissions.");
+            DISCORD_LOG.debug("Failed updating discord presence. Check that the bot has correct permissions.", e);
         }
     }
 
@@ -420,7 +425,8 @@ public class DiscordBot {
                                      .build())
                 .block();
         } catch (final Exception e) {
-            DISCORD_LOG.error("Failed updating discord profile image", e);
+            DISCORD_LOG.warn("Failed updating discord profile image. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed updating discord profile image. Check that the bot has correct permissions", e);
         }
     }
 
@@ -431,99 +437,72 @@ public class DiscordBot {
                                             .build().asRequest());
             CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
         } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord embed message", e);
+            DISCORD_LOG.error("Failed sending discord embed message. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed sending discord embed message. Check that the bot has correct permissions", e);
         }
     }
 
     public void sendRelayEmbedMessage(EmbedCreateSpec embedCreateSpec) {
-        try {
-            relayChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .addEmbed(embedCreateSpec)
-                                            .build().asRequest());
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord embed message to relay", e);
-        }
+        relayChannelMessageQueue.add(MessageCreateSpec.builder()
+                                        .addEmbed(embedCreateSpec)
+                                        .build().asRequest());
     }
 
     private void sendEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .content(message)
-                                            .addEmbed(embedCreateSpec)
-                                            .build().asRequest());
-            TERMINAL_LOG.info(message);
-            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord embed message", e);
-        }
+        mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                        .content(message)
+                                        .addEmbed(embedCreateSpec)
+                                        .build().asRequest());
+        TERMINAL_LOG.info(message);
+        CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
     }
 
     private void sendRelayEmbedMessage(String message, EmbedCreateSpec embedCreateSpec) {
-        try {
-            relayChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .content(message)
-                                            .addEmbed(embedCreateSpec)
-                                            .build().asRequest());
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord embed message to relay", e);
-        }
+        relayChannelMessageQueue.add(MessageCreateSpec.builder()
+                                         .content(message)
+                                         .addEmbed(embedCreateSpec)
+                                         .build().asRequest());
     }
 
     public void sendMessage(final String message) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .content(message)
-                                            .build().asRequest());
-            TERMINAL_LOG.info(message);
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
+        mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                        .content(message)
+                                        .build().asRequest());
+        TERMINAL_LOG.info(message);
     }
 
     public void sendRelayMessage(final String message) {
-        try {
-            relayChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .content(message)
-                                            .build().asRequest());
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message to relay", e);
-        }
+        relayChannelMessageQueue.add(MessageCreateSpec.builder()
+                                         .content(message)
+                                         .build().asRequest());
     }
 
     private void sendEmbedMessageWithButtons(String message, EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .content(message)
-                                            .addEmbed(embedCreateSpec)
-                                            .components(ActionRow.of(buttons))
-                                            .build().asRequest());
-            TERMINAL_LOG.info(message);
-            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
-            client.getEventDispatcher()
-                .on(ButtonInteractionEvent.class, mapper)
-                .timeout(timeout)
-                .onErrorResume(TimeoutException.class, e -> Mono.empty())
-                .subscribe();
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
+        mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                        .content(message)
+                                        .addEmbed(embedCreateSpec)
+                                        .components(ActionRow.of(buttons))
+                                        .build().asRequest());
+        TERMINAL_LOG.info(message);
+        CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
+        client.getEventDispatcher()
+            .on(ButtonInteractionEvent.class, mapper)
+            .timeout(timeout)
+            .onErrorResume(TimeoutException.class, e -> Mono.empty())
+            .subscribe();
     }
 
     private void sendEmbedMessageWithButtons(EmbedCreateSpec embedCreateSpec, List<Button> buttons, Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper, Duration timeout) {
-        try {
-            mainChannelMessageQueue.add(MessageCreateSpec.builder()
-                                            .addEmbed(embedCreateSpec)
-                                            .components(ActionRow.of(buttons))
-                                            .build().asRequest());
-            CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
-            client.getEventDispatcher()
-                .on(ButtonInteractionEvent.class, mapper)
-                .timeout(timeout)
-                .onErrorResume(TimeoutException.class, e -> Mono.empty())
-                .subscribe();
-        } catch (final Exception e) {
-            DISCORD_LOG.error("Failed sending discord message", e);
-        }
+        mainChannelMessageQueue.add(MessageCreateSpec.builder()
+                                        .addEmbed(embedCreateSpec)
+                                        .components(ActionRow.of(buttons))
+                                        .build().asRequest());
+        CommandOutputHelper.logEmbedOutputToTerminal(embedCreateSpec);
+        client.getEventDispatcher()
+            .on(ButtonInteractionEvent.class, mapper)
+            .timeout(timeout)
+            .onErrorResume(TimeoutException.class, e -> Mono.empty())
+            .subscribe();
     }
 
     private ClientPresence getQueuePresence() {
