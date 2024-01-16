@@ -27,14 +27,13 @@ public final class ComponentSerializer {
         final String TERM = System.getenv("TERM"); // this should be set on unix systems
         // must be set before creating ansi serializer
         if (TERM == null) {
-            String colorLevel = "";
+            String colorLevel = "indexed16";
             final String intellij = System.getenv("IDEA_INITIAL_DIRECTORY");
             final String windowsTerminal = System.getenv("WT_SESSION");
             final String cmd = System.getenv("PROMPT");
             if (intellij != null || windowsTerminal != null || cmd != null)
                 colorLevel = "truecolor";
-            if (!colorLevel.isBlank())
-                System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, colorLevel);
+            System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, colorLevel);
         }
         ansiComponentSerializer = ANSIComponentSerializer.builder()
             .flattener(ComponentFlattener.basic()
