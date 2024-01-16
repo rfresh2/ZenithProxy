@@ -24,9 +24,18 @@ public final class ComponentSerializer {
     private static final ANSIComponentSerializer ansiComponentSerializer;
 
     static { // fixes no ansi colors being serialized on dumb terminals
-        final String TERM = System.getenv("TERM");
+        final String TERM = System.getenv("TERM"); // this should be set on unix systems
         // must be set before creating ansi serializer
-        if (TERM == null) System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, "indexed16");
+        if (TERM == null) {
+            String colorLevel = "";
+            final String intellij = System.getenv("IDEA_INITIAL_DIRECTORY");
+            final String windowsTerminal = System.getenv("WT_SESSION");
+            final String cmd = System.getenv("PROMPT");
+            if (intellij != null || windowsTerminal != null || cmd != null)
+                colorLevel = "truecolor";
+            if (!colorLevel.isBlank())
+                System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, colorLevel);
+        }
         ansiComponentSerializer = ANSIComponentSerializer.builder()
             .flattener(ComponentFlattener.basic()
                            .toBuilder()
