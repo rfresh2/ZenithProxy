@@ -321,6 +321,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.github.steveice10.mc.auth.service.SessionService$MinecraftProfileResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket",
   "fields":[{"name":"message"}]
 },
@@ -1485,7 +1490,8 @@
   "name":"java.io.FilePermission"
 },
 {
-  "name":"java.io.IOException"
+  "name":"java.io.IOException",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"java.io.Serializable",
