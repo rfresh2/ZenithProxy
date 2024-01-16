@@ -12,6 +12,7 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.util.MentionUtil;
 import discord4j.rest.util.Color;
 
 import java.util.List;
@@ -76,10 +77,17 @@ public abstract class Command {
             .map(Snowflake::asString)
             .anyMatch(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId));
         if (!hasAccountOwnerRole) {
+            String accountOwnerRoleMention = "";
+            try {
+                accountOwnerRoleMention = MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId));
+            } catch (final Exception e) {
+                // fall through
+            }
             context.getEmbedBuilder()
                 .addField("Error",
                           "User: " + event.getMember().map(User::getTag).orElse("Unknown")
-                              + " is not authorized to execute this command! Contact the account owner", false);
+                              + " is not authorized to execute this command! "
+                              + "You must have the account owner role: " + accountOwnerRoleMention, false);
         }
         return hasAccountOwnerRole;
     }
