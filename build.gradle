@@ -103,7 +103,7 @@ configurations {
 ext {
     lombokVersion = "1.18.30"
     postgresVersion = '42.7.1'
-    nettyVersion = '4.1.104.Final'
+    nettyVersion = '4.1.105.Final'
     fastutilVersion = "8.5.13-SNAPSHOT"
     jdbiVersion = "3.43.0"
 }
@@ -128,7 +128,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:dc7bc81bc1") {
         exclude group: 'io.netty'
     }
-    shade("com.github.rfresh2:MCProtocolLib:f4c52132e6") {
+    shade("com.github.rfresh2:MCProtocolLib:170838beb9") {
         exclude group: 'io.netty.incubator'
         exclude group: 'io.netty'
         exclude group: 'com.microsoft.azure'
