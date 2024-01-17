@@ -11,7 +11,6 @@ import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.CommandSource;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
-import discord4j.core.spec.EmbedCreateSpec;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 
@@ -75,7 +74,7 @@ public class InGameCommandManager {
     private void executeInGameCommand(final String command, final ServerConnection session) {
         final CommandContext commandContext = CommandContext.create(command, CommandSource.IN_GAME_PLAYER);
         COMMAND_MANAGER.execute(commandContext);
-        final EmbedCreateSpec embed = commandContext.getEmbedBuilder().build();
+        var embed = commandContext.getEmbed();
         CommandOutputHelper.logEmbedOutputToInGame(embed, session);
         CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
         if (!embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty())

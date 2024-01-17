@@ -5,8 +5,8 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.Embed;
 import com.zenith.module.impl.AntiLeak;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
@@ -36,28 +36,28 @@ public class AntiLeakCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.antiLeak.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AntiLeak.class).syncEnabledFromConfig();
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("AntiLeak " + (CONFIG.client.extra.antiLeak.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("rangeCheck")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.antiLeak.rangeCheck = getToggle(c, "toggle");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("RangeCheck " + (CONFIG.client.extra.antiLeak.rangeCheck ? "On!" : "Off!"));
                           return 1;
                       })))
             .then(literal("rangeFactor")
                       .then(argument("factor", doubleArg(0.1, 1000.0)).executes(c -> {
                           CONFIG.client.extra.antiLeak.rangeFactor = getDouble(c, "factor");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("RangeFactor set to " + CONFIG.client.extra.antiLeak.rangeFactor);
                           return 1;
                       })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("AntiLeak", toggleStr(CONFIG.client.extra.antiLeak.enabled), false)
             .addField("RangeCheck", toggleStr(CONFIG.client.extra.antiLeak.rangeCheck), false)

@@ -38,7 +38,7 @@ public class UpdateCommand extends Command {
                 DISCORD_LOG.error("Failed to update", e);
                 CONFIG.discord.isUpdating = false;
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                         .title("Failed updating")
                         .color(Color.RUBY);
             }

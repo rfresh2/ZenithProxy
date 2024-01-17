@@ -38,7 +38,7 @@ public class KickCommand extends Command {
                     kickedPlayers.add(connection.getProfileCache().getProfile().getName());
                     connection.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                 }
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Kicked " + kickedPlayers.size() + " players")
                     .addField("Players", kickedPlayers.stream().map(DiscordBot::escape).collect(Collectors.joining(", ")), false);
                 return 1;
@@ -50,11 +50,11 @@ public class KickCommand extends Command {
                     .collect(Collectors.toList());
                 if (!connections.isEmpty()) {
                     connections.forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title("Kicked " + escape(playerName))
                         .color(Color.CYAN);
                 } else {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title("Unable to kick " + escape(playerName))
                         .color(Color.RUBY)
                         .addField("Reason", "Player is not connected", false);

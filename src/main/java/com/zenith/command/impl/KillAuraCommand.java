@@ -5,9 +5,9 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.Embed;
 import com.zenith.module.Module;
 import com.zenith.module.impl.KillAura;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
@@ -42,55 +42,55 @@ public class KillAuraCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.killAura.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.getModule(KillAura.class).ifPresent(Module::syncEnabledFromConfig);
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                              .title("Kill Aura " + (CONFIG.client.extra.killAura.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("attackdelay")
                       .then(argument("ticks", integer(0, 1000)).executes(c -> {
                           CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                                        .title("Attack Delay Ticks Set!");
                           return 1;
                       })))
             .then(literal("targetplayers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetPlayers = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .title("Target Players " + (CONFIG.client.extra.killAura.targetPlayers ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("targetmobs")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .title("Target Mobs " + (CONFIG.client.extra.killAura.targetHostileMobs ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("targetarmorstands")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetArmorStands = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .title("Target Armor Stands " + (CONFIG.client.extra.killAura.targetArmorStands ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("weaponswitch")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.switchWeapon = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .title("Weapon Switching " + (CONFIG.client.extra.killAura.switchWeapon ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("range").then(argument("range", doubleArg(0.01, 5.0)).executes(c -> {
                 CONFIG.client.extra.killAura.attackRange = getDouble(c, "range");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                              .title("Attack Range Set!");
                 return 1;
             })));
     }
 
     @Override
-    public void postPopulate(EmbedCreateSpec.Builder builder) {
+    public void postPopulate(Embed builder) {
         builder
             .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled), false)
             .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers), false)

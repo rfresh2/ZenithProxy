@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;
@@ -34,28 +34,28 @@ public class ExtraChatCommand extends Command {
             .then(literal("hidechat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideChat = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Chat " + (CONFIG.client.extra.chat.hideChat ? "hidden!" : "shown!"));
                             return 1;
                         })))
             .then(literal("hidewhispers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideWhispers = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Whispers " + (CONFIG.client.extra.chat.hideWhispers ? "hidden!" : "shown!"));
                             return 1;
                         })))
             .then(literal("hidedeathmessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideDeathMessages = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Death messages " + (CONFIG.client.extra.chat.hideDeathMessages ? "hidden!" : "shown!"));
                             return 1;
                         })))
             .then(literal("showconnectionmessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.showConnectionMessages = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Connection messages " + (CONFIG.client.extra.chat.showConnectionMessages ? "shown!" : "hidden!"));
                             return 1;
                         })));
@@ -63,7 +63,7 @@ public class ExtraChatCommand extends Command {
 
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Hide chat", CONFIG.client.extra.chat.hideChat ? "on" : "off", true)
             .addField("Hide whispers", CONFIG.client.extra.chat.hideWhispers ? "on" : "off", true)

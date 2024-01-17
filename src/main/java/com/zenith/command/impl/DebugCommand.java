@@ -32,7 +32,7 @@ public class DebugCommand extends Command {
             .then(literal("autoconnect")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.autoConnect = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Auto Connect " + (CONFIG.client.autoConnect ? "On!" : "Off!"))
                                 .color(Color.CYAN);
                             return 1;
@@ -51,7 +51,7 @@ public class DebugCommand extends Command {
                                 CONFIG.debug.packet.postSent = false;
                                 CONFIG.debug.packet.preSent = false;
                             }
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                     .title("Packet Log " + (toggle ? "On!" : "Off!"))
                                     .color(Color.CYAN);
                                 return 1;

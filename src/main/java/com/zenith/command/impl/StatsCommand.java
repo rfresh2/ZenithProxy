@@ -38,12 +38,12 @@ public class StatsCommand extends Command {
                 final String playerName = c.getArgument("playerName", String.class);
                 final Optional<StatsResponse> statsResponse = VC_API.getStats(playerName);
                 if (statsResponse.isEmpty()) {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title(playerName + " not found");
                     return -1;
                 }
                 final StatsResponse playerStats = statsResponse.get();
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Player Stats: " + escape(playerName))
                     .color(Color.CYAN)
                     .addField("Joins", ""+playerStats.joinCount(), true)
@@ -60,8 +60,7 @@ public class StatsCommand extends Command {
                     .addField("\u200B", "\u200B", true)
                     .addField("Chats", ""+playerStats.chatsCount(), true)
                     .addField("\u200B", "\u200B", true)
-                    .addField("\u200B", "\u200B", true)
-                    .build();
+                    .addField("\u200B", "\u200B", true);
                 return 1;
             }));
     }

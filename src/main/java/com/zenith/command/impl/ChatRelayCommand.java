@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
@@ -39,77 +39,77 @@ public class ChatRelayCommand extends Command {
         return command("chatRelay")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.chatRelay.enable = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Chat Relay " + (CONFIG.discord.chatRelay.enable ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("connectionMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.connectionMessages = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Connection Messages " + (CONFIG.discord.chatRelay.connectionMessages ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("whispers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.whispers = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Whispers " + (CONFIG.discord.chatRelay.whispers ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("publicChat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.publicChats = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Public Chat " + (CONFIG.discord.chatRelay.publicChats ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("deathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.discord.chatRelay.deathMessages = getToggle(c, "toggle");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Death Messages " + (CONFIG.discord.chatRelay.deathMessages ? "On!" : "Off!"));
                           return 1;
                       })))
             .then(literal("serverMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.discord.chatRelay.serverMessages = getToggle(c, "toggle");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Server Messages " + (CONFIG.discord.chatRelay.serverMessages ? "On!" : "Off!"));
                           return 1;
                       })))
             .then(literal("whisperMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.mentionRoleOnWhisper = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Whisper Mentions " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("nameMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.mentionRoleOnNameMention = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Name Mentions " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("mentionsWhileConnected")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.mentionWhileConnected = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Mentions While Connected " + (CONFIG.discord.chatRelay.mentionWhileConnected ? "On!" : "Off!"));
                             return 1;
                       })))
             .then(literal("sendMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.sendMessages = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Send Messages " + (CONFIG.discord.chatRelay.sendMessages ? "On!" : "Off!"));
                             return 1;
                       })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Chat Relay", toggleStr(CONFIG.discord.chatRelay.enable), false)
             .addField("Connection Messages", toggleStr(CONFIG.discord.chatRelay.connectionMessages), false)

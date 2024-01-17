@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -33,9 +33,9 @@ public class IgnoreCommand extends Command {
                 .then(literal("add").then(argument("player", string()).executes(c -> {
                     String player = c.getArgument("player", String.class);
                     PLAYER_LISTS.getIgnoreList().add(player).ifPresentOrElse(
-                            ignored -> c.getSource().getEmbedBuilder()
+                            ignored -> c.getSource().getEmbed()
                                     .title(escape(ignored.getUsername()) + " ignored!"),
-                            () -> c.getSource().getEmbedBuilder()
+                            () -> c.getSource().getEmbed()
                                     .title("Failed to add " + escape(player) + " to ignore list. Unable to lookup profile.")
                                     .color(Color.RUBY));
                     return 1;
@@ -43,24 +43,24 @@ public class IgnoreCommand extends Command {
                 .then(literal("del").then(argument("player", string()).executes(c -> {
                     String player = c.getArgument("player", String.class);
                     PLAYER_LISTS.getIgnoreList().remove(player);
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title(escape(player) + " removed from ignore list!");
                     return 1;
                 })))
                 .then(literal("list").executes(c -> {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Ignore List");
                 }))
                 .then(literal("clear").executes(c -> {
                     PLAYER_LISTS.getIgnoreList().clear();
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Ignore list cleared!");
                     return 1;
                 }));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .description("**Ignore List**\n" + playerListToString(PLAYER_LISTS.getIgnoreList()))
             .color(Color.CYAN);

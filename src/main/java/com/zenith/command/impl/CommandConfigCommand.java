@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
@@ -39,13 +39,13 @@ public class CommandConfigCommand extends Command {
                         .executes(c -> {
                             final String newPrefix = c.getArgument("prefix", String.class);
                             if (newPrefix.length() > 1) {
-                                c.getSource().getEmbedBuilder()
+                                c.getSource().getEmbed()
                                     .title("Error")
                                     .description("Prefix must be a single character");
                                 return -1;
                             } else {
                                 CONFIG.discord.prefix = newPrefix;
-                                c.getSource().getEmbedBuilder()
+                                c.getSource().getEmbed()
                                     .title("Command Config")
                                     .description("Set discord prefix to " + CONFIG.discord.prefix);
                                 return 1;
@@ -54,7 +54,7 @@ public class CommandConfigCommand extends Command {
             .then(literal("ingame")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.inGameCommands.enable = getToggle(c, "toggle");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("In Game Commands " + (CONFIG.inGameCommands.enable ? "On!" : "Off!"));
                           return 1;
                       }))
@@ -63,13 +63,13 @@ public class CommandConfigCommand extends Command {
                                           .executes(c -> {
                                               final String newPrefix = c.getArgument("prefix", String.class);
                                               if (newPrefix.length() > 1) {
-                                                  c.getSource().getEmbedBuilder()
+                                                  c.getSource().getEmbed()
                                                       .title("Error")
                                                       .description("Prefix must be a single character");
                                                   return -1;
                                               } else {
                                                   CONFIG.inGameCommands.prefix = newPrefix;
-                                                  c.getSource().getEmbedBuilder()
+                                                  c.getSource().getEmbed()
                                                       .title("Command Config")
                                                       .description("Set ingame prefix to " + CONFIG.inGameCommands.prefix);
                                                   return 1;
@@ -78,7 +78,7 @@ public class CommandConfigCommand extends Command {
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Discord Prefix", CONFIG.discord.prefix, false)
             .addField("Ingame Commands", toggleStr(CONFIG.inGameCommands.enable), false)

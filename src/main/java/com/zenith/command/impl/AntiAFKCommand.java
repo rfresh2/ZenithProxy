@@ -6,9 +6,9 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.Embed;
 import com.zenith.module.Module;
 import com.zenith.module.impl.AntiAFK;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -48,7 +48,7 @@ public class AntiAFKCommand extends Command {
                 boolean toggle = getToggle(c, "toggle");
                 CONFIG.client.extra.antiafk.enabled = toggle;
                 MODULE_MANAGER.getModule(AntiAFK.class).ifPresent(Module::syncEnabledFromConfig);
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("AntiAFK " + (toggle ? "On!" : "Off!"));
                 return 1;
             }))
@@ -56,13 +56,13 @@ public class AntiAFKCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
                           CONFIG.client.extra.antiafk.actions.rotate = toggle;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Rotate " + (toggle ? "On!" : "Off!"));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
                           CONFIG.client.extra.antiafk.actions.rotateDelayTicks = IntegerArgumentType.getInteger(c, "delay");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Rotate Delay Set!");
                           return 1;
                       }))))
@@ -70,13 +70,13 @@ public class AntiAFKCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
                           CONFIG.client.extra.antiafk.actions.swingHand = toggle;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Swing " + (toggle ? "On!" : "Off!"));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
                           CONFIG.client.extra.antiafk.actions.swingDelayTicks = IntegerArgumentType.getInteger(c, "delay");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Swing Delay Set!");
                           return 1;
                       }))))
@@ -84,13 +84,13 @@ public class AntiAFKCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
                           CONFIG.client.extra.antiafk.actions.walk = toggle;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Walk " + (toggle ? "On!" : "Off!"));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
                           CONFIG.client.extra.antiafk.actions.walkDelayTicks = IntegerArgumentType.getInteger(c, "delay");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Walk Delay Set!");
                           return 1;
                       }))))
@@ -98,14 +98,14 @@ public class AntiAFKCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
                           CONFIG.client.extra.antiafk.actions.safeWalk = toggle;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("SafeWalk " + (toggle ? "On!" : "Off!"));
                           return 1;
                       })))
             .then(literal("walkdistance")
                                 .then(argument("walkdist", integer(1)).executes(c -> {
                                     CONFIG.client.extra.antiafk.actions.walkDistance = IntegerArgumentType.getInteger(c, "walkdist");
-                                    c.getSource().getEmbedBuilder()
+                                    c.getSource().getEmbed()
                                         .title("Walk Distance Set!");
                                     return 1;
                                 })))
@@ -113,20 +113,20 @@ public class AntiAFKCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
                           CONFIG.client.extra.antiafk.actions.jump = toggle;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Jump " + (toggle ? "On!" : "Off!"));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
                           CONFIG.client.extra.antiafk.actions.jumpDelayTicks = IntegerArgumentType.getInteger(c, "delay");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Jump Delay Set!");
                           return 1;
                       }))));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder embedBuilder) {
+    public void postPopulate(final Embed embedBuilder) {
         embedBuilder
             .addField("AntiAFK", toggleStr(CONFIG.client.extra.antiafk.enabled), false)
             .addField("Rotate", toggleStr(CONFIG.client.extra.antiafk.actions.rotate)

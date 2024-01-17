@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
@@ -31,27 +31,27 @@ public class PrioCommand extends Command {
             .then(literal("mentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.mentionRoleOnPrioUpdate = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Prio Mentions " + (CONFIG.discord.mentionRoleOnPrioUpdate ? "On!" : "Off!"));
                             return 1;
                         })))
             .then(literal("banMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.mentionRoleOnPrioBanUpdate = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Prio Ban Mentions " + (CONFIG.discord.mentionRoleOnPrioBanUpdate ? "On!" : "Off!"));
                             return 1;
                         })))
             .then(literal("check").executes(c -> {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Checking Prio ban");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .addField("Banned", (PRIORITY_BAN_CHECKER.checkPrioBan().map(Object::toString).orElse("unknown")), true);
             }));
     }
 
     @Override
-    public void postPopulate(EmbedCreateSpec.Builder builder) {
+    public void postPopulate(Embed builder) {
         builder
             .addField("Prio Status Mentions", toggleStr(CONFIG.discord.mentionRoleOnPrioUpdate), true)
             .addField("Prio Ban Mentions", toggleStr(CONFIG.discord.mentionRoleOnPrioBanUpdate), true)

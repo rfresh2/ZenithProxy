@@ -7,7 +7,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
@@ -38,14 +38,14 @@ public class ViaVersionCommand extends Command {
             .then(literal("client")
                 .then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.client.viaversion.enabled = getToggle(c, "toggle");
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title("Client ViaVersion " + (CONFIG.client.viaversion.enabled ? "On!" : "Off!"));
                     return 1;
                 }))
                 .then(literal("autoconfig")
                           .then(argument("toggle", toggle()).executes(c -> {
                                 CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
-                                c.getSource().getEmbedBuilder()
+                                c.getSource().getEmbed()
                                     .title("Client ViaVersion AutoConfig " + (CONFIG.client.viaversion.autoProtocolVersion ? "On!" : "Off!"));
                                 return 1;
                           })))
@@ -54,13 +54,13 @@ public class ViaVersionCommand extends Command {
                               final String version = StringArgumentType.getString(c, "version");
                               ProtocolVersion closest = ProtocolVersion.getClosest(version);
                               if (closest == null) {
-                                  c.getSource().getEmbedBuilder()
+                                  c.getSource().getEmbed()
                                       .title("Invalid Version!")
                                       .description("Please select a valid version. Example: 1.19.4")
                                       .color(Color.RED);
                               } else {
                                   CONFIG.client.viaversion.protocolVersion = closest.getVersion();
-                                  c.getSource().getEmbedBuilder()
+                                  c.getSource().getEmbed()
                                       .title("Client ViaVersion Version Updated!");
                               }
                               return 1;
@@ -68,14 +68,14 @@ public class ViaVersionCommand extends Command {
             .then(literal("server")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.server.viaversion.enabled = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Server ViaVersion " + (CONFIG.server.viaversion.enabled ? "On!" : "Off!"));
                             return 1;
                       })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder embedBuilder) {
+    public void postPopulate(final Embed embedBuilder) {
         embedBuilder
             .addField("Client ViaVersion", toggleStr(CONFIG.client.viaversion.enabled), false)
             .addField("Client AutoConfig", toggleStr(CONFIG.client.viaversion.autoProtocolVersion), false)

@@ -6,7 +6,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -30,28 +30,28 @@ public class AutoReconnectCommand extends Command {
         return command("autoreconnect")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReconnect.enabled = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("AutoReconnect " + (CONFIG.client.extra.autoReconnect.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("delay")
                       .then(argument("delaySec", integer(0, 1000)).executes(c -> {
                           CONFIG.client.extra.autoReconnect.delaySeconds = IntegerArgumentType.getInteger(c, "delaySec");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("AutoReconnect Delay Updated!");
                           return 1;
                       })))
             .then(literal("maxattempts")
                       .then(argument("maxAttempts", integer(1)).executes(c -> {
                           CONFIG.client.extra.autoReconnect.maxAttempts = IntegerArgumentType.getInteger(c, "maxAttempts");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("AutoReconnect Max Attempts Updated!");
                           return 1;
                       })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("AutoReconnect", toggleStr(CONFIG.client.extra.autoReconnect.enabled), false)
             .addField("Delay", "" + CONFIG.client.extra.autoReconnect.delaySeconds, true)

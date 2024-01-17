@@ -7,7 +7,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -35,7 +35,7 @@ public class ServerCommand extends Command {
                           final int port = IntegerArgumentType.getInteger(c, "port");
                           CONFIG.client.server.address = ip;
                           CONFIG.client.server.port = port;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Server Updated!");
                           return 1;
                       }))
@@ -43,14 +43,14 @@ public class ServerCommand extends Command {
                           final String ip = StringArgumentType.getString(c, "ip");
                           CONFIG.client.server.address = (ip.equalsIgnoreCase("2b2t") ? "connect.2b2t.org" : ip);
                           CONFIG.client.server.port = 25565;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Server Updated!");
                           return 1;
                       }));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("IP", CONFIG.client.server.address, false)
             .addField("Port", "" + CONFIG.client.server.port, true)

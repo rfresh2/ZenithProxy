@@ -5,7 +5,6 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.CommandSource;
 import com.zenith.terminal.logback.TerminalConsoleAppender;
-import discord4j.core.spec.EmbedCreateSpec;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -97,10 +96,10 @@ public class TerminalManager {
     }
 
     private void executeDiscordCommand(final String command) {
-        CommandContext commandContext = CommandContext.create(command, CommandSource.TERMINAL);
+        final var commandContext = CommandContext.create(command, CommandSource.TERMINAL);
         COMMAND_MANAGER.execute(commandContext);
         if (CONFIG.interactiveTerminal.logToDiscord && !commandContext.isSensitiveInput()) CommandOutputHelper.logInputToDiscord(command, CommandSource.TERMINAL);
-        EmbedCreateSpec embed = commandContext.getEmbedBuilder().build();
+        var embed = commandContext.getEmbed();
         if (CONFIG.interactiveTerminal.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
             CommandOutputHelper.logEmbedOutputToDiscord(embed);
             CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);

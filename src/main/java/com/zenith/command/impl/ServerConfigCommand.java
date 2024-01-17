@@ -6,7 +6,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
@@ -39,7 +39,7 @@ public class ServerConfigCommand extends Command {
         return command("serverConfig").requires(Command::validateAccountOwner)
             .then(literal("port").then(argument("port", integer(1, 65535)).executes(context -> {
                 CONFIG.server.bind.port = getInteger(context, "port");
-                context.getSource().getEmbedBuilder()
+                context.getSource().getEmbed()
                     .title("Port Set")
                     .description("Restarting server...");
                 SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
@@ -51,34 +51,34 @@ public class ServerConfigCommand extends Command {
             .then(literal("ping")
                       .then(argument("pingToggle", toggle()).executes(context -> {
                           CONFIG.server.ping.enabled = getToggle(context, "pingToggle");
-                          context.getSource().getEmbedBuilder()
+                          context.getSource().getEmbed()
                               .title("Ping Set!");
                           return 1;
                       }))
                       .then(literal("onlinePlayers")
                                 .then(argument("onlinePlayersToggle", toggle()).executes(context -> {
                                     CONFIG.server.ping.onlinePlayers = getToggle(context, "onlinePlayersToggle");
-                                    context.getSource().getEmbedBuilder()
+                                    context.getSource().getEmbed()
                                         .title("Ping Reports Online Players Set!");
                                     return 1;
                                 })))
                       .then(literal("maxPlayers").then(argument("maxPlayers", integer(0)).executes(context -> {
                           CONFIG.server.ping.maxPlayers = getInteger(context, "maxPlayers");
-                          context.getSource().getEmbedBuilder()
+                          context.getSource().getEmbed()
                               .title("Ping Max Players Set!");
                           return 1;
                       })))
                       .then(literal("lanBroadcast")
                                 .then(argument("lanBroadcastToggle", toggle()).executes(context -> {
                                     CONFIG.server.ping.lanBroadcast = getToggle(context, "lanBroadcastToggle");
-                                    context.getSource().getEmbedBuilder()
+                                    context.getSource().getEmbed()
                                         .title("Ping LAN Broadcast Set!");
                                     return 1;
                                 }))));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .color(Color.CYAN)
             .addField("Port", ""+CONFIG.server.bind.port, true)
