@@ -6,7 +6,6 @@ import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.DiscordCommandContext;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
@@ -90,7 +89,6 @@ public class DiscordBot {
     private ScheduledFuture<?> presenceUpdateFuture;
     private ScheduledFuture<?> mainChannelMessageQueueProcessFuture;
     private ScheduledFuture<?> relayChannelMessageQueueProcessFuture;
-    private Subscription eventSubscription;
 
     public DiscordBot() {
         this.mainChannelMessageQueue = new ConcurrentLinkedQueue<>();
@@ -99,7 +97,7 @@ public class DiscordBot {
     }
 
     public void initEventHandlers() {
-        if (eventSubscription != null) throw new RuntimeException("Event handlers already initialized");
+        if (EVENT_BUS.isSubscribed(this)) throw new RuntimeException("Event handlers already initialized");
         EVENT_BUS.subscribe(this,
             pair(ConnectEvent.class, this::handleConnectEvent),
             pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
@@ -245,10 +243,7 @@ public class DiscordBot {
             this.mainChannelMessageQueueProcessFuture.cancel(true);
         if (this.relayChannelMessageQueueProcessFuture != null)
             this.relayChannelMessageQueueProcessFuture.cancel(true);
-        if (eventSubscription != null) {
-            eventSubscription.unsubscribe();
-            eventSubscription = null;
-        }
+        EVENT_BUS.unsubscribe(this);
         if (client != null) {
             client.logout().block();
             client = null;

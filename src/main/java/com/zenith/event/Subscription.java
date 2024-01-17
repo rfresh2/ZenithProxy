@@ -1,6 +1,6 @@
 package com.zenith.event;
 
-public class Subscription {
+class Subscription {
     private final Runnable unsubscribeCallback;
 
     public Subscription(Runnable unsubscribeCallback) {
