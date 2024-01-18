@@ -2,8 +2,10 @@ package com.zenith.discord;
 
 import discord4j.core.spec.EmbedCreateFields;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -13,35 +15,47 @@ import java.util.regex.Pattern;
 public class EmbedSerializer {
     private static final Pattern DISCORD_TIMESTAMP_PATTERN = Pattern.compile("<t:(\\d+):.>");
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    // used to find discord formatted text and replace it with the appropriate style
+    // **bold** -> bold
+    // `code` -> code
+    // ```code block``` -> code block
+    // there's more we don't currently use that aren't implemented here
+    private static final Pattern DISCORD_FORMATTING_REGEX = Pattern.compile("(\\*\\*(.+?)\\*\\*)|(```(.+?)```)|(`(.+?)`)");
 
     public static Component serialize(final Embed embed) {
-        Component c = Component.newline();
-        if (embed.isColorPresent()) {
-            var color = embed.color();
-            c = c.applyFallbackStyle(Style.style(TextColor.color(
-                color.getRed(),
-                color.getGreen(),
-                color.getBlue())));
+        var c = Component.text()
+            .appendNewline();
+        if (embed.isTitlePresent()) {
+            c.append(Component.text(embed.title()).decorate(TextDecoration.BOLD))
+                .appendNewline();
         }
-        // todo: handle discord formatted bold, italicized, or underlined text
-        c = c.append(Component.text(embed.title()));
         if (embed.isDescriptionPresent()) {
-            c = c
-                .appendNewline()
-                .append(Component.text(replaceDiscordTime(embed.description())));
+            c.appendNewline()
+                .append(serializeText(replaceDiscordTime(embed.description())));
         }
         if (embed.isUrlPresent()) {
-            c = c
-                .appendNewline()
-                .append(Component.text(embed.url()));
+            c.appendNewline()
+                .append(Component
+                            .text(embed.url())
+                            .color(NamedTextColor.BLUE)
+                            .clickEvent(ClickEvent.openUrl(embed.url())));
         }
         for (EmbedCreateFields.Field field : embed.fields()) {
             if (field.name().equals("\u200B")) continue; // ignore empty fields (used for spacing)
-            c = c
-                .appendNewline()
-                .append(Component.text(field.name() + ": " + replaceDiscordTime(field.value())));
+            c.appendNewline()
+                .append(Component.text(field.name())
+                            .appendNewline()
+                            .decorate(TextDecoration.BOLD))
+                .append(Component.text(replaceDiscordTime(field.value())));
         }
-        return c;
+        if (embed.isColorPresent()) {
+            var color = embed.color();
+            c.color(TextColor.color(
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue()));
+        }
+        return c.build();
     }
 
     public static String replaceDiscordTime(final String input) {
@@ -50,5 +64,31 @@ public class EmbedSerializer {
             var instant = Instant.ofEpochSecond(timestamp);
             return dateTimeFormatter.format(instant.atOffset(ZoneOffset.UTC));
         });
+    }
+
+    public static Component serializeText(final String text) {
+        var matcher = DISCORD_FORMATTING_REGEX.matcher(text);
+        var component = Component.text();
+        var lastEnd = 0;
+        while (matcher.find()) {
+            var start = matcher.start();
+            var end = matcher.end();
+            if (start > lastEnd) {
+                component.append(Component.text(text.substring(lastEnd, start)));
+            }
+            if (matcher.group(2) != null) {
+                component.append(Component.text(matcher.group(2)).decorate(TextDecoration.BOLD));
+            } else if (matcher.group(4) != null) {
+                component.append(Component.text(matcher.group(4)).color(NamedTextColor.GRAY));
+            } else if (matcher.group(6) != null) {
+                component.append(Component.text(matcher.group(6)).color(NamedTextColor.GRAY));
+            }
+            lastEnd = end;
+        }
+        if (lastEnd < text.length()) {
+            component.append(Component.text(text.substring(lastEnd)));
+        }
+
+        return component.build();
     }
 }
