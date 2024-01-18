@@ -3,8 +3,8 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.*;
+import com.zenith.discord.Embed;
 import com.zenith.util.Config;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;
@@ -42,21 +42,21 @@ public class AuthCommand extends Command {
             .then(literal("clear").executes(c -> {
                 Proxy.getInstance().cancelLogin();
                 Proxy.getInstance().getAuthenticator().clearAuthCache();
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Authentication Cleared")
                     .description("Cached tokens and authentication state cleared. Full re-auth will occur on next login.")
                     .color(Color.CYAN);
             }))
             .then(literal("attempts").then(argument("attempts", integer(1, 10)).executes(c -> {
                 CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe = c.getArgument("attempts", Integer.class);
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Authentication Max Attempts Set")
                     .color(Color.CYAN);
                 return 1;
             })))
             .then(literal("type").requires(this::validateTerminalSource)
                       .then(literal("list").executes(c -> {
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Authentication Types")
                               .color(Color.CYAN);
                           return 1;
@@ -66,11 +66,11 @@ public class AuthCommand extends Command {
                           try {
                               CONFIG.authentication.accountType = Config.Authentication.AccountType.valueOf(type);
                               Proxy.getInstance().getAuthenticator().clearAuthCache();
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Authentication Type Set")
                                   .color(Color.CYAN);
                           } catch (final Exception e) {
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Authentication Type")
                                   .description("Valid types: " + Arrays.toString(Config.Authentication.AccountType.values()))
                                   .color(Color.RED);
@@ -83,13 +83,13 @@ public class AuthCommand extends Command {
                           var emailStr = getString(c, "email").trim();
                           // validate email str is an email
                           if (!emailStr.contains("@") || emailStr.length() < 3) {
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Email")
                                   .color(Color.RED);
                               return 1;
                           }
                           CONFIG.authentication.email = emailStr;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Authentication Email Set")
                               .color(Color.CYAN);
                           return 1;
@@ -100,13 +100,13 @@ public class AuthCommand extends Command {
                           var passwordStr = getString(c, "password").trim();
                           // validate password str is a password
                           if (passwordStr.isBlank()) {
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Password")
                                   .color(Color.RED);
                               return 1;
                           }
                           CONFIG.authentication.password = passwordStr;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Authentication Password Set")
                               .color(Color.CYAN);
                           return 1;
@@ -118,7 +118,7 @@ public class AuthCommand extends Command {
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Account Type", CONFIG.authentication.accountType.toString(), true)
             .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), true)

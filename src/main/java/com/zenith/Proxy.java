@@ -291,12 +291,12 @@ public class Proxy {
         if (CONFIG.client.connectionProxy.enabled) {
             if (!CONFIG.client.connectionProxy.user.isEmpty() || !CONFIG.client.connectionProxy.password.isEmpty())
                 proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
-                                          InetSocketAddress.createUnresolved(CONFIG.client.connectionProxy.host,
+                                          new InetSocketAddress(CONFIG.client.connectionProxy.host,
                                                                              CONFIG.client.connectionProxy.port),
                                           CONFIG.client.connectionProxy.user,
                                           CONFIG.client.connectionProxy.password);
             else proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
-                                             InetSocketAddress.createUnresolved(CONFIG.client.connectionProxy.host,
+                                             new InetSocketAddress(CONFIG.client.connectionProxy.host,
                                                                                 CONFIG.client.connectionProxy.port));
         }
         return proxyInfo;

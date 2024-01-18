@@ -29,7 +29,7 @@ public class DisplayCoordsCommand extends Command {
         return command("displayCoords").requires(Command::validateAccountOwner)
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.reportCoords = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Coordinates " + (CONFIG.discord.reportCoords ? "On!" : "Off!"))
                     .color(Color.CYAN);
                 return 1;

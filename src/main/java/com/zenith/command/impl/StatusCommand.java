@@ -10,7 +10,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.feature.queue.Queue;
 import com.zenith.network.server.ServerConnection;
 import discord4j.common.util.TimestampFormat;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.time.Duration;
@@ -102,7 +101,7 @@ public class StatusCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("status").executes(c -> {
-            final EmbedCreateSpec.Builder builder = c.getSource().getEmbedBuilder();
+            var builder = c.getSource().getEmbed();
             builder
                 .title("ZenithProxy " + LAUNCH_CONFIG.version + " Status: " + CONFIG.authentication.username)
                 .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)

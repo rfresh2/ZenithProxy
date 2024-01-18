@@ -32,7 +32,7 @@ public class QueueStatusCommand extends Command {
         return command("queueStatus").executes(c -> {
             final boolean inQueue = Proxy.getInstance().isInQueue();
             final QueueStatus queueStatus = Queue.getQueueStatus();
-            c.getSource().getEmbedBuilder()
+            c.getSource().getEmbed()
                 .title("2b2t Queue Status")
                 .addField("Regular", queueStatus.regular() + (inQueue ? "" : " [ETA: " + Queue.getQueueEta(queueStatus.regular()) + "]"), false)
                 .addField("Priority", ""+queueStatus.prio(), false)
@@ -40,7 +40,7 @@ public class QueueStatusCommand extends Command {
             if (inQueue) {
                 final int queuePosition = Proxy.getInstance().getQueuePosition();
                 final Duration currentWaitDuration = Duration.between(Proxy.getInstance().getConnectTime(), Instant.now());
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .addField("Position", queuePosition + " [ETA: " + Queue.getQueueEta(queuePosition) + "]", false)
                     .addField("Current Wait Duration", MathHelper.formatDuration(currentWaitDuration), false);
             }

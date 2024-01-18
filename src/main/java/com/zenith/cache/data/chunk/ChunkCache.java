@@ -95,6 +95,7 @@ public class ChunkCache implements CachedData {
             CompoundTag element = dimension.<CompoundTag>get("element");
             int height = element.<IntTag>get("height").getValue();
             int minY = element.<IntTag>get("min_y").getValue();
+            CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
             dimensionRegistry.put(name, new Dimension(name, id, height, minY));
         }
     }
@@ -113,8 +114,19 @@ public class ChunkCache implements CachedData {
 
     public void setCurrentWorld(final String dimensionType, final String worldName, long hashedSeed, boolean debug, boolean flat) {
         worldData = new WorldData(dimensionType, worldName, hashedSeed, debug, flat);
-        currentDimension = dimensionRegistry.get(worldName);
+        var worldDimension = dimensionRegistry.get(dimensionType);
+        if (worldDimension == null) {
+            CACHE_LOG.warn("Received unknown dimension type: {}", dimensionType);
+            if (!dimensionRegistry.isEmpty()) {
+                worldDimension = dimensionRegistry.values().stream().findFirst().get();
+                CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.dimensionName);
+            } else {
+                throw new RuntimeException("No dimensions in registry");
+            }
+        }
+        this.currentDimension = worldDimension;
         CACHE_LOG.debug("Updated current world to {}", worldName);
+        CACHE_LOG.debug("Current dimension: {}", currentDimension);
     }
 
     public static int log2RoundUp(int num) {
@@ -484,6 +496,7 @@ public class ChunkCache implements CachedData {
 
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
+        CACHE_LOG.debug("Updating current dimension to: {}", info.getDimension());
         this.currentDimension = dimensionRegistry.get(info.getDimension());
         this.worldData = new WorldData(info.getDimension(), // todo: verify if this is even relevant
                                        currentDimension.dimensionName,

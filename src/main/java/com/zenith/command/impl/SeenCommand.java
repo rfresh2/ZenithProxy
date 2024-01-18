@@ -38,15 +38,15 @@ public class SeenCommand extends Command {
                 final String playerName = getString(c, "playerName");
                 var seenResponse = VC_API.getSeen(playerName);
                 if (seenResponse.isEmpty()) {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title(escape(playerName) + " not found")
                         .color(Color.RUBY);
                     return -1;
                 }
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Seen: " + escape(playerName))
                     .color(Color.CYAN);
-                seenResponse.ifPresent((response) -> c.getSource().getEmbedBuilder()
+                seenResponse.ifPresent((response) -> c.getSource().getEmbed()
                     .addField("First Seen", getSeenString(response.firstSeen()), false)
                     .addField("Last Seen", getSeenString(response.lastSeen()), false));
                 return 1;

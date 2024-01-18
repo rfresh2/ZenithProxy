@@ -1,5 +1,7 @@
 package com.zenith.util;
 
+import com.zenith.discord.Embed;
+import com.zenith.discord.EmbedSerializer;
 import de.themoep.minedown.adventure.MineDown;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
@@ -24,9 +26,17 @@ public final class ComponentSerializer {
     private static final ANSIComponentSerializer ansiComponentSerializer;
 
     static { // fixes no ansi colors being serialized on dumb terminals
-        final String TERM = System.getenv("TERM");
+        final String TERM = System.getenv("TERM"); // this should be set on unix systems
         // must be set before creating ansi serializer
-        if (TERM == null) System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, "indexed16");
+        if (TERM == null) {
+            String colorLevel = "indexed16";
+            final String intellij = System.getenv("IDEA_INITIAL_DIRECTORY");
+            final String windowsTerminal = System.getenv("WT_SESSION");
+            final String cmd = System.getenv("PROMPT");
+            if (intellij != null || windowsTerminal != null || cmd != null)
+                colorLevel = "truecolor";
+            System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, colorLevel);
+        }
         ansiComponentSerializer = ANSIComponentSerializer.builder()
             .flattener(ComponentFlattener.basic()
                            .toBuilder()
@@ -59,6 +69,10 @@ public final class ComponentSerializer {
             .urlDetection(false) // this uses a url matching regex by default that adds mem usage and isn't needed
             .replace(replacements)
             .toComponent();
+    }
+
+    public static Component deserializeEmbed(final Embed embed) {
+        return EmbedSerializer.serialize(embed);
     }
 
     private static void translatableMapper(TranslatableComponent translatableComponent, Consumer<Component> componentConsumer) {

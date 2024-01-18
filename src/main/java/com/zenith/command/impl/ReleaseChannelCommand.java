@@ -36,7 +36,7 @@ public class ReleaseChannelCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("channel")
             .then(literal("list").executes(c -> {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Release Channel Info")
                     .addField("Current Release Channel", LAUNCH_CONFIG.release_channel, true)
                     .addField("Available Platforms", PLATFORMS.stream().collect(Collectors.joining("`, `", "`", "`")), false)
@@ -49,21 +49,21 @@ public class ReleaseChannelCommand extends Command {
                                     final String channel = StringArgumentType.getString(c, "channel");
                                     final String minecraft_version = StringArgumentType.getString(c, "minecraft_version");
                                     if (!PLATFORMS.contains(channel)) {
-                                        c.getSource().getEmbedBuilder()
+                                        c.getSource().getEmbed()
                                             .title("Invalid Platform!")
                                             .description("Available platforms: " + PLATFORMS)
                                             .color(Color.RED);
                                         return 0;
                                     }
                                     if (!MINECRAFT_VERSIONS.contains(minecraft_version)) {
-                                        c.getSource().getEmbedBuilder()
+                                        c.getSource().getEmbed()
                                             .title("Invalid Minecraft Version!")
                                             .description("Available versions: " + MINECRAFT_VERSIONS)
                                             .color(Color.RED);
                                         return 0;
                                     }
                                     LAUNCH_CONFIG.release_channel = channel + "." + minecraft_version;
-                                    c.getSource().getEmbedBuilder()
+                                    c.getSource().getEmbed()
                                         .title("Release Channel Updated!")
                                         .addField("Release Channel", LAUNCH_CONFIG.release_channel, false)
                                         .addField("Info", "Please restart ZenithProxy for changes to take effect.\nYou can use the `update` command to restart.", false)

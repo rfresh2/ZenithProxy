@@ -2,8 +2,8 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.*;
+import com.zenith.discord.Embed;
 import discord4j.common.util.Snowflake;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.util.MentionUtil;
 import discord4j.rest.util.Color;
 
@@ -47,11 +47,11 @@ public class DiscordManageCommand extends Command {
             .requires(c -> Command.validateCommandSource(c, asList(CommandSource.DISCORD, CommandSource.TERMINAL)))
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.enable = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Discord Bot " + (CONFIG.discord.enable ? "On!" : "Off!"))
                     .color(Color.CYAN);
                 if (CONFIG.discord.enable) {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .description("Discord bot will now start");
                 }
                 // will stop/start depending on if the bot is enabled
@@ -67,21 +67,21 @@ public class DiscordManageCommand extends Command {
                               Snowflake.of(channelId);
                           } catch (final Exception e) {
                               // invalid id
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("The channel ID provided is invalid")
                                   .color(Color.RUBY);
                               return 1;
                           }
                           if (channelId.equals(CONFIG.discord.chatRelay.channelId)) {
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("Cannot use the same channel ID for both the relay and main channel")
                                   .color(Color.RUBY);
                               return 1;
                           }
                           CONFIG.discord.channelId = channelId;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                                        .title("Channel set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
@@ -98,21 +98,21 @@ public class DiscordManageCommand extends Command {
                               Snowflake.of(channelId);
                           } catch (final Exception e) {
                               // invalid id
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("The channel ID provided is invalid")
                                   .color(Color.RUBY);
                               return 1;
                           }
                           if (channelId.equals(CONFIG.discord.channelId)) {
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("Cannot use the same channel ID for both the relay and main channel")
                                   .color(Color.RUBY);
                               return 1;
                           }
                           CONFIG.discord.chatRelay.channelId = channelId;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                                        .title("Relay Channel set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
@@ -124,7 +124,7 @@ public class DiscordManageCommand extends Command {
                       .then(argument("token", wordWithChars()).executes(c -> {
                           c.getSource().setSensitiveInput(true);
                           CONFIG.discord.token = getString(c, "token");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                                        .title("Token set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
@@ -140,14 +140,14 @@ public class DiscordManageCommand extends Command {
                               Snowflake.of(roleId);
                           } catch (final Exception e) {
                               // invalid id
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Role ID")
                                   .description("The role ID provided is invalid")
                                   .color(Color.RUBY);
                               return 1;
                           }
                           CONFIG.discord.accountOwnerRoleId = roleId;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Role set!")
                               .color(Color.CYAN);
                           return 1;
@@ -155,7 +155,7 @@ public class DiscordManageCommand extends Command {
             .then(literal("manageprofileimage")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageProfileImage = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .color(Color.CYAN)
                                          .title("Manage Profile Image " + (CONFIG.discord.manageProfileImage ? "On!" : "Off!"));
                             return 1;
@@ -163,7 +163,7 @@ public class DiscordManageCommand extends Command {
             .then(literal("managenickname")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageNickname = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .color(Color.CYAN)
                                          .title("Manage Nickname " + (CONFIG.discord.manageNickname ? "On!" : "Off!"));
                             return 1;
@@ -171,7 +171,7 @@ public class DiscordManageCommand extends Command {
             .then(literal("managedescription")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageDescription = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .color(Color.CYAN)
                                          .title("Manage Description " + (CONFIG.discord.manageDescription ? "On!" : "Off!"));
                             return 1;
@@ -179,7 +179,7 @@ public class DiscordManageCommand extends Command {
             .then(literal("shownonwhitelistip")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.showNonWhitelistLoginIP = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                          .color(Color.CYAN)
                                          .title("Show Non-Whitelist IP " + (CONFIG.discord.showNonWhitelistLoginIP ? "On!" : "Off!"));
                             return 1;
@@ -191,7 +191,7 @@ public class DiscordManageCommand extends Command {
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Channel ID", getChannelMention(CONFIG.discord.channelId), false)
             .addField("Relay Channel ID", getChannelMention(CONFIG.discord.chatRelay.channelId), false)
@@ -227,10 +227,9 @@ public class DiscordManageCommand extends Command {
             DISCORD_BOT.stop(false);
             if (CONFIG.discord.enable) {
                 DISCORD_BOT.start();
-                DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
+                DISCORD_BOT.sendEmbedMessage(Embed.builder()
                                                  .title("Discord Bot Restarted")
-                                                 .color(Color.GREEN)
-                                                 .build());
+                                                 .color(Color.GREEN));
             } else {
                 DISCORD_LOG.info("Discord bot is disabled, not starting");
             }

@@ -28,16 +28,16 @@ public class DisconnectCommand extends Command {
                 boolean loginCancelled = Proxy.getInstance().cancelLogin();
                 boolean autoReconnectCancelled = Proxy.getInstance().cancelAutoReconnect();
                 if (autoReconnectCancelled) {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title("AutoReconnect Cancelled");
                     return;
                 }
                 if (loginCancelled) {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Login Cancelled");
                     return;
                 }
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                         .title("Already Disconnected!");
             } else {
                 try {
@@ -45,7 +45,7 @@ public class DisconnectCommand extends Command {
                     Proxy.getInstance().cancelAutoReconnect();
                 } catch (final Exception e) {
                     DISCORD_LOG.error("Failed to disconnect", e);
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Proxy Failed to Disconnect");
                 }
             }

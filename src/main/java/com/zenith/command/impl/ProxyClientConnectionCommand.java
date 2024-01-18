@@ -28,7 +28,7 @@ public class ProxyClientConnectionCommand extends Command {
         return command("clientConnectionMessages")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.clientConnectionMessages = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Client connection messages " + (CONFIG.client.extra.clientConnectionMessages ? "On!" : "Off!"))
                     .color(Color.CYAN);
                 return 1;
