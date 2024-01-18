@@ -115,7 +115,7 @@ public class ChunkCache implements CachedData {
         worldData = new WorldData(dimensionType, worldName, hashedSeed, debug, flat);
         var worldDimension = dimensionRegistry.get(dimensionType);
         if (worldDimension == null) {
-            CACHE_LOG.warn("Received to unknown dimension type: {}", dimensionType);
+            CACHE_LOG.warn("Received unknown dimension type: {}", dimensionType);
             if (!dimensionRegistry.isEmpty()) {
                 worldDimension = dimensionRegistry.values().stream().findFirst().get();
                 CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.dimensionName);
@@ -123,6 +123,7 @@ public class ChunkCache implements CachedData {
                 throw new RuntimeException("No dimensions in registry");
             }
         }
+        this.currentDimension = worldDimension;
         CACHE_LOG.debug("Updated current world to {}", worldName);
         CACHE_LOG.debug("Current dimension: {}", currentDimension);
     }
