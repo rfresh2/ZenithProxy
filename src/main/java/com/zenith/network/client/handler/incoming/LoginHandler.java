@@ -19,6 +19,11 @@ import static com.zenith.Shared.EVENT_BUS;
 public class LoginHandler implements PacketHandler<ClientboundLoginPacket, ClientSession> {
     @Override
     public ClientboundLoginPacket apply(@NonNull ClientboundLoginPacket packet, @NonNull ClientSession session) {
+        // todo: handle join game server switches more accurately to vanilla
+        //  https://discord.com/channels/1127460556710883391/1127461501960208465/1197657407631937536
+        var currentProfile = CACHE.getProfileCache().getProfile();
+        CACHE.reset(true);
+        CACHE.getProfileCache().setProfile(currentProfile);
         CACHE.getPlayerCache()
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
