@@ -8,7 +8,8 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/MC-1.20.1-brightgreen.svg" alt="Minecraft"/>
-  <img src="https://img.shields.io/badge/MC-1.12.2-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.20.4-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.12.2-yellow.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/github/languages/code-size/rfresh2/ZenithProxy.svg" alt="Code size"/>
   <img src="https://img.shields.io/github/repo-size/rfresh2/ZenithProxy.svg" alt="GitHub repo size"/>
   <img alt="Downloads" src="https://img.shields.io/github/downloads/rfresh2/ZenithProxy/total">
