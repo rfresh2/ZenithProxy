@@ -92,6 +92,10 @@ repositories {
         "ViaVersion"
         url "https://repo.viaversion.com"
     }
+    maven {
+        "Lenni0451"
+        url "https://maven.lenni0451.net/releases"
+    }
     mavenLocal()
 }
 
@@ -134,7 +138,7 @@ dependencies {
         exclude group: 'com.microsoft.azure'
         exclude group: 'fr.litarvan'
     }
-    shade "net.raphimc:MinecraftAuth:3.1.0"
+    shade "net.raphimc:MinecraftAuth:4.0.0"
     shade "io.netty:netty-codec-haproxy:$nettyVersion"
     shade "io.netty:netty-codec-dns:$nettyVersion"
     shade "io.netty:netty-codec-http2:$nettyVersion"
@@ -255,7 +259,6 @@ shadowJar {
         exclude(dependency("io.netty:netty-resolver-dns:.*"))
         exclude(dependency("org.cloudburstmc.math:api:.*"))
         exclude(dependency("org.cloudburstmc.math:immutable:.*"))
-        exclude(dependency("commons-logging:commons-logging:.*"))
         exclude(dependency("io.jsonwebtoken:jjwt-api:.*"))
         exclude(dependency("io.jsonwebtoken:jjwt-gson:.*"))
         exclude(dependency("io.jsonwebtoken:jjwt-impl:.*"))
