@@ -26,8 +26,9 @@ public class EmbedSerializer {
         var c = Component.text()
             .appendNewline();
         if (embed.isTitlePresent()) {
-            c.append(Component.text(embed.title()).decorate(TextDecoration.BOLD))
-                .appendNewline();
+            c.append(Component.text(embed.title()).decorate(TextDecoration.BOLD));
+            if (embed.isDescriptionPresent() || embed.isUrlPresent() || !embed.fields().isEmpty())
+                c.appendNewline();
         }
         if (embed.isDescriptionPresent()) {
             c.appendNewline()
