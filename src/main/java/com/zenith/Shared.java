@@ -15,6 +15,7 @@ import com.zenith.discord.DiscordBot;
 import com.zenith.event.SimpleEventBus;
 import com.zenith.feature.api.minetools.MinetoolsApi;
 import com.zenith.feature.api.mojang.MojangApi;
+import com.zenith.feature.api.prioban.PriobanApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.food.FoodManager;
@@ -22,7 +23,6 @@ import com.zenith.feature.items.ItemsManager;
 import com.zenith.feature.language.LanguageManager;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
-import com.zenith.feature.prioban.PriorityBanChecker;
 import com.zenith.feature.tps.TPSCalculator;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.module.ModuleManager;
@@ -91,7 +91,6 @@ public class Shared {
     public static final SimpleEventBus EVENT_BUS;
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
     public static final PlayerListsManager PLAYER_LISTS;
-    public static final PriorityBanChecker PRIORITY_BAN_CHECKER;
     public static final BlockDataManager BLOCK_DATA_MANAGER;
     public static final DatabaseManager DATABASE_MANAGER;
     public static final TPSCalculator TPS_CALCULATOR;
@@ -107,6 +106,7 @@ public class Shared {
     public static final MojangApi MOJANG_API;
     public static final SessionServerApi SESSION_SERVER_API;
     public static final MinetoolsApi MINETOOLS_API;
+    public static final PriobanApi PRIOBAN_API;
     public static volatile boolean SHOULD_RECONNECT;
 
     public static synchronized void loadConfig() {
@@ -223,7 +223,6 @@ public class Shared {
                 .build()));
             CACHE = new DataCache();
             PLAYER_LISTS = new PlayerListsManager();
-            PRIORITY_BAN_CHECKER = new PriorityBanChecker();
             BLOCK_DATA_MANAGER = new BlockDataManager();
             DATABASE_MANAGER = new DatabaseManager();
             TPS_CALCULATOR = new TPSCalculator();
@@ -239,6 +238,7 @@ public class Shared {
             MOJANG_API = new MojangApi();
             SESSION_SERVER_API = new SessionServerApi();
             MINETOOLS_API = new MinetoolsApi();
+            PRIOBAN_API = new PriobanApi();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
             translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);

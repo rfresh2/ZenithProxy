@@ -9,7 +9,7 @@ import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.PRIORITY_BAN_CHECKER;
+import static com.zenith.Shared.PRIOBAN_API;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -46,7 +46,7 @@ public class PrioCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Checking Prio ban");
                 c.getSource().getEmbed()
-                    .addField("Banned", (PRIORITY_BAN_CHECKER.checkPrioBan().map(Object::toString).orElse("unknown")), true);
+                    .addField("Banned", (PRIOBAN_API.checkPrioBan().map(Object::toString).orElse("unknown")), true);
             }));
     }
 

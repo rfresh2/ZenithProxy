@@ -2,6 +2,7 @@ package com.zenith.feature.api.vcapi;
 
 import com.zenith.feature.api.Api;
 import com.zenith.feature.api.vcapi.model.PlaytimeResponse;
+import com.zenith.feature.api.vcapi.model.QueueResponse;
 import com.zenith.feature.api.vcapi.model.SeenResponse;
 import com.zenith.feature.api.vcapi.model.StatsResponse;
 
@@ -23,5 +24,9 @@ public class VcApi extends Api {
 
     public Optional<StatsResponse> getStats(final String playerName) {
         return get("/stats/player?playerName=" + playerName, StatsResponse.class);
+    }
+
+    public Optional<QueueResponse> getQueue() {
+        return get("/queue", QueueResponse.class);
     }
 }

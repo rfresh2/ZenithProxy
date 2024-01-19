@@ -30,14 +30,12 @@ import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
 import com.zenith.via.ZenithViaInitializer;
-import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-import reactor.netty.http.client.HttpClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,6 +45,8 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.*;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.Base64;
@@ -462,7 +462,7 @@ public class Proxy {
 
     public void updatePrioBanStatus() {
         if (!CONFIG.client.extra.prioBan2b2tCheck || !isOn2b2t()) return;
-        this.isPrioBanned = PRIORITY_BAN_CHECKER.checkPrioBan();
+        this.isPrioBanned = PRIOBAN_API.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.postAsync(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
             CONFIG.authentication.prioBanned = this.isPrioBanned.get();
@@ -534,20 +534,20 @@ public class Proxy {
                 avatarURL = getAvatarURL(profile.getId());
             else
                 avatarURL = getAvatarURL(CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username);
-            try (InputStream netInputStream = HttpClient.create()
-                .resolver(DefaultAddressResolverGroup.INSTANCE)
-                .secure()
-                .followRedirect(true)
-                .get()
-                .uri(avatarURL.toURI())
-                .responseContent()
-                .aggregate()
-                .asInputStream()
-                .block()) {
-                if (netInputStream == null) {
+            try (java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
+                .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
+                .connectTimeout(Duration.ofSeconds(5))
+                .build()) {
+                final HttpRequest request = HttpRequest.newBuilder()
+                    .uri(avatarURL.toURI())
+                    .GET()
+                    .build();
+                final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
+                if (response.statusCode() != 200)
                     throw new IOException("Unable to download server icon for \"" + CONFIG.authentication.username + "\"");
+                try (InputStream inputStream = response.body()) {
+                    this.serverIcon = inputStream.readAllBytes();
                 }
-                this.serverIcon = netInputStream.readAllBytes();
                 if (DISCORD_BOT.isRunning()) {
                     if (CONFIG.discord.manageProfileImage) DISCORD_BOT.updateProfileImage(this.serverIcon);
                     if (CONFIG.discord.manageNickname) DISCORD_BOT.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
