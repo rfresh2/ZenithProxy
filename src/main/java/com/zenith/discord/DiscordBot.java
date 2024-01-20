@@ -576,7 +576,7 @@ public class DiscordBot {
         if (Proxy.getInstance().isOn2b2t()
             && Proxy.getInstance().getIsPrio().orElse(false)
             && event.reason().startsWith("You have lost connection")
-            && event.onlineDuration().isPositive()
+            && event.onlineDuration().toSeconds() >= 0L
             && event.onlineDuration().toSeconds() <= 1L) {
             embed.description("You have likely been kicked for reaching the 2b2t non-prio account IP limit."
                                   + "\nConsider configuring a connection proxy with the `clientConnection` command."
