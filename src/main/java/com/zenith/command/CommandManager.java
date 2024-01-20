@@ -43,6 +43,7 @@ public class CommandManager {
            new AutoTotemCommand(),
            new AutoUpdateCommand(),
            new ChatRelayCommand(),
+           new ClientConnectionCommand(),
            new CommandConfigCommand(),
            new ConnectCommand(),
            new DatabaseCommand(),
