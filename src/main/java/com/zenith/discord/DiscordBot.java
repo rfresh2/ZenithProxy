@@ -568,14 +568,22 @@ public class DiscordBot {
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {
-        boolean sus = event.reason().startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
-        sendEmbedMessage((sus ? MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId)) : ""), Embed.builder()
-                .title("Proxy Disconnected")
-                .addField("Reason", event.reason(), false)
-                .addField("Online Duration", formatDuration(event.onlineDuration()), false)
-                .color(Color.RUBY));
+        var embed = Embed.builder()
+            .title("Proxy Disconnected")
+            .addField("Reason", event.reason(), false)
+            .addField("Online Duration", formatDuration(event.onlineDuration()), false)
+            .color(Color.RUBY);
+        if (Proxy.getInstance().isOn2b2t()
+            && Proxy.getInstance().getIsPrio().orElse(false)
+            && event.reason().startsWith("You have lost connection")
+            && event.onlineDuration().isPositive()
+            && event.onlineDuration().toSeconds() <= 1L) {
+            embed.description("You have likely been kicked for reaching the 2b2t non-prio account IP limit."
+                                  + "\nConsider configuring a connection proxy with the `clientConnection` command."
+                                  + "\nOr migrate ZenithProxy instances to multiple hosts.");
+        }
+        sendEmbedMessage(embed);
         SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
-        if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
     }
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
