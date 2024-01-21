@@ -70,7 +70,9 @@ public class PlayerSimulation extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-                            of(ClientTickEvent.class, this::tick)
+                            // we want this to be the last thing that happens in the tick
+                            // to allow other modules to update the player's input
+                            of(ClientTickEvent.class, -20000, this::tick)
         );
     }
 

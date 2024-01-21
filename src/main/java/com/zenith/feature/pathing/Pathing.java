@@ -15,7 +15,10 @@ public class Pathing {
 
     public Pathing() {
         EVENT_BUS.subscribe(this,
-                            of(ClientTickEvent.class, this::handleTick)
+                            // should be next to last in the tick handlers
+                            // right before player simulation
+                            // but after all modules that send movement inputs
+                            of(ClientTickEvent.class, -10000, this::handleTick)
         );
     }
 

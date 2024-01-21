@@ -92,10 +92,9 @@ public class SimpleEventBusTest {
         bus.subscribe(obj2, of(TestEvent.class, 2, event -> counter.set(2)));
         bus.post(new TestEvent());
         assertEquals(2, counter.get());
-        bus.unsubscribe(obj1);
-        bus.subscribe(obj1, of(TestEvent.class, 1, event -> counter.set(1)));
+        bus.subscribe(obj1, of(TestEvent.class, 3, event -> counter.set(3)));
         bus.post(new TestEvent());
-        assertEquals(2, counter.get());
+        assertEquals(3, counter.get());
     }
 
     public record TestEvent() { }
