@@ -10,6 +10,7 @@ import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -21,6 +22,7 @@ import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ClientConnectionCommand extends Command {
+    private static final Pattern bindAddressPattern = Pattern.compile("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
@@ -33,7 +35,8 @@ public class ClientConnectionCommand extends Command {
                 "proxy host <host>",
                 "proxy port <port>",
                 "proxy user <user>",
-                "proxy password <password>"
+                "proxy password <password>",
+                "bindAddress <address>"
             )
         );
     }
@@ -91,8 +94,21 @@ public class ClientConnectionCommand extends Command {
                                     c.getSource().getEmbed()
                                         .title("Proxy Password Set");
                                     return 1;
-                                })))
-                );
+                                }))))
+            .then(literal("bindAddress")
+                      .then(argument("address", wordWithChars()).executes(c -> {
+                          var address = getString(c, "address");
+                          if (!bindAddressPattern.matcher(address).matches()) {
+                              c.getSource().getEmbed()
+                                  .title("Invalid Bind Address")
+                                  .addField("Valid Format", "Must be formatted like an IP address, e.g. '0.0.0.0'", false);
+                              return 0;
+                          }
+                          CONFIG.client.bindAddress = address;
+                          c.getSource().getEmbed()
+                              .title("Bind Address Set");
+                          return 1;
+                      })));
     }
 
     @Override
@@ -104,6 +120,7 @@ public class ClientConnectionCommand extends Command {
             .addField("Proxy Host", CONFIG.client.connectionProxy.host, false)
             .addField("Proxy Port", String.valueOf(CONFIG.client.connectionProxy.port), false)
             .addField("Authentication", CONFIG.client.connectionProxy.password.isEmpty() && CONFIG.client.connectionProxy.user.isEmpty()
-                          ? "Off" : "On", false);
+                          ? "Off" : "On", false)
+            .addField("Bind Address", CONFIG.client.bindAddress, false);
     }
 }
