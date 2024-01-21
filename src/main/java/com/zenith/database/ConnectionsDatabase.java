@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static com.zenith.Shared.DATABASE_LOG;
 import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 
 public class ConnectionsDatabase extends LiveDatabase {
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
@@ -24,8 +24,8 @@ public class ConnectionsDatabase extends LiveDatabase {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
+                            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+                            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );
     }
 

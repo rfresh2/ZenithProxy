@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -103,17 +103,17 @@ public class Proxy {
     @SuppressWarnings("unchecked")
     public void initEventHandlers() {
         EVENT_BUS.subscribe(this,
-            pair(DisconnectEvent.class, this::handleDisconnectEvent),
-            pair(ConnectEvent.class, this::handleConnectEvent),
-            pair(StartQueueEvent.class, this::handleStartQueueEvent),
-            pair(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
-            pair(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
-            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
-            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
-            pair(ServerRestartingEvent.class, this::handleServerRestartingEvent),
-            pair(PrioStatusEvent.class, this::handlePrioStatusEvent),
-            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
+                            of(DisconnectEvent.class, this::handleDisconnectEvent),
+                            of(ConnectEvent.class, this::handleConnectEvent),
+                            of(StartQueueEvent.class, this::handleStartQueueEvent),
+                            of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
+                            of(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
+                            of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+                            of(ServerRestartingEvent.class, this::handleServerRestartingEvent),
+                            of(PrioStatusEvent.class, this::handlePrioStatusEvent),
+                            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+                            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );
     }
 

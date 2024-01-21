@@ -1,9 +1,9 @@
 package com.zenith.event;
 
-import com.zenith.util.Pair;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
@@ -17,126 +17,132 @@ import static com.zenith.Shared.DEFAULT_LOG;
  * Failing to do this will block GC of the object and existing event handlers will still be called
  *
  * There is no thread safety built-in to event (un)subscriptions methods, avoid subscribing the same object from multiple threads
+ *
+ * Event priority is ordered by larger priority ints being called first.
+ * The default priority is 0.
  */
 public class SimpleEventBus {
 
     private final ExecutorService asyncEventExecutor;
-    private final Reference2ObjectMap<Class<?>, Consumer<?>[]> handlers = new Reference2ObjectOpenHashMap<>();
-    private final Reference2ObjectMap<Object, Subscription> subscribers = new Reference2ObjectOpenHashMap<>();
+    private final Reference2ObjectMap<Class<?>, EventConsumer<?>[]> eventConsumersMap = new Reference2ObjectOpenHashMap<>();
+    private final Reference2ObjectMap<Object, Subscription> subscribersMap = new Reference2ObjectOpenHashMap<>();
 
     public SimpleEventBus(final ExecutorService asyncEventExecutor) {
         this.asyncEventExecutor = asyncEventExecutor;
     }
 
     public <T> void subscribe(Object subscriber, Class<T> eventType, Consumer<T> handler) {
-        var existingSub = subscribers.remove(subscriber);
-        if (existingSub != subscribers.defaultReturnValue()) existingSub.unsubscribe();
-        var sub = subscribe(eventType, handler);
-        subscribers.put(subscriber, sub);
+        var existingSub = subscribersMap.remove(subscriber);
+        if (existingSub != subscribersMap.defaultReturnValue()) existingSub.unsubscribe();
+        var sub = subscribe(EventConsumer.of(eventType, handler));
+        subscribersMap.put(subscriber, sub);
     }
 
-    @SafeVarargs
-    public final void subscribe(Object subscriber, Pair<Class<?>, Consumer<?>>... pairs) {
-        var existingSub = subscribers.remove(subscriber);
-        if (existingSub != subscribers.defaultReturnValue()) existingSub.unsubscribe();
-        var sub = subscribe(pairs);
-        subscribers.put(subscriber, sub);
+    public <T> void subscribe(Object subscriber, EventConsumer<T> eventConsumer) {
+        var existingSub = subscribersMap.remove(subscriber);
+        if (existingSub != subscribersMap.defaultReturnValue()) existingSub.unsubscribe();
+        var sub = subscribe(eventConsumer);
+        subscribersMap.put(subscriber, sub);
+    }
+
+    public final void subscribe(Object subscriber, EventConsumer<?>... eventConsumers) {
+        var existingSub = subscribersMap.remove(subscriber);
+        if (existingSub != subscribersMap.defaultReturnValue()) existingSub.unsubscribe();
+        var sub = subscribe(eventConsumers);
+        subscribersMap.put(subscriber, sub);
     }
 
     public boolean isSubscribed(Object subscriber) {
-        return subscribers.containsKey(subscriber);
-    }
-
-    public static <T> Pair<Class<?>, Consumer<?>> pair(Class<T> clazz, Consumer<T> handler) {
-        return Pair.of(clazz, handler);
+        return subscribersMap.containsKey(subscriber);
     }
 
     public void unsubscribe(Object subscriber) {
-        var sub = subscribers.remove(subscriber);
-        if (sub != subscribers.defaultReturnValue()) sub.unsubscribe();
+        var sub = subscribersMap.remove(subscriber);
+        if (sub != subscribersMap.defaultReturnValue()) sub.unsubscribe();
     }
 
     // handlers can throw and return exceptions - cancelling subsequent event executions
     public <T> void post(T event) {
-        var consumers = handlers.get(event.getClass());
-        if (consumers != handlers.defaultReturnValue()) {
+        var consumers = eventConsumersMap.get(event.getClass());
+        if (consumers != eventConsumersMap.defaultReturnValue()) {
             for (int i = 0; i < consumers.length; i++) {
                 var consumer = consumers[i];
-                ((Consumer<T>) consumer).accept(event);
+                ((Consumer<T>) consumer.handler()).accept(event);
             }
         }
     }
 
     public <T> void postAsync(T event) {
-        var consumers = handlers.get(event.getClass());
-        if (consumers != handlers.defaultReturnValue())
+        var consumers = eventConsumersMap.get(event.getClass());
+        if (consumers != eventConsumersMap.defaultReturnValue())
             asyncEventExecutor.execute(() -> this.postAsyncInternal(event, consumers));
     }
 
-    private synchronized void removeHandler(Class<?> eventType, Consumer<?> handler) {
-        var consumers = handlers.get(eventType);
-        if (consumers != handlers.defaultReturnValue()) {
+    private synchronized void removeEventConsumer(EventConsumer<?> eventConsumer) {
+        var consumers = eventConsumersMap.get(eventConsumer.eventClass());
+        if (consumers != eventConsumersMap.defaultReturnValue()) {
             int index = -1;
             for (int i = 0; i < consumers.length; i++) {
-                if (consumers[i] == handler) {
+                if (consumers[i].handler() == eventConsumer.handler()) {
                     index = i;
                     break;
                 }
             }
             if (index == -1) return;
             if (consumers.length == 1) {
-                handlers.remove(eventType);
+                eventConsumersMap.remove(eventConsumer.eventClass());
                 return;
             }
-            final Consumer<?>[] newConsumers = new Consumer[consumers.length - 1];
+            final EventConsumer<?>[] newConsumers = new EventConsumer[consumers.length - 1];
             System.arraycopy(consumers, 0, newConsumers, 0, index);
             System.arraycopy(consumers, index + 1, newConsumers, index, consumers.length - index - 1);
-            handlers.put(eventType, newConsumers);
+            eventConsumersMap.put(eventConsumer.eventClass(), newConsumers);
         }
     }
 
-    private synchronized <T> Subscription subscribe(Class<T> eventType, Consumer<T> handler) {
-        handlers.compute(eventType, (key, consumers) -> {
-            if (consumers == null) {
-                return new Consumer<?>[]{handler};
-            } else {
-                final Consumer<?>[] newConsumers = new Consumer[consumers.length + 1];
-                System.arraycopy(consumers, 0, newConsumers, 0, consumers.length);
-                newConsumers[consumers.length] = handler;
-                return newConsumers;
-            }
-        });
-        return new Subscription(() -> removeHandler(eventType, handler));
-    }
-
     @SafeVarargs
-    private synchronized Subscription subscribe(Pair<Class<?>, Consumer<?>>... pairs) {
-        for (int i = 0; i < pairs.length; i++) {
-            var pair = pairs[i];
-            handlers.compute(pair.left(), (key, consumers) -> {
+    private synchronized Subscription subscribe(EventConsumer<?>... eventConsumers) {
+        for (int i = 0; i < eventConsumers.length; i++) {
+            var eventConsumer = eventConsumers[i];
+            this.eventConsumersMap.compute(eventConsumer.eventClass(), (key, consumers) -> {
                 if (consumers == null) {
-                    return new Consumer<?>[]{pair.right()};
+                    return new EventConsumer[]{eventConsumer};
                 } else {
-                    final Consumer<?>[] newConsumers = new Consumer[consumers.length + 1];
+                    final EventConsumer<?>[] newConsumers = new EventConsumer[consumers.length + 1];
                     System.arraycopy(consumers, 0, newConsumers, 0, consumers.length);
-                    newConsumers[consumers.length] = pair.right();
+                    newConsumers[consumers.length] = eventConsumer;
+                    Arrays.sort(newConsumers);
                     return newConsumers;
                 }
             });
         }
         return new Subscription(() -> {
-            for (int i = 0; i < pairs.length; i++) {
-                var pair = pairs[i];
-                removeHandler(pair.left(), pair.right());
+            for (int i = 0; i < eventConsumers.length; i++) {
+                removeEventConsumer(eventConsumers[i]);
             }
         });
     }
 
-    private <T> void postAsyncInternal(T event, Consumer<?>[] consumers) {
+    private synchronized <T> Subscription subscribe(EventConsumer<T> eventConsumer) {
+        eventConsumersMap.compute(eventConsumer.eventClass(), (key, consumers) -> {
+            if (consumers == null) {
+                return new EventConsumer[]{eventConsumer};
+            } else {
+                final EventConsumer<?>[] newConsumers = new EventConsumer[consumers.length + 1];
+                System.arraycopy(consumers, 0, newConsumers, 0, consumers.length);
+                newConsumers[consumers.length] = eventConsumer;
+                Arrays.sort(newConsumers);
+                return newConsumers;
+            }
+        });
+        return new Subscription(() -> removeEventConsumer(eventConsumer));
+    }
+
+    private <T> void postAsyncInternal(T event, EventConsumer<?>[] eventConsumers) {
         try {
-            for (int i = 0; i < consumers.length; i++) {
-                var consumer = consumers[i];
-                ((Consumer<T>) consumer).accept(event);
+            for (int i = 0; i < eventConsumers.length; i++) {
+                var consumer = eventConsumers[i];
+                ((Consumer<T>) consumer.handler()).accept(event);
             }
         } catch (final Throwable e) { // swallow exception so we don't kill the executor
             DEFAULT_LOG.debug("Error handling async event", e);

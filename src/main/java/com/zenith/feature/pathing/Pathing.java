@@ -8,14 +8,14 @@ import org.cloudburstmc.math.vector.Vector2f;
 import java.util.*;
 
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 
 public class Pathing {
     private final Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
 
     public Pathing() {
         EVENT_BUS.subscribe(this,
-            pair(ClientTickEvent.class, this::handleTick)
+                            of(ClientTickEvent.class, this::handleTick)
         );
     }
 

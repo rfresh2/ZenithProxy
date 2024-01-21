@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
@@ -24,8 +24,8 @@ public class AutoRespawn extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(ClientTickEvent.class, this::handleClientTickEvent),
-            pair(DeathEvent.class, this::handleDeathEvent)
+                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(DeathEvent.class, this::handleDeathEvent)
         );
     }
 

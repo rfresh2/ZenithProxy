@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SimpleEventBusTest {
@@ -71,6 +71,33 @@ public class SimpleEventBusTest {
         assertEquals(1, foo.counter.get());
     }
 
+    @Test
+    public void prioritiesTest() {
+        final SimpleEventBus bus = new SimpleEventBus(executorService);
+        final AtomicInteger counter = new AtomicInteger(0);
+        var obj1 = new Object();
+        var obj2 = new Object();
+        var obj3 = new Object();
+        bus.subscribe(obj1, of(TestEvent.class, 1, event -> counter.set(1)));
+        bus.subscribe(obj2, of(TestEvent.class, 2, event -> counter.set(2)));
+        bus.subscribe(obj3, of(TestEvent.class, 3, event -> counter.set(3)));
+        bus.post(new TestEvent());
+        assertEquals(3, counter.get());
+        bus.unsubscribe(obj3);
+        bus.post(new TestEvent());
+        assertEquals(2, counter.get());
+        bus.unsubscribe(obj2);
+        bus.post(new TestEvent());
+        assertEquals(1, counter.get());
+        bus.subscribe(obj2, of(TestEvent.class, 2, event -> counter.set(2)));
+        bus.post(new TestEvent());
+        assertEquals(2, counter.get());
+        bus.unsubscribe(obj1);
+        bus.subscribe(obj1, of(TestEvent.class, 1, event -> counter.set(1)));
+        bus.post(new TestEvent());
+        assertEquals(2, counter.get());
+    }
+
     public record TestEvent() { }
     public record AnotherTestEvent() { }
 
@@ -103,8 +130,8 @@ public class SimpleEventBusTest {
 
         public void subscribe(SimpleEventBus bus) {
             bus.subscribe(this,
-                pair(TestEvent.class, this::handleTestEvent),
-                pair(AnotherTestEvent.class, this::handleAnotherTestEvent));
+                          of(TestEvent.class, this::handleTestEvent),
+                          of(AnotherTestEvent.class, this::handleAnotherTestEvent));
         }
 
         public void handleTestEvent(final TestEvent testEvent) {

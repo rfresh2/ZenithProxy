@@ -26,7 +26,7 @@ import java.time.Instant;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 import static java.util.Objects.nonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -44,9 +44,9 @@ public class AutoFish extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(EntityFishHookSpawnEvent.class, this::handleEntityFishHookSpawnEvent),
-            pair(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
-            pair(ClientTickEvent.class, this::handleClientTick)
+                            of(EntityFishHookSpawnEvent.class, this::handleEntityFishHookSpawnEvent),
+                            of(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
+                            of(ClientTickEvent.class, this::handleClientTick)
         );
     }
 

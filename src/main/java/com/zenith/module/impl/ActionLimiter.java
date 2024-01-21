@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
+import static com.zenith.event.EventConsumer.of;
 
 public class ActionLimiter extends Module {
     @Getter
@@ -63,8 +63,8 @@ public class ActionLimiter extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(PlayerLoginEvent.class, this::onPlayerLoginEvent),
-            pair(ServerConnectionRemovedEvent.class, this::onServerConnectionRemoved)
+                            of(PlayerLoginEvent.class, this::onPlayerLoginEvent),
+                            of(ServerConnectionRemovedEvent.class, this::onServerConnectionRemoved)
         );
     }
 
