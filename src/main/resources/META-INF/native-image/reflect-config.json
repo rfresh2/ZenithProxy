@@ -671,6 +671,13 @@
   "methods":[{"name":"<init>","parameterTypes":["java.util.UUID","int"] }]
 },
 {
+  "name":"com.zenith.feature.api.vcapi.model.QueueResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["int","int","java.time.OffsetDateTime"] }]
+},
+{
   "name":"com.zenith.feature.api.vcapi.model.SeenResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -764,13 +771,6 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setDisplayName","parameterTypes":["java.lang.String"] }, {"name":"setMetadata","parameterTypes":["java.lang.Integer"] }]
-},
-{
-  "name":"com.zenith.feature.queue.Queue$QueueApiResponse",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.feature.queue.QueueStatus",

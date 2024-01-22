@@ -57,9 +57,9 @@ import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
-import static com.zenith.event.SimpleEventBus.pair;
 import static com.zenith.util.math.MathHelper.formatDuration;
 import static discord4j.common.ReactorResources.DEFAULT_BLOCKING_TASK_SCHEDULER;
 import static discord4j.common.ReactorResources.DEFAULT_TIMER_TASK_SCHEDULER;
@@ -99,39 +99,39 @@ public class DiscordBot {
     public void initEventHandlers() {
         if (EVENT_BUS.isSubscribed(this)) throw new RuntimeException("Event handlers already initialized");
         EVENT_BUS.subscribe(this,
-            pair(ConnectEvent.class, this::handleConnectEvent),
-            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
-            pair(DisconnectEvent.class, this::handleDisconnectEvent),
-            pair(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
-            pair(AutoEatOutOfFoodEvent.class, this::handleAutoEatOutOfFoodEvent),
-            pair(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
-            pair(StartQueueEvent.class, this::handleStartQueueEvent),
-            pair(DeathEvent.class, this::handleDeathEvent),
-            pair(SelfDeathMessageEvent.class, this::handleSelfDeathMessageEvent),
-            pair(HealthAutoDisconnectEvent.class, this::handleHealthAutoDisconnectEvent),
-            pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
-            pair(ProxySpectatorConnectedEvent.class, this::handleProxySpectatorConnectedEvent),
-            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
-            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
-            pair(PlayerLeftVisualRangeEvent.class, this::handlePlayerLeftVisualRangeEvent),
-            pair(PlayerLogoutInVisualRangeEvent.class, this::handlePlayerLogoutInVisualRangeEvent),
-            pair(NonWhitelistedPlayerConnectedEvent.class, this::handleNonWhitelistedPlayerConnectedEvent),
-            pair(ProxySpectatorDisconnectedEvent.class, this::handleProxySpectatorDisconnectedEvent),
-            pair(ActiveHoursConnectEvent.class, this::handleActiveHoursConnectEvent),
-            pair(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent),
-            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
-            pair(DiscordMessageSentEvent.class, this::handleDiscordMessageSentEvent),
-            pair(UpdateStartEvent.class, this::handleUpdateStartEvent),
-            pair(ServerRestartingEvent.class, this::handleServerRestartingEvent),
-            pair(ProxyLoginFailedEvent.class, this::handleProxyLoginFailedEvent),
-            pair(StartConnectEvent.class, this::handleStartConnectEvent),
-            pair(PrioStatusUpdateEvent.class, this::handlePrioStatusUpdateEvent),
-            pair(PrioBanStatusUpdateEvent.class, this::handlePrioBanStatusUpdateEvent),
-            pair(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
-            pair(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
-            pair(DeathMessageEvent.class, this::handleDeathMessageEvent),
-            pair(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent)
+                            of(ConnectEvent.class, this::handleConnectEvent),
+                            of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+                            of(DisconnectEvent.class, this::handleDisconnectEvent),
+                            of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
+                            of(AutoEatOutOfFoodEvent.class, this::handleAutoEatOutOfFoodEvent),
+                            of(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
+                            of(StartQueueEvent.class, this::handleStartQueueEvent),
+                            of(DeathEvent.class, this::handleDeathEvent),
+                            of(SelfDeathMessageEvent.class, this::handleSelfDeathMessageEvent),
+                            of(HealthAutoDisconnectEvent.class, this::handleHealthAutoDisconnectEvent),
+                            of(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+                            of(ProxySpectatorConnectedEvent.class, this::handleProxySpectatorConnectedEvent),
+                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
+                            of(PlayerLeftVisualRangeEvent.class, this::handlePlayerLeftVisualRangeEvent),
+                            of(PlayerLogoutInVisualRangeEvent.class, this::handlePlayerLogoutInVisualRangeEvent),
+                            of(NonWhitelistedPlayerConnectedEvent.class, this::handleNonWhitelistedPlayerConnectedEvent),
+                            of(ProxySpectatorDisconnectedEvent.class, this::handleProxySpectatorDisconnectedEvent),
+                            of(ActiveHoursConnectEvent.class, this::handleActiveHoursConnectEvent),
+                            of(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent),
+                            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+                            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
+                            of(DiscordMessageSentEvent.class, this::handleDiscordMessageSentEvent),
+                            of(UpdateStartEvent.class, this::handleUpdateStartEvent),
+                            of(ServerRestartingEvent.class, this::handleServerRestartingEvent),
+                            of(ProxyLoginFailedEvent.class, this::handleProxyLoginFailedEvent),
+                            of(StartConnectEvent.class, this::handleStartConnectEvent),
+                            of(PrioStatusUpdateEvent.class, this::handlePrioStatusUpdateEvent),
+                            of(PrioBanStatusUpdateEvent.class, this::handlePrioBanStatusUpdateEvent),
+                            of(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
+                            of(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
+                            of(DeathMessageEvent.class, this::handleDeathMessageEvent),
+                            of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent)
         );
     }
 
@@ -568,14 +568,22 @@ public class DiscordBot {
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {
-        boolean sus = event.reason().startsWith("Login failed: Authentication error: Your account has been suspended for the next ");
-        sendEmbedMessage((sus ? MentionUtil.forRole(Snowflake.of(CONFIG.discord.accountOwnerRoleId)) : ""), Embed.builder()
-                .title("Proxy Disconnected")
-                .addField("Reason", event.reason(), false)
-                .addField("Online Duration", formatDuration(event.onlineDuration()), false)
-                .color(Color.RUBY));
+        var embed = Embed.builder()
+            .title("Proxy Disconnected")
+            .addField("Reason", event.reason(), false)
+            .addField("Online Duration", formatDuration(event.onlineDuration()), false)
+            .color(Color.RUBY);
+        if (Proxy.getInstance().isOn2b2t()
+            && Proxy.getInstance().getIsPrio().orElse(false)
+            && event.reason().startsWith("You have lost connection")
+            && event.onlineDuration().toSeconds() >= 0L
+            && event.onlineDuration().toSeconds() <= 1L) {
+            embed.description("You have likely been kicked for reaching the 2b2t non-prio account IP limit."
+                                  + "\nConsider configuring a connection proxy with the `clientConnection` command."
+                                  + "\nOr migrate ZenithProxy instances to multiple hosts.");
+        }
+        sendEmbedMessage(embed);
         SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
-        if (sus) { Proxy.getInstance().cancelAutoReconnect(); }
     }
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {

@@ -10,9 +10,9 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {
@@ -31,10 +31,10 @@ public class QueueWaitDatabase extends Database {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(ServerRestartingEvent.class, this::handleServerRestart),
-            pair(StartQueueEvent.class, this::handleStartQueue),
-            pair(QueuePositionUpdateEvent.class, this::handleQueuePosition),
-            pair(QueueCompleteEvent.class, this::handleQueueComplete)
+                            of(ServerRestartingEvent.class, this::handleServerRestart),
+                            of(StartQueueEvent.class, this::handleStartQueue),
+                            of(QueuePositionUpdateEvent.class, this::handleQueuePosition),
+                            of(QueueCompleteEvent.class, this::handleQueueComplete)
         );
     }
 

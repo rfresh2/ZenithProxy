@@ -16,8 +16,8 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -28,10 +28,10 @@ public class ModuleManager {
 
     public ModuleManager() {
         EVENT_BUS.subscribe(this,
-            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
-            pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
-            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
-            pair(DisconnectEvent.class, this::handleDisconnectEvent)
+                            of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+                            of(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+                            of(DisconnectEvent.class, this::handleDisconnectEvent)
         );
     }
 

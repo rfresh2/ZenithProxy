@@ -15,8 +15,8 @@ import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
@@ -35,8 +35,8 @@ public class Spook extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(ClientTickEvent.class, this::handleClientTickEvent),
-            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
+                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
     }
 
     @Override

@@ -1,20 +1,13 @@
 package com.zenith.feature.queue;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Suppliers;
 import com.zenith.feature.queue.mcping.MCPing;
 import com.zenith.feature.queue.mcping.data.FinalResponse;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaderValues;
-import reactor.netty.http.client.HttpClient;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,12 +16,6 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.Objects.isNull;
 
 public class Queue {
-    private static final String apiUrl = "https://api.2b2t.vc";
-    private static final Supplier<HttpClient> httpClient = Suppliers.memoize(() -> HttpClient.create()
-        .secure()
-        .baseUrl(apiUrl)
-        .headers(h -> h.add(HttpHeaderNames.ACCEPT, HttpHeaderValues.APPLICATION_JSON))
-        .headers(h -> h.add(HttpHeaderNames.USER_AGENT, "ZenithProxy/" + LAUNCH_CONFIG.version)));
     private static QueueStatus queueStatus;
     private static final Pattern digitPattern = Pattern.compile("\\d+");
     private static final MCPing mcPing = new MCPing();
@@ -110,25 +97,12 @@ public class Queue {
 
     private static boolean apiUpdate() {
         try {
-            final String response = httpClient.get()
-                .get()
-                .uri("/queue")
-                .responseContent()
-                .aggregate()
-                .asString()
-                .block();
-            QueueApiResponse queueApiResponse = OBJECT_MAPPER.readValue(response, QueueApiResponse.class);
-            queueStatus = new QueueStatus(queueApiResponse.prio, queueApiResponse.regular, queueApiResponse.time.toEpochSecond());
+            var response = VC_API.getQueue().orElseThrow();
+            queueStatus = new QueueStatus(response.prio(), response.regular(), response.time().toEpochSecond());
             return true;
         } catch (final Exception e) {
             SERVER_LOG.error("Failed updating queue status from API", e);
             return false;
         }
-    }
-
-    private static class QueueApiResponse {
-        @JsonProperty("prio") public Integer prio;
-        @JsonProperty("regular") public Integer regular;
-        @JsonProperty("time") public OffsetDateTime time;
     }
 }

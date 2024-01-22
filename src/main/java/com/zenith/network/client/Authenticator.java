@@ -15,7 +15,6 @@ import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
 import net.raphimc.minecraftauth.step.msa.StepLocalWebServer;
 import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
 import net.raphimc.minecraftauth.util.MicrosoftConstants;
-import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -125,32 +124,32 @@ public class Authenticator {
     }
 
     private FullJavaSession deviceCodeLogin() {
-        try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
-            return deviceCodeAuthStep.getFromInput(httpClient, new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+        try {
+            return deviceCodeAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private FullJavaSession msaLogin() {
-        try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
-            return msaAuthStep.getFromInput(httpClient, new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
+        try {
+            return msaAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private FullJavaSession localWebserverLogin() {
-        try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
-            return localWebserverStep.getFromInput(httpClient, new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
+        try {
+            return localWebserverStep.getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
-        try (CloseableHttpClient httpClient = MicrosoftConstants.createHttpClient()) {
-            return Optional.of(getAuthStep().refresh(httpClient, session));
+        try {
+            return Optional.of(getAuthStep().refresh(MinecraftAuth.createHttpClient(), session));
         } catch (Exception e) {
             AUTH_LOG.debug("Failed to refresh token", e);
             return Optional.empty();

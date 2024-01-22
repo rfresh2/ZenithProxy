@@ -11,8 +11,8 @@ import com.zenith.network.server.ServerConnection;
 
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -25,9 +25,9 @@ public class AutoDisconnect extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            pair(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
-            pair(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
-            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)
+                            of(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
+                            of(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
+                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)
         );
     }
 

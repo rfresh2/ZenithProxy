@@ -7,15 +7,18 @@ import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.*;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 
 public class Pathing {
     private final Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
 
     public Pathing() {
         EVENT_BUS.subscribe(this,
-            pair(ClientTickEvent.class, this::handleTick)
+                            // should be next to last in the tick handlers
+                            // right before player simulation
+                            // but after all modules that send movement inputs
+                            of(ClientTickEvent.class, -10000, this::handleTick)
         );
     }
 

@@ -30,7 +30,7 @@ public class DiscordManageCommand extends Command {
                 "on/off",
                 "channel <channel ID>",
                 "relayChannel <channel ID>",
-                "token <token",
+                "token <token>",
                 "role <role ID>",
                 "manageProfileImage on/off",
                 "manageNickname on/off",

@@ -8,7 +8,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.Proxy;
-import com.zenith.event.SimpleEventBus;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
@@ -23,6 +22,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class PlayerSimulation extends Module {
@@ -70,7 +70,9 @@ public class PlayerSimulation extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-            SimpleEventBus.pair(ClientTickEvent.class, this::tick)
+                            // we want this to be the last thing that happens in the tick
+                            // to allow other modules to update the player's input
+                            of(ClientTickEvent.class, -20000, this::tick)
         );
     }
 
