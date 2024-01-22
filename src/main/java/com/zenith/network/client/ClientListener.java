@@ -82,7 +82,6 @@ public class ClientListener implements SessionListener {
         this.session.setDisconnected(false);
         session.send(new ClientIntentionPacket(session.getPacketProtocol().getCodec().getProtocolVersion(), session.getHost(), session.getPort(), HandshakeIntent.LOGIN));
         EVENT_BUS.postAsync(new ConnectEvent());
-        session.send(new ClientIntentionPacket(session.getPacketProtocol().getCodec().getProtocolVersion(), session.getHost(), session.getPort(), HandshakeIntent.LOGIN));
     }
 
     @Override
