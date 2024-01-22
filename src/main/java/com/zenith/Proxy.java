@@ -482,11 +482,15 @@ public class Proxy {
     private void handleActiveHoursTick() {
         var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
         if (!activeHoursConfig.enabled) return;
-        if (this.isPrio.orElse(false) && isConnected()) return;
+        if (isOn2b2t() && (this.isPrio.orElse(false) && isConnected())) return;
         if (hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
         if (this.lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
 
-        var queueLength = Queue.getQueueStatus().regular();
+        var queueLength = isOn2b2t()
+            ? this.isPrio.orElse(false)
+                ? Queue.getQueueStatus().prio()
+                : Queue.getQueueStatus().regular()
+            : 0;
         var queueWaitSeconds = Queue.getQueueWait(queueLength);
         var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
             .plusSeconds(queueWaitSeconds)
