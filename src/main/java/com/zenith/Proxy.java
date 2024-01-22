@@ -492,7 +492,7 @@ public class Proxy {
                 ? Queue.getQueueStatus().prio()
                 : Queue.getQueueStatus().regular()
             : 0;
-        var queueWaitSeconds = Queue.getQueueWait(queueLength);
+        var queueWaitSeconds = activeHoursConfig.queueEtaCalc ? Queue.getQueueWait(queueLength) : 0;
         var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
             .plusSeconds(queueWaitSeconds)
             .atZone(ZoneId.of(activeHoursConfig.timeZoneId))

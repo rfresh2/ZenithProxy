@@ -189,6 +189,7 @@ public final class Config {
                 public static final class ActiveHours {
                     public boolean enabled = false;
                     public boolean forceReconnect = false;
+                    public boolean queueEtaCalc = true;
                     public String timeZoneId = "Universal";
                     public ArrayList<ActiveTime> activeTimes = new ArrayList<>();
 
