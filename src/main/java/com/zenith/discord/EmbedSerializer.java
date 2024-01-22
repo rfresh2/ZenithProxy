@@ -3,6 +3,7 @@ package com.zenith.discord;
 import discord4j.core.spec.EmbedCreateFields;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -40,7 +41,8 @@ public class EmbedSerializer {
                 .append(Component
                             .text(embed.url())
                             .color(NamedTextColor.BLUE)
-                            .clickEvent(ClickEvent.openUrl(embed.url())));
+                            .clickEvent(ClickEvent.openUrl(embed.url()))
+                            .hoverEvent(HoverEvent.showText(Component.text(embed.url()))));
         }
         for (EmbedCreateFields.Field field : embed.fields()) {
             if (field.name().equals("\u200B")) continue; // ignore empty fields (used for spacing)
@@ -85,7 +87,9 @@ public class EmbedSerializer {
             } else if (matcher.group(6) != null) {
                 component.append(Component.text(matcher.group(6)).color(NamedTextColor.GRAY));
             } else if (matcher.group(8) != null) {
-                component.append(Component.text(matcher.group(8)).color(NamedTextColor.BLUE).clickEvent(ClickEvent.openUrl(matcher.group(9))));
+                component.append(Component.text(matcher.group(8)).color(NamedTextColor.BLUE)
+                                     .clickEvent(ClickEvent.openUrl(matcher.group(9)))
+                                     .hoverEvent(HoverEvent.showText(Component.text(matcher.group(9)))));
             }
             lastEnd = end;
         }
