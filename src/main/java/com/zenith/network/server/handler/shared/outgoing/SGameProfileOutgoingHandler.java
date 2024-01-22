@@ -49,8 +49,14 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     }
                 }
             }
-
-            if (!Wait.waitUntilCondition(() -> CACHE.getProfileCache().getProfile() != null, 3)) {
+            if (!Wait.waitUntilCondition(() -> {
+                var client = Proxy.getInstance().getClient();
+                return client != null
+                    && CACHE.getProfileCache().getProfile() != null
+                    && (client.isOnline()
+                        || (client.isInQueue() && Proxy.getInstance().getQueuePosition() > 1));
+            }, 15)) {
+                SERVER_LOG.info("Timed out waiting for the proxy to login");
                 session.disconnect("Timed out waiting for the proxy to login");
                 return null;
             }
