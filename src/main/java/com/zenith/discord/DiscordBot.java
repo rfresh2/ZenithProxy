@@ -57,9 +57,9 @@ import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
-import static com.zenith.event.EventConsumer.of;
 import static com.zenith.util.math.MathHelper.formatDuration;
 import static discord4j.common.ReactorResources.DEFAULT_BLOCKING_TASK_SCHEDULER;
 import static discord4j.common.ReactorResources.DEFAULT_TIMER_TASK_SCHEDULER;

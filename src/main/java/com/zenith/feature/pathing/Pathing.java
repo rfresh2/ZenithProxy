@@ -7,8 +7,8 @@ import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.*;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.EventConsumer.of;
 
 public class Pathing {
     private final Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());

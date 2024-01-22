@@ -10,9 +10,9 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.event.EventConsumer.of;
 import static java.util.Objects.nonNull;
 
 public class QueueWaitDatabase extends Database {

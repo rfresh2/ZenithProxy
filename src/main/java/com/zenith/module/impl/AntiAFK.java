@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.EventConsumer.of;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 

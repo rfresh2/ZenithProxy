@@ -10,8 +10,8 @@ import com.zenith.module.Module;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.EventConsumer.of;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {

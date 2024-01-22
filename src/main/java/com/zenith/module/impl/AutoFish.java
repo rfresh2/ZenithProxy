@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import java.time.Instant;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.EventConsumer.of;
 import static java.util.Objects.nonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 

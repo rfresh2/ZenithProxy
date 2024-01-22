@@ -22,8 +22,8 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.EventConsumer.of;
 
 public class PlayerSimulation extends Module {
     private double gravity = 0.08;
