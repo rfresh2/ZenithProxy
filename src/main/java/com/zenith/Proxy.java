@@ -45,6 +45,7 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.*;
@@ -538,8 +539,8 @@ public class Proxy {
                 avatarURL = getAvatarURL(profile.getId());
             else
                 avatarURL = getAvatarURL(CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username);
-            try (java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
-                .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
+            try (HttpClient httpClient = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS)
                 .connectTimeout(Duration.ofSeconds(5))
                 .build()) {
                 final HttpRequest request = HttpRequest.newBuilder()
