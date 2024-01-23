@@ -10,6 +10,8 @@ import sys
 import urllib.parse
 import zipfile
 
+import jdk
+
 auto_update = True
 auto_update_launcher = True
 release_channel = "java.1.20.1"
@@ -452,8 +454,8 @@ def validate_system_with_config():
         java_version = get_java_version()
         min_java_version = 21 if version.startswith("2") else 17
         if java_version is None or java_version < min_java_version:
-            print("Invalid Java version on PATH. Found: '" + str(java_version) + "' Please install Java " + str(
-                min_java_version) + " or higher.")
+            print("Invalid Java version on PATH. Found: '" + str(java_version) + "' Java " + str(
+                min_java_version) + " or higher required.")
             return False
         return True
     elif release_channel.startswith("linux"):
@@ -463,6 +465,16 @@ def validate_system_with_config():
         return system == "Linux"  # and valid_flags and valid_glibc
     else:
         return False
+
+
+def install_java():
+    print("Installing Java...")
+    if system == "Windows":
+        jdk.install('21')
+    else:
+        jdk.install('21')
+    print("Java installed successfully!")
+
 
 def validate_linux_system():
     return system == "Linux" and validate_linux_cpu_flags() and validate_linux_glibc_version()
