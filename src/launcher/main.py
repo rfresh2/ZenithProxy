@@ -1,3 +1,4 @@
+import sys
 import time
 
 import github_api
@@ -24,10 +25,13 @@ def main():
         config.validate_launch_config()
         update_launcher_exec(config, api)
         update_zenith_exec(config, api)
-        launcher.launcher_exec(config, api)
+        launcher.launcher_exec(config)
         print("Restarting in 3 seconds...")
         time.sleep(3)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit(0)

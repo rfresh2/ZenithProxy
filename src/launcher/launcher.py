@@ -2,6 +2,7 @@ import os
 import platform
 import subprocess
 
+from jdk_install import get_java_executable
 from launch_platform import validate_system_with_config
 from utils import critical_error
 
@@ -43,7 +44,7 @@ def git_build():
         os.system("./gradlew jarBuild --no-daemon")
 
 
-def launcher_exec(config, api):
+def launcher_exec(config):
     if config.release_channel == "git":
         git_read_version(config)
 
@@ -79,6 +80,7 @@ def launcher_exec(config, api):
         except subprocess.CalledProcessError as e:
             print("Error launching application:", e)
     elif config.release_channel.startswith("java"):
+        java_executable = get_java_executable().replace("/", "\\")
         if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
             critical_error("ZenithProxy.jar not found")
         if config.custom_jvm_args is not None and config.custom_jvm_args != "":
@@ -86,10 +88,10 @@ def launcher_exec(config, api):
         else:
             jvm_args = default_java_args
         if platform.system() == 'Windows':
-            toolchain_command = "call java"
+            toolchain_command = "call " + java_executable
             jar_command = "-jar " + config.launch_dir.replace("/", "\\") + "ZenithProxy.jar"
         else:
-            toolchain_command = "java"
+            toolchain_command = java_executable
             jar_command = "-jar " + config.launch_dir + "ZenithProxy.jar"
         run_script = f"{toolchain_command} {jvm_args} {jar_command}"
         try:

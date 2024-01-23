@@ -28,7 +28,7 @@ def rest_update_check(config, api, asset_name, executable_name):
     if latest_release_and_ver[1] == config.version and os.path.isfile(config.launch_dir + executable_name):
         print("Already up to date")
         return
-    rest_get_assets(asset_name, executable_name, latest_release_and_ver)
+    rest_get_assets(config, api, asset_name, executable_name, latest_release_and_ver)
 
 
 def rest_get_version(config, api, asset_name, executable_name, target_version):
@@ -36,7 +36,7 @@ def rest_get_version(config, api, asset_name, executable_name, target_version):
     if not release_and_version:
         raise RestUpdateError("Failed to get release for version: " + target_version
                               + " and channel: " + config.release_channel)
-    rest_get_assets(asset_name, executable_name, release_and_version)
+    rest_get_assets(config, api, asset_name, executable_name, release_and_version)
 
 
 def rest_get_assets(config, api, asset_name, executable_name, release_and_version):
