@@ -1,14 +1,28 @@
 # TODO: Migrate this into the launcher script
 
 import os
-import sys
+import re
+import subprocess
 
 import jdk
 
-from launch_platform import get_java_version
+from utils import critical_error
 
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
+
+
+def get_path_java_version():
+    try:
+        output = subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True)
+        version_line = [line for line in output.split('\n') if "version" in line][0]
+        version_match = re.search(r'"(\d+(\.\d+)?)', version_line)
+        if version_match:
+            version = version_match.group(1)
+            return float(version) if '.' in version else int(version)
+    except (subprocess.CalledProcessError, OSError) as e:
+        critical_error("Error checking Java version, do you have Java installed?\n" + str(e))
+    return None
 
 
 def install_java():
@@ -17,11 +31,11 @@ def install_java():
     print("Java installed successfully!")
 
 
-def locate_java():
+def locate_java(min_version=21):
     # first check if the java on the path is java 21+
     # if so, use that
-    path_java_version = get_java_version()
-    if path_java_version and path_java_version >= 21:
+    path_java_version = get_path_java_version()
+    if path_java_version and path_java_version >= min_version:
         return 'java'
 
     if not os.path.exists(_JDK_DIR):
@@ -35,15 +49,28 @@ def locate_java():
     return None
 
 
-def get_java_executable():
-    java_path = locate_java()
+def java_install_prompt():
+    while True:
+        print("Automatically install Java? (y/n)")
+        i1 = input("> ")
+        if i1 == "y":
+            install_java()
+            break
+        elif i1 == "n":
+            print("Please install Java 21+ and try again.")
+            break
+        else:
+            print("Invalid input. Enter y or n")
+
+
+def get_java_executable(min_version=21):
+    java_path = locate_java(min_version)
     if not java_path:
-        install_java()
-        java_path = locate_java()
+        java_install_prompt()
+        java_path = locate_java(min_version)
         if not java_path:
             print("Failed to install Java.")
-            sys.exit(69)
-    print("Java path: " + java_path)
+            return None
     return java_path
 
 # can be called like this
