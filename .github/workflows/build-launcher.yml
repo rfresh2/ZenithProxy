@@ -88,10 +88,10 @@ jobs:
 
       - name: Rename executable
         run: |
-          mv dist/main dist/launcher
+          sudo mv dist/main dist/launcher
 
       - name: Elevate binary permissions
-        run: chmod +x dist/launcher
+        run: sudo chmod +x dist/launcher
 
       - name: Upload Binary
         uses: actions/upload-artifact@v3
