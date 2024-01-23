@@ -1,8 +1,7 @@
+import jdk
 import os
 import re
 import subprocess
-
-import jdk
 
 from utils import critical_error
 
@@ -24,9 +23,9 @@ def get_path_java_version():
 
 
 def install_java():
-    print("Installing Java...")
-    jdk.install('21', path=_JDK_DIR)
-    print("Java installed successfully!")
+    print("Installing Java to:", _JDK_DIR)
+    install_dir = jdk.install('21', path=_JDK_DIR)
+    print("Java installed successfully to:", install_dir)
 
 
 def locate_java(min_version=21):
@@ -71,5 +70,3 @@ def get_java_executable(min_version=21):
             return None
     return java_path
 
-# can be called like this
-# java = get_java_executable()
