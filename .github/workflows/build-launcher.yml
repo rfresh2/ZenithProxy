@@ -80,7 +80,7 @@ jobs:
 
       - name: Build binary on emulated aarch64
         run: |
-          docker run --rm --platform arm64 --volume "${PWD}:/repo" ubuntu:20.04 /bin/sh -c " \
+          docker run --rm --platform linux/arm64 --volume "${PWD}:/repo" python:3.12-bullseye /bin/sh -c " \
             cd /repo && \
             python3 -m pip install -U pyinstaller && \
             pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
