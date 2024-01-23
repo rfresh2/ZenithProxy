@@ -15,9 +15,10 @@ import static com.zenith.Shared.*;
 
 public class RestAutoUpdater extends AutoUpdater {
     private final HttpClient httpClient;
+    private final String baseUrl;
 
     public RestAutoUpdater() {
-        String baseUrl = LAUNCH_CONFIG.repo_owner.equals("rfresh2") && LAUNCH_CONFIG.repo_name.equals("ZenithProxy")
+        this.baseUrl = LAUNCH_CONFIG.repo_owner.equals("rfresh2") && LAUNCH_CONFIG.repo_name.equals("ZenithProxy")
             ? "https://github.2b2t.vc"
             : "https://api.github.com";
         this.httpClient = HttpClient.newBuilder()
@@ -42,7 +43,7 @@ public class RestAutoUpdater extends AutoUpdater {
     @Override
     public void updateCheck() {
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name + "/releases?per_page=100"))
+            .uri(URI.create(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name + "/releases?per_page=100"))
             .headers("User-Agent", "ZenithProxy/" + LAUNCH_CONFIG.version)
             .headers("Accept", "application/vnd.github+json")
             .headers("X-GitHub-Api-Version", "2022-11-28")

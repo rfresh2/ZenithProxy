@@ -220,7 +220,7 @@ public class Shared {
             EVENT_BUS = new SimpleEventBus(Executors.newFixedThreadPool(2, new ThreadFactoryBuilder()
                 .setNameFormat("ZenithProxy Async EventBus - #%d")
                 .setDaemon(true)
-                .build()));
+                .build()), DEFAULT_LOG);
             CACHE = new DataCache();
             PLAYER_LISTS = new PlayerListsManager();
             BLOCK_DATA_MANAGER = new BlockDataManager();

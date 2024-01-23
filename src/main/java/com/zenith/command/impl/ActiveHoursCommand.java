@@ -28,13 +28,17 @@ public class ActiveHoursCommand extends Command {
             "activeHours",
             CommandCategory.MODULE,
             "Set active hours for the proxy to automatically be logged in at."
-                        + "\n Time zone Ids (\"TZ identifier\" column): https://w.wiki/8Yif"
-                        + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
+                + "\nBy default, 2b2t's queue wait ETA is used to determine when to log in."
+                + "\nThe connect will occur when the current time plus the ETA is equal to a time set."
+                + "\nQueue ETA calc can be disabled with a command, which would mean connects would occur exactly at the set times."
+                + "\n Time zone Ids (\"TZ identifier\" column): https://w.wiki/8Yif"
+                + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
             asList("on/off",
-                        "timezone <timezone ID>",
-                        "add/del <time>",
-                        "status",
-                        "forceReconnect on/off")
+                   "timezone <timezone ID>",
+                   "add/del <time>",
+                   "status",
+                   "forceReconnect on/off",
+                   "queueEtaCalc on/off")
         );
     }
 
@@ -95,6 +99,13 @@ public class ActiveHoursCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Force Reconnect Set!");
                           return 1;
+                      })))
+            .then(literal("queueEtaCalc")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.utility.actions.activeHours.queueEtaCalc = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Queue ETA Calc Set!");
+                          return 1;
                       })));
     }
 
@@ -128,6 +139,7 @@ public class ActiveHoursCommand extends Command {
                 ? "None set!"
                 : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
             .addField("Force Reconnect", toggleStr(CONFIG.client.extra.utility.actions.activeHours.forceReconnect), false)
+            .addField("Queue ETA Calc", toggleStr(CONFIG.client.extra.utility.actions.activeHours.queueEtaCalc), false)
             .color(Color.CYAN);
     }
 }

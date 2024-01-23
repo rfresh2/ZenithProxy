@@ -5,7 +5,9 @@ import com.zenith.discord.EmbedSerializer;
 import de.themoep.minedown.adventure.MineDown;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -21,6 +23,7 @@ import static net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializ
 @UtilityClass
 public final class ComponentSerializer {
     private static final ComponentFlattener componentFlattener = ComponentFlattener.basic().toBuilder()
+        .mapper(TextComponent.class, ComponentSerializer::linkMapper)
         .complexMapper(TranslatableComponent.class, ComponentSerializer::translatableMapper)
         .build();
     private static final ANSIComponentSerializer ansiComponentSerializer;
@@ -38,10 +41,7 @@ public final class ComponentSerializer {
             System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, colorLevel);
         }
         ansiComponentSerializer = ANSIComponentSerializer.builder()
-            .flattener(ComponentFlattener.basic()
-                           .toBuilder()
-                           .complexMapper(TranslatableComponent.class, ComponentSerializer::translatableMapper)
-                           .build())
+            .flattener(componentFlattener)
             .build();
     }
 
@@ -90,6 +90,18 @@ public final class ComponentSerializer {
                 return;
             }
         }
+    }
+
+    private static String linkMapper(TextComponent component) {
+        var content = component.content();
+        if (content.isEmpty()) return "";
+        if (content.startsWith("http")) return content;
+        var clickEvent = component.clickEvent();
+        if (clickEvent != null && clickEvent.action() == ClickEvent.Action.OPEN_URL) {
+            var link = clickEvent.value();
+            return content + " (" + link + ")";
+        }
+        return content;
     }
 
 }

@@ -45,6 +45,7 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.*;
@@ -482,12 +483,16 @@ public class Proxy {
     private void handleActiveHoursTick() {
         var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
         if (!activeHoursConfig.enabled) return;
-        if (this.isPrio.orElse(false) && isConnected()) return;
+        if (isOn2b2t() && (this.isPrio.orElse(false) && isConnected())) return;
         if (hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
         if (this.lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
 
-        var queueLength = Queue.getQueueStatus().regular();
-        var queueWaitSeconds = Queue.getQueueWait(queueLength);
+        var queueLength = isOn2b2t()
+            ? this.isPrio.orElse(false)
+                ? Queue.getQueueStatus().prio()
+                : Queue.getQueueStatus().regular()
+            : 0;
+        var queueWaitSeconds = activeHoursConfig.queueEtaCalc ? Queue.getQueueWait(queueLength) : 0;
         var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
             .plusSeconds(queueWaitSeconds)
             .atZone(ZoneId.of(activeHoursConfig.timeZoneId))
@@ -534,8 +539,8 @@ public class Proxy {
                 avatarURL = getAvatarURL(profile.getId());
             else
                 avatarURL = getAvatarURL(CONFIG.authentication.username.equals("Unknown") ? "odpay" : CONFIG.authentication.username);
-            try (java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
-                .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
+            try (HttpClient httpClient = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS)
                 .connectTimeout(Duration.ofSeconds(5))
                 .build()) {
                 final HttpRequest request = HttpRequest.newBuilder()

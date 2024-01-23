@@ -78,4 +78,16 @@ public class EmbedSerializerTest {
         assertSame(child3.style().color(), NamedTextColor.GRAY);
         assertEquals("code block", ((TextComponent) child3).content());
     }
+
+    @Test
+    public void linksTest() {
+        var str = "[Test](https://example.com)";
+
+        var c = EmbedSerializer.serializeText(str);
+
+        var child = c.children().get(0);
+        assertSame(child.style().color(), NamedTextColor.BLUE);
+        assertEquals("Test", ((TextComponent) child).content());
+        assertEquals("https://example.com", child.clickEvent().value());
+    }
 }
