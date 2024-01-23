@@ -1,16 +1,15 @@
 import hashlib
-import http.client
 import json
 import os
 import platform
 import re
-import ssl
 import subprocess
 import sys
-import urllib.parse
+import time
 import zipfile
 
 import jdk
+import requests
 
 auto_update = True
 auto_update_launcher = True
@@ -23,7 +22,6 @@ launch_dir = "launcher/"
 custom_jvm_args = None
 system = platform.system()
 launcher_tag = "launcher"
-
 
 default_java_args = """\
 -Xmx300m \
@@ -169,25 +167,14 @@ def get_github_base_headers():
     }
 
 
-# Use our bundled SSL certs to avoid issues with any old operating systems
-def get_ssl_context():
-    # only set if file exists
-    if os.path.exists("cacert.pem"):
-        context = ssl.create_default_context(cafile="cacert.pem")
-    else:
-        context = ssl.create_default_context()
-    return context
-
-
 def get_latest_release_and_ver(channel):
     latest_release = None
-    url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100})}"
+    url = f"https://{get_github_api_base_url()}/repos/{repo_owner}/{repo_name}/releases"
+    params = {'per_page': 100}
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
-        connection.request("GET", url, headers=get_github_base_headers())
-        response = connection.getresponse()
-        if response.status == 200:
-            releases = json.loads(response.read())
+        response = requests.get(url, headers=get_github_base_headers(), params=params)
+        if response.status_code == 200:
+            releases = response.json()
             for release in releases:
                 if release["draft"]:
                     continue
@@ -195,122 +182,87 @@ def get_latest_release_and_ver(channel):
                     if latest_release is None or release["published_at"] > latest_release["published_at"]:
                         latest_release = release
         else:
-            print("Failed to get releases:", response.status, response.reason)
+            print("Failed to get releases:", response.status_code, response.reason)
     except Exception as e:
         print("Failed to get releases:", e)
-    finally:
-        connection.close()
     return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
 
 
 def get_release_for_ver(target_version):
     found_version = False
     page = 1
-    url = f"/repos/{repo_owner}/{repo_name}/releases?{urllib.parse.urlencode({'per_page': 100, 'page': page})}"
+    url = f"https://{get_github_api_base_url()}/repos/{repo_owner}/{repo_name}/releases"
     try:
         while not found_version and page < 10:
-            connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
-            connection.request("GET", url, headers=get_github_base_headers())
-            response = connection.getresponse()
-            if response.status == 200:
-                releases = json.loads(response.read())
+            response = requests.get(url, headers=get_github_base_headers(), params={'per_page': 100, 'page': page})
+            if response.status_code == 200:
+                releases = response.json()
                 for release in releases:
                     if release["draft"]:
                         continue
                     if release["tag_name"] == target_version:
                         return release["id"], release["tag_name"]
             else:
-                print("Failed to get releases:", response.status, response.reason)
+                print("Failed to get releases:", response.status_code, response.reason)
                 break
-            connection.close()
             page += 1
     except Exception as e:
         print("Failed to get release for version:", target_version, e)
-    finally:
-        connection.close()
-    return None
 
 
 def get_release_asset_id(release_id, asset_name):
-    url = f"/repos/{repo_owner}/{repo_name}/releases/{release_id}"
+    url = f"https://{get_github_api_base_url()}/repos/{repo_owner}/{repo_name}/releases/{release_id}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
-        connection.request("GET", url, headers=get_github_base_headers())
-        response = connection.getresponse()
-        if response.status == 200:
-            release_data = json.loads(response.read())
+        response = requests.get(url, headers=get_github_base_headers())
+        if response.status_code == 200:
+            release_data = response.json()
             asset_id = next(
                 (asset["id"] for asset in release_data["assets"] if asset["name"] == asset_name),
                 None
             )
             return asset_id
         else:
-            print("Failed to get release asset ID:", get_github_api_base_url() + url, response.status, response.reason)
+            print("Failed to get release asset ID:", response.status_code, response.reason)
             return None
     except Exception as e:
         print("Failed to get release asset ID:", e)
         return None
-    finally:
-        connection.close()
 
 
 def get_release_tag_asset_id(release_id, asset_name):
-    url = f"/repos/{repo_owner}/{repo_name}/releases/tags/{release_id}"
+    url = f"https://{get_github_api_base_url()}/repos/{repo_owner}/{repo_name}/releases/tags/{release_id}"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
-        connection.request("GET", url, headers=get_github_base_headers())
-        response = connection.getresponse()
-        if response.status == 200:
-            release_data = json.loads(response.read())
+        response = requests.get(url, headers=get_github_base_headers())
+        if response.status_code == 200:
+            release_data = response.json()
             asset_id = next(
                 (asset["id"] for asset in release_data["assets"] if asset["name"] == asset_name),
                 None
             )
             return asset_id
         else:
-            print("Failed to get release asset ID:", get_github_api_base_url() + url, response.status, response.reason)
+            print("Failed to get release asset ID:", response.status_code, response.reason)
             return None
     except Exception as e:
         print("Failed to get release asset ID:", e)
         return None
-    finally:
-        connection.close()
 
 
 def download_release_asset(asset_id):
-    url = f"/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
+    url = f"https://{get_github_api_base_url()}/repos/{repo_owner}/{repo_name}/releases/assets/{asset_id}"
+    download_headers = get_github_base_headers()
+    download_headers["Accept"] = "application/octet-stream"
     try:
-        connection = http.client.HTTPSConnection(get_github_api_base_url(), context=get_ssl_context())
-        download_headers = get_github_base_headers()
-        download_headers["Accept"] = "application/octet-stream"
-        connection.request("GET", url, headers=download_headers)
-        response = connection.getresponse()
-
-        # Follow redirects
-        while response.status // 100 == 3:
-            redirect_location = response.getheader('Location')
-            connection.close()
-
-            # Parse the redirect URL to extract the new host
-            redirect_url = urllib.parse.urlparse(redirect_location)
-            redirect_host = redirect_url.netloc
-
-            # Reopen connection to the new host
-            connection = http.client.HTTPSConnection(redirect_host, context=get_ssl_context())
-            connection.request("GET", redirect_location, headers=download_headers)
-            response = connection.getresponse()
-
-        if response.status == 200:
-            asset_data = response.read()
+        response = requests.get(url, headers=download_headers, allow_redirects=True)
+        if response.status_code == 200:
+            asset_data = response.content
             return asset_data
         else:
-            print("Failed to download asset:", response.status, response.reason)
+            print("Failed to download asset:", response.status_code, response.reason)
             return None
     except Exception as e:
         print("Failed to download asset:", e)
         return None
-    finally:
-        connection.close()
 
 
 class UpdateError(Exception):
@@ -585,18 +537,17 @@ def setup_exec():
 
     while True:
         print("Input the IP address players should connect to. This can be a domain name or an IP address.")
-        print("If you are unsure, leave this blank and the proxy will use the IP address of the machine it is running on.")
+        print(
+            "If you are unsure, leave this blank and the proxy will use the IP address of the machine it is running on.")
         print("If you are using a domain name, make sure you have DNS records set up (see README.md)")
         ip = input("> ")
         if ip == "":
-            connection = http.client.HTTPSConnection("api.ipify.org")
-            connection.request("GET", "/")
-            response = connection.getresponse()
-            if response.status == 200:
-                ip = response.read().decode()
+            response = requests.get("https://api.ipify.org")
+            if response.status_code == 200:
+                ip = response.content.decode()
                 break
             else:
-                print("Failed to get IP address:", response.status, response.reason)
+                print("Failed to get IP address:", response.status_code, response.reason)
         else:
             break
 
@@ -831,13 +782,20 @@ def launcher_exec():
         critical_error("Invalid release channel:" + release_channel)
 
 
-# Main script
-json_data = init_launch_config()
-if json_data is None:
-    print("launch_config.json not found, running setup.")
-    setup_exec()
-    json_data = init_launch_config()
-read_launch_config(json_data)
-validate_launch_config()
-update_launcher_exec()
-launcher_exec()
+def main():
+    while True:
+        json_data = init_launch_config()
+        if json_data is None:
+            print("launch_config.json not found, running setup.")
+            setup_exec()
+            json_data = init_launch_config()
+        read_launch_config(json_data)
+        validate_launch_config()
+        update_launcher_exec()
+        launcher_exec()
+        print("Restarting in 3 seconds...")
+        time.sleep(3)
+
+
+if __name__ == "__main__":
+    main()
