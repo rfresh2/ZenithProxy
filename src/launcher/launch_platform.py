@@ -1,9 +1,8 @@
 import os
 import platform
-import re
 import subprocess
 
-from utils import critical_error
+from jdk_install import get_java_executable
 
 
 def validate_linux_cpu_flags():
@@ -52,19 +51,6 @@ def validate_linux_system():
     return platform.system() == "Linux" and validate_linux_cpu_flags() and validate_linux_glibc_version()
 
 
-def get_java_version():
-    try:
-        output = subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True)
-        version_line = [line for line in output.split('\n') if "version" in line][0]
-        version_match = re.search(r'"(\d+(\.\d+)?)', version_line)
-        if version_match:
-            version = version_match.group(1)
-            return float(version) if '.' in version else int(version)
-    except (subprocess.CalledProcessError, OSError) as e:
-        critical_error("Error checking Java version, do you have Java installed?\n" + str(e))
-    return None
-
-
 def validate_system_with_config(config):
     if config.release_channel == "git":
         # check if we have a .git directory
@@ -73,11 +59,10 @@ def validate_system_with_config(config):
             return False
         return True
     elif config.release_channel.startswith("java"):
-        java_version = get_java_version()
         min_java_version = 21 if config.version.startswith("2") else 17
-        if java_version is None or java_version < min_java_version:
-            print("Invalid Java version on PATH. Found: '" + str(java_version) + "' Java " + str(
-                min_java_version) + " or higher required.")
+        java_executable = get_java_executable()
+        if java_executable is None:
+            print(f"Java >={min_java_version} not found.")
             return False
         return True
     elif config.release_channel.startswith("linux"):
