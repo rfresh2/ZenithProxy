@@ -25,7 +25,11 @@ jobs:
 
       - name: Build launcher
         run: |
-          pyinstaller --onefile launcher.py
+          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+
+      - name: Rename executable
+        run: |
+          mv dist/main dist/launcher
 
       - name: Elevate binary permissions
         run: chmod +x dist/launcher
