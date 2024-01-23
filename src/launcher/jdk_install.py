@@ -1,11 +1,11 @@
 # TODO: Migrate this into the launcher script
 
 import os
-import re
-import subprocess
 import sys
 
 import jdk
+
+from launch_platform import get_java_version
 
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
@@ -15,19 +15,6 @@ def install_java():
     print("Installing Java...")
     jdk.install('21', path=_JDK_DIR)
     print("Java installed successfully!")
-
-
-def get_java_version():
-    try:
-        output = subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True)
-        version_line = [line for line in output.split('\n') if "version" in line][0]
-        version_match = re.search(r'"(\d+(\.\d+)?)', version_line)
-        if version_match:
-            version = version_match.group(1)
-            return float(version) if '.' in version else int(version)
-    except (subprocess.CalledProcessError, OSError) as e:
-        print("Error checking Java version, do you have Java installed?\n" + str(e))
-    return None
 
 
 def locate_java():
@@ -48,7 +35,7 @@ def locate_java():
     return None
 
 
-def get_java():
+def get_java_executable():
     java_path = locate_java()
     if not java_path:
         install_java()
@@ -59,5 +46,5 @@ def get_java():
     print("Java path: " + java_path)
     return java_path
 
-
-java = get_java()
+# can be called like this
+# java = get_java_executable()
