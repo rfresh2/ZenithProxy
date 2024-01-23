@@ -146,7 +146,7 @@ jobs:
           tag_name: 'launcher-v3'
           prerelease: true
           files: |
-            ZenithProxy-launcher-win64.exe
-            ZenithProxy-launcher-linux-amd64
-            ZenithProxy-launcher-linux-aarch64
-            ZenithProxy-launcher-macos
+            launcher-windows-amd64/ZenithProxy-launcher-win64.exe
+            launcher-linux-amd64/ZenithProxy-launcher-linux-amd64
+            launcher-linux-aarch64/ZenithProxy-launcher-linux-aarch64
+            launcher-macos-amd64/ZenithProxy-launcher-macos
