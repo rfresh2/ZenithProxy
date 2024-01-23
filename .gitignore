@@ -16,3 +16,5 @@ gradle.properties
 /.vscode
 launcher/
 /ViaLoader/
+dist/
+/*.spec
