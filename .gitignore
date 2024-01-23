@@ -14,8 +14,7 @@ gradle.properties
 /*.json*
 *.tmp
 /.vscode
-/launcher
+launcher/
 /ViaLoader/
 dist/
 /*.spec
-__pycache__/

@@ -1,3 +1,5 @@
+# TODO: Migrate this into the launcher script
+
 import os
 import re
 import subprocess

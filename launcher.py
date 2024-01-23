@@ -1,15 +1,14 @@
 import hashlib
+import jdk
 import json
 import os
 import platform
 import re
+import requests
 import subprocess
 import sys
 import time
 import zipfile
-
-import jdk
-import requests
 
 auto_update = True
 auto_update_launcher = True
@@ -799,3 +798,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# todo: We could still split out our py source files and compile them with PyInstaller into a single executable
+#   Would probably reduce the length and complexity of this script by a lot
+#   This is more possible with PyInstaller as we don't have to depend on the user not updating all the launcher files
+#   as we had before
