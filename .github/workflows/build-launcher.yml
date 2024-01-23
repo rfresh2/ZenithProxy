@@ -4,54 +4,87 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-windows-amd64:
-    runs-on: 'windows-2019'
+#  build-windows-amd64:
+#    runs-on: 'windows-2019'
+#    steps:
+#      - name: Check out repository
+#        uses: actions/checkout@v3
+#
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.12'
+#
+#      - name: Install PyInstaller
+#        run: |
+#          pip install -U pyinstaller
+#        shell: pwsh
+#
+#      - name: Build launcher
+#        run: |
+#          pyinstaller --specpath .\build -p .\src\launcher --onefile --noconfirm .\src\launcher\main.py
+#        shell: pwsh
+#
+#      - name: Rename executable
+#        run: |
+#          Move-Item -Path .\dist\main.exe -Destination .\dist\launcher.exe
+#        shell: pwsh
+#
+#      - name: Upload Binary
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: launcher-windows-amd64
+#          path: dist/launcher.exe
+#
+#  build-linux-amd64:
+#    runs-on: 'ubuntu-20.04'
+#    steps:
+#      - name: Check out repository
+#        uses: actions/checkout@v3
+#
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.12'
+#
+#      - name: Install PyInstaller
+#        run: |
+#          pip install -U pyinstaller
+#
+#      - name: Build launcher
+#        run: |
+#          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+#
+#      - name: Rename executable
+#        run: |
+#          mv dist/main dist/launcher
+#
+#      - name: Elevate binary permissions
+#        run: chmod +x dist/launcher
+#
+#      - name: Upload Binary
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: launcher-linux-amd64
+#          path: dist/launcher
+
+  build-linux-aarch64:
+    runs-on: 'ubuntu-latest'
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Install PyInstaller
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build binary on emulated aarch64
         run: |
-          pip install -U pyinstaller
-        shell: pwsh
-
-      - name: Build launcher
-        run: |
-          pyinstaller --specpath .\build -p .\src\launcher --onefile --noconfirm .\src\launcher\main.py
-        shell: pwsh
-
-      - name: Rename executable
-        run: |
-          Move-Item -Path .\dist\main.exe -Destination .\dist\launcher.exe
-        shell: pwsh
-
-      - name: Upload Binary
-        uses: actions/upload-artifact@v3
-        with:
-          name: launcher-windows-amd64
-          path: dist/launcher.exe
-
-  build-linux-amd64:
-    runs-on: 'ubuntu-20.04'
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install PyInstaller
-        run: |
-          pip install -U pyinstaller
-
-      - name: Build launcher
-        run: |
-          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+          docker run --rm --platform arm64 --volume "${PWD}:/repo" ubuntu:20.04 /bin/sh -c " \
+            cd /repo && \
+            python3 -m pip install -U pyinstaller && \
+            pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+          "
 
       - name: Rename executable
         run: |
@@ -63,37 +96,37 @@ jobs:
       - name: Upload Binary
         uses: actions/upload-artifact@v3
         with:
-          name: launcher-linux-amd64
+          name: launcher-linux-aarch64
           path: dist/launcher
 
-  build-mac-amd64:
-    runs-on: 'macos-latest'
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install PyInstaller
-        run: |
-          pip install -U pyinstaller
-
-      - name: Build launcher
-        run: |
-          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
-
-      - name: Rename executable
-        run: |
-          mv dist/main dist/launcher
-
-      - name: Elevate binary permissions
-        run: chmod +x dist/launcher
-
-      - name: Upload Binary
-        uses: actions/upload-artifact@v3
-        with:
-          name: launcher-macos-amd64
-          path: dist/launcher
-
+#  build-mac-amd64:
+#    runs-on: 'macos-latest'
+#    steps:
+#      - name: Check out repository
+#        uses: actions/checkout@v3
+#
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.12'
+#
+#      - name: Install PyInstaller
+#        run: |
+#          pip install -U pyinstaller
+#
+#      - name: Build launcher
+#        run: |
+#          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+#
+#      - name: Rename executable
+#        run: |
+#          mv dist/main dist/launcher
+#
+#      - name: Elevate binary permissions
+#        run: chmod +x dist/launcher
+#
+#      - name: Upload Binary
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: launcher-macos-amd64
+#          path: dist/launcher
+#
