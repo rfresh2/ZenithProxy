@@ -5,10 +5,11 @@ on:
 
 jobs:
   build:
-    # todo: multi-arch build strategy
+    # todo: multi-os build strategy
 #    strategy:
 #      matrix:
 #        os: [ubuntu-20.04, windows-latest, macos-latest]
+# todo: we also will need qemu for arm builds
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
