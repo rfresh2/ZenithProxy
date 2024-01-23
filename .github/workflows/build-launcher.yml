@@ -1,0 +1,39 @@
+name: Build Launcher
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    # todo: multi-arch build strategy
+#    strategy:
+#      matrix:
+#        os: [ubuntu-20.04, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PyInstaller
+        run: |
+          pip install -U pyinstaller
+
+      - name: Build launcher
+        run: |
+          pyinstaller --onefile launcher.py
+
+      - name: Elevate binary permissions
+        run: chmod +x dist/launcher
+
+      - name: Zip Binary
+        run: zip -j launcher.zip dist/launcher
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: launcher
+          path: launcher.zip
