@@ -50,7 +50,7 @@ public class EmbedSerializer {
                 .append(Component.text(field.name())
                             .appendNewline()
                             .decorate(TextDecoration.BOLD))
-                .append(Component.text(replaceDiscordTime(field.value())));
+                .append(serializeText(replaceDiscordTime(field.value())));
         }
         if (embed.isColorPresent()) {
             var color = embed.color();
