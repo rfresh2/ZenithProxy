@@ -20,3 +20,5 @@ dist/
 /*.spec
 __pycache__/
 *.exe
+*.zip
+/launcher-python*

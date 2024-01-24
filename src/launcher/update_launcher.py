@@ -9,6 +9,7 @@ import zipfile
 import launch_platform
 
 launcher_tag = "launcher-v3"
+hashes_file_name = "hashes.txt"
 
 
 def get_launcher_asset_file_name(is_pyinstaller, os_platform, os_arch):
@@ -41,6 +42,58 @@ def get_launcher_executable_name(is_pyinstaller, os_platform, os_arch):
     return None
 
 
+def compute_sha1(file_path):
+    sha1 = hashlib.sha1()
+    with open(file_path, "rb") as f:
+        while True:
+            data = f.read(65536)
+            if not data:
+                break
+            sha1.update(data)
+    return sha1.hexdigest()
+
+
+def get_launcher_hashes(api):
+    hashes_asset_id = api.get_release_tag_asset_id(launcher_tag, hashes_file_name)
+    if hashes_asset_id is None:
+        print("Failed to get launcher hashes asset ID:", hashes_file_name)
+        return None
+    hashes_asset_bytes = api.download_release_asset(hashes_asset_id)
+    if hashes_asset_bytes is None:
+        print("Failed to download launcher hashes asset:", hashes_file_name)
+        return None
+    hashes_file_string = hashes_asset_bytes.decode("utf-8")
+    hashes_file_lines = hashes_file_string.splitlines()
+    hashes_list = []
+    for line in hashes_file_lines:
+        if line.startswith("#"):
+            continue
+        if line.strip() == "":
+            continue
+        hashes_list.append(line)
+    if len(hashes_list) == 0:
+        print("Failed to parse launcher hashes file:", hashes_file_name)
+        return None
+    return hashes_list
+
+
+def relaunch(os_platform, executable_name, new_executable_path, current_launcher_sha1):
+    print("Relaunching...")
+    if os_platform == "windows":
+        # on windows, we can't replace the executable while it's running
+        # so we're moving the files around and then launching a subprocess
+        # not ideal as we don't clean this process until everything gets closed, but it seems to work
+        os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + current_launcher_sha1.hexdigest() + ".old")
+        os.rename(new_executable_path, executable_name)
+        subprocess.run([executable_name])
+    else:
+        os.replace(new_executable_path, executable_name)
+    if sys.argv[0].endswith(".py"):
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    else:
+        os.execl(sys.argv[0], *sys.argv)
+
+
 def update_launcher_exec(config, api):
     if not config.auto_update_launcher:
         return
@@ -56,51 +109,29 @@ def update_launcher_exec(config, api):
     if launcher_asset_file_name is None:
         print("Unable to identify which launcher asset to download, skipping launcher update.")
         return
+    hashes_list = get_launcher_hashes(api)
+    if hashes_list is None:
+        print("Failed to get launcher hashes, skipping launcher update.")
+        return
+    current_launcher_sha1 = compute_sha1(executable_name)
+    if current_launcher_sha1 in hashes_list:
+        print("Launcher is up to date:", current_launcher_sha1)
+        return
+    print("Found new launcher, current version:", current_launcher_sha1)
     launcher_asset_id = api.get_release_tag_asset_id(launcher_tag, launcher_asset_file_name)
     if launcher_asset_id is None:
         print("Failed to get launcher asset ID:", launcher_asset_file_name)
         return
     launcher_asset_bytes = api.download_release_asset(launcher_asset_id)
     if launcher_asset_bytes is None:
-        print("Failed to download launcher.py asset:", launcher_asset_file_name)
+        print("Failed to download launcher asset:", launcher_asset_file_name)
         return
     with zipfile.ZipFile(io.BytesIO(launcher_asset_bytes)) as zip_file:
         zip_file.extractall("launcher")
-    tmp_executable_path = "launcher/" + executable_name
-    do_update = False
-    if os.path.exists(tmp_executable_path):
-        tmp_sha1 = hashlib.sha1()
-        cur_sha1 = hashlib.sha1()
-        with open(tmp_executable_path, "rb") as f:
-            while True:
-                data = f.read(65536)
-                if not data:
-                    break
-                tmp_sha1.update(data)
-        with open(executable_name, "rb") as f:
-            while True:
-                data = f.read(65536)
-                if not data:
-                    break
-                cur_sha1.update(data)
-        if cur_sha1.hexdigest() != tmp_sha1.hexdigest():
-            print("Current launcher:", cur_sha1.hexdigest())
-            print("New launcher:", tmp_sha1.hexdigest())
-            print("Updating launcher to:", tmp_sha1.hexdigest())
-            do_update = True
-
-    if do_update:
-        print("Relaunching...")
-        if os_platform == "windows":
-            # on windows, we can't replace the executable while it's running
-            # so we're moving the files around and then launching a subprocess
-            # not ideal as we don't clean this process until everything gets closed, but it seems to work
-            os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + cur_sha1.hexdigest() + ".old")
-            os.rename(tmp_executable_path, executable_name)
-            subprocess.run([executable_name])
-        else:
-            os.replace(tmp_executable_path, executable_name)
-        if sys.argv[0].endswith(".py"):
-            os.execl(sys.executable, sys.executable, *sys.argv)
-        else:
-            os.execl(sys.argv[0], *sys.argv)
+    new_executable_path = "launcher/" + executable_name
+    if not os.path.isfile(new_executable_path):
+        print("Failed to extract launcher executable:", executable_name)
+        return
+    new_launcher_sha1 = compute_sha1(new_executable_path)
+    print("New launcher version:", new_launcher_sha1)
+    relaunch(os_platform, executable_name, new_executable_path, current_launcher_sha1)
