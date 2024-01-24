@@ -83,7 +83,7 @@ def relaunch(os_platform, executable_name, new_executable_path, current_launcher
         # on windows, we can't replace the executable while it's running
         # so we're moving the files around and then launching a subprocess
         # not ideal as we don't clean this process until everything gets closed, but it seems to work
-        os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + current_launcher_sha1.hexdigest() + ".old")
+        os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + current_launcher_sha1 + ".old")
         os.rename(new_executable_path, executable_name)
         subprocess.run([executable_name])
     else:
