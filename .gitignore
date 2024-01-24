@@ -18,3 +18,4 @@ gradle.properties
 /ViaLoader/
 dist/
 /*.spec
+__pycache__/
