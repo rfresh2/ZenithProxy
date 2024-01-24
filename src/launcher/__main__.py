@@ -11,6 +11,12 @@ from update_zenith import update_zenith_exec
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
 
+# for use with relaunches just so we don't get stuck in an infinite update loop if something goes wrong
+no_launcher_update = False
+for arg in sys.argv:
+    if arg == "--no-launcher-update":
+        no_launcher_update = True
+
 try:
     while True:
         json_data = read_launch_config_file()
@@ -20,7 +26,11 @@ try:
             json_data = read_launch_config_file()
         config.load_launch_config_data(json_data)
         config.validate_launch_config()
-        update_launcher_exec(config, api)
+        if no_launcher_update:
+            print("Skipping launcher update check")
+            no_launcher_update = False
+        else:
+            update_launcher_exec(config, api)
         update_zenith_exec(config, api)
         launcher.launcher_exec(config)
         print("Restarting in 3 seconds...")

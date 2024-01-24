@@ -89,18 +89,18 @@ def relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, 
             os.rename("launcher/launcher-python.sh", "launcher-python.sh")
             os.rename("launcher-python.bat", tempfile.gettempdir() + "/launcher-python-" + current_launcher_sha1 + ".bat.old")
             os.rename("launcher/launcher-python.bat", "launcher-python.bat")
-            subprocess.run(["launcher-python.bat"])
+            subprocess.run(["launcher-python.bat", "--no-launcher-update"])
         else:
-            subprocess.run([executable_name])
+            subprocess.run([executable_name, "--no-launcher-update"])
     else:
         os.replace(new_executable_path, executable_name)
         if not is_pyinstaller:
             os.replace("launcher/launcher-python.sh", "launcher-python.sh")
             os.replace("launcher/launcher-python.bat", "launcher-python.bat")
     if not is_pyinstaller:
-        os.execl("launcher-python.sh", *sys.argv)
+        os.execl("launcher-python.sh", "--no-launcher-update")
     else:
-        os.execl(sys.argv[0], *sys.argv)
+        os.execl(sys.argv[0], "--no-launcher-update")
 
 
 def update_launcher_exec(config, api):

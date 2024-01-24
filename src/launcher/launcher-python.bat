@@ -19,5 +19,6 @@ echo Using Python interpreter: %PYTHON_CMD%
 echo Installing dependencies...
 %PYTHON_CMD% -m pip install -r requirements.txt
 echo Launching ZenithProxy...
-%PYTHON_CMD% launcher-py.zip
+%PYTHON_CMD% launcher-py.zip %*
+
 
