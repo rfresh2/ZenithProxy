@@ -107,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: launcher-python
-          path: dist/ZenithProxy-launcher-python.zip
+          path: ZenithProxy-launcher-python.zip
 
   release-artifacts:
     needs:
