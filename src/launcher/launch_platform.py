@@ -1,6 +1,7 @@
 import os
 import platform
 import subprocess
+import sys
 
 from jdk_install import get_java_executable
 
@@ -72,3 +73,29 @@ def validate_system_with_config(config):
         return platform.system() == "Linux"  # and valid_flags and valid_glibc
     else:
         return False
+
+
+def is_pyinstaller_bundle():
+    return getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
+
+
+def get_platform_os():
+    if platform.system() == "Windows":
+        return "windows"
+    elif platform.system() == "Linux":
+        return "linux"
+    elif platform.system() == "Darwin":
+        return "macos"
+    else:
+        return "unknown"
+
+
+def get_platform_arch():
+    if platform.machine().lower() == "amd64":
+        return "amd64"
+    elif platform.machine() == "x86_64":
+        return "amd64"
+    elif platform.machine().lower() == "arm64":
+        return "aarch64"
+    else:
+        return "unknown"
