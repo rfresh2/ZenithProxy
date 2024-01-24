@@ -39,7 +39,7 @@ jobs:
 
       - name: Build launcher
         run: |
-          pyinstaller --specpath .\build -p .\src\launcher --onefile --noconfirm .\src\launcher\main.py
+          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
 
       - name: Rename executable
         run: |
