@@ -126,6 +126,9 @@ def update_launcher_exec(config, api):
     if launcher_asset_bytes is None:
         print("Failed to download launcher asset:", launcher_asset_file_name)
         return
+    for file_name in os.listdir("launcher"):
+        if file_name.startswith("launcher"):
+            os.remove("launcher/" + file_name)
     with zipfile.ZipFile(io.BytesIO(launcher_asset_bytes)) as zip_file:
         zip_file.extractall("launcher")
     new_executable_path = "launcher/" + executable_name
