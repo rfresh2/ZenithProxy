@@ -26,14 +26,19 @@ jobs:
 
       - name: Rename executable
         run: |
-          Move-Item -Path .\dist\main.exe -Destination .\dist\ZenithProxy-launcher-win64.exe
+          Move-Item -Path .\dist\main.exe -Destination .\dist\launcher.exe
+        shell: pwsh
+
+      - name: Create zip
+        run: |
+          Compress-Archive -Path .\dist\launcher.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip
         shell: pwsh
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: launcher-windows-amd64
-          path: dist/ZenithProxy-launcher-win64.exe
+          path: dist/ZenithProxy-launcher-windows-amd64.zip
 
   build-linux-amd64:
     runs-on: 'ubuntu-20.04'
@@ -55,16 +60,19 @@ jobs:
 
       - name: Rename executable
         run: |
-          mv dist/main dist/ZenithProxy-launcher-linux-amd64
+          mv dist/main dist/launcher
 
       - name: Elevate binary permissions
-        run: chmod +x dist/ZenithProxy-launcher-linux-amd64
+        run: chmod +x dist/launcher
+
+      - name: Create zip
+        run: zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launcher
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: launcher-linux-amd64
-          path: dist/ZenithProxy-launcher-linux-amd64
+          path: dist/ZenithProxy-launcher-linux-amd64.zip
 
   build-linux-aarch64:
     runs-on: 'ubuntu-latest'
@@ -88,16 +96,19 @@ jobs:
 
       - name: Rename executable
         run: |
-          sudo mv dist/main dist/ZenithProxy-launcher-linux-aarch64
+          sudo mv dist/main dist/launcher
 
       - name: Elevate binary permissions
-        run: sudo chmod +x dist/ZenithProxy-launcher-linux-aarch64
+        run: sudo chmod +x dist/launcher
+
+      - name: Create zip
+        run: sudo zip -j dist/ZenithProxy-launcher-linux-aarch64.zip dist/launcher
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: launcher-linux-aarch64
-          path: dist/ZenithProxy-launcher-linux-aarch64
+          path: dist/ZenithProxy-launcher-linux-aarch64.zip
 
   build-mac-amd64:
     runs-on: 'macos-11'
@@ -119,18 +130,21 @@ jobs:
 
       - name: Rename executable
         run: |
-          mv dist/main dist/ZenithProxy-launcher-macos
+          mv dist/main dist/launcher
 
       - name: Elevate binary permissions
-        run: chmod +x dist/ZenithProxy-launcher-macos
+        run: chmod +x dist/launcher
+
+      - name: Create zip
+        run: zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launcher
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: launcher-macos-amd64
-          path: dist/ZenithProxy-launcher-macos
+          path: dist/ZenithProxy-launcher-macos-amd64.zip
 
-  release-files:
+  release-artifacts:
     needs:
       - build-windows-amd64
       - build-linux-amd64
@@ -138,15 +152,17 @@ jobs:
       - build-mac-amd64
     runs-on: ubuntu-20.04
     steps:
-      - name: Download jobs' artifacts
+      - name: Download job artifacts
         uses: actions/download-artifact@v4
-      - name: Publish artifacts to release
-        uses: softprops/action-gh-release@v1
         with:
-          tag_name: 'launcher-v3'
-          prerelease: true
-          files: |
-            launcher-windows-amd64/ZenithProxy-launcher-win64.exe
-            launcher-linux-amd64/ZenithProxy-launcher-linux-amd64
-            launcher-linux-aarch64/ZenithProxy-launcher-linux-aarch64
-            launcher-macos-amd64/ZenithProxy-launcher-macos
+          merge-multiple: true
+          path: artifacts/
+      - name: Publish Release Artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "launcher-v3"
+          artifacts: artifacts/*.zip
+          allowUpdates: true
+          replacesArtifacts: true
+          omitBodyDuringUpdate: true
+#          makeLatest: true
