@@ -17,14 +17,17 @@ jobs:
             artifact-name: 'launcher-windows-amd64'
             move-command: 'Move-Item -Path .\dist\__main__.exe -Destination .\dist\launcher.exe'
             zip-command: 'Compress-Archive -Path .\dist\launcher.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip'
+            sha1-command: '(Get-FileHash -Path launcher.exe -Algorithm sha1).Hash.ToLower()'
           - os: 'ubuntu-20.04'
             artifact-name: 'launcher-linux-amd64'
             move-command: 'mv dist/__main__ dist/launcher'
             zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launcher'
+            sha1-command: 'sha1sum -b dist/launcher | cut -d" " -f 1'
           - os: 'macos-11'
             artifact-name: 'launcher-macos-amd64'
             move-command: 'mv dist/__main__ dist/launcher'
             zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launcher'
+            sha1-command: 'sha1sum -b dist/launcher | cut -d" " -f 1'
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -55,6 +58,15 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}
           path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
+
+      - name: Get Binary Hash
+        run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}.sha1
+          path: ZenithProxy-${{ matrix.artifact-name }}.sha1
 
   build-linux-aarch64:
     runs-on: 'ubuntu-latest'
@@ -93,6 +105,15 @@ jobs:
           name: launcher-linux-aarch64
           path: dist/ZenithProxy-launcher-linux-aarch64.zip
 
+      - name: Get Binary Hash
+        run: sha1sum -b dist/launcher | cut -d" " -f 1 > ZenithProxy-launcher-linux-aarch64.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-linux-aarch64.sha1
+          path: ZenithProxy-launcher-linux-aarch64.sha1
+
   package-python:
     runs-on: ubuntu-latest
     steps:
@@ -111,6 +132,15 @@ jobs:
           name: launcher-python
           path: ZenithProxy-launcher-python.zip
 
+      - name: Get Binary Hash
+        run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-python.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-python.sha1
+          path: ZenithProxy-launcher-python.sha1
+
   release-artifacts:
     needs:
       - build-matrix
@@ -123,11 +153,16 @@ jobs:
         with:
           merge-multiple: true
           path: artifacts/
+
+      - name: Compile Hashes
+        run: |
+          cat artifacts/*.sha1 > hashes.txt
+
       - name: Publish Release Artifacts
         uses: ncipollo/release-action@v1
         with:
           tag: "launcher-v3"
-          artifacts: artifacts/*.zip
+          artifacts: "artifacts/*.zip,hashes.txt"
           allowUpdates: true
           replacesArtifacts: true
           omitBodyDuringUpdate: true
