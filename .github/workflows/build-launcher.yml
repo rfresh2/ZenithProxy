@@ -10,6 +10,7 @@ jobs:
   build-matrix:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: true
       matrix:
         os: [ 'windows-2019', 'ubuntu-20.04', 'macos-11' ]
         include:
@@ -17,7 +18,7 @@ jobs:
             artifact-name: 'launcher-windows-amd64'
             move-command: 'Move-Item -Path .\dist\__main__.exe -Destination .\dist\launcher.exe'
             zip-command: 'Compress-Archive -Path .\dist\launcher.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip'
-            sha1-command: '(Get-FileHash -Path launcher.exe -Algorithm sha1).Hash.ToLower()'
+            sha1-command: '(Get-FileHash -Path dist\launcher.exe -Algorithm sha1).Hash.ToLower()'
           - os: 'ubuntu-20.04'
             artifact-name: 'launcher-linux-amd64'
             move-command: 'mv dist/__main__ dist/launcher'
