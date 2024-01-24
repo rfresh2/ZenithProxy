@@ -19,3 +19,4 @@ gradle.properties
 dist/
 /*.spec
 __pycache__/
+*.exe
