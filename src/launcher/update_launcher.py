@@ -1,7 +1,9 @@
 import hashlib
 import io
 import os
+import subprocess
 import sys
+import tempfile
 import zipfile
 
 import launch_platform
@@ -89,18 +91,16 @@ def update_launcher_exec(config, api):
 
     if do_update:
         print("Relaunching...")
-        # on windows, we can't replace the executable while it's running
-        # run a batch script to do it for us and relaunch
         if os_platform == "windows":
-            with open("launcher/update_launcher.bat", "w") as f:
-                f.write(f'timeout /t 3 >nul\n')
-                f.write(f'del "{executable_name}"\n')
-                f.write(f'move "launcher\\{executable_name}" "{executable_name}"\n')
-                f.write(f'.\\"{executable_name}"\n')
-            os.execl("launcher\\update_launcher.bat", "launcher\\update_launcher.bat")
+            # on windows, we can't replace the executable while it's running
+            # so we're moving the files around and then launching a subprocess
+            # not ideal as we don't clean this process until everything gets closed, but it seems to work
+            os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + cur_sha1.hexdigest() + ".old")
+            os.rename(tmp_executable_path, executable_name)
+            subprocess.run([executable_name])
         else:
             os.replace(tmp_executable_path, executable_name)
-            if sys.argv[0].endswith(".py"):
-                os.execl(sys.executable, sys.executable, *sys.argv)
-            else:
-                os.execl(sys.argv[0], *sys.argv)
+        if sys.argv[0].endswith(".py"):
+            os.execl(sys.executable, sys.executable, *sys.argv)
+        else:
+            os.execl(sys.argv[0], *sys.argv)
