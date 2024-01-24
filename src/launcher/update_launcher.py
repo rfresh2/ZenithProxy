@@ -2,7 +2,6 @@ import hashlib
 import io
 import os
 import subprocess
-import sys
 import tempfile
 import zipfile
 
@@ -100,7 +99,7 @@ def relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, 
     if not is_pyinstaller:
         os.execl("launcher-python.sh", "--no-launcher-update")
     else:
-        os.execl(sys.argv[0], "--no-launcher-update")
+        os.execl(executable_name, "--no-launcher-update")
 
 
 def update_launcher_exec(config, api):
