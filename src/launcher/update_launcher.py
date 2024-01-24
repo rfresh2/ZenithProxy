@@ -29,7 +29,7 @@ def get_launcher_asset_file_name(is_pyinstaller, os_platform, os_arch):
 
 def get_launcher_executable_name(is_pyinstaller, os_platform, os_arch):
     if not is_pyinstaller:
-        return "__main__.py"
+        return "launcher-py.zip"
     if os_platform == "windows":
         return "launcher.exe"
     if os_platform == "linux":
@@ -77,7 +77,7 @@ def get_launcher_hashes(api):
     return hashes_list
 
 
-def relaunch(os_platform, executable_name, new_executable_path, current_launcher_sha1):
+def relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, current_launcher_sha1):
     print("Relaunching...")
     if os_platform == "windows":
         # on windows, we can't replace the executable while it's running
@@ -85,10 +85,13 @@ def relaunch(os_platform, executable_name, new_executable_path, current_launcher
         # not ideal as we don't clean this process until everything gets closed, but it seems to work
         os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + current_launcher_sha1 + ".old")
         os.rename(new_executable_path, executable_name)
-        subprocess.run([executable_name])
+        if not is_pyinstaller:
+            subprocess.run([sys.executable, executable_name])
+        else:
+            subprocess.run([executable_name])
     else:
         os.replace(new_executable_path, executable_name)
-    if sys.argv[0].endswith(".py"):
+    if not is_pyinstaller:
         os.execl(sys.executable, sys.executable, *sys.argv)
     else:
         os.execl(sys.argv[0], *sys.argv)
@@ -137,4 +140,4 @@ def update_launcher_exec(config, api):
         return
     new_launcher_sha1 = compute_sha1(new_executable_path)
     print("New launcher version:", new_launcher_sha1)
-    relaunch(os_platform, executable_name, new_executable_path, current_launcher_sha1)
+    relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, current_launcher_sha1)

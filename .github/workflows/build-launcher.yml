@@ -125,7 +125,7 @@ jobs:
         run: zip -j launcher-py.zip src/launcher/*.py
 
       - name: Create release zip
-        run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launcher-python.sh
+        run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launcher-python.sh src/launcher/launcher-python.bat
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
