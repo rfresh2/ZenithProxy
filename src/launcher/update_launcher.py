@@ -86,13 +86,19 @@ def relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, 
         os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + current_launcher_sha1 + ".old")
         os.rename(new_executable_path, executable_name)
         if not is_pyinstaller:
-            subprocess.run([sys.executable, executable_name])
+            os.rename("launcher/launcher-python.sh", "launcher-python.sh")
+            os.rename("launcher-python.bat", tempfile.gettempdir() + "/launcher-python-" + current_launcher_sha1 + ".bat.old")
+            os.rename("launcher/launcher-python.bat", "launcher-python.bat")
+            subprocess.run(["launcher-python.bat"])
         else:
             subprocess.run([executable_name])
     else:
         os.replace(new_executable_path, executable_name)
+        if not is_pyinstaller:
+            os.replace("launcher/launcher-python.sh", "launcher-python.sh")
+            os.replace("launcher/launcher-python.bat", "launcher-python.bat")
     if not is_pyinstaller:
-        os.execl(sys.executable, sys.executable, *sys.argv)
+        os.execl("launcher-python.sh", *sys.argv)
     else:
         os.execl(sys.argv[0], *sys.argv)
 
@@ -140,4 +146,6 @@ def update_launcher_exec(config, api):
         return
     new_launcher_sha1 = compute_sha1(new_executable_path)
     print("New launcher version:", new_launcher_sha1)
+    if not is_pyinstaller:
+        os.replace("launcher/requirements.txt", "requirements.txt")
     relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, current_launcher_sha1)
