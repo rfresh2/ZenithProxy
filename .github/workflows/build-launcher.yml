@@ -15,15 +15,15 @@ jobs:
         include:
           - os: 'windows-2019'
             artifact-name: 'launcher-windows-amd64'
-            move-command: 'Move-Item -Path .\dist\main.exe -Destination .\dist\launcher.exe'
+            move-command: 'Move-Item -Path .\dist\__main__.exe -Destination .\dist\launcher.exe'
             zip-command: 'Compress-Archive -Path .\dist\launcher.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip'
           - os: 'ubuntu-20.04'
             artifact-name: 'launcher-linux-amd64'
-            move-command: 'mv dist/main dist/launcher'
+            move-command: 'mv dist/__main__ dist/launcher'
             zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launcher'
           - os: 'macos-11'
             artifact-name: 'launcher-macos-amd64'
-            move-command: 'mv dist/main dist/launcher'
+            move-command: 'mv dist/__main__ dist/launcher'
             zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launcher'
     steps:
       - name: Check out repository
@@ -39,7 +39,7 @@ jobs:
 
       - name: Build launcher
         run: |
-          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/__main__.py
 
       - name: Rename executable
         run: |
@@ -72,12 +72,12 @@ jobs:
           docker run --rm --platform linux/arm64 --volume "${PWD}:/repo" python:${{ env.python_version }}-bullseye /bin/sh -c " \
             cd /repo && \
             python3 -m pip install -U pyinstaller && \
-            pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/main.py
+            pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/__main__.py
           "
 
       - name: Rename executable
         run: |
-          sudo mv dist/main dist/launcher
+          sudo mv dist/__main__ dist/launcher
 
       - name: Elevate binary permissions
         run: sudo chmod +x dist/launcher
@@ -91,11 +91,30 @@ jobs:
           name: launcher-linux-aarch64
           path: dist/ZenithProxy-launcher-linux-aarch64.zip
 
+  package-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Create Python executable zip
+        run: zip -j launcher-py.zip src/launcher/*.py
+
+      - name: Create release zip
+        run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launcher-python.sh
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-python
+          path: dist/ZenithProxy-launcher-python.zip
+
   release-artifacts:
     needs:
       - build-matrix
       - build-linux-aarch64
-    runs-on: ubuntu-20.04
+      - package-python
+    runs-on: ubuntu-latest
     steps:
       - name: Download job artifacts
         uses: actions/download-artifact@v4

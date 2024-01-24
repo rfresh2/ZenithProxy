@@ -10,11 +10,8 @@ from update_zenith import update_zenith_exec
 
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
-launcher.config = config
-launcher.api = api
 
-
-def main():
+try:
     while True:
         json_data = read_launch_config_file()
         if json_data is None:
@@ -28,10 +25,5 @@ def main():
         launcher.launcher_exec(config)
         print("Restarting in 3 seconds...")
         time.sleep(3)
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        sys.exit(0)
+except KeyboardInterrupt:
+    sys.exit(0)
