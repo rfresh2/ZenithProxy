@@ -36,6 +36,7 @@ jobs:
       - name: Install PyInstaller
         run: |
           pip install -U pyinstaller
+          pip install -r ./src/launcher/requirements.txt
 
       - name: Build launcher
         run: |
@@ -72,6 +73,7 @@ jobs:
           docker run --rm --platform linux/arm64 --volume "${PWD}:/repo" python:${{ env.python_version }}-bullseye /bin/sh -c " \
             cd /repo && \
             python3 -m pip install -U pyinstaller && \
+            python3 -m pip install -r ./src/launcher/requirements.txt && \
             pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/__main__.py
           "
 
