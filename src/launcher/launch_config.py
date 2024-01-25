@@ -86,3 +86,8 @@ class LaunchConfig:
             print("Invalid repo owner:", self.repo_owner)
             return False
         return True
+
+    def get_mc_version(self):
+        # extract mc version from release channel
+        # e.g. java.1.20.1 -> 1.20.1
+        return self.release_channel.split(".")[1]
