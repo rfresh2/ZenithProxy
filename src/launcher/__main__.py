@@ -13,9 +13,17 @@ api = github_api.GitHubAPI(config)
 
 # for use with relaunches just so we don't get stuck in an infinite update loop if something goes wrong
 no_launcher_update = False
+# to go straight to setup and exit
+setup_only = False
 for arg in sys.argv:
     if arg == "--no-launcher-update":
         no_launcher_update = True
+    if arg == "--setup":
+        setup_only = True
+
+if setup_only:
+    setup_execute()
+    sys.exit(0)
 
 try:
     while True:
