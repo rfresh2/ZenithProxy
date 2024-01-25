@@ -121,6 +121,9 @@ def update_launcher_exec(config, api):
     if hashes_list is None:
         print("Failed to get launcher hashes, skipping launcher update.")
         return
+    if not os.path.isfile(executable_name):
+        print("Launcher executable not found, skipping launcher update:", executable_name)
+        return
     current_launcher_sha1 = compute_sha1(executable_name)
     if current_launcher_sha1 in hashes_list:
         print("Launcher is up to date:", current_launcher_sha1)
