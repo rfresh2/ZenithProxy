@@ -12,3 +12,77 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Echo Versions and Paths
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Download GraalVM Profile
+        run: |
+          wget https://cdn.2b2t.vc/profile.iprof
+          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
+
+      #      - name: Enable GraalVM Profile Instrumenting
+      #        run: |
+      #          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
+
+      - name: Build ZenithProxy Java
+        uses: gradle/gradle-build-action@v2
+        with:
+          dependency-graph: generate-and-submit
+          arguments: jarBuild
+
+      - name: Upload Java Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZenithProxy-java
+          path: build/libs/ZenithProxy.jar
+
+      - name: Build ZenithProxy Linux Native
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: nativeCompile
+
+      - name: Elevate binary permissions
+        run: chmod +x build/native/nativeCompile/*
+
+      - name: Zip Binary And Libs
+        run: zip -j ZenithProxy-linux-amd64.zip build/native/nativeCompile/*
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZenithProxy-linux
+          path: ZenithProxy-linux-amd64.zip
+
+  release-artifacts:
+    needs:
+      - build-java-and-linux-amd64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download job artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Publish Release Artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "launcher-v3"
+          artifacts: "artifacts/*"
+          prerelease: true
+

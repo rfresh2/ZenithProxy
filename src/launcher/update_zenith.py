@@ -22,7 +22,7 @@ def git_update_check():
 
 
 def rest_update_check(config, api, asset_name, executable_name):
-    latest_release_and_ver = api.get_latest_release_and_ver(config.release_channel)
+    latest_release_and_ver = api.get_latest_release_and_ver(config.get_mc_version())
     if not latest_release_and_ver:
         raise RestUpdateError("Failed to get latest release for channel: " + config.release_channel)
     if latest_release_and_ver[1] == config.version and os.path.isfile(config.launch_dir + executable_name):
@@ -78,12 +78,12 @@ def java_get_version(config, api, target_version):
 
 
 def linux_native_update_check(config, api):
-    rest_update_check(config, api, "ZenithProxy.zip", "ZenithProxy")
+    rest_update_check(config, api, "ZenithProxy-linux-amd64.zip", "ZenithProxy")
 
 
 def linux_native_get_version(config, api, target_version):
     print("Getting version: " + target_version)
-    rest_get_version(config, api, "ZenithProxy.zip", "ZenithProxy", target_version)
+    rest_get_version(config, api, "ZenithProxy-linux-amd64.zip", "ZenithProxy", target_version)
 
 
 def update_zenith_exec(config, api):
