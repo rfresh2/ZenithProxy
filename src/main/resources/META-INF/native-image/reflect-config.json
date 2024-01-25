@@ -310,22 +310,6 @@
   "unsafeAllocated":true
 },
 {
-  "name":"com.github.steveice10.mc.auth.service.SessionService$HasJoinedResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.SessionService$JoinServerRequest",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.service.SessionService$MinecraftProfileResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket",
   "fields":[{"name":"message"}]
 },
@@ -655,6 +639,16 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"com.zenith.feature.api.sessionserver.model.HasJoinedResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.util.List"] }, {"name":"id","parameterTypes":[] }, {"name":"name","parameterTypes":[] }, {"name":"properties","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.api.sessionserver.model.JoinServerRequest",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.util.UUID","java.lang.String","java.lang.String"] }, {"name":"accessToken","parameterTypes":[] }, {"name":"selectedProfile","parameterTypes":[] }, {"name":"serverId","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.feature.api.sessionserver.model.SessionProfileResponse",

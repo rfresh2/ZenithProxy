@@ -1,18 +1,19 @@
 package com.zenith.network;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.auth.exception.request.RequestException;
-import com.github.steveice10.mc.auth.service.SessionService;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginCompressionPacket;
 import com.zenith.network.server.ServerConnection;
 
 import javax.crypto.SecretKey;
+import java.util.Optional;
 import java.util.UUID;
 
+import static com.zenith.Shared.SESSION_SERVER_API;
+
 public class UserAuthTask implements Runnable {
-    private ServerConnection session;
-    private SecretKey key;
+    private final ServerConnection session;
+    private final SecretKey key;
 
     public UserAuthTask(ServerConnection session, SecretKey key) {
         this.key = key;
@@ -23,21 +24,16 @@ public class UserAuthTask implements Runnable {
     public void run() {
         GameProfile profile;
         if (this.key != null) {
-            SessionService sessionService = this.session.getFlag(MinecraftConstants.SESSION_SERVICE_KEY,
-                                                                 new SessionService());
-            try {
-                profile = sessionService.getProfileByServer(session.getUsername(),
-                                                            sessionService.getServerId(session.getServerId(),
-                                                                                       session.getKeyPair().getPublic(),
-                                                                                       this.key));
-            } catch (RequestException e) {
-                this.session.disconnect("Failed to make session service request.", e);
+            final Optional<GameProfile> response = SESSION_SERVER_API.hasJoined(
+                session.getUsername(),
+                SESSION_SERVER_API.getSharedSecret(session.getServerId(),
+                                                   session.getKeyPair().getPublic(),
+                                                   this.key));
+            if (response.isEmpty()) {
+                this.session.disconnect("Failed to verify username.");
                 return;
             }
-
-            if (profile == null) {
-                this.session.disconnect("Failed to verify username.");
-            }
+            profile = response.get();
         } else {
             profile = new GameProfile(UUID.nameUUIDFromBytes(("OfflinePlayer:" + session.getUsername()).getBytes()),
                                       session.getUsername());

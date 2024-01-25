@@ -29,10 +29,16 @@ public abstract class Api {
             .build();
         try (HttpClient client = buildHttpClient()) {
             var response = client
-                .send(request, HttpResponse.BodyHandlers.ofInputStream());
-            return Optional.of(OBJECT_MAPPER.readValue(response.body(), clazz));
+                .send(request, HttpResponse.BodyHandlers.ofString());
+            var body = response.body();
+            try {
+                return Optional.of(OBJECT_MAPPER.readValue(body, clazz));
+            } catch (final Exception e) {
+                DEFAULT_LOG.error("Failed to parse response: {}", body, e);
+                return Optional.empty();
+            }
         } catch (Exception e) {
-            DEFAULT_LOG.error("Failed to parse response", e);
+            DEFAULT_LOG.error("Failed to send get request to: {}", uri, e);
             return Optional.empty();
         }
     }
