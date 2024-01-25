@@ -6,6 +6,7 @@ import com.zenith.feature.api.sessionserver.model.HasJoinedResponse;
 import com.zenith.feature.api.sessionserver.model.JoinServerErrorResponse;
 import com.zenith.feature.api.sessionserver.model.JoinServerRequest;
 import com.zenith.feature.api.sessionserver.model.SessionProfileResponse;
+import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -94,7 +95,7 @@ public class SessionServerApi extends Api {
         }
     }
 
-    public SecretKey generateClientKey() {
+    public @Nullable SecretKey generateClientKey() {
         SecretKey key;
         try {
             KeyGenerator gen = KeyGenerator.getInstance("AES");

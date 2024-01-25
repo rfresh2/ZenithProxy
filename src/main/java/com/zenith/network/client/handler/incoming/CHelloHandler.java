@@ -22,6 +22,10 @@ public class CHelloHandler implements PacketHandler<ClientboundHelloPacket, Clie
             return null;
         }
         final SecretKey key = SESSION_SERVER_API.generateClientKey();
+        if (key == null) {
+            session.disconnect("Failed to generate secret key.");
+            return null;
+        }
         final String sharedSecret = SESSION_SERVER_API.getSharedSecret(packet.getServerId(), packet.getPublicKey(), key);
         try {
             SESSION_SERVER_API.joinServer(profile.getId(), accessToken, sharedSecret);
