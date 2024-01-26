@@ -129,7 +129,7 @@ dependencies {
     shade 'com.mojang:brigadier:1.2.9'
     shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     shade 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
-    shade 'com.github.rfresh2:SimpleEventBus:1.0'
+    shade 'com.github.rfresh2:SimpleEventBus:1.1'
     shade("com.github.rfresh2.Discord4j:discord4j-core:dc7bc81bc1") {
         exclude group: 'io.netty'
     }
@@ -172,8 +172,8 @@ dependencies {
     shade "com.viaversion:viaversion:4.9.3-SNAPSHOT"
     shade "com.viaversion:viabackwards:4.9.2-SNAPSHOT"
 
-    shade 'org.jline:jline:3.25.0'
-    shade 'org.jline:jline-terminal-jansi:3.25.0'
+    shade 'org.jline:jline:3.25.1'
+    shade 'org.jline:jline-terminal-jansi:3.25.1'
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.1"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -239,8 +239,6 @@ shadowJar {
 
     exclude 'module-info.class', 'META-INF/licenses/**', 'META-INF/maven/**', 'META-INF/proguard/**',
             'META-INF/gradle/**', 'META-INF/versions/**', 'META-INF/native-image/io.netty/**/native-image.properties' ,
-            // todo: remove when jline 3.25.1 released https://github.com/jline/jline3/issues/923
-            'META-INF/native-image/jansi/native-image.properties',
             "about.html", "bungee.yml", "plugin.yml", "velocity-plugin.json", "fabric.mod.json", "OSGI-INF/**"
     minimize {
         exclude(dependency("org.slf4j:slf4j-api:.*"))

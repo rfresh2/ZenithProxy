@@ -54,7 +54,7 @@ public class QueueWarningCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("QueueWarning", toggleStr(CONFIG.discord.queueWarning.enabled), false)
-            .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
+            .addField("Position", CONFIG.discord.queueWarning.position, false)
             .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
             .color(Color.CYAN);
     }

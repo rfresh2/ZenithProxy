@@ -81,10 +81,10 @@ public class ServerConfigCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .color(Color.CYAN)
-            .addField("Port", ""+CONFIG.server.bind.port, true)
+            .addField("Port", CONFIG.server.bind.port, true)
             .addField("Ping", toggleStr(CONFIG.server.ping.enabled), true)
             .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), true)
-            .addField("Ping Max Players", ""+CONFIG.server.ping.maxPlayers, true)
+            .addField("Ping Max Players", CONFIG.server.ping.maxPlayers, true)
             .addField("Ping LAN Broadcast", toggleStr(CONFIG.server.ping.lanBroadcast), true);
     }
 }

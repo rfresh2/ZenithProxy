@@ -35,7 +35,7 @@ public class QueueStatusCommand extends Command {
             c.getSource().getEmbed()
                 .title("2b2t Queue Status")
                 .addField("Regular", queueStatus.regular() + (inQueue ? "" : " [ETA: " + Queue.getQueueEta(queueStatus.regular()) + "]"), false)
-                .addField("Priority", ""+queueStatus.prio(), false)
+                .addField("Priority", queueStatus.prio(), false)
                 .color(Color.CYAN);
             if (inQueue) {
                 final int queuePosition = Proxy.getInstance().getQueuePosition();

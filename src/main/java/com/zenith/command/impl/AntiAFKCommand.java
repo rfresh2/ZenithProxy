@@ -136,7 +136,7 @@ public class AntiAFKCommand extends Command {
             .addField("Walk", toggleStr(CONFIG.client.extra.antiafk.actions.walk)
                 + " - Delay: " + CONFIG.client.extra.antiafk.actions.walkDelayTicks, false)
             .addField("Safe Walk", toggleStr(CONFIG.client.extra.antiafk.actions.safeWalk), false)
-            .addField("Walk Distance", "" + CONFIG.client.extra.antiafk.actions.walkDistance, false)
+            .addField("Walk Distance", CONFIG.client.extra.antiafk.actions.walkDistance, false)
             .addField("Jump", toggleStr(CONFIG.client.extra.antiafk.actions.jump)
                 + " - Delay: " + CONFIG.client.extra.antiafk.actions.jumpDelayTicks, false)
             .color(Color.CYAN);

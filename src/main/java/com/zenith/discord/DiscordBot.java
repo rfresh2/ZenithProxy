@@ -574,13 +574,13 @@ public class DiscordBot {
             .addField("Online Duration", formatDuration(event.onlineDuration()), false)
             .color(Color.RUBY);
         if (Proxy.getInstance().isOn2b2t()
-            && Proxy.getInstance().getIsPrio().orElse(false)
+            && !Proxy.getInstance().getIsPrio().orElse(false)
             && event.reason().startsWith("You have lost connection")
             && event.onlineDuration().toSeconds() >= 0L
             && event.onlineDuration().toSeconds() <= 1L) {
             embed.description("You have likely been kicked for reaching the 2b2t non-prio account IP limit."
                                   + "\nConsider configuring a connection proxy with the `clientConnection` command."
-                                  + "\nOr migrate ZenithProxy instances to multiple hosts.");
+                                  + "\nOr migrate ZenithProxy instances to multiple hosts/IP's.");
         }
         sendEmbedMessage(embed);
         SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
@@ -612,8 +612,8 @@ public class DiscordBot {
         sendEmbedMessage(Embed.builder()
                 .title("Started Queuing")
                 .color(Color.MOON_YELLOW)
-                .addField("Regular Queue", "" + Queue.getQueueStatus().regular(), true)
-                .addField("Priority Queue", "" + Queue.getQueueStatus().prio(), true));
+                .addField("Regular Queue", Queue.getQueueStatus().regular(), true)
+                .addField("Priority Queue", Queue.getQueueStatus().prio(), true));
         this.client.updatePresence(getQueuePresence()).block();
     }
 
@@ -634,7 +634,7 @@ public class DiscordBot {
     public void handleHealthAutoDisconnectEvent(HealthAutoDisconnectEvent event) {
         sendEmbedMessage(Embed.builder()
                 .title("Health AutoDisconnect Triggered")
-                .addField("Health", "" + (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                .addField("Health", CACHE.getPlayerCache().getThePlayer().getHealth(), true)
                 .color(Color.CYAN));
     }
 

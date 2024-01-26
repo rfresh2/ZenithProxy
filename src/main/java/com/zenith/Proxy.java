@@ -144,7 +144,7 @@ public class Proxy {
             saveConfigAsync();
             this.startServer();
             CACHE.reset(true);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 1L, 1L, TimeUnit.MINUTES);
+            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 0L, 1L, TimeUnit.MINUTES);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
@@ -202,10 +202,12 @@ public class Proxy {
     }
 
     private void tablistUpdate() {
-        if (!this.isConnected() || currentPlayer.get() == null) return;
+        var playerConnection = currentPlayer.get();
+        if (!this.isConnected() || playerConnection == null) return;
+        if (!playerConnection.isLoggedIn()) return;
         long lastUpdate = CACHE.getTabListCache().getLastUpdate();
         if (lastUpdate < System.currentTimeMillis() - 3000) {
-            currentPlayer.get().sendAsync(new ClientboundTabListPacket(CACHE.getTabListCache().getHeader(), CACHE.getTabListCache().getFooter()));
+            playerConnection.sendAsync(new ClientboundTabListPacket(CACHE.getTabListCache().getHeader(), CACHE.getTabListCache().getFooter()));
             CACHE.getTabListCache().setLastUpdate(System.currentTimeMillis());
         }
     }
@@ -508,8 +510,8 @@ public class Proxy {
         // active hour within 10 mins range of now
         var timeRange = Duration.ofMinutes(5); // x2
         for (Instant activeTime : activeTimes) {
-            if (nowPlusQueueWait.isBefore(activeTime.minus(timeRange))
-                && nowPlusQueueWait.isAfter(activeTime.plus(timeRange))) {
+            if (nowPlusQueueWait.isAfter(activeTime.minus(timeRange))
+                && nowPlusQueueWait.isBefore(activeTime.plus(timeRange))) {
                 MODULE_LOG.info("ActiveHours triggered for time: {}", activeTime);
                 EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
                 this.lastActiveHoursConnect = Instant.now();

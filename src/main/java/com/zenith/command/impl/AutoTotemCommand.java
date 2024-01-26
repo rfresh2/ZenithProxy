@@ -52,7 +52,7 @@ public class AutoTotemCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("Auto Totem", toggleStr(CONFIG.client.extra.autoTotem.enabled), false)
-            .addField("Health Threshold", "" + CONFIG.client.extra.autoTotem.healthThreshold, true)
+            .addField("Health Threshold", CONFIG.client.extra.autoTotem.healthThreshold, true)
             .color(Color.CYAN);
     }
 }

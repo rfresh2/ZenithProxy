@@ -139,7 +139,7 @@ public class SpammerCommand extends Command {
         addListDescription(builder)
             .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled), false)
             .addField("Whisper", toggleStr(CONFIG.client.extra.spammer.whisper), false)
-            .addField("Delay", "" + CONFIG.client.extra.spammer.delayTicks, false)
+            .addField("Delay", CONFIG.client.extra.spammer.delayTicks, false)
             .addField("Random Order", toggleStr(CONFIG.client.extra.spammer.randomOrder), false)
             .addField("Append Random", toggleStr(CONFIG.client.extra.spammer.appendRandom), false)
             .color(Color.CYAN);

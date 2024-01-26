@@ -44,8 +44,8 @@ public class AutoEatCommand extends Command {
                           c.getSource().getEmbed()
                               .title("AutoEat Health Threshold Set")
                               .color(Color.CYAN)
-                              .addField("Health Threshold", "" + CONFIG.client.extra.autoEat.healthThreshold, false)
-                              .addField("Hunger Threshold", "" + CONFIG.client.extra.autoEat.hungerThreshold, false)
+                              .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
+                              .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
                           return 1;
                       })))
@@ -56,8 +56,8 @@ public class AutoEatCommand extends Command {
                           c.getSource().getEmbed()
                               .title("AutoEat Hunger Threshold Set")
                               .color(Color.CYAN)
-                              .addField("Health Threshold", "" + CONFIG.client.extra.autoEat.healthThreshold, false)
-                              .addField("Hunger Threshold", "" + CONFIG.client.extra.autoEat.hungerThreshold, false)
+                              .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
+                              .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
                           return 1;
                       })))
@@ -74,8 +74,8 @@ public class AutoEatCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoEat", toggleStr(CONFIG.client.extra.autoEat.enabled), false)
-            .addField("Health Threshold", "" + CONFIG.client.extra.autoEat.healthThreshold, false)
-            .addField("Hunger Threshold", "" + CONFIG.client.extra.autoEat.hungerThreshold, false)
+            .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
+            .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
             .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false)
             .color(Color.CYAN);
     }

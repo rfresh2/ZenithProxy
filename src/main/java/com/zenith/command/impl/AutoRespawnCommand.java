@@ -51,7 +51,7 @@ public class AutoRespawnCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoRespawn", toggleStr(CONFIG.client.extra.autoRespawn.enabled), false)
-            .addField("Delay (ms)", "" + CONFIG.client.extra.autoRespawn.delayMillis, true)
+            .addField("Delay (ms)", CONFIG.client.extra.autoRespawn.delayMillis, true)
             .color(Color.CYAN);
     }
 }

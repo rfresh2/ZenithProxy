@@ -78,7 +78,7 @@ public class AutoDisconnectCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled), false)
-            .addField("Health", "" + CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
+            .addField("Health", CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
             .addField("CancelAutoReconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect), false)
             .addField("AutoClientDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect), false)
             .addField("Thunder", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.thunder), false)

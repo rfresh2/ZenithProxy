@@ -64,7 +64,7 @@ public class AutoReplyCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoReply", toggleStr(CONFIG.client.extra.autoReply.enabled), false)
-            .addField("Cooldown Seconds", "" + CONFIG.client.extra.autoReply.cooldownSeconds, false)
+            .addField("Cooldown Seconds", CONFIG.client.extra.autoReply.cooldownSeconds, false)
             .addField("Message", CONFIG.client.extra.autoReply.message, false)
             .color(Color.CYAN);
     }

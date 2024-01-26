@@ -54,8 +54,8 @@ public class AutoReconnectCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoReconnect", toggleStr(CONFIG.client.extra.autoReconnect.enabled), false)
-            .addField("Delay", "" + CONFIG.client.extra.autoReconnect.delaySeconds, true)
-            .addField("Max Attempts", "" + CONFIG.client.extra.autoReconnect.maxAttempts, true)
+            .addField("Delay", CONFIG.client.extra.autoReconnect.delaySeconds, true)
+            .addField("Max Attempts", CONFIG.client.extra.autoReconnect.maxAttempts, true)
             .color(Color.CYAN);
     }
 }
