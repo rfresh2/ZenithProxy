@@ -72,8 +72,8 @@ public class AutoFishCommand extends Command {
         builder
             .addField("AutoFish", toggleStr(CONFIG.client.extra.autoFish.enabled), false)
             .addField("Cast Delay", CONFIG.client.extra.autoFish.castDelay + " ticks", false)
-            .addField("Yaw", ""+CONFIG.client.extra.autoFish.yaw, false)
-            .addField("Pitch", ""+CONFIG.client.extra.autoFish.pitch, false)
+            .addField("Yaw", CONFIG.client.extra.autoFish.yaw, false)
+            .addField("Pitch", CONFIG.client.extra.autoFish.pitch, false)
             .color(Color.CYAN);
     }
 }

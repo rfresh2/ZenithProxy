@@ -64,7 +64,7 @@ public class SpookCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("Spook", toggleStr(CONFIG.client.extra.spook.enabled), false)
-            .addField("Delay", "" + CONFIG.client.extra.spook.tickDelay + " tick(s)", false)
+            .addField("Delay", CONFIG.client.extra.spook.tickDelay + " tick(s)", false)
             .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
             .color(Color.CYAN);
     }

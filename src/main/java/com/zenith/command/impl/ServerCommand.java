@@ -53,7 +53,7 @@ public class ServerCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("IP", CONFIG.client.server.address, false)
-            .addField("Port", "" + CONFIG.client.server.port, true)
+            .addField("Port", CONFIG.client.server.port, true)
             .color(Color.CYAN);
     }
 }

@@ -122,6 +122,6 @@ public class AuthCommand extends Command {
         builder
             .addField("Account Type", CONFIG.authentication.accountType.toString(), true)
             .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), true)
-            .addField("Attempts", ""+CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, true);
+            .addField("Attempts", CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, true);
     }
 }

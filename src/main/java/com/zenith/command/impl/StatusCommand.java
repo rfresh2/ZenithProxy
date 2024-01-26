@@ -124,7 +124,7 @@ public class StatusCommand extends Command {
             if (CONFIG.discord.reportCoords) {
                 builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
             }
-            builder.addField("Health", "" + (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+            builder.addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .addField("AutoDisconnect",
                           "[Health: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled)
                               + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"

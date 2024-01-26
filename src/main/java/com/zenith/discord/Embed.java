@@ -52,6 +52,11 @@ public class Embed {
         return this;
     }
 
+    public Embed addField(String name, Object value, boolean inline) {
+        fields.add(EmbedCreateFields.Field.of(name, String.valueOf(value), inline));
+        return this;
+    }
+
     public Embed footer(String text, String iconUrl) {
         footer = EmbedCreateFields.Footer.of(text, iconUrl);
         return this;
