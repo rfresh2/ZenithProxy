@@ -1,7 +1,6 @@
 package com.zenith.feature.autoupdater;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zenith.util.LaunchConfig;
 import org.apache.commons.math3.util.Pair;
 
 import java.net.URI;
@@ -29,16 +28,16 @@ public class RestAutoUpdater extends AutoUpdater {
 
     @Override
     public void start() {
-        if (!validReleaseChannel(LAUNCH_CONFIG)) {
+        if (!validReleaseChannel(LAUNCH_CONFIG.release_channel)) {
             DEFAULT_LOG.error("Invalid release channel: {}", LAUNCH_CONFIG.release_channel);
             return;
         }
         super.start();
     }
 
-    public boolean validReleaseChannel(final LaunchConfig launchConfig) {
+    public boolean validReleaseChannel(final String in) {
         return Stream.of("git", "java", "linux")
-            .anyMatch(launchConfig.release_channel::startsWith) && launchConfig.getMcVersion() != null;
+            .anyMatch(in::startsWith);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class RestAutoUpdater extends AutoUpdater {
     }
 
     private boolean versionLooksCorrect(final String version) {
-        return version != null && version.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\+.*") && version.endsWith("+" + LAUNCH_CONFIG.getMcVersion());
+        return version != null && version.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\+.*") && version.endsWith("+" + LAUNCH_CONFIG.release_channel);
     }
 
     private boolean versionIsLessThanCurrent(final String current, final String newVersion) {
