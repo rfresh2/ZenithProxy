@@ -10,7 +10,7 @@ echo "=================================================="
 sudo apt update
 export DEBIAN_FRONTEND=noninteractive
 sudo apt upgrade -y
-sudo apt install tmux zsh unzip zip git python3 -y
+sudo apt install tmux zsh unzip zip git python3 python3-pip -y
 echo "Installing oh-my-zsh..."
 echo "=================================================="
 export RUNZSH=no
