@@ -62,13 +62,13 @@ jobs:
         run: chmod +x build/native/nativeCompile/*
 
       - name: Zip Binary And Libs
-        run: zip -j ZenithProxy-linux-amd64.zip build/native/nativeCompile/*
+        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ZenithProxy-linux
-          path: ZenithProxy-linux-amd64.zip
+          path: ZenithProxy.zip
 
   release-artifacts:
     needs:
@@ -81,10 +81,21 @@ jobs:
           merge-multiple: true
           path: artifacts/
 
-      - name: Publish Release Artifacts
+      - name: Get Release Tags
+        run: |
+          sed 's/\+/\+java./' <<< ${{ github.ref }} >> $JAVA_TAG
+          sed 's/\+/\+linux./' <<< ${{ github.ref }} >> $LINUX_TAG
+
+      - name: Publish Java Artifact
         uses: ncipollo/release-action@v1
         with:
-          tag: "launcher-v3"
-          artifacts: "artifacts/*"
+          tag: ${{ env.JAVA_TAG }}
+          artifacts: "artifacts/*.jar"
           prerelease: true
 
+      - name: Publish Linux Artifact
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.LINUX_TAG }}
+          artifacts: "artifacts/ZenithProxy.zip"
+          prerelease: true
