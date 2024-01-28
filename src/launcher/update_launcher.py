@@ -30,14 +30,14 @@ def get_launcher_executable_name(is_pyinstaller, os_platform, os_arch):
     if not is_pyinstaller:
         return "launcher-py.zip"
     if os_platform == "windows":
-        return "launcher.exe"
+        return "launch.exe"
     if os_platform == "linux":
         if os_arch == "amd64":
-            return "launcher"
+            return "launch"
         elif os_arch == "aarch64":
-            return "launcher"
+            return "launch"
     if os_platform == "macos":
-        return "launcher"
+        return "launch"
     return None
 
 
@@ -82,22 +82,22 @@ def relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, 
         # on windows, we can't replace the executable while it's running
         # so we're moving the files around and then launching a subprocess
         # not ideal as we don't clean this process until everything gets closed, but it seems to work
-        os.rename(executable_name, tempfile.gettempdir() + "/launcher-" + current_launcher_sha1 + ".old")
+        os.rename(executable_name, tempfile.gettempdir() + "/launch-" + current_launcher_sha1 + ".old")
         os.rename(new_executable_path, executable_name)
         if not is_pyinstaller:
-            os.rename("launcher/launcher-python.sh", "launcher-python.sh")
-            os.rename("launcher-python.bat", tempfile.gettempdir() + "/launcher-python-" + current_launcher_sha1 + ".bat.old")
-            os.rename("launcher/launcher-python.bat", "launcher-python.bat")
-            subprocess.run(["launcher-python.bat", "--no-launcher-update"])
+            os.rename("launcher/launch.sh", "launch.sh")
+            os.rename("launch.bat", tempfile.gettempdir() + "/launch-" + current_launcher_sha1 + ".bat.old")
+            os.rename("launcher/launch.bat", "launch.bat")
+            subprocess.run(["launch.bat", "--no-launcher-update"])
         else:
             subprocess.run([executable_name, "--no-launcher-update"])
     else:
         os.replace(new_executable_path, executable_name)
         if not is_pyinstaller:
-            os.replace("launcher/launcher-python.sh", "launcher-python.sh")
-            os.replace("launcher/launcher-python.bat", "launcher-python.bat")
+            os.replace("launcher/launch.sh", "launch.sh")
+            os.replace("launcher/launch.bat", "launch.bat")
     if not is_pyinstaller:
-        os.execl("launcher-python.sh", "--no-launcher-update")
+        os.execl("launch.sh", "--no-launcher-update")
     else:
         os.execl(executable_name, "--no-launcher-update")
 
@@ -138,7 +138,7 @@ def update_launcher_exec(config, api):
         print("Failed to download launcher asset:", launcher_asset_file_name)
         return
     for file_name in os.listdir("launcher"):
-        if file_name.startswith("launcher"):
+        if file_name.startswith("launch"):
             os.remove("launcher/" + file_name)
     with zipfile.ZipFile(io.BytesIO(launcher_asset_bytes)) as zip_file:
         zip_file.extractall("launcher")

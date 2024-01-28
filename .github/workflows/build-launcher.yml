@@ -17,19 +17,19 @@ jobs:
         include:
           - os: 'windows-2019'
             artifact-name: 'launcher-windows-amd64'
-            move-command: 'Move-Item -Path .\dist\__main__.exe -Destination .\dist\launcher.exe'
-            zip-command: 'Compress-Archive -Path .\dist\launcher.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip'
-            sha1-command: '(Get-FileHash -Path dist\launcher.exe -Algorithm sha1).Hash.ToLower()'
+            move-command: 'Move-Item -Path .\dist\__main__.exe -Destination .\dist\launch.exe'
+            zip-command: 'Compress-Archive -Path .\dist\launch.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip'
+            sha1-command: '(Get-FileHash -Path dist\launch.exe -Algorithm sha1).Hash.ToLower()'
           - os: 'ubuntu-20.04'
             artifact-name: 'launcher-linux-amd64'
-            move-command: 'mv dist/__main__ dist/launcher'
-            zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launcher'
-            sha1-command: 'sha1sum -b dist/launcher | cut -d" " -f 1'
+            move-command: 'mv dist/__main__ dist/launch'
+            zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launch'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
           - os: 'macos-11'
             artifact-name: 'launcher-macos-amd64'
-            move-command: 'mv dist/__main__ dist/launcher'
-            zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launcher'
-            sha1-command: 'sha1sum -b dist/launcher | cut -d" " -f 1'
+            move-command: 'mv dist/__main__ dist/launch'
+            zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launch'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -93,13 +93,13 @@ jobs:
 
       - name: Rename executable
         run: |
-          sudo mv dist/__main__ dist/launcher
+          sudo mv dist/__main__ dist/launch
 
       - name: Elevate binary permissions
-        run: sudo chmod +x dist/launcher
+        run: sudo chmod +x dist/launch
 
       - name: Create zip
-        run: sudo zip -j dist/ZenithProxy-launcher-linux-aarch64.zip dist/launcher
+        run: sudo zip -j dist/ZenithProxy-launcher-linux-aarch64.zip dist/launch
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
@@ -108,7 +108,7 @@ jobs:
           path: dist/ZenithProxy-launcher-linux-aarch64.zip
 
       - name: Get Binary Hash
-        run: sha1sum -b dist/launcher | cut -d" " -f 1 > ZenithProxy-launcher-linux-aarch64.sha1
+        run: sha1sum -b dist/launch | cut -d" " -f 1 > ZenithProxy-launcher-linux-aarch64.sha1
 
       - name: Upload Launcher Hash Version
         uses: actions/upload-artifact@v4
@@ -125,8 +125,12 @@ jobs:
       - name: Create Python executable zip
         run: zip -j launcher-py.zip src/launcher/*.py
 
+      - name: Elevate script permissions
+        run: |
+          chmod +x src/launcher/launch.sh
+
       - name: Create release zip
-        run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launcher-python.sh src/launcher/launcher-python.bat
+        run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launch.sh src/launcher/launch.bat
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
