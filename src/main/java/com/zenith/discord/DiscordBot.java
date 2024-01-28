@@ -161,17 +161,22 @@ public class DiscordBot {
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
+            DISCORD_LOG.error("GOT A MESSAGE!!!");
             if (CONFIG.discord.chatRelay.enable && !CONFIG.discord.chatRelay.channelId.isEmpty() && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
+                DISCORD_LOG.error("IM CHECKING IT NOW");
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
+                    DISCORD_LOG.error("AND IT PASSED ALL CHECKS!!!");
                     EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent()), event));
                     return;
                 }
             }
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
+                DISCORD_LOG.error("IT WAS NOT IN THE RIGHT CHANNEL");
                 return;
             }
             final String message = event.getMessage().getContent();
             if (!message.startsWith(CONFIG.discord.prefix)) {
+                DISCORD_LOG.error("IT DID NOT HAVE THE RIGHT PREFIX");
                 return;
             }
             try {
