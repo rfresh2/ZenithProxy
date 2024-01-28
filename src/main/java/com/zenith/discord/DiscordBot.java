@@ -181,7 +181,8 @@ public class DiscordBot {
             }
             try {
                 final String inputMessage = message.substring(1);
-                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
+                if (!CONFIG.discord.accountOwnerRoleId.isEmpty())
+                    DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
                 final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
                 COMMAND_MANAGER.execute(context);
                 final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
