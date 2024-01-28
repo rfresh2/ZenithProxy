@@ -1,6 +1,7 @@
 import os
 import subprocess
-import zipfile
+
+import zip_fixed
 
 
 class UpdateError(Exception):
@@ -59,9 +60,8 @@ def rest_get_assets(config, api, asset_name, executable_name, release_and_versio
         with open(config.launch_dir + asset_name, "wb") as f:
             f.write(asset_data)
         if asset_name.endswith(".zip"):
-            with zipfile.ZipFile(config.launch_dir + asset_name, "r") as zip_ref:
+            with zip_fixed.ZipFileWithPermissions(config.launch_dir + asset_name, "r") as zip_ref:
                 zip_ref.extractall(config.launch_dir)
-                subprocess.run(["chmod", "+x", config.launch_dir + executable_name])
             os.remove(config.launch_dir + asset_name)
         config.local_version = config.version = release_and_version[1]
     except IOError as e:

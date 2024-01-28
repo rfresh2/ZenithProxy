@@ -3,9 +3,9 @@ import io
 import os
 import subprocess
 import tempfile
-import zipfile
 
 import launch_platform
+import zip_fixed
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
@@ -140,7 +140,7 @@ def update_launcher_exec(config, api):
     for file_name in os.listdir("launcher"):
         if file_name.startswith("launch"):
             os.remove("launcher/" + file_name)
-    with zipfile.ZipFile(io.BytesIO(launcher_asset_bytes)) as zip_file:
+    with zip_fixed.ZipFileWithPermissions(io.BytesIO(launcher_asset_bytes)) as zip_file:
         zip_file.extractall("launcher")
     new_executable_path = "launcher/" + executable_name
     if not os.path.isfile(new_executable_path):
