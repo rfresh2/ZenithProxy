@@ -142,7 +142,7 @@ public class DiscordBot {
             if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
         }
         if (CONFIG.discord.accountOwnerRoleId.isEmpty()) 
-            DISCORD_LOG.error("Discord account owner role id is not set. Bot can be controlled by anyone");
+            DISCORD_LOG.error("Discord account owner role id is not set. Roles will not be checked");
         else {
             try {
                 Snowflake.of(CONFIG.discord.accountOwnerRoleId);
@@ -183,6 +183,8 @@ public class DiscordBot {
                 final String inputMessage = message.substring(1);
                 if (!CONFIG.discord.accountOwnerRoleId.isEmpty())
                     DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
+                else
+                    DISCORD_LOG.info(" (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
                 final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
                 COMMAND_MANAGER.execute(context);
                 final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
