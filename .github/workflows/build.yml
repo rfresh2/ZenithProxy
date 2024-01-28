@@ -2,10 +2,7 @@
 name: ZenithProxy Build
 
 on:
-  pull_request:
-  push:
-    branches:
-      - "1.20.1"
+  workflow_dispatch
 
 jobs:
   build:
