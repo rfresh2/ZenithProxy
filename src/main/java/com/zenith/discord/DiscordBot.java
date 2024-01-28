@@ -161,22 +161,17 @@ public class DiscordBot {
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
-            DISCORD_LOG.error("GOT A MESSAGE!!!");
             if (CONFIG.discord.chatRelay.enable && !CONFIG.discord.chatRelay.channelId.isEmpty() && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
-                DISCORD_LOG.error("IM CHECKING IT NOW");
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
-                    DISCORD_LOG.error("AND IT PASSED ALL CHECKS!!!");
                     EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent()), event));
                     return;
                 }
             }
             if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
-                DISCORD_LOG.error("IT WAS NOT IN THE RIGHT CHANNEL");
                 return;
             }
             final String message = event.getMessage().getContent();
             if (!message.startsWith(CONFIG.discord.prefix)) {
-                DISCORD_LOG.error("IT DID NOT HAVE THE RIGHT PREFIX");
                 return;
             }
             try {
@@ -184,7 +179,7 @@ public class DiscordBot {
                 if (!CONFIG.discord.accountOwnerRoleId.isEmpty())
                     DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
                 else
-                    DISCORD_LOG.info(" (" + event.getMessage().getAuthor() + ") executed discord command: {}", inputMessage);
+                    DISCORD_LOG.info(event.getMessage().getAuthor().getUsername() + " executed discord command: {}", inputMessage);
                 final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
                 COMMAND_MANAGER.execute(context);
                 final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
