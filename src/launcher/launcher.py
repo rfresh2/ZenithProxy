@@ -80,7 +80,9 @@ def launcher_exec(config):
         except subprocess.CalledProcessError as e:
             print("Error launching application:", e)
     elif config.release_channel.startswith("java"):
-        java_executable = get_java_executable().replace("/", "\\")
+        java_executable = get_java_executable()
+        if platform.system() == 'Windows':
+            java_executable = java_executable.replace("/", "\\")
         if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
             critical_error("ZenithProxy.jar not found")
         if config.custom_jvm_args is not None and config.custom_jvm_args != "":

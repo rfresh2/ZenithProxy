@@ -1,9 +1,8 @@
-import jdk
 import os
 import re
 import subprocess
 
-from utils import critical_error
+import jdk
 
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
@@ -18,8 +17,9 @@ def get_path_java_version():
             version = version_match.group(1)
             return float(version) if '.' in version else int(version)
     except (subprocess.CalledProcessError, OSError) as e:
-        critical_error("Error checking Java version, do you have Java installed?\n" + str(e))
-    return None
+        # No Java installation found on PATH
+        # fall through
+        return None
 
 
 def install_java():
