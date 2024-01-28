@@ -84,9 +84,9 @@ jobs:
       - name: Get Release Tags
         run: |
           j_tag="$(sed 's/\+/\+java./' <<< ${{ github.ref_name }})" 
-          j_tag >> "$JAVA_TAG"
+          echo "JAVA_TAG=$j_tag" >> "$GITHUB_ENV"
           l_tag="$(sed 's/\+/\+linux./' <<< ${{ github.ref_name }})"
-          l_tag >> "$LINUX_TAG"
+          echo "LINUX_TAG=$l_tag" >> "$GITHUB_ENV"
 
       - name: Publish Java Artifact
         uses: ncipollo/release-action@v1
