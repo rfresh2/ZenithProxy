@@ -83,6 +83,8 @@ jobs:
 
       - name: Get Release Tags
         run: |
+          JAVA_TAG="%NOT SET%"
+          LINUX_TAG="%NOT SET%"
           sed 's/\+/\+java./' <<< ${{ github.ref }} >> $JAVA_TAG
           sed 's/\+/\+linux./' <<< ${{ github.ref }} >> $LINUX_TAG
 
