@@ -142,12 +142,13 @@ public class DiscordBot {
             if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
         }
         if (CONFIG.discord.accountOwnerRoleId.isEmpty()) 
-            DISCORD_LOG.error("Discord account owner role id is not set. Roles will not be checked");
+            DISCORD_LOG.warn("Discord account owner role id is not set. Roles will not be checked");
         else {
             try {
                 Snowflake.of(CONFIG.discord.accountOwnerRoleId);
             } catch (final NumberFormatException e) {
                 throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
+            }
         }
         DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
         this.client = discordClient.gateway()
