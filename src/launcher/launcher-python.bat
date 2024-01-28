@@ -16,6 +16,12 @@ where %PYTHON_CMD% >nul 2>nul || (
 )
 
 echo Using Python interpreter: %PYTHON_CMD%
+%PYTHON_CMD% -m pip >nul 2>nul
+if errorlevel 1 (
+  echo Error: pip is required but not installed!
+  echo Help installing: https://pip.pypa.io/en/stable/installation/
+  exit /b 1
+)
 echo Installing dependencies...
 %PYTHON_CMD% -m pip install -r requirements.txt
 echo Launching ZenithProxy...
