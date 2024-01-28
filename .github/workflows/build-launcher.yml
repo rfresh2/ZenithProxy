@@ -171,7 +171,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: "launcher-v3"
-          artifacts: "artifacts/*.zip,hashes.txt,launcher.py"
+          artifacts: "artifacts/*.zip,hashes.txt,scripts/launcher.py"
           allowUpdates: true
           replacesArtifacts: true
           omitBodyDuringUpdate: true
