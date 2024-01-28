@@ -21,6 +21,7 @@ has_pip="$?"
 if [ "$has_pip" = 1 ] ; then
   echo "Error: pip is required but not installed!"
   echo "Help installing: https://pip.pypa.io/en/stable/installation/"
+  echo "Or on Ubuntu: 'apt install python3-pip'"
   exit 1
 fi
 echo Verifying requirements...
