@@ -23,7 +23,7 @@ if [ "$has_pip" = 1 ] ; then
   echo "Help installing: https://pip.pypa.io/en/stable/installation/"
   exit 1
 fi
-echo Installing dependencies...
-$PYTHON_CMD -m pip install -r requirements.txt
+echo Verifying requirements...
+$PYTHON_CMD -m pip install -r requirements.txt -qq --disable-pip-version-check --no-input
 echo Launching ZenithProxy...
 $PYTHON_CMD launcher-py.zip "$@"

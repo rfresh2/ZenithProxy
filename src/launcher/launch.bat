@@ -22,8 +22,8 @@ if errorlevel 1 (
   echo Help installing: https://pip.pypa.io/en/stable/installation/
   exit /b 1
 )
-echo Installing dependencies...
-%PYTHON_CMD% -m pip install -r requirements.txt
+echo Verifying requirements...
+%PYTHON_CMD% -m pip install -r requirements.txt -qq --disable-pip-version-check --no-input
 echo Launching ZenithProxy...
 %PYTHON_CMD% launcher-py.zip %*
 
