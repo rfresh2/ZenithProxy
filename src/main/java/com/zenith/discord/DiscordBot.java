@@ -141,16 +141,19 @@ public class DiscordBot {
             if (CONFIG.discord.chatRelay.channelId.isEmpty()) throw new RuntimeException("Discord chat relay is enabled and channel id is not set");
             if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
         }
-        if (CONFIG.discord.accountOwnerRoleId.isEmpty()) throw new RuntimeException("Discord account owner role id is not set");
-        try {
-            Snowflake.of(CONFIG.discord.accountOwnerRoleId);
-        } catch (final NumberFormatException e) {
-            throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
+        if (CONFIG.discord.accountOwnerRoleId.isEmpty()) 
+            DISCORD_LOG.warn("Discord account owner role id is not set. Roles will not be checked");
+        else {
+            try {
+                Snowflake.of(CONFIG.discord.accountOwnerRoleId);
+            } catch (final NumberFormatException e) {
+                throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
+            }
         }
         DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
         this.client = discordClient.gateway()
                 .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
-                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES, Intent.DIRECT_MESSAGES)))
                 .setInitialPresence(shardInfo -> disconnectedPresence)
                 .login()
                 .block();
@@ -173,7 +176,10 @@ public class DiscordBot {
             }
             try {
                 final String inputMessage = message.substring(1);
-                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
+                if (!CONFIG.discord.accountOwnerRoleId.isEmpty())
+                    DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
+                else
+                    DISCORD_LOG.info(event.getMessage().getAuthor().get().getUsername() + " executed discord command: {}", inputMessage);
                 final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
                 COMMAND_MANAGER.execute(context);
                 final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
