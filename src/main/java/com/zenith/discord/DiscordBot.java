@@ -142,7 +142,7 @@ public class DiscordBot {
             if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
         }
         if (CONFIG.discord.accountOwnerRoleId.isEmpty()) 
-            DISCORD_LOG.error("Discord account owner role id is not set. Bot can be controlled by anyone.");
+            DISCORD_LOG.error("Discord account owner role id is not set. Bot can be controlled by anyone");
         else {
             try {
                 Snowflake.of(CONFIG.discord.accountOwnerRoleId);
@@ -153,7 +153,7 @@ public class DiscordBot {
         DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
         this.client = discordClient.gateway()
                 .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
-                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES, Intent.DIRECT_MESSAGES)))
                 .setInitialPresence(shardInfo -> disconnectedPresence)
                 .login()
                 .block();
