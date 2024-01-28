@@ -276,6 +276,10 @@ public class DiscordBot {
         } catch (final Throwable e) {
             DISCORD_LOG.error("Failed sending message to main channel. Check bot permissions.");
             DISCORD_LOG.debug("Failed sending message to main channel. Check bot permissions.", e);
+            if (mainChannelMessageQueue.size() > 100) {
+                DISCORD_LOG.error("Flushing main channel message queue to reclaim memory, current size: {}", mainChannelMessageQueue.size());
+                mainChannelMessageQueue.clear();
+            }
         }
     }
 
@@ -290,6 +294,10 @@ public class DiscordBot {
         } catch (final Throwable e) {
             DISCORD_LOG.error("Failed sending message to relay channel. Check bot permissions.");
             DISCORD_LOG.debug("Failed sending message to relay channel. Check bot permissions.", e);
+            if (relayChannelMessageQueue.size() > 100) {
+                DISCORD_LOG.error("Flushing relay channel message queue to reclaim memory, current size: {}", relayChannelMessageQueue.size());
+                relayChannelMessageQueue.clear();
+            }
         }
     }
 
