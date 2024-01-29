@@ -55,7 +55,6 @@ try:
         config.load_launch_config_data(json_data)
         config.validate_launch_config()
         if no_launcher_update:
-            print("Skipping launcher update check")
             no_launcher_update = False
         else:
             update_launcher_exec(config, api)
