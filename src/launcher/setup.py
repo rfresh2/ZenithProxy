@@ -96,8 +96,12 @@ def setup_execute():
                 break
 
     while True:
-        print("Input port the proxy will listen on (e.g. 25565):")
+        print("Input port the proxy will use.")
+        print("If you are unsure, leave this blank; port 25565 will be selected.")
         port = input("> ")
+        if port == "":
+            port = 25565
+            break
         try:
             port = int(port)
             if port < 1 or port > 65535:
