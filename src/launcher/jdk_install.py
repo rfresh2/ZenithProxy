@@ -16,7 +16,7 @@ def get_java_version_from_subprocess(java_path):
         if version_match:
             version = version_match.group(1)
             return float(version) if '.' in version else int(version)
-    except (subprocess.CalledProcessError, OSError) as e:
+    except Exception:
         # No Java installation found on PATH
         # fall through
         return None
