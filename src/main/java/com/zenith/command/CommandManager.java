@@ -1,37 +1,41 @@
 package com.zenith.command;
 
+import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
+import com.google.common.base.Suppliers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestion;
-import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.command.impl.*;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
-import lombok.SneakyThrows;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.saveConfigAsync;
+import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
 @Getter
 public class CommandManager {
     private final Reference2ObjectOpenHashMap<Class<? extends Command>, Command> commandsClassMap = new Reference2ObjectOpenHashMap<>();
     private final CommandDispatcher<CommandContext> dispatcher;
+    private final Supplier<CommandNode[]> MCProtocolLibCommandNodesSupplier;
 
     public CommandManager() {
         this.dispatcher = new CommandDispatcher<>();
-        init();
+        registerCommands();
+        this.MCProtocolLibCommandNodesSupplier = Suppliers.memoize(
+            // should be safe to cache as we don't mutate zenith commands after startup
+            () -> BrigadierToMCProtocolLibConverter.convertNodesToMCProtocolLibNodes(this.dispatcher));
     }
 
-    public void init() {
+    public void registerCommands() {
        asList(
            new ActionLimiterCommand(),
            new ActiveHoursCommand(),
@@ -160,18 +164,21 @@ public class CommandManager {
         //      abstract the embed builder output to a mutable intermediary?
         return switch (source) {
             case DISCORD -> CONFIG.discord.prefix;
-            case IN_GAME_PLAYER -> CONFIG.inGameCommands.prefix;
+            case IN_GAME_PLAYER -> CONFIG.inGameCommands.slashCommands ? "/" : CONFIG.inGameCommands.prefix;
             case TERMINAL -> "";
         };
     }
 
-    @SneakyThrows
     public List<String> getCommandCompletions(final String input) {
         final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(input), CommandContext.create(input, CommandSource.TERMINAL));
-        Suggestions suggestions = this.dispatcher.getCompletionSuggestions(parse).get(2L, TimeUnit.SECONDS);
-        List<String> suggestionStrings = suggestions.getList().stream()
-            .map(Suggestion::getText)
-            .toList();
-        return suggestionStrings;
+        try {
+            var suggestions = this.dispatcher.getCompletionSuggestions(parse).get(2L, TimeUnit.SECONDS);
+            return suggestions.getList().stream()
+                .map(Suggestion::getText)
+                .toList();
+        } catch (final Exception e) {
+            TERMINAL_LOG.warn("Failed to get command completions for input: " + input);
+            return List.of();
+        }
     }
 }

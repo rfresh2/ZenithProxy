@@ -33,9 +33,9 @@ public class ToggleArgumentType implements ArgumentType<Boolean> {
             throw READER_EXPECTED_ON_OFF.createWithContext(reader);
         }
 
-        if (value.equalsIgnoreCase("on")) {
+        if (value.equalsIgnoreCase("on") || value.equalsIgnoreCase("true")) {
             return true;
-        } else if (value.equalsIgnoreCase("off")) {
+        } else if (value.equalsIgnoreCase("off") || value.equalsIgnoreCase("false")) {
             return false;
         } else {
             reader.setCursor(start);

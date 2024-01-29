@@ -400,6 +400,8 @@ public final class Config {
     }
     public static final class InGameCommands {
         public boolean enable = true;
+        // replaces server slash commands with zenith commands
+        public boolean slashCommands = true;
         public String prefix = "!";
         public boolean logToDiscord = true;
     }

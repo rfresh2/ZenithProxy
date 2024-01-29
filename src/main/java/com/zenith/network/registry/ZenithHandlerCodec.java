@@ -47,6 +47,7 @@ import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.player.incoming.*;
+import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
@@ -200,9 +201,11 @@ public class ZenithHandlerCodec {
             .registerInbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
             .registerInbound(ServerboundChatPacket.class, new ChatHandler())
             .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
+            .registerInbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionHandler())
             .registerInbound(ServerboundPongPacket.class, new PongHandler())
             .registerInbound(ServerboundClientCommandPacket.class, new ClientCommandHandler())
             .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
+            .registerOutbound(ClientboundCommandsPacket.class, new ClientCommandsOutgoingHandler())
             .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
             .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
             .registerOutbound(ClientboundSystemChatPacket.class, new SystemChatOutgoingHandler())

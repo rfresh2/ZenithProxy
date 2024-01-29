@@ -23,6 +23,7 @@ public class CommandConfigCommand extends Command {
                                  asList(
                                      "discord prefix <string>",
                                      "ingame on/off",
+                                     "ingame slashCommands on/off",
                                      "ingame prefix <string>"
                                     // todo: might add command to config these at some point. But I think these should always be on
 //                                     "ingame logToDiscord on/off",
@@ -58,6 +59,13 @@ public class CommandConfigCommand extends Command {
                               .title("In Game Commands " + (CONFIG.inGameCommands.enable ? "On!" : "Off!"));
                           return 1;
                       }))
+                      .then(literal("slashCommands")
+                                .then(argument("toggle", toggle()).executes(c -> {
+                                    CONFIG.inGameCommands.slashCommands = getToggle(c, "toggle");
+                                    c.getSource().getEmbed()
+                                        .title("In Game Slash Commands " + (CONFIG.inGameCommands.slashCommands ? "On!" : "Off!"));
+                                    return 1;
+                                })))
                       .then(literal("prefix")
                                 .then(argument("prefix", wordWithChars())
                                           .executes(c -> {

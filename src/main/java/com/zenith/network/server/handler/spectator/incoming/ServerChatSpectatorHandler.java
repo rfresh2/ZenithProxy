@@ -36,6 +36,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
     private void handleCommandInput(final String message, final ServerConnection session) {
         final String fullCommandAndArgs = message.substring(CONFIG.inGameCommands.prefix.length()).trim(); // cut off the prefix
         final String command = fullCommandAndArgs.split(" ")[0]; // first word is the command
+        TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), message);
         switch (command) {
             case "help" -> {
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9&lSpectator commands:"), false));

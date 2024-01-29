@@ -49,7 +49,7 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Death messages are currently disabled. To enable death messages, type &c/toggledeathmsgs&7."), false));
         }
         session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&9ZenithProxy&7]&r &2Connected to &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
-        if (CONFIG.inGameCommands.enable) {
+        if (CONFIG.inGameCommands.enable && !CONFIG.inGameCommands.slashCommands) {
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&chelp &7- &8List Commands"), false));
         }

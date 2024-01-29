@@ -11,6 +11,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import lombok.Getter;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> {
+    @Getter
     private final String literalOriginalCase;
     private final String literalLowercase;
     private final CommandErrorHandler errorHandler;

@@ -14,6 +14,7 @@ public class CommandContext {
     private final List<String> multiLineOutput;
     // don't log sensitive input like passwords to discord
     private boolean sensitiveInput = false;
+    private boolean noOutput = false;
 
     public CommandContext(String input, CommandSource source, Embed embed, List<String> multiLineOutput) {
         this.input = input;
