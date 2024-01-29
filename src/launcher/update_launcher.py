@@ -57,7 +57,7 @@ def get_launcher_hashes(api):
     if hashes_asset_id is None:
         print("Failed to get launcher hashes asset ID:", hashes_file_name)
         return None
-    hashes_asset_bytes = api.download_release_asset(hashes_asset_id)
+    hashes_asset_bytes = api.download_asset(hashes_asset_id)
     if hashes_asset_bytes is None:
         print("Failed to download launcher hashes asset:", hashes_file_name)
         return None
@@ -133,7 +133,7 @@ def update_launcher_exec(config, api):
     if launcher_asset_id is None:
         print("Failed to get launcher asset ID:", launcher_asset_file_name)
         return
-    launcher_asset_bytes = api.download_release_asset(launcher_asset_id)
+    launcher_asset_bytes = api.download_asset(launcher_asset_id)
     if launcher_asset_bytes is None:
         print("Failed to download launcher asset:", launcher_asset_file_name)
         return

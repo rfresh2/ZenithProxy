@@ -42,10 +42,10 @@ def rest_get_version(config, api, asset_name, executable_name, target_version):
 
 def rest_get_assets(config, api, asset_name, executable_name, release_and_version):
     print("Downloading version:", release_and_version[1])
-    asset_id = api.get_release_asset_id(release_and_version[0], asset_name)
+    asset_id = api.get_asset_id(release_and_version[0], asset_name)
     if not asset_id:
         raise RestUpdateError("Failed to get executable asset ID")
-    asset_data = api.download_release_asset(asset_id)
+    asset_data = api.download_asset(asset_id)
     if not asset_data:
         raise RestUpdateError("Failed to download executable asset")
     try:
