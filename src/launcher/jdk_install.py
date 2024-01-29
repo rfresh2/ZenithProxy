@@ -8,9 +8,9 @@ _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
 
 
-def get_path_java_version():
+def get_java_version_from_subprocess(java_path):
     try:
-        output = subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True)
+        output = subprocess.check_output([java_path, '-version'], stderr=subprocess.STDOUT, text=True)
         version_line = [line for line in output.split('\n') if "version" in line][0]
         version_match = re.search(r'"(\d+(\.\d+)?)', version_line)
         if version_match:
@@ -20,6 +20,17 @@ def get_path_java_version():
         # No Java installation found on PATH
         # fall through
         return None
+
+
+def get_path_java_version():
+    return get_java_version_from_subprocess('java')
+
+
+def get_java_home_version():
+    java_home = os.environ.get('JAVA_HOME')
+    if not java_home:
+        return None
+    return get_java_version_from_subprocess(os.path.join(java_home, 'bin', 'java'))
 
 
 def install_java():
@@ -34,6 +45,9 @@ def locate_java(min_version=21):
     path_java_version = get_path_java_version()
     if path_java_version and path_java_version >= min_version:
         return 'java'
+    java_home_version = get_java_home_version()
+    if java_home_version and java_home_version >= min_version:
+        return os.path.join(os.environ.get('JAVA_HOME'), 'bin', 'java')
 
     if not os.path.exists(_JDK_DIR):
         return None
