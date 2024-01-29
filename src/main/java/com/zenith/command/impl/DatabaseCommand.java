@@ -37,7 +37,7 @@ public class DatabaseCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("database")
-            .then(literal("queuewait")
+            .then(literal("queueWait")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.queueWait.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.queueWait.enabled) DATABASE_MANAGER.startQueueWaitDatabase();
@@ -46,7 +46,7 @@ public class DatabaseCommand extends Command {
                                 .title("Queue Wait Database " + (CONFIG.database.queueWait.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("queuelength")
+            .then(literal("queueLength")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.queueLength.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.queueLength.enabled) DATABASE_MANAGER.startQueueLengthDatabase();
@@ -55,7 +55,7 @@ public class DatabaseCommand extends Command {
                                 .title("Queue Length Database " + (CONFIG.database.queueLength.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("publicchat")
+            .then(literal("publicChat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.chats.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.chats.enabled) DATABASE_MANAGER.startChatsDatabase();
@@ -64,7 +64,7 @@ public class DatabaseCommand extends Command {
                                 .title("Public Chat Database " + (CONFIG.database.chats.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("joinleave")
+            .then(literal("joinLeave")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.connections.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.connections.enabled) DATABASE_MANAGER.startConnectionsDatabase();
@@ -73,7 +73,7 @@ public class DatabaseCommand extends Command {
                                 .title("Connections Database " + (CONFIG.database.connections.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("deathmessages")
+            .then(literal("deathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.deaths.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.deaths.enabled) DATABASE_MANAGER.startDeathsDatabase();
@@ -91,7 +91,7 @@ public class DatabaseCommand extends Command {
                                     .title("Restarts Database " + (CONFIG.database.restarts.enabled ? "On!" : "Off!"));
                                 return 1;
                         })))
-            .then(literal("playercount")
+            .then(literal("playerCount")
                         .then(argument("toggle", toggle()).executes(c -> {
                                 CONFIG.database.playerCount.enabled = getToggle(c, "toggle");
                                 if (CONFIG.database.playerCount.enabled) DATABASE_MANAGER.startPlayerCountDatabase();

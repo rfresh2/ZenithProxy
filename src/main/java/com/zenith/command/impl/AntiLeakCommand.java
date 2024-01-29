@@ -32,7 +32,7 @@ public class AntiLeakCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("antileak")
+        return command("antiLeak")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.antiLeak.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AntiLeak.class).syncEnabledFromConfig();

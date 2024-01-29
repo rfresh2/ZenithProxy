@@ -3,17 +3,23 @@ package com.zenith.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> {
+    private final String literalOriginalCase;
+    private final String literalLowercase;
     private final CommandErrorHandler errorHandler;
     private final CommandSuccessHandler successHandler;
 
@@ -26,6 +32,8 @@ public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> 
                                              CommandErrorHandler errorHandler,
                                              CommandSuccessHandler successHandler) {
         super(literal.toLowerCase(), command, requirement, redirect, modifier, forks);
+        this.literalOriginalCase = literal;
+        this.literalLowercase = literal.toLowerCase();
         this.errorHandler = errorHandler;
         this.successHandler = successHandler;
     }
@@ -71,5 +79,14 @@ public class CaseInsensitiveLiteralCommandNode<S> extends LiteralCommandNode<S> 
         final StringReader stringReader = new StringReader(input.getString().toLowerCase());
         stringReader.setCursor(input.getCursor());
         return super.getRelevantNodes(stringReader);
+    }
+
+    @Override
+    public CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
+        if (this.literalLowercase.startsWith(builder.getRemainingLowerCase())) {
+            return builder.suggest(literalOriginalCase).buildFuture();
+        } else {
+            return Suggestions.empty();
+        }
     }
 }

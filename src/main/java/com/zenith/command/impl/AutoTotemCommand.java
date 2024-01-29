@@ -31,7 +31,7 @@ public class AutoTotemCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autototem")
+        return command("autoTotem")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoTotem.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);

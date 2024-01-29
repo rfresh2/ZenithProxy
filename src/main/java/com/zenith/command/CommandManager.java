@@ -4,13 +4,17 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestion;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.zenith.command.impl.*;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CONFIG;
@@ -159,5 +163,15 @@ public class CommandManager {
             case IN_GAME_PLAYER -> CONFIG.inGameCommands.prefix;
             case TERMINAL -> "";
         };
+    }
+
+    @SneakyThrows
+    public List<String> getCommandCompletions(final String input) {
+        final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(input), CommandContext.create(input, CommandSource.TERMINAL));
+        Suggestions suggestions = this.dispatcher.getCompletionSuggestions(parse).get(2L, TimeUnit.SECONDS);
+        List<String> suggestionStrings = suggestions.getList().stream()
+            .map(Suggestion::getText)
+            .toList();
+        return suggestionStrings;
     }
 }

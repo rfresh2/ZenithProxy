@@ -9,15 +9,12 @@ import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
-import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.impl.DumbTerminal;
 
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
 
@@ -39,9 +36,7 @@ public class TerminalManager {
                         .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                         .option(LineReader.Option.INSERT_TAB, false)
                         // todo: integrate brigadier arguments or suggestion system
-                        .completer(new StringsCompleter(COMMAND_MANAGER.getCommands().stream()
-                                .flatMap(command -> Stream.concat(Stream.of(command.commandUsage().getName()), command.commandUsage().getAliases().stream()))
-                                .collect(Collectors.toList())))
+                        .completer(new TerminalCommandCompleter())
                         .build();
                 TerminalConsoleAppender.setReader(lineReader);
                 executorFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(interactiveRunnable));

@@ -27,7 +27,7 @@ public class AutoReconnectCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autoreconnect")
+        return command("autoReconnect")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReconnect.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -41,7 +41,7 @@ public class AutoReconnectCommand extends Command {
                               .title("AutoReconnect Delay Updated!");
                           return 1;
                       })))
-            .then(literal("maxattempts")
+            .then(literal("maxAttempts")
                       .then(argument("maxAttempts", integer(1)).executes(c -> {
                           CONFIG.client.extra.autoReconnect.maxAttempts = IntegerArgumentType.getInteger(c, "maxAttempts");
                           c.getSource().getEmbed()

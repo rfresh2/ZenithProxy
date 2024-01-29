@@ -89,7 +89,7 @@ public class DiscordManageCommand extends Command {
                               SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
-            .then(literal("relaychannel")
+            .then(literal("relayChannel")
                       .then(argument("channel ID", wordWithChars()).executes(c -> {
                           String channelId = getString(c, "channel ID");
                           if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
@@ -152,7 +152,7 @@ public class DiscordManageCommand extends Command {
                               .color(Color.CYAN);
                           return 1;
                       })))
-            .then(literal("manageprofileimage")
+            .then(literal("manageProfileImage")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageProfileImage = getToggle(c, "toggle");
                             c.getSource().getEmbed()
@@ -160,7 +160,7 @@ public class DiscordManageCommand extends Command {
                                          .title("Manage Profile Image " + (CONFIG.discord.manageProfileImage ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("managenickname")
+            .then(literal("manageNickname")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageNickname = getToggle(c, "toggle");
                             c.getSource().getEmbed()
@@ -168,7 +168,7 @@ public class DiscordManageCommand extends Command {
                                          .title("Manage Nickname " + (CONFIG.discord.manageNickname ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("managedescription")
+            .then(literal("manageDescription")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageDescription = getToggle(c, "toggle");
                             c.getSource().getEmbed()
@@ -176,7 +176,7 @@ public class DiscordManageCommand extends Command {
                                          .title("Manage Description " + (CONFIG.discord.manageDescription ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("shownonwhitelistip")
+            .then(literal("showNonWhitelistIP")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.showNonWhitelistLoginIP = getToggle(c, "toggle");
                             c.getSource().getEmbed()

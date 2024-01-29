@@ -7,6 +7,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+
+import java.util.concurrent.CompletableFuture;
 
 public class ToggleArgumentType implements ArgumentType<Boolean> {
 
@@ -37,5 +41,16 @@ public class ToggleArgumentType implements ArgumentType<Boolean> {
             reader.setCursor(start);
             throw READER_INVALID_ON_OFF.createWithContext(reader, value);
         }
+    }
+
+    @Override
+    public CompletableFuture<Suggestions> listSuggestions(final CommandContext context, final SuggestionsBuilder builder) {
+        if ("on".startsWith(builder.getRemainingLowerCase())) {
+            builder.suggest("on");
+        }
+        if ("off".startsWith(builder.getRemainingLowerCase())) {
+            builder.suggest("off");
+        }
+        return builder.buildFuture();
     }
 }

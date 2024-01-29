@@ -29,7 +29,7 @@ public class DebugCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("debug").requires(Command::validateAccountOwner)
-            .then(literal("autoconnect")
+            .then(literal("autoConnect")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.autoConnect = getToggle(c, "toggle");
                             c.getSource().getEmbed()
@@ -37,7 +37,7 @@ public class DebugCommand extends Command {
                                 .color(Color.CYAN);
                             return 1;
                       })))
-            .then(literal("packetlog")
+            .then(literal("packetLog")
                         .then(argument("toggle", toggle()).executes(c -> {
                             boolean toggle = getToggle(c, "toggle");
                             if (toggle) {

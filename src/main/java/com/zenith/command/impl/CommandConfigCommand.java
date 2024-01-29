@@ -32,7 +32,7 @@ public class CommandConfigCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("commandconfig").requires(Command::validateAccountOwner)
+        return command("commandConfig").requires(Command::validateAccountOwner)
             .then(literal("discord")
                 .then(literal("prefix")
                     .then(argument("prefix", wordWithChars())

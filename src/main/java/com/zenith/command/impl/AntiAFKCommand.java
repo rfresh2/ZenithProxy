@@ -94,7 +94,7 @@ public class AntiAFKCommand extends Command {
                               .title("Walk Delay Set!");
                           return 1;
                       }))))
-            .then(literal("safewalk")
+            .then(literal("safeWalk")
                       .then(argument("toggle", toggle()).executes(c -> {
                           boolean toggle = getToggle(c, "toggle");
                           CONFIG.client.extra.antiafk.actions.safeWalk = toggle;
@@ -102,7 +102,7 @@ public class AntiAFKCommand extends Command {
                               .title("SafeWalk " + (toggle ? "On!" : "Off!"));
                           return 1;
                       })))
-            .then(literal("walkdistance")
+            .then(literal("walkDistance")
                                 .then(argument("walkdist", integer(1)).executes(c -> {
                                     CONFIG.client.extra.antiafk.actions.walkDistance = IntegerArgumentType.getInteger(c, "walkdist");
                                     c.getSource().getEmbed()
