@@ -48,7 +48,7 @@ def setup_execute():
         "version": "0.0.0",
         "local_version": "0.0.0",
         "repo_owner": "rfresh2",
-        "repo_name": "ZenithProxy"
+        "repo_name": "ZenithProxy",
     }
 
     with open("launch_config.json", "w") as f:
@@ -113,7 +113,8 @@ def setup_execute():
     while True:
         print("Input the IP address players should connect to. This can be a domain name or an IP address.")
         print(
-            "If you are unsure, leave this blank and the proxy will use the IP address of the machine it is running on.")
+            "If you are unsure, leave this blank and the proxy will use the IP address of the machine it is running on."
+        )
         print("If you are using a domain name, make sure you have DNS records set up (see README.md)")
         ip = input("> ")
         if ip == "":
@@ -185,11 +186,7 @@ def setup_execute():
     config = {}
 
     if auth_method == "msa":
-        config["authentication"] = {
-            "accountType": "msa",
-            "email": username,
-            "password": password
-        }
+        config["authentication"] = {"accountType": "msa", "email": username, "password": password}
 
     ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
     proxy_address = ip + ":" + str(port) if ip_pattern.match(ip) else ip
@@ -198,7 +195,7 @@ def setup_execute():
         "bind": {
             "port": port,
         },
-        "proxyIP": proxy_address
+        "proxyIP": proxy_address,
     }
 
     if discord_bot:
@@ -207,10 +204,7 @@ def setup_execute():
             "token": discord_bot_token,
             "channelId": discord_channel_id,
             "accountOwnerRoleId": discord_admin_role_id,
-            "chatRelay": {
-                "enable": True,
-                "channelId": discord_chat_relay_channel
-            }
+            "chatRelay": {"enable": True, "channelId": discord_chat_relay_channel},
         }
 
     with open("config.json", "w") as f:

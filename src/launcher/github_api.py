@@ -19,7 +19,7 @@ class GitHubAPI:
             "User-Agent": "ZenithProxy/" + self.launch_config.local_version,
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
-            "Connection": "close"
+            "Connection": "close",
         }
 
     def get_releases(self, params):
@@ -31,17 +31,18 @@ class GitHubAPI:
             return None
 
     def get_latest_release_and_ver(self, channel):
-        releases = self.get_releases({'per_page': 100})
+        releases = self.get_releases({"per_page": 100})
         if releases:
-            latest_release = max((r for r in releases
-                                  if not r["draft"]
-                                  and r["tag_name"].endswith("+" + channel)),
-                                 key=lambda r: r["published_at"], default=None)
+            latest_release = max(
+                (r for r in releases if not r["draft"] and r["tag_name"].endswith("+" + channel)),
+                key=lambda r: r["published_at"],
+                default=None,
+            )
             return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
 
     def get_release_for_ver(self, target_version):
         for page in range(1, 10):
-            releases = self.get_releases({'per_page': 100, 'page': page})
+            releases = self.get_releases({"per_page": 100, "page": page})
             if releases:
                 for release in releases:
                     if not release["draft"] and release["tag_name"] == target_version:

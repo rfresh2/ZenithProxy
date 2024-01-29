@@ -15,7 +15,7 @@ class RestUpdateError(UpdateError):
 def git_update_check():
     try:
         print("Running git pull...")
-        subprocess.run(['git', 'pull'], check=True, capture_output=True, text=True)
+        subprocess.run(["git", "pull"], check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as e:
         print("Error pulling from git:")
         print(e.stderr)
@@ -35,8 +35,9 @@ def rest_update_check(config, api, asset_name, executable_name):
 def rest_get_version(config, api, asset_name, executable_name, target_version):
     release_and_version = api.get_release_for_ver(target_version)
     if not release_and_version:
-        raise RestUpdateError("Failed to get release for version: " + target_version
-                              + " and channel: " + config.release_channel)
+        raise RestUpdateError(
+            "Failed to get release for version: " + target_version + " and channel: " + config.release_channel
+        )
     rest_get_assets(config, api, asset_name, executable_name, release_and_version)
 
 

@@ -8,14 +8,12 @@ def version_looks_valid(ver):
 
 
 def valid_release_channel(channel):
-    return channel.startswith("git") \
-        or channel.startswith("java") \
-        or channel.startswith("linux")
+    return channel.startswith("git") or channel.startswith("java") or channel.startswith("linux")
 
 
 def read_launch_config_file():
     try:
-        with open('launch_config.json') as f:
+        with open("launch_config.json") as f:
             data = json.load(f)
             return data
     except FileNotFoundError:
@@ -41,14 +39,14 @@ class LaunchConfig:
         if data is None:
             print("No data to read from launch_config.json")
             return
-        self.auto_update = data.get('auto_update', self.auto_update)
-        self.auto_update_launcher = data.get('auto_update_launcher', self.auto_update_launcher)
-        self.release_channel = data.get('release_channel', self.release_channel)
-        self.version = data.get('version', self.version)
-        self.local_version = data.get('local_version', self.local_version)
-        self.repo_owner = data.get('repo_owner', self.repo_owner)
-        self.repo_name = data.get('repo_name', self.repo_name)
-        self.custom_jvm_args = data.get('custom_jvm_args', self.custom_jvm_args)
+        self.auto_update = data.get("auto_update", self.auto_update)
+        self.auto_update_launcher = data.get("auto_update_launcher", self.auto_update_launcher)
+        self.release_channel = data.get("release_channel", self.release_channel)
+        self.version = data.get("version", self.version)
+        self.local_version = data.get("local_version", self.local_version)
+        self.repo_owner = data.get("repo_owner", self.repo_owner)
+        self.repo_name = data.get("repo_name", self.repo_name)
+        self.custom_jvm_args = data.get("custom_jvm_args", self.custom_jvm_args)
         if self.custom_jvm_args is not None and self.custom_jvm_args != "":
             print("Using custom JVM args:", self.custom_jvm_args)
 
@@ -64,9 +62,9 @@ class LaunchConfig:
         }
         if (self.custom_jvm_args is not None) and (self.custom_jvm_args != ""):
             output["custom_jvm_args"] = self.custom_jvm_args
-        with open('launch_config.json.tmp', 'w') as f:
+        with open("launch_config.json.tmp", "w") as f:
             f.write(json.dumps(output, indent=2))
-        os.replace('launch_config.json.tmp', 'launch_config.json')
+        os.replace("launch_config.json.tmp", "launch_config.json")
 
     def create_default_launch_config(self):
         print("Creating default launch_config.json")

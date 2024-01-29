@@ -24,7 +24,7 @@ default_linux_args = """\
 
 def git_read_version(config):
     try:
-        output = subprocess.check_output(['git', 'rev-parse', '--short=8', 'HEAD'], stderr=subprocess.STDOUT, text=True)
+        output = subprocess.check_output(["git", "rev-parse", "--short=8", "HEAD"], stderr=subprocess.STDOUT, text=True)
         v = str(output).splitlines()[0].strip()
         if len(v) == 8:
             config.version = v
@@ -52,10 +52,17 @@ def launcher_exec(config):
 
     if config.version == "0.0.0" or config.local_version == "0.0.0":
         if config.release_channel == "git":
-            critical_error("Invalid version found for git release channel:" + config.version
-                           + "\nRe-run setup.py and select another release channel.")
-        critical_error("Invalid version found:'" + config.version + "'"
-                       + "\nEnable `auto_updater` or specify a valid version in launch_config.json.")
+            critical_error(
+                "Invalid version found for git release channel:"
+                + config.version
+                + "\nRe-run setup.py and select another release channel."
+            )
+        critical_error(
+            "Invalid version found:'"
+            + config.version
+            + "'"
+            + "\nEnable `auto_updater` or specify a valid version in launch_config.json."
+        )
 
     if not validate_system_with_config(config):
         critical_error("Invalid system for release channel: " + config.release_channel)
@@ -68,7 +75,7 @@ def launcher_exec(config):
             jvm_args = config.custom_jvm_args
         else:
             jvm_args = default_java_args
-        if platform.system() == 'Windows':
+        if platform.system() == "Windows":
             toolchain_command = ".\\build\\java_toolchain.bat"
             jar_command = "-jar build\\libs\\ZenithProxy.jar"
         else:
@@ -81,7 +88,7 @@ def launcher_exec(config):
             print("Error launching application:", e)
     elif config.release_channel.startswith("java"):
         java_executable = get_java_executable()
-        if platform.system() == 'Windows':
+        if platform.system() == "Windows":
             java_executable = java_executable.replace("/", "\\")
         if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
             critical_error("ZenithProxy.jar not found")
@@ -89,7 +96,7 @@ def launcher_exec(config):
             jvm_args = config.custom_jvm_args
         else:
             jvm_args = default_java_args
-        if platform.system() == 'Windows':
+        if platform.system() == "Windows":
             toolchain_command = "call " + java_executable
             jar_command = "-jar " + config.launch_dir.replace("/", "\\") + "ZenithProxy.jar"
         else:

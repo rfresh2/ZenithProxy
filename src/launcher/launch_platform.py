@@ -9,7 +9,7 @@ from jdk_install import get_java_executable
 def validate_linux_cpu_flags():
     x86_64_v3_flags = ["avx", "avx2", "bmi1", "bmi2", "fma", "sse4_1", "sse4_2", "ssse3"]
     try:
-        output = subprocess.check_output(['cat', '/proc/cpuinfo'], stderr=subprocess.STDOUT, text=True)
+        output = subprocess.check_output(["cat", "/proc/cpuinfo"], stderr=subprocess.STDOUT, text=True)
         flags = []
         for line in output.splitlines():
             if line.startswith("flags"):
@@ -17,9 +17,12 @@ def validate_linux_cpu_flags():
                 break
         for flag in x86_64_v3_flags:
             if flag not in flags:
-                print("Unsupported CPU. "
-                      + "Use the Java release channel instead. Re-run setup.py to change the release channel. "
-                      + "\nFlag not found: " + flag)
+                print(
+                    "Unsupported CPU. "
+                    + "Use the Java release channel instead. Re-run setup.py to change the release channel. "
+                    + "\nFlag not found: "
+                    + flag
+                )
                 return False
         return True
     except Exception as e:
@@ -29,18 +32,16 @@ def validate_linux_cpu_flags():
 
 def validate_linux_glibc_version():
     try:
-        output = subprocess.check_output(['ldd', '--version'], stderr=subprocess.STDOUT, text=True)
+        output = subprocess.check_output(["ldd", "--version"], stderr=subprocess.STDOUT, text=True)
         # ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
         # get the version from the last word of the first line
         version = output.splitlines()[0].split(" ")[-1]
         version = version.split(".")
         if int(version[0]) != 2:
-            print("Unsupported OS for linux release channel. "
-                  + "\nglibc version too low: " + ".".join(version))
+            print("Unsupported OS for linux release channel. " + "\nglibc version too low: " + ".".join(version))
             return False
         if int(version[1]) < 31:
-            print("Unsupported OS for linux release channel. "
-                  + "\nglibc version too low: " + ".".join(version))
+            print("Unsupported OS for linux release channel. " + "\nglibc version too low: " + ".".join(version))
             return False
         return True
     except Exception as e:
@@ -76,7 +77,7 @@ def validate_system_with_config(config):
 
 
 def is_pyinstaller_bundle():
-    return getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
+    return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 
 
 def get_platform_os():

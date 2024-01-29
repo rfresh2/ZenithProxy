@@ -17,17 +17,17 @@ api = github_api.GitHubAPI(config)
 
 
 # Handle windows .exe double click launch
-if not sys.stdout.isatty() and platform.system() == 'Windows' and launch_platform.is_pyinstaller_bundle():
+if not sys.stdout.isatty() and platform.system() == "Windows" and launch_platform.is_pyinstaller_bundle():
     print("Launching exe to a new terminal...")
     cwd = os.getcwd()
     # Check if Windows Terminal is installed
-    windows_terminal_path = os.path.join(os.environ['windir'], 'system32', 'wt.exe')
+    windows_terminal_path = os.path.join(os.environ["windir"], "system32", "wt.exe")
     if os.path.isfile(windows_terminal_path):
         # Run the script in a new Windows Terminal window
-        subprocess.Popen([windows_terminal_path, '-d', cwd, 'launch.exe'])
+        subprocess.Popen([windows_terminal_path, "-d", cwd, "launch.exe"])
     else:
         # Run the script in a new cmd window
-        subprocess.Popen(['cmd.exe', '/k', 'cd', cwd, '&', 'launch.exe'])
+        subprocess.Popen(["cmd.exe", "/k", "cd", cwd, "&", "launch.exe"])
     sys.exit(0)
 
 
