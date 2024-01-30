@@ -72,9 +72,9 @@ public class CommandConfigCommand extends Command {
                                 }))
                                 .then(literal("replaceServerCommands")
                                           .then(argument("toggle", toggle()).executes(c -> {
-                                              CONFIG.inGameCommands.slashCommandsReplaceServerCommands = getToggle(c, "toggle");
+                                              CONFIG.inGameCommands.slashCommandsReplacesServerCommands = getToggle(c, "toggle");
                                               c.getSource().getEmbed()
-                                                  .title("Replace Server Commands " + (CONFIG.inGameCommands.slashCommandsReplaceServerCommands ? "On!" : "Off!"));
+                                                  .title("Replace Server Commands " + (CONFIG.inGameCommands.slashCommandsReplacesServerCommands ? "On!" : "Off!"));
                                               syncSlashCommandsToCurrentPlayer();
                                               return 1;
                                           }))))
@@ -110,7 +110,7 @@ public class CommandConfigCommand extends Command {
             .addField("Discord Prefix", CONFIG.discord.prefix, false)
             .addField("Ingame Commands", toggleStr(CONFIG.inGameCommands.enable), false)
             .addField("Ingame Slash Commands", toggleStr(CONFIG.inGameCommands.slashCommands), false)
-            .addField("Ingame Slash Commands Replace Server Commands", toggleStr(CONFIG.inGameCommands.slashCommandsReplaceServerCommands), false)
+            .addField("Ingame Slash Commands Replace Server Commands", toggleStr(CONFIG.inGameCommands.slashCommandsReplacesServerCommands), false)
             .addField("Ingame Prefix", CONFIG.inGameCommands.prefix, false)
             .color(Color.CYAN);
     }
