@@ -9,7 +9,9 @@ import static com.zenith.Shared.CONFIG;
 public class CommandSuggestionHandler implements PacketHandler<ServerboundCommandSuggestionPacket, ServerConnection> {
     @Override
     public ServerboundCommandSuggestionPacket apply(final ServerboundCommandSuggestionPacket packet, final ServerConnection session) {
-        if (CONFIG.inGameCommands.slashCommands && CONFIG.inGameCommands.slashCommandsReplacesServerCommands) return null;
+        if (CONFIG.inGameCommands.enable
+            && CONFIG.inGameCommands.slashCommands
+            && CONFIG.inGameCommands.slashCommandsReplacesServerCommands) return null;
         return packet;
     }
 }

@@ -13,7 +13,7 @@ import static com.zenith.Shared.*;
 public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundCommandsPacket, ServerConnection> {
     @Override
     public ClientboundCommandsPacket apply(final ClientboundCommandsPacket packet, final ServerConnection session) {
-        if (CONFIG.inGameCommands.slashCommands) {
+        if (CONFIG.inGameCommands.enable && CONFIG.inGameCommands.slashCommands) {
             CommandNode[] zenithCommandNodes = COMMAND_MANAGER.getMCProtocolLibCommandNodesSupplier().get();
             if (CONFIG.inGameCommands.slashCommandsReplacesServerCommands) {
                 return new ClientboundCommandsPacket(
