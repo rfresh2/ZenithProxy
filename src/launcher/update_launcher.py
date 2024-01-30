@@ -105,7 +105,6 @@ def relaunch(is_pyinstaller, os_platform, executable_name, new_executable_path, 
 def update_launcher_exec(config, api):
     if not config.auto_update_launcher:
         return
-    print("Checking for launcher update...")
     is_pyinstaller = launch_platform.is_pyinstaller_bundle()
     os_platform = launch_platform.get_platform_os()
     os_arch = launch_platform.get_platform_arch()
@@ -126,7 +125,6 @@ def update_launcher_exec(config, api):
         return
     current_launcher_sha1 = compute_sha1(executable_name)
     if current_launcher_sha1 in hashes_list:
-        print("Launcher is up to date:", current_launcher_sha1)
         return
     print("Found new launcher, current version:", current_launcher_sha1)
     launcher_asset_id = api.get_release_tag_asset_id(launcher_tag, launcher_asset_file_name)
