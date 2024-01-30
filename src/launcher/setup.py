@@ -5,6 +5,7 @@ import re
 import requests
 
 from launch_platform import validate_linux_system
+from utils import critical_error
 
 
 def setup_execute():
@@ -212,3 +213,15 @@ def setup_execute():
         print("config.json written successfully!")
 
     print("Setup complete!")
+
+
+def rescue_invalid_system(config):
+    print("CRITICAL: Invalid system for release channel: " + config.release_channel)
+    while True:
+        print("Run setup? (y/n)")
+        i1 = input("> ")
+        if i1 == "y":
+            setup_execute()
+            return
+        elif i1 == "n":
+            critical_error("Invalid system for release channel: " + config.release_channel)

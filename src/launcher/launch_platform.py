@@ -53,25 +53,29 @@ def validate_linux_system():
     return platform.system() == "Linux" and validate_linux_cpu_flags() and validate_linux_glibc_version()
 
 
+def validate_java_system(config):
+    min_java_version = 17 if config.version.startswith("1") else 21
+    java_executable = get_java_executable()
+    if java_executable is None:
+        print(f"Java >={min_java_version} not found.")
+        return False
+    return True
+
+
+def validate_git_system():
+    # check if we have a .git directory
+    if not os.path.isdir(".git"):
+        return False
+    return True
+
+
 def validate_system_with_config(config):
     if config.release_channel == "git":
-        # check if we have a .git directory
-        if not os.path.isdir(".git"):
-            print("No .git directory found. Please clone the repository.")
-            return False
-        return True
+        return validate_git_system()
     elif config.release_channel.startswith("java"):
-        min_java_version = 21 if config.version.startswith("2") else 17
-        java_executable = get_java_executable()
-        if java_executable is None:
-            print(f"Java >={min_java_version} not found.")
-            return False
-        return True
+        return validate_java_system(config)
     elif config.release_channel.startswith("linux"):
-        # ignoring this for now
-        valid_flags = validate_linux_cpu_flags()
-        valid_glibc = validate_linux_glibc_version()
-        return platform.system() == "Linux"  # and valid_flags and valid_glibc
+        return validate_linux_system()
     else:
         return False
 

@@ -6,9 +6,9 @@ import time
 
 import github_api
 import launch_platform
-import launcher
 from launch_config import LaunchConfig, read_launch_config_file
-from setup import setup_execute
+from launcher import launcher_exec
+from setup import setup_execute, rescue_invalid_system
 from update_launcher import update_launcher_exec
 from update_zenith import update_zenith_exec
 
@@ -51,15 +51,21 @@ try:
         if json_data is None:
             print("launch_config.json not found, running setup.")
             setup_execute()
-            json_data = read_launch_config_file()
+            continue
         config.load_launch_config_data(json_data)
-        config.validate_launch_config()
+        if not config.validate_launch_config():
+            print("launch_config.json has invalid values, running setup.")
+            setup_execute()
+            continue
+        if not launch_platform.validate_system_with_config(config):
+            rescue_invalid_system(config)
+            continue
         if no_launcher_update:
             no_launcher_update = False
         else:
             update_launcher_exec(config, api)
         update_zenith_exec(config, api)
-        launcher.launcher_exec(config)
+        launcher_exec(config)
         print("Restarting in 3 seconds...")
         time.sleep(3)
 except KeyboardInterrupt:
