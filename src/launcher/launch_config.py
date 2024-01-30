@@ -2,6 +2,8 @@ import json
 import os
 import re
 
+from utils import critical_error
+
 
 def version_looks_valid(ver):
     return re.match(r"[0-9]+\.[0-9]+\.[0-9]+", ver) or (len(ver) == 8 and re.match(r"[0-9a-f]+", ver))
@@ -37,8 +39,7 @@ class LaunchConfig:
 
     def load_launch_config_data(self, data):
         if data is None:
-            print("No data to read from launch_config.json")
-            return
+            critical_error("No data to read from launch_config.json")
         self.auto_update = data.get("auto_update", self.auto_update)
         self.auto_update_launcher = data.get("auto_update_launcher", self.auto_update_launcher)
         self.release_channel = data.get("release_channel", self.release_channel)
