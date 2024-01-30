@@ -85,7 +85,7 @@ def launcher_exec(config):
         try:
             subprocess.run(run_script, shell=True, check=True)
         except subprocess.CalledProcessError as e:
-            print("Error launching application:", e)
+            critical_error("Error launching application:", e)
     elif config.release_channel.startswith("java"):
         java_executable = get_java_executable()
         if platform.system() == "Windows":
