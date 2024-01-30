@@ -219,4 +219,4 @@ def rescue_invalid_system(config):
             setup_execute(config)
             return
         elif i1 == "n":
-            critical_error("Invalid system for release channel: " + config.release_channel)
+            critical_error("Invalid system for release channel:", config.release_channel)

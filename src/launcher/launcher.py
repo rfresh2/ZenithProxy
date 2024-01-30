@@ -39,7 +39,7 @@ def launch_linux(config):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
-        critical_error("Error launching application:" + str(e))
+        critical_error("Error launching application:", e)
 
 
 def launch_java(config):
@@ -62,7 +62,7 @@ def launch_java(config):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
-        critical_error("Error launching application:" + str(e))
+        critical_error("Error launching application:", str(e))
 
 
 def launch_git(config):
@@ -93,4 +93,4 @@ def launcher_exec(config):
     elif config.release_channel.startswith("linux"):
         launch_linux(config)
     else:
-        critical_error("Invalid release channel:" + config.release_channel)
+        critical_error("Invalid release channel:", config.release_channel)
