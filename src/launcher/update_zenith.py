@@ -103,8 +103,6 @@ def git_read_version(config):
 
 
 def update_zenith_exec(config, api):
-    # Determine if there's a new update
-    # Install new update if available
     if config.auto_update:
         try:
             if config.release_channel == "git":
