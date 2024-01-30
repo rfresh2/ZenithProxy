@@ -87,6 +87,21 @@ def linux_native_get_version(config, api, target_version):
     rest_get_version(config, api, "ZenithProxy.zip", "ZenithProxy", target_version)
 
 
+def git_read_version(config):
+    try:
+        output = subprocess.check_output(["git", "rev-parse", "--short=8", "HEAD"], stderr=subprocess.STDOUT, text=True)
+        v = str(output).splitlines()[0].strip()
+        if len(v) == 8:
+            config.version = v
+            config.local_version = v
+            print("Git commit:", config.version)
+        else:
+            print("Invalid version string found from git:", output)
+    except subprocess.CalledProcessError as e:
+        print("Error reading local git version:")
+        print(e.stderr)
+
+
 def update_zenith_exec(config, api):
     # Determine if there's a new update
     # Install new update if available
@@ -109,3 +124,6 @@ def update_zenith_exec(config, api):
                 linux_native_get_version(config, api, config.version)
         except UpdateError as e:
             print("Error performing update check:", e)
+    if config.release_channel == "git":
+        git_read_version(config)
+    config.write_launch_config()

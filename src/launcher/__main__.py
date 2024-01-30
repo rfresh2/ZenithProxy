@@ -42,7 +42,7 @@ for arg in sys.argv:
         setup_only = True
 
 if setup_only:
-    setup_execute()
+    setup_execute(config)
     sys.exit(0)
 
 try:
@@ -50,12 +50,12 @@ try:
         json_data = read_launch_config_file()
         if json_data is None:
             print("launch_config.json not found, running setup.")
-            setup_execute()
+            setup_execute(config)
             continue
         config.load_launch_config_data(json_data)
         if not config.validate_launch_config():
             print("launch_config.json has invalid values, running setup.")
-            setup_execute()
+            setup_execute(config)
             continue
         if not launch_platform.validate_system_with_config(config):
             rescue_invalid_system(config)

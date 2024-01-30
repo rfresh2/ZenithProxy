@@ -66,6 +66,7 @@ class LaunchConfig:
         with open("launch_config.json.tmp", "w") as f:
             f.write(json.dumps(output, indent=2))
         os.replace("launch_config.json.tmp", "launch_config.json")
+        print("launch_config.json written successfully")
 
     def create_default_launch_config(self):
         print("Creating default launch_config.json")

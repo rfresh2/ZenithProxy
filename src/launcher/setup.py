@@ -8,7 +8,7 @@ from launch_platform import validate_linux_system
 from utils import critical_error
 
 
-def setup_execute():
+def setup_execute(config):
     if validate_linux_system():  # otherwise we will always select java
         while True:
             print("Select a ZenithProxy platform: (1/2)")
@@ -42,19 +42,14 @@ def setup_execute():
         else:
             print("Invalid input. Enter 1 or 2")
 
-    launch_config = {
-        "auto_update": True,
-        "auto_update_launcher": True,
-        "release_channel": release_channel + "." + minecraft_version,
-        "version": "0.0.0",
-        "local_version": "0.0.0",
-        "repo_owner": "rfresh2",
-        "repo_name": "ZenithProxy",
-    }
-
-    with open("launch_config.json", "w") as f:
-        f.write(json.dumps(launch_config, indent=2))
-        print("launch_config written successfully")
+    config.auto_update = True
+    config.auto_update_launcher = True
+    config.release_channel = release_channel + "." + minecraft_version
+    config.version = "0.0.0"
+    config.local_version = "0.0.0"
+    config.repo_owner = "rfresh2"
+    config.repo_name = "ZenithProxy"
+    config.write_launch_config()
 
     if os.path.exists("config.json"):
         while True:
@@ -221,7 +216,7 @@ def rescue_invalid_system(config):
         print("Run setup? (y/n)")
         i1 = input("> ")
         if i1 == "y":
-            setup_execute()
+            setup_execute(config)
             return
         elif i1 == "n":
             critical_error("Invalid system for release channel: " + config.release_channel)
