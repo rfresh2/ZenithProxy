@@ -298,6 +298,7 @@ public final class Config {
     public static final class Debug {
         public Packet packet = new Packet();
         public Server server = new Server();
+        public boolean clearOldLogs = false;
 
         public static final class Packet {
             public boolean received = false;

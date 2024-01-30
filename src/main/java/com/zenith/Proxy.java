@@ -48,6 +48,8 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.*;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.Base64;
@@ -124,6 +126,7 @@ public class Proxy {
         DEFAULT_LOG.info("Starting ZenithProxy-{}", LAUNCH_CONFIG.version);
         initEventHandlers();
         try {
+            if (CONFIG.debug.clearOldLogs) clearOldLogs();
             if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.start();
             if (CONFIG.database.enabled) {
                 DATABASE_MANAGER.start();
@@ -175,6 +178,20 @@ public class Proxy {
             DEFAULT_LOG.info("Shutting down...");
             if (this.server != null) this.server.close(true);
             saveConfig();
+        }
+    }
+
+    private static void clearOldLogs() {
+        try (Stream<Path> walk = Files.walk(Path.of("log/"))) {
+            walk.filter(path -> path.toString().endsWith(".zip")).forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (final IOException e) {
+                    DEFAULT_LOG.error("Error deleting old log file", e);
+                }
+            });
+        } catch (final IOException e) {
+            DEFAULT_LOG.error("Error deleting old log file", e);
         }
     }
 
