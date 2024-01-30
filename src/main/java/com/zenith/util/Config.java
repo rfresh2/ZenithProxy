@@ -402,6 +402,7 @@ public final class Config {
         public boolean enable = true;
         // replaces server slash commands with zenith commands
         public boolean slashCommands = true;
+        public boolean slashCommandsReplaceServerCommands = true;
         public String prefix = "!";
         public boolean logToDiscord = true;
     }

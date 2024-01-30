@@ -26,6 +26,7 @@ public class CommandConfigCommand extends Command {
                                      "discord prefix <string>",
                                      "ingame on/off",
                                      "ingame slashCommands on/off",
+                                     "ingame slashCommands replaceServerCommands on/off",
                                      "ingame prefix <string>"
                                     // todo: might add command to config these at some point. But I think these should always be on
 //                                     "ingame logToDiscord on/off",
@@ -66,18 +67,17 @@ public class CommandConfigCommand extends Command {
                                     CONFIG.inGameCommands.slashCommands = getToggle(c, "toggle");
                                     c.getSource().getEmbed()
                                         .title("In Game Slash Commands " + (CONFIG.inGameCommands.slashCommands ? "On!" : "Off!"));
-                                    var session = Proxy.getInstance().getCurrentPlayer().get();
-                                    if (session != null) {
-                                        if (CONFIG.inGameCommands.slashCommands) {
-                                            session.sendAsync(new ClientboundCommandsPacket(
-                                                COMMAND_MANAGER.getMCProtocolLibCommandNodesSupplier().get(),
-                                                0));
-                                        } else {
-                                            CACHE.getChatCache().getPackets(session::sendAsync);
-                                        }
-                                    }
+                                    syncSlashCommandsToCurrentPlayer();
                                     return 1;
-                                })))
+                                }))
+                                .then(literal("replaceServerCommands")
+                                          .then(argument("toggle", toggle()).executes(c -> {
+                                              CONFIG.inGameCommands.slashCommandsReplaceServerCommands = getToggle(c, "toggle");
+                                              c.getSource().getEmbed()
+                                                  .title("Replace Server Commands " + (CONFIG.inGameCommands.slashCommandsReplaceServerCommands ? "On!" : "Off!"));
+                                              syncSlashCommandsToCurrentPlayer();
+                                              return 1;
+                                          }))))
                       .then(literal("prefix")
                                 .then(argument("prefix", wordWithChars())
                                           .executes(c -> {
@@ -97,11 +97,26 @@ public class CommandConfigCommand extends Command {
                                           }))));
     }
 
+    private static void syncSlashCommandsToCurrentPlayer() {
+        var session = Proxy.getInstance().getCurrentPlayer().get();
+        if (session != null) {
+            if (CONFIG.inGameCommands.slashCommands) {
+                session.sendAsync(new ClientboundCommandsPacket(
+                    COMMAND_MANAGER.getMCProtocolLibCommandNodesSupplier().get(),
+                    0));
+            } else {
+                CACHE.getChatCache().getPackets(session::sendAsync);
+            }
+        }
+    }
+
     @Override
     public void postPopulate(final Embed builder) {
         builder
             .addField("Discord Prefix", CONFIG.discord.prefix, false)
             .addField("Ingame Commands", toggleStr(CONFIG.inGameCommands.enable), false)
+            .addField("Ingame Slash Commands", toggleStr(CONFIG.inGameCommands.slashCommands), false)
+            .addField("Ingame Slash Commands Replace Server Commands", toggleStr(CONFIG.inGameCommands.slashCommandsReplaceServerCommands), false)
             .addField("Ingame Prefix", CONFIG.inGameCommands.prefix, false)
             .color(Color.CYAN);
     }
