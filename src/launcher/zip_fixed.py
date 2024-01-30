@@ -14,4 +14,5 @@ class ZipFileWithPermissions(ZipFile):
         attr = member.external_attr >> 16
         if attr != 0:
             os.chmod(targetpath, attr)
+        print("Extracted:", targetpath)
         return targetpath
