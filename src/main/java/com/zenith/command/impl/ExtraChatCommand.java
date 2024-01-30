@@ -30,29 +30,29 @@ public class ExtraChatCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("extrachat")
-            .then(literal("hidechat")
+        return command("extraChat")
+            .then(literal("hideChat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideChat = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Chat " + (CONFIG.client.extra.chat.hideChat ? "hidden!" : "shown!"));
                             return 1;
                         })))
-            .then(literal("hidewhispers")
+            .then(literal("hideWhispers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideWhispers = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Whispers " + (CONFIG.client.extra.chat.hideWhispers ? "hidden!" : "shown!"));
                             return 1;
                         })))
-            .then(literal("hidedeathmessages")
+            .then(literal("hideDeathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideDeathMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Death messages " + (CONFIG.client.extra.chat.hideDeathMessages ? "hidden!" : "shown!"));
                             return 1;
                         })))
-            .then(literal("showconnectionmessages")
+            .then(literal("showConnectionMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.showConnectionMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()

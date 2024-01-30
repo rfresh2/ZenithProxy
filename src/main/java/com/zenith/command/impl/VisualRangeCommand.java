@@ -83,7 +83,7 @@ public class VisualRangeCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Friend list cleared!");
                       })))
-            .then(literal("ignorefriends")
+            .then(literal("ignoreFriends")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangeIgnoreFriends = getToggle(c, "toggle");
                             c.getSource().getEmbed()
@@ -104,7 +104,7 @@ public class VisualRangeCommand extends Command {
                                 .title("Logout Alerts " + (CONFIG.client.extra.visualRangeLeftLogoutAlert ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("enemytracking")
+            .then(literal("enemyTracking")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangePositionTracking = getToggle(c, "toggle");
                             c.getSource().getEmbed()

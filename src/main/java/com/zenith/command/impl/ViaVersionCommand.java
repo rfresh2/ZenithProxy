@@ -42,7 +42,7 @@ public class ViaVersionCommand extends Command {
                         .title("Client ViaVersion " + (CONFIG.client.viaversion.enabled ? "On!" : "Off!"));
                     return 1;
                 }))
-                .then(literal("autoconfig")
+                .then(literal("autoConfig")
                           .then(argument("toggle", toggle()).executes(c -> {
                                 CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
                                 c.getSource().getEmbed()

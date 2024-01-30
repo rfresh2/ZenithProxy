@@ -20,10 +20,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundConfigurationAcknowledgedPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
@@ -53,6 +50,7 @@ import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.player.incoming.*;
+import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
@@ -229,26 +227,19 @@ public class ZenithHandlerCodec {
             .build())
         .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
             .allowUnhandled(true)
-            //
-            // Inbound packets
-            //
             .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
             .registerInbound(ServerboundConfigurationAcknowledgedPacket.class, new ConfigurationAckHandler())
             .registerInbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
             .registerInbound(ServerboundChatPacket.class, new ChatHandler())
             .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
+            .registerInbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionHandler())
             .registerInbound(ServerboundPongPacket.class, new PongHandler())
             .registerInbound(ServerboundClientCommandPacket.class, new ClientCommandHandler())
             .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
-            //
-            // Outbound packets
-            //
+            .registerOutbound(ClientboundCommandsPacket.class, new ClientCommandsOutgoingHandler())
             .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
             .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
             .registerOutbound(ClientboundSystemChatPacket.class, new SystemChatOutgoingHandler())
-            //
-            // Post-outbound packets
-            //
             .registerPostOutbound(ClientboundLoginPacket.class, new LoginPostHandler())
             .build())
         .build();

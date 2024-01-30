@@ -13,12 +13,27 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
     public ServerboundChatCommandPacket apply(final ServerboundChatCommandPacket packet, final ServerConnection session) {
         final String command = packet.getCommand();
         if (command.isBlank()) return packet;
+        if (CONFIG.inGameCommands.slashCommands) {
+            if (!IN_GAME_COMMAND_MANAGER.handleInGameCommand(command, session, CONFIG.inGameCommands.slashCommandsReplaceServerCommands)
+                && !CONFIG.inGameCommands.slashCommandsReplaceServerCommands)
+                return replaceExtraChatServerCommands(packet, session);
+            return null;
+        } else {
+            return replaceExtraChatServerCommands(packet, session);
+        }
+    }
+
+    private ServerboundChatCommandPacket replaceExtraChatServerCommands(
+        final ServerboundChatCommandPacket packet,
+        final ServerConnection session
+    ) {
+        final String command = packet.getCommand();
         final String commandLowercased = command.toLowerCase().split(" ")[0];
         return switch (commandLowercased) {
             case "ignorelist" -> {
                 CONFIG.client.extra.chat.ignoreList.forEach(s -> session.send(new ClientboundSystemChatPacket(
                     ComponentSerializer.minedown(
-                    "&c" + s.getUsername()), true)));
+                        "&c" + s.getUsername()), true)));
                 yield null;
             }
             case "ignoredeathmsgs" -> {

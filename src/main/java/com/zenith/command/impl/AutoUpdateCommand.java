@@ -29,7 +29,7 @@ public class AutoUpdateCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autoupdate").requires(Command::validateAccountOwner)
+        return command("autoUpdate").requires(Command::validateAccountOwner)
             .then(argument("toggle", toggle()).executes(c -> {
                 final boolean toggle = getToggle(c, "toggle");
                 CONFIG.autoUpdater.autoUpdate = toggle;

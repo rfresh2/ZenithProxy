@@ -61,21 +61,21 @@ public class SpammerCommand extends Command {
                                 .title("Whisper " + (CONFIG.client.extra.spammer.whisper ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("delayticks")
+            .then(literal("delayTicks")
                       .then(argument("delayTicks", integer(1, 10000)).executes(c -> {
                           CONFIG.client.extra.spammer.delayTicks = IntegerArgumentType.getInteger(c, "delayTicks");
                           c.getSource().getEmbed()
                               .title("Delay Updated!");
                           return 1;
                       })))
-            .then(literal("randomorder")
+            .then(literal("randomOrder")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.randomOrder = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Random Order " + (CONFIG.client.extra.spammer.randomOrder ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("appendrandom")
+            .then(literal("appendRandom")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.appendRandom = getToggle(c, "toggle");
                             c.getSource().getEmbed()

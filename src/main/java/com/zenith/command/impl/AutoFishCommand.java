@@ -34,7 +34,7 @@ public class AutoFishCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autofish")
+        return command("autoFish")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoFish.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.getModule(AutoFish.class).ifPresent(Module::syncEnabledFromConfig);

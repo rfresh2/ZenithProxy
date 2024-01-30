@@ -268,26 +268,36 @@ public class DiscordBot {
 
     private void processMessageQueue() {
         try {
-            MultipartRequest<MessageCreateRequest> message = mainChannelMessageQueue.poll();
+            var message = mainChannelMessageQueue.peek();
             if (nonNull(message)) {
-                this.mainRestChannel.createMessage(message).block();
+                this.mainRestChannel.createMessage(message).retry(1).block();
+                mainChannelMessageQueue.poll();
             }
         } catch (final Throwable e) {
-            DISCORD_LOG.error("Failed sending message to main channel. Check that the bot has correct permissions.");
-            DISCORD_LOG.debug("Failed sending message to main channel. Check that the bot has correct permissions.", e);
+            DISCORD_LOG.error("Failed sending message to main channel. Check bot permissions.");
+            DISCORD_LOG.debug("Failed sending message to main channel. Check bot permissions.", e);
+            if (mainChannelMessageQueue.size() > 100) {
+                DISCORD_LOG.error("Flushing main channel message queue to reclaim memory, current size: {}", mainChannelMessageQueue.size());
+                mainChannelMessageQueue.clear();
+            }
         }
     }
 
     private void processRelayMessageQueue() {
         try {
-            MultipartRequest<MessageCreateRequest> message = relayChannelMessageQueue.poll();
+            var message = relayChannelMessageQueue.peek();
             if (nonNull(message)
                 && (!message.getJsonPayload().embeds().isAbsent()
                     || !(message.getJsonPayload().content().isAbsent() || message.getJsonPayload().content().get().isEmpty())))
-                this.relayRestChannel.createMessage(message).block();
+                this.relayRestChannel.createMessage(message).retry(1).block();
+            relayChannelMessageQueue.poll();
         } catch (final Throwable e) {
-            DISCORD_LOG.error("Failed sending message to relay channel. Check that the bot has correct permissions");
-            DISCORD_LOG.debug("Failed sending message to relay channel. Check that the bot has correct permissions", e);
+            DISCORD_LOG.error("Failed sending message to relay channel. Check bot permissions.");
+            DISCORD_LOG.debug("Failed sending message to relay channel. Check bot permissions.", e);
+            if (relayChannelMessageQueue.size() > 100) {
+                DISCORD_LOG.error("Flushing relay channel message queue to reclaim memory, current size: {}", relayChannelMessageQueue.size());
+                relayChannelMessageQueue.clear();
+            }
         }
     }
 

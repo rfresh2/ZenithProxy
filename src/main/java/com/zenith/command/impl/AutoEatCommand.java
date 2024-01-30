@@ -29,7 +29,7 @@ public class AutoEatCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autoeat")
+        return command("autoEat")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoEat.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.getModule(AutoEat.class).ifPresent(Module::syncEnabledFromConfig);
