@@ -27,21 +27,21 @@ def rest_update_check(config, api, asset_name, executable_name):
     if not latest_release_and_ver:
         raise RestUpdateError("Failed to get latest release for channel: " + config.release_channel)
     if latest_release_and_ver[1] == config.version and os.path.isfile(config.launch_dir + executable_name):
-        print("Already up to date")
+        print("Already on the latest version:", config.version)
         return
-    rest_get_assets(config, api, asset_name, executable_name, latest_release_and_ver)
+    rest_get_assets(config, api, asset_name, latest_release_and_ver)
 
 
-def rest_get_version(config, api, asset_name, executable_name, target_version):
+def rest_get_version(config, api, asset_name, target_version):
     release_and_version = api.get_release_for_ver(target_version)
     if not release_and_version:
         raise RestUpdateError(
             "Failed to get release for version: " + target_version + " and channel: " + config.release_channel
         )
-    rest_get_assets(config, api, asset_name, executable_name, release_and_version)
+    rest_get_assets(config, api, asset_name, release_and_version)
 
 
-def rest_get_assets(config, api, asset_name, executable_name, release_and_version):
+def rest_get_assets(config, api, asset_name, release_and_version):
     print("Downloading version:", release_and_version[1])
     asset_id = api.get_asset_id(release_and_version[0], asset_name)
     if not asset_id:
@@ -75,7 +75,7 @@ def java_update_check(config, api):
 
 def java_get_version(config, api, target_version):
     print("Getting version: " + target_version)
-    rest_get_version(config, api, "ZenithProxy.jar", "ZenithProxy.jar", target_version)
+    rest_get_version(config, api, "ZenithProxy.jar", target_version)
 
 
 def linux_native_update_check(config, api):
@@ -84,7 +84,7 @@ def linux_native_update_check(config, api):
 
 def linux_native_get_version(config, api, target_version):
     print("Getting version: " + target_version)
-    rest_get_version(config, api, "ZenithProxy.zip", "ZenithProxy", target_version)
+    rest_get_version(config, api, "ZenithProxy.zip", target_version)
 
 
 def git_read_version(config):
