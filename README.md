@@ -84,14 +84,14 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
    * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
 2. [Python 3.10+](https://www.python.org/downloads/)
 3. Java 21+ (Not required for `linux` release channel on supported CPU)
-   * Linux Installation: 
+   * Linux/Mac Installation: 
       * Install: https://sdkman.io/install
       * Run: `sdk install java 21-zulu`
    * Windows Installation: https://adoptium.net/
 
 ## Run
 
-* `./launch.sh` (Linux) or `.\launch.bat` (Windows). Then use the `connect` command to log in
+* `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows). Then use the `connect` command to log in
 * Command Prefixes:
   * Discord: `.` (e.g. `.help`)
   * In-game: `!` -> (e.g. `!help`)
