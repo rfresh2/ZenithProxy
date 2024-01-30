@@ -1,6 +1,5 @@
 package com.zenith.command.impl;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
@@ -10,7 +9,8 @@ import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
@@ -100,13 +100,7 @@ public class CommandConfigCommand extends Command {
     private static void syncSlashCommandsToCurrentPlayer() {
         var session = Proxy.getInstance().getCurrentPlayer().get();
         if (session != null) {
-            if (CONFIG.inGameCommands.slashCommands) {
-                session.sendAsync(new ClientboundCommandsPacket(
-                    COMMAND_MANAGER.getMCProtocolLibCommandNodesSupplier().get(),
-                    0));
-            } else {
-                CACHE.getChatCache().getPackets(session::sendAsync);
-            }
+            CACHE.getChatCache().getPackets(session::sendAsync);
         }
     }
 
