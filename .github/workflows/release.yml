@@ -31,7 +31,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Download GraalVM Profile
-        if: !endsWith(github.ref, '.pre')
+        if: (!endsWith(github.ref, '.pre'))
         run: |
           wget https://cdn.2b2t.vc/profile.iprof
           echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
