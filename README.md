@@ -86,15 +86,17 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
     * For other systems, download the Python version (Universal). Requires [Python 3.10+](https://www.python.org/downloads/)
 <details>
     <summary>How do I download a file from a Linux terminal?</summary>
-    Use `wget` to download a file from the terminal. [Example](https://linuxize.com/post/wget-command-examples/#how-to-download-a-file-with-wget)
+    
+    Use wget: https://linuxize.com/post/wget-command-examples/#how-to-download-a-file-with-wget
 </details>
 
 2. Unzip the file. 
 <details> 
     <summary>Recommended unzip tools</summary>
-    * Windows: [7zip](https://www.7-zip.org/download.html)
-    * Linux: [unzip](https://linuxize.com/post/how-to-unzip-files-in-linux/)
-    * Mac: [The Unarchiver](https://theunarchiver.com/)
+    
+    Windows: https://www.7-zip.org/download.html
+    Linux: https://linuxize.com/post/how-to-unzip-files-in-linux/
+    Mac: https://theunarchiver.com/
 </details>
 
 3. Run the launcher executable in a terminal:
