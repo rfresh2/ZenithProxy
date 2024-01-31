@@ -11,6 +11,8 @@ launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
 
 
+# todo: we should really be able to bake this into the executable
+#   either as a variable injected at build or determine it based on the runtime executable name
 def get_launcher_asset_file_name(is_pyinstaller, os_platform, os_arch):
     if not is_pyinstaller:
         return "ZenithProxy-launcher-python.zip"
@@ -22,20 +24,21 @@ def get_launcher_asset_file_name(is_pyinstaller, os_platform, os_arch):
         elif os_arch == "aarch64":
             return "ZenithProxy-launcher-linux-aarch64.zip"
     if os_platform == "macos":
-        return "ZenithProxy-launcher-macos-amd64.zip"
+        if os_arch == "aarch64":
+            return "ZenithProxy-launcher-macos-aarch64.zip"
+        else:
+            return "ZenithProxy-launcher-macos-amd64.zip"
     return None
 
 
-def get_launcher_executable_name(is_pyinstaller, os_platform, os_arch):
+# todo: determine this from the current process exec
+def get_launcher_executable_name(is_pyinstaller, os_platform):
     if not is_pyinstaller:
         return "launcher-py.zip"
     if os_platform == "windows":
         return "launch.exe"
     if os_platform == "linux":
-        if os_arch == "amd64":
-            return "launch"
-        elif os_arch == "aarch64":
-            return "launch"
+        return "launch"
     if os_platform == "macos":
         return "launch"
     return None
@@ -110,7 +113,7 @@ def update_launcher_exec(config, api):
     os_platform = launch_platform.get_platform_os()
     os_arch = launch_platform.get_platform_arch()
     launcher_asset_file_name = get_launcher_asset_file_name(is_pyinstaller, os_platform, os_arch)
-    executable_name = get_launcher_executable_name(is_pyinstaller, os_platform, os_arch)
+    executable_name = get_launcher_executable_name(is_pyinstaller, os_platform)
     if executable_name is None:
         print("Unable to identify which launcher executable to update, skipping launcher update.")
         return

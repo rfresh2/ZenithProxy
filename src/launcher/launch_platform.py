@@ -96,11 +96,13 @@ def get_platform_os():
 
 
 def get_platform_arch():
-    if platform.machine().lower() == "amd64":
-        return "amd64"
-    elif platform.machine() == "x86_64":
-        return "amd64"
-    elif platform.machine().lower() == "arm64":
+    uname = platform.machine().lower()
+    arm64_names = ["aarch64", "arm64", "aarch64_be", "armv8b", "armv8l"]
+    x64_names = ["amd64", "x86_64", "x64"]
+    if uname in arm64_names:
         return "aarch64"
+    elif uname in x64_names:
+        return "amd64"
     else:
+        print("WARN: Unknown system architecture:", uname)
         return "unknown"
