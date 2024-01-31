@@ -72,6 +72,14 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 
 ## Setup and Download
 
+### System Requirements
+
+1. Linux, Windows, or Mac computer. I recommend using a VPS (droplet) from DigitalOcean:
+    * [$200 Free Digital](https://m.do.co/c/f3afffef9a46)[Ocean Credits](https://m.do.co/c/3a3a226e4936).
+    * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
+2. Java 21+ (Not required for `linux` release channel on supported CPU)
+    * The ZenithProxy launcher will install Java 21 automatically if not already installed
+
 ### Launcher
 
 1. Download the launcher zip for your system: https://github.com/rfresh2/ZenithProxy/releases/launcher-v3
@@ -86,23 +94,15 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
    * Linux/Mac: `./launch`
    * Python Universal: `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows)
 
-## System Requirements
-
-1. Linux, Windows, or Mac computer. I recommend using a VPS (droplet) from DigitalOcean: 
-   * [$200 Free Digital](https://m.do.co/c/f3afffef9a46)[Ocean Credits](https://m.do.co/c/3a3a226e4936).
-   * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
-2. Java 21+ (Not required for `linux` release channel on supported CPU)
-   * The ZenithProxy launcher will install Java 21 automatically if not already installed
-
-## Run
+### Run
 
 * The launcher will ask for all configuration on first launch
-  * Or run the launcher with the `--setup` flag. e.g. `.\launch.exe --setup`
+    * Or run the launcher with the `--setup` flag. e.g. `.\launch.exe --setup`
 * Use the `connect` command to link an MC account and log in once ZenithProxy is launched
 * Command Prefixes:
-  * Discord: `.` (e.g. `.help`)
-  * In-game: `/` OR `!` -> (e.g. `/help`)
-  * Terminal: N/A -> (e.g. `help`)
+    * Discord: `.` (e.g. `.help`)
+    * In-game: `/` OR `!` -> (e.g. `/help`)
+    * Terminal: N/A -> (e.g. `help`)
 
 ### Running on Linux Servers
 
