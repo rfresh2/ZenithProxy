@@ -85,7 +85,7 @@ def launch_git(config):
 
 
 def launcher_exec(config):
-    # Launch application
+    print("Launching ZenithProxy...")
     if config.release_channel == "git":
         launch_git(config)
     elif config.release_channel.startswith("java"):

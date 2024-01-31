@@ -30,6 +30,7 @@ if not sys.stdout.isatty() and platform.system() == "Windows" and launch_platfor
         subprocess.Popen(["cmd.exe", "/k", "cd", cwd, "&", "launch.exe"])
     sys.exit(0)
 
+print("ZenithProxy Launcher Initializing...")
 
 # for use with relaunches just so we don't get stuck in an infinite update loop if something goes wrong
 no_launcher_update = False
@@ -57,6 +58,7 @@ try:
             print("launch_config.json has invalid values, running setup.")
             setup_execute(config)
             continue
+        print("Loaded launch_config.json successfully")
         if not launch_platform.validate_system_with_config(config):
             rescue_invalid_system(config)
             continue

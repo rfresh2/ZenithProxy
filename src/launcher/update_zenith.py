@@ -104,6 +104,7 @@ def git_read_version(config):
 
 def update_zenith_exec(config, api):
     if config.auto_update:
+        print("Checking for ZenithProxy update...")
         try:
             if config.release_channel == "git":
                 git_update_check()
