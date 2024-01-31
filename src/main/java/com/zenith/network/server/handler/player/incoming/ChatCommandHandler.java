@@ -13,7 +13,7 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
     public ServerboundChatCommandPacket apply(final ServerboundChatCommandPacket packet, final ServerConnection session) {
         final String command = packet.getCommand();
         if (command.isBlank()) return packet;
-        if (CONFIG.inGameCommands.slashCommands) {
+        if (CONFIG.inGameCommands.slashCommands && CONFIG.inGameCommands.enable) {
             if (!IN_GAME_COMMAND_MANAGER.handleInGameCommand(command, session, CONFIG.inGameCommands.slashCommandsReplacesServerCommands)
                 && !CONFIG.inGameCommands.slashCommandsReplacesServerCommands)
                 return replaceExtraChatServerCommands(packet, session);
