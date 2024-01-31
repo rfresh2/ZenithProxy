@@ -85,10 +85,10 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 1. Download [the launcher zip](https://github.com/rfresh2/ZenithProxy/releases/launcher-v3) for your system
     * For other systems, download the Python version (Universal). Requires [Python 3.10+](https://www.python.org/downloads/)
 2. Unzip the file.
-3. Run the launcher executable in a terminal:
-   * Windows: `.\launch.exe` (or double-click the exe)
+3. Double click or run the launcher executable in a terminal:
+   * Windows: `.\launch.exe`
    * Linux/Mac: `./launch`
-   * Python Universal: `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows)
+   * (Terminal Only) Python Universal: `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows)
 
 <details>
     <summary>How do I download a file from a Linux terminal?</summary>
