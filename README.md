@@ -105,6 +105,13 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
    * Linux/Mac: `./launch`
    * Python Universal: `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows)
 
+<details>
+    <summary>Recommended Terminals</summary>
+
+* Windows: [Windows Terminal](https://apps.microsoft.com/detail/9N8G5RFZ9XK3)
+* Mac: [iterm2](https://iterm2.com/)
+</details>
+
 ### Run
 
 * The launcher will ask for all configuration on first launch
