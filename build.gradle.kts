@@ -2,12 +2,6 @@ import org.apache.tools.ant.taskdefs.condition.Os
 import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 
-buildscript {
-    repositories {
-        maven(url = "https://plugins.gradle.org/m2/") { name = "Gradle" }
-    }
-}
-
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.9.28"
@@ -19,16 +13,8 @@ group = "com.zenith"
 version = "1.0.0"
 
 val javaVersion = JavaLanguageVersion.of(21)
-
-val javaLauncherProvider = javaToolchains.launcherFor {
-    languageVersion = javaVersion
-}
-
-java {
-    toolchain {
-        languageVersion = javaVersion
-    }
-}
+val javaLauncherProvider = javaToolchains.launcherFor { languageVersion = javaVersion }
+java { toolchain { languageVersion = javaVersion } }
 
 repositories {
     maven("https://jitpack.io") { name = "jitpack.io" }
@@ -91,12 +77,9 @@ dependencies {
     shade("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
     shade("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
     shade("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
-//    // uncomment to use io_uring
-//    shade("io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.21.Final:linux-x86_64")
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-
     shade("org.redisson:redisson:3.26.0") {
         exclude(group = "io.netty")
     }
@@ -106,15 +89,12 @@ dependencies {
     shade("org.cloudburstmc.fastutil.maps:long-object-maps:$fastutilVersion")
     shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion")
     shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion")
-
     shade("net.raphimc:ViaLoader:2.2.12")
     shade("com.viaversion:viaversion:4.9.3-SNAPSHOT")
     shade("com.viaversion:viabackwards:4.9.2-SNAPSHOT")
-
     shade("org.jline:jline:3.25.1")
     shade("org.jline:jline-terminal-jansi:3.25.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
-
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")

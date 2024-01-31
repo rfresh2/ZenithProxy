@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -47,6 +48,7 @@ public class RestAutoUpdater extends AutoUpdater {
             .headers("User-Agent", "ZenithProxy/" + LAUNCH_CONFIG.version)
             .headers("Accept", "application/vnd.github+json")
             .headers("X-GitHub-Api-Version", "2022-11-28")
+            .timeout(Duration.ofSeconds(5))
             .GET()
             .build();
 
