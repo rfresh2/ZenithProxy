@@ -12,9 +12,6 @@ runcmd:
   - [runuser, -l, root, -c, 'chsh -s /usr/bin/zsh root']
   - 'cd /root && wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh && chmod +x install.sh'
   - [runuser, -l, root, -c, '/usr/bin/zsh -c "/root/install.sh --unattended"']
-  - 'cd /root && curl -s "https://get.sdkman.io" > sdkmanInstall.sh && chmod +x sdkmanInstall.sh'
-  - [runuser, -l, root, -c, '/usr/bin/zsh -c "/root/sdkmanInstall.sh"']
-  - [runuser, -l, root, -c, '/usr/bin/zsh -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install java 21-graal"']
-  - 'cd /root && mkdir ZenithProxy && cd ZenithProxy && wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher/ZenithProxyLauncher.zip && unzip ZenithProxyLauncher.zip'
-  - 'rm /root/install.sh /root/sdkmanInstall.sh'
+  - 'cd /root && mkdir ZenithProxy && cd ZenithProxy && wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-linux-amd64.zip && unzip ZenithProxy-launcher-linux-amd64.zip'
+  - 'rm /root/install.sh'
   - 'reboot'
