@@ -49,8 +49,11 @@ jobs:
           pip install -r ./src/launcher/requirements.txt
 
       - name: Build launcher
-        run: |
-          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/__main__.py
+        run: >
+          pyinstaller --specpath ./build 
+          -p ./src/launcher --onefile --noconfirm
+          -i ./src/launcher/icon.ico
+          ./src/launcher/__main__.py
 
       - name: Rename executable
         run: |
