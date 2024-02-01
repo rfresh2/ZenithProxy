@@ -142,7 +142,7 @@ def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_s
         # on windows, we can't replace the executable while it's running
         # so we're moving the files around and then launching a subprocess
         # not ideal as we don't clean this process until everything gets closed, but it seems to work
-        os_platform.rename(exec_name, tempfile.gettempdir() + "/launch-" + current_sha1 + ".old")
+        os_platform.rename(exec_name, tempfile.gettempdir() + "/launcher-exec-" + current_sha1 + ".old")
         os_platform.rename(new_exec_name, exec_name)
     else:
         os_platform.replace(new_exec_name, exec_name)
