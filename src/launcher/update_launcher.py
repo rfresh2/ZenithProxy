@@ -7,6 +7,7 @@ import tempfile
 
 import launch_platform
 import zip_fixed
+from launch_platform import Platform
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
@@ -74,7 +75,7 @@ def update_launcher_exec(config, api):
 
 def get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch):
     if is_pyinstaller:
-        return f"ZenithProxy-launcher-{os_platform}-{os_arch}.zip"
+        return f"ZenithProxy-launcher-{os_platform.value}-{os_arch.value}.zip"
     else:
         return "ZenithProxy-launcher-python.zip"
 
@@ -123,14 +124,14 @@ def get_launcher_hashes(api):
 
 def relaunch_executable(os_platform, executable_name):
     print("Relaunching...")
-    if os_platform == "windows":
+    if os_platform == Platform.WINDOWS:
         subprocess.run([executable_name, "--no-launcher-update"])
     else:
         os.execl(executable_name, "--no-launcher-update")
 
 
 def relaunch_python(os_platform, executable_name):
-    if os_platform == "windows":
+    if os_platform == Platform.WINDOWS:
         relaunch_executable(os_platform, "launch.bat")
     else:
         relaunch_executable(executable_name, "launch.sh")
@@ -138,20 +139,20 @@ def relaunch_python(os_platform, executable_name):
 
 def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_sha1):
     print("Replacing launcher files...")
-    if os_platform == "windows":
+    if os_platform == Platform.WINDOWS:
         # on windows, we can't replace the executable while it's running
         # so we're moving the files around and then launching a subprocess
         # not ideal as we don't clean this process until everything gets closed, but it seems to work
-        os_platform.rename(exec_name, tempfile.gettempdir() + "/launcher-exec-" + current_sha1 + ".old")
-        os_platform.rename(new_exec_name, exec_name)
+        os.rename(exec_name, tempfile.gettempdir() + "/launcher-exec-" + current_sha1 + ".old")
+        os.rename(new_exec_name, exec_name)
     else:
-        os_platform.replace(new_exec_name, exec_name)
+        os.replace(new_exec_name, exec_name)
 
 
 def replace_extra_python_launcher_files(os_platform, current_sha1):
     os.replace("launcher/requirements.txt", "requirements.txt")
     os.replace("launcher/launch.sh", "launch.sh")
-    if os_platform == "windows":
+    if os_platform == Platform.WINDOWS:
         os.rename("launch.bat", tempfile.gettempdir() + "/launch-" + current_sha1 + ".bat.old")
         os.rename("launcher/launch.bat", "launch.bat")
     else:

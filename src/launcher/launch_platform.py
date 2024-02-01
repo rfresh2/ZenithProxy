@@ -2,6 +2,7 @@ import os
 import platform
 import subprocess
 import sys
+from enum import Enum
 
 from jdk_install import get_java_executable
 
@@ -63,10 +64,7 @@ def validate_java_system(config):
 
 
 def validate_git_system():
-    # check if we have a .git directory
-    if not os.path.isdir(".git"):
-        return False
-    return True
+    return os.path.isdir(".git")
 
 
 def validate_system_with_config(config):
@@ -84,15 +82,26 @@ def is_pyinstaller_bundle():
     return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 
 
+class Platform(Enum):
+    WINDOWS = "windows"
+    LINUX = "linux"
+    MACOS = "macos"
+
+
 def get_platform_os():
     if platform.system() == "Windows":
-        return "windows"
+        return Platform.WINDOWS
     elif platform.system() == "Linux":
-        return "linux"
+        return Platform.LINUX
     elif platform.system() == "Darwin":
-        return "macos"
+        return Platform.MACOS
     else:
         return None
+
+
+class Arch(Enum):
+    AMD64 = "amd64"
+    AARCH64 = "aarch64"
 
 
 def get_platform_arch():
@@ -100,8 +109,8 @@ def get_platform_arch():
     arm64_names = ["aarch64", "arm64", "aarch64_be", "armv8b", "armv8l"]
     x64_names = ["amd64", "x86_64", "x64"]
     if uname in arm64_names:
-        return "aarch64"
+        return Arch.AARCH64
     elif uname in x64_names:
-        return "amd64"
+        return Arch.AMD64
     else:
         return None

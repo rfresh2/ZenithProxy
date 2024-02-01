@@ -71,8 +71,7 @@ class GitHubAPI:
         try:
             response = requests.get(url, headers=download_headers, allow_redirects=True)
             if response.status_code == 200:
-                asset_data = response.content
-                return asset_data
+                return response.content
             else:
                 print("Failed to download asset:", response.status_code, response.reason)
                 return None
