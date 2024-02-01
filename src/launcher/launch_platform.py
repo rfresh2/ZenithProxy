@@ -82,7 +82,7 @@ def is_pyinstaller_bundle():
     return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 
 
-class Platform(Enum):
+class OperatingSystem(Enum):
     WINDOWS = "windows"
     LINUX = "linux"
     MACOS = "macos"
@@ -90,16 +90,16 @@ class Platform(Enum):
 
 def get_platform_os():
     if platform.system() == "Windows":
-        return Platform.WINDOWS
+        return OperatingSystem.WINDOWS
     elif platform.system() == "Linux":
-        return Platform.LINUX
+        return OperatingSystem.LINUX
     elif platform.system() == "Darwin":
-        return Platform.MACOS
+        return OperatingSystem.MACOS
     else:
         return None
 
 
-class Arch(Enum):
+class CpuArch(Enum):
     AMD64 = "amd64"
     AARCH64 = "aarch64"
 
@@ -109,8 +109,8 @@ def get_platform_arch():
     arm64_names = ["aarch64", "arm64", "aarch64_be", "armv8b", "armv8l"]
     x64_names = ["amd64", "x86_64", "x64"]
     if uname in arm64_names:
-        return Arch.AARCH64
+        return CpuArch.AARCH64
     elif uname in x64_names:
-        return Arch.AMD64
+        return CpuArch.AMD64
     else:
         return None

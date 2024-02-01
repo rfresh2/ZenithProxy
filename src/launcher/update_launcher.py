@@ -7,7 +7,7 @@ import tempfile
 
 import launch_platform
 import zip_fixed
-from launch_platform import Platform
+from launch_platform import OperatingSystem
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
@@ -124,14 +124,14 @@ def get_launcher_hashes(api):
 
 def relaunch_executable(os_platform, executable_name):
     print("Relaunching...")
-    if os_platform == Platform.WINDOWS:
+    if os_platform == OperatingSystem.WINDOWS:
         subprocess.run([executable_name, "--no-launcher-update"])
     else:
         os.execl(executable_name, "--no-launcher-update")
 
 
 def relaunch_python(os_platform, executable_name):
-    if os_platform == Platform.WINDOWS:
+    if os_platform == OperatingSystem.WINDOWS:
         relaunch_executable(os_platform, "launch.bat")
     else:
         relaunch_executable(executable_name, "launch.sh")
@@ -139,7 +139,7 @@ def relaunch_python(os_platform, executable_name):
 
 def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_sha1):
     print("Replacing launcher files...")
-    if os_platform == Platform.WINDOWS:
+    if os_platform == OperatingSystem.WINDOWS:
         # on windows, we can't replace the executable while it's running
         # so we're moving the files around and then launching a subprocess
         # not ideal as we don't clean this process until everything gets closed, but it seems to work
@@ -152,7 +152,7 @@ def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_s
 def replace_extra_python_launcher_files(os_platform, current_sha1):
     os.replace("launcher/requirements.txt", "requirements.txt")
     os.replace("launcher/launch.sh", "launch.sh")
-    if os_platform == Platform.WINDOWS:
+    if os_platform == OperatingSystem.WINDOWS:
         os.rename("launch.bat", tempfile.gettempdir() + "/launch-" + current_sha1 + ".bat.old")
         os.rename("launcher/launch.bat", "launch.bat")
     else:
