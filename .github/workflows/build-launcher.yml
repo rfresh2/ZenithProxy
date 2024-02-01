@@ -52,7 +52,7 @@ jobs:
         run: >
           pyinstaller --specpath ./build 
           -p ./src/launcher --onefile --noconfirm
-          -i ./src/launcher/icon.ico
+          -i ../src/launcher/icon.ico
           ./src/launcher/__main__.py
 
       - name: Rename executable
