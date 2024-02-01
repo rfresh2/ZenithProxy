@@ -92,7 +92,7 @@ def get_platform_os():
     elif platform.system() == "Darwin":
         return "macos"
     else:
-        return "unknown"
+        return None
 
 
 def get_platform_arch():
@@ -104,5 +104,4 @@ def get_platform_arch():
     elif uname in x64_names:
         return "amd64"
     else:
-        print("WARN: Unknown system architecture:", uname)
-        return "unknown"
+        return None
