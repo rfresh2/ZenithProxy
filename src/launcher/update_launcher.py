@@ -17,60 +17,44 @@ def update_launcher_exec(config, api):
     if not config.auto_update_launcher:
         return
     print("Checking for launcher update...")
-    is_pyinstaller = launch_platform.is_pyinstaller_bundle()
-    os_platform = launch_platform.get_platform_os()
-    if os_platform is None:
-        print("Failed to identify platform, skipping launcher update.")
-        return
-    os_arch = launch_platform.get_platform_arch()
-    if os_arch is None:
-        print("Failed to identify CPU architecture, skipping launcher update.")
-        return
-    launcher_asset_file_name = get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch)
-    executable_name = get_launcher_main_executable_name(is_pyinstaller)
-    if executable_name is None:
-        print("Unable to identify which launcher executable to update, skipping launcher update.")
-        return
-    if launcher_asset_file_name is None:
-        print("Unable to identify which launcher asset to download, skipping launcher update.")
-        return
-    hashes_list = get_launcher_hashes(api)
-    if hashes_list is None:
-        print("Failed to get launcher hashes, skipping launcher update.")
-        return
-    if not os.path.isfile(executable_name):
-        print("Launcher executable not found, skipping launcher update:", executable_name)
-        return
-    current_launcher_sha1 = compute_sha1(executable_name)
-    if current_launcher_sha1 in hashes_list:
-        print("Already on the latest launcher")
-        return
-    print("Found new launcher, current version:", current_launcher_sha1)
-    launcher_asset_id = api.get_release_tag_asset_id(launcher_tag, launcher_asset_file_name)
-    if launcher_asset_id is None:
-        print("Failed to get launcher asset ID:", launcher_asset_file_name)
-        return
-    launcher_asset_bytes = api.download_asset(launcher_asset_id)
-    if launcher_asset_bytes is None:
-        print("Failed to download launcher asset:", launcher_asset_file_name)
-        return
-    for file_name in os.listdir("launcher"):
-        if file_name.startswith("launch"):
-            os.remove("launcher/" + file_name)
-    with zip_fixed.ZipFileWithPermissions(io.BytesIO(launcher_asset_bytes)) as zip_file:
-        zip_file.extractall("launcher")
-    new_executable_path = "launcher/" + executable_name
-    if not os.path.isfile(new_executable_path):
-        print("Failed to extract launcher executable:", executable_name)
-        return
-    new_launcher_sha1 = compute_sha1(new_executable_path)
-    print("New launcher version:", new_launcher_sha1)
-    replace_launcher_executable(os_platform, executable_name, new_executable_path, current_launcher_sha1)
-    if is_pyinstaller:
-        relaunch_executable(os_platform, executable_name)
-    else:
-        replace_extra_python_launcher_files(os_platform, current_launcher_sha1)
-        relaunch_python(os_platform, executable_name)
+    try:
+        is_pyinstaller = launch_platform.is_pyinstaller_bundle()
+        os_platform = launch_platform.get_platform_os()
+        os_arch = launch_platform.get_platform_arch()
+        launcher_asset_file_name = get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch)
+        executable_name = get_launcher_main_executable_name(is_pyinstaller)
+        hashes_list = get_launcher_hashes(api)
+        if not os.path.isfile(executable_name):
+            raise LauncherUpdateError("Launcher executable not found, skipping launcher update:", executable_name)
+        current_launcher_sha1 = compute_sha1(executable_name)
+        if current_launcher_sha1 in hashes_list:
+            print("Already on the latest launcher")
+            return
+        print("Found new launcher, current version:", current_launcher_sha1)
+        launcher_asset_id = api.get_release_tag_asset_id(launcher_tag, launcher_asset_file_name)
+        if launcher_asset_id is None:
+            raise LauncherUpdateError("Failed to get launcher asset ID:", launcher_asset_file_name)
+        launcher_asset_bytes = api.download_asset(launcher_asset_id)
+        if launcher_asset_bytes is None:
+            raise LauncherUpdateError("Failed to download launcher asset:", launcher_asset_file_name)
+        for file_name in os.listdir("launcher"):
+            if file_name.startswith("launch"):
+                os.remove("launcher/" + file_name)
+        with zip_fixed.ZipFileWithPermissions(io.BytesIO(launcher_asset_bytes)) as zip_file:
+            zip_file.extractall("launcher")
+        new_executable_path = "launcher/" + executable_name
+        if not os.path.isfile(new_executable_path):
+            raise LauncherUpdateError("Failed to extract launcher executable:", executable_name)
+        new_launcher_sha1 = compute_sha1(new_executable_path)
+        print("New launcher version:", new_launcher_sha1)
+        replace_launcher_executable(os_platform, executable_name, new_executable_path, current_launcher_sha1)
+        if is_pyinstaller:
+            relaunch_executable(os_platform, executable_name)
+        else:
+            replace_extra_python_launcher_files(os_platform, current_launcher_sha1)
+            relaunch_python(os_platform, executable_name)
+    except Exception as e:
+        print("Error during launcher updater check, skipping update:", e)
 
 
 def get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch):
@@ -101,12 +85,10 @@ def compute_sha1(file_path):
 def get_launcher_hashes(api):
     hashes_asset_id = api.get_release_tag_asset_id(launcher_tag, hashes_file_name)
     if hashes_asset_id is None:
-        print("Failed to get launcher hashes asset ID:", hashes_file_name)
-        return None
+        raise LauncherUpdateError("Failed to get launcher hashes asset ID:", hashes_file_name)
     hashes_asset_bytes = api.download_asset(hashes_asset_id)
     if hashes_asset_bytes is None:
-        print("Failed to download launcher hashes asset:", hashes_file_name)
-        return None
+        raise LauncherUpdateError("Failed to download launcher hashes asset:", hashes_file_name)
     hashes_file_string = hashes_asset_bytes.decode("utf-8")
     hashes_file_lines = hashes_file_string.splitlines()
     hashes_list = []
@@ -117,8 +99,7 @@ def get_launcher_hashes(api):
             continue
         hashes_list.append(line)
     if len(hashes_list) == 0:
-        print("Failed to parse launcher hashes file:", hashes_file_name)
-        return None
+        raise LauncherUpdateError("Failed to parse launcher hashes file:", hashes_file_name)
     return hashes_list
 
 
@@ -157,3 +138,7 @@ def replace_extra_python_launcher_files(os_platform, current_sha1):
         os.rename("launcher/launch.bat", "launch.bat")
     else:
         os.replace("launcher/launch.bat", "launch.bat")
+
+
+class LauncherUpdateError(Exception):
+    pass

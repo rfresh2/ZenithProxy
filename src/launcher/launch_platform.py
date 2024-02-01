@@ -82,6 +82,10 @@ def is_pyinstaller_bundle():
     return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 
 
+class PlatformError(Exception):
+    pass
+
+
 class OperatingSystem(Enum):
     WINDOWS = "windows"
     LINUX = "linux"
@@ -96,7 +100,7 @@ def get_platform_os():
     elif platform.system() == "Darwin":
         return OperatingSystem.MACOS
     else:
-        return None
+        raise PlatformError("Unsupported OS: " + platform.system())
 
 
 class CpuArch(Enum):
@@ -113,4 +117,4 @@ def get_platform_arch():
     elif uname in x64_names:
         return CpuArch.AMD64
     else:
-        return None
+        raise PlatformError("Unsupported CPU architecture: " + uname)
