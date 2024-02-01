@@ -103,26 +103,23 @@ def git_read_version(config):
 
 
 def update_zenith_exec(config, api):
-    if config.auto_update:
-        print("Checking for ZenithProxy update...")
-        try:
+    try:
+        if config.auto_update:
+            print("Checking for ZenithProxy update...")
             if config.release_channel == "git":
                 git_update_check()
             elif config.release_channel.startswith("java"):
                 java_update_check(config, api)
             elif config.release_channel.startswith("linux"):
                 linux_native_update_check(config, api)
-        except UpdateError as e:
-            print("Error performing update check:", e)
-    elif config.release_channel != "git" and config.version != config.local_version:
-        print("Desired version is different from local version, attempting to download version:", config.version)
-        try:
+        elif config.release_channel != "git" and config.version != config.local_version:
+            print("Desired version is different from local version, attempting to download version:", config.version)
             if config.release_channel.startswith("java"):
                 java_get_version(config, api, config.version)
             elif config.release_channel.startswith("linux"):
                 linux_native_get_version(config, api, config.version)
-        except UpdateError as e:
-            print("Error performing update check:", e)
-    if config.release_channel == "git":
-        git_read_version(config)
-    config.write_launch_config()
+        if config.release_channel == "git":
+            git_read_version(config)
+        config.write_launch_config()
+    except Exception as e:
+        print("Error checking for ZenithProxy update:", e)
