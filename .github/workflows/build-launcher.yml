@@ -162,9 +162,6 @@ jobs:
       - package-python
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
       - name: Download job artifacts
         uses: actions/download-artifact@v4
         with:
@@ -179,7 +176,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: "launcher-v3"
-          artifacts: "artifacts/*.zip,hashes.txt,scripts/launcher.py"
+          artifacts: "artifacts/*.zip,hashes.txt"
           allowUpdates: true
           replacesArtifacts: true
           omitBodyDuringUpdate: true
