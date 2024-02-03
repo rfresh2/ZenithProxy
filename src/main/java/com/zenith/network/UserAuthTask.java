@@ -2,6 +2,7 @@ package com.zenith.network;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
+import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginCompressionPacket;
 import com.zenith.network.server.ServerConnection;
 
@@ -9,6 +10,7 @@ import javax.crypto.SecretKey;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SESSION_SERVER_API;
 
 public class UserAuthTask implements Runnable {
@@ -43,6 +45,11 @@ public class UserAuthTask implements Runnable {
 
         int threshold = session.getFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD,
                                         ServerConnection.DEFAULT_COMPRESSION_THRESHOLD);
-        this.session.send(new ClientboundLoginCompressionPacket(threshold));
+        if (threshold >= 0) {
+            this.session.send(new ClientboundLoginCompressionPacket(threshold));
+        } else {
+            session.setCompressionThreshold(threshold, CONFIG.server.compressionLevel, true);
+            session.send(new ClientboundGameProfilePacket(session.getFlag(MinecraftConstants.PROFILE_KEY)));
+        }
     }
 }
