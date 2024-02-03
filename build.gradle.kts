@@ -162,14 +162,10 @@ tasks {
             }
         }
     }
-    processResources{
-        finalizedBy(commitHashTask)
-    }
-    jar {
-        enabled = false
-    }
+    processResources{ finalizedBy(commitHashTask) }
+    jar { enabled = false }
     shadowJar {
-        from(named("collectReachabilityMetadata"))
+        from(collectReachabilityMetadata)
         archiveBaseName.set(project.name)
         archiveClassifier.set("")
         archiveVersion.set("")
@@ -220,15 +216,11 @@ tasks {
         from(sourceSets.main.get().allSource)
     }
     nativeCompile {
-        classpathJar.set(shadowJar.flatMap { it.archiveFile })
+        classpathJar = shadowJar.flatMap { it.archiveFile }
         dependsOn(jarBuildTask)
     }
-    generateResourcesConfigFile {
-        dependsOn(shadowJar)
-    }
-    build {
-        dependsOn(shadowJar)
-    }
+    generateResourcesConfigFile { dependsOn(shadowJar) }
+    build { dependsOn(shadowJar) }
 }
 
 graalvmNative {
@@ -266,7 +258,5 @@ graalvmNative {
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
-    metadataRepository {
-        enabled = true
-    }
+    metadataRepository { enabled = true }
 }
