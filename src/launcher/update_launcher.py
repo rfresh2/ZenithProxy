@@ -66,7 +66,7 @@ def get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch):
 
 def get_launcher_main_executable_name(is_pyinstaller):
     if is_pyinstaller:
-        return sys.executable
+        return os.path.basename(sys.executable)
     else:
         return "launcher-py.zip"
 
