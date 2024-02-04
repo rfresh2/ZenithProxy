@@ -241,7 +241,7 @@ graalvmNative {
                 "-H:IncludeLocales=en",
                 "-R:MaxHeapSize=200m",
                 "-march=x86-64-v3",
-                "--gc=serial",
+                "--gc=G1",
                 "-J-XX:MaxRAMPercentage=90",
                 "--strict-image-heap",
                 "--initialize-at-build-time=org.redisson.misc.BiHashMap",
