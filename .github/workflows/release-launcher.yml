@@ -1,5 +1,4 @@
-# todo: rename this workflow to Release Launcher (and filename to release-launcher.yml)
-name: Build Launcher
+name: Release Launcher
 
 on:
   workflow_dispatch:
@@ -182,4 +181,4 @@ jobs:
           omitBodyDuringUpdate: true
           prerelease: true
           removeArtifacts: true
-#          makeLatest: true
+          makeLatest: true
