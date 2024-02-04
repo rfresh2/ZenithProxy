@@ -1,5 +1,10 @@
 #!/bin/sh
 
+#########################
+# Run this from the repo's root directory
+# ./scripts/launcher-git.sh
+#########################
+
 PYTHON_CMD="python"
 
 echo Finding python interpreter...

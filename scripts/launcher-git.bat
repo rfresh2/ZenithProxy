@@ -1,5 +1,10 @@
 @echo off
 
+REM #########################
+REM Run this from the repo's root directory
+REM .\scripts\launcher-git.bat
+REM #########################
+
 setlocal
 
 echo Finding python interpreter...
