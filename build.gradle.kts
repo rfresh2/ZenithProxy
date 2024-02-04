@@ -232,17 +232,20 @@ graalvmNative {
             quickBuild = false
             verbose = true
             buildArgs.addAll(
-                    "-Duser.country=US",
-                    "-Duser.language=en",
-                    "--enable-url-protocols=https,http",
-                    "--report-unsupported-elements-at-runtime",
-                    "-H:+ReportExceptionStackTraces",
-                    "-H:DeadlockWatchdogInterval=30",
-                    "-H:IncludeLocales=en",
-                    "-R:MaxHeapSize=200m",
-                    "-march=x86-64-v3",
-                    "--gc=serial",
-                    "-J-XX:MaxRAMPercentage=90",
+                "-Duser.country=US",
+                "-Duser.language=en",
+                "--enable-url-protocols=https,http",
+                "--report-unsupported-elements-at-runtime",
+                "-H:+ReportExceptionStackTraces",
+                "-H:DeadlockWatchdogInterval=30",
+                "-H:IncludeLocales=en",
+                "-R:MaxHeapSize=200m",
+                "-march=x86-64-v3",
+                "--gc=serial",
+                "-J-XX:MaxRAMPercentage=90",
+                "--strict-image-heap",
+                "--initialize-at-build-time=org.redisson.misc.BiHashMap",
+                "--initialize-at-build-time=org.redisson.liveobject.core.RedissonObjectBuilder\$CodecMethodRef"
             )
             val pgoPath = System.getenv("GRAALVM_PGO_PATH")
             if (pgoPath != null) {
