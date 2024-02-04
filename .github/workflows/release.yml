@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
@@ -40,6 +40,10 @@ jobs:
         if: endsWith(github.ref, '.pre')
         run: |
           echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
+
+      - name: Export Tag
+        run: |
+          echo "RELEASE_TAG=${{ github.ref_name }}" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Java
         uses: gradle/gradle-build-action@v2

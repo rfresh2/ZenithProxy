@@ -1,0 +1,115 @@
+name: Build Launcher
+
+on:
+  workflow_dispatch:
+
+env:
+  python_version: '3.12'
+
+jobs:
+  build-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ 'ubuntu-20.04' ]
+        include:
+          - os: 'ubuntu-20.04'
+            artifact-name: 'launcher-linux-amd64'
+            move-command: 'mv dist/__main__ dist/launch'
+            zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launch'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.python_version }}
+
+      - name: Install PyInstaller
+        run: |
+          pip install -U pyinstaller
+          pip install -r ./src/launcher/requirements.txt
+
+      - name: Build launcher
+        run: |
+          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/__main__.py
+
+      - name: Rename executable
+        run: |
+          ${{ matrix.move-command }}
+
+      - name: Create zip
+        run: |
+          ${{ matrix.zip-command }}
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
+
+      - name: Get Binary Hash
+        run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact-name }}.sha1
+          path: ZenithProxy-${{ matrix.artifact-name }}.sha1
+
+  package-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create Python executable zip
+        run: zip -j launcher-py.zip src/launcher/*.py
+
+      - name: Elevate script permissions
+        run: |
+          chmod +x src/launcher/launch.sh
+
+      - name: Create release zip
+        run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launch.sh src/launcher/launch.bat
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: launcher-python
+          path: ZenithProxy-launcher-python.zip
+
+      - name: Get Binary Hash
+        run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-python.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v3
+        with:
+          name: launcher-python.sha1
+          path: ZenithProxy-launcher-python.sha1
+
+  release-artifacts:
+    needs:
+      - build-matrix
+      - package-python
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download job artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts/
+
+      - name: Compile Hashes
+        run: |
+          cat artifacts/**/*.sha1 > hashes.txt
+
+      - name: Upload Hashes Version
+        uses: actions/upload-artifact@v3
+        with:
+          name: hashes.txt
+          path: hashes.txt

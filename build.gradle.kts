@@ -120,7 +120,7 @@ tasks {
             }
             String(byteOut.toByteArray()).trim().let {
                 if (it.length > 5) {
-                    file(layout.buildDirectory.asFile.get().absolutePath + "/resources/main/proxy_commit.txt").apply {
+                    file(layout.buildDirectory.asFile.get().absolutePath + "/resources/main/zenith_commit.txt").apply {
                         parentFile.mkdirs()
                         println("Writing commit hash: $it")
                         writeText(it)
@@ -128,6 +128,22 @@ tasks {
                 } else {
                     println("Unable to determine commit hash")
                 }
+            }
+        }
+        outputs.upToDateWhen { false }
+    }
+    val releaseTagTask = register("releaseTag") {
+        group = "build"
+        description = "Write release tag to file"
+        doLast {
+            System.getenv("RELEASE_TAG")?.let {
+                file(layout.buildDirectory.asFile.get().absolutePath + "/resources/main/zenith_release.txt").apply {
+                    parentFile.mkdirs()
+                    println("Writing release tag: $it")
+                    writeText(it)
+                }
+            } ?: run {
+                println("Dev build detected, skipping release tag generation")
             }
         }
         outputs.upToDateWhen { false }
@@ -162,7 +178,7 @@ tasks {
             }
         }
     }
-    processResources{ finalizedBy(commitHashTask) }
+    processResources{ finalizedBy(commitHashTask, releaseTagTask) }
     jar { enabled = false }
     shadowJar {
         from(collectReachabilityMetadata)

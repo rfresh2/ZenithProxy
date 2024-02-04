@@ -1,3 +1,6 @@
+# DEPRECATED OLD LAUNCHER FILE
+# DO NOT USE
+
 import http.client
 import json
 import os
@@ -8,6 +11,12 @@ import subprocess
 import sys
 import urllib.parse
 import zipfile
+
+print("################################################")
+print("WARNING: This launcher version is deprecated and will no longer work in the near future.")
+print("Please update to the latest launcher: https://github.com/rfresh2/ZenithProxy/releases/tags/launcher")
+print("################################################")
+# todo: automatically update to the new launcher?
 
 auto_update = True
 auto_update_launcher = True
