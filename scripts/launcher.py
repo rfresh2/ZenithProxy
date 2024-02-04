@@ -13,10 +13,9 @@ import urllib.parse
 import zipfile
 
 print("################################################")
-print("WARNING: This launcher version is deprecated and will no longer work in the near future.")
-print("Please update to the latest launcher: https://github.com/rfresh2/ZenithProxy/releases/tags/launcher")
+print("WARNING: This launcher version is deprecated and may no longer work in the future.")
+print("Please update to Launcher V3: https://github.com/rfresh2/ZenithProxy/releases/tags/launcher-v3")
 print("################################################")
-# todo: automatically update to the new launcher?
 
 auto_update = True
 auto_update_launcher = True
