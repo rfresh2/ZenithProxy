@@ -51,7 +51,15 @@ def validate_linux_glibc_version():
 
 
 def validate_linux_system():
-    return platform.system() == "Linux" and validate_linux_cpu_flags() and validate_linux_glibc_version()
+    try:
+        return (
+            get_platform_os() == OperatingSystem.LINUX
+            and get_platform_arch() == CpuArch.AMD64
+            and validate_linux_cpu_flags()
+            and validate_linux_glibc_version()
+        )
+    except Exception:
+        return False
 
 
 def validate_java_system(config):

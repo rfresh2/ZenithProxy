@@ -28,7 +28,6 @@ def setup_execute(config):
         release_channel = "java"
 
     while True:
-        # todo: load valid versions from API instead of hardcoding?
         print("Select a Minecraft version: (1/2)")
         print("1. 1.20.1")
         print("2. 1.20.4")
