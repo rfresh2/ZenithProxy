@@ -508,8 +508,8 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void setCompressionThreshold(int threshold, boolean validateCompression) {
-        this.session.setCompressionThreshold(threshold, validateCompression);
+    public void setCompressionThreshold(int threshold, int level, boolean validateCompression) {
+        this.session.setCompressionThreshold(threshold, level, validateCompression);
     }
 
     @Override

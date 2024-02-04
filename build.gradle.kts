@@ -58,7 +58,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:dc7bc81bc1") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:185183f432") {
+    shade("com.github.rfresh2:MCProtocolLib:66797ef489") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
@@ -178,14 +178,10 @@ tasks {
             }
         }
     }
-    processResources{
-        finalizedBy(commitHashTask, releaseTagTask)
-    }
-    jar {
-        enabled = false
-    }
+    processResources{ finalizedBy(commitHashTask, releaseTagTask) }
+    jar { enabled = false }
     shadowJar {
-        from(named("collectReachabilityMetadata"))
+        from(collectReachabilityMetadata)
         archiveBaseName.set(project.name)
         archiveClassifier.set("")
         archiveVersion.set("")
@@ -236,15 +232,11 @@ tasks {
         from(sourceSets.main.get().allSource)
     }
     nativeCompile {
-        classpathJar.set(shadowJar.flatMap { it.archiveFile })
+        classpathJar = shadowJar.flatMap { it.archiveFile }
         dependsOn(jarBuildTask)
     }
-    generateResourcesConfigFile {
-        dependsOn(shadowJar)
-    }
-    build {
-        dependsOn(shadowJar)
-    }
+    generateResourcesConfigFile { dependsOn(shadowJar) }
+    build { dependsOn(shadowJar) }
 }
 
 graalvmNative {
@@ -282,7 +274,5 @@ graalvmNative {
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
-    metadataRepository {
-        enabled = true
-    }
+    metadataRepository { enabled = true }
 }

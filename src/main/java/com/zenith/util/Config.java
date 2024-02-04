@@ -46,6 +46,7 @@ public final class Config {
         public Extra extra = new Extra();
         public Server server = new Server();
         public ConnectionProxy connectionProxy = new ConnectionProxy();
+        public int compressionLevel = -1;
         public boolean autoConnect = false; // auto-connect proxy on process start
         public ClientViaVersion viaversion = new ClientViaVersion();
         public String bindAddress = "0.0.0.0";
@@ -322,6 +323,7 @@ public final class Config {
     public static final class Server {
         public Bind bind = new Bind();
         public int compressionThreshold = 256;
+        public int compressionLevel = -1;
         public boolean enabled = true;
         public Extra extra = new Extra();
         public Ping ping = new Ping();
