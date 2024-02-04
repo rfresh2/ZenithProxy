@@ -28,6 +28,8 @@ public final class SpectatorEntityRegistry {
         spectatorEntityMap.put("chicken", new SpectatorEntityChicken());
         spectatorEntityMap.put("parrot", new SpectatorEntityParrot());
         spectatorEntityMap.put("ghast", new SpectatorEntityGhast());
+        spectatorEntityMap.put("allay", new SpectatorEntityAllay());
+        spectatorEntityMap.put("warden", new SpectatorEntityWarden());
     }
 
     public static SpectatorEntity getSpectatorEntityWithDefault(final String identifier) {
