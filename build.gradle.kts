@@ -120,7 +120,7 @@ tasks {
             }
             String(byteOut.toByteArray()).trim().let {
                 if (it.length > 5) {
-                    file(layout.buildDirectory.asFile.get().absolutePath + "/resources/main/proxy_commit.txt").apply {
+                    file(layout.buildDirectory.asFile.get().absolutePath + "/resources/main/zenith_commit.txt").apply {
                         parentFile.mkdirs()
                         println("Writing commit hash: $it")
                         writeText(it)
@@ -128,6 +128,22 @@ tasks {
                 } else {
                     println("Unable to determine commit hash")
                 }
+            }
+        }
+        outputs.upToDateWhen { false }
+    }
+    val releaseTagTask = register("releaseTag") {
+        group = "build"
+        description = "Write release tag to file"
+        doLast {
+            System.getenv("RELEASE_TAG")?.let {
+                file(layout.buildDirectory.asFile.get().absolutePath + "/resources/main/zenith_release.txt").apply {
+                    parentFile.mkdirs()
+                    println("Writing release tag: $it")
+                    writeText(it)
+                }
+            } ?: run {
+                println("Dev build detected, skipping release tag generation")
             }
         }
         outputs.upToDateWhen { false }
@@ -162,14 +178,10 @@ tasks {
             }
         }
     }
-    processResources{
-        finalizedBy(commitHashTask)
-    }
-    jar {
-        enabled = false
-    }
+    processResources{ finalizedBy(commitHashTask, releaseTagTask) }
+    jar { enabled = false }
     shadowJar {
-        from(named("collectReachabilityMetadata"))
+        from(collectReachabilityMetadata)
         archiveBaseName.set(project.name)
         archiveClassifier.set("")
         archiveVersion.set("")
@@ -220,15 +232,11 @@ tasks {
         from(sourceSets.main.get().allSource)
     }
     nativeCompile {
-        classpathJar.set(shadowJar.flatMap { it.archiveFile })
+        classpathJar = shadowJar.flatMap { it.archiveFile }
         dependsOn(jarBuildTask)
     }
-    generateResourcesConfigFile {
-        dependsOn(shadowJar)
-    }
-    build {
-        dependsOn(shadowJar)
-    }
+    generateResourcesConfigFile { dependsOn(shadowJar) }
+    build { dependsOn(shadowJar) }
 }
 
 graalvmNative {
@@ -237,20 +245,23 @@ graalvmNative {
             javaLauncher = javaLauncherProvider
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
-            quickBuild = true
+            quickBuild = false
             verbose = true
             buildArgs.addAll(
-                    "-Duser.country=US",
-                    "-Duser.language=en",
-                    "--enable-url-protocols=https,http",
-                    "--report-unsupported-elements-at-runtime",
-                    "-H:+ReportExceptionStackTraces",
-                    "-H:DeadlockWatchdogInterval=30",
-                    "-H:IncludeLocales=en",
-                    "-R:MaxHeapSize=200m",
-                    "-march=x86-64-v3",
-                    "--gc=serial",
-                    "-J-XX:MaxRAMPercentage=90",
+                "-Duser.country=US",
+                "-Duser.language=en",
+                "--enable-url-protocols=https,http",
+                "--report-unsupported-elements-at-runtime",
+                "-H:+ReportExceptionStackTraces",
+                "-H:DeadlockWatchdogInterval=30",
+                "-H:IncludeLocales=en",
+                "-R:MaxHeapSize=200m",
+                "-march=x86-64-v3",
+                "--gc=G1",
+                "-J-XX:MaxRAMPercentage=90",
+                "--strict-image-heap",
+                "--initialize-at-build-time=org.redisson.misc.BiHashMap",
+                "--initialize-at-build-time=org.redisson.liveobject.core.RedissonObjectBuilder\$CodecMethodRef"
             )
             val pgoPath = System.getenv("GRAALVM_PGO_PATH")
             if (pgoPath != null) {
@@ -266,7 +277,5 @@ graalvmNative {
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
-    metadataRepository {
-        enabled = true
-    }
+    metadataRepository { enabled = true }
 }

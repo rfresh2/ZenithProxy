@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
@@ -52,15 +52,6 @@ jobs:
 
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
-
-      # This will reduce the size of the binary substantially.
-      # BUT, the tradeoff is increased mem usage at runtime
-      # which is exactly what we're trying to avoid by using native compilation.
-      #      - name: Compress Native Binary
-      #        uses: svenstaro/upx-action@v2
-      #        with:
-      #          files: |
-      #            build/native/nativeCompile/ZenithProxy
 
       - name: Zip Binary And Libs
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*

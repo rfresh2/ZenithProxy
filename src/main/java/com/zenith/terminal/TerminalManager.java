@@ -12,8 +12,6 @@ import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.impl.DumbTerminal;
 
-import java.util.Optional;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Shared.*;
@@ -21,13 +19,9 @@ import static com.zenith.Shared.*;
 public class TerminalManager {
     private LineReader lineReader;
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
-    private Optional<Future<?>> executorFuture = Optional.empty();
-
-    public TerminalManager() {
-    }
 
     public void start() {
-        if (executorFuture.isEmpty() && isRunning.compareAndSet(false, true)) {
+        if (isRunning.compareAndSet(false, true)) {
             Terminal terminal = TerminalConsoleAppender.getTerminal();
             if (terminal != null && !(terminal instanceof DumbTerminal)) {
                 TERMINAL_LOG.info("Starting Interactive Terminal...");
@@ -35,24 +29,17 @@ public class TerminalManager {
                         .terminal(terminal)
                         .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                         .option(LineReader.Option.INSERT_TAB, false)
-                        // todo: integrate brigadier arguments or suggestion system
                         .completer(new TerminalCommandCompleter())
                         .build();
                 TerminalConsoleAppender.setReader(lineReader);
-                executorFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(interactiveRunnable));
+                var terminalThread = new Thread(interactiveRunnable, "ZenithProxy Terminal");
+                terminalThread.setDaemon(true);
+                terminal.handle(Terminal.Signal.INT, signal -> terminalThread.interrupt());
+                terminalThread.start();
             } else {
                 TERMINAL_LOG.warn("Unsupported Terminal. Interactive Terminal will not be started.");
             }
         }
-    }
-
-    public void stop() {
-        if (executorFuture.isPresent()) {
-            executorFuture.get().cancel(true);
-            executorFuture = Optional.empty();
-        }
-        isRunning.set(false);
-        TerminalConsoleAppender.setReader(null);
     }
 
     private final Runnable interactiveRunnable = () -> {
