@@ -229,7 +229,7 @@ graalvmNative {
             javaLauncher = javaLauncherProvider
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
-            quickBuild = true
+            quickBuild = false
             verbose = true
             buildArgs.addAll(
                     "-Duser.country=US",
