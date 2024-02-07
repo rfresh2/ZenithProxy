@@ -179,6 +179,5 @@ jobs:
           allowUpdates: true
           replacesArtifacts: true
           omitBodyDuringUpdate: true
-          prerelease: true
           removeArtifacts: true
           makeLatest: true
