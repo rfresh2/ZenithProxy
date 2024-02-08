@@ -1,10 +1,10 @@
 package com.zenith.module.impl;
 
 import com.zenith.Proxy;
-import com.zenith.Shared;
 import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.event.proxy.HealthAutoDisconnectEvent;
+import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.Module;
 import com.zenith.network.server.ServerConnection;
@@ -13,7 +13,6 @@ import java.util.function.Supplier;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoDisconnect extends Module {
@@ -27,7 +26,8 @@ public class AutoDisconnect extends Module {
         EVENT_BUS.subscribe(this,
                             of(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
                             of(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
-                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)
+                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent)
         );
     }
 
@@ -39,9 +39,12 @@ public class AutoDisconnect extends Module {
     }
 
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {
-        if (Shared.CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
-            if (event.newHealth() <= Shared.CONFIG.client.extra.utility.actions.autoDisconnect.health) {
-                if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
+        if (CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
+            if (event.newHealth() <= CONFIG.client.extra.utility.actions.autoDisconnect.health) {
+                if (shouldDisconnect()) {
+                    MODULE_LOG.info("[AutoDisconnect] Health disconnect: {} < {}",
+                                    event.newHealth(),
+                                    CONFIG.client.extra.utility.actions.autoDisconnect.health);
                     EVENT_BUS.postAsync(new HealthAutoDisconnectEvent());
                     Proxy.getInstance().disconnect(AUTO_DISCONNECT);
                 }
@@ -51,11 +54,9 @@ public class AutoDisconnect extends Module {
 
     public void handleWeatherChangeEvent(final WeatherChangeEvent event) {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.thunder) {
-            synchronized (this) {
-                if (CACHE.getChunkCache().isRaining() && CACHE.getChunkCache().getThunderStrength() > 0.0f) {
-                    if (isNull(Proxy.getInstance().getCurrentPlayer().get())) {
-                        Proxy.getInstance().disconnect(AUTO_DISCONNECT);
-                    }
+            if (CACHE.getChunkCache().isRaining() && CACHE.getChunkCache().getThunderStrength() > 0.0f) {
+                if (shouldDisconnect()) {
+                    Proxy.getInstance().disconnect(AUTO_DISCONNECT);
                 }
             }
         }
@@ -65,8 +66,33 @@ public class AutoDisconnect extends Module {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             ServerConnection currentConnection = Proxy.getInstance().getCurrentPlayer().get();
             if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
+                MODULE_LOG.info("[AutoDisconnect] Auto Client Disconnect");
                 Proxy.getInstance().disconnect();
             }
         }
+    }
+
+    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
+        if (CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange) {
+            var playerUUID = event.playerEntity().getUuid();
+            if (PLAYER_LISTS.getFriendsList().contains(playerUUID)
+                || PLAYER_LISTS.getWhitelist().contains(playerUUID)
+                || PLAYER_LISTS.getSpectatorWhitelist().contains(playerUUID)
+            ) return;
+            if (shouldDisconnect()) {
+                MODULE_LOG.info("[AutoDisconnect] Non-friended player seen: {}", event.playerEntry().getProfile());
+                Proxy.getInstance().disconnect(AUTO_DISCONNECT);
+            }
+        }
+    }
+
+    private boolean shouldDisconnect() {
+        if (Proxy.getInstance().hasActivePlayer()) {
+            var whilePlayerConnected = CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected;
+            if (!whilePlayerConnected)
+                MODULE_LOG.debug("[AutoDisconnect] Not disconnecting because a player is connected and whilePlayerConnected setting is disabled");
+            return whilePlayerConnected;
+        }
+        return true;
     }
 }

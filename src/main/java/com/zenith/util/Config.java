@@ -181,10 +181,13 @@ public final class Config {
 
                 public static final class AutoDisconnect {
                     public boolean enabled = false;
+                    public boolean whilePlayerConnected = false;
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
                     public boolean thunder = false;
-                    public boolean cancelAutoReconnect = false;
+                    public boolean cancelAutoReconnect = true;
+                    // checks friends list, whitelist, and spectator whitelist
+                    public boolean onUnknownPlayerInVisualRange = false;
                 }
 
                 public static final class ActiveHours {
