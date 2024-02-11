@@ -1,7 +1,9 @@
 package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
@@ -11,7 +13,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.Ser
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
-import com.google.common.collect.Sets;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
@@ -21,8 +22,10 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -32,7 +35,7 @@ import static java.util.Objects.nonNull;
 
 public class KillAura extends Module {
 
-    private static final Set<EntityType> hostileEntities = Sets.newHashSet(
+    private static final Set<EntityType> hostileEntities = ReferenceOpenHashSet.of(
         EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CREEPER, EntityType.DROWNED, EntityType.ELDER_GUARDIAN,
         EntityType.ENDER_DRAGON, EntityType.ENDERMITE, EntityType.EVOKER, EntityType.GHAST, EntityType.GUARDIAN,
         EntityType.HOGLIN, EntityType.HUSK, EntityType.ILLUSIONER, EntityType.FIREBALL, EntityType.MAGMA_CUBE,
@@ -41,6 +44,11 @@ public class KillAura extends Module {
         EntityType.SMALL_FIREBALL, EntityType.SPIDER, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR,
         EntityType.WARDEN, EntityType.WITCH, EntityType.WITHER, EntityType.ZOGLIN, EntityType.ZOMBIE,
         EntityType.ZOMBIE_VILLAGER
+    );
+    private static final Set<EntityType> neutralEntities = ReferenceOpenHashSet.of(
+        EntityType.BEE, EntityType.DOLPHIN, EntityType.ENDERMAN, EntityType.FOX, EntityType.GOAT, EntityType.IRON_GOLEM,
+        EntityType.LLAMA, EntityType.PANDA, EntityType.POLAR_BEAR, EntityType.TRADER_LLAMA, EntityType.WOLF,
+        EntityType.ZOMBIFIED_PIGLIN
     );
     private int delay = 0;
     private boolean isAttacking = false;
@@ -125,8 +133,32 @@ public class KillAura extends Module {
             if (CONFIG.client.extra.killAura.targetArmorStands) {
                 if (e.getEntityType() == EntityType.ARMOR_STAND) return true;
             }
+            if (CONFIG.client.extra.killAura.targetNeutralMobs) {
+                if (neutralEntities.contains(e.getEntityType())) {
+                    if (CONFIG.client.extra.killAura.onlyNeutralAggressive) {
+                        // https://wiki.vg/Entity_metadata#Mob
+                        var byteMetadata = getMetadataFromId(entity.getMetadata(), 15);
+                        if (byteMetadata == null) return false;
+                        if (byteMetadata instanceof ByteEntityMetadata byteData) {
+                            var data = byteData.getPrimitiveValue() & 0x04;
+                            return data != 0;
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+            }
         }
         return false;
+    }
+
+    private EntityMetadata getMetadataFromId(List<EntityMetadata> metadata, int id) {
+        for (int i = 0; i < metadata.size(); i++) {
+            if (metadata.get(i).getId() == id) {
+                return metadata.get(i);
+            }
+        }
+        return null;
     }
 
     @Override

@@ -114,6 +114,8 @@ public final class Config {
                 public boolean enabled = true;
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
+                public boolean targetNeutralMobs = false;
+                public boolean onlyNeutralAggressive = true;
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
