@@ -176,7 +176,7 @@ public class ChunkCache implements CachedData {
                 chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
                 handleBlockUpdateTileEntity(record, pos, chunkSection, chunk);
             } else {
-                CLIENT_LOG.warn("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
+                CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
                 return false;
             }
         } catch (final Exception e) {
@@ -198,7 +198,7 @@ public class ChunkCache implements CachedData {
         } else {
             final Block block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(record.getBlock());
             if (block == null) {
-                CLIENT_LOG.warn("Received block update packet for unknown block: {}", record.getBlock());
+                CLIENT_LOG.debug("Received block update packet for unknown block: {}", record.getBlock());
                 return;
             }
             final String blockName = block.name();
