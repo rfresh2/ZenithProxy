@@ -8,7 +8,6 @@ import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -30,8 +29,8 @@ public class AutoRespawn extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.autoRespawn.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.autoRespawn.enabled;
     }
 
 

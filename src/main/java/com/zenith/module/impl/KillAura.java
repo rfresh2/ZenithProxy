@@ -27,7 +27,6 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -68,8 +67,8 @@ public class KillAura extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.killAura.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.killAura.enabled;
     }
 
     public void handleClientTick(final ClientTickEvent event) {

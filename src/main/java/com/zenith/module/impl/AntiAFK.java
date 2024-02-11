@@ -17,7 +17,6 @@ import com.zenith.util.math.MathHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -52,8 +51,8 @@ public class AntiAFK extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.antiafk.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.antiafk.enabled;
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {

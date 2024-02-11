@@ -8,7 +8,6 @@ import com.zenith.util.ComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static com.zenith.Shared.*;
@@ -22,8 +21,8 @@ public class AntiLeak extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.antiLeak.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.antiLeak.enabled;
     }
 
     public void handleOutgoingChat(final OutboundChatEvent event) {

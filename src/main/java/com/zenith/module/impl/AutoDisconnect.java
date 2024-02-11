@@ -9,8 +9,6 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.Module;
 import com.zenith.network.server.ServerConnection;
 
-import java.util.function.Supplier;
-
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -32,8 +30,8 @@ public class AutoDisconnect extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.utility.actions.autoDisconnect.enabled
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.utility.actions.autoDisconnect.enabled
             || CONFIG.client.extra.utility.actions.autoDisconnect.thunder
             || CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect;
     }

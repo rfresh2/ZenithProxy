@@ -17,7 +17,6 @@ import com.zenith.util.Maps;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -45,8 +44,8 @@ public class AutoEat extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.autoEat.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.autoEat.enabled;
     }
 
     public void handleClientTick(final ClientTickEvent e) {

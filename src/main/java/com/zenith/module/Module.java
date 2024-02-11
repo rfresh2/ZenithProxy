@@ -4,8 +4,6 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
 
-import java.util.function.Supplier;
-
 import static com.zenith.Shared.EVENT_BUS;
 
 /**
@@ -43,7 +41,7 @@ public abstract class Module {
     }
 
     public synchronized void syncEnabledFromConfig() {
-        setEnabled(shouldBeEnabled().get());
+        setEnabled(shouldBeEnabled());
     }
 
     public boolean isEnabled() {
@@ -56,7 +54,7 @@ public abstract class Module {
 
     public abstract void subscribeEvents();
 
-    public abstract Supplier<Boolean> shouldBeEnabled();
+    public abstract boolean shouldBeEnabled();
 
     public void clientTickStarting() {
     }
