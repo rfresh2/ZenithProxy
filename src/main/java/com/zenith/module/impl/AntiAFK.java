@@ -9,6 +9,7 @@ import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
+import com.zenith.feature.pathing.Input;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
@@ -70,10 +71,19 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.jump) {
                 jumpTick();
             }
+            if (CONFIG.client.extra.antiafk.actions.sneak) {
+                sneakTick();
+            }
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
             }
         }
+    }
+
+    private void sneakTick() {
+        PATHING.move(
+                new Input(false, false, false, false, false, true, false),
+                MOVEMENT_PRIORITY - 1);
     }
 
     public void handleDeathEvent(final DeathEvent event) {
@@ -137,7 +147,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                if (CONFIG.client.extra.antiafk.actions.safeWalk)
+                if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
                     PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
                                                         MathHelper.floorToInt(currentPathingGoal.getZ()),
                                                         MOVEMENT_PRIORITY);

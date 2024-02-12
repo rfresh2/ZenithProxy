@@ -159,6 +159,7 @@ public final class Config {
                     public long rotateDelayTicks = 300L;
                     public boolean jump = false;
                     public long jumpDelayTicks = 1000L;
+                    public boolean sneak = false;
                 }
             }
 

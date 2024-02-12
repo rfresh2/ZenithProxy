@@ -20,17 +20,14 @@ import com.zenith.module.Module;
 import com.zenith.util.Maps;
 import com.zenith.util.TickTimer;
 import com.zenith.util.math.MathHelper;
-import org.slf4j.Logger;
 
 import java.time.Instant;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class AutoFish extends Module {
-    private static final Logger LOGGER = getLogger(AutoFish.class);
     private final TickTimer castTimer = new TickTimer();
     private int fishHookEntityId = -1;
     private Hand rodHand = Hand.MAIN_HAND;
@@ -78,7 +75,7 @@ public class AutoFish extends Module {
             if (data.getOwnerId() != CACHE.getPlayerCache().getEntityId()) return;
             fishHookEntityId = event.fishHookObject().getEntityId();
         } catch (final Exception e) {
-            LOGGER.error("Failed to handle EntityFishHookSpawnEvent", e);
+            MODULE_LOG.error("Failed to handle EntityFishHookSpawnEvent", e);
         }
     }
 
