@@ -13,7 +13,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.Ser
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
-import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class KillAura extends Module {
@@ -72,9 +70,7 @@ public class KillAura extends Module {
     }
 
     public void handleClientTick(final ClientTickEvent event) {
-        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
-                && !Proxy.getInstance().isInQueue()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)
                 && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
             if (delay > 0) {

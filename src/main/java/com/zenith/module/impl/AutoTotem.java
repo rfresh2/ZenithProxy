@@ -15,7 +15,6 @@ import java.time.Duration;
 import java.time.Instant;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoTotem extends Module {
@@ -43,11 +42,9 @@ public class AutoTotem extends Module {
     }
 
     public void handleClientTick(final ClientTickEvent event) {
-        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())
-                && !Proxy.getInstance().isInQueue()) {
+                && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())) {
             if (delay > 0) {
                 delay--;
                 return;

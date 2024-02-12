@@ -49,9 +49,8 @@ public class AutoEat extends Module {
     }
 
     public void handleClientTick(final ClientTickEvent e) {
-        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
-                && !Proxy.getInstance().isInQueue()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())
                 && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
             if (delay > 0) {

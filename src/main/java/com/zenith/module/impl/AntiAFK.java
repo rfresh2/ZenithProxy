@@ -5,7 +5,6 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.collect.Iterators;
-import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
@@ -22,7 +21,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
-import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
     private final TickTimer swingTickTimer = new TickTimer();
@@ -57,10 +55,7 @@ public class AntiAFK extends Module {
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (Proxy.getInstance().isConnected()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && !Proxy.getInstance().isInQueue()
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
