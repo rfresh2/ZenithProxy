@@ -9,7 +9,6 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.DiscordBot;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AutoReply;
 import discord4j.rest.util.Color;
 
@@ -37,14 +36,14 @@ public class AutoReplyCommand extends Command {
         return command("autoReply")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReply.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoReply.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AutoReply.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoReply " + (CONFIG.client.extra.autoReply.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {
                 int delay = IntegerArgumentType.getInteger(c, "secs");
-                MODULE_MANAGER.getModule(AutoReply.class).ifPresent(m -> m.updateCooldown(delay));
+                MODULE_MANAGER.get(AutoReply.class).updateCooldown(delay);
                 c.getSource().getEmbed()
                     .title("AutoReply Cooldown Updated!");
                 return 1;

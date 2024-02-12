@@ -6,7 +6,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AutoTotem;
 import discord4j.rest.util.Color;
 
@@ -34,7 +33,7 @@ public class AutoTotemCommand extends Command {
         return command("autoTotem")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoTotem.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoTotem.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AutoTotem.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoTotem " + (CONFIG.client.extra.autoTotem.enabled ? "On!" : "Off!"));
                 return 1;

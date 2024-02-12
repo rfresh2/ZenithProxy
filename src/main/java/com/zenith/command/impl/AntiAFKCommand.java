@@ -7,7 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AntiAFK;
 import discord4j.rest.util.Color;
 
@@ -48,7 +47,7 @@ public class AntiAFKCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 boolean toggle = getToggle(c, "toggle");
                 CONFIG.client.extra.antiafk.enabled = toggle;
-                MODULE_MANAGER.getModule(AntiAFK.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AntiAFK.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AntiAFK " + (toggle ? "On!" : "Off!"));
                 return 1;

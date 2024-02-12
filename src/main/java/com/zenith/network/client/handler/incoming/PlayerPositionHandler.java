@@ -36,8 +36,7 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
             Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
         } // else send to active player
         SpectatorUtils.syncPlayerPositionWithSpectators();
-        MODULE_MANAGER.getModule(AntiAFK.class)
-                .ifPresent(AntiAFK::handlePlayerPosRotate);
+        MODULE_MANAGER.get(AntiAFK.class).handlePlayerPosRotate();
         return true;
     }
 }

@@ -71,8 +71,8 @@ public class KillAura extends Module {
 
     public void handleClientTick(final ClientTickEvent event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-                && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)
-                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
+                && !MODULE_MANAGER.get(AutoEat.class).isEating()
+                && !MODULE_MANAGER.get(AutoTotem.class).isActivelySwapping()) {
             if (delay > 0) {
                 delay--;
                 return;

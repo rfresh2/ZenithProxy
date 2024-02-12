@@ -52,7 +52,7 @@ public class AutoEat extends Module {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())
-                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
+                && !MODULE_MANAGER.get(AutoTotem.class).isActivelySwapping()) {
             if (delay > 0) {
                 delay--;
                 return;
