@@ -23,7 +23,6 @@ import com.zenith.network.server.ServerConnection;
 import lombok.Getter;
 
 import java.util.HashSet;
-import java.util.function.Supplier;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -69,8 +68,8 @@ public class ActionLimiter extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.actionLimiter.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.actionLimiter.enabled;
     }
 
     public void onPlayerLoginEvent(final PlayerLoginEvent event) {

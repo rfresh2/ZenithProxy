@@ -9,7 +9,6 @@ import com.zenith.util.TickTimer;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
@@ -26,8 +25,8 @@ public class Spammer extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.spammer.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.spammer.enabled;
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {

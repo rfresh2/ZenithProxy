@@ -13,7 +13,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -39,8 +38,8 @@ public class AutoTotem extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.autoTotem.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.autoTotem.enabled;
     }
 
     public void handleClientTick(final ClientTickEvent event) {

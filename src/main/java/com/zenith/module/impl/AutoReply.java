@@ -10,7 +10,6 @@ import com.zenith.module.Module;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -34,8 +33,8 @@ public class AutoReply extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.autoReply.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.autoReply.enabled;
     }
 
     public void updateCooldown(final int newCooldown) {

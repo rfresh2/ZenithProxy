@@ -23,14 +23,29 @@ public class AutoDisconnectCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.full(
             "autoDisconnect",
-            CommandCategory.MODULE,
-            "Configures the AutoDisconnect feature",
+            CommandCategory.MODULE, """
+            Configures the AutoDisconnect module.
+            Modes:
+            
+              * Health: Disconnects when health is below a set threshold
+              * Thunder: Disconnects during thunderstorms (i.e. avoid lightning burning down bases)
+              * Unknown Player: Disconnects when a player not on the friends list, whitelist, or spectator whitelist is in visual range
+            Multiple modes can be enabled, they are non-exclusive
+            
+            Global Settings:
+              * WhilePlayerConnected: If AutoDisconnect should disconnect while a player is controlling the proxy account
+              * AutoClientDisconnect: Disconnects when the controlling player disconnects
+              * CancelAutoReconnect: Cancels AutoReconnect when AutoDisconnect is triggered. If the proxy account has prio this is ignored and AutoReconnect is always cancelled
+            """,
             asList(
                         "on/off",
                         "health <integer>",
-                        "cancelAutoReconnect on/off",
+                        "thunder on/off",
+                        "unknownPlayer on/off",
+                        "whilePlayerConnected on/off",
                         "autoClientDisconnect on/off",
-                        "thunder on/off"),
+                        "cancelAutoReconnect on/off"
+            ),
             asList("autoLog")
         );
     }
@@ -45,12 +60,13 @@ public class AutoDisconnectCommand extends Command {
                     .title("AutoDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "On!" : "Off!"));
                 return 1;
             }))
-            .then(literal("health").then(argument("healthLevel", integer(1, 19)).executes(c -> {
-                CONFIG.client.extra.utility.actions.autoDisconnect.health = IntegerArgumentType.getInteger(c, "healthLevel");
-                c.getSource().getEmbed()
-                    .title("AutoDisconnect Health Updated!");
-                return 1;
-            })))
+            .then(literal("health")
+                      .then(argument("healthLevel", integer(1, 19)).executes(c -> {
+                          CONFIG.client.extra.utility.actions.autoDisconnect.health = IntegerArgumentType.getInteger(c, "healthLevel");
+                          c.getSource().getEmbed()
+                              .title("AutoDisconnect Health Updated!");
+                          return 1;
+                      })))
             .then(literal("cancelAutoReconnect")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = getToggle(c, "toggle");
@@ -71,6 +87,20 @@ public class AutoDisconnectCommand extends Command {
                             c.getSource().getEmbed()
                                 .title("AutoDisconnect Thunder " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "On!" : "Off!"));
                             return 1;
+                      })))
+            .then(literal("unknownPlayer")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("AutoDisconnect UnknownPlayer " + (CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange ? "On!" : "Off!"));
+                          return 1;
+                      })))
+            .then(literal("whilePlayerConnected")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("AutoDisconnect WhilePlayerConnected " + (CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected ? "On!" : "Off!"));
+                          return 1;
                       })));
     }
 
@@ -79,9 +109,11 @@ public class AutoDisconnectCommand extends Command {
         builder
             .addField("AutoDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled), false)
             .addField("Health", CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
-            .addField("CancelAutoReconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect), false)
-            .addField("AutoClientDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect), false)
             .addField("Thunder", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.thunder), false)
+            .addField("UnknownPlayer", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange), false)
+            .addField("WhilePlayerConnected", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected), false)
+            .addField("AutoClientDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect), false)
+            .addField("CancelAutoReconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect), false)
             .color(Color.CYAN);
     }
 }

@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -40,8 +39,8 @@ public class Spook extends Module {
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.spook.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.spook.enabled;
     }
 
     @Override

@@ -22,11 +22,12 @@ def update_launcher_exec(config, api):
         os_platform = launch_platform.get_platform_os()
         os_arch = launch_platform.get_platform_arch()
         launcher_asset_file_name = get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch)
-        executable_name = get_launcher_main_executable_name(is_pyinstaller)
+        current_executable_name = get_current_launcher_executable_name(is_pyinstaller)
+        expected_executable_name = get_expected_launcher_executable_name(is_pyinstaller)
         hashes_list = get_launcher_hashes(api)
-        if not os.path.isfile(executable_name):
-            raise LauncherUpdateError("Launcher executable not found, skipping launcher update:", executable_name)
-        current_launcher_sha1 = compute_sha1(executable_name)
+        if not os.path.isfile(current_executable_name):
+            raise LauncherUpdateError("Launcher executable not found, skipping launcher update:", current_executable_name)
+        current_launcher_sha1 = compute_sha1(current_executable_name)
         if current_launcher_sha1 in hashes_list:
             print("Already on the latest launcher")
             return
@@ -42,17 +43,18 @@ def update_launcher_exec(config, api):
                 os.remove("launcher/" + file_name)
         with zip_fixed.ZipFileWithPermissions(io.BytesIO(launcher_asset_bytes)) as zip_file:
             zip_file.extractall("launcher")
-        new_executable_path = "launcher/" + executable_name
+        new_executable_path = "launcher/" + expected_executable_name
         if not os.path.isfile(new_executable_path):
-            raise LauncherUpdateError("Failed to extract launcher executable:", executable_name)
+            raise LauncherUpdateError("Failed to extract launcher executable:", new_executable_path)
         new_launcher_sha1 = compute_sha1(new_executable_path)
         print("New launcher version:", new_launcher_sha1)
-        replace_launcher_executable(os_platform, executable_name, new_executable_path, current_launcher_sha1)
+        # Preserve current launcher executable name if its changed
+        replace_launcher_executable(os_platform, current_executable_name, new_executable_path, current_launcher_sha1)
         if is_pyinstaller:
-            relaunch_executable(os_platform, executable_name)
+            relaunch_executable(os_platform, current_executable_name)
         else:
             replace_extra_python_launcher_files(os_platform, current_launcher_sha1)
-            relaunch_python(os_platform, executable_name)
+            relaunch_python(os_platform, current_executable_name)
     except Exception as e:
         print("Error during launcher updater check, skipping update:", e)
 
@@ -64,9 +66,20 @@ def get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch):
         return "ZenithProxy-launcher-python.zip"
 
 
-def get_launcher_main_executable_name(is_pyinstaller):
+# The executable name we're currently running
+def get_current_launcher_executable_name(is_pyinstaller):
     if is_pyinstaller:
         return os.path.basename(sys.executable)
+    else:
+        return "launcher-py.zip"  # could be anything really, we don't have a way to determine this correctly
+
+
+# The executable name we're expecting from github
+def get_expected_launcher_executable_name(is_pyinstaller):
+    if is_pyinstaller:
+        if launch_platform.get_platform_os() == OperatingSystem.WINDOWS:
+            return "launch.exe"
+        return "launch"
     else:
         return "launcher-py.zip"
 
@@ -132,6 +145,7 @@ def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_s
 
 def replace_extra_python_launcher_files(os_platform, current_sha1):
     os.replace("launcher/requirements.txt", "requirements.txt")
+    # todo: handle the case where users change the script's name
     os.replace("launcher/launch.sh", "launch.sh")
     if os_platform == OperatingSystem.WINDOWS:
         os.rename("launch.bat", tempfile.gettempdir() + "/launch-" + current_sha1 + ".bat.old")

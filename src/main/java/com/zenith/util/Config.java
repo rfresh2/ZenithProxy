@@ -114,6 +114,8 @@ public final class Config {
                 public boolean enabled = true;
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
+                public boolean targetNeutralMobs = false;
+                public boolean onlyNeutralAggressive = true;
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
@@ -181,10 +183,13 @@ public final class Config {
 
                 public static final class AutoDisconnect {
                     public boolean enabled = false;
+                    public boolean whilePlayerConnected = false;
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
                     public boolean thunder = false;
-                    public boolean cancelAutoReconnect = false;
+                    public boolean cancelAutoReconnect = true;
+                    // checks friends list, whitelist, and spectator whitelist
+                    public boolean onUnknownPlayerInVisualRange = false;
                 }
 
                 public static final class ActiveHours {

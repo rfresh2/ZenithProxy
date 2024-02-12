@@ -4,7 +4,7 @@ import java.nio.file.Files
 
 plugins {
     java
-    id("org.graalvm.buildtools.native") version "0.9.28"
+    id("org.graalvm.buildtools.native") version "0.10.0"
     // todo: use official version when https://github.com/johnrengelman/shadow/pull/879 is merged
     id("io.github.goooler.shadow") version "8.1.3"
 }
@@ -35,7 +35,7 @@ val lombokVersion = "1.18.30"
 val postgresVersion = "42.7.1"
 val nettyVersion = "4.1.106.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
-val jdbiVersion = "3.43.0"
+val jdbiVersion = "3.44.0"
 
 dependencies {
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
@@ -49,8 +49,8 @@ dependencies {
     shade("org.apache.commons:commons-math3:3.6.1")
     shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.4.14")
-    shade("org.slf4j:slf4j-api:2.0.11")
-    shade("org.slf4j:jul-to-slf4j:2.0.11")
+    shade("org.slf4j:slf4j-api:2.0.12")
+    shade("org.slf4j:jul-to-slf4j:2.0.12")
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
     shade("jakarta.xml.bind:jakarta.xml.bind-api:4.0.1")
@@ -94,7 +94,7 @@ dependencies {
     shade("com.viaversion:viabackwards:4.9.2-SNAPSHOT")
     shade("org.jline:jline:3.25.1")
     shade("org.jline:jline-terminal-jansi:3.25.1")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
