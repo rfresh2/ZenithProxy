@@ -35,7 +35,7 @@ val lombokVersion = "1.18.30"
 val postgresVersion = "42.7.1"
 val nettyVersion = "4.1.106.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
-val jdbiVersion = "3.44.0"
+val jdbiVersion = "3.44.1"
 
 dependencies {
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
@@ -80,7 +80,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.26.0") {
+    shade("org.redisson:redisson:3.26.1") {
         exclude(group = "io.netty")
     }
     shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion")
