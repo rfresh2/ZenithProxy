@@ -620,8 +620,8 @@ public class PlayerSimulation extends Module {
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
         } else {
-            this.isSneaking = CACHE.getPlayerCache().isSneaking();
-            this.isSprinting = CACHE.getPlayerCache().isSprinting();
+            this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
+            this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
         syncPlayerCollisionBox();
     }
