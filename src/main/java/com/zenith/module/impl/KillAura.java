@@ -13,7 +13,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.Ser
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
-import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
@@ -78,7 +77,6 @@ public class KillAura extends Module {
                 return;
             }
             if (swapping) {
-                PlayerCache.sync();
                 delay = 5;
                 swapping = false;
                 return;
@@ -180,7 +178,7 @@ public class KillAura extends Module {
         }
 
         // check if offhand has weapon
-        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
             if (isWeapon(offhandStack.getId())) {
                 weaponSlot = EquipmentSlot.OFF_HAND;
@@ -188,7 +186,7 @@ public class KillAura extends Module {
             }
         }
         // check mainhand
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
+        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (isWeapon(mainHandStack.getId())) {
                 weaponSlot = EquipmentSlot.MAIN_HAND;
@@ -197,9 +195,9 @@ public class KillAura extends Module {
         }
 
         // find next weapon and switch it into our hotbar slot
-        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
+        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
-            final ItemStack stack = inventory[i];
+            final ItemStack stack = inventory.get(i);
             if (nonNull(stack) && isWeapon(stack.getId())) {
                 sendClientPacketAsync(new ServerboundContainerClickPacket(0,
                                                                           CACHE.getPlayerCache().getActionId().incrementAndGet(),
@@ -208,7 +206,7 @@ public class KillAura extends Module {
                                                                           MoveToHotbarAction.SLOT_2,
                                                                           null,
                                                                           Maps.of(
-                                                                              i, inventory[37],
+                                                                              i, inventory.get(37),
                                                                               37, stack
                                                                           )));
                 if (CACHE.getPlayerCache().getHeldItemSlot() != 1) {

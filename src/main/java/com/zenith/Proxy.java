@@ -13,7 +13,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpServer;
-import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
@@ -112,7 +111,6 @@ public class Proxy {
                             of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
                             of(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
                             of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
-                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
                             of(ServerRestartingEvent.class, this::handleServerRestartingEvent),
                             of(PrioStatusEvent.class, this::handlePrioStatusEvent),
                             of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
@@ -674,11 +672,6 @@ public class Proxy {
             // assume we are prio if we skipped queuing
             EVENT_BUS.postAsync(new PrioStatusEvent(true));
         this.reconnectCounter = 0;
-        PlayerCache.sync();
-    }
-
-    public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent e) {
-        PlayerCache.sync();
     }
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {

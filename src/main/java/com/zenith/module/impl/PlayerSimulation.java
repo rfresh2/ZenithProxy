@@ -574,7 +574,7 @@ public class PlayerSimulation extends Module {
     private float getBlockSpeedFactor(Block block) {
         if (block.name().equals("honey_block")) return 0.4f;
         if (block.name().equals("soul_sand")) {
-            ItemStack bootsItemStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.BOOTS);
+            ItemStack bootsItemStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS);
             if (bootsItemStack != null) {
                 // todo: check if soul speed enchantment is on boots
                 // todo: create enchantment parser helper class

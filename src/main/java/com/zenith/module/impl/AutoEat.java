@@ -9,7 +9,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.Ser
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.Proxy;
-import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
@@ -17,6 +16,7 @@ import com.zenith.util.Maps;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
@@ -58,7 +58,6 @@ public class AutoEat extends Module {
                 return;
             } else {
                 if (swapping) {
-                    PlayerCache.sync();
                     delay = 5;
                     swapping = false;
                     return;
@@ -81,7 +80,7 @@ public class AutoEat extends Module {
 
     public boolean switchToFood() {
         // check if offhand has a food
-        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
             if (FOOD_MANAGER.isSafeFood(offhandStack.getId())) {
                 return true;
@@ -89,7 +88,7 @@ public class AutoEat extends Module {
         }
 
         // check if selected hotbar item has a food
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
+        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (FOOD_MANAGER.isSafeFood(mainHandStack.getId())) {
               return true;
@@ -97,9 +96,9 @@ public class AutoEat extends Module {
         }
 
         // find next food and switch it to our hotbar slot
-        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
+        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
-            ItemStack itemStack = inventory[i];
+            ItemStack itemStack = inventory.get(i);
             if (nonNull(itemStack)) {
                 if (FOOD_MANAGER.isSafeFood(itemStack.getId())) {
                     sendClientPacketAsync(new ServerboundContainerClickPacket(0,
@@ -109,7 +108,7 @@ public class AutoEat extends Module {
                                                                               MoveToHotbarAction.SLOT_1,
                                                                               null,
                                                                               Maps.of(
-                                                                                  i, inventory[36],
+                                                                                  i, inventory.get(36),
                                                                                   36, itemStack
                                                                               )));
                     if (CACHE.getPlayerCache().getHeldItemSlot() != 0) {
@@ -131,7 +130,7 @@ public class AutoEat extends Module {
     }
 
     public void startEating() {
-        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
             if (FOOD_MANAGER.isFood(offhandStack.getId())) {
                 isEating = true;
@@ -142,7 +141,7 @@ public class AutoEat extends Module {
             }
         }
 
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
+        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (FOOD_MANAGER.isFood(mainHandStack.getId())) {
                 isEating = true;

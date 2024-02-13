@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.GlobalPos;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
+import com.github.steveice10.mc.protocol.data.game.inventory.ContainerType;
 import com.github.steveice10.mc.protocol.data.game.inventory.CreativeGrabAction;
 import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
@@ -17,6 +18,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetContentPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundOpenScreenPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetDefaultSpawnPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
@@ -26,12 +28,14 @@ import com.zenith.cache.CachedData;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.cache.data.inventory.InventoryCache;
 import com.zenith.util.math.MutableVec3i;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.kyori.adventure.text.Component;
 import org.cloudburstmc.math.vector.Vector3i;
 
 import java.util.*;
@@ -58,7 +62,7 @@ public class PlayerCache implements CachedData {
 
     protected EntityPlayer thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
 
-    protected final ItemStack[] inventory = new ItemStack[46];
+    protected final InventoryCache inventoryCache = new InventoryCache();
 
     protected final EntityCache entityCache;
     protected String[] enabledFeatures = new String[]{"minecraft:vanilla"};
@@ -91,9 +95,16 @@ public class PlayerCache implements CachedData {
         consumer.accept(new ClientboundUpdateTagsPacket(this.tags));
         consumer.accept(new ClientboundGameEventPacket(GameEvent.CHANGE_GAMEMODE, this.gameMode));
         consumer.accept(new ClientboundEntityEventPacket(this.thePlayer.getEntityId(), this.opLevel));
-        consumer.accept(new ClientboundContainerSetContentPacket(0,
-                                                                 0, // todo: verify if this is correct
-                                                                 this.inventory.clone(),
+        var container = this.inventoryCache.getContainers().get(this.inventoryCache.getOpenContainerId());
+        if (container == this.inventoryCache.getContainers().defaultReturnValue()) {
+            container = this.inventoryCache.getPlayerInventory();
+        }
+        if (container.getContainerId() != 0) {
+            consumer.accept(new ClientboundOpenScreenPacket(container.getContainerId(), container.getType(), container.getTitle()));
+        }
+        consumer.accept(new ClientboundContainerSetContentPacket(container.getContainerId(),
+                                                                 actionId.get(),
+                                                                 container.getContents().toArray(new ItemStack[0]),
                                                                  new ItemStack(0, 0)));
         consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
         consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(Vector3i.from(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ()), 0.0f));
@@ -106,7 +117,7 @@ public class PlayerCache implements CachedData {
             this.thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;
-            Arrays.fill(this.inventory, null);
+            this.inventoryCache.reset();
             this.heldItemSlot = 0;
             this.enabledFeatures = new String[0];
         }
@@ -133,7 +144,6 @@ public class PlayerCache implements CachedData {
 
     public static void sync() {
         if (nonNull(Proxy.getInstance().getClient())) {
-            // todo: verify this still works
             try {
                 // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
                 // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
@@ -150,38 +160,37 @@ public class PlayerCache implements CachedData {
         }
     }
 
-    public void setInventory(ItemStack[] newInventory) {
-        System.arraycopy(newInventory, 0, this.inventory, 0, Math.min(this.inventory.length, newInventory.length));
+    public void setInventory(final int containerId, final ItemStack[] inventory) {
+        this.inventoryCache.setInventory(containerId, inventory);
+    }
+
+    public ItemStack getEquipment(final EquipmentSlot slot) {
+        var inventory = this.inventoryCache.getPlayerInventory();
+        if (inventory == null) return null;
+        return switch (slot) {
+            case EquipmentSlot.HELMET -> inventory.getItemStack(5);
+            case EquipmentSlot.CHESTPLATE -> inventory.getItemStack(6);
+            case EquipmentSlot.LEGGINGS -> inventory.getItemStack(7);
+            case EquipmentSlot.BOOTS -> inventory.getItemStack(8);
+            case EquipmentSlot.OFF_HAND -> inventory.getItemStack(9);
+            case EquipmentSlot.MAIN_HAND -> inventory.getItemStack(heldItemSlot + 36);
+        };
+    }
+
+    // prefer calling getEquipment with a slot type instead of this, creates gc spam
+    public Map<EquipmentSlot, ItemStack> getEquipment() {
         final Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
-        equipment.put(EquipmentSlot.HELMET, this.inventory[5]);
-        equipment.put(EquipmentSlot.CHESTPLATE, this.inventory[6]);
-        equipment.put(EquipmentSlot.LEGGINGS, this.inventory[7]);
-        equipment.put(EquipmentSlot.BOOTS, this.inventory[8]);
-        equipment.put(EquipmentSlot.OFF_HAND, this.inventory[45]);
-        equipment.put(EquipmentSlot.MAIN_HAND, this.inventory[heldItemSlot + 36]);
-        this.getThePlayer().setEquipment(equipment);
+        equipment.put(EquipmentSlot.HELMET, getEquipment(EquipmentSlot.HELMET));
+        equipment.put(EquipmentSlot.CHESTPLATE, getEquipment(EquipmentSlot.CHESTPLATE));
+        equipment.put(EquipmentSlot.LEGGINGS, getEquipment(EquipmentSlot.LEGGINGS));
+        equipment.put(EquipmentSlot.BOOTS, getEquipment(EquipmentSlot.BOOTS));
+        equipment.put(EquipmentSlot.OFF_HAND, getEquipment(EquipmentSlot.OFF_HAND));
+        equipment.put(EquipmentSlot.MAIN_HAND, getEquipment(EquipmentSlot.MAIN_HAND));
+        return equipment;
     }
 
-    public void setInventorySlot(ItemStack newItemStack, int slot) {
-        this.inventory[slot] = newItemStack;
-        if (slot >= 5 && slot <= 8 || slot == 45 || slot == heldItemSlot) {
-            switch (slot) {
-                case 5 -> this.getThePlayer().getEquipment().put(EquipmentSlot.HELMET, newItemStack);
-                case 6 -> this.getThePlayer().getEquipment().put(EquipmentSlot.CHESTPLATE, newItemStack);
-                case 7 -> this.getThePlayer().getEquipment().put(EquipmentSlot.LEGGINGS, newItemStack);
-                case 8 -> this.getThePlayer().getEquipment().put(EquipmentSlot.BOOTS, newItemStack);
-                case 45 -> this.getThePlayer().getEquipment().put(EquipmentSlot.OFF_HAND, newItemStack);
-            }
-        }
-        if (slot == heldItemSlot + 36) {
-            getThePlayer().getEquipment().put(EquipmentSlot.MAIN_HAND, newItemStack);
-        }
-    }
-
-    public PlayerCache setHeldItemSlot(final int slot) {
-        this.heldItemSlot = slot;
-        getThePlayer().getEquipment().put(EquipmentSlot.MAIN_HAND, getInventory()[slot + 36]);
-        return this;
+    public void setInventorySlot(final int containerId, ItemStack newItemStack, int slot) {
+        this.inventoryCache.setItemStack(containerId, slot, newItemStack);
     }
 
     public double getX() {
@@ -252,5 +261,17 @@ public class PlayerCache implements CachedData {
             Math.pow(getX() - entity.getX(), 2)
                 + Math.pow(getY() - entity.getY(), 2)
                 + Math.pow(getZ() - entity.getZ(), 2));
+    }
+
+    public void closeContainer(final int containerId) {
+        this.inventoryCache.closeContainer(containerId);
+    }
+
+    public void openContainer(final int containerId, final ContainerType type, final Component title) {
+        this.inventoryCache.openContainer(containerId, type, title);
+    }
+
+    public List<ItemStack> getPlayerInventory() {
+        return this.inventoryCache.getPlayerInventory().getContents();
     }
 }

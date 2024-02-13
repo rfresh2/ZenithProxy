@@ -19,6 +19,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetSubtitleTextPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClosePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
@@ -115,6 +116,8 @@ public class ZenithHandlerCodec {
             .registerInbound(ClientboundSoundPacket.class, new SoundHandler())
             .registerInbound(ClientboundSetExperiencePacket.class, new SetExperienceHandler())
             .registerInbound(ClientboundRespawnPacket.class, new RespawnHandler())
+            .registerInbound(ClientboundContainerClosePacket.class, new ContainerCloseHandler())
+            .registerInbound(ClientboundOpenScreenPacket.class, new ContainerOpenScreenHandler())
             .registerInbound(ClientboundContainerSetSlotPacket.class, new ContainerSetSlotHandler())
             .registerInbound(ClientboundContainerSetContentPacket.class, new ContainerSetContentHandler())
             .registerInbound(ClientboundAwardStatsPacket.class, new AwardStatsHandler())
@@ -173,6 +176,8 @@ public class ZenithHandlerCodec {
             .registerPostOutbound(ServerboundMovePlayerRotPacket.class, new PostOutgoingPlayerRotationHandler())
             .registerPostOutbound(ServerboundMovePlayerStatusOnlyPacket.class, new PostOutgoingPlayerStatusOnlyHandler())
             .registerPostOutbound(ServerboundSwingPacket.class, new PostOutgoingSwingHandler())
+            .registerPostOutbound(ServerboundContainerClosePacket.class, new PostOutgoingContainerCloseHandler())
+            .registerPostOutbound(ServerboundContainerClickPacket.class, new PostOutgoingContainerClickHandler())
             .build())
         .build();
 
