@@ -19,6 +19,7 @@ import com.zenith.feature.actionlimiter.handlers.outbound.ALPlayerPositionHandle
 import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.PacketHandlerStateCodec;
+import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
 import lombok.Getter;
 
@@ -38,6 +39,8 @@ public class ActionLimiter extends Module {
 
     private void initializeHandlers() {
         codec = PacketHandlerCodec.builder()
+            .setId("action-limiter")
+            .setPriority(5)
             .setLogger(MODULE_LOG)
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .allowUnhandled(true)
@@ -70,6 +73,16 @@ public class ActionLimiter extends Module {
     @Override
     public boolean shouldBeEnabled() {
         return CONFIG.client.extra.actionLimiter.enabled;
+    }
+
+    @Override
+    public void onEnable() {
+        ZenithHandlerCodec.SERVER_REGISTRY.register(codec);
+    }
+
+    @Override
+    public void onDisable() {
+        ZenithHandlerCodec.SERVER_REGISTRY.unregister(codec);
     }
 
     public void onPlayerLoginEvent(final PlayerLoginEvent event) {

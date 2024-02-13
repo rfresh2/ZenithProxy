@@ -1,16 +1,17 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
+import com.zenith.module.impl.ActionLimiter;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
 
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.*;
 
 public class ALLoginHandler implements PacketHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
     public ClientboundLoginPacket apply(final ClientboundLoginPacket packet, final ServerConnection session) {
+        if (MODULE_MANAGER.get(ActionLimiter.class).bypassesLimits(session)) return packet;
         if (CONFIG.client.extra.actionLimiter.allowMovement)
             return packet;
         int playerX = (int) CACHE.getPlayerCache().getX();

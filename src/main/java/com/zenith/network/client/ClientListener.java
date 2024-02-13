@@ -28,7 +28,7 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     public void packetReceived(Session session, Packet packet) {
         try {
             var state = session.getPacketProtocol().getState();
-            Packet p = ZenithHandlerCodec.CLIENT_CODEC.handleInbound(packet, this.session);
+            final Packet p = ZenithHandlerCodec.CLIENT_REGISTRY.handleInbound(packet, this.session);
             if (p != null && state == ProtocolState.GAME) {
                 for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
                     connection.sendAsync(packet); // sends on each connection's own event loop
@@ -43,7 +43,7 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            return ZenithHandlerCodec.CLIENT_CODEC.handleOutgoing(packet, this.session);
+            return ZenithHandlerCodec.CLIENT_REGISTRY.handleOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
@@ -53,7 +53,7 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            ZenithHandlerCodec.CLIENT_CODEC.handlePostOutgoing(packet, this.session);
+            ZenithHandlerCodec.CLIENT_REGISTRY.handlePostOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);

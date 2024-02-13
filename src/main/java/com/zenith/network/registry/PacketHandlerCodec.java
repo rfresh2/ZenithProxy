@@ -10,14 +10,18 @@ import org.slf4j.Logger;
 
 import java.time.Instant;
 import java.util.EnumMap;
+import java.util.Objects;
 
 import static com.zenith.Shared.CONFIG;
 
+@Data
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PacketHandlerCodec {
+    private final int priority;
+    @EqualsAndHashCode.Include private final String id;
     private final EnumMap<ProtocolState, PacketHandlerStateCodec<? extends Session>> stateCodecs;
-    @NonNull
-    private final Logger logger;
+    @NonNull private final Logger logger;
 
     public static Builder builder() {
         return new Builder();
@@ -67,8 +71,9 @@ public class PacketHandlerCodec {
     @Accessors(chain = true)
     public static class Builder {
         private final EnumMap<ProtocolState, PacketHandlerStateCodec<? extends Session>> aStateCodecs = new EnumMap<>(ProtocolState.class);
-        @NonNull
         private Logger logger;
+        private int priority;
+        private String id;
 
         public Builder state(ProtocolState state, PacketHandlerStateCodec<? extends Session> codec) {
             this.aStateCodecs.put(state, codec);
@@ -76,7 +81,9 @@ public class PacketHandlerCodec {
         }
 
         public PacketHandlerCodec build() {
-            return new PacketHandlerCodec(this.aStateCodecs, logger);
+            Objects.requireNonNull(this.id, "id");
+            Objects.requireNonNull(this.logger, "logger");
+            return new PacketHandlerCodec(priority, id, this.aStateCodecs, logger);
         }
     }
 }
