@@ -303,17 +303,25 @@ public final class Config {
     }
 
     public static final class Debug {
-        public Packet packet = new Packet();
+        public PacketLog packetLog = new PacketLog();
         public Server server = new Server();
         public boolean clearOldLogs = false;
 
-        public static final class Packet {
-            public boolean received = false;
-            public boolean receivedBody = false;
-            public boolean preSent = false;
-            public boolean preSentBody = false;
-            public boolean postSent = false;
-            public boolean postSentBody = false;
+        public static final class PacketLog {
+            public boolean enabled = false;
+            public PacketLogConfig clientPacketLog = new PacketLogConfig();
+            public PacketLogConfig serverPacketLog = new PacketLogConfig();
+            // todo: could be more flexible, but this can cover the most basic use cases
+            public String packetFilter = "";
+
+            public static final class PacketLogConfig {
+                public boolean received = false;
+                public boolean receivedBody = false;
+                public boolean preSent = false;
+                public boolean preSentBody = false;
+                public boolean postSent = false;
+                public boolean postSentBody = false;
+            }
         }
 
         public static final class Server {
