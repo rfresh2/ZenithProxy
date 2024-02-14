@@ -1,4 +1,4 @@
-package com.zenith.network.server.handler.shared.outgoing;
+package com.zenith.network.server.handler.shared.postoutgoing;
 
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;

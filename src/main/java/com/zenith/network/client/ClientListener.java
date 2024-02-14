@@ -37,7 +37,7 @@ public class ClientListener implements SessionListener {
     public void packetReceived(Session session, Packet packet) {
         try {
             var state = session.getPacketProtocol().getState();
-            Packet p = ZenithHandlerCodec.CLIENT_CODEC.handleInbound(packet, this.session);
+            final Packet p = ZenithHandlerCodec.CLIENT_REGISTRY.handleInbound(packet, this.session);
             if (p != null && state == ProtocolState.GAME) {
                 for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
                     if (connection.getPacketProtocol().getState() == ProtocolState.GAME)
@@ -53,7 +53,7 @@ public class ClientListener implements SessionListener {
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            return ZenithHandlerCodec.CLIENT_CODEC.handleOutgoing(packet, this.session);
+            return ZenithHandlerCodec.CLIENT_REGISTRY.handleOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
@@ -63,7 +63,7 @@ public class ClientListener implements SessionListener {
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            ZenithHandlerCodec.CLIENT_CODEC.handlePostOutgoing(packet, this.session);
+            ZenithHandlerCodec.CLIENT_REGISTRY.handlePostOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);

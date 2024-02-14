@@ -27,7 +27,6 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
-import com.zenith.module.impl.ActionLimiter;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
 import lombok.Getter;
@@ -127,19 +126,10 @@ public class ServerConnection implements Session, SessionListener {
     public void packetReceived(Session session, Packet packet) {
         try {
             Packet p = packet;
-            if (CONFIG.client.extra.actionLimiter.enabled && !MODULE_MANAGER.get(ActionLimiter.class).bypassesLimits(this)) {
-                p = MODULE_MANAGER.get(ActionLimiter.class).getCodec().handleInbound(p, this);
-                if (p == null) return;
-            }
-            if (isSpectator()) {
-                p = ZenithHandlerCodec.SERVER_SPECTATOR_CODEC.handleInbound(p, this);
-                // not passing through ever
-            } else {
-                var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
-                p = ZenithHandlerCodec.SERVER_PLAYER_CODEC.handleInbound(p, this);
-                if (p != null && state == ProtocolState.GAME) {
-                    Proxy.getInstance().getClient().sendAsync(p);
-                }
+            var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
+            p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
+            if (p != null && !isSpectator() && state == ProtocolState.GAME) {
+                Proxy.getInstance().getClient().sendAsync(p);
             }
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling Received packet: " + packet.getClass().getSimpleName(), e);
@@ -149,13 +139,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            Packet p = isSpectator()
-                ? ZenithHandlerCodec.SERVER_SPECTATOR_CODEC.handleOutgoing(packet, this)
-                : ZenithHandlerCodec.SERVER_PLAYER_CODEC.handleOutgoing(packet, this);
-            if (p != null && CONFIG.client.extra.actionLimiter.enabled) {
-                p = MODULE_MANAGER.get(ActionLimiter.class).getCodec().handleOutgoing(p, this);
-            }
-            return p;
+            return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling packet sending: " + packet.getClass().getSimpleName(), e);
         }
@@ -166,10 +150,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            if (isSpectator())
-                ZenithHandlerCodec.SERVER_SPECTATOR_CODEC.handlePostOutgoing(packet, this);
-            else
-                ZenithHandlerCodec.SERVER_PLAYER_CODEC.handlePostOutgoing(packet, this);
+            ZenithHandlerCodec.SERVER_REGISTRY.handlePostOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling PostOutgoing packet: " + packet.getClass().getSimpleName(), e);
         }

@@ -19,10 +19,11 @@ import com.zenith.feature.actionlimiter.handlers.outbound.ALPlayerPositionHandle
 import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.PacketHandlerStateCodec;
+import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import lombok.Getter;
-
-import java.util.HashSet;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -30,7 +31,7 @@ import static com.zenith.Shared.*;
 public class ActionLimiter extends Module {
     @Getter
     private PacketHandlerCodec codec;
-    private final HashSet<ServerConnection> limitedConnections = new HashSet<>();
+    private final ReferenceSet<ServerConnection> limitedConnections = new ReferenceOpenHashSet<>();
 
     public ActionLimiter() {
         initializeHandlers();
@@ -38,7 +39,10 @@ public class ActionLimiter extends Module {
 
     private void initializeHandlers() {
         codec = PacketHandlerCodec.builder()
+            .setId("action-limiter")
+            .setPriority(1000)
             .setLogger(MODULE_LOG)
+            .setActivePredicate((session) -> shouldLimit((ServerConnection) session))
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .allowUnhandled(true)
                 .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
@@ -72,6 +76,16 @@ public class ActionLimiter extends Module {
         return CONFIG.client.extra.actionLimiter.enabled;
     }
 
+    @Override
+    public void onEnable() {
+        ZenithHandlerCodec.SERVER_REGISTRY.register(codec);
+    }
+
+    @Override
+    public void onDisable() {
+        ZenithHandlerCodec.SERVER_REGISTRY.unregister(codec);
+    }
+
     public void onPlayerLoginEvent(final PlayerLoginEvent event) {
         ServerConnection serverConnection = event.serverConnection();
         var profile = serverConnection.getProfileCache().getProfile();
@@ -85,7 +99,7 @@ public class ActionLimiter extends Module {
         limitedConnections.remove(event.serverConnection());
     }
 
-    public boolean bypassesLimits(final ServerConnection serverConnection) {
-        return !limitedConnections.contains(serverConnection);
+    public boolean shouldLimit(final ServerConnection serverConnection) {
+        return limitedConnections.contains(serverConnection);
     }
 }
