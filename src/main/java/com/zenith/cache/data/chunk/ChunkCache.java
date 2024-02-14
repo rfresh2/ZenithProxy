@@ -232,7 +232,7 @@ public class ChunkCache implements CachedData {
         ));
         try {
             // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
-            final MNBT nbt = MNBTIO.write(tileEntityTag);
+            final MNBT nbt = MNBTIO.writeAny(tileEntityTag);
             synchronized (chunk.blockEntities) {
                 Optional<BlockEntityInfo> foundTileEntity = chunk.blockEntities.stream()
                     .filter(tileEntity -> tileEntity.getX() == position.getX() &&
