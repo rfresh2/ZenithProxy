@@ -64,8 +64,7 @@ import com.zenith.network.server.handler.spectator.incoming.movement.PlayerRotat
 import com.zenith.network.server.handler.spectator.outgoing.*;
 import com.zenith.network.server.handler.spectator.postoutgoing.LoginSpectatorPostHandler;
 
-import static com.zenith.Shared.CLIENT_LOG;
-import static com.zenith.Shared.SERVER_LOG;
+import static com.zenith.Shared.*;
 
 public final class ZenithHandlerCodec {
     private ZenithHandlerCodec() {}
@@ -272,9 +271,25 @@ public final class ZenithHandlerCodec {
                 .build())
             .build();
 
+        final PacketHandlerCodec CLIENT_PACKETLOG = new PacketLogPacketHandlerCodec(
+            "client-packet-log",
+            CLIENT_LOG,
+            ClientSession.class,
+            () -> CONFIG.debug.packetLog.clientPacketLog
+        );
+
+        final PacketHandlerCodec SERVER_PACKETLOG = new PacketLogPacketHandlerCodec(
+            "server-packet-log",
+            SERVER_LOG,
+            ServerConnection.class,
+            () -> CONFIG.debug.packetLog.serverPacketLog
+        );
+
         CLIENT_REGISTRY.register(CLIENT_CODEC);
+        CLIENT_REGISTRY.register(CLIENT_PACKETLOG);
         SERVER_REGISTRY.register(SERVER_PLAYER_CODEC);
         SERVER_REGISTRY.register(SERVER_SPECTATOR_CODEC);
         SERVER_REGISTRY.register(SERVER_SHARED_CODEC);
+        SERVER_REGISTRY.register(SERVER_PACKETLOG);
     }
 }
