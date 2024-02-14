@@ -25,8 +25,9 @@ public class CodecRegistry {
     private PacketHandlerCodec[] codecs = new PacketHandlerCodec[0];
     private final String id;
 
-    public void register(final PacketHandlerCodec codec) {
+    synchronized public void register(final PacketHandlerCodec codec) {
         if (getCodec(codec.getId()) != null) return;
+        var codecs = this.codecs;
         var newCodecs = new PacketHandlerCodec[codecs.length + 1];
         System.arraycopy(codecs, 0, newCodecs, 0, codecs.length);
         newCodecs[codecs.length] = codec;
@@ -35,7 +36,8 @@ public class CodecRegistry {
         DEFAULT_LOG.debug("[{}] Registered codec: {} with priority: {}, pipeline: {}", id, codec.getId(), codec.getPriority(), getCodecIds());
     }
 
-    public void unregister(final PacketHandlerCodec codec) {
+    synchronized public void unregister(final PacketHandlerCodec codec) {
+        var codecs = this.codecs;
         int removeIndex = -1;
         for (int i = 0; i < codecs.length; i++) {
             if (codecs[i] == codec) {
@@ -52,6 +54,7 @@ public class CodecRegistry {
     }
 
     public void unregister(final String id) {
+        var codecs = this.codecs;
         for (int i = 0; i < codecs.length; i++) {
             if (codecs[i].getId().equals(id)) {
                 unregister(codecs[i]);
@@ -61,6 +64,7 @@ public class CodecRegistry {
     }
 
     public PacketHandlerCodec getCodec(final String id) {
+        var codecs = this.codecs;
         for (int i = 0; i < codecs.length; i++) {
             var codec = codecs[i];
             if (codec.getId().equals(id)) {
@@ -72,6 +76,7 @@ public class CodecRegistry {
 
     // in-order based on priority
     public List<String> getCodecIds() {
+        var codecs = this.codecs;
         var ids = new ArrayList<String>(codecs.length);
         for (int i = 0; i < codecs.length; i++) {
             ids.add(codecs[i].getId());
@@ -82,6 +87,7 @@ public class CodecRegistry {
     public <P extends Packet, S extends Session> P handleInbound(@Nullable P packet, @NonNull S session) {
         if (packet == null) return null;
         P p = packet;
+        var codecs = this.codecs;
         for (int i = 0; i < codecs.length; i++) {
             if (p == null) break;
             var codec = codecs[i];
@@ -94,6 +100,7 @@ public class CodecRegistry {
     public <P extends Packet, S extends Session> P handleOutgoing(@Nullable P packet, @NonNull S session) {
         if (packet == null) return null;
         P p = packet;
+        var codecs = this.codecs;
         for (int i = codecs.length - 1; i >= 0; i--) {
             if (p == null) break;
             var codec = codecs[i];
@@ -105,6 +112,7 @@ public class CodecRegistry {
 
     public <P extends Packet, S extends Session> void handlePostOutgoing(@Nullable P packet, @NonNull S session) {
         if (packet == null) return;
+        var codecs = this.codecs;
         for (int i = codecs.length - 1; i >= 0; i--) {
             var codec = codecs[i];
             if (codec.getActivePredicate().test(session))
