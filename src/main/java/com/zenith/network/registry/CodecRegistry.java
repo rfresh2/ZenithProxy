@@ -30,7 +30,7 @@ public class CodecRegistry {
         var newCodecs = new PacketHandlerCodec[codecs.length + 1];
         System.arraycopy(codecs, 0, newCodecs, 0, codecs.length);
         newCodecs[codecs.length] = codec;
-        Arrays.sort(newCodecs, Comparator.comparingInt(PacketHandlerCodec::getPriority));
+        Arrays.sort(newCodecs, Comparator.comparingInt(PacketHandlerCodec::getPriority).reversed());
         this.codecs = newCodecs;
         DEFAULT_LOG.debug("[{}] Registered codec: {} with priority: {}, pipeline: {}", id, codec.getId(), codec.getPriority(), getCodecIds());
     }

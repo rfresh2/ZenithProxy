@@ -40,7 +40,7 @@ public class ActionLimiter extends Module {
     private void initializeHandlers() {
         codec = PacketHandlerCodec.builder()
             .setId("action-limiter")
-            .setPriority(5)
+            .setPriority(1000)
             .setLogger(MODULE_LOG)
             .setActivePredicate((session) -> shouldLimit((ServerConnection) session))
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()

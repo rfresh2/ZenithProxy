@@ -187,7 +187,7 @@ public final class ZenithHandlerCodec {
 
         final PacketHandlerCodec SERVER_PLAYER_CODEC = PacketHandlerCodec.builder()
             .setId("server-player")
-            .setPriority(1)
+            .setPriority(2)
             .setActivePredicate((connection) -> !((ServerConnection) connection).isSpectator())
             .setLogger(SERVER_LOG)
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
@@ -206,7 +206,7 @@ public final class ZenithHandlerCodec {
 
         final PacketHandlerCodec SERVER_SPECTATOR_CODEC = PacketHandlerCodec.builder()
             .setId("server-spectator")
-            .setPriority(2)
+            .setPriority(1)
             .setActivePredicate((connection) -> ((ServerConnection) connection).isSpectator())
             .setLogger(SERVER_LOG)
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
