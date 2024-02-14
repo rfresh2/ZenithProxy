@@ -7,7 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.Spook;
 import com.zenith.util.Config;
 import discord4j.rest.util.Color;
@@ -35,7 +34,7 @@ public class SpookCommand extends Command {
         return command("spook")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spook.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(Spook.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(Spook.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spook " + (CONFIG.client.extra.spook.enabled ? "On!" : "Off!"));
                 return 1;

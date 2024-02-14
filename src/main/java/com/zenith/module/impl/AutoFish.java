@@ -10,7 +10,6 @@ import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
-import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientTickEvent;
@@ -20,17 +19,15 @@ import com.zenith.module.Module;
 import com.zenith.util.Maps;
 import com.zenith.util.TickTimer;
 import com.zenith.util.math.MathHelper;
-import org.slf4j.Logger;
 
 import java.time.Instant;
+import java.util.List;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class AutoFish extends Module {
-    private static final Logger LOGGER = getLogger(AutoFish.class);
     private final TickTimer castTimer = new TickTimer();
     private int fishHookEntityId = -1;
     private Hand rodHand = Hand.MAIN_HAND;
@@ -78,7 +75,7 @@ public class AutoFish extends Module {
             if (data.getOwnerId() != CACHE.getPlayerCache().getEntityId()) return;
             fishHookEntityId = event.fishHookObject().getEntityId();
         } catch (final Exception e) {
-            LOGGER.error("Failed to handle EntityFishHookSpawnEvent", e);
+            MODULE_LOG.error("Failed to handle EntityFishHookSpawnEvent", e);
         }
     }
 
@@ -97,7 +94,6 @@ public class AutoFish extends Module {
             return;
         }
         if (swapping) {
-            PlayerCache.sync();
             delay = 5;
             swapping = false;
             return;
@@ -132,7 +128,7 @@ public class AutoFish extends Module {
 
     public boolean switchToFishingRod() {
         // check if offhand has rod
-        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
             if (offhandStack.getId() == fishingRodId) {
                 rodHand = Hand.OFF_HAND;
@@ -140,7 +136,7 @@ public class AutoFish extends Module {
             }
         }
         // check mainhand
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
+        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (mainHandStack.getId() == fishingRodId) {
                 rodHand = Hand.MAIN_HAND;
@@ -149,9 +145,9 @@ public class AutoFish extends Module {
         }
 
         // find next rod and switch it into our hotbar slot
-        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
+        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
-            final ItemStack stack = inventory[i];
+            final ItemStack stack = inventory.get(i);
             if (nonNull(stack) && stack.getId() == fishingRodId) {
                 sendClientPacketAsync(new ServerboundContainerClickPacket(0,
                                                                           CACHE.getPlayerCache().getActionId().incrementAndGet(),
@@ -160,7 +156,7 @@ public class AutoFish extends Module {
                                                                           MoveToHotbarAction.SLOT_3,
                                                                           null,
                                                                           Maps.of(
-                                                                              i, inventory[38],
+                                                                              i, inventory.get(38),
                                                                               38, stack
                                                                           )));
                 if (CACHE.getPlayerCache().getHeldItemSlot() != 2) {

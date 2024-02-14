@@ -39,12 +39,16 @@ public class EntityLiving extends Entity {
                 potionEffect.getFactorData()
             )));
         }
-        if (!equipment.isEmpty()) {
-            consumer.accept(new ClientboundSetEquipmentPacket(this.entityId, this.equipment.entrySet().stream()
+        if (!isSelfPlayer() && !getEquipment().isEmpty()) {
+            consumer.accept(new ClientboundSetEquipmentPacket(this.entityId, getEquipment().entrySet().stream()
                 .map(entry -> new Equipment(entry.getKey(), entry.getValue()))
                 .toList()
                 .toArray(new Equipment[0])));
         }
         super.addPackets(consumer);
+    }
+
+    private boolean isSelfPlayer() {
+        return this instanceof EntityPlayer player && player.isSelfPlayer();
     }
 }

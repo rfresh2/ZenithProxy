@@ -3,10 +3,10 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.collect.Iterators;
-import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
+import com.zenith.feature.pathing.Input;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
@@ -19,7 +19,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
-import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
     private final TickTimer swingTickTimer = new TickTimer();
@@ -54,11 +53,8 @@ public class AntiAFK extends Module {
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (Proxy.getInstance().isConnected()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && !Proxy.getInstance().isInQueue()
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
-                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
+                && !MODULE_MANAGER.get(KillAura.class).isActive()) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
@@ -68,10 +64,19 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.jump) {
                 jumpTick();
             }
+            if (CONFIG.client.extra.antiafk.actions.sneak) {
+                sneakTick();
+            }
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
             }
         }
+    }
+
+    private void sneakTick() {
+        PATHING.move(
+                new Input(false, false, false, false, false, true, false),
+                MOVEMENT_PRIORITY - 1);
     }
 
     public void handleDeathEvent(final DeathEvent event) {
@@ -134,7 +139,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                if (CONFIG.client.extra.antiafk.actions.safeWalk)
+                if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
                     PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
                                                         MathHelper.floorToInt(currentPathingGoal.getZ()),
                                                         MOVEMENT_PRIORITY);

@@ -12,7 +12,6 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -60,19 +59,6 @@ public class ModuleManager {
         moduleClassMap.put(module.getClass(), module);
     }
 
-    public <T extends Module> Optional<T> getModule(final Class<T> clazz) {
-        Module module = moduleClassMap.get(clazz);
-        if (module == null) {
-            return Optional.empty();
-        }
-        try {
-            return Optional.of((T) module);
-        } catch (final ClassCastException e) {
-            return Optional.empty();
-        }
-    }
-
-    // unsafe version of getModule, but without optional overhead
     public <T extends Module> T get(final Class<T> clazz) {
         try {
             return (T) moduleClassMap.get(clazz);

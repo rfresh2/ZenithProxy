@@ -7,7 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AutoRespawn;
 import discord4j.rest.util.Color;
 
@@ -34,7 +33,7 @@ public class AutoRespawnCommand extends Command {
         return command("autoRespawn")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoRespawn.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoRespawn.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AutoRespawn.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoRespawn " + (CONFIG.client.extra.autoRespawn.enabled ? "On!" : "Off!"));
                 return 1;

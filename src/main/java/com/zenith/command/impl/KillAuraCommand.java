@@ -6,7 +6,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.KillAura;
 import discord4j.rest.util.Color;
 
@@ -43,7 +42,7 @@ public class KillAuraCommand extends Command {
         return command("killAura")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.killAura.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(KillAura.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(KillAura.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                              .title("Kill Aura " + (CONFIG.client.extra.killAura.enabled ? "On!" : "Off!"));
                 return 1;

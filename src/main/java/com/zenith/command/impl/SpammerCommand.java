@@ -8,7 +8,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.Spammer;
 import discord4j.rest.util.Color;
 
@@ -49,7 +48,7 @@ public class SpammerCommand extends Command {
         return command("spammer")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spammer.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(Spammer.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(Spammer.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spammer " + (CONFIG.client.extra.spammer.enabled ? "On!" : "Off!"));
                 return 1;

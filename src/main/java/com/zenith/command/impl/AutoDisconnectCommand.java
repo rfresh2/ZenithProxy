@@ -7,7 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AutoDisconnect;
 import discord4j.rest.util.Color;
 
@@ -55,7 +54,7 @@ public class AutoDisconnectCommand extends Command {
         return command("autoDisconnect")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.utility.actions.autoDisconnect.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoDisconnect.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AutoDisconnect.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "On!" : "Off!"));
                 return 1;

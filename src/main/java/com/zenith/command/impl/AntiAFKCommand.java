@@ -7,7 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AntiAFK;
 import discord4j.rest.util.Color;
 
@@ -26,16 +25,17 @@ public class AntiAFKCommand extends Command {
             CommandCategory.MODULE,
             "Configure the AntiAFK feature",
             asList("on/off",
-                   "rotate on/off",
-                   "rotate delay <int>",
-                   "swing on/off",
-                   "swing delay <int>",
-                   "walk on/off",
-                   "walk delay <int>",
-                   "safeWalk on/off",
-                   "walkDistance <int>",
-                   "jump on/off",
-                   "jump delay <int>"
+                    "rotate on/off",
+                    "rotate delay <int>",
+                    "swing on/off",
+                    "swing delay <int>",
+                    "walk on/off",
+                    "walk delay <int>",
+                    "safeWalk on/off",
+                    "walkDistance <int>",
+                    "jump on/off",
+                    "jump delay <int>",
+                    "sneak on/off"
             ),
             asList("afk")
         );
@@ -47,7 +47,7 @@ public class AntiAFKCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 boolean toggle = getToggle(c, "toggle");
                 CONFIG.client.extra.antiafk.enabled = toggle;
-                MODULE_MANAGER.getModule(AntiAFK.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AntiAFK.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AntiAFK " + (toggle ? "On!" : "Off!"));
                 return 1;
@@ -122,7 +122,15 @@ public class AntiAFKCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Jump Delay Set!");
                           return 1;
-                      }))));
+                      }))))
+            .then(literal("sneak")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          boolean toggle = getToggle(c, "toggle");
+                          CONFIG.client.extra.antiafk.actions.sneak = toggle;
+                          c.getSource().getEmbed()
+                              .title("Sneak " + (toggle ? "On!" : "Off!"));
+                          return 1;
+                      })));
     }
 
     @Override
@@ -139,6 +147,7 @@ public class AntiAFKCommand extends Command {
             .addField("Walk Distance", CONFIG.client.extra.antiafk.actions.walkDistance, false)
             .addField("Jump", toggleStr(CONFIG.client.extra.antiafk.actions.jump)
                 + " - Delay: " + CONFIG.client.extra.antiafk.actions.jumpDelayTicks, false)
+            .addField("Sneak", toggleStr(CONFIG.client.extra.antiafk.actions.sneak), false)
             .color(Color.CYAN);
     }
 }

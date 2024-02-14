@@ -7,7 +7,6 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.module.Module;
 import com.zenith.module.impl.AutoEat;
 import discord4j.rest.util.Color;
 
@@ -32,7 +31,7 @@ public class AutoEatCommand extends Command {
         return command("autoEat")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoEat.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoEat.class).ifPresent(Module::syncEnabledFromConfig);
+                MODULE_MANAGER.get(AutoEat.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoEat " + (CONFIG.client.extra.autoEat.enabled ? "On!" : "Off!"));
                 return 1;

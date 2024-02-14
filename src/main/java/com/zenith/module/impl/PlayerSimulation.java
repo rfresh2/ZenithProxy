@@ -574,7 +574,7 @@ public class PlayerSimulation extends Module {
     private float getBlockSpeedFactor(Block block) {
         if (block.name().equals("honey_block")) return 0.4f;
         if (block.name().equals("soul_sand")) {
-            ItemStack bootsItemStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.BOOTS);
+            ItemStack bootsItemStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS);
             if (bootsItemStack != null) {
                 // todo: check if soul speed enchantment is on boots
                 // todo: create enchantment parser helper class
@@ -620,8 +620,8 @@ public class PlayerSimulation extends Module {
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
         } else {
-            this.isSneaking = CACHE.getPlayerCache().isSneaking();
-            this.isSprinting = CACHE.getPlayerCache().isSprinting();
+            this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
+            this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
         syncPlayerCollisionBox();
     }

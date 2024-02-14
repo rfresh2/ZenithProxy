@@ -1096,6 +1096,16 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Debug$PacketLog",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Debug$PacketLog$PacketLogConfig",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Debug$Server",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

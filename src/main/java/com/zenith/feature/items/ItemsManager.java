@@ -43,4 +43,8 @@ public class ItemsManager {
         }
         return result;
     }
+
+    public ItemsData getItemData(final int id) {
+        return itemsData.get(id);
+    }
 }

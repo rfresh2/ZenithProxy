@@ -6,16 +6,15 @@ import com.github.steveice10.mc.protocol.data.game.inventory.ClickItemAction;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.zenith.Proxy;
-import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class AutoTotem extends Module {
@@ -43,17 +42,14 @@ public class AutoTotem extends Module {
     }
 
     public void handleClientTick(final ClientTickEvent event) {
-        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())
-                && !Proxy.getInstance().isInQueue()) {
+                && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())) {
             if (delay > 0) {
                 delay--;
                 return;
             } else {
                 if (swapping) {
-                    PlayerCache.sync();
                     delay = 5;
                     swapping = false;
                     return;
@@ -73,17 +69,17 @@ public class AutoTotem extends Module {
     }
 
     private boolean isTotemEquipped() {
-        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
         return nonNull(offhandStack) && offhandStack.getId() == totemId;
     }
 
     private void swapToTotem() {
-        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
-        ItemStack offhand = inventory[45];
+        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
+        ItemStack offhand = inventory.get(45);
         for (int i = 44; i >= 9; i--) {
-            final ItemStack stack = inventory[i];
+            final ItemStack stack = inventory.get(i);
             if (nonNull(stack) && stack.getId() == totemId) {
-                if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND))) {
+                if (nonNull(offhand) && nonNull(CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND))) {
                     sendClientPacketsAsync(new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, stack, Int2ObjectMaps.singleton(i, null)),
                                            new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), 45, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, offhand, Int2ObjectMaps.singleton(45, stack)),
                                            new ServerboundContainerClickPacket(0, CACHE.getPlayerCache().getActionId().incrementAndGet(), i, ContainerActionType.CLICK_ITEM, ClickItemAction.LEFT_CLICK, null, Int2ObjectMaps.singleton(i, offhand)));
