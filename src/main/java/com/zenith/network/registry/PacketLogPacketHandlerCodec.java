@@ -21,10 +21,9 @@ class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     public PacketLogPacketHandlerCodec(
         final String id,
         final Logger logger,
-        Class<? extends Session> sessionType,
         Supplier<PacketLogConfig> packetLogConfigSupplier
     ) {
-        super(Integer.MAX_VALUE, id, new EnumMap<>(ProtocolState.class), logger, (session) -> session.getClass().equals(sessionType));
+        super(Integer.MAX_VALUE, id, new EnumMap<>(ProtocolState.class), logger, (session) -> CONFIG.debug.packetLog.enabled);
         this.packetLogConfigSupplier = packetLogConfigSupplier;
     }
 
@@ -36,30 +35,24 @@ class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
 
     @Override
     public <P extends Packet, S extends Session> P handleInbound(@NonNull P packet, @NonNull S session) {
-        if (CONFIG.debug.packetLog.enabled) {
-            if (getPacketLogConfig().received)
-                if (CONFIG.debug.packetLog.packetFilter.isEmpty() || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase()))
-                    getLogger().debug("[{}] [{}] Received: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().receivedBody ? packet : packet.getClass());
-        }
+        if (getPacketLogConfig().received)
+            if (CONFIG.debug.packetLog.packetFilter.isEmpty() || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase()))
+                getLogger().debug("[{}] [{}] Received: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().receivedBody ? packet : packet.getClass());
         return packet;
     }
 
     @Override
     public <P extends Packet, S extends Session> P handleOutgoing(@NonNull P packet, @NonNull S session) {
-        if (CONFIG.debug.packetLog.enabled)  {
-            if (getPacketLogConfig().preSent)
-                if (CONFIG.debug.packetLog.packetFilter.isEmpty() || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase()))
-                    getLogger().debug("[{}] [{}] Sending: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().preSentBody ? packet : packet.getClass());
-        }
+        if (getPacketLogConfig().preSent)
+            if (CONFIG.debug.packetLog.packetFilter.isEmpty() || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase()))
+                getLogger().debug("[{}] [{}] Sending: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().preSentBody ? packet : packet.getClass());
         return packet;
     }
 
     @Override
     public <P extends Packet, S extends Session> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
-        if (CONFIG.debug.packetLog.enabled) {
-            if (getPacketLogConfig().postSent)
-                if (CONFIG.debug.packetLog.packetFilter.isEmpty() || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase()))
-                    getLogger().debug("[{}] [{}] Sent: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().postSentBody ? packet : packet.getClass());
-        }
+        if (getPacketLogConfig().postSent)
+            if (CONFIG.debug.packetLog.packetFilter.isEmpty() || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase()))
+                getLogger().debug("[{}] [{}] Sent: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().postSentBody ? packet : packet.getClass());
     }
 }

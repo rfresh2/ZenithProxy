@@ -274,14 +274,12 @@ public final class ZenithHandlerCodec {
         final PacketHandlerCodec CLIENT_PACKETLOG = new PacketLogPacketHandlerCodec(
             "client-packet-log",
             CLIENT_LOG,
-            ClientSession.class,
             () -> CONFIG.debug.packetLog.clientPacketLog
         );
 
         final PacketHandlerCodec SERVER_PACKETLOG = new PacketLogPacketHandlerCodec(
             "server-packet-log",
             SERVER_LOG,
-            ServerConnection.class,
             () -> CONFIG.debug.packetLog.serverPacketLog
         );
 
