@@ -21,9 +21,9 @@ import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.PacketHandlerStateCodec;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import lombok.Getter;
-
-import java.util.HashSet;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -31,7 +31,7 @@ import static com.zenith.Shared.*;
 public class ActionLimiter extends Module {
     @Getter
     private PacketHandlerCodec codec;
-    private final HashSet<ServerConnection> limitedConnections = new HashSet<>();
+    private final ReferenceSet<ServerConnection> limitedConnections = new ReferenceOpenHashSet<>();
 
     public ActionLimiter() {
         initializeHandlers();
@@ -42,6 +42,7 @@ public class ActionLimiter extends Module {
             .setId("action-limiter")
             .setPriority(5)
             .setLogger(MODULE_LOG)
+            .setActivePredicate((session) -> shouldLimit((ServerConnection) session))
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .allowUnhandled(true)
                 .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
@@ -98,7 +99,7 @@ public class ActionLimiter extends Module {
         limitedConnections.remove(event.serverConnection());
     }
 
-    public boolean bypassesLimits(final ServerConnection serverConnection) {
-        return !limitedConnections.contains(serverConnection);
+    public boolean shouldLimit(final ServerConnection serverConnection) {
+        return limitedConnections.contains(serverConnection);
     }
 }

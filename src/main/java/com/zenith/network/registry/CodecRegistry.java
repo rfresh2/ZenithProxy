@@ -84,7 +84,9 @@ public class CodecRegistry {
         P p = packet;
         for (int i = 0; i < codecs.length; i++) {
             if (p == null) break;
-            p = codecs[i].handleInbound(p, session);
+            var codec = codecs[i];
+            if (codec.getActivePredicate().test(session))
+                p = codec.handleInbound(p, session);
         }
         return p;
     }
@@ -94,7 +96,9 @@ public class CodecRegistry {
         P p = packet;
         for (int i = codecs.length - 1; i >= 0; i--) {
             if (p == null) break;
-            p = codecs[i].handleOutgoing(p, session);
+            var codec = codecs[i];
+            if (codec.getActivePredicate().test(session))
+                p = codec.handleOutgoing(p, session);
         }
         return p;
     }
@@ -102,7 +106,9 @@ public class CodecRegistry {
     public <P extends Packet, S extends Session> void handlePostOutgoing(@Nullable P packet, @NonNull S session) {
         if (packet == null) return;
         for (int i = codecs.length - 1; i >= 0; i--) {
-            codecs[i].handlePostOutgoing(packet, session);
+            var codec = codecs[i];
+            if (codec.getActivePredicate().test(session))
+                codecs[i].handlePostOutgoing(packet, session);
         }
     }
 }

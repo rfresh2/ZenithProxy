@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import java.time.Instant;
 import java.util.EnumMap;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static com.zenith.Shared.CONFIG;
 
@@ -22,6 +23,8 @@ public class PacketHandlerCodec {
     @EqualsAndHashCode.Include private final String id;
     private final EnumMap<ProtocolState, PacketHandlerStateCodec<? extends Session>> stateCodecs;
     @NonNull private final Logger logger;
+    // Predicate called on each packet to determine if it should be handled by this codec
+    private final Predicate<Session> activePredicate;
 
     public static Builder builder() {
         return new Builder();
@@ -74,6 +77,7 @@ public class PacketHandlerCodec {
         private Logger logger;
         private int priority;
         private String id;
+        private Predicate<Session> activePredicate = session -> true;
 
         public Builder state(ProtocolState state, PacketHandlerStateCodec<? extends Session> codec) {
             this.aStateCodecs.put(state, codec);
@@ -83,7 +87,7 @@ public class PacketHandlerCodec {
         public PacketHandlerCodec build() {
             Objects.requireNonNull(this.id, "id");
             Objects.requireNonNull(this.logger, "logger");
-            return new PacketHandlerCodec(priority, id, this.aStateCodecs, logger);
+            return new PacketHandlerCodec(priority, id, this.aStateCodecs, logger, activePredicate);
         }
     }
 }

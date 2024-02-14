@@ -52,10 +52,10 @@ import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingH
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
-import com.zenith.network.server.handler.shared.outgoing.LoginCompressionOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.PingOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.SGameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
+import com.zenith.network.server.handler.shared.postoutgoing.LoginCompressionPostOutgoingHandler;
 import com.zenith.network.server.handler.shared.postoutgoing.SGameProfilePostHandler;
 import com.zenith.network.server.handler.spectator.incoming.*;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
@@ -70,9 +70,6 @@ import static com.zenith.Shared.SERVER_LOG;
 public final class ZenithHandlerCodec {
     private ZenithHandlerCodec() {}
     public static final CodecRegistry CLIENT_REGISTRY = new CodecRegistry("Client Handlers");
-    public static final CodecRegistry SERVER_PLAYER_REGISTRY = new CodecRegistry("Server Player Handlers");
-    public static final CodecRegistry SERVER_SPECTATOR_REGISTRY = new CodecRegistry("Server Spectator Handlers");
-    // codecs that affect both player and spectator. These are applied before player/spectator specific codecs
     public static final CodecRegistry SERVER_REGISTRY = new CodecRegistry("Server Handlers");
 
     static {
@@ -191,38 +188,18 @@ public final class ZenithHandlerCodec {
 
         final PacketHandlerCodec SERVER_PLAYER_CODEC = PacketHandlerCodec.builder()
             .setId("server-player")
-            .setPriority(0)
+            .setPriority(1)
+            .setActivePredicate((connection) -> !((ServerConnection) connection).isSpectator())
             .setLogger(SERVER_LOG)
-            .state(ProtocolState.HANDSHAKE, PacketHandlerStateCodec.<ServerConnection>builder()
-                .allowUnhandled(false)
-                .registerInbound(ClientIntentionPacket.class, new IntentionHandler())
-                .build())
-            .state(ProtocolState.LOGIN, PacketHandlerStateCodec.<ServerConnection>builder()
-                .allowUnhandled(false)
-                .registerInbound(ServerboundHelloPacket.class, new SHelloHandler())
-                .registerInbound(ServerboundKeyPacket.class, new KeyHandler())
-                .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
-                .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionOutgoingHandler())
-                .registerPostOutbound(ClientboundGameProfilePacket.class, new SGameProfilePostHandler())
-                .build())
-            .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ServerConnection>builder()
-                .allowUnhandled(false)
-                .registerInbound(ServerboundStatusRequestPacket.class, new StatusRequestHandler())
-                .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
-                .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .allowUnhandled(true)
-                .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
                 .registerInbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
                 .registerInbound(ServerboundChatPacket.class, new ChatHandler())
                 .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
                 .registerInbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionHandler())
                 .registerInbound(ServerboundPongPacket.class, new PongHandler())
                 .registerInbound(ServerboundClientCommandPacket.class, new ClientCommandHandler())
-                .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
                 .registerOutbound(ClientboundCommandsPacket.class, new ClientCommandsOutgoingHandler())
-                .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
-                .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
                 .registerOutbound(ClientboundSystemChatPacket.class, new SystemChatOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginPacket.class, new LoginPostHandler())
                 .build())
@@ -230,16 +207,11 @@ public final class ZenithHandlerCodec {
 
         final PacketHandlerCodec SERVER_SPECTATOR_CODEC = PacketHandlerCodec.builder()
             .setId("server-spectator")
-            .setPriority(0)
+            .setPriority(2)
+            .setActivePredicate((connection) -> ((ServerConnection) connection).isSpectator())
             .setLogger(SERVER_LOG)
-            .state(ProtocolState.LOGIN, PacketHandlerStateCodec.<ServerConnection>builder()
-                .allowUnhandled(false)
-                // state is switched to game and connection is set to spectator in SGameProfileOutgoingHandler
-                .registerPostOutbound(ClientboundGameProfilePacket.class, new SGameProfilePostHandler())
-                .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .allowUnhandled(false)
-                .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
                 .registerInbound(ServerboundPongPacket.class, new SpectatorPongHandler())
                 .registerInbound(ServerboundMovePlayerPosRotPacket.class, new PlayerPositionRotationSpectatorHandler())
                 .registerInbound(ServerboundMovePlayerPosPacket.class, new PlayerPositionSpectatorHandler())
@@ -249,7 +221,6 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ServerboundTeleportToEntityPacket.class, new TeleportToEntitySpectatorHandler())
                 .registerInbound(ServerboundInteractPacket.class, new InteractEntitySpectatorHandler())
                 .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
-                .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
                 .registerOutbound(ClientboundContainerClosePacket.class, new ContainerCloseSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundContainerSetContentPacket.class, new ContainerSetContentSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundPlaceGhostRecipePacket.class, new PlaceGhostRecipeSpectatorOutgoingHandler())
@@ -264,15 +235,46 @@ public final class ZenithHandlerCodec {
                 .registerOutbound(ClientboundMoveVehiclePacket.class, new MoveVehicleSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundHorseScreenOpenPacket.class, new HorseScreenOpenSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundContainerSetDataPacket.class, new ContainerSetDataSpectatorOutgoingHandler())
-                .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
                 .registerOutbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundRespawnPacket.class, new RespawnSpectatorOutgoingPacket())
                 .registerPostOutbound(ClientboundLoginPacket.class, new LoginSpectatorPostHandler())
                 .build())
             .build();
 
+        final PacketHandlerCodec SERVER_SHARED_CODEC = PacketHandlerCodec.builder()
+            .setId("server-shared")
+            .setPriority(0)
+            .setLogger(SERVER_LOG)
+            .state(ProtocolState.HANDSHAKE, PacketHandlerStateCodec.<ServerConnection>builder()
+                .allowUnhandled(false)
+                .registerInbound(ClientIntentionPacket.class, new IntentionHandler())
+                .build())
+            .state(ProtocolState.LOGIN, PacketHandlerStateCodec.<ServerConnection>builder()
+                .allowUnhandled(false)
+                .registerInbound(ServerboundKeyPacket.class, new KeyHandler())
+                .registerInbound(ServerboundHelloPacket.class, new SHelloHandler())
+                // state is switched to game and connection is set to spectator in SGameProfileOutgoingHandler
+                .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
+                .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionPostOutgoingHandler())
+                .registerPostOutbound(ClientboundGameProfilePacket.class, new SGameProfilePostHandler())
+                .build())
+            .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ServerConnection>builder()
+                .allowUnhandled(false)
+                .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
+                .registerInbound(ServerboundStatusRequestPacket.class, new StatusRequestHandler())
+                .build())
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+                .allowUnhandled(false)
+                .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
+                .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
+                .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
+                .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
+                .build())
+            .build();
+
         CLIENT_REGISTRY.register(CLIENT_CODEC);
-        SERVER_PLAYER_REGISTRY.register(SERVER_PLAYER_CODEC);
-        SERVER_SPECTATOR_REGISTRY.register(SERVER_SPECTATOR_CODEC);
+        SERVER_REGISTRY.register(SERVER_PLAYER_CODEC);
+        SERVER_REGISTRY.register(SERVER_SPECTATOR_CODEC);
+        SERVER_REGISTRY.register(SERVER_SHARED_CODEC);
     }
 }

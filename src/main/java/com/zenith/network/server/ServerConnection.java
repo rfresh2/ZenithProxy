@@ -128,13 +128,8 @@ public class ServerConnection implements Session, SessionListener {
             Packet p = packet;
             var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
             p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
-            if (isSpectator()) {
-                p = ZenithHandlerCodec.SERVER_SPECTATOR_REGISTRY.handleInbound(p, this);
-            } else {
-                p = ZenithHandlerCodec.SERVER_PLAYER_REGISTRY.handleInbound(p, this);
-                if (p != null && state == ProtocolState.GAME) {
-                    Proxy.getInstance().getClient().sendAsync(p);
-                }
+            if (p != null && !isSpectator() && state == ProtocolState.GAME) {
+                Proxy.getInstance().getClient().sendAsync(p);
             }
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling Received packet: " + packet.getClass().getSimpleName(), e);
@@ -144,12 +139,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            Packet p = packet;
-            p = isSpectator()
-                ? ZenithHandlerCodec.SERVER_SPECTATOR_REGISTRY.handleOutgoing(p, this)
-                : ZenithHandlerCodec.SERVER_PLAYER_REGISTRY.handleOutgoing(p, this);
-            p = ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(p, this);
-            return p;
+            return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling packet sending: " + packet.getClass().getSimpleName(), e);
         }
@@ -160,10 +150,6 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            if (isSpectator())
-                ZenithHandlerCodec.SERVER_SPECTATOR_REGISTRY.handlePostOutgoing(packet, this);
-            else
-                ZenithHandlerCodec.SERVER_PLAYER_REGISTRY.handlePostOutgoing(packet, this);
             ZenithHandlerCodec.SERVER_REGISTRY.handlePostOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling PostOutgoing packet: " + packet.getClass().getSimpleName(), e);
