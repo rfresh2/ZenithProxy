@@ -703,13 +703,13 @@ public class Proxy {
         if (!CONFIG.client.extra.chat.showConnectionMessages) return;
         var serverConnection = getCurrentPlayer().get();
         if (nonNull(serverConnection) && serverConnection.isLoggedIn())
-            serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e connected"), false));
+            serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e connected"), false));
     }
 
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (!CONFIG.client.extra.chat.showConnectionMessages) return;
         var serverConnection = getCurrentPlayer().get();
         if (nonNull(serverConnection) && serverConnection.isLoggedIn())
-            serverConnection.sendDirect(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
+            serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
     }
 }
