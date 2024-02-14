@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 
@@ -13,6 +14,14 @@ config = LaunchConfig()
 api = github_api.GitHubAPI(config)
 
 print("ZenithProxy Launcher Initializing...")
+
+# Certain platforms like mac seem to not have the correct cwd set correctly when double clicking the executable
+if launch_platform.is_pyinstaller_bundle():
+    current_cwd = os.getcwd()
+    executable_path = sys.executable
+    expected_cwd = os.path.dirname(executable_path)
+    if current_cwd != expected_cwd:
+        os.chdir(expected_cwd)
 
 # for use with relaunches just so we don't get stuck in an infinite update loop if something goes wrong
 no_launcher_update = False
