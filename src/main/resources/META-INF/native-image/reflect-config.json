@@ -27,6 +27,9 @@
   "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
 },
 {
+  "name":"[Lcom.github.steveice10.mc.protocol.data.game.command.CommandNode;"
+},
+{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
 },
 {
@@ -308,6 +311,11 @@
   "name":"com.github.steveice10.mc.auth.data.GameProfile$TextureType",
   "allDeclaredFields":true,
   "unsafeAllocated":true
+},
+{
+  "name":"com.github.steveice10.mc.auth.service.SessionService$MinecraftProfileResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket",
