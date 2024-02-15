@@ -170,7 +170,7 @@ public class PlayerCache implements CachedData {
             case EquipmentSlot.CHESTPLATE -> inventory.getItemStack(6);
             case EquipmentSlot.LEGGINGS -> inventory.getItemStack(7);
             case EquipmentSlot.BOOTS -> inventory.getItemStack(8);
-            case EquipmentSlot.OFF_HAND -> inventory.getItemStack(9);
+            case EquipmentSlot.OFF_HAND -> inventory.getItemStack(45);
             case EquipmentSlot.MAIN_HAND -> inventory.getItemStack(heldItemSlot + 36);
         };
     }

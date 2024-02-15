@@ -205,6 +205,7 @@ public final class ZenithHandlerCodec {
                 .registerPostOutbound(ServerboundSwingPacket.class, new PostOutgoingSwingHandler())
                 .registerPostOutbound(ServerboundContainerClosePacket.class, new PostOutgoingContainerCloseHandler())
                 .registerPostOutbound(ServerboundContainerClickPacket.class, new PostOutgoingContainerClickHandler())
+                .registerPostOutbound(ServerboundPlayerActionPacket.class, new PostOutgoingPlayerActionHandler())
                 .build())
             .build();
 

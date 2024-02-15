@@ -4,10 +4,12 @@ import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
 import com.google.common.base.Suppliers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import lombok.experimental.UtilityClass;
 
 import java.util.function.Supplier;
 
-public final class RefStrings {
+@UtilityClass
+public class RefStrings {
     private static final String BRAND = "ZenithProxy";
 
     public static Supplier<byte[]> BRAND_SUPPLIER = Suppliers.memoize(() -> {
