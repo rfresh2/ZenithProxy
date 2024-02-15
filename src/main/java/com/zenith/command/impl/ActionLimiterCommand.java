@@ -5,8 +5,8 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.Embed;
 import com.zenith.module.impl.ActionLimiter;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
@@ -92,7 +92,7 @@ public class ActionLimiterCommand extends Command {
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .title("Action Limiter")
             .addField("Action Limiter", toggleStr(CONFIG.client.extra.actionLimiter.enabled), true)

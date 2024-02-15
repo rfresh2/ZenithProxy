@@ -3,8 +3,8 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.*;
+import com.zenith.discord.Embed;
 import com.zenith.util.Config.Client.Extra.Utility.ActiveHours.ActiveTime;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.time.ZoneId;
@@ -28,13 +28,17 @@ public class ActiveHoursCommand extends Command {
             "activeHours",
             CommandCategory.MODULE,
             "Set active hours for the proxy to automatically be logged in at."
-                        + "\n Time zone Ids (\"TZ identifier\" column): https://w.wiki/8Yif"
-                        + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
+                + "\nBy default, 2b2t's queue wait ETA is used to determine when to log in."
+                + "\nThe connect will occur when the current time plus the ETA is equal to a time set."
+                + "\nQueue ETA calc can be disabled with a command, which would mean connects would occur exactly at the set times."
+                + "\n Time zone Ids (\"TZ identifier\" column): https://w.wiki/8Yif"
+                + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
             asList("on/off",
-                        "timezone <timezone ID>",
-                        "add/del <time>",
-                        "status",
-                        "forceReconnect on/off")
+                   "timezone <timezone ID>",
+                   "add/del <time>",
+                   "status",
+                   "forceReconnect on/off",
+                   "queueEtaCalc on/off")
         );
     }
 
@@ -44,7 +48,7 @@ public class ActiveHoursCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 boolean toggle = getToggle(c, "toggle");
                 CONFIG.client.extra.utility.actions.activeHours.enabled = toggle;
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Active Hours " + (toggle ? "On!" : "Off!"));
                 return 1;
             }))
@@ -54,7 +58,7 @@ public class ActiveHoursCommand extends Command {
                     return -1;
                 } else {
                     CONFIG.client.extra.utility.actions.activeHours.timeZoneId = ZoneId.of(timeZoneId).getId();
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title("Set timezone: " + timeZoneId);
                     return 1;
                 }
@@ -68,7 +72,7 @@ public class ActiveHoursCommand extends Command {
                     if (!CONFIG.client.extra.utility.actions.activeHours.activeTimes.contains(activeTime)) {
                         CONFIG.client.extra.utility.actions.activeHours.activeTimes.add(activeTime);
                     }
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                                  .title("Added time: " + time);
                     return 1;
                 }
@@ -80,20 +84,27 @@ public class ActiveHoursCommand extends Command {
                 } else {
                     final ActiveTime activeTime = ActiveTime.fromString(time);
                     CONFIG.client.extra.utility.actions.activeHours.activeTimes.removeIf(s -> s.equals(activeTime));
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                         .title("Removed time: " + time);
                     return 1;
                 }
             })))
             .then(literal("status").executes(c -> {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Active Hours Status");
             }))
             .then(literal("forceReconnect")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.utility.actions.activeHours.forceReconnect = getToggle(c, "toggle");
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Force Reconnect Set!");
+                          return 1;
+                      })))
+            .then(literal("queueEtaCalc")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.utility.actions.activeHours.queueEtaCalc = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Queue ETA Calc Set!");
                           return 1;
                       })));
     }
@@ -120,7 +131,7 @@ public class ActiveHoursCommand extends Command {
     }
 
     @Override
-    public void postPopulate(EmbedCreateSpec.Builder builder) {
+    public void postPopulate(Embed builder) {
         builder
             .addField("ActiveHours", toggleStr(CONFIG.client.extra.utility.actions.activeHours.enabled), false)
             .addField("Time Zone", CONFIG.client.extra.utility.actions.activeHours.timeZoneId, false)
@@ -128,6 +139,7 @@ public class ActiveHoursCommand extends Command {
                 ? "None set!"
                 : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
             .addField("Force Reconnect", toggleStr(CONFIG.client.extra.utility.actions.activeHours.forceReconnect), false)
+            .addField("Queue ETA Calc", toggleStr(CONFIG.client.extra.utility.actions.activeHours.queueEtaCalc), false)
             .color(Color.CYAN);
     }
 }

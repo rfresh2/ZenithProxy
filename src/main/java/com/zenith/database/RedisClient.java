@@ -1,5 +1,6 @@
 package com.zenith.database;
 
+import io.netty.resolver.DefaultAddressResolverGroup;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -48,13 +49,14 @@ public class RedisClient {
     public static RedissonClient buildRedisClient() {
         Config config = new Config();
         config.setNettyThreads(1)
-                .setThreads(1)
-                .useSingleServer()
-                .setAddress(CONFIG.database.lock.redisAddress)
-                .setUsername(CONFIG.database.lock.redisUsername)
-                .setPassword(CONFIG.database.lock.redisPassword)
-                .setConnectionPoolSize(1)
-                .setConnectionMinimumIdleSize(1);
+            .setAddressResolverGroupFactory((channelType, socketChannelType, nameServerProvider) -> DefaultAddressResolverGroup.INSTANCE)
+            .setThreads(1)
+            .useSingleServer()
+            .setAddress(CONFIG.database.lock.redisAddress)
+            .setUsername(CONFIG.database.lock.redisUsername)
+            .setPassword(CONFIG.database.lock.redisPassword)
+            .setConnectionPoolSize(1)
+            .setConnectionMinimumIdleSize(1);
         config.setLockWatchdogTimeout(15000);
         return Redisson.create(config);
     }

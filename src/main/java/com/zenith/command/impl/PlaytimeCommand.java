@@ -36,11 +36,11 @@ public class PlaytimeCommand extends Command {
                 final String playerName = getString(c, "playerName");
                 VC_API.getPlaytime(playerName)
                     .ifPresentOrElse((response) ->
-                                         c.getSource().getEmbedBuilder()
+                                         c.getSource().getEmbed()
                                              .title("Playtime: " + escape(playerName))
                                              .addField("Playtime", MathHelper.formatDuration(Duration.ofSeconds(response.playtimeSeconds())), false)
                                              .color(Color.CYAN),
-                                     () -> c.getSource().getEmbedBuilder()
+                                     () -> c.getSource().getEmbed()
                                          .title(playerName + " not found")
                                          .color(Color.RUBY));
                 return 1;

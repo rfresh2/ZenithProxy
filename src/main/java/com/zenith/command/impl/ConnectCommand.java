@@ -25,7 +25,7 @@ public class ConnectCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("connect").executes(c -> {
             if (Proxy.getInstance().isConnected()) {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                         .title("Already Connected!");
             } else {
                 SCHEDULED_EXECUTOR_SERVICE.execute(Proxy.getInstance()::connectAndCatchExceptions);

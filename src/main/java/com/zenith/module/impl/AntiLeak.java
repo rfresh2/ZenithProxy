@@ -2,14 +2,12 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.OutboundChatEvent;
 import com.zenith.module.Module;
 import com.zenith.util.ComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static com.zenith.Shared.*;
@@ -18,13 +16,13 @@ public class AntiLeak extends Module {
     private final Pattern notNumber = Pattern.compile("[^0-9]");
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(OutboundChatEvent.class, this::handleOutgoingChat);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, OutboundChatEvent.class, this::handleOutgoingChat);
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.antiLeak.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.antiLeak.enabled;
     }
 
     public void handleOutgoingChat(final OutboundChatEvent event) {
@@ -62,7 +60,7 @@ public class AntiLeak extends Module {
             MODULE_LOG.info("AntiLeak cancelled chat message: " + message);
             if (Proxy.getInstance().hasActivePlayer())
                 Proxy.getInstance().getCurrentPlayer().get()
-                    .sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&ZenithProxy&7]&r &cAntiLeak Cancelled Chat"), false));
+                    .sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&ZenithProxy&7]&r &cAntiLeak Cancelled Chat"), false));
         }
     }
 }

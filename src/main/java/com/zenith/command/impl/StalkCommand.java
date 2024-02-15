@@ -6,7 +6,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -34,34 +34,34 @@ public class StalkCommand extends Command {
         return command("stalk")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.stalk.enabled = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Stalk " + (CONFIG.client.extra.stalk.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("list").executes(c -> {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Stalk List");
             }))
             .then(literal("add").then(argument("player", string()).executes(c -> {
                 final String player = StringArgumentType.getString(c, "player");
                 PLAYER_LISTS.getStalkList().add(player).ifPresentOrElse(e ->
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Added player: " + escape(e.getUsername()) + " To Stalk List"),
-                        () -> c.getSource().getEmbedBuilder()
+                        () -> c.getSource().getEmbed()
                             .title("Failed to add player: " + escape(player) + " to stalk list. Unable to lookup profile."));
                 return 1;
             })))
             .then(literal("del").then(argument("player", string()).executes(c -> {
                 final String player = StringArgumentType.getString(c, "player");
                 PLAYER_LISTS.getStalkList().remove(player);
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Removed player: " + escape(player) + " From Stalk List");
                 return 1;
             })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Stalk", toggleStr(CONFIG.client.extra.stalk.enabled), false)
             .description("**Stalk List**\n" + playerListToString(PLAYER_LISTS.getStalkList()))

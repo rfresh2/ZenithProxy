@@ -8,9 +8,8 @@ import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.DiscordBot;
-import com.zenith.module.Module;
+import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoReply;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -37,15 +36,15 @@ public class AutoReplyCommand extends Command {
         return command("autoReply")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReply.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoReply.class).ifPresent(Module::syncEnabledFromConfig);
-                c.getSource().getEmbedBuilder()
+                MODULE_MANAGER.get(AutoReply.class).syncEnabledFromConfig();
+                c.getSource().getEmbed()
                     .title("AutoReply " + (CONFIG.client.extra.autoReply.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {
                 int delay = IntegerArgumentType.getInteger(c, "secs");
-                MODULE_MANAGER.getModule(AutoReply.class).ifPresent(m -> m.updateCooldown(delay));
-                c.getSource().getEmbedBuilder()
+                MODULE_MANAGER.get(AutoReply.class).updateCooldown(delay);
+                c.getSource().getEmbed()
                     .title("AutoReply Cooldown Updated!");
                 return 1;
             })))
@@ -54,17 +53,17 @@ public class AutoReplyCommand extends Command {
                 if (message.length() > 236)
                     message = message.substring(0, 236);
                 CONFIG.client.extra.autoReply.message = message;
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("AutoReply Message Updated!");
                 return 1;
             })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("AutoReply", toggleStr(CONFIG.client.extra.autoReply.enabled), false)
-            .addField("Cooldown Seconds", "" + CONFIG.client.extra.autoReply.cooldownSeconds, false)
+            .addField("Cooldown Seconds", CONFIG.client.extra.autoReply.cooldownSeconds, false)
             .addField("Message", CONFIG.client.extra.autoReply.message, false)
             .color(Color.CYAN);
     }

@@ -1,6 +1,5 @@
 package com.zenith.feature.pathing;
 
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
@@ -8,17 +7,18 @@ import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.*;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 
 public class Pathing {
-    private Subscription eventSubscription;
-
-    private Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
+    private final Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
 
     public Pathing() {
-        eventSubscription = EVENT_BUS.subscribe(
-            pair(ClientTickEvent.class, this::handleTick)
+        EVENT_BUS.subscribe(this,
+                            // should be next to last in the tick handlers
+                            // right before player simulation
+                            // but after all modules that send movement inputs
+                            of(ClientTickEvent.class, -10000, this::handleTick)
         );
     }
 

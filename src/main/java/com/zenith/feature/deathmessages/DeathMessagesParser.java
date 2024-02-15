@@ -1,6 +1,6 @@
 package com.zenith.feature.deathmessages;
 
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import java.io.BufferedReader;
@@ -58,11 +58,10 @@ public class DeathMessagesParser {
             }
         }
         if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
-            DISCORD_BOT.sendEmbedMessage(EmbedCreateSpec.builder()
+            DISCORD_BOT.sendEmbedMessage(Embed.builder()
                                                  .title("Unknown death message")
                                                  .description(rawInput)
-                                                 .color(Color.RUBY)
-                                                 .build());
+                                                 .color(Color.RUBY));
         }
         DEFAULT_LOG.warn("No death message schema found for '{}'", rawInput);
         return Optional.empty();

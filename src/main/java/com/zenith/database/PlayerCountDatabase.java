@@ -1,11 +1,6 @@
 package com.zenith.database;
 
-import com.zenith.database.dto.tables.Playercount;
-import com.zenith.database.dto.tables.records.PlayercountRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.DatabaseTickEvent;
-import org.jooq.*;
-import org.jooq.impl.DSL;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -20,8 +15,8 @@ public class PlayerCountDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             DatabaseTickEvent.class, this::handleDatabaseTickEvent
         );
     }
@@ -33,26 +28,23 @@ public class PlayerCountDatabase extends LockingDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        Playercount p = Playercount.PLAYERCOUNT;
-        Result<Record1<OffsetDateTime>> timeRecordResult = this.queryExecutor.fetch(context.select(p.TIME)
-                .from(p)
-                .orderBy(p.TIME.desc())
-                .limit(1));
-        if (timeRecordResult.isEmpty()) {
-            DATABASE_LOG.warn("Player Count database unable to sync. Database empty?");
-            return Instant.EPOCH;
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            var result = handle.select("SELECT time FROM playercount ORDER BY time DESC LIMIT 1;")
+                .mapTo(OffsetDateTime.class)
+                .findOne();
+            if (result.isEmpty()) {
+                DATABASE_LOG.warn("Player Count database unable to sync. Database empty?");
+                return Instant.EPOCH;
+            }
+            return result.get().toInstant();
         }
-        return timeRecordResult.get(0).value1().toInstant();
     }
 
     public void handleDatabaseTickEvent(final DatabaseTickEvent event) {
-        final int count = CACHE.getTabListCache().getEntries().size();
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Playercount p = Playercount.PLAYERCOUNT;
-        final InsertSetMoreStep<PlayercountRecord> query = context.insertInto(p)
-            .set(p.TIME, Instant.now().atOffset(ZoneOffset.UTC))
-            .set(p.COUNT, (short) count);
-        this.insert(Instant.now(), query);
+        this.insert(Instant.now(), handle ->
+            handle.createUpdate("INSERT INTO playercount (time, count) VALUES (:time, :count)")
+                .bind("time", Instant.now().atOffset(ZoneOffset.UTC))
+                .bind("count", (short) CACHE.getTabListCache().getEntries().size())
+                .execute());
     }
 }

@@ -1,5 +1,6 @@
 package com.zenith.feature.spectator;
 
+import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
@@ -59,7 +60,7 @@ public final class SpectatorUtils {
             .setYaw(target.getYaw())
             .setPitch(target.getPitch());
         spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
-        spectConnection.sendAsync(new ClientboundPlayerPositionPacket(
+        spectConnection.send(new ClientboundPlayerPositionPacket(
                 spectConnection.getSpectatorPlayerCache().getX(),
                 spectConnection.getSpectatorPlayerCache().getY(),
                 spectConnection.getSpectatorPlayerCache().getZ(),
@@ -82,15 +83,17 @@ public final class SpectatorUtils {
     }
 
     private static void sendSpectatorsEquipment() {
-        Proxy.getInstance().getSpectatorConnections().forEach(SpectatorUtils::sendSpectatorsEquipment);
-    }
-
-    private static void sendSpectatorsEquipment(final ServerConnection connection) {
-        connection.sendAsync(new ClientboundSetEquipmentPacket(
+        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
+            var helmet = new Equipment(EquipmentSlot.HELMET, CACHE.getPlayerCache().getEquipment(EquipmentSlot.HELMET));
+            var chestplate = new Equipment(EquipmentSlot.CHESTPLATE, CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE));
+            var leggings = new Equipment(EquipmentSlot.LEGGINGS, CACHE.getPlayerCache().getEquipment(EquipmentSlot.LEGGINGS));
+            var boots = new Equipment(EquipmentSlot.BOOTS, CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS));
+            var mainHand = new Equipment(EquipmentSlot.MAIN_HAND, CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND));
+            var offHand = new Equipment(EquipmentSlot.OFF_HAND, CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND));
+            connection.sendAsync(new ClientboundSetEquipmentPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                CACHE.getPlayerCache().getThePlayer().getEquipment().entrySet().stream()
-                    .map(entry -> new Equipment(entry.getKey(), entry.getValue()))
-                    .toArray(Equipment[]::new)));
+                new Equipment[] { helmet, chestplate, leggings, boots, mainHand, offHand }));
+        });
     }
 
     private static void spawnSpectatorForOtherSessions(ServerConnection session, ServerConnection connection) {

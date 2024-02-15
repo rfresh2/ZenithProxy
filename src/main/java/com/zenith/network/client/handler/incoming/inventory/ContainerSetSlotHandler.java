@@ -11,10 +11,8 @@ import static com.zenith.Shared.CACHE;
 public class ContainerSetSlotHandler implements AsyncPacketHandler<ClientboundContainerSetSlotPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundContainerSetSlotPacket packet, @NonNull ClientSession session) {
-        if (packet.getContainerId() == 0 && packet.getSlot() >= 0) {
-            CACHE.getPlayerCache().setInventorySlot(packet.getItem(), packet.getSlot());
-            SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
-        }
+        CACHE.getPlayerCache().setInventorySlot(packet.getContainerId(), packet.getItem(), packet.getSlot());
+        SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
         CACHE.getPlayerCache().getActionId().set(packet.getStateId());
         return true;
     }

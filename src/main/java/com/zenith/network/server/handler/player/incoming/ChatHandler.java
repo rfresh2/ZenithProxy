@@ -13,7 +13,7 @@ public class ChatHandler implements PacketHandler<ServerboundChatPacket, ServerC
         if (CONFIG.inGameCommands.enable) {
             final String message = packet.getMessage();
             if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(message).find()) {
-                SCHEDULED_EXECUTOR_SERVICE.execute(() -> IN_GAME_COMMAND_MANAGER.handleInGameCommand(message.substring(CONFIG.inGameCommands.prefix.length()), session));
+                SCHEDULED_EXECUTOR_SERVICE.execute(() -> IN_GAME_COMMAND_MANAGER.handleInGameCommand(message.substring(CONFIG.inGameCommands.prefix.length()), session, true));
                 return null;
             }
         }

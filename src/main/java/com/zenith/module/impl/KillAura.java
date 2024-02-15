@@ -1,7 +1,9 @@
 package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
@@ -11,29 +13,25 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.Ser
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
-import com.google.common.collect.Sets;
-import com.zenith.Proxy;
-import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class KillAura extends Module {
 
-    private static final Set<EntityType> hostileEntities = Sets.newHashSet(
+    private static final Set<EntityType> hostileEntities = ReferenceOpenHashSet.of(
         EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CREEPER, EntityType.DROWNED, EntityType.ELDER_GUARDIAN,
         EntityType.ENDER_DRAGON, EntityType.ENDERMITE, EntityType.EVOKER, EntityType.GHAST, EntityType.GUARDIAN,
         EntityType.HOGLIN, EntityType.HUSK, EntityType.ILLUSIONER, EntityType.FIREBALL, EntityType.MAGMA_CUBE,
@@ -42,6 +40,11 @@ public class KillAura extends Module {
         EntityType.SMALL_FIREBALL, EntityType.SPIDER, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR,
         EntityType.WARDEN, EntityType.WITCH, EntityType.WITHER, EntityType.ZOGLIN, EntityType.ZOMBIE,
         EntityType.ZOMBIE_VILLAGER
+    );
+    private static final Set<EntityType> neutralEntities = ReferenceOpenHashSet.of(
+        EntityType.BEE, EntityType.DOLPHIN, EntityType.ENDERMAN, EntityType.FOX, EntityType.GOAT, EntityType.IRON_GOLEM,
+        EntityType.LLAMA, EntityType.PANDA, EntityType.POLAR_BEAR, EntityType.TRADER_LLAMA, EntityType.WOLF,
+        EntityType.ZOMBIFIED_PIGLIN
     );
     private int delay = 0;
     private boolean isAttacking = false;
@@ -56,27 +59,24 @@ public class KillAura extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTick);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTick);
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.killAura.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.killAura.enabled;
     }
 
     public void handleClientTick(final ClientTickEvent event) {
-        if (CACHE.getPlayerCache().getThePlayer().getHealth() > 0
-                && !Proxy.getInstance().isInQueue()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && !MODULE_MANAGER.getModule(AutoEat.class).map(AutoEat::isEating).orElse(false)
-                && !MODULE_MANAGER.getModule(AutoTotem.class).map(AutoTotem::isActivelySwapping).orElse(false)) {
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
+                && !MODULE_MANAGER.get(AutoEat.class).isEating()
+                && !MODULE_MANAGER.get(AutoTotem.class).isActivelySwapping()) {
             if (delay > 0) {
                 delay--;
                 return;
             }
             if (swapping) {
-                PlayerCache.sync();
                 delay = 5;
                 swapping = false;
                 return;
@@ -126,8 +126,32 @@ public class KillAura extends Module {
             if (CONFIG.client.extra.killAura.targetArmorStands) {
                 if (e.getEntityType() == EntityType.ARMOR_STAND) return true;
             }
+            if (CONFIG.client.extra.killAura.targetNeutralMobs) {
+                if (neutralEntities.contains(e.getEntityType())) {
+                    if (CONFIG.client.extra.killAura.onlyNeutralAggressive) {
+                        // https://wiki.vg/Entity_metadata#Mob
+                        var byteMetadata = getMetadataFromId(entity.getMetadata(), 15);
+                        if (byteMetadata == null) return false;
+                        if (byteMetadata instanceof ByteEntityMetadata byteData) {
+                            var data = byteData.getPrimitiveValue() & 0x04;
+                            return data != 0;
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+            }
         }
         return false;
+    }
+
+    private EntityMetadata getMetadataFromId(List<EntityMetadata> metadata, int id) {
+        for (int i = 0; i < metadata.size(); i++) {
+            if (metadata.get(i).getId() == id) {
+                return metadata.get(i);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -154,7 +178,7 @@ public class KillAura extends Module {
         }
 
         // check if offhand has weapon
-        final ItemStack offhandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.OFF_HAND);
+        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
         if (nonNull(offhandStack)) {
             if (isWeapon(offhandStack.getId())) {
                 weaponSlot = EquipmentSlot.OFF_HAND;
@@ -162,7 +186,7 @@ public class KillAura extends Module {
             }
         }
         // check mainhand
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.MAIN_HAND);
+        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
         if (nonNull(mainHandStack)) {
             if (isWeapon(mainHandStack.getId())) {
                 weaponSlot = EquipmentSlot.MAIN_HAND;
@@ -171,9 +195,9 @@ public class KillAura extends Module {
         }
 
         // find next weapon and switch it into our hotbar slot
-        final ItemStack[] inventory = CACHE.getPlayerCache().getInventory();
+        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
-            final ItemStack stack = inventory[i];
+            final ItemStack stack = inventory.get(i);
             if (nonNull(stack) && isWeapon(stack.getId())) {
                 sendClientPacketAsync(new ServerboundContainerClickPacket(0,
                                                                           CACHE.getPlayerCache().getActionId().incrementAndGet(),
@@ -182,7 +206,7 @@ public class KillAura extends Module {
                                                                           MoveToHotbarAction.SLOT_2,
                                                                           null,
                                                                           Maps.of(
-                                                                              i, inventory[37],
+                                                                              i, inventory.get(37),
                                                                               37, stack
                                                                           )));
                 if (CACHE.getPlayerCache().getHeldItemSlot() != 1) {

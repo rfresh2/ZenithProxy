@@ -35,7 +35,7 @@ public class RespawnCommand extends Command {
                 if (nonNull(player)) {
                     player.setHealth(20.0f);
                 }
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Respawn performed")
                     .color(Color.CYAN);
             });

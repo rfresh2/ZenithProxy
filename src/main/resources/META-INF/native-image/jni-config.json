@@ -47,42 +47,6 @@
   "name":"io.netty.channel.unix.Socket"
 },
 {
-  "name":"java.awt.GraphicsEnvironment",
-  "methods":[{"name":"isHeadless","parameterTypes":[] }]
-},
-{
-  "name":"java.awt.Insets",
-  "fields":[{"name":"bottom"}, {"name":"left"}, {"name":"right"}, {"name":"top"}],
-  "methods":[{"name":"<init>","parameterTypes":["int","int","int","int"] }]
-},
-{
-  "name":"java.awt.Toolkit",
-  "methods":[{"name":"getDefaultToolkit","parameterTypes":[] }, {"name":"getFontMetrics","parameterTypes":["java.awt.Font"] }]
-},
-{
-  "name":"java.awt.image.BufferedImage",
-  "fields":[{"name":"colorModel"}, {"name":"imageType"}, {"name":"raster"}],
-  "methods":[{"name":"getRGB","parameterTypes":["int","int","int","int","int[]","int","int"] }, {"name":"setRGB","parameterTypes":["int","int","int","int","int[]","int","int"] }]
-},
-{
-  "name":"java.awt.image.ColorModel",
-  "fields":[{"name":"colorSpace"}, {"name":"colorSpaceType"}, {"name":"isAlphaPremultiplied"}, {"name":"is_sRGB"}, {"name":"nBits"}, {"name":"numComponents"}, {"name":"pData"}, {"name":"supportsAlpha"}, {"name":"transparency"}],
-  "methods":[{"name":"getRGBdefault","parameterTypes":[] }]
-},
-{
-  "name":"java.awt.image.Raster",
-  "fields":[{"name":"dataBuffer"}, {"name":"height"}, {"name":"minX"}, {"name":"minY"}, {"name":"numBands"}, {"name":"numDataElements"}, {"name":"sampleModel"}, {"name":"sampleModelTranslateX"}, {"name":"sampleModelTranslateY"}, {"name":"width"}]
-},
-{
-  "name":"java.awt.image.SampleModel",
-  "fields":[{"name":"height"}, {"name":"width"}],
-  "methods":[{"name":"getPixels","parameterTypes":["int","int","int","int","int[]","java.awt.image.DataBuffer"] }, {"name":"setPixels","parameterTypes":["int","int","int","int","int[]","java.awt.image.DataBuffer"] }]
-},
-{
-  "name":"java.awt.image.SinglePixelPackedSampleModel",
-  "fields":[{"name":"bitMasks"}, {"name":"bitOffsets"}, {"name":"bitSizes"}, {"name":"maxBitSize"}]
-},
-{
   "name":"java.io.FileDescriptor",
   "fields":[{"name":"fd"}]
 },
@@ -194,14 +158,6 @@
 {
   "name":"org.jline.nativ.Kernel32$WINDOW_BUFFER_SIZE_RECORD",
   "fields":[{"name":"SIZEOF"}, {"name":"size"}]
-},
-{
-  "name":"sun.awt.image.ByteComponentRaster",
-  "fields":[{"name":"data"}, {"name":"dataOffsets"}, {"name":"pixelStride"}, {"name":"scanlineStride"}, {"name":"type"}]
-},
-{
-  "name":"sun.java2d.Disposer",
-  "methods":[{"name":"addRecord","parameterTypes":["java.lang.Object","long","long"] }]
 },
 {
   "name":"sun.management.VMManagementImpl",

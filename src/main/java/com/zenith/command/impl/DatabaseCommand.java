@@ -5,7 +5,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
@@ -37,48 +37,48 @@ public class DatabaseCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("database")
-            .then(literal("queuewait")
+            .then(literal("queueWait")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.queueWait.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.queueWait.enabled) DATABASE_MANAGER.startQueueWaitDatabase();
                             else DATABASE_MANAGER.stopQueueWaitDatabase();
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Queue Wait Database " + (CONFIG.database.queueWait.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("queuelength")
+            .then(literal("queueLength")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.queueLength.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.queueLength.enabled) DATABASE_MANAGER.startQueueLengthDatabase();
                             else DATABASE_MANAGER.stopQueueLengthDatabase();
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Queue Length Database " + (CONFIG.database.queueLength.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("publicchat")
+            .then(literal("publicChat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.chats.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.chats.enabled) DATABASE_MANAGER.startChatsDatabase();
                             else DATABASE_MANAGER.stopChatsDatabase();
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Public Chat Database " + (CONFIG.database.chats.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("joinleave")
+            .then(literal("joinLeave")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.connections.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.connections.enabled) DATABASE_MANAGER.startConnectionsDatabase();
                             else DATABASE_MANAGER.stopConnectionsDatabase();
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Connections Database " + (CONFIG.database.connections.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
-            .then(literal("deathmessages")
+            .then(literal("deathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.deaths.enabled = getToggle(c, "toggle");
                             if (CONFIG.database.deaths.enabled) DATABASE_MANAGER.startDeathsDatabase();
                             else DATABASE_MANAGER.stopDeathsDatabase();
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Death Messages Database " + (CONFIG.database.deaths.enabled ? "On!" : "Off!"));
                             return 1;
                       })))
@@ -87,16 +87,16 @@ public class DatabaseCommand extends Command {
                                 CONFIG.database.restarts.enabled = getToggle(c, "toggle");
                                 if (CONFIG.database.restarts.enabled) DATABASE_MANAGER.startRestartsDatabase();
                                 else DATABASE_MANAGER.stopRestartsDatabase();
-                                c.getSource().getEmbedBuilder()
+                                c.getSource().getEmbed()
                                     .title("Restarts Database " + (CONFIG.database.restarts.enabled ? "On!" : "Off!"));
                                 return 1;
                         })))
-            .then(literal("playercount")
+            .then(literal("playerCount")
                         .then(argument("toggle", toggle()).executes(c -> {
                                 CONFIG.database.playerCount.enabled = getToggle(c, "toggle");
                                 if (CONFIG.database.playerCount.enabled) DATABASE_MANAGER.startPlayerCountDatabase();
                                 else DATABASE_MANAGER.stopPlayerCountDatabase();
-                                c.getSource().getEmbedBuilder()
+                                c.getSource().getEmbed()
                                     .title("Player Count Database " + (CONFIG.database.playerCount.enabled ? "On!" : "Off!"));
                                 return 1;
                         })))
@@ -105,14 +105,14 @@ public class DatabaseCommand extends Command {
                                 CONFIG.database.tablist.enabled = getToggle(c, "toggle");
                                 if (CONFIG.database.tablist.enabled) DATABASE_MANAGER.startTablistDatabase();
                                 else DATABASE_MANAGER.stopTablistDatabase();
-                                c.getSource().getEmbedBuilder()
+                                c.getSource().getEmbed()
                                     .title("Tablist Database " + (CONFIG.database.tablist.enabled ? "On!" : "Off!"));
                                 return 1;
                         })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Queue Wait", toggleStr(CONFIG.database.queueWait.enabled), false)
             .addField("Queue Length", toggleStr(CONFIG.database.queueLength.enabled), false)

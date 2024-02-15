@@ -1,21 +1,23 @@
 package com.zenith.network.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
+import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.CollisionRule;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.NameTagVisibility;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamAction;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamColor;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundDisconnectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
+import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.codec.PacketCodecHelper;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
-import com.github.steveice10.packetlib.packet.PacketProtocol;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
@@ -25,8 +27,7 @@ import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
-import com.zenith.module.impl.ActionLimiter;
-import com.zenith.module.impl.ProxyForwarding;
+import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
 import lombok.Getter;
 import lombok.NonNull;
@@ -38,6 +39,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -51,12 +55,32 @@ import static com.zenith.Shared.*;
 public class ServerConnection implements Session, SessionListener {
     protected final Session session;
 
+    public static final int DEFAULT_COMPRESSION_THRESHOLD = 256;
+
+    // Always empty post-1.7
+    private static final String SERVER_ID = "";
+    private static final KeyPair KEY_PAIR;
+
+    static {
+        try {
+            KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
+            gen.initialize(1024);
+            KEY_PAIR = gen.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Failed to generate server key pair.", e);
+        }
+    }
+
+    private final byte[] challenge = new byte[4];
+    private String username = "";
+    private int protocolVersion; // as reported by the client when they connected
+
     public ServerConnection(final Session session) {
+        ThreadLocalRandom.current().nextBytes(this.challenge);
         this.session = session;
         initSpectatorEntity();
     }
 
-    protected long lastPacket = System.currentTimeMillis();
     protected long lastPingId = 0L;
     protected long lastPingTime = 0L;
     protected long ping = 0L;
@@ -91,32 +115,22 @@ public class ServerConnection implements Session, SessionListener {
     private static final boolean friendlyFire = false;
     private static final boolean seeFriendlyInvisibles = false;
 
+    public KeyPair getKeyPair() {
+        return KEY_PAIR;
+    }
+
+    public String getServerId() {
+        return SERVER_ID;
+    }
+
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
             Packet p = packet;
-            if (CONFIG.server.extra.proxyForwarding.enabled) {
-                p = MODULE_MANAGER.get(ProxyForwarding.class).getHandlerRegistry().handleInbound(p, this);
-                if (p == null) return;
-            }
-            if (!this.isLoggedIn || ((MinecraftProtocol) Proxy.getInstance().getClient().getPacketProtocol()).getState() != ProtocolState.GAME) return;
-            if (CONFIG.client.extra.actionLimiter.enabled && !MODULE_MANAGER.get(ActionLimiter.class).bypassesLimits(this)) {
-                p = MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleInbound(p, this);
-                if (p == null) return;
-            }
-            if (isSpectator()) {
-                p = SERVER_SPECTATOR_HANDLERS.handleInbound(p, this);
-                if (p != null) {
-                    // there's no use case for this so I'm just disabling sending it to the client
-                    // we still want spectator handlers to process the packet though
-//                    Proxy.getInstance().getClient().sendAsync(packet);
-                }
-            } else {
-                this.lastPacket = System.currentTimeMillis();
-                p = SERVER_PLAYER_HANDLERS.handleInbound(p, this);
-                if (p != null) {
-                    Proxy.getInstance().getClient().sendAsync(p);
-                }
+            var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
+            p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
+            if (p != null && !isSpectator() && state == ProtocolState.GAME) {
+                Proxy.getInstance().getClient().sendAsync(p);
             }
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling Received packet: " + packet.getClass().getSimpleName(), e);
@@ -126,19 +140,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            Packet p = packet;
-            if (CONFIG.server.extra.proxyForwarding.enabled) {
-                p = MODULE_MANAGER.get(ProxyForwarding.class).getHandlerRegistry().handleOutgoing(p, this);
-            }
-            if (p != null) {
-                p = isSpectator()
-                        ? SERVER_SPECTATOR_HANDLERS.handleOutgoing(p, this)
-                        : SERVER_PLAYER_HANDLERS.handleOutgoing(p, this);
-            }
-            if (p != null && CONFIG.client.extra.actionLimiter.enabled) {
-                p = MODULE_MANAGER.get(ActionLimiter.class).getHandlerRegistry().handleOutgoing(p, this);
-            }
-            return p;
+            return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling packet sending: " + packet.getClass().getSimpleName(), e);
         }
@@ -149,10 +151,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            if (isSpectator())
-                SERVER_SPECTATOR_HANDLERS.handlePostOutgoing(packet, this);
-            else
-                SERVER_PLAYER_HANDLERS.handlePostOutgoing(packet, this);
+            ZenithHandlerCodec.SERVER_REGISTRY.handlePostOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling PostOutgoing packet: " + packet.getClass().getSimpleName(), e);
         }
@@ -170,10 +169,19 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void connected(final Session session) {}
+    public void connected(final Session session) {
+        session.setFlag(MinecraftConstants.PING_KEY, 0);
+    }
 
     @Override
-    public void disconnecting(final Session session, final Component reason, final Throwable cause) { }
+    public void disconnecting(final Session session, final Component reason, final Throwable cause) {
+        MinecraftProtocol protocol = session.getPacketProtocol();
+        if (protocol.getState() == ProtocolState.LOGIN) {
+            session.send(new ClientboundLoginDisconnectPacket(reason));
+        } else if (protocol.getState() == ProtocolState.GAME) {
+            session.send(new ClientboundDisconnectPacket(reason));
+        }
+    }
 
     @Override
     public void disconnected(final Session session, final Component reason, final Throwable cause) {
@@ -184,7 +192,7 @@ public class ServerConnection implements Session, SessionListener {
             return;
         }
         if (this.isPlayer) {
-            final String reasonStr = ComponentSerializer.toRawString(reason);
+            final String reasonStr = ComponentSerializer.serializePlain(reason);
 
             if (!isSpectator()) {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
@@ -202,7 +210,7 @@ public class ServerConnection implements Session, SessionListener {
             } else {
                 Proxy.getInstance().getActiveConnections().forEach(connection -> {
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
+                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
                 });
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
@@ -324,7 +332,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public synchronized void syncTeamMembers() {
-        final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections()
+        final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections().stream()
             .map(ServerConnection::getSpectatorEntityUUID)
             .map(UUID::toString)
             .collect(Collectors.toCollection(ArrayList::new));
@@ -392,7 +400,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public PacketProtocol getPacketProtocol() {
+    public MinecraftProtocol getPacketProtocol() {
         return this.session.getPacketProtocol();
     }
 
@@ -482,8 +490,8 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void setCompressionThreshold(int threshold, boolean validateCompression) {
-        this.session.setCompressionThreshold(threshold, validateCompression);
+    public void setCompressionThreshold(int threshold, int level, boolean validateCompression) {
+        this.session.setCompressionThreshold(threshold, level, validateCompression);
     }
 
     @Override

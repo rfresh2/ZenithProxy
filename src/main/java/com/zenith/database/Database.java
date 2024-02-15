@@ -1,10 +1,9 @@
 package com.zenith.database;
 
-import com.zenith.event.Subscription;
+import static com.zenith.Shared.EVENT_BUS;
 
 public abstract class Database {
     protected final QueryExecutor queryExecutor;
-    private Subscription eventSubscription;
     boolean isRunning = false;
 
     public Database(final QueryExecutor queryExecutor) {
@@ -18,11 +17,8 @@ public abstract class Database {
     }
 
     public void stop() {
-        if (eventSubscription != null) {
-            eventSubscription.unsubscribe();
-            eventSubscription = null;
-        }
+        EVENT_BUS.unsubscribe(this);
     }
 
-    public abstract Subscription subscribeEvents();
+    public abstract void subscribeEvents();
 }

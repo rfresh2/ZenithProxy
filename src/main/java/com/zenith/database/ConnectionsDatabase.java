@@ -2,16 +2,9 @@ package com.zenith.database;
 
 import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
-import com.zenith.database.dto.tables.Connections;
-import com.zenith.database.dto.tables.records.ConnectionsRecord;
-import com.zenith.event.Subscription;
+import com.zenith.database.dto.records.ConnectionsRecord;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
-import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -19,9 +12,9 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.DATABASE_LOG;
 import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.event.SimpleEventBus.pair;
 
 public class ConnectionsDatabase extends LiveDatabase {
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
@@ -29,10 +22,10 @@ public class ConnectionsDatabase extends LiveDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            pair(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-            pair(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+                            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+                            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );
     }
 
@@ -43,17 +36,16 @@ public class ConnectionsDatabase extends LiveDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Connections c = Connections.CONNECTIONS;
-        Result<Record1<OffsetDateTime>> timeRecordResult = this.queryExecutor.fetch(context.select(c.TIME)
-                .from(c)
-                .orderBy(c.TIME.desc())
-                .limit(1));
-        if (timeRecordResult.isEmpty()) {
-            DATABASE_LOG.warn("Connections database unable to sync. Database empty?");
-            return Instant.EPOCH;
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            var result = handle.select("SELECT time FROM connections ORDER BY time DESC LIMIT 1;")
+                .mapTo(OffsetDateTime.class)
+                .findOne();
+            if (result.isEmpty()) {
+                DATABASE_LOG.warn("Connections database unable to sync. Database empty?");
+                return Instant.EPOCH;
+            }
+            return result.get().toInstant();
         }
-        return timeRecordResult.get(0).value1().toInstant();
     }
 
     @Override
@@ -78,20 +70,13 @@ public class ConnectionsDatabase extends LiveDatabase {
     //  need to think about a better approach for this
 
     public void writeConnection(final Connectiontype connectiontype, final String playerName, final UUID playerUUID, final OffsetDateTime time) {
-        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))) {
-            return;
-        }
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Connections c = Connections.CONNECTIONS;
-        final ConnectionsRecord record = context.newRecord(c)
-            .setTime(time)
-            .setConnection(connectiontype)
-            .setPlayerName(playerName)
-            .setPlayerUuid(playerUUID);
-        var query = context.insertInto(c)
-            .set(record);
-        this.insert(time.toInstant(),
-                    record.into(com.zenith.database.dto.tables.pojos.Connections.class),
-                    query);
+        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))) return;
+        insert(time.toInstant(), new ConnectionsRecord(time, connectiontype, playerName, playerUUID), handle ->
+            handle.createUpdate("INSERT INTO connections (time, connection, player_name, player_uuid) VALUES (:time, :connection, :playerName, :playerUuid)")
+                .bind("time", time)
+                .bind("connection", connectiontype)
+                .bind("playerName", playerName)
+                .bind("playerUuid", playerUUID)
+                .execute());
     }
 }

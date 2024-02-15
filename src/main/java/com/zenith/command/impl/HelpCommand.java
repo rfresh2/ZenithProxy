@@ -32,12 +32,12 @@ public class HelpCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("help").executes(c -> {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Commands")
                     .color(Color.CYAN);
-                final String commandUsages = getCommandUsages(c.getSource().getCommandSource(), CommandCategory.CORE);
-                final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource().getCommandSource());
-                c.getSource().getEmbedBuilder()
+                final String commandUsages = getCommandUsages(c.getSource().getSource(), CommandCategory.CORE);
+                final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource().getSource());
+                c.getSource().getEmbed()
                     .description("**More info:** "
                                      + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
                                      + "\n\n**Categories**\n"
@@ -51,7 +51,7 @@ public class HelpCommand extends Command {
             })
             .then(argument("commandName", string()).executes(c -> {
                 final String commandName = StringArgumentType.getString(c, "commandName");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Command Usage")
                     .color(Color.CYAN);
                 Arrays.stream(CommandCategory.values())
@@ -72,9 +72,9 @@ public class HelpCommand extends Command {
     }
 
     private void populateCategory(final CommandContext c, final CommandCategory category) {
-        final String commandUsages = getCommandUsages(c.getCommandSource(), category);
-        final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getCommandSource());
-        c.getEmbedBuilder()
+        final String commandUsages = getCommandUsages(c.getSource(), category);
+        final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource());
+        c.getEmbed()
             .description("**More info:** "
                              + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
                              + "\n"
@@ -89,9 +89,9 @@ public class HelpCommand extends Command {
                 || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
             .findFirst();
         if (foundCommand.isPresent()) {
-            c.getEmbedBuilder().description(foundCommand.get().commandUsage().serialize(c.getCommandSource()));
+            c.getEmbed().description(foundCommand.get().commandUsage().serialize(c.getSource()));
         } else {
-            c.getEmbedBuilder().description("Unknown command or category");
+            c.getEmbed().description("Unknown command or category");
         }
     }
 }

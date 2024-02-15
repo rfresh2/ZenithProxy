@@ -108,6 +108,10 @@ public class EntityPlayer extends EntityLiving {
 //        }
 //    }
 
+    public boolean isAlive() {
+        return this.health > 0.0f;
+    }
+
     @Override
     public void addPackets(@NonNull Consumer<Packet> consumer) {
         if (this.selfPlayer) {

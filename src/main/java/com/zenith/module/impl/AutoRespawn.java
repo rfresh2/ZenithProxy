@@ -3,16 +3,14 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.ClientCommand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
@@ -23,16 +21,16 @@ public class AutoRespawn extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            pair(ClientTickEvent.class, this::handleClientTickEvent),
-            pair(DeathEvent.class, this::handleDeathEvent)
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(DeathEvent.class, this::handleDeathEvent)
         );
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.autoRespawn.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.autoRespawn.enabled;
     }
 
 

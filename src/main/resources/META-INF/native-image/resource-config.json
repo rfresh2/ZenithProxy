@@ -33,6 +33,8 @@
   }, {
     "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/org.apache.commons.logging.LogFactory\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/org.cloudburstmc.math.vector.VectorProvider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org.eclipse.jgit.transport.SshSessionFactory\\E"
@@ -193,6 +195,8 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20to1.20.2.nbt\\E"
   }, {
+    "pattern":"\\Qcommons-logging.properties\\E"
+  }, {
     "pattern":"\\Qdeath_message_mobs.schema\\E"
   }, {
     "pattern":"\\Qdeath_messages.schema\\E"
@@ -200,8 +204,6 @@
     "pattern":"\\Qdiscord4j/common/git.properties\\E"
   }, {
     "pattern":"\\Qjndi.properties\\E"
-  }, {
-    "pattern":"\\Qjooq-settings.xml\\E"
   }, {
     "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl30x.so\\E"
   }, {
@@ -225,6 +227,10 @@
   }, {
     "pattern":"\\Qmcdata/language.json\\E"
   }, {
+    "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
+  }, {
+    "pattern":"\\Qorg/apache/http/client/version.properties\\E"
+  }, {
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Linux/x86_64/libjansi.so\\E"
   }, {
     "pattern":"\\Qorg/fusesource/jansi/internal/native/Windows/x86_64/jansi.dll\\E"
@@ -247,9 +253,11 @@
   }, {
     "pattern":"\\Qorg/postgresql/driverconfig.properties\\E"
   }, {
-    "pattern":"\\Qproxy_commit.txt\\E"
-  }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
+  }, {
+    "pattern":"\\Qzenith_commit.txt\\E"
+  }, {
+    "pattern":"\\Qzenith_release.txt\\E"
   }, {
     "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"
   }, {

@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.pathing.Pathing;
@@ -14,10 +13,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
@@ -34,15 +32,15 @@ public class Spook extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            pair(ClientTickEvent.class, this::handleClientTickEvent),
-            pair(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.spook.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.spook.enabled;
     }
 
     @Override
@@ -62,7 +60,7 @@ public class Spook extends Module {
         }
         if (isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
-                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
+                && !MODULE_MANAGER.get(KillAura.class).isActive()) {
             stareTick();
         } else {
             hasTarget.lazySet(false);

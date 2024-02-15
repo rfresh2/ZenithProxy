@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.zenith.Shared.*;
+import static com.zenith.util.math.MathHelper.formatDuration;
 
 public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabListPacket, ClientSession> {
     private Optional<Duration> queueDuration = Optional.empty();
@@ -28,7 +29,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
         CACHE.getTabListCache()
             .setHeader(packet.getHeader())
             .setFooter(packet.getFooter());
-        if (CONFIG.client.server.address.toLowerCase(Locale.ROOT).contains("2b2t.org")) {
+        if (Proxy.getInstance().isOn2b2t()) {
             parse2bQueueState(packet, session);
             if (session.isInQueue()) {
                 parse2bPrioQueueState(packet);
@@ -45,13 +46,22 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
     }
 
     private synchronized void parse2bQueueState(ClientboundTabListPacket packet, ClientSession session) {
-        Optional<String> queueHeader = Arrays.stream(ComponentSerializer.toRawString(packet.getHeader()).split("\\\\n"))
+        Optional<String> queueHeader = Arrays.stream(ComponentSerializer.serializePlain(packet.getHeader()).split("\\\\n"))
                 .map(String::trim)
                 .map(m -> m.toLowerCase(Locale.ROOT))
                 .filter(m -> m.contains("2b2t is full") || m.contains("pending") || m.contains("in queue"))
                 .findAny();
         if (queueHeader.isPresent()) {
             if (!session.isInQueue()) {
+                if (session.isOnline()) {
+                    // can occur if we get kicked to queue in certain cases like if the main server restarts
+                    // resetting connect time to calculate queue duration correctly
+                    CLIENT_LOG.info("Detected that the client was kicked to queue. Was online for {}",
+                                    formatDuration(Duration.between(
+                                        Proxy.getInstance().getConnectTime(),
+                                        Instant.now())));
+                    Proxy.getInstance().setConnectTime(Instant.now());
+                }
                 EVENT_BUS.postAsync(new StartQueueEvent());
                 queueDuration = Optional.empty();
             }
@@ -72,7 +82,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
 
     private void parse2bPrioQueueState(final ClientboundTabListPacket packet) {
         Optional.of(packet.getFooter())
-                .map(ComponentSerializer::toRawString)
+                .map(ComponentSerializer::serializePlain)
                 .map(textRaw -> textRaw.replace("\n", ""))
                 .filter(messageString -> messageString.contains("priority"))
                 .ifPresent(messageString -> {
@@ -89,7 +99,7 @@ public class TabListDataHandler implements AsyncPacketHandler<ClientboundTabList
 
     private synchronized void parse2bPing(final ClientboundTabListPacket packet, ClientSession session) {
         Optional.of(packet.getFooter())
-                .map(ComponentSerializer::toRawString)
+                .map(ComponentSerializer::serializePlain)
                 .map(textRaw -> textRaw.replace("\n", ""))
                 .map(String::trim)
                 .filter(textRaw -> textRaw.contains("ping"))

@@ -37,21 +37,21 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
                 });
         // add spectators and self to team
         if (CONFIG.client.extra.chat.hideChat) {
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));
         }
         if (CONFIG.client.extra.chat.hideWhispers) {
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Whispers are currently disabled. To enable whispers, type &c/toggleprivatemsgs&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Whispers are currently disabled. To enable whispers, type &c/toggleprivatemsgs&7."), false));
         }
         if (CONFIG.client.extra.chat.showConnectionMessages) {
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Connection messages enabled. To disable, type &c/toggleconnectionmsgs&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Connection messages enabled. To disable, type &c/toggleconnectionmsgs&7."), false));
         }
         if (CONFIG.client.extra.chat.hideDeathMessages) {
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7Death messages are currently disabled. To enable death messages, type &c/toggledeathmsgs&7."), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Death messages are currently disabled. To enable death messages, type &c/toggledeathmsgs&7."), false));
         }
-        session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&7[&9ZenithProxy&7]&r &2Connected to &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
-        if (CONFIG.inGameCommands.enable) {
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.mineDownParse("&chelp &7- &8List Commands"), false));
+        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&9ZenithProxy&7]&r &2Connected to &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
+        if (CONFIG.inGameCommands.enable && !CONFIG.inGameCommands.slashCommands) {
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&chelp &7- &8List Commands"), false));
         }
     }
 }

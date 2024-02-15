@@ -2,7 +2,6 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
@@ -10,7 +9,6 @@ import com.zenith.util.TickTimer;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
@@ -22,13 +20,13 @@ public class Spammer extends Module {
 
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ClientTickEvent.class, this::handleClientTickEvent);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTickEvent);
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.spammer.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.spammer.enabled;
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {

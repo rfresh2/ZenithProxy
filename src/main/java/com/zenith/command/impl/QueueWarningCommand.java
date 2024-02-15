@@ -6,7 +6,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -31,30 +31,30 @@ public class QueueWarningCommand extends Command {
         return command("queueWarning")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.queueWarning.enabled = getToggle(c, "toggle");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("QueueWarning " + (CONFIG.discord.queueWarning.enabled ? "On!" : "Off!"));
                 return 1;
             }))
             .then(literal("position").then(argument("pos", integer(1, 100)).executes(c -> {
                 CONFIG.discord.queueWarning.position = IntegerArgumentType.getInteger(c, "pos");
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Position Updated!");
                 return 1;
             })))
             .then(literal("mention")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.queueWarning.mentionRole = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Mention " + (CONFIG.discord.queueWarning.mentionRole ? "On!" : "Off!"));
                             return 1;
                       })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("QueueWarning", toggleStr(CONFIG.discord.queueWarning.enabled), false)
-            .addField("Position", "" + CONFIG.discord.queueWarning.position, false)
+            .addField("Position", CONFIG.discord.queueWarning.position, false)
             .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
             .color(Color.CYAN);
     }

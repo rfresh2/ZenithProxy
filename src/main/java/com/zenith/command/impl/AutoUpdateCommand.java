@@ -6,10 +6,10 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.Embed;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.*;
@@ -29,7 +29,7 @@ public class AutoUpdateCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autoupdate").requires(Command::validateAccountOwner)
+        return command("autoUpdate").requires(Command::validateAccountOwner)
             .then(argument("toggle", toggle()).executes(c -> {
                 final boolean toggle = getToggle(c, "toggle");
                 CONFIG.autoUpdater.autoUpdate = toggle;
@@ -46,13 +46,13 @@ public class AutoUpdateCommand extends Command {
                 }
                 LAUNCH_CONFIG.auto_update = toggle;
                 saveLaunchConfig();
-                c.getSource().getEmbedBuilder().title("AutoUpdater " + (toggle ? "On!" : "Off!"));
+                c.getSource().getEmbed().title("AutoUpdater " + (toggle ? "On!" : "Off!"));
                 return 1;
             }));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("AutoUpdater", toggleStr(CONFIG.autoUpdater.autoUpdate), false)
             .color(Color.CYAN);

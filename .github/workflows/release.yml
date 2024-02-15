@@ -1,0 +1,107 @@
+name: 1.20.1 Build and Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+\+1.20.1.pre'
+      - '[0-9]+.[0-9]+.[0-9]+\+1.20.1'
+
+jobs:
+  build-java-and-linux-amd64:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Echo Versions and Paths
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Download GraalVM Profile
+        if: (!endsWith(github.ref, '.pre'))
+        run: |
+          wget https://cdn.2b2t.vc/profile.iprof
+          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
+
+      - name: Enable GraalVM Profile Instrumenting
+        if: endsWith(github.ref, '.pre')
+        run: |
+          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
+
+      - name: Export Tag
+        run: |
+          echo "RELEASE_TAG=${{ github.ref_name }}" >> "$GITHUB_ENV"
+
+      - name: Build ZenithProxy Java
+        uses: gradle/gradle-build-action@v2
+        with:
+          dependency-graph: generate-and-submit
+          arguments: jarBuild
+
+      - name: Upload Java Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZenithProxy-java
+          path: build/libs/ZenithProxy.jar
+
+      - name: Build ZenithProxy Linux Native
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: nativeCompile
+
+      - name: Elevate binary permissions
+        run: chmod +x build/native/nativeCompile/*
+
+      - name: Zip Binary And Libs
+        run: zip -j ZenithProxy.zip build/native/nativeCompile/*
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZenithProxy-linux
+          path: ZenithProxy.zip
+
+  release-artifacts:
+    needs:
+      - build-java-and-linux-amd64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download job artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Get Release Tags
+        run: |
+          j_tag="$(sed 's/\+/\+java./' <<< ${{ github.ref_name }})" 
+          echo "JAVA_TAG=$j_tag" >> "$GITHUB_ENV"
+          l_tag="$(sed 's/\+/\+linux./' <<< ${{ github.ref_name }})"
+          echo "LINUX_TAG=$l_tag" >> "$GITHUB_ENV"
+
+      - name: Publish Java Artifact
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.JAVA_TAG }}
+          artifacts: "artifacts/*.jar"
+          prerelease: true
+
+      - name: Publish Linux Artifact
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.LINUX_TAG }}
+          artifacts: "artifacts/ZenithProxy.zip"
+          prerelease: true

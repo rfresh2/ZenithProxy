@@ -8,7 +8,8 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/MC-1.20.1-brightgreen.svg" alt="Minecraft"/>
-  <img src="https://img.shields.io/badge/MC-1.12.2-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.20.4-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.12.2-yellow.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/github/languages/code-size/rfresh2/ZenithProxy.svg" alt="Code size"/>
   <img src="https://img.shields.io/github/repo-size/rfresh2/ZenithProxy.svg" alt="GitHub repo size"/>
   <img alt="Downloads" src="https://img.shields.io/github/downloads/rfresh2/ZenithProxy/total">
@@ -53,11 +54,12 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 # Features
 
 * High performance and efficiency on minimal hardware, <300MB RAM per java instance or <150MB on linux.
-* ViaVersion built in - can connect to any MC server version
+* Integrated ViaVersion
+  * Can connect to (almost) any MC server and players can connect with (almost) any MC client
 * Secure Whitelist system - share MC accounts without sharing passwords
-* Extensive Discord Bot integration
+* Extensive Discord Bot integration for management and monitoring
     * Chat relay
-    * Player in visual range alerts
+    * Customizable pings, alerts, and notifications. e.g. Player in visual range alerts
 * Command System - Discord, In-game, and Terminal
   * 25+ commands and modules to configure every feature
 * Spectator mode
@@ -70,31 +72,55 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 
 ## Setup and Download
 
-1. Download `ZenithProxyLauncher.zip` [here](https://github.com/rfresh2/ZenithProxy/releases/launcher) and unzip to a new folder:
-    * Linux CLI:
-        * Download: `wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher/ZenithProxyLauncher.zip`
-        * Unzip: `unzip ZenithProxyLauncher.zip`
-2. Open a terminal to the launcher folder and run `python3 setup.py` (if `python3` is not recognized, try `python` or `py`)
+### System Requirements
 
-## System Requirements
+1. Linux, Windows, or Mac computer. I recommend using a VPS (droplet) from DigitalOcean:
+    * [$200 Free Digital](https://m.do.co/c/f3afffef9a46)[Ocean Credits](https://m.do.co/c/3a3a226e4936).
+    * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
+2. Java 21+ (Not required for `linux` release channel on supported CPU)
+    * The ZenithProxy launcher will install Java 21 automatically if not already installed
 
-1. Linux or Windows computer. I recommend DigitalOcean: 
-   * [$200 Free Digital](https://m.do.co/c/f3afffef9a46)[Ocean Credits](https://m.do.co/c/3a3a226e4936).
-   * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
-2. [Python 3.10+](https://www.python.org/downloads/)
-3. Java 21+ (Not required for `linux` release channel on supported CPU)
-   * Linux Installation: 
-      * Install: https://sdkman.io/install
-      * Run: `sdk install java 21-zulu`
-   * Windows Installation: https://adoptium.net/
+### Launcher
 
-## Run
+1. Download [the launcher zip](https://github.com/rfresh2/ZenithProxy/releases/launcher-v3) for your system
+    * For other systems, download the Python version (Universal). Requires [Python 3.10+](https://www.python.org/downloads/)
+2. Unzip the file.
+3. Double click or run the launcher executable in a terminal:
+   * Windows: `.\launch.exe`
+   * Linux/Mac: `./launch`
+   * (Terminal Only) Python Universal: `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows)
 
-* `./launch.sh` (Linux) or `.\launch.bat` (Windows). Then use the `connect` command to log in
+<details>
+    <summary>How do I download a file from a Linux terminal?</summary>
+
+* Use [wget](https://linuxize.com/post/wget-command-examples/#how-to-download-a-file-with-wget) in the terminal
+* Example: `wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-linux-amd64.zip`
+</details>
+
+<details> 
+<summary>Recommended unzip tools</summary>
+
+* Windows: [7zip](https://www.7-zip.org/download.html)
+* Linux: [unzip](https://linuxize.com/post/how-to-unzip-files-in-linux/)
+* Mac: [The Unarchiver](https://theunarchiver.com/)
+</details>
+
+<details>
+    <summary>Recommended Terminals</summary>
+
+* Windows: [Windows Terminal](https://apps.microsoft.com/detail/9N8G5RFZ9XK3)
+* Mac: [iterm2](https://iterm2.com/)
+</details>
+
+### Run
+
+* The launcher will ask for all configuration on first launch
+    * Or run the launcher with the `--setup` flag. e.g. `.\launch.exe --setup`
+* Use the `connect` command to link an MC account and log in once ZenithProxy is launched
 * Command Prefixes:
-  * Discord: `.` (e.g. `.help`)
-  * In-game: `!` -> (e.g. `!help`)
-  * Terminal: N/A -> (e.g. `help`)
+    * Discord: `.` (e.g. `.help`)
+    * In-game: `/` OR `!` -> (e.g. `/help`)
+    * Terminal: N/A -> (e.g. `help`)
 
 ### Running on Linux Servers
 
@@ -128,7 +154,7 @@ If you do not use one, **ZenithProxy will be killed after you exit your SSH sess
 * Invite the discord bot to a server.
 * Create a role for users to manage the proxy, a channel to manage the 
   proxy in, and a channel for the chat relay. The bot's role must have permissions to send and receive messages in both channels
-* Run `setup.py` or configure with the `discord` command.
+* Configure in ZenithProxy using the `discord` command. Or run the launcher with the `--setup` flag.
 
 ## Running Multiple Instances
 
@@ -137,6 +163,14 @@ Create a new folder for each instance with its own copy of the launcher files. [
 Instances must be independently run and configured. i.e. separate terminal sessions, discord bots, ports, config files, etc.
 
 See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide) for help copying files, creating folders, etc.
+
+### 2b2t Limits
+
+2b2t limits accounts without priority queue based on:
+1. Accounts currently connected per IP address
+2. In-game session time, excluding time in queue.
+
+Current limits are documented in [a discord channel](https://discord.com/channels/1127460556710883391/1200685719073599488)
 
 ## Special Thanks
 

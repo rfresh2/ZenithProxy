@@ -5,19 +5,27 @@ import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
 import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientInformationPacket;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import lombok.NonNull;
 
 import java.util.List;
-import java.util.Locale;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class LoginHandler implements PacketHandler<ClientboundLoginPacket, ClientSession> {
     @Override
     public ClientboundLoginPacket apply(@NonNull ClientboundLoginPacket packet, @NonNull ClientSession session) {
+        // todo: handle join game server switches more accurately to vanilla
+        //  https://discord.com/channels/1127460556710883391/1127461501960208465/1197657407631937536
+        var currentProfile = CACHE.getProfileCache().getProfile();
+        var currentBrand = CACHE.getChunkCache().getServerBrand();
+        CACHE.reset(true);
+        CACHE.getProfileCache().setProfile(currentProfile);
+        CACHE.getChunkCache().setServerBrand(currentBrand);
         CACHE.getPlayerCache()
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
@@ -51,7 +59,7 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
             false,
             false
         ));
-        if (!CONFIG.client.server.address.toLowerCase(Locale.ROOT).endsWith("2b2t.org")) {
+        if (!Proxy.getInstance().isOn2b2t()) {
             if (!session.isOnline()) {
                 session.setOnline(true);
                 EVENT_BUS.post(new PlayerOnlineEvent());

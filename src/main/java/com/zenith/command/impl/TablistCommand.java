@@ -34,7 +34,7 @@ public class TablistCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("tablist").executes(c -> {
             if (!Proxy.getInstance().isConnected()) {
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Proxy is not online!")
                     .color(Color.RUBY);
             } else {

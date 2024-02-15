@@ -1,8 +1,22 @@
 package com.zenith.feature.whitelist;
 
+import com.zenith.feature.api.ProfileData;
+import com.zenith.util.Wait;
 import lombok.Getter;
 
-import static com.zenith.Shared.CONFIG;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.zenith.Shared.*;
 
 @Getter
 public class PlayerListsManager {
@@ -11,6 +25,7 @@ public class PlayerListsManager {
     private PlayerList friendsList;
     private PlayerList ignoreList;
     private PlayerList stalkList;
+    private ScheduledFuture<?> refreshScheduledFuture;
 
     public void init() { // must be called after config is loaded
         whitelist = new PlayerList("whitelist", CONFIG.server.extra.whitelist.whitelist);
@@ -18,17 +33,72 @@ public class PlayerListsManager {
         friendsList = new PlayerList("friendsList", CONFIG.client.extra.friendsList);
         ignoreList = new PlayerList("ignoreList", CONFIG.client.extra.chat.ignoreList);
         stalkList = new PlayerList("stalkList", CONFIG.client.extra.stalk.stalking);
-        startRefreshTasks();
+        startRefreshTask();
     }
 
-    // todo: refactor refresh task into a single task that refreshes all lists
-    //  duplicate players in multiple lists should not need their own refresh
-    //  also move out the game profile contains cache update so it updates all lists
-    public void startRefreshTasks() {
-        getWhitelist().startRefreshTask();
-        getSpectatorWhitelist().startRefreshTask();
-        getFriendsList().startRefreshTask();
-        getIgnoreList().startRefreshTask();
-        getStalkList().startRefreshTask();
+    public void startRefreshTask() {
+        stopRefreshTask();
+        refreshScheduledFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+            this::refreshLists,
+            ThreadLocalRandom.current().nextInt(Math.max(1, (int) (CONFIG.server.playerListsRefreshIntervalMins / 2))),
+            Math.max(10L, CONFIG.server.playerListsRefreshIntervalMins),
+            TimeUnit.MINUTES);
+    }
+
+    public void stopRefreshTask() {
+        if (refreshScheduledFuture != null) {
+            refreshScheduledFuture.cancel(true);
+        }
+    }
+
+    private void refreshLists() {
+        var playerEntryList = Stream
+            .of(getWhitelist(), getSpectatorWhitelist(), getFriendsList(), getIgnoreList(), getStalkList())
+            .map(PlayerList::entries)
+            .flatMap(Collection::stream)
+            .toList();
+
+        // avoid duplicate API requests for the same UUID
+        final Map<UUID, PlayerEntry> uniquePlayers = playerEntryList.stream()
+            .collect(Collectors.toMap(PlayerEntry::getUuid, Function.identity(), (existing, replacement) -> existing));
+
+        for (var entry : uniquePlayers.entrySet()) {
+            Wait.waitALittleMs(250); // trying to avoid mojang API rate limiting
+            refreshEntry(entry.getValue())
+                .ifPresentOrElse(
+                    entry::setValue,
+                    () -> SERVER_LOG.error("PlayerLists refresh: unable to refresh player with username: {} and uuid: {}", entry.getValue().getUsername(), entry.getValue().getUuid().toString())
+                );
+        }
+
+        for (PlayerEntry e : playerEntryList) {
+            var newEntry = uniquePlayers.get(e.getUuid());
+            e.setUsername(newEntry.getUsername());
+            e.setLastRefreshed(newEntry.getLastRefreshed());
+        }
+    }
+
+    private Optional<PlayerEntry> refreshEntry(final PlayerEntry playerEntry) {
+        return createPlayerListEntry(playerEntry.getUuid());
+    }
+
+    public static Optional<PlayerEntry> createPlayerListEntry(final String username) {
+        return getProfileFromUsername(username)
+            .map(profile -> new PlayerEntry(profile.name(), profile.uuid(), Instant.now().getEpochSecond()));
+    }
+
+    public static Optional<PlayerEntry> createPlayerListEntry(final UUID uuid) {
+        return getProfileFromUUID(uuid)
+            .map(profile -> new PlayerEntry(profile.name(), profile.uuid(), Instant.now().getEpochSecond()));
+    }
+
+    public static Optional<ProfileData> getProfileFromUsername(final String username) {
+        return MOJANG_API.getProfileFromUsername(username).map(o -> (ProfileData) o)
+            .or(() -> MINETOOLS_API.getProfileFromUsername(username));
+    }
+
+    public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
+        return SESSION_SERVER_API.getProfileFromUUID(uuid).map(o -> (ProfileData) o)
+            .or(() -> MINETOOLS_API.getProfileFromUUID(uuid));
     }
 }

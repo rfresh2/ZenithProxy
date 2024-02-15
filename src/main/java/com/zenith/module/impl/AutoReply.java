@@ -4,14 +4,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.module.Module;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -30,13 +28,13 @@ public class AutoReply extends Module {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent);
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this, ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent);
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.autoReply.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.autoReply.enabled;
     }
 
     public void updateCooldown(final int newCooldown) {

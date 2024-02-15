@@ -8,8 +8,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.Proxy;
-import com.zenith.event.SimpleEventBus;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
@@ -22,8 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class PlayerSimulation extends Module {
@@ -69,15 +67,17 @@ public class PlayerSimulation extends Module {
     private int jumpingCooldown;
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            SimpleEventBus.pair(ClientTickEvent.class, this::tick)
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+                            // we want this to be the last thing that happens in the tick
+                            // to allow other modules to update the player's input
+                            of(ClientTickEvent.class, -20000, this::tick)
         );
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> true;
+    public boolean shouldBeEnabled() {
+        return true;
     }
 
     @Override
@@ -574,7 +574,7 @@ public class PlayerSimulation extends Module {
     private float getBlockSpeedFactor(Block block) {
         if (block.name().equals("honey_block")) return 0.4f;
         if (block.name().equals("soul_sand")) {
-            ItemStack bootsItemStack = CACHE.getPlayerCache().getThePlayer().getEquipment().get(EquipmentSlot.BOOTS);
+            ItemStack bootsItemStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS);
             if (bootsItemStack != null) {
                 // todo: check if soul speed enchantment is on boots
                 // todo: create enchantment parser helper class
@@ -620,8 +620,8 @@ public class PlayerSimulation extends Module {
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
         } else {
-            this.isSneaking = CACHE.getPlayerCache().isSneaking();
-            this.isSprinting = CACHE.getPlayerCache().isSprinting();
+            this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
+            this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
         syncPlayerCollisionBox();
     }

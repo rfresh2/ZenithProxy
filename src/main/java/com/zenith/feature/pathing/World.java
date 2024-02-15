@@ -60,11 +60,9 @@ public class World {
         final LocalizedCollisionBox box = cb.stretch(-0.001, -0.001, -0.001);
         for (BlockPos blockPos : getBlockPosListInCollisionBox(box)) {
             final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
-            if (isWater(blockAtBlockPos)) {
-                if (blockPos.getY() + 1.0 >= box.getMinY()) {
+            if (isWater(blockAtBlockPos))
+                if (blockPos.getY() + 1.0 >= box.getMinY())
                     return true;
-                }
-            }
         }
         return false;
     }
@@ -75,13 +73,13 @@ public class World {
     }
 
     public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {
-        final List<BlockPos> blockPosList = new ArrayList<>();
         int minX = MathHelper.floorToInt(cb.getMinX());
         int maxX = MathHelper.ceilToInt(cb.getMaxX());
         int minY = MathHelper.floorToInt(cb.getMinY());
         int maxY = MathHelper.ceilToInt(cb.getMaxY());
         int minZ = MathHelper.floorToInt(cb.getMinZ());
         int maxZ = MathHelper.ceilToInt(cb.getMaxZ());
+        final List<BlockPos> blockPosList = new ArrayList<>((maxX - minX) * (maxY - minY) * (maxZ - minZ));
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
                 for (int z = minZ; z < maxZ; z++) {
@@ -94,14 +92,10 @@ public class World {
 
     public static boolean isSpaceEmpty(final LocalizedCollisionBox cb) {
         for (BlockPos blockPos : getBlockPosListInCollisionBox(cb)) {
-            final List<LocalizedCollisionBox> collisionBoxes = getBlockState(blockPos).getCollisionBoxes().stream()
-                .map(collisionBox -> new LocalizedCollisionBox(collisionBox,
-                                                               blockPos.getX(),
-                                                               blockPos.getY(),
-                                                               blockPos.getZ()))
-                .toList();
-            if (collisionBoxes.stream().anyMatch(collisionBox -> collisionBox.intersects(cb))) {
-                return false;
+            var blockStateCBs = getBlockState(blockPos).getCollisionBoxes();
+            for (int i = 0; i < blockStateCBs.size(); i++) {
+                var localizedCB = new LocalizedCollisionBox(blockStateCBs.get(i), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                if (localizedCB.intersects(cb)) return false;
             }
         }
         return true;
@@ -111,17 +105,16 @@ public class World {
         BlockPos supportingBlock = null;
         double dist = Double.MAX_VALUE;
         for (BlockPos blockPos2 : getBlockPosListInCollisionBox(cb)) {
-            List<LocalizedCollisionBox> collisionBoxes = getBlockState(blockPos2).getCollisionBoxes().stream()
-                .map(collisionBox -> new LocalizedCollisionBox(collisionBox,
-                                                               blockPos2.getX(),
-                                                               blockPos2.getY(),
-                                                               blockPos2.getZ()))
-                .toList();
-            if (collisionBoxes.stream().anyMatch(collisionBox -> collisionBox.intersects(cb))) {
-                final double curDist = blockPos2.squaredDistance(cb.getX(), cb.getY(), cb.getZ());
-                if (curDist < dist || curDist == dist && (supportingBlock == null || supportingBlock.compareTo(blockPos2) < 0)) {
-                    supportingBlock = blockPos2;
-                    dist = curDist;
+            var blockStateCBs = getBlockState(blockPos2).getCollisionBoxes();
+            for (int i = 0; i < blockStateCBs.size(); i++) {
+                var localizedCB = new LocalizedCollisionBox(blockStateCBs.get(i), blockPos2.getX(), blockPos2.getY(), blockPos2.getZ());
+                if (localizedCB.intersects(cb)) {
+                    final double curDist = blockPos2.squaredDistance(cb.getX(), cb.getY(), cb.getZ());
+                    if (curDist < dist || curDist == dist && (supportingBlock == null || supportingBlock.compareTo(blockPos2) < 0)) {
+                        supportingBlock = blockPos2;
+                        dist = curDist;
+                    }
+                    break;
                 }
             }
         }

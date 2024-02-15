@@ -1,10 +1,10 @@
 package com.zenith.util;
 
+import com.github.steveice10.packetlib.ProxyInfo;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,26 +31,29 @@ public final class Config {
         public String username = "Unknown";
         public boolean prio = false;
         public boolean prioBanned = false;
-        public String msaClientId = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"; // prism launcher client id lol don't sue me
-        public boolean msaDeviceCodeTokenRefresh = true;
+        public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
+        public boolean openBrowserOnLogin = true;
 
         public enum AccountType {
             @SerializedName("msa") MSA,
-            @SerializedName("device_code") DEVICE_CODE
+            @SerializedName("device_code") DEVICE_CODE,
+            @SerializedName("local_webserver") LOCAL_WEBSERVER
         }
     }
 
     public static final class Client {
         public Extra extra = new Extra();
         public Server server = new Server();
+        public ConnectionProxy connectionProxy = new ConnectionProxy();
+        public int compressionLevel = -1;
         public boolean autoConnect = false; // auto-connect proxy on process start
-        public ViaVersion viaversion = new ViaVersion();
+        public ClientViaVersion viaversion = new ClientViaVersion();
         public String bindAddress = "0.0.0.0";
         public boolean maxPlaytimeReconnect = false;
         public long maxPlaytimeReconnectMins = 1440;
 
-        public static final class ViaVersion {
+        public static final class ClientViaVersion {
             public boolean enabled = false;
             public boolean autoProtocolVersion = true;
             public int protocolVersion = 762; // 1.19.4
@@ -111,6 +114,8 @@ public final class Config {
                 public boolean enabled = true;
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
+                public boolean targetNeutralMobs = false;
+                public boolean onlyNeutralAggressive = true;
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
@@ -154,6 +159,7 @@ public final class Config {
                     public long rotateDelayTicks = 300L;
                     public boolean jump = false;
                     public long jumpDelayTicks = 1000L;
+                    public boolean sneak = false;
                 }
             }
 
@@ -178,17 +184,21 @@ public final class Config {
 
                 public static final class AutoDisconnect {
                     public boolean enabled = false;
+                    public boolean whilePlayerConnected = false;
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
                     public boolean thunder = false;
-                    public boolean cancelAutoReconnect = false;
+                    public boolean cancelAutoReconnect = true;
+                    // checks friends list, whitelist, and spectator whitelist
+                    public boolean onUnknownPlayerInVisualRange = false;
                 }
 
                 public static final class ActiveHours {
                     public boolean enabled = false;
                     public boolean forceReconnect = false;
+                    public boolean queueEtaCalc = true;
                     public String timeZoneId = "Universal";
-                    public List<ActiveTime> activeTimes = new ArrayList<>();
+                    public ArrayList<ActiveTime> activeTimes = new ArrayList<>();
 
                     public static class ActiveTime {
                         public int hour;
@@ -281,19 +291,37 @@ public final class Config {
             public String address = "connect.2b2t.org";
             public int port = 25565;
         }
+
+        public static final class ConnectionProxy {
+            public boolean enabled = false;
+            public ProxyInfo.Type type = ProxyInfo.Type.SOCKS5;
+            public String host = "127.0.0.1";
+            public int port = 7890;
+            public String user = "";
+            public String password = "";
+        }
     }
 
     public static final class Debug {
-        public Packet packet = new Packet();
+        public PacketLog packetLog = new PacketLog();
         public Server server = new Server();
+        public boolean clearOldLogs = false;
 
-        public static final class Packet {
-            public boolean received = false;
-            public boolean receivedBody = false;
-            public boolean preSent = false;
-            public boolean preSentBody = false;
-            public boolean postSent = false;
-            public boolean postSentBody = false;
+        public static final class PacketLog {
+            public boolean enabled = false;
+            public PacketLogConfig clientPacketLog = new PacketLogConfig();
+            public PacketLogConfig serverPacketLog = new PacketLogConfig();
+            // todo: could be more flexible, but this can cover the most basic use cases
+            public String packetFilter = "";
+
+            public static final class PacketLogConfig {
+                public boolean received = false;
+                public boolean receivedBody = false;
+                public boolean preSent = false;
+                public boolean preSentBody = false;
+                public boolean postSent = false;
+                public boolean postSentBody = false;
+            }
         }
 
         public static final class Server {
@@ -309,9 +337,11 @@ public final class Config {
     public static final class Server {
         public Bind bind = new Bind();
         public int compressionThreshold = 256;
+        public int compressionLevel = -1;
         public boolean enabled = true;
         public Extra extra = new Extra();
         public Ping ping = new Ping();
+        public ServerViaVersion viaversion = new ServerViaVersion();
         public boolean verifyUsers = true;
         public boolean kickPrevious = false;
         public String proxyIP = "localhost";
@@ -374,6 +404,13 @@ public final class Config {
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public boolean lanBroadcast = true;
+            public boolean responseCaching = true;
+            // could probably be increased 2-3x without issue
+            public int responseCacheSeconds = 10;
+        }
+
+        public static final class ServerViaVersion {
+            public boolean enabled = false;
         }
 
         public String getProxyAddress() {
@@ -392,6 +429,8 @@ public final class Config {
     }
     public static final class InGameCommands {
         public boolean enable = true;
+        public boolean slashCommands = true;
+        public boolean slashCommandsReplacesServerCommands = false;
         public String prefix = "!";
         public boolean logToDiscord = true;
     }
@@ -454,7 +493,6 @@ public final class Config {
         public String username = "";
         public String password = "";
         public int writePool = 1;
-        public int readPool = 0; // no database actually needs a read pool currently
         public QueueWait queueWait = new QueueWait();
         public Connections connections = new Connections();
         public Chats chats = new Chats();

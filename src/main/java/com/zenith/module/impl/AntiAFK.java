@@ -5,11 +5,10 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.collect.Iterators;
-import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
+import com.zenith.feature.pathing.Input;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.TickTimer;
@@ -18,12 +17,10 @@ import com.zenith.util.math.MathHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
-import static java.util.Objects.isNull;
 
 public class AntiAFK extends Module {
     private final TickTimer swingTickTimer = new TickTimer();
@@ -45,24 +42,21 @@ public class AntiAFK extends Module {
     public static final int MOVEMENT_PRIORITY = 100;
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            pair(ClientTickEvent.class, this::handleClientTickEvent),
-            pair(DeathEvent.class, this::handleDeathEvent)
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(DeathEvent.class, this::handleDeathEvent)
         );
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.antiafk.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.antiafk.enabled;
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (Proxy.getInstance().isConnected()
-                && isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && !Proxy.getInstance().isInQueue()
-                && CACHE.getPlayerCache().getThePlayer().getHealth() > 0
-                && MODULE_MANAGER.getModule(KillAura.class).map(ka -> !ka.isActive()).orElse(true)) {
+        if (CACHE.getPlayerCache().getThePlayer().isAlive()
+                && !MODULE_MANAGER.get(KillAura.class).isActive()) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
                 swingTick();
             }
@@ -72,10 +66,19 @@ public class AntiAFK extends Module {
             if (CONFIG.client.extra.antiafk.actions.jump) {
                 jumpTick();
             }
+            if (CONFIG.client.extra.antiafk.actions.sneak) {
+                sneakTick();
+            }
             if (CONFIG.client.extra.antiafk.actions.walk) {
                 walkTick();
             }
         }
+    }
+
+    private void sneakTick() {
+        PATHING.move(
+                new Input(false, false, false, false, false, true, false),
+                MOVEMENT_PRIORITY - 1);
     }
 
     public void handleDeathEvent(final DeathEvent event) {
@@ -139,7 +142,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                if (CONFIG.client.extra.antiafk.actions.safeWalk)
+                if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
                     PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
                                                         MathHelper.floorToInt(currentPathingGoal.getZ()),
                                                         MOVEMENT_PRIORITY);

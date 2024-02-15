@@ -1,7 +1,6 @@
 package com.zenith.module;
 
 import com.zenith.Proxy;
-import com.zenith.event.Subscription;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.PlayerOnlineEvent;
@@ -13,27 +12,25 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class ModuleManager {
     protected ScheduledFuture<?> clientTickFuture;
-    private Subscription eventSubscription;
     private final Reference2ObjectMap<Class<? extends Module>, Module> moduleClassMap = new Reference2ObjectOpenHashMap<>();
 
     public ModuleManager() {
-        eventSubscription = EVENT_BUS.subscribe(
-            pair(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
-            pair(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
-            pair(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
-            pair(DisconnectEvent.class, this::handleDisconnectEvent)
+        EVENT_BUS.subscribe(this,
+                            of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+                            of(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+                            of(DisconnectEvent.class, this::handleDisconnectEvent)
         );
     }
 
@@ -63,19 +60,6 @@ public class ModuleManager {
         moduleClassMap.put(module.getClass(), module);
     }
 
-    public <T extends Module> Optional<T> getModule(final Class<T> clazz) {
-        Module module = moduleClassMap.get(clazz);
-        if (module == null) {
-            return Optional.empty();
-        }
-        try {
-            return Optional.of((T) module);
-        } catch (final ClassCastException e) {
-            return Optional.empty();
-        }
-    }
-
-    // unsafe version of getModule, but without optional overhead
     public <T extends Module> T get(final Class<T> clazz) {
         try {
             return (T) moduleClassMap.get(clazz);

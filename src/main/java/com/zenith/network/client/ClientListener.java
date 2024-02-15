@@ -1,11 +1,15 @@
 package com.zenith.network.client;
 
+import com.github.steveice10.mc.protocol.data.ProtocolState;
+import com.github.steveice10.mc.protocol.data.handshake.HandshakeIntent;
+import com.github.steveice10.mc.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
@@ -15,15 +19,17 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 import static java.util.Objects.isNull;
 
 public record ClientListener(@NonNull ClientSession session) implements SessionListener {
     @Override
     public void packetReceived(Session session, Packet packet) {
         try {
-            Packet p = CLIENT_HANDLERS.handleInbound(packet, this.session);
-            if (p != null) {
+            var state = session.getPacketProtocol().getState();
+            final Packet p = ZenithHandlerCodec.CLIENT_REGISTRY.handleInbound(packet, this.session);
+            if (p != null && state == ProtocolState.GAME) {
                 for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
                     connection.sendAsync(packet); // sends on each connection's own event loop
                 }
@@ -37,7 +43,7 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
         try {
-            return CLIENT_HANDLERS.handleOutgoing(packet, this.session);
+            return ZenithHandlerCodec.CLIENT_REGISTRY.handleOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
@@ -47,7 +53,7 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
-            CLIENT_HANDLERS.handlePostOutgoing(packet, this.session);
+            ZenithHandlerCodec.CLIENT_REGISTRY.handlePostOutgoing(packet, this.session);
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
             throw new RuntimeException(e);
@@ -65,6 +71,7 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
         CLIENT_LOG.info("Connected to {}!", session.getRemoteAddress());
         this.session.setDisconnected(false);
         EVENT_BUS.postAsync(new ConnectEvent());
+        session.send(new ClientIntentionPacket(session.getPacketProtocol().getCodec().getProtocolVersion(), session.getHost(), session.getPort(), HandshakeIntent.LOGIN));
     }
 
     @Override
@@ -84,10 +91,10 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
         this.session.setDisconnected(true);
         String reasonStr;
         try {
-            reasonStr = ComponentSerializer.toRawString(reason);
+            reasonStr = ComponentSerializer.serializePlain(reason);
         } catch (final Exception e) {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", reason, e);
-            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serialize(reason);
+            reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serializeJson(reason);
         }
         CLIENT_LOG.info("Disconnected: " + reasonStr);
         var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());

@@ -7,7 +7,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import discord4j.core.spec.EmbedCreateSpec;
+import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -34,27 +34,27 @@ public class WhitelistCommand extends Command {
                 .then(literal("add").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");
                     PLAYER_LISTS.getWhitelist().add(player).ifPresentOrElse(e ->
-                                    c.getSource().getEmbedBuilder()
+                                    c.getSource().getEmbed()
                                             .title("Added user: " + escape(e.getUsername()) + " To Whitelist"),
-                                                                            () -> c.getSource().getEmbedBuilder()
+                                                                            () -> c.getSource().getEmbed()
                                     .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile."));
                     return 1;
                 })))
                 .then(literal("del").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");
                     PLAYER_LISTS.getWhitelist().remove(player);
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Removed user: " + escape(player) + " From Whitelist");
                     Proxy.getInstance().kickNonWhitelistedPlayers();
                     return 1;
                 })))
                 .then(literal("list").executes(c -> {
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Whitelist List");
                 }))
                 .then(literal("clear").requires(Command::validateAccountOwner).executes(c -> {
                     PLAYER_LISTS.getWhitelist().clear();
-                    c.getSource().getEmbedBuilder()
+                    c.getSource().getEmbed()
                             .title("Whitelist Cleared");
                     Proxy.getInstance().kickNonWhitelistedPlayers();
                     return 1;
@@ -62,7 +62,7 @@ public class WhitelistCommand extends Command {
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .description(playerListToString(PLAYER_LISTS.getWhitelist()))
             .color(Color.CYAN);

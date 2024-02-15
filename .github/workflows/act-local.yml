@@ -9,10 +9,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
@@ -36,6 +36,15 @@ jobs:
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
 
+      - name: Download GraalVM Profile
+        run: |
+          wget https://cdn.2b2t.vc/profile.iprof
+          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
+
+#      - name: Enable GraalVM Profile Instrumenting
+#        run: |
+#          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
+
       - name: Build ZenithProxy
         uses: gradle/gradle-build-action@v2
         with:
@@ -43,15 +52,6 @@ jobs:
 
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
-
-      # This will reduce the size of the binary substantially.
-      # BUT, the tradeoff is increased mem usage at runtime
-      # which is exactly what we're trying to avoid by using native compilation.
-      #      - name: Compress Native Binary
-      #        uses: svenstaro/upx-action@v2
-      #        with:
-      #          files: |
-      #            build/native/nativeCompile/ZenithProxy
 
       - name: Zip Binary And Libs
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*

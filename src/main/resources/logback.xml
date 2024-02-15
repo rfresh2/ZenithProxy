@@ -67,15 +67,19 @@
         <!--        allow logs from other libs to also go to stdout-->
         <appender-ref ref="TERMINAL"/>
     </root>
-    <logger name="org.jooq" level="WARN">
-        <!-- suppress these dumb "thank you" and ascii arts -->
-        <appender-ref ref="TERMINAL"/>
-    </logger>
     <logger name="org.jline" level="WARN">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
     <logger name="discord4j" level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <logger name="ViaVersion" level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <logger name="ViaBackwards" level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>

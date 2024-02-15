@@ -1,11 +1,6 @@
 package com.zenith.database;
 
-import com.zenith.database.dto.tables.Restarts;
-import com.zenith.database.dto.tables.records.RestartsRecord;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.ServerRestartingEvent;
-import org.jooq.*;
-import org.jooq.impl.DSL;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -25,8 +20,8 @@ public class RestartsDatabase extends LockingDatabase {
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
                 ServerRestartingEvent.class, this::handleServerRestartEvent
         );
     }
@@ -38,28 +33,26 @@ public class RestartsDatabase extends LockingDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Restarts r = Restarts.RESTARTS;
-        final Result<Record1<OffsetDateTime>> timeRecordResult = this.queryExecutor.fetch(context.select(r.TIME)
-                .from(r)
-                .orderBy(r.TIME.desc())
-                .limit(1));
-        if (timeRecordResult.isEmpty()) {
-            DATABASE_LOG.warn("Restarts database unable to sync. Database empty?");
-            return Instant.EPOCH;
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            var result = handle.select("SELECT time FROM restarts ORDER BY time DESC LIMIT 1;")
+                    .mapTo(OffsetDateTime.class)
+                    .findOne();
+            if (result.isEmpty()) {
+                DATABASE_LOG.warn("Restarts database unable to sync. Database empty?");
+                return Instant.EPOCH;
+            }
+            return result.get().toInstant();
         }
-        return timeRecordResult.get(0).value1().toInstant();
     }
 
     public void handleServerRestartEvent(final ServerRestartingEvent event) {
         synchronized (this) {
             if (lastRestartWrite.isBefore(Instant.now().minus(cooldownDuration))) {
                 lastRestartWrite = Instant.now();
-                final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-                final Restarts r = Restarts.RESTARTS;
-                final InsertSetMoreStep<RestartsRecord> query = context.insertInto(r)
-                        .set(r.TIME, Instant.now().plus(Duration.ofMinutes(15L)).atOffset(ZoneOffset.UTC));
-                this.insert(Instant.now(), query);
+                this.insert(Instant.now(), handle ->
+                    handle.createUpdate("INSERT INTO restarts (time) VALUES (:time)")
+                        .bind("time", Instant.now().plus(Duration.ofMinutes(15L)).atOffset(ZoneOffset.UTC))
+                        .execute());
             }
         }
     }

@@ -7,9 +7,9 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.discord.Embed;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class SpectatorCommand extends Command {
                 if (!CONFIG.server.spectator.allowSpectator)
                     Proxy.getInstance().getSpectatorConnections()
                         .forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
-                c.getSource().getEmbedBuilder()
+                c.getSource().getEmbed()
                     .title("Spectators " + (CONFIG.server.spectator.allowSpectator ? "On!" : "Off!"))
                     .color(Color.CYAN)
                     .description(spectatorWhitelist());
@@ -56,11 +56,11 @@ public class SpectatorCommand extends Command {
                           final String playerName = StringArgumentType.getString(c, "player");
                           PLAYER_LISTS.getSpectatorWhitelist().add(playerName)
                               .ifPresentOrElse(e ->
-                                                   c.getSource().getEmbedBuilder()
+                                                   c.getSource().getEmbed()
                                                        .title("Added user: " + escape(e.getUsername()) + " To Spectator Whitelist")
                                                        .color(Color.CYAN)
                                                        .description(spectatorWhitelist()),
-                                               () -> c.getSource().getEmbedBuilder()
+                                               () -> c.getSource().getEmbed()
                                                    .title("Failed to add user: " + escape(playerName) + " to whitelist. Unable to lookup profile.")
                                                    .color(Color.RUBY)
                                                    .description(spectatorWhitelist()));
@@ -69,7 +69,7 @@ public class SpectatorCommand extends Command {
                       .then(literal("del").then(argument("player", string()).executes(c -> {
                           final String playerName = StringArgumentType.getString(c, "player");
                           PLAYER_LISTS.getSpectatorWhitelist().remove(playerName);
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Removed user: " + escape(playerName) + " From Spectator Whitelist")
                               .color(Color.CYAN)
                               .description(spectatorWhitelist());
@@ -78,21 +78,21 @@ public class SpectatorCommand extends Command {
                       })))
                       .then(literal("clear").executes(c -> {
                           PLAYER_LISTS.getSpectatorWhitelist().clear();
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Spectator Whitelist Cleared")
                               .color(Color.RUBY)
                               .description(spectatorWhitelist());
                           Proxy.getInstance().kickNonWhitelistedPlayers();
                       }))
                       .then(literal("list").executes(c -> {
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Spectator Whitelist")
                               .color(Color.CYAN)
                               .description(spectatorWhitelist());
                       })))
             .then(literal("entity")
                       .then(literal("list").executes(c -> {
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("Entity List")
                               .description(entityList())
                               .color(Color.CYAN);
@@ -102,11 +102,11 @@ public class SpectatorCommand extends Command {
                           Optional<SpectatorEntity> spectatorEntity = SpectatorEntityRegistry.getSpectatorEntity(entityInput);
                           if (spectatorEntity.isPresent()) {
                               CONFIG.server.spectator.spectatorEntity = entityInput;
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Set Entity")
                                   .color(Color.CYAN);
                           } else {
-                              c.getSource().getEmbedBuilder()
+                              c.getSource().getEmbed()
                                   .title("Invalid Entity")
                                   .description(entityList())
                                   .color(Color.RUBY);
@@ -116,7 +116,7 @@ public class SpectatorCommand extends Command {
             .then(literal("chat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.server.spectator.spectatorPublicChatEnabled = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("Spectator Chat " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "On!" : "Off!"))
                                 .color(Color.CYAN)
                                 .description(spectatorWhitelist());
@@ -133,7 +133,7 @@ public class SpectatorCommand extends Command {
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator), false)
             .addField("Chat", toggleStr(CONFIG.server.spectator.spectatorPublicChatEnabled), false)

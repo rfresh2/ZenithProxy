@@ -1,6 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
+import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
@@ -10,23 +11,22 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class SetActionBarTextHandler implements AsyncPacketHandler<ClientboundSetActionBarTextPacket, ClientSession> {
     private Instant lastRestartEvent = Instant.EPOCH;
 
     @Override
     public boolean applyAsync(final ClientboundSetActionBarTextPacket packet, final ClientSession session) {
-        if (CONFIG.client.server.address.contains("2b2t.org")) {
-            parse2bRestart(packet, session);
-        }
+        if (Proxy.getInstance().isOn2b2t()) parse2bRestart(packet, session);
         return true;
     }
 
     private void parse2bRestart(ClientboundSetActionBarTextPacket serverTitlePacket, final ClientSession session) {
         try {
             Optional.of(serverTitlePacket)
-                .map(title -> ComponentSerializer.toRawString(title.getText()))
+                .map(title -> ComponentSerializer.serializePlain(title.getText()))
                 .filter(text -> text.toLowerCase().contains("restart"))
                 .ifPresent(text -> {
                     if (lastRestartEvent.isBefore(Instant.now().minus(15, ChronoUnit.MINUTES))) {

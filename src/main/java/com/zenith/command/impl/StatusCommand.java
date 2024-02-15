@@ -10,7 +10,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.feature.queue.Queue;
 import com.zenith.network.server.ServerConnection;
 import discord4j.common.util.TimestampFormat;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import java.time.Duration;
@@ -55,7 +54,7 @@ public class StatusCommand extends Command {
     }
 
     private List<String> getSpectatorUserNames() {
-        return Proxy.getInstance().getSpectatorConnections()
+        return Proxy.getInstance().getSpectatorConnections().stream()
                 .map(connection -> connection.getProfileCache().getProfile().getName())
                 .collect(Collectors.toList());
     }
@@ -102,7 +101,7 @@ public class StatusCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("status").executes(c -> {
-            final EmbedCreateSpec.Builder builder = c.getSource().getEmbedBuilder();
+            var builder = c.getSource().getEmbed();
             builder
                 .title("ZenithProxy " + LAUNCH_CONFIG.version + " Status: " + CONFIG.authentication.username)
                 .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
@@ -125,7 +124,7 @@ public class StatusCommand extends Command {
             if (CONFIG.discord.reportCoords) {
                 builder.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
             }
-            builder.addField("Health", "" + (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+            builder.addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                 .addField("AutoDisconnect",
                           "[Health: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled)
                               + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]"

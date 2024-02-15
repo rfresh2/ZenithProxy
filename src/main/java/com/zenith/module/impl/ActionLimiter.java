@@ -1,5 +1,6 @@
 package com.zenith.module.impl;
 
+import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
@@ -9,7 +10,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCl
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
-import com.zenith.event.Subscription;
 import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import com.zenith.feature.actionlimiter.handlers.inbound.*;
@@ -17,57 +17,73 @@ import com.zenith.feature.actionlimiter.handlers.outbound.ALCMoveVehicleHandler;
 import com.zenith.feature.actionlimiter.handlers.outbound.ALLoginHandler;
 import com.zenith.feature.actionlimiter.handlers.outbound.ALPlayerPositionHandler;
 import com.zenith.module.Module;
-import com.zenith.network.registry.HandlerRegistry;
+import com.zenith.network.registry.PacketHandlerCodec;
+import com.zenith.network.registry.PacketHandlerStateCodec;
+import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import lombok.Getter;
 
-import java.util.HashSet;
-import java.util.function.Supplier;
-
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static com.zenith.event.SimpleEventBus.pair;
 
 public class ActionLimiter extends Module {
     @Getter
-    private HandlerRegistry<ServerConnection> handlerRegistry;
-    private final HashSet<ServerConnection> limitedConnections = new HashSet<>();
+    private PacketHandlerCodec codec;
+    private final ReferenceSet<ServerConnection> limitedConnections = new ReferenceOpenHashSet<>();
 
     public ActionLimiter() {
         initializeHandlers();
     }
 
     private void initializeHandlers() {
-        handlerRegistry = new HandlerRegistry.Builder<ServerConnection>()
+        codec = PacketHandlerCodec.builder()
+            .setId("action-limiter")
+            .setPriority(1000)
             .setLogger(MODULE_LOG)
-            .allowUnhandled(true)
-            .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
-            .registerInbound(ServerboundChatPacket.class, new ALChatHandler())
-            .registerInbound(ServerboundClientCommandPacket.class, new ALClientCommandHandler())
-            .registerInbound(ServerboundContainerClickPacket.class, new ALContainerClickHandler())
-            .registerInbound(ServerboundInteractPacket.class, new ALInteractHandler())
-            .registerInbound(ServerboundMovePlayerPosPacket.class, new ALMovePlayerPosHandler())
-            .registerInbound(ServerboundMovePlayerPosRotPacket.class, new ALMovePlayerPosRotHandler())
-            .registerInbound(ServerboundMoveVehiclePacket.class, new ALMoveVehicleHandler())
-            .registerInbound(ServerboundPlayerActionPacket.class, new ALPlayerActionHandler())
-            .registerInbound(ServerboundUseItemOnPacket.class, new ALUseItemOnHandler())
-            .registerInbound(ServerboundUseItemPacket.class, new ALUseItemHandler())
-            .registerOutbound(ClientboundMoveVehiclePacket.class, new ALCMoveVehicleHandler())
-            .registerOutbound(ClientboundLoginPacket.class, new ALLoginHandler())
-            .registerOutbound(ClientboundPlayerPositionPacket.class, new ALPlayerPositionHandler())
+            .setActivePredicate((session) -> shouldLimit((ServerConnection) session))
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+                .allowUnhandled(true)
+                .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
+                .registerInbound(ServerboundChatPacket.class, new ALChatHandler())
+                .registerInbound(ServerboundClientCommandPacket.class, new ALClientCommandHandler())
+                .registerInbound(ServerboundContainerClickPacket.class, new ALContainerClickHandler())
+                .registerInbound(ServerboundInteractPacket.class, new ALInteractHandler())
+                .registerInbound(ServerboundMovePlayerPosPacket.class, new ALMovePlayerPosHandler())
+                .registerInbound(ServerboundMovePlayerPosRotPacket.class, new ALMovePlayerPosRotHandler())
+                .registerInbound(ServerboundMoveVehiclePacket.class, new ALMoveVehicleHandler())
+                .registerInbound(ServerboundPlayerActionPacket.class, new ALPlayerActionHandler())
+                .registerInbound(ServerboundUseItemOnPacket.class, new ALUseItemOnHandler())
+                .registerInbound(ServerboundUseItemPacket.class, new ALUseItemHandler())
+                .registerOutbound(ClientboundMoveVehiclePacket.class, new ALCMoveVehicleHandler())
+                .registerOutbound(ClientboundLoginPacket.class, new ALLoginHandler())
+                .registerOutbound(ClientboundPlayerPositionPacket.class, new ALPlayerPositionHandler())
+                .build())
             .build();
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
-            pair(PlayerLoginEvent.class, this::onPlayerLoginEvent),
-            pair(ServerConnectionRemovedEvent.class, this::onServerConnectionRemoved)
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+                            of(PlayerLoginEvent.class, this::onPlayerLoginEvent),
+                            of(ServerConnectionRemovedEvent.class, this::onServerConnectionRemoved)
         );
     }
 
     @Override
-    public Supplier<Boolean> shouldBeEnabled() {
-        return () -> CONFIG.client.extra.actionLimiter.enabled;
+    public boolean shouldBeEnabled() {
+        return CONFIG.client.extra.actionLimiter.enabled;
+    }
+
+    @Override
+    public void onEnable() {
+        ZenithHandlerCodec.SERVER_REGISTRY.register(codec);
+    }
+
+    @Override
+    public void onDisable() {
+        ZenithHandlerCodec.SERVER_REGISTRY.unregister(codec);
     }
 
     public void onPlayerLoginEvent(final PlayerLoginEvent event) {
@@ -83,7 +99,7 @@ public class ActionLimiter extends Module {
         limitedConnections.remove(event.serverConnection());
     }
 
-    public boolean bypassesLimits(final ServerConnection serverConnection) {
-        return !limitedConnections.contains(serverConnection);
+    public boolean shouldLimit(final ServerConnection serverConnection) {
+        return limitedConnections.contains(serverConnection);
     }
 }

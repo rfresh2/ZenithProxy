@@ -1,11 +1,13 @@
 package com.zenith.feature.autoupdater;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.netty.handler.codec.http.HttpHeaderNames;
 import org.apache.commons.math3.util.Pair;
-import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -14,17 +16,15 @@ import static com.zenith.Shared.*;
 
 public class RestAutoUpdater extends AutoUpdater {
     private final HttpClient httpClient;
+    private final String baseUrl;
 
     public RestAutoUpdater() {
-        String baseUrl = LAUNCH_CONFIG.repo_owner.equals("rfresh2") && LAUNCH_CONFIG.repo_name.equals("ZenithProxy")
+        this.baseUrl = LAUNCH_CONFIG.repo_owner.equals("rfresh2") && LAUNCH_CONFIG.repo_name.equals("ZenithProxy")
             ? "https://github.2b2t.vc"
             : "https://api.github.com";
-        this.httpClient = HttpClient.create()
-            .secure()
-            .baseUrl(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name)
-            .headers(h -> h.add(HttpHeaderNames.USER_AGENT, "ZenithProxy/" + LAUNCH_CONFIG.version))
-            .headers(h -> h.add(HttpHeaderNames.ACCEPT, "application/vnd.github+json"))
-            .headers(h -> h.add("X-GitHub-Api-Version", "2022-11-28"));
+        this.httpClient = HttpClient.newBuilder()
+            .followRedirects(HttpClient.Redirect.ALWAYS)
+            .build();
     }
 
     @Override
@@ -43,32 +43,38 @@ public class RestAutoUpdater extends AutoUpdater {
 
     @Override
     public void updateCheck() {
-        httpClient
-            .get()
-            .uri("/releases?per_page=100")
-            .responseContent()
-            .aggregate()
-            .asString()
-            .flatMap(response -> {
-                Pair<String, String> releaseIdToTag = parseLatestReleaseId(response);
-                if (releaseIdToTag == null || releaseIdToTag.getFirst() == null || releaseIdToTag.getSecond() == null) {
-                    return Mono.empty();
-                }
-                if (versionLooksCorrect(releaseIdToTag.getSecond())) {
-                    if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond()) && versionIsLessThanCurrent(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
-                        if (!getUpdateAvailable()) {
-                            DEFAULT_LOG.info(
-                                "New update on release channel {}! Current: {} New: {}!",
-                                LAUNCH_CONFIG.release_channel,
-                                LAUNCH_CONFIG.version,
-                                releaseIdToTag.getSecond());
-                        }
-                        setUpdateAvailable(true, releaseIdToTag.getSecond());
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name + "/releases?per_page=100"))
+            .headers("User-Agent", "ZenithProxy/" + LAUNCH_CONFIG.version)
+            .headers("Accept", "application/vnd.github+json")
+            .headers("X-GitHub-Api-Version", "2022-11-28")
+            .timeout(Duration.ofSeconds(5))
+            .GET()
+            .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+
+            Pair<String, String> releaseIdToTag = parseLatestReleaseId(responseBody);
+            if (releaseIdToTag == null || releaseIdToTag.getFirst() == null || releaseIdToTag.getSecond() == null) {
+                return;
+            }
+            if (versionLooksCorrect(releaseIdToTag.getSecond())) {
+                if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond()) && versionIsLessThanCurrent(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
+                    if (!getUpdateAvailable()) {
+                        DEFAULT_LOG.info(
+                            "New update on release channel {}! Current: {} New: {}!",
+                            LAUNCH_CONFIG.release_channel,
+                            LAUNCH_CONFIG.version,
+                            releaseIdToTag.getSecond());
                     }
-                } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.getSecond());
-                return Mono.empty();
-            })
-            .block();
+                    setUpdateAvailable(true, releaseIdToTag.getSecond());
+                }
+            } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.getSecond());
+        } catch (Exception e) {
+            DEFAULT_LOG.error("Failed to check for updates: {}", e.getMessage());
+        }
     }
 
     private boolean versionLooksCorrect(final String version) {

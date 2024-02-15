@@ -1,22 +1,16 @@
 package com.zenith.database;
 
 import com.zenith.Proxy;
-import com.zenith.database.dto.tables.Chats;
-import com.zenith.database.dto.tables.records.ChatsRecord;
-import com.zenith.event.Subscription;
+import com.zenith.database.dto.records.ChatsRecord;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
-import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class ChatDatabase extends LiveDatabase {
     public ChatDatabase(QueryExecutor queryExecutor, RedisClient redisClient) {
@@ -30,29 +24,28 @@ public class ChatDatabase extends LiveDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Chats c = Chats.CHATS;
-        final Result<ChatsRecord> recordResult = this.queryExecutor.fetch(context.selectFrom(c)
-                .orderBy(c.TIME.desc())
-                .limit(1));
-        if (recordResult.isEmpty()) {
-            DATABASE_LOG.warn("Chats database unable to sync. Database empty?");
-            return Instant.EPOCH;
+        try (var handle = this.queryExecutor.getJdbi().open()) {
+            var result = handle.select("SELECT time FROM chats ORDER BY time DESC LIMIT 1;")
+                .mapTo(OffsetDateTime.class)
+                .findOne();
+            if (result.isEmpty()) {
+                DATABASE_LOG.warn("Chats database unable to sync. Database empty?");
+                return Instant.EPOCH;
+            }
+            return result.get().toInstant();
         }
-        final ChatsRecord chatsRecord = recordResult.get(0);
-        return chatsRecord.get(c.TIME).toInstant();
     }
 
     @Override
-    public Subscription subscribeEvents() {
-        return EVENT_BUS.subscribe(
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
             ServerChatReceivedEvent.class, this::handleServerChatReceivedEvent
         );
     }
 
 
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
-        if (!CONFIG.client.server.address.endsWith("2b2t.org") // only write on 2b2t
+        if (!Proxy.getInstance().isOn2b2t() // only write on 2b2t
                 || Proxy.getInstance().isInQueue()  // ignore queue
                 || !event.message().startsWith("<")) return; // don't write whispers or system messages
         try {
@@ -67,16 +60,13 @@ public class ChatDatabase extends LiveDatabase {
         }
     }
 
-    public void writeChat(final UUID playerUUID, final String playerName, final String message, final OffsetDateTime time) {
-        final DSLContext context = DSL.using(SQLDialect.POSTGRES);
-        final Chats c = Chats.CHATS;
-        var record = context.newRecord(c)
-            .setTime(time)
-            .setChat(message)
-            .setPlayerUuid(playerUUID)
-            .setPlayerName(playerName);
-        InsertSetMoreStep<ChatsRecord> query = context.insertInto(c)
-                .set(record);
-        this.insert(time.toInstant(), record.into(com.zenith.database.dto.tables.pojos.Chats.class), query);
+    public void writeChat(final UUID playerUuid, final String playerName, final String chat, final OffsetDateTime time) {
+        this.insert(time.toInstant(), new ChatsRecord(time, chat, playerName, playerUuid), handle ->
+            handle.createUpdate("INSERT INTO chats (time, chat, player_name, player_uuid) VALUES (:time, :chat, :player_name, :player_uuid);")
+                .bind("time", time)
+                .bind("chat", chat)
+                .bind("player_name", playerName)
+                .bind("player_uuid", playerUuid)
+                .execute());
     }
 }

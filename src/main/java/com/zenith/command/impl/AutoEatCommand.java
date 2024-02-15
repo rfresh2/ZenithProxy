@@ -6,9 +6,8 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
-import com.zenith.module.Module;
+import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoEat;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -29,11 +28,11 @@ public class AutoEatCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autoeat")
+        return command("autoEat")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoEat.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.getModule(AutoEat.class).ifPresent(Module::syncEnabledFromConfig);
-                c.getSource().getEmbedBuilder()
+                MODULE_MANAGER.get(AutoEat.class).syncEnabledFromConfig();
+                c.getSource().getEmbed()
                     .title("AutoEat " + (CONFIG.client.extra.autoEat.enabled ? "On!" : "Off!"));
                 return 1;
             }))
@@ -41,11 +40,11 @@ public class AutoEatCommand extends Command {
                       .then(argument("health", integer(1, 19)).executes(c -> {
                           int health = IntegerArgumentType.getInteger(c, "health");
                           CONFIG.client.extra.autoEat.healthThreshold = health;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("AutoEat Health Threshold Set")
                               .color(Color.CYAN)
-                              .addField("Health Threshold", "" + CONFIG.client.extra.autoEat.healthThreshold, false)
-                              .addField("Hunger Threshold", "" + CONFIG.client.extra.autoEat.hungerThreshold, false)
+                              .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
+                              .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
                           return 1;
                       })))
@@ -53,29 +52,29 @@ public class AutoEatCommand extends Command {
                       .then(argument("hunger", integer(1, 19)).executes(c -> {
                           int hunger = IntegerArgumentType.getInteger(c, "hunger");
                           CONFIG.client.extra.autoEat.hungerThreshold = hunger;
-                          c.getSource().getEmbedBuilder()
+                          c.getSource().getEmbed()
                               .title("AutoEat Hunger Threshold Set")
                               .color(Color.CYAN)
-                              .addField("Health Threshold", "" + CONFIG.client.extra.autoEat.healthThreshold, false)
-                              .addField("Hunger Threshold", "" + CONFIG.client.extra.autoEat.hungerThreshold, false)
+                              .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
+                              .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
                           return 1;
                       })))
             .then(literal("warning")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.autoEat.warning = getToggle(c, "toggle");
-                            c.getSource().getEmbedBuilder()
+                            c.getSource().getEmbed()
                                 .title("AutoEat Warning " + (CONFIG.client.extra.autoEat.warning ? "On!" : "Off!"));
                             return 1;
                       })));
     }
 
     @Override
-    public void postPopulate(final EmbedCreateSpec.Builder builder) {
+    public void postPopulate(final Embed builder) {
         builder
             .addField("AutoEat", toggleStr(CONFIG.client.extra.autoEat.enabled), false)
-            .addField("Health Threshold", "" + CONFIG.client.extra.autoEat.healthThreshold, false)
-            .addField("Hunger Threshold", "" + CONFIG.client.extra.autoEat.hungerThreshold, false)
+            .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
+            .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
             .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false)
             .color(Color.CYAN);
     }
