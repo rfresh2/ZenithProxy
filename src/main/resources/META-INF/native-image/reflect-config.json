@@ -1173,6 +1173,15 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Server$Extra$ProxyForwarding",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Server$Extra$ProxyForwarding$ForwardingMode",
+  "allDeclaredFields":true
+},
+{
   "name":"com.zenith.util.Config$Server$Extra$Timeout",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
