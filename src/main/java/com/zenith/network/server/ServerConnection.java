@@ -331,7 +331,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public synchronized void syncTeamMembers() {
-        final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections()
+        final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections().stream()
             .map(ServerConnection::getSpectatorEntityUUID)
             .map(UUID::toString)
             .collect(Collectors.toCollection(ArrayList::new));

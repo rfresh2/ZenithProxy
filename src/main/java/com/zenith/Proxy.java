@@ -51,10 +51,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.*;
 import java.time.chrono.ChronoZonedDateTime;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -449,11 +446,12 @@ public class Proxy {
         return this.loggingIn.getAndSet(false);
     }
 
-    public Stream<ServerConnection> getSpectatorConnections() {
-        if (getActiveConnections().isEmpty()) return Stream.empty();
-        if (getActiveConnections().size() == 1 && getCurrentPlayer().get() != null) return Stream.empty();
+    public List<ServerConnection> getSpectatorConnections() {
+        if (getActiveConnections().isEmpty()) return Collections.emptyList();
+        if (getActiveConnections().size() == 1 && hasActivePlayer()) return Collections.emptyList();
         return getActiveConnections().stream()
-                .filter(ServerConnection::isSpectator);
+            .filter(ServerConnection::isSpectator)
+            .toList();
     }
 
     public void delayBeforeReconnect() {
