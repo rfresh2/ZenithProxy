@@ -5,11 +5,13 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
+import static com.zenith.feature.spectator.SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache;
 
 public class ContainerCloseHandler implements AsyncPacketHandler<ClientboundContainerClosePacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundContainerClosePacket packet, final ClientSession session) {
         CACHE.getPlayerCache().closeContainer(packet.getContainerId());
+        syncPlayerEquipmentWithSpectatorsFromCache();
         return true;
     }
 }
