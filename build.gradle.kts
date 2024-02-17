@@ -251,7 +251,6 @@ graalvmNative {
                 "-Duser.country=US",
                 "-Duser.language=en",
                 "--enable-url-protocols=https,http",
-                "--report-unsupported-elements-at-runtime",
                 "-H:+ReportExceptionStackTraces",
                 "-H:DeadlockWatchdogInterval=30",
                 "-H:IncludeLocales=en",

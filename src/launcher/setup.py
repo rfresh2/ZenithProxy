@@ -145,38 +145,53 @@ def setup_execute(config):
             if verify_discord_bot_token(discord_bot_token):
                 break
         while True:
-            print("Enter the channel ID the proxy will be managed in:")
+            print("Enter a Discord channel ID to manage ZenithProxy in:")
             discord_channel_id = input("> ")
             try:
                 discord_channel_id = int(discord_channel_id)
                 if discord_channel_id < 1000000000 or discord_channel_id > 9999999999999999999:
                     raise ValueError
+                # todo: verify the bot is in this channel
                 break
             except ValueError:
                 print("Invalid ID")
         while True:
-            print("Enter the role ID of the role that will be able to manage the proxy's whitelist:")
+            print("Enter a Discord Role ID to grant management permissions like the whitelist to:")
             discord_admin_role_id = input("> ")
             try:
                 discord_admin_role_id = int(discord_admin_role_id)
                 if discord_admin_role_id < 1000000000 or discord_admin_role_id > 9999999999999999999:
                     raise ValueError
+                # todo: verify the bot has this role
                 break
             except ValueError:
                 print("Invalid ID")
         while True:
-            print("Enter the channel ID the proxy will relay chat messages to:")
-            discord_chat_relay_channel = input("> ")
-            try:
-                discord_chat_relay_channel = int(discord_chat_relay_channel)
-                if discord_chat_relay_channel < 1000000000 or discord_chat_relay_channel > 9999999999999999999:
-                    raise ValueError
-                if discord_chat_relay_channel == discord_channel_id:
-                    print("Chat relay channel cannot be the same as the management channel")
-                    continue
+            print("Enable Discord Chat Relay? (y/n)")
+            i3 = input("> ")
+            if i3 == "y":
+                chat_relay = True
                 break
-            except ValueError:
-                print("Invalid ID")
+            elif i3 == "n":
+                chat_relay = False
+                break
+            else:
+                print("Invalid input. Enter y or n")
+        if chat_relay:
+            while True:
+                print("Enter a Discord channel ID for the Chat Relay:")
+                discord_chat_relay_channel = input("> ")
+                try:
+                    discord_chat_relay_channel = int(discord_chat_relay_channel)
+                    if discord_chat_relay_channel < 1000000000 or discord_chat_relay_channel > 9999999999999999999:
+                        raise ValueError
+                    if discord_chat_relay_channel == discord_channel_id:
+                        print("Chat Relay and Management cannot have the same channel")
+                        continue
+                    # todo: verify the bot is in this channel
+                    break
+                except ValueError:
+                    print("Invalid ID")
 
     # Write config.json
     config = {}
@@ -200,8 +215,12 @@ def setup_execute(config):
             "token": discord_bot_token,
             "channelId": discord_channel_id,
             "accountOwnerRoleId": discord_admin_role_id,
-            "chatRelay": {"enable": True, "channelId": discord_chat_relay_channel},
         }
+        if chat_relay:
+            config["discord"]["chatRelay"] = {
+                "enable": True,
+                "channelId": discord_chat_relay_channel
+            }
 
     with open("config.json", "w") as f:
         f.write(json.dumps(config, indent=2))
