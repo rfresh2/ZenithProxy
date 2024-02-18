@@ -10,7 +10,6 @@ import com.zenith.util.WebBrowserHelper;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.raphimc.minecraftauth.MinecraftAuth;
-import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestException;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaSession;
 import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
@@ -83,31 +82,20 @@ public class Authenticator {
      *
      */
 
+    @SneakyThrows
     public MinecraftProtocol login()  {
-        try {
-            var cachedAuth = loadAuthCache()
-                .flatMap(this::checkAuthCacheMatchesConfig);
-            // throws on failed login
-            var authSession = cachedAuth
-                .map(this::refreshOrFullLogin)
-                .orElseGet(this::fullLogin);
-            this.refreshTryCount = 0;
-            saveAuthCacheAsync(authSession);
-            updateConfig(authSession);
-            if (this.refreshTask != null) this.refreshTask.cancel(true);
-            if (CONFIG.authentication.authTokenRefresh) scheduleAuthCacheRefresh(authSession);
-            return createMinecraftProtocol(authSession);
-        } catch (final Exception e) {
-            if (e instanceof MinecraftRequestException mre) {
-                if (mre.getResponse().getStatusCode() == 404) {
-                    // log this after the exception stacktrace is logged in caller
-                    SCHEDULED_EXECUTOR_SERVICE.schedule(
-                        () -> AUTH_LOG.error("[Help] Log into the account with the vanilla MC launcher and join a server. Then try again with ZenithProxy."),
-                        1L, TimeUnit.SECONDS);
-                }
-            }
-            throw new RuntimeException("Login failed", e);
-        }
+        var cachedAuth = loadAuthCache()
+            .flatMap(this::checkAuthCacheMatchesConfig);
+        // throws on failed login
+        var authSession = cachedAuth
+            .map(this::refreshOrFullLogin)
+            .orElseGet(this::fullLogin);
+        this.refreshTryCount = 0;
+        saveAuthCacheAsync(authSession);
+        updateConfig(authSession);
+        if (this.refreshTask != null) this.refreshTask.cancel(true);
+        if (CONFIG.authentication.authTokenRefresh) scheduleAuthCacheRefresh(authSession);
+        return createMinecraftProtocol(authSession);
     }
 
     private FullJavaSession refreshOrFullLogin(FullJavaSession session) {

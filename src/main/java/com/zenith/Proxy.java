@@ -32,6 +32,7 @@ import com.zenith.via.ZenithViaInitializer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestException;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -397,7 +398,12 @@ public class Proxy {
             try {
                 return this.authenticator.login();
             } catch (final Exception e) {
-                CLIENT_LOG.error("", e);
+                CLIENT_LOG.error("Login failed", e);
+                if (e instanceof MinecraftRequestException mre) {
+                    if (mre.getResponse().getStatusCode() == 404) {
+                        AUTH_LOG.error("[Help] Log into the account with the vanilla MC launcher and join a server. Then try again with ZenithProxy.");
+                    }
+                }
                 return null;
             }
         });
