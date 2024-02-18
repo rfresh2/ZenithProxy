@@ -150,22 +150,28 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
-            if (CONFIG.client.autoConnect && !this.isConnected())
+            boolean connected = false;
+            if (CONFIG.client.autoConnect && !this.isConnected()) {
                 this.connectAndCatchExceptions();
-            if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
+                connected = true;
+            }
+            if (!connected && CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfigAsync();
                 if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
                     this.connectAndCatchExceptions();
+                    connected = true;
                 }
             }
             if (CONFIG.autoUpdater.autoUpdate) {
                 if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
                 else autoUpdater = new RestAutoUpdater();
                 autoUpdater.start();
-                DEFAULT_LOG.info("Started {} AutoUpdater...", LAUNCH_CONFIG.release_channel);
+                DEFAULT_LOG.info("Started AutoUpdater");
             }
             DEFAULT_LOG.info("ZenithProxy started!");
+            if (!connected)
+                DEFAULT_LOG.info("Use the `connect` command to log in!");
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.error("", e);
