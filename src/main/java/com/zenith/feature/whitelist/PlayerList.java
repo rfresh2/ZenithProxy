@@ -25,6 +25,16 @@ public record PlayerList(
         return playerListEntryOptional;
     }
 
+    // returns true if the account was added. false if the account was already present
+    public boolean add(final String username, final UUID uuid) {
+        var entry = new PlayerEntry(username, uuid, Instant.now().getEpochSecond());
+        if (!entries.contains(entry)) {
+            entries.add(entry);
+            return true;
+        }
+        return false;
+    }
+
     public void remove(final String username) {
         this.entries.removeIf(entry -> entry.getUsername().equalsIgnoreCase(username));
     }

@@ -11,8 +11,11 @@ import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.PLAYER_LISTS;
 import static com.zenith.command.CommandOutputHelper.playerListToString;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
@@ -22,8 +25,14 @@ public class WhitelistCommand extends Command {
         return CommandUsage.full(
             "whitelist",
             CommandCategory.CORE,
-            "Manage the proxy's whitelist. Only usable by users with the account owner role.",
-            asList("add/del <player>", "list", "clear"),
+            "Manage the proxy's whitelist. Only usable by users with the account owner role."
+                + "\nautoAddClient will automatically add the account logged into by ZenithProxy to the whitelist if not already present",
+            asList(
+                "add/del <player>",
+                "list",
+                "clear",
+                "autoAddClient on/off"
+            ),
             asList("wl")
         );
     }
@@ -58,13 +67,21 @@ public class WhitelistCommand extends Command {
                             .title("Whitelist Cleared");
                     Proxy.getInstance().kickNonWhitelistedPlayers();
                     return 1;
-                }));
+                }))
+            .then(literal("autoAddClient").requires(Command::validateAccountOwner)
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.server.extra.whitelist.autoAddClient = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Add Client " + (CONFIG.server.extra.whitelist.autoAddClient ? "On!" : "Off!"));
+                          return 1;
+                      })));
     }
 
     @Override
     public void postPopulate(final Embed builder) {
         builder
             .description(playerListToString(PLAYER_LISTS.getWhitelist()))
+            .addField("Auto Add Client", toggleStr(CONFIG.server.extra.whitelist.autoAddClient), false)
             .color(Color.CYAN);
     }
 }

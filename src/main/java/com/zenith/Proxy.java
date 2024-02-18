@@ -307,12 +307,12 @@ public class Proxy {
             if (!CONFIG.client.connectionProxy.user.isEmpty() || !CONFIG.client.connectionProxy.password.isEmpty())
                 proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
                                           new InetSocketAddress(CONFIG.client.connectionProxy.host,
-                                                                             CONFIG.client.connectionProxy.port),
+                                                                CONFIG.client.connectionProxy.port),
                                           CONFIG.client.connectionProxy.user,
                                           CONFIG.client.connectionProxy.password);
             else proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
-                                             new InetSocketAddress(CONFIG.client.connectionProxy.host,
-                                                                                CONFIG.client.connectionProxy.port));
+                                           new InetSocketAddress(CONFIG.client.connectionProxy.host,
+                                                                 CONFIG.client.connectionProxy.port));
         }
         return proxyInfo;
     }
@@ -376,8 +376,13 @@ public class Proxy {
         if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
         loggingIn.set(false);
         if (minecraftProtocol == null) throw new RuntimeException("Auth failed");
-        AUTH_LOG.info("Logged in as {} [{}].", minecraftProtocol.getProfile().getName(), minecraftProtocol.getProfile().getId());
-        SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
+        var username = minecraftProtocol.getProfile().getName();
+        var uuid = minecraftProtocol.getProfile().getId();
+        AUTH_LOG.info("Logged in as {} [{}].", username, uuid);
+        if (CONFIG.server.extra.whitelist.autoAddClient)
+            if (PLAYER_LISTS.getWhitelist().add(username, uuid))
+                SERVER_LOG.info("Auto added {} [{}] to whitelist", username, uuid);
+        SCHEDULED_EXECUTOR_SERVICE.execute(this::updateFavicon);
         return minecraftProtocol;
     }
 
