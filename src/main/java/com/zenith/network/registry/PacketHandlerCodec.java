@@ -5,7 +5,6 @@ import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.slf4j.Logger;
 
 import java.util.EnumMap;
 import java.util.Objects;
@@ -18,7 +17,6 @@ public class PacketHandlerCodec {
     private final int priority;
     @EqualsAndHashCode.Include private final String id;
     private final EnumMap<ProtocolState, PacketHandlerStateCodec<? extends Session>> stateCodecs;
-    @NonNull private final Logger logger;
     // Predicate called on each packet to determine if it should be handled by this codec
     private final Predicate<Session> activePredicate;
 
@@ -49,7 +47,6 @@ public class PacketHandlerCodec {
     @Accessors(chain = true)
     public static class Builder {
         private final EnumMap<ProtocolState, PacketHandlerStateCodec<? extends Session>> aStateCodecs = new EnumMap<>(ProtocolState.class);
-        private Logger logger;
         private int priority;
         private String id;
         private Predicate<Session> activePredicate = session -> true;
@@ -61,8 +58,7 @@ public class PacketHandlerCodec {
 
         public PacketHandlerCodec build() {
             Objects.requireNonNull(this.id, "id");
-            Objects.requireNonNull(this.logger, "logger");
-            return new PacketHandlerCodec(priority, id, this.aStateCodecs, logger, activePredicate);
+            return new PacketHandlerCodec(priority, id, this.aStateCodecs, activePredicate);
         }
     }
 }

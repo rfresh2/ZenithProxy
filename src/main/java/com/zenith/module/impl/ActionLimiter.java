@@ -23,13 +23,11 @@ import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
-import lombok.Getter;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class ActionLimiter extends Module {
-    @Getter
     private PacketHandlerCodec codec;
     private final ReferenceSet<ServerConnection> limitedConnections = new ReferenceOpenHashSet<>();
 
@@ -41,7 +39,6 @@ public class ActionLimiter extends Module {
         codec = PacketHandlerCodec.builder()
             .setId("action-limiter")
             .setPriority(1000)
-            .setLogger(MODULE_LOG)
             .setActivePredicate((session) -> shouldLimit((ServerConnection) session))
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .allowUnhandled(true)
