@@ -8,7 +8,9 @@ import com.zenith.event.proxy.MsaDeviceCodeLoginEvent;
 import com.zenith.util.MCAuthLoggerBridge;
 import com.zenith.util.WebBrowserHelper;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import net.raphimc.minecraftauth.MinecraftAuth;
+import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestException;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaSession;
 import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
@@ -96,6 +98,14 @@ public class Authenticator {
             if (CONFIG.authentication.authTokenRefresh) scheduleAuthCacheRefresh(authSession);
             return createMinecraftProtocol(authSession);
         } catch (final Exception e) {
+            if (e instanceof MinecraftRequestException mre) {
+                if (mre.getResponse().getStatusCode() == 404) {
+                    // log this after the exception stacktrace is logged in caller
+                    SCHEDULED_EXECUTOR_SERVICE.schedule(
+                        () -> AUTH_LOG.error("[Help] Log into the account with the vanilla MC launcher and join a server. Then try again with ZenithProxy."),
+                        1L, TimeUnit.SECONDS);
+                }
+            }
             throw new RuntimeException("Login failed", e);
         }
     }
@@ -123,28 +133,19 @@ public class Authenticator {
         return new MinecraftProtocol(MinecraftCodec.CODEC, gameProfile, accessToken);
     }
 
+    @SneakyThrows
     private FullJavaSession deviceCodeLogin() {
-        try {
-            return deviceCodeAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return deviceCodeAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
 
+    @SneakyThrows
     private FullJavaSession msaLogin() {
-        try {
-            return msaAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return msaAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
     }
 
+    @SneakyThrows
     private FullJavaSession localWebserverLogin() {
-        try {
-            return localWebserverStep.getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return localWebserverStep.getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
     }
 
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
