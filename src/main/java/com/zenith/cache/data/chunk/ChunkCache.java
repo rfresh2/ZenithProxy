@@ -334,17 +334,17 @@ public class ChunkCache implements CachedData {
             if (this.worldTimeData != null) {
                 consumer.accept(this.worldTimeData.toPacket());
             }
-            // todo: we could optimize the chunk order by sending the closest chunks first
-            //  start in the center chunk and spiral out
-            for (final Chunk chunk : this.cache.values()) {
-                consumer.accept(new ClientboundLevelChunkWithLightPacket(
-                    chunk.x,
-                    chunk.z,
-                    chunk.serialize(CACHE.getChunkCache().getCodec()),
-                    chunk.heightMaps,
-                    chunk.blockEntities.toArray(new BlockEntityInfo[0]),
-                    chunk.lightUpdateData));
-            }
+            this.cache.values().stream()
+                .sorted(Comparator.comparingInt(chunk -> Math.abs(chunk.x - centerX) + Math.abs(chunk.z - centerZ)))
+                .forEach(chunk -> {
+                    consumer.accept(new ClientboundLevelChunkWithLightPacket(
+                        chunk.x,
+                        chunk.z,
+                        chunk.serialize(CACHE.getChunkCache().getCodec()),
+                        chunk.heightMaps,
+                        chunk.blockEntities.toArray(new BlockEntityInfo[0]),
+                        chunk.lightUpdateData));
+                });
             if (CONFIG.debug.sendChunksBeforePlayerSpawn) {
                 // todo: this will not handle spectator player cache pos correctly, but we don't have
                 //  enough context here to know if this is the spectator or not
