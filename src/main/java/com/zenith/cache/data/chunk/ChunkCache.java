@@ -13,6 +13,7 @@ import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.level.notify.RainStrengthValue;
 import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthValue;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 import com.github.steveice10.opennbt.MNBTIO;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -332,6 +334,8 @@ public class ChunkCache implements CachedData {
             if (this.worldTimeData != null) {
                 consumer.accept(this.worldTimeData.toPacket());
             }
+            // todo: we could optimize the chunk order by sending the closest chunks first
+            //  start in the center chunk and spiral out
             for (final Chunk chunk : this.cache.values()) {
                 consumer.accept(new ClientboundLevelChunkWithLightPacket(
                     chunk.x,
@@ -340,6 +344,13 @@ public class ChunkCache implements CachedData {
                     chunk.heightMaps,
                     chunk.blockEntities.toArray(new BlockEntityInfo[0]),
                     chunk.lightUpdateData));
+            }
+            if (CONFIG.debug.sendChunksBeforePlayerSpawn) {
+                // todo: this will not handle spectator player cache pos correctly, but we don't have
+                //  enough context here to know if this is the spectator or not
+                //  at worst, the spectator pos is 1 block off from where we should spawn them anyway
+                var player = CACHE.getPlayerCache();
+                consumer.accept(new ClientboundPlayerPositionPacket(player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
             }
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);

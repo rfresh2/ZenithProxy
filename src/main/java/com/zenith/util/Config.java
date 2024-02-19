@@ -306,6 +306,7 @@ public final class Config {
         public PacketLog packetLog = new PacketLog();
         public Server server = new Server();
         public boolean clearOldLogs = false;
+        public boolean sendChunksBeforePlayerSpawn = false;
 
         public static final class PacketLog {
             public boolean enabled = false;

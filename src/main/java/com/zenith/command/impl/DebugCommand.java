@@ -35,7 +35,8 @@ public class DebugCommand extends Command {
                         "packetLog on/off",
                         "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
                         "packetLog server on/off",
-                        "packetLog filter <string>"
+                        "packetLog filter <string>",
+                        "sendChunksBeforePlayerSpawn on/off"
                 ));
     }
 
@@ -125,7 +126,14 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Cleared Effects");
                 return 1;
-            }));
+            }))
+            .then(literal("sendChunksBeforePlayerSpawn")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.debug.sendChunksBeforePlayerSpawn = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Send Chunks Before Player Spawn " + (CONFIG.debug.sendChunksBeforePlayerSpawn ? "On!" : "Off!"));
+                          return 1;
+                      })));
     }
 
     @Override
@@ -136,6 +144,7 @@ public class DebugCommand extends Command {
             .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received), false)
             .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received), false)
             .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter, false)
+            .addField("Send Chunks Before Player Spawn", toggleStr(CONFIG.debug.sendChunksBeforePlayerSpawn), false)
             .color(Color.CYAN);
     }
 }
