@@ -44,6 +44,7 @@ def launch_linux(config):
 
 def launch_java(config):
     java_executable = get_java_executable()
+    print("Using Java installation:", java_executable)
     if platform.system() == "Windows":
         java_executable = java_executable.replace("/", "\\")
     if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
@@ -53,12 +54,10 @@ def launch_java(config):
     else:
         jvm_args = default_java_args
     if platform.system() == "Windows":
-        toolchain_command = "call " + java_executable
         jar_command = "-jar " + config.launch_dir.replace("/", "\\") + "ZenithProxy.jar"
     else:
-        toolchain_command = java_executable
         jar_command = "-jar " + config.launch_dir + "ZenithProxy.jar"
-    run_script = f"{toolchain_command} {jvm_args} {jar_command}"
+    run_script = f"{java_executable} {jvm_args} {jar_command}"
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
