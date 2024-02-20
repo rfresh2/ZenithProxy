@@ -4,6 +4,8 @@ import subprocess
 
 import jdk
 
+import launch_platform
+
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
 
@@ -39,24 +41,42 @@ def install_java():
     print("Java installed successfully to:", install_dir)
 
 
+def search_for_java_in_dir(search_path, min_version=21):
+    output = []
+    java_file_extension = ".exe" if launch_platform.get_platform_os() == launch_platform.OperatingSystem.WINDOWS else ""
+    if not os.path.exists(search_path) or not os.path.isdir(search_path):
+        return output
+    for folder in os.listdir(search_path):
+        if folder.__contains__(str(min_version)):
+            # check if this has bin/java(.exe)
+            # its optional on windows to include the .exe in the subprocess call, but we need to check it if its present
+            java_path = os.path.join(search_path, folder, "bin", "java" + java_file_extension)
+            if os.path.exists(java_path):
+                output.append(java_path)
+    return output
+
+
+def find_first_java_in_dir(java_path_list, min_version):
+    for java_path in java_path_list:
+        version = get_java_version_from_subprocess(java_path)
+        if version and version >= min_version:
+            return java_path
+    return None
+
+
 def locate_java(min_version=21):
-    # first check if the java on the path is java 21+
-    # if so, use that
     path_java_version = get_path_java_version()
     if path_java_version and path_java_version >= min_version:
         return "java"
     java_home_version = get_java_home_version()
     if java_home_version and java_home_version >= min_version:
         return os.path.join(os.environ.get("JAVA_HOME"), "bin", "java")
-
-    if not os.path.exists(_JDK_DIR):
-        return None
-    # find the jdk/bin/java executable for java 21+ including java 21, 22, 23, etc.
-    # the next folder down will be named like 'jdk-21.0.2+13'
-    # match on anything that starts with jdk-2
-    for folder in os.listdir(_JDK_DIR):
-        if folder.startswith("jdk-2"):
-            return os.path.join(_JDK_DIR, folder, "bin", "java")
+    jdk_dir_java = find_first_java_in_dir(search_for_java_in_dir(_JDK_DIR, min_version), min_version)
+    if jdk_dir_java:
+        return jdk_dir_java
+    jdk_dir_java = find_first_java_in_dir(search_for_java_in_dir(os.path.join(_USER_DIR, ".jdks"), min_version), min_version)
+    if jdk_dir_java:
+        return jdk_dir_java
     return None
 
 

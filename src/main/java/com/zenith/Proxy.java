@@ -32,6 +32,7 @@ import com.zenith.via.ZenithViaInitializer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestException;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -150,22 +151,28 @@ public class Proxy {
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
                 SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
-            if (CONFIG.client.autoConnect && !this.isConnected())
+            boolean connected = false;
+            if (CONFIG.client.autoConnect && !this.isConnected()) {
                 this.connectAndCatchExceptions();
-            if (CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
+                connected = true;
+            }
+            if (!connected && CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfigAsync();
                 if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
                     this.connectAndCatchExceptions();
+                    connected = true;
                 }
             }
             if (CONFIG.autoUpdater.autoUpdate) {
                 if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
                 else autoUpdater = new RestAutoUpdater();
                 autoUpdater.start();
-                DEFAULT_LOG.info("Started {} AutoUpdater...", LAUNCH_CONFIG.release_channel);
+                DEFAULT_LOG.info("Started AutoUpdater");
             }
             DEFAULT_LOG.info("ZenithProxy started!");
+            if (!connected)
+                DEFAULT_LOG.info("Use the `connect` command to log in!");
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.error("", e);
@@ -307,12 +314,12 @@ public class Proxy {
             if (!CONFIG.client.connectionProxy.user.isEmpty() || !CONFIG.client.connectionProxy.password.isEmpty())
                 proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
                                           new InetSocketAddress(CONFIG.client.connectionProxy.host,
-                                                                             CONFIG.client.connectionProxy.port),
+                                                                CONFIG.client.connectionProxy.port),
                                           CONFIG.client.connectionProxy.user,
                                           CONFIG.client.connectionProxy.password);
             else proxyInfo = new ProxyInfo(CONFIG.client.connectionProxy.type,
-                                             new InetSocketAddress(CONFIG.client.connectionProxy.host,
-                                                                                CONFIG.client.connectionProxy.port));
+                                           new InetSocketAddress(CONFIG.client.connectionProxy.host,
+                                                                 CONFIG.client.connectionProxy.port));
         }
         return proxyInfo;
     }
@@ -376,8 +383,13 @@ public class Proxy {
         if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
         loggingIn.set(false);
         if (minecraftProtocol == null) throw new RuntimeException("Auth failed");
-        AUTH_LOG.info("Logged in as {} [{}].", minecraftProtocol.getProfile().getName(), minecraftProtocol.getProfile().getId());
-        SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
+        var username = minecraftProtocol.getProfile().getName();
+        var uuid = minecraftProtocol.getProfile().getId();
+        AUTH_LOG.info("Logged in as {} [{}].", username, uuid);
+        if (CONFIG.server.extra.whitelist.autoAddClient)
+            if (PLAYER_LISTS.getWhitelist().add(username, uuid))
+                SERVER_LOG.info("Auto added {} [{}] to whitelist", username, uuid);
+        SCHEDULED_EXECUTOR_SERVICE.execute(this::updateFavicon);
         return minecraftProtocol;
     }
 
@@ -386,7 +398,12 @@ public class Proxy {
             try {
                 return this.authenticator.login();
             } catch (final Exception e) {
-                CLIENT_LOG.error("", e);
+                CLIENT_LOG.error("Login failed", e);
+                if (e instanceof MinecraftRequestException mre) {
+                    if (mre.getResponse().getStatusCode() == 404) {
+                        AUTH_LOG.error("[Help] Log into the account with the vanilla MC launcher and join a server. Then try again with ZenithProxy.");
+                    }
+                }
                 return null;
             }
         });

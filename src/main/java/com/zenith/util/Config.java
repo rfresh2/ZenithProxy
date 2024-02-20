@@ -306,6 +306,7 @@ public final class Config {
         public PacketLog packetLog = new PacketLog();
         public Server server = new Server();
         public boolean clearOldLogs = false;
+        public boolean sendChunksBeforePlayerSpawn = false;
 
         public static final class PacketLog {
             public boolean enabled = false;
@@ -378,6 +379,9 @@ public final class Config {
                 public boolean enable = true;
                 public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
                 public String kickmsg = "no whitelist?";
+                // Automatically adds the proxy client account to the whitelist if not present
+                // does not remove any entries
+                public boolean autoAddClient = true;
             }
 
             public static final class Timeout {
