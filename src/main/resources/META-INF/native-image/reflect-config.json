@@ -1203,6 +1203,9 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.via.handler.ZViaClientCodecHandler"
+},
+{
   "name":"com.zenith.via.handler.ZenithViaChannelInitializer"
 },
 {
