@@ -4,9 +4,9 @@ import java.nio.file.Files
 
 plugins {
     java
-    id("org.graalvm.buildtools.native") version "0.10.0"
+    id("org.graalvm.buildtools.native") version "0.10.1"
     // todo: use official version when https://github.com/johnrengelman/shadow/pull/879 is merged
-    id("io.github.goooler.shadow") version "8.1.3"
+    id("io.github.goooler.shadow") version "8.1.5"
 }
 
 group = "com.zenith"
@@ -35,7 +35,7 @@ val lombokVersion = "1.18.30"
 val postgresVersion = "42.7.1"
 val nettyVersion = "4.1.107.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
-val jdbiVersion = "3.44.1"
+val jdbiVersion = "3.45.0"
 
 dependencies {
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
@@ -48,7 +48,7 @@ dependencies {
     shade("com.google.guava:guava:33.0.0-jre")
     shade("org.apache.commons:commons-math3:3.6.1")
     shade("org.apache.commons:commons-collections4:4.4")
-    shade("ch.qos.logback:logback-classic:1.4.14")
+    shade("ch.qos.logback:logback-classic:1.5.0")
     shade("org.slf4j:slf4j-api:2.0.12")
     shade("org.slf4j:jul-to-slf4j:2.0.12")
     shade("com.mojang:brigadier:1.2.9")
