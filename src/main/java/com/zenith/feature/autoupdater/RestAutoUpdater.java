@@ -1,7 +1,7 @@
 package com.zenith.feature.autoupdater;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.math3.util.Pair;
+import com.zenith.util.Pair;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -57,21 +57,21 @@ public class RestAutoUpdater extends AutoUpdater {
             String responseBody = response.body();
 
             Pair<String, String> releaseIdToTag = parseLatestReleaseId(responseBody);
-            if (releaseIdToTag == null || releaseIdToTag.getFirst() == null || releaseIdToTag.getSecond() == null) {
+            if (releaseIdToTag == null || releaseIdToTag.left() == null || releaseIdToTag.right() == null) {
                 return;
             }
-            if (versionLooksCorrect(releaseIdToTag.getSecond())) {
-                if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.getSecond()) && versionIsLessThanCurrent(LAUNCH_CONFIG.version, releaseIdToTag.getSecond())) {
+            if (versionLooksCorrect(releaseIdToTag.right())) {
+                if (!Objects.equals(LAUNCH_CONFIG.version, releaseIdToTag.right()) && versionIsLessThanCurrent(LAUNCH_CONFIG.version, releaseIdToTag.right())) {
                     if (!getUpdateAvailable()) {
                         DEFAULT_LOG.info(
                             "New update on release channel {}! Current: {} New: {}!",
                             LAUNCH_CONFIG.release_channel,
                             LAUNCH_CONFIG.version,
-                            releaseIdToTag.getSecond());
+                            releaseIdToTag.right());
                     }
-                    setUpdateAvailable(true, releaseIdToTag.getSecond());
+                    setUpdateAvailable(true, releaseIdToTag.right());
                 }
-            } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.getSecond());
+            } else DEFAULT_LOG.warn("Invalid version on release: '{}'", releaseIdToTag.right());
         } catch (Exception e) {
             DEFAULT_LOG.error("Failed to check for updates: {}", e.getMessage());
         }
@@ -121,7 +121,7 @@ public class RestAutoUpdater extends AutoUpdater {
             releaseNodes.sort((a, b) -> b.get("published_at").asText().compareTo(a.get("published_at").asText()));
 
             if (!releaseNodes.isEmpty()) {
-                return Pair.create(releaseNodes.get(0).get("id").asText(), releaseNodes.get(0).get("tag_name").asText());
+                return Pair.of(releaseNodes.get(0).get("id").asText(), releaseNodes.get(0).get("tag_name").asText());
             }
         } catch (Throwable e) {
             DEFAULT_LOG.error("Failed to parse latest release ID.", e);
