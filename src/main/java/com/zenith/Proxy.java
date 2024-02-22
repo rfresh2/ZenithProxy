@@ -369,15 +369,11 @@ public class Proxy {
     public @NonNull MinecraftProtocol logIn() {
         loggingIn.set(true);
         AUTH_LOG.info("Logging in {}...", CONFIG.authentication.username);
-        int tries = 0;
         MinecraftProtocol minecraftProtocol = null;
-        while (tries < 3) {
+        for (int tries = 0; tries < 3; tries++) {
             minecraftProtocol = retrieveLoginTaskResult(loginTask());
-            if (minecraftProtocol != null) break;
-            if (!loggingIn.get()) break;
-            tries++;
-            AUTH_LOG.warn("Failed login attempt " + tries);
-            // wait random time between 3 and 10 seconds
+            if (minecraftProtocol != null || !loggingIn.get()) break;
+            AUTH_LOG.warn("Failed login attempt " + (tries + 1));
             Wait.waitALittle((int) (3 + (Math.random() * 7.0)));
         }
         if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
@@ -398,6 +394,9 @@ public class Proxy {
             try {
                 return this.authenticator.login();
             } catch (final Exception e) {
+                if (e instanceof InterruptedException) {
+                    return null;
+                }
                 CLIENT_LOG.error("Login failed", e);
                 if (e instanceof MinecraftRequestException mre) {
                     if (mre.getResponse().getStatusCode() == 404) {
@@ -411,15 +410,14 @@ public class Proxy {
 
     public MinecraftProtocol retrieveLoginTaskResult(Future<MinecraftProtocol> loginTask) {
         try {
-            var maxWait = CONFIG.authentication.accountType == Config.Authentication.AccountType.MSA ? 10L : 300L;
-            long currentWait = 0;
-            while (!loginTask.isDone() && currentWait < maxWait) {
-                if (!loggingIn.get()) { // allow login to be cancelled
+            var maxWait = CONFIG.authentication.accountType == Config.Authentication.AccountType.MSA ? 10 : 300;
+            for (int currentWait = 0; currentWait < maxWait; currentWait++) {
+                if (loginTask.isDone()) break;
+                if (!loggingIn.get()) {
                     loginTask.cancel(true);
                     return null;
                 }
                 Wait.waitALittle(1);
-                currentWait++;
             }
             return loginTask.get(1L, TimeUnit.SECONDS);
         } catch (Exception e) {
