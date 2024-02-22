@@ -107,8 +107,6 @@ public class Shared {
     public static final SessionServerApi SESSION_SERVER_API;
     public static final MinetoolsApi MINETOOLS_API;
     public static final PriobanApi PRIOBAN_API;
-    public static volatile boolean SHOULD_RECONNECT;
-
     public static synchronized void loadConfig() {
         try {
             DEFAULT_LOG.info("Loading config...");
@@ -125,7 +123,6 @@ public class Shared {
             }
 
             CONFIG = config.doPostLoad();
-            SHOULD_RECONNECT = CONFIG.client.extra.autoReconnect.enabled;
             PLAYER_LISTS.init();
             DEFAULT_LOG.info("Config loaded.");
         } catch (final Throwable e) {

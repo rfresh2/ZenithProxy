@@ -75,7 +75,6 @@ public class Proxy {
     protected byte[] serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
     protected final CopyOnWriteArraySet<ServerConnection> activeConnections = new CopyOnWriteArraySet<>();
-    private int reconnectCounter;
     private boolean inQueue = false;
     private int queuePosition = 0;
     @Setter
@@ -83,7 +82,7 @@ public class Proxy {
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
-    volatile private Optional<Future<?>> autoReconnectFuture = Optional.empty();
+    private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
     private final AtomicBoolean loggingIn = new AtomicBoolean(false);
     @Setter
@@ -440,13 +439,11 @@ public class Proxy {
     }
 
     public boolean cancelAutoReconnect() {
-        synchronized (this.autoReconnectFuture) {
-            if (autoReconnectIsInProgress()) {
-                Future<?> future = this.autoReconnectFuture.get();
-                this.autoReconnectFuture = Optional.empty();
-                future.cancel(true);
-                return true;
-            }
+        if (autoReconnectIsInProgress()) {
+            Future<?> future = this.autoReconnectFuture.get();
+            this.autoReconnectFuture = Optional.empty();
+            future.cancel(true);
+            return true;
         }
         return false;
     }
@@ -457,7 +454,6 @@ public class Proxy {
 
     // returns true if we were previously trying to log in
     public boolean cancelLogin() {
-        this.reconnectCounter = 0;
         return this.loggingIn.getAndSet(false);
     }
 
@@ -470,19 +466,13 @@ public class Proxy {
     }
 
     public void delayBeforeReconnect() {
-        try {
-            final int countdown;
-            countdown = CONFIG.client.extra.autoReconnect.delaySeconds
-                // random jitter to help prevent multiple clients from logging in at the same time
-                + ((int) (Math.random() * 5));
-            reconnectCounter++;
-            EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
-            for (int i = countdown; SHOULD_RECONNECT && i > 0; i--) {
-                if (i % 10 == 0) CLIENT_LOG.info("Reconnecting in {}", i);
-                Wait.waitALittle(1);
-            }
-        } catch (Exception e) {
-            CLIENT_LOG.info("AutoReconnect stopped");
+        final int countdown = CONFIG.client.extra.autoReconnect.delaySeconds;
+        EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
+        // random jitter to help prevent multiple clients from logging in at the same time
+        Wait.waitALittle((((int) (Math.random() * 5))) % 10);
+        for (int i = countdown; i > 0; i-=10) {
+            CLIENT_LOG.info("Reconnecting in {}s", i);
+            Wait.waitALittle(10);
         }
     }
 
@@ -640,24 +630,22 @@ public class Proxy {
         if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             // skip autoreconnect when we want to sync client disconnect
             if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason())) {
-                if (autoReconnectIsInProgress()) {
-                    return;
-                }
+                if (autoReconnectIsInProgress()) return;
                 this.autoReconnectFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
-                    delayBeforeReconnect();
-                    synchronized (this.autoReconnectFuture) {
-                        if (this.autoReconnectFuture.isPresent()) {
-                            this.autoReconnectFuture = Optional.empty();
-                            this.connect();
-                        } else
-                            this.autoReconnectFuture = Optional.empty();
+                    try {
+                        delayBeforeReconnect();
+                        if (Thread.currentThread().isInterrupted()) return;
+                        CLIENT_LOG.info("AutoReconnect is interrupted: {}", Thread.currentThread().isInterrupted());
+                        connect();
+                        this.autoReconnectFuture = Optional.empty();
+                    } catch (final Exception e) {
+                        CLIENT_LOG.info("AutoReconnect stopped");
                     }
                 }));
             }
         }
         TPS_CALCULATOR.reset();
     }
-
 
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
@@ -667,7 +655,6 @@ public class Proxy {
     public void handleStartQueueEvent(StartQueueEvent event) {
         this.inQueue = true;
         this.queuePosition = 0;
-        this.reconnectCounter = 0;
         updatePrioBanStatus();
     }
 
@@ -684,7 +671,6 @@ public class Proxy {
         if (this.isPrio.isEmpty())
             // assume we are prio if we skipped queuing
             EVENT_BUS.postAsync(new PrioStatusEvent(true));
-        this.reconnectCounter = 0;
     }
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
