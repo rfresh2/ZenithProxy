@@ -253,6 +253,8 @@
   }, {
     "pattern":"\\Qorg/postgresql/driverconfig.properties\\E"
   }, {
+    "pattern":"\\Qservericon.png\\E"
+  }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
   }, {
     "pattern":"\\Qzenith_commit.txt\\E"
