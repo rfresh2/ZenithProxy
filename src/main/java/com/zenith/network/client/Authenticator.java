@@ -39,6 +39,14 @@ public class Authenticator {
         .withDeviceToken("Win32")
         .sisuTitleAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false); // for chat signing stuff which we don't implement (yet)
+    private final StepFullJavaSession deviceCodeAuthWithoutDeviceTokenStep = MinecraftAuth.builder()
+        .withTimeout(300)
+        .withClientId(MicrosoftConstants.JAVA_TITLE_ID)
+        .withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
+        .deviceCode()
+        .withoutDeviceToken()
+        .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
+        .buildMinecraftJavaProfileStep(false); // for chat signing stuff which we don't implement (yet)
     private final StepFullJavaSession msaAuthStep = MinecraftAuth.builder()
         .withClientId(MicrosoftConstants.JAVA_TITLE_ID).withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
         .credentials()
@@ -127,6 +135,11 @@ public class Authenticator {
     }
 
     @SneakyThrows
+    private FullJavaSession withoutDeviceTokenLogin() {
+        return deviceCodeAuthWithoutDeviceTokenStep.getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+    }
+
+    @SneakyThrows
     private FullJavaSession msaLogin() {
         return msaAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
     }
@@ -150,6 +163,7 @@ public class Authenticator {
             case MSA -> msaAuthStep;
             case DEVICE_CODE -> deviceCodeAuthStep;
             case LOCAL_WEBSERVER -> localWebserverStep;
+            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> deviceCodeAuthWithoutDeviceTokenStep;
         };
     }
 
@@ -158,6 +172,7 @@ public class Authenticator {
             case MSA -> msaLogin();
             case DEVICE_CODE -> deviceCodeLogin();
             case LOCAL_WEBSERVER -> localWebserverLogin();
+            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> withoutDeviceTokenLogin();
         };
     }
 
