@@ -32,7 +32,7 @@ repositories {
 val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.30"
-val postgresVersion = "42.7.1"
+val postgresVersion = "42.7.2"
 val nettyVersion = "4.1.107.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
 val jdbiVersion = "3.45.0"
