@@ -1,12 +1,12 @@
 #!/bin/sh
 
-PYTHON_CMD="python"
+PYTHON_CMD="python3"
 
 echo Finding python interpreter...
 
-# Check if 'python' is not found, then try 'python3'
+# Check if 'python3' is not found, then try 'python'
 if ! command -v $PYTHON_CMD >/dev/null 2>&1; then
-  PYTHON_CMD="python3"
+  PYTHON_CMD="python"
 fi
 
 # Check if neither 'python' nor 'python3' is found
