@@ -22,8 +22,7 @@ public class OutgoingChatHandler implements PacketHandler<ServerboundChatPacket,
         EVENT_BUS.post(outboundChatEvent);
         if (outboundChatEvent.isCancelled()) return null;
         final var cacheTimestamp = CACHE.getChatCache().getLastChatTimestamp();
-        final var packetTimestamp = packet.getTimeStamp();
-        if (packetTimestamp < cacheTimestamp) packet.setTimeStamp(cacheTimestamp);
+        if (packet.getTimeStamp() < cacheTimestamp) packet.setTimeStamp(cacheTimestamp);
         CACHE.getChatCache().setLastChatTimestamp(packet.getTimeStamp());
         return packet;
     }

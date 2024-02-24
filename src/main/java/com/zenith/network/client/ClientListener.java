@@ -10,7 +10,6 @@ import com.zenith.Proxy;
 import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.network.registry.ZenithHandlerCodec;
-import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
@@ -30,9 +29,8 @@ public record ClientListener(@NonNull ClientSession session) implements SessionL
             var state = session.getPacketProtocol().getState();
             final Packet p = ZenithHandlerCodec.CLIENT_REGISTRY.handleInbound(packet, this.session);
             if (p != null && state == ProtocolState.GAME) {
-                for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
-                    connection.sendAsync(packet); // sends on each connection's own event loop
-                }
+                // sends on each connection's own event loop
+                Proxy.getInstance().getActiveConnections().forEach(connection -> connection.sendAsync(packet));
             }
         } catch (Exception e) {
             CLIENT_LOG.error("", e);

@@ -22,6 +22,8 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
             return;
         }
         session.send(new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()));
+        // todo: move this after cache is sent
+        //  queue packets received in the meantime to be sent after cache is sent
         session.setLoggedIn(); // allows server packets to start being sent to player
         // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);
