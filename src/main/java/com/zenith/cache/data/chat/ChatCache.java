@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 public class ChatCache implements CachedData {
     protected CommandNode[] commandNodes = new CommandNode[0];
     protected int firstCommandNodeIndex;
+    protected long lastChatTimestamp = 0L;
 
     // todo: cache chat signing stuff
 
@@ -30,6 +31,7 @@ public class ChatCache implements CachedData {
         if (full) {
             this.commandNodes = new CommandNode[0];
             this.firstCommandNodeIndex = 0;
+            this.lastChatTimestamp = 0L;
         }
     }
 }
