@@ -27,17 +27,16 @@ public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemCh
     @Override
     public boolean applyAsync(@NonNull ClientboundSystemChatPacket packet, @NonNull ClientSession session) {
         try {
-            String serializedChat = ComponentSerializer.serializeJson(packet.getContent());
-            if (Proxy.getInstance().isInQueue()) serializedChat = serializedChat.replace("\\n\\n", "");
-            CHAT_LOG.info(serializedChat);
+            if (CONFIG.client.extra.logChatMessages) {
+                String serializedChat = ComponentSerializer.serializeJson(packet.getContent());
+                if (Proxy.getInstance().isInQueue()) serializedChat = serializedChat.replace("\\n\\n", "");
+                CHAT_LOG.info(serializedChat);
+            }
             final Component component = packet.getContent();
             final String messageString = ComponentSerializer.serializePlain(component);
             Optional<DeathMessageParseResult> deathMessage = Optional.empty();
-            if (!messageString.startsWith("<")) { // normal chat msg
-                if (Proxy.getInstance().isOn2b2t()) {
-                    deathMessage = parseDeathMessage2b2t(component, deathMessage, messageString);
-                }
-            }
+            if (!messageString.startsWith("<") && Proxy.getInstance().isOn2b2t())
+                deathMessage = parseDeathMessage2b2t(component, deathMessage, messageString);
             String senderName = null;
             String whisperTarget = null;
             if (messageString.startsWith("<")) {

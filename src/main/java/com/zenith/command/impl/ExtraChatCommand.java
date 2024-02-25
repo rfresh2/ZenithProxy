@@ -24,7 +24,8 @@ public class ExtraChatCommand extends Command {
                                      "hideChat on/off",
                                      "hideWhispers on/off",
                                      "hideDeathMessages on/off",
-                                     "showConnectionMessages on/off"
+                                     "showConnectionMessages on/off",
+                                     "logChatMessages on/off"
                                  ));
     }
 
@@ -58,6 +59,13 @@ public class ExtraChatCommand extends Command {
                             c.getSource().getEmbed()
                                 .title("Connection messages " + (CONFIG.client.extra.chat.showConnectionMessages ? "shown!" : "hidden!"));
                             return 1;
+                        })))
+            .then(literal("logChatMessages")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.logChatMessages = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                .title("Chat messages logging " + (CONFIG.client.extra.logChatMessages ? "On!" : "Off!"));
+                            return 1;
                         })));
     }
 
@@ -65,10 +73,11 @@ public class ExtraChatCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .addField("Hide chat", CONFIG.client.extra.chat.hideChat ? "on" : "off", true)
-            .addField("Hide whispers", CONFIG.client.extra.chat.hideWhispers ? "on" : "off", true)
-            .addField("Hide death messages", CONFIG.client.extra.chat.hideDeathMessages ? "on" : "off", true)
-            .addField("Connection messages", CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off", true)
+            .addField("Hide chat", CONFIG.client.extra.chat.hideChat ? "on" : "off", false)
+            .addField("Hide whispers", CONFIG.client.extra.chat.hideWhispers ? "on" : "off", false)
+            .addField("Hide death messages", CONFIG.client.extra.chat.hideDeathMessages ? "on" : "off", false)
+            .addField("Connection messages", CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off", false)
+            .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages), false)
             .color(Color.CYAN);
     }
 }

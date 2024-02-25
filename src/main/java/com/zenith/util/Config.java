@@ -87,6 +87,7 @@ public final class Config {
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
+            public boolean logChatMessages = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
 
             public static final class Chat {
