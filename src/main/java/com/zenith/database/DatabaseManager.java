@@ -73,6 +73,22 @@ public class DatabaseManager {
         }
     }
 
+    public void stop() {
+        try {
+            if (nonNull(databaseTickFuture)) databaseTickFuture.cancel(false);
+            stopQueueWaitDatabase();
+            stopConnectionsDatabase();
+            stopChatsDatabase();
+            stopDeathsDatabase();
+            stopQueueLengthDatabase();
+            stopRestartsDatabase();
+            stopPlayerCountDatabase();
+            stopTablistDatabase();
+        } catch (final Exception e) {
+            DATABASE_LOG.error("Failed stopping databases", e);
+        }
+    }
+
     public void postDatabaseTick() {
         try {
             // todo: there's a (uncommon) race condition here, if the proxy disconnects and the cache resets during the tick event
