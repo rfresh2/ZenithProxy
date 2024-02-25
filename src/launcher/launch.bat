@@ -4,10 +4,10 @@ setlocal
 
 echo Finding python interpreter...
 
-set "PYTHON_CMD=python"
+set "PYTHON_CMD=python3"
 
-REM Check if 'python' is not found, then try 'python3'
-where %PYTHON_CMD% >nul 2>nul || set "PYTHON_CMD=python3"
+REM Check if 'python3' is not found, then try 'python'
+where %PYTHON_CMD% >nul 2>nul || set "PYTHON_CMD=python"
 
 REM Check if neither 'python' nor 'python3' is found
 where %PYTHON_CMD% >nul 2>nul || (

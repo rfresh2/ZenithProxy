@@ -32,7 +32,7 @@ repositories {
 val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.30"
-val postgresVersion = "42.7.1"
+val postgresVersion = "42.7.2"
 val nettyVersion = "4.1.107.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
 val jdbiVersion = "3.45.0"
@@ -46,19 +46,17 @@ dependencies {
     shade("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.8.0.202311291450-r")
     shade("com.github.mwiede:jsch:0.2.16")
     shade("com.google.guava:guava:33.0.0-jre")
-    shade("org.apache.commons:commons-math3:3.6.1")
     shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.5.0")
     shade("org.slf4j:slf4j-api:2.0.12")
     shade("org.slf4j:jul-to-slf4j:2.0.12")
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
-    shade("jakarta.xml.bind:jakarta.xml.bind-api:4.0.1")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
     shade("com.github.rfresh2.Discord4j:discord4j-core:8fbbfcd7cc") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:83e066e11e") {
+    shade("com.github.rfresh2:MCProtocolLib:12cabc05b1") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")

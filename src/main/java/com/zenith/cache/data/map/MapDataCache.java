@@ -13,23 +13,20 @@ public class MapDataCache implements CachedData {
     Map<Integer, StoredMapData> mapDataMap = new ConcurrentHashMap<>();
 
     public void upsert(final ClientboundMapItemDataPacket serverMapDataPacket) {
-        if (mapDataMap.containsKey(serverMapDataPacket.getMapId())) {
-            mapDataMap.computeIfPresent(serverMapDataPacket.getMapId(), (key, oldValue) -> {
+        mapDataMap.compute(serverMapDataPacket.getMapId(), (key, oldValue) -> {
+            if (oldValue == null) {
+                return new StoredMapData(
+                        serverMapDataPacket.getMapId(),
+                        serverMapDataPacket.getScale(),
+                        serverMapDataPacket.isLocked());
+            } else {
                 oldValue.setScale(serverMapDataPacket.getScale());
                 oldValue.setLocked(serverMapDataPacket.isLocked());
                 oldValue.addIcons(serverMapDataPacket.getIcons());
                 oldValue.addData(serverMapDataPacket.getData());
                 return oldValue;
-            });
-        } else {
-            mapDataMap.put(serverMapDataPacket.getMapId(), new StoredMapData(
-                    serverMapDataPacket.getMapId(),
-                    serverMapDataPacket.getScale(),
-                    serverMapDataPacket.isLocked()));
-            StoredMapData storedMapData = mapDataMap.get(serverMapDataPacket.getMapId());
-            storedMapData.addIcons(serverMapDataPacket.getIcons());
-            storedMapData.addData(serverMapDataPacket.getData());
-        }
+            }
+        });
     }
 
     @Override

@@ -25,8 +25,9 @@ public class WhitelistCommand extends Command {
         return CommandUsage.full(
             "whitelist",
             CommandCategory.CORE,
-            "Manage the proxy's whitelist. Only usable by users with the account owner role."
-                + "\nautoAddClient will automatically add the account logged into by ZenithProxy to the whitelist if not already present",
+            """
+            Manage the proxy's whitelist. Only usable by users with the account owner role.
+                autoAddClient will automatically add the account logged into by ZenithProxy to the whitelist""",
             asList(
                 "add/del <player>",
                 "list",
