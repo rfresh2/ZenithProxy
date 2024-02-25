@@ -36,7 +36,7 @@ public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemCh
                 // death message color on 2b
                 if (component.children().stream().anyMatch(child -> nonNull(child.color())
                     && Objects.equals(child.color(), TextColor.color(170, 0, 0)))) {
-                    deathMessage = deathMessagesHelper.parse(messageString, true);
+                    deathMessage = deathMessagesHelper.parse(component, messageString);
                     if (deathMessage.isPresent()) {
                         EVENT_BUS.postAsync(new DeathMessageEvent(deathMessage.get(), messageString));
                         if (deathMessage.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {

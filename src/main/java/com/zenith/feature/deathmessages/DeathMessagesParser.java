@@ -2,17 +2,15 @@ package com.zenith.feature.deathmessages;
 
 import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.nonNull;
 
 public class DeathMessagesParser {
     private final List<DeathMessageSchemaInstance> deathMessageSchemaInstances;
@@ -48,14 +46,10 @@ public class DeathMessagesParser {
         deathMessageSchemaInstances = schemaInstancesTemp;
     }
 
-    public Optional<DeathMessageParseResult> parse(final String rawInput, final boolean verifyPlayers) {
-        if (nonNull(deathMessageSchemaInstances)) {
-            for (final DeathMessageSchemaInstance instance : deathMessageSchemaInstances) {
-                final Optional<DeathMessageParseResult> parse = instance.parse(rawInput, verifyPlayers);
-                if (parse.isPresent()) {
-                    return parse;
-                }
-            }
+    public Optional<DeathMessageParseResult> parse(final Component component, final String rawInput) {
+        for (final DeathMessageSchemaInstance instance : deathMessageSchemaInstances) {
+            final Optional<DeathMessageParseResult> parse = instance.parse(rawInput, getPlayerNames(component));
+            if (parse.isPresent()) return parse;
         }
         if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
             DISCORD_BOT.sendEmbedMessage(Embed.builder()
@@ -65,5 +59,14 @@ public class DeathMessagesParser {
         }
         DEFAULT_LOG.warn("No death message schema found for '{}'", rawInput);
         return Optional.empty();
+    }
+
+    List<String> getPlayerNames(final Component component) {
+        return component.children().stream()
+            .map(Component::clickEvent)
+            .filter(Objects::nonNull)
+            .filter(clickEvent -> clickEvent.action() == ClickEvent.Action.SUGGEST_COMMAND && clickEvent.value().startsWith("/w"))
+            .map(clickEvent -> clickEvent.value().substring(3).trim())
+            .toList();
     }
 }
