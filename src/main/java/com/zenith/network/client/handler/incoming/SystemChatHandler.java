@@ -21,6 +21,7 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemChatPacket, ClientSession> {
+    private static final TextColor DEATH_MSG_COLOR_2b2t = TextColor.color(170, 0, 0);
     private final DeathMessagesParser deathMessagesHelper = new DeathMessagesParser();
 
     @Override
@@ -33,21 +34,10 @@ public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemCh
             final String messageString = ComponentSerializer.serializePlain(component);
             Optional<DeathMessageParseResult> deathMessage = Optional.empty();
             if (!messageString.startsWith("<")) { // normal chat msg
-                // death message color on 2b
-                if (component.children().stream().anyMatch(child -> nonNull(child.color())
-                    && Objects.equals(child.color(), TextColor.color(170, 0, 0)))) {
-                    deathMessage = deathMessagesHelper.parse(component, messageString);
-                    if (deathMessage.isPresent()) {
-                        EVENT_BUS.postAsync(new DeathMessageEvent(deathMessage.get(), messageString));
-                        if (deathMessage.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {
-                            EVENT_BUS.postAsync(new SelfDeathMessageEvent(messageString));
-                        }
-                    } else {
-                        CLIENT_LOG.warn("Failed to parse death message: {}", messageString);
-                    }
+                if (Proxy.getInstance().isOn2b2t()) {
+                    deathMessage = parseDeathMessage2b2t(component, deathMessage, messageString);
                 }
             }
-
             String senderName = null;
             String whisperTarget = null;
             if (messageString.startsWith("<")) {
@@ -64,14 +54,31 @@ public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemCh
                     }
                 }
             }
-            EVENT_BUS.postAsync(new ServerChatReceivedEvent(Optional.ofNullable(senderName).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
-                                                            messageString,
-                                                            Optional.ofNullable(whisperTarget).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
-                                                            deathMessage));
+            EVENT_BUS.postAsync(new ServerChatReceivedEvent(
+                Optional.ofNullable(senderName).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
+                messageString,
+                Optional.ofNullable(whisperTarget).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
+                deathMessage));
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: " + packet, e);
         }
         return true;
+    }
+
+    private Optional<DeathMessageParseResult> parseDeathMessage2b2t(final Component component, Optional<DeathMessageParseResult> deathMessage, final String messageString) {
+        if (component.children().stream().anyMatch(child -> nonNull(child.color())
+            && Objects.equals(child.color(), DEATH_MSG_COLOR_2b2t))) { // death message color on 2b
+            deathMessage = deathMessagesHelper.parse(component, messageString);
+            if (deathMessage.isPresent()) {
+                EVENT_BUS.postAsync(new DeathMessageEvent(deathMessage.get(), messageString));
+                if (deathMessage.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {
+                    EVENT_BUS.postAsync(new SelfDeathMessageEvent(messageString));
+                }
+            } else {
+                CLIENT_LOG.warn("Failed to parse death message: {}", messageString);
+            }
+        }
+        return deathMessage;
     }
 
     private String extractSenderNameNormalChat(final String message) {
