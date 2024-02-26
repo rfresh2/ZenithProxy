@@ -31,7 +31,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Authenticator {
     private ScheduledFuture<?> refreshTask;
     private int refreshTryCount = 0;
-    private final StepFullJavaSession deviceCodeAuthStep = MinecraftAuth.builder()
+    @Getter(lazy = true) private final StepFullJavaSession deviceCodeAuthStep = MinecraftAuth.builder()
         .withTimeout(300)
         .withClientId(MicrosoftConstants.JAVA_TITLE_ID)
         .withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
@@ -39,7 +39,7 @@ public class Authenticator {
         .withDeviceToken("Win32")
         .sisuTitleAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false); // for chat signing stuff which we don't implement (yet)
-    private final StepFullJavaSession deviceCodeAuthWithoutDeviceTokenStep = MinecraftAuth.builder()
+    @Getter(lazy = true) private final StepFullJavaSession deviceCodeAuthWithoutDeviceTokenStep = MinecraftAuth.builder()
         .withTimeout(300)
         .withClientId(MicrosoftConstants.JAVA_TITLE_ID)
         .withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
@@ -47,13 +47,13 @@ public class Authenticator {
         .withoutDeviceToken()
         .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false); // for chat signing stuff which we don't implement (yet)
-    private final StepFullJavaSession msaAuthStep = MinecraftAuth.builder()
+    @Getter(lazy = true) private final StepFullJavaSession msaAuthStep = MinecraftAuth.builder()
         .withClientId(MicrosoftConstants.JAVA_TITLE_ID).withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
         .credentials()
         .withDeviceToken("Win32")
         .sisuTitleAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false);
-    private final StepFullJavaSession localWebserverStep = MinecraftAuth.builder()
+    @Getter(lazy = true) private final StepFullJavaSession localWebserverStep = MinecraftAuth.builder()
         .withTimeout(300)
         // meteor client id lol don't sue me
         .withClientId("4673b348-3efa-4f6a-bbb6-34e141cdc638").withScope(MicrosoftConstants.SCOPE2)
@@ -131,22 +131,22 @@ public class Authenticator {
 
     @SneakyThrows
     private FullJavaSession deviceCodeLogin() {
-        return deviceCodeAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+        return getDeviceCodeAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
 
     @SneakyThrows
     private FullJavaSession withoutDeviceTokenLogin() {
-        return deviceCodeAuthWithoutDeviceTokenStep.getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+        return getDeviceCodeAuthWithoutDeviceTokenStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
 
     @SneakyThrows
     private FullJavaSession msaLogin() {
-        return msaAuthStep.getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
+        return getMsaAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
     }
 
     @SneakyThrows
     private FullJavaSession localWebserverLogin() {
-        return localWebserverStep.getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
+        return getLocalWebserverStep().getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
     }
 
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
@@ -160,10 +160,10 @@ public class Authenticator {
 
     private StepFullJavaSession getAuthStep() {
         return switch (CONFIG.authentication.accountType) {
-            case MSA -> msaAuthStep;
-            case DEVICE_CODE -> deviceCodeAuthStep;
-            case LOCAL_WEBSERVER -> localWebserverStep;
-            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> deviceCodeAuthWithoutDeviceTokenStep;
+            case MSA -> getMsaAuthStep();
+            case DEVICE_CODE -> getDeviceCodeAuthStep();
+            case LOCAL_WEBSERVER -> getLocalWebserverStep();
+            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> getDeviceCodeAuthWithoutDeviceTokenStep();
         };
     }
 

@@ -116,7 +116,7 @@ public class CodecRegistry {
         for (int i = codecs.length - 1; i >= 0; i--) {
             var codec = codecs[i];
             if (codec.getActivePredicate().test(session))
-                codecs[i].handlePostOutgoing(packet, session);
+                codec.handlePostOutgoing(packet, session);
         }
     }
 }
