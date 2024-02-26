@@ -47,11 +47,10 @@ public class ChatDatabase extends LiveDatabase {
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
         if (!Proxy.getInstance().isOn2b2t() // only write on 2b2t
                 || Proxy.getInstance().isInQueue()  // ignore queue
-                || !event.message().startsWith("<")) return; // don't write whispers or system messages
+                || !event.isPublicChat()) return; // don't write whispers or system messages
         try {
             if (event.sender().isPresent()) {
-                final String msg = event.message().substring(event.message().indexOf(">") + 2); // skip leading space
-                writeChat(event.sender().get().getProfileId(), event.sender().get().getName(), msg, Instant.now().atOffset(ZoneOffset.UTC));
+                writeChat(event.sender().get().getProfileId(), event.sender().get().getName(), event.publicChatContent(), Instant.now().atOffset(ZoneOffset.UTC));
             } else {
                 DATABASE_LOG.error("Unable to extract sender for chat message: {}", event.message());
             }

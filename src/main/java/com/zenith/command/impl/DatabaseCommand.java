@@ -21,6 +21,7 @@ public class DatabaseCommand extends Command {
                                  CommandCategory.MANAGE,
                                  "Configures what 2b2t server data is collected by the proxy. No database logs personal data.",
                                  asList(
+                                     "on/off",
                                      "queueWait on/off",
                                      "queueLength on/off",
                                      "publicChat on/off",
@@ -37,6 +38,15 @@ public class DatabaseCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("database")
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.database.enabled = getToggle(c, "toggle");
+                if (CONFIG.database.enabled) DATABASE_MANAGER.start();
+                else DATABASE_MANAGER.stop();
+                c.getSource().getEmbed()
+                    .title("Databases " + (CONFIG.database.enabled ? "On!" : "Off!"));
+                return 1;
+
+            }))
             .then(literal("queueWait")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.database.queueWait.enabled = getToggle(c, "toggle");

@@ -87,6 +87,7 @@ public final class Config {
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
+            public boolean logChatMessages = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
 
             public static final class Chat {
@@ -437,6 +438,7 @@ public final class Config {
         public boolean reportCoords = true;
         public boolean mentionRoleOnPrioUpdate = true;
         public boolean mentionRoleOnPrioBanUpdate = true;
+        public boolean mentionRoleOnDeviceCodeAuth = true;
         public boolean manageProfileImage = true;
         public boolean manageNickname = true;
         public boolean manageDescription = true;

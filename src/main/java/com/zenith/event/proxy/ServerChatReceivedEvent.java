@@ -17,6 +17,11 @@ public record ServerChatReceivedEvent(Optional<PlayerListEntry> sender, String m
         return !isWhisper() && !isDeathMessage() && sender.isPresent() && message.startsWith("<" + sender.get().getName() + ">");
     }
 
+    // throws on error extracting content
+    public String publicChatContent() {
+        return message.substring(message.indexOf(">") + 2);
+    }
+
     public boolean isWhisper() {
         return whisperTarget.isPresent();
     }

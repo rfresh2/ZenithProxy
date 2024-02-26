@@ -1,6 +1,9 @@
 package com.zenith.feature.deathmessages;
 
 import com.zenith.Shared;
+import com.zenith.util.ComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -145,7 +148,11 @@ public class DeathMessageParserTest {
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         Shared.loadConfig();
         Shared.loadLaunchConfig();
-        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(rawInput, false);
+        final var componentBuilder = Component.text();
+        componentBuilder.append(Component.text(victim).clickEvent(ClickEvent.suggestCommand("/w " + victim)));
+        if (killerType == KillerType.PLAYER)
+            componentBuilder.append(Component.text(killerName).clickEvent(ClickEvent.suggestCommand("/w " + killerName)));
+        final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(componentBuilder.build(), rawInput);
         assertTrue(deathMessageParseResult.isPresent());
         assertEquals(deathMessageParseResult.get().getVictim(), victim);
         if (nonNull(killerName)) {
@@ -161,6 +168,12 @@ public class DeathMessageParserTest {
         } else {
             assertFalse(deathMessageParseResult.get().getWeapon().isPresent());
         }
+    }
 
+    @Test
+    public void componentPlayercountTest() {
+        final var component = ComponentSerializer.deserialize("{\"extra\":[{\"color\":\"dark_aqua\",\"text\":\"\"},{\"color\":\"dark_aqua\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/w SonofPajank \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":{\"extra\":[{\"color\":\"gold\",\"text\":\"Message \"},{\"color\":\"dark_aqua\",\"text\":\"\"},{\"color\":\"dark_aqua\",\"text\":\"SonofPajank\"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"}},\"text\":\"SonofPajank\"},{\"color\":\"dark_aqua\",\"text\":\" \"},{\"color\":\"dark_red\",\"text\":\"assassinated \"},{\"color\":\"dark_aqua\",\"text\":\"\"},{\"color\":\"dark_aqua\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/w TakinaNakano \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":{\"extra\":[{\"color\":\"gold\",\"text\":\"Message \"},{\"color\":\"dark_aqua\",\"text\":\"\"},{\"color\":\"dark_aqua\",\"text\":\"TakinaNakano\"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"}},\"text\":\"TakinaNakano\"},{\"color\":\"dark_aqua\",\"text\":\" \"},{\"color\":\"dark_red\",\"text\":\"using just their hands.\"}],\"text\":\"\"}");
+        final var playerCount = deathMessagesParser.getPlayerNames(component).size();
+        assertEquals(2, playerCount);
     }
 }

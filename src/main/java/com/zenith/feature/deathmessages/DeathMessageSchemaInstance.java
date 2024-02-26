@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.DEFAULT_LOG;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 
@@ -27,7 +27,7 @@ public final class DeathMessageSchemaInstance {
         return asList(in.split(" "));
     }
 
-    public Optional<DeathMessageParseResult> parse(final String deathMessageRaw, final boolean verifyPlayers) {
+    public Optional<DeathMessageParseResult> parse(final String deathMessageRaw, final List<String> playerNames) {
         final WordIterator iterator = new WordIterator(deathMessageRaw);
         String victim = null;
         Killer killer = null;
@@ -46,18 +46,14 @@ public final class DeathMessageSchemaInstance {
                 if (!userNameValidPattern.matcher(textWord).matches()) {
                     return Optional.empty();
                 } else {
-                    if (verifyPlayers && !isPlayerOnline(textWord)) {
-                        return Optional.empty();
-                    }
+                    if (!playerNames.contains(textWord)) return Optional.empty();
                     victim = textWord;
                 }
             } else if (schemaWord.startsWith("$k")) {
                 if (!userNameValidPattern.matcher(mcTextWord).matches()) {
                     return Optional.empty();
                 } else {
-                    if (verifyPlayers && !isPlayerOnline(mcTextWord)) {
-                        return Optional.empty();
-                    }
+                    if (!playerNames.contains(mcTextWord)) return Optional.empty();
                     killer = new Killer(mcTextWord, KillerType.PLAYER);
                 }
             } else if (schemaWord.startsWith("$w")) {
@@ -142,12 +138,12 @@ public final class DeathMessageSchemaInstance {
                 }
             }
         }
-        if (isNull(victim) || iterator.hasNext())
-            return Optional.empty(); // we shouldn't ever reach this but just in case
+        if (isNull(victim) || iterator.hasNext()) return Optional.empty(); // we shouldn't ever reach this but just in case
+        if (playerNames.size() == 2 && (killer == null || killer.getType() != KillerType.PLAYER)) {
+            DEFAULT_LOG.warn("Expected player killer but found: {}", killer);
+        } else if (playerNames.size() == 1 && (killer != null && killer.getType() == KillerType.PLAYER)) {
+            DEFAULT_LOG.warn("Expected no player killer but found: {}", killer);
+        }
         return Optional.of(new DeathMessageParseResult(victim, Optional.ofNullable(killer), Optional.ofNullable(weapon), this));
-    }
-
-    public boolean isPlayerOnline(final String playerName) {
-        return CACHE.getTabListCache().getFromName(playerName).isPresent();
     }
 }
