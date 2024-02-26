@@ -639,6 +639,16 @@ public class Proxy {
             }
         }
         TPS_CALCULATOR.reset();
+        if (!DISCORD_BOT.isRunning()
+            && Proxy.getInstance().isOn2b2t()
+            && !Proxy.getInstance().getIsPrio().orElse(false)
+            && event.reason().startsWith("You have lost connection")
+            && event.onlineDuration().toSeconds() >= 0L
+            && event.onlineDuration().toSeconds() <= 1L) {
+            CLIENT_LOG.warn("You have likely been kicked for reaching the 2b2t non-prio account IP limit."
+                                  + "\nConsider configuring a connection proxy with the `clientConnection` command."
+                                  + "\nOr migrate ZenithProxy instances to multiple hosts/IP's.");
+        }
     }
 
     public void handleConnectEvent(ConnectEvent event) {
