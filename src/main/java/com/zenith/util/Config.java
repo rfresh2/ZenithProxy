@@ -438,6 +438,7 @@ public final class Config {
         public boolean reportCoords = true;
         public boolean mentionRoleOnPrioUpdate = true;
         public boolean mentionRoleOnPrioBanUpdate = true;
+        public boolean mentionRoleOnDeviceCodeAuth = true;
         public boolean manageProfileImage = true;
         public boolean manageNickname = true;
         public boolean manageDescription = true;

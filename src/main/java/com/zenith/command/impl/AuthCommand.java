@@ -13,6 +13,8 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.CustomStringArgumentType.getString;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class AuthCommand extends Command {
@@ -27,7 +29,8 @@ public class AuthCommand extends Command {
                                      "type list",
                                      "type <type>",
                                      "email <email>",
-                                     "password <password>"
+                                     "password <password>",
+                                     "mention on/off"
                                  )
         );
     }
@@ -110,6 +113,14 @@ public class AuthCommand extends Command {
                               .title("Authentication Password Set")
                               .color(Color.CYAN);
                           return 1;
+                      })))
+            .then(literal("mention")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.discord.mentionRoleOnDeviceCodeAuth = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                .title("Mention Role " + (CONFIG.discord.mentionRoleOnDeviceCodeAuth ? "On" : "Off"))
+                                .color(Color.CYAN);
+                            return 1;
                       })));
     }
 
@@ -120,8 +131,9 @@ public class AuthCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .addField("Account Type", CONFIG.authentication.accountType.toString(), true)
-            .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), true)
-            .addField("Attempts", CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, true);
+            .addField("Account Type", CONFIG.authentication.accountType.toString(), false)
+            .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), false)
+            .addField("Attempts", CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, false)
+            .addField("Mention", toggleStr(CONFIG.discord.mentionRoleOnDeviceCodeAuth), false);
     }
 }

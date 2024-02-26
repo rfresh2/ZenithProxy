@@ -1058,10 +1058,14 @@ public class DiscordBot {
     }
 
     public void handleMsaDeviceCodeLoginEvent(final MsaDeviceCodeLoginEvent event) {
-        sendEmbedMessage(mentionAccountOwner(), Embed.builder()
+        final var embed = Embed.builder()
             .title("Microsoft Device Code Login")
             .color(Color.CYAN)
-            .description("Login Here: " + event.deviceCode().getDirectVerificationUri()));
+            .description("Login Here: " + event.deviceCode().getDirectVerificationUri());
+        if (CONFIG.discord.mentionRoleOnDeviceCodeAuth)
+            sendEmbedMessage(mentionAccountOwner(), embed);
+        else
+            sendEmbedMessage(embed);
     }
 
     public void handleDeathMessageEvent(final DeathMessageEvent event) {
