@@ -113,9 +113,8 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
     private String getMotdStatus() { // in minedown formatted string
         var proxy = Proxy.getInstance();
         if (proxy.isInQueue()) {
-            if (proxy.getIsPrio().isEmpty()) return "&cQueuing&r";
             var sb = new StringBuilder();
-            var prio = proxy.getIsPrio().get();
+            var prio = proxy.isPrio();
             if (prio) sb.append("&cIn Prio Queue&r");
             else sb.append("&cIn Queue&r");
             sb.append(" &f[&r&b");

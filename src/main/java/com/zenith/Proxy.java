@@ -469,6 +469,10 @@ public class Proxy {
         return player != null && player.isLoggedIn();
     }
 
+    public boolean isPrio() {
+        return this.isPrio.orElse(CONFIG.authentication.prio);
+    }
+
     public void updatePrioBanStatus() {
         if (!CONFIG.client.extra.prioBan2b2tCheck || !isOn2b2t()) return;
         this.isPrioBanned = PRIOBAN_API.checkPrioBan();
@@ -491,12 +495,12 @@ public class Proxy {
     private void handleActiveHoursTick() {
         var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
         if (!activeHoursConfig.enabled) return;
-        if (isOn2b2t() && (this.isPrio.orElse(false) && isConnected())) return;
+        if (isOn2b2t() && (this.isPrio() && isConnected())) return;
         if (hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
         if (this.lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
 
         var queueLength = isOn2b2t()
-            ? this.isPrio.orElse(false)
+            ? this.isPrio()
                 ? Queue.getQueueStatus().prio()
                 : Queue.getQueueStatus().regular()
             : 0;
@@ -583,7 +587,7 @@ public class Proxy {
 
     public void twoB2tTimeLimitKickWarningTick() {
         try {
-            if (this.isPrio.orElse(false) // Prio players don't get kicked
+            if (this.isPrio() // Prio players don't get kicked
                 || !this.hasActivePlayer() // If no player is connected, nobody to warn
                 || !isOnlineOn2b2tForAtLeastDuration(twoB2tTimeLimit.minusMinutes(10L))
             ) return;
@@ -641,7 +645,7 @@ public class Proxy {
         TPS_CALCULATOR.reset();
         if (!DISCORD_BOT.isRunning()
             && Proxy.getInstance().isOn2b2t()
-            && !Proxy.getInstance().getIsPrio().orElse(false)
+            && !Proxy.getInstance().isPrio()
             && event.reason().startsWith("You have lost connection")
             && event.onlineDuration().toSeconds() >= 0L
             && event.onlineDuration().toSeconds() <= 1L) {
@@ -678,7 +682,7 @@ public class Proxy {
     }
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
-        if (!this.isPrio.orElse(false) && isNull(getCurrentPlayer().get())) {
+        if (!this.isPrio() && isNull(getCurrentPlayer().get())) {
             SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
                 if (isNull(getCurrentPlayer().get()))
                     disconnect(SERVER_RESTARTING);

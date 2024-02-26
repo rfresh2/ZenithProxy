@@ -62,18 +62,14 @@ public class StatusCommand extends Command {
     private String getStatus() {
         if (Proxy.getInstance().isConnected()) {
             if (Proxy.getInstance().isInQueue()) {
-                if (Proxy.getInstance().getIsPrio().isPresent()) {
-                    if (Proxy.getInstance().getIsPrio().get()) {
-                        return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\n"
-                            + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
-                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
-                    } else {
-                        return "In Reg Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\n"
-                            + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
-                            + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
-                    }
+                if (Proxy.getInstance().isPrio()) {
+                    return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\n"
+                        + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
+                        + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
                 } else {
-                    return "Queueing";
+                    return "In Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\n"
+                        + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
+                        + "(" + TimestampFormat.LONG_TIME.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
                 }
             } else {
                 return "Online";

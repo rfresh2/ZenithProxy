@@ -380,7 +380,7 @@ public class DiscordBot {
     }
 
     private String queuePositionStr() {
-        if (Proxy.getInstance().getIsPrio().orElse(false))
+        if (Proxy.getInstance().isPrio())
             return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
         else
             return Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + " - ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition());
@@ -584,7 +584,7 @@ public class DiscordBot {
             .addField("Online Duration", formatDuration(event.onlineDuration()), false)
             .color(Color.RUBY);
         if (Proxy.getInstance().isOn2b2t()
-            && !Proxy.getInstance().getIsPrio().orElse(false)
+            && !Proxy.getInstance().isPrio()
             && event.reason().startsWith("You have lost connection")
             && event.onlineDuration().toSeconds() >= 0L
             && event.onlineDuration().toSeconds() <= 1L) {
@@ -856,7 +856,7 @@ public class DiscordBot {
 
     public void handleActiveHoursConnectEvent(ActiveHoursConnectEvent event) {
         int queueLength;
-        if (Proxy.getInstance().getIsPrio().orElse(false)) {
+        if (Proxy.getInstance().isPrio()) {
             queueLength = Queue.getQueueStatus().prio();
         } else {
             queueLength = Queue.getQueueStatus().regular();

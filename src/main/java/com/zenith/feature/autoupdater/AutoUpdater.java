@@ -95,7 +95,7 @@ public abstract class AutoUpdater {
     }
 
     private void scheduleConditionalUpdate() {
-        if (Proxy.getInstance().getIsPrio().orElse(CONFIG.authentication.prio)) {
+        if (Proxy.getInstance().isPrio()) {
             // update immediately if we have prio
             update();
         } else {

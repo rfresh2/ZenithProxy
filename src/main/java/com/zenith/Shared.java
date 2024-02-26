@@ -77,9 +77,7 @@ public class Shared {
         ) {
             return false;
         } else if (reason.equals(AUTO_DISCONNECT)) {
-            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance()
-                .getIsPrio()
-                .orElse(false));
+            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance().isPrio());
         } else {
             return true;
         }
