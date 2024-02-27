@@ -12,7 +12,7 @@ public class BlockEntityDataHandler implements AsyncPacketHandler<ClientboundBlo
 
     @Override
     public boolean applyAsync(@NonNull ClientboundBlockEntityDataPacket packet, @NonNull ClientSession session) {
-        if (!CACHE.getChunkCache().updateTileEntity(packet)) {
+        if (!CACHE.getChunkCache().updateBlockEntity(packet)) {
             CLIENT_LOG.warn("Received ServerUpdateTileEntityPacket for chunk column that does not exist: {}, data: {}", packet.getPosition(), packet.getNbt());
             return false;
         }

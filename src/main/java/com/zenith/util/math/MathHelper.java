@@ -29,6 +29,11 @@ public class MathHelper {
         return d > i ? i + 1 : i;
     }
 
+    public static int log2Ceil(int num) {
+        return (int) Math.ceil(Math.log(num) / Math.log(2));
+    }
+
+
     public static double wrapDegrees(double degrees) {
         double d = degrees % 360.0;
         if (d >= 180.0) d -= 360.0;

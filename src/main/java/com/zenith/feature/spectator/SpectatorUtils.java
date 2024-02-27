@@ -43,7 +43,7 @@ public final class SpectatorUtils {
                 CACHE.getPlayerCache().getZ(),
                 CACHE.getPlayerCache().getYaw(),
                 CACHE.getPlayerCache().getPitch(),
-                false // idk if this will break any rendering or not
+                false
             ));
             connection.sendAsync(new ClientboundRotateHeadPacket(
                 CACHE.getPlayerCache().getEntityId(),

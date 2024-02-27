@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.feature.pathing.CollisionBox;
+import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -35,7 +35,7 @@ public class BlockDataManager {
     public BlockDataManager() {
         init();
         this.maxStates = blockStateIdToBlockId.size();
-        this.blockBitsPerEntry = ChunkCache.log2RoundUp(this.maxStates);
+        this.blockBitsPerEntry = MathHelper.log2Ceil(this.maxStates);
     }
 
     private void init() {
