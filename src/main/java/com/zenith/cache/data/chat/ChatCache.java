@@ -4,15 +4,13 @@ import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 public class ChatCache implements CachedData {
     protected CommandNode[] commandNodes = new CommandNode[0];

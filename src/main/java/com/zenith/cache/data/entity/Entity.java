@@ -9,9 +9,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateAttributesPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
@@ -22,8 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 public abstract class Entity {
     protected double x;

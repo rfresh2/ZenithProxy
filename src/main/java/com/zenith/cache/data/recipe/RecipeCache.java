@@ -6,15 +6,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRe
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateRecipesPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-@Getter
-@Setter
+@Data
 public class RecipeCache implements CachedData {
     protected Set<Recipe> recipeRegistry = Collections.synchronizedSet(new HashSet<>());
     // todo: still some issues with known/displayed to debug

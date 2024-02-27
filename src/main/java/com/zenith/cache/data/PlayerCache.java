@@ -147,15 +147,15 @@ public class PlayerCache implements CachedData {
     public static void sync() {
         if (nonNull(Proxy.getInstance().getClient())) {
             try {
-                // intentionally sends an invalid inventory packet to issue a ServerWindowItems which corrects all inventory slot contents
-                // pretty sure it requires a Notchian client to be connected to send the confirmTransaction stuff, can be implemented later if nesscesary
-                Proxy.getInstance().getClient().sendAsync(new ServerboundContainerClickPacket(0,
-                                                                                         -1337,
-                                                                                         0,
-                                                                                         ContainerActionType.CREATIVE_GRAB_MAX_STACK,
-                                                                                         CreativeGrabAction.GRAB,
-                                                                                         new ItemStack(1, 1),
-                                                                                         Int2ObjectMaps.emptyMap()));
+                // intentionally sends an invalid inventory packet to make the server send us our full inventory
+                Proxy.getInstance().getClient().sendAsync(new ServerboundContainerClickPacket(
+                    0,
+                    -1337,
+                    0,
+                    ContainerActionType.CREATIVE_GRAB_MAX_STACK,
+                    CreativeGrabAction.GRAB,
+                    new ItemStack(1, 1),
+                    Int2ObjectMaps.emptyMap()));
             } catch (final Exception e) {
                 CLIENT_LOG.warn("Failed Player Sync", e);
             }

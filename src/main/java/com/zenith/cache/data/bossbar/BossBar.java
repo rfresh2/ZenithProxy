@@ -3,20 +3,16 @@ package com.zenith.cache.data.bossbar;
 import com.github.steveice10.mc.protocol.data.game.BossBarColor;
 import com.github.steveice10.mc.protocol.data.game.BossBarDivision;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@RequiredArgsConstructor
 public class BossBar {
     @NonNull
     protected final UUID uuid;

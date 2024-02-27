@@ -2,17 +2,16 @@ package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import javax.annotation.Nullable;
 
+@Data
 @AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Accessors(chain = true)
-@ToString
 public class PotionEffect {
     @NonNull
     public final Effect effect;

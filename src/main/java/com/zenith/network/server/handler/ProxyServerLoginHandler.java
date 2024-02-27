@@ -36,7 +36,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())
                         && nonNull(CACHE.getChunkCache().getCurrentDimension())
-                        && nonNull(CACHE.getChunkCache().getWorldData())
+                        && nonNull(CACHE.getChunkCache().getWorldName())
                         && nonNull(CACHE.getTabListCache().get(CACHE.getProfileCache().getProfile().getId()))
                         && connection.isWhitelistChecked(),
                 20)) {
@@ -59,16 +59,16 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 GameMode.SPECTATOR,
                 CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
                 CACHE.getChunkCache().getRegistryTag(),
-                CACHE.getChunkCache().getWorldData().dimensionType(),
-                CACHE.getChunkCache().getWorldData().worldName(),
-                CACHE.getChunkCache().getWorldData().hashedSeed(),
+                CACHE.getChunkCache().getDimensionType(),
+                CACHE.getChunkCache().getWorldName(),
+                CACHE.getChunkCache().getHashedSeed(),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
                 false,
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
-                CACHE.getChunkCache().getWorldData().debug(),
-                CACHE.getChunkCache().getWorldData().flat(),
+                CACHE.getChunkCache().isDebug(),
+                CACHE.getChunkCache().isFlat(),
                 CACHE.getPlayerCache().getLastDeathPos(),
                 CACHE.getPlayerCache().getPortalCooldown()
             ));
@@ -81,16 +81,16 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().getGameMode(),
                 CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
                 CACHE.getChunkCache().getRegistryTag(),
-                CACHE.getChunkCache().getWorldData().dimensionType(),
-                CACHE.getChunkCache().getWorldData().worldName(),
-                CACHE.getChunkCache().getWorldData().hashedSeed(),
+                CACHE.getChunkCache().getDimensionType(),
+                CACHE.getChunkCache().getWorldName(),
+                CACHE.getChunkCache().getHashedSeed(),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
                 false,
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
-                CACHE.getChunkCache().getWorldData().debug(),
-                CACHE.getChunkCache().getWorldData().flat(),
+                CACHE.getChunkCache().isDebug(),
+                CACHE.getChunkCache().isFlat(),
                 CACHE.getPlayerCache().getLastDeathPos(),
                 CACHE.getPlayerCache().getPortalCooldown()
             ));

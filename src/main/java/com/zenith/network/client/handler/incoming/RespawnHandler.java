@@ -36,7 +36,7 @@ public class RespawnHandler implements AsyncPacketHandler<ClientboundRespawnPack
             // delay is a hacky workaround and might still get caught in race condition sometimes
             SCHEDULED_EXECUTOR_SERVICE.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
         }
-        if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().getDimensionName(), packet.getDimension())) {
+        if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().dimensionName(), packet.getDimension())) {
             CACHE.reset(false);
             // only partial reset chunk and entity cache?
         }

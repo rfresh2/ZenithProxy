@@ -7,8 +7,8 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateMobEffectPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.annotation.Nullable;
@@ -16,8 +16,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class EntityLiving extends Entity {
     @Nullable
