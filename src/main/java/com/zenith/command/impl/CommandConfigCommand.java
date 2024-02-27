@@ -59,14 +59,14 @@ public class CommandConfigCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.inGameCommands.enable = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("In Game Commands " + (CONFIG.inGameCommands.enable ? "On!" : "Off!"));
+                              .title("In Game Commands " + toggleStrCaps(CONFIG.inGameCommands.enable));
                           return 1;
                       }))
                       .then(literal("slashCommands")
                                 .then(argument("toggle", toggle()).executes(c -> {
                                     CONFIG.inGameCommands.slashCommands = getToggle(c, "toggle");
                                     c.getSource().getEmbed()
-                                        .title("In Game Slash Commands " + (CONFIG.inGameCommands.slashCommands ? "On!" : "Off!"));
+                                        .title("In Game Slash Commands " + toggleStrCaps(CONFIG.inGameCommands.slashCommands));
                                     syncSlashCommandsToCurrentPlayer();
                                     return 1;
                                 }))
@@ -74,7 +74,7 @@ public class CommandConfigCommand extends Command {
                                           .then(argument("toggle", toggle()).executes(c -> {
                                               CONFIG.inGameCommands.slashCommandsReplacesServerCommands = getToggle(c, "toggle");
                                               c.getSource().getEmbed()
-                                                  .title("Replace Server Commands " + (CONFIG.inGameCommands.slashCommandsReplacesServerCommands ? "On!" : "Off!"));
+                                                  .title("Replace Server Commands " + toggleStrCaps(CONFIG.inGameCommands.slashCommandsReplacesServerCommands));
                                               syncSlashCommandsToCurrentPlayer();
                                               return 1;
                                           }))))

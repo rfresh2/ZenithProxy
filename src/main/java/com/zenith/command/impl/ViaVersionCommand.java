@@ -39,14 +39,14 @@ public class ViaVersionCommand extends Command {
                 .then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.client.viaversion.enabled = getToggle(c, "toggle");
                     c.getSource().getEmbed()
-                        .title("Client ViaVersion " + (CONFIG.client.viaversion.enabled ? "On!" : "Off!"));
+                        .title("Client ViaVersion " + toggleStrCaps(CONFIG.client.viaversion.enabled));
                     return 1;
                 }))
                 .then(literal("autoConfig")
                           .then(argument("toggle", toggle()).executes(c -> {
                                 CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
                                 c.getSource().getEmbed()
-                                    .title("Client ViaVersion AutoConfig " + (CONFIG.client.viaversion.autoProtocolVersion ? "On!" : "Off!"));
+                                    .title("Client ViaVersion AutoConfig " + toggleStrCaps(CONFIG.client.viaversion.autoProtocolVersion));
                                 return 1;
                           })))
                 .then(literal("version")
@@ -69,7 +69,7 @@ public class ViaVersionCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.server.viaversion.enabled = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Server ViaVersion " + (CONFIG.server.viaversion.enabled ? "On!" : "Off!"));
+                                .title("Server ViaVersion " + toggleStrCaps(CONFIG.server.viaversion.enabled));
                             return 1;
                       })));
     }

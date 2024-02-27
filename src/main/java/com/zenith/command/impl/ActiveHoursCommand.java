@@ -46,10 +46,9 @@ public class ActiveHoursCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("activeHours")
             .then(argument("toggle", toggle()).executes(c -> {
-                boolean toggle = getToggle(c, "toggle");
-                CONFIG.client.extra.utility.actions.activeHours.enabled = toggle;
+                CONFIG.client.extra.utility.actions.activeHours.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Active Hours " + (toggle ? "On!" : "Off!"));
+                    .title("Active Hours " + toggleStrCaps(CONFIG.client.extra.utility.actions.activeHours.enabled));
                 return 1;
             }))
             .then(literal("timezone").then(argument("tz", wordWithChars()).executes(c -> {

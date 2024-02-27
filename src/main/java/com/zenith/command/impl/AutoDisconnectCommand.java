@@ -56,7 +56,7 @@ public class AutoDisconnectCommand extends Command {
                 CONFIG.client.extra.utility.actions.autoDisconnect.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AutoDisconnect.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AutoDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.enabled ? "On!" : "Off!"));
+                    .title("AutoDisconnect " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.enabled));
                 return 1;
             }))
             .then(literal("health")
@@ -70,35 +70,35 @@ public class AutoDisconnectCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("AutoDisconnect CancelAutoReconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect ? "On!" : "Off!"));
+                                .title("AutoDisconnect CancelAutoReconnect " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect));
                             return 1;
                       })))
             .then(literal("autoClientDisconnect")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("AutoDisconnect AutoClientDisconnect " + (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect ? "On!" : "Off!"));
+                                .title("AutoDisconnect AutoClientDisconnect " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect));
                             return 1;
                       })))
             .then(literal("thunder")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.utility.actions.autoDisconnect.thunder = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("AutoDisconnect Thunder " + (CONFIG.client.extra.utility.actions.autoDisconnect.thunder ? "On!" : "Off!"));
+                                .title("AutoDisconnect Thunder " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.thunder));
                             return 1;
                       })))
             .then(literal("unknownPlayer")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("AutoDisconnect UnknownPlayer " + (CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange ? "On!" : "Off!"));
+                              .title("AutoDisconnect UnknownPlayer " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange));
                           return 1;
                       })))
             .then(literal("whilePlayerConnected")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("AutoDisconnect WhilePlayerConnected " + (CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected ? "On!" : "Off!"));
+                              .title("AutoDisconnect WhilePlayerConnected " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected));
                           return 1;
                       })));
     }

@@ -47,14 +47,14 @@ public class DebugCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.autoConnect = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Auto Connect " + (CONFIG.client.autoConnect ? "On!" : "Off!"));
+                                .title("Auto Connect " + toggleStrCaps(CONFIG.client.autoConnect));
                             return 1;
                       })))
             .then(literal("packetLog")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.debug.packetLog.enabled = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Packet Log " + (CONFIG.debug.packetLog.enabled ? "On!" : "Off!"));
+                              .title("Packet Log " + toggleStrCaps(CONFIG.debug.packetLog.enabled));
                           return 1;
                       }))
                       .then(literal("client")
@@ -71,7 +71,7 @@ public class DebugCommand extends Command {
                                         CONFIG.debug.packetLog.clientPacketLog.preSent = false;
                                     }
                                     c.getSource().getEmbed()
-                                        .title("Client Packet Log " + (toggle ? "On!" : "Off!"));
+                                        .title("Client Packet Log " + toggleStrCaps(toggle));
                                     return 1;
                                 })))
                       .then(literal("server")
@@ -88,7 +88,7 @@ public class DebugCommand extends Command {
                                         CONFIG.debug.packetLog.serverPacketLog.preSent = false;
                                     }
                                     c.getSource().getEmbed()
-                                        .title("Server Packet Log " + (toggle ? "On!" : "Off!"));
+                                        .title("Server Packet Log " + toggleStrCaps(toggle));
                                     return 1;
                                 })))
                       .then(literal("filter")
@@ -131,7 +131,7 @@ public class DebugCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.debug.sendChunksBeforePlayerSpawn = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Send Chunks Before Player Spawn " + (CONFIG.debug.sendChunksBeforePlayerSpawn ? "On!" : "Off!"));
+                              .title("Send Chunks Before Player Spawn " + toggleStrCaps(CONFIG.debug.sendChunksBeforePlayerSpawn));
                           return 1;
                       })));
     }

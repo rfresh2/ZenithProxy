@@ -32,14 +32,14 @@ public class PrioCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.mentionRoleOnPrioUpdate = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Prio Mentions " + (CONFIG.discord.mentionRoleOnPrioUpdate ? "On!" : "Off!"));
+                                .title("Prio Mentions " + toggleStrCaps(CONFIG.discord.mentionRoleOnPrioUpdate));
                             return 1;
                         })))
             .then(literal("banMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.mentionRoleOnPrioBanUpdate = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Prio Ban Mentions " + (CONFIG.discord.mentionRoleOnPrioBanUpdate ? "On!" : "Off!"));
+                                .title("Prio Ban Mentions " + toggleStrCaps(CONFIG.discord.mentionRoleOnPrioBanUpdate));
                             return 1;
                         })))
             .then(literal("check").executes(c -> {

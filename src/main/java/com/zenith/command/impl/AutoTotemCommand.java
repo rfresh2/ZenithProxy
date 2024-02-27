@@ -35,7 +35,7 @@ public class AutoTotemCommand extends Command {
                 CONFIG.client.extra.autoTotem.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AutoTotem.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AutoTotem " + (CONFIG.client.extra.autoTotem.enabled ? "On!" : "Off!"));
+                    .title("AutoTotem " + toggleStrCaps(CONFIG.client.extra.autoTotem.enabled));
                 return 1;
             }))
             .then(literal("health")

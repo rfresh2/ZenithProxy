@@ -73,7 +73,7 @@ public class WhitelistCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.server.extra.whitelist.autoAddClient = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Auto Add Client " + (CONFIG.server.extra.whitelist.autoAddClient ? "On!" : "Off!"));
+                              .title("Auto Add Client " + toggleStrCaps(CONFIG.server.extra.whitelist.autoAddClient));
                           return 1;
                       })));
     }

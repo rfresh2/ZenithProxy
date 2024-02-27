@@ -48,7 +48,7 @@ public class ClientConnectionCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.connectionProxy.enabled = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Client Connection Proxy " + (CONFIG.client.connectionProxy.enabled ? "On!" : "Off!"));
+                              .title("Client Connection Proxy " + toggleStrCaps(CONFIG.client.connectionProxy.enabled));
                           return 1;
                       }))
                       .then(literal("type")

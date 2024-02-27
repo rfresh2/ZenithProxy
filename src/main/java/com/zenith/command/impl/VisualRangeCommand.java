@@ -46,14 +46,14 @@ public class VisualRangeCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.visualRangeAlert = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("VisualRange " + (CONFIG.client.extra.visualRangeAlert ? "On!" : "Off!"));
+                    .title("VisualRange " + toggleStrCaps(CONFIG.client.extra.visualRangeAlert));
                 return 1;
             }))
             .then(literal("mention")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangeAlertMention = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("VisualRange Mentions " + (CONFIG.client.extra.visualRangeAlertMention ? "On!" : "Off!"));
+                                .title("VisualRange Mentions " + toggleStrCaps(CONFIG.client.extra.visualRangeAlertMention));
                             return 1;
                       })))
             .then(literal("friend")
@@ -87,28 +87,28 @@ public class VisualRangeCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangeIgnoreFriends = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Ignore Friends " + (CONFIG.client.extra.visualRangeIgnoreFriends ? "On!" : "Off!"));
+                                .title("Ignore Friends " + toggleStrCaps(CONFIG.client.extra.visualRangeIgnoreFriends));
                             return 1;
                       })))
             .then(literal("leave")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangeLeftAlert = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Leave Alerts " + (CONFIG.client.extra.visualRangeLeftAlert ? "On!" : "Off!"));
+                                .title("Leave Alerts " + toggleStrCaps(CONFIG.client.extra.visualRangeLeftAlert));
                             return 1;
                       })))
             .then(literal("logout")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangeLeftLogoutAlert = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Logout Alerts " + (CONFIG.client.extra.visualRangeLeftLogoutAlert ? "On!" : "Off!"));
+                                .title("Logout Alerts " + toggleStrCaps(CONFIG.client.extra.visualRangeLeftLogoutAlert));
                             return 1;
                       })))
             .then(literal("enemyTracking")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRangePositionTracking = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Enemy Tracking " + (CONFIG.client.extra.visualRangePositionTracking ? "On!" : "Off!"));
+                                .title("Enemy Tracking " + toggleStrCaps(CONFIG.client.extra.visualRangePositionTracking));
                             return 1;
                       })));
     }

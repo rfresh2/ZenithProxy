@@ -128,6 +128,10 @@ public abstract class Command {
         return state ? "on" : "off";
     }
 
+    public static String toggleStrCaps(boolean state) {
+        return state ? "On!" : "Off!";
+    }
+
     /**
      * Required. Registers {@link CommandUsage}
      */

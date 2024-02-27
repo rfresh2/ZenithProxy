@@ -37,14 +37,14 @@ public class AntiLeakCommand extends Command {
                 CONFIG.client.extra.antiLeak.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AntiLeak.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AntiLeak " + (CONFIG.client.extra.antiLeak.enabled ? "On!" : "Off!"));
+                    .title("AntiLeak " + toggleStrCaps(CONFIG.client.extra.antiLeak.enabled));
                 return 1;
             }))
             .then(literal("rangeCheck")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.antiLeak.rangeCheck = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("RangeCheck " + (CONFIG.client.extra.antiLeak.rangeCheck ? "On!" : "Off!"));
+                              .title("RangeCheck " + toggleStrCaps(CONFIG.client.extra.antiLeak.rangeCheck));
                           return 1;
                       })))
             .then(literal("rangeFactor")

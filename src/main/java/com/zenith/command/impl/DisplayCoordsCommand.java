@@ -30,7 +30,7 @@ public class DisplayCoordsCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.reportCoords = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Coordinates " + (CONFIG.discord.reportCoords ? "On!" : "Off!"))
+                    .title("Coordinates " + toggleStrCaps(CONFIG.discord.reportCoords))
                     .color(Color.CYAN);
                 return 1;
             }));
