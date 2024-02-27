@@ -23,11 +23,21 @@ public class Chunk {
     LightUpdateData lightUpdateData;
     MNBT heightMaps;
 
+    // reusing buffer to avoid allocating extra memory
+    // chunks will usually be around 10-30kb, so we can reduce gc spam by reusing the already allocated buffer
+    // also, every chunk we send from the cache would be 32kb where the excess empty bytes would be unnecessary network IO
+    private static final ByteBuf serializeBuffer = Unpooled.buffer();
+
     public byte[] serialize(MinecraftCodecHelper codec) {
-        ByteBuf buf = Unpooled.buffer();
-        for (int i = 0; i < sections.length; i++) {
-            codec.writeChunkSection(buf, sections[i]);
+        // we are limiting ourselves to one thread, but its not a big issue
+        synchronized (serializeBuffer) {
+            for (int i = 0; i < sections.length; i++) {
+                codec.writeChunkSection(serializeBuffer, sections[i]);
+            }
+            var bytes = new byte[serializeBuffer.readableBytes()];
+            serializeBuffer.readBytes(bytes);
+            serializeBuffer.clear();
+            return bytes;
         }
-        return buf.array();
     }
 }
