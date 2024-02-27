@@ -48,7 +48,7 @@ public class DiscordManageCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.enable = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Discord Bot " + (CONFIG.discord.enable ? "On!" : "Off!"))
+                    .title("Discord Bot " + toggleStrCaps(CONFIG.discord.enable))
                     .color(Color.CYAN);
                 if (CONFIG.discord.enable) {
                     c.getSource().getEmbed()
@@ -157,7 +157,7 @@ public class DiscordManageCommand extends Command {
                             CONFIG.discord.manageProfileImage = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .color(Color.CYAN)
-                                         .title("Manage Profile Image " + (CONFIG.discord.manageProfileImage ? "On!" : "Off!"));
+                                         .title("Manage Profile Image " + toggleStrCaps(CONFIG.discord.manageProfileImage));
                             return 1;
                       })))
             .then(literal("manageNickname")
@@ -165,7 +165,7 @@ public class DiscordManageCommand extends Command {
                             CONFIG.discord.manageNickname = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .color(Color.CYAN)
-                                         .title("Manage Nickname " + (CONFIG.discord.manageNickname ? "On!" : "Off!"));
+                                         .title("Manage Nickname " + toggleStrCaps(CONFIG.discord.manageNickname));
                             return 1;
                       })))
             .then(literal("manageDescription")
@@ -173,7 +173,7 @@ public class DiscordManageCommand extends Command {
                             CONFIG.discord.manageDescription = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .color(Color.CYAN)
-                                         .title("Manage Description " + (CONFIG.discord.manageDescription ? "On!" : "Off!"));
+                                         .title("Manage Description " + toggleStrCaps(CONFIG.discord.manageDescription));
                             return 1;
                       })))
             .then(literal("showNonWhitelistIP")
@@ -181,7 +181,7 @@ public class DiscordManageCommand extends Command {
                             CONFIG.discord.showNonWhitelistLoginIP = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .color(Color.CYAN)
-                                         .title("Show Non-Whitelist IP " + (CONFIG.discord.showNonWhitelistLoginIP ? "On!" : "Off!"));
+                                         .title("Show Non-Whitelist IP " + toggleStrCaps(CONFIG.discord.showNonWhitelistLoginIP));
                             return 1;
                       })));
     }

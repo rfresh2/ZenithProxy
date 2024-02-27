@@ -36,7 +36,7 @@ public class SpookCommand extends Command {
                 CONFIG.client.extra.spook.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(Spook.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("Spook " + (CONFIG.client.extra.spook.enabled ? "On!" : "Off!"));
+                    .title("Spook " + toggleStrCaps(CONFIG.client.extra.spook.enabled));
                 return 1;
             }))
             .then(literal("delay").then(argument("delayTicks", integer(0, 1000)).executes(c -> {

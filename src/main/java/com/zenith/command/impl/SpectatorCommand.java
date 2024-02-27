@@ -46,7 +46,7 @@ public class SpectatorCommand extends Command {
                     Proxy.getInstance().getSpectatorConnections()
                         .forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
                 c.getSource().getEmbed()
-                    .title("Spectators " + (CONFIG.server.spectator.allowSpectator ? "On!" : "Off!"))
+                    .title("Spectators " + toggleStrCaps(CONFIG.server.spectator.allowSpectator))
                     .color(Color.CYAN)
                     .description(spectatorWhitelist());
                 return 1;
@@ -117,7 +117,7 @@ public class SpectatorCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.server.spectator.spectatorPublicChatEnabled = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Spectator Chat " + (CONFIG.server.spectator.spectatorPublicChatEnabled ? "On!" : "Off!"))
+                                .title("Spectator Chat " + toggleStrCaps(CONFIG.server.spectator.spectatorPublicChatEnabled))
                                 .color(Color.CYAN)
                                 .description(spectatorWhitelist());
                             return 1;

@@ -6,6 +6,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
+import lombok.Data;
 import lombok.NonNull;
 
 import java.time.Duration;
@@ -15,8 +16,9 @@ import java.util.function.Consumer;
 
 import static com.zenith.Shared.CACHE;
 
+@Data
 public class EntityCache implements CachedData {
-    protected final ConcurrentHashMap<Integer, Entity> cachedEntities = new ConcurrentHashMap<>();
+    protected final Map<Integer, Entity> entities = new ConcurrentHashMap<>();
     protected final Cache<UUID, EntityPlayer> recentlyRemovedPlayers = CacheBuilder.newBuilder()
         // really we're looking for players in the last tick (with generous headroom for async scheduling)
         .expireAfterWrite(Duration.ofSeconds(2))
@@ -27,7 +29,7 @@ public class EntityCache implements CachedData {
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         // it would be preferable to not have this intermediary list :/ could impact memory if there are a lot of entities
         final List<Packet> packets = new ArrayList<>();
-        this.cachedEntities.values().forEach(entity -> entity.addPackets(packets::add));
+        this.entities.values().forEach(entity -> entity.addPackets(packets::add));
         // sort ClientboundAddEntityPacket first
         // some entity metadata references other entities that need to exist first
         packets.sort((p1, p2) -> {
@@ -47,24 +49,24 @@ public class EntityCache implements CachedData {
     @Override
     public void reset(boolean full) {
         if (full) {
-            this.cachedEntities.clear();
+            this.entities.clear();
         } else {
-            this.cachedEntities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
+            this.entities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
         }
         this.recentlyRemovedPlayers.invalidateAll();
     }
 
     @Override
     public String getSendingMessage() {
-        return String.format("Sending %d entities", this.cachedEntities.size());
+        return String.format("Sending %d entities", this.entities.size());
     }
 
     public void add(@NonNull Entity entity) {
-        this.cachedEntities.put(entity.getEntityId(), entity);
+        this.entities.put(entity.getEntityId(), entity);
     }
 
     public Entity remove(int id)  {
-        Entity entity = this.cachedEntities.remove(id);
+        Entity entity = this.entities.remove(id);
         if (entity instanceof EntityPlayer player)
             this.recentlyRemovedPlayers.put(player.getUuid(), player);
         return entity;
@@ -76,7 +78,7 @@ public class EntityCache implements CachedData {
 
     @SuppressWarnings("unchecked")
     public <E extends Entity> E get(int id) {
-        Entity entity = this.cachedEntities.get(id);
+        Entity entity = this.entities.get(id);
         if (entity == null) return null;
         return (E) entity;
     }
@@ -84,20 +86,18 @@ public class EntityCache implements CachedData {
     // todo: this is not particularly efficient but is currently used infrequently.
     //  if there are higher frequency use cases, consider building a secondary cached map of uuids to entity
     public <E extends Entity> E get(UUID uuid) {
-        return this.cachedEntities.values().stream()
+        return this.entities.values().stream()
             .filter(entity -> entity.getUuid().equals(uuid))
             .map(entity -> (E) entity)
             .findFirst()
             .orElse(null);
     }
 
-    public Map<Integer, Entity> getEntities() { return this.cachedEntities;}
-
     private void reapDeadEntities() {
         if (!Proxy.getInstance().isConnected()) return;
         int playerChunkX = (int) CACHE.getPlayerCache().getX() >> 4;
         int playerChunkZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
-        this.cachedEntities.values()
+        this.entities.values()
             .removeIf(entity -> distanceOutOfRange(
                 playerChunkX,
                 playerChunkZ,

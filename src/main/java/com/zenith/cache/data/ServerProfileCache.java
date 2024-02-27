@@ -16,15 +16,11 @@ public class ServerProfileCache implements CachedData {
     public void getPackets(@NonNull Consumer<Packet> consumer) {}
 
     public @Nullable GameProfile getProfile() {
-        synchronized (this) {
-            return profile;
-        }
+        return profile;
     }
 
     public void setProfile(final GameProfile profile) {
-        synchronized (this) {
-            this.profile = profile;
-        }
+        this.profile = profile;
     }
 
     @Override

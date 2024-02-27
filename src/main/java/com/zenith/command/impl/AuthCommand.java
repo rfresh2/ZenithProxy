@@ -118,7 +118,7 @@ public class AuthCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.discord.mentionRoleOnDeviceCodeAuth = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Mention Role " + (CONFIG.discord.mentionRoleOnDeviceCodeAuth ? "On" : "Off"))
+                                .title("Mention Role " + toggleStrCaps(CONFIG.discord.mentionRoleOnDeviceCodeAuth))
                                 .color(Color.CYAN);
                             return 1;
                       })));

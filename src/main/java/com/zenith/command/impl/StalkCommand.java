@@ -35,7 +35,7 @@ public class StalkCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.stalk.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Stalk " + (CONFIG.client.extra.stalk.enabled ? "On!" : "Off!"));
+                    .title("Stalk " + toggleStrCaps(CONFIG.client.extra.stalk.enabled));
                 return 1;
             }))
             .then(literal("list").executes(c -> {

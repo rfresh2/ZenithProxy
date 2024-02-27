@@ -45,19 +45,17 @@ public class AntiAFKCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("antiAFK")
             .then(argument("toggle", toggle()).executes(c -> {
-                boolean toggle = getToggle(c, "toggle");
-                CONFIG.client.extra.antiafk.enabled = toggle;
+                CONFIG.client.extra.antiafk.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AntiAFK.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AntiAFK " + (toggle ? "On!" : "Off!"));
+                    .title("AntiAFK " + toggleStrCaps(CONFIG.client.extra.antiafk.enabled));
                 return 1;
             }))
             .then(literal("rotate")
                       .then(argument("toggle", toggle()).executes(c -> {
-                          boolean toggle = getToggle(c, "toggle");
-                          CONFIG.client.extra.antiafk.actions.rotate = toggle;
+                          CONFIG.client.extra.antiafk.actions.rotate = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Rotate " + (toggle ? "On!" : "Off!"));
+                              .title("Rotate " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.rotate));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
@@ -68,10 +66,9 @@ public class AntiAFKCommand extends Command {
                       }))))
             .then(literal("swing")
                       .then(argument("toggle", toggle()).executes(c -> {
-                          boolean toggle = getToggle(c, "toggle");
-                          CONFIG.client.extra.antiafk.actions.swingHand = toggle;
+                          CONFIG.client.extra.antiafk.actions.swingHand = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Swing " + (toggle ? "On!" : "Off!"));
+                              .title("Swing " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.swingHand));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
@@ -82,10 +79,9 @@ public class AntiAFKCommand extends Command {
                       }))))
             .then(literal("walk")
                       .then(argument("toggle", toggle()).executes(c -> {
-                          boolean toggle = getToggle(c, "toggle");
-                          CONFIG.client.extra.antiafk.actions.walk = toggle;
+                          CONFIG.client.extra.antiafk.actions.walk = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Walk " + (toggle ? "On!" : "Off!"));
+                              .title("Walk " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.walk));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
@@ -96,10 +92,9 @@ public class AntiAFKCommand extends Command {
                       }))))
             .then(literal("safeWalk")
                       .then(argument("toggle", toggle()).executes(c -> {
-                          boolean toggle = getToggle(c, "toggle");
-                          CONFIG.client.extra.antiafk.actions.safeWalk = toggle;
+                          CONFIG.client.extra.antiafk.actions.safeWalk = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("SafeWalk " + (toggle ? "On!" : "Off!"));
+                              .title("SafeWalk " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.safeWalk));
                           return 1;
                       })))
             .then(literal("walkDistance")
@@ -111,10 +106,9 @@ public class AntiAFKCommand extends Command {
                                 })))
             .then(literal("jump")
                       .then(argument("toggle", toggle()).executes(c -> {
-                          boolean toggle = getToggle(c, "toggle");
-                          CONFIG.client.extra.antiafk.actions.jump = toggle;
+                          CONFIG.client.extra.antiafk.actions.jump = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Jump " + (toggle ? "On!" : "Off!"));
+                              .title("Jump " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.jump));
                           return 1;
                       }))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
@@ -125,10 +119,9 @@ public class AntiAFKCommand extends Command {
                       }))))
             .then(literal("sneak")
                       .then(argument("toggle", toggle()).executes(c -> {
-                          boolean toggle = getToggle(c, "toggle");
-                          CONFIG.client.extra.antiafk.actions.sneak = toggle;
+                          CONFIG.client.extra.antiafk.actions.sneak = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Sneak " + (toggle ? "On!" : "Off!"));
+                              .title("Sneak " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.sneak));
                           return 1;
                       })));
     }

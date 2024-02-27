@@ -38,7 +38,7 @@ public class AutoReplyCommand extends Command {
                 CONFIG.client.extra.autoReply.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AutoReply.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AutoReply " + (CONFIG.client.extra.autoReply.enabled ? "On!" : "Off!"));
+                    .title("AutoReply " + toggleStrCaps(CONFIG.client.extra.autoReply.enabled));
                 return 1;
             }))
             .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {

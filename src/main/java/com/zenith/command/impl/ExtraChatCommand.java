@@ -36,35 +36,35 @@ public class ExtraChatCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideChat = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Chat " + (CONFIG.client.extra.chat.hideChat ? "hidden!" : "shown!"));
+                                .title("Hide Chat " + toggleStrCaps(CONFIG.client.extra.chat.hideChat));
                             return 1;
                         })))
             .then(literal("hideWhispers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideWhispers = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Whispers " + (CONFIG.client.extra.chat.hideWhispers ? "hidden!" : "shown!"));
+                                .title("Hide Whispers " + toggleStrCaps(CONFIG.client.extra.chat.hideWhispers));
                             return 1;
                         })))
             .then(literal("hideDeathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideDeathMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Death messages " + (CONFIG.client.extra.chat.hideDeathMessages ? "hidden!" : "shown!"));
+                                .title("Hide Death Messages " + toggleStrCaps(CONFIG.client.extra.chat.hideDeathMessages));
                             return 1;
                         })))
             .then(literal("showConnectionMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.showConnectionMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Connection messages " + (CONFIG.client.extra.chat.showConnectionMessages ? "shown!" : "hidden!"));
+                                .title("Show Connection Messages " + toggleStrCaps(CONFIG.client.extra.chat.showConnectionMessages));
                             return 1;
                         })))
             .then(literal("logChatMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.logChatMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Chat messages logging " + (CONFIG.client.extra.logChatMessages ? "On!" : "Off!"));
+                                .title("Log Chat Messages " + toggleStrCaps(CONFIG.client.extra.logChatMessages));
                             return 1;
                         })));
     }
@@ -73,10 +73,10 @@ public class ExtraChatCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .addField("Hide chat", CONFIG.client.extra.chat.hideChat ? "on" : "off", false)
-            .addField("Hide whispers", CONFIG.client.extra.chat.hideWhispers ? "on" : "off", false)
-            .addField("Hide death messages", CONFIG.client.extra.chat.hideDeathMessages ? "on" : "off", false)
-            .addField("Connection messages", CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off", false)
+            .addField("Hide Chat", toggleStr(CONFIG.client.extra.chat.hideChat), false)
+            .addField("Hide Whispers", toggleStr(CONFIG.client.extra.chat.hideWhispers), false)
+            .addField("Hide death Messages", toggleStr(CONFIG.client.extra.chat.hideDeathMessages), false)
+            .addField("Show Connection Messages", toggleStr(CONFIG.client.extra.chat.showConnectionMessages), false)
             .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages), false)
             .color(Color.CYAN);
     }

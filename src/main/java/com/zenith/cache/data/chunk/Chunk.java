@@ -25,8 +25,8 @@ public class Chunk {
 
     public byte[] serialize(MinecraftCodecHelper codec) {
         ByteBuf buf = Unpooled.buffer();
-        for (ChunkSection section : sections) {
-            codec.writeChunkSection(buf, section);
+        for (int i = 0; i < sections.length; i++) {
+            codec.writeChunkSection(buf, sections[i]);
         }
         return buf.array();
     }

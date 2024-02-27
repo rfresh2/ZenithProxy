@@ -38,7 +38,7 @@ public class AutoFishCommand extends Command {
                 CONFIG.client.extra.autoFish.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AutoFish.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AutoFish " + (CONFIG.client.extra.autoFish.enabled ? "On!" : "Off!"));
+                    .title("AutoFish " + toggleStr(CONFIG.client.extra.autoFish.enabled));
                 return 1;
             }))
             .then(literal("castDelay")

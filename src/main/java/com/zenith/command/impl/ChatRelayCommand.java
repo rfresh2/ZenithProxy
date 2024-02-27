@@ -40,70 +40,70 @@ public class ChatRelayCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.chatRelay.enable = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Chat Relay " + (CONFIG.discord.chatRelay.enable ? "On!" : "Off!"));
+                    .title("Chat Relay " + toggleStrCaps(CONFIG.discord.chatRelay.enable));
                 return 1;
             }))
             .then(literal("connectionMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.connectionMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Connection Messages " + (CONFIG.discord.chatRelay.connectionMessages ? "On!" : "Off!"));
+                                .title("Connection Messages " + toggleStrCaps(CONFIG.discord.chatRelay.connectionMessages));
                             return 1;
                       })))
             .then(literal("whispers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.whispers = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Whispers " + (CONFIG.discord.chatRelay.whispers ? "On!" : "Off!"));
+                                .title("Whispers " + toggleStrCaps(CONFIG.discord.chatRelay.whispers));
                             return 1;
                       })))
             .then(literal("publicChat")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.publicChats = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Public Chat " + (CONFIG.discord.chatRelay.publicChats ? "On!" : "Off!"));
+                                .title("Public Chat " + toggleStrCaps(CONFIG.discord.chatRelay.publicChats));
                             return 1;
                       })))
             .then(literal("deathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.discord.chatRelay.deathMessages = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Death Messages " + (CONFIG.discord.chatRelay.deathMessages ? "On!" : "Off!"));
+                              .title("Death Messages " + toggleStrCaps(CONFIG.discord.chatRelay.deathMessages));
                           return 1;
                       })))
             .then(literal("serverMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.discord.chatRelay.serverMessages = getToggle(c, "toggle");
                           c.getSource().getEmbed()
-                              .title("Server Messages " + (CONFIG.discord.chatRelay.serverMessages ? "On!" : "Off!"));
+                              .title("Server Messages " + toggleStrCaps(CONFIG.discord.chatRelay.serverMessages));
                           return 1;
                       })))
             .then(literal("whisperMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.mentionRoleOnWhisper = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Whisper Mentions " + (CONFIG.discord.chatRelay.mentionRoleOnWhisper ? "On!" : "Off!"));
+                                .title("Whisper Mentions " + toggleStrCaps(CONFIG.discord.chatRelay.mentionRoleOnWhisper));
                             return 1;
                       })))
             .then(literal("nameMentions")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.mentionRoleOnNameMention = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Name Mentions " + (CONFIG.discord.chatRelay.mentionRoleOnNameMention ? "On!" : "Off!"));
+                                .title("Name Mentions " + toggleStrCaps(CONFIG.discord.chatRelay.mentionRoleOnNameMention));
                             return 1;
                       })))
             .then(literal("mentionsWhileConnected")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.mentionWhileConnected = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Mentions While Connected " + (CONFIG.discord.chatRelay.mentionWhileConnected ? "On!" : "Off!"));
+                                .title("Mentions While Connected " + toggleStrCaps(CONFIG.discord.chatRelay.mentionWhileConnected));
                             return 1;
                       })))
             .then(literal("sendMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.sendMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Send Messages " + (CONFIG.discord.chatRelay.sendMessages ? "On!" : "Off!"));
+                                .title("Send Messages " + toggleStrCaps(CONFIG.discord.chatRelay.sendMessages));
                             return 1;
                       })));
     }

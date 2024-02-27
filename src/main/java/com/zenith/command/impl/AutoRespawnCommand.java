@@ -35,7 +35,7 @@ public class AutoRespawnCommand extends Command {
                 CONFIG.client.extra.autoRespawn.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AutoRespawn.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AutoRespawn " + (CONFIG.client.extra.autoRespawn.enabled ? "On!" : "Off!"));
+                    .title("AutoRespawn " + toggleStrCaps(CONFIG.client.extra.autoRespawn.enabled));
                 return 1;
             }))
             .then(literal("delay").then(argument("delay", integer(0)).executes(c -> {

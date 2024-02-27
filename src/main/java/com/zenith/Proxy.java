@@ -633,7 +633,6 @@ public class Proxy {
                     try {
                         delayBeforeReconnect();
                         if (Thread.currentThread().isInterrupted()) return;
-                        CLIENT_LOG.info("AutoReconnect is interrupted: {}", Thread.currentThread().isInterrupted());
                         connect();
                         this.autoReconnectFuture = Optional.empty();
                     } catch (final Exception e) {

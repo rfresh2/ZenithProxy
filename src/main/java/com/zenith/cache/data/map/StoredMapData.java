@@ -4,8 +4,7 @@ import com.github.steveice10.mc.protocol.data.game.level.map.MapData;
 import com.github.steveice10.mc.protocol.data.game.level.map.MapIcon;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundMapItemDataPacket;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,9 +13,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
 public class StoredMapData {
     private int mapId;
     private byte scale;

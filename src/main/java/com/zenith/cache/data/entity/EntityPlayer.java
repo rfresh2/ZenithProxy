@@ -14,7 +14,9 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
@@ -25,15 +27,11 @@ import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.SERVER_LOG;
 
 
-@RequiredArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class EntityPlayer extends EntityLiving {
-    @NonNull
     protected boolean selfPlayer;
-
     protected int food = 20;
     protected float saturation = 5;
     protected int totalExperience;
@@ -41,12 +39,17 @@ public class EntityPlayer extends EntityLiving {
     protected float experience;
     protected float speed = 0.10000000149011612f;
 
-    {
+    public EntityPlayer() {
         //set health to maximum by default
         this.health = 20.0f;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.equipment.put(slot, null);
         }
+    }
+
+    public EntityPlayer(boolean selfPlayer) {
+        this();
+        this.selfPlayer = selfPlayer;
     }
 
     @Override

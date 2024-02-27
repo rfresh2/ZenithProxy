@@ -7,19 +7,15 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.Cl
 import com.github.steveice10.packetlib.packet.Packet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 
 import java.util.function.Consumer;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@RequiredArgsConstructor
 public class Objective {
     @NonNull
     protected final String name;

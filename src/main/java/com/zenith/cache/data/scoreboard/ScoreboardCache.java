@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.Cl
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
+import lombok.Data;
 import lombok.NonNull;
 
 import java.util.EnumMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+@Data
 public class ScoreboardCache implements CachedData {
     protected final Map<String, Objective> cachedObjectives = new ConcurrentHashMap<>();
     protected final Map<ScoreboardPosition, String> cachedPositionObjectives = new EnumMap<>(ScoreboardPosition.class);

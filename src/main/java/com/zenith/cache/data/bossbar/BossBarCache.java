@@ -11,25 +11,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class BossBarCache implements CachedData {
-    protected final Map<UUID, BossBar> cachedBossBars = new ConcurrentHashMap<>();
+    protected final Map<UUID, BossBar> bossBars = new ConcurrentHashMap<>();
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        this.cachedBossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer);
+        this.bossBars.values().stream().map(BossBar::toMCProtocolLibPacket).forEach(consumer);
     }
 
     @Override
     public void reset(boolean full) {
-        this.cachedBossBars.clear();
+        this.bossBars.clear();
     }
 
     @Override
     public String getSendingMessage() {
-        return String.format("Sending %d boss bars", this.cachedBossBars.size());
+        return String.format("Sending %d boss bars", this.bossBars.size());
     }
 
     public void add(@NonNull ClientboundBossEventPacket packet) {
-        this.cachedBossBars.put(
+        this.bossBars.put(
                 packet.getUuid(),
                 new BossBar(packet.getUuid())
                         .setTitle(packet.getTitle())
@@ -42,11 +42,11 @@ public class BossBarCache implements CachedData {
     }
 
     public void remove(@NonNull ClientboundBossEventPacket packet) {
-        this.cachedBossBars.remove(packet.getUuid());
+        this.bossBars.remove(packet.getUuid());
     }
 
     public BossBar get(@NonNull ClientboundBossEventPacket packet) {
-        BossBar bossBar = this.cachedBossBars.get(packet.getUuid());
+        BossBar bossBar = this.bossBars.get(packet.getUuid());
         if (bossBar == null)    {
             return new BossBar(packet.getUuid());
         }

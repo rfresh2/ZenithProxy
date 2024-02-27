@@ -43,7 +43,7 @@ public class DatabaseCommand extends Command {
                 if (CONFIG.database.enabled) DATABASE_MANAGER.start();
                 else DATABASE_MANAGER.stop();
                 c.getSource().getEmbed()
-                    .title("Databases " + (CONFIG.database.enabled ? "On!" : "Off!"));
+                    .title("Databases " + toggleStrCaps(CONFIG.database.enabled));
                 return 1;
 
             }))
@@ -53,7 +53,7 @@ public class DatabaseCommand extends Command {
                             if (CONFIG.database.queueWait.enabled) DATABASE_MANAGER.startQueueWaitDatabase();
                             else DATABASE_MANAGER.stopQueueWaitDatabase();
                             c.getSource().getEmbed()
-                                .title("Queue Wait Database " + (CONFIG.database.queueWait.enabled ? "On!" : "Off!"));
+                                .title("Queue Wait Database " + toggleStrCaps(CONFIG.database.queueWait.enabled));
                             return 1;
                       })))
             .then(literal("queueLength")
@@ -62,7 +62,7 @@ public class DatabaseCommand extends Command {
                             if (CONFIG.database.queueLength.enabled) DATABASE_MANAGER.startQueueLengthDatabase();
                             else DATABASE_MANAGER.stopQueueLengthDatabase();
                             c.getSource().getEmbed()
-                                .title("Queue Length Database " + (CONFIG.database.queueLength.enabled ? "On!" : "Off!"));
+                                .title("Queue Length Database " + toggleStrCaps(CONFIG.database.queueLength.enabled));
                             return 1;
                       })))
             .then(literal("publicChat")
@@ -71,7 +71,7 @@ public class DatabaseCommand extends Command {
                             if (CONFIG.database.chats.enabled) DATABASE_MANAGER.startChatsDatabase();
                             else DATABASE_MANAGER.stopChatsDatabase();
                             c.getSource().getEmbed()
-                                .title("Public Chat Database " + (CONFIG.database.chats.enabled ? "On!" : "Off!"));
+                                .title("Public Chat Database " + toggleStrCaps(CONFIG.database.chats.enabled));
                             return 1;
                       })))
             .then(literal("joinLeave")
@@ -80,7 +80,7 @@ public class DatabaseCommand extends Command {
                             if (CONFIG.database.connections.enabled) DATABASE_MANAGER.startConnectionsDatabase();
                             else DATABASE_MANAGER.stopConnectionsDatabase();
                             c.getSource().getEmbed()
-                                .title("Connections Database " + (CONFIG.database.connections.enabled ? "On!" : "Off!"));
+                                .title("Connections Database " + toggleStrCaps(CONFIG.database.connections.enabled));
                             return 1;
                       })))
             .then(literal("deathMessages")
@@ -89,7 +89,7 @@ public class DatabaseCommand extends Command {
                             if (CONFIG.database.deaths.enabled) DATABASE_MANAGER.startDeathsDatabase();
                             else DATABASE_MANAGER.stopDeathsDatabase();
                             c.getSource().getEmbed()
-                                .title("Death Messages Database " + (CONFIG.database.deaths.enabled ? "On!" : "Off!"));
+                                .title("Death Messages Database " + toggleStrCaps(CONFIG.database.deaths.enabled));
                             return 1;
                       })))
             .then(literal("restarts")
@@ -98,7 +98,7 @@ public class DatabaseCommand extends Command {
                                 if (CONFIG.database.restarts.enabled) DATABASE_MANAGER.startRestartsDatabase();
                                 else DATABASE_MANAGER.stopRestartsDatabase();
                                 c.getSource().getEmbed()
-                                    .title("Restarts Database " + (CONFIG.database.restarts.enabled ? "On!" : "Off!"));
+                                    .title("Restarts Database " + toggleStrCaps(CONFIG.database.restarts.enabled));
                                 return 1;
                         })))
             .then(literal("playerCount")
@@ -107,7 +107,7 @@ public class DatabaseCommand extends Command {
                                 if (CONFIG.database.playerCount.enabled) DATABASE_MANAGER.startPlayerCountDatabase();
                                 else DATABASE_MANAGER.stopPlayerCountDatabase();
                                 c.getSource().getEmbed()
-                                    .title("Player Count Database " + (CONFIG.database.playerCount.enabled ? "On!" : "Off!"));
+                                    .title("Player Count Database " + toggleStrCaps(CONFIG.database.playerCount.enabled));
                                 return 1;
                         })))
             .then(literal("tablist")
@@ -116,7 +116,7 @@ public class DatabaseCommand extends Command {
                                 if (CONFIG.database.tablist.enabled) DATABASE_MANAGER.startTablistDatabase();
                                 else DATABASE_MANAGER.stopTablistDatabase();
                                 c.getSource().getEmbed()
-                                    .title("Tablist Database " + (CONFIG.database.tablist.enabled ? "On!" : "Off!"));
+                                    .title("Tablist Database " + toggleStrCaps(CONFIG.database.tablist.enabled));
                                 return 1;
                         })));
     }

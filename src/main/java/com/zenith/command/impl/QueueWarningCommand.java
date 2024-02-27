@@ -32,7 +32,7 @@ public class QueueWarningCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.queueWarning.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("QueueWarning " + (CONFIG.discord.queueWarning.enabled ? "On!" : "Off!"));
+                    .title("QueueWarning " + toggleStrCaps(CONFIG.discord.queueWarning.enabled));
                 return 1;
             }))
             .then(literal("position").then(argument("pos", integer(1, 100)).executes(c -> {
@@ -45,7 +45,7 @@ public class QueueWarningCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.queueWarning.mentionRole = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Mention " + (CONFIG.discord.queueWarning.mentionRole ? "On!" : "Off!"));
+                                .title("Mention " + toggleStrCaps(CONFIG.discord.queueWarning.mentionRole));
                             return 1;
                       })));
     }
@@ -55,7 +55,7 @@ public class QueueWarningCommand extends Command {
         builder
             .addField("QueueWarning", toggleStr(CONFIG.discord.queueWarning.enabled), false)
             .addField("Position", CONFIG.discord.queueWarning.position, false)
-            .addField("Mention", (CONFIG.discord.queueWarning.mentionRole ? "on" : "off"), false)
+            .addField("Mention", toggleStr(CONFIG.discord.queueWarning.mentionRole), false)
             .color(Color.CYAN);
     }
 }

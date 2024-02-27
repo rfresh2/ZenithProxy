@@ -33,7 +33,7 @@ public class AutoEatCommand extends Command {
                 CONFIG.client.extra.autoEat.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(AutoEat.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("AutoEat " + (CONFIG.client.extra.autoEat.enabled ? "On!" : "Off!"));
+                    .title("AutoEat " + toggleStrCaps(CONFIG.client.extra.autoEat.enabled));
                 return 1;
             }))
             .then(literal("health")
@@ -64,7 +64,7 @@ public class AutoEatCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.autoEat.warning = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("AutoEat Warning " + (CONFIG.client.extra.autoEat.warning ? "On!" : "Off!"));
+                                .title("AutoEat Warning " + toggleStrCaps(CONFIG.client.extra.autoEat.warning));
                             return 1;
                       })));
     }

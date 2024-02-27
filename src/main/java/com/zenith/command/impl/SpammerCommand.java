@@ -50,14 +50,14 @@ public class SpammerCommand extends Command {
                 CONFIG.client.extra.spammer.enabled = getToggle(c, "toggle");
                 MODULE_MANAGER.get(Spammer.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                    .title("Spammer " + (CONFIG.client.extra.spammer.enabled ? "On!" : "Off!"));
+                    .title("Spammer " + toggleStrCaps(CONFIG.client.extra.spammer.enabled));
                 return 1;
             }))
             .then(literal("whisper")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.whisper = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Whisper " + (CONFIG.client.extra.spammer.whisper ? "On!" : "Off!"));
+                                .title("Whisper " + toggleStrCaps(CONFIG.client.extra.spammer.whisper));
                             return 1;
                       })))
             .then(literal("delayTicks")
@@ -71,14 +71,14 @@ public class SpammerCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.randomOrder = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Random Order " + (CONFIG.client.extra.spammer.randomOrder ? "On!" : "Off!"));
+                                .title("Random Order " + toggleStrCaps(CONFIG.client.extra.spammer.randomOrder));
                             return 1;
                       })))
             .then(literal("appendRandom")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.appendRandom = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Append Random " + (CONFIG.client.extra.spammer.appendRandom ? "On!" : "Off!"));
+                                .title("Append Random " + toggleStrCaps(CONFIG.client.extra.spammer.appendRandom));
                             return 1;
                       })))
             .then(literal("list").executes(c -> {
