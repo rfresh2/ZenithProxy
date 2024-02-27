@@ -336,8 +336,8 @@ public class PlayerSimulation extends Module {
             if (stepUpWithMoveXZAdjustedVec.getY() < this.stepHeight) {
                 MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(new MutableVec3d(velocity.getX(), 0.0, velocity.getZ()),
                                                                             playerCollisionBox.move(stepUpWithMoveXZAdjustedVec.getX(),
-                                                                                             stepUpWithMoveXZAdjustedVec.getY(),
-                                                                                             stepUpWithMoveXZAdjustedVec.getZ()),
+                                                                                                    stepUpWithMoveXZAdjustedVec.getY(),
+                                                                                                    stepUpWithMoveXZAdjustedVec.getZ()),
                                                                             blockCollisionBoxes);
                 stepUpAndMoveVec.add(stepUpWithMoveXZAdjustedVec);
                 if (stepUpAndMoveVec.horizontalLengthSquared() > stepUpAdjustedVec.horizontalLengthSquared()) {
@@ -357,8 +357,8 @@ public class PlayerSimulation extends Module {
         this.setOnGround(isYAdjusted && velocity.getY() < 0.0, adjustedMovement);
 
         final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
-                                                                                            adjustedMovement.getY(),
-                                                                                            adjustedMovement.getZ());
+                                                                                      adjustedMovement.getY(),
+                                                                                      adjustedMovement.getZ());
 
         if (isXAdjusted) {
             velocity.setX(0.0);

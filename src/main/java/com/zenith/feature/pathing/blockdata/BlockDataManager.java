@@ -126,6 +126,14 @@ public class BlockDataManager {
         return collisionBoxes;
     }
 
+    // not efficient, avoid calling outside initialization logic
+    public Block getBlockFromName(final String name) {
+        return blockIdToBlockData.values().stream()
+            .filter(block -> block.name().equals(name))
+            .findAny()
+            .orElseThrow();
+    }
+
     public float getBlockSlipperiness(Block block) {
         float slippy = 0.6f;
         if (block.name().equals("ice")) slippy = 0.98f;

@@ -67,9 +67,12 @@ public class World {
         return false;
     }
 
+    private static final int waterId = BLOCK_DATA_MANAGER.getBlockFromName("water").id();
+    private static final int bubbleColumnId = BLOCK_DATA_MANAGER.getBlockFromName("bubble_column").id();
+
     public boolean isWater(Block block) {
-        return block.id() == 32 // water
-            || block.id() == 731; // bubble column
+        return block.id() == waterId
+            || block.id() == bubbleColumnId;
     }
 
     public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {
