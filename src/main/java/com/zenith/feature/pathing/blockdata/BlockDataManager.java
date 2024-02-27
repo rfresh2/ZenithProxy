@@ -7,12 +7,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zenith.feature.pathing.CollisionBox;
-import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import lombok.Getter;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -22,11 +20,6 @@ import java.util.List;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class BlockDataManager {
-    @Getter
-    private final int maxStates;
-    @Getter
-    private final int blockBitsPerEntry;
-
     private final Int2IntOpenHashMap blockStateIdToBlockId = new Int2IntOpenHashMap(24135);
     private final Int2ObjectOpenHashMap<Block> blockIdToBlockData = new Int2ObjectOpenHashMap<>(1003);
     private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(24135);
@@ -34,8 +27,6 @@ public class BlockDataManager {
 
     public BlockDataManager() {
         init();
-        this.maxStates = blockStateIdToBlockId.size();
-        this.blockBitsPerEntry = MathHelper.log2Ceil(this.maxStates);
     }
 
     private void init() {

@@ -22,11 +22,9 @@ import com.github.steveice10.opennbt.tag.builtin.*;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
-import com.zenith.Shared;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.network.server.ServerConnection;
-import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3i;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -60,7 +58,6 @@ public class ChunkCache implements CachedData {
     protected Map<String, Dimension> dimensionRegistry = new ConcurrentHashMap<>();
     protected Dimension currentDimension = null;
     protected Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
-    protected int biomesEntryBitsSize = -1;
     protected WorldData worldData;
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
@@ -111,7 +108,6 @@ public class ChunkCache implements CachedData {
             Biome biome = new Biome(biomeName, biomeId);
             biomes.put(biome.id(), biome);
         }
-        biomesEntryBitsSize = MathHelper.log2Ceil(biomes.size());
     }
 
     public void setCurrentWorld(final String dimensionType, final String worldName, long hashedSeed, boolean debug, boolean flat) {
@@ -167,8 +163,8 @@ public class ChunkCache implements CachedData {
                 ChunkSection chunkSection = chunk.sections[(pos.getY() >> 4) - getMinSection()];
                 if (chunkSection == null) {
                     chunkSection = new ChunkSection(0,
-                                                    DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
-                                                    DataPalette.createForBiome(biomesEntryBitsSize));
+                                                    DataPalette.createForChunk(),
+                                                    DataPalette.createForBiome());
                 }
                 chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
                 handleBlockUpdateBlockEntity(record, pos, chunk);
@@ -261,7 +257,7 @@ public class ChunkCache implements CachedData {
             } else {
                 ByteBuf buf = Unpooled.wrappedBuffer(biomeData.getBuffer());
                 for (int i = 0; i < chunk.sectionsCount; i++) {
-                    DataPalette biomesData = codec.readDataPalette(buf, PaletteType.BIOME, biomesEntryBitsSize);
+                    DataPalette biomesData = codec.readDataPalette(buf, PaletteType.BIOME);
                     chunk.sections[i].setBiomeData(biomesData);
                 }
             }
@@ -368,7 +364,6 @@ public class ChunkCache implements CachedData {
         this.rainStrength = 0.0f;
         if (full) {
             this.biomes.clear();
-            this.biomesEntryBitsSize = -1;
             this.dimensionRegistry.clear();
             this.worldData = null;
             this.currentDimension = null;
@@ -420,22 +415,18 @@ public class ChunkCache implements CachedData {
     }
 
     public ChunkSection readChunkSection(ByteBuf buf) throws UncheckedIOException {
-        if (biomesEntryBitsSize == -1) {
-            throw new IllegalStateException("Biome entry bits size is not set");
-        }
-
         try {
             int blockCount = buf.readShort();
             DataPalette chunkPalette = codec
-                .readDataPalette(buf, PaletteType.CHUNK, Shared.BLOCK_DATA_MANAGER.getBlockBitsPerEntry());
+                .readDataPalette(buf, PaletteType.CHUNK);
             DataPalette biomePalette = codec
-                .readDataPalette(buf, PaletteType.BIOME, biomesEntryBitsSize);
+                .readDataPalette(buf, PaletteType.BIOME);
             return new ChunkSection(blockCount, chunkPalette, biomePalette);
         } catch (final IndexOutOfBoundsException e) {
             CACHE_LOG.debug("Error reading chunk section, no data", e);
             return new ChunkSection(0,
-                                    DataPalette.createForChunk(BLOCK_DATA_MANAGER.getBlockBitsPerEntry()),
-                                    DataPalette.createForBiome(biomesEntryBitsSize));
+                                    DataPalette.createForChunk(),
+                                    DataPalette.createForBiome());
         }
     }
 
