@@ -206,7 +206,8 @@ public class DiscordBot {
                 15L, // discord rate limit
                 TimeUnit.SECONDS);
         this.mainChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
-        this.relayChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        if (CONFIG.discord.chatRelay.enable)
+            this.relayChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
     }
 
