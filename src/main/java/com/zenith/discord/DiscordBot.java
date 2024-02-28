@@ -156,7 +156,8 @@ public class DiscordBot {
                 .block();
         restClient = client.getRestClient();
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
-        relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
+        if (CONFIG.discord.chatRelay.enable)
+            relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
             if (CONFIG.discord.chatRelay.enable && !CONFIG.discord.chatRelay.channelId.isEmpty() && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
                 if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
