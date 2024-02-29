@@ -30,7 +30,7 @@ public class StatusCommand extends Command {
             "Gets the current proxy status",
             asList(
                 "",
-                "module"
+                "modules"
                 ),
             asList("s")
         );
@@ -101,7 +101,7 @@ public class StatusCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("status")
-            .then(literal("module").executes(c -> {
+            .then(literal("modules").executes(c -> {
                 c.getSource().getEmbed()
                     .title("ZenithProxy " + LAUNCH_CONFIG.version + " Modules Status: " + CONFIG.authentication.username)
                     .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
