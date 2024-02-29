@@ -42,6 +42,8 @@ public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundC
         final CommandNode[] nodesA, // these nodes are essentially left as-is, except for the root node
         final CommandNode[] nodesB // these nodes are added to the end of the nodesA array, with indices offset
     ) {
+        if (nodesB.length == 0) return nodesA;
+        if (nodesA.length == 0) return nodesB;
         final CommandNode[] combinedNodes = new CommandNode[nodesA.length + nodesB.length - 1];
         final int offset = nodesA.length - 1;
         System.arraycopy(nodesA, 0, combinedNodes, 0, nodesA.length);
