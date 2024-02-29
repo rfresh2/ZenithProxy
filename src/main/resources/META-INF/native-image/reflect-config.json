@@ -945,6 +945,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$AntiKick",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$AntiLeak",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

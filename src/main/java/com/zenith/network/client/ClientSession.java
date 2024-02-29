@@ -3,13 +3,16 @@ package com.zenith.network.client;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
+import com.zenith.event.module.ClientOnlineTickEvent;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 
 import java.io.IOException;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.*;
 
 
 @Getter
@@ -23,6 +26,7 @@ public class ClientSession extends TcpClientSession {
     // in game
     private boolean online = false;
     private boolean disconnected = true;
+    private ScheduledFuture clientConstantTickFuture = null;
 
     public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo) {
         super(host, port, bindAddress, 0, protocol, proxyInfo);
@@ -31,6 +35,38 @@ public class ClientSession extends TcpClientSession {
 
     public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol) {
         this(host, port, bindAddress, protocol, null);
+    }
+
+    public void setOnline(final boolean online) {
+        this.online = online;
+        if (online) startClientTicks();
+        else stopClientTicks();
+    }
+
+    public void setDisconnected(final boolean disconnected) {
+        this.disconnected = disconnected;
+        setOnline(false);
+    }
+
+    public synchronized void startClientTicks() {
+        if (this.clientConstantTickFuture == null || this.clientConstantTickFuture.isDone()) {
+            EVENT_BUS.post(ClientOnlineTickEvent.Starting.INSTANCE);
+            this.clientConstantTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+                () -> EVENT_BUS.post(ClientOnlineTickEvent.INSTANCE), 0L, 10L, TimeUnit.SECONDS);
+        }
+    }
+
+    public synchronized void stopClientTicks() {
+        if (this.clientConstantTickFuture != null && !this.clientConstantTickFuture.isDone()) {
+            this.clientConstantTickFuture.cancel(false);
+            try {
+                this.clientConstantTickFuture.get(1L, TimeUnit.SECONDS);
+            } catch (final Exception e) {
+                // fall through
+            }
+            EVENT_BUS.post(ClientOnlineTickEvent.Stopped.INSTANCE);
+            this.clientConstantTickFuture = null;
+        }
     }
 
     @Override

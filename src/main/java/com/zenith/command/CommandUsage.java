@@ -44,9 +44,10 @@ public class CommandUsage {
 
     public String serialize(CommandSource commandSource) {
         return this.description
-                + usageLines.stream()
-                .map(line -> "\n  " + COMMAND_MANAGER.getCommandPrefix(commandSource) + name + " " + line)
-                .collect(Collectors.joining());
+            + "\n**Commands**"
+            + usageLines.stream()
+            .map(line -> "\n" + COMMAND_MANAGER.getCommandPrefix(commandSource) + name + " " + line)
+            .collect(Collectors.joining());
     }
 
     public String shortSerialize(CommandSource commandSource) {

@@ -67,6 +67,10 @@ public class MathHelper {
         return Math.sqrt(square(x1 - x2) + square(y1 - y2));
     }
 
+    public static double manhattanDistance2d(double x1, double y1, double x2, double y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    }
+
     // is this math? no, but idk where else to put it
     public static String formatDuration(Duration duration) {
         final StringBuilder sb = new StringBuilder();

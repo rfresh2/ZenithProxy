@@ -95,15 +95,13 @@ public class AntiAFK extends Module {
         reset();
     }
 
-    private void reset() {
-        synchronized (this) {
-            swingTickTimer.reset();
-            startWalkTickTimer.reset();
-            rotateTimer.reset();
-            shouldWalk = false;
-            currentPathingGoal = null;
-            jumpTimer.reset();
-        }
+    private synchronized void reset() {
+        swingTickTimer.reset();
+        startWalkTickTimer.reset();
+        rotateTimer.reset();
+        shouldWalk = false;
+        currentPathingGoal = null;
+        jumpTimer.reset();
     }
 
     private void rotateTick() {

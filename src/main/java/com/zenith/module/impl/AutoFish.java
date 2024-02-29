@@ -61,7 +61,7 @@ public class AutoFish extends Module {
         reset();
     }
 
-    private void reset() {
+    private synchronized void reset() {
         fishHookEntityId = -1;
         castTimer.reset();
         delay = 0;
@@ -71,8 +71,7 @@ public class AutoFish extends Module {
 
     public void handleEntityFishHookSpawnEvent(final EntityFishHookSpawnEvent event) {
         try {
-            ProjectileData data = (ProjectileData) event.fishHookObject().getObjectData();
-            if (data.getOwnerId() != CACHE.getPlayerCache().getEntityId()) return;
+            if (event.getOwnerEntityId() != CACHE.getPlayerCache().getEntityId()) return;
             fishHookEntityId = event.fishHookObject().getEntityId();
         } catch (final Exception e) {
             MODULE_LOG.error("Failed to handle EntityFishHookSpawnEvent", e);
