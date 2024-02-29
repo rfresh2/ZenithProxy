@@ -54,12 +54,11 @@ public class AntiKick extends Module {
 
     public void onClientOnlineTick(final ClientOnlineTickEvent event) {
         if (!Proxy.getInstance().hasActivePlayer()) return;
-        if (Instant.now().minus(Duration.ofMinutes(CONFIG.client.extra.antiKick.playerInactivityKickMins)).isBefore(Proxy.getInstance().getConnectTime())) return;
 
-        if (bypassedKickWithFishing()
-            || bypassedKickWithSwing()
-            || bypassedKickWithWalk()) return;
-
+        final var fishBypass = bypassedKickWithFishing();
+        final var swingBypass = bypassedKickWithSwing();
+        final var walkBypass = bypassedKickWithWalk();
+        if (fishBypass || swingBypass || walkBypass) return;
         final var currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return;
         currentPlayer.disconnect("[AntiKick] Kicked for inactivity");
