@@ -75,6 +75,7 @@ public final class Config {
             public AutoTotem autoTotem = new AutoTotem();
             public AntiLeak antiLeak = new AntiLeak();
             public Chat chat = new Chat();
+            public AntiKick antiKick = new AntiKick();
             public boolean visualRangeAlert = true;
             public boolean visualRangeIgnoreFriends = false;
             public boolean visualRangeAlertMention = false;
@@ -89,6 +90,12 @@ public final class Config {
             public boolean killMessage = true;
             public boolean logChatMessages = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
+
+            public static class AntiKick {
+                public boolean enabled = false;
+                public int playerInactivityKickMins = 15;
+                public int minWalkDistance = 2;
+            }
 
             public static final class Chat {
                 public ArrayList<PlayerEntry> ignoreList = new ArrayList<>();

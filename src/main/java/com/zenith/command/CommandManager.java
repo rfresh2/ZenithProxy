@@ -40,6 +40,7 @@ public class CommandManager {
            new ActionLimiterCommand(),
            new ActiveHoursCommand(),
            new AntiAFKCommand(),
+           new AntiKickCommand(),
            new AntiLeakCommand(),
            new AuthCommand(),
            new AutoDisconnectCommand(),

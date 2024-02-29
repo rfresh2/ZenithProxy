@@ -10,6 +10,11 @@ public class TickTimer extends Timer {
         super();
     }
 
+    @Override
+    public long tickTimeConstant() {
+        return TICK_TIME_CONSTANT;
+    }
+
     public boolean tick(final long delay, final boolean resetIfTick) {
         if (Instant.now().toEpochMilli() - this.time.toEpochMilli() > delay * TICK_TIME_CONSTANT) {
             if (resetIfTick) {
