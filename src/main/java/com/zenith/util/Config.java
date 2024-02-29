@@ -265,8 +265,7 @@ public final class Config {
                 public ArrayList<String> messages = new ArrayList<>(asList(
                         "ZenithProxy on top!",
                         "I just skipped queue thanks to ZenithProxy!",
-                        "I love undertime slopper!",
-                        ">odpay supremacy"
+                        "Download ZenithProxy on GitHub today! It's free!"
                 ));
             }
 
