@@ -6,7 +6,7 @@ import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
-import com.zenith.util.TickTimer;
+import com.zenith.util.Timer;
 import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.Objects;
@@ -19,17 +19,10 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class Spook extends Module {
-    public final AtomicBoolean hasTarget;
-    private final TickTimer stareTimer;
-    private final Stack<EntityPlayer> focusStack;
+    public final AtomicBoolean hasTarget = new AtomicBoolean(false);
+    private final Timer stareTimer = Timer.newTickTimer();
+    private final Stack<EntityPlayer> focusStack = new Stack<>();
     private static final int MOVEMENT_PRIORITY = 10;
-
-    public Spook() {
-        super();
-        this.stareTimer = new TickTimer();
-        this.hasTarget = new AtomicBoolean(false);
-        this.focusStack = new Stack<>();
-    }
 
     @Override
     public void subscribeEvents() {
@@ -75,7 +68,7 @@ public class Spook extends Module {
     }
 
     private void stareTick() {
-        if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay, true)) {
+        if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay)) {
             switch (CONFIG.client.extra.spook.spookTargetingMode) {
                 case NEAREST:
                     handleNearestTargetTick();
