@@ -12,6 +12,7 @@ import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityType;
 import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.level.notify.RainStrengthValue;
 import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthValue;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCustomPayloadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
@@ -25,6 +26,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.util.BrandSerializer;
 import com.zenith.util.math.MutableVec3i;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -43,7 +45,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
-import static com.zenith.util.RefStrings.BRAND_SUPPLIER;
 
 @Getter
 @Setter
@@ -73,7 +74,7 @@ public class ChunkCache implements CachedData {
     //  doesn't particularly matter on 2b2t tho
     protected WorldBorderData worldBorderData = WorldBorderData.DEFAULT;
     protected WorldTimeData worldTimeData;
-    protected byte[] serverBrand = BRAND_SUPPLIER.get();
+    protected byte[] serverBrand = null;
 
     public ChunkCache() {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks,
@@ -326,6 +327,10 @@ public class ChunkCache implements CachedData {
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         try {
+            final var brandBytes = serverBrand == null
+                ? BrandSerializer.defaultBrand(codec)
+                : BrandSerializer.appendBrand(codec, serverBrand);
+            consumer.accept(new ClientboundCustomPayloadPacket("minecraft:brand", brandBytes));
             consumer.accept(new ClientboundInitializeBorderPacket(worldBorderData.getCenterX(),
                                                                    worldBorderData.getCenterZ(),
                                                                    worldBorderData.getSize(),
@@ -387,7 +392,7 @@ public class ChunkCache implements CachedData {
             this.registryTag = null;
             this.worldBorderData = WorldBorderData.DEFAULT;
             this.worldTimeData = null;
-            this.serverBrand = BRAND_SUPPLIER.get();
+            this.serverBrand = null;
         }
     }
 
