@@ -234,7 +234,7 @@ public class Proxy {
                 saveConfig();
                 int count = 0;
                 while (!DISCORD_BOT.isMessageQueueEmpty() && count++ < 10) {
-                    Wait.waitALittleMs(100);
+                    Wait.waitMs(100);
                 }
                 DISCORD_BOT.stop(true);
             }).get(10L, TimeUnit.SECONDS);
@@ -361,7 +361,7 @@ public class Proxy {
             minecraftProtocol = retrieveLoginTaskResult(loginTask());
             if (minecraftProtocol != null || !loggingIn.get()) break;
             AUTH_LOG.warn("Failed login attempt " + (tries + 1));
-            Wait.waitALittle((int) (3 + (Math.random() * 7.0)));
+            Wait.wait((int) (3 + (Math.random() * 7.0)));
         }
         if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
         loggingIn.set(false);
@@ -404,7 +404,7 @@ public class Proxy {
                     loginTask.cancel(true);
                     return null;
                 }
-                Wait.waitALittle(1);
+                Wait.wait(1);
             }
             return loginTask.get(1L, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -457,10 +457,10 @@ public class Proxy {
         final int countdown = CONFIG.client.extra.autoReconnect.delaySeconds;
         EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
         // random jitter to help prevent multiple clients from logging in at the same time
-        Wait.waitALittle((((int) (Math.random() * 5))) % 10);
+        Wait.wait((((int) (Math.random() * 5))) % 10);
         for (int i = countdown; i > 0; i-=10) {
             CLIENT_LOG.info("Reconnecting in {}s", i);
-            Wait.waitALittle(10);
+            Wait.wait(10);
         }
     }
 

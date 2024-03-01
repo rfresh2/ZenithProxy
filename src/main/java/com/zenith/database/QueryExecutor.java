@@ -20,7 +20,7 @@ public class QueryExecutor {
             queryProvider.get().useHandle(handle);
         } catch (final Exception e) {
             DATABASE_LOG.error("Failed executing query", e);
-            Wait.waitALittleMs(3000);
+            Wait.waitMs(3000);
         }
     }
 }

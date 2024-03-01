@@ -1,49 +1,41 @@
 package com.zenith.util;
 
-import lombok.experimental.UtilityClass;
+import lombok.SneakyThrows;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-@UtilityClass
 public class Wait {
-    public static void waitALittle(int seconds) {
-        try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(seconds));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    public static void wait(int seconds) {
+        Thread.sleep(TimeUnit.SECONDS.toMillis(seconds));
     }
 
-    public static void waitALittleMs(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    public static void waitMs(int milliseconds) {
+        Thread.sleep(milliseconds);
     }
 
     public static void waitSpinLoop() {
         while (true) {
             try {
-                Thread.sleep(30000);
+                Thread.sleep(2147483647L);
             } catch (InterruptedException e) {
                 throw new IllegalStateException(e);
             }
         }
     }
 
-    public static boolean waitUntilCondition(final Supplier<Boolean> conditionSupplier, int secondsToWait) {
-        long beforeTime = Instant.now().getEpochSecond();
+    public static boolean waitUntil(final Supplier<Boolean> conditionSupplier, int secondsToWait) {
+        final var beforeTime = Instant.now().getEpochSecond();
         while (!conditionSupplier.get() && Instant.now().getEpochSecond() - beforeTime < secondsToWait) {
-            Wait.waitALittleMs(50);
+            Wait.waitMs(50);
         }
         return conditionSupplier.get();
     }
 
-    public static void waitRandomWithinMsBound(final int ms) {
-        int wait = (int) (Math.random() * ms);
-        Wait.waitALittleMs(wait);
+    public static void waitRandomMs(final int ms) {
+        Wait.waitMs((int) (Math.random() * ms));
     }
 }

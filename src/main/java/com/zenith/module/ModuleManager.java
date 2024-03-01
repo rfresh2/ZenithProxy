@@ -113,7 +113,7 @@ public class ModuleManager {
         synchronized (this) {
             if (nonNull(this.clientTickFuture)) {
                 this.clientTickFuture.cancel(false);
-                Wait.waitUntilCondition(() -> this.clientTickFuture.isDone(), 1);
+                Wait.waitUntil(() -> this.clientTickFuture.isDone(), 1);
                 getModules().forEach(Module::clientTickStopped);
             }
         }

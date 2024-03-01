@@ -63,7 +63,7 @@ public class PlayerListsManager {
             .collect(Collectors.toMap(PlayerEntry::getUuid, Function.identity(), (existing, replacement) -> existing));
 
         for (var entry : uniquePlayers.entrySet()) {
-            Wait.waitALittleMs(250); // trying to avoid mojang API rate limiting
+            Wait.waitMs(250); // trying to avoid mojang API rate limiting
             refreshEntry(entry.getValue())
                 .ifPresentOrElse(
                     entry::setValue,
