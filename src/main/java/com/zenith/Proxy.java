@@ -338,7 +338,6 @@ public class Proxy {
             lanBroadcaster.start();
         }
         this.server.setGlobalFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY, new ProxyServerLoginHandler());
-        this.server.setGlobalFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD, CONFIG.server.compressionThreshold);
         this.server.setGlobalFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true);
         this.server.addListener(new ProxyServerListener());
         this.server.bind(false);

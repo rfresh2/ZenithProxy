@@ -73,6 +73,8 @@ public class ServerConnection implements Session, SessionListener {
 
     private final byte[] challenge = new byte[4];
     private String username = "";
+    // as requested by the player during login. may not be the same as what mojang api returns
+    private @Nullable UUID loginProfileUUID;
     private int protocolVersion; // as reported by the client when they connected
 
     public ServerConnection(final Session session) {

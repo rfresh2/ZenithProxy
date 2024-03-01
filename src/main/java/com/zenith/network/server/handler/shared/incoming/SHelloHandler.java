@@ -14,6 +14,7 @@ public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, Serv
     @Override
     public ServerboundHelloPacket apply(@NonNull ServerboundHelloPacket packet, @NonNull ServerConnection session) {
         session.setUsername(packet.getUsername());
+        session.setLoginProfileUUID(packet.getProfileId());
         if (session.getFlag(MinecraftConstants.VERIFY_USERS_KEY, true)) {
             session.send(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge()));
         } else {

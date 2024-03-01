@@ -37,19 +37,25 @@ public class UserAuthTask implements Runnable {
             }
             profile = response.get();
         } else {
-            profile = new GameProfile(UUID.nameUUIDFromBytes(("OfflinePlayer:" + session.getUsername()).getBytes()),
-                                      session.getUsername());
+            if (CONFIG.server.verifyUsers) {
+                this.session.disconnect("No encryption key!");
+                return;
+            }
+            // blindly trusting the player's requested UUID if present
+            final var uuid = session.getLoginProfileUUID() == null
+                ? UUID.nameUUIDFromBytes(("OfflinePlayer:" + session.getUsername()).getBytes())
+                : session.getLoginProfileUUID();
+            profile = new GameProfile(uuid, session.getUsername());
         }
 
         this.session.setFlag(MinecraftConstants.PROFILE_KEY, profile);
 
-        int threshold = session.getFlag(MinecraftConstants.SERVER_COMPRESSION_THRESHOLD,
-                                        ServerConnection.DEFAULT_COMPRESSION_THRESHOLD);
+        final var threshold = CONFIG.server.compressionThreshold;
         if (threshold >= 0) {
             this.session.send(new ClientboundLoginCompressionPacket(threshold));
         } else {
             session.setCompressionThreshold(threshold, CONFIG.server.compressionLevel, true);
-            session.send(new ClientboundGameProfilePacket(session.getFlag(MinecraftConstants.PROFILE_KEY)));
+            session.send(new ClientboundGameProfilePacket(profile));
         }
     }
 }
