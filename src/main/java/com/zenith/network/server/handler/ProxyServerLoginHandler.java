@@ -46,11 +46,6 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         connection.setPlayer(true);
         EVENT_BUS.post(new PlayerLoginEvent(connection));
         if (connection.isSpectator()) {
-            if (Proxy.getInstance().getCurrentPlayer().get() == null) {
-                // can probably make this state work with some more work but im just gonna block it for now
-                connection.disconnect("A player must be connected in order to spectate!");
-                return;
-            }
             EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),
