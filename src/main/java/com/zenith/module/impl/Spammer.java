@@ -4,7 +4,7 @@ import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.Module;
-import com.zenith.util.TickTimer;
+import com.zenith.util.Timer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import static com.zenith.Shared.*;
 
 public class Spammer extends Module {
-    private final TickTimer tickTimer = new TickTimer();
+    private final Timer tickTimer = Timer.newTickTimer();
     private int spamIndex = 0;
     private final HashSet<String> whisperedPlayers = new HashSet<>();
 
@@ -30,7 +30,7 @@ public class Spammer extends Module {
     }
 
     public void handleClientTickEvent(final ClientTickEvent event) {
-        if (tickTimer.tick(CONFIG.client.extra.spammer.delayTicks, true)) {
+        if (tickTimer.tick(CONFIG.client.extra.spammer.delayTicks)) {
             sendSpam();
         }
     }

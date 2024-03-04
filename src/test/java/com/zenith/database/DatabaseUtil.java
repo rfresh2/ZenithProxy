@@ -44,7 +44,7 @@ public class DatabaseUtil {
                 System.out.println("Failed to unlock, stopping");
                 break;
             }
-            Wait.waitALittle(10 + ((int) (Math.random() * 10)));
+            Wait.wait(10 + ((int) (Math.random() * 10)));
         }
     }
 

@@ -104,7 +104,7 @@ public abstract class LockingDatabase extends Database {
     public void onLockAcquired() {
         DATABASE_LOG.info("{} Database Lock Acquired", getLockKey());
         writeLockInfo();
-        Wait.waitALittle(20); // buffer for any lock releasers to finish up remaining writes
+        Wait.wait(20); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
             queryExecutorFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
@@ -116,7 +116,7 @@ public abstract class LockingDatabase extends Database {
         if (nonNull(queryExecutorFuture)) {
             queryExecutorFuture.cancel(true);
             while (!queryExecutorFuture.isDone()) {
-                Wait.waitALittleMs(50);
+                Wait.waitMs(50);
             }
         }
     }
@@ -234,7 +234,7 @@ public abstract class LockingDatabase extends Database {
                 DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);
             }
         }
-        Wait.waitRandomWithinMsBound(100); // adds some jitter
+        Wait.waitRandomMs(100); // adds some jitter
     }
 
 

@@ -1,6 +1,5 @@
 package com.zenith.network.server.handler.player.postoutgoing;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
@@ -21,7 +20,6 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
             session.disconnect("Login without whitelist check?");
             return;
         }
-        session.send(new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()));
         // todo: move this after cache is sent
         //  queue packets received in the meantime to be sent after cache is sent
         session.setLoggedIn(); // allows server packets to start being sent to player

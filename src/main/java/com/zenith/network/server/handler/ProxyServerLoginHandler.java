@@ -31,7 +31,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
         ServerConnection connection = (ServerConnection) session;
 
-        if (!Wait.waitUntilCondition(() -> Proxy.getInstance().isConnected()
+        if (!Wait.waitUntil(() -> Proxy.getInstance().isConnected()
                         && (Proxy.getInstance().getConnectTime() != null && Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
@@ -40,18 +40,13 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                         && nonNull(CACHE.getChunkCache().getWorldName())
                         && nonNull(CACHE.getTabListCache().get(CACHE.getProfileCache().getProfile().getId()))
                         && connection.isWhitelistChecked(),
-                20)) {
+                            20)) {
             session.disconnect("Client login timed out.");
             return;
         }
         connection.setPlayer(true);
         EVENT_BUS.post(new PlayerLoginEvent(connection));
         if (connection.isSpectator()) {
-            if (Proxy.getInstance().getCurrentPlayer().get() == null) {
-                // can probably make this state work with some more work but im just gonna block it for now
-                connection.disconnect("A player must be connected in order to spectate!");
-                return;
-            }
             EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),

@@ -49,7 +49,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     }
                 }
             }
-            if (!Wait.waitUntilCondition(() -> {
+            if (!Wait.waitUntil(() -> {
                 var client = Proxy.getInstance().getClient();
                 return client != null
                     && CACHE.getProfileCache().getProfile() != null

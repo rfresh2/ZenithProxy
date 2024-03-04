@@ -21,7 +21,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
         if (CONFIG.inGameCommands.enable) {
             SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
                 if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(packet.getMessage()).find()) {
-                    TERMINAL_LOG.info(session.getProfileCache().getProfile().getName() + " executed spectator command: " + packet.getMessage());
+                    TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), packet.getMessage());
                     handleCommandInput(packet.getMessage(), session);
                 } else {
                     Proxy.getInstance().getActiveConnections().forEach(connection -> {
@@ -36,7 +36,6 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
     private void handleCommandInput(final String message, final ServerConnection session) {
         final String fullCommandAndArgs = message.substring(CONFIG.inGameCommands.prefix.length()).trim(); // cut off the prefix
         final String command = fullCommandAndArgs.split(" ")[0]; // first word is the command
-        TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), message);
         switch (command) {
             case "help" -> {
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9&lSpectator commands:"), false));

@@ -17,7 +17,7 @@ import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Maps;
-import com.zenith.util.TickTimer;
+import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
 
 import java.time.Instant;
@@ -28,7 +28,7 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class AutoFish extends Module {
-    private final TickTimer castTimer = new TickTimer();
+    private final Timer castTimer = Timer.newTickTimer();
     private int fishHookEntityId = -1;
     private Hand rodHand = Hand.MAIN_HAND;
     private int delay = 0;
@@ -97,7 +97,7 @@ public class AutoFish extends Module {
             swapping = false;
             return;
         }
-        if (!isFishing() && switchToFishingRod() && castTimer.tick(CONFIG.client.extra.autoFish.castDelay, true)) {
+        if (!isFishing() && switchToFishingRod() && castTimer.tick(CONFIG.client.extra.autoFish.castDelay)) {
             // cast
             cast();
         }
