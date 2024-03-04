@@ -11,6 +11,6 @@ public class CRegistryDataHandler implements PacketHandler<ClientboundRegistryDa
     public ClientboundRegistryDataPacket apply(final ClientboundRegistryDataPacket packet, final ClientSession session) {
         CACHE.getConfigurationCache().setRegistry(packet.getRegistry());
         CACHE.getChunkCache().updateRegistryTag(packet.getRegistry());
-        return null;
+        return packet;
     }
 }

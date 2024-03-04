@@ -89,6 +89,9 @@ public class ServerConnection implements Session, SessionListener {
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
     protected boolean isSpectator = false;
+    // we have performed the configuration phase at zenith
+    // any subsequent configurations should pass through to client
+    protected boolean isConfigured = false;
     protected boolean onlySpectator = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
@@ -128,7 +131,8 @@ public class ServerConnection implements Session, SessionListener {
             Packet p = packet;
             var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
             p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
-            if (p != null && !isSpectator() && state == ProtocolState.GAME) {
+            if (p != null && !isSpectator() && (state == ProtocolState.GAME || state == ProtocolState.CONFIGURATION)) {
+                if (state == ProtocolState.CONFIGURATION && !isConfigured()) return;
                 Proxy.getInstance().getClient().sendAsync(p);
             }
         } catch (final Exception e) {

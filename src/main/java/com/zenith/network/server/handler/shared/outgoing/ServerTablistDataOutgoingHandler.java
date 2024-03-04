@@ -22,13 +22,17 @@ public class ServerTablistDataOutgoingHandler implements PacketHandler<Clientbou
 
     public Component insertProxyDataIntoFooter(final Component footer, final ServerConnection session) {
         try {
+            var sessionProfile = session.getProfileCache().getProfile();
+            var clientProfile = CACHE.getProfileCache().getProfile();
+            var sessionProfileName = sessionProfile == null ? "Unknown" : sessionProfile.getName();
+            var clientProfileName = clientProfile == null ? "Unknown" : clientProfile.getName();
             return footer.append(Component.text().appendNewline().append(ComponentSerializer.minedown("&b&lZenithProxy&r")).build())
                 .append(Component.text()
                             .appendNewline()
                             .append(ComponentSerializer.minedown(
-                             "&b&l " + session.getProfileCache().getProfile().getName()
+                             "&b&l " + sessionProfileName
                                  + " &r&7[&r&3" + session.getPing() + "ms&r&7]&r&7"
-                                 + " -> &r&b&l" + CACHE.getProfileCache().getProfile().getName()
+                                 + " -> &r&b&l" + clientProfileName
                                  + " &r&7[&r&3" + Proxy.getInstance().getClient().getPing() + "ms&r&7]&r"
                             )).build())
                 .append(Component.text()

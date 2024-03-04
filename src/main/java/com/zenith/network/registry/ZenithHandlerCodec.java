@@ -306,10 +306,10 @@ public final class ZenithHandlerCodec {
         );
 
         CLIENT_REGISTRY.register(CLIENT_CODEC);
-//        CLIENT_REGISTRY.register(CLIENT_PACKETLOG);
+        CLIENT_REGISTRY.register(CLIENT_PACKETLOG);
         SERVER_REGISTRY.register(SERVER_PLAYER_CODEC);
         SERVER_REGISTRY.register(SERVER_SPECTATOR_CODEC);
         SERVER_REGISTRY.register(SERVER_SHARED_CODEC);
-//        SERVER_REGISTRY.register(SERVER_PACKETLOG);
+        SERVER_REGISTRY.register(SERVER_PACKETLOG);
     }
 }

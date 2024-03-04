@@ -14,13 +14,17 @@ public class FinishConfigurationHandler implements PacketHandler<ServerboundFini
     @Override
     public ServerboundFinishConfigurationPacket apply(final ServerboundFinishConfigurationPacket packet, final ServerConnection session) {
         session.getPacketProtocol().setState(ProtocolState.GAME);
-        ServerLoginHandler handler = session.getFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY);
-        if (handler != null) {
-            handler.loggedIn(session);
+        if (!session.isConfigured()) {
+            ServerLoginHandler handler = session.getFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY);
+            if (handler != null) {
+                handler.loggedIn(session);
+            }
+            if (session.getFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true)) {
+                SCHEDULED_EXECUTOR_SERVICE.execute(new KeepAliveTask(session));
+            }
+            session.setConfigured(true);
+            return null;
         }
-        if (session.getFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true)) {
-            SCHEDULED_EXECUTOR_SERVICE.execute(new KeepAliveTask(session));
-        }
-        return null;
+        return packet;
     }
 }

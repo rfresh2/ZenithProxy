@@ -37,9 +37,12 @@ public class ClientListener implements SessionListener {
         try {
             var state = session.getPacketProtocol().getState();
             final Packet p = ZenithHandlerCodec.CLIENT_REGISTRY.handleInbound(packet, this.session);
-            if (p != null && state == ProtocolState.GAME) {
+            if (p != null && (state == ProtocolState.GAME || state == ProtocolState.CONFIGURATION)) {
                 // sends on each connection's own event loop
-                Proxy.getInstance().getActiveConnections().forEach(connection -> connection.sendAsync(packet));
+                Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                    if (state == ProtocolState.CONFIGURATION && !connection.isConfigured()) return;
+                    connection.sendAsync(packet);
+                });
             }
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
