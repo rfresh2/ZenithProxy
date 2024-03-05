@@ -6,7 +6,7 @@ plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.1"
     // todo: use official version when https://github.com/johnrengelman/shadow/pull/879 is merged
-    id("io.github.goooler.shadow") version "8.1.5"
+    id("io.github.goooler.shadow") version "8.1.6"
 }
 
 group = "com.zenith"
@@ -44,10 +44,10 @@ dependencies {
     shade("org.postgresql:postgresql:$postgresVersion")
     shade("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")
     shade("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.8.0.202311291450-r")
-    shade("com.github.mwiede:jsch:0.2.16")
+    shade("com.github.mwiede:jsch:0.2.17")
     shade("com.google.guava:guava:33.0.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
-    shade("ch.qos.logback:logback-classic:1.5.0")
+    shade("ch.qos.logback:logback-classic:1.5.3")
     shade("org.slf4j:slf4j-api:2.0.12")
     shade("org.slf4j:jul-to-slf4j:2.0.12")
     shade("com.mojang:brigadier:1.2.9")
@@ -56,7 +56,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:8fbbfcd7cc") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:18c1da2022") {
+    shade("com.github.rfresh2:MCProtocolLib:9e50cdeaff") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
@@ -78,7 +78,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.26.1") {
+    shade("org.redisson:redisson:3.27.1") {
         exclude(group = "io.netty")
     }
     shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion")
