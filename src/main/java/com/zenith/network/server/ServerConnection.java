@@ -29,6 +29,7 @@ import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
+import io.netty.channel.ChannelFutureListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -176,12 +177,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void disconnecting(final Session session, final Component reason, final Throwable cause) {
-        MinecraftProtocol protocol = session.getPacketProtocol();
-        if (protocol.getState() == ProtocolState.LOGIN) {
-            session.send(new ClientboundLoginDisconnectPacket(reason));
-        } else if (protocol.getState() == ProtocolState.GAME) {
-            session.send(new ClientboundDisconnectPacket(reason));
-        }
+
     }
 
     @Override
@@ -229,6 +225,11 @@ public class ServerConnection implements Session, SessionListener {
 
     public void send(@NonNull Packet packet) {
         this.session.send(packet);
+    }
+
+    @Override
+    public void send(@NonNull final Packet packet, @NonNull final ChannelFutureListener channelFutureListener) {
+        this.session.send(packet, channelFutureListener);
     }
 
     public void sendDirect(Packet packet) {
@@ -537,21 +538,37 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void disconnect(String reason) {
-        this.session.disconnect(reason);
+        disconnect(Component.text(reason));
     }
 
     @Override
     public void disconnect(String reason, Throwable cause) {
-        this.session.disconnect(reason, cause);
+        disconnect(Component.text(reason), cause);
     }
 
     @Override
     public void disconnect(@Nullable final Component reason) {
-        this.session.disconnect(reason);
+        disconnect(reason, null);
     }
 
     @Override
     public void disconnect(@Nullable final Component reason, final Throwable cause) {
-        this.session.disconnect(reason, cause);
+        var disconnectPacket = getDisconnectPacket(reason);
+        if (disconnectPacket != null) {
+            send(disconnectPacket, future -> this.session.disconnect(reason, cause));
+        } else {
+            this.session.disconnect(reason, cause);
+        }
+    }
+
+    private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
+        if (reason == null) return null;
+        MinecraftProtocol protocol = session.getPacketProtocol();
+        if (protocol.getState() == ProtocolState.LOGIN) {
+            return new ClientboundLoginDisconnectPacket(reason);
+        } else if (protocol.getState() == ProtocolState.GAME) {
+            return new ClientboundDisconnectPacket(reason);
+        }
+        return null;
     }
 }
