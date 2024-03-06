@@ -82,7 +82,7 @@ public class InventoryCommand extends Command {
         return CommandUsage.full(
             "inventory",
             CommandCategory.INFO,
-            "Shows the player inventory",
+            "Show and interact with the player's inventory",
             asList(
                 "",
                 "show",
@@ -102,14 +102,17 @@ public class InventoryCommand extends Command {
                 printInvAscii(c.getSource().getMultiLineOutput(), true);
             })
             .then(literal("show").executes(c -> {
+                if (!verifyLoggedIn(c.getSource().getEmbed())) return;
                 printInvAscii(c.getSource().getMultiLineOutput(), false);
             }))
             .then(literal("hold").then(argument("slot", integer(36, 44)).executes(c -> {
-                var client = Proxy.getInstance().getClient();
                 if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                 var slot = c.getArgument("slot", Integer.class);
-                client.sendAsync(new ServerboundSetCarriedItemPacket(slot - 36));
-                logInvDelayed();
+                var sim = MODULE_MANAGER.get(PlayerSimulation.class);
+                sim.addTask(() -> {
+                    sim.sendClientPacketAsync(new ServerboundSetCarriedItemPacket(slot - 36));
+                    logInvDelayed();
+                });
                 c.getSource().setNoOutput(true);
                 return 1;
             })))
@@ -120,35 +123,7 @@ public class InventoryCommand extends Command {
                           var to = c.getArgument("to", Integer.class);
                           var sim = MODULE_MANAGER.get(PlayerSimulation.class);
                           sim.addTask(() -> {
-                              var fromStack = CACHE.getPlayerCache().getPlayerInventory().get(from);
-                              var toStack = CACHE.getPlayerCache().getPlayerInventory().get(to);
-                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                                  0,
-                                  CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                                  from,
-                                  ContainerActionType.CLICK_ITEM,
-                                  ClickItemAction.LEFT_CLICK,
-                                  fromStack,
-                                  Int2ObjectMaps.singleton(from, null)
-                              ));
-                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                                  0,
-                                  CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                                  to,
-                                  ContainerActionType.CLICK_ITEM,
-                                  ClickItemAction.LEFT_CLICK,
-                                  toStack,
-                                  Int2ObjectMaps.singleton(to, fromStack)
-                              ));
-                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                                  0,
-                                  CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                                  from,
-                                  ContainerActionType.CLICK_ITEM,
-                                  ClickItemAction.LEFT_CLICK,
-                                  null,
-                                  Int2ObjectMaps.singleton(from, toStack)
-                              ));
+                              swapSlot(from, to, sim);
                               logInvDelayed();
                           });
                           c.getSource().setNoOutput(true);
@@ -182,6 +157,80 @@ public class InventoryCommand extends Command {
                           c.getSource().setNoOutput(true);
                           return 1;
                       })));
+    }
+
+    private static void swapSlot(final int from, final int to, final PlayerSimulation sim) {
+        var fromStack = CACHE.getPlayerCache().getPlayerInventory().get(from);
+        var toStack = CACHE.getPlayerCache().getPlayerInventory().get(to);
+        if (fromStack == Container.EMPTY_STACK && toStack == Container.EMPTY_STACK) return;
+        if (fromStack == Container.EMPTY_STACK) {
+            // pick up toStack and move to fromStack
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                to,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                toStack,
+                Int2ObjectMaps.singleton(to, null)
+            ));
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                from,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                null,
+                Int2ObjectMaps.singleton(from, toStack)
+            ));
+        } else if (toStack == Container.EMPTY_STACK) {
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                from,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                fromStack,
+                Int2ObjectMaps.singleton(from, null)
+            ));
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                to,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                null,
+                Int2ObjectMaps.singleton(to, fromStack)
+            ));
+        } else {
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                from,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                fromStack,
+                Int2ObjectMaps.singleton(from, null)
+            ));
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                to,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                toStack,
+                Int2ObjectMaps.singleton(to, fromStack)
+            ));
+            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                0,
+                CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                from,
+                ContainerActionType.CLICK_ITEM,
+                ClickItemAction.LEFT_CLICK,
+                null,
+                Int2ObjectMaps.singleton(from, toStack)
+            ));
+        }
     }
 
     private void logInvDelayed() {
@@ -224,7 +273,9 @@ public class InventoryCommand extends Command {
     }
 
     private boolean verifyAbleToDoInvActions(final Embed embed) {
-        return verifyLoggedIn(embed) && verifyNoActivePlayer(embed);
+        return verifyLoggedIn(embed)
+            && verifyNoActivePlayer(embed)
+            && CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() == 0;
     }
 
     private boolean verifyNoActivePlayer(final Embed embed) {
