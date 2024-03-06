@@ -63,6 +63,7 @@ public class CommandManager {
            new ExtraChatCommand(),
            new HelpCommand(),
            new IgnoreCommand(),
+           new InventoryCommand(),
            new KickCommand(),
            new KillAuraCommand(),
            new PlaytimeCommand(),
