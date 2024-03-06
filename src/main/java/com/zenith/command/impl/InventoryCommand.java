@@ -7,14 +7,16 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.Server
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.inventory.Container;
-import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
-import com.zenith.command.CommandUsage;
+import com.zenith.command.*;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.PlayerSimulation;
 import discord4j.rest.util.Color;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.*;
@@ -83,9 +85,10 @@ public class InventoryCommand extends Command {
             "Shows the player inventory",
             asList(
                 "",
-                "slotIds",
+                "show",
                 "hold <slot>",
-                "swap <from> <to>"
+                "swap <from> <to>",
+                "drop <slot>"
             ),
             asList("inv")
         );
@@ -95,54 +98,31 @@ public class InventoryCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("inventory")
             .executes(c -> {
-                if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return;
-                var playerInv = CACHE.getPlayerCache().getPlayerInventory();
-                var sb = new StringBuilder();
-                sb.append("```\n");
-                var heldSlot = CACHE.getPlayerCache().getHeldItemSlot() + 36;
-                for (int i = 0; i < playerInv.size(); i++) {
-                    var itemStack = playerInv.get(i);
-                    if (itemStack == Container.EMPTY_STACK) continue;
-                    var itemData = ITEMS_MANAGER.getItemData(itemStack.getId());
-                    sb.append("  ").append(i).append(" -> ");
-                    sb.append(itemData.getName());
-                    if (itemStack.getAmount() > 1) sb.append(" ").append(itemStack.getAmount()).append("x ");
-                    if (i == heldSlot) sb.append(" (Held)");
-                    sb.append("\n");
-                }
-                sb.append("\n```");
-                var items = sb.toString();
-                c.getSource().getMultiLineOutput().add(inventoryAscii);
-                if (items.isEmpty()) {
-                    c.getSource().getMultiLineOutput().add("Empty!");
-                } else {
-                    c.getSource().getMultiLineOutput().add(items);
-                }})
-            .then(literal("slotIds").executes(c -> {
-                // shows the slot ids ascii, doesn't print actual player inventory
-                c.getSource().getMultiLineOutput().add(inventoryAscii);
+                if (!verifyLoggedIn(c.getSource().getEmbed())) return;
+                printInvAscii(c.getSource().getMultiLineOutput(), true);
+            })
+            .then(literal("show").executes(c -> {
+                printInvAscii(c.getSource().getMultiLineOutput(), false);
             }))
             .then(literal("hold").then(argument("slot", integer(36, 44)).executes(c -> {
                 var client = Proxy.getInstance().getClient();
                 if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                 var slot = c.getArgument("slot", Integer.class);
                 client.sendAsync(new ServerboundSetCarriedItemPacket(slot - 36));
-                c.getSource().getEmbed()
-                    .title("Held Item Switched")
-                    .addField("Slot", slot, false)
-                    .color(Color.CYAN);
+                logInvDelayed();
+                c.getSource().setNoOutput(true);
                 return 1;
             })))
             .then(literal("swap")
                       .then(argument("from", integer(0, 45)).then(argument("to", integer(0, 45)).executes(c -> {
-                          var client = Proxy.getInstance().getClient();
                           if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                           var from = c.getArgument("from", Integer.class);
                           var to = c.getArgument("to", Integer.class);
-                          MODULE_MANAGER.get(PlayerSimulation.class).addTask(() -> {
+                          var sim = MODULE_MANAGER.get(PlayerSimulation.class);
+                          sim.addTask(() -> {
                               var fromStack = CACHE.getPlayerCache().getPlayerInventory().get(from);
                               var toStack = CACHE.getPlayerCache().getPlayerInventory().get(to);
-                              client.sendAsync(new ServerboundContainerClickPacket(
+                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
                                   0,
                                   CACHE.getPlayerCache().getActionId().getAndIncrement(),
                                   from,
@@ -151,7 +131,7 @@ public class InventoryCommand extends Command {
                                   fromStack,
                                   Int2ObjectMaps.singleton(from, null)
                               ));
-                              client.sendAsync(new ServerboundContainerClickPacket(
+                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
                                   0,
                                   CACHE.getPlayerCache().getActionId().getAndIncrement(),
                                   to,
@@ -160,7 +140,7 @@ public class InventoryCommand extends Command {
                                   toStack,
                                   Int2ObjectMaps.singleton(to, fromStack)
                               ));
-                              client.sendAsync(new ServerboundContainerClickPacket(
+                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
                                   0,
                                   CACHE.getPlayerCache().getActionId().getAndIncrement(),
                                   from,
@@ -169,14 +149,78 @@ public class InventoryCommand extends Command {
                                   null,
                                   Int2ObjectMaps.singleton(from, toStack)
                               ));
+                              logInvDelayed();
                           });
-                          c.getSource().getEmbed()
-                              .title("Inventory Slot Swapped")
-                              .addField("From", from, false)
-                              .addField("To", to, false)
-                              .color(Color.CYAN);
+                          c.getSource().setNoOutput(true);
                           return 1;
-                      }))));
+                      }))))
+            .then(literal("drop")
+                      .then(argument("slot", integer(0, 44)).executes(c -> {
+                          if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
+                          var slot = c.getArgument("slot", Integer.class);
+                          var stack = CACHE.getPlayerCache().getPlayerInventory().get(slot);
+                          if (stack == Container.EMPTY_STACK) {
+                              c.getSource().getEmbed()
+                                  .title("Error")
+                                  .description("Slot: " + slot + " is empty")
+                                  .color(Color.RUBY);
+                              return 1;
+                          }
+                          var sim = MODULE_MANAGER.get(PlayerSimulation.class);
+                          sim.addTask(() -> {
+                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+                                  0,
+                                  CACHE.getPlayerCache().getActionId().getAndIncrement(),
+                                  slot,
+                                  ContainerActionType.DROP_ITEM,
+                                  ClickItemAction.LEFT_CLICK,
+                                  stack,
+                                  Int2ObjectMaps.singleton(slot, null)
+                              ));
+                              logInvDelayed();
+                          });
+                          c.getSource().setNoOutput(true);
+                          return 1;
+                      })));
+    }
+
+    private void logInvDelayed() {
+        SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+            final List<String> output = new ArrayList<>();
+            printInvAscii(output, false);
+            CommandOutputHelper.logMultiLineOutput(output);
+        }, 1, TimeUnit.SECONDS);
+    }
+
+    private void printInvAscii(final List<String> multiLineOutput, final boolean showAllSlotIds) {
+        var playerInv = CACHE.getPlayerCache().getPlayerInventory();
+        var sb = new StringBuilder();
+        var slotsWithItems = new String[46];
+        Arrays.fill(slotsWithItems, "");
+        sb.append("```\n");
+        var heldSlot = CACHE.getPlayerCache().getHeldItemSlot() + 36;
+        for (int i = 0; i < playerInv.size(); i++) {
+            var itemStack = playerInv.get(i);
+            if (itemStack == Container.EMPTY_STACK) continue;
+            slotsWithItems[i] = i + "";
+            var itemData = ITEMS_MANAGER.getItemData(itemStack.getId());
+            sb.append("  ").append(i).append(" -> ");
+            sb.append(itemData.getName());
+            if (itemStack.getAmount() > 1) sb.append(" ").append(itemStack.getAmount()).append("x ");
+            if (i == heldSlot) sb.append(" (Held)");
+            sb.append("\n");
+        }
+        sb.append("\n```");
+        var items = sb.toString();
+        if (showAllSlotIds)
+            multiLineOutput.add(inventoryAscii);
+        else
+            multiLineOutput.add(String.format(inventoryAsciiFormatter, (Object[]) slotsWithItems));
+        if (items.isEmpty()) {
+            multiLineOutput.add("Empty!");
+        } else {
+            multiLineOutput.add(items);
+        }
     }
 
     private boolean verifyAbleToDoInvActions(final Embed embed) {
