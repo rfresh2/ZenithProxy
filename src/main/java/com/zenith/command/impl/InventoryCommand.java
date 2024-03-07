@@ -1,7 +1,9 @@
 package com.zenith.command.impl;
 
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.inventory.ClickItemAction;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
+import com.github.steveice10.mc.protocol.data.game.inventory.DropItemAction;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,6 +13,7 @@ import com.zenith.command.*;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.PlayerSimulation;
 import discord4j.rest.util.Color;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 
 import java.util.ArrayList;
@@ -23,60 +26,6 @@ import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
 public class InventoryCommand extends Command {
-    private static final String inventoryAscii =
-"""
-```
-
-╔═══╦═══════════╗
-║ 5 ║    ███    ║   ╔═══╦═══╗
-╠═══╣    ███    ║   ║ 1 ║ 2 ║   ╔═══╗
-║ 6 ║  ███████  ║   ╠═══╬═══╣   ║ 0 ║
-╠═══╣  ███████  ║   ║ 3 ║ 4 ║   ╚═══╝
-║ 7 ║  ███████  ║   ╚═══╩═══╝
-╠═══╣    ███    ╠═══╗
-║ 8 ║    ███    ║45 ║
-╚═══╩═══════════╩═══╝
-╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
-║ 9 ║10 ║11 ║12 ║13 ║14 ║15 ║16 ║17 ║
-╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
-║18 ║19 ║20 ║21 ║22 ║23 ║24 ║25 ║26 ║
-╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
-║27 ║28 ║29 ║30 ║31 ║32 ║33 ║34 ║35 ║
-╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
-╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
-║36 ║37 ║38 ║39 ║40 ║41 ║42 ║43 ║44 ║
-╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
-
-```
-""";
-
-    private static final String inventoryAsciiFormatter =
-        """
-        ```
-        
-        ╔═══╦═══════════╗
-        ║%6$2s ║    ███    ║   ╔═══╦═══╗
-        ╠═══╣    ███    ║   ║%2$2s ║%3$2s ║   ╔═══╗
-        ║%7$2s ║  ███████  ║   ╠═══╬═══╣   ║%1$2s ║
-        ╠═══╣  ███████  ║   ║%4$2s ║%5$2s ║   ╚═══╝
-        ║%8$2s ║  ███████  ║   ╚═══╩═══╝
-        ╠═══╣    ███    ╠═══╗
-        ║%9$2s ║    ███    ║%46$2s ║
-        ╚═══╩═══════════╩═══╝
-        ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
-        ║%10$2s ║%11$2s ║%12$2s ║%13$2s ║%14$2s ║%15$2s ║%16$2s ║%17$2s ║%18$2s ║
-        ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
-        ║%19$2s ║%20$2s ║%21$2s ║%22$2s ║%23$2s ║%24$2s ║%25$2s ║%26$2s ║%27$2s ║
-        ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
-        ║%28$2s ║%29$2s ║%30$2s ║%31$2s ║%32$2s ║%33$2s ║%34$2s ║%35$2s ║%36$2s ║
-        ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
-        ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
-        ║%37$2s ║%38$2s ║%39$2s ║%40$2s ║%41$2s ║%42$2s ║%43$2s ║%44$2s ║%45$2s ║
-        ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
-        
-        ```
-        """;
-
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full(
@@ -88,11 +37,14 @@ public class InventoryCommand extends Command {
                 "show",
                 "hold <slot>",
                 "swap <from> <to>",
-                "drop <slot>"
+                "drop <slot>",
+                "drop stack <slot>"
             ),
             asList("inv")
         );
     }
+
+    // TODO: Inventory Manager in PlayerSimulation
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
@@ -130,6 +82,26 @@ public class InventoryCommand extends Command {
                           return 1;
                       }))))
             .then(literal("drop")
+                      .then(literal("stack")
+                                .then(argument("slot", integer(0, 44)).executes(c -> {
+                                    if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
+                                    var slot = c.getArgument("slot", Integer.class);
+                                    var stack = CACHE.getPlayerCache().getPlayerInventory().get(slot);
+                                    if (stack == Container.EMPTY_STACK) {
+                                        c.getSource().getEmbed()
+                                            .title("Error")
+                                            .description("Slot: " + slot + " is empty")
+                                            .color(Color.RUBY);
+                                        return 1;
+                                    }
+                                    var sim = MODULE_MANAGER.get(PlayerSimulation.class);
+                                    sim.addTask(() -> {
+                                        drop(slot, true, sim);
+                                        logInvDelayed();
+                                    });
+                                    c.getSource().setNoOutput(true);
+                                    return 1;
+                                })))
                       .then(argument("slot", integer(0, 44)).executes(c -> {
                           if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                           var slot = c.getArgument("slot", Integer.class);
@@ -143,20 +115,37 @@ public class InventoryCommand extends Command {
                           }
                           var sim = MODULE_MANAGER.get(PlayerSimulation.class);
                           sim.addTask(() -> {
-                              sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                                  0,
-                                  CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                                  slot,
-                                  ContainerActionType.DROP_ITEM,
-                                  ClickItemAction.LEFT_CLICK,
-                                  stack,
-                                  Int2ObjectMaps.singleton(slot, null)
-                              ));
+                              drop(slot, false, sim);
                               logInvDelayed();
                           });
                           c.getSource().setNoOutput(true);
                           return 1;
                       })));
+    }
+
+    private void drop(final int slot, final boolean dropStack, final PlayerSimulation sim) {
+        var stack = CACHE.getPlayerCache().getPlayerInventory().get(slot);
+        if (stack == Container.EMPTY_STACK) return;
+        Int2ObjectMap<ItemStack> changedSlots;
+        if (dropStack) {
+            changedSlots = Int2ObjectMaps.singleton(slot, null);
+        } else {
+            if (stack.getAmount() > 1) {
+                var newStack = new ItemStack(stack.getId(), stack.getAmount() - 1, stack.getNbt());
+                changedSlots = Int2ObjectMaps.singleton(slot, newStack);
+            } else {
+                changedSlots = Int2ObjectMaps.singleton(slot, null);
+            }
+        }
+        sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
+            0,
+            CACHE.getPlayerCache().getActionId().getAndIncrement(),
+            slot,
+            ContainerActionType.DROP_ITEM,
+            dropStack ? DropItemAction.DROP_SELECTED_STACK : DropItemAction.DROP_FROM_SELECTED,
+            null,
+            changedSlots
+        ));
     }
 
     private static void swapSlot(final int from, final int to, final PlayerSimulation sim) {
@@ -301,4 +290,59 @@ public class InventoryCommand extends Command {
         }
         return true;
     }
+
+    private static final String inventoryAscii =
+        """
+        ```
+        
+        ╔═══╦═══════════╗
+        ║ 5 ║    ███    ║   ╔═══╦═══╗
+        ╠═══╣    ███    ║   ║ 1 ║ 2 ║   ╔═══╗
+        ║ 6 ║  ███████  ║   ╠═══╬═══╣   ║ 0 ║
+        ╠═══╣  ███████  ║   ║ 3 ║ 4 ║   ╚═══╝
+        ║ 7 ║  ███████  ║   ╚═══╩═══╝
+        ╠═══╣    ███    ╠═══╗
+        ║ 8 ║    ███    ║45 ║
+        ╚═══╩═══════════╩═══╝
+        ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
+        ║ 9 ║10 ║11 ║12 ║13 ║14 ║15 ║16 ║17 ║
+        ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
+        ║18 ║19 ║20 ║21 ║22 ║23 ║24 ║25 ║26 ║
+        ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
+        ║27 ║28 ║29 ║30 ║31 ║32 ║33 ║34 ║35 ║
+        ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
+        ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
+        ║36 ║37 ║38 ║39 ║40 ║41 ║42 ║43 ║44 ║
+        ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
+        
+        ```
+        """;
+
+    private static final String inventoryAsciiFormatter =
+        """
+        ```
+        
+        ╔═══╦═══════════╗
+        ║%6$2s ║    ███    ║   ╔═══╦═══╗
+        ╠═══╣    ███    ║   ║%2$2s ║%3$2s ║   ╔═══╗
+        ║%7$2s ║  ███████  ║   ╠═══╬═══╣   ║%1$2s ║
+        ╠═══╣  ███████  ║   ║%4$2s ║%5$2s ║   ╚═══╝
+        ║%8$2s ║  ███████  ║   ╚═══╩═══╝
+        ╠═══╣    ███    ╠═══╗
+        ║%9$2s ║    ███    ║%46$2s ║
+        ╚═══╩═══════════╩═══╝
+        ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
+        ║%10$2s ║%11$2s ║%12$2s ║%13$2s ║%14$2s ║%15$2s ║%16$2s ║%17$2s ║%18$2s ║
+        ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
+        ║%19$2s ║%20$2s ║%21$2s ║%22$2s ║%23$2s ║%24$2s ║%25$2s ║%26$2s ║%27$2s ║
+        ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣
+        ║%28$2s ║%29$2s ║%30$2s ║%31$2s ║%32$2s ║%33$2s ║%34$2s ║%35$2s ║%36$2s ║
+        ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
+        ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗
+        ║%37$2s ║%38$2s ║%39$2s ║%40$2s ║%41$2s ║%42$2s ║%43$2s ║%44$2s ║%45$2s ║
+        ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
+        
+        ```
+        """;
+
 }
