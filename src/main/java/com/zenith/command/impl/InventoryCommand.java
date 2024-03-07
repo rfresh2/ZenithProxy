@@ -244,8 +244,8 @@ public class InventoryCommand extends Command {
             var itemData = ITEMS_MANAGER.getItemData(itemStack.getId());
             sb.append("  ").append(i).append(" -> ");
             sb.append(itemData.getName());
-            if (itemStack.getAmount() > 1) sb.append(" ").append(itemStack.getAmount()).append("x ");
-            if (i == heldSlot) sb.append(" (Held)");
+            if (itemStack.getAmount() > 1) sb.append(" (x").append(itemStack.getAmount()).append(") ");
+            if (i == heldSlot) sb.append(" [Held]");
             sb.append("\n");
         }
         sb.append("\n```");
