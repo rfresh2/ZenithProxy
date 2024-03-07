@@ -11,7 +11,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.cache.DataCache;
@@ -129,8 +128,6 @@ public final class SpectatorUtils {
         spectatorEntityPlayer.setEntityId(session.getSpectatorSelfEntityId());
         spectatorEntityPlayer.setYaw(CACHE.getPlayerCache().getYaw());
         spectatorEntityPlayer.setPitch(CACHE.getPlayerCache().getPitch());
-        final CompoundTag emptyNbtTag = new CompoundTag("");
-        emptyNbtTag.clear();
         spectatorEntityPlayer.setMetadata(asList(
             new FloatEntityMetadata(9, MetadataType.FLOAT, 20.0f), // health
             new ByteEntityMetadata(17, MetadataType.BYTE, (byte) 255) // visible skin parts
