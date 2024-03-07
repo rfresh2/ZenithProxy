@@ -18,11 +18,11 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRe
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.*;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
-import com.github.steveice10.opennbt.MNBTIO;
 import com.github.steveice10.opennbt.mini.MNBT;
-import com.github.steveice10.opennbt.tag.builtin.*;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
+import com.github.steveice10.opennbt.tag.builtin.Tag;
+import com.github.steveice10.opennbt.tag.io.MNBTIO;
 import com.github.steveice10.packetlib.packet.Packet;
-import com.google.common.collect.ImmutableMap;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.pathing.blockdata.Block;
@@ -92,14 +92,14 @@ public class ChunkCache implements CachedData {
     }
 
     public void setDimensionRegistry(final CompoundTag registryData) {
-        final var dimensionList = registryData.<CompoundTag>get("minecraft:dimension_type").<ListTag>get("value");
+        final var dimensionList = registryData.<CompoundTag>get("minecraft:dimension_type").getListTag("value").getValue();
         for (Tag tag : dimensionList) {
             CompoundTag dimension = (CompoundTag) tag;
-            String name = dimension.<StringTag>get("name").getValue();
-            int id = dimension.<IntTag>get("id").getValue();
-            CompoundTag element = dimension.<CompoundTag>get("element");
-            int height = element.<IntTag>get("height").getValue();
-            int minY = element.<IntTag>get("min_y").getValue();
+            String name = dimension.getStringTag("name").asRawString();
+            int id = dimension.getNumberTag("id").asInt();
+            CompoundTag element = dimension.get("element");
+            int height = element.getNumberTag("height").asInt();
+            int minY = element.getNumberTag("min_y").asInt();
             CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
             dimensionRegistry.put(name, new Dimension(name, id, height, minY));
         }
@@ -107,10 +107,10 @@ public class ChunkCache implements CachedData {
 
     public void setBiomes(final CompoundTag registryData) {
         final var biomeRegistry = registryData.<CompoundTag>get("minecraft:worldgen/biome");
-        for (Tag type : biomeRegistry.<ListTag>get("value").getValue()) {
+        for (Tag type : biomeRegistry.getListTag("value").getValue()) {
             CompoundTag biomeNBT = (CompoundTag) type;
-            String biomeName = biomeNBT.<StringTag>get("name").getValue();
-            int biomeId = biomeNBT.<IntTag>get("id").getValue();
+            String biomeName = biomeNBT.getStringTag("name").asRawString();
+            int biomeId = biomeNBT.getNumberTag("id").asInt();
             Biome biome = new Biome(biomeName, biomeId);
             biomes.put(biome.id(), biome);
         }
@@ -229,16 +229,15 @@ public class ChunkCache implements CachedData {
     }
 
     private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final MutableVec3i position) {
-        final CompoundTag tileEntityTag = new CompoundTag(blockName, ImmutableMap.of(
+        final CompoundTag tileEntityTag = new CompoundTag();
             // there's probably more properties some tile entities need but this seems to work well enough
-            "id", new StringTag("id", "minecraft:" + blockName),
-            "x", new IntTag("x", position.getX()),
-            "y", new IntTag("y", position.getY()),
-            "z", new IntTag("z", position.getZ())
-        ));
+        tileEntityTag.putString("id", "minecraft:" + blockName);
+        tileEntityTag.putInt("x", position.getX());
+        tileEntityTag.putInt("y", position.getY());
+        tileEntityTag.putInt("z", position.getZ());
         try {
             // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
-            final MNBT nbt = MNBTIO.writeAny(tileEntityTag);
+            final MNBT nbt = MNBTIO.write(tileEntityTag, false);
             synchronized (chunk.blockEntities) {
                 chunk.blockEntities.stream()
                     .filter(tileEntity -> tileEntity.getX() == position.getX() &&

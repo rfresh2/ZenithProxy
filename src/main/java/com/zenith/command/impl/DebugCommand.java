@@ -1,5 +1,6 @@
 package com.zenith.command.impl;
 
+import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveMobEffectPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -36,7 +37,8 @@ public class DebugCommand extends Command {
                         "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
                         "packetLog server on/off",
                         "packetLog filter <string>",
-                        "sendChunksBeforePlayerSpawn on/off"
+                        "sendChunksBeforePlayerSpawn on/off",
+                        "binaryNbtComponentSerializer on/off"
                 ));
     }
 
@@ -133,6 +135,14 @@ public class DebugCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Send Chunks Before Player Spawn " + toggleStrCaps(CONFIG.debug.sendChunksBeforePlayerSpawn));
                           return 1;
+                      })))
+            .then(literal("binaryNbtComponentSerializer")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.debug.binaryNbtComponentSerializer = getToggle(c, "toggle");
+                          MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
+                          c.getSource().getEmbed()
+                              .title("Binary Nbt Component Serializer " + toggleStrCaps(CONFIG.debug.binaryNbtComponentSerializer));
+                          return 1;
                       })));
     }
 
@@ -145,6 +155,7 @@ public class DebugCommand extends Command {
             .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received), false)
             .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter, false)
             .addField("Send Chunks Before Player Spawn", toggleStr(CONFIG.debug.sendChunksBeforePlayerSpawn), false)
+            .addField("Binary Nbt Component Serializer", toggleStr(CONFIG.debug.binaryNbtComponentSerializer), false)
             .color(Color.CYAN);
     }
 }

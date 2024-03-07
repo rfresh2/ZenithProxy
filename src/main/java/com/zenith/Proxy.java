@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.github.steveice10.mc.protocol.data.game.level.sound.BuiltinSound;
 import com.github.steveice10.mc.protocol.data.game.level.sound.SoundCategory;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
@@ -135,6 +136,7 @@ public class Proxy {
             MODULE_MANAGER.init();
             Queue.start();
             saveConfigAsync();
+            MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
             this.startServer();
             CACHE.reset(true);
             SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 0L, 1L, TimeUnit.MINUTES);

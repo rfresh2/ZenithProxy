@@ -8,6 +8,8 @@ import com.zenith.util.ComponentSerializer;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 
+import java.util.List;
+
 import static com.zenith.Shared.DISCORD_BOT;
 import static com.zenith.Shared.TERMINAL_LOG;
 
@@ -54,6 +56,13 @@ public class CommandOutputHelper {
 
     public void logMultiLineOutputToTerminal(CommandContext context) {
         context.getMultiLineOutput().forEach(TERMINAL_LOG::info);
+    }
+
+    public void logMultiLineOutput(final List<String> multiLineOutput) {
+        if (DISCORD_BOT.isRunning())
+            multiLineOutput.forEach(DISCORD_BOT::sendMessage);
+        else
+            multiLineOutput.forEach(TERMINAL_LOG::info);
     }
 
     // intended for use in embed descriptions

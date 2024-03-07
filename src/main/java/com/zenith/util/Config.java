@@ -315,6 +315,7 @@ public final class Config {
         public Server server = new Server();
         public boolean clearOldLogs = false;
         public boolean sendChunksBeforePlayerSpawn = false;
+        public boolean binaryNbtComponentSerializer = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

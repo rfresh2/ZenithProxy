@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 @Data
 public class ConfigurationCache implements CachedData {
 
-    private CompoundTag registry = new CompoundTag(":");
+    private CompoundTag registry = new CompoundTag();
     protected String[] enabledFeatures = new String[]{"minecraft:vanilla"};
     private Map<UUID, ResourcePack> resourcePacks = new ConcurrentHashMap<>();
     private Map<String, Map<String, int[]>> tags = new ConcurrentHashMap<>();
@@ -43,7 +43,7 @@ public class ConfigurationCache implements CachedData {
     @Override
     public void reset(final boolean full) {
         if (full) {
-            this.registry = new CompoundTag(":");
+            this.registry = new CompoundTag();
             this.enabledFeatures = new String[]{"minecraft:vanilla"};
             this.resourcePacks = new ConcurrentHashMap<>();
             this.tags = new ConcurrentHashMap<>();

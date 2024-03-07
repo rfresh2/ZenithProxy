@@ -56,7 +56,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:8fbbfcd7cc") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:9e50cdeaff") {
+    shade("com.github.rfresh2:MCProtocolLib:0ab40a76c4") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
@@ -88,8 +88,8 @@ dependencies {
     shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion")
     shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion")
     shade("net.raphimc:ViaLoader:2.2.12")
-    shade("com.viaversion:viaversion:4.9.3-SNAPSHOT")
-    shade("com.viaversion:viabackwards:4.9.2-SNAPSHOT")
+    shade("com.viaversion:viaversion:4.9.3")
+    shade("com.viaversion:viabackwards:4.9.2")
     shade("org.jline:jline:3.25.1")
     shade("org.jline:jline-terminal-jansi:3.25.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
