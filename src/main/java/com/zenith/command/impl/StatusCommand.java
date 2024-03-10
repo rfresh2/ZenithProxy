@@ -152,7 +152,7 @@ public class StatusCommand extends Command {
                     embed.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
                 embed.addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("Chat Relay", (!CONFIG.discord.chatRelay.channelId.isEmpty() ? toggleStr(CONFIG.discord.chatRelay.enable) : "Not Configured"), true)
-                    .addField("AutoUpdate", toggleStr(CONFIG.autoUpdater.autoUpdate), false);
+                    .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update), false);
                  return 1;
             });
     }

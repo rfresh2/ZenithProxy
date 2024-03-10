@@ -305,7 +305,7 @@ public class DiscordBot {
 
     private void updatePresence() {
         try {
-            if (CONFIG.autoUpdater.autoUpdate) {
+            if (LAUNCH_CONFIG.auto_update) {
                 final AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
                 if (autoUpdater != null
                     && autoUpdater.getUpdateAvailable()

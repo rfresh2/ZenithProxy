@@ -158,7 +158,7 @@ public class Proxy {
                     connected = true;
                 }
             }
-            if (CONFIG.autoUpdater.autoUpdate) {
+            if (LAUNCH_CONFIG.auto_update) {
                 if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
                 else autoUpdater = new RestAutoUpdater();
                 autoUpdater.start();
