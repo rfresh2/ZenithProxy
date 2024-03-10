@@ -18,13 +18,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SpectatorEntityGhast extends SpectatorMob {
     @Override
-    public EntityMetadata[] getSelfEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
-        return getEntityMetadata(spectatorProfile, spectatorEntityId, true);
+    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
+        return getEntityMetadata(spectatorFakeProfile, spectatorEntityId, true);
     }
 
     @Override
-    public EntityMetadata[] getEntityMetadata(GameProfile spectatorProfile, int spectatorEntityId) {
-        return getEntityMetadata(spectatorProfile, spectatorEntityId, false);
+    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
+        return getEntityMetadata(spectatorFakeProfile, spectatorEntityId, false);
     }
 
     private EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId, final boolean self) {

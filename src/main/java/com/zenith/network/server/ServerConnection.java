@@ -288,11 +288,17 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public ClientboundSetEntityDataPacket getSelfEntityMetadataPacket() {
-        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(spectatorFakeProfileCache.getProfile(), spectatorEntityId));
+        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getSelfEntityMetadata(
+            profileCache.getProfile(),
+            spectatorFakeProfileCache.getProfile(),
+            spectatorEntityId));
     }
 
     public ClientboundSetEntityDataPacket getEntityMetadataPacket() {
-        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(spectatorFakeProfileCache.getProfile(), spectatorEntityId));
+        return new ClientboundSetEntityDataPacket(spectatorEntityId, spectatorEntity.getEntityMetadata(
+            profileCache.getProfile(),
+            spectatorFakeProfileCache.getProfile(),
+            spectatorEntityId));
     }
 
     public Optional<Packet> getSoundPacket() {

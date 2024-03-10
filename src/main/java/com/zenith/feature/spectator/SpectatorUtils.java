@@ -17,6 +17,7 @@ import com.zenith.cache.DataCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
+import com.zenith.feature.spectator.entity.mob.SpectatorEntityPlayerHead;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
 
@@ -213,7 +214,7 @@ public final class SpectatorUtils {
                         newY,
                         newZ,
                         getDisplayYaw(selfSession),
-                        selfSession.getSpectatorPlayerCache().getPitch(),
+                        getDisplayPitch(selfSession),
                         false
                     ));
                     connection.sendAsync(new ClientboundRotateHeadPacket(
@@ -227,8 +228,17 @@ public final class SpectatorUtils {
         // idk why but dragon is displayed 180 degrees off from what you'd expect
         if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityEnderDragon) {
             return serverConnection.getSpectatorPlayerCache().getYaw() - 180f;
+        } else if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityPlayerHead) {
+            return serverConnection.getSpectatorPlayerCache().getYaw() - 180f;
         } else {
             return serverConnection.getSpectatorPlayerCache().getYaw();
         }
+    }
+
+    public static float getDisplayPitch(final ServerConnection serverConnection) {
+        if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityPlayerHead) {
+            return -serverConnection.getSpectatorPlayerCache().getPitch();
+        }
+        return serverConnection.getSpectatorPlayerCache().getPitch();
     }
 }
