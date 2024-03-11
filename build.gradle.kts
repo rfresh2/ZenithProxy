@@ -6,7 +6,7 @@ plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.1"
     // todo: use official version when https://github.com/johnrengelman/shadow/pull/879 is merged
-    id("io.github.goooler.shadow") version "8.1.6"
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 
 group = "com.zenith"
@@ -42,8 +42,8 @@ dependencies {
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
     shade("com.zaxxer:HikariCP:5.1.0")
     shade("org.postgresql:postgresql:$postgresVersion")
-    shade("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")
-    shade("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.8.0.202311291450-r")
+    shade("org.eclipse.jgit:org.eclipse.jgit:6.9.0.202403050737-r")
+    shade("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.9.0.202403050737-r")
     shade("com.github.mwiede:jsch:0.2.17")
     shade("com.google.guava:guava:33.0.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
@@ -51,7 +51,7 @@ dependencies {
     shade("org.slf4j:slf4j-api:2.0.12")
     shade("org.slf4j:jul-to-slf4j:2.0.12")
     shade("com.mojang:brigadier:1.2.9")
-    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
+    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.2")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
     shade("com.github.rfresh2.Discord4j:discord4j-core:8fbbfcd7cc") {
         exclude(group = "io.netty")
