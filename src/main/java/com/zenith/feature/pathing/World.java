@@ -93,6 +93,16 @@ public class World {
         return blockPosList;
     }
 
+    public List<BlockState> getCollidingBlockStates(final LocalizedCollisionBox cb) {
+        final List<BlockState> blockStates = new ArrayList<>(0);
+        for (BlockPos blockPos : getBlockPosListInCollisionBox(cb)) {
+            var blockState = getBlockState(blockPos);
+            if (blockState.id() == 0) continue; // air
+            blockStates.add(blockState);
+        }
+        return blockStates;
+    }
+
     public static boolean isSpaceEmpty(final LocalizedCollisionBox cb) {
         for (BlockPos blockPos : getBlockPosListInCollisionBox(cb)) {
             var blockStateCBs = getBlockState(blockPos).getCollisionBoxes();
