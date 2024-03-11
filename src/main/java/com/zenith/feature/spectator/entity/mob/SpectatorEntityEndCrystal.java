@@ -16,52 +16,58 @@ import net.kyori.adventure.text.Component;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SpectatorEntityBat extends SpectatorMob {
+public class SpectatorEntityEndCrystal extends SpectatorMob {
+
     @Override
-    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
-        return getEntityMetadata(spectatorFakeProfile, spectatorEntityId, true);
+    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {
+        return getEntityMetadata(spectatorRealProfile, spectatorEntityId, true);
     }
 
     @Override
-    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
-        return getEntityMetadata(spectatorFakeProfile, spectatorEntityId, false);
+    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {
+        return getEntityMetadata(spectatorRealProfile, spectatorEntityId, false);
     }
 
     private EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId, final boolean self) {
         return new EntityMetadata[]{
             new ObjectEntityMetadata<>(2, MetadataType.OPTIONAL_CHAT, Optional.of(Component.text(spectatorProfile.getName()))),
             new BooleanEntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
+            new BooleanEntityMetadata(9, MetadataType.BOOLEAN, false),
         };
     }
 
     @Override
-    EntityType getType() {
-        return EntityType.BAT;
-    }
-    @Override
     public double getEyeHeight() {
-        return 0.45;
+        return 1.5;
     }
+
     @Override
     public double getHeight() {
-        return 0.9;
+        return 2;
     }
+
     @Override
     public double getWidth() {
-        return 0.5;
+        return 2;
+    }
+
+    @Override
+    EntityType getType() {
+        return EntityType.END_CRYSTAL;
     }
 
     @Override
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {
-        final float randFloat = ThreadLocalRandom.current().nextFloat();
+        var f1 = ThreadLocalRandom.current().nextFloat();
+        var f2 = ThreadLocalRandom.current().nextFloat();
         return Optional.of(new ClientboundSoundPacket(
-            BuiltinSound.ENTITY_BAT_AMBIENT,
-            SoundCategory.AMBIENT,
+            BuiltinSound.ENTITY_GENERIC_EXPLODE,
+            SoundCategory.BLOCK,
             playerCache.getX(),
             playerCache.getY(),
             playerCache.getZ(),
-            1.0f - (randFloat / 2f),
-            1.0f + (randFloat / 10f), // slight pitch variations
+            4.0f,
+            (1.0F + (f1 - f2) * 0.2F) * 0.7F,
             0L
         ));
     }

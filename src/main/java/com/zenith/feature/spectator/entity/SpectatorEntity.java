@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public abstract class SpectatorEntity {
-    public abstract EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
+    public abstract EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId);
 
-    public abstract EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId);
+    public abstract EntityMetadata[] getEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId);
 
     public abstract Packet getSpawnPacket(final int entityId, final UUID uuid, final PlayerCache playerCache, final GameProfile gameProfile);
     public Optional<Packet> getSoundPacket(final PlayerCache playerCache) {

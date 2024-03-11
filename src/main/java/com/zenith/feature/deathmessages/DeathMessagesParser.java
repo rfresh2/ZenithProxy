@@ -1,6 +1,7 @@
 package com.zenith.feature.deathmessages;
 
 import com.zenith.discord.Embed;
+import com.zenith.util.ComponentSerializer;
 import discord4j.rest.util.Color;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -53,9 +54,10 @@ public class DeathMessagesParser {
         }
         if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
             DISCORD_BOT.sendEmbedMessage(Embed.builder()
-                                                 .title("Unknown death message")
-                                                 .description(rawInput)
-                                                 .color(Color.RUBY));
+                                             .title("Unknown death message")
+                                             .description(ComponentSerializer.serializeJson(component))
+                                             .addField("Message", rawInput, false)
+                                             .color(Color.RUBY));
         }
         DEFAULT_LOG.warn("No death message schema found for '{}'", rawInput);
         return Optional.empty();

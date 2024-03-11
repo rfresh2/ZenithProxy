@@ -12,7 +12,8 @@ import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import discord4j.rest.util.Color;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.LAUNCH_CONFIG;
+import static com.zenith.Shared.saveLaunchConfig;
 import static com.zenith.command.ToggleArgumentType.getToggle;
 import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -32,7 +33,7 @@ public class AutoUpdateCommand extends Command {
         return command("autoUpdate").requires(Command::validateAccountOwner)
             .then(argument("toggle", toggle()).executes(c -> {
                 final boolean toggle = getToggle(c, "toggle");
-                CONFIG.autoUpdater.autoUpdate = toggle;
+                LAUNCH_CONFIG.auto_update = toggle;
                 AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
                 if (toggle) {
                     if (autoUpdater == null) {
@@ -54,7 +55,7 @@ public class AutoUpdateCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .addField("AutoUpdater", toggleStr(CONFIG.autoUpdater.autoUpdate), false)
+            .addField("AutoUpdater", toggleStr(LAUNCH_CONFIG.auto_update), false)
             .color(Color.CYAN);
     }
 }

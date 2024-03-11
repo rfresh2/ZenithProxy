@@ -30,6 +30,8 @@ public final class SpectatorEntityRegistry {
         spectatorEntityMap.put("ghast", new SpectatorEntityGhast());
         spectatorEntityMap.put("allay", new SpectatorEntityAllay());
         spectatorEntityMap.put("warden", new SpectatorEntityWarden());
+        spectatorEntityMap.put("head", new SpectatorEntityPlayerHead());
+        spectatorEntityMap.put("crystal", new SpectatorEntityEndCrystal());
     }
 
     public static SpectatorEntity getSpectatorEntityWithDefault(final String identifier) {
