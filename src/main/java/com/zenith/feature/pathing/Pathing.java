@@ -3,15 +3,17 @@ package com.zenith.feature.pathing;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
+import lombok.NonNull;
 import org.cloudburstmc.math.vector.Vector2f;
 
-import java.util.*;
+import java.util.Optional;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class Pathing {
-    private final Set<MovementInputRequest> movementInputRequests = Collections.synchronizedSet(new HashSet<>());
+    private static final MovementInputRequest DEFAULT_MOVEMENT_INPUT_REQUEST = new MovementInputRequest(Optional.empty(), Optional.empty(), Optional.empty(), Integer.MIN_VALUE);
+    private @NonNull MovementInputRequest currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
 
     public Pathing() {
         EVENT_BUS.subscribe(this,
@@ -26,72 +28,86 @@ public class Pathing {
      * Interface to request movement on the next tick
      */
 
-    public void moveReq(final MovementInputRequest movementInputRequest) {
-        this.movementInputRequests.add(movementInputRequest);
+    public synchronized void moveReq(final MovementInputRequest movementInputRequest) {
+        if (movementInputRequest.priority() <= currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = movementInputRequest;
     }
 
-    public void moveRot(final Input input, final float yaw, final float pitch, final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.of(input), Optional.of(yaw), Optional.of(pitch), priority));
+    public synchronized void moveRot(final Input input, final float yaw, final float pitch, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(input), Optional.of(yaw), Optional.of(pitch), priority);
     }
 
-    public void moveYaw(final Input input, final float yaw, final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.of(input), Optional.of(yaw), Optional.empty(), priority));
+    public synchronized void moveYaw(final Input input, final float yaw, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(input), Optional.of(yaw), Optional.empty(), priority);
     }
 
-    public void moveRotTowards(final double x, final double z, final int priority) {
+    public synchronized void moveRotTowards(final double x, final double z, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
         final float yaw = yawToXZ(x, z);
-        this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority));
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority);
     }
 
-    public void moveRotTowards(final double x, final double y, final double z, final int priority) {
+    public synchronized void moveRotTowards(final double x, final double y, final double z, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
         final Vector2f rotationTo = rotationTo(x, y, z);
-        this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(rotationTo.getX()), Optional.of(rotationTo.getY()), priority));
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(forwardInput()), Optional.of(rotationTo.getX()), Optional.of(rotationTo.getY()), priority);
     }
 
-    public void moveRotTowardsBlockPos(final int x, final int z, final int priority) {
+    public synchronized void moveRotTowardsBlockPos(final int x, final int z, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
         final float yaw = yawToXZ(x + 0.5, z + 0.5);
-        this.moveReq(new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority));
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(forwardInput()), Optional.of(yaw), Optional.empty(), priority);
     }
 
-    public void moveRotSneakTowardsBlockPos(final int x, final int z, final int priority) {
+    public synchronized void moveRotSneakTowardsBlockPos(final int x, final int z, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
         final float yaw = yawToXZ(x + 0.5, z + 0.5);
-        this.moveReq(new MovementInputRequest(Optional.of(forwardSneakInput()), Optional.of(yaw), Optional.empty(), priority));
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(forwardSneakInput()), Optional.of(yaw), Optional.empty(), priority);
     }
 
-    public void move(final Input input, final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.of(input), Optional.empty(), Optional.empty(), priority));
+    public synchronized void move(final Input input, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(input), Optional.empty(), Optional.empty(), priority);
     }
 
-    public void rotate(final float yaw, final float pitch, final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(yaw), Optional.of(pitch), priority));
+    public synchronized void rotate(final float yaw, final float pitch, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.empty(), Optional.of(yaw), Optional.of(pitch), priority);
     }
 
-    public void rotateTowards(final double x, final double y, final double z, final int priority) {
+    public synchronized void rotateTowards(final double x, final double y, final double z, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
         final Vector2f rotationTo = rotationTo(x, y, z);
-        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(rotationTo.getX()), Optional.of(rotationTo.getY()), priority));
+        currentMovementInputRequest = new MovementInputRequest(Optional.empty(), Optional.of(rotationTo.getX()), Optional.of(rotationTo.getY()), priority);
     }
 
-    public void rotateYaw(final float yaw, final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.of(yaw), Optional.empty(), priority));
+    public synchronized void rotateYaw(final float yaw, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.empty(), Optional.of(yaw), Optional.empty(), priority);
     }
 
-    public void rotatePitch(final float pitch, final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.empty(), Optional.of(pitch), priority));
+    public synchronized void rotatePitch(final float pitch, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.empty(), Optional.empty(), Optional.of(pitch), priority);
     }
 
-    public void stop(final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.empty(), Optional.empty(), Optional.empty(), priority));
+    public synchronized void stop(final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.empty(), Optional.empty(), Optional.empty(), priority);
     }
 
-    public void jump(final int priority) {
-        this.moveReq(new MovementInputRequest(Optional.of(jumpInput()), Optional.empty(), Optional.empty(), priority));
+    public synchronized void jump(final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(Optional.of(jumpInput()), Optional.empty(), Optional.empty(), priority);
     }
 
-    public void handleTick(final ClientTickEvent event) {
-        this.movementInputRequests.stream()
-            .max(Comparator.comparingInt(MovementInputRequest::priority))
-            .ifPresent(request -> MODULE_MANAGER.get(PlayerSimulation.class).doMovement(request));
-        this.movementInputRequests.clear();
+    public synchronized void handleTick(final ClientTickEvent event) {
+        if (currentMovementInputRequest != DEFAULT_MOVEMENT_INPUT_REQUEST) {
+            MODULE_MANAGER.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
+            currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
+        }
     }
 
     // todo: Pathing interface based on goals
