@@ -9,7 +9,6 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
@@ -17,8 +16,8 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.feature.items.ContainerClickAction;
 import com.zenith.module.Module;
-import com.zenith.util.Maps;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
@@ -70,8 +69,7 @@ public class KillAura extends Module {
 
     public void handleClientTick(final ClientTickEvent event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-                && !MODULE_MANAGER.get(AutoEat.class).isEating()
-                && !MODULE_MANAGER.get(AutoTotem.class).isActivelySwapping()) {
+                && !MODULE_MANAGER.get(AutoEat.class).isEating()) {
             if (delay > 0) {
                 delay--;
                 return;
@@ -199,16 +197,15 @@ public class KillAura extends Module {
         for (int i = 44; i >= 9; i--) {
             final ItemStack stack = inventory.get(i);
             if (nonNull(stack) && isWeapon(stack.getId())) {
-                sendClientPacketAsync(new ServerboundContainerClickPacket(0,
-                                                                          CACHE.getPlayerCache().getActionId().incrementAndGet(),
-                                                                          i,
-                                                                          ContainerActionType.MOVE_TO_HOTBAR_SLOT,
-                                                                          MoveToHotbarAction.SLOT_2,
-                                                                          null,
-                                                                          Maps.of(
-                                                                              i, inventory.get(37),
-                                                                              37, stack
-                                                                          )));
+                PLAYER_INVENTORY_MANAGER.invActionReq(
+                    this,
+                    new ContainerClickAction(
+                        i,
+                        ContainerActionType.MOVE_TO_HOTBAR_SLOT,
+                        MoveToHotbarAction.SLOT_2
+                    ),
+                    MOVEMENT_PRIORITY
+                );
                 if (CACHE.getPlayerCache().getHeldItemSlot() != 1) {
                     sendClientPacketAsync(new ServerboundSetCarriedItemPacket(1));
                 }

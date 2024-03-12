@@ -7,7 +7,6 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.cache.data.entity.Entity;
@@ -15,8 +14,8 @@ import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
+import com.zenith.feature.items.ContainerClickAction;
 import com.zenith.module.Module;
-import com.zenith.util.Maps;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
 
@@ -148,16 +147,15 @@ public class AutoFish extends Module {
         for (int i = 44; i >= 9; i--) {
             final ItemStack stack = inventory.get(i);
             if (nonNull(stack) && stack.getId() == fishingRodId) {
-                sendClientPacketAsync(new ServerboundContainerClickPacket(0,
-                                                                          CACHE.getPlayerCache().getActionId().incrementAndGet(),
-                                                                          i,
-                                                                          ContainerActionType.MOVE_TO_HOTBAR_SLOT,
-                                                                          MoveToHotbarAction.SLOT_3,
-                                                                          null,
-                                                                          Maps.of(
-                                                                              i, inventory.get(38),
-                                                                              38, stack
-                                                                          )));
+                PLAYER_INVENTORY_MANAGER.invActionReq(
+                    this,
+                    new ContainerClickAction(
+                        i,
+                        ContainerActionType.MOVE_TO_HOTBAR_SLOT,
+                        MoveToHotbarAction.SLOT_3
+                    ),
+                    MOVEMENT_PRIORITY
+                );
                 if (CACHE.getPlayerCache().getHeldItemSlot() != 2) {
                     sendClientPacketAsync(new ServerboundSetCarriedItemPacket(2));
                 }

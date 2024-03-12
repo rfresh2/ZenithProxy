@@ -5,14 +5,13 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.feature.items.ContainerClickAction;
 import com.zenith.module.Module;
-import com.zenith.util.Maps;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -51,8 +50,7 @@ public class AutoEat extends Module {
     public void handleClientTick(final ClientTickEvent e) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
-                && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())
-                && !MODULE_MANAGER.get(AutoTotem.class).isActivelySwapping()) {
+                && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())) {
             if (delay > 0) {
                 delay--;
                 return;
@@ -101,16 +99,11 @@ public class AutoEat extends Module {
             ItemStack itemStack = inventory.get(i);
             if (nonNull(itemStack)) {
                 if (FOOD_MANAGER.isSafeFood(itemStack.getId())) {
-                    sendClientPacketAsync(new ServerboundContainerClickPacket(0,
-                                                                              CACHE.getPlayerCache().getActionId().incrementAndGet(),
-                                                                              i,
-                                                                              ContainerActionType.MOVE_TO_HOTBAR_SLOT,
-                                                                              MoveToHotbarAction.SLOT_1,
-                                                                              null,
-                                                                              Maps.of(
-                                                                                  i, inventory.get(36),
-                                                                                  36, itemStack
-                                                                              )));
+                    PLAYER_INVENTORY_MANAGER.invActionReq(
+                        this,
+                        new ContainerClickAction(i, ContainerActionType.MOVE_TO_HOTBAR_SLOT, MoveToHotbarAction.SLOT_1),
+                        MOVEMENT_PRIORITY
+                    );
                     if (CACHE.getPlayerCache().getHeldItemSlot() != 0) {
                         sendClientPacketAsync(new ServerboundSetCarriedItemPacket(0));
                     }

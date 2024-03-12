@@ -1,20 +1,16 @@
 package com.zenith.command.impl;
 
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
-import com.github.steveice10.mc.protocol.data.game.inventory.ClickItemAction;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.data.game.inventory.DropItemAction;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.command.*;
 import com.zenith.discord.Embed;
+import com.zenith.feature.items.ContainerClickAction;
 import com.zenith.module.impl.PlayerSimulation;
 import discord4j.rest.util.Color;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,8 +40,6 @@ public class InventoryCommand extends Command {
         );
     }
 
-    // TODO: Inventory Manager in PlayerSimulation
-
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("inventory")
@@ -73,11 +67,8 @@ public class InventoryCommand extends Command {
                           if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                           var from = c.getArgument("from", Integer.class);
                           var to = c.getArgument("to", Integer.class);
-                          var sim = MODULE_MANAGER.get(PlayerSimulation.class);
-                          sim.addTask(() -> {
-                              swapSlot(from, to, sim);
-                              logInvDelayed();
-                          });
+                          PLAYER_INVENTORY_MANAGER.invActionReq(this, PLAYER_INVENTORY_MANAGER.swapSlots(from, to), 0);
+                          logInvDelayed();
                           c.getSource().setNoOutput(true);
                           return 1;
                       }))))
@@ -94,11 +85,8 @@ public class InventoryCommand extends Command {
                                             .color(Color.RUBY);
                                         return 1;
                                     }
-                                    var sim = MODULE_MANAGER.get(PlayerSimulation.class);
-                                    sim.addTask(() -> {
-                                        drop(slot, true, sim);
-                                        logInvDelayed();
-                                    });
+                                    drop(slot, true);
+                                    logInvDelayed();
                                     c.getSource().setNoOutput(true);
                                     return 1;
                                 })))
@@ -113,113 +101,22 @@ public class InventoryCommand extends Command {
                                   .color(Color.RUBY);
                               return 1;
                           }
-                          var sim = MODULE_MANAGER.get(PlayerSimulation.class);
-                          sim.addTask(() -> {
-                              drop(slot, false, sim);
-                              logInvDelayed();
-                          });
+                          drop(slot, false);
+                          logInvDelayed();
                           c.getSource().setNoOutput(true);
                           return 1;
                       })));
     }
 
-    private void drop(final int slot, final boolean dropStack, final PlayerSimulation sim) {
-        var stack = CACHE.getPlayerCache().getPlayerInventory().get(slot);
-        if (stack == Container.EMPTY_STACK) return;
-        Int2ObjectMap<ItemStack> changedSlots;
-        if (dropStack) {
-            changedSlots = Int2ObjectMaps.singleton(slot, null);
-        } else {
-            if (stack.getAmount() > 1) {
-                var newStack = new ItemStack(stack.getId(), stack.getAmount() - 1, stack.getNbt());
-                changedSlots = Int2ObjectMaps.singleton(slot, newStack);
-            } else {
-                changedSlots = Int2ObjectMaps.singleton(slot, null);
-            }
-        }
-        sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-            0,
-            CACHE.getPlayerCache().getActionId().getAndIncrement(),
-            slot,
-            ContainerActionType.DROP_ITEM,
-            dropStack ? DropItemAction.DROP_SELECTED_STACK : DropItemAction.DROP_FROM_SELECTED,
-            null,
-            changedSlots
-        ));
-    }
-
-    private static void swapSlot(final int from, final int to, final PlayerSimulation sim) {
-        var fromStack = CACHE.getPlayerCache().getPlayerInventory().get(from);
-        var toStack = CACHE.getPlayerCache().getPlayerInventory().get(to);
-        if (fromStack == Container.EMPTY_STACK && toStack == Container.EMPTY_STACK) return;
-        if (fromStack == Container.EMPTY_STACK) {
-            // pick up toStack and move to fromStack
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                to,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                toStack,
-                Int2ObjectMaps.singleton(to, null)
-            ));
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                from,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                null,
-                Int2ObjectMaps.singleton(from, toStack)
-            ));
-        } else if (toStack == Container.EMPTY_STACK) {
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                from,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                fromStack,
-                Int2ObjectMaps.singleton(from, null)
-            ));
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                to,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                null,
-                Int2ObjectMaps.singleton(to, fromStack)
-            ));
-        } else {
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                from,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                fromStack,
-                Int2ObjectMaps.singleton(from, null)
-            ));
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                to,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                toStack,
-                Int2ObjectMaps.singleton(to, fromStack)
-            ));
-            sim.sendClientPacketAsync(new ServerboundContainerClickPacket(
-                0,
-                CACHE.getPlayerCache().getActionId().getAndIncrement(),
-                from,
-                ContainerActionType.CLICK_ITEM,
-                ClickItemAction.LEFT_CLICK,
-                null,
-                Int2ObjectMaps.singleton(from, toStack)
-            ));
-        }
+    private void drop(final int slot, final boolean dropStack) {
+        PLAYER_INVENTORY_MANAGER.invActionReq(
+            this,
+            new ContainerClickAction(
+                slot,
+                ContainerActionType.DROP_ITEM,
+                dropStack ? DropItemAction.DROP_SELECTED_STACK : DropItemAction.DROP_FROM_SELECTED
+            ),
+            0);
     }
 
     private void logInvDelayed() {
