@@ -80,4 +80,21 @@ public class MathHelper {
         if (duration.toSecondsPart() > 0 || sb.isEmpty()) sb.append(duration.toSecondsPart()).append("s");
         return sb.toString().trim();
     }
+
+    public static String formatDurationLong(Duration duration) {
+        var durationInSeconds = duration.toSeconds();
+        var secondsInMinute = 60L;
+        var secondsInHour = secondsInMinute * 60L;
+        var secondsInDay = secondsInHour * 24L;
+        var secondsInMonth = secondsInDay * 30L; // assuming 30 days per month
+
+        var months = durationInSeconds / secondsInMonth;
+        var days = (durationInSeconds % secondsInMonth) / secondsInDay;
+        var hours = (durationInSeconds % secondsInDay) / secondsInHour;
+        final StringBuilder sb = new StringBuilder();
+        sb.append((months > 0) ? months + " month" + (months != 1 ? "s" : "") + ", " : "");
+        sb.append((days > 0) ? days + " day" + (days != 1 ? "s" : "") + ", " : "");
+        sb.append(hours + " hour" + (hours != 1 ? "s" : ""));
+        return sb.toString();
+    }
 }

@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
@@ -14,8 +15,8 @@ import java.util.Optional;
 
 import static com.zenith.Shared.VC_API;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
-import static com.zenith.discord.DiscordBot.escape;
-import static com.zenith.util.math.MathHelper.formatDuration;
+import static com.zenith.util.math.MathHelper.formatDurationLong;
+import static discord4j.common.util.TimestampFormat.SHORT_DATE_TIME;
 import static java.util.Arrays.asList;
 
 public class StatsCommand extends Command {
@@ -44,23 +45,27 @@ public class StatsCommand extends Command {
                 }
                 final StatsResponse playerStats = statsResponse.get();
                 c.getSource().getEmbed()
-                    .title("Player Stats: " + escape(playerName))
+                    .title("Player Stats")
                     .color(Color.CYAN)
+                    .addField("Player", playerName, true)
+                    .addField("\u200B", "\u200B", true)
+                    .addField("\u200B", "\u200B", true)
                     .addField("Joins", playerStats.joinCount(), true)
                     .addField("Leaves", playerStats.leaveCount(), true)
                     .addField("\u200B", "\u200B", true)
-                    .addField("First Seen", playerStats.firstSeen().format(formatter), true)
-                    .addField("Last Seen", playerStats.lastSeen().format(formatter), true)
+                    .addField("First Seen", SHORT_DATE_TIME.format(playerStats.firstSeen().toInstant()), true)
+                    .addField("Last Seen", SHORT_DATE_TIME.format(playerStats.lastSeen().toInstant()), true)
                     .addField("\u200B", "\u200B", true)
-                    .addField("Playtime", formatDuration(Duration.ofSeconds(playerStats.playtimeSeconds())), true)
-                    .addField("Playtime (Last 30 Days)", formatDuration(Duration.ofSeconds(playerStats.playtimeSecondsMonth())), true)
+                    .addField("Playtime", formatDurationLong(Duration.ofSeconds(playerStats.playtimeSeconds())), true)
+                    .addField("Playtime (Last 30 Days)", formatDurationLong(Duration.ofSeconds(playerStats.playtimeSecondsMonth())), true)
                     .addField("\u200B", "\u200B", true)
                     .addField("Deaths", playerStats.deathCount(), true)
                     .addField("Kills", playerStats.killCount(), true)
                     .addField("\u200B", "\u200B", true)
                     .addField("Chats", playerStats.chatsCount(), true)
                     .addField("\u200B", "\u200B", true)
-                    .addField("\u200B", "\u200B", true);
+                    .addField("\u200B", "\u200B", true)
+                    .thumbnail(Proxy.getInstance().getAvatarURL(playerName).toString());
                 return 1;
             }));
     }

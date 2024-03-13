@@ -12,7 +12,7 @@ import static com.zenith.Shared.*;
 public class AutoTotem extends AbstractInventoryModule {
     private int delay = 0;
     private static final int MOVEMENT_PRIORITY = 1000;
-    private int totemId = ITEMS_MANAGER.getItemId("totem_of_undying");
+    private final int totemId = ITEMS_MANAGER.getItemId("totem_of_undying");
 
     public AutoTotem() {
         super(true, -1, MOVEMENT_PRIORITY);

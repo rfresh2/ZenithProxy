@@ -43,8 +43,8 @@ public class KillAura extends AbstractInventoryModule {
     private boolean isAttacking = false;
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
     private static final int MOVEMENT_PRIORITY = 500;
-    private IntList swords = ITEMS_MANAGER.getItemsContaining("_sword");
-    private IntList axes = ITEMS_MANAGER.getItemsContaining("_axe");
+    private final IntList swords = ITEMS_MANAGER.getItemsContaining("_sword");
+    private final IntList axes = ITEMS_MANAGER.getItemsContaining("_axe");
 
     public KillAura() {
         super(false, 1, MOVEMENT_PRIORITY);
