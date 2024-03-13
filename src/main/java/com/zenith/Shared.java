@@ -20,6 +20,7 @@ import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.food.FoodManager;
 import com.zenith.feature.items.ItemsManager;
+import com.zenith.feature.items.PlayerInventoryManager;
 import com.zenith.feature.language.LanguageManager;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
@@ -100,6 +101,7 @@ public class Shared {
     public static final LanguageManager LANGUAGE_MANAGER;
     public static final FoodManager FOOD_MANAGER;
     public static final ItemsManager ITEMS_MANAGER;
+    public static final PlayerInventoryManager PLAYER_INVENTORY_MANAGER;
     public static final VcApi VC_API;
     public static final MojangApi MOJANG_API;
     public static final SessionServerApi SESSION_SERVER_API;
@@ -228,6 +230,7 @@ public class Shared {
             LANGUAGE_MANAGER = new LanguageManager();
             FOOD_MANAGER = new FoodManager();
             ITEMS_MANAGER = new ItemsManager();
+            PLAYER_INVENTORY_MANAGER = new PlayerInventoryManager();
             VC_API = new VcApi();
             MOJANG_API = new MojangApi();
             SESSION_SERVER_API = new SessionServerApi();

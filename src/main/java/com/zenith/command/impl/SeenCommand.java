@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
@@ -9,16 +10,15 @@ import discord4j.rest.util.Color;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static com.zenith.Shared.VC_API;
 import static com.zenith.command.CustomStringArgumentType.getString;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
 import static com.zenith.discord.DiscordBot.escape;
+import static discord4j.common.util.TimestampFormat.SHORT_DATE_TIME;
 import static java.util.Arrays.asList;
 
 public class SeenCommand extends Command {
-    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.full("seen",
@@ -44,16 +44,21 @@ public class SeenCommand extends Command {
                     return -1;
                 }
                 c.getSource().getEmbed()
-                    .title("Seen: " + escape(playerName))
+                    .title("Seen")
                     .color(Color.CYAN);
                 seenResponse.ifPresent((response) -> c.getSource().getEmbed()
+                    .addField("Player", playerName, true)
+                    .addField("\u200B", "\u200B", true)
+                    .addField("\u200B", "\u200B", true)
                     .addField("First Seen", getSeenString(response.firstSeen()), false)
-                    .addField("Last Seen", getSeenString(response.lastSeen()), false));
+                    .addField("Last Seen", getSeenString(response.lastSeen()), false)
+                    .thumbnail(Proxy.getInstance().getAvatarURL(playerName).toString()));
+
                 return 1;
             }));
     }
 
     private String getSeenString(@Nullable final OffsetDateTime time) {
-        return time != null ? time.format(formatter) : "Never";
+        return time != null ? SHORT_DATE_TIME.format(time.toInstant()) : "Never";
     }
 }

@@ -65,6 +65,8 @@ public class PlayerSimulation extends Module {
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
+    private final int bubbleColumnDownwardBlockStateId = BLOCK_DATA_MANAGER.getBlockFromName("bubble_column").minStateId();
+    private final int bubbleColumnUpwardBlockStateId = BLOCK_DATA_MANAGER.getBlockFromName("bubble_column").maxStateId();
 
     @Override
     public void subscribeEvents() {
@@ -376,8 +378,22 @@ public class PlayerSimulation extends Module {
         this.y = movedPlayerCollisionBox.getMinY();
         this.z = ((movedPlayerCollisionBox.getMinZ() + movedPlayerCollisionBox.getMaxZ()) / 2.0);
         syncPlayerCollisionBox();
+        tryCheckInsideBlocks();
         float velocityMultiplier = this.getBlockSpeedFactor();
         velocity.multiply(velocityMultiplier, 1.0, velocityMultiplier);
+    }
+
+    private void tryCheckInsideBlocks() {
+        var collidingBlockStates = World.getCollidingBlockStates(playerCollisionBox);
+        if (collidingBlockStates.isEmpty()) return;
+        for (int i = 0; i < collidingBlockStates.size(); i++) {
+            var blockState = collidingBlockStates.get(i);
+            if (blockState.id() == bubbleColumnDownwardBlockStateId) {
+                velocity.setY(Math.max(-0.3, velocity.getY() - 0.03));
+            } else if (blockState.id() == bubbleColumnUpwardBlockStateId) {
+                velocity.setY(Math.min(0.7, velocity.getY() + 0.06));
+            }
+        }
     }
 
     private void setOnGround(boolean onGround, MutableVec3d movement) {

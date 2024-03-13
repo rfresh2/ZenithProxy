@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
 import com.zenith.command.CommandContext;
@@ -13,7 +14,6 @@ import java.time.Duration;
 import static com.zenith.Shared.VC_API;
 import static com.zenith.command.CustomStringArgumentType.getString;
 import static com.zenith.command.CustomStringArgumentType.wordWithChars;
-import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
 public class PlaytimeCommand extends Command {
@@ -37,8 +37,10 @@ public class PlaytimeCommand extends Command {
                 VC_API.getPlaytime(playerName)
                     .ifPresentOrElse((response) ->
                                          c.getSource().getEmbed()
-                                             .title("Playtime: " + escape(playerName))
-                                             .addField("Playtime", MathHelper.formatDuration(Duration.ofSeconds(response.playtimeSeconds())), false)
+                                             .title("Playtime")
+                                             .addField("Player", playerName, true)
+                                             .description(MathHelper.formatDurationLong(Duration.ofSeconds(response.playtimeSeconds())))
+                                             .thumbnail(Proxy.getInstance().getAvatarURL(playerName).toString())
                                              .color(Color.CYAN),
                                      () -> c.getSource().getEmbed()
                                          .title(playerName + " not found")
