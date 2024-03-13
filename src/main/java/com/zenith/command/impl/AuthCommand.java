@@ -57,7 +57,7 @@ public class AuthCommand extends Command {
                     .color(Color.CYAN);
                 return 1;
             })))
-            .then(literal("type").requires(this::validateTerminalSource)
+            .then(literal("type").requires(this::validateDiscordOrTerminalSource)
                       .then(literal("list").executes(c -> {
                           c.getSource().getEmbed()
                               .title("Authentication Types")
@@ -126,6 +126,10 @@ public class AuthCommand extends Command {
 
     private boolean validateTerminalSource(CommandContext c) {
         return Command.validateCommandSource(c, CommandSource.TERMINAL);
+    }
+
+    private boolean validateDiscordOrTerminalSource(CommandContext c) {
+        return Command.validateCommandSource(c, asList(CommandSource.TERMINAL, CommandSource.DISCORD));
     }
 
     @Override
