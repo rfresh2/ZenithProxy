@@ -67,7 +67,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         }
         return new ServerboundContainerClickPacket(
             0,
-            CACHE.getPlayerCache().getActionId().getAndIncrement(),
+            CACHE.getPlayerCache().getActionId().incrementAndGet(),
             slotId,
             actionType,
             param,
@@ -102,7 +102,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         }
         return new ServerboundContainerClickPacket(
             0,
-            CACHE.getPlayerCache().getActionId().getAndIncrement(),
+            CACHE.getPlayerCache().getActionId().incrementAndGet(),
             -999,
             actionType,
             param,
@@ -138,7 +138,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
 
         return new ServerboundContainerClickPacket(
             0,
-            CACHE.getPlayerCache().getActionId().getAndIncrement(),
+            CACHE.getPlayerCache().getActionId().incrementAndGet(),
             slotId,
             actionType,
             param,
@@ -172,7 +172,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         }
         return new ServerboundContainerClickPacket(
             0,
-            CACHE.getPlayerCache().getActionId().getAndIncrement(),
+            CACHE.getPlayerCache().getActionId().incrementAndGet(),
             slotId,
             actionType,
             param,

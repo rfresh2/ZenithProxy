@@ -1,40 +1,35 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.object.ProjectileData;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
-import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
-import com.zenith.feature.items.ContainerClickAction;
-import com.zenith.module.Module;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
 
 import java.time.Instant;
-import java.util.List;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static java.util.Objects.nonNull;
 
-public class AutoFish extends Module {
+public class AutoFish extends AbstractInventoryModule {
     private final Timer castTimer = Timer.newTickTimer();
     private int fishHookEntityId = -1;
     private Hand rodHand = Hand.MAIN_HAND;
     private int delay = 0;
-    private boolean swapping = false;
     public static final int MOVEMENT_PRIORITY = 10;
     private Instant castTime = Instant.EPOCH;
-    private int fishingRodId = ITEMS_MANAGER.getItemId("fishing_rod");
+    private final int fishingRodId = ITEMS_MANAGER.getItemId("fishing_rod");
+
+    public AutoFish() {
+        super(false, 2, MOVEMENT_PRIORITY);
+    }
 
     @Override
     public void subscribeEvents() {
@@ -64,7 +59,6 @@ public class AutoFish extends Module {
         fishHookEntityId = -1;
         castTimer.reset();
         delay = 0;
-        swapping = false;
         castTime = Instant.EPOCH;
     }
 
@@ -87,13 +81,9 @@ public class AutoFish extends Module {
     }
 
     public void handleClientTick(final ClientTickEvent event) {
+        if (MODULE_MANAGER.get(AutoEat.class).isEating() || MODULE_MANAGER.get(KillAura.class).isActive()) return;
         if (delay > 0) {
             delay--;
-            return;
-        }
-        if (swapping) {
-            delay = 5;
-            swapping = false;
             return;
         }
         if (!isFishing() && switchToFishingRod() && castTimer.tick(CONFIG.client.extra.autoFish.castDelay)) {
@@ -102,7 +92,7 @@ public class AutoFish extends Module {
         }
         if (isFishing() && Instant.now().getEpochSecond() - castTime.getEpochSecond() > 60) {
             // something's wrong, probably don't have hook in water
-            CLIENT_LOG.warn("AutoFish: probably don't have hook in water. reeling in");
+            CLIENT_LOG.warn("[AutoFish] Probably don't have hook in water. reeling in");
             fishHookEntityId = -1;
             sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
             castTimer.reset();
@@ -125,47 +115,11 @@ public class AutoFish extends Module {
     }
 
     public boolean switchToFishingRod() {
-        // check if offhand has rod
-        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
-        if (nonNull(offhandStack)) {
-            if (offhandStack.getId() == fishingRodId) {
-                rodHand = Hand.OFF_HAND;
-                return true;
-            }
+        delay = doInventoryActions();
+        if (getHand() != null && delay == 0) {
+            rodHand = getHand();
+            return true;
         }
-        // check mainhand
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
-        if (nonNull(mainHandStack)) {
-            if (mainHandStack.getId() == fishingRodId) {
-                rodHand = Hand.MAIN_HAND;
-                return true;
-            }
-        }
-
-        // find next rod and switch it into our hotbar slot
-        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
-        for (int i = 44; i >= 9; i--) {
-            final ItemStack stack = inventory.get(i);
-            if (nonNull(stack) && stack.getId() == fishingRodId) {
-                PLAYER_INVENTORY_MANAGER.invActionReq(
-                    this,
-                    new ContainerClickAction(
-                        i,
-                        ContainerActionType.MOVE_TO_HOTBAR_SLOT,
-                        MoveToHotbarAction.SLOT_3
-                    ),
-                    MOVEMENT_PRIORITY
-                );
-                if (CACHE.getPlayerCache().getHeldItemSlot() != 2) {
-                    sendClientPacketAsync(new ServerboundSetCarriedItemPacket(2));
-                }
-                delay = 5;
-                swapping = true;
-                rodHand = Hand.MAIN_HAND;
-                return false;
-            }
-        }
-        // no rod
         return false;
     }
 
@@ -176,4 +130,8 @@ public class AutoFish extends Module {
             && ((ProjectileData) standard.getObjectData()).getOwnerId() == CACHE.getPlayerCache().getEntityId();
     }
 
+    @Override
+    public boolean itemPredicate(final ItemStack itemStack) {
+        return itemStack.getId() == fishingRodId;
+    }
 }

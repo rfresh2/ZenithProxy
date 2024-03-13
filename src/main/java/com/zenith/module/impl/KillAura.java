@@ -7,17 +7,12 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ByteEnti
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
-import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientTickEvent;
-import com.zenith.feature.items.ContainerClickAction;
-import com.zenith.module.Module;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
@@ -26,9 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.nonNull;
 
-public class KillAura extends Module {
+public class KillAura extends AbstractInventoryModule {
 
     private static final Set<EntityType> hostileEntities = ReferenceOpenHashSet.of(
         EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CREEPER, EntityType.DROWNED, EntityType.ELDER_GUARDIAN,
@@ -48,10 +42,13 @@ public class KillAura extends Module {
     private int delay = 0;
     private boolean isAttacking = false;
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
-    private boolean swapping = false;
     private static final int MOVEMENT_PRIORITY = 500;
     private IntList swords = ITEMS_MANAGER.getItemsContaining("_sword");
     private IntList axes = ITEMS_MANAGER.getItemsContaining("_axe");
+
+    public KillAura() {
+        super(false, 1, MOVEMENT_PRIORITY);
+    }
 
     public boolean isActive() {
         return CONFIG.client.extra.killAura.enabled && isAttacking;
@@ -74,28 +71,20 @@ public class KillAura extends Module {
                 delay--;
                 return;
             }
-            if (swapping) {
-                delay = 5;
-                swapping = false;
-                return;
-            }
             // find non-friended players or hostile mobs within 3.5 blocks
             final Entity target = findTarget();
             // rotate to target
             if (target != null && MODULE_MANAGER.get(PlayerSimulation.class).isOnGround()) {
+                isAttacking = true;
                 if (switchToWeapon()) {
-                    isAttacking = true;
                     if (rotateTo(target)) {
-                        // attack
                         attack(target);
                         delay = CONFIG.client.extra.killAura.attackDelayTicks;
                     }
                 }
+                PATHING.stop(MOVEMENT_PRIORITY-1);
             } else {
                 isAttacking = false;
-            }
-            if (isAttacking || swapping) {
-                PATHING.stop(MOVEMENT_PRIORITY-1);
             }
         }
     }
@@ -167,61 +156,24 @@ public class KillAura extends Module {
 
     private boolean rotateTo(Entity entity) {
         PATHING.rotateTowards(entity.getX(), entity.getY() + 0.2, entity.getZ(), MOVEMENT_PRIORITY);
+        // todo: add a raytrace check to test if we can hit the target
         return true;
     }
 
     public boolean switchToWeapon() {
-        if (!CONFIG.client.extra.killAura.switchWeapon) {
-            return true;
-        }
-
-        // check if offhand has weapon
-        final ItemStack offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
-        if (nonNull(offhandStack)) {
-            if (isWeapon(offhandStack.getId())) {
-                weaponSlot = EquipmentSlot.OFF_HAND;
-                return true;
-            }
-        }
-        // check mainhand
-        final ItemStack mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
-        if (nonNull(mainHandStack)) {
-            if (isWeapon(mainHandStack.getId())) {
-                weaponSlot = EquipmentSlot.MAIN_HAND;
-                return true;
-            }
-        }
-
-        // find next weapon and switch it into our hotbar slot
-        final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
-        for (int i = 44; i >= 9; i--) {
-            final ItemStack stack = inventory.get(i);
-            if (nonNull(stack) && isWeapon(stack.getId())) {
-                PLAYER_INVENTORY_MANAGER.invActionReq(
-                    this,
-                    new ContainerClickAction(
-                        i,
-                        ContainerActionType.MOVE_TO_HOTBAR_SLOT,
-                        MoveToHotbarAction.SLOT_2
-                    ),
-                    MOVEMENT_PRIORITY
-                );
-                if (CACHE.getPlayerCache().getHeldItemSlot() != 1) {
-                    sendClientPacketAsync(new ServerboundSetCarriedItemPacket(1));
-                }
-                delay = 5;
-                swapping = true;
-                weaponSlot = EquipmentSlot.MAIN_HAND;
-                return false;
-            }
-        }
-        // no weapon, let's just punch em
-        weaponSlot = EquipmentSlot.MAIN_HAND;
-        return true;
+        if (!CONFIG.client.extra.killAura.switchWeapon) return true;
+        delay = doInventoryActions();
+        var hand = getHand();
+        weaponSlot = hand == Hand.OFF_HAND ? EquipmentSlot.OFF_HAND : EquipmentSlot.MAIN_HAND;
+        return delay == 0;
     }
 
     private boolean isWeapon(int id) {
         return swords.contains(id) || axes.contains(id);
     }
 
+    @Override
+    public boolean itemPredicate(final ItemStack itemStack) {
+        return isWeapon(itemStack.getId());
+    }
 }
