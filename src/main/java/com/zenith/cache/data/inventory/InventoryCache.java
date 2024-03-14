@@ -58,9 +58,8 @@ public class InventoryCache {
     private void popContainer(final int containerId) { // assuming containerId > 0
         // populate player inventory based on prev container contents
         var container = containers.remove(containerId);
-        if (container.getSize() < 36) return;
-        var playerInventory = getPlayerInventory();
         if (container != containers.defaultReturnValue() && container.getSize() >= 36) {
+            var playerInventory = getPlayerInventory();
             int playerIndex = 44;
             for (int containerIndex = container.getSize() - 1; containerIndex >= 0 && playerIndex >= 9; containerIndex--) {
                 var stack = container.getItemStack(containerIndex);
