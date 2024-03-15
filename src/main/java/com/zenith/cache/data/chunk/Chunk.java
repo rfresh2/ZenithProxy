@@ -60,12 +60,26 @@ public class Chunk {
     }
 
     public int getBlockStateId(final int relativeX, final int y, final int relativeZ) {
-        try {
-            final ChunkSection section = sections[(y >> 4)];
-            return section.getBlock(relativeX, y & 15, relativeZ);
-        } catch (final Exception e) {
-            throw e;
-        }
+        final ChunkSection section = getChunkSection(y);
+        if (section == null) return 0;
+        return section.getBlock(relativeX, y & 15, relativeZ);
+    }
 
+    public ChunkSection getChunkSection(final int y) {
+        var sectionIndex = getSectionIndex(y);
+        if (sectionIndex < 0 || sectionIndex >= sections.length) return null;
+        return sections[sectionIndex];
+    }
+
+    public int getSectionIndex(final int y) {
+        return (y >> 4) - minSection;
+    }
+
+    public int minY() {
+        return minSection << 4;
+    }
+
+    public int maxY() {
+        return (maxSection << 4) - 1;
     }
 }

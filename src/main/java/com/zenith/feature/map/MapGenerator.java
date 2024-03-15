@@ -69,31 +69,28 @@ public class MapGenerator {
                 int i0 = 0;
                 double d1 = 0.0;
 
-                int height = getHeight(x, z, heightsStorage, (CACHE.getChunkCache().getMinSection() << 4));
-                final int minHeight = (CACHE.getChunkCache().getMinSection() << 4);
+                int height = getHeight(x, z, heightsStorage, (chunk.getMinSection() << 4));
                 int blockStateId = chunk.getBlockStateId(sectionX, height, sectionZ);
                 Block block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId);
                 int mapColorId = 0;
-                if (block != null) MAP_BLOCK_COLOR_MANAGER.getColor(block.name());
-                while (mapColorId == 0 && height > minHeight) {
+                if (block != null) mapColorId = MAP_BLOCK_COLOR_MANAGER.getMapColorId(block.name());
+                while (mapColorId == 0 && height > chunk.minY()) {
                     blockStateId = chunk.getBlockStateId(sectionX, --height, sectionZ);
                     block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId);
-                    if (block != null) mapColorId = MAP_BLOCK_COLOR_MANAGER.getColor(block.name());
+                    if (block != null) mapColorId = MAP_BLOCK_COLOR_MANAGER.getMapColorId(block.name());
                 }
-                if (height > minHeight && World.isWater(block)) {
+                if (height > chunk.minY() && World.isWater(block)) {
                     int yUnderBlock = height - 1;
                     int blockStateId2;
                     Block block2;
                     do {
                         blockStateId2 = chunk.getBlockStateId(sectionX, yUnderBlock--, sectionZ);
                         block2 = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId2);
-                        i0++;
-                    } while (yUnderBlock > minHeight && World.isWater(block2));
-//                            blockstate = this.getCorrectStateForFluidBlock(level, blockstate, blockPos1);
+                        i0++; // water brightness shading
+                    } while (yUnderBlock > chunk.minY() && World.isWater(block2));
                 }
 
                 d1 += height;
-                mapColorId = MAP_BLOCK_COLOR_MANAGER.getMapColorId(block.name());
 
                 Brightness brightness;
                 if (mapColorId == 12) { // water
@@ -153,7 +150,7 @@ public class MapGenerator {
         var heightMaps = chunk.getHeightMaps();
         var heightMapNBT = (CompoundTag) MNBTIO.read(heightMaps);
         long[] worldSurfaces = heightMapNBT.getLongArrayTag("WORLD_SURFACE").getValue();
-        int bitsPerEntry = MathHelper.log2Ceil(CACHE.getChunkCache().getMaxBuildHeight() + 1);
+        int bitsPerEntry = MathHelper.log2Ceil((chunk.getMaxSection() << 4) + 1);
         return new BitStorage(bitsPerEntry, 256, worldSurfaces);
     }
 
@@ -172,17 +169,17 @@ public class MapGenerator {
     }
 
     private static BitStorage generateHeightMapData(final Chunk chunk) {
-        final int minBuildHeight = CACHE.getChunkCache().getMinSection() << 4;
-        final int maxBuildHeight = CACHE.getChunkCache().getMaxBuildHeight();
+        final int minBuildHeight = chunk.minY();
+        final int maxBuildHeight = chunk.maxY();
         long[] worldSurfaces = new long[37];
-        int bitsPerEntry = MathHelper.log2Ceil(CACHE.getChunkCache().getMaxBuildHeight() + 1);
+        int bitsPerEntry = MathHelper.log2Ceil((chunk.getMaxSection() << 4) + 1);
         final BitStorage storage = new BitStorage(bitsPerEntry, 256, worldSurfaces);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = maxBuildHeight; y >= minBuildHeight; y--) {
+                for (int y = maxBuildHeight; y > minBuildHeight; y--) {
                     final int blockStateId = chunk.getBlockStateId(x, y, z);
                     Block block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId);
-                    if (block != null && block != Block.AIR) {
+                    if (block != null && block.id() != Block.AIR.id()) {
                         int index = x + z * 16;
                         storage.set(index, y - minBuildHeight);
                         break;
@@ -195,7 +192,6 @@ public class MapGenerator {
 
     private static int getHeight(int blockX, int blockZ, BitStorage data, int minBuildHeight) {
         return getFirstAvailable(blockX & 15, blockZ & 15, data, minBuildHeight);
-
     }
 
     private static int getFirstAvailable(int i, BitStorage data, int minBuildHeight) {
