@@ -31,6 +31,8 @@ public class MapGenerator {
 
     @SneakyThrows
     public static byte[] generateMapData(final int size, final boolean cachedHeightMap) {
+        // todo: option to align the map center exactly like vanilla mc
+
         final int chunksSize = size / 16;
         final int dataSize = size * size;
         final int halfWChunks = chunksSize / 2;
@@ -49,11 +51,20 @@ public class MapGenerator {
         final int maxBlockX = maxChunkX * 16;
         final int maxBlockZ = maxChunkZ * 16;
         final Long2ObjectMap<BitStorage> chunkToHeightMap = cachedHeightMap
-            ? getCachedHeightMap(minChunkX, minChunkZ, maxChunkX, maxChunkZ)
-            : generateHeightMapFromChunkData(minChunkX, minChunkZ, maxChunkX, maxChunkZ);
+            ? getCachedHeightMap(minChunkX, minChunkZ - 1, maxChunkX, maxChunkZ)
+            : generateHeightMapFromChunkData(minChunkX, minChunkZ - 1, maxChunkX, maxChunkZ);
 
         for (int x = minBlockX; x < maxBlockX; x++) {
             double d0 = 0.0;
+            // need to populate 1 above block height in order to calculate brightness correctly
+            final int aboveZBlock = minBlockZ - 1;
+            final Chunk aboveChunk = CACHE.getChunkCache().get(x >> 4, aboveZBlock >> 4);
+            if (aboveChunk != null) {
+                final BitStorage heightsStorage = chunkToHeightMap.get(chunkPosToLong(x >> 4, aboveZBlock >> 4));
+                if (heightsStorage != null) {
+                    d0 = getHeight(x, aboveZBlock, heightsStorage, (aboveChunk.getMinSection() << 4));
+                }
+            }
             for (int z = minBlockZ; z < maxBlockZ; z++) {
                 final int sectionX = x & 15;
                 final int sectionZ = z & 15;
