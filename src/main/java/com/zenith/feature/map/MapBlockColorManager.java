@@ -66,6 +66,18 @@ public class MapBlockColorManager {
         }
     }
 
+    public int calculateRGBColorI(final int mapColor, final Brightness brightness) {
+        if (mapColor == 0) {
+            return 0;
+        } else {
+            int i = brightness.modifier;
+            int r = (mapColor >> 16 & 0xFF) * i / 255;
+            int g = (mapColor >> 8 & 0xFF) * i / 255;
+            int b = (mapColor & 0xFF) * i / 255;
+            return 255 << 24 | r << 16 | g << 8 | b;
+        }
+    }
+
     public byte getPackedId(int mapColorId, Brightness brightness) {
         return (byte)(mapColorId << 2 | brightness.id & 3);
     }
