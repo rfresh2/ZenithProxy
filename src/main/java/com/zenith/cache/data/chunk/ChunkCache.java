@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
+import static com.zenith.cache.data.chunk.Chunk.*;
 
 @Getter
 @Setter
@@ -152,10 +153,6 @@ public class ChunkCache implements CachedData {
 
     public boolean isChunkLoaded(final int x, final int z) {
         return cache.containsKey(chunkPosToLong(x, z));
-    }
-
-    private static long chunkPosToLong(final int x, final int z) {
-        return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
     }
 
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
@@ -400,14 +397,6 @@ public class ChunkCache implements CachedData {
         return String.format("Sending %d chunks", this.cache.size());
     }
 
-    private static int longToChunkX(final long l) {
-        return (int) (l & 4294967295L);
-    }
-
-    private static int longToChunkZ(final long l) {
-        return (int) (l >> 32 & 4294967295L);
-    }
-
     public void add(final ClientboundLevelChunkWithLightPacket p) {
         final var chunkX = p.getX();
         final var chunkZ = p.getZ();
@@ -419,6 +408,8 @@ public class ChunkCache implements CachedData {
                               chunkZ,
                               new ChunkSection[sectionsCount],
                               sectionsCount,
+                              getMinSection(),
+                              getMaxSection(),
                               Collections.synchronizedList(new ArrayList<>(
                                   List.of(p.getBlockEntities()))),
                               p.getLightData(),

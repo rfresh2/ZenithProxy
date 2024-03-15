@@ -36,7 +36,8 @@ public class DebugCommand extends Command {
                         "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
                         "packetLog server on/off",
                         "packetLog filter <string>",
-                        "sendChunksBeforePlayerSpawn on/off"
+                        "sendChunksBeforePlayerSpawn on/off",
+                        "map"
                 ));
     }
 

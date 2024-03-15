@@ -1,6 +1,7 @@
 package com.zenith.util;
 
 public record Color(int r, int g, int b) {
+    public static final Color BLACK = new Color(0, 0, 0);
     public int getRGB() {
         return ((255 & 0xFF) << 24) |
             ((r & 0xFF) << 16) |

@@ -219,6 +219,8 @@
   }, {
     "pattern":"\\Qmcdata/blockCollisionShapes.json\\E"
   }, {
+    "pattern":"\\Qmcdata/blockToMapColorId.json\\E"
+  }, {
     "pattern":"\\Qmcdata/blocks.json\\E"
   }, {
     "pattern":"\\Qmcdata/foods.json\\E"
@@ -226,6 +228,8 @@
     "pattern":"\\Qmcdata/items.json\\E"
   }, {
     "pattern":"\\Qmcdata/language.json\\E"
+  }, {
+    "pattern":"\\Qmcdata/mapColorIdToColor.json\\E"
   }, {
     "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
   }, {

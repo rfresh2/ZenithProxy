@@ -6,10 +6,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.Clientb
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -45,6 +43,8 @@ public class StoredMapData {
     }
 
     public void addIcons(final MapIcon[] icons) {
-        this.getIcons().addAll(Arrays.stream(icons).collect(Collectors.toSet()));
+        for (MapIcon icon : icons) {
+            getIcons().add(icon);
+        }
     }
 }

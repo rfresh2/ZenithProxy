@@ -19,6 +19,8 @@ public class Chunk {
     final int z;
     final ChunkSection[] sections;
     final int sectionsCount;
+    final int maxSection;
+    final int minSection;
     final List<BlockEntityInfo> blockEntities;
     LightUpdateData lightUpdateData;
     MNBT heightMaps;
@@ -39,5 +41,31 @@ public class Chunk {
             serializeBuffer.clear();
             return bytes;
         }
+    }
+
+    public long getChunkPos() {
+        return chunkPosToLong(x, z);
+    }
+
+    public static long chunkPosToLong(final int x, final int z) {
+        return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
+    }
+
+    public static int longToChunkX(final long l) {
+        return (int) (l & 4294967295L);
+    }
+
+    public static int longToChunkZ(final long l) {
+        return (int) (l >> 32 & 4294967295L);
+    }
+
+    public int getBlockStateId(final int relativeX, final int y, final int relativeZ) {
+        try {
+            final ChunkSection section = sections[(y >> 4)];
+            return section.getBlock(relativeX, y & 15, relativeZ);
+        } catch (final Exception e) {
+            throw e;
+        }
+
     }
 }

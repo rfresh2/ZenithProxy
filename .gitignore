@@ -22,3 +22,4 @@ __pycache__/
 *.exe
 *.zip
 /launcher-python*
+maps/

@@ -22,6 +22,7 @@ import com.zenith.feature.food.FoodManager;
 import com.zenith.feature.items.ItemsManager;
 import com.zenith.feature.items.PlayerInventoryManager;
 import com.zenith.feature.language.LanguageManager;
+import com.zenith.feature.map.MapBlockColorManager;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.feature.pathing.blockdata.BlockDataManager;
 import com.zenith.feature.tps.TPSCalculator;
@@ -91,6 +92,7 @@ public class Shared {
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
     public static final PlayerListsManager PLAYER_LISTS;
     public static final BlockDataManager BLOCK_DATA_MANAGER;
+    public static final MapBlockColorManager MAP_BLOCK_COLOR_MANAGER;
     public static final DatabaseManager DATABASE_MANAGER;
     public static final TPSCalculator TPS_CALCULATOR;
     public static final ModuleManager MODULE_MANAGER;
@@ -220,6 +222,7 @@ public class Shared {
             CACHE = new DataCache();
             PLAYER_LISTS = new PlayerListsManager();
             BLOCK_DATA_MANAGER = new BlockDataManager();
+            MAP_BLOCK_COLOR_MANAGER = new MapBlockColorManager();
             DATABASE_MANAGER = new DatabaseManager();
             TPS_CALCULATOR = new TPSCalculator();
             MODULE_MANAGER = new ModuleManager();
