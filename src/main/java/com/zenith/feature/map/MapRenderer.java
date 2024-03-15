@@ -31,6 +31,10 @@ public class MapRenderer {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 int k = j + i * size;
+                if (k >= mapData.length) {
+                    DEFAULT_LOG.error("Failed to render pixel: {} {}", i, j);
+                    break;
+                }
                 int colorFromPackedId = getColorFromPackedId(mapData[k]);
                 image.setRGB(j, i, colorFromPackedId);
             }

@@ -27,7 +27,8 @@ public class MapCommand extends Command {
     """,
             asList(
                 "render <mapId>",
-                "generate"
+                "generate",
+                "generate <viewDistance>"
             )
         );
     }
@@ -63,18 +64,35 @@ public class MapCommand extends Command {
                         .color(Color.CYAN);
                     return 1;
                 })))
-            .then(literal("generate").executes(c -> {
-                var bytes = MapRenderer.render(MapGenerator.generateMapData(), -1);
-                var attachmentName = "map.png";
-                c.getSource().getEmbed()
-                    .title("Map Generated!")
-                    .fileAttachment(new Embed.FileAttachment(
-                        attachmentName,
-                        bytes
-                    ))
-                    .image("attachment://" + attachmentName)
-                    .color(Color.CYAN);
-                return 1;
-            }));
+            .then(literal("generate")
+                      .executes(c -> {
+                          var bytes = MapRenderer.render(MapGenerator.generateMapData(), -1);
+                          var attachmentName = "map.png";
+                          c.getSource().getEmbed()
+                              .title("Map Generated!")
+                              .fileAttachment(new Embed.FileAttachment(
+                                  attachmentName,
+                                  bytes
+                              ))
+                              .image("attachment://" + attachmentName)
+                              .color(Color.CYAN);
+                          return 1;
+                      })
+                      .then(argument("viewDistance", integer(1, 16)).executes(c -> {
+                          var viewDistance = c.getArgument("viewDistance", Integer.class);
+                          var chunkSquareWidth = viewDistance * 2;
+                          var blockSquareWidth = chunkSquareWidth * 16;
+                          var bytes = MapRenderer.render(MapGenerator.generateMapData(blockSquareWidth), -1, blockSquareWidth);
+                          var attachmentName = "map.png";
+                          c.getSource().getEmbed()
+                              .title("Map Generated!")
+                              .fileAttachment(new Embed.FileAttachment(
+                                  attachmentName,
+                                  bytes
+                              ))
+                              .image("attachment://" + attachmentName)
+                              .color(Color.CYAN);
+                          return 1;
+                      })));
     }
 }

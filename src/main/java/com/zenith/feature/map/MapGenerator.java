@@ -21,13 +21,19 @@ public class MapGenerator {
 
     @SneakyThrows
     public static byte[] generateMapData() {
-        return generateMapData(4, false);
+        return generateMapData(128, false);
     }
 
     @SneakyThrows
-    public static byte[] generateMapData(final int halfWChunks, final boolean cachedHeightMap) {
-        final int blocksSize = (halfWChunks * 16) * 2;
-        final int dataSize = blocksSize * blocksSize;
+    public static byte[] generateMapData(final int size) {
+        return generateMapData(size, false);
+    }
+
+    @SneakyThrows
+    public static byte[] generateMapData(final int size, final boolean cachedHeightMap) {
+        final int chunksSize = size / 16;
+        final int dataSize = size * size;
+        final int halfWChunks = chunksSize / 2;
         final byte[] data = new byte[dataSize];
 
         var centerX = CACHE.getChunkCache().getCenterX();
@@ -37,13 +43,6 @@ public class MapGenerator {
         final int minChunkZ = centerZ - halfWChunks;
         final int maxChunkX = centerX + halfWChunks;
         final int maxChunkZ = centerZ + halfWChunks;
-        var minChunk = CACHE.getChunkCache().get(minChunkX, minChunkZ);
-        var maxChunk = CACHE.getChunkCache().get(maxChunkX, maxChunkZ);
-        if (minChunk == null || maxChunk == null) {
-            DEFAULT_LOG.error("Not enough chunks loaded to generate map data");
-            // there's still a possible race condition here if the player is moving quickly :/
-            return data;
-        }
 
         final int minBlockX = minChunkX * 16;
         final int minBlockZ = minChunkZ * 16;
@@ -61,9 +60,11 @@ public class MapGenerator {
                 final int chunkX = x >> 4;
                 final int chunkZ = z >> 4;
                 final Chunk chunk = CACHE.getChunkCache().get(chunkX, chunkZ);
+                if (chunk == null) continue;
                 final BitStorage heightsStorage = chunkToHeightMap.get(chunkPosToLong(chunkX, chunkZ));
-                final int relChunkX = chunkX - (centerX - 4);
-                final int relChunkZ = chunkZ - (centerZ - 4);
+                if (heightsStorage == null) continue;
+                final int relChunkX = chunkX - (centerX - halfWChunks);
+                final int relChunkZ = chunkZ - (centerZ - halfWChunks);
 
                 int i0 = 0;
                 double d1 = 0.0;
@@ -118,19 +119,29 @@ public class MapGenerator {
                 final byte packedId = MAP_BLOCK_COLOR_MANAGER.getPackedId(mapColorId, brightness);
                 final int rowX = relChunkX * 16 + sectionX;
                 final int rowZ = relChunkZ * 16 + sectionZ;
-                data[rowX + rowZ * 128] = packedId;
+                data[rowX + rowZ * size] = packedId;
             }
         }
 
         return data;
     }
 
+    /**
+     * The issue with the cached height maps is that we don't update our cached values like the vanilla MC client does
+     * so this data will fall out of sync and cause divergence of what the player sees and what's generated
+     * This would only occur if there were individual block updates that changed the height map
+     *
+     * We could update our chunk cache to constantly update the height map data, but that would cause extra GC and cpu pressure
+     * and we only use it here, so it's not worth it
+     * maybe if there was some need to update the heightmaps for players having issues or something
+     */
     @NotNull
     private static Long2ObjectMap<BitStorage> getCachedHeightMap(final int minChunkX, final int minChunkZ, final int maxChunkX, final int maxChunkZ) throws IOException {
         final Long2ObjectMap<BitStorage> chunkToHeightMap = new Long2ObjectOpenHashMap<>((maxChunkX - minChunkX) * (maxChunkZ - minChunkZ));
         for (int chunkX = minChunkX; chunkX < maxChunkX; chunkX++) {
             for (int chunkZ = minChunkZ; chunkZ < maxChunkZ; chunkZ++) {
                 final Chunk chunk = CACHE.getChunkCache().get(chunkX, chunkZ);
+                if (chunk == null) continue;
                 final BitStorage heightsStorage = getCachedHeightMapData(chunk);
                 chunkToHeightMap.put(chunkPosToLong(chunkX, chunkZ), heightsStorage);
             }
@@ -152,6 +163,7 @@ public class MapGenerator {
         for (int chunkX = minChunkX; chunkX < maxChunkX; chunkX++) {
             for (int chunkZ = minChunkZ; chunkZ < maxChunkZ; chunkZ++) {
                 final Chunk chunk = CACHE.getChunkCache().get(chunkX, chunkZ);
+                if (chunk == null) continue;
                 final BitStorage heightsStorage = generateHeightMapData(chunk);
                 chunkToHeightMap.put(chunkPosToLong(chunkX, chunkZ), heightsStorage);
             }
