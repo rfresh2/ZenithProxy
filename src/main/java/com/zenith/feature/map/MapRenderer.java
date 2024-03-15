@@ -62,9 +62,8 @@ public class MapRenderer {
     public static int getColorFromPackedId(int i) {
         int j = i & 0xFF;
         int colorId = j >> 2;
-        return MAP_BLOCK_COLOR_MANAGER.calculateRGBColor(
+        return MAP_BLOCK_COLOR_MANAGER.calculateRGBColorI(
             MAP_BLOCK_COLOR_MANAGER.getColor(colorId),
-            Brightness.byId(j & 3))
-            .getRGB();
+            Brightness.byId(j & 3));
     }
 }
