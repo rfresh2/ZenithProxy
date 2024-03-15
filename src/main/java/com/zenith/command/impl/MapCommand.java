@@ -24,10 +24,13 @@ public class MapCommand extends Command {
             CommandCategory.INFO, """
     Generate and render map images.
     Map ID's to render must be cached during the current session
+    Generated maps can optionally be aligned to the vanilla map grid, or generated with a custom view distance.
+    Generated maps cannot be larger than what chunks are currently cached in the proxy
     """,
             asList(
                 "render <mapId>",
                 "generate",
+                "generate align",
                 "generate <viewDistance>"
             )
         );
@@ -66,33 +69,32 @@ public class MapCommand extends Command {
                 })))
             .then(literal("generate")
                       .executes(c -> {
-                          var bytes = MapRenderer.render(MapGenerator.generateMapData(), -1);
-                          var attachmentName = "map.png";
-                          c.getSource().getEmbed()
-                              .title("Map Generated!")
-                              .fileAttachment(new Embed.FileAttachment(
-                                  attachmentName,
-                                  bytes
-                              ))
-                              .image("attachment://" + attachmentName)
-                              .color(Color.CYAN);
+                          generate(c.getSource().getEmbed(), 4, false);
                           return 1;
                       })
+                      .then(literal("align").executes(c -> {
+                          generate(c.getSource().getEmbed(), 4, true);
+                          return 1;
+                      }))
                       .then(argument("viewDistance", integer(1, 16)).executes(c -> {
                           var viewDistance = c.getArgument("viewDistance", Integer.class);
-                          var chunkSquareWidth = viewDistance * 2;
-                          var blockSquareWidth = chunkSquareWidth * 16;
-                          var bytes = MapRenderer.render(MapGenerator.generateMapData(blockSquareWidth), -1, blockSquareWidth);
-                          var attachmentName = "map.png";
-                          c.getSource().getEmbed()
-                              .title("Map Generated!")
-                              .fileAttachment(new Embed.FileAttachment(
-                                  attachmentName,
-                                  bytes
-                              ))
-                              .image("attachment://" + attachmentName)
-                              .color(Color.CYAN);
+                          generate(c.getSource().getEmbed(), viewDistance, false);
                           return 1;
                       })));
+    }
+
+    private void generate(final Embed embed, final int viewDistance, final boolean vanillaAlign) {
+        final int chunkSquareWidth = viewDistance * 2;
+        final int blockSquareWidth = chunkSquareWidth * 16;
+        var bytes = MapRenderer.render(MapGenerator.generateMapData(blockSquareWidth, vanillaAlign), -1, blockSquareWidth);
+        var attachmentName = "map.png";
+        embed
+            .title("Map Generated!")
+            .fileAttachment(new Embed.FileAttachment(
+                attachmentName,
+                bytes
+            ))
+            .image("attachment://" + attachmentName)
+            .color(Color.CYAN);
     }
 }

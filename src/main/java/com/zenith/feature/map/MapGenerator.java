@@ -21,30 +21,45 @@ public class MapGenerator {
 
     @SneakyThrows
     public static byte[] generateMapData() {
-        return generateMapData(128, false);
+        return generateMapData(128, false, true);
     }
 
     @SneakyThrows
     public static byte[] generateMapData(final int size) {
-        return generateMapData(size, false);
+        return generateMapData(size, false, true);
     }
 
     @SneakyThrows
-    public static byte[] generateMapData(final int size, final boolean cachedHeightMap) {
-        // todo: option to align the map center exactly like vanilla mc
+    public static byte[] generateMapData(final int size, final boolean vanillaAlign) {
+        return generateMapData(size, false, vanillaAlign);
+    }
 
+    @SneakyThrows
+    public static byte[] generateMapData(final int size, final boolean cachedHeightMap, final boolean vanillaAlign) {
         final int chunksSize = size / 16;
         final int dataSize = size * size;
         final int halfWChunks = chunksSize / 2;
         final byte[] data = new byte[dataSize];
 
-        var centerX = CACHE.getChunkCache().getCenterX();
-        var centerZ = CACHE.getChunkCache().getCenterZ();
+        var centerChunkX = CACHE.getChunkCache().getCenterX();
+        var centerChunkZ = CACHE.getChunkCache().getCenterZ();
 
-        final int minChunkX = centerX - halfWChunks;
-        final int minChunkZ = centerZ - halfWChunks;
-        final int maxChunkX = centerX + halfWChunks;
-        final int maxChunkZ = centerZ + halfWChunks;
+        if (vanillaAlign) {
+            // todo: this only works well for 128x128 maps
+            final double playerX = CACHE.getPlayerCache().getX();
+            final double playerZ = CACHE.getPlayerCache().getZ();
+            int playerFlooredX = MathHelper.floorToInt((playerX + ((double) size / 2)) / size);
+            int playerFlooredZ = MathHelper.floorToInt((playerZ + ((double) size / 2)) / size);
+            int centerX = playerFlooredX * size + size / 2 - (size / 2);
+            int centerZ = playerFlooredZ * size + size / 2 - (size / 2);
+            centerChunkX = centerX / 16;
+            centerChunkZ = centerZ / 16;
+        }
+
+        final int minChunkX = centerChunkX - halfWChunks;
+        final int minChunkZ = centerChunkZ - halfWChunks;
+        final int maxChunkX = centerChunkX + halfWChunks;
+        final int maxChunkZ = centerChunkZ + halfWChunks;
 
         final int minBlockX = minChunkX * 16;
         final int minBlockZ = minChunkZ * 16;
@@ -74,8 +89,8 @@ public class MapGenerator {
                 if (chunk == null) continue;
                 final BitStorage heightsStorage = chunkToHeightMap.get(chunkPosToLong(chunkX, chunkZ));
                 if (heightsStorage == null) continue;
-                final int relChunkX = chunkX - (centerX - halfWChunks);
-                final int relChunkZ = chunkZ - (centerZ - halfWChunks);
+                final int relChunkX = chunkX - (centerChunkX - halfWChunks);
+                final int relChunkZ = chunkZ - (centerChunkZ - halfWChunks);
 
                 int i0 = 0;
                 double d1 = 0.0;
