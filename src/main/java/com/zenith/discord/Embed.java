@@ -30,6 +30,7 @@ public class Embed {
     @Nullable EmbedCreateFields.Footer footer;
     @Nullable EmbedCreateFields.Author author;
     @NonNull List<EmbedCreateFields.Field> fields = new ArrayList<>();
+    @Nullable FileAttachment fileAttachment;
 
     public boolean isTitlePresent() {
         return title != null;
@@ -94,4 +95,9 @@ public class Embed {
     public static Embed builder() {
         return new Embed();
     }
+
+    public record FileAttachment(
+        String name,
+        byte[] data
+    ) { }
 }

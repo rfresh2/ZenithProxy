@@ -28,7 +28,6 @@ import com.zenith.cache.CachedData;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.BrandSerializer;
-import com.zenith.util.math.MutableVec3i;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -36,6 +35,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.cloudburstmc.math.vector.Vector3i;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
+import static com.zenith.cache.data.chunk.Chunk.*;
 
 @Getter
 @Setter
@@ -157,13 +158,9 @@ public class ChunkCache implements CachedData {
         return cache.containsKey(chunkPosToLong(x, z));
     }
 
-    private static long chunkPosToLong(final int x, final int z) {
-        return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
-    }
-
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
         try {
-            final var pos = MutableVec3i.from(record.getPosition());
+            final var pos = record.getPosition();
             if (pos.getY() < currentDimension.minY() || pos.getY() >= currentDimension.minY() + currentDimension.height()) {
                 // certain client modules might cause the server to send us block updates out of bounds if we send illegal dig packets
                 // instead of causing a retry of the block update, just return true and ignore it
@@ -172,12 +169,12 @@ public class ChunkCache implements CachedData {
 
             final var chunk = get(pos.getX() >> 4, pos.getZ() >> 4);
             if (chunk != null) {
-                var chunkSection = chunk.sections[(pos.getY() >> 4) - getMinSection()];
+                var chunkSection = chunk.getChunkSection(pos.getY());
                 if (chunkSection == null)
                     chunkSection = new ChunkSection(0,
                                                     DataPalette.createForChunk(),
                                                     DataPalette.createForBiome());
-                chunkSection.setBlock(pos.getX() & 0xF, pos.getY() & 0xF, pos.getZ() & 0xF, record.getBlock());
+                chunkSection.setBlock(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, record.getBlock());
                 handleBlockUpdateBlockEntity(record, pos, chunk);
             } else {
                 CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
@@ -192,7 +189,7 @@ public class ChunkCache implements CachedData {
 
     // update any block entities implicitly affected by this block update
     // server doesn't send us tile entity update packets and relies on logic in client
-    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, MutableVec3i pos, Chunk chunk) {
+    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, Vector3i pos, Chunk chunk) {
         if (record.getBlock() == Block.AIR.id()) {
             synchronized (chunk.blockEntities) {
                 chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == pos.getX() &&
@@ -228,7 +225,7 @@ public class ChunkCache implements CachedData {
         return null;
     }
 
-    private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final MutableVec3i position) {
+    private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final Vector3i position) {
         final CompoundTag tileEntityTag = new CompoundTag();
             // there's probably more properties some tile entities need but this seems to work well enough
         tileEntityTag.putString("id", "minecraft:" + blockName);
@@ -238,24 +235,28 @@ public class ChunkCache implements CachedData {
         try {
             // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
             final MNBT nbt = MNBTIO.write(tileEntityTag, false);
-            synchronized (chunk.blockEntities) {
-                chunk.blockEntities.stream()
-                    .filter(tileEntity -> tileEntity.getX() == position.getX() &&
-                        tileEntity.getY() == position.getY() &&
-                        tileEntity.getZ() == position.getZ())
-                    .findFirst()
-                    .ifPresentOrElse(
-                        tileEntity -> tileEntity.setNbt(nbt),
-                        () -> chunk.blockEntities.add(new BlockEntityInfo(
-                            position.getX(),
-                            position.getY(),
-                            position.getZ(),
-                            type,
-                            nbt))
-                );
-            }
+            updateOrAddBlockEntity(chunk, position, type, nbt);
         } catch (final IOException e) {
             throw new UncheckedIOException(e);
+        }
+    }
+
+    private void updateOrAddBlockEntity(final Chunk chunk, final Vector3i position, final BlockEntityType type, final MNBT nbt) {
+        synchronized (chunk.blockEntities) {
+            boolean found = false;
+            for (BlockEntityInfo tileEntity : chunk.blockEntities) {
+                if (tileEntity.getX() == position.getX() &&
+                    tileEntity.getY() == position.getY() &&
+                    tileEntity.getZ() == position.getZ()) {
+                    tileEntity.setNbt(nbt);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                chunk.blockEntities.add(
+                    new BlockEntityInfo(position.getX(), position.getY(), position.getZ(), type, nbt));
+            }
         }
     }
 
@@ -307,22 +308,7 @@ public class ChunkCache implements CachedData {
         if (chunk == null) return false;
         // when we place certain tile entities like beds, the server sends us a block entity update packet with empty nbt
         //  wiki.vg says this should mean the tile entity gets removed, however that doesn't seem to be correct
-        synchronized (chunk.blockEntities) {
-            chunk.blockEntities.stream()
-                .filter(tileEntity -> tileEntity.getX() == packet.getPosition().getX() &&
-                    tileEntity.getY() == packet.getPosition().getY() &&
-                    tileEntity.getZ() == packet.getPosition().getZ())
-                .findFirst()
-                .ifPresentOrElse(
-                    tileEntity -> tileEntity.setNbt(packet.getNbt()),
-                    () -> chunk.blockEntities.add(new BlockEntityInfo(
-                        packet.getPosition().getX(),
-                        packet.getPosition().getY(),
-                        packet.getPosition().getZ(),
-                        packet.getType(),
-                        packet.getNbt()))
-            );
-        }
+        updateOrAddBlockEntity(chunk, packet.getPosition(), packet.getType(), packet.getNbt());
         return true;
     }
 
@@ -406,14 +392,6 @@ public class ChunkCache implements CachedData {
         return String.format("Sending %d chunks", this.cache.size());
     }
 
-    private static int longToChunkX(final long l) {
-        return (int) (l & 4294967295L);
-    }
-
-    private static int longToChunkZ(final long l) {
-        return (int) (l >> 32 & 4294967295L);
-    }
-
     public void add(final ClientboundLevelChunkWithLightPacket p) {
         final var chunkX = p.getX();
         final var chunkZ = p.getZ();
@@ -421,14 +399,17 @@ public class ChunkCache implements CachedData {
         final var sectionsCount = getSectionsCount();
         var chunk = cache.get(chunkPosToLong(chunkX, chunkZ));
         if (chunk == null) {
-            chunk = new Chunk(chunkX,
-                              chunkZ,
-                              new ChunkSection[sectionsCount],
-                              sectionsCount,
-                              Collections.synchronizedList(new ArrayList<>(
-                                  List.of(p.getBlockEntities()))),
-                              p.getLightData(),
-                              p.getHeightMaps());
+            chunk = new Chunk(
+                chunkX,
+                chunkZ,
+                new ChunkSection[sectionsCount],
+                sectionsCount,
+                getMaxSection(),
+                getMinSection(),
+                Collections.synchronizedList(new ArrayList<>(
+                    List.of(p.getBlockEntities()))),
+                p.getLightData(),
+                p.getHeightMaps());
         }
         for (int i = 0; i < chunk.sectionsCount; i++) {
             chunk.sections[i] = readChunkSection(buf);
@@ -444,9 +425,7 @@ public class ChunkCache implements CachedData {
             return new ChunkSection(blockCount, chunkPalette, biomePalette);
         } catch (final IndexOutOfBoundsException e) {
             CACHE_LOG.debug("Error reading chunk section, no data", e);
-            return new ChunkSection(0,
-                                    DataPalette.createForChunk(),
-                                    DataPalette.createForBiome());
+            return new ChunkSection(0, DataPalette.createForChunk(), DataPalette.createForBiome());
         }
     }
 
@@ -474,11 +453,7 @@ public class ChunkCache implements CachedData {
     public ChunkSection getChunkSection(int x, int y, int z) {
         final var chunk = get(x >> 4, z >> 4);
         if (chunk == null) return null;
-        int sectionIndex = (y >> 4) - getMinSection();
-        if (sectionIndex < 0 || sectionIndex >= chunk.sections.length) {
-            return null;
-        }
-        return chunk.sections[sectionIndex];
+        return chunk.getChunkSection(y);
     }
 
     public void remove(int x, int z) {

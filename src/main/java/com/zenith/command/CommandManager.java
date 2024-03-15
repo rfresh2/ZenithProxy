@@ -66,6 +66,7 @@ public class CommandManager {
            new InventoryCommand(),
            new KickCommand(),
            new KillAuraCommand(),
+           new MapCommand(),
            new PlaytimeCommand(),
            new PrioCommand(),
            new ProxyClientConnectionCommand(),

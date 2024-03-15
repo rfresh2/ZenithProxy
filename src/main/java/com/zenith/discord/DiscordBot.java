@@ -50,6 +50,7 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
 
+import java.io.ByteArrayInputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -263,9 +264,13 @@ public class DiscordBot {
     private MultipartRequest<MessageCreateRequest> commandEmbedOutputToMessage(final CommandContext context) {
         var embed = context.getEmbed();
         if (embed.title() == null) return null;
-        return MessageCreateSpec.builder()
-                .addEmbed(embed.toSpec())
-                .build().asRequest();
+        var msgBuilder = MessageCreateSpec.builder()
+            .addEmbed(embed.toSpec());
+        if (embed.fileAttachment() != null) {
+            msgBuilder.addFile(embed.fileAttachment.name(), new ByteArrayInputStream(embed.fileAttachment.data()));
+        }
+        return msgBuilder
+            .build().asRequest();
     }
 
     private void processMessageQueue() {

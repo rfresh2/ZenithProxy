@@ -46,6 +46,8 @@ public class InGameCommandManager {
 
     private boolean executeInGameCommand(final String command, final ServerConnection session, final boolean printUnhandled) {
         final CommandContext commandContext = CommandContext.create(command, CommandSource.IN_GAME_PLAYER);
+        // todo: execute commands async wtf!
+        //  all we need to do is make sure a corresponding root command node exists and return the boolean value there
         COMMAND_MANAGER.execute(commandContext);
         var embed = commandContext.getEmbed();
         CommandOutputHelper.logEmbedOutputToInGame(embed, session);
