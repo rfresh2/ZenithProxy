@@ -17,17 +17,16 @@ import static com.zenith.Shared.MAP_BLOCK_COLOR_MANAGER;
 
 public class MapRenderer {
     private static final Path mapsOutputPath = Path.of("maps");
-    static {
-        if (!mapsOutputPath.toFile().exists()) {
-            mapsOutputPath.toFile().mkdir();
-        }
-    }
 
     public static byte[] render(final byte[] mapData, final int mapId) {
         return render(mapData, mapId, 128);
     }
 
     public static byte[] render(final byte[] mapData, final int mapId, final int size) {
+        if (!mapsOutputPath.toFile().exists()) {
+            mapsOutputPath.toFile().mkdir();
+        }
+
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         var info = new ImageInfo(size, size, 8, false);
         final PngWriter png = new PngWriter(byteStream, info);
