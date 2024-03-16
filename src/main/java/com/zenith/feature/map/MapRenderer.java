@@ -1,8 +1,10 @@
 package com.zenith.feature.map;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
+import ar.com.hjg.pngj.ImageInfo;
+import ar.com.hjg.pngj.ImageLineHelper;
+import ar.com.hjg.pngj.ImageLineInt;
+import ar.com.hjg.pngj.PngWriter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.file.Files;
@@ -26,9 +28,13 @@ public class MapRenderer {
     }
 
     public static byte[] render(final byte[] mapData, final int mapId, final int size) {
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        var info = new ImageInfo(size, size, 8, false);
+        final PngWriter png = new PngWriter(byteStream, info);
+
         // render map
-        BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < size; i++) {
+            final ImageLineInt line = new ImageLineInt(info);
             for (int j = 0; j < size; j++) {
                 int k = j + i * size;
                 if (k >= mapData.length) {
@@ -36,21 +42,16 @@ public class MapRenderer {
                     break;
                 }
                 int colorFromPackedId = getColorFromPackedId(mapData[k]);
-                image.setRGB(j, i, colorFromPackedId);
+                ImageLineHelper.setPixelRGB8(line, j, colorFromPackedId);
             }
+            png.writeRow(line);
         }
+        png.end();
+        final byte[] bytes = byteStream.toByteArray();
 
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         final String isoDate = formatter.format(ZonedDateTime.now());
-        File outputfile = mapsOutputPath.resolve(isoDate + "_map_" + mapId + ".png").toFile();
-        var byteStream = new ByteArrayOutputStream();
-        try (var outputStream = new BufferedOutputStream(byteStream)) {
-            ImageIO.write(image, "png", outputStream);
-        } catch (Exception e) {
-            DEFAULT_LOG.error("Failed to write map image", e);
-        }
-        var bytes = byteStream.toByteArray();
-
+        final File outputfile = mapsOutputPath.resolve(isoDate + "_map_" + mapId + ".png").toFile();
         try {
             Files.write(outputfile.toPath(), bytes);
         } catch (Exception e) {

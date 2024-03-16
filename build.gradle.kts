@@ -92,6 +92,7 @@ dependencies {
     shade("com.viaversion:viabackwards:4.9.2")
     shade("org.jline:jline:3.25.1")
     shade("org.jline:jline-terminal-jansi:3.25.1")
+    shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
