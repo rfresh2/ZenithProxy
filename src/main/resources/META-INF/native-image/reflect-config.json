@@ -1397,6 +1397,10 @@
   "methods":[{"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"close","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, {"name":"connect","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, {"name":"deregister","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, {"name":"disconnect","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, {"name":"flush","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"read","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
 },
 {
+  "name":"io.netty.handler.stream.ChunkedWriteHandler",
+  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"flush","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
+},
+{
   "name":"io.netty.handler.timeout.IdleStateHandler",
   "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
 },
@@ -2156,6 +2160,10 @@
   "fields":[{"name":"requested"}]
 },
 {
+  "name":"reactor.core.publisher.FluxOnBackpressureLatest$LatestSubscriber",
+  "fields":[{"name":"requested"}, {"name":"value"}, {"name":"wip"}]
+},
+{
   "name":"reactor.core.publisher.FluxOnErrorReturn$ReturnSubscriber",
   "fields":[{"name":"requested"}]
 },
@@ -2178,6 +2186,10 @@
 {
   "name":"reactor.core.publisher.FluxReplay$ReplaySubscriber",
   "fields":[{"name":"state"}]
+},
+{
+  "name":"reactor.core.publisher.FluxRetry$RetrySubscriber",
+  "fields":[{"name":"wip"}]
 },
 {
   "name":"reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber",
@@ -2322,6 +2334,10 @@
 {
   "name":"reactor.core.publisher.SinkManyReplayProcessor$ReplayInner",
   "fields":[{"name":"requested"}, {"name":"wip"}]
+},
+{
+  "name":"reactor.core.publisher.SinkManyUnicastNoBackpressure",
+  "fields":[{"name":"requested"}, {"name":"state"}]
 },
 {
   "name":"reactor.core.publisher.SinksSpecs$AbstractSerializedSink",
