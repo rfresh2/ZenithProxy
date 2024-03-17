@@ -27,8 +27,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
     @Override
     public void loggedIn(Session session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
-        SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
         ServerConnection connection = (ServerConnection) session;
+        SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), connection.getRemoteAddress());
 
         if (!Wait.waitUntil(() -> Proxy.getInstance().isConnected()
                         && (Proxy.getInstance().getConnectTime() != null && Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())

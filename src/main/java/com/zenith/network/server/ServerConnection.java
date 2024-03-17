@@ -105,6 +105,7 @@ public class ServerConnection implements Session, SessionListener {
     protected ServerProfileCache spectatorFakeProfileCache = new ServerProfileCache();
     protected PlayerCache spectatorPlayerCache = new PlayerCache(new EntityCache());
     protected SpectatorEntity spectatorEntity;
+    protected SocketAddress remoteAddress;
 
     /**
      * Team data
@@ -185,7 +186,7 @@ public class ServerConnection implements Session, SessionListener {
         Proxy.getInstance().getActiveConnections().remove(this);
         if (!this.isPlayer && cause != null && !(cause instanceof IOException)) {
             // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
-            SERVER_LOG.warn(String.format("Connection disconnected: %s", session.getRemoteAddress()), cause);
+            SERVER_LOG.warn(String.format("Connection disconnected: %s", this.getRemoteAddress()), cause);
             return;
         }
         if (this.isPlayer) {
@@ -195,7 +196,7 @@ public class ServerConnection implements Session, SessionListener {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
                                 Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getId).orElse(null),
                                 Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getName).orElse(null),
-                                session.getRemoteAddress(),
+                                this.getRemoteAddress(),
                                 reasonStr,
                                 cause);
                 try {
@@ -404,7 +405,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public SocketAddress getRemoteAddress() {
-        return this.session.getRemoteAddress();
+        return this.remoteAddress != null ? this.remoteAddress : this.session.getRemoteAddress();
     }
 
     @Override
