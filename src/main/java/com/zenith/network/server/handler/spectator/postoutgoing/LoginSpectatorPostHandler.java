@@ -6,7 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLo
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
@@ -41,7 +41,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
                 null
             )}
         ));
-        SpectatorUtils.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
+        SpectatorSync.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         //send cached data
         Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
@@ -58,7 +58,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
         session.setLoggedIn();
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
-        SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache();
+        SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache();
         // send command help
         session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&9ZenithProxy&7]&r &2Spectating &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
         if (CONFIG.inGameCommands.enable) {

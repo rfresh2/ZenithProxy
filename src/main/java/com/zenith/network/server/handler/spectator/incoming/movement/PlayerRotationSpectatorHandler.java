@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.spectator.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
@@ -13,7 +13,7 @@ public class PlayerRotationSpectatorHandler implements PacketHandler<Serverbound
         session.getSpectatorPlayerCache()
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch());
-        SpectatorUtils.updateSpectatorPosition(session);
+        SpectatorSync.updateSpectatorPosition(session);
         return null;
     }
 }

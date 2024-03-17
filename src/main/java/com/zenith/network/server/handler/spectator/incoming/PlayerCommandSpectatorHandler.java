@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 
@@ -18,7 +18,7 @@ public class PlayerCommandSpectatorHandler implements PacketHandler<ServerboundP
             if (packet.getState() == PlayerState.START_SNEAKING) {
                 session.setCameraTarget(null);
                 session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
-                SpectatorUtils.syncSpectatorPositionToEntity(session, cameraTarget);
+                SpectatorSync.syncSpectatorPositionToEntity(session, cameraTarget);
             }
         } else {
             if (packet.getState() == PlayerState.START_SNEAKING || packet.getState() == PlayerState.START_SPRINTING) {

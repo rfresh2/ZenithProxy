@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.spectator.incoming.movement;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosPacket;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
@@ -14,8 +14,8 @@ public class PlayerPositionSpectatorHandler implements PacketHandler<Serverbound
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ());
-        SpectatorUtils.updateSpectatorPosition(session);
-        SpectatorUtils.checkSpectatorPositionOutOfRender(session);
+        SpectatorSync.updateSpectatorPosition(session);
+        SpectatorSync.checkSpectatorPositionOutOfRender(session);
         return null;
     }
 }

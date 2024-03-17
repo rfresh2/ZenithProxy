@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
@@ -14,11 +14,11 @@ public class PostOutgoingPlayerCommandHandler implements AsyncPacketHandler<Serv
         switch (packet.getState()) {
             case START_SNEAKING -> {
                 CACHE.getPlayerCache().setSneaking(true);
-                SpectatorUtils.sendPlayerSneakStatus();
+                SpectatorSync.sendPlayerSneakStatus();
             }
             case STOP_SNEAKING -> {
                 CACHE.getPlayerCache().setSneaking(false);
-                SpectatorUtils.sendPlayerSneakStatus();
+                SpectatorSync.sendPlayerSneakStatus();
             }
             case START_SPRINTING -> CACHE.getPlayerCache().setSprinting(true);
             case STOP_SPRINTING -> CACHE.getPlayerCache().setSprinting(false);
