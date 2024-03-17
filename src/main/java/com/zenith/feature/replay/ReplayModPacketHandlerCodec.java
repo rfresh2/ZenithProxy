@@ -3,22 +3,13 @@ package com.zenith.feature.replay;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zenith.module.impl.ReplayMod;
 import com.zenith.network.registry.PacketHandlerCodec;
 import lombok.NonNull;
 
 import java.util.EnumMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ReplayModPacketHandlerCodec extends PacketHandlerCodec {
-    private static final ExecutorService ASYNC_EXECUTOR_SERVICE = Executors.newFixedThreadPool(
-        1,
-        new ThreadFactoryBuilder()
-            .setNameFormat("ZenithProxy ReplayMod PacketHandler #%d")
-            .setDaemon(true)
-            .build());
     private final ReplayMod replayMod;
 
     public ReplayModPacketHandlerCodec(final ReplayMod instance, final int priority, final String id) {

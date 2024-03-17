@@ -16,6 +16,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.packetlib.Session;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -25,6 +26,8 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -35,10 +38,15 @@ public class ReplayRecording implements Closeable {
     private final Path replayDirectory;
     private OutputStream outputStream;
     private ZipOutputStream zipOutputStream;
-    private DataOutputStream dataOutputStream;
     private static final ByteBufAllocator ALLOC = PooledByteBufAllocator.DEFAULT;
     private boolean loginPhase = true;
     private long startT;
+    private final ExecutorService executor = Executors.newFixedThreadPool(
+        1,
+        new ThreadFactoryBuilder()
+            .setNameFormat("ZenithProxy ReplayMod PacketHandler #%d")
+            .setDaemon(true)
+            .build());
 
     public ReplayRecording(final Path replayDirectory) {
         this.metadata = new ReplayMetadata();
@@ -63,51 +71,49 @@ public class ReplayRecording implements Closeable {
         outputStream = new BufferedOutputStream(new FileOutputStream(file));
         zipOutputStream = new ZipOutputStream(outputStream);
         zipOutputStream.putNextEntry(new ZipEntry("recording.tmcpr"));
-        dataOutputStream = new DataOutputStream(zipOutputStream);
         startT = System.currentTimeMillis();
     }
 
-    public void write(final long time, final MinecraftPacket packet, final Session session) {
+    public void writePacket(final long time, final MinecraftPacket packet, final Session session) {
         var protocolState = session.getPacketProtocol().getState();
         if (protocolState != ProtocolState.GAME) return;
-        if (loginPhase) {
-            // todo: check if this works?
-            //  should cause issues because we can't get the packet id from this session's protocol phase codec
-            writePacket(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session);
-        }
-        writePacket(time, packet, session);
+        executor.execute(() -> writePacket0(time, packet, session, protocolState));
     }
 
-    public void writePacket(final long time, final MinecraftPacket packet, final Session session) {
-        if (time == 0) {
-            startT = System.currentTimeMillis();
+    private void writePacket0(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
+        try {
+            if (loginPhase) {
+                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
+            }
+            writeToFile(time, packet, session, protocolState);
+        } catch (final Throwable e) {
+            MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
+        }
+    }
+
+    private void writeToFile(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
+        int t = (int) time;
+        if (t == 0) {
+            startT = Instant.now().toEpochMilli();
+        } else {
+            t = (int) (time - startT);
         }
         final ByteBuf packetBuf = ALLOC.buffer();
         try {
             var packetProtocol = session.getPacketProtocol();
             var codecHelper = (MinecraftCodecHelper) session.getCodecHelper();
-            int packetId;
-            if (packet instanceof ClientboundGameProfilePacket gpp) {
-                packetId = MinecraftCodec.CODEC.getCodec(ProtocolState.LOGIN).getClientboundId(gpp);
-            } else {
-                packetId = packetProtocol.getClientboundId(packet);
-            }
-
+            var packetId = MinecraftCodec.CODEC.getCodec(protocolState).getClientboundId(packet);
             packetProtocol.getPacketHeader().writePacketId(packetBuf, codecHelper, packetId);
             packet.serialize(packetBuf, codecHelper);
             var packetSize = packetBuf.readableBytes();
-
-            writeInt(zipOutputStream, (int) (time - startT));
+            writeInt(zipOutputStream, t);
             writeInt(zipOutputStream, packetSize);
             packetBuf.readBytes(zipOutputStream, packetSize);
-//            MODULE_LOG.info("Wrote packet: {} [{}]", packet.getClass().getSimpleName(), packetSize);
-
         } catch (final Throwable e) {
             MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
         } finally {
             packetBuf.release();
         }
-
         if (packet instanceof ClientboundGameProfilePacket) {
             loginPhase = false;
         }
@@ -128,6 +134,16 @@ public class ReplayRecording implements Closeable {
 
     @Override
     public void close() throws IOException {
+        if (!executor.isShutdown()) {
+            try {
+                executor.shutdown();
+                if (!executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                    throw new Exception("");
+                }
+            } catch (final Exception e) {
+                MODULE_LOG.error("Failed waiting for termination of ReplayMod PacketHandler executor", e);
+            }
+        }
         if (zipOutputStream != null) {
             zipOutputStream.closeEntry();
             metadata.setDuration((int) (System.currentTimeMillis() - startT));
@@ -159,8 +175,8 @@ public class ReplayRecording implements Closeable {
                     CACHE.getPlayerCache().getEntityId(),
                     CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()
                 );
-                write(time, spawnPacket, session);
-                write(time, entityMetadataPacket, session);
+                writePacket(time, spawnPacket, session);
+                writePacket(time, entityMetadataPacket, session);
             }
         } else if (packet instanceof ServerboundMovePlayerPosPacket
             || packet instanceof ServerboundMovePlayerPosRotPacket
@@ -178,8 +194,8 @@ public class ReplayRecording implements Closeable {
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().getYaw()
             );
-            write(time, teleportEntityPacket, session);
-            write(time, rotateHeadPacket, session);
+            writePacket(time, teleportEntityPacket, session);
+            writePacket(time, rotateHeadPacket, session);
         } else if (packet instanceof ServerboundContainerClickPacket
             || packet instanceof ServerboundContainerClosePacket
             || packet instanceof ServerboundPlayerActionPacket) {
@@ -192,13 +208,13 @@ public class ReplayRecording implements Closeable {
             var equipmentPacket = new ClientboundSetEquipmentPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 new Equipment[] { helmet, chestplate, leggings, boots, mainHand, offHand });
-            write(time, equipmentPacket, session);
+            writePacket(time, equipmentPacket, session);
         } else if (packet instanceof ServerboundSwingPacket) {
             var swingPacket = new ClientboundAnimatePacket(
                 CACHE.getPlayerCache().getEntityId(),
                 Animation.SWING_ARM
             );
-            write(time, swingPacket, session);
+            writePacket(time, swingPacket, session);
         } else if (packet instanceof ServerboundPlayerCommandPacket commandPacket) {
             // send mutated entity metadata
         }
@@ -208,6 +224,6 @@ public class ReplayRecording implements Closeable {
         if (packet instanceof ClientboundLoginPacket loginPacket) {
             recordSelfSpawn = true;
         }
-        write(time, packet, session);
+        writePacket(time, packet, session);
     }
 }

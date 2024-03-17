@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -63,13 +64,13 @@ public class ReplayMod extends Module {
 
     public void onInboundPacket(final Packet packet, final Session session) {
         if (recording.get()) {
-            replayRecording.handleInboundPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
+            replayRecording.handleInboundPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
         }
     }
 
     public void onPostOutgoing(final Packet packet, final Session session) {
         if (recording.get()) {
-            replayRecording.translateOutgoingPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
+            replayRecording.translateOutgoingPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
         }
     }
 
@@ -87,7 +88,7 @@ public class ReplayMod extends Module {
 
     public void startRecording() {
         if (!recording.compareAndSet(false, true)) return;
-        MODULE_LOG.error("Starting ReplayMod recording");
+        MODULE_LOG.info("Starting ReplayMod recording");
         this.replayRecording = new ReplayRecording(replayDirectory);
         try {
             this.replayRecording.startRecording();
@@ -100,7 +101,7 @@ public class ReplayMod extends Module {
     @SneakyThrows
     public void stopRecording() {
         if (!recording.compareAndSet(true, false)) return;
-        MODULE_LOG.error("Stopping ReplayMod recording");
+        MODULE_LOG.info("Stopping ReplayMod recording");
         this.replayRecording.close();
     }
 }
