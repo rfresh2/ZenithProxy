@@ -64,7 +64,7 @@ public final class SpectatorSync {
     }
 
     private static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
-        syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer());
+        spectConnection.getEventLoop().execute(() -> syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer()));
     }
 
     private static void sendSpectatorsEquipment() {

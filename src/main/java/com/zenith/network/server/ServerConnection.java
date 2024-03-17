@@ -18,6 +18,7 @@ import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.codec.PacketCodecHelper;
 import com.github.steveice10.packetlib.event.session.SessionListener;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.github.steveice10.packetlib.tcp.TcpSession;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
@@ -30,6 +31,7 @@ import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.EventLoop;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -54,7 +56,7 @@ import static com.zenith.Shared.*;
 @Getter
 @Setter
 public class ServerConnection implements Session, SessionListener {
-    protected final Session session;
+    protected final TcpSession session;
 
     public static final int DEFAULT_COMPRESSION_THRESHOLD = 256;
 
@@ -80,7 +82,7 @@ public class ServerConnection implements Session, SessionListener {
 
     public ServerConnection(final Session session) {
         ThreadLocalRandom.current().nextBytes(this.challenge);
-        this.session = session;
+        this.session = (TcpSession) session;
         initSpectatorEntity();
     }
 
@@ -123,6 +125,10 @@ public class ServerConnection implements Session, SessionListener {
 
     public String getServerId() {
         return SERVER_ID;
+    }
+
+    public EventLoop getEventLoop() {
+        return this.session.getChannel().eventLoop();
     }
 
     @Override
