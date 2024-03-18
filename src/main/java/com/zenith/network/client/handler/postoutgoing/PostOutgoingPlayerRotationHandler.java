@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
@@ -13,7 +13,7 @@ public class PostOutgoingPlayerRotationHandler implements AsyncPacketHandler<Ser
         CACHE.getPlayerCache()
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch());
-        SpectatorUtils.syncPlayerPositionWithSpectators();
+        SpectatorSync.syncPlayerPositionWithSpectators();
 //        CLIENT_LOG.info("Client set player rotation: {}, {}", packet.getYaw(), packet.getPitch());
         return true;
     }

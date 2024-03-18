@@ -6,7 +6,7 @@ import com.zenith.network.registry.AsyncPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.feature.spectator.SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache;
+import static com.zenith.feature.spectator.SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache;
 
 
 public class ContainerSetContentHandler implements AsyncPacketHandler<ClientboundContainerSetContentPacket, ClientSession> {

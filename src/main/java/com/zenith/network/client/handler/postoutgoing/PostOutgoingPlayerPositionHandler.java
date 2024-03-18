@@ -1,7 +1,7 @@
 package com.zenith.network.client.handler.postoutgoing;
 
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosPacket;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
@@ -15,7 +15,7 @@ public class PostOutgoingPlayerPositionHandler implements AsyncPacketHandler<Ser
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ());
-        SpectatorUtils.syncPlayerPositionWithSpectators();
+        SpectatorSync.syncPlayerPositionWithSpectators();
 //        CLIENT_LOG.info("Client set player position: {}, {}, {}", packet.getX(), packet.getY(), packet.getZ());
         return true;
     }

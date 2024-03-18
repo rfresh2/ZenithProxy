@@ -76,6 +76,7 @@ public final class Config {
             public AntiLeak antiLeak = new AntiLeak();
             public Chat chat = new Chat();
             public AntiKick antiKick = new AntiKick();
+//            public ReplayMod replayMod = new ReplayMod();
             public boolean visualRangeAlert = true;
             public boolean visualRangeIgnoreFriends = false;
             public boolean visualRangeAlertMention = false;
@@ -182,6 +183,10 @@ public final class Config {
                     VISUAL_RANGE
                 }
             }
+
+//            public static final class ReplayMod {
+//
+//            }
 
             public static final class Utility {
                 public Actions actions = new Actions();

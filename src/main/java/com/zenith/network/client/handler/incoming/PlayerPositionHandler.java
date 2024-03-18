@@ -6,7 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosRotPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.AntiAFK;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
@@ -40,7 +40,7 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
             Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
             Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
         } // else send to active player
-        SpectatorUtils.syncPlayerPositionWithSpectators();
+        SpectatorSync.syncPlayerPositionWithSpectators();
         MODULE_MANAGER.get(AntiAFK.class).handlePlayerPosRotate();
         return true;
     }

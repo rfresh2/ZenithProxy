@@ -1,8 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
-import com.zenith.Proxy;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
@@ -13,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Shared.*;
-import static java.util.Arrays.asList;
 
 public class RespawnHandler implements AsyncPacketHandler<ClientboundRespawnPacket, ClientSession> {
 
@@ -58,9 +56,7 @@ public class RespawnHandler implements AsyncPacketHandler<ClientboundRespawnPack
     private void spectatorRespawn() {
         try {
             // load world and init self
-            Proxy.getInstance().getSpectatorConnections().forEach(session -> {
-                SpectatorUtils.initSpectator(session, () -> asList(CACHE.getChunkCache(), CACHE.getEntityCache(), CACHE.getMapDataCache(), session.getSpectatorPlayerCache()));
-            });
+            SpectatorSync.sendRespawn();
         } finally {
             isSpectatorRespawning.set(false);
         }

@@ -5,7 +5,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.feature.spectator.SpectatorUtils.syncPlayerEquipmentWithSpectatorsFromCache;
+import static com.zenith.feature.spectator.SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache;
 
 public class ContainerCloseHandler implements AsyncPacketHandler<ClientboundContainerClosePacket, ClientSession> {
     @Override

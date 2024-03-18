@@ -7,6 +7,8 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.DiscordCommandContext;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
+import com.zenith.event.module.ReplayStartedEvent;
+import com.zenith.event.module.ReplayStoppedEvent;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
@@ -50,7 +52,10 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -132,7 +137,9 @@ public class DiscordBot {
                             of(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
                             of(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
                             of(DeathMessageEvent.class, this::handleDeathMessageEvent),
-                            of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent)
+                            of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent),
+                            of(ReplayStartedEvent.class, this::handleReplayStartedEvent),
+                            of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent)
         );
     }
 
@@ -433,6 +440,21 @@ public class DiscordBot {
         } catch (final Exception e) {
             DISCORD_LOG.warn("Failed updating discord profile image. Check that the bot has correct permissions");
             DISCORD_LOG.debug("Failed updating discord profile image. Check that the bot has correct permissions", e);
+        }
+    }
+
+    public void sendEmbedMessageWithFileAttachment(Embed embed) {
+        try {
+            var msgBuilder = MessageCreateSpec.builder()
+                .addEmbed(embed.toSpec());
+            if (embed.fileAttachment() != null) {
+                msgBuilder.addFile(embed.fileAttachment.name(), new ByteArrayInputStream(embed.fileAttachment.data()));
+            }
+            mainChannelMessageQueue.add(msgBuilder.build().asRequest());
+            CommandOutputHelper.logEmbedOutputToTerminal(embed);
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed sending discord embed message. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed sending discord embed message. Check that the bot has correct permissions", e);
         }
     }
 
@@ -1101,5 +1123,31 @@ public class DiscordBot {
             "Update will be applied at next opportunity.\nOr apply the update now: `.update`",
             false);
         sendEmbedMessage(embedBuilder);
+    }
+
+    public void handleReplayStartedEvent(final ReplayStartedEvent event) {
+        sendEmbedMessage(Embed.builder()
+                             .title("Replay Recording Started")
+                             .color(Color.CYAN));
+    }
+
+    public void handleReplayStoppedEvent(final ReplayStoppedEvent event) {
+        var embed = Embed.builder()
+            .title("Replay Recording Stopped")
+            .color(Color.CYAN);
+        var replayFile = event.replayFile();
+        if (replayFile != null) {
+            try (InputStream in = new BufferedInputStream(new FileInputStream(replayFile))) {
+                // 25MB discord file attachment size limit
+                if (replayFile.length() > 24 * 1024 * 1024)
+                    embed.description("Replay file too large to read: " + (replayFile.length() / (1024 * 1024)) + " MB");
+                else
+                    embed.fileAttachment(new Embed.FileAttachment(replayFile.getName(), in.readAllBytes()));
+            } catch (final Exception e) {
+                DISCORD_LOG.error("Failed to read replay file", e);
+                embed.description("Error reading replay file: " + e.getMessage());
+            }
+        }
+        sendEmbedMessageWithFileAttachment(embed);
     }
 }

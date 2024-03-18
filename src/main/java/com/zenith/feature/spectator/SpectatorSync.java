@@ -25,35 +25,23 @@ import com.zenith.feature.spectator.entity.mob.SpectatorEntityPlayerHead;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.CACHE;
 import static java.util.Arrays.asList;
 
-public final class SpectatorUtils {
+public final class SpectatorSync {
 
     public static void syncPlayerEquipmentWithSpectatorsFromCache() {
         sendSpectatorsEquipment();
     }
 
     public static void syncPlayerPositionWithSpectators() {
-        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.sendAsync(new ClientboundTeleportEntityPacket(
-                CACHE.getPlayerCache().getEntityId(),
-                CACHE.getPlayerCache().getX(),
-                CACHE.getPlayerCache().getY(),
-                CACHE.getPlayerCache().getZ(),
-                CACHE.getPlayerCache().getYaw(),
-                CACHE.getPlayerCache().getPitch(),
-                false
-            ));
-            connection.sendAsync(new ClientboundRotateHeadPacket(
-                CACHE.getPlayerCache().getEntityId(),
-                CACHE.getPlayerCache().getYaw()
-            ));
-        });
+        sendSpectatorPackets(SpectatorPacketProvider::playerPosition);
     }
 
     public static void syncSpectatorPositionToEntity(final ServerConnection spectConnection, Entity target) {
@@ -82,22 +70,12 @@ public final class SpectatorUtils {
         });
     }
 
-    public static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
-        syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer());
+    private static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
+        spectConnection.getEventLoop().execute(() -> syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer()));
     }
 
     private static void sendSpectatorsEquipment() {
-        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            var helmet = new Equipment(EquipmentSlot.HELMET, CACHE.getPlayerCache().getEquipment(EquipmentSlot.HELMET));
-            var chestplate = new Equipment(EquipmentSlot.CHESTPLATE, CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE));
-            var leggings = new Equipment(EquipmentSlot.LEGGINGS, CACHE.getPlayerCache().getEquipment(EquipmentSlot.LEGGINGS));
-            var boots = new Equipment(EquipmentSlot.BOOTS, CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS));
-            var mainHand = new Equipment(EquipmentSlot.MAIN_HAND, CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND));
-            var offHand = new Equipment(EquipmentSlot.OFF_HAND, CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND));
-            connection.sendAsync(new ClientboundSetEquipmentPacket(
-                CACHE.getPlayerCache().getEntityId(),
-                new Equipment[] { helmet, chestplate, leggings, boots, mainHand, offHand }));
-        });
+        sendSpectatorPackets(SpectatorPacketProvider::playerEquipment);
     }
 
     private static void spawnSpectatorForOtherSessions(ServerConnection spectatorSession, ServerConnection connection) {
@@ -107,22 +85,6 @@ public final class SpectatorUtils {
         }
         connection.sendAsync(spectatorSession.getEntitySpawnPacket());
         connection.sendAsync(spectatorSession.getEntityMetadataPacket());
-    }
-
-    public static void spawnClientForSpectator(ServerConnection spectatorSession) {
-        spectatorSession.sendAsync(new ClientboundAddEntityPacket(
-            CACHE.getPlayerCache().getEntityId(),
-            CACHE.getProfileCache().getProfile().getId(),
-            EntityType.PLAYER,
-            CACHE.getPlayerCache().getX(),
-            CACHE.getPlayerCache().getY(),
-            CACHE.getPlayerCache().getZ(),
-            CACHE.getPlayerCache().getYaw(),
-            CACHE.getPlayerCache().getPitch(),
-            CACHE.getPlayerCache().getThePlayer().getHeadYaw()));
-        spectatorSession.sendAsync(new ClientboundSetEntityDataPacket(
-            CACHE.getPlayerCache().getEntityId(),
-            CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray()));
     }
 
     public static EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {
@@ -168,7 +130,7 @@ public final class SpectatorUtils {
         session.setAllowSpectatorServerPlayerPosRotate(false);
         session.sendAsync(session.getEntitySpawnPacket());
         session.sendAsync(session.getSelfEntityMetadataPacket());
-        spawnClientForSpectator(session);
+        SpectatorPacketProvider.playerSpawn().forEach(session::sendAsync);
         Proxy.getInstance().getActiveConnections().stream()
                 .filter(connection -> !connection.equals(session))
                 .forEach(connection -> {
@@ -229,12 +191,38 @@ public final class SpectatorUtils {
     }
 
     public static void sendPlayerSneakStatus() {
-        Proxy.getInstance().getSpectatorConnections().forEach(connection -> {
-            connection.sendAsync(new ClientboundSetEntityDataPacket(
-                CACHE.getPlayerCache().getEntityId(),
-                new EntityMetadata[] {new ObjectEntityMetadata<>(6, MetadataType.POSE, CACHE.getPlayerCache().isSneaking() ? Pose.SNEAKING : Pose.STANDING) }
-            ));
-        });
+        sendSpectatorPackets(SpectatorPacketProvider::playerSneak);
+    }
+
+    public static void sendSwing() {
+        sendSpectatorPackets(SpectatorPacketProvider::playerSwing);
+    }
+
+    public static void sendRespawn() {
+        var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
+        if (!spectatorConnections.isEmpty()) {
+            final List<CachedData> cachedData = asList(CACHE.getChunkCache(), CACHE.getEntityCache(), CACHE.getMapDataCache());
+            spectatorConnections.forEach(session -> {
+                final List<CachedData> data = new ArrayList<>(4);
+                data.addAll(cachedData);
+                data.add(session.getSpectatorPlayerCache());
+                SpectatorSync.initSpectator(session, () -> data);
+            });
+        }
+    }
+
+    public static void checkSpectatorPositionOutOfRender(final int chunkX, final int chunkZ) {
+        var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
+        if (!spectatorConnections.isEmpty()) {
+            spectatorConnections.forEach(connection -> {
+                final int spectX = (int) connection.getSpectatorPlayerCache().getX() >> 4;
+                final int spectZ = (int) connection.getSpectatorPlayerCache().getZ() >> 4;
+                if ((spectX == chunkX || spectX + 1 == chunkX || spectX - 1 == chunkX)
+                    && (spectZ == chunkZ || spectZ + 1 == chunkZ || spectZ - 1 == chunkZ)) {
+                    SpectatorSync.syncSpectatorPositionToProxiedPlayer(connection);
+                }
+            });
+        }
     }
 
     public static float getDisplayYaw(final ServerConnection serverConnection) {
@@ -253,5 +241,15 @@ public final class SpectatorUtils {
             return -serverConnection.getSpectatorPlayerCache().getPitch();
         }
         return serverConnection.getSpectatorPlayerCache().getPitch();
+    }
+
+    private static void sendSpectatorPackets(final Supplier<List<Packet>> packetProvider) {
+        var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
+        if (!spectatorConnections.isEmpty()) {
+            var packets = packetProvider.get();
+            spectatorConnections.forEach(connection -> {
+                packets.forEach(connection::sendAsync);
+            });
+        }
     }
 }

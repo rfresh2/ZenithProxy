@@ -7,7 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
@@ -76,7 +76,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                         if (!connection.equals(session) || session.isShowSelfEntity()) {
                             connection.send(session.getEntitySpawnPacket());
                             connection.send(session.getEntityMetadataPacket());
-                            SpectatorUtils.updateSpectatorPosition(session);
+                            SpectatorSync.updateSpectatorPosition(session);
                         }
                     });
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Updated entity to: " + entityId + "&r"), false));
@@ -90,7 +90,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 if (existingTarget != null) {
                     session.setCameraTarget(null);
                     session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
-                    SpectatorUtils.syncSpectatorPositionToEntity(session, existingTarget);
+                    SpectatorSync.syncSpectatorPositionToEntity(session, existingTarget);
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Exited playercam!&r"), false));
                 } else {
                     session.setCameraTarget(CACHE.getPlayerCache().getThePlayer());

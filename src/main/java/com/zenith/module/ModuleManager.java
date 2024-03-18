@@ -48,6 +48,7 @@ public class ModuleManager {
             new AutoTotem(),
             new KillAura(),
             new PlayerSimulation(),
+            new ReplayMod(),
             new Spammer(),
             new Spook()
         ).forEach(m -> {

@@ -74,6 +74,7 @@ public class CommandManager {
            new QueueWarningCommand(),
            new ReconnectCommand(),
            new ReleaseChannelCommand(),
+           new ReplayCommand(),
            new RespawnCommand(),
            new SeenCommand(),
            new SendMessageCommand(),

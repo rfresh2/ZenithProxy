@@ -3,7 +3,7 @@ package com.zenith.network.server.handler.spectator.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.zenith.cache.data.entity.Entity;
-import com.zenith.feature.spectator.SpectatorUtils;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 
@@ -18,7 +18,7 @@ public class TeleportToEntitySpectatorHandler implements PacketHandler<Serverbou
                 session.setCameraTarget(null);
                 session.send(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
             }
-            SpectatorUtils.syncSpectatorPositionToEntity(session, targetEntity);
+            SpectatorSync.syncSpectatorPositionToEntity(session, targetEntity);
         }
         return null;
     }
