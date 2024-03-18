@@ -39,9 +39,7 @@ public class ReplayCommand extends Command {
                     return 1;
                 }
                 module.enable();
-                c.getSource().getEmbed()
-                    .title("Recording Started")
-                    .color(Color.CYAN);
+                c.getSource().setNoOutput(true);
                 return 1;
             }))
             .then(literal("stop").executes(c -> {
@@ -54,9 +52,7 @@ public class ReplayCommand extends Command {
                     return 1;
                 }
                 module.disable();
-                c.getSource().getEmbed()
-                    .title("Recording Stopped")
-                    .color(Color.CYAN);
+                c.getSource().setNoOutput(true);
                 return 1;
             }));
     }

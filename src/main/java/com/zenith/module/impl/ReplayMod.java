@@ -3,6 +3,8 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.codec.MinecraftPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.event.module.ReplayStartedEvent;
+import com.zenith.event.module.ReplayStoppedEvent;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.feature.replay.ReplayModPacketHandlerCodec;
 import com.zenith.feature.replay.ReplayRecording;
@@ -68,6 +70,7 @@ public class ReplayMod extends Module {
         this.replayRecording = new ReplayRecording(replayDirectory);
         try {
             this.replayRecording.startRecording();
+            EVENT_BUS.postAsync(new ReplayStartedEvent());
         } catch (final Exception e) {
             MODULE_LOG.error("Failed to start ReplayMod recording", e);
             disable();
@@ -80,6 +83,13 @@ public class ReplayMod extends Module {
             this.replayRecording.close();
         } catch (final Exception e) {
             MODULE_LOG.error("Failed to save ReplayMod recording", e);
+        }
+        var file = replayRecording.getReplayFile();
+        if (file.exists()) {
+            MODULE_LOG.info("ReplayMod recording saved to {}", file.getPath());
+            EVENT_BUS.postAsync(new ReplayStoppedEvent(replayRecording.getReplayFile()));
+        } else {
+            EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
     }
 }

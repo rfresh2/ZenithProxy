@@ -18,6 +18,7 @@ import com.zenith.feature.spectator.SpectatorPacketProvider;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
+import lombok.Getter;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -36,6 +37,7 @@ public class ReplayRecording implements Closeable {
     private final Path replayDirectory;
     private OutputStream outputStream;
     private ZipOutputStream zipOutputStream;
+    @Getter private File replayFile;
     private static final ByteBufAllocator ALLOC = PooledByteBufAllocator.DEFAULT;
     private boolean preConnectSyncNeeded = false;
     private long startT;
@@ -64,9 +66,9 @@ public class ReplayRecording implements Closeable {
 //        metadata.setSelfId(CACHE.getPlayerCache().getEntityId());
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         final String time = formatter.format(ZonedDateTime.now());
-        final File file = replayDirectory.resolve(time + "_recording.mcpr").toFile();
-        file.getParentFile().mkdirs();
-        outputStream = new BufferedOutputStream(new FileOutputStream(file));
+        replayFile = replayDirectory.resolve(time + "_recording.mcpr").toFile();
+        replayFile.getParentFile().mkdirs();
+        outputStream = new BufferedOutputStream(new FileOutputStream(replayFile));
         zipOutputStream = new ZipOutputStream(outputStream);
         zipOutputStream.putNextEntry(new ZipEntry("recording.tmcpr"));
         if (Proxy.getInstance().isConnected() && Proxy.getInstance().getClient().isOnline()) {
@@ -213,6 +215,12 @@ public class ReplayRecording implements Closeable {
         } else if (packet instanceof ServerboundPlayerCommandPacket commandPacket) {
             // send mutated entity metadata
         }
+        /**
+         * Known issues because we don't cache these states:
+         *
+         * Block breaking progress
+         * Sleeping animation
+         */
     }
 
     public void handleInboundPacket(final long time, final MinecraftPacket packet, final Session session) {
