@@ -5,6 +5,7 @@ import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.github.steveice10.mc.protocol.codec.MinecraftPacket;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClosePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
@@ -219,5 +220,8 @@ public class ReplayRecording implements Closeable {
             recordSelfSpawn = true;
         }
         writePacket(time, packet, session);
+        if (packet instanceof ClientboundRespawnPacket respawnPacket) {
+            SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
+        }
     }
 }
