@@ -12,6 +12,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import com.github.steveice10.packetlib.Session;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorPacketProvider;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -35,7 +36,7 @@ public class ReplayRecording implements Closeable {
     private OutputStream outputStream;
     private ZipOutputStream zipOutputStream;
     private static final ByteBufAllocator ALLOC = PooledByteBufAllocator.DEFAULT;
-    private boolean loginPhase = true;
+    private boolean preConnectSyncNeeded = false;
     private long startT;
     private final ExecutorService executor = Executors.newFixedThreadPool(
         1,
@@ -67,7 +68,46 @@ public class ReplayRecording implements Closeable {
         outputStream = new BufferedOutputStream(new FileOutputStream(file));
         zipOutputStream = new ZipOutputStream(outputStream);
         zipOutputStream.putNextEntry(new ZipEntry("recording.tmcpr"));
-        startT = System.currentTimeMillis();
+        if (Proxy.getInstance().isConnected() && Proxy.getInstance().getClient().isOnline()) {
+            lateStartRecording();
+        } else {
+            preConnectRecording();
+        }
+    }
+
+    // Start recording while we already have a logged in session
+    private void lateStartRecording() {
+        writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
+        writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
+            CACHE.getPlayerCache().getEntityId(),
+            CACHE.getPlayerCache().isHardcore(),
+            CACHE.getPlayerCache().getGameMode(),
+            CACHE.getPlayerCache().getGameMode(),
+            CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
+            CACHE.getChunkCache().getRegistryTag(),
+            CACHE.getChunkCache().getDimensionType(),
+            CACHE.getChunkCache().getWorldName(),
+            CACHE.getChunkCache().getHashedSeed(),
+            CACHE.getPlayerCache().getMaxPlayers(),
+            CACHE.getChunkCache().getServerViewDistance(),
+            CACHE.getChunkCache().getServerSimulationDistance(),
+            false,
+            CACHE.getPlayerCache().isEnableRespawnScreen(),
+            CACHE.getChunkCache().isDebug(),
+            CACHE.getChunkCache().isFlat(),
+            CACHE.getPlayerCache().getLastDeathPos(),
+            CACHE.getPlayerCache().getPortalCooldown()
+        ), Proxy.getInstance().getClient());
+        CACHE.getAllData()
+            .forEach(d -> d.getPackets(packet -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient())));
+        SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+        SpectatorPacketProvider.playerPosition().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+    }
+
+    // Start recording before we've connected
+    // need to wait for login packets
+    private void preConnectRecording() {
+        preConnectSyncNeeded = true;
     }
 
     public void writePacket(final long time, final MinecraftPacket packet, final Session session) {
@@ -78,8 +118,9 @@ public class ReplayRecording implements Closeable {
 
     private void writePacket0(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
         try {
-            if (loginPhase) {
+            if (preConnectSyncNeeded) {
                 writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
+                preConnectSyncNeeded = false;
             }
             writeToFile(time, packet, session, protocolState);
         } catch (final Throwable e) {
@@ -109,9 +150,6 @@ public class ReplayRecording implements Closeable {
             MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
         } finally {
             packetBuf.release();
-        }
-        if (packet instanceof ClientboundGameProfilePacket) {
-            loginPhase = false;
         }
     }
 
@@ -155,7 +193,7 @@ public class ReplayRecording implements Closeable {
 
     private boolean recordSelfSpawn = false;
 
-    public void translateOutgoingPacket(final long time, final MinecraftPacket packet, final Session session) {
+    public void handleOutgoingPacket(final long time, final MinecraftPacket packet, final Session session) {
         if (packet instanceof ServerboundAcceptTeleportationPacket) {
             if (recordSelfSpawn) {
                 recordSelfSpawn = false;
