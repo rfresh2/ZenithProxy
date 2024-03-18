@@ -28,12 +28,12 @@ jobs:
             artifact-name: 'launcher-macos-amd64'
             move-command: 'mv dist/__main__ dist/launch'
             zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launch'
-            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
+            sha1-command: 'shasum dist/launch | cut -d" " -f 1'
           - os: 'macos-14'
             artifact-name: 'launcher-macos-aarch64'
             move-command: 'mv dist/__main__ dist/launch'
             zip-command: 'zip -j dist/ZenithProxy-launcher-macos-aarch64.zip dist/launch'
-            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
+            sha1-command: 'shasum dist/launch | cut -d" " -f 1'
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
