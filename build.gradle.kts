@@ -32,10 +32,10 @@ repositories {
 val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.30"
-val postgresVersion = "42.7.2"
+val postgresVersion = "42.7.3"
 val nettyVersion = "4.1.107.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
-val jdbiVersion = "3.45.0"
+val jdbiVersion = "3.45.1"
 
 dependencies {
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
@@ -45,13 +45,13 @@ dependencies {
     shade("org.eclipse.jgit:org.eclipse.jgit:6.9.0.202403050737-r")
     shade("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.9.0.202403050737-r")
     shade("com.github.mwiede:jsch:0.2.17")
-    shade("com.google.guava:guava:33.0.0-jre")
+    shade("com.google.guava:guava:33.1.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.5.3")
     shade("org.slf4j:slf4j-api:2.0.12")
     shade("org.slf4j:jul-to-slf4j:2.0.12")
     shade("com.mojang:brigadier:1.2.9")
-    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.2")
+    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
     shade("com.github.rfresh2.Discord4j:discord4j-core:b40c82ad47") {
         exclude(group = "io.netty")
@@ -78,7 +78,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.27.1") {
+    shade("org.redisson:redisson:3.27.2") {
         exclude(group = "io.netty")
     }
     shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion")
