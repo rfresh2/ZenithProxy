@@ -127,7 +127,7 @@ public class ReplayRecording implements Closeable {
         executor.execute(() -> writePacket0(time, packet, session, protocolState));
     }
 
-    private void writePacket0(long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
+    private void writePacket0(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
         try {
             writeToFile(time, packet, session, protocolState);
         } catch (final Throwable e) {
