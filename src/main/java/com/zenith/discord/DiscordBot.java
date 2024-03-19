@@ -1136,7 +1136,7 @@ public class DiscordBot {
             .title("Replay Recording Stopped")
             .color(Color.CYAN);
         var replayFile = event.replayFile();
-        if (replayFile != null) {
+        if (replayFile != null && CONFIG.client.extra.replayMod.sendRecordingsToDiscord) {
             try (InputStream in = new BufferedInputStream(new FileInputStream(replayFile))) {
                 // 25MB discord file attachment size limit
                 if (replayFile.length() > 24 * 1024 * 1024)

@@ -8,7 +8,10 @@ import com.zenith.command.CommandUsage;
 import com.zenith.module.impl.ReplayMod;
 import discord4j.rest.util.Color;
 
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.command.ToggleArgumentType.getToggle;
+import static com.zenith.command.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ReplayCommand extends Command {
@@ -20,7 +23,8 @@ public class ReplayCommand extends Command {
             "Captures a ReplayMod recording",
             asList(
                 "start",
-                "stop"
+                "stop",
+                "discordUpload on/off"
             )
         );
     }
@@ -29,7 +33,6 @@ public class ReplayCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("replay")
             .then(literal("start").executes(c -> {
-                // start recording
                 var module = MODULE_MANAGER.get(ReplayMod.class);
                 if (module.isEnabled()) {
                     c.getSource().getEmbed()
@@ -54,6 +57,13 @@ public class ReplayCommand extends Command {
                 module.disable();
                 c.getSource().setNoOutput(true);
                 return 1;
-            }));
+            }))
+            .then(literal("discordUpload").requires(Command::validateAccountOwner).then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.replayMod.sendRecordingsToDiscord = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Discord Upload " + toggleStrCaps(CONFIG.client.extra.replayMod.sendRecordingsToDiscord))
+                    .color(Color.CYAN);
+                return 1;
+            })));
     }
 }

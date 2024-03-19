@@ -995,6 +995,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$ReplayMod",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$Spammer",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
