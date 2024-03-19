@@ -121,10 +121,6 @@ public class ReplayRecording implements Closeable {
 
     private void writePacket0(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
         try {
-            if (preConnectSyncNeeded) {
-                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
-                preConnectSyncNeeded = false;
-            }
             writeToFile(time, packet, session, protocolState);
         } catch (final Throwable e) {
             MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
@@ -223,13 +219,19 @@ public class ReplayRecording implements Closeable {
          */
     }
 
-    public void handleInboundPacket(final long time, final MinecraftPacket packet, final Session session) {
+    public void handleInboundPacket(long time, final MinecraftPacket packet, final Session session) {
         if (packet instanceof ClientboundLoginPacket loginPacket) {
             recordSelfSpawn = true;
+            if (preConnectSyncNeeded) {
+                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
+                time = Instant.now().toEpochMilli();
+                preConnectSyncNeeded = false;
+            }
         }
         writePacket(time, packet, session);
         if (packet instanceof ClientboundRespawnPacket respawnPacket) {
-            SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
+            final long t = time;
+            SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(t, (MinecraftPacket) p, session));
         }
     }
 }
