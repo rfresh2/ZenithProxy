@@ -1,4 +1,4 @@
 package com.zenith.event.module;
 
-public record PlayerTotemPopAlertEvent() {
+public record PlayerTotemPopAlertEvent(int totemsRemaining) {
 }

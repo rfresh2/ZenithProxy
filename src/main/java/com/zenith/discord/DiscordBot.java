@@ -1154,6 +1154,7 @@ public class DiscordBot {
     public void handleTotemPopEvent(final PlayerTotemPopAlertEvent event) {
         var embed = Embed.builder()
             .title("Player Totem Popped")
+            .addField("Totems Left", event.totemsRemaining(), false)
             .color(Color.RUBY);
         if (CONFIG.client.extra.autoTotem.totemPopAlertMention)
             sendEmbedMessage(mentionAccountOwner(), embed);

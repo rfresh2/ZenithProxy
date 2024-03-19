@@ -56,14 +56,8 @@ public class AutoTotem extends AbstractInventoryModule {
         }
         if (CONFIG.client.extra.autoTotem.noTotemsAlert
             && lastNoTotemsAlert.plus(noTotemsAlertCooldown).isBefore(Instant.now())) {
-            var hasTotems = false;
-            for (ItemStack item : CACHE.getPlayerCache().getPlayerInventory()) {
-                if (item != Container.EMPTY_STACK && item.getId() == totemId) {
-                    hasTotems = true;
-                    break;
-                }
-            }
-            if (!hasTotems) {
+            var totemCount = countTotems();
+            if (totemCount < 1) {
                 lastNoTotemsAlert = Instant.now();
                 MODULE_LOG.info("[AutoTotem] No Totems Left");
                 EVENT_BUS.postAsync(new NoTotemsEvent());
@@ -73,13 +67,23 @@ public class AutoTotem extends AbstractInventoryModule {
 
     private void onTotemPopEvent(TotemPopEvent totemPopEvent) {
         if (totemPopEvent.entityId() == CACHE.getPlayerCache().getEntityId()) {
-            EVENT_BUS.postAsync(new PlayerTotemPopAlertEvent());
-            MODULE_LOG.info("Player Totem Popped");
+            var totemCount = countTotems();
+            EVENT_BUS.postAsync(new PlayerTotemPopAlertEvent(totemCount));
+            MODULE_LOG.info("Player Totem Popped - {} remaining", totemCount);
         }
     }
 
     private boolean playerHealthBelowThreshold() {
         return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoTotem.healthThreshold;
+    }
+
+    private int countTotems() {
+        var count = 0;
+        for (ItemStack item : CACHE.getPlayerCache().getPlayerInventory()) {
+            if (item != Container.EMPTY_STACK && item.getId() == totemId)
+                count++;
+        }
+        return count;
     }
 
     @Override
