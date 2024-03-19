@@ -110,6 +110,8 @@ public final class Config {
             public static final class AutoTotem {
                 public boolean enabled = true;
                 public int healthThreshold = 20;
+                public boolean totemPopAlert = false;
+                public boolean totemPopAlertMention = false;
             }
 
             public static final class AntiLeak {

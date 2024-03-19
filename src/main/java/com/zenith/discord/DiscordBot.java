@@ -14,6 +14,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.queue.Queue;
+import com.zenith.module.impl.AutoTotem;
 import discord4j.common.ReactorResources;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
@@ -139,7 +140,8 @@ public class DiscordBot {
                             of(DeathMessageEvent.class, this::handleDeathMessageEvent),
                             of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent),
                             of(ReplayStartedEvent.class, this::handleReplayStartedEvent),
-                            of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent)
+                            of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent),
+                            of(TotemPopEvent.class, this::handleTotemPopEvent)
         );
     }
 
@@ -1149,5 +1151,17 @@ public class DiscordBot {
             }
         }
         sendEmbedMessageWithFileAttachment(embed);
+    }
+
+    public void handleTotemPopEvent(final TotemPopEvent event) {
+        if (!MODULE_MANAGER.get(AutoTotem.class).isEnabled()) return;
+        if (!CONFIG.client.extra.autoTotem.totemPopAlert) return;
+        var embed = Embed.builder()
+            .title("Player Totem Popped")
+            .color(Color.CYAN);
+        if (CONFIG.client.extra.autoTotem.totemPopAlertMention)
+            sendEmbedMessage(mentionAccountOwner(), embed);
+        else
+            sendEmbedMessage(embed);
     }
 }

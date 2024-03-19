@@ -3,10 +3,12 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.proxy.TotemPopEvent;
 
 import java.time.Duration;
 import java.time.Instant;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class AutoTotem extends AbstractInventoryModule {
@@ -20,7 +22,11 @@ public class AutoTotem extends AbstractInventoryModule {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTick);
+        EVENT_BUS.subscribe(
+            this,
+            of(ClientTickEvent.class, this::handleClientTick),
+            of(TotemPopEvent.class, this::onTotemPopEvent)
+        );
     }
 
     @Override
@@ -38,6 +44,10 @@ public class AutoTotem extends AbstractInventoryModule {
             }
             delay = doInventoryActions();
         }
+    }
+
+    private void onTotemPopEvent(TotemPopEvent totemPopEvent) {
+        MODULE_LOG.info("Player Totem Popped");
     }
 
     private boolean playerHealthBelowThreshold() {

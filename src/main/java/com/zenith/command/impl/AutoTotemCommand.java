@@ -24,7 +24,9 @@ public class AutoTotemCommand extends Command {
                                  "Automatically equips totems in the offhand",
                                  asList(
                                      "on/off",
-                                     "health <int>"
+                                     "health <int>",
+                                     "alert on/off",
+                                     "alert mention on/off"
                                  ));
     }
 
@@ -44,7 +46,20 @@ public class AutoTotemCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Auto Totem Health Threshold Set!");
                           return 1;
-                      })));
+                      })))
+            .then(literal("alert")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.totemPopAlert = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Totem Alert " + toggleStrCaps(CONFIG.client.extra.autoTotem.totemPopAlert));
+                          return 1;
+                      }))
+                      .then(literal("mention").then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.totemPopAlertMention = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Totem Mention " + toggleStrCaps(CONFIG.client.extra.autoTotem.totemPopAlertMention));
+                          return 1;
+                      }))));
     }
 
     @Override
@@ -52,6 +67,8 @@ public class AutoTotemCommand extends Command {
         builder
             .addField("Auto Totem", toggleStr(CONFIG.client.extra.autoTotem.enabled), false)
             .addField("Health Threshold", CONFIG.client.extra.autoTotem.healthThreshold, true)
+            .addField("Alert", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlert), false)
+            .addField("Alert Mention", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlertMention), true)
             .color(Color.CYAN);
     }
 }
