@@ -3,6 +3,7 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.codec.MinecraftPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.ReplayStartedEvent;
 import com.zenith.event.module.ReplayStoppedEvent;
 import com.zenith.event.proxy.DisconnectEvent;
@@ -17,8 +18,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Shared.EVENT_BUS;
-import static com.zenith.Shared.MODULE_LOG;
+import static com.zenith.Shared.*;
 
 public class ReplayMod extends Module {
     private final PacketHandlerCodec codec = new ReplayModPacketHandlerCodec(this, Integer.MIN_VALUE, "replay-mod");
@@ -48,6 +48,16 @@ public class ReplayMod extends Module {
     public void onDisable() {
         ZenithHandlerCodec.CLIENT_REGISTRY.unregister(codec);
         stopRecording();
+    }
+
+    public void onClientTick(final ClientTickEvent event) {
+        var startT = replayRecording.getStartT();
+        if (startT == 0L) return;
+        if (CONFIG.client.extra.replayMod.maxRecordingTimeMins <= 0) return;
+        if (Instant.now().toEpochMilli() - (CONFIG.client.extra.replayMod.maxRecordingTimeMins * 60 * 1000) > startT) {
+            MODULE_LOG.info("Stopping ReplayMod recording due to max recording time");
+            disable();
+        }
     }
 
     public void onInboundPacket(final Packet packet, final Session session) {

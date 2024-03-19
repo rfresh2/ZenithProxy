@@ -76,7 +76,7 @@ public final class Config {
             public AntiLeak antiLeak = new AntiLeak();
             public Chat chat = new Chat();
             public AntiKick antiKick = new AntiKick();
-//            public ReplayMod replayMod = new ReplayMod();
+            public ReplayMod replayMod = new ReplayMod();
             public boolean visualRangeAlert = true;
             public boolean visualRangeIgnoreFriends = false;
             public boolean visualRangeAlertMention = false;
@@ -184,9 +184,10 @@ public final class Config {
                 }
             }
 
-//            public static final class ReplayMod {
-//
-//            }
+            public static final class ReplayMod {
+                public boolean sendRecordingsToDiscord = false;
+                public int maxRecordingTimeMins = 0;
+            }
 
             public static final class Utility {
                 public Actions actions = new Actions();

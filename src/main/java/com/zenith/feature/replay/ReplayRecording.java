@@ -43,7 +43,7 @@ public class ReplayRecording implements Closeable {
     @Getter private File replayFile;
     private static final ByteBufAllocator ALLOC = PooledByteBufAllocator.DEFAULT;
     private boolean preConnectSyncNeeded = false;
-    private long startT;
+    @Getter private long startT;
     private final ExecutorService executor = Executors.newFixedThreadPool(
         1,
         new ThreadFactoryBuilder()
