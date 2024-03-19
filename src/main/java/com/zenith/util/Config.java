@@ -191,6 +191,7 @@ public final class Config {
             public static final class ReplayMod {
                 public boolean sendRecordingsToDiscord = false;
                 public int maxRecordingTimeMins = 0;
+                public boolean autoStartRecording = false;
             }
 
             public static final class Utility {

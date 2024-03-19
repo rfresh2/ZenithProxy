@@ -1140,7 +1140,7 @@ public class DiscordBot {
             try (InputStream in = new BufferedInputStream(new FileInputStream(replayFile))) {
                 // 25MB discord file attachment size limit
                 if (replayFile.length() > 24 * 1024 * 1024)
-                    embed.description("Replay file too large to read: " + (replayFile.length() / (1024 * 1024)) + " MB");
+                    embed.description("Replay too large to upload to discord: " + (replayFile.length() / (1024 * 1024)) + "mb");
                 else
                     embed.fileAttachment(new Embed.FileAttachment(replayFile.getName(), in.readAllBytes()));
             } catch (final Exception e) {

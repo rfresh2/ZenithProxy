@@ -18,6 +18,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.queue.Queue;
+import com.zenith.module.impl.ReplayMod;
 import com.zenith.network.client.Authenticator;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.CustomServerInfoBuilder;
@@ -656,6 +657,9 @@ public class Proxy {
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
         cancelAutoReconnect();
+        if (CONFIG.client.extra.replayMod.autoStartRecording) {
+            MODULE_MANAGER.get(ReplayMod.class).enable();
+        }
     }
 
     public void handleStartQueueEvent(StartQueueEvent event) {
