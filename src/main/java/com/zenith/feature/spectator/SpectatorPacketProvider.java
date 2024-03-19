@@ -7,8 +7,9 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Pose;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Animation;
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.*;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddPlayerPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 
 import java.util.List;
@@ -54,14 +55,16 @@ public class SpectatorPacketProvider {
 
     public static List<Packet> playerSpawn() {
         return asList(
-            new ClientboundAddPlayerPacket(
+            new ClientboundAddEntityPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getProfileCache().getProfile().getId(),
+                EntityType.PLAYER,
                 CACHE.getPlayerCache().getX(),
                 CACHE.getPlayerCache().getY(),
                 CACHE.getPlayerCache().getZ(),
                 CACHE.getPlayerCache().getYaw(),
-                CACHE.getPlayerCache().getPitch()),
+                CACHE.getPlayerCache().getPitch(),
+                CACHE.getPlayerCache().getThePlayer().getHeadYaw()),
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray())

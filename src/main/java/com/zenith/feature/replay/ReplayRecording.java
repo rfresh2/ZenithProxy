@@ -4,6 +4,9 @@ import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
 import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.github.steveice10.mc.protocol.codec.MinecraftPacket;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
+import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerSpawnInfo;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
+import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
@@ -81,25 +84,30 @@ public class ReplayRecording implements Closeable {
     // Start recording while we already have a logged in session
     private void lateStartRecording() {
         writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
+        CACHE.getConfigurationCache().getPackets(packet -> writePacket0(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
+        writePacket0(Instant.now().toEpochMilli(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+        writePacket0(Instant.now().toEpochMilli(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
         writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
-            CACHE.getPlayerCache().getGameMode(),
-            CACHE.getPlayerCache().getGameMode(),
-            CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(String[]::new),
-            CACHE.getChunkCache().getRegistryTag(),
-            CACHE.getChunkCache().getDimensionType(),
-            CACHE.getChunkCache().getWorldName(),
-            CACHE.getChunkCache().getHashedSeed(),
+            CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
             CACHE.getPlayerCache().getMaxPlayers(),
             CACHE.getChunkCache().getServerViewDistance(),
             CACHE.getChunkCache().getServerSimulationDistance(),
-            false,
+            CACHE.getPlayerCache().isReducedDebugInfo(),
             CACHE.getPlayerCache().isEnableRespawnScreen(),
-            CACHE.getChunkCache().isDebug(),
-            CACHE.getChunkCache().isFlat(),
-            CACHE.getPlayerCache().getLastDeathPos(),
-            CACHE.getPlayerCache().getPortalCooldown()
+            CACHE.getPlayerCache().isDoLimitedCrafting(),
+            new PlayerSpawnInfo(
+                CACHE.getChunkCache().getCurrentDimension().dimensionName(),
+                CACHE.getChunkCache().getWorldName(),
+                CACHE.getChunkCache().getHashedSeed(),
+                CACHE.getPlayerCache().getGameMode(),
+                CACHE.getPlayerCache().getGameMode(),
+                CACHE.getChunkCache().isDebug(),
+                CACHE.getChunkCache().isFlat(),
+                CACHE.getPlayerCache().getLastDeathPos(),
+                CACHE.getPlayerCache().getPortalCooldown()
+            )
         ), Proxy.getInstance().getClient());
         CACHE.getAllData()
             .forEach(d -> d.getPackets(packet -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient())));
@@ -119,12 +127,8 @@ public class ReplayRecording implements Closeable {
         executor.execute(() -> writePacket0(time, packet, session, protocolState));
     }
 
-    private void writePacket0(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
+    private void writePacket0(long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
         try {
-            if (preConnectSyncNeeded) {
-                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
-                preConnectSyncNeeded = false;
-            }
             writeToFile(time, packet, session, protocolState);
         } catch (final Throwable e) {
             MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
@@ -223,13 +227,22 @@ public class ReplayRecording implements Closeable {
          */
     }
 
-    public void handleInboundPacket(final long time, final MinecraftPacket packet, final Session session) {
+    public void handleInboundPacket(long time, final MinecraftPacket packet, final Session session) {
         if (packet instanceof ClientboundLoginPacket loginPacket) {
             recordSelfSpawn = true;
+            if (preConnectSyncNeeded) {
+                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
+                CACHE.getConfigurationCache().getPackets(packet2 -> writeToFile(Instant.now().toEpochMilli(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
+                writeToFile(Instant.now().toEpochMilli(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+                writeToFile(Instant.now().toEpochMilli(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+                time = Instant.now().toEpochMilli();
+                preConnectSyncNeeded = false;
+            }
         }
         writePacket(time, packet, session);
         if (packet instanceof ClientboundRespawnPacket respawnPacket) {
-            SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
+            final long t = time;
+            SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(t, (MinecraftPacket) p, session));
         }
     }
 }
