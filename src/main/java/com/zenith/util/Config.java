@@ -110,6 +110,10 @@ public final class Config {
             public static final class AutoTotem {
                 public boolean enabled = true;
                 public int healthThreshold = 20;
+                public boolean noTotemsAlert = false;
+                public boolean noTotemsAlertMention = false;
+                public boolean totemPopAlert = false;
+                public boolean totemPopAlertMention = false;
             }
 
             public static final class AntiLeak {
@@ -187,6 +191,7 @@ public final class Config {
             public static final class ReplayMod {
                 public boolean sendRecordingsToDiscord = false;
                 public int maxRecordingTimeMins = 0;
+                public boolean autoStartRecording = false;
             }
 
             public static final class Utility {

@@ -6,9 +6,7 @@ import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.DiscordCommandContext;
-import com.zenith.event.module.AutoEatOutOfFoodEvent;
-import com.zenith.event.module.ReplayStartedEvent;
-import com.zenith.event.module.ReplayStoppedEvent;
+import com.zenith.event.module.*;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
@@ -139,7 +137,9 @@ public class DiscordBot {
                             of(DeathMessageEvent.class, this::handleDeathMessageEvent),
                             of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent),
                             of(ReplayStartedEvent.class, this::handleReplayStartedEvent),
-                            of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent)
+                            of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent),
+                            of(PlayerTotemPopAlertEvent.class, this::handleTotemPopEvent),
+                            of(NoTotemsEvent.class, this::handleNoTotemsEvent)
         );
     }
 
@@ -1140,7 +1140,7 @@ public class DiscordBot {
             try (InputStream in = new BufferedInputStream(new FileInputStream(replayFile))) {
                 // 25MB discord file attachment size limit
                 if (replayFile.length() > 24 * 1024 * 1024)
-                    embed.description("Replay file too large to read: " + (replayFile.length() / (1024 * 1024)) + " MB");
+                    embed.description("Replay too large to upload to discord: " + (replayFile.length() / (1024 * 1024)) + "mb");
                 else
                     embed.fileAttachment(new Embed.FileAttachment(replayFile.getName(), in.readAllBytes()));
             } catch (final Exception e) {
@@ -1149,5 +1149,26 @@ public class DiscordBot {
             }
         }
         sendEmbedMessageWithFileAttachment(embed);
+    }
+
+    public void handleTotemPopEvent(final PlayerTotemPopAlertEvent event) {
+        var embed = Embed.builder()
+            .title("Player Totem Popped")
+            .addField("Totems Left", event.totemsRemaining(), false)
+            .color(Color.RUBY);
+        if (CONFIG.client.extra.autoTotem.totemPopAlertMention)
+            sendEmbedMessage(mentionAccountOwner(), embed);
+        else
+            sendEmbedMessage(embed);
+    }
+
+    public void handleNoTotemsEvent(final NoTotemsEvent event) {
+        var embed = Embed.builder()
+            .title("Player Out of Totems")
+            .color(Color.RUBY);
+        if (CONFIG.client.extra.autoTotem.noTotemsAlertMention)
+            sendEmbedMessage(mentionAccountOwner(), embed);
+        else
+            sendEmbedMessage(embed);
     }
 }

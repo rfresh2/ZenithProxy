@@ -19,13 +19,18 @@ import static java.util.Arrays.asList;
 public class AutoTotemCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("autoTotem",
-                                 CommandCategory.MODULE,
-                                 "Automatically equips totems in the offhand",
-                                 asList(
-                                     "on/off",
-                                     "health <int>"
-                                 ));
+        return CommandUsage.args(
+            "autoTotem",
+            CommandCategory.MODULE,
+            "Automatically equips totems in the offhand",
+            asList(
+                "on/off",
+                "health <int>",
+                "popAlert on/off",
+                "popAlert mention on/off",
+                "noTotemsAlert on/off",
+                "noTotemsAlert mention on/off"
+            ));
     }
 
     @Override
@@ -44,7 +49,33 @@ public class AutoTotemCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Auto Totem Health Threshold Set!");
                           return 1;
-                      })));
+                      })))
+            .then(literal("popAlert")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.totemPopAlert = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Totem Alert " + toggleStrCaps(CONFIG.client.extra.autoTotem.totemPopAlert));
+                          return 1;
+                      }))
+                      .then(literal("mention").then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.totemPopAlertMention = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Totem Mention " + toggleStrCaps(CONFIG.client.extra.autoTotem.totemPopAlertMention));
+                          return 1;
+                      }))))
+            .then(literal("noTotemsAlert")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.noTotemsAlert = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("No Totems Alert " + toggleStrCaps(CONFIG.client.extra.autoTotem.noTotemsAlert));
+                          return 1;
+                      }))
+                      .then(literal("mention").then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.noTotemsAlertMention = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("No Totems Mention " + toggleStrCaps(CONFIG.client.extra.autoTotem.noTotemsAlertMention));
+                          return 1;
+                      }))));
     }
 
     @Override
@@ -52,6 +83,10 @@ public class AutoTotemCommand extends Command {
         builder
             .addField("Auto Totem", toggleStr(CONFIG.client.extra.autoTotem.enabled), false)
             .addField("Health Threshold", CONFIG.client.extra.autoTotem.healthThreshold, true)
+            .addField("Pop Alert", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlert), false)
+            .addField("Pop Alert Mention", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlertMention), true)
+            .addField("No Totems Alert", toggleStr(CONFIG.client.extra.autoTotem.noTotemsAlert), false)
+            .addField("No Totems Alert Mention", toggleStr(CONFIG.client.extra.autoTotem.noTotemsAlertMention), true)
             .color(Color.CYAN);
     }
 }

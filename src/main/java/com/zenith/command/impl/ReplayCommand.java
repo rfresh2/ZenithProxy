@@ -29,12 +29,15 @@ public class ReplayCommand extends Command {
             Replays can optionally be uploaded to discord if they are under the discord message size limit.
             
             A `maxRecordingTime` of 0 means there is no limit, however, recording are always stopped on disconnects.
+            
+            `autoStart` will automatically start a new recording when the proxy connects.
             """,
             asList(
                 "start",
                 "stop",
                 "discordUpload on/off",
-                "maxRecordingTime <minutes>"
+                "maxRecordingTime <minutes>",
+                "autoStart on/off"
             )
         );
     }
@@ -81,6 +84,13 @@ public class ReplayCommand extends Command {
                     .title("Max Recording Time Set")
                     .color(Color.CYAN)
                     .addField("Max Recording Time", CONFIG.client.extra.replayMod.maxRecordingTimeMins + " minutes", false);
+                return 1;
+            })))
+            .then(literal("autoStart").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.replayMod.autoStartRecording = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Auto Start " + toggleStrCaps(CONFIG.client.extra.replayMod.autoStartRecording))
+                    .color(Color.CYAN);
                 return 1;
             })));
     }

@@ -29,7 +29,8 @@ public class ReplayMod extends Module {
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
-            of(DisconnectEvent.class, this::onDisconnectEvent)
+            of(DisconnectEvent.class, this::onDisconnectEvent),
+            of(ClientTickEvent.class, this::onClientTick)
         );
     }
 
