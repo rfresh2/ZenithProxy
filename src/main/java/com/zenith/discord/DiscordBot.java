@@ -6,15 +6,12 @@ import com.zenith.Proxy;
 import com.zenith.command.CommandContext;
 import com.zenith.command.CommandOutputHelper;
 import com.zenith.command.DiscordCommandContext;
-import com.zenith.event.module.AutoEatOutOfFoodEvent;
-import com.zenith.event.module.ReplayStartedEvent;
-import com.zenith.event.module.ReplayStoppedEvent;
+import com.zenith.event.module.*;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.queue.Queue;
-import com.zenith.module.impl.AutoTotem;
 import discord4j.common.ReactorResources;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
@@ -141,7 +138,8 @@ public class DiscordBot {
                             of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent),
                             of(ReplayStartedEvent.class, this::handleReplayStartedEvent),
                             of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent),
-                            of(TotemPopEvent.class, this::handleTotemPopEvent)
+                            of(PlayerTotemPopAlertEvent.class, this::handleTotemPopEvent),
+                            of(NoTotemsEvent.class, this::handleNoTotemsEvent)
         );
     }
 
@@ -1153,13 +1151,21 @@ public class DiscordBot {
         sendEmbedMessageWithFileAttachment(embed);
     }
 
-    public void handleTotemPopEvent(final TotemPopEvent event) {
-        if (!MODULE_MANAGER.get(AutoTotem.class).isEnabled()) return;
-        if (!CONFIG.client.extra.autoTotem.totemPopAlert) return;
+    public void handleTotemPopEvent(final PlayerTotemPopAlertEvent event) {
         var embed = Embed.builder()
             .title("Player Totem Popped")
-            .color(Color.CYAN);
+            .color(Color.RUBY);
         if (CONFIG.client.extra.autoTotem.totemPopAlertMention)
+            sendEmbedMessage(mentionAccountOwner(), embed);
+        else
+            sendEmbedMessage(embed);
+    }
+
+    public void handleNoTotemsEvent(final NoTotemsEvent event) {
+        var embed = Embed.builder()
+            .title("Player Out of Totems")
+            .color(Color.RUBY);
+        if (CONFIG.client.extra.autoTotem.noTotemsAlertMention)
             sendEmbedMessage(mentionAccountOwner(), embed);
         else
             sendEmbedMessage(embed);

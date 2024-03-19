@@ -1,3 +1,3 @@
 package com.zenith.event.proxy;
 
-public record TotemPopEvent() { }
+public record TotemPopEvent(int entityId) { }

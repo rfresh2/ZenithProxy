@@ -20,9 +20,10 @@ public class EntityEventHandler implements AsyncPacketHandler<ClientboundEntityE
                 || packet.getEvent() == EntityEvent.PLAYER_OP_PERMISSION_LEVEL_4
             ) {
                 CACHE.getPlayerCache().setOpLevel(packet.getEvent());
-            } else if (packet.getEvent() == EntityEvent.TOTEM_OF_UNDYING_MAKE_SOUND) {
-                EVENT_BUS.postAsync(new TotemPopEvent());
             }
+        }
+        if (packet.getEvent() == EntityEvent.TOTEM_OF_UNDYING_MAKE_SOUND) {
+            EVENT_BUS.postAsync(new TotemPopEvent(packet.getEntityId()));
         }
         return true;
     }
