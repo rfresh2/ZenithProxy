@@ -1,6 +1,9 @@
 import os
+import ssl
 import sys
 import time
+
+import certifi
 
 import github_api
 import launch_platform
@@ -9,6 +12,8 @@ from launcher import launcher_exec
 from setup import setup_execute, rescue_invalid_system
 from update_launcher import update_launcher_exec
 from update_zenith import update_zenith_exec
+
+ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
