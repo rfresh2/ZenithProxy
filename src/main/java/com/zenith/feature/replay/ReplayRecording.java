@@ -113,6 +113,7 @@ public class ReplayRecording implements Closeable {
             .forEach(d -> d.getPackets(packet -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient())));
         SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
         SpectatorPacketProvider.playerPosition().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+        SpectatorPacketProvider.playerEquipment().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
     }
 
     // Start recording before we've connected

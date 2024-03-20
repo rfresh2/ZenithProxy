@@ -9,6 +9,9 @@
   "name":"[J"
 },
 {
+  "name":"[Lcom.fasterxml.jackson.databind.deser.BeanDeserializerModifier;"
+},
+{
   "name":"[Lcom.fasterxml.jackson.databind.deser.Deserializers;"
 },
 {
@@ -16,6 +19,9 @@
 },
 {
   "name":"[Lcom.fasterxml.jackson.databind.deser.ValueInstantiators;"
+},
+{
+  "name":"[Lcom.fasterxml.jackson.databind.ser.BeanSerializerModifier;"
 },
 {
   "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
@@ -846,6 +852,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.feature.replay.ReplayMetadata",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.whitelist.PlayerEntry",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -1429,7 +1440,13 @@
   "name":"io.netty.resolver.dns.DnsNameResolver$1"
 },
 {
+  "name":"io.netty.resolver.dns.DnsNameResolver$2"
+},
+{
   "name":"io.netty.resolver.dns.DnsNameResolver$3"
+},
+{
+  "name":"io.netty.resolver.dns.DnsNameResolver$4"
 },
 {
   "name":"io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler",
