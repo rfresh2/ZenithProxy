@@ -312,12 +312,16 @@ public class ChunkCache implements CachedData {
         return true;
     }
 
+    public byte[] getServerBrand() {
+        return serverBrand == null
+            ? BrandSerializer.defaultBrand(codec)
+            : BrandSerializer.appendBrand(codec, serverBrand);
+    }
+
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         try {
-            final var brandBytes = serverBrand == null
-                ? BrandSerializer.defaultBrand(codec)
-                : BrandSerializer.appendBrand(codec, serverBrand);
+            final var brandBytes = getServerBrand();
             consumer.accept(new ClientboundCustomPayloadPacket("minecraft:brand", brandBytes));
             consumer.accept(new ClientboundInitializeBorderPacket(worldBorderData.getCenterX(),
                                                                    worldBorderData.getCenterZ(),
