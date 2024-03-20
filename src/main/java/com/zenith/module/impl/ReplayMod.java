@@ -1,8 +1,10 @@
 package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.codec.MinecraftPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.ReplayStartedEvent;
 import com.zenith.event.module.ReplayStoppedEvent;
@@ -12,6 +14,7 @@ import com.zenith.feature.replay.ReplayRecording;
 import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.ZenithHandlerCodec;
+import com.zenith.util.ComponentSerializer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -82,6 +85,9 @@ public class ReplayMod extends Module {
         try {
             this.replayRecording.startRecording();
             EVENT_BUS.postAsync(new ReplayStartedEvent());
+            Proxy.getInstance().getActiveConnections().forEach(session -> {
+                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&ZenithProxy&7]&r &cReplay recording started"), false));
+            });
         } catch (final Exception e) {
             MODULE_LOG.error("Failed to start ReplayMod recording", e);
             disable();
@@ -102,5 +108,8 @@ public class ReplayMod extends Module {
         } else {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
+        Proxy.getInstance().getActiveConnections().forEach(session -> {
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&ZenithProxy&7]&r &cReplay recording stopped"), false));
+        });
     }
 }
