@@ -7,13 +7,13 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
+import com.zenith.module.impl.VisualRange;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.PLAYER_LISTS;
+import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static com.zenith.command.util.CommandOutputHelper.playerListToString;
@@ -49,6 +49,7 @@ public class VisualRangeCommand extends Command {
         return command("visualRange")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.visualRange.enabled = getToggle(c, "toggle");
+                MODULE.get(VisualRange.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("VisualRange " + toggleStrCaps(CONFIG.client.extra.visualRange.enabled));
                 return 1;
