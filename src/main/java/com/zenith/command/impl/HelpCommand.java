@@ -2,7 +2,11 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.*;
+import com.zenith.command.Command;
+import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;

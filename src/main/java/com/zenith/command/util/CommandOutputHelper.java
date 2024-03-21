@@ -1,6 +1,8 @@
-package com.zenith.command;
+package com.zenith.command.util;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import com.zenith.feature.whitelist.PlayerList;
 import com.zenith.network.server.ServerConnection;

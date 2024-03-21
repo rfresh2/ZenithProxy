@@ -3,17 +3,17 @@ package com.zenith.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import discord4j.rest.util.Color;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 
 import static com.zenith.Shared.VC_API;
-import static com.zenith.command.CustomStringArgumentType.getString;
-import static com.zenith.command.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.discord.DiscordBot.escape;
 import static discord4j.common.util.TimestampFormat.SHORT_DATE_TIME;
 import static java.util.Arrays.asList;

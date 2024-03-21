@@ -1,5 +1,7 @@
 package com.zenith.command;
 
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandSource;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package com.zenith.command;
+package com.zenith.command.util;
 
 import com.mojang.brigadier.context.CommandContext;
 

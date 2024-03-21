@@ -1,4 +1,4 @@
-package com.zenith.command;
+package com.zenith.command.brigadier;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;

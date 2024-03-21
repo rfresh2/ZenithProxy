@@ -1,7 +1,11 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.*;
+import com.zenith.command.Command;
+import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.util.MentionUtil;
@@ -11,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import static com.zenith.Shared.*;
-import static com.zenith.command.CustomStringArgumentType.getString;
-import static com.zenith.command.CustomStringArgumentType.wordWithChars;
-import static com.zenith.command.ToggleArgumentType.getToggle;
-import static com.zenith.command.ToggleArgumentType.toggle;
+import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class DiscordManageCommand extends Command {

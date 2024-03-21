@@ -1,4 +1,4 @@
-package com.zenith.command;
+package com.zenith.command.util;
 
 import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
 import com.github.steveice10.mc.protocol.data.game.command.CommandParser;
@@ -10,6 +10,10 @@ import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
+import com.zenith.command.brigadier.CaseInsensitiveLiteralCommandNode;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CustomStringArgumentType;
+import com.zenith.command.brigadier.ToggleArgumentType;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
