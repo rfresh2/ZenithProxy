@@ -1,7 +1,11 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.*;
+import com.zenith.command.Command;
+import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.util.MentionUtil;
@@ -11,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import static com.zenith.Shared.*;
-import static com.zenith.command.CustomStringArgumentType.getString;
-import static com.zenith.command.CustomStringArgumentType.wordWithChars;
-import static com.zenith.command.ToggleArgumentType.getToggle;
-import static com.zenith.command.ToggleArgumentType.toggle;
+import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class DiscordManageCommand extends Command {
@@ -55,7 +59,7 @@ public class DiscordManageCommand extends Command {
                         .description("Discord bot will now start");
                 }
                 // will stop/start depending on if the bot is enabled
-                SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                 return 1;
             }))
             .then(literal("channel")
@@ -85,8 +89,8 @@ public class DiscordManageCommand extends Command {
                                        .title("Channel set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
-                          if (DISCORD_BOT.isRunning())
-                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          if (DISCORD.isRunning())
+                              EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("relayChannel")
@@ -116,8 +120,8 @@ public class DiscordManageCommand extends Command {
                                        .title("Relay Channel set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
-                          if (DISCORD_BOT.isRunning())
-                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          if (DISCORD.isRunning())
+                              EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("token").requires(DiscordManageCommand::validateTerminalSource)
@@ -128,8 +132,8 @@ public class DiscordManageCommand extends Command {
                                        .title("Token set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
-                          if (DISCORD_BOT.isRunning())
-                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          if (DISCORD.isRunning())
+                              EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("role").requires(DiscordManageCommand::validateTerminalSource)
@@ -224,10 +228,10 @@ public class DiscordManageCommand extends Command {
     private void restartDiscordBot() {
         DISCORD_LOG.info("Restarting discord bot");
         try {
-            DISCORD_BOT.stop(false);
+            DISCORD.stop(false);
             if (CONFIG.discord.enable) {
-                DISCORD_BOT.start();
-                DISCORD_BOT.sendEmbedMessage(Embed.builder()
+                DISCORD.start();
+                DISCORD.sendEmbedMessage(Embed.builder()
                                                  .title("Discord Bot Restarted")
                                                  .color(Color.GREEN));
             } else {

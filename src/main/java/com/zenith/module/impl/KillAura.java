@@ -43,8 +43,8 @@ public class KillAura extends AbstractInventoryModule {
     private boolean isAttacking = false;
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
     private static final int MOVEMENT_PRIORITY = 500;
-    private final IntList swords = ITEMS_MANAGER.getItemsContaining("_sword");
-    private final IntList axes = ITEMS_MANAGER.getItemsContaining("_axe");
+    private final IntList swords = ITEMS.getItemsContaining("_sword");
+    private final IntList axes = ITEMS.getItemsContaining("_axe");
 
     public KillAura() {
         super(false, 1, MOVEMENT_PRIORITY);
@@ -66,7 +66,7 @@ public class KillAura extends AbstractInventoryModule {
 
     public void handleClientTick(final ClientTickEvent event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-                && !MODULE_MANAGER.get(AutoEat.class).isEating()) {
+                && !MODULE.get(AutoEat.class).isEating()) {
             if (delay > 0) {
                 delay--;
                 return;
@@ -74,7 +74,7 @@ public class KillAura extends AbstractInventoryModule {
             // find non-friended players or hostile mobs within 3.5 blocks
             final Entity target = findTarget();
             // rotate to target
-            if (target != null && MODULE_MANAGER.get(PlayerSimulation.class).isOnGround()) {
+            if (target != null && MODULE.get(PlayerSimulation.class).isOnGround()) {
                 isAttacking = true;
                 if (switchToWeapon()) {
                     if (rotateTo(target)) {

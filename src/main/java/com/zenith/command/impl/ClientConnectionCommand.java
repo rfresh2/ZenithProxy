@@ -3,9 +3,9 @@ package com.zenith.command.impl;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
@@ -15,10 +15,10 @@ import java.util.regex.Pattern;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.command.CustomStringArgumentType.getString;
-import static com.zenith.command.CustomStringArgumentType.wordWithChars;
-import static com.zenith.command.ToggleArgumentType.getToggle;
-import static com.zenith.command.ToggleArgumentType.toggle;
+import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ClientConnectionCommand extends Command {

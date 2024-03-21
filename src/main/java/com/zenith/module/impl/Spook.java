@@ -53,7 +53,7 @@ public class Spook extends Module {
         }
         if (isNull(Proxy.getInstance().getCurrentPlayer().get())
                 && !Proxy.getInstance().isInQueue()
-                && !MODULE_MANAGER.get(KillAura.class).isActive()) {
+                && !MODULE.get(KillAura.class).isActive()) {
             stareTick();
         } else {
             hasTarget.lazySet(false);

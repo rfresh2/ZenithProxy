@@ -1,8 +1,11 @@
-package com.zenith.command;
+package com.zenith.command.brigadier;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.zenith.command.util.CommandErrorHandler;
+import com.zenith.command.util.CommandSuccessHandler;
+import com.zenith.command.util.IExecutes;
 
 import java.util.function.Predicate;
 

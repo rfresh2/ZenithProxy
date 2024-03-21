@@ -105,7 +105,7 @@ public class Pathing {
 
     public synchronized void handleTick(final ClientTickEvent event) {
         if (currentMovementInputRequest != DEFAULT_MOVEMENT_INPUT_REQUEST) {
-            MODULE_MANAGER.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
+            MODULE.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
             currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
         }
     }
@@ -162,7 +162,7 @@ public class Pathing {
 
     public static Vector2f rotationTo(final double x, final double y, final double z) {
         final double dx = x - CACHE.getPlayerCache().getX();
-        final double dy = y - (MODULE_MANAGER.get(PlayerSimulation.class).getEyeY());
+        final double dy = y - (MODULE.get(PlayerSimulation.class).getEyeY());
         final double dz = z - CACHE.getPlayerCache().getZ();
         final double distance = Math.sqrt(dx * dx + dz * dz);
         final double yaw = Math.toDegrees(Math.atan2(dz, dx)) - 90.0;

@@ -53,8 +53,9 @@ public class AutoReply extends Module {
                 if (event.isIncomingWhisper()) {
                     if (!event.sender().get().getName().equalsIgnoreCase(CONFIG.authentication.username)
                             && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)
-                            && (DISCORD_BOT.lastRelaymessage.isEmpty()
-                            || Instant.now().minus(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds)).isAfter(DISCORD_BOT.lastRelaymessage.get()))) {
+                            && (DISCORD.lastRelaymessage.isEmpty()
+                            || Instant.now().minus(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds)).isAfter(
+                        DISCORD.lastRelaymessage.get()))) {
                         if (isNull(repliedPlayersCache.getIfPresent(event.sender().get().getName()))) {
                             repliedPlayersCache.put(event.sender().get().getName(), event.sender().get().getName());
                             // 236 char max ( 256 - 4(command) - 16(max name length) )

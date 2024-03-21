@@ -4,7 +4,11 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSy
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
-import com.zenith.command.*;
+import com.zenith.command.Command;
+import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import com.zenith.util.ComponentSerializer;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;

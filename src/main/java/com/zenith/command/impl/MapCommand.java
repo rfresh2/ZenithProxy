@@ -2,9 +2,9 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.feature.map.MapGenerator;
 import com.zenith.feature.map.MapRenderer;

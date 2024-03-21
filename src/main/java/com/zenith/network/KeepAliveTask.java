@@ -5,7 +5,7 @@ import com.zenith.network.server.ServerConnection;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 
 public class KeepAliveTask implements Runnable {
     private final ServerConnection session;
@@ -20,7 +20,7 @@ public class KeepAliveTask implements Runnable {
             session.setLastPingTime(System.currentTimeMillis());
             session.setLastPingId((int) session.getLastPingTime());
             this.session.sendAsync(new ClientboundKeepAlivePacket(session.getLastPingId()));
-            SCHEDULED_EXECUTOR_SERVICE.schedule(this, 2L, TimeUnit.SECONDS);
+            EXECUTOR.schedule(this, 2L, TimeUnit.SECONDS);
         }
     }
 }

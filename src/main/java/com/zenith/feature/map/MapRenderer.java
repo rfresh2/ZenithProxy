@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static com.zenith.Shared.DEFAULT_LOG;
-import static com.zenith.Shared.MAP_BLOCK_COLOR_MANAGER;
+import static com.zenith.Shared.MAP_BLOCK_COLOR;
 
 public class MapRenderer {
     private static final Path mapsOutputPath = Path.of("maps");
@@ -62,8 +62,8 @@ public class MapRenderer {
     public static int getColorFromPackedId(int i) {
         int j = i & 0xFF;
         int colorId = j >> 2;
-        return MAP_BLOCK_COLOR_MANAGER.calculateRGBColorI(
-            MAP_BLOCK_COLOR_MANAGER.getColor(colorId),
+        return MAP_BLOCK_COLOR.calculateRGBColorI(
+            MAP_BLOCK_COLOR.getColor(colorId),
             Brightness.byId(j & 3));
     }
 }

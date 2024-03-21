@@ -32,7 +32,7 @@ public class RespawnHandler implements AsyncPacketHandler<ClientboundRespawnPack
             // we need this method to be invoked *after* the 2nd respawn packet
             // and we only want to invoke it once (on the first)
             // delay is a hacky workaround and might still get caught in race condition sometimes
-            SCHEDULED_EXECUTOR_SERVICE.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
+            EXECUTOR.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
         }
         if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().dimensionName(), packet.getCommonPlayerSpawnInfo().getDimension())) {
             CACHE.reset(false);
@@ -49,7 +49,7 @@ public class RespawnHandler implements AsyncPacketHandler<ClientboundRespawnPack
         if (!packet.isKeepAttributes()) {
             // todo: what do here?
         }
-        MODULE_MANAGER.get(PlayerSimulation.class).handleRespawn();
+        MODULE.get(PlayerSimulation.class).handleRespawn();
         return true;
     }
 

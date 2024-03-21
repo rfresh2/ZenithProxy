@@ -2,9 +2,9 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.ReplayMod;
 import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
@@ -17,9 +17,9 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
-import static com.zenith.command.ToggleArgumentType.getToggle;
-import static com.zenith.command.ToggleArgumentType.toggle;
+import static com.zenith.Shared.MODULE;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ReplayCommand extends Command {
@@ -51,7 +51,7 @@ public class ReplayCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("replay")
             .then(literal("start").executes(c -> {
-                var module = MODULE_MANAGER.get(ReplayMod.class);
+                var module = MODULE.get(ReplayMod.class);
                 if (module.isEnabled()) {
                     c.getSource().getEmbed()
                         .title("Error")
@@ -64,7 +64,7 @@ public class ReplayCommand extends Command {
                 return 1;
             }))
             .then(literal("stop").executes(c -> {
-                var module = MODULE_MANAGER.get(ReplayMod.class);
+                var module = MODULE.get(ReplayMod.class);
                 if (!module.isEnabled()) {
                     c.getSource().getEmbed()
                         .title("Error")

@@ -146,13 +146,13 @@ public class ReplayMod extends Module {
         public void handleProxyClientConnectedEvent(final ProxyClientConnectedEvent event) {
             if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
                 MODULE_LOG.info("Starting ReplayMod recording because player connected");
-                MODULE_MANAGER.get(ReplayMod.class).enable();
+                MODULE.get(ReplayMod.class).enable();
             }
         }
 
         public void handleConnectEvent(ConnectEvent event) {
             if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PROXY_CONNECTED) {
-                MODULE_MANAGER.get(ReplayMod.class).enable();
+                MODULE.get(ReplayMod.class).enable();
             }
         }
     }

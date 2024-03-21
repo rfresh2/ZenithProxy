@@ -4,18 +4,18 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.PLAYER_LISTS;
-import static com.zenith.command.CommandOutputHelper.playerListToString;
-import static com.zenith.command.ToggleArgumentType.getToggle;
-import static com.zenith.command.ToggleArgumentType.toggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
+import static com.zenith.command.util.CommandOutputHelper.playerListToString;
 import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 

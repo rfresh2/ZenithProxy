@@ -1,9 +1,9 @@
 package com.zenith.network.server.handler.player;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
-import com.zenith.command.CommandContext;
-import com.zenith.command.CommandOutputHelper;
-import com.zenith.command.CommandSource;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
+import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
@@ -48,7 +48,7 @@ public class InGameCommandManager {
         final CommandContext commandContext = CommandContext.create(command, CommandSource.IN_GAME_PLAYER);
         // todo: execute commands async wtf!
         //  all we need to do is make sure a corresponding root command node exists and return the boolean value there
-        COMMAND_MANAGER.execute(commandContext);
+        COMMAND.execute(commandContext);
         var embed = commandContext.getEmbed();
         CommandOutputHelper.logEmbedOutputToInGame(embed, session);
         CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
@@ -59,7 +59,7 @@ public class InGameCommandManager {
             }
             return false;
         }
-        if (CONFIG.inGameCommands.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
+        if (CONFIG.inGameCommands.logToDiscord && DISCORD.isRunning() && !commandContext.isSensitiveInput()) {
             // will also log to terminal
             CommandOutputHelper.logInputToDiscord(command, CommandSource.IN_GAME_PLAYER);
             CommandOutputHelper.logEmbedOutputToDiscord(embed);

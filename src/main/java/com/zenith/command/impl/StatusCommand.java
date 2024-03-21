@@ -4,9 +4,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.queue.Queue;
 import com.zenith.network.server.ServerConnection;
 import discord4j.common.util.TimestampFormat;
@@ -140,7 +140,7 @@ public class StatusCommand extends Command {
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
                     .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
                 if (Proxy.getInstance().isConnected())
-                    embed.addField("TPS", TPS_CALCULATOR.getTPS(), true);
+                    embed.addField("TPS", TPS.getTPS(), true);
                 embed.addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator),true);
                 if (!getSpectatorUserNames().isEmpty())
                     embed.addField("Online Spectators", String.join(", ", getSpectatorUserNames()), true);

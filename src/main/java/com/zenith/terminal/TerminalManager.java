@@ -1,9 +1,9 @@
 package com.zenith.terminal;
 
 import com.zenith.Proxy;
-import com.zenith.command.CommandContext;
-import com.zenith.command.CommandOutputHelper;
-import com.zenith.command.CommandSource;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
+import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.terminal.logback.TerminalConsoleAppender;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
@@ -79,10 +79,10 @@ public class TerminalManager {
 
     private void executeDiscordCommand(final String command) {
         final var commandContext = CommandContext.create(command, CommandSource.TERMINAL);
-        COMMAND_MANAGER.execute(commandContext);
+        COMMAND.execute(commandContext);
         if (CONFIG.interactiveTerminal.logToDiscord && !commandContext.isSensitiveInput()) CommandOutputHelper.logInputToDiscord(command, CommandSource.TERMINAL);
         var embed = commandContext.getEmbed();
-        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
+        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD.isRunning() && !commandContext.isSensitiveInput()) {
             CommandOutputHelper.logEmbedOutputToDiscord(embed);
             CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
         } else {

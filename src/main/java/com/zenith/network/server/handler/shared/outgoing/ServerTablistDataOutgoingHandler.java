@@ -39,7 +39,7 @@ public class ServerTablistDataOutgoingHandler implements PacketHandler<Clientbou
                          .appendNewline()
                          .append(ComponentSerializer.minedown(
                              "&9Online: &r&b&l" + getOnlineTime() + " &r&7-&r &r&9TPS: &r&b&l" +
-                                 TPS_CALCULATOR.getTPS() + "&r")).build());
+                                 TPS.getTPS() + "&r")).build());
         } catch (final Exception e) {
             SERVER_LOG.warn("Failed injecting proxy info to tablist footer", e);
             return footer;

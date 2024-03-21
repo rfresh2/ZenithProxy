@@ -4,9 +4,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
-import com.zenith.command.CommandCategory;
-import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.DiscordBot;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoReply;
@@ -15,9 +15,9 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
-import static com.zenith.command.ToggleArgumentType.getToggle;
-import static com.zenith.command.ToggleArgumentType.toggle;
+import static com.zenith.Shared.MODULE;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class AutoReplyCommand extends Command {
@@ -36,14 +36,14 @@ public class AutoReplyCommand extends Command {
         return command("autoReply")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReply.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(AutoReply.class).syncEnabledFromConfig();
+                MODULE.get(AutoReply.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoReply " + toggleStrCaps(CONFIG.client.extra.autoReply.enabled));
                 return 1;
             }))
             .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {
                 int delay = IntegerArgumentType.getInteger(c, "secs");
-                MODULE_MANAGER.get(AutoReply.class).updateCooldown(delay);
+                MODULE.get(AutoReply.class).updateCooldown(delay);
                 c.getSource().getEmbed()
                     .title("AutoReply Cooldown Updated!");
                 return 1;

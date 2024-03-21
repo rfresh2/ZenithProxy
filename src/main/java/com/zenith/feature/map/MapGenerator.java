@@ -97,13 +97,13 @@ public class MapGenerator {
 
                 int height = getHeight(x, z, heightsStorage, (chunk.getMinSection() << 4));
                 int blockStateId = chunk.getBlockStateId(sectionX, height, sectionZ);
-                Block block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId);
+                Block block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
                 int mapColorId = 0;
-                if (block != null) mapColorId = MAP_BLOCK_COLOR_MANAGER.getMapColorId(block.name());
+                if (block != null) mapColorId = MAP_BLOCK_COLOR.getMapColorId(block.name());
                 while (mapColorId == 0 && height > chunk.minY()) {
                     blockStateId = chunk.getBlockStateId(sectionX, --height, sectionZ);
-                    block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId);
-                    if (block != null) mapColorId = MAP_BLOCK_COLOR_MANAGER.getMapColorId(block.name());
+                    block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
+                    if (block != null) mapColorId = MAP_BLOCK_COLOR.getMapColorId(block.name());
                 }
                 if (height > chunk.minY() && World.isWater(block)) {
                     int yUnderBlock = height - 1;
@@ -111,7 +111,7 @@ public class MapGenerator {
                     Block block2;
                     do {
                         blockStateId2 = chunk.getBlockStateId(sectionX, yUnderBlock--, sectionZ);
-                        block2 = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId2);
+                        block2 = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId2);
                         i0++; // water brightness shading
                     } while (yUnderBlock > chunk.minY() && World.isWater(block2));
                 }
@@ -139,7 +139,7 @@ public class MapGenerator {
                     }
                 }
                 d0 = d1;
-                final byte packedId = MAP_BLOCK_COLOR_MANAGER.getPackedId(mapColorId, brightness);
+                final byte packedId = MAP_BLOCK_COLOR.getPackedId(mapColorId, brightness);
                 final int rowX = relChunkX * 16 + sectionX;
                 final int rowZ = relChunkZ * 16 + sectionZ;
                 data[rowX + rowZ * size] = packedId;
@@ -204,7 +204,7 @@ public class MapGenerator {
             for (int z = 0; z < 16; z++) {
                 for (int y = maxBuildHeight; y > minBuildHeight; y--) {
                     final int blockStateId = chunk.getBlockStateId(x, y, z);
-                    Block block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(blockStateId);
+                    Block block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
                     if (block != null && block.id() != Block.AIR.id()) {
                         int index = x + z * 16;
                         storage.set(index, y - minBuildHeight);

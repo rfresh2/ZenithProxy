@@ -24,7 +24,7 @@ public class SpectatorEntityPlayerHead extends SpectatorMob {
     // /summon minecraft:item_display ~ ~ ~ {item:{id:"minecraft:player_head",Count:1b,tag:{SkullOwner:"rfresh2"}}}
     // the uuid and textures get populated by the server usually. but in this case, we're the server
 
-    private int playerHeadItemId = Shared.ITEMS_MANAGER.getItemId("player_head");
+    private int playerHeadItemId = Shared.ITEMS.getItemId("player_head");
 
     @Override
     public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {

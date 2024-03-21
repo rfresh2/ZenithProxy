@@ -21,7 +21,7 @@ public class Queue {
     private static final MCPing mcPing = new MCPing();
 
     public static void start() {
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+        EXECUTOR.scheduleAtFixedRate(
             () -> Thread.ofVirtual().name("Queue Update").start(Queue::updateQueueStatus),
             500L,
             Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES).toMillis(),
@@ -97,7 +97,7 @@ public class Queue {
 
     private static boolean apiUpdate() {
         try {
-            var response = VC_API.getQueue().orElseThrow();
+            var response = VC.getQueue().orElseThrow();
             queueStatus = new QueueStatus(response.prio(), response.regular(), response.time().toEpochSecond());
             return true;
         } catch (final Exception e) {

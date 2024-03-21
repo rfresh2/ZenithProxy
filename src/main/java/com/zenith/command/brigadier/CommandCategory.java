@@ -1,4 +1,4 @@
-package com.zenith.command;
+package com.zenith.command.brigadier;
 
 import lombok.Getter;
 

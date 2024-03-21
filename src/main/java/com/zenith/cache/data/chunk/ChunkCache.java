@@ -79,10 +79,10 @@ public class ChunkCache implements CachedData {
     protected byte[] serverBrand = null;
 
     public ChunkCache() {
-        SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::reapDeadChunks,
-                                                       5L,
-                                                       5L,
-                                                       TimeUnit.MINUTES);
+        EXECUTOR.scheduleAtFixedRate(this::reapDeadChunks,
+                                     5L,
+                                     5L,
+                                     TimeUnit.MINUTES);
         codec = MinecraftCodec.CODEC.getHelperFactory().get();
     }
 
@@ -197,7 +197,7 @@ public class ChunkCache implements CachedData {
                     tileEntity.getZ() == pos.getZ());
             }
         } else {
-            final var block = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(record.getBlock());
+            final var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());
             if (block == null) {
                 CLIENT_LOG.debug("Received block update packet for unknown block: {}", record.getBlock());
                 return;

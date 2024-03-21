@@ -1,6 +1,8 @@
-package com.zenith.command;
+package com.zenith.command.util;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import com.zenith.feature.whitelist.PlayerList;
 import com.zenith.network.server.ServerConnection;
@@ -10,25 +12,25 @@ import net.kyori.adventure.text.Component;
 
 import java.util.List;
 
-import static com.zenith.Shared.DISCORD_BOT;
+import static com.zenith.Shared.DISCORD;
 import static com.zenith.Shared.TERMINAL_LOG;
 
 @UtilityClass
 public class CommandOutputHelper {
     public void logMultiLineOutputToDiscord(CommandContext commandContext) {
-        if (DISCORD_BOT.isRunning()) {
-            commandContext.getMultiLineOutput().forEach(DISCORD_BOT::sendMessage);
+        if (DISCORD.isRunning()) {
+            commandContext.getMultiLineOutput().forEach(DISCORD::sendMessage);
         }
     }
 
     public void logEmbedOutputToDiscord(final Embed embed) {
-        if (DISCORD_BOT.isRunning() && embed.isTitlePresent())
-            DISCORD_BOT.sendEmbedMessage(embed);
+        if (DISCORD.isRunning() && embed.isTitlePresent())
+            DISCORD.sendEmbedMessage(embed);
     }
 
     public void logInputToDiscord(String command, CommandSource source) {
-        if (DISCORD_BOT.isRunning()) {
-            DISCORD_BOT.sendEmbedMessage(Embed.builder()
+        if (DISCORD.isRunning()) {
+            DISCORD.sendEmbedMessage(Embed.builder()
                                              .title(source.getName() + " Command Executed")
                                              .description(command));
         }
@@ -59,8 +61,8 @@ public class CommandOutputHelper {
     }
 
     public void logMultiLineOutput(final List<String> multiLineOutput) {
-        if (DISCORD_BOT.isRunning())
-            multiLineOutput.forEach(DISCORD_BOT::sendMessage);
+        if (DISCORD.isRunning())
+            multiLineOutput.forEach(DISCORD::sendMessage);
         else
             multiLineOutput.forEach(TERMINAL_LOG::info);
     }

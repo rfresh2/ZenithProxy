@@ -19,8 +19,8 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
     @Override
     public ServerboundChatPacket apply(ServerboundChatPacket packet, ServerConnection session) {
         if (CONFIG.inGameCommands.enable) {
-            SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
-                if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(packet.getMessage()).find()) {
+            EXECUTOR.execute(() -> {
+                if (IN_GAME_COMMAND.getCommandPattern().matcher(packet.getMessage()).find()) {
                     TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), packet.getMessage());
                     handleCommandInput(packet.getMessage(), session);
                 } else {

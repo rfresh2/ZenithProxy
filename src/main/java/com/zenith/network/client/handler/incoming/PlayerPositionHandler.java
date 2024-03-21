@@ -15,7 +15,7 @@ import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 import static java.util.Objects.isNull;
 
 public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlayerPositionPacket, ClientSession> {
@@ -31,7 +31,7 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (isNull(currentPlayer)) {
             if (session.isOnline()) {
-                MODULE_MANAGER.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getTeleportId());
+                MODULE.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getTeleportId());
             } else { // todo: handle PlayerOnline state transition better with 1.20.2 configuration phase
                 Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
                 Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
@@ -41,7 +41,7 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
             Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
         } // else send to active player
         SpectatorSync.syncPlayerPositionWithSpectators();
-        MODULE_MANAGER.get(AntiAFK.class).handlePlayerPosRotate();
+        MODULE.get(AntiAFK.class).handlePlayerPosRotate();
         return true;
     }
 }

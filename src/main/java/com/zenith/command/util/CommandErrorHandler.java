@@ -1,7 +1,8 @@
-package com.zenith.command;
+package com.zenith.command.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import com.zenith.command.brigadier.CommandContext;
 
 import java.util.Map;
 

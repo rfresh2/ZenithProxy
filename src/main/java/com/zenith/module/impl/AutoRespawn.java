@@ -36,7 +36,7 @@ public class AutoRespawn extends Module {
 
     public void handleDeathEvent(final DeathEvent event) {
         tickCounter = -tickEventRespawnDelay - (CONFIG.client.extra.autoRespawn.delayMillis / 50);
-        SCHEDULED_EXECUTOR_SERVICE.schedule(this::checkAndRespawn, Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000), TimeUnit.MILLISECONDS);
+        EXECUTOR.schedule(this::checkAndRespawn, Math.max(CONFIG.client.extra.autoRespawn.delayMillis, 1000), TimeUnit.MILLISECONDS);
     }
 
 

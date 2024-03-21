@@ -25,7 +25,7 @@ public class AutoFish extends AbstractInventoryModule {
     private int delay = 0;
     public static final int MOVEMENT_PRIORITY = 10;
     private Instant castTime = Instant.EPOCH;
-    private final int fishingRodId = ITEMS_MANAGER.getItemId("fishing_rod");
+    private final int fishingRodId = ITEMS.getItemId("fishing_rod");
 
     public AutoFish() {
         super(false, 2, MOVEMENT_PRIORITY);
@@ -81,7 +81,7 @@ public class AutoFish extends AbstractInventoryModule {
     }
 
     public void handleClientTick(final ClientTickEvent event) {
-        if (MODULE_MANAGER.get(AutoEat.class).isEating() || MODULE_MANAGER.get(KillAura.class).isActive()) return;
+        if (MODULE.get(AutoEat.class).isEating() || MODULE.get(KillAura.class).isActive()) return;
         if (delay > 0) {
             delay--;
             return;

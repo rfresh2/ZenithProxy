@@ -2,7 +2,11 @@ package com.zenith.command.impl;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.*;
+import com.zenith.command.Command;
+import com.zenith.command.CommandUsage;
+import com.zenith.command.brigadier.CommandCategory;
+import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;
@@ -10,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.zenith.Shared.COMMAND_MANAGER;
+import static com.zenith.Shared.COMMAND;
 import static java.util.Arrays.asList;
 
 public class HelpCommand extends Command {
@@ -36,7 +40,7 @@ public class HelpCommand extends Command {
                     .title("Commands")
                     .color(Color.CYAN);
                 final String commandUsages = getCommandUsages(c.getSource().getSource(), CommandCategory.CORE);
-                final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource().getSource());
+                final String prefix = COMMAND.getCommandPrefix(c.getSource().getSource());
                 c.getSource().getEmbed()
                     .description("**More info:** "
                                      + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
@@ -65,7 +69,7 @@ public class HelpCommand extends Command {
     }
 
     private String getCommandUsages(final CommandSource src, final CommandCategory category) {
-        return COMMAND_MANAGER.getCommands(category).stream()
+        return COMMAND.getCommands(category).stream()
             .sorted((c1, c2) -> c1.commandUsage().getName().compareToIgnoreCase(c2.commandUsage().getName()))
             .map(command -> command.commandUsage().shortSerialize(src))
             .collect(Collectors.joining("\n"));
@@ -73,7 +77,7 @@ public class HelpCommand extends Command {
 
     private void populateCategory(final CommandContext c, final CommandCategory category) {
         final String commandUsages = getCommandUsages(c.getSource(), category);
-        final String prefix = COMMAND_MANAGER.getCommandPrefix(c.getSource());
+        final String prefix = COMMAND.getCommandPrefix(c.getSource());
         c.getEmbed()
             .description("**More info:** "
                              + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
@@ -84,7 +88,7 @@ public class HelpCommand extends Command {
     }
 
     private void populateCommand(final CommandContext c, final String commandName) {
-        final Optional<Command> foundCommand = COMMAND_MANAGER.getCommands().stream()
+        final Optional<Command> foundCommand = COMMAND.getCommands().stream()
             .filter(command -> command.commandUsage().getName().equalsIgnoreCase(commandName)
                 || command.commandUsage().getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(commandName)))
             .findFirst();

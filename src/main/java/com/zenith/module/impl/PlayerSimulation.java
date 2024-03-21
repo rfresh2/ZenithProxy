@@ -65,8 +65,8 @@ public class PlayerSimulation extends Module {
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
-    private final int bubbleColumnDownwardBlockStateId = BLOCK_DATA_MANAGER.getBlockFromName("bubble_column").minStateId();
-    private final int bubbleColumnUpwardBlockStateId = BLOCK_DATA_MANAGER.getBlockFromName("bubble_column").maxStateId();
+    private final int bubbleColumnDownwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").minStateId();
+    private final int bubbleColumnUpwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").maxStateId();
 
     @Override
     public void subscribeEvents() {
@@ -304,7 +304,7 @@ public class PlayerSimulation extends Module {
             // todo: lava movement
         } else {
             final Block floorBlock = World.getBlockAtBlockPos(getVelocityAffectingPos());
-            float floorSlipperiness = BLOCK_DATA_MANAGER.getBlockSlipperiness(floorBlock);
+            float floorSlipperiness = BLOCK_DATA.getBlockSlipperiness(floorBlock);
             float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
             applyMovementInput(movementInputVec, floorSlipperiness);
             if (!isFlying) velocity.setY(velocity.getY() - gravity);

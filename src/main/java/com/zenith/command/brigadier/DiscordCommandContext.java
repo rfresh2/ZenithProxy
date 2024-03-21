@@ -1,4 +1,4 @@
-package com.zenith.command;
+package com.zenith.command.brigadier;
 
 import com.zenith.discord.Embed;
 import discord4j.core.event.domain.message.MessageCreateEvent;

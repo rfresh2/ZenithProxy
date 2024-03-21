@@ -5,14 +5,14 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.TPS_CALCULATOR;
+import static com.zenith.Shared.TPS;
 
 public class SetTimeHandler implements AsyncPacketHandler<ClientboundSetTimePacket, ClientSession> {
 
     @Override
     public boolean applyAsync(ClientboundSetTimePacket packet, ClientSession session) {
         CACHE.getChunkCache().updateWorldTime(packet);
-        TPS_CALCULATOR.handleTimeUpdate();
+        TPS.handleTimeUpdate();
         return true;
     }
 }

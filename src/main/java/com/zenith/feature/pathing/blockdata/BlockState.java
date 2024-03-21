@@ -5,7 +5,7 @@ import com.zenith.feature.pathing.CollisionBox;
 
 import java.util.List;
 
-import static com.zenith.Shared.BLOCK_DATA_MANAGER;
+import static com.zenith.Shared.BLOCK_DATA;
 
 /**
  * @param id palette blockstate id
@@ -16,6 +16,6 @@ public record BlockState(Block block, int id, BlockPos blockPos) {
     }
 
     public List<CollisionBox> getCollisionBoxes() {
-        return BLOCK_DATA_MANAGER.getCollisionBoxesFromBlockStateId(id);
+        return BLOCK_DATA.getCollisionBoxesFromBlockStateId(id);
     }
 }

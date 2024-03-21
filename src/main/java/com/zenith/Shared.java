@@ -87,28 +87,28 @@ public class Shared {
     public static Config CONFIG;
     public static LaunchConfig LAUNCH_CONFIG;
     public static final DataCache CACHE;
-    public static final DiscordBot DISCORD_BOT;
+    public static final DiscordBot DISCORD;
     public static final SimpleEventBus EVENT_BUS;
-    public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE;
+    public static final ScheduledExecutorService EXECUTOR;
     public static final PlayerListsManager PLAYER_LISTS;
-    public static final BlockDataManager BLOCK_DATA_MANAGER;
-    public static final MapBlockColorManager MAP_BLOCK_COLOR_MANAGER;
-    public static final DatabaseManager DATABASE_MANAGER;
-    public static final TPSCalculator TPS_CALCULATOR;
-    public static final ModuleManager MODULE_MANAGER;
+    public static final BlockDataManager BLOCK_DATA;
+    public static final MapBlockColorManager MAP_BLOCK_COLOR;
+    public static final DatabaseManager DATABASE;
+    public static final TPSCalculator TPS;
+    public static final ModuleManager MODULE;
     public static final Pathing PATHING;
-    public static final TerminalManager TERMINAL_MANAGER;
-    public static final InGameCommandManager IN_GAME_COMMAND_MANAGER;
-    public static final CommandManager COMMAND_MANAGER;
-    public static final LanguageManager LANGUAGE_MANAGER;
-    public static final FoodManager FOOD_MANAGER;
-    public static final ItemsManager ITEMS_MANAGER;
-    public static final PlayerInventoryManager PLAYER_INVENTORY_MANAGER;
-    public static final VcApi VC_API;
-    public static final MojangApi MOJANG_API;
-    public static final SessionServerApi SESSION_SERVER_API;
-    public static final MinetoolsApi MINETOOLS_API;
-    public static final PriobanApi PRIOBAN_API;
+    public static final TerminalManager TERMINAL;
+    public static final InGameCommandManager IN_GAME_COMMAND;
+    public static final CommandManager COMMAND;
+    public static final LanguageManager LANGUAGE;
+    public static final FoodManager FOOD;
+    public static final ItemsManager ITEMS;
+    public static final PlayerInventoryManager INVENTORY;
+    public static final VcApi VC;
+    public static final MojangApi MOJANG;
+    public static final SessionServerApi SESSION_SERVER;
+    public static final MinetoolsApi MINETOOLS;
+    public static final PriobanApi PRIOBAN;
     public static synchronized void loadConfig() {
         try {
             DEFAULT_LOG.info("Loading config...");
@@ -210,37 +210,37 @@ public class Shared {
             Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
                 DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e);
             });
-            SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(4, new ThreadFactoryBuilder()
+            EXECUTOR = Executors.newScheduledThreadPool(4, new ThreadFactoryBuilder()
                 .setNameFormat("ZenithProxy Scheduled Executor - #%d")
                 .setDaemon(true)
                 .build());
-            DISCORD_BOT = new DiscordBot();
+            DISCORD = new DiscordBot();
             EVENT_BUS = new SimpleEventBus(Executors.newFixedThreadPool(2, new ThreadFactoryBuilder()
                 .setNameFormat("ZenithProxy Async EventBus - #%d")
                 .setDaemon(true)
                 .build()), DEFAULT_LOG);
             CACHE = new DataCache();
             PLAYER_LISTS = new PlayerListsManager();
-            BLOCK_DATA_MANAGER = new BlockDataManager();
-            MAP_BLOCK_COLOR_MANAGER = new MapBlockColorManager();
-            DATABASE_MANAGER = new DatabaseManager();
-            TPS_CALCULATOR = new TPSCalculator();
-            MODULE_MANAGER = new ModuleManager();
+            BLOCK_DATA = new BlockDataManager();
+            MAP_BLOCK_COLOR = new MapBlockColorManager();
+            DATABASE = new DatabaseManager();
+            TPS = new TPSCalculator();
+            MODULE = new ModuleManager();
             PATHING = new Pathing();
-            TERMINAL_MANAGER = new TerminalManager();
-            IN_GAME_COMMAND_MANAGER = new InGameCommandManager();
-            COMMAND_MANAGER = new CommandManager();
-            LANGUAGE_MANAGER = new LanguageManager();
-            FOOD_MANAGER = new FoodManager();
-            ITEMS_MANAGER = new ItemsManager();
-            PLAYER_INVENTORY_MANAGER = new PlayerInventoryManager();
-            VC_API = new VcApi();
-            MOJANG_API = new MojangApi();
-            SESSION_SERVER_API = new SessionServerApi();
-            MINETOOLS_API = new MinetoolsApi();
-            PRIOBAN_API = new PriobanApi();
+            TERMINAL = new TerminalManager();
+            IN_GAME_COMMAND = new InGameCommandManager();
+            COMMAND = new CommandManager();
+            LANGUAGE = new LanguageManager();
+            FOOD = new FoodManager();
+            ITEMS = new ItemsManager();
+            INVENTORY = new PlayerInventoryManager();
+            VC = new VcApi();
+            MOJANG = new MojangApi();
+            SESSION_SERVER = new SessionServerApi();
+            MINETOOLS = new MinetoolsApi();
+            PRIOBAN = new PriobanApi();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
-            translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE_MANAGER.getLanguageDataMap());
+            translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to initialize!", e);

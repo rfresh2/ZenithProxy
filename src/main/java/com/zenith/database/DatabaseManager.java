@@ -63,7 +63,7 @@ public class DatabaseManager {
             if (databaseTickFuture != null) {
                 databaseTickFuture.cancel(false);
             }
-            databaseTickFuture = SCHEDULED_EXECUTOR_SERVICE
+            databaseTickFuture = EXECUTOR
                 .scheduleAtFixedRate(this::postDatabaseTick,
                                      1L,
                                         5L,
