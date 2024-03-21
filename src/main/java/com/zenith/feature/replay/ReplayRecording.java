@@ -66,7 +66,7 @@ public class ReplayRecording implements Closeable {
 //        metadata.setSelfId(CACHE.getPlayerCache().getEntityId());
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         final String time = formatter.format(ZonedDateTime.now());
-        replayFile = replayDirectory.resolve(time + "_recording.mcpr").toFile();
+        replayFile = replayDirectory.resolve(time + "_" + CONFIG.authentication.username + ".mcpr").toFile();
         replayFile.getParentFile().mkdirs();
         outputStream = new BufferedOutputStream(new FileOutputStream(replayFile));
         zipOutputStream = new ZipOutputStream(outputStream);
