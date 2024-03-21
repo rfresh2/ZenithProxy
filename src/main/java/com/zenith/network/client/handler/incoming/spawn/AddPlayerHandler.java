@@ -12,7 +12,8 @@ import lombok.NonNull;
 
 import java.util.Optional;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EVENT_BUS;
 
 public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayerPacket, ClientSession> {
     @Override
@@ -38,9 +39,6 @@ public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayer
                     .map(entry -> new PlayerListEntry(entry.name(), entry.uuid()))
                     .orElseGet(() -> new PlayerListEntry("", packet.getUuid())));
         EVENT_BUS.postAsync(new NewPlayerInVisualRangeEvent(playerEntry, entity));
-        if (CONFIG.client.extra.visualRangePositionTracking && !PLAYER_LISTS.getFriendsList().contains(playerEntry.getProfileId())) {
-            CLIENT_LOG.info("Tracking Spawn {}: {}, {}, {}", playerEntry.getName(), entity.getX(), entity.getY(), entity.getZ());
-        }
         return true;
     }
 }

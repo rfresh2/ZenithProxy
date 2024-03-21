@@ -50,7 +50,8 @@ public class ModuleManager {
             new PlayerSimulation(),
             new ReplayMod(),
             new Spammer(),
-            new Spook()
+            new Spook(),
+            new VisualRange()
         ).forEach(m -> {
             addModule(m);
             m.syncEnabledFromConfig();

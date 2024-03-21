@@ -117,7 +117,7 @@ public class StatusCommand extends Command {
                         + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
                     .addField("ViaVersion", "Client: " + toggleStr(CONFIG.client.viaversion.enabled)
                         + "\nServer: " + toggleStr(CONFIG.server.viaversion.enabled), true)
-                    .addField("VisualRange", toggleStr(CONFIG.client.extra.visualRangeAlert), true)
+                    .addField("VisualRange", toggleStr(CONFIG.client.extra.visualRange.enabled), true)
                     .addField("AntiLeak", toggleStr(CONFIG.client.extra.antiLeak.enabled), true)
                     .addField("AntiKick", toggleStr(CONFIG.client.extra.antiKick.enabled), true)
                     .addField("AutoFish", toggleStr(CONFIG.client.extra.autoFish.enabled), true)

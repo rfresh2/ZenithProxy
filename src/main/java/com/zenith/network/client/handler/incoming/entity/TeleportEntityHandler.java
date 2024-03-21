@@ -19,7 +19,6 @@ public class TeleportEntityHandler implements AsyncPacketHandler<ClientboundTele
                     .setZ(packet.getZ())
                     .setYaw(packet.getYaw())
                     .setPitch(packet.getPitch());
-            MoveEntityPosRotHandler.trackPlayerVisualRangePosition(entity);
             return true;
         } else {
             CLIENT_LOG.debug("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());

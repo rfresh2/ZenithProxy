@@ -1063,6 +1063,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$VisualRange",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Server",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

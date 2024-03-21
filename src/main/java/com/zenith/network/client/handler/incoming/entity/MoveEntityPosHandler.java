@@ -17,7 +17,6 @@ public class MoveEntityPosHandler implements AsyncPacketHandler<ClientboundMoveE
         entity.setX(entity.getX() + packet.getMoveX())
                 .setY(entity.getY() + packet.getMoveY())
                 .setZ(entity.getZ() + packet.getMoveZ());
-        MoveEntityPosRotHandler.trackPlayerVisualRangePosition(entity);
         return true;
     }
 }

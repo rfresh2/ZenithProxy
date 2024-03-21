@@ -59,9 +59,9 @@ public class DiscordEventListener {
                             of(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
                             of(ProxySpectatorConnectedEvent.class, this::handleProxySpectatorConnectedEvent),
                             of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
-                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
-                            of(PlayerLeftVisualRangeEvent.class, this::handlePlayerLeftVisualRangeEvent),
-                            of(PlayerLogoutInVisualRangeEvent.class, this::handlePlayerLogoutInVisualRangeEvent),
+                            of(VisualRangeEnterEvent.class, this::handleVisualRangeEnterEvent),
+                            of(VisualRangeLeaveEvent.class, this::handleVisualRangeLeaveEvent),
+                            of(VisualRangeLogoutEvent.class, this::handleVisualRangeLogoutEvent),
                             of(NonWhitelistedPlayerConnectedEvent.class, this::handleNonWhitelistedPlayerConnectedEvent),
                             of(ProxySpectatorDisconnectedEvent.class, this::handleProxySpectatorDisconnectedEvent),
                             of(ActiveHoursConnectEvent.class, this::handleActiveHoursConnectEvent),
@@ -115,9 +115,10 @@ public class DiscordEventListener {
             && event.reason().startsWith("You have lost connection")
             && event.onlineDuration().toSeconds() >= 0L
             && event.onlineDuration().toSeconds() <= 1L) {
-            embed.description("You have likely been kicked for reaching the 2b2t non-prio account IP limit."
-                                  + "\nConsider configuring a connection proxy with the `clientConnection` command."
-                                  + "\nOr migrate ZenithProxy instances to multiple hosts/IP's.");
+            embed.description("""
+                              You have likely been kicked for reaching the 2b2t non-prio account IP limit.
+                              Consider configuring a connection proxy with the `clientConnection` command.
+                              Or migrate ZenithProxy instances to multiple hosts/IP's.""");
         }
         sendEmbedMessage(embed);
         EXECUTOR.execute(() -> updatePresence(bot.disconnectedPresence));
@@ -207,16 +208,10 @@ public class DiscordEventListener {
         sendEmbedMessage(builder);
     }
 
-    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
-        if (!CONFIG.client.extra.visualRangeAlert) return;
-        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
-        if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
-            DISCORD_LOG.debug("Ignoring visual range alert for friend: " + event.playerEntry().getName());
-            return;
-        }
+    public void handleVisualRangeEnterEvent(VisualRangeEnterEvent event) {
         var embedCreateSpec = Embed.builder()
             .title("Player In Visual Range")
-            .color(isFriend ? Color.GREEN : Color.RUBY)
+            .color(event.isFriend() ? Color.GREEN : Color.RUBY)
             .addField("Player Name", escape(event.playerEntry().getName()), true)
             .addField("Player UUID", ("[" + event.playerEntry().getProfileId().toString() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString());
@@ -248,35 +243,25 @@ public class DiscordEventListener {
             }
             return Mono.empty();
         };
-        if (CONFIG.client.extra.visualRangeAlertMention) {
-            if (!isFriend) {
-                if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
+        if (CONFIG.client.extra.visualRange.enterAlertMention)
+            if (!event.isFriend())
+                if (CONFIG.discord.visualRangeMentionRoleId.length() > 3)
                     sendEmbedMessageWithButtons(mentionRole(CONFIG.discord.visualRangeMentionRoleId), embedCreateSpec, buttons, mapper, Duration.ofHours(1));
-                } else {
+                else
                     sendEmbedMessageWithButtons(mentionAccountOwner(), embedCreateSpec, buttons, mapper, Duration.ofHours(1));
-                }
-            } else {
+            else
                 sendEmbedMessage(embedCreateSpec);
-            }
-        } else {
-            if (!isFriend) {
+        else
+            if (!event.isFriend())
                 sendEmbedMessageWithButtons(embedCreateSpec, buttons, mapper, Duration.ofHours(1));
-            } else {
+            else
                 sendEmbedMessage(embedCreateSpec);
-            }
-        }
     }
 
-    public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
-        if (!CONFIG.client.extra.visualRangeLeftAlert) return;
-        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
-        if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
-            DISCORD_LOG.debug("Ignoring visual range left alert for friend: " + event.playerEntry().getName());
-            return;
-        }
+    public void handleVisualRangeLeaveEvent(final VisualRangeLeaveEvent event) {
         var embedCreateSpec = Embed.builder()
             .title("Player Left Visual Range")
-            .color(isFriend ? Color.GREEN : Color.RUBY)
+            .color(event.isFriend() ? Color.GREEN : Color.RUBY)
             .addField("Player Name", escape(event.playerEntry().getName()), true)
             .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
@@ -291,16 +276,10 @@ public class DiscordEventListener {
         sendEmbedMessage(embedCreateSpec);
     }
 
-    public void handlePlayerLogoutInVisualRangeEvent(final PlayerLogoutInVisualRangeEvent event) {
-        if (!CONFIG.client.extra.visualRangeLeftAlert || !CONFIG.client.extra.visualRangeLeftLogoutAlert) return;
-        boolean isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntry().getProfileId());
-        if (isFriend && CONFIG.client.extra.visualRangeIgnoreFriends) {
-            DISCORD_LOG.debug("Ignoring visual range logout alert for friend: " + event.playerEntry().getName());
-            return;
-        }
+    public void handleVisualRangeLogoutEvent(final VisualRangeLogoutEvent event) {
         var embedCreateSpec = Embed.builder()
             .title("Player Logout In Visual Range")
-            .color(isFriend ? Color.GREEN : Color.RUBY)
+            .color(event.isFriend() ? Color.GREEN : Color.RUBY)
             .addField("Player Name", escape(event.playerEntry().getName()), true)
             .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
