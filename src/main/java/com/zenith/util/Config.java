@@ -79,12 +79,6 @@ public final class Config {
             public Chat chat = new Chat();
             public AntiKick antiKick = new AntiKick();
             public ReplayMod replayMod = new ReplayMod();
-            public boolean visualRangeAlert = true;
-            public boolean visualRangeIgnoreFriends = false;
-            public boolean visualRangeAlertMention = false;
-            public boolean visualRangePositionTracking = false;
-            public boolean visualRangeLeftAlert = true;
-            public boolean visualRangeLeftLogoutAlert = true;
             public ArrayList<PlayerEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
@@ -93,6 +87,18 @@ public final class Config {
             public boolean killMessage = true;
             public boolean logChatMessages = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
+            public VisualRange visualRange = new VisualRange();
+
+            public static class VisualRange {
+                public boolean enabled = true;
+                public boolean ignoreFriends = false;
+                public boolean enterAlert = true;
+                public boolean enterAlertMention = true;
+                public boolean leaveAlert = true;
+                public boolean logoutAlert = true;
+                public boolean replayRecording = false;
+                public int replayRecordingCooldownMins = 5;
+            }
 
             public static class AntiKick {
                 public boolean enabled = false;
@@ -106,7 +112,6 @@ public final class Config {
                 public boolean hideWhispers = false;
                 public boolean hideDeathMessages = false;
                 public boolean showConnectionMessages = false;
-
             }
 
             public static final class AutoTotem {
