@@ -210,7 +210,7 @@ public class ReplayRecording implements Closeable {
         } else if (packet instanceof ServerboundSwingPacket) {
             SpectatorPacketProvider.playerSwing().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
         } else if (packet instanceof ServerboundPlayerCommandPacket commandPacket) {
-            // send mutated entity metadata
+            SpectatorPacketProvider.playerSneak().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
         }
         /**
          * Known issues because we don't cache these states:
