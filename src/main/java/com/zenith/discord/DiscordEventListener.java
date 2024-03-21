@@ -30,8 +30,7 @@ import java.util.function.Function;
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static com.zenith.command.impl.StatusCommand.getCoordinates;
-import static com.zenith.discord.DiscordBot.escape;
-import static com.zenith.discord.DiscordBot.mentionAccountOwner;
+import static com.zenith.discord.DiscordBot.*;
 import static com.zenith.util.math.MathHelper.formatDuration;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
@@ -252,7 +251,7 @@ public class DiscordEventListener {
         if (CONFIG.client.extra.visualRangeAlertMention) {
             if (!isFriend) {
                 if (CONFIG.discord.visualRangeMentionRoleId.length() > 3) {
-                    sendEmbedMessageWithButtons(DiscordBot.mentionRole(CONFIG.discord.visualRangeMentionRoleId), embedCreateSpec, buttons, mapper, Duration.ofHours(1));
+                    sendEmbedMessageWithButtons(mentionRole(CONFIG.discord.visualRangeMentionRoleId), embedCreateSpec, buttons, mapper, Duration.ofHours(1));
                 } else {
                     sendEmbedMessageWithButtons(mentionAccountOwner(), embedCreateSpec, buttons, mapper, Duration.ofHours(1));
                 }
@@ -332,7 +331,7 @@ public class DiscordEventListener {
             final List<Button> buttons = asList(Button.primary(buttonId, "Whitelist Player"));
             final Function<ButtonInteractionEvent, Publisher<Mono<?>>> mapper = e -> {
                 if (e.getCustomId().equals(buttonId)) {
-                    if (DiscordBot.validateButtonInteractionEventFromAccountOwner(e)) {
+                    if (validateButtonInteractionEventFromAccountOwner(e)) {
                         DISCORD_LOG.info(e.getInteraction().getMember()
                                              .map(User::getTag).orElse("Unknown")
                                              + " whitelisted " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "]");
