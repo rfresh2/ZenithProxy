@@ -8,7 +8,7 @@ import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 
 public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, ServerConnection> {
     @Override
@@ -18,7 +18,7 @@ public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, Serv
         if (session.getFlag(MinecraftConstants.VERIFY_USERS_KEY, true)) {
             session.send(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge()));
         } else {
-            SCHEDULED_EXECUTOR_SERVICE.execute(new UserAuthTask(session, null));
+            EXECUTOR.execute(new UserAuthTask(session, null));
         }
         return null;
     }

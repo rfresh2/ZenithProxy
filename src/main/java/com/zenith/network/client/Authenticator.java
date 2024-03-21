@@ -201,7 +201,7 @@ public class Authenticator {
             AUTH_LOG.debug("Auth token refresh time is negative? {}", time);
             return;
         }
-        this.refreshTask = SCHEDULED_EXECUTOR_SERVICE.schedule(
+        this.refreshTask = EXECUTOR.schedule(
             this::executeAuthCacheRefresh,
             Math.min(time, Duration.ofHours(6).toMillis()),
             MILLISECONDS);

@@ -17,7 +17,7 @@ import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -52,7 +52,7 @@ public class KillAuraCommand extends Command {
         return command("killAura")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.killAura.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(KillAura.class).syncEnabledFromConfig();
+                MODULE.get(KillAura.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                              .title("Kill Aura " + toggleStrCaps(CONFIG.client.extra.killAura.enabled));
                 return 1;

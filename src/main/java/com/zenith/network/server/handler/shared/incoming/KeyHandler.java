@@ -9,7 +9,7 @@ import javax.crypto.SecretKey;
 import java.security.PrivateKey;
 import java.util.Arrays;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 
 public class KeyHandler implements PacketHandler<ServerboundKeyPacket, ServerConnection> {
 
@@ -22,7 +22,7 @@ public class KeyHandler implements PacketHandler<ServerboundKeyPacket, ServerCon
         }
         SecretKey key = packet.getSecretKey(privateKey);
         session.enableEncryption(key);
-        SCHEDULED_EXECUTOR_SERVICE.execute(new UserAuthTask(session, key));
+        EXECUTOR.execute(new UserAuthTask(session, key));
         return null;
     }
 }

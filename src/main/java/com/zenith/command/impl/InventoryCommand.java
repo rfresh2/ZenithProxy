@@ -58,7 +58,7 @@ public class InventoryCommand extends Command {
             .then(literal("hold").then(argument("slot", integer(36, 44)).executes(c -> {
                 if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                 var slot = c.getArgument("slot", Integer.class);
-                var sim = MODULE_MANAGER.get(PlayerSimulation.class);
+                var sim = MODULE.get(PlayerSimulation.class);
                 sim.addTask(() -> {
                     sim.sendClientPacketAsync(new ServerboundSetCarriedItemPacket(slot - 36));
                     logInvDelayed();
@@ -71,7 +71,7 @@ public class InventoryCommand extends Command {
                           if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                           var from = c.getArgument("from", Integer.class);
                           var to = c.getArgument("to", Integer.class);
-                          PLAYER_INVENTORY_MANAGER.invActionReq(this, PLAYER_INVENTORY_MANAGER.swapSlots(from, to), 0);
+                          INVENTORY.invActionReq(this, INVENTORY.swapSlots(from, to), 0);
                           logInvDelayed();
                           c.getSource().setNoOutput(true);
                           return 1;
@@ -113,7 +113,7 @@ public class InventoryCommand extends Command {
     }
 
     private void drop(final int slot, final boolean dropStack) {
-        PLAYER_INVENTORY_MANAGER.invActionReq(
+        INVENTORY.invActionReq(
             this,
             new ContainerClickAction(
                 slot,
@@ -124,7 +124,7 @@ public class InventoryCommand extends Command {
     }
 
     private void logInvDelayed() {
-        SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+        EXECUTOR.schedule(() -> {
             final List<String> output = new ArrayList<>();
             printInvAscii(output, false);
             CommandOutputHelper.logMultiLineOutput(output);
@@ -142,7 +142,7 @@ public class InventoryCommand extends Command {
             var itemStack = playerInv.get(i);
             if (itemStack == Container.EMPTY_STACK) continue;
             slotsWithItems[i] = i + "";
-            var itemData = ITEMS_MANAGER.getItemData(itemStack.getId());
+            var itemData = ITEMS.getItemData(itemStack.getId());
             sb.append("  ").append(i).append(" -> ");
             sb.append(itemData.getName());
             if (itemStack.getAmount() > 1) sb.append(" (x").append(itemStack.getAmount()).append(") ");

@@ -52,8 +52,8 @@ public class DeathMessagesParser {
             final Optional<DeathMessageParseResult> parse = instance.parse(rawInput, getPlayerNames(component));
             if (parse.isPresent()) return parse;
         }
-        if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD_BOT.isRunning()) {
-            DISCORD_BOT.sendEmbedMessage(Embed.builder()
+        if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD.isRunning()) {
+            DISCORD.sendEmbedMessage(Embed.builder()
                                              .title("Unknown death message")
                                              .description(ComponentSerializer.serializeJson(component))
                                              .addField("Message", rawInput, false)

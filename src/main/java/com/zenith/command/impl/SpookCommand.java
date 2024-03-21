@@ -13,7 +13,7 @@ import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -34,7 +34,7 @@ public class SpookCommand extends Command {
         return command("spook")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spook.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(Spook.class).syncEnabledFromConfig();
+                MODULE.get(Spook.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spook " + toggleStrCaps(CONFIG.client.extra.spook.enabled));
                 return 1;

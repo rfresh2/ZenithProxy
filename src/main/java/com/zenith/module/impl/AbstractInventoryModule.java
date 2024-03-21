@@ -73,7 +73,7 @@ public abstract class AbstractInventoryModule extends Module {
             ItemStack itemStack = inventory.get(i);
             if (nonNull(itemStack) && itemPredicate(itemStack)) {
                 var actionSlot = getActionSlot();
-                PLAYER_INVENTORY_MANAGER.invActionReq(
+                INVENTORY.invActionReq(
                     this,
                     new ContainerClickAction(i, ContainerActionType.MOVE_TO_HOTBAR_SLOT, actionSlot),
                     inventoryActionPriority

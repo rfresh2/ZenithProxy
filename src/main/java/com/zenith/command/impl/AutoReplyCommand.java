@@ -15,7 +15,7 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -36,14 +36,14 @@ public class AutoReplyCommand extends Command {
         return command("autoReply")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReply.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(AutoReply.class).syncEnabledFromConfig();
+                MODULE.get(AutoReply.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoReply " + toggleStrCaps(CONFIG.client.extra.autoReply.enabled));
                 return 1;
             }))
             .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {
                 int delay = IntegerArgumentType.getInteger(c, "secs");
-                MODULE_MANAGER.get(AutoReply.class).updateCooldown(delay);
+                MODULE.get(AutoReply.class).updateCooldown(delay);
                 c.getSource().getEmbed()
                     .title("AutoReply Cooldown Updated!");
                 return 1;

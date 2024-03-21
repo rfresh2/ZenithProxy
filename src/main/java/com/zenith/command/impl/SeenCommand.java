@@ -11,7 +11,7 @@ import discord4j.rest.util.Color;
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 
-import static com.zenith.Shared.VC_API;
+import static com.zenith.Shared.VC;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.discord.DiscordBot.escape;
@@ -36,7 +36,7 @@ public class SeenCommand extends Command {
         return command("seen")
             .then(argument("playerName", wordWithChars()).executes(c -> {
                 final String playerName = getString(c, "playerName");
-                var seenResponse = VC_API.getSeen(playerName);
+                var seenResponse = VC.getSeen(playerName);
                 if (seenResponse.isEmpty()) {
                     c.getSource().getEmbed()
                         .title(escape(playerName) + " not found")

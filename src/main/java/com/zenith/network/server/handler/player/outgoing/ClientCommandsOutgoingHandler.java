@@ -14,7 +14,7 @@ public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundC
     @Override
     public ClientboundCommandsPacket apply(final ClientboundCommandsPacket packet, final ServerConnection session) {
         if (CONFIG.inGameCommands.enable && CONFIG.inGameCommands.slashCommands) {
-            CommandNode[] zenithCommandNodes = COMMAND_MANAGER.getMCProtocolLibCommandNodesSupplier().get();
+            CommandNode[] zenithCommandNodes = COMMAND.getMCProtocolLibCommandNodesSupplier().get();
             if (CONFIG.inGameCommands.slashCommandsReplacesServerCommands) {
                 return new ClientboundCommandsPacket(
                     zenithCommandNodes,

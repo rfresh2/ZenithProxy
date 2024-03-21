@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.SESSION_SERVER_API;
+import static com.zenith.Shared.SESSION_SERVER;
 
 public class UserAuthTask implements Runnable {
     private final ServerConnection session;
@@ -26,11 +26,11 @@ public class UserAuthTask implements Runnable {
     public void run() {
         GameProfile profile;
         if (this.key != null) {
-            final Optional<GameProfile> response = SESSION_SERVER_API.hasJoined(
+            final Optional<GameProfile> response = SESSION_SERVER.hasJoined(
                 session.getUsername(),
-                SESSION_SERVER_API.getSharedSecret(session.getServerId(),
-                                                   session.getKeyPair().getPublic(),
-                                                   this.key));
+                SESSION_SERVER.getSharedSecret(session.getServerId(),
+                                               session.getKeyPair().getPublic(),
+                                               this.key));
             if (response.isEmpty()) {
                 this.session.disconnect("Failed to verify username.");
                 return;

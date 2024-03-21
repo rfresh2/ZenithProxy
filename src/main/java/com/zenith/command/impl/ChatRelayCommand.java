@@ -9,7 +9,7 @@ import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.DISCORD_BOT;
+import static com.zenith.Shared.DISCORD;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -42,9 +42,9 @@ public class ChatRelayCommand extends Command {
                 var currentState = CONFIG.discord.chatRelay.enable;
                 CONFIG.discord.chatRelay.enable = getToggle(c, "toggle");
                 if (CONFIG.discord.chatRelay.enable != currentState) {
-                    DISCORD_BOT.stop(false);
+                    DISCORD.stop(false);
                     if (CONFIG.discord.enable)
-                        DISCORD_BOT.start();
+                        DISCORD.start();
                 }
                 c.getSource().getEmbed()
                     .title("Chat Relay " + toggleStrCaps(CONFIG.discord.chatRelay.enable));

@@ -12,7 +12,7 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -42,7 +42,7 @@ public class ServerConfigCommand extends Command {
                 context.getSource().getEmbed()
                     .title("Port Set")
                     .description("Restarting server...");
-                SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+                EXECUTOR.execute(() -> {
                     Proxy.getInstance().stopServer();
                     Proxy.getInstance().startServer();
                 });

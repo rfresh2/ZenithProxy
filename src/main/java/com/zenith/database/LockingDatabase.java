@@ -107,7 +107,7 @@ public abstract class LockingDatabase extends Database {
         Wait.wait(20); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
-            queryExecutorFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
+            queryExecutorFuture = EXECUTOR.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -227,7 +227,7 @@ public abstract class LockingDatabase extends Database {
                 if (nonNull(insertInstance)) {
                     queryExecutor.execute(() -> Objects.requireNonNull(insertInstance).query());
                     if (nonNull(insertInstance.redisQuery())) {
-                        SCHEDULED_EXECUTOR_SERVICE.execute(() -> insertInstance.redisQuery().run());
+                        EXECUTOR.execute(() -> insertInstance.redisQuery().run());
                     }
                 }
             } catch (final Exception e) {

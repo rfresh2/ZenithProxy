@@ -7,7 +7,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 import static java.util.Arrays.asList;
 
 public class ConnectCommand extends Command {
@@ -28,7 +28,7 @@ public class ConnectCommand extends Command {
                 c.getSource().getEmbed()
                         .title("Already Connected!");
             } else {
-                SCHEDULED_EXECUTOR_SERVICE.execute(Proxy.getInstance()::connectAndCatchExceptions);
+                EXECUTOR.execute(Proxy.getInstance()::connectAndCatchExceptions);
             }
         });
     }

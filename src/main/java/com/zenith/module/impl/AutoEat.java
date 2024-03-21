@@ -95,6 +95,6 @@ public class AutoEat extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
-        return FOOD_MANAGER.isSafeFood(itemStack.getId());
+        return FOOD.isSafeFood(itemStack.getId());
     }
 }

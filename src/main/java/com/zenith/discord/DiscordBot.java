@@ -184,7 +184,7 @@ public class DiscordBot {
                 final String inputMessage = message.substring(1);
                 DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
                 final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
-                COMMAND_MANAGER.execute(context);
+                COMMAND.execute(context);
                 final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
                 if (request != null) {
                     DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
@@ -210,12 +210,12 @@ public class DiscordBot {
         if (CONFIG.discord.isUpdating) {
             handleProxyUpdateComplete();
         }
-        this.presenceUpdateFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePresence, 0L,
-                15L, // discord rate limit
-                TimeUnit.SECONDS);
-        this.mainChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+        this.presenceUpdateFuture = EXECUTOR.scheduleAtFixedRate(this::updatePresence, 0L,
+                                                                 15L, // discord rate limit
+                                                                 TimeUnit.SECONDS);
+        this.mainChannelMessageQueueProcessFuture = EXECUTOR.scheduleAtFixedRate(this::processMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         if (CONFIG.discord.chatRelay.enable)
-            this.relayChannelMessageQueueProcessFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
+            this.relayChannelMessageQueueProcessFuture = EXECUTOR.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
     }
 
@@ -342,7 +342,7 @@ public class DiscordBot {
         } catch (final IllegalStateException e) {
             if (e.getMessage().contains("Backpressure overflow")) {
                 DISCORD_LOG.error("Caught backpressure overflow, restarting discord session");
-                SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+                EXECUTOR.execute(() -> {
                     this.stop(false);
                     this.start();
                 });
@@ -622,7 +622,7 @@ public class DiscordBot {
                                   + "\nOr migrate ZenithProxy instances to multiple hosts/IP's.");
         }
         sendEmbedMessage(embed);
-        SCHEDULED_EXECUTOR_SERVICE.execute(() -> this.client.updatePresence(disconnectedPresence).block());
+        EXECUTOR.execute(() -> this.client.updatePresence(disconnectedPresence).block());
     }
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {

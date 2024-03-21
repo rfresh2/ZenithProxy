@@ -35,7 +35,7 @@ public abstract class AutoUpdater {
     }
 
     public void scheduleUpdateCheck(Runnable runnable, long initialDelay, long interval, TimeUnit timeUnit) {
-        updateCheckFuture = SCHEDULED_EXECUTOR_SERVICE
+        updateCheckFuture = EXECUTOR
             .scheduleWithFixedDelay(runnable,
                                     initialDelay,
                                     interval,
@@ -99,7 +99,7 @@ public abstract class AutoUpdater {
             // update immediately if we have prio
             update();
         } else {
-            SCHEDULED_EXECUTOR_SERVICE.schedule(this::conditionalRegularQueueUpdate, 30L, TimeUnit.SECONDS);
+            EXECUTOR.schedule(this::conditionalRegularQueueUpdate, 30L, TimeUnit.SECONDS);
         }
     }
 

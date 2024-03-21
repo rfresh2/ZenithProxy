@@ -38,7 +38,7 @@ public class PlayerListsManager {
 
     public void startRefreshTask() {
         stopRefreshTask();
-        refreshScheduledFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+        refreshScheduledFuture = EXECUTOR.scheduleAtFixedRate(
             this::refreshLists,
             ThreadLocalRandom.current().nextInt(Math.max(1, (int) (CONFIG.server.playerListsRefreshIntervalMins / 2))),
             Math.max(10L, CONFIG.server.playerListsRefreshIntervalMins),
@@ -93,12 +93,12 @@ public class PlayerListsManager {
     }
 
     public static Optional<ProfileData> getProfileFromUsername(final String username) {
-        return MOJANG_API.getProfileFromUsername(username).map(o -> (ProfileData) o)
-            .or(() -> MINETOOLS_API.getProfileFromUsername(username));
+        return MOJANG.getProfileFromUsername(username).map(o -> (ProfileData) o)
+            .or(() -> MINETOOLS.getProfileFromUsername(username));
     }
 
     public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
-        return SESSION_SERVER_API.getProfileFromUUID(uuid).map(o -> (ProfileData) o)
-            .or(() -> MINETOOLS_API.getProfileFromUUID(uuid));
+        return SESSION_SERVER.getProfileFromUUID(uuid).map(o -> (ProfileData) o)
+            .or(() -> MINETOOLS.getProfileFromUUID(uuid));
     }
 }

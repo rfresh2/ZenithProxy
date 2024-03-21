@@ -17,7 +17,7 @@ import java.util.List;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -48,7 +48,7 @@ public class SpammerCommand extends Command {
         return command("spammer")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spammer.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(Spammer.class).syncEnabledFromConfig();
+                MODULE.get(Spammer.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spammer " + toggleStrCaps(CONFIG.client.extra.spammer.enabled));
                 return 1;

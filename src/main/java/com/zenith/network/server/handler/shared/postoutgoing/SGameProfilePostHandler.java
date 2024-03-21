@@ -8,7 +8,7 @@ import com.zenith.network.KeepAliveTask;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
 import com.zenith.network.server.ServerConnection;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 
 public class SGameProfilePostHandler implements PostOutgoingPacketHandler<ClientboundGameProfilePacket, ServerConnection> {
     @Override
@@ -19,7 +19,7 @@ public class SGameProfilePostHandler implements PostOutgoingPacketHandler<Client
             handler.loggedIn(session);
         }
         if (session.getFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true)) {
-            SCHEDULED_EXECUTOR_SERVICE.execute(new KeepAliveTask(session));
+            EXECUTOR.execute(new KeepAliveTask(session));
         }
     }
 }

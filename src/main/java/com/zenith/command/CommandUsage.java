@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zenith.Shared.COMMAND_MANAGER;
+import static com.zenith.Shared.COMMAND;
 
 @Getter
 @Setter
@@ -48,16 +48,16 @@ public class CommandUsage {
         return this.description
             + "\n**Commands**"
             + usageLines.stream()
-            .map(line -> "\n" + COMMAND_MANAGER.getCommandPrefix(commandSource) + name + " " + line)
+            .map(line -> "\n" + COMMAND.getCommandPrefix(commandSource) + name + " " + line)
             .collect(Collectors.joining());
     }
 
     public String shortSerialize(CommandSource commandSource) {
-        String result = COMMAND_MANAGER.getCommandPrefix(commandSource) + this.name;
+        String result = COMMAND.getCommandPrefix(commandSource) + this.name;
         if (!aliases.isEmpty()) {
             result += aliases.stream()
-                    .collect(Collectors.joining(" / " + COMMAND_MANAGER.getCommandPrefix(commandSource),
-                            " / " + COMMAND_MANAGER.getCommandPrefix(commandSource),
+                    .collect(Collectors.joining(" / " + COMMAND.getCommandPrefix(commandSource),
+                            " / " + COMMAND.getCommandPrefix(commandSource),
                             ""));
         }
         return result;

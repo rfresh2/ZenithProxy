@@ -12,8 +12,8 @@ public class ChatHandler implements PacketHandler<ServerboundChatPacket, ServerC
     public ServerboundChatPacket apply(@NonNull ServerboundChatPacket packet, @NonNull ServerConnection session) {
         if (CONFIG.inGameCommands.enable) {
             final String message = packet.getMessage();
-            if (IN_GAME_COMMAND_MANAGER.getCommandPattern().matcher(message).find()) {
-                SCHEDULED_EXECUTOR_SERVICE.execute(() -> IN_GAME_COMMAND_MANAGER.handleInGameCommand(message.substring(CONFIG.inGameCommands.prefix.length()), session, true));
+            if (IN_GAME_COMMAND.getCommandPattern().matcher(message).find()) {
+                EXECUTOR.execute(() -> IN_GAME_COMMAND.handleInGameCommand(message.substring(CONFIG.inGameCommands.prefix.length()), session, true));
                 return null;
             }
         }

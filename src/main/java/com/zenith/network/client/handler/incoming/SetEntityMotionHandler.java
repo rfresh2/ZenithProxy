@@ -7,13 +7,13 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.AsyncPacketHandler;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 
 public class SetEntityMotionHandler implements AsyncPacketHandler<ClientboundSetEntityMotionPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundSetEntityMotionPacket packet, final ClientSession session) {
         if (Proxy.getInstance().getCurrentPlayer().get() == null && packet.getEntityId() == CACHE.getPlayerCache().getEntityId()) {
-            MODULE_MANAGER.get(PlayerSimulation.class).handleSetMotion(packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
+            MODULE.get(PlayerSimulation.class).handleSetMotion(packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
         }
         return true;
     }

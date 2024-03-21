@@ -7,7 +7,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 
-import static com.zenith.Shared.SCHEDULED_EXECUTOR_SERVICE;
+import static com.zenith.Shared.EXECUTOR;
 import static com.zenith.Shared.SYSTEM_DISCONNECT;
 
 public class ReconnectCommand extends Command {
@@ -23,7 +23,7 @@ public class ReconnectCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("reconnect").executes(c -> {
-            SCHEDULED_EXECUTOR_SERVICE.execute(() -> {
+            EXECUTOR.execute(() -> {
                 Proxy.getInstance().disconnect(SYSTEM_DISCONNECT);
                 Proxy.getInstance().cancelAutoReconnect();
                 Proxy.getInstance().connect();

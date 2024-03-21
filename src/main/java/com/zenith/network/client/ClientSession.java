@@ -51,7 +51,7 @@ public class ClientSession extends TcpClientSession {
     public synchronized void startClientTicks() {
         if (this.clientConstantTickFuture == null || this.clientConstantTickFuture.isDone()) {
             EVENT_BUS.post(ClientOnlineTickEvent.Starting.INSTANCE);
-            this.clientConstantTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(
+            this.clientConstantTickFuture = EXECUTOR.scheduleAtFixedRate(
                 () -> EVENT_BUS.post(ClientOnlineTickEvent.INSTANCE), 0L, 10L, TimeUnit.SECONDS);
         }
     }

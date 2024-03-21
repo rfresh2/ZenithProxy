@@ -59,7 +59,7 @@ public class DiscordManageCommand extends Command {
                         .description("Discord bot will now start");
                 }
                 // will stop/start depending on if the bot is enabled
-                SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                 return 1;
             }))
             .then(literal("channel")
@@ -89,8 +89,8 @@ public class DiscordManageCommand extends Command {
                                        .title("Channel set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
-                          if (DISCORD_BOT.isRunning())
-                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          if (DISCORD.isRunning())
+                              EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("relayChannel")
@@ -120,8 +120,8 @@ public class DiscordManageCommand extends Command {
                                        .title("Relay Channel set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
-                          if (DISCORD_BOT.isRunning())
-                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          if (DISCORD.isRunning())
+                              EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("token").requires(DiscordManageCommand::validateTerminalSource)
@@ -132,8 +132,8 @@ public class DiscordManageCommand extends Command {
                                        .title("Token set!")
                                        .color(Color.CYAN)
                                        .description("Discord bot will now restart if enabled");
-                          if (DISCORD_BOT.isRunning())
-                              SCHEDULED_EXECUTOR_SERVICE.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                          if (DISCORD.isRunning())
+                              EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
                       })))
             .then(literal("role").requires(DiscordManageCommand::validateTerminalSource)
@@ -228,10 +228,10 @@ public class DiscordManageCommand extends Command {
     private void restartDiscordBot() {
         DISCORD_LOG.info("Restarting discord bot");
         try {
-            DISCORD_BOT.stop(false);
+            DISCORD.stop(false);
             if (CONFIG.discord.enable) {
-                DISCORD_BOT.start();
-                DISCORD_BOT.sendEmbedMessage(Embed.builder()
+                DISCORD.start();
+                DISCORD.sendEmbedMessage(Embed.builder()
                                                  .title("Discord Bot Restarted")
                                                  .color(Color.GREEN));
             } else {

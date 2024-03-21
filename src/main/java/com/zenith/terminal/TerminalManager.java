@@ -79,10 +79,10 @@ public class TerminalManager {
 
     private void executeDiscordCommand(final String command) {
         final var commandContext = CommandContext.create(command, CommandSource.TERMINAL);
-        COMMAND_MANAGER.execute(commandContext);
+        COMMAND.execute(commandContext);
         if (CONFIG.interactiveTerminal.logToDiscord && !commandContext.isSensitiveInput()) CommandOutputHelper.logInputToDiscord(command, CommandSource.TERMINAL);
         var embed = commandContext.getEmbed();
-        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
+        if (CONFIG.interactiveTerminal.logToDiscord && DISCORD.isRunning() && !commandContext.isSensitiveInput()) {
             CommandOutputHelper.logEmbedOutputToDiscord(embed);
             CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
         } else {

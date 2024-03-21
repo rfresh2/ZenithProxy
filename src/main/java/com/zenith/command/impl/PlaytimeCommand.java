@@ -11,7 +11,7 @@ import discord4j.rest.util.Color;
 
 import java.time.Duration;
 
-import static com.zenith.Shared.VC_API;
+import static com.zenith.Shared.VC;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static java.util.Arrays.asList;
@@ -34,7 +34,7 @@ public class PlaytimeCommand extends Command {
         return command("playtime")
             .then(argument("playerName", wordWithChars()).executes(c -> {
                 final String playerName = getString(c, "playerName");
-                VC_API.getPlaytime(playerName)
+                VC.getPlaytime(playerName)
                     .ifPresentOrElse((response) ->
                                          c.getSource().getEmbed()
                                              .title("Playtime")

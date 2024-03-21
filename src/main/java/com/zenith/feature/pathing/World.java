@@ -36,7 +36,7 @@ public class World {
     }
 
     public Block getBlockAtBlockPos(final BlockPos blockPos) {
-        Block blockData = BLOCK_DATA_MANAGER.getBlockDataFromBlockStateId(getBlockStateId(blockPos));
+        Block blockData = BLOCK_DATA.getBlockDataFromBlockStateId(getBlockStateId(blockPos));
         if (blockData == null)
             return Block.AIR;
         return blockData;
@@ -67,8 +67,8 @@ public class World {
         return false;
     }
 
-    private static final int waterId = BLOCK_DATA_MANAGER.getBlockFromName("water").id();
-    private static final int bubbleColumnId = BLOCK_DATA_MANAGER.getBlockFromName("bubble_column").id();
+    private static final int waterId = BLOCK_DATA.getBlockFromName("water").id();
+    private static final int bubbleColumnId = BLOCK_DATA.getBlockFromName("bubble_column").id();
 
     public boolean isWater(Block block) {
         return block.id() == waterId

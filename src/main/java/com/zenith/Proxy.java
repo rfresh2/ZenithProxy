@@ -117,34 +117,34 @@ public class Proxy {
         initEventHandlers();
         try {
             if (CONFIG.debug.clearOldLogs) clearOldLogs();
-            if (CONFIG.interactiveTerminal.enable) TERMINAL_MANAGER.start();
+            if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
             if (CONFIG.database.enabled) {
-                DATABASE_MANAGER.start();
+                DATABASE.start();
                 DEFAULT_LOG.info("Started Databases");
             }
             if (CONFIG.discord.enable) {
                 boolean err = false;
                 try {
-                    DISCORD_BOT.start();
+                    DISCORD.start();
                 } catch (final Throwable e) {
                     err = true;
                     DISCORD_LOG.error("Failed starting discord bot", e);
                 }
                 if (!err) DISCORD_LOG.info("Started Discord Bot");
             }
-            MODULE_MANAGER.init();
+            MODULE.init();
             Queue.start();
             saveConfigAsync();
             this.startServer();
             CACHE.reset(true);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::handleActiveHoursTick, 0L, 1L, TimeUnit.MINUTES);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::twoB2tTimeLimitKickWarningTick, twoB2tTimeLimit.minusMinutes(10L).toMinutes(), 1L, TimeUnit.MINUTES);
-            SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
+            EXECUTOR.scheduleAtFixedRate(this::handleActiveHoursTick, 0L, 1L, TimeUnit.MINUTES);
+            EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
+            EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
+            EXECUTOR.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
+            EXECUTOR.scheduleAtFixedRate(this::twoB2tTimeLimitKickWarningTick, twoB2tTimeLimit.minusMinutes(10L).toMinutes(), 1L, TimeUnit.MINUTES);
+            EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
-                SCHEDULED_EXECUTOR_SERVICE.submit(this::updateFavicon);
+                EXECUTOR.submit(this::updateFavicon);
             boolean connected = false;
             if (CONFIG.client.autoConnect && !this.isConnected()) {
                 this.connectAndCatchExceptions();
@@ -196,7 +196,7 @@ public class Proxy {
         if (server != null && server.isListening()) return;
         SERVER_LOG.error("Server is not listening! Is another service on this port?");
         this.startServer();
-        SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+        EXECUTOR.schedule(() -> {
             if (server == null || !server.isListening()) {
                 SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
@@ -233,10 +233,10 @@ public class Proxy {
                 stopServer();
                 saveConfig();
                 int count = 0;
-                while (!DISCORD_BOT.isMessageQueueEmpty() && count++ < 10) {
+                while (!DISCORD.isMessageQueueEmpty() && count++ < 10) {
                     Wait.waitMs(100);
                 }
-                DISCORD_BOT.stop(true);
+                DISCORD.stop(true);
             }).get(10L, TimeUnit.SECONDS);
         } catch (final Exception e) {
             DEFAULT_LOG.error("Error shutting down gracefully", e);
@@ -282,7 +282,7 @@ public class Proxy {
         } catch (final Exception e) {
             EVENT_BUS.post(new ProxyLoginFailedEvent());
             getActiveConnections().forEach(connection -> connection.disconnect("Login failed"));
-            SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+            EXECUTOR.schedule(() -> {
                 EVENT_BUS.post(new DisconnectEvent(LOGIN_FAILED));
             }, 1L, TimeUnit.SECONDS);
             return;
@@ -371,12 +371,12 @@ public class Proxy {
         if (CONFIG.server.extra.whitelist.autoAddClient)
             if (PLAYER_LISTS.getWhitelist().add(username, uuid))
                 SERVER_LOG.info("Auto added {} [{}] to whitelist", username, uuid);
-        SCHEDULED_EXECUTOR_SERVICE.execute(this::updateFavicon);
+        EXECUTOR.execute(this::updateFavicon);
         return minecraftProtocol;
     }
 
     public Future<MinecraftProtocol> loginTask() {
-        return SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
+        return EXECUTOR.submit(() -> {
             try {
                 return this.authenticator.login();
             } catch (final Exception e) {
@@ -474,7 +474,7 @@ public class Proxy {
 
     public void updatePrioBanStatus() {
         if (!CONFIG.client.extra.prioBan2b2tCheck || !isOn2b2t()) return;
-        this.isPrioBanned = PRIOBAN_API.checkPrioBan();
+        this.isPrioBanned = PRIOBAN.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.postAsync(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
             CONFIG.authentication.prioBanned = this.isPrioBanned.get();
@@ -525,7 +525,7 @@ public class Proxy {
                 EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
                 this.lastActiveHoursConnect = Instant.now();
                 disconnect(SYSTEM_DISCONNECT);
-                SCHEDULED_EXECUTOR_SERVICE.schedule(this::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
+                EXECUTOR.schedule(this::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
                 break;
             }
         }
@@ -565,10 +565,10 @@ public class Proxy {
                 try (InputStream inputStream = response.body()) {
                     this.serverIcon = inputStream.readAllBytes();
                 }
-                if (DISCORD_BOT.isRunning()) {
+                if (DISCORD.isRunning()) {
                     if (CONFIG.discord.manageNickname)
-                        DISCORD_BOT.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
-                    if (CONFIG.discord.manageDescription) DISCORD_BOT.setBotDescription(
+                        DISCORD.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
+                    if (CONFIG.discord.manageDescription) DISCORD.setBotDescription(
                         """
                         ZenithProxy %s
                         **Official Discord**:
@@ -580,8 +580,8 @@ public class Proxy {
                 SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
             }
         }
-        if (DISCORD_BOT.isRunning())
-            if (CONFIG.discord.manageProfileImage) DISCORD_BOT.updateProfileImage(this.serverIcon);
+        if (DISCORD.isRunning())
+            if (CONFIG.discord.manageProfileImage) DISCORD.updateProfileImage(this.serverIcon);
     }
 
     public void twoB2tTimeLimitKickWarningTick() {
@@ -628,7 +628,7 @@ public class Proxy {
             // skip autoreconnect when we want to sync client disconnect
             if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason())) {
                 if (autoReconnectIsInProgress()) return;
-                this.autoReconnectFuture = Optional.of(SCHEDULED_EXECUTOR_SERVICE.submit(() -> {
+                this.autoReconnectFuture = Optional.of(EXECUTOR.submit(() -> {
                     try {
                         delayBeforeReconnect();
                         if (Thread.currentThread().isInterrupted()) return;
@@ -640,8 +640,8 @@ public class Proxy {
                 }));
             }
         }
-        TPS_CALCULATOR.reset();
-        if (!DISCORD_BOT.isRunning()
+        TPS.reset();
+        if (!DISCORD.isRunning()
             && Proxy.getInstance().isOn2b2t()
             && !Proxy.getInstance().isPrio()
             && event.reason().startsWith("You have lost connection")
@@ -681,7 +681,7 @@ public class Proxy {
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         if (!this.isPrio() && isNull(getCurrentPlayer().get())) {
-            SCHEDULED_EXECUTOR_SERVICE.schedule(() -> {
+            EXECUTOR.schedule(() -> {
                 if (isNull(getCurrentPlayer().get()))
                     disconnect(SERVER_RESTARTING);
             }, ((int) (Math.random() * 20)), TimeUnit.SECONDS);

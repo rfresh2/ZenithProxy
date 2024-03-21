@@ -17,7 +17,7 @@ import static com.zenith.Shared.*;
 public class AutoTotem extends AbstractInventoryModule {
     private int delay = 0;
     private static final int MOVEMENT_PRIORITY = 1000;
-    private final int totemId = ITEMS_MANAGER.getItemId("totem_of_undying");
+    private final int totemId = ITEMS.getItemId("totem_of_undying");
     private Instant lastNoTotemsAlert = Instant.EPOCH;
     private static final Duration noTotemsAlertCooldown = Duration.ofMinutes(30);
 

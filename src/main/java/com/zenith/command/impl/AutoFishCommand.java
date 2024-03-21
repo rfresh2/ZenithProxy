@@ -36,7 +36,7 @@ public class AutoFishCommand extends Command {
         return command("autoFish")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoFish.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(AutoFish.class).syncEnabledFromConfig();
+                MODULE.get(AutoFish.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoFish " + toggleStr(CONFIG.client.extra.autoFish.enabled));
                 return 1;

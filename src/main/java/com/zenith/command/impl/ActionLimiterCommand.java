@@ -12,7 +12,7 @@ import discord4j.rest.util.Color;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE_MANAGER;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -45,7 +45,7 @@ public class ActionLimiterCommand extends Command {
         return command("actionLimiter").requires(Command::validateAccountOwner)
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.enabled = getToggle(c, "toggle");
-                MODULE_MANAGER.get(ActionLimiter.class).syncEnabledFromConfig();
+                MODULE.get(ActionLimiter.class).syncEnabledFromConfig();
                 return 1;
             }))
             .then(literal("allowMovement").then(argument("toggle", toggle()).executes(c -> {

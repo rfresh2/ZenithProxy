@@ -48,7 +48,7 @@ public class InGameCommandManager {
         final CommandContext commandContext = CommandContext.create(command, CommandSource.IN_GAME_PLAYER);
         // todo: execute commands async wtf!
         //  all we need to do is make sure a corresponding root command node exists and return the boolean value there
-        COMMAND_MANAGER.execute(commandContext);
+        COMMAND.execute(commandContext);
         var embed = commandContext.getEmbed();
         CommandOutputHelper.logEmbedOutputToInGame(embed, session);
         CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
@@ -59,7 +59,7 @@ public class InGameCommandManager {
             }
             return false;
         }
-        if (CONFIG.inGameCommands.logToDiscord && DISCORD_BOT.isRunning() && !commandContext.isSensitiveInput()) {
+        if (CONFIG.inGameCommands.logToDiscord && DISCORD.isRunning() && !commandContext.isSensitiveInput()) {
             // will also log to terminal
             CommandOutputHelper.logInputToDiscord(command, CommandSource.IN_GAME_PLAYER);
             CommandOutputHelper.logEmbedOutputToDiscord(embed);

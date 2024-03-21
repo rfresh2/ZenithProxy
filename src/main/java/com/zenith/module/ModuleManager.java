@@ -97,7 +97,7 @@ public class ModuleManager {
         synchronized (this) {
             if (isNull(clientTickFuture) || clientTickFuture.isDone()) {
                 getModules().forEach(Module::clientTickStarting);
-                clientTickFuture = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(() -> {
+                clientTickFuture = EXECUTOR.scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         try {
                             EVENT_BUS.post(ClientTickEvent.INSTANCE);
