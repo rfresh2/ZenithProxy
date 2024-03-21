@@ -7,10 +7,15 @@ import com.zenith.command.CommandContext;
 import com.zenith.command.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.ReplayMod;
+import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
 import discord4j.rest.util.Color;
+
+import java.util.Arrays;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
+import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
 import static com.zenith.command.ToggleArgumentType.getToggle;
@@ -37,7 +42,7 @@ public class ReplayCommand extends Command {
                 "stop",
                 "discordUpload on/off",
                 "maxRecordingTime <minutes>",
-                "autoStart on/off"
+                "autoRecordMode <off/proxyConnected/playerConnected>"
             )
         );
     }
@@ -83,10 +88,21 @@ public class ReplayCommand extends Command {
                     .title("Max Recording Time Set");
                 return 1;
             })))
-            .then(literal("autoStart").then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.client.extra.replayMod.autoStartRecording = getToggle(c, "toggle");
-                c.getSource().getEmbed()
-                    .title("Auto Start " + toggleStrCaps(CONFIG.client.extra.replayMod.autoStartRecording));
+            .then(literal("autoRecordMode").then(argument("mode", string()).executes(c -> {
+                var modeStr = getString(c, "mode").toLowerCase();
+                var foundMode = Arrays.stream(AutoRecordMode.values())
+                    .filter(mode -> mode.getName().toLowerCase().equals(modeStr))
+                    .findFirst();
+                if (foundMode.isEmpty()) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Mode")
+                        .description("Available Modes: " + Arrays.toString(AutoRecordMode.values()));
+                    return 1;
+                } else {
+                    CONFIG.client.extra.replayMod.autoRecordMode = foundMode.get();
+                    c.getSource().getEmbed()
+                        .title("Auto Record Mode Set");
+                }
                 return 1;
             })));
     }
@@ -97,7 +113,7 @@ public class ReplayCommand extends Command {
             .color(Color.CYAN)
             .addField("Discord Upload", toggleStr(CONFIG.client.extra.replayMod.sendRecordingsToDiscord), false)
             .addField("Max Recording Time", getMaxRecordingTimeStr(), false)
-            .addField("Auto Start", toggleStr(CONFIG.client.extra.replayMod.autoStartRecording), false);
+            .addField("Auto Record Mode", CONFIG.client.extra.replayMod.autoRecordMode.getName(), false);
     }
 
     private String getMaxRecordingTimeStr() {

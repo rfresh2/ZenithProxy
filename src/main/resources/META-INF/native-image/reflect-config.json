@@ -1011,6 +1011,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$ReplayMod$AutoRecordMode",
+  "allDeclaredFields":true
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$Spammer",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

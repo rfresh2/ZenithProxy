@@ -8,13 +8,17 @@ import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.ReplayStartedEvent;
 import com.zenith.event.module.ReplayStoppedEvent;
+import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.event.proxy.ProxyClientConnectedEvent;
+import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.feature.replay.ReplayModPacketHandlerCodec;
 import com.zenith.feature.replay.ReplayRecording;
 import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
+import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,13 +31,20 @@ public class ReplayMod extends Module {
     private final PacketHandlerCodec codec = new ReplayModPacketHandlerCodec(this, Integer.MIN_VALUE, "replay-mod");
     private final Path replayDirectory = Paths.get("replays");
     private ReplayRecording replayRecording = new ReplayRecording(replayDirectory);
+    private final ReplayModPersistentEventListener persistentEventListener = new ReplayModPersistentEventListener();
+
+    public ReplayMod() {
+        super();
+        persistentEventListener.subscribeEvents();
+    }
 
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
             of(DisconnectEvent.class, this::onDisconnectEvent),
-            of(ClientTickEvent.class, this::onClientTick)
+            of(ClientTickEvent.class, this::onClientTick),
+            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)
         );
     }
 
@@ -111,5 +122,38 @@ public class ReplayMod extends Module {
         Proxy.getInstance().getActiveConnections().forEach(session -> {
             session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&ZenithProxy&7]&r &cReplay recording stopped"), false));
         });
+    }
+
+    public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
+        if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
+            MODULE_LOG.info("Stopping ReplayMod recording due to player disconnect");
+            disable();
+        }
+    }
+
+    /**
+     * Event listeners even when the module is disabled
+     */
+    public static class ReplayModPersistentEventListener {
+
+        public void subscribeEvents() {
+            EVENT_BUS.subscribe(
+                this,
+                of(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
+                of(ConnectEvent.class, this::handleConnectEvent));
+        }
+
+        public void handleProxyClientConnectedEvent(final ProxyClientConnectedEvent event) {
+            if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
+                MODULE_LOG.info("Starting ReplayMod recording because player connected");
+                MODULE_MANAGER.get(ReplayMod.class).enable();
+            }
+        }
+
+        public void handleConnectEvent(ConnectEvent event) {
+            if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PROXY_CONNECTED) {
+                MODULE_MANAGER.get(ReplayMod.class).enable();
+            }
+        }
     }
 }
