@@ -128,6 +128,9 @@ public class KillAura extends AbstractInventoryModule {
                     return true;
                 }
             }
+            if (CONFIG.client.extra.killAura.targetCustom) {
+                if (CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType())) return true;
+            }
         }
         return false;
     }

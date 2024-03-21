@@ -69,7 +69,7 @@ public class ReplayRecording implements Closeable {
 //        metadata.setSelfId(CACHE.getPlayerCache().getEntityId());
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         final String time = formatter.format(ZonedDateTime.now());
-        replayFile = replayDirectory.resolve(time + "_recording.mcpr").toFile();
+        replayFile = replayDirectory.resolve(time + "_" + CONFIG.authentication.username + ".mcpr").toFile();
         replayFile.getParentFile().mkdirs();
         outputStream = new BufferedOutputStream(new FileOutputStream(replayFile));
         zipOutputStream = new ZipOutputStream(outputStream);
@@ -218,7 +218,7 @@ public class ReplayRecording implements Closeable {
         } else if (packet instanceof ServerboundSwingPacket) {
             SpectatorPacketProvider.playerSwing().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
         } else if (packet instanceof ServerboundPlayerCommandPacket commandPacket) {
-            // send mutated entity metadata
+            SpectatorPacketProvider.playerSneak().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
         }
         /**
          * Known issues because we don't cache these states:

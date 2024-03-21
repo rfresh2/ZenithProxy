@@ -1,8 +1,10 @@
 package com.zenith.util;
 
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -129,11 +131,13 @@ public final class Config {
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
                 public boolean targetNeutralMobs = false;
+                public boolean targetCustom = false;
                 public boolean onlyNeutralAggressive = true;
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
                 public double attackRange = 3.5;
+                public ArrayList<EntityType> customTargets = new ArrayList<>();
             }
 
             public static final class AutoEat {
@@ -191,7 +195,19 @@ public final class Config {
             public static final class ReplayMod {
                 public boolean sendRecordingsToDiscord = false;
                 public int maxRecordingTimeMins = 0;
-                public boolean autoStartRecording = false;
+                public AutoRecordMode autoRecordMode = AutoRecordMode.NONE;
+
+                @Getter
+                public enum AutoRecordMode {
+                    NONE("off"),
+                    PROXY_CONNECTED("proxyConnected"),
+                    PLAYER_CONNECTED("playerConnected");
+                    private final String name;
+
+                    AutoRecordMode(String name) {
+                        this.name = name;
+                    }
+                }
             }
 
             public static final class Utility {

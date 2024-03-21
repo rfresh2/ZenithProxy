@@ -324,6 +324,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.github.steveice10.mc.protocol.data.game.entity.type.EntityType",
+  "allDeclaredFields":true
+},
+{
   "name":"com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket",
   "fields":[{"name":"message"}]
 },
@@ -1009,6 +1013,10 @@
   "name":"com.zenith.util.Config$Client$Extra$ReplayMod",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Client$Extra$ReplayMod$AutoRecordMode",
+  "allDeclaredFields":true
 },
 {
   "name":"com.zenith.util.Config$Client$Extra$Spammer",

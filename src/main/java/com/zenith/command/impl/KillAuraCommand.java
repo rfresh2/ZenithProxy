@@ -1,5 +1,6 @@
 package com.zenith.command.impl;
 
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandCategory;
@@ -9,9 +10,12 @@ import com.zenith.discord.Embed;
 import com.zenith.module.impl.KillAura;
 import discord4j.rest.util.Color;
 
+import java.util.stream.Collectors;
+
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE_MANAGER;
 import static com.zenith.command.ToggleArgumentType.getToggle;
@@ -23,7 +27,11 @@ public class KillAuraCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.full("killAura",
                                  CommandCategory.MODULE,
-                                 "Attacks entities near the player",
+                                 """
+                                 Attacks entities near the player.
+                                 
+                                 Custom targets list: http://gg.gg/19i5rc
+                                 """,
                                  asList("on/off",
                                         "attackDelay <ticks>",
                                         "targetPlayers on/off",
@@ -31,6 +39,8 @@ public class KillAuraCommand extends Command {
                                         "targetNeutralMobs on/off",
                                         "targetNeutralMobs onlyAggressive on/off",
                                         "targetArmorStands on/off",
+                                        "targetCustom on/off",
+                                        "targetCustom add/del <entityType>",
                                         "weaponSwitch on/off",
                                         "range <number>"),
                                  asList("ka")
@@ -101,7 +111,47 @@ public class KillAuraCommand extends Command {
                 c.getSource().getEmbed()
                              .title("Attack Range Set!");
                 return 1;
-            })));
+            })))
+            .then(literal("targetCustom")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.killAura.targetCustom = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                         .title("Target Custom " + toggleStrCaps(CONFIG.client.extra.killAura.targetCustom));
+                            return 1;
+                      }))
+                      .then(literal("add")
+                                .then(argument("entityType", string()).executes(c -> {
+                                    var entityType = c.getArgument("entityType", String.class);
+                                    var foundType = entityType.toUpperCase();
+                                    try {
+                                        var type = Enum.valueOf(EntityType.class, foundType);
+                                        if (!CONFIG.client.extra.killAura.customTargets.contains(type))
+                                            CONFIG.client.extra.killAura.customTargets.add(type);
+                                        c.getSource().getEmbed()
+                                                     .title("Added " + type.name());
+                                    } catch (Exception e) {
+                                        c.getSource().getEmbed()
+                                                     .title("Invalid Entity Type")
+                                                     .color(Color.RUBY);
+                                    }
+                                    return 1;
+                                })))
+                      .then(literal("del")
+                                .then(argument("entityType", string()).executes(c -> {
+                                    var entityType = c.getArgument("entityType", String.class);
+                                    var foundType = entityType.toUpperCase();
+                                    try {
+                                        var type = Enum.valueOf(EntityType.class, foundType);
+                                        CONFIG.client.extra.killAura.customTargets.remove(type);
+                                        c.getSource().getEmbed()
+                                            .title("Removed " + type.name());
+                                    } catch (Exception e) {
+                                        c.getSource().getEmbed()
+                                            .title("Invalid Entity Type")
+                                            .color(Color.RUBY);
+                                    }
+                                    return 1;
+                                }))));
     }
 
     @Override
@@ -111,11 +161,16 @@ public class KillAuraCommand extends Command {
             .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers), false)
             .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs), false)
             .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs), false)
+            .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom), false)
             .addField("Only Aggressive Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive), false)
             .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands), false)
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon), false)
             .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks, false)
             .addField("Attack Range", CONFIG.client.extra.killAura.attackRange, false)
             .color(Color.CYAN);
+        if (CONFIG.client.extra.killAura.targetCustom) {
+            builder.description("Custom Targets: " + CONFIG.client.extra.killAura.customTargets.stream().map(Enum::name).collect(
+                Collectors.joining(", ", "[", "]")));
+        }
     }
 }
