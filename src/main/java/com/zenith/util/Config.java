@@ -1,5 +1,6 @@
 package com.zenith.util;
 
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
@@ -130,11 +131,13 @@ public final class Config {
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
                 public boolean targetNeutralMobs = false;
+                public boolean targetCustom = false;
                 public boolean onlyNeutralAggressive = true;
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
                 public double attackRange = 3.5;
+                public ArrayList<EntityType> customTargets = new ArrayList<>();
             }
 
             public static final class AutoEat {
