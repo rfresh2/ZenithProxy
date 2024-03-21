@@ -97,7 +97,7 @@ public class ReplayMod extends Module {
             this.replayRecording.startRecording();
             EVENT_BUS.postAsync(new ReplayStartedEvent());
             Proxy.getInstance().getActiveConnections().forEach(session -> {
-                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&ZenithProxy&7]&r &cReplay recording started"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&9ZenithProxy&7]&r &cReplay recording started"), false));
             });
         } catch (final Exception e) {
             MODULE_LOG.error("Failed to start ReplayMod recording", e);
@@ -120,7 +120,7 @@ public class ReplayMod extends Module {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
         Proxy.getInstance().getActiveConnections().forEach(session -> {
-            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&ZenithProxy&7]&r &cReplay recording stopped"), false));
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&9ZenithProxy&7]&r &cReplay recording stopped"), false));
         });
     }
 
