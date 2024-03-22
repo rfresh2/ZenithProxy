@@ -19,6 +19,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.queue.Queue;
+import com.zenith.module.impl.AutoReconnect;
 import com.zenith.network.client.Authenticator;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.CustomServerInfoBuilder;
@@ -80,7 +81,6 @@ public class Proxy {
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
-    private Optional<Future<?>> autoReconnectFuture = Optional.empty();
     private Instant lastActiveHoursConnect = Instant.EPOCH;
     private final AtomicBoolean loggingIn = new AtomicBoolean(false);
     @Setter private AutoUpdater autoUpdater;
@@ -211,7 +211,7 @@ public class Proxy {
         if (CONFIG.client.maxPlaytimeReconnect && isOnlineForAtLeastDuration(Duration.ofMinutes(CONFIG.client.maxPlaytimeReconnectMins))) {
             CLIENT_LOG.info("Max playtime minutes reached: {}, reconnecting...", CONFIG.client.maxPlaytimeReconnectMins);
             disconnect(SYSTEM_DISCONNECT);
-            cancelAutoReconnect();
+            MODULE.get(AutoReconnect.class).cancelAutoReconnect();
             connect();
         }
     }
@@ -427,20 +427,6 @@ public class Proxy {
         }
     }
 
-    public boolean cancelAutoReconnect() {
-        if (autoReconnectIsInProgress()) {
-            Future<?> future = this.autoReconnectFuture.get();
-            this.autoReconnectFuture = Optional.empty();
-            future.cancel(true);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean autoReconnectIsInProgress() {
-        return this.autoReconnectFuture.isPresent();
-    }
-
     // returns true if we were previously trying to log in
     public boolean cancelLogin() {
         return this.loggingIn.getAndSet(false);
@@ -452,17 +438,6 @@ public class Proxy {
         return getActiveConnections().stream()
             .filter(ServerConnection::isSpectator)
             .toList();
-    }
-
-    public void delayBeforeReconnect() {
-        final int countdown = CONFIG.client.extra.autoReconnect.delaySeconds;
-        EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
-        // random jitter to help prevent multiple clients from logging in at the same time
-        Wait.wait((((int) (Math.random() * 5))) % 10);
-        for (int i = countdown; i > 0; i-=10) {
-            CLIENT_LOG.info("Reconnecting in {}s", i);
-            Wait.wait(10);
-        }
     }
 
     public boolean hasActivePlayer() {
@@ -626,22 +601,6 @@ public class Proxy {
         this.disconnectTime = Instant.now();
         this.inQueue = false;
         this.queuePosition = 0;
-        if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            // skip autoreconnect when we want to sync client disconnect
-            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason())) {
-                if (autoReconnectIsInProgress()) return;
-                this.autoReconnectFuture = Optional.of(EXECUTOR.submit(() -> {
-                    try {
-                        delayBeforeReconnect();
-                        if (Thread.currentThread().isInterrupted()) return;
-                        connect();
-                        this.autoReconnectFuture = Optional.empty();
-                    } catch (final Exception e) {
-                        CLIENT_LOG.info("AutoReconnect stopped");
-                    }
-                }));
-            }
-        }
         TPS.reset();
         if (!DISCORD.isRunning()
             && Proxy.getInstance().isOn2b2t()
@@ -657,7 +616,6 @@ public class Proxy {
 
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
-        cancelAutoReconnect();
     }
 
     public void handleStartQueueEvent(StartQueueEvent event) {

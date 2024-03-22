@@ -7,10 +7,12 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
+import com.zenith.module.impl.AutoReconnect;
 import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -22,7 +24,12 @@ public class AutoReconnectCommand extends Command {
             "autoReconnect",
             CommandCategory.MODULE,
             "Configure the AutoReconnect feature",
-            asList("on/off", "delay <seconds>", "maxAttempts <number>"));
+            asList(
+                "on/off",
+                "delay <seconds>",
+                "maxAttempts <number>"
+            )
+        );
     }
 
     @Override
@@ -30,6 +37,7 @@ public class AutoReconnectCommand extends Command {
         return command("autoReconnect")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoReconnect.enabled = getToggle(c, "toggle");
+                MODULE.get(AutoReconnect.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoReconnect " + toggleStrCaps(CONFIG.client.extra.autoReconnect.enabled));
                 return 1;

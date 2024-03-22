@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.rfresh2.SimpleEventBus;
-import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
@@ -32,7 +31,6 @@ import com.zenith.network.server.handler.player.InGameCommandManager;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
-import lombok.experimental.UtilityClass;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -44,9 +42,7 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-@UtilityClass
 public class Shared {
-
     public static final Gson GSON = new GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
@@ -71,19 +67,6 @@ public class Shared {
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
     public static final String AUTO_DISCONNECT = "AutoDisconnect";
     public static final String LOGIN_FAILED = "Login Failed";
-    public static boolean isReconnectableDisconnect(final String reason) {
-        if (reason.equals(SYSTEM_DISCONNECT)
-            || reason.equals(MANUAL_DISCONNECT)
-            || reason.equals(MinecraftConstants.SERVER_CLOSING_MESSAGE)
-            || reason.equals(LOGIN_FAILED)
-        ) {
-            return false;
-        } else if (reason.equals(AUTO_DISCONNECT)) {
-            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance().isPrio());
-        } else {
-            return true;
-        }
-    }
     public static Config CONFIG;
     public static LaunchConfig LAUNCH_CONFIG;
     public static final DataCache CACHE;
@@ -100,7 +83,6 @@ public class Shared {
     public static final TerminalManager TERMINAL;
     public static final InGameCommandManager IN_GAME_COMMAND;
     public static final CommandManager COMMAND;
-    public static final LanguageManager LANGUAGE;
     public static final FoodManager FOOD;
     public static final ItemsManager ITEMS;
     public static final PlayerInventoryManager INVENTORY;
@@ -230,7 +212,6 @@ public class Shared {
             TERMINAL = new TerminalManager();
             IN_GAME_COMMAND = new InGameCommandManager();
             COMMAND = new CommandManager();
-            LANGUAGE = new LanguageManager();
             FOOD = new FoodManager();
             ITEMS = new ItemsManager();
             INVENTORY = new PlayerInventoryManager();
@@ -239,8 +220,9 @@ public class Shared {
             SESSION_SERVER = new SessionServerApi();
             MINETOOLS = new MinetoolsApi();
             PRIOBAN = new PriobanApi();
+            final LanguageManager languageManager = new LanguageManager();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
-            translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE.getLanguageDataMap());
+            translationRegistry.registerAll(Locale.ENGLISH, languageManager.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to initialize!", e);

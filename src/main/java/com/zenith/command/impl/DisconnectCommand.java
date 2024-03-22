@@ -6,8 +6,10 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
+import com.zenith.module.impl.AutoReconnect;
 
 import static com.zenith.Shared.DISCORD_LOG;
+import static com.zenith.Shared.MODULE;
 import static java.util.Arrays.asList;
 
 public class DisconnectCommand extends Command {
@@ -26,7 +28,7 @@ public class DisconnectCommand extends Command {
         return command("disconnect").executes(c -> {
             if (!Proxy.getInstance().isConnected()) {
                 boolean loginCancelled = Proxy.getInstance().cancelLogin();
-                boolean autoReconnectCancelled = Proxy.getInstance().cancelAutoReconnect();
+                boolean autoReconnectCancelled = MODULE.get(AutoReconnect.class).cancelAutoReconnect();
                 if (autoReconnectCancelled) {
                     c.getSource().getEmbed()
                         .title("AutoReconnect Cancelled");
@@ -42,7 +44,7 @@ public class DisconnectCommand extends Command {
             } else {
                 try {
                     Proxy.getInstance().disconnect();
-                    Proxy.getInstance().cancelAutoReconnect();
+                    MODULE.get(AutoReconnect.class).cancelAutoReconnect();
                 } catch (final Exception e) {
                     DISCORD_LOG.error("Failed to disconnect", e);
                     c.getSource().getEmbed()

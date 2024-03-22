@@ -13,14 +13,16 @@ import discord4j.rest.util.Color;
 import java.util.Optional;
 
 import static com.zenith.Shared.*;
+import static java.util.Arrays.asList;
 
 public class UpdateCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simple(
+        return CommandUsage.simpleAliases(
             "update",
             CommandCategory.CORE,
-            "Restarts and updates the proxy software"
+            "Restarts and updates the proxy software",
+            asList("restart", "shutdown", "reboot")
         );
     }
 

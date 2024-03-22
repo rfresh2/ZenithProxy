@@ -43,6 +43,7 @@ public class ModuleManager {
             new AutoDisconnect(),
             new AutoEat(),
             new AutoFish(),
+            new AutoReconnect(),
             new AutoReply(),
             new AutoRespawn(),
             new AutoTotem(),

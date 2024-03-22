@@ -7,6 +7,7 @@ import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.event.proxy.DiscordMessageSentEvent;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.queue.Queue;
+import com.zenith.module.impl.AutoReconnect;
 import discord4j.common.ReactorResources;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
@@ -280,7 +281,7 @@ public class DiscordBot {
                     return;
                 }
             }
-            if (Proxy.getInstance().autoReconnectIsInProgress()) {
+            if (MODULE.get(AutoReconnect.class).autoReconnectIsInProgress()) {
                 this.client.updatePresence(autoReconnectingPresence)
                     .block();
                 return;

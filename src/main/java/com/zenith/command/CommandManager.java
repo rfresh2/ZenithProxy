@@ -66,6 +66,7 @@ public class CommandManager {
            new DiscordManageCommand(),
            new DisplayCoordsCommand(),
            new ExtraChatCommand(),
+           new FriendCommand(),
            new HelpCommand(),
            new IgnoreCommand(),
            new InventoryCommand(),
