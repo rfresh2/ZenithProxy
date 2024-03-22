@@ -169,7 +169,7 @@ public class KillAuraCommand extends Command {
             .addField("Attack Range", CONFIG.client.extra.killAura.attackRange, false)
             .color(Color.CYAN);
         if (CONFIG.client.extra.killAura.targetCustom) {
-            builder.description("Custom Targets: " + CONFIG.client.extra.killAura.customTargets.stream().map(Enum::name).collect(
+            builder.description("**Custom Targets**\n" + CONFIG.client.extra.killAura.customTargets.stream().map(Enum::name).collect(
                 Collectors.joining(", ", "[", "]")));
         }
     }
