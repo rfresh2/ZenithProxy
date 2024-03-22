@@ -47,8 +47,10 @@ public class VisualRange extends Module {
             EVENT_BUS.post(new VisualRangeEnterEvent(event.playerEntry(), event.playerEntity(), isFriend));
         }
         if (CONFIG.client.extra.visualRange.replayRecording && !isFriend) {
-            MODULE_LOG.info("[VisualRange] Starting replay recording");
-            MODULE.get(ReplayMod.class).enable();
+            if (!MODULE.get(ReplayMod.class).isEnabled()) {
+                MODULE_LOG.info("[VisualRange] Starting replay recording");
+                MODULE.get(ReplayMod.class).enable();
+            }
             cancelVisualRangeLeaveRecordingStopFuture();
         }
     }
