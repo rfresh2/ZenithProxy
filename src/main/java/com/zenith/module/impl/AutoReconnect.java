@@ -81,7 +81,7 @@ public class AutoReconnect extends Module {
         // random jitter to help prevent multiple clients from logging in at the same time
         Wait.wait((((int) (Math.random() * 5))) % 10);
         for (int i = countdown; i > 0; i-=10) {
-            CLIENT_LOG.info("Reconnecting in {}s", i);
+            MODULE_LOG.info("Reconnecting in {}s", i);
             Wait.wait(10);
         }
     }
