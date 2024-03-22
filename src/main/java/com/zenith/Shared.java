@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.rfresh2.SimpleEventBus;
-import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
@@ -71,19 +70,6 @@ public class Shared {
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
     public static final String AUTO_DISCONNECT = "AutoDisconnect";
     public static final String LOGIN_FAILED = "Login Failed";
-    public static boolean isReconnectableDisconnect(final String reason) {
-        if (reason.equals(SYSTEM_DISCONNECT)
-            || reason.equals(MANUAL_DISCONNECT)
-            || reason.equals(MinecraftConstants.SERVER_CLOSING_MESSAGE)
-            || reason.equals(LOGIN_FAILED)
-        ) {
-            return false;
-        } else if (reason.equals(AUTO_DISCONNECT)) {
-            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance().isPrio());
-        } else {
-            return true;
-        }
-    }
     public static Config CONFIG;
     public static LaunchConfig LAUNCH_CONFIG;
     public static final DataCache CACHE;
