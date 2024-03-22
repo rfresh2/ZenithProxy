@@ -40,10 +40,11 @@ public class VisualRange extends Module {
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         var isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRange.ignoreFriends) {
-            MODULE_LOG.debug("Ignoring visual range enter alert for friend: " + event.playerEntry().getName());
+            MODULE_LOG.debug("[Visual Range] Ignoring enter alert for friend: {}", event.playerEntry().getName());
             return;
         }
         if (CONFIG.client.extra.visualRange.enterAlert) {
+            MODULE_LOG.warn("[Visual Range] {} entered visual range [{}, {}, {}]", event.playerEntry().getName(), event.playerEntity().getX(), event.playerEntity().getY(), event.playerEntity().getZ());
             EVENT_BUS.post(new VisualRangeEnterEvent(event.playerEntry(), event.playerEntity(), isFriend));
         }
         if (CONFIG.client.extra.visualRange.replayRecording && !isFriend) {
@@ -58,10 +59,11 @@ public class VisualRange extends Module {
     public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
         var isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRange.ignoreFriends) {
-            MODULE_LOG.debug("Ignoring visual range leave alert for friend: " + event.playerEntry().getName());
+            MODULE_LOG.debug("[Visual Range] Ignoring leave alert for friend: {}", event.playerEntry().getName());
             return;
         }
         if (CONFIG.client.extra.visualRange.leaveAlert) {
+            MODULE_LOG.warn("[Visual Range] {} left visual range [{}, {}, {}]", event.playerEntry().getName(), event.playerEntity().getX(), event.playerEntity().getY(), event.playerEntity().getZ());
             EVENT_BUS.post(new VisualRangeLeaveEvent(event.playerEntry(), event.playerEntity(), isFriend));
         }
         if (CONFIG.client.extra.visualRange.replayRecording && !isFriend) {
@@ -101,9 +103,10 @@ public class VisualRange extends Module {
         if (!CONFIG.client.extra.visualRange.logoutAlert) return;
         var isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
         if (isFriend && CONFIG.client.extra.visualRange.ignoreFriends) {
-            MODULE_LOG.debug("Ignoring visual range leave alert for friend: " + event.playerEntry().getName());
+            MODULE_LOG.debug("[Visual Range] Ignoring logout alert for friend: {}", event.playerEntry().getName());
             return;
         }
+        MODULE_LOG.warn("[Visual Range] {} logged out in visual range [{}, {}, {}]", event.playerEntry().getName(), event.playerEntity().getX(), event.playerEntity().getY(), event.playerEntity().getZ());
         EVENT_BUS.post(new VisualRangeLogoutEvent(event.playerEntry(), event.playerEntity(), isFriend));
     }
 }
