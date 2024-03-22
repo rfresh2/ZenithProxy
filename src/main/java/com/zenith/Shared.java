@@ -31,7 +31,6 @@ import com.zenith.network.server.handler.player.InGameCommandManager;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
-import lombok.experimental.UtilityClass;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -43,9 +42,7 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-@UtilityClass
 public class Shared {
-
     public static final Gson GSON = new GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
@@ -86,7 +83,6 @@ public class Shared {
     public static final TerminalManager TERMINAL;
     public static final InGameCommandManager IN_GAME_COMMAND;
     public static final CommandManager COMMAND;
-    public static final LanguageManager LANGUAGE;
     public static final FoodManager FOOD;
     public static final ItemsManager ITEMS;
     public static final PlayerInventoryManager INVENTORY;
@@ -216,7 +212,6 @@ public class Shared {
             TERMINAL = new TerminalManager();
             IN_GAME_COMMAND = new InGameCommandManager();
             COMMAND = new CommandManager();
-            LANGUAGE = new LanguageManager();
             FOOD = new FoodManager();
             ITEMS = new ItemsManager();
             INVENTORY = new PlayerInventoryManager();
@@ -225,8 +220,9 @@ public class Shared {
             SESSION_SERVER = new SessionServerApi();
             MINETOOLS = new MinetoolsApi();
             PRIOBAN = new PriobanApi();
+            final LanguageManager languageManager = new LanguageManager();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
-            translationRegistry.registerAll(Locale.ENGLISH, LANGUAGE.getLanguageDataMap());
+            translationRegistry.registerAll(Locale.ENGLISH, languageManager.getLanguageDataMap());
             GlobalTranslator.translator().addSource(translationRegistry);
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to initialize!", e);
