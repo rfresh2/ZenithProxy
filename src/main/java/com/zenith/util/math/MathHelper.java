@@ -1,6 +1,7 @@
 package com.zenith.util.math;
 
 import lombok.experimental.UtilityClass;
+import org.cloudburstmc.math.vector.Vector3d;
 
 import java.time.Duration;
 
@@ -69,6 +70,37 @@ public class MathHelper {
 
     public static double manhattanDistance2d(double x1, double y1, double x2, double y2) {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    }
+
+    public static double lerp(double delta, double start, double end) {
+        return start + delta * (end - start);
+    }
+
+    public static long lfloor(double d) {
+        long i = (long)d;
+        return d < (double)i ? i - 1L : i;
+    }
+
+    public static double frac(double d) {
+        return d - (double)lfloor(d);
+    }
+
+    public static int sign(double d) {
+        if (d == 0.0) {
+            return 0;
+        } else {
+            return d > 0.0 ? 1 : -1;
+        }
+    }
+
+    public static Vector3d calculateViewVector(final double yaw, final double pitch) {
+        double pitchRad = pitch * (Math.PI / 180.0);
+        double yawRad = -yaw * (Math.PI / 180.0);
+        double yawCos = Math.cos(yawRad);
+        double yawSin = Math.sin(yawRad);
+        double pitchCos = Math.cos(pitchRad);
+        double pitchSin = Math.sin(pitchRad);
+        return Vector3d.from(yawSin * pitchCos, -pitchSin, yawCos * pitchCos);
     }
 
     // is this math? no, but idk where else to put it
