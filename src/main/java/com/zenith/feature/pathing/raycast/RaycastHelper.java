@@ -1,10 +1,16 @@
 package com.zenith.feature.pathing.raycast;
 
+import com.zenith.feature.pathing.CollisionBox;
+import com.zenith.feature.pathing.LocalizedCollisionBox;
 import com.zenith.feature.pathing.World;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3d;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 import static com.zenith.Shared.*;
 
@@ -26,8 +32,6 @@ public class RaycastHelper {
         return raycast(x, y, z, targetX, targetY, targetZ, includeFluids);
     }
 
-    // TODO: calculate block face direction based on collision box
-
     public static BlockRaycastResult raycast(double x1, double y1, double z1, // start point
                                               double x2, double y2, double z2, // end point
                                               boolean includeFluids) {
@@ -41,9 +45,9 @@ public class RaycastHelper {
         int resX = MathHelper.floorToInt(startX);
         int resY = MathHelper.floorToInt(startY);
         int resZ = MathHelper.floorToInt(startZ);
-        Block block = checkRaycastResult(resX, resY, resZ, includeFluids);
+        Block block = getBlockAt(resX, resY, resZ, includeFluids);
         if (!block.equals(Block.AIR)) {
-            return new BlockRaycastResult(true, resX, resY, resZ, block);
+            return new BlockRaycastResult(true, resX, resY, resZ, Direction.DOWN, block);
         }
 
         final double dx = endX - startX;
@@ -76,21 +80,49 @@ public class RaycastHelper {
                 zFrac += zStep;
             }
 
-            block = checkRaycastResult(resX, resY, resZ, includeFluids);
+            final int blockStateId = World.getBlockStateId(resX, resY, resZ);
+            block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
             if (!block.equals(Block.AIR)) {
-                return new BlockRaycastResult(true, resX, resY, resZ, block);
+                var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, blockStateId, block, includeFluids);
+                if (raycastResult.hit()) return raycastResult;
             }
         }
 
-        return new BlockRaycastResult(false, 0, 0, 0, Block.AIR);
+        return BlockRaycastResult.miss();
     }
 
-    private static Block checkRaycastResult(final int x, final int y, final int z, final boolean includeFluids) {
+    private static Block getBlockAt(final int x, final int y, final int z, final boolean includeFluids) {
         var block = World.getBlockAtBlockPos(x, y, z);
         if (!includeFluids && World.isWater(block)) {
             return Block.AIR;
         } else {
             return block;
         }
+    }
+
+    private static BlockRaycastResult checkBlockRaycast(
+        double x, double y, double z,
+        double x2, double y2, double z2,
+        int blockX, int blockY, int blockZ,
+        int blockStateId,
+        Block block,
+        boolean includeFluids) {
+        if (!includeFluids && World.isWater(block)) {
+            return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, Block.AIR);
+        }
+        final List<CollisionBox> collisionBoxes = BLOCK_DATA.getCollisionBoxesFromBlockStateId(blockStateId);
+        if (collisionBoxes == null || collisionBoxes.isEmpty()) return BlockRaycastResult.miss();
+        final List<LocalizedCollisionBox> localizedCBs = collisionBoxes.stream().map(cb -> new LocalizedCollisionBox(cb, blockX, blockY, blockZ)).toList();
+        // find intersecting Direction / Block face with the ray (if any)
+        final List<LocalizedCollisionBox.RayIntersection> intersections = localizedCBs.stream()
+            .map(cb -> cb.rayIntersection(x, y, z, x2, y2, z2))
+            .filter(Objects::nonNull)
+            .toList();
+        if (intersections.isEmpty()) return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, Block.AIR);
+        // select intersection nearest to the start point
+        final LocalizedCollisionBox.RayIntersection intersection = intersections.stream()
+            .min(Comparator.comparingDouble(a -> MathHelper.squaredMagnitude(a.x(), a.y(), a.z())))
+            .orElseThrow();
+        return new BlockRaycastResult(true, blockX, blockY, blockZ, intersection.intersectingFace(), block);
     }
 }
