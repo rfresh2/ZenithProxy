@@ -36,7 +36,9 @@ public class DebugCommand extends Command {
                         "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
                         "packetLog server on/off",
                         "packetLog filter <string>",
-                        "sendChunksBeforePlayerSpawn on/off"
+                        "sendChunksBeforePlayerSpawn on/off",
+                        "kickDisconnect on/off",
+                        "dc"
                 ));
     }
 
@@ -133,7 +135,18 @@ public class DebugCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Send Chunks Before Player Spawn " + toggleStrCaps(CONFIG.debug.sendChunksBeforePlayerSpawn));
                           return 1;
-                      })));
+                      })))
+            .then(literal("kickDisconnect").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.kickDisconnect = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Kick Disconnect " + toggleStrCaps(CONFIG.debug.kickDisconnect));
+                return 1;
+            })))
+            // insta disconnect
+            .then(literal("dc").executes(c -> {
+                c.getSource().setNoOutput(true);
+                Proxy.getInstance().instaKick();
+            }));
     }
 
     @Override

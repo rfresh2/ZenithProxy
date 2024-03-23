@@ -10,6 +10,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSy
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpServer;
@@ -254,13 +255,31 @@ public class Proxy {
     }
 
     public void disconnect(final String reason, final Throwable cause) {
-        if (this.isConnected()) this.client.disconnect(reason, cause);
+        if (this.isConnected()) {
+            if (CONFIG.debug.kickDisconnect) this.instaKick();
+            this.client.disconnect(reason, cause);
+        }
         CACHE.reset(true);
     }
 
     public void disconnect(final String reason) {
-        if (this.isConnected()) this.client.disconnect(reason);
+        if (this.isConnected()) {
+            if (CONFIG.debug.kickDisconnect) this.instaKick();
+            this.client.disconnect(reason);
+        }
         CACHE.reset(true);
+    }
+
+    public void instaKick() {
+        if (!isConnected()) return;
+        var cachedTime = CACHE.getChatCache().getLastChatTimestamp();
+        // out of order timestamp = server kicks us
+        if (cachedTime > 0) {
+            client.sendDirect(new ServerboundChatPacket("", cachedTime - 1, 0L, null, 0, BitSet.valueOf(new byte[20])));
+        } else {
+            client.sendDirect(new ServerboundChatPacket("", 5L, 0L, null, 0, BitSet.valueOf(new byte[20])));
+            client.sendDirect(new ServerboundChatPacket("", 0L, 0L, null, 0, BitSet.valueOf(new byte[20])));
+        }
     }
 
     public void connectAndCatchExceptions() {
