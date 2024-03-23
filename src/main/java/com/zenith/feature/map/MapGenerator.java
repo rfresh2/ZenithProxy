@@ -48,8 +48,8 @@ public class MapGenerator {
             // todo: this only works well for 128x128 maps
             final double playerX = CACHE.getPlayerCache().getX();
             final double playerZ = CACHE.getPlayerCache().getZ();
-            int playerFlooredX = MathHelper.floorToInt((playerX + ((double) size / 2)) / size);
-            int playerFlooredZ = MathHelper.floorToInt((playerZ + ((double) size / 2)) / size);
+            int playerFlooredX = MathHelper.floorI((playerX + ((double) size / 2)) / size);
+            int playerFlooredZ = MathHelper.floorI((playerZ + ((double) size / 2)) / size);
             int centerX = playerFlooredX * size + size / 2 - (size / 2);
             int centerZ = playerFlooredZ * size + size / 2 - (size / 2);
             centerChunkX = centerX / 16;

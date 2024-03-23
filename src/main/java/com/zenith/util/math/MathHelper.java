@@ -7,7 +7,7 @@ import java.time.Duration;
 
 @UtilityClass
 public class MathHelper {
-    public static double squaredMagnitude(double a, double b, double c) {
+    public static double squareLen(double a, double b, double c) {
         return a * a + b * b + c * c;
     }
 
@@ -20,12 +20,12 @@ public class MathHelper {
         return Math.round(n * scale) / scale;
     }
 
-    public static int floorToInt(final double d) {
+    public static int floorI(final double d) {
         final int i = (int)d;
         return d < i ? i - 1 : i;
     }
 
-    public static int ceilToInt(final double d) {
+    public static int ceilI(final double d) {
         final int i = (int)d;
         return d > i ? i + 1 : i;
     }

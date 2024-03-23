@@ -227,7 +227,7 @@ public enum Direction {
     }
 
     public static Direction fromYRot(double angle) {
-        return from2DDataValue(MathHelper.floorToInt(angle / 90.0 + 0.5) & 3);
+        return from2DDataValue(MathHelper.floorI(angle / 90.0 + 0.5) & 3);
     }
 
     public static Direction fromAxisAndDirection(Direction.Axis axis, Direction.AxisDirection axisDirection) {

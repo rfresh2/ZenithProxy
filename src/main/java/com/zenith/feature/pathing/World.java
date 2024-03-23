@@ -88,12 +88,12 @@ public class World {
     }
 
     public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {
-        int minX = MathHelper.floorToInt(cb.getMinX());
-        int maxX = MathHelper.ceilToInt(cb.getMaxX());
-        int minY = MathHelper.floorToInt(cb.getMinY());
-        int maxY = MathHelper.ceilToInt(cb.getMaxY());
-        int minZ = MathHelper.floorToInt(cb.getMinZ());
-        int maxZ = MathHelper.ceilToInt(cb.getMaxZ());
+        int minX = MathHelper.floorI(cb.getMinX());
+        int maxX = MathHelper.ceilI(cb.getMaxX());
+        int minY = MathHelper.floorI(cb.getMinY());
+        int maxY = MathHelper.ceilI(cb.getMaxY());
+        int minZ = MathHelper.floorI(cb.getMinZ());
+        int maxZ = MathHelper.ceilI(cb.getMaxZ());
         final List<BlockPos> blockPosList = new ArrayList<>((maxX - minX) * (maxY - minY) * (maxZ - minZ));
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
