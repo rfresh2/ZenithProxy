@@ -1,5 +1,10 @@
 package com.zenith.feature.pathing.raycast;
 
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
+import com.zenith.cache.data.entity.Entity;
+import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.cache.data.entity.EntityStandard;
+import com.zenith.feature.entities.EntityData;
 import com.zenith.feature.pathing.CollisionBox;
 import com.zenith.feature.pathing.LocalizedCollisionBox;
 import com.zenith.feature.pathing.World;
@@ -8,33 +13,31 @@ import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3d;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
 
 public class RaycastHelper {
 
-    public static BlockRaycastResult playerRaycastBlock(double maxDistance, boolean includeFluids) {
-        return raycastBlock(CACHE.getPlayerCache().getX(), MODULE.get(PlayerSimulation.class).getEyeY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch(), maxDistance, includeFluids);
+    public static BlockRaycastResult playerBlockRaycast(double maxDistance, boolean includeFluids) {
+        return blockRaycastFromPos(CACHE.getPlayerCache().getX(), MODULE.get(PlayerSimulation.class).getEyeY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch(), maxDistance, includeFluids);
     }
 
-    public static BlockRaycastResult raycastBlock(double x, double y, double z, double yaw, double pitch, double maxDistance, boolean includeFluids) {
+    public static BlockRaycastResult blockRaycastFromPos(double x, double y, double z, double yaw, double pitch, double maxDistance, boolean includeFluids) {
         final Vector3d viewVec = MathHelper.calculateViewVector(yaw, pitch);
 
         // end point of the ray
         final double targetX = x + (viewVec.getX() * maxDistance);
         final double targetY = y + (viewVec.getY() * maxDistance);
         final double targetZ = z + (viewVec.getZ() * maxDistance);
-        DEFAULT_LOG.info("Raycast from " + x + ", " + y + ", " + z + " to " + targetX + ", " + targetY + ", " + targetZ);
 
-        return raycast(x, y, z, targetX, targetY, targetZ, includeFluids);
+        return blockRaycast(x, y, z, targetX, targetY, targetZ, includeFluids);
     }
 
-    public static BlockRaycastResult raycast(double x1, double y1, double z1, // start point
-                                              double x2, double y2, double z2, // end point
-                                              boolean includeFluids) {
+    public static BlockRaycastResult blockRaycast(double x1, double y1, double z1, // start point
+                                                  double x2, double y2, double z2, // end point
+                                                  boolean includeFluids) {
         final double startX = MathHelper.lerp(-1.0E-7, x1, x2);
         final double startY = MathHelper.lerp(-1.0E-7, y1, y2);
         final double startZ = MathHelper.lerp(-1.0E-7, z1, z2);
@@ -91,6 +94,86 @@ public class RaycastHelper {
         return BlockRaycastResult.miss();
     }
 
+    public static EntityRaycastResult playerEntityRaycast(double maxDistance) {
+        return entityRaycastFromPos(CACHE.getPlayerCache().getX(), MODULE.get(PlayerSimulation.class).getEyeY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch(), maxDistance);
+    }
+
+    private static EntityRaycastResult entityRaycastFromPos(final double x, final double y, final double z, final float yaw, final float pitch, final double maxDistance) {
+        final Vector3d viewVec = MathHelper.calculateViewVector(yaw, pitch);
+
+        // end point of the ray
+        final double targetX = x + (viewVec.getX() * maxDistance);
+        final double targetY = y + (viewVec.getY() * maxDistance);
+        final double targetZ = z + (viewVec.getZ() * maxDistance);
+        return entityRaycast(x, y, z, targetX, targetY, targetZ);
+    }
+
+    private static EntityRaycastResult entityRaycast(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2) {
+        final double startX = MathHelper.lerp(-1.0E-7, x1, x2);
+        final double startY = MathHelper.lerp(-1.0E-7, y1, y2);
+        final double startZ = MathHelper.lerp(-1.0E-7, z1, z2);
+        final double endX = MathHelper.lerp(-1.0E-7, x2, x1);
+        final double endY = MathHelper.lerp(-1.0E-7, y2, y1);
+        final double endZ = MathHelper.lerp(-1.0E-7, z2, z1);
+
+        final double rayLength = MathHelper.distance3d(x1, y1, z1, x2, y2, z2);
+
+        // todo: make this more efficient, cut out the maps and use a for loop
+
+        Map<Entity, EntityData> entityToData = CACHE.getEntityCache().getEntities().values().stream()
+            .filter(entity -> entity instanceof EntityStandard || entity instanceof EntityPlayer)
+            .filter(entity -> !(entity instanceof EntityPlayer p && p.isSelfPlayer()))
+            // filter out entities that are too far away to possibly intersect
+            .filter(entity -> rayLength > MathHelper.distance3d(
+                x1, y1, z1,
+                entity.getX(), entity.getY(), entity.getZ()))
+            .collect(Collectors.toMap(
+                k -> k,
+                v -> {
+                    EntityType type;
+                    if (v instanceof EntityPlayer)
+                        type = EntityType.PLAYER;
+                    else
+                        type = ((EntityStandard) v).getEntityType();
+                    return ENTITY_DATA.getEntityData(type);
+                }
+            ));
+
+        final List<EntityRaycastResult> results = new ArrayList<>(1);
+        for (Map.Entry<Entity, EntityData> entry : entityToData.entrySet()) {
+            Entity entity = entry.getKey();
+            EntityData data = entry.getValue();
+            if (data == null) continue;
+            LocalizedCollisionBox cb = entityCollisionBox(entity, data);
+            LocalizedCollisionBox.RayIntersection intersection = cb.rayIntersection(startX, startY, startZ, endX, endY, endZ);
+            if (intersection != null) {
+                results.add(new EntityRaycastResult(true, entity));
+            }
+        }
+        return results.stream()
+            .min(Comparator.comparingDouble(
+                e -> MathHelper.distance3d(
+                    x1, y1, z1,
+                    e.entity().getX(), e.entity().getY(), e.entity().getZ()
+                )))
+            .orElse(EntityRaycastResult.miss());
+    }
+
+    private static LocalizedCollisionBox entityCollisionBox(final Entity entity, final EntityData data) {
+        double width = data.width();
+        double height = data.height();
+        double x = entity.getX();
+        double y = entity.getY();
+        double z = entity.getZ();
+        double minX = x - width / 2;
+        double maxX = x + width / 2;
+        double minY = y;
+        double maxY = y + height;
+        double minZ = z - width / 2;
+        double maxZ = z + width / 2;
+        return new LocalizedCollisionBox(minX, maxX, minY, maxY, minZ, maxZ, x, y, z);
+    }
+
     private static Block getBlockAt(final int x, final int y, final int z, final boolean includeFluids) {
         var block = World.getBlockAtBlockPos(x, y, z);
         if (!includeFluids && World.isWater(block)) {
@@ -121,7 +204,7 @@ public class RaycastHelper {
             .map(cb -> cb.rayIntersection(x, y, z, x2, y2, z2))
             .filter(Objects::nonNull)
             .toList();
-        if (intersections.isEmpty()) return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, Block.AIR);
+        if (intersections.isEmpty()) return BlockRaycastResult.miss();
         // select intersection nearest to the start point
         final LocalizedCollisionBox.RayIntersection intersection = intersections.stream()
             .min(Comparator.comparingDouble(a -> MathHelper.squareLen(a.x(), a.y(), a.z())))

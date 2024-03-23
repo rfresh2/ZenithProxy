@@ -72,6 +72,14 @@ public class MathHelper {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 
+    public static double distance3d(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return Math.sqrt(square(x1 - x2) + square(y1 - y2) + square(z1 - z2));
+    }
+
+    public static double manhattanDistance3d(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2);
+    }
+
     public static double lerp(double delta, double start, double end) {
         return start + delta * (end - start);
     }
