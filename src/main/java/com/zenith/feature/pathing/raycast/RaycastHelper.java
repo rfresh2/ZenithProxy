@@ -42,9 +42,9 @@ public class RaycastHelper {
         final double endY = MathHelper.lerp(-1.0E-7, y2, y1);
         final double endZ = MathHelper.lerp(-1.0E-7, z2, z1);
 
-        int resX = MathHelper.floorToInt(startX);
-        int resY = MathHelper.floorToInt(startY);
-        int resZ = MathHelper.floorToInt(startZ);
+        int resX = MathHelper.floorI(startX);
+        int resY = MathHelper.floorI(startY);
+        int resZ = MathHelper.floorI(startZ);
         Block block = getBlockAt(resX, resY, resZ, includeFluids);
         if (!block.equals(Block.AIR)) {
             return new BlockRaycastResult(true, resX, resY, resZ, Direction.DOWN, block);
@@ -100,6 +100,8 @@ public class RaycastHelper {
         }
     }
 
+    // TODO: Does not work for blocks with incongruent interaction boxes
+    //   e.g. torches, flowers, etc. Blocks that you don't collide with but can interact with
     private static BlockRaycastResult checkBlockRaycast(
         double x, double y, double z,
         double x2, double y2, double z2,
@@ -112,6 +114,7 @@ public class RaycastHelper {
         }
         final List<CollisionBox> collisionBoxes = BLOCK_DATA.getCollisionBoxesFromBlockStateId(blockStateId);
         if (collisionBoxes == null || collisionBoxes.isEmpty()) return BlockRaycastResult.miss();
+        // TODO: improve efficiency
         final List<LocalizedCollisionBox> localizedCBs = collisionBoxes.stream().map(cb -> new LocalizedCollisionBox(cb, blockX, blockY, blockZ)).toList();
         // find intersecting Direction / Block face with the ray (if any)
         final List<LocalizedCollisionBox.RayIntersection> intersections = localizedCBs.stream()
@@ -121,7 +124,7 @@ public class RaycastHelper {
         if (intersections.isEmpty()) return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, Block.AIR);
         // select intersection nearest to the start point
         final LocalizedCollisionBox.RayIntersection intersection = intersections.stream()
-            .min(Comparator.comparingDouble(a -> MathHelper.squaredMagnitude(a.x(), a.y(), a.z())))
+            .min(Comparator.comparingDouble(a -> MathHelper.squareLen(a.x(), a.y(), a.z())))
             .orElseThrow();
         return new BlockRaycastResult(true, blockX, blockY, blockZ, intersection.intersectingFace(), block);
     }
