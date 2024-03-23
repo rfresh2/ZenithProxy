@@ -17,6 +17,7 @@ import com.zenith.feature.api.mojang.MojangApi;
 import com.zenith.feature.api.prioban.PriobanApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.api.vcapi.VcApi;
+import com.zenith.feature.entities.EntityDataManager;
 import com.zenith.feature.food.FoodManager;
 import com.zenith.feature.items.ItemsManager;
 import com.zenith.feature.items.PlayerInventoryManager;
@@ -75,6 +76,7 @@ public class Shared {
     public static final ScheduledExecutorService EXECUTOR;
     public static final PlayerListsManager PLAYER_LISTS;
     public static final BlockDataManager BLOCK_DATA;
+    public static final EntityDataManager ENTITY_DATA;
     public static final MapBlockColorManager MAP_BLOCK_COLOR;
     public static final DatabaseManager DATABASE;
     public static final TPSCalculator TPS;
@@ -204,6 +206,7 @@ public class Shared {
             CACHE = new DataCache();
             PLAYER_LISTS = new PlayerListsManager();
             BLOCK_DATA = new BlockDataManager();
+            ENTITY_DATA = new EntityDataManager();
             MAP_BLOCK_COLOR = new MapBlockColorManager();
             DATABASE = new DatabaseManager();
             TPS = new TPSCalculator();

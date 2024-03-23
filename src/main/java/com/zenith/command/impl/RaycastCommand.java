@@ -21,7 +21,7 @@ public class RaycastCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("raycast").executes(c -> {
-            var result = RaycastHelper.playerRaycastBlock(4.5, false);
+            var result = RaycastHelper.playerBlockRaycast(4.5, false);
             c.getSource().getEmbed()
                 .title("Raycast Result")
                 .addField("Hit", result.hit(), false)
@@ -29,6 +29,14 @@ public class RaycastCommand extends Command {
                 .addField("Pos", result.x() + ", " + result.y() + ", " + result.z(), false)
                 .addField("Direction", result.direction().name(), false)
                 .color(Color.CYAN);
-        });
+        })
+            .then(literal("e").executes(c -> {
+                var result = RaycastHelper.playerEntityRaycast(4.5);
+                c.getSource().getEmbed()
+                    .title("Raycast Result")
+                    .addField("Hit", result.hit(), false)
+                    .addField("Entity", result.entity() != null ? result.entity().getEntityId() : -1, false)
+                    .color(Color.CYAN);
+            }));
     }
 }

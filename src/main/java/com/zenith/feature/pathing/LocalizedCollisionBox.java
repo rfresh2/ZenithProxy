@@ -112,6 +112,12 @@ public class LocalizedCollisionBox {
         final double x1, final double y1, final double z1, // start pos
         final double x2, final double y2, final double z2 // end pos
     ) {
+        // Check if the ray's start and end points are both outside the bounding box in the same direction
+        if ((x1 < minX && x2 < minX) || (x1 > maxX && x2 > maxX) ||
+            (y1 < minY && y2 < minY) || (y1 > maxY && y2 > maxY) ||
+            (z1 < minZ && z2 < minZ) || (z1 > maxZ && z2 > maxZ)) {
+            return null;
+        }
         final double xLen = x2 - x1;
         final double yLen = y2 - y1;
         final double zLen = z2 - z1;
