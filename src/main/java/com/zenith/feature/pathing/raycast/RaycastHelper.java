@@ -40,7 +40,7 @@ public class RaycastHelper {
         int resY = MathHelper.floorI(startY);
         int resZ = MathHelper.floorI(startZ);
         Block block = getBlockAt(resX, resY, resZ, includeFluids);
-        if (!block.equals(Block.AIR)) {
+        if (!block.isAir()) {
             return new BlockRaycastResult(true, resX, resY, resZ, Direction.DOWN, block);
         }
 
@@ -76,7 +76,7 @@ public class RaycastHelper {
 
             final int blockStateId = World.getBlockStateId(resX, resY, resZ);
             block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-            if (!block.equals(Block.AIR)) {
+            if (!block.isAir()) {
                 var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, blockStateId, block, includeFluids);
                 if (raycastResult.hit()) return raycastResult;
             }

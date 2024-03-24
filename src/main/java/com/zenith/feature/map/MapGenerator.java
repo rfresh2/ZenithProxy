@@ -205,7 +205,7 @@ public class MapGenerator {
                 for (int y = maxBuildHeight; y > minBuildHeight; y--) {
                     final int blockStateId = chunk.getBlockStateId(x, y, z);
                     Block block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-                    if (block != null && block.id() != Block.AIR.id()) {
+                    if (block != null && !block.isAir()) {
                         int index = x + z * 16;
                         storage.set(index, y - minBuildHeight);
                         break;

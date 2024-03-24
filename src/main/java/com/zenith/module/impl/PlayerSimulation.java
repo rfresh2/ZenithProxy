@@ -10,10 +10,13 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
+import com.zenith.feature.pathing.raycast.BlockRaycastResult;
+import com.zenith.feature.pathing.raycast.RaycastHelper;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +66,9 @@ public class PlayerSimulation extends Module {
     private int jumpingCooldown;
     private final int bubbleColumnDownwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").minStateId();
     private final int bubbleColumnUpwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").maxStateId();
+    private final PlayerInteractionManager interactions = new PlayerInteractionManager();
+    @Setter
+    private boolean holdLeftClick = false;
 
     @Override
     public void subscribeEvents() {
@@ -147,7 +153,17 @@ public class PlayerSimulation extends Module {
         }
     }
 
+    private void interactionTick() {
+        if (holdLeftClick) {
+            final BlockRaycastResult raycast = RaycastHelper.playerBlockRaycast(4.5, false);
+            if (raycast.hit()) {
+                interactions.continueDestroyBlock(new BlockPos(MathHelper.floorI(raycast.x()), MathHelper.floorI(raycast.y()), MathHelper.floorI(raycast.z())), raycast.direction());
+            }
+        }
+    }
+
     private synchronized void tick(final ClientBotTick event) {
+        interactionTick();
         if (this.jumpingCooldown > 0) --this.jumpingCooldown;
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) return;
         if (waitTicks-- > 0) return;

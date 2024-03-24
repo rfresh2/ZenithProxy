@@ -57,6 +57,7 @@ public class CommandManager {
            new AutoTotemCommand(),
            new AutoUpdateCommand(),
            new ChatRelayCommand(),
+           new ClickCommand(),
            new ClientConnectionCommand(),
            new CommandConfigCommand(),
            new ConnectCommand(),

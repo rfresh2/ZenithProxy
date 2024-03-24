@@ -56,8 +56,7 @@ public class PlayerInteractionManager {
             }
 
             BlockState blockState = World.getBlockState(loc);
-            boolean notAir = !blockState.block().equals(Block.AIR);
-            if (!notAir || !(blockBreakSpeed(blockState) >= 1.0)) {
+            if (blockState.block().isAir() || blockBreakSpeed(blockState) < 1.0) {
                 this.isDestroying = true;
                 this.destroyBlockPos = loc;
                 this.destroyingItem = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);

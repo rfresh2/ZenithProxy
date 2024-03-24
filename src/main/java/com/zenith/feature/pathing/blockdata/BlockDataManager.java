@@ -59,6 +59,9 @@ public class BlockDataManager {
                 blockNameToId.put(blockName, blockId);
                 int minStateId = e.get("minStateId").asInt();
                 int maxStateId = e.get("maxStateId").asInt();
+                for (int i = minStateId; i <= maxStateId; i++) {
+                    blockStateIdToBlockId.put(i, blockId);
+                }
                 String boundingBoxType = e.get("boundingBox").asText();
                 boolean isBlock = boundingBoxType.equals("block"); // empty otherwise
                 boolean diggable = e.get("diggable").asBoolean();
