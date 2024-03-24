@@ -1,6 +1,5 @@
 package com.zenith.feature.pathing.raycast;
 
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
@@ -97,7 +96,7 @@ public class RaycastHelper {
         return entityRaycastFromPos(CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY() + 1.6, CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch(), maxDistance);
     }
 
-    private static EntityRaycastResult entityRaycastFromPos(final double x, final double y, final double z, final float yaw, final float pitch, final double maxDistance) {
+    public static EntityRaycastResult entityRaycastFromPos(final double x, final double y, final double z, final float yaw, final float pitch, final double maxDistance) {
         final Vector3d viewVec = MathHelper.calculateViewVector(yaw, pitch);
 
         // end point of the ray
@@ -128,14 +127,7 @@ public class RaycastHelper {
                 entity.getX(), entity.getY(), entity.getZ()))
             .collect(Collectors.toMap(
                 k -> k,
-                v -> {
-                    EntityType type;
-                    if (v instanceof EntityPlayer)
-                        type = EntityType.PLAYER;
-                    else
-                        type = ((EntityStandard) v).getEntityType();
-                    return ENTITY_DATA.getEntityData(type);
-                }
+                v -> ENTITY_DATA.getEntityData(v.getEntityType())
             ));
 
         final List<EntityRaycastResult> results = new ArrayList<>(1);

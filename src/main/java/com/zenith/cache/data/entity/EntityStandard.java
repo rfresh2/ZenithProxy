@@ -1,7 +1,6 @@
 package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
@@ -16,7 +15,6 @@ import java.util.function.Consumer;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class EntityStandard extends EntityLiving {
-    protected EntityType entityType;
 
     @Override
     public void addPackets(final Consumer<Packet> consumer) {
