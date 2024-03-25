@@ -549,9 +549,10 @@ public class Proxy {
                         """
                         ZenithProxy %s
                         **Official Discord**:
-                          https://discord.gg/nJZrSaRKtb"
+                          https://discord.gg/nJZrSaRKtb
                         **Github**:
-                          https://github.com/rfresh2/ZenithProxy""".formatted(LAUNCH_CONFIG.version));
+                          https://github.com/rfresh2/ZenithProxy
+                        """.formatted(LAUNCH_CONFIG.version));
                 }
             } catch (Exception e) {
                 SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);

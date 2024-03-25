@@ -78,6 +78,7 @@ public class CommandManager {
            new ProxyClientConnectionCommand(),
            new QueueStatusCommand(),
            new QueueWarningCommand(),
+           new RaycastCommand(),
            new ReconnectCommand(),
            new ReleaseChannelCommand(),
            new ReplayCommand(),

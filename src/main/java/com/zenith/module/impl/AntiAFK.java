@@ -138,20 +138,20 @@ public class AntiAFK extends Module {
                 shouldWalk = false;
             } else {
                 if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
-                    PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
-                                                        MathHelper.floorToInt(currentPathingGoal.getZ()),
+                    PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorI(currentPathingGoal.getX()),
+                                                        MathHelper.floorI(currentPathingGoal.getZ()),
                                                         MOVEMENT_PRIORITY);
                 else
-                    PATHING.moveRotTowardsBlockPos(MathHelper.floorToInt(currentPathingGoal.getX()),
-                                                    MathHelper.floorToInt(currentPathingGoal.getZ()),
+                    PATHING.moveRotTowardsBlockPos(MathHelper.floorI(currentPathingGoal.getX()),
+                                                    MathHelper.floorI(currentPathingGoal.getZ()),
                                                     MOVEMENT_PRIORITY);
             }
         }
     }
 
     private boolean reachedPathingGoal() {
-        final int px = MathHelper.floorToInt(Pathing.getCurrentPlayerPos().getX());
-        final int pz = MathHelper.floorToInt(Pathing.getCurrentPlayerPos().getZ());
+        final int px = MathHelper.floorI(Pathing.getCurrentPlayerPos().getX());
+        final int pz = MathHelper.floorI(Pathing.getCurrentPlayerPos().getZ());
         return px == currentPathingGoal.getX() && pz == currentPathingGoal.getZ();
     }
 

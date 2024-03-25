@@ -223,6 +223,8 @@
   }, {
     "pattern":"\\Qmcdata/blocks.json\\E"
   }, {
+    "pattern":"\\Qmcdata/entities.json\\E"
+  }, {
     "pattern":"\\Qmcdata/foods.json\\E"
   }, {
     "pattern":"\\Qmcdata/items.json\\E"

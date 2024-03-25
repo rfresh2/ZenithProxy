@@ -26,17 +26,29 @@ public class World {
     }
 
     public int getBlockStateId(final BlockPos blockPos) {
-        final ChunkSection chunk = getChunkSection(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        return getBlockStateId(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public int getBlockStateId(final int x, final int y, final int z) {
+        final ChunkSection chunk = getChunkSection(x, y, z);
         if (chunk == null) return 0;
-        return chunk.getBlock(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15);
+        return chunk.getBlock(x & 15, y & 15, z & 15);
     }
 
     public BlockState getBlockState(final BlockPos blockPos) {
-        return new BlockState(getBlockAtBlockPos(blockPos), getBlockStateId(blockPos), blockPos);
+        return getBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public BlockState getBlockState(final int x, final int y, final int z) {
+        return new BlockState(getBlockAtBlockPos(new BlockPos(x, y, z)), getBlockStateId(x, y, z), new BlockPos(x, y, z));
     }
 
     public Block getBlockAtBlockPos(final BlockPos blockPos) {
-        Block blockData = BLOCK_DATA.getBlockDataFromBlockStateId(getBlockStateId(blockPos));
+        return getBlockAtBlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public Block getBlockAtBlockPos(final int x, final int y, final int z) {
+        Block blockData = BLOCK_DATA.getBlockDataFromBlockStateId(getBlockStateId(x, y, z));
         if (blockData == null)
             return Block.AIR;
         return blockData;
@@ -76,12 +88,12 @@ public class World {
     }
 
     public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {
-        int minX = MathHelper.floorToInt(cb.getMinX());
-        int maxX = MathHelper.ceilToInt(cb.getMaxX());
-        int minY = MathHelper.floorToInt(cb.getMinY());
-        int maxY = MathHelper.ceilToInt(cb.getMaxY());
-        int minZ = MathHelper.floorToInt(cb.getMinZ());
-        int maxZ = MathHelper.ceilToInt(cb.getMaxZ());
+        int minX = MathHelper.floorI(cb.getMinX());
+        int maxX = MathHelper.ceilI(cb.getMaxX());
+        int minY = MathHelper.floorI(cb.getMinY());
+        int maxY = MathHelper.ceilI(cb.getMaxY());
+        int minZ = MathHelper.floorI(cb.getMinZ());
+        int maxZ = MathHelper.ceilI(cb.getMaxZ());
         final List<BlockPos> blockPosList = new ArrayList<>((maxX - minX) * (maxY - minY) * (maxZ - minZ));
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {

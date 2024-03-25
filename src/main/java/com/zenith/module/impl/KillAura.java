@@ -13,6 +13,7 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.feature.pathing.Pathing;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
@@ -158,8 +159,8 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     private boolean rotateTo(Entity entity) {
-        PATHING.rotateTowards(entity.getX(), entity.getY() + 0.2, entity.getZ(), MOVEMENT_PRIORITY);
-        // todo: add a raytrace check to test if we can hit the target
+        var rotation = Pathing.shortestRotationTo(entity);
+        PATHING.rotate(rotation.getX(), rotation.getY(), MOVEMENT_PRIORITY);
         return true;
     }
 

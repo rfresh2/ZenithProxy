@@ -4,6 +4,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
 import com.github.steveice10.mc.protocol.data.game.entity.attribute.AttributeType;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.object.ObjectData;
+import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetPassengersPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateAttributesPacket;
@@ -24,6 +25,7 @@ import java.util.function.Consumer;
 @Data
 @Accessors(chain = true)
 public abstract class Entity {
+    protected EntityType entityType = EntityType.PLAYER;
     protected double x;
     protected double y;
     protected double z;
@@ -43,6 +45,7 @@ public abstract class Entity {
     protected boolean isInVehicle;
     protected int vehicleId;
     protected ObjectData objectData;
+
 
     public void addPackets(@NonNull Consumer<Packet> consumer)  {
         if (!this.attributes.isEmpty()) {

@@ -45,6 +45,7 @@ public class EntityPlayer extends EntityLiving {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.equipment.put(slot, null);
         }
+        this.entityType = EntityType.PLAYER;
     }
 
     public EntityPlayer(boolean selfPlayer) {

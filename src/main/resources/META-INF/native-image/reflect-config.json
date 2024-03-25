@@ -970,6 +970,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$AutoDig",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$AutoEat",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

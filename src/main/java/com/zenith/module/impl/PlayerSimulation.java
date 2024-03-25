@@ -229,7 +229,7 @@ public class PlayerSimulation extends Module {
             double pitchDelta = this.pitch - this.lastPitch;
             double yawDelta = this.yaw - this.lastYaw;
             ++this.ticksSinceLastPositionPacketSent;
-            boolean shouldUpdatePos = MathHelper.squaredMagnitude(xDelta, yDelta, zDelta) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20;
+            boolean shouldUpdatePos = MathHelper.squareLen(xDelta, yDelta, zDelta) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20;
             boolean shouldUpdateRot = pitchDelta != 0.0 || yawDelta != 0.0;
             if (shouldUpdatePos && shouldUpdateRot) {
                 sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(this.onGround, this.x, this.y, this.z, this.yaw, this.pitch));
@@ -449,13 +449,13 @@ public class PlayerSimulation extends Module {
                     )
 //                    && !blockState.isIn(BlockTags.WALLS)
 //                    && !(blockState.getBlock() instanceof FenceGateBlock)
-                    ? new BlockPos(blockPos.getX(), MathHelper.floorToInt(this.y - (double)offset), blockPos.getZ())
+                    ? new BlockPos(blockPos.getX(), MathHelper.floorI(this.y - (double)offset), blockPos.getZ())
                     : blockPos;
             }
         } else {
-            int i = MathHelper.floorToInt(this.x);
-            int j = MathHelper.floorToInt(this.y - (double)offset);
-            int k = MathHelper.floorToInt(this.z);
+            int i = MathHelper.floorI(this.x);
+            int j = MathHelper.floorI(this.y - (double)offset);
+            int k = MathHelper.floorI(this.z);
             return new BlockPos(i, j, k);
         }
     }

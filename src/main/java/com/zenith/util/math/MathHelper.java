@@ -1,12 +1,13 @@
 package com.zenith.util.math;
 
 import lombok.experimental.UtilityClass;
+import org.cloudburstmc.math.vector.Vector3d;
 
 import java.time.Duration;
 
 @UtilityClass
 public class MathHelper {
-    public static double squaredMagnitude(double a, double b, double c) {
+    public static double squareLen(double a, double b, double c) {
         return a * a + b * b + c * c;
     }
 
@@ -19,12 +20,12 @@ public class MathHelper {
         return Math.round(n * scale) / scale;
     }
 
-    public static int floorToInt(final double d) {
+    public static int floorI(final double d) {
         final int i = (int)d;
         return d < i ? i - 1 : i;
     }
 
-    public static int ceilToInt(final double d) {
+    public static int ceilI(final double d) {
         final int i = (int)d;
         return d > i ? i + 1 : i;
     }
@@ -69,6 +70,57 @@ public class MathHelper {
 
     public static double manhattanDistance2d(double x1, double y1, double x2, double y2) {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    }
+
+    public static double distance3d(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return Math.sqrt(distanceSq3d(x1, y1, z1, x2, y2, z2));
+    }
+
+    public static double distanceSq3d(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return square(x1 - x2) + square(y1 - y2) + square(z1 - z2);
+    }
+
+    public static double manhattanDistance3d(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2);
+    }
+
+    public static double lerp(double delta, double start, double end) {
+        return start + delta * (end - start);
+    }
+
+    public static long lfloor(double d) {
+        long i = (long)d;
+        return d < (double)i ? i - 1L : i;
+    }
+
+    public static double frac(double d) {
+        return d - (double)lfloor(d);
+    }
+
+    public static int sign(double d) {
+        if (d == 0.0) {
+            return 0;
+        } else {
+            return d > 0.0 ? 1 : -1;
+        }
+    }
+
+    public static Vector3d calculateRayEndPos(double x, double y, double z, double yaw, double pitch, double maxDistance) {
+        final Vector3d viewVec = MathHelper.calculateViewVector(yaw, pitch);
+        final double targetX = x + (viewVec.getX() * maxDistance);
+        final double targetY = y + (viewVec.getY() * maxDistance);
+        final double targetZ = z + (viewVec.getZ() * maxDistance);
+        return Vector3d.from(targetX, targetY, targetZ);
+    }
+
+    public static Vector3d calculateViewVector(final double yaw, final double pitch) {
+        double pitchRad = pitch * (Math.PI / 180.0);
+        double yawRad = -yaw * (Math.PI / 180.0);
+        double yawCos = Math.cos(yawRad);
+        double yawSin = Math.sin(yawRad);
+        double pitchCos = Math.cos(pitchRad);
+        double pitchSin = Math.sin(pitchRad);
+        return Vector3d.from(yawSin * pitchCos, -pitchSin, yawCos * pitchCos);
     }
 
     // is this math? no, but idk where else to put it
