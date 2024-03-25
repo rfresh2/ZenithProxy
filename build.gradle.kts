@@ -33,7 +33,7 @@ val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.32"
 val postgresVersion = "42.7.3"
-val nettyVersion = "4.1.107.Final"
+val nettyVersion = "4.1.108.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
 val jdbiVersion = "3.45.1"
 
