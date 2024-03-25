@@ -153,10 +153,6 @@ public class PlayerSimulation extends Module {
         }
     }
 
-    public double getEyeY() {
-        return playerCollisionBox.getMaxY() - 0.2;
-    }
-
     // its important that we process certain packets in order. Grim tracks the order of "transactions"
     // i.e. if we get teleported back, we need to process it before we do the next ping packet. otherwise the transactions are out of order and we get into a flag failure loop
     private void processTaskQueue() {

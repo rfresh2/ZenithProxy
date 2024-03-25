@@ -1,5 +1,6 @@
 package com.zenith.feature.pathing.raycast;
 
+import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.entities.EntityData;
