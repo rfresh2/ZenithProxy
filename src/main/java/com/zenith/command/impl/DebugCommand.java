@@ -38,7 +38,9 @@ public class DebugCommand extends Command {
                         "packetLog server on/off",
                         "packetLog filter <string>",
                         "sendChunksBeforePlayerSpawn on/off",
-                        "binaryNbtComponentSerializer on/off"
+                        "binaryNbtComponentSerializer on/off",
+                        "kickDisconnect on/off",
+                        "dc"
                 ));
     }
 
@@ -143,7 +145,18 @@ public class DebugCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Binary Nbt Component Serializer " + toggleStrCaps(CONFIG.debug.binaryNbtComponentSerializer));
                           return 1;
-                      })));
+                      })))
+            .then(literal("kickDisconnect").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.kickDisconnect = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Kick Disconnect " + toggleStrCaps(CONFIG.debug.kickDisconnect));
+                return 1;
+            })))
+            // insta disconnect
+            .then(literal("dc").executes(c -> {
+                c.getSource().setNoOutput(true);
+                Proxy.getInstance().instaKick();
+            }));
     }
 
     @Override
