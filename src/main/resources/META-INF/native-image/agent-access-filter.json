@@ -1,6 +1,7 @@
 {
   "rules": [
-    {"excludeClasses": "discord4j.**"}
+    {"excludeClasses": "discord4j.**"},
+    {"excludeClasses": "io.netty.**"}
   ],
   "regexRules": []
 }
