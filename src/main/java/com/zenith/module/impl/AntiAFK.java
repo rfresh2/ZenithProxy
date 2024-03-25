@@ -5,7 +5,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.google.common.collect.Iterators;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.feature.pathing.BlockPos;
 import com.zenith.feature.pathing.Input;
@@ -44,7 +44,9 @@ public class AntiAFK extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(ClientBotTick.class, this::handleClientTickEvent),
+                            of(ClientBotTick.Starting.class, this::handleClientBotTickStarting),
+                            of(ClientBotTick.Stopped.class, this::handleClientBotTickStopped),
                             of(DeathEvent.class, this::handleDeathEvent)
         );
     }
@@ -54,7 +56,7 @@ public class AntiAFK extends Module {
         return CONFIG.client.extra.antiafk.enabled;
     }
 
-    public void handleClientTickEvent(final ClientTickEvent event) {
+    public void handleClientTickEvent(final ClientBotTick event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && !MODULE.get(KillAura.class).isActive()) {
             if (CONFIG.client.extra.antiafk.actions.swingHand) {
@@ -87,14 +89,12 @@ public class AntiAFK extends Module {
         }
     }
 
-    @Override
-    public void clientTickStarting() {
+    public void handleClientBotTickStarting(final ClientBotTick.Starting event) {
         reset();
         sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
     }
 
-    @Override
-    public void clientTickStopped() {
+    public void handleClientBotTickStopped(final ClientBotTick.Stopped event) {
         reset();
     }
 

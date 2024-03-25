@@ -1,11 +1,12 @@
 package com.zenith.module.impl;
 
 import com.zenith.Proxy;
-import com.zenith.event.module.ClientOnlineTickEvent;
 import com.zenith.event.module.ClientSwingEvent;
+import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.module.Module;
+import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
 
 import java.time.Duration;
@@ -20,13 +21,14 @@ public class AntiKick extends Module {
     private Instant lastPosTime = Instant.now();
     private Instant lastFishingTime = Instant.now();
     private Instant lastSwingTime = Instant.now();
+    private final Timer timer = new Timer();
 
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
             of(ProxyClientConnectedEvent.class, this::onProxyClientConnectedEvent),
-            of(ClientOnlineTickEvent.class, this::onClientOnlineTick),
+            of(ClientTickEvent.class, this::onClientTick),
             of(EntityFishHookSpawnEvent.class, this::onEntityFishHookSpawnEvent),
             of(ClientSwingEvent.class, this::onClientSwingEvent)
         );
@@ -52,7 +54,8 @@ public class AntiKick extends Module {
         reset();
     }
 
-    public void onClientOnlineTick(final ClientOnlineTickEvent event) {
+    public void onClientTick(final ClientTickEvent event) {
+        if (!timer.tick(10 * 1000)) return; // process event every 10 seconds
         if (!Proxy.getInstance().hasActivePlayer()) return;
 
         final var fishBypass = bypassedKickWithFishing();

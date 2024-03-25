@@ -7,7 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.Clientb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.module.Module;
@@ -69,7 +69,9 @@ public class PlayerSimulation extends Module {
         EVENT_BUS.subscribe(this,
                             // we want this to be the last thing that happens in the tick
                             // to allow other modules to update the player's input
-                            of(ClientTickEvent.class, -20000, this::tick)
+                            of(ClientBotTick.class, -20000, this::tick),
+                            of(ClientBotTick.Starting.class, this::handleClientTickStarting),
+                            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
         );
     }
 
@@ -78,13 +80,11 @@ public class PlayerSimulation extends Module {
         return true;
     }
 
-    @Override
-    public synchronized void clientTickStarting() {
+    public synchronized void handleClientTickStarting(final ClientBotTick.Starting event) {
         syncFromCache(false);
     }
 
-    @Override
-    public synchronized void clientTickStopped() {
+    public synchronized void handleClientTickStopped(final ClientBotTick.Stopped event) {
         if (isSneaking) {
             sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
         }
@@ -147,7 +147,7 @@ public class PlayerSimulation extends Module {
         }
     }
 
-    private synchronized void tick(final ClientTickEvent event) {
+    private synchronized void tick(final ClientBotTick event) {
         if (this.jumpingCooldown > 0) --this.jumpingCooldown;
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) return;
         if (waitTicks-- > 0) return;

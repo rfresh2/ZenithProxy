@@ -1,7 +1,7 @@
 package com.zenith.feature.pathing;
 
 import com.zenith.cache.data.entity.Entity;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.entities.EntityData;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
@@ -22,7 +22,7 @@ public class Pathing {
                             // should be next to last in the tick handlers
                             // right before player simulation
                             // but after all modules that send movement inputs
-                            of(ClientTickEvent.class, -10000, this::handleTick)
+                            of(ClientBotTick.class, -10000, this::handleTick)
         );
     }
 
@@ -105,7 +105,7 @@ public class Pathing {
         currentMovementInputRequest = new MovementInputRequest(Optional.of(jumpInput()), Optional.empty(), Optional.empty(), priority);
     }
 
-    public synchronized void handleTick(final ClientTickEvent event) {
+    public synchronized void handleTick(final ClientBotTick event) {
         if (currentMovementInputRequest != DEFAULT_MOVEMENT_INPUT_REQUEST) {
             MODULE.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
             currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;

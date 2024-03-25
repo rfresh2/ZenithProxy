@@ -4,7 +4,7 @@ import com.github.rfresh2.EventConsumer;
 import com.github.steveice10.mc.protocol.data.game.inventory.ClickItemAction;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.zenith.Proxy;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.util.Timer;
 
 import java.util.Collections;
@@ -22,7 +22,7 @@ public class PlayerInventoryManager {
         EVENT_BUS.subscribe(
             this,
             // after modules, before player simulation
-            EventConsumer.of(ClientTickEvent.class, -5000, this::handleTick)
+            EventConsumer.of(ClientBotTick.class, -5000, this::handleTick)
         );
     }
 
@@ -50,7 +50,7 @@ public class PlayerInventoryManager {
         currentActionRequest = new InventoryActionRequest(owner, List.of(action), priority);
     }
 
-    public synchronized void handleTick(final ClientTickEvent event) {
+    public synchronized void handleTick(final ClientBotTick event) {
         if (currentActionRequest == DEFAULT_ACTION_REQUEST) return;
         if (tickTimer.tick(actionDelayTicks)) {
             var nextAction = currentActionRequest.nextAction();

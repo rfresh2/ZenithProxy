@@ -4,11 +4,12 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 
 import java.time.Duration;
 import java.time.Instant;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class AutoEat extends AbstractInventoryModule {
@@ -23,8 +24,10 @@ public class AutoEat extends AbstractInventoryModule {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-            ClientTickEvent.class, this::handleClientTick
+        EVENT_BUS.subscribe(
+            this,
+            of(ClientBotTick.class, this::handleClientTick),
+            of(ClientBotTick.Starting.class, this::handleBotTickStarting)
         );
     }
 
@@ -37,7 +40,7 @@ public class AutoEat extends AbstractInventoryModule {
         return CONFIG.client.extra.autoEat.enabled;
     }
 
-    public void handleClientTick(final ClientTickEvent e) {
+    public void handleClientTick(final ClientBotTick e) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
                 && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())) {
@@ -81,8 +84,7 @@ public class AutoEat extends AbstractInventoryModule {
         sendClientPacketAsync(new ServerboundUseItemPacket(hand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
     }
 
-    @Override
-    public void clientTickStopped() {
+    public void handleBotTickStarting(final ClientBotTick.Starting event) {
         delay = 0;
         lastAutoEatOutOfFoodWarning = Instant.EPOCH;
         isEating = false;
