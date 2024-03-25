@@ -4,7 +4,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRe
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import java.util.Objects;
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Shared.*;
 
-public class RespawnHandler implements AsyncPacketHandler<ClientboundRespawnPacket, ClientSession> {
+public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundRespawnPacket, ClientSession> {
 
     private final AtomicBoolean isSpectatorRespawning = new AtomicBoolean(false);
 

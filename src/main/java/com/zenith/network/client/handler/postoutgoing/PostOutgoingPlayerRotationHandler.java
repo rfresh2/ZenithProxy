@@ -3,11 +3,11 @@ package com.zenith.network.client.handler.postoutgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerRotPacket;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 
-public class PostOutgoingPlayerRotationHandler implements AsyncPacketHandler<ServerboundMovePlayerRotPacket, ClientSession> {
+public class PostOutgoingPlayerRotationHandler implements ClientEventLoopPacketHandler<ServerboundMovePlayerRotPacket, ClientSession> {
     @Override
     public boolean applyAsync(ServerboundMovePlayerRotPacket packet, ClientSession session) {
         CACHE.getPlayerCache()

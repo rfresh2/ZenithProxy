@@ -16,7 +16,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -99,7 +100,7 @@ public class ModuleManager {
         synchronized (this) {
             if (isNull(clientTickFuture) || clientTickFuture.isDone()) {
                 getModules().forEach(Module::clientTickStarting);
-                clientTickFuture = EXECUTOR.scheduleAtFixedRate(() -> {
+                clientTickFuture = Proxy.getInstance().getClient().getClientEventLoop().scheduleAtFixedRate(() -> {
                     if (Proxy.getInstance().isConnected()) {
                         try {
                             EVENT_BUS.post(ClientTickEvent.INSTANCE);

@@ -2,13 +2,13 @@ package com.zenith.network.client.handler.incoming.level;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundBlockEntityDataPacket;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class BlockEntityDataHandler implements AsyncPacketHandler<ClientboundBlockEntityDataPacket, ClientSession> {
+public class BlockEntityDataHandler implements ClientEventLoopPacketHandler<ClientboundBlockEntityDataPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ClientboundBlockEntityDataPacket packet, @NonNull ClientSession session) {

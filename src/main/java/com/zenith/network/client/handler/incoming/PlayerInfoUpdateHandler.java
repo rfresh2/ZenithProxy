@@ -3,14 +3,14 @@ package com.zenith.network.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction.*;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class PlayerInfoUpdateHandler implements AsyncPacketHandler<ClientboundPlayerInfoUpdatePacket, ClientSession> {
+public class PlayerInfoUpdateHandler implements ClientEventLoopPacketHandler<ClientboundPlayerInfoUpdatePacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundPlayerInfoUpdatePacket packet, @NonNull ClientSession session) {
         for (int i = 0; i < packet.getEntries().length; i++) {

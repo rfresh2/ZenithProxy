@@ -8,7 +8,7 @@ import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.DeathMessagesParser;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
-public class SystemChatHandler implements AsyncPacketHandler<ClientboundSystemChatPacket, ClientSession> {
+public class SystemChatHandler implements ClientEventLoopPacketHandler<ClientboundSystemChatPacket, ClientSession> {
     private static final TextColor DEATH_MSG_COLOR_2b2t = TextColor.color(170, 0, 0);
     private final DeathMessagesParser deathMessagesHelper = new DeathMessagesParser();
 

@@ -4,6 +4,9 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import com.zenith.event.module.ClientOnlineTickEvent;
+import io.netty.channel.DefaultEventLoopGroup;
+import io.netty.channel.EventLoop;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -18,6 +21,7 @@ import static com.zenith.Shared.*;
 @Getter
 @Setter
 public class ClientSession extends TcpClientSession {
+    private static DefaultEventLoopGroup CLIENT_EVENT_LOOP_GROUP = new DefaultEventLoopGroup(1, new DefaultThreadFactory("Client Event Loop"));
     protected boolean serverProbablyOff;
     protected long ping = 0L;
 
@@ -27,10 +31,12 @@ public class ClientSession extends TcpClientSession {
     private boolean online = false;
     private boolean disconnected = true;
     private ScheduledFuture clientConstantTickFuture = null;
+    private final EventLoop clientEventLoop;
 
     public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo) {
         super(host, port, bindAddress, 0, protocol, proxyInfo);
         this.addListener(new ClientListener(this));
+        this.clientEventLoop = CLIENT_EVENT_LOOP_GROUP.next();
     }
 
     public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol) {

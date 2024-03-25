@@ -4,12 +4,12 @@ import com.github.steveice10.mc.protocol.data.game.entity.EntityEvent;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundEntityEventPacket;
 import com.zenith.event.proxy.TotemPopEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class EntityEventHandler implements AsyncPacketHandler<ClientboundEntityEventPacket, ClientSession> {
+public class EntityEventHandler implements ClientEventLoopPacketHandler<ClientboundEntityEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundEntityEventPacket packet, final ClientSession session) {
         if (packet.getEntityId() == CACHE.getPlayerCache().getEntityId()) {

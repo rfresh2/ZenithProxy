@@ -4,7 +4,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerRestartingEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.util.ComponentSerializer;
 
 import java.time.Instant;
@@ -14,7 +14,7 @@ import java.util.Optional;
 import static com.zenith.Shared.CLIENT_LOG;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class SetActionBarTextHandler implements AsyncPacketHandler<ClientboundSetActionBarTextPacket, ClientSession> {
+public class SetActionBarTextHandler implements ClientEventLoopPacketHandler<ClientboundSetActionBarTextPacket, ClientSession> {
     private Instant lastRestartEvent = Instant.EPOCH;
 
     @Override

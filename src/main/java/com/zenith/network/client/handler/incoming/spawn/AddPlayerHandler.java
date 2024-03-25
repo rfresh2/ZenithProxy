@@ -7,7 +7,7 @@ import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class AddPlayerHandler implements AsyncPacketHandler<ClientboundAddPlayerPacket, ClientSession> {
+public class AddPlayerHandler implements ClientEventLoopPacketHandler<ClientboundAddPlayerPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundAddPlayerPacket packet, @NonNull ClientSession session) {
         final EntityPlayer entity = (EntityPlayer) new EntityPlayer()

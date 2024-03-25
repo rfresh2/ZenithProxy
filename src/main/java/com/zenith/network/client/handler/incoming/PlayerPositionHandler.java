@@ -2,15 +2,13 @@ package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosRotPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.AntiAFK;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 
@@ -18,7 +16,7 @@ import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.MODULE;
 import static java.util.Objects.isNull;
 
-public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlayerPositionPacket, ClientSession> {
+public class PlayerPositionHandler implements ClientEventLoopPacketHandler<ClientboundPlayerPositionPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundPlayerPositionPacket packet, @NonNull ClientSession session) {
         PlayerCache cache = CACHE.getPlayerCache();
@@ -29,11 +27,8 @@ public class PlayerPositionHandler implements AsyncPacketHandler<ClientboundPlay
                 .setYaw((packet.getRelative().contains(PositionElement.YAW) ? cache.getYaw() : 0.0f) + packet.getYaw())
                 .setPitch((packet.getRelative().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
-        if (isNull(currentPlayer)) {
+        if (isNull(currentPlayer) || !currentPlayer.isLoggedIn()) {
             MODULE.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getTeleportId());
-        } else if (!currentPlayer.isLoggedIn()) { // possible race condition during login where we get a position packet before we're fully logged in
-            Proxy.getInstance().getClient().send(new ServerboundAcceptTeleportationPacket(packet.getTeleportId()));
-            Proxy.getInstance().getClient().send(new ServerboundMovePlayerPosRotPacket(false, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
         } // else send to active player
         SpectatorSync.syncPlayerPositionWithSpectators();
         MODULE.get(AntiAFK.class).handlePlayerPosRotate();

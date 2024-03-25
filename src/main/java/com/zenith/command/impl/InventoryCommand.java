@@ -13,7 +13,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.Embed;
 import com.zenith.feature.items.ContainerClickAction;
-import com.zenith.module.impl.PlayerSimulation;
 import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
@@ -58,11 +57,8 @@ public class InventoryCommand extends Command {
             .then(literal("hold").then(argument("slot", integer(36, 44)).executes(c -> {
                 if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return 1;
                 var slot = c.getArgument("slot", Integer.class);
-                var sim = MODULE.get(PlayerSimulation.class);
-                sim.addTask(() -> {
-                    sim.sendClientPacketAsync(new ServerboundSetCarriedItemPacket(slot - 36));
-                    logInvDelayed();
-                });
+                Proxy.getInstance().getClient().send(new ServerboundSetCarriedItemPacket(slot - 36));
+                logInvDelayed();
                 c.getSource().setNoOutput(true);
                 return 1;
             })))

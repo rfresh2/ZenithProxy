@@ -39,7 +39,7 @@ public interface AsyncPacketHandler<P extends Packet, S extends Session> extends
     private void applyWithRetries(P packet, S session, final int tryCount) {
         try {
             if (!applyAsync(packet, session)) {
-                if (tryCount < 0 || tryCount > 1) {
+                if (tryCount > 1) {
                     CLIENT_LOG.debug("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
                     return;
                 }

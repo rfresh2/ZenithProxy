@@ -4,12 +4,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.Client
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class RemoveMobEffectHandler implements AsyncPacketHandler<ClientboundRemoveMobEffectPacket, ClientSession> {
+public class RemoveMobEffectHandler implements ClientEventLoopPacketHandler<ClientboundRemoveMobEffectPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(ClientboundRemoveMobEffectPacket packet, ClientSession session) {

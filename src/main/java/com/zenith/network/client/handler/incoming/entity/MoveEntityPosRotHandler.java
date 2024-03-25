@@ -3,12 +3,12 @@ package com.zenith.network.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundMoveEntityPosRotPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 
-public class MoveEntityPosRotHandler implements AsyncPacketHandler<ClientboundMoveEntityPosRotPacket, ClientSession> {
+public class MoveEntityPosRotHandler implements ClientEventLoopPacketHandler<ClientboundMoveEntityPosRotPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ClientboundMoveEntityPosRotPacket packet, @NonNull ClientSession session) {

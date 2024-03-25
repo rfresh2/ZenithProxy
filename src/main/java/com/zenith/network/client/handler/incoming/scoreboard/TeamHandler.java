@@ -2,14 +2,14 @@ package com.zenith.network.client.handler.incoming.scoreboard;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import java.util.Collections;
 
 import static com.zenith.Shared.CACHE;
 
-public class TeamHandler implements AsyncPacketHandler<ClientboundSetPlayerTeamPacket, ClientSession> {
+public class TeamHandler implements ClientEventLoopPacketHandler<ClientboundSetPlayerTeamPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundSetPlayerTeamPacket packet, @NonNull ClientSession session) {
         switch (packet.getAction()) {

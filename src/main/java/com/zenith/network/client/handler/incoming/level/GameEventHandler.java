@@ -8,13 +8,13 @@ import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthV
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class GameEventHandler implements AsyncPacketHandler<ClientboundGameEventPacket, ClientSession> {
+public class GameEventHandler implements ClientEventLoopPacketHandler<ClientboundGameEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundGameEventPacket packet, @NonNull ClientSession session) {
         if (packet.getNotification() == GameEvent.CHANGE_GAMEMODE) {

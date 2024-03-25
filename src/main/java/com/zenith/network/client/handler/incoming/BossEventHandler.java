@@ -2,7 +2,7 @@ package com.zenith.network.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import java.util.function.Consumer;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import static com.zenith.Shared.CACHE;
 import static java.util.Objects.isNull;
 
-public class BossEventHandler implements AsyncPacketHandler<ClientboundBossEventPacket, ClientSession> {
+public class BossEventHandler implements ClientEventLoopPacketHandler<ClientboundBossEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundBossEventPacket packet, @NonNull ClientSession session) {
         Consumer<ClientboundBossEventPacket> consumer = p -> {
