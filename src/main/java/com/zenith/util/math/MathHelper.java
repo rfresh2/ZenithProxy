@@ -73,7 +73,11 @@ public class MathHelper {
     }
 
     public static double distance3d(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return Math.sqrt(square(x1 - x2) + square(y1 - y2) + square(z1 - z2));
+        return Math.sqrt(distanceSq3d(x1, y1, z1, x2, y2, z2));
+    }
+
+    public static double distanceSq3d(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return square(x1 - x2) + square(y1 - y2) + square(z1 - z2);
     }
 
     public static double manhattanDistance3d(double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -99,6 +103,14 @@ public class MathHelper {
         } else {
             return d > 0.0 ? 1 : -1;
         }
+    }
+
+    public static Vector3d calculateRayEndPos(double x, double y, double z, double yaw, double pitch, double maxDistance) {
+        final Vector3d viewVec = MathHelper.calculateViewVector(yaw, pitch);
+        final double targetX = x + (viewVec.getX() * maxDistance);
+        final double targetY = y + (viewVec.getY() * maxDistance);
+        final double targetZ = z + (viewVec.getZ() * maxDistance);
+        return Vector3d.from(targetX, targetY, targetZ);
     }
 
     public static Vector3d calculateViewVector(final double yaw, final double pitch) {

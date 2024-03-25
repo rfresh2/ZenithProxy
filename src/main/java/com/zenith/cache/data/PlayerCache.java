@@ -208,6 +208,10 @@ public class PlayerCache implements CachedData {
         return this.thePlayer.getY();
     }
 
+    public double getEyeY() {
+        return getY() + (isSneaking ? 1.27 : 1.62);
+    }
+
     public PlayerCache setY(double y)    {
         this.thePlayer.setY(y);
         return this;

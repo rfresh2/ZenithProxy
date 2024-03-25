@@ -41,6 +41,7 @@ public class RaycastCommand extends Command {
                     .title("Raycast Result")
                     .addField("Hit", result.hit(), false)
                     .addField("Entity", result.entity() != null ? result.entityType() != null ? result.entityType() : "N/A" : "N/A", false)
+                    .addField("ID", result.entity() != null ? result.entity().getEntityId() : "N/A", false)
                     .color(Color.CYAN);
             }))
             .then(literal("b").executes(c -> {
