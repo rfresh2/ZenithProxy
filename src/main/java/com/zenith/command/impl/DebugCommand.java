@@ -13,8 +13,7 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import discord4j.rest.util.Color;
 
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
@@ -145,7 +144,7 @@ public class DebugCommand extends Command {
             // insta disconnect
             .then(literal("dc").executes(c -> {
                 c.getSource().setNoOutput(true);
-                Proxy.getInstance().instaKick();
+                Proxy.getInstance().kickDisconnect(MANUAL_DISCONNECT, null);
             }));
     }
 
