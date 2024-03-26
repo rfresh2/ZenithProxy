@@ -125,16 +125,28 @@ public class CommandManager {
         command.commandUsage().getAliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));
     }
 
-    public void execute(final CommandContext context) {
-        final ParseResults<CommandContext> parse = this.dispatcher.parse(downcaseFirstWord(context.getInput()), context);
+    public void execute(final CommandContext context, final ParseResults<CommandContext> parseResults) {
         try {
-            executeWithHandlers(context, parse);
+            executeWithHandlers(context, parseResults);
         } catch (final CommandSyntaxException e) {
             // fall through
             // errors handled by delegate
             // and if this not a matching root command we want to fallback to original commands
         }
         saveConfigAsync();
+    }
+
+    public void execute(final CommandContext context) {
+        final ParseResults<CommandContext> parse = parse(context);
+        execute(context, parse);
+    }
+
+    public ParseResults<CommandContext> parse(final CommandContext context) {
+        return this.dispatcher.parse(downcaseFirstWord(context.getInput()), context);
+    }
+
+    public boolean hasCommandNode(final ParseResults<CommandContext> parse) {
+        return parse.getContext().getNodes().stream().anyMatch(node -> node.getNode() instanceof CaseInsensitiveLiteralCommandNode);
     }
 
     private String downcaseFirstWord(final String sentence) {
