@@ -46,6 +46,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -229,8 +230,8 @@ public class ServerConnection implements Session, SessionListener {
         Proxy.getInstance().getActiveConnections().add(this);
     }
 
-    public void send(@NonNull Packet packet) {
-        this.session.send(packet);
+    public Future<Void> send(@NonNull Packet packet) {
+        return this.session.send(packet);
     }
 
     @Override
@@ -238,8 +239,8 @@ public class ServerConnection implements Session, SessionListener {
         this.session.send(packet, channelFutureListener);
     }
 
-    public void sendDirect(Packet packet) {
-        this.session.sendDirect(packet);
+    public Future<Void> sendDirect(Packet packet) {
+        return this.session.sendDirect(packet);
     }
 
     @Override

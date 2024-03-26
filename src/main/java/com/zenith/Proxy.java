@@ -276,12 +276,12 @@ public class Proxy {
         try {
             // out of order timestamp causes server to kick us
             // must send direct to avoid our mitigation in the outgoing packet handler
-            client.sendDirect(new ServerboundChatPacket("", -1L, 0L, null, 0, BitSet.valueOf(new byte[20])));
-            // todo: return a channel future from sendDirect or a param to set one
-            Wait.waitUntil(() -> !isConnected(), 5);
+            client.sendDirect(new ServerboundChatPacket("", -1L, 0L, null, 0, BitSet.valueOf(new byte[20])))
+                .get();
         } catch (final Exception e) {
             CLIENT_LOG.error("Error performing kick disconnect", e);
         }
+        // note: this will occur before the server sends us back a disconnect packet, but before our channel close is received by the server
         client.disconnect(reason, cause);
     }
 
