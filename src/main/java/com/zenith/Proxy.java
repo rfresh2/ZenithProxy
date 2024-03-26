@@ -258,30 +258,33 @@ public class Proxy {
 
     public void disconnect(final String reason, final Throwable cause) {
         if (this.isConnected()) {
-            if (CONFIG.debug.kickDisconnect) this.instaKick();
-            this.client.disconnect(reason, cause);
+            if (CONFIG.debug.kickDisconnect) this.kickDisconnect(reason, cause);
+            else this.client.disconnect(reason, cause);
         }
         CACHE.reset(true);
     }
 
     public void disconnect(final String reason) {
         if (this.isConnected()) {
-            if (CONFIG.debug.kickDisconnect) this.instaKick();
-            this.client.disconnect(reason);
+            if (CONFIG.debug.kickDisconnect) this.kickDisconnect(reason, null);
+            else this.client.disconnect(reason);
         }
         CACHE.reset(true);
     }
 
-    public void instaKick() {
+    public void kickDisconnect(final String reason, final Throwable cause) {
         if (!isConnected()) return;
-        var cachedTime = CACHE.getChatCache().getLastChatTimestamp();
-        // out of order timestamp = server kicks us
-        if (cachedTime > 0) {
-            client.sendDirect(new ServerboundChatPacket("", cachedTime - 1, 0L, null, 0, BitSet.valueOf(new byte[20])));
-        } else {
-            client.sendDirect(new ServerboundChatPacket("", 5L, 0L, null, 0, BitSet.valueOf(new byte[20])));
-            client.sendDirect(new ServerboundChatPacket("", 0L, 0L, null, 0, BitSet.valueOf(new byte[20])));
+        var client = this.client;
+        try {
+            // out of order timestamp causes server to kick us
+            // must send direct to avoid our mitigation in the outgoing packet handler
+            client.sendDirect(new ServerboundChatPacket("", -1L, 0L, null, 0, BitSet.valueOf(new byte[20])))
+                .get();
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error performing kick disconnect", e);
         }
+        // note: this will occur before the server sends us back a disconnect packet, but before our channel close is received by the server
+        client.disconnect(reason, cause);
     }
 
     public void connectAndCatchExceptions() {
