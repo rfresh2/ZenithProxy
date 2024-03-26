@@ -46,28 +46,30 @@ public class InGameCommandManager {
 
     private boolean executeInGameCommand(final String command, final ServerConnection session, final boolean printUnhandled) {
         final CommandContext commandContext = CommandContext.create(command, CommandSource.IN_GAME_PLAYER);
-        // todo: execute commands async wtf!
-        //  all we need to do is make sure a corresponding root command node exists and return the boolean value there
-        COMMAND.execute(commandContext);
-        var embed = commandContext.getEmbed();
-        CommandOutputHelper.logEmbedOutputToInGame(embed, session);
-        CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
-        if (!commandContext.isNoOutput() && !embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty()) {
-            if (printUnhandled) {
-                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown(
-                    "&7[&9ZenithProxy&7]&r &cUnknown command!"), false));
+        var parse = COMMAND.parse(commandContext);
+        if (!COMMAND.hasCommandNode(parse)) return false;
+        EXECUTOR.execute(() -> {
+            COMMAND.execute(commandContext, parse);
+            var embed = commandContext.getEmbed();
+            CommandOutputHelper.logEmbedOutputToInGame(embed, session);
+            CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
+            if (!commandContext.isNoOutput() && !embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty()) {
+                if (printUnhandled) {
+                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown(
+                        "&7[&9ZenithProxy&7]&r &cUnknown command!"), false));
+                }
+                return;
             }
-            return false;
-        }
-        if (CONFIG.inGameCommands.logToDiscord && DISCORD.isRunning() && !commandContext.isSensitiveInput()) {
-            // will also log to terminal
-            CommandOutputHelper.logInputToDiscord(command, CommandSource.IN_GAME_PLAYER);
-            CommandOutputHelper.logEmbedOutputToDiscord(embed);
-            CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
-        } else {
-            CommandOutputHelper.logEmbedOutputToTerminal(embed);
-            CommandOutputHelper.logMultiLineOutputToTerminal(commandContext);
-        }
+            if (CONFIG.inGameCommands.logToDiscord && DISCORD.isRunning() && !commandContext.isSensitiveInput()) {
+                // will also log to terminal
+                CommandOutputHelper.logInputToDiscord(command, CommandSource.IN_GAME_PLAYER);
+                CommandOutputHelper.logEmbedOutputToDiscord(embed);
+                CommandOutputHelper.logMultiLineOutputToDiscord(commandContext);
+            } else {
+                CommandOutputHelper.logEmbedOutputToTerminal(embed);
+                CommandOutputHelper.logMultiLineOutputToTerminal(commandContext);
+            }
+        });
         return true;
     }
 }
