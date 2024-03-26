@@ -11,7 +11,7 @@
     "drops": [
       0
     ],
-    "diggable": true,
+    "diggable": false,
     "transparent": true,
     "filterLight": 0,
     "emitLight": 0,

@@ -235,6 +235,8 @@
   }, {
     "pattern":"\\Qmcdata/mapColorIdToColor.json\\E"
   }, {
+    "pattern":"\\Qmcdata/materials.json\\E"
+  }, {
     "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
   }, {
     "pattern":"\\Qorg/apache/http/client/version.properties\\E"

@@ -82,6 +82,7 @@ public class PlayerCache implements CachedData {
     protected AtomicInteger actionId = new AtomicInteger(0);
     private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
+    protected AtomicInteger seqId = new AtomicInteger(0);
 
     public PlayerCache(final EntityCache entityCache) {
         this.entityCache = entityCache;

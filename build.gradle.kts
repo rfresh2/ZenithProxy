@@ -86,6 +86,7 @@ dependencies {
     shade("org.cloudburstmc.fastutil.maps:object-int-maps:$fastutilVersion")
     shade("org.cloudburstmc.fastutil.maps:long-object-maps:$fastutilVersion")
     shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion")
+    shade("org.cloudburstmc.fastutil.maps:int-double-maps:$fastutilVersion")
     shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion")
     shade("net.raphimc:ViaLoader:2.2.12")
     shade("com.viaversion:viaversion:4.9.3")

@@ -7,15 +7,15 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zenith.feature.pathing.CollisionBox;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static com.zenith.Shared.OBJECT_MAPPER;
 
@@ -30,6 +30,25 @@ public class BlockDataManager {
     }
 
     private void init() {
+        final Object2ObjectOpenHashMap<String, Int2DoubleOpenHashMap> breakSpeedMap = new Object2ObjectOpenHashMap<>();
+        try (JsonParser breakSpeedParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/mcdata/materials.json"))) {
+            JsonNode node = breakSpeedParser.getCodec().readTree(breakSpeedParser);
+            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext(); ) {
+                final var e = it.next();
+                String materialType = e.getKey();
+                Int2DoubleOpenHashMap breakSpeeds = new Int2DoubleOpenHashMap();
+                for (Iterator<Map.Entry<String, JsonNode>> it2 = e.getValue().fields(); it2.hasNext(); ) {
+                    final var e2 = it2.next();
+                    int itemId = Integer.parseInt(e2.getKey());
+                    double breakSpeed = e2.getValue().asDouble();
+                    breakSpeeds.put(itemId, breakSpeed);
+                }
+                breakSpeedMap.put(materialType, breakSpeeds);
+            }
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+
         final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
         try (JsonParser blocksParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/mcdata/blocks.json"))) {
             TreeNode node = blocksParser.getCodec().readTree(blocksParser);
@@ -42,10 +61,38 @@ public class BlockDataManager {
                 int maxStateId = e.get("maxStateId").asInt();
                 String boundingBoxType = e.get("boundingBox").asText();
                 boolean isBlock = boundingBoxType.equals("block"); // empty otherwise
-                for (int i = minStateId; i <= maxStateId; i++) {
-                    blockStateIdToBlockId.put(i, blockId);
+                boolean diggable = e.get("diggable").asBoolean();
+                double destroySpeed = e.get("hardness").asDouble();
+                Int2DoubleMap breakSpeedsMapResult;
+                JsonNode materialNode = e.get("material");
+                if (materialNode != null) {
+                    String material = materialNode.asText();
+                    var breakSpeeds = breakSpeedMap.get(material);
+                    if (breakSpeeds != breakSpeedMap.defaultReturnValue()) {
+                        breakSpeedsMapResult = breakSpeeds;
+                    } else {
+                        breakSpeedsMapResult = Int2DoubleMaps.EMPTY_MAP;
+                    }
+                } else {
+                    breakSpeedsMapResult = Int2DoubleMaps.EMPTY_MAP;
                 }
-                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId));
+
+                JsonNode harvestTools = e.get("harvestTools");
+                IntSet requiredHarvestItems;
+                if (harvestTools != null) {
+                    requiredHarvestItems = new IntOpenHashSet();
+                    var iter = harvestTools.fieldNames();
+                    if (iter.hasNext()) {
+                        // the first listed item id should be the lowest, and therefore is the minimum required tool
+                        final String next = iter.next();
+                        final int itemId = Integer.parseInt(next);
+                        requiredHarvestItems.add(itemId);
+                    }
+                } else {
+                    requiredHarvestItems = IntSets.EMPTY_SET;
+                }
+
+                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId, diggable, destroySpeed, breakSpeedsMapResult, requiredHarvestItems));
             }
         } catch (final Exception e) {
             throw new RuntimeException(e);
