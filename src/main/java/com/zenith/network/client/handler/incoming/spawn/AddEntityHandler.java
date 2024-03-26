@@ -10,7 +10,7 @@ import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
 
-public class AddEntityHandler implements AsyncPacketHandler<ClientboundAddEntityPacket, ClientSession> {
+public class AddEntityHandler implements ClientEventLoopPacketHandler<ClientboundAddEntityPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ClientboundAddEntityPacket packet, @NonNull ClientSession session) {

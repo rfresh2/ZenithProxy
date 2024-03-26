@@ -56,12 +56,6 @@ public abstract class Module {
 
     public abstract boolean shouldBeEnabled();
 
-    public void clientTickStarting() {
-    }
-
-    public void clientTickStopped() {
-    }
-
     public void sendClientPacketAsync(final Packet packet) {
         ClientSession clientSession = Proxy.getInstance().getClient();
         if (clientSession != null && clientSession.isConnected()) {

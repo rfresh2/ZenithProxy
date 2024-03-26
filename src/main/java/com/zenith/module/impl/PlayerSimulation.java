@@ -7,8 +7,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.Clientb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
-import com.zenith.Proxy;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.module.Module;
@@ -18,8 +17,6 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -57,7 +54,6 @@ public class PlayerSimulation extends Module {
     private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
     private Input movementInput = new Input();
     private int waitTicks = 0;
-    private Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<>();
     private static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
     private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
     private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(STANDING_COLLISION_BOX, 0, 0, 0);
@@ -73,7 +69,9 @@ public class PlayerSimulation extends Module {
         EVENT_BUS.subscribe(this,
                             // we want this to be the last thing that happens in the tick
                             // to allow other modules to update the player's input
-                            of(ClientTickEvent.class, -20000, this::tick)
+                            of(ClientBotTick.class, -20000, this::tick),
+                            of(ClientBotTick.Starting.class, this::handleClientTickStarting),
+                            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
         );
     }
 
@@ -82,21 +80,17 @@ public class PlayerSimulation extends Module {
         return true;
     }
 
-    @Override
-    public synchronized void clientTickStarting() {
-        this.taskQueue.clear();
+    public synchronized void handleClientTickStarting(final ClientBotTick.Starting event) {
         syncFromCache(false);
     }
 
-    @Override
-    public synchronized void clientTickStopped() {
+    public synchronized void handleClientTickStopped(final ClientBotTick.Stopped event) {
         if (isSneaking) {
             sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
         }
         if (isSprinting) {
             sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
         }
-        this.taskQueue.clear();
     }
 
     public void doRotate(float yaw, float pitch) {
@@ -153,26 +147,8 @@ public class PlayerSimulation extends Module {
         }
     }
 
-    public double getEyeY() {
-        return playerCollisionBox.getMaxY() - 0.2;
-    }
-
-    // its important that we process certain packets in order. Grim tracks the order of "transactions"
-    // i.e. if we get teleported back, we need to process it before we do the next ping packet. otherwise the transactions are out of order and we get into a flag failure loop
-    private void processTaskQueue() {
-        while (!taskQueue.isEmpty()) {
-            taskQueue.poll().run();
-        }
-    }
-
-    public void addTask(Runnable task) {
-        if (!Proxy.getInstance().hasActivePlayer())
-            taskQueue.add(task);
-    }
-
-    private synchronized void tick(final ClientTickEvent event) {
+    private synchronized void tick(final ClientBotTick event) {
         if (this.jumpingCooldown > 0) --this.jumpingCooldown;
-        processTaskQueue();
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) return;
         if (waitTicks-- > 0) return;
         if (waitTicks < 0) waitTicks = 0;
@@ -271,11 +247,9 @@ public class PlayerSimulation extends Module {
 
     public synchronized void handlePlayerPosRotate(final int teleportId) {
         syncFromCache(false);
-        addTask(() -> {
-            CLIENT_LOG.debug("Server teleport to: {}, {}, {}", this.x, this.y, this.z);
-            sendClientPacketAsync(new ServerboundAcceptTeleportationPacket(teleportId));
-            sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
-        });
+        CLIENT_LOG.debug("Server teleport to: {}, {}, {}", this.x, this.y, this.z);
+        sendClientPacketAsync(new ServerboundAcceptTeleportationPacket(teleportId));
+        sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
     }
 
     public synchronized void handleRespawn() {
@@ -602,17 +576,13 @@ public class PlayerSimulation extends Module {
     }
 
     public void handleSetMotion(final double motionX, final double motionY, final double motionZ) {
-        addTask(() -> {
-            this.velocity.setX(motionX);
-            this.velocity.setY(motionY);
-            this.velocity.setZ(motionZ);
-        });
+        this.velocity.setX(motionX);
+        this.velocity.setY(motionY);
+        this.velocity.setZ(motionZ);
     }
 
     public void handleExplosion(final ClientboundExplodePacket packet) {
-        addTask(() -> {
-            this.velocity.add(packet.getPushX(), packet.getPushY(), packet.getPushZ());
-        });
+        this.velocity.add(packet.getPushX(), packet.getPushY(), packet.getPushZ());
     }
 
     private void syncFromCache(boolean full) {

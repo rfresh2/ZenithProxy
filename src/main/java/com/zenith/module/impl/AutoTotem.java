@@ -3,7 +3,7 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.zenith.Proxy;
 import com.zenith.cache.data.inventory.Container;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.module.NoTotemsEvent;
 import com.zenith.event.module.PlayerTotemPopAlertEvent;
 import com.zenith.event.proxy.TotemPopEvent;
@@ -29,7 +29,8 @@ public class AutoTotem extends AbstractInventoryModule {
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
-            of(ClientTickEvent.class, this::handleClientTick),
+            of(ClientBotTick.class, this::handleClientTick),
+            of(ClientBotTick.Starting.class, this::handleBotTickStarting),
             of(TotemPopEvent.class, this::onTotemPopEvent)
         );
     }
@@ -39,12 +40,11 @@ public class AutoTotem extends AbstractInventoryModule {
         return CONFIG.client.extra.autoTotem.enabled;
     }
 
-    @Override
-    public void clientTickStarting() {
+    public void handleBotTickStarting(final ClientBotTick.Starting event) {
         lastNoTotemsAlert = Instant.EPOCH;
     }
 
-    public void handleClientTick(final ClientTickEvent event) {
+    public void handleClientTick(final ClientBotTick event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
                 && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())) {

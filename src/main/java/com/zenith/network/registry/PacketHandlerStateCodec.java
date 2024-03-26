@@ -2,6 +2,7 @@ package com.zenith.network.registry;
 
 import com.github.steveice10.packetlib.Session;
 import com.github.steveice10.packetlib.packet.Packet;
+import com.zenith.network.client.ClientSession;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.*;
@@ -79,6 +80,11 @@ public class PacketHandlerStateCodec<S extends Session> {
 
         public PacketHandlerStateCodec.Builder<S> registerPostOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull AsyncPacketHandler<? extends Packet, S> handler) {
             this.postOutboundHandlers.put(packetClass, handler);
+            return this;
+        }
+
+        public PacketHandlerStateCodec.Builder<S> registerPostOutbound(@NonNull Class<? extends Packet> packetClass, @NonNull ClientEventLoopPacketHandler<? extends Packet, ClientSession> handler) {
+            this.postOutboundHandlers.put(packetClass, (PacketHandler<? extends Packet, S>) handler);
             return this;
         }
 

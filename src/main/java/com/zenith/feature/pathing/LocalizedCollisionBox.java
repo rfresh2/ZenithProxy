@@ -1,7 +1,7 @@
 package com.zenith.feature.pathing;
 
 
-import com.zenith.feature.pathing.raycast.Direction;
+import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.Nullable;

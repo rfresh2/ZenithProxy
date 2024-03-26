@@ -3,12 +3,12 @@ package com.zenith.network.client.handler.incoming.scoreboard;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
 import com.zenith.cache.data.scoreboard.Objective;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 
-public class SetObjectiveHandler implements AsyncPacketHandler<ClientboundSetObjectivePacket, ClientSession> {
+public class SetObjectiveHandler implements ClientEventLoopPacketHandler<ClientboundSetObjectivePacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundSetObjectivePacket packet, @NonNull ClientSession session) {
         switch (packet.getAction()) {

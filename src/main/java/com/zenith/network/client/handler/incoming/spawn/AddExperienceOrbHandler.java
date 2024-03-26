@@ -4,12 +4,12 @@ import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddExperienceOrbPacket;
 import com.zenith.cache.data.entity.EntityExperienceOrb;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 
-public class AddExperienceOrbHandler implements AsyncPacketHandler<ClientboundAddExperienceOrbPacket, ClientSession> {
+public class AddExperienceOrbHandler implements ClientEventLoopPacketHandler<ClientboundAddExperienceOrbPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundAddExperienceOrbPacket packet, @NonNull ClientSession session) {
         CACHE.getEntityCache().add(

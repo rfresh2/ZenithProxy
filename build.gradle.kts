@@ -33,7 +33,7 @@ val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.32"
 val postgresVersion = "42.7.3"
-val nettyVersion = "4.1.107.Final"
+val nettyVersion = "4.1.108.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
 val jdbiVersion = "3.45.1"
 
@@ -56,7 +56,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:b40c82ad47") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:c9d28f535c") {
+    shade("com.github.rfresh2:MCProtocolLib:2472a26a22") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")

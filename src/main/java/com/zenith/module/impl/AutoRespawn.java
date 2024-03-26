@@ -3,7 +3,7 @@ package com.zenith.module.impl;
 import com.github.steveice10.mc.protocol.data.game.ClientCommand;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.Proxy;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
 
@@ -23,7 +23,7 @@ public class AutoRespawn extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(ClientBotTick.class, this::handleClientTickEvent),
                             of(DeathEvent.class, this::handleDeathEvent)
         );
     }
@@ -40,7 +40,7 @@ public class AutoRespawn extends Module {
     }
 
 
-    public void handleClientTickEvent(final ClientTickEvent event) {
+    public void handleClientTickEvent(final ClientBotTick event) {
         // the purpose of this handler is to also autorespawn when we've logged in and are already dead
         if (tickCounter++ < tickEventRespawnDelay) return;
         tickCounter = 0;

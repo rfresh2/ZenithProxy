@@ -3,13 +3,13 @@ package com.zenith.network.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;
 
-public class TeleportEntityHandler implements AsyncPacketHandler<ClientboundTeleportEntityPacket, ClientSession> {
+public class TeleportEntityHandler implements ClientEventLoopPacketHandler<ClientboundTeleportEntityPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundTeleportEntityPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());

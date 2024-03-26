@@ -2,7 +2,7 @@ package com.zenith.module.impl;
 
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.feature.pathing.Pathing;
 import com.zenith.module.Module;
@@ -27,7 +27,7 @@ public class Spook extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-                            of(ClientTickEvent.class, this::handleClientTickEvent),
+                            of(ClientBotTick.class, this::handleClientTickEvent),
                             of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
     }
 
@@ -44,7 +44,7 @@ public class Spook extends Module {
                 .forEach(this.focusStack::push);
     }
 
-    public void handleClientTickEvent(final ClientTickEvent event) {
+    public void handleClientTickEvent(final ClientBotTick event) {
         synchronized (focusStack) { // handling this regardless of mode so we don't fill stack indefinitely
             if (!this.focusStack.isEmpty()) {
                 this.focusStack.removeIf(e -> CACHE.getEntityCache().getEntities().values().stream()

@@ -2,7 +2,7 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.module.Module;
 import com.zenith.util.Timer;
 
@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class Spammer extends Module {
@@ -21,7 +22,11 @@ public class Spammer extends Module {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTickEvent);
+        EVENT_BUS.subscribe(
+            this,
+            of(ClientBotTick.class, this::handleClientTickEvent),
+            of(ClientBotTick.Starting.class, this::clientTickStarting)
+        );
     }
 
     @Override
@@ -29,7 +34,7 @@ public class Spammer extends Module {
         return CONFIG.client.extra.spammer.enabled;
     }
 
-    public void handleClientTickEvent(final ClientTickEvent event) {
+    public void handleClientTickEvent(final ClientBotTick event) {
         if (tickTimer.tick(CONFIG.client.extra.spammer.delayTicks)) {
             sendSpam();
         }
@@ -71,8 +76,7 @@ public class Spammer extends Module {
 
     }
 
-    @Override
-    public void clientTickStarting() {
+    public void clientTickStarting(final ClientBotTick.Starting event) {
         tickTimer.reset();
         spamIndex = 0;
     }

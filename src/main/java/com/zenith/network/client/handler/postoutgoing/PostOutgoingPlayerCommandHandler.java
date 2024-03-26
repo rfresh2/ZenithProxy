@@ -3,11 +3,11 @@ package com.zenith.network.client.handler.postoutgoing;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 
 import static com.zenith.Shared.CACHE;
 
-public class PostOutgoingPlayerCommandHandler implements AsyncPacketHandler<ServerboundPlayerCommandPacket, ClientSession> {
+public class PostOutgoingPlayerCommandHandler implements ClientEventLoopPacketHandler<ServerboundPlayerCommandPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ServerboundPlayerCommandPacket packet, final ClientSession session) {
         if (packet.getEntityId() != CACHE.getPlayerCache().getEntityId()) return true;

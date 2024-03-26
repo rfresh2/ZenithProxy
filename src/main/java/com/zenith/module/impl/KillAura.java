@@ -12,7 +12,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.Server
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.pathing.Pathing;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class KillAura extends AbstractInventoryModule {
@@ -57,7 +58,11 @@ public class KillAura extends AbstractInventoryModule {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this, ClientTickEvent.class, this::handleClientTick);
+        EVENT_BUS.subscribe(
+            this,
+            of(ClientBotTick.class, this::handleClientTick),
+            of(ClientBotTick.Stopped.class, this::handleBotTickStopped)
+        );
     }
 
     @Override
@@ -65,7 +70,7 @@ public class KillAura extends AbstractInventoryModule {
         return CONFIG.client.extra.killAura.enabled;
     }
 
-    public void handleClientTick(final ClientTickEvent event) {
+    public void handleClientTick(final ClientBotTick event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && !MODULE.get(AutoEat.class).isEating()) {
             if (delay > 0) {
@@ -145,8 +150,7 @@ public class KillAura extends AbstractInventoryModule {
         return null;
     }
 
-    @Override
-    public void clientTickStopped() {
+    public void handleBotTickStopped(final ClientBotTick.Stopped event) {
         delay = 0;
         isAttacking = false;
     }

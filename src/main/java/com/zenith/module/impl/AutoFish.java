@@ -7,7 +7,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityStandard;
-import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
 import com.zenith.util.Timer;
@@ -36,7 +36,9 @@ public class AutoFish extends AbstractInventoryModule {
         EVENT_BUS.subscribe(this,
                             of(EntityFishHookSpawnEvent.class, this::handleEntityFishHookSpawnEvent),
                             of(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
-                            of(ClientTickEvent.class, this::handleClientTick)
+                            of(ClientBotTick.class, this::handleClientTick),
+                            of(ClientBotTick.Starting.class, this::handleBotTickStarting),
+                            of(ClientBotTick.Stopped.class, this::handleBotTickStopped)
         );
     }
 
@@ -45,13 +47,12 @@ public class AutoFish extends AbstractInventoryModule {
         return CONFIG.client.extra.autoFish.enabled;
     }
 
-    @Override
-    public void clientTickStarting() {
+
+    public void handleBotTickStarting(final ClientBotTick.Starting event) {
         reset();
     }
 
-    @Override
-    public void clientTickStopped() {
+    public void handleBotTickStopped(final ClientBotTick.Stopped event) {
         reset();
     }
 
@@ -80,7 +81,7 @@ public class AutoFish extends AbstractInventoryModule {
         }
     }
 
-    public void handleClientTick(final ClientTickEvent event) {
+    public void handleClientTick(final ClientBotTick event) {
         if (MODULE.get(AutoEat.class).isEating() || MODULE.get(KillAura.class).isActive()) return;
         if (delay > 0) {
             delay--;

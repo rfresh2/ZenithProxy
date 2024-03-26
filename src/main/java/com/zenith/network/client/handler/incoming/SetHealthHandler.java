@@ -3,12 +3,12 @@ package com.zenith.network.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHealthPacket;
 import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.AsyncPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 
 import static com.zenith.Shared.*;
 
-public class SetHealthHandler implements AsyncPacketHandler<ClientboundSetHealthPacket, ClientSession> {
+public class SetHealthHandler implements ClientEventLoopPacketHandler<ClientboundSetHealthPacket, ClientSession> {
 
     @Override
     public boolean applyAsync(@NonNull ClientboundSetHealthPacket packet, @NonNull ClientSession session) {
