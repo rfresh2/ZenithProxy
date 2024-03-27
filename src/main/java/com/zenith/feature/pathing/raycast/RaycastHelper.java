@@ -8,6 +8,7 @@ import com.zenith.feature.pathing.CollisionBox;
 import com.zenith.feature.pathing.LocalizedCollisionBox;
 import com.zenith.feature.pathing.World;
 import com.zenith.feature.pathing.blockdata.Block;
+import com.zenith.feature.pathing.blockdata.BlockState;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3d;
 
@@ -74,10 +75,10 @@ public class RaycastHelper {
                 zFrac += zStep;
             }
 
-            final int blockStateId = World.getBlockStateId(resX, resY, resZ);
-            block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
+            final BlockState blockState = World.getBlockState(resX, resY, resZ);
+            block = blockState.block();
             if (!block.isAir()) {
-                var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, blockStateId, block, includeFluids);
+                var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, blockState, includeFluids);
                 if (raycastResult.hit()) return raycastResult;
             }
         }
@@ -154,13 +155,12 @@ public class RaycastHelper {
         double x, double y, double z,
         double x2, double y2, double z2,
         int blockX, int blockY, int blockZ,
-        int blockStateId,
-        Block block,
+        BlockState blockState,
         boolean includeFluids) {
-        if (!includeFluids && World.isWater(block)) {
+        if (!includeFluids && World.isWater(blockState.block())) {
             return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, Block.AIR);
         }
-        final List<CollisionBox> collisionBoxes = BLOCK_DATA.getCollisionBoxesFromBlockStateId(blockStateId);
+        final List<CollisionBox> collisionBoxes = BLOCK_DATA.getCollisionBoxesFromBlockStateId(blockState.id());
         if (collisionBoxes == null || collisionBoxes.isEmpty()) return BlockRaycastResult.miss();
 
         // replace stream with efficient for loop
@@ -173,7 +173,7 @@ public class RaycastHelper {
             if (intersection == null) continue;
             final double thisLen = MathHelper.squareLen(intersection.x(), intersection.y(), intersection.z());
             if (thisLen < prevLen) {
-                result = new BlockRaycastResult(true, blockX, blockY, blockZ, intersection.intersectingFace(), block);
+                result = new BlockRaycastResult(true, blockX, blockY, blockZ, intersection.intersectingFace(), blockState.block());
                 prevLen = thisLen;
             }
         }

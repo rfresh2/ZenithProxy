@@ -24,45 +24,50 @@ import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.MODULE;
 
 public class PlayerInteractionManager {
-    private BlockPos destroyBlockPos = new BlockPos(-1, -1, -1);
+    private int destroyBlockPosX = -1;
+    private int destroyBlockPosY = -1;
+    private int destroyBlockPosZ = -1;
     private @Nullable ItemStack destroyingItem = Container.EMPTY_STACK;
     private double destroyProgress;
     private double destroyTicks;
     private int destroyDelay;
     private boolean isDestroying;
 
-    private boolean sameDestroyTarget(BlockPos pos) {
+    private boolean sameDestroyTarget(final int x, final int y, final int z) {
         ItemStack itemStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
-        return pos.equals(this.destroyBlockPos) && itemStack.equals(this.destroyingItem);
+        return x == this.destroyBlockPosX && y == this.destroyBlockPosY && z == this.destroyBlockPosZ
+            && itemStack.equals(this.destroyingItem);
     }
 
-    public boolean startDestroyBlock(BlockPos loc, Direction face) {
+    public boolean startDestroyBlock(final int x, final int y, final int z, Direction face) {
         if (CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE) {
             Proxy.getInstance().getClient().sendAsync(
                 new ServerboundPlayerActionPacket(
                     PlayerAction.START_DIGGING,
-                    Vector3i.from(loc.getX(), loc.getY(), loc.getZ()),
+                    Vector3i.from(x, y, z),
                     face,
                     CACHE.getPlayerCache().getSeqId().incrementAndGet()
                 )
             );
             this.destroyDelay = 5;
-        } else if (!this.isDestroying || !this.sameDestroyTarget(loc)) {
+        } else if (!this.isDestroying || !this.sameDestroyTarget(x, y, z)) {
             if (this.isDestroying) {
                 Proxy.getInstance().getClient().sendAsync(
                     new ServerboundPlayerActionPacket(
                         PlayerAction.CANCEL_DIGGING,
-                        Vector3i.from(this.destroyBlockPos.getX(), this.destroyBlockPos.getY(), this.destroyBlockPos.getZ()),
+                        Vector3i.from(this.destroyBlockPosX, this.destroyBlockPosY, this.destroyBlockPosZ),
                         face,
                         CACHE.getPlayerCache().getSeqId().incrementAndGet()
                     )
                 );
             }
 
-            BlockState blockState = World.getBlockState(loc);
+            BlockState blockState = World.getBlockState(x, y, z);
             if (blockState.block().isAir() || blockBreakSpeed(blockState) < 1.0) {
                 this.isDestroying = true;
-                this.destroyBlockPos = loc;
+                this.destroyBlockPosX = x;
+                this.destroyBlockPosY = y;
+                this.destroyBlockPosZ = z;
                 this.destroyingItem = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
                 this.destroyProgress = 0.0;
                 this.destroyTicks = 0.0F;
@@ -71,7 +76,7 @@ public class PlayerInteractionManager {
             Proxy.getInstance().getClient().send(
                 new ServerboundPlayerActionPacket(
                     PlayerAction.START_DIGGING,
-                    Vector3i.from(loc.getX(), loc.getY(), loc.getZ()),
+                    Vector3i.from(x, y, z),
                     face,
                     CACHE.getPlayerCache().getSeqId().incrementAndGet()));
         }
@@ -84,7 +89,7 @@ public class PlayerInteractionManager {
             Proxy.getInstance().getClient()
                 .send(new ServerboundPlayerActionPacket(
                     PlayerAction.CANCEL_DIGGING,
-                    Vector3i.from(this.destroyBlockPos.getX(), this.destroyBlockPos.getY(), this.destroyBlockPos.getZ()),
+                    Vector3i.from(this.destroyBlockPosX, this.destroyBlockPosY, this.destroyBlockPosZ),
                     Direction.DOWN,
                     CACHE.getPlayerCache().getSeqId().incrementAndGet()
                 ));
@@ -93,7 +98,7 @@ public class PlayerInteractionManager {
         }
     }
 
-    public boolean continueDestroyBlock(BlockPos posBlock, Direction directionFacing) {
+    public boolean continueDestroyBlock(final int x, final int y, final int z, Direction directionFacing) {
         if (this.destroyDelay > 0) {
             --this.destroyDelay;
             return true;
@@ -102,13 +107,13 @@ public class PlayerInteractionManager {
             Proxy.getInstance().getClient().send(
                 new ServerboundPlayerActionPacket(
                     PlayerAction.START_DIGGING,
-                    Vector3i.from(posBlock.getX(), posBlock.getY(), posBlock.getZ()),
+                    Vector3i.from(x, y, z),
                     directionFacing,
                     CACHE.getPlayerCache().getSeqId().incrementAndGet()
                 ));
             return true;
-        } else if (this.sameDestroyTarget(posBlock)) {
-            BlockState blockState = World.getBlockState(posBlock);
+        } else if (this.sameDestroyTarget(x, y, z)) {
+            BlockState blockState = World.getBlockState(x, y, z);
             if (blockState.block().equals(Block.AIR)) {
                 this.isDestroying = false;
                 return false;
@@ -120,7 +125,7 @@ public class PlayerInteractionManager {
                     Proxy.getInstance().getClient().send(
                         new ServerboundPlayerActionPacket(
                             PlayerAction.FINISH_DIGGING,
-                            Vector3i.from(posBlock.getX(), posBlock.getY(), posBlock.getZ()),
+                            Vector3i.from(x, y, z),
                             directionFacing,
                             CACHE.getPlayerCache().getSeqId().incrementAndGet()
                         ));
@@ -131,7 +136,7 @@ public class PlayerInteractionManager {
                 return true;
             }
         } else {
-            return this.startDestroyBlock(posBlock, directionFacing);
+            return this.startDestroyBlock(x, y, z, directionFacing);
         }
     }
 
@@ -208,8 +213,17 @@ public class PlayerInteractionManager {
         boolean isEyeInWater = World.isWater(
             World.getBlockAtBlockPos(
                 MathHelper.floorI(CACHE.getPlayerCache().getX()), MathHelper.floorI(CACHE.getPlayerCache().getEyeY()), MathHelper.floorI(CACHE.getPlayerCache().getZ())));
-        if (isEyeInWater) { // todo: && !EnchantmentHelper.hasAquaAffinity(this)) {
-            speed /= 5.0;
+        if (isEyeInWater) {
+            boolean hasAquaAffinity = false;
+            if (mainHandStack != Container.EMPTY_STACK) {
+                for (Enchantment e : mainHandStack.getEnchantments()) {
+                    if (e.type().equals(EnchantmentType.AQUA_AFFINITY)) {
+                        hasAquaAffinity = true;
+                        break;
+                    }
+                }
+            }
+            if (!hasAquaAffinity) speed /= 5.0;
         }
 
         if (!MODULE.get(PlayerSimulation.class).isOnGround()) { // todo: cache
