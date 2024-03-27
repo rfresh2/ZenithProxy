@@ -154,11 +154,15 @@ public class PlayerSimulation extends Module {
     }
 
     private void interactionTick() {
-        if (holdLeftClick) {
-            final BlockRaycastResult raycast = RaycastHelper.playerBlockRaycast(4.5, false);
-            if (raycast.hit()) {
-                interactions.continueDestroyBlock(new BlockPos(MathHelper.floorI(raycast.x()), MathHelper.floorI(raycast.y()), MathHelper.floorI(raycast.z())), raycast.direction());
+        try {
+            if (holdLeftClick) {
+                final BlockRaycastResult raycast = RaycastHelper.playerBlockRaycast(4.5, false);
+                if (raycast.hit()) {
+                    interactions.continueDestroyBlock(new BlockPos(MathHelper.floorI(raycast.x()), MathHelper.floorI(raycast.y()), MathHelper.floorI(raycast.z())), raycast.direction());
+                }
             }
+        } catch (final Exception e) {
+            CLIENT_LOG.error("Error during interaction tick", e);
         }
     }
 

@@ -2,6 +2,8 @@ package com.zenith.feature.pathing;
 
 import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Enchantment;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.EnchantmentType;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
@@ -15,6 +17,8 @@ import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.MODULE;
@@ -156,13 +160,19 @@ public class PlayerInteractionManager {
             speed = state.block().itemToBreakSpeedMap().getOrDefault(mainHandStack.getId(), 1.0);
         }
 
-        if (speed > 1.0F) {
-            // todo: enchantment helper
-//            int i = EnchantmentHelper.getBlockEfficiency(this);
-//            ItemStack itemStack = this.getMainHandItem();
-//            if (i > 0 && !itemStack.isEmpty()) {
-//                f += (float)(i * i + 1);
-//            }
+        if (speed > 1.0F && mainHandStack != Container.EMPTY_STACK) {
+            var enchantments = mainHandStack.getEnchantments();
+            var efficiencyLevel = new AtomicInteger(0);
+            for (Enchantment e : enchantments) {
+                if (e.type() == EnchantmentType.EFFICIENCY) {
+                    efficiencyLevel.set(e.level());
+                    break;
+                }
+            }
+            var lvl = efficiencyLevel.get();
+            if (lvl > 0) {
+                speed += (float)(lvl * lvl + 1);
+            }
         }
 
         boolean hasDigSpeedEffect = false;

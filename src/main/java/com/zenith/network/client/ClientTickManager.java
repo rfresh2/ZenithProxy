@@ -57,9 +57,13 @@ public class ClientTickManager {
             EVENT_BUS.post(ClientTickEvent.Starting.INSTANCE);
             this.clientTickFuture = Proxy.getInstance().getClient().getClientEventLoop().scheduleAtFixedRate(
                 () -> {
-                    EVENT_BUS.post(ClientTickEvent.INSTANCE);
-                    if (doBotTicks.get()) {
-                        EVENT_BUS.post(ClientBotTick.INSTANCE);
+                    try {
+                        EVENT_BUS.post(ClientTickEvent.INSTANCE);
+                        if (doBotTicks.get()) {
+                            EVENT_BUS.post(ClientBotTick.INSTANCE);
+                        }
+                    } catch (final Exception e) {
+                        CLIENT_LOG.error("Error during client tick", e);
                     }
                 },
                 0L, 50, TimeUnit.MILLISECONDS);
