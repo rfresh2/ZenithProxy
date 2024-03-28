@@ -119,6 +119,7 @@ public class Proxy {
         try {
             if (CONFIG.debug.clearOldLogs) clearOldLogs();
             if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
+            MODULE.init();
             if (CONFIG.database.enabled) {
                 DATABASE.start();
                 DEFAULT_LOG.info("Started Databases");
@@ -133,7 +134,6 @@ public class Proxy {
                 }
                 if (!err) DISCORD_LOG.info("Started Discord Bot");
             }
-            MODULE.init();
             Queue.start();
             saveConfigAsync();
             this.startServer();
