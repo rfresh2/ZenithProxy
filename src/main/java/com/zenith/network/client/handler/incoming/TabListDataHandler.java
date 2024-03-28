@@ -46,7 +46,8 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
     }
 
     private synchronized void parse2bQueueState(ClientboundTabListPacket packet, ClientSession session) {
-        Optional<String> queueHeader = Arrays.stream(ComponentSerializer.serializePlain(packet.getHeader()).split("\\\\n"))
+        final String[] headerContentLineBreakSplit = ComponentSerializer.serializePlain(packet.getHeader()).split("\\\\n");
+        Optional<String> queueHeader = Arrays.stream(headerContentLineBreakSplit)
                 .map(String::trim)
                 .map(m -> m.toLowerCase(Locale.ROOT))
                 .filter(m -> m.contains("2b2t is full") || m.contains("pending") || m.contains("in queue"))
@@ -74,6 +75,7 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
             queueDuration = Optional.of(Duration.between(Proxy.getInstance().getConnectTime(), Instant.now()));
             EVENT_BUS.postAsync(new QueueCompleteEvent(queueDuration.get()));
         } else if (!session.isOnline()) {
+            if (headerContentLineBreakSplit.length == 1 && headerContentLineBreakSplit[0].isEmpty()) return; // can occur right after game profile packet received
             session.setOnline(true);
             EVENT_BUS.postAsync(new PlayerOnlineEvent(queueDuration));
             queueDuration = Optional.empty();
