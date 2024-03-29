@@ -137,33 +137,23 @@ public class ReplayRecording implements Closeable {
         }
         final ByteBuf packetBuf = ALLOC.buffer();
         try {
+            packetBuf.writeInt(t);
+            var lenIndex = packetBuf.writerIndex();
+            packetBuf.writeInt(0); // write dummy length
             var packetProtocol = session.getPacketProtocol();
             var codecHelper = (MinecraftCodecHelper) session.getCodecHelper();
             var packetId = MinecraftCodec.CODEC.getCodec(protocolState).getClientboundId(packet);
             packetProtocol.getPacketHeader().writePacketId(packetBuf, codecHelper, packetId);
             packet.serialize(packetBuf, codecHelper);
             var packetSize = packetBuf.readableBytes();
-            writeInt(zipOutputStream, t);
-            writeInt(zipOutputStream, packetSize);
+            var packetBodySize = packetSize - 8;
+            packetBuf.setInt(lenIndex, packetBodySize); // write actual length
             packetBuf.readBytes(zipOutputStream, packetSize);
         } catch (final Throwable e) {
             MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
         } finally {
             packetBuf.release();
         }
-    }
-
-    /**
-     * Writes an integer to the output stream.
-     * @param out The output stream
-     * @param x The integer
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void writeInt(OutputStream out, int x) throws IOException {
-        out.write((x >>> 24) & 0xFF);
-        out.write((x >>> 16) & 0xFF);
-        out.write((x >>>  8) & 0xFF);
-        out.write(x & 0xFF);
     }
 
     @Override
