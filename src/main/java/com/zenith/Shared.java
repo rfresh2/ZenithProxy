@@ -32,6 +32,7 @@ import com.zenith.network.server.handler.player.InGameCommandManager;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
+import com.zenith.via.ZenithViaInitializer;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -93,6 +94,7 @@ public class Shared {
     public static final SessionServerApi SESSION_SERVER;
     public static final MinetoolsApi MINETOOLS;
     public static final PriobanApi PRIOBAN;
+    public static final ZenithViaInitializer VIA_INITIALIZER;
     public static synchronized void loadConfig() {
         try {
             DEFAULT_LOG.info("Loading config...");
@@ -223,6 +225,7 @@ public class Shared {
             SESSION_SERVER = new SessionServerApi();
             MINETOOLS = new MinetoolsApi();
             PRIOBAN = new PriobanApi();
+            VIA_INITIALIZER = new ZenithViaInitializer();
             final LanguageManager languageManager = new LanguageManager();
             TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
             translationRegistry.registerAll(Locale.ENGLISH, languageManager.getLanguageDataMap());

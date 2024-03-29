@@ -3,6 +3,7 @@ package com.zenith.network.client;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.github.steveice10.packetlib.tcp.TcpClientSession;
+import com.github.steveice10.packetlib.tcp.TcpConnectionManager;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -32,13 +33,13 @@ public class ClientSession extends TcpClientSession {
     private ScheduledFuture clientConstantTickFuture = null;
     private static final ClientTickManager clientTickManager = new ClientTickManager();
 
-    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo) {
-        super(host, port, bindAddress, 0, protocol, proxyInfo);
+    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo, TcpConnectionManager tcpManager) {
+        super(host, port, bindAddress, 0, protocol, proxyInfo, tcpManager);
         this.addListener(new ClientListener(this));
     }
 
-    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol) {
-        this(host, port, bindAddress, protocol, null);
+    public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, TcpConnectionManager tcpManager) {
+        this(host, port, bindAddress, protocol, null, tcpManager);
     }
 
     public void setOnline(final boolean online) {

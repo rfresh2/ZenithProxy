@@ -1,11 +1,11 @@
 package com.zenith.via;
 
 import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
+import com.github.steveice10.packetlib.Session;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import com.zenith.Proxy;
-import com.zenith.network.client.ClientSession;
 import com.zenith.via.handler.ZViaClientCodecHandler;
 import io.netty.channel.Channel;
 import net.raphimc.vialoader.ViaLoader;
@@ -21,23 +21,21 @@ public class ZenithViaInitializer {
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
     public void init() {
-        if (this.initialized.get()) {
-            return;
+        if (this.initialized.compareAndSet(false, true)) {
+            ViaLoader.init(
+                null,
+                new ZenithViaLoader(),
+                null,
+                null,
+                ViaBackwardsPlatformImpl::new
+            );
         }
-        ViaLoader.init(
-            null,
-            new ZenithViaLoader(),
-            null,
-            null,
-            ViaBackwardsPlatformImpl::new
-        );
-        this.initialized.set(true);
     }
 
     // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
     // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-codec -> codec -> manager
 
-    public void clientViaChannelInitializer(Channel channel, ClientSession client) {
+    public void clientViaChannelInitializer(Channel channel, Session client) {
         if (!CONFIG.client.viaversion.enabled) return;
         if (CONFIG.client.viaversion.autoProtocolVersion) updateClientViaProtocolVersion();
         if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
@@ -63,26 +61,30 @@ public class ZenithViaInitializer {
 
     private void updateClientViaProtocolVersion() {
         try {
-            final int detectedVersion = ProtocolVersionDetector.getProtocolVersion(CONFIG.client.server.address,
-                                                                                   CONFIG.client.server.port);
+            final int detectedVersion = ProtocolVersionDetector.getProtocolVersion(
+                CONFIG.client.server.address,
+                CONFIG.client.server.port);
             if (!ProtocolVersion.isRegistered(detectedVersion)) {
-                CLIENT_LOG.error("Unknown protocol version {} detected for server: {}:{}",
-                                 detectedVersion,
-                                 CONFIG.client.server.address,
-                                 CONFIG.client.server.port);
+                CLIENT_LOG.error(
+                    "Unknown protocol version {} detected for server: {}:{}",
+                    detectedVersion,
+                    CONFIG.client.server.address,
+                    CONFIG.client.server.port);
                 return;
             }
-            CLIENT_LOG.info("Updating detected protocol version {} for server: {}:{}",
-                            detectedVersion,
-                            CONFIG.client.server.address,
-                            CONFIG.client.server.port);
+            CLIENT_LOG.info(
+                "Updating detected protocol version {} for server: {}:{}",
+                detectedVersion,
+                CONFIG.client.server.address,
+                CONFIG.client.server.port);
             CONFIG.client.viaversion.protocolVersion = detectedVersion;
             saveConfigAsync();
         } catch (final Exception e) {
-            CLIENT_LOG.error("Failed to detect protocol version for server: {}:{}",
-                             CONFIG.client.server.address,
-                             CONFIG.client.server.port,
-                             e);
+            CLIENT_LOG.error(
+                "Failed to detect protocol version for server: {}:{}",
+                CONFIG.client.server.address,
+                CONFIG.client.server.port,
+                e);
         }
     }
 }
