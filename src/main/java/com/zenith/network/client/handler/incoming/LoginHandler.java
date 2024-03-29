@@ -23,7 +23,7 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
         //  https://discord.com/channels/1127460556710883391/1127461501960208465/1197657407631937536
         var currentProfile = CACHE.getProfileCache().getProfile();
         var currentRegistryTag = CACHE.getChunkCache().getRegistryTag();
-        var currentServerBrand = CACHE.getChunkCache().getServerBrand();
+        var currentServerBrand = CACHE.getChunkCache().getServerBrandRaw();
         CACHE.reset(true);
         CACHE.getProfileCache().setProfile(currentProfile);
         CACHE.getChunkCache().updateRegistryTag(currentRegistryTag);
