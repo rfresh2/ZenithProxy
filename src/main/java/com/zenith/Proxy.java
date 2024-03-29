@@ -13,6 +13,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.title.Clientb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.github.steveice10.packetlib.BuiltinFlags;
 import com.github.steveice10.packetlib.ProxyInfo;
+import com.github.steveice10.packetlib.tcp.TcpConnectionManager;
 import com.github.steveice10.packetlib.tcp.TcpServer;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
@@ -30,7 +31,8 @@ import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
-import com.zenith.via.ZenithViaInitializer;
+import com.zenith.via.ZenithClientChannelInitializer;
+import com.zenith.via.ZenithServerChannelInitializer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -87,7 +89,7 @@ public class Proxy {
     private LanBroadcaster lanBroadcaster;
     // might move to config and make the user deal with it when it changes
     private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
-    private final ZenithViaInitializer viaInitializer = new ZenithViaInitializer();
+    private TcpConnectionManager tcpManager;
 
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -136,6 +138,7 @@ public class Proxy {
             }
             Queue.start();
             saveConfigAsync();
+            this.tcpManager = new TcpConnectionManager();
             this.startServer();
             CACHE.reset(true);
             EXECUTOR.scheduleAtFixedRate(this::handleActiveHoursTick, 0L, 1L, TimeUnit.MINUTES);
@@ -232,6 +235,7 @@ public class Proxy {
             CompletableFuture.runAsync(() -> {
                 if (nonNull(this.client)) this.client.disconnect(MinecraftConstants.SERVER_CLOSING_MESSAGE);
                 stopServer();
+                tcpManager.close();
                 saveConfig();
                 int count = 0;
                 while (!DISCORD.isMessageQueueEmpty() && count++ < 10) {
@@ -311,12 +315,12 @@ public class Proxy {
         }
         if (this.isConnected()) throw new IllegalStateException("Already connected!");
         CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
-        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, minecraftProtocol, getClientProxyInfo());
+        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, minecraftProtocol, getClientProxyInfo(), tcpManager);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org"))
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         this.client.setReadTimeout(CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : 0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
-        this.client.setInitChannelConsumer(viaInitializer::clientViaChannelInitializer);
+        this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);
     }
 
@@ -350,8 +354,8 @@ public class Proxy {
         var address = CONFIG.server.bind.address;
         var port = CONFIG.server.bind.port;
         SERVER_LOG.info("Starting server on {}:{}...", address, port);
-        this.server = new TcpServer(address, port, MinecraftProtocol::new);
-        this.server.setInitChannelConsumer(viaInitializer::serverViaChannelInitializer);
+        this.server = new TcpServer(address, port, MinecraftProtocol::new, tcpManager);
+        this.server.setGlobalFlag(MinecraftConstants.SERVER_CHANNEL_INITIALIZER, ZenithServerChannelInitializer.FACTORY);
         this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
         var serverInfoBuilder = new CustomServerInfoBuilder();
         this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);

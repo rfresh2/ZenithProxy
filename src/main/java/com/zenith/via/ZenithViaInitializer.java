@@ -19,17 +19,15 @@ public class ZenithViaInitializer {
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
     public void init() {
-        if (this.initialized.get()) {
-            return;
+        if (this.initialized.compareAndSet(false, true)) {
+            ViaLoader.init(
+                null,
+                new ZenithViaLoader(),
+                null,
+                null,
+                ViaBackwardsPlatformImpl::new
+            );
         }
-        ViaLoader.init(
-            null,
-            new ZenithViaLoader(),
-            null,
-            null,
-            ViaBackwardsPlatformImpl::new
-        );
-        this.initialized.set(true);
     }
 
     // pipeline order before readTimeout -> encryption -> sizer -> compression -> codec -> manager
@@ -60,26 +58,30 @@ public class ZenithViaInitializer {
 
     private void updateClientViaProtocolVersion() {
         try {
-            final int detectedVersion = ProtocolVersionDetector.getProtocolVersion(CONFIG.client.server.address,
-                                                                                   CONFIG.client.server.port);
+            final int detectedVersion = ProtocolVersionDetector.getProtocolVersion(
+                CONFIG.client.server.address,
+                CONFIG.client.server.port);
             if (!ProtocolVersion.isRegistered(detectedVersion)) {
-                CLIENT_LOG.error("Unknown protocol version {} detected for server: {}:{}",
-                                 detectedVersion,
-                                 CONFIG.client.server.address,
-                                 CONFIG.client.server.port);
+                CLIENT_LOG.error(
+                    "Unknown protocol version {} detected for server: {}:{}",
+                    detectedVersion,
+                    CONFIG.client.server.address,
+                    CONFIG.client.server.port);
                 return;
             }
-            CLIENT_LOG.info("Updating detected protocol version {} for server: {}:{}",
-                            detectedVersion,
-                            CONFIG.client.server.address,
-                            CONFIG.client.server.port);
+            CLIENT_LOG.info(
+                "Updating detected protocol version {} for server: {}:{}",
+                detectedVersion,
+                CONFIG.client.server.address,
+                CONFIG.client.server.port);
             CONFIG.client.viaversion.protocolVersion = detectedVersion;
             saveConfigAsync();
         } catch (final Exception e) {
-            CLIENT_LOG.error("Failed to detect protocol version for server: {}:{}",
-                             CONFIG.client.server.address,
-                             CONFIG.client.server.port,
-                             e);
+            CLIENT_LOG.error(
+                "Failed to detect protocol version for server: {}:{}",
+                CONFIG.client.server.address,
+                CONFIG.client.server.port,
+                e);
         }
     }
 }
