@@ -35,8 +35,9 @@ import static com.zenith.Shared.*;
 public class ReplayRecording implements Closeable {
     private final ReplayMetadata metadata;
     private final Path replayDirectory;
-    private OutputStream outputStream;
+    private OutputStream fileOutputStream;
     private ZipOutputStream zipOutputStream;
+    private OutputStream writerStream;
     @Getter private File replayFile;
     private static final ByteBufAllocator ALLOC = PooledByteBufAllocator.DEFAULT;
     private boolean preConnectSyncNeeded = false;
@@ -68,9 +69,10 @@ public class ReplayRecording implements Closeable {
         final String time = formatter.format(ZonedDateTime.now());
         replayFile = replayDirectory.resolve(time + "_" + CONFIG.authentication.username + ".mcpr").toFile();
         replayFile.getParentFile().mkdirs();
-        outputStream = new BufferedOutputStream(new FileOutputStream(replayFile));
-        zipOutputStream = new ZipOutputStream(outputStream);
+        fileOutputStream = new FileOutputStream(replayFile);
+        zipOutputStream = new ZipOutputStream(fileOutputStream);
         zipOutputStream.putNextEntry(new ZipEntry("recording.tmcpr"));
+        writerStream = new BufferedOutputStream(zipOutputStream);
         if (Proxy.getInstance().isConnected() && Proxy.getInstance().getClient().isOnline()) {
             lateStartRecording();
         } else {
@@ -135,7 +137,7 @@ public class ReplayRecording implements Closeable {
         } else {
             t = (int) (time - startT);
         }
-        final ByteBuf packetBuf = ALLOC.buffer();
+        final ByteBuf packetBuf = ALLOC.heapBuffer();
         try {
             packetBuf.writeInt(t);
             var lenIndex = packetBuf.writerIndex();
@@ -148,7 +150,7 @@ public class ReplayRecording implements Closeable {
             var packetSize = packetBuf.readableBytes();
             var packetBodySize = packetSize - 8;
             packetBuf.setInt(lenIndex, packetBodySize); // write actual length
-            packetBuf.readBytes(zipOutputStream, packetSize);
+            packetBuf.readBytes(writerStream, packetSize);
         } catch (final Throwable e) {
             MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
         } finally {
@@ -168,16 +170,18 @@ public class ReplayRecording implements Closeable {
                 MODULE_LOG.error("Failed waiting for termination of ReplayMod PacketHandler executor", e);
             }
         }
-        if (zipOutputStream != null) {
+        if (writerStream != null) {
+            writerStream.flush();
             zipOutputStream.closeEntry();
             metadata.setDuration((int) (System.currentTimeMillis() - startT));
             zipOutputStream.putNextEntry(new ZipEntry("metaData.json"));
             zipOutputStream.write(GSON.toJson(metadata).getBytes());
             zipOutputStream.closeEntry();
+            writerStream.close();
             zipOutputStream.close();
         }
-        if (outputStream != null) {
-            outputStream.close();
+        if (fileOutputStream != null) {
+            fileOutputStream.close();
         }
     }
 
