@@ -35,6 +35,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.cloudburstmc.math.vector.Vector3i;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -307,6 +308,10 @@ public class ChunkCache implements CachedData {
         //  wiki.vg says this should mean the tile entity gets removed, however that doesn't seem to be correct
         updateOrAddBlockEntity(chunk, packet.getPosition(), packet.getType(), packet.getNbt());
         return true;
+    }
+
+    public @Nullable byte[] getServerBrandRaw() {
+        return serverBrand;
     }
 
     public byte[] getServerBrand() {
