@@ -17,6 +17,7 @@ public class ModuleManager {
             new AntiAFK(),
             new AntiKick(),
             new AntiLeak(),
+            new AutoArmor(),
             new AutoDisconnect(),
             new AutoEat(),
             new AutoFish(),

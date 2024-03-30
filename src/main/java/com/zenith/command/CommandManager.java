@@ -48,6 +48,7 @@ public class CommandManager {
            new AntiKickCommand(),
            new AntiLeakCommand(),
            new AuthCommand(),
+           new AutoArmorCommand(),
            new AutoDisconnectCommand(),
            new AutoEatCommand(),
            new AutoFishCommand(),

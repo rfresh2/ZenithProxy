@@ -12,7 +12,6 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 
 import java.io.IOException;
-import java.util.concurrent.ScheduledFuture;
 
 import static com.zenith.Shared.CLIENT_LOG;
 
@@ -30,7 +29,6 @@ public class ClientSession extends TcpClientSession {
     // in game
     private boolean online = false;
     private boolean disconnected = true;
-    private ScheduledFuture clientConstantTickFuture = null;
     private static final ClientTickManager clientTickManager = new ClientTickManager();
 
     public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo, TcpConnectionManager tcpManager) {

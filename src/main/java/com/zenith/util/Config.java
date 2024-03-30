@@ -88,6 +88,7 @@ public final class Config {
             public boolean logChatMessages = true;
             public ActionLimiter actionLimiter = new ActionLimiter();
             public VisualRange visualRange = new VisualRange();
+            public AutoArmor autoArmor = new AutoArmor();
 
             public static class VisualRange {
                 public boolean enabled = true;
@@ -98,6 +99,10 @@ public final class Config {
                 public boolean logoutAlert = true;
                 public boolean replayRecording = false;
                 public int replayRecordingCooldownMins = 5;
+            }
+
+            public static class AutoArmor {
+                public boolean enabled = false;
             }
 
             public static class AntiKick {

@@ -205,9 +205,9 @@
   }, {
     "pattern":"\\Qjndi.properties\\E"
   }, {
-    "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl30x.so\\E"
-  }, {
     "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl11x.so\\E"
+  }, {
+    "pattern":"\\Qlinux_x86_64/velocity-cipher-ossl30x.so\\E"
   }, {
     "pattern":"\\Qlinux_x86_64/velocity-cipher.so\\E"
   }, {
