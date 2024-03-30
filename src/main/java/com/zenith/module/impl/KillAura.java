@@ -83,12 +83,9 @@ public class KillAura extends AbstractInventoryModule {
             if (target != null && MODULE.get(PlayerSimulation.class).isOnGround()) {
                 isAttacking = true;
                 if (switchToWeapon()) {
-                    if (rotateTo(target)) {
-                        attack(target);
-                        delay = CONFIG.client.extra.killAura.attackDelayTicks;
-                    }
+                    PATHING.attackEntity(target, MOVEMENT_PRIORITY);
+                    delay = CONFIG.client.extra.killAura.attackDelayTicks;
                 }
-                PATHING.stop(MOVEMENT_PRIORITY-1);
             } else {
                 isAttacking = false;
             }

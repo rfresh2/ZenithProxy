@@ -19,6 +19,7 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -119,7 +120,10 @@ public class PlayerSimulation extends Module {
                                              boolean sneaking,
                                              boolean sprinting,
                                              final boolean leftClick,
-                                             final boolean rightClick) {
+                                             Predicate<BlockOrEntityRaycastResult> leftClickPredicate,
+                                             final boolean rightClick,
+                                             Predicate<BlockOrEntityRaycastResult> rightClickPredicate
+    ) {
         if (!pressingForward || !pressingBack) {
             this.movementInput.pressingForward = pressingForward;
             this.movementInput.pressingBack = pressingBack;
@@ -132,7 +136,9 @@ public class PlayerSimulation extends Module {
         this.movementInput.sneaking = sneaking;
         this.movementInput.sprinting = sprinting;
         this.movementInput.leftClick = leftClick;
+        this.movementInput.leftClickPredicate = leftClickPredicate;
         this.movementInput.rightClick = rightClick;
+        this.movementInput.rightClickPredicate = rightClickPredicate;
     }
 
     public synchronized void doMovementInput(final Input input) {
@@ -144,7 +150,9 @@ public class PlayerSimulation extends Module {
                         input.sneaking,
                         input.sprinting,
                         input.leftClick,
-                        input.rightClick
+                        input.leftClickPredicate,
+                        input.rightClick,
+                        input.rightClickPredicate
         );
     }
 
@@ -158,8 +166,8 @@ public class PlayerSimulation extends Module {
     private void interactionTick() {
         try {
             if (movementInput.isLeftClick()) {
-                final BlockOrEntityRaycastResult raycast = RaycastHelper.playerBlockOrEntityRaycast(4.5);
-                if (raycast.hit()) {
+                final BlockOrEntityRaycastResult raycast = RaycastHelper.blockOrEntityRaycastFromPos(this.x, CACHE.getPlayerCache().getEyeY(), this.z, this.yaw, this.pitch, 4.5);
+                if (raycast.hit() && movementInput.leftClickPredicate.test(raycast)) {
                     if (raycast.isBlock()) {
                         interactions.continueDestroyBlock(MathHelper.floorI(raycast.block().x()), MathHelper.floorI(raycast.block().y()), MathHelper.floorI(raycast.block().z()), raycast.block().direction());
                     } else {

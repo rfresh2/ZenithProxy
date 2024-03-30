@@ -105,30 +105,43 @@ public class Pathing {
         currentMovementInputRequest = new MovementInputRequest(Optional.of(jumpInput()), Optional.empty(), Optional.empty(), priority);
     }
 
-    public synchronized void leftClick(final float yaw, final float pitch, final int priority) {
-        if (priority < currentMovementInputRequest.priority()) return;
-        currentMovementInputRequest = new MovementInputRequest(
-            Optional.of(new Input(false, false, false, false, false, false, false, true, false)),
-            Optional.of(yaw),
-            Optional.of(pitch),
-            priority);
-    }
-
-    public synchronized void leftClick(final int blockX, final int blockY, final int blockZ, final int priority) {
+    public synchronized void breakBlock(final int blockX, final int blockY, final int blockZ, final int priority) {
         if (priority < currentMovementInputRequest.priority()) return;
         final Vector2f rotationTo = shortestRotationTo(blockX, blockY, blockZ);
         currentMovementInputRequest = new MovementInputRequest(
-            Optional.of(new Input(false, false, false, false, false, false, false, true, false)),
+            Optional.of(new Input(
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                true,
+                (ray) -> ray.isBlock() && MathHelper.floorI(ray.block().x()) == blockX && MathHelper.floorI(ray.block().y()) == blockY && MathHelper.floorI(ray.block().z()) == blockZ,
+                false,
+                Input.DEFAULT_CLICK_PREDICATE)),
             Optional.of(rotationTo.getX()),
             Optional.of(rotationTo.getY()),
             priority);
     }
 
-    public synchronized void leftClick(final Entity entity, final int priority) {
+    public synchronized void attackEntity(final Entity entity, final int priority) {
         if (priority < currentMovementInputRequest.priority()) return;
         final Vector2f rotationTo = shortestRotationTo(entity);
         currentMovementInputRequest = new MovementInputRequest(
-            Optional.of(new Input(false, false, false, false, false, false, false, true, false)),
+            Optional.of(new Input(
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                true,
+                (ray) -> ray.isEntity() && ray.entity().entity().getEntityId() == entity.getEntityId(),
+                false,
+                Input.DEFAULT_CLICK_PREDICATE)),
             Optional.of(rotationTo.getX()),
             Optional.of(rotationTo.getY()),
             priority);
@@ -158,7 +171,9 @@ public class Pathing {
             false,
             false,
             false,
-            false
+            Input.DEFAULT_CLICK_PREDICATE,
+            false,
+            Input.DEFAULT_CLICK_PREDICATE
         );
     }
 
@@ -172,7 +187,9 @@ public class Pathing {
             true,
             false,
             false,
-            false
+            Input.DEFAULT_CLICK_PREDICATE,
+            false,
+            Input.DEFAULT_CLICK_PREDICATE
         );
     }
 
@@ -186,7 +203,9 @@ public class Pathing {
             false,
             false,
             false,
-            false
+            Input.DEFAULT_CLICK_PREDICATE,
+            false,
+            Input.DEFAULT_CLICK_PREDICATE
         );
     }
 

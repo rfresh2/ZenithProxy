@@ -79,7 +79,7 @@ public class AntiAFK extends Module {
 
     private void sneakTick() {
         PATHING.move(
-                new Input(false, false, false, false, false, true, false, false, false),
+                new Input(false, false, false, false, false, true, false, false, Input.DEFAULT_CLICK_PREDICATE, false, Input.DEFAULT_CLICK_PREDICATE),
                 MOVEMENT_PRIORITY - 1);
     }
 
