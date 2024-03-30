@@ -5,12 +5,10 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
 
 import static java.util.Arrays.asList;
 
 public class ModuleManager {
-    protected ScheduledFuture<?> clientTickFuture;
     private final Reference2ObjectMap<Class<? extends Module>, Module> moduleClassMap = new Reference2ObjectOpenHashMap<>();
 
     public void init() {
@@ -26,6 +24,7 @@ public class ModuleManager {
             new AutoReply(),
             new AutoRespawn(),
             new AutoTotem(),
+            new ESP(),
             new KillAura(),
             new PlayerSimulation(),
             new ReplayMod(),

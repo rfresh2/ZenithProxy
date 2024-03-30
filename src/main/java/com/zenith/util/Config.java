@@ -415,6 +415,7 @@ public final class Config {
         public static final class Extra {
             public Timeout timeout = new Timeout();
             public Whitelist whitelist = new Whitelist();
+            public ESP esp = new ESP();
 
             public static final class Whitelist {
                 public boolean enable = true;
@@ -428,6 +429,10 @@ public final class Config {
             public static final class Timeout {
                 public boolean enable = true;
                 public int seconds = 30;
+            }
+
+            public static final class ESP {
+                public boolean enable = false;
             }
         }
 

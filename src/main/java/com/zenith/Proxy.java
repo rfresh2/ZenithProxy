@@ -469,6 +469,12 @@ public class Proxy {
         return player != null && player.isLoggedIn();
     }
 
+    public @Nullable ServerConnection getActivePlayer() {
+        ServerConnection player = this.currentPlayer.get();
+        if (player != null && player.isLoggedIn()) return player;
+        else return null;
+    }
+
     public boolean isPrio() {
         return this.isPrio.orElse(CONFIG.authentication.prio);
     }

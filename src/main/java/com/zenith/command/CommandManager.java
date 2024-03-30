@@ -65,6 +65,7 @@ public class CommandManager {
            new DisconnectCommand(),
            new DiscordManageCommand(),
            new DisplayCoordsCommand(),
+           new ESPCommand(),
            new ExtraChatCommand(),
            new FriendCommand(),
            new HelpCommand(),
