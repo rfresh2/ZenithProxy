@@ -14,12 +14,10 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.pathing.raycast.RaycastHelper;
-import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3i;
 
 import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.MODULE;
 
 public class ClickCommand extends Command {
     @Override
@@ -34,20 +32,6 @@ public class ClickCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("click")
-            .then(literal("lhold").executes(c -> {
-                // break the block currently looked at
-                c.getSource().setNoOutput(true);
-                if (!Proxy.getInstance().isConnected()) return 1;
-                MODULE.get(PlayerSimulation.class).setHoldLeftClick(true);
-                return 1;
-            }))
-            .then(literal("lholdstop").executes(c -> {
-                // break the block currently looked at
-                c.getSource().setNoOutput(true);
-                if (!Proxy.getInstance().isConnected()) return 1;
-                MODULE.get(PlayerSimulation.class).setHoldLeftClick(false);
-                return 1;
-            }))
             .then(literal("left").executes(c -> {
                 c.getSource().setNoOutput(true);
                 if (!Proxy.getInstance().isConnected()) return 1;

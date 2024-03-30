@@ -105,6 +105,35 @@ public class Pathing {
         currentMovementInputRequest = new MovementInputRequest(Optional.of(jumpInput()), Optional.empty(), Optional.empty(), priority);
     }
 
+    public synchronized void leftClick(final float yaw, final float pitch, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        currentMovementInputRequest = new MovementInputRequest(
+            Optional.of(new Input(false, false, false, false, false, false, false, true, false)),
+            Optional.of(yaw),
+            Optional.of(pitch),
+            priority);
+    }
+
+    public synchronized void leftClick(final int blockX, final int blockY, final int blockZ, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        final Vector2f rotationTo = shortestRotationTo(blockX, blockY, blockZ);
+        currentMovementInputRequest = new MovementInputRequest(
+            Optional.of(new Input(false, false, false, false, false, false, false, true, false)),
+            Optional.of(rotationTo.getX()),
+            Optional.of(rotationTo.getY()),
+            priority);
+    }
+
+    public synchronized void leftClick(final Entity entity, final int priority) {
+        if (priority < currentMovementInputRequest.priority()) return;
+        final Vector2f rotationTo = shortestRotationTo(entity);
+        currentMovementInputRequest = new MovementInputRequest(
+            Optional.of(new Input(false, false, false, false, false, false, false, true, false)),
+            Optional.of(rotationTo.getX()),
+            Optional.of(rotationTo.getY()),
+            priority);
+    }
+
     public synchronized void handleTick(final ClientBotTick event) {
         if (currentMovementInputRequest != DEFAULT_MOVEMENT_INPUT_REQUEST) {
             MODULE.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
@@ -127,6 +156,8 @@ public class Pathing {
             false,
             false,
             false,
+            false,
+            false,
             false
         );
     }
@@ -139,6 +170,8 @@ public class Pathing {
             false,
             false,
             true,
+            false,
+            false,
             false
         );
     }
@@ -150,6 +183,8 @@ public class Pathing {
             false,
             false,
             true,
+            false,
+            false,
             false,
             false
         );

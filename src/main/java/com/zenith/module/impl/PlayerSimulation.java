@@ -10,13 +10,12 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.pathing.*;
 import com.zenith.feature.pathing.blockdata.Block;
-import com.zenith.feature.pathing.raycast.BlockRaycastResult;
+import com.zenith.feature.pathing.raycast.BlockOrEntityRaycastResult;
 import com.zenith.feature.pathing.raycast.RaycastHelper;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,8 +66,6 @@ public class PlayerSimulation extends Module {
     private final int bubbleColumnDownwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").minStateId();
     private final int bubbleColumnUpwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").maxStateId();
     private final PlayerInteractionManager interactions = new PlayerInteractionManager();
-    @Setter
-    private boolean holdLeftClick = false;
 
     @Override
     public void subscribeEvents() {
@@ -120,8 +117,9 @@ public class PlayerSimulation extends Module {
                                              boolean pressingRight,
                                              boolean jumping,
                                              boolean sneaking,
-                                             boolean sprinting
-    ) {
+                                             boolean sprinting,
+                                             final boolean leftClick,
+                                             final boolean rightClick) {
         if (!pressingForward || !pressingBack) {
             this.movementInput.pressingForward = pressingForward;
             this.movementInput.pressingBack = pressingBack;
@@ -133,6 +131,8 @@ public class PlayerSimulation extends Module {
         this.movementInput.jumping = jumping;
         this.movementInput.sneaking = sneaking;
         this.movementInput.sprinting = sprinting;
+        this.movementInput.leftClick = leftClick;
+        this.movementInput.rightClick = rightClick;
     }
 
     public synchronized void doMovementInput(final Input input) {
@@ -142,7 +142,9 @@ public class PlayerSimulation extends Module {
                         input.pressingRight,
                         input.jumping,
                         input.sneaking,
-                        input.sprinting
+                        input.sprinting,
+                        input.leftClick,
+                        input.rightClick
         );
     }
 
@@ -155,10 +157,14 @@ public class PlayerSimulation extends Module {
 
     private void interactionTick() {
         try {
-            if (holdLeftClick) {
-                final BlockRaycastResult raycast = RaycastHelper.playerBlockRaycast(4.5, false);
+            if (movementInput.isLeftClick()) {
+                final BlockOrEntityRaycastResult raycast = RaycastHelper.playerBlockOrEntityRaycast(4.5);
                 if (raycast.hit()) {
-                    interactions.continueDestroyBlock(MathHelper.floorI(raycast.x()), MathHelper.floorI(raycast.y()), MathHelper.floorI(raycast.z()), raycast.direction());
+                    if (raycast.isBlock()) {
+                        interactions.continueDestroyBlock(MathHelper.floorI(raycast.block().x()), MathHelper.floorI(raycast.block().y()), MathHelper.floorI(raycast.block().z()), raycast.block().direction());
+                    } else {
+                        interactions.attackEntity(raycast.entity());
+                    }
                 }
             }
         } catch (final Exception e) {

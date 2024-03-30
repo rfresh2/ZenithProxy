@@ -7,12 +7,17 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.EnchantmentTy
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
+import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
+import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerAction;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.feature.pathing.blockdata.BlockState;
+import com.zenith.feature.pathing.raycast.EntityRaycastResult;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -231,5 +236,10 @@ public class PlayerInteractionManager {
         }
 
         return speed;
+    }
+
+    public void attackEntity(final EntityRaycastResult entity) {
+        Proxy.getInstance().getClient().sendAsync(new ServerboundInteractPacket(entity.entity().getEntityId(), InteractAction.ATTACK, false));
+        Proxy.getInstance().getClient().sendAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
     }
 }
