@@ -169,6 +169,8 @@ public class Proxy {
                 DEFAULT_LOG.info("Started AutoUpdater");
             }
             DEFAULT_LOG.info("ZenithProxy started!");
+            DEFAULT_LOG.info("1.20.1 support has been discontinued, please update to 1.20.4!");
+            DEFAULT_LOG.info("Command to update: `channel set java/linux 1.20.4`");
             if (!connected)
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             Wait.waitSpinLoop();
