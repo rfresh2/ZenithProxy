@@ -62,9 +62,9 @@ import static discord4j.common.ReactorResources.DEFAULT_TIMER_TASK_SCHEDULER;
 import static java.util.Objects.nonNull;
 
 public class DiscordBot {
-
     public static final ClientPresence autoReconnectingPresence = ClientPresence.of(Status.IDLE, ClientActivity.custom(
         "AutoReconnecting..."));
+    private static final Duration BLOCK_TIMEOUT = Duration.ofSeconds(5);
     private RestClient restClient;
     private RestChannel mainRestChannel;
     private RestChannel relayRestChannel;
@@ -114,7 +114,7 @@ public class DiscordBot {
                 .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
                 .setInitialPresence(shardInfo -> disconnectedPresence)
                 .login()
-                .block();
+                .block(Duration.ofSeconds(20));
         restClient = client.getRestClient();
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         if (CONFIG.discord.chatRelay.enable)
@@ -174,10 +174,10 @@ public class DiscordBot {
 
     public void setBotNickname(final String nick) {
         try {
-            final Id guildId = mainRestChannel.getData().block().guildId().get();
+            final Id guildId = mainRestChannel.getData().block(BLOCK_TIMEOUT).guildId().get();
             this.client.getGuildById(Snowflake.of(guildId))
                 .flatMap(g -> g.changeSelfNickname(nick))
-                .block();
+                .block(BLOCK_TIMEOUT);
         } catch (final Exception e) {
             DISCORD_LOG.warn("Failed updating bot's nickname. Check that the bot has correct permissions");
             DISCORD_LOG.debug("Failed updating bot's nickname. Check that the bot has correct permissions", e);
@@ -191,7 +191,7 @@ public class DiscordBot {
                                                .description(description)
                                                .build()
                                                .asRequest())
-                .block();
+                .block(BLOCK_TIMEOUT);
         } catch (final Exception e) {
             DISCORD_LOG.warn("Failed updating bot's description. Check that the bot has correct permissions");
             DISCORD_LOG.debug("Failed updating bot's description", e);
@@ -208,7 +208,7 @@ public class DiscordBot {
             this.relayChannelMessageQueueProcessFuture.cancel(true);
         EVENT_BUS.unsubscribe(eventListener);
         if (client != null) {
-            client.logout().block();
+            client.logout().block(Duration.ofSeconds(20));
             client = null;
         }
         if (restClient != null) restClient = null;
@@ -237,7 +237,7 @@ public class DiscordBot {
         try {
             var message = mainChannelMessageQueue.peek();
             if (nonNull(message)) {
-                this.mainRestChannel.createMessage(message).retry(1).block();
+                this.mainRestChannel.createMessage(message).retry(1).block(BLOCK_TIMEOUT);
                 mainChannelMessageQueue.poll();
             }
         } catch (final Throwable e) {
@@ -256,7 +256,7 @@ public class DiscordBot {
             if (nonNull(message)
                 && (!message.getJsonPayload().embeds().isAbsent()
                     || !(message.getJsonPayload().content().isAbsent() || message.getJsonPayload().content().get().isEmpty())))
-                this.relayRestChannel.createMessage(message).retry(1).block();
+                this.relayRestChannel.createMessage(message).retry(1).block(BLOCK_TIMEOUT);
             relayChannelMessageQueue.poll();
         } catch (final Throwable e) {
             DISCORD_LOG.error("Failed sending message to relay channel. Check bot permissions.");
@@ -277,21 +277,21 @@ public class DiscordBot {
                     && Math.random() > 0.75 // 25% chance to show update available
                 ) {
                     this.client.updatePresence(getUpdateAvailablePresence(autoUpdater))
-                        .block();
+                        .block(BLOCK_TIMEOUT);
                     return;
                 }
             }
             if (MODULE.get(AutoReconnect.class).autoReconnectIsInProgress()) {
                 this.client.updatePresence(autoReconnectingPresence)
-                    .block();
+                    .block(BLOCK_TIMEOUT);
                 return;
             }
             if (Proxy.getInstance().isInQueue())
-                this.client.updatePresence(getQueuePresence()).block();
+                this.client.updatePresence(getQueuePresence()).block(BLOCK_TIMEOUT);
             else if (Proxy.getInstance().isConnected())
-                this.client.updatePresence(getOnlinePresence()).block();
+                this.client.updatePresence(getOnlinePresence()).block(BLOCK_TIMEOUT);
             else
-                this.client.updatePresence(disconnectedPresence).block();
+                this.client.updatePresence(disconnectedPresence).block(BLOCK_TIMEOUT);
         } catch (final IllegalStateException e) {
             if (e.getMessage().contains("Backpressure overflow")) {
                 DISCORD_LOG.error("Caught backpressure overflow, restarting discord session");
@@ -389,7 +389,7 @@ public class DiscordBot {
             this.client.edit(UserEditSpec.builder()
                                      .avatar(Image.ofRaw(imageBytes, Image.Format.PNG))
                                      .build())
-                .block();
+                .block(BLOCK_TIMEOUT);
         } catch (final Exception e) {
             DISCORD_LOG.warn("Failed updating discord profile image. Check that the bot has correct permissions");
             DISCORD_LOG.debug("Failed updating discord profile image. Check that the bot has correct permissions", e);
@@ -542,6 +542,6 @@ public class DiscordBot {
     }
 
     public void updatePresence(final ClientPresence presence) {
-        this.client.updatePresence(presence).block();
+        this.client.updatePresence(presence).block(BLOCK_TIMEOUT);
     }
 }
