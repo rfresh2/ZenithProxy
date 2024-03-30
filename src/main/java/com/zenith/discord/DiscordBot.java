@@ -64,7 +64,7 @@ import static java.util.Objects.nonNull;
 public class DiscordBot {
     public static final ClientPresence autoReconnectingPresence = ClientPresence.of(Status.IDLE, ClientActivity.custom(
         "AutoReconnecting..."));
-    private static final Duration BLOCK_TIMEOUT = Duration.ofSeconds(5);
+    private static final Duration BLOCK_TIMEOUT = Duration.ofSeconds(10);
     private RestClient restClient;
     private RestChannel mainRestChannel;
     private RestChannel relayRestChannel;
