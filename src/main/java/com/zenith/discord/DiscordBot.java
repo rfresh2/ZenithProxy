@@ -154,6 +154,20 @@ public class DiscordBot {
                 DISCORD_LOG.error("Failed processing discord command: {}", message, e);
             }
         });
+        if (CONFIG.deprecationWarning_1_20_1) {
+            sendEmbedMessage(
+                Embed.builder()
+                    .title("1.20.1 Deprecated")
+                    .description(
+                        """
+                        **ZenithProxy for 1.20.1 has been deprecated and will no longer receive updates or support.**
+                        
+                        Update to 1.20.4: `channel set java/linux 1.20.4`
+                        
+                        To disable this warning: `debug deprecationWarning off`
+                        """)
+            );
+        }
     }
 
     public synchronized void start() {

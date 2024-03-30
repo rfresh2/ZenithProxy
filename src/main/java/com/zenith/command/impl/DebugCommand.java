@@ -27,23 +27,31 @@ public class DebugCommand extends Command {
             CommandCategory.MANAGE,
             "Debug settings for developers",
             asList(
-                        "autoConnect on/off",
-                        "sync inventory",
-                        "sync chunks",
-                        "clearEffects",
-                        "packetLog on/off",
-                        "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
-                        "packetLog server on/off",
-                        "packetLog filter <string>",
-                        "sendChunksBeforePlayerSpawn on/off",
-                        "kickDisconnect on/off",
-                        "dc"
-                ));
+                "deprecationWarning on/off",
+                "autoConnect on/off",
+                "sync inventory",
+                "sync chunks",
+                "clearEffects",
+                "packetLog on/off",
+                "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
+                "packetLog server on/off",
+                "packetLog filter <string>",
+                "sendChunksBeforePlayerSpawn on/off",
+                "kickDisconnect on/off",
+                "dc"
+            ));
     }
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("debug").requires(Command::validateAccountOwner)
+            .then(literal("deprecationWarning")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.deprecationWarning_1_20_1 = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Deprecation Warning " + toggleStrCaps(CONFIG.deprecationWarning_1_20_1));
+                          return 1;
+                      })))
             .then(literal("autoConnect")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.autoConnect = getToggle(c, "toggle");

@@ -14,6 +14,7 @@ import static java.util.Arrays.asList;
 
 
 public final class Config {
+    public boolean deprecationWarning_1_20_1 = true;
     public Authentication authentication = new Authentication();
     public Client client = new Client();
     public Debug debug = new Debug();
