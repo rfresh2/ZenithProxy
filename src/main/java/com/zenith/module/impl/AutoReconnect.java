@@ -68,7 +68,13 @@ public class AutoReconnect extends Module {
         try {
             delayBeforeReconnect();
             if (Thread.currentThread().isInterrupted()) return;
-            Proxy.getInstance().connect();
+            EXECUTOR.execute(() -> {
+                try {
+                    Proxy.getInstance().connect();
+                } catch (final Throwable e) {
+                    DEFAULT_LOG.error("Error connecting", e);
+                }
+            });
             this.autoReconnectFuture = null;
         } catch (final Exception e) {
             MODULE_LOG.info("AutoReconnect stopped");
