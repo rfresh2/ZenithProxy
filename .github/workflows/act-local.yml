@@ -14,10 +14,30 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Echo Versions and Paths
+        run: |
+          echo "JAVA_HOME: $JAVA_HOME"
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Build ZenithProxy
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: jarBuild
+
+#      - name: Set Gradle JVM
+#        run: touch gradle.properties && echo "org.gradle.java.home=$JAVA_HOME" > gradle.properties
+
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '21'
+          java-version: '22'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 #
@@ -33,22 +53,19 @@ jobs:
           java --version
           native-image --version
 
-      - name: Elevate wrapper permissions
-        run: chmod +x ./gradlew
-
       - name: Download GraalVM Profile
         run: |
           wget https://cdn.2b2t.vc/profile.iprof
           echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
 
-#      - name: Enable GraalVM Profile Instrumenting
-#        run: |
-#          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
-
       - name: Build ZenithProxy
         uses: gradle/gradle-build-action@v2
         with:
           arguments: nativeCompile
+
+#      - name: Enable GraalVM Profile Instrumenting
+#        run: |
+#          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
 
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*

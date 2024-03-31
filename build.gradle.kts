@@ -12,9 +12,11 @@ plugins {
 group = "com.zenith"
 version = "1.0.0"
 
-val javaVersion = JavaLanguageVersion.of(21)
-val javaLauncherProvider = javaToolchains.launcherFor { languageVersion = javaVersion }
-java { toolchain { languageVersion = javaVersion } }
+val javaVersion22 = JavaLanguageVersion.of(22)
+val javaVersion21 = JavaLanguageVersion.of(21)
+val javaLauncherProvider21 = javaToolchains.launcherFor { languageVersion = javaVersion21 }
+val javaLauncherProvider22 = javaToolchains.launcherFor { languageVersion = javaVersion22 }
+java { toolchain { languageVersion = javaVersion21 } }
 
 repositories {
     maven("https://jitpack.io") { name = "jitpack.io" }
@@ -159,7 +161,7 @@ tasks {
     val javaPathTask = register("javaPath", Task::class.java) {
         group = runGroup
         doLast {
-            val execPath = javaLauncherProvider.get().executablePath
+            val execPath = javaLauncherProvider21.get().executablePath
             // create a file symlinked to the java executable for use in scripts
             layout.buildDirectory.asFile.get().mkdirs()
             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -241,7 +243,7 @@ tasks {
 graalvmNative {
     binaries {
         named("main") {
-            javaLauncher = javaLauncherProvider
+            javaLauncher = javaLauncherProvider22
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
             quickBuild = false
@@ -257,7 +259,6 @@ graalvmNative {
                 "-march=x86-64-v3",
                 "--gc=serial",
                 "-J-XX:MaxRAMPercentage=90",
-                "--strict-image-heap",
                 "--initialize-at-build-time=org.redisson.misc.BiHashMap",
                 "--initialize-at-build-time=org.redisson.liveobject.core.RedissonObjectBuilder\$CodecMethodRef"
             )
