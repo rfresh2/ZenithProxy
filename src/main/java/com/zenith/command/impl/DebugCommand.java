@@ -159,6 +159,7 @@ public class DebugCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
+            .addField("Deprecation Warning", toggleStr(CONFIG.deprecationWarning_1_20_1), false)
             .addField("Auto Connect", toggleStr(CONFIG.client.autoConnect), false)
             .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled), false)
             .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received), false)
