@@ -1273,6 +1273,9 @@
   "name":"com.zenith.via.ZenithClientChannelInitializer"
 },
 {
+  "name":"com.zenith.via.ZenithServerChannelInitializer"
+},
+{
   "name":"com.zenith.via.handler.ZViaClientCodecHandler"
 },
 {

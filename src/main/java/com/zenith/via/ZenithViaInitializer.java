@@ -23,7 +23,7 @@ public class ZenithViaInitializer {
     public void init() {
         if (this.initialized.compareAndSet(false, true)) {
             ViaLoader.init(
-                null,
+                new ZenithViaPlatform(),
                 new ZenithViaLoader(),
                 null,
                 null,
