@@ -153,6 +153,8 @@ public class PlayerSimulation extends Module {
         if (waitTicks-- > 0) return;
         if (waitTicks < 0) waitTicks = 0;
 
+        if (resyncTeleport()) return;
+
         if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
@@ -635,4 +637,26 @@ public class PlayerSimulation extends Module {
     private float getSpeed() {
         return CACHE.getPlayerCache().getThePlayer().getSpeed();
     }
+
+    private boolean resyncTeleport() {
+        if (!CONFIG.debug.teleportResync) return false;
+        // can occur when a connected player disconnects in an unusual way like crashing
+        var lastAccepted = CACHE.getPlayerCache().getLastTeleportAccepted();
+        var lastReceived = CACHE.getPlayerCache().getLastTeleportReceived();
+        if (lastAccepted < lastReceived) {
+            MODULE_LOG.warn("Detected teleport desync, resyncing. lastAccepted: {}, lastReceived: {}", lastAccepted, lastReceived);
+            sendClientPacketAsync(new ServerboundAcceptTeleportationPacket(lastAccepted + 1));
+            sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(
+                onGround,
+                x,
+                y,
+                z,
+                yaw,
+                pitch
+            ));
+            return true;
+        }
+        return false;
+    }
+
 }

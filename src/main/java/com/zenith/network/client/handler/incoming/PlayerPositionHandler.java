@@ -20,6 +20,7 @@ public class PlayerPositionHandler implements ClientEventLoopPacketHandler<Clien
     @Override
     public boolean applyAsync(@NonNull ClientboundPlayerPositionPacket packet, @NonNull ClientSession session) {
         PlayerCache cache = CACHE.getPlayerCache();
+        cache.setLastTeleportReceived(packet.getTeleportId());
         cache
                 .setX((packet.getRelative().contains(PositionElement.X) ? cache.getX() : 0.0d) + packet.getX())
                 .setY((packet.getRelative().contains(PositionElement.Y) ? cache.getY() : 0.0d) + packet.getY())

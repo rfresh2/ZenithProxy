@@ -39,7 +39,8 @@ public class DebugCommand extends Command {
                         "sendChunksBeforePlayerSpawn on/off",
                         "binaryNbtComponentSerializer on/off",
                         "kickDisconnect on/off",
-                        "dc"
+                        "dc",
+                        "teleportResync on/off"
                 ));
     }
 
@@ -155,7 +156,13 @@ public class DebugCommand extends Command {
             .then(literal("dc").executes(c -> {
                 c.getSource().setNoOutput(true);
                 Proxy.getInstance().kickDisconnect(MANUAL_DISCONNECT, null);
-            }));
+            }))
+            .then(literal("teleportResync").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.teleportResync = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Teleport Resync " + toggleStrCaps(CONFIG.debug.teleportResync));
+                return 1;
+            })));
     }
 
     @Override
@@ -168,6 +175,8 @@ public class DebugCommand extends Command {
             .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter, false)
             .addField("Send Chunks Before Player Spawn", toggleStr(CONFIG.debug.sendChunksBeforePlayerSpawn), false)
             .addField("Binary Nbt Component Serializer", toggleStr(CONFIG.debug.binaryNbtComponentSerializer), false)
+            .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
+            .addField("Teleport Resync", toggleStr(CONFIG.debug.teleportResync), false)
             .color(Color.CYAN);
     }
 }

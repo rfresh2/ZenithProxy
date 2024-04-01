@@ -354,6 +354,7 @@ public final class Config {
         public boolean sendChunksBeforePlayerSpawn = false;
         public boolean binaryNbtComponentSerializer = true;
         public boolean kickDisconnect = false;
+        public boolean teleportResync = false;
 
         public static final class PacketLog {
             public boolean enabled = false;
