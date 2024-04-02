@@ -47,14 +47,14 @@ public class ChatHistoryCommand extends Command {
                 return 1;
             }))
             .then(literal("seconds")
-                      .then(argument("seconds", integer(0, 120)).executes(c -> {
+                      .then(argument("seconds", integer(5, 300)).executes(c -> {
                           CONFIG.server.extra.chatHistory.seconds = getInteger(c, "seconds");
                           c.getSource().getEmbed()
                               .title("Chat History Seconds Set");
                           return 1;
                       })))
             .then(literal("maxCount")
-                      .then(argument("maxCount", integer(0, 100)).executes(c -> {
+                      .then(argument("maxCount", integer(1, 50)).executes(c -> {
                           CONFIG.server.extra.chatHistory.maxCount = getInteger(c, "maxCount");
                           MODULE.get(ChatHistory.class).syncMaxCountFromConfig();
                           c.getSource().getEmbed()

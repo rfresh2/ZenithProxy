@@ -1,6 +1,7 @@
 package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.ProxyClientLoggedInEvent;
 import com.zenith.event.proxy.ProxySpectatorLoggedInEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
@@ -25,7 +26,8 @@ public class ChatHistory extends Module {
             this,
             of(ServerChatReceivedEvent.class, this::handleServerChatReceived),
             of(ProxyClientLoggedInEvent.class, this::handleClientLoggedIn),
-            of(ProxySpectatorLoggedInEvent.class, this::handleSpectatorLoggedIn)
+            of(ProxySpectatorLoggedInEvent.class, this::handleSpectatorLoggedIn),
+            of(DisconnectEvent.class, this::handleDisconnect)
         );
     }
 
@@ -54,6 +56,10 @@ public class ChatHistory extends Module {
         removeOldChats();
         var session = event.session();
         chatHistory.forEach(chat -> session.sendAsync(new ClientboundSystemChatPacket(chat.message(), false)));
+    }
+
+    private void handleDisconnect(DisconnectEvent event) {
+        chatHistory.clear();
     }
 
     private void removeOldChats() {
