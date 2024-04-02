@@ -21,10 +21,8 @@ jobs:
 
       - name: Echo Versions and Paths
         run: |
-          echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
           java --version
-          native-image --version
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
@@ -51,6 +49,13 @@ jobs:
           java-version: '22'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Echo Versions and Paths
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
 
       - name: Download GraalVM Profile
         if: (!endsWith(github.ref, '.pre'))
