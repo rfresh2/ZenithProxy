@@ -8,11 +8,17 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import discord4j.rest.util.Color;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zenith.Shared.LAUNCH_CONFIG;
-import static com.zenith.Shared.saveLaunchConfig;
+import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static java.util.Arrays.asList;
 
@@ -22,13 +28,18 @@ public class ReleaseChannelCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("channel",
-                                 CommandCategory.MANAGE,
-                                 "Changes the current release channel.",
-                                 asList(
-                                     "list",
-                                     "set <platform> <minecraft version>"
-                                 )
+        return CommandUsage.full(
+            "channel",
+            CommandCategory.MANAGE,
+            "Changes the current release channel.",
+            asList(
+                "list",
+                "set <platform> <minecraft version>"
+            ),
+            asList(
+                "release",
+                "releaseChannel"
+            )
         );
     }
 
@@ -74,13 +85,105 @@ public class ReleaseChannelCommand extends Command {
                 .color(Color.RED);
             return;
         }
+        if (channel.equals("linux")) {
+            if (!validateLinuxPlatform()) {
+                c.getSource().getEmbed()
+                    .title("Invalid Platform!")
+                    .description("Invalid system for linux channel")
+                    .color(Color.RED);
+                return;
+            }
+        }
         LAUNCH_CONFIG.release_channel = channel + "." + minecraft_version;
         if (pre) LAUNCH_CONFIG.release_channel += ".pre";
         c.getSource().getEmbed()
             .title("Release Channel Updated!")
             .addField("Release Channel", LAUNCH_CONFIG.release_channel, false)
-            .addField("Info", "Please restart ZenithProxy for changes to take effect.\nYou can use the `update` command to restart.", false)
+            .addField("Info", "Please restart ZenithProxy for changes to take effect.\nOr apply now: `update`", false)
             .color(Color.CYAN);
         saveLaunchConfig();
+    }
+
+    private static final List<String> amd64CpuFlags = List.of("avx", "avx2", "bmi1", "bmi2", "fma", "sse4_1", "sse4_2", "ssse3");
+
+    private boolean validateLinuxPlatform() {
+        if (LAUNCH_CONFIG.release_channel.startsWith("linux")) {
+            // we're already on linux, so it must be ok
+            return true;
+        }
+
+        // Check if we're running on linux OS
+        boolean isLinuxOs = System.getProperty("os.name").toLowerCase().contains("linux");
+        if (!isLinuxOs) {
+            DEFAULT_LOG.warn("Linux release channel selected but not running on Linux OS.");
+            return false;
+        }
+
+        // check cpu is x86_64
+        boolean isAmd64Cpu = System.getProperty("os.arch").equals("amd64");
+        if (!isAmd64Cpu) {
+            DEFAULT_LOG.warn("Linux release channel selected but not running on x86_64 CPU.");
+            return false;
+        }
+        // check if we have the required CPU flags
+        try {
+            List<String> flags = Files.lines(Paths.get("/proc/cpuinfo"))
+                .filter(line -> line.startsWith("flags"))
+                .map(line -> line.split(":")[1].trim().split(" "))
+                .flatMap(Arrays::stream)
+                .toList();
+            for (String reqFlag : amd64CpuFlags) {
+                if (!flags.contains(reqFlag)) {
+                    DEFAULT_LOG.warn("Linux release channel selected but CPU does not have required flag: {}", reqFlag);
+                    return false;
+                }
+            }
+        } catch (final Throwable e) {
+            DEFAULT_LOG.warn("Error validating linux channel. Failed to read /proc/cpuinfo", e);
+            return false;
+        }
+
+        // check if we have glibc > 2.30
+        try {
+            final ProcessBuilder processBuilder = new ProcessBuilder("ldd",  "--version");
+            processBuilder.redirectErrorStream(true);
+
+            final Process process = processBuilder.start();
+            final StringBuilder stream = readStream(process.getInputStream());
+            var output = stream.toString();
+            String[] lines = output.split(System.getProperty("line.separator"));
+            // ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
+            // get the version from the last word of the first line
+            String[] firstLineWordSplit = lines[0].split(" ");
+            String version = firstLineWordSplit[firstLineWordSplit.length - 1];
+            String[] versionSplit = version.split("\\.");
+            int major = Integer.parseInt(versionSplit[0]);
+            int minor = Integer.parseInt(versionSplit[1]);
+            if (major != 2) {
+                DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.31");
+                return false;
+            }
+            if (minor < 31) {
+                DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.31");
+                return false;
+            }
+        } catch (final Throwable e) {
+            DEFAULT_LOG.warn("Error validating linux channel. Failed to determine glibc version", e);
+            return false;
+        }
+        return true;
+    }
+
+    private static StringBuilder readStream(InputStream iStream) throws IOException {
+        final StringBuilder builder = new StringBuilder();
+        String line;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(iStream))) {
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line);
+                builder.append(System.getProperty("line.separator"));
+            }
+        }
+        return builder;
     }
 }
