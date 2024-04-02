@@ -24,7 +24,7 @@ class GitHubAPI:
 
     def get_releases(self, params):
         try:
-            response = requests.get(self.get_base_url(), headers=self.get_headers(), params=params)
+            response = requests.get(self.get_base_url(), headers=self.get_headers(), params=params, timeout=10)
             return response.json() if response.status_code == 200 else None
         except Exception as e:
             print("Failed to get releases:", e)
@@ -51,7 +51,7 @@ class GitHubAPI:
     def get_asset_id(self, release_id, asset_name, tag=False):
         url = f"{self.get_base_url()}/{'tags/' if tag else ''}{release_id}"
         try:
-            response = requests.get(url, headers=self.get_headers())
+            response = requests.get(url, headers=self.get_headers(), timeout=10)
             if response.status_code == 200:
                 return next((asset["id"] for asset in response.json()["assets"] if asset["name"] == asset_name), None)
         except Exception as e:
@@ -69,7 +69,7 @@ class GitHubAPI:
         download_headers = self.get_headers()
         download_headers["Accept"] = "application/octet-stream"
         try:
-            response = requests.get(url, headers=download_headers, allow_redirects=True)
+            response = requests.get(url, headers=download_headers, allow_redirects=True, timeout=10)
             if response.status_code == 200:
                 return response.content
             else:

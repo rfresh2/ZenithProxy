@@ -115,7 +115,7 @@ def setup_execute(config):
         print("If you are using a domain name, make sure you have DNS records set up (see README.md)")
         ip = input("> ")
         if ip == "":
-            response = requests.get("https://api.ipify.org")
+            response = requests.get("https://api.ipify.org", timeout=10)
             if response.status_code == 200:
                 ip = response.content.decode()
                 break
@@ -248,7 +248,7 @@ def verify_discord_bot_token(token):
         "Authorization": "Bot " + token
     }
     try:
-        response = requests.get("https://discord.com/api/applications/@me", headers=headers)
+        response = requests.get("https://discord.com/api/applications/@me", headers=headers, timeout=10)
         if response.status_code != 200:
             print("Invalid token. Discord API response code:", response.status_code)
             return False
