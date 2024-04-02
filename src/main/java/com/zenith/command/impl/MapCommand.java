@@ -10,6 +10,7 @@ import com.zenith.feature.map.MapGenerator;
 import com.zenith.feature.map.MapRenderer;
 import discord4j.rest.util.Color;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -29,6 +30,7 @@ public class MapCommand extends Command {
     """,
             asList(
                 "render <mapId>",
+                "render all",
                 "generate",
                 "generate align",
                 "generate <viewDistance>"
@@ -40,33 +42,45 @@ public class MapCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("map")
             .then(literal("render")
-                .then(argument("mapId", integer()).executes(c -> {
-                    final int id = c.getArgument("mapId", Integer.class);
-                    var mapData = CACHE.getMapDataCache().getMapDataMap().get(id);
-                    if (mapData == null) {
-                        var knownIdList = CACHE.getMapDataCache().getMapDataMap().keySet().stream()
-                            .map(String::valueOf)
-                            .collect(Collectors.joining(", ", "[", "]"));
-                        c.getSource().getEmbed()
-                            .title("Map Not Found")
-                            .description("**Known Map ID's**\n" + knownIdList)
-                            .addField("Map ID", id, true)
-                            .color(Color.RUBY);
-                        return 1;
-                    }
-                    var bytes = MapRenderer.render(mapData.getData(), id);
-                    var attachmentName = "map_" + id + ".png";
-                    c.getSource().getEmbed()
-                        .title("Map Rendered!")
-                        .addField("Map ID", id, true)
-                        .fileAttachment(new Embed.FileAttachment(
-                            attachmentName,
-                            bytes
-                        ))
-                        .image("attachment://" + attachmentName)
-                        .color(Color.CYAN);
-                    return 1;
-                })))
+                      .then(argument("mapId", integer()).executes(c -> {
+                          final int id = c.getArgument("mapId", Integer.class);
+                          var mapData = CACHE.getMapDataCache().getMapDataMap().get(id);
+                          if (mapData == null) {
+                              var knownIdList = CACHE.getMapDataCache().getMapDataMap().keySet().stream()
+                                  .map(String::valueOf)
+                                  .collect(Collectors.joining(", ", "[", "]"));
+                              c.getSource().getEmbed()
+                                  .title("Map Not Found")
+                                  .description("**Known Map ID's**\n" + knownIdList)
+                                  .addField("Map ID", id, true)
+                                  .color(Color.RUBY);
+                              return 1;
+                          }
+                          var bytes = MapRenderer.render(mapData.getData(), id);
+                          var attachmentName = "map_" + id + ".png";
+                          c.getSource().getEmbed()
+                              .title("Map Rendered!")
+                              .addField("Map ID", id, true)
+                              .fileAttachment(new Embed.FileAttachment(
+                                  attachmentName,
+                                  bytes
+                              ))
+                              .image("attachment://" + attachmentName)
+                              .color(Color.CYAN);
+                          return 1;
+                      }))
+                      .then(literal("all").executes(c -> {
+                          final AtomicInteger count = new AtomicInteger(0);
+                          CACHE.getMapDataCache().getMapDataMap().forEach((id, mapData) -> {
+                              MapRenderer.render(mapData.getData(), id);
+                              count.incrementAndGet();
+                          });
+                          c.getSource().getEmbed()
+                              .title("All Cached Maps Rendered")
+                              .color(Color.CYAN)
+                              .addField("Map Count", count.get(), false);
+                          return 1;
+                      })))
             .then(literal("generate")
                       .executes(c -> {
                           generate(c.getSource().getEmbed(), 4, false);
