@@ -55,11 +55,17 @@ public final class Config {
         public String bindAddress = "0.0.0.0";
         public boolean maxPlaytimeReconnect = false;
         public long maxPlaytimeReconnectMins = 1440;
+        public ClientTimeout timeout = new ClientTimeout();
 
         public static final class ClientViaVersion {
             public boolean enabled = false;
             public boolean autoProtocolVersion = true;
             public int protocolVersion = 762; // 1.19.4
+        }
+
+        public static final class ClientTimeout {
+            public boolean enable = true;
+            public int seconds = 60;
         }
 
         public static final class Extra {
@@ -386,7 +392,7 @@ public final class Config {
         }
 
         public static final class Extra {
-            public Timeout timeout = new Timeout();
+            public ServerTimeout timeout = new ServerTimeout();
             public Whitelist whitelist = new Whitelist();
             public ESP esp = new ESP();
             public ChatHistory chatHistory = new ChatHistory();
@@ -407,7 +413,7 @@ public final class Config {
                 public boolean autoAddClient = true;
             }
 
-            public static final class Timeout {
+            public static final class ServerTimeout {
                 public boolean enable = true;
                 public int seconds = 30;
             }

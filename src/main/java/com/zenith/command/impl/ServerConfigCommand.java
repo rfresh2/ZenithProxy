@@ -29,7 +29,9 @@ public class ServerConfigCommand extends Command {
                 "ping on/off",
                 "ping onlinePlayers on/off",
                 "ping maxPlayers <int>",
-                "ping lanBroadcast on/off"
+                "ping lanBroadcast on/off",
+                "timeout on/off",
+                "timeout <seconds>"
             )
         );
     }
@@ -74,17 +76,38 @@ public class ServerConfigCommand extends Command {
                                     context.getSource().getEmbed()
                                         .title("Ping LAN Broadcast Set!");
                                     return 1;
-                                }))));
+                                }))))
+            .then(literal("timeout")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.server.extra.timeout.enable = getToggle(c, "toggle");
+                          syncTimeout();
+                          c.getSource().getEmbed()
+                              .title("Server Timeout " + toggleStrCaps(CONFIG.server.extra.timeout.enable));
+                          return 1;
+                      }))
+                      .then(argument("timeout", integer(10, 120)).executes(c -> {
+                          CONFIG.server.extra.timeout.seconds = getInteger(c, "timeout");
+                          syncTimeout();
+                          c.getSource().getEmbed()
+                              .title("Server Timeout Set");
+                          return 1;
+                      })));
+    }
+
+    private void syncTimeout() {
+        int t = CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : 0;
+        Proxy.getInstance().getActiveConnections().forEach(connection -> connection.setReadTimeout(t));
     }
 
     @Override
     public void postPopulate(final Embed builder) {
         builder
             .color(Color.CYAN)
-            .addField("Port", CONFIG.server.bind.port, true)
-            .addField("Ping", toggleStr(CONFIG.server.ping.enabled), true)
-            .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), true)
-            .addField("Ping Max Players", CONFIG.server.ping.maxPlayers, true)
-            .addField("Ping LAN Broadcast", toggleStr(CONFIG.server.ping.lanBroadcast), true);
+            .addField("Port", CONFIG.server.bind.port, false)
+            .addField("Ping", toggleStr(CONFIG.server.ping.enabled), false)
+            .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), false)
+            .addField("Ping Max Players", CONFIG.server.ping.maxPlayers, false)
+            .addField("Ping LAN Broadcast", toggleStr(CONFIG.server.ping.lanBroadcast), false)
+            .addField("Timeout", CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : toggleStr(false), false);
     }
 }

@@ -2,6 +2,7 @@ package com.zenith.command.impl;
 
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
@@ -36,7 +37,9 @@ public class ClientConnectionCommand extends Command {
                 "proxy port <port>",
                 "proxy user <user>",
                 "proxy password <password>",
-                "bindAddress <address>"
+                "bindAddress <address>",
+                "timeout on/off",
+                "timeout <seconds>"
             )
         );
     }
@@ -108,7 +111,29 @@ public class ClientConnectionCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Bind Address Set");
                           return 1;
+                      })))
+            .then(literal("timeout")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.timeout.enable = getToggle(c, "toggle");
+                            syncTimeout();
+                            c.getSource().getEmbed()
+                                .title("Client Connection Timeout " + toggleStrCaps(CONFIG.client.timeout.enable));
+                            return 1;
+                      }))
+                      .then(argument("seconds", integer(10, 120)).executes(c -> {
+                          CONFIG.client.timeout.seconds = getInteger(c, "seconds");
+                          syncTimeout();
+                          c.getSource().getEmbed()
+                              .title("Timeout Set");
+                          return 1;
                       })));
+    }
+
+    private void syncTimeout() {
+        int t = CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0;
+        var client = Proxy.getInstance().getClient();
+        if (client == null) return;
+        client.setReadTimeout(t);
     }
 
     @Override
@@ -121,6 +146,7 @@ public class ClientConnectionCommand extends Command {
             .addField("Proxy Port", String.valueOf(CONFIG.client.connectionProxy.port), false)
             .addField("Authentication", CONFIG.client.connectionProxy.password.isEmpty() && CONFIG.client.connectionProxy.user.isEmpty()
                           ? "Off" : "On", false)
-            .addField("Bind Address", CONFIG.client.bindAddress, false);
+            .addField("Bind Address", CONFIG.client.bindAddress, false)
+            .addField("Timeout", CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : toggleStr(false), false);
     }
 }

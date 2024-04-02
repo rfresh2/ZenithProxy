@@ -318,7 +318,7 @@ public class Proxy {
         this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, minecraftProtocol, getClientProxyInfo(), tcpManager);
         if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org"))
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
-        this.client.setReadTimeout(CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : 0);
+        this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);

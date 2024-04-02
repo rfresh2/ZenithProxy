@@ -884,6 +884,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.module.impl.ActiveHours$ActiveTime",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.network.client.ClientSession"
 },
 {
@@ -944,6 +949,11 @@
 },
 {
   "name":"com.zenith.util.Config$Client",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Client$ClientTimeout",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -1241,6 +1251,11 @@
 },
 {
   "name":"com.zenith.util.Config$Server$Extra$ESP",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Server$Extra$ServerTimeout",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
