@@ -8,7 +8,8 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CustomStringArgumentType;
 import com.zenith.discord.Embed;
-import com.zenith.util.Config.Client.Extra.Utility.ActiveHours.ActiveTime;
+import com.zenith.module.impl.ActiveHours;
+import com.zenith.module.impl.ActiveHours.ActiveTime;
 import discord4j.rest.util.Color;
 
 import java.time.ZoneId;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
@@ -31,12 +33,17 @@ public class ActiveHoursCommand extends Command {
         return CommandUsage.args(
             "activeHours",
             CommandCategory.MODULE,
-            "Set active hours for the proxy to automatically be logged in at."
-                + "\nBy default, 2b2t's queue wait ETA is used to determine when to log in."
-                + "\nThe connect will occur when the current time plus the ETA is equal to a time set."
-                + "\nQueue ETA calc can be disabled with a command, which would mean connects would occur exactly at the set times."
-                + "\n Time zone Ids (\"TZ identifier\" column): https://w.wiki/8Yif"
-                + "\n Time format: XX:XX, e.g.: 1:42, 14:42, 14:01",
+            """
+            Set active hours for the proxy to automatically be logged in at.
+            
+            By default, 2b2t's queue wait ETA is used to determine when to log in.
+            The connect will occur when the current time plus the ETA is equal to a time set.
+            
+            If Queue ETA calc is disabled, connects will occur exactly at the set times instead.
+            
+             Time zone Ids ("TZ identifier" column): https://w.wiki/8Yif"
+             Time format: XX:XX, e.g.: 1:42, 14:42, 14:01
+            """,
             asList("on/off",
                    "timezone <timezone ID>",
                    "add/del <time>",
@@ -51,6 +58,7 @@ public class ActiveHoursCommand extends Command {
         return command("activeHours")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.utility.actions.activeHours.enabled = getToggle(c, "toggle");
+                MODULE.get(ActiveHours.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Active Hours " + toggleStrCaps(CONFIG.client.extra.utility.actions.activeHours.enabled));
                 return 1;

@@ -14,6 +14,7 @@ public class ModuleManager {
     public void init() {
         asList(
             new ActionLimiter(),
+            new ActiveHours(),
             new AntiAFK(),
             new AntiKick(),
             new AntiLeak(),

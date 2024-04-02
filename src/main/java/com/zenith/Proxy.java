@@ -55,8 +55,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.*;
-import java.time.chrono.ChronoZonedDateTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -84,7 +84,6 @@ public class Proxy {
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
-    private Instant lastActiveHoursConnect = Instant.EPOCH;
     private final AtomicBoolean loggingIn = new AtomicBoolean(false);
     @Setter private AutoUpdater autoUpdater;
     private LanBroadcaster lanBroadcaster;
@@ -143,7 +142,6 @@ public class Proxy {
             this.tcpManager = new TcpConnectionManager();
             this.startServer();
             CACHE.reset(true);
-            EXECUTOR.scheduleAtFixedRate(this::handleActiveHoursTick, 0L, 1L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
@@ -498,46 +496,6 @@ public class Proxy {
             .filter(con -> !PLAYER_LISTS.getWhitelist().contains(con.getProfileCache().getProfile()))
             .filter(con -> !(PLAYER_LISTS.getSpectatorWhitelist().contains(con.getProfileCache().getProfile()) && con.isSpectator()))
             .forEach(con -> con.disconnect("Not whitelisted"));
-    }
-
-    private void handleActiveHoursTick() {
-        var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
-        if (!activeHoursConfig.enabled) return;
-        if (isOn2b2t() && (this.isPrio() && isConnected())) return;
-        if (hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
-        if (this.lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
-
-        var queueLength = isOn2b2t()
-            ? this.isPrio()
-                ? Queue.getQueueStatus().prio()
-                : Queue.getQueueStatus().regular()
-            : 0;
-        var queueWaitSeconds = activeHoursConfig.queueEtaCalc ? Queue.getQueueWait(queueLength) : 0;
-        var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
-            .plusSeconds(queueWaitSeconds)
-            .atZone(ZoneId.of(activeHoursConfig.timeZoneId))
-            .toInstant();
-        var activeTimes = activeHoursConfig.activeTimes.stream()
-            .flatMap(activeTime -> {
-                var activeHourToday = ZonedDateTime.of(LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)), LocalTime.of(activeTime.hour, activeTime.minute), ZoneId.of(activeHoursConfig.timeZoneId));
-                var activeHourTomorrow = activeHourToday.plusDays(1L);
-                return Stream.of(activeHourToday, activeHourTomorrow);
-            })
-            .map(ChronoZonedDateTime::toInstant)
-            .toList();
-        // active hour within 10 mins range of now
-        var timeRange = Duration.ofMinutes(5); // x2
-        for (Instant activeTime : activeTimes) {
-            if (nowPlusQueueWait.isAfter(activeTime.minus(timeRange))
-                && nowPlusQueueWait.isBefore(activeTime.plus(timeRange))) {
-                MODULE_LOG.info("ActiveHours triggered for time: {}", activeTime);
-                EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
-                this.lastActiveHoursConnect = Instant.now();
-                disconnect(SYSTEM_DISCONNECT);
-                EXECUTOR.schedule(this::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
-                break;
-            }
-        }
     }
 
     public boolean isOnlineOn2b2tForAtLeastDuration(Duration duration) {

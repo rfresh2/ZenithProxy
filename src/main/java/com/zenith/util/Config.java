@@ -4,10 +4,10 @@ import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.github.steveice10.packetlib.ProxyInfo;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
+import com.zenith.module.impl.ActiveHours.ActiveTime;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
@@ -245,40 +245,6 @@ public final class Config {
                     public boolean queueEtaCalc = true;
                     public String timeZoneId = "Universal";
                     public ArrayList<ActiveTime> activeTimes = new ArrayList<>();
-
-                    public static class ActiveTime {
-                        public int hour;
-                        public int minute;
-
-                        public static ActiveTime fromString(final String arg) {
-                            final String[] split = arg.split(":");
-                            final int hour = Integer.parseInt(split[0]);
-                            final int minute = Integer.parseInt(split[1]);
-                            ActiveTime activeTime = new ActiveTime();
-                            activeTime.hour = hour;
-                            activeTime.minute = minute;
-                            return activeTime;
-                        }
-
-                        @Override
-                        public String toString() {
-                            return (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
-                        }
-
-                        @Override
-                        public boolean equals(Object o) {
-                            if (this == o) return true;
-                            if (o == null || getClass() != o.getClass()) return false;
-                            ActiveTime that = (ActiveTime) o;
-                            return hour == that.hour && minute == that.minute;
-                        }
-
-                        @Override
-                        public int hashCode() {
-                            return Objects.hash(hour, minute);
-                        }
-
-                    }
                 }
             }
 
