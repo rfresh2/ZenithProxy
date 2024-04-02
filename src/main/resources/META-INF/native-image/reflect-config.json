@@ -1235,6 +1235,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Server$Extra$ChatHistory",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Server$Extra$ESP",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

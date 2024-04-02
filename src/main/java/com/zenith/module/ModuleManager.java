@@ -25,6 +25,7 @@ public class ModuleManager {
             new AutoReply(),
             new AutoRespawn(),
             new AutoTotem(),
+            new ChatHistory(),
             new ESP(),
             new KillAura(),
             new PlayerSimulation(),

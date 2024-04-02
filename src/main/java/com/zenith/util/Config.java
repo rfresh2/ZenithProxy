@@ -423,6 +423,14 @@ public final class Config {
             public Timeout timeout = new Timeout();
             public Whitelist whitelist = new Whitelist();
             public ESP esp = new ESP();
+            public ChatHistory chatHistory = new ChatHistory();
+
+            public static class ChatHistory {
+                public boolean enable = false;
+                public int seconds = 30;
+                public int maxCount = 10;
+                public boolean spectators = true;
+            }
 
             public static final class Whitelist {
                 public boolean enable = true;

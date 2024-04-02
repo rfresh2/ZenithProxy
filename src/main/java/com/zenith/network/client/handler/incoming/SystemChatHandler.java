@@ -55,6 +55,7 @@ public class SystemChatHandler implements ClientEventLoopPacketHandler<Clientbou
             }
             EVENT_BUS.postAsync(new ServerChatReceivedEvent(
                 Optional.ofNullable(senderName).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
+                component,
                 messageString,
                 Optional.ofNullable(whisperTarget).flatMap(t -> CACHE.getTabListCache().getFromName(t)),
                 deathMessage));

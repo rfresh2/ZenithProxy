@@ -6,6 +6,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLo
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
+import com.zenith.event.proxy.ProxySpectatorLoggedInEvent;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
 import com.zenith.network.server.ServerConnection;
@@ -15,8 +16,7 @@ import lombok.NonNull;
 import java.util.EnumSet;
 
 import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.*;
 
 public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerConnection> {
     @Override
@@ -41,6 +41,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
                 null
             )}
         ));
+        EVENT_BUS.postAsync(new ProxySpectatorLoggedInEvent(session));
         SpectatorSync.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         //send cached data
         Proxy.getInstance().getActiveConnections().stream()
