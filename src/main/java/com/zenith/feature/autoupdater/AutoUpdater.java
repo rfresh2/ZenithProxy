@@ -115,6 +115,7 @@ public abstract class AutoUpdater {
 
     public void update() {
         if (!Proxy.getInstance().getActiveConnections().isEmpty()) return;
+        DEFAULT_LOG.info("[AutoUpdater] Shutting down and updating to version: " + newVersion.orElse("unknown"));
         EVENT_BUS.post(new UpdateStartEvent(newVersion));
         CONFIG.discord.isUpdating = true;
         Proxy.getInstance().stop();
