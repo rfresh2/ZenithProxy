@@ -71,6 +71,15 @@ public final class ComponentSerializer {
             .toComponent();
     }
 
+    public static final String minedownAlertPrefix = "&7[&bZenithProxy&7]&r ";
+
+    public static Component minedownAlert(String message, String... replacements) {
+        return new MineDown(minedownAlertPrefix + message)
+            .urlDetection(false) // this uses a url matching regex by default that adds mem usage and isn't needed
+            .replace(replacements)
+            .toComponent();
+    }
+
     public static Component deserializeEmbed(final Embed embed) {
         return EmbedSerializer.serialize(embed);
     }

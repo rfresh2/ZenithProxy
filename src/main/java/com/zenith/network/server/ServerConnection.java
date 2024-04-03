@@ -234,8 +234,14 @@ public class ServerConnection implements Session, SessionListener {
         Proxy.getInstance().getActiveConnections().add(this);
     }
 
+    @Override
     public Future<Void> send(@NonNull Packet packet) {
         return this.session.send(packet);
+    }
+
+    public void sendAsyncAlert(final String minedown) {
+        // todo: gradient colors?
+        this.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&bZenithProxy&7]&r " + minedown), false));
     }
 
     @Override

@@ -61,7 +61,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache();
         // send command help
-        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&9ZenithProxy&7]&r &2Spectating &r&c" + CACHE.getProfileCache().getProfile().getName()), false));
+        session.sendAsyncAlert("&2Spectating &r&c" + CACHE.getProfileCache().getProfile().getName());
         if (CONFIG.inGameCommands.enable) {
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&2Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&chelp &7- &8List Commands"), false));

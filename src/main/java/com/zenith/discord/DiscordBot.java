@@ -300,7 +300,7 @@ public class DiscordBot {
                     this.start();
                 });
             } else throw e;
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             DISCORD_LOG.error("Failed updating discord presence. Check that the bot has correct permissions.");
             DISCORD_LOG.debug("Failed updating discord presence. Check that the bot has correct permissions.", e);
         }

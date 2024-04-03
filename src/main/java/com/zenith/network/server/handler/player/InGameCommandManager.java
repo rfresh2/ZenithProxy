@@ -55,8 +55,7 @@ public class InGameCommandManager {
             CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
             if (!commandContext.isNoOutput() && !embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty()) {
                 if (printUnhandled) {
-                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown(
-                        "&7[&9ZenithProxy&7]&r &cUnknown command!"), false));
+                    session.sendAsyncAlert("&cUnknown command!");
                 }
                 return;
             }
