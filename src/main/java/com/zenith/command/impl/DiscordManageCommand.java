@@ -8,9 +8,13 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.DiscordClientBuilder;
 import discord4j.core.util.MentionUtil;
+import discord4j.gateway.intent.Intent;
+import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.util.Color;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -127,7 +131,15 @@ public class DiscordManageCommand extends Command {
             .then(literal("token").requires(DiscordManageCommand::validateTerminalSource)
                       .then(argument("token", wordWithChars()).executes(c -> {
                           c.getSource().setSensitiveInput(true);
-                          CONFIG.discord.token = getString(c, "token");
+                          var token = getString(c, "token");
+                          if (!validateToken(token)) {
+                              c.getSource().getEmbed()
+                                  .title("Invalid Token")
+                                  .description("Discord API returned an error during test login")
+                                  .color(Color.RUBY);
+                              return -1;
+                          }
+                          CONFIG.discord.token = token;
                           c.getSource().getEmbed()
                                        .title("Token set!")
                                        .color(Color.CYAN)
@@ -239,6 +251,24 @@ public class DiscordManageCommand extends Command {
             }
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed to restart discord bot", e);
+        }
+    }
+
+    private boolean validateToken(final String token) {
+        try {
+            var builder = DiscordClientBuilder.create(token)
+                .build();
+            builder.gateway()
+                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)));
+            builder
+                .login()
+                .block(Duration.ofSeconds(20))
+                .logout()
+                .block(Duration.ofSeconds(20));
+            return true;
+        } catch (final Throwable e) {
+            DISCORD_LOG.error("Failed validating discord token", e);
+            return false;
         }
     }
 }
