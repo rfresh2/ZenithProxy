@@ -69,7 +69,7 @@ class GitHubAPI:
         download_headers = self.get_headers()
         download_headers["Accept"] = "application/octet-stream"
         try:
-            response = requests.get(url, headers=download_headers, allow_redirects=True, timeout=10)
+            response = requests.get(url, headers=download_headers, allow_redirects=True, timeout=60)
             if response.status_code == 200:
                 return response.content
             else:
