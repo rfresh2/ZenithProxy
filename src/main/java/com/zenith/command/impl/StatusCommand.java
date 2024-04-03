@@ -8,6 +8,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.queue.Queue;
+import com.zenith.module.impl.ReplayMod;
 import com.zenith.network.server.ServerConnection;
 import discord4j.common.util.TimestampFormat;
 import discord4j.rest.util.Color;
@@ -103,8 +104,9 @@ public class StatusCommand extends Command {
         return command("status")
             .then(literal("modules").executes(c -> {
                 c.getSource().getEmbed()
-                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " Modules Status: " + CONFIG.authentication.username)
+                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " - " + CONFIG.authentication.username)
                     .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
+                    .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
                     .addField("AutoDisconnect", "[Health: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled)
                         + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]", true)
                     .addField("AutoReconnect", toggleStr(CONFIG.client.extra.autoReconnect.enabled)
@@ -126,33 +128,42 @@ public class StatusCommand extends Command {
                     .addField("Active Hours", toggleStr(CONFIG.client.extra.utility.actions.activeHours.enabled), true)
                     .addField("AutoReply", toggleStr(CONFIG.client.extra.autoReply.enabled), true)
                     .addField("ActionLimiter", toggleStr(CONFIG.client.extra.actionLimiter.enabled), true)
-                    .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled), true);
+                    .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled), true)
+                    .addField("Replay Recording", toggleStr(MODULE.get(ReplayMod.class).isEnabled()), true)
+                    .addField("ESP", toggleStr(CONFIG.server.extra.esp.enable), true)
+                    .addField("AutoArmor", toggleStr(CONFIG.client.extra.autoArmor.enabled), true)
+                    .addField("ChatHistory", toggleStr(CONFIG.server.extra.chatHistory.enable), true);
             }))
             .executes(c -> {
                 final var embed = c.getSource().getEmbed();
                 embed
-                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " Status: " + CONFIG.authentication.username)
+                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " - " + CONFIG.authentication.username)
                     .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
+                    .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
                     .addField("Status", getStatus(), true)
-                    .addField("Connected User", getCurrentClientUserName(), true)
+                    .addField("Connected Client", getCurrentClientUserName(), true)
                     .addField("Online Time", getOnlineTime(), true)
+                    // end row 1
+                    .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                    .addField("Dimension",
+                              (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().dimensionName().replace("minecraft:", ""): "None"),
+                              true)
+                    .addField("TPS", TPS.getTPS(), true)
+                    // end row 2
                     .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
                     .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
-                if (Proxy.getInstance().isConnected())
-                    embed.addField("TPS", TPS.getTPS(), true);
+                    // end row 3
                 embed.addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator),true);
                 if (!getSpectatorUserNames().isEmpty())
                     embed.addField("Online Spectators", String.join(", ", getSpectatorUserNames()), true);
-                embed.addField("2b2t Queue", getQueueStatus(), true)
-                    .addField("Dimension",
-                              (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().dimensionName().replace("minecraft:", ""): "None"),
-                              true);
+                embed
+                    .addField("2b2t Queue", getQueueStatus(), true);
                 if (CONFIG.discord.reportCoords)
                     embed.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
-                embed.addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
+                embed
                     .addField("Chat Relay", (!CONFIG.discord.chatRelay.channelId.isEmpty() ? toggleStr(CONFIG.discord.chatRelay.enable) : "Not Configured"), true)
-                    .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update), false);
+                    .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update), true);
                  return 1;
             });
     }
