@@ -19,7 +19,7 @@
 
 Minecraft proxy/bot intended for use on 2b2t.org. 
 
-Unlike a traditional MC bot, you can login to it like a normal MC server and control the account.
+Unlike a traditional MC bot, you can login to it as a normal MC server and control the account.
 
 The primary purpose is to have accounts always online in-game and securely shared by multiple people.
 
@@ -34,21 +34,32 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 
     Players use a Minecraft client to connect to the Proxy Server as you would a normal MC server.
     The Proxy Client connects to a destination MC server (i.e. 2b2t.org).
-    The Player's packets to the Proxy Server get forwarded to the Proxy Client which forwards them to the destination
-    MC server.
+    The Player's packets to the Proxy Server get forwarded to the Proxy Client which 
+    forwards them to the destination MC server.
     
     Player MC Client -> Proxy Server -> Proxy Client -> MC Server
     
-    When no Player Client is connected the Proxy Client can still act as a bot: moving around, chatting, etc.
+    When no Player Client is connected the Proxy Client will act 
+    as a bot: moving around, chatting, etc.
 </details>
 
 <details>
     <summary>How does it work?</summary>
 
-    The Proxy caches the client's world state including chunks, entities, other players, etc. to allow Player Clients to connect at any time.
+    ZenithProxy does not use, depend on, or interact with the Minecraft client or server code.
+    This means much greater opportunities for optimizing memory usage and performance.
+    
+    But this also means existing MC mods or plugins cannot be used and must be
+    reimplemented specifically for ZenithProxy.
 
-    The Proxy is also able to read/modify/cancel/send arbitrary packets in either direction at any time. This is used to simulate
-    player movements, spectator mode, discord chat relay, and more.
+    ZenithProxy acts primarily at the network packet layer. It can read/modify/cancel/send
+    arbitrary packets in either direction at any time.
+
+    Using packet interception, the client's session and world state is cached and 
+    sent to players when they connect.
+
+    The cached world state is also used to simulate player movements, 
+    inventory actions, discord chat relay, and all features.
 </details>
 
 # Features
@@ -65,6 +76,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
 * Spectator mode
   * Multiple players can connect to the proxy and spectate the player
 * Advanced AntiAFK with full player movement simulation
+* Integrated ReplayMod Recording
 * Modules including AutoEat, AutoDisconnect, AutoReconnect, AutoRespawn, AutoTotem, KillAura, Spammer, AutoReply
 * Many, many, more features.
 
