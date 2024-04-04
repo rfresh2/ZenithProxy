@@ -1299,6 +1299,9 @@
   "name":"com.zenith.via.handler.ZViaClientCodecHandler"
 },
 {
+  "name":"com.zenith.via.handler.ZViaProtocolStateHandler"
+},
+{
   "name":"com.zenith.via.handler.ZenithViaChannelInitializer"
 },
 {
