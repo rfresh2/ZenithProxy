@@ -39,7 +39,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
         switch (command) {
             case "help" -> {
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9&lSpectator commands:"), false));
-                session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&aPrefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
                 session.send(new ClientboundSystemChatPacket(Component.text(""), false));
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7&chelp &7- &8Display help menu"), false));
                 if (CONFIG.server.spectator.spectatorPublicChatEnabled)

@@ -27,7 +27,7 @@ public class InGameCommandManager {
                 ComponentSerializer.minedown("&9&lIn Game commands"),
                 false));
             session.sendAsync(new ClientboundSystemChatPacket(
-                ComponentSerializer.minedown("&2Prefix : \"" + CONFIG.inGameCommands.prefix + "\""),
+                ComponentSerializer.minedown("&aPrefix : \"" + CONFIG.inGameCommands.prefix + "\""),
                 false));
         }
         return executeInGameCommand(message, session, printUnhandled);
