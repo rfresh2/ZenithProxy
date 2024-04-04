@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.zenith.event.proxy.MsaDeviceCodeLoginEvent;
 import com.zenith.util.MCAuthLoggerBridge;
 import com.zenith.util.WebBrowserHelper;
+import com.zenith.util.math.MathHelper;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.raphimc.minecraftauth.MinecraftAuth;
@@ -96,7 +97,7 @@ public class Authenticator {
             .flatMap(this::checkAuthCacheMatchesConfig);
         // throws on failed login
         var authSession = cachedAuth
-            .map(this::refreshOrFullLogin)
+            .map(this::useCacheOrRefreshLogin)
             .orElseGet(this::fullLogin);
         this.refreshTryCount = 0;
         saveAuthCacheAsync(authSession);
@@ -104,6 +105,15 @@ public class Authenticator {
         if (this.refreshTask != null) this.refreshTask.cancel(true);
         if (CONFIG.authentication.authTokenRefresh) scheduleAuthCacheRefresh(authSession);
         return createMinecraftProtocol(authSession);
+    }
+
+    private FullJavaSession useCacheOrRefreshLogin(FullJavaSession session) {
+        if (!CONFIG.authentication.alwaysRefreshOnLogin && shouldUseCachedSessionWithoutRefresh(session)) {
+            AUTH_LOG.debug("Using cached auth session without refresh. expiry time: {}",
+                           MathHelper.formatDuration(Duration.ofMillis(session.getMcProfile().getMcToken().getExpireTimeMs() - System.currentTimeMillis())));
+            return session;
+        }
+        else return refreshOrFullLogin(session);
     }
 
     private FullJavaSession refreshOrFullLogin(FullJavaSession session) {
@@ -120,6 +130,11 @@ public class Authenticator {
                 return fullLogin();
             }
         }
+    }
+
+    private boolean shouldUseCachedSessionWithoutRefresh(FullJavaSession session) {
+        // return true if expiry time is at least 5 mins in the future
+        return session.getMcProfile().getMcToken().getExpireTimeMs() - System.currentTimeMillis() > (5 * 60 * 1000);
     }
 
     private MinecraftProtocol createMinecraftProtocol(FullJavaSession authSession) {
@@ -150,6 +165,7 @@ public class Authenticator {
     }
 
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
+        AUTH_LOG.debug("Performing token refresh..");
         try {
             return Optional.of(getAuthStep().refresh(MinecraftAuth.createHttpClient(), session));
         } catch (Exception e) {

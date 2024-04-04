@@ -36,6 +36,7 @@ public final class Config {
         public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
         public boolean openBrowserOnLogin = true;
+        public boolean alwaysRefreshOnLogin = false;
 
         public enum AccountType {
             @SerializedName("msa") MSA,

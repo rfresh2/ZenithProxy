@@ -24,18 +24,21 @@ import static java.util.Arrays.asList;
 public class AuthCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("auth",
-                                 CommandCategory.MANAGE,
-                                 "Configures the proxy's authentication settings",
-                                 asList(
-                                     "clear",
-                                     "attempts <int>",
-                                     "type list",
-                                     "type <type>",
-                                     "email <email>",
-                                     "password <password>",
-                                     "mention on/off"
-                                 )
+        return CommandUsage.args(
+            "auth",
+            CommandCategory.MANAGE,
+            "Configures the proxy's authentication settings",
+            asList(
+                "clear",
+                "attempts <int>",
+                "alwaysRefreshOnLogin on/off",
+                "type list",
+                "type <type>",
+                "email <email>",
+                "password <password>",
+                "mention on/off",
+                "openBrowser on/off"
+            )
         );
     }
 
@@ -58,6 +61,13 @@ public class AuthCommand extends Command {
                 CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe = c.getArgument("attempts", Integer.class);
                 c.getSource().getEmbed()
                     .title("Authentication Max Attempts Set")
+                    .color(Color.CYAN);
+                return 1;
+            })))
+            .then(literal("alwaysRefreshOnLogin").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.authentication.alwaysRefreshOnLogin = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Always Refresh On Login " + toggleStrCaps(CONFIG.authentication.alwaysRefreshOnLogin))
                     .color(Color.CYAN);
                 return 1;
             })))
@@ -125,7 +135,14 @@ public class AuthCommand extends Command {
                                 .title("Mention Role " + toggleStrCaps(CONFIG.discord.mentionRoleOnDeviceCodeAuth))
                                 .color(Color.CYAN);
                             return 1;
-                      })));
+                      })))
+            .then(literal("openBrowser").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.authentication.openBrowserOnLogin = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Open Browser On Login " + toggleStrCaps(CONFIG.authentication.openBrowserOnLogin))
+                    .color(Color.CYAN);
+                return 1;
+            })));
     }
 
     private boolean validateTerminalSource(CommandContext c) {
@@ -142,6 +159,8 @@ public class AuthCommand extends Command {
             .addField("Account Type", CONFIG.authentication.accountType.toString(), false)
             .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), false)
             .addField("Attempts", CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, false)
-            .addField("Mention", toggleStr(CONFIG.discord.mentionRoleOnDeviceCodeAuth), false);
+            .addField("Always Refresh On Login", toggleStr(CONFIG.authentication.alwaysRefreshOnLogin), false)
+            .addField("Mention", toggleStr(CONFIG.discord.mentionRoleOnDeviceCodeAuth), false)
+            .addField("Open Browser", toggleStr(CONFIG.authentication.openBrowserOnLogin), false);
     }
 }
