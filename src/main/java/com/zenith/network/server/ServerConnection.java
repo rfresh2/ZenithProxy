@@ -147,7 +147,7 @@ public class ServerConnection implements Session, SessionListener {
                 Proxy.getInstance().getClient().sendAsync(p);
             }
         } catch (final Exception e) {
-            SERVER_LOG.error("Failed handling Received packet: " + packet.getClass().getSimpleName(), e);
+            SERVER_LOG.error("Failed handling Received packet: {}", packet.getClass().getSimpleName(), e);
         }
     }
 
@@ -156,7 +156,7 @@ public class ServerConnection implements Session, SessionListener {
         try {
             return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
-            SERVER_LOG.error("Failed handling packet sending: " + packet.getClass().getSimpleName(), e);
+            SERVER_LOG.error("Failed handling packet sending: {}", packet.getClass().getSimpleName(), e);
         }
         return packet;
     }
@@ -167,7 +167,7 @@ public class ServerConnection implements Session, SessionListener {
         try {
             ZenithHandlerCodec.SERVER_REGISTRY.handlePostOutgoing(packet, this);
         } catch (final Exception e) {
-            SERVER_LOG.error("Failed handling PostOutgoing packet: " + packet.getClass().getSimpleName(), e);
+            SERVER_LOG.error("Failed handling PostOutgoing packet: {}", packet.getClass().getSimpleName(), e);
         }
     }
 

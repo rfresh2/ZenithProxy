@@ -106,7 +106,7 @@ public class ClientListener implements SessionListener {
             CLIENT_LOG.warn("Unable to parse disconnect reason: {}", reason, e);
             reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serializeJson(reason);
         }
-        CLIENT_LOG.info("Disconnected: " + reasonStr);
+        CLIENT_LOG.info("Disconnected: {}", reasonStr);
         var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());
         var disconnectTime = Instant.now();
         var onlineDuration = Duration.between(connectTime, disconnectTime);

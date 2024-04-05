@@ -13,6 +13,7 @@ import com.zenith.Proxy;
 import com.zenith.feature.queue.Queue;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -31,7 +32,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         .build();
 
     @Override
-    public ServerStatusInfo buildInfo(Session session) {
+    public @Nullable ServerStatusInfo buildInfo(@Nullable Session session) {
         if (!CONFIG.server.ping.enabled) return null;
         if (CONFIG.server.ping.responseCaching) {
             var cacheKey = getSessionCacheKey(session);
@@ -47,16 +48,17 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         } else return createServerStatusInfo(session);
     }
 
-    private String getSessionCacheKey(Session session) {
-        if (CONFIG.server.viaversion.enabled) { // our response has a different protocol version for each connection (mirroring them)
+    private String getSessionCacheKey(@Nullable Session session) {
+        if (session != null && CONFIG.server.viaversion.enabled) { // our response has a different protocol version for each connection (mirroring them)
             String ip = session.getRemoteAddress().toString();
             if (ip.contains("/")) ip = ip.substring(ip.indexOf("/") + 1);
             if (ip.contains(":")) ip = ip.substring(0, ip.indexOf(":"));
             return ip;
-        } else return "";
+        }
+        return "";
     }
 
-    private ServerStatusInfo createServerStatusInfo(Session session) {
+    private ServerStatusInfo createServerStatusInfo(@Nullable Session session) {
         return new ServerStatusInfo(
             getVersionInfo(session),
             getPlayerInfo(),
@@ -66,7 +68,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         );
     }
 
-    private VersionInfo getVersionInfo(Session session) {
+    private VersionInfo getVersionInfo(@Nullable Session session) {
         if (CONFIG.server.viaversion.enabled && session instanceof ServerConnection)
             return new VersionInfo("ZenithProxy", ((ServerConnection) session).getProtocolVersion());
         return new VersionInfo(MinecraftCodec.CODEC.getMinecraftVersion(), MinecraftCodec.CODEC.getProtocolVersion());

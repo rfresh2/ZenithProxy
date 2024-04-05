@@ -35,14 +35,18 @@ public class LanBroadcaster {
         // micro-optimization to reduce cpu load
         this.motdSupplier = Suppliers.memoizeWithExpiration(() -> {
             try {
-                var bytes = ("[MOTD]" + stripLegacyFormatting(ComponentSerializer.serializePlain(this.serverInfoBuilder.buildInfo(null).getDescription())) + "[/MOTD]"
-                    + "[AD]" + CONFIG.server.bind.port + "[/AD]")
-                    .getBytes();
-                return new DatagramPacket(bytes, bytes.length, broadcastAddressSupplier.get(), 4445);
-            } catch (final Exception e) {
-                var bytes = ("[MOTD] ZenithProxy - " + CONFIG.authentication.username + "[/MOTD][AD]" + CONFIG.server.bind.port + "[/AD]").getBytes();
-                return new DatagramPacket(bytes, bytes.length, broadcastAddressSupplier.get(), 4445);
+                var serverStatusInfo = this.serverInfoBuilder.buildInfo(null);
+                if (serverStatusInfo != null) {
+                    var bytes = ("[MOTD]" + stripLegacyFormatting(ComponentSerializer.serializePlain(serverStatusInfo.getDescription())) + "[/MOTD]"
+                        + "[AD]" + CONFIG.server.bind.port + "[/AD]")
+                        .getBytes();
+                    return new DatagramPacket(bytes, bytes.length, broadcastAddressSupplier.get(), 4445);
+                }
+            } catch (final Throwable e) {
+                // fall through
             }
+            var bytes = ("[MOTD] ZenithProxy - " + CONFIG.authentication.username + "[/MOTD][AD]" + CONFIG.server.bind.port + "[/AD]").getBytes();
+            return new DatagramPacket(bytes, bytes.length, broadcastAddressSupplier.get(), 4445);
         }, 10, TimeUnit.SECONDS);
     }
 

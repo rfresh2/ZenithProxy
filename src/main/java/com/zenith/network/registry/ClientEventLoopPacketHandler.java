@@ -23,7 +23,7 @@ public interface ClientEventLoopPacketHandler<P extends Packet, S extends Client
         try {
             if (!applyAsync(packet, session)) {
                 if (tryCount > 1) {
-                    CLIENT_LOG.debug("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
+                    CLIENT_LOG.debug("Unable to apply async handler for packet: {}", packet.getClass().getSimpleName());
                     return;
                 }
                 session.getClientEventLoop().schedule(() -> {
