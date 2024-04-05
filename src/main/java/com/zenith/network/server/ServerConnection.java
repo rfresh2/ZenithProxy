@@ -346,7 +346,7 @@ public class ServerConnection implements Session, SessionListener {
             friendlyFire,
             seeFriendlyInvisibles,
             NameTagVisibility.HIDE_FOR_OTHER_TEAMS,
-            CollisionRule.PUSH_OTHER_TEAMS,
+            CollisionRule.PUSH_OWN_TEAM, // ??? doesn't allow pushing own team members but PUSH_OTHER_TEAMS does ???
             TeamColor.AQUA,
             currentTeamMembers.toArray(new String[0])
         ));
