@@ -176,6 +176,7 @@ jobs:
         with:
           tag: "launcher-v3"
           artifacts: "artifacts/*.zip,hashes.txt"
+          name: "Launcher V3"
           allowUpdates: true
           replacesArtifacts: true
           omitBodyDuringUpdate: true
