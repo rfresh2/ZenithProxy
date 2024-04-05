@@ -5,13 +5,13 @@ import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
+import com.zenith.util.Config;
 import lombok.NonNull;
 
 import java.util.Objects;
 
 import static com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction.*;
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 
 public class PlayerInfoUpdateHandler implements ClientEventLoopPacketHandler<ClientboundPlayerInfoUpdatePacket, ClientSession> {
     @Override
@@ -37,7 +37,9 @@ public class PlayerInfoUpdateHandler implements ClientEventLoopPacketHandler<Cli
                     e.setListed(entry.isListed());
                 if (packet.getActions().contains(UPDATE_LATENCY)) {
                     e.setLatency(entry.getLatency());
-                    if (!Proxy.getInstance().isOn2b2t() && Objects.equals(e.getProfileId(), CACHE.getPlayerCache().getThePlayer().getUuid())) {
+                    if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.TABLIST
+                        && !Proxy.getInstance().isOn2b2t()
+                        && Objects.equals(e.getProfileId(), CACHE.getPlayerCache().getThePlayer().getUuid())) {
                         session.setPing(e.getLatency());
                     }
                 }

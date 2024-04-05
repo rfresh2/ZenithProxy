@@ -1106,6 +1106,15 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Ping",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Client$Ping$Mode",
+  "allDeclaredFields":true
+},
+{
   "name":"com.zenith.util.Config$Client$Server",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

@@ -23,6 +23,8 @@ public class ClientSession extends TcpClientSession {
     private static final EventLoop CLIENT_EVENT_LOOP = CLIENT_EVENT_LOOP_GROUP.next();
     protected boolean serverProbablyOff;
     protected long ping = 0L;
+    protected long lastPingId = 0L;
+    protected long lastPingSentTime = 0L;
 
     private boolean inQueue = false;
     private int lastQueuePosition = Integer.MAX_VALUE;

@@ -138,6 +138,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundSetHealthPacket.class, new SetHealthHandler())
                 .registerInbound(ClientboundSetSubtitleTextPacket.class, new SetSubtitleTextHandler())
                 .registerInbound(ClientboundPlayerPositionPacket.class, new PlayerPositionHandler())
+                .registerInbound(ClientboundPongResponsePacket.class, new PongResponseHandler())
                 .registerInbound(ClientboundSoundPacket.class, new SoundHandler())
                 .registerInbound(ClientboundSetExperiencePacket.class, new SetExperienceHandler())
                 .registerInbound(ClientboundRespawnPacket.class, new RespawnHandler())

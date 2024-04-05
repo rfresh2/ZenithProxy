@@ -9,6 +9,7 @@ import com.zenith.event.proxy.StartQueueEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.util.ComponentSerializer;
+import com.zenith.util.Config;
 import lombok.NonNull;
 
 import java.time.Duration;
@@ -115,12 +116,14 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
                             final String ping = pingSectionSpaceSplit.get(1);
                             try {
                                 int pingInt = Integer.parseInt(ping);
-                                session.setPing(pingInt);
-                    } catch (final Exception e) {
-                        // f
+                                if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.TABLIST) {
+                                    session.setPing(pingInt);
+                                }
+                            } catch (final Exception e) {
+                                // f
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 }

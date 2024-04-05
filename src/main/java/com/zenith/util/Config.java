@@ -57,6 +57,7 @@ public final class Config {
         public boolean maxPlaytimeReconnect = false;
         public long maxPlaytimeReconnectMins = 1440;
         public ClientTimeout timeout = new ClientTimeout();
+        public Ping ping = new Ping();
 
         public static final class ClientViaVersion {
             public boolean enabled = false;
@@ -67,6 +68,15 @@ public final class Config {
         public static final class ClientTimeout {
             public boolean enable = true;
             public int seconds = 60;
+        }
+
+        public static final class Ping {
+            public Mode mode = Mode.TABLIST;
+            public int packetPingIntervalSeconds = 10;
+
+            public enum Mode {
+                TABLIST, PACKET;
+            }
         }
 
         public static final class Extra {

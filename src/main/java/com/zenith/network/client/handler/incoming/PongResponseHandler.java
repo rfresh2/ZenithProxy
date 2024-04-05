@@ -1,20 +1,20 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.data.status.handler.ServerPingTimeHandler;
 import com.github.steveice10.mc.protocol.packet.status.clientbound.ClientboundPongResponsePacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import com.zenith.util.Config;
+
+import static com.zenith.Shared.CONFIG;
 
 public class PongResponseHandler implements PacketHandler<ClientboundPongResponsePacket, ClientSession> {
     @Override
     public ClientboundPongResponsePacket apply(final ClientboundPongResponsePacket packet, final ClientSession session) {
-        long time = System.currentTimeMillis() - packet.getPingTime();
-        ServerPingTimeHandler handler = session.getFlag(MinecraftConstants.SERVER_PING_TIME_HANDLER_KEY);
-        if (handler != null) {
-            handler.handle(session, time);
+        if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.PACKET && session.getLastPingId() == packet.getPingTime()) {
+            // this is from our own ping task
+            session.setPing(System.currentTimeMillis() - session.getLastPingSentTime());
+            return null;
         }
-        session.disconnect("Finished");
-        return null;
+        return packet;
     }
 }

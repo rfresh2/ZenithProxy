@@ -8,6 +8,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
+import com.zenith.util.Config;
 import discord4j.rest.util.Color;
 
 import java.util.Arrays;
@@ -39,7 +40,9 @@ public class ClientConnectionCommand extends Command {
                 "proxy password <password>",
                 "bindAddress <address>",
                 "timeout on/off",
-                "timeout <seconds>"
+                "timeout <seconds>",
+                "ping mode <tablist/packet>",
+                "ping packetInterval <seconds>"
             )
         );
     }
@@ -126,7 +129,28 @@ public class ClientConnectionCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Timeout Set");
                           return 1;
-                      })));
+                      })))
+            .then(literal("ping")
+                      .then(literal("mode")
+                                .then(literal("tablist").executes(c -> {
+                                    CONFIG.client.ping.mode = Config.Client.Ping.Mode.TABLIST;
+                                    c.getSource().getEmbed()
+                                        .title("Ping Mode Set");
+                                    return 1;
+                                }))
+                                .then(literal("packet").executes(c -> {
+                                    CONFIG.client.ping.mode = Config.Client.Ping.Mode.PACKET;
+                                    c.getSource().getEmbed()
+                                        .title("Ping Mode Set")
+                                        .addField("Info", "Will be applied on next reconnect", false);
+                                    return 1;
+                                })))
+                      .then(literal("packetInterval").then(argument("seconds", integer(5, 300)).executes(c -> {
+                            CONFIG.client.ping.packetPingIntervalSeconds = getInteger(c, "seconds");
+                            c.getSource().getEmbed()
+                                .title("Ping Packet Interval Set");
+                            return 1;
+                      }))));
     }
 
     private void syncTimeout() {
@@ -147,6 +171,8 @@ public class ClientConnectionCommand extends Command {
             .addField("Authentication", CONFIG.client.connectionProxy.password.isEmpty() && CONFIG.client.connectionProxy.user.isEmpty()
                           ? "Off" : "On", false)
             .addField("Bind Address", CONFIG.client.bindAddress, false)
-            .addField("Timeout", CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : toggleStr(false), false);
+            .addField("Timeout", CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : toggleStr(false), false)
+            .addField("Ping Mode", CONFIG.client.ping.mode.toString().toLowerCase(), false)
+            .addField("Ping Packet Interval", CONFIG.client.ping.packetPingIntervalSeconds + "s", false);
     }
 }

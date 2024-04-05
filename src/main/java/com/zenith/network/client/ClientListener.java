@@ -9,8 +9,10 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
+import com.zenith.network.ClientPacketPingTask;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
+import com.zenith.util.Config;
 import lombok.Getter;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
@@ -20,8 +22,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.zenith.Shared.CLIENT_LOG;
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 @Getter
@@ -82,6 +83,7 @@ public class ClientListener implements SessionListener {
         this.session.setDisconnected(false);
         session.send(new ClientIntentionPacket(session.getPacketProtocol().getCodec().getProtocolVersion(), session.getHost(), session.getPort(), HandshakeIntent.LOGIN));
         EVENT_BUS.postAsync(new ConnectEvent());
+        if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.PACKET) EXECUTOR.execute(new ClientPacketPingTask(this.session));
     }
 
     @Override
