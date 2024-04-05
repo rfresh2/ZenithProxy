@@ -40,7 +40,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -143,14 +146,15 @@ public class ChunkCache implements CachedData {
         final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return;
         currentPlayer.sendAsync(new ClientboundChunkBatchStartPacket());
-        CACHE.getChunkCache().cache.values().parallelStream()
+        CACHE.getChunkCache().cache.values().stream()
             .map(chunk -> new ClientboundLevelChunkWithLightPacket(
                 chunk.x,
                 chunk.z,
-                chunk.serialize(CACHE.getChunkCache().getCodec()),
+                chunk.sections,
                 chunk.heightMaps,
                 chunk.blockEntities.toArray(new BlockEntityInfo[0]),
-                chunk.lightUpdateData))
+                chunk.lightUpdateData)
+            )
             .forEach(currentPlayer::sendAsync);
         currentPlayer.sendAsync(new ClientboundChunkBatchFinishedPacket(CACHE.getChunkCache().cache.values().size()));
     }
@@ -345,15 +349,15 @@ public class ChunkCache implements CachedData {
             consumer.accept(new ClientboundChunkBatchStartPacket());
             this.cache.values().stream()
                 .sorted(Comparator.comparingInt(chunk -> Math.abs(chunk.x - centerX) + Math.abs(chunk.z - centerZ)))
-                .forEach(chunk -> {
+                .forEach(chunk ->
                     consumer.accept(new ClientboundLevelChunkWithLightPacket(
                         chunk.x,
                         chunk.z,
-                        chunk.serialize(CACHE.getChunkCache().getCodec()),
+                        chunk.sections,
                         chunk.heightMaps,
                         chunk.blockEntities.toArray(new BlockEntityInfo[0]),
-                        chunk.lightUpdateData));
-            });
+                        chunk.lightUpdateData))
+                );
             consumer.accept(new ClientboundChunkBatchFinishedPacket(this.cache.size()));
             if (CONFIG.debug.sendChunksBeforePlayerSpawn) {
                 // todo: this will not handle spectator player cache pos correctly, but we don't have
@@ -408,6 +412,9 @@ public class ChunkCache implements CachedData {
         final var sectionsCount = getSectionsCount();
         var chunk = cache.get(chunkPosToLong(chunkX, chunkZ));
         if (chunk == null) {
+            var blockEntitiesArray = p.getBlockEntities();
+            var blockEntities = Collections.synchronizedList(new ArrayList<BlockEntityInfo>(blockEntitiesArray.length));
+            Collections.addAll(blockEntities, blockEntitiesArray);
             chunk = new Chunk(
                 chunkX,
                 chunkZ,
@@ -415,8 +422,7 @@ public class ChunkCache implements CachedData {
                 sectionsCount,
                 getMaxSection(),
                 getMinSection(),
-                Collections.synchronizedList(new ArrayList<>(
-                    List.of(p.getBlockEntities()))),
+                blockEntities,
                 p.getLightData(),
                 p.getHeightMaps());
         }
