@@ -32,6 +32,7 @@ import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoop;
+import io.netty.handler.codec.DecoderException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -172,13 +173,8 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public boolean packetError(final Session session, final Throwable throwable) {
-        if (isLoggedIn) {
-            SERVER_LOG.debug("", throwable);
-            return true;
-        } else {
-            SERVER_LOG.error("", throwable);
-        }
-        return false;
+        SERVER_LOG.debug("", throwable);
+        return isLoggedIn;
     }
 
     @Override
@@ -194,7 +190,7 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void disconnected(final Session session, final Component reason, final Throwable cause) {
         Proxy.getInstance().getActiveConnections().remove(this);
-        if (!this.isPlayer && cause != null && !(cause instanceof IOException)) {
+        if (!this.isPlayer && cause != null && !(cause instanceof DecoderException || cause instanceof IOException)) {
             // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
             SERVER_LOG.warn(String.format("Connection disconnected: %s", session.getRemoteAddress()), cause);
             return;
