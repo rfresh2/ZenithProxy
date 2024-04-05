@@ -524,7 +524,7 @@ public class Proxy {
                 final HttpRequest request = HttpRequest.newBuilder()
                     .uri(avatarURL.toURI())
                     .GET()
-                    .timeout(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(15))
                     .build();
                 final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
                 if (response.statusCode() != 200)
