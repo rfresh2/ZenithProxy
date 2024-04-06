@@ -18,7 +18,6 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import discord4j.core.util.MentionUtil;
-import discord4j.rest.util.Color;
 
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public abstract class Command {
             if (!allowed) {
                 context.getEmbed()
                     .title("Not Authorized!")
-                    .color(Color.RUBY);
+                    .errorColor();
             }
             return allowed;
         } catch (final Throwable e) {
@@ -190,6 +189,6 @@ public abstract class Command {
         context.getEmbed()
                 .title("Invalid command usage")
                 .addField("Usage", commandUsage().serialize(context.getSource()), false)
-                .color(Color.RUBY);
+                .errorColor();
     }
 }

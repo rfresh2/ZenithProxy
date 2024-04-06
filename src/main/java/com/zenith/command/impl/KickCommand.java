@@ -10,7 +10,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.DiscordBot;
 import com.zenith.network.server.ServerConnection;
-import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +55,11 @@ public class KickCommand extends Command {
                     connections.forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
                     c.getSource().getEmbed()
                         .title("Kicked " + escape(playerName))
-                        .color(Color.CYAN);
+                        .primaryColor();
                 } else {
                     c.getSource().getEmbed()
                         .title("Unable to kick " + escape(playerName))
-                        .color(Color.RUBY)
+                        .errorColor()
                         .addField("Reason", "Player is not connected", false);
                 }
                 return 1;

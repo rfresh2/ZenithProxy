@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import com.zenith.util.Config;
-import discord4j.rest.util.Color;
 
 import java.util.Arrays;
 
@@ -55,27 +54,27 @@ public class AuthCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Authentication Cleared")
                     .description("Cached tokens and authentication state cleared. Full re-auth will occur on next login.")
-                    .color(Color.CYAN);
+                    .primaryColor();
             }))
             .then(literal("attempts").then(argument("attempts", integer(1, 10)).executes(c -> {
                 CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe = c.getArgument("attempts", Integer.class);
                 c.getSource().getEmbed()
                     .title("Authentication Max Attempts Set")
-                    .color(Color.CYAN);
+                    .primaryColor();
                 return 1;
             })))
             .then(literal("alwaysRefreshOnLogin").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.alwaysRefreshOnLogin = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Always Refresh On Login " + toggleStrCaps(CONFIG.authentication.alwaysRefreshOnLogin))
-                    .color(Color.CYAN);
+                    .primaryColor();
                 return 1;
             })))
             .then(literal("type").requires(this::validateDiscordOrTerminalSource)
                       .then(literal("list").executes(c -> {
                           c.getSource().getEmbed()
                               .title("Authentication Types")
-                              .color(Color.CYAN);
+                              .primaryColor();
                           return 1;
                       }))
                       .then(argument("type", wordWithChars()).executes(c -> {
@@ -85,12 +84,12 @@ public class AuthCommand extends Command {
                               Proxy.getInstance().getAuthenticator().clearAuthCache();
                               c.getSource().getEmbed()
                                   .title("Authentication Type Set")
-                                  .color(Color.CYAN);
+                                  .primaryColor();
                           } catch (final Exception e) {
                               c.getSource().getEmbed()
                                   .title("Invalid Authentication Type")
                                   .description("Valid types: " + Arrays.toString(Config.Authentication.AccountType.values()))
-                                  .color(Color.RED);
+                                  .errorColor();
                           }
                           return 1;
                       })))
@@ -102,13 +101,13 @@ public class AuthCommand extends Command {
                           if (!emailStr.contains("@") || emailStr.length() < 3) {
                               c.getSource().getEmbed()
                                   .title("Invalid Email")
-                                  .color(Color.RED);
+                                  .errorColor();
                               return 1;
                           }
                           CONFIG.authentication.email = emailStr;
                           c.getSource().getEmbed()
                               .title("Authentication Email Set")
-                              .color(Color.CYAN);
+                              .primaryColor();
                           return 1;
                       })))
             .then(literal("password").requires(this::validateTerminalSource)
@@ -119,13 +118,13 @@ public class AuthCommand extends Command {
                           if (passwordStr.isBlank()) {
                               c.getSource().getEmbed()
                                   .title("Invalid Password")
-                                  .color(Color.RED);
+                                  .errorColor();
                               return 1;
                           }
                           CONFIG.authentication.password = passwordStr;
                           c.getSource().getEmbed()
                               .title("Authentication Password Set")
-                              .color(Color.CYAN);
+                              .primaryColor();
                           return 1;
                       })))
             .then(literal("mention")
@@ -133,14 +132,14 @@ public class AuthCommand extends Command {
                           CONFIG.discord.mentionRoleOnDeviceCodeAuth = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Mention Role " + toggleStrCaps(CONFIG.discord.mentionRoleOnDeviceCodeAuth))
-                                .color(Color.CYAN);
+                                .primaryColor();
                             return 1;
                       })))
             .then(literal("openBrowser").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.openBrowserOnLogin = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Open Browser On Login " + toggleStrCaps(CONFIG.authentication.openBrowserOnLogin))
-                    .color(Color.CYAN);
+                    .primaryColor();
                 return 1;
             })));
     }

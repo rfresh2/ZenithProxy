@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
@@ -65,6 +64,6 @@ public class StalkCommand extends Command {
         builder
             .addField("Stalk", toggleStr(CONFIG.client.extra.stalk.enabled), false)
             .description("**Stalk List**\n" + playerListToString(PLAYER_LISTS.getStalkList()))
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

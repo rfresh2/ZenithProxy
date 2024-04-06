@@ -11,7 +11,6 @@ import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.ReplayMod;
 import com.zenith.network.server.ServerConnection;
 import discord4j.common.util.TimestampFormat;
-import discord4j.rest.util.Color;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -105,7 +104,11 @@ public class StatusCommand extends Command {
             .then(literal("modules").executes(c -> {
                 c.getSource().getEmbed()
                     .title("ZenithProxy " + LAUNCH_CONFIG.version + " - " + CONFIG.authentication.username)
-                    .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
+                    .color(Proxy.getInstance().isConnected()
+                               ? (Proxy.getInstance().isInQueue()
+                                    ? CONFIG.theme.inQueue.discord()
+                                    : CONFIG.theme.success.discord())
+                               : CONFIG.theme.error.discord())
                     .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
                     .addField("AutoDisconnect", "[Health: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled)
                         + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]", true)
@@ -138,7 +141,11 @@ public class StatusCommand extends Command {
                 final var embed = c.getSource().getEmbed();
                 embed
                     .title("ZenithProxy " + LAUNCH_CONFIG.version + " - " + CONFIG.authentication.username)
-                    .color(Proxy.getInstance().isConnected() ? (Proxy.getInstance().isInQueue() ? Color.MOON_YELLOW : Color.MEDIUM_SEA_GREEN) : Color.RUBY)
+                    .color(Proxy.getInstance().isConnected()
+                               ? (Proxy.getInstance().isInQueue()
+                        ? CONFIG.theme.inQueue.discord()
+                        : CONFIG.theme.success.discord())
+                               : CONFIG.theme.error.discord())
                     .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
                     .addField("Status", getStatus(), true)
                     .addField("Connected Client", getCurrentClientUserName(), true)

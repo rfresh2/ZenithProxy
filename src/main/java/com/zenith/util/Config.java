@@ -20,6 +20,7 @@ public final class Config {
     public Server server = new Server();
     public InteractiveTerminal interactiveTerminal = new InteractiveTerminal();
     public InGameCommands inGameCommands = new InGameCommands();
+    public Theme theme = new Theme();
     public Discord discord = new Discord();
     public Database database = new Database();
     public AutoUpdater autoUpdater = new AutoUpdater();
@@ -44,6 +45,13 @@ public final class Config {
             @SerializedName("local_webserver") LOCAL_WEBSERVER,
             @SerializedName("device_code_without_device_token") DEVICE_CODE_WITHOUT_DEVICE_TOKEN
         }
+    }
+
+    public static final class Theme {
+        public ConfigColor primary = ConfigColor.CYAN;
+        public ConfigColor success = ConfigColor.GREEN;
+        public ConfigColor error = ConfigColor.RUBY;
+        public ConfigColor inQueue = ConfigColor.MOON_YELLOW;
     }
 
     public static final class Client {

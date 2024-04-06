@@ -6,7 +6,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.PLAYER_LISTS;
@@ -37,7 +36,7 @@ public class IgnoreCommand extends Command {
                                     .title(escape(ignored.getUsername()) + " ignored!"),
                             () -> c.getSource().getEmbed()
                                     .title("Failed to add " + escape(player) + " to ignore list. Unable to lookup profile.")
-                                    .color(Color.RUBY));
+                                    .errorColor());
                     return 1;
                 })))
                 .then(literal("del").then(argument("player", string()).executes(c -> {
@@ -63,6 +62,6 @@ public class IgnoreCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .description("**Ignore List**\n" + playerListToString(PLAYER_LISTS.getIgnoreList()))
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

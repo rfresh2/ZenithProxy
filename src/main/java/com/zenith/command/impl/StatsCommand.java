@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.api.vcapi.model.StatsResponse;
-import discord4j.rest.util.Color;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +45,7 @@ public class StatsCommand extends Command {
                 final StatsResponse playerStats = statsResponse.get();
                 c.getSource().getEmbed()
                     .title("Player Stats")
-                    .color(Color.CYAN)
+                    .primaryColor()
                     .addField("Player", playerName, true)
                     .addField("\u200B", "\u200B", true)
                     .addField("\u200B", "\u200B", true)

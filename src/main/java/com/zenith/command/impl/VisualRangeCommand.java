@@ -7,7 +7,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.VisualRange;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -108,6 +107,6 @@ public class VisualRangeCommand extends Command {
             .addField("Logout Alerts", toggleStr(CONFIG.client.extra.visualRange.logoutAlert), false)
             .addField("Enemy Replay Recording", toggleStr(CONFIG.client.extra.visualRange.replayRecording), false)
             .addField("Enemy Replay Recording Cooldown", CONFIG.client.extra.visualRange.replayRecordingCooldownMins, false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

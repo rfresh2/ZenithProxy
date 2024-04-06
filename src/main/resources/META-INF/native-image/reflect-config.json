@@ -1125,6 +1125,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Colors",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Database",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -1292,6 +1297,10 @@
   "name":"com.zenith.util.Config$Server$Spectator",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.ConfigColor",
+  "allDeclaredFields":true
 },
 {
   "name":"com.zenith.util.LaunchConfig",

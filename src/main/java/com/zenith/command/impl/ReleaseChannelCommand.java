@@ -6,7 +6,6 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
-import discord4j.rest.util.Color;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,7 +51,7 @@ public class ReleaseChannelCommand extends Command {
                     .addField("Current Release Channel", LAUNCH_CONFIG.release_channel, true)
                     .addField("Available Platforms", PLATFORMS.stream().collect(Collectors.joining("`, `", "`", "`")), false)
                     .addField("Available Minecraft Versions", MINECRAFT_VERSIONS.stream().collect(Collectors.joining("`, `", "`", "`")), false)
-                    .color(Color.CYAN);
+                    .primaryColor();
             }))
             .then(literal("set")
                       .then(argument("channel", wordWithChars())
@@ -75,14 +74,14 @@ public class ReleaseChannelCommand extends Command {
             c.getSource().getEmbed()
                 .title("Invalid Platform!")
                 .description("Available platforms: " + PLATFORMS)
-                .color(Color.RED);
+                .errorColor();
             return;
         }
         if (!MINECRAFT_VERSIONS.contains(minecraft_version)) {
             c.getSource().getEmbed()
                 .title("Invalid Minecraft Version!")
                 .description("Available versions: " + MINECRAFT_VERSIONS)
-                .color(Color.RED);
+                .errorColor();
             return;
         }
         if (channel.equals("linux")) {
@@ -90,7 +89,7 @@ public class ReleaseChannelCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Invalid Platform!")
                     .description("Invalid system for linux channel")
-                    .color(Color.RED);
+                    .errorColor();
                 return;
             }
         }
@@ -100,7 +99,7 @@ public class ReleaseChannelCommand extends Command {
             .title("Release Channel Updated!")
             .addField("Release Channel", LAUNCH_CONFIG.release_channel, false)
             .addField("Info", "Please restart ZenithProxy for changes to take effect.\nOr apply now: `update`", false)
-            .color(Color.CYAN);
+            .primaryColor();
         saveLaunchConfig();
     }
 

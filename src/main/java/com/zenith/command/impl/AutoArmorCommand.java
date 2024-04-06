@@ -6,7 +6,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.module.impl.AutoArmor;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE;
@@ -35,7 +34,7 @@ public class AutoArmorCommand extends Command {
                 MODULE.get(AutoArmor.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoArmor " + toggleStrCaps(CONFIG.client.extra.autoArmor.enabled))
-                    .color(Color.CYAN);
+                    .primaryColor();
                 return 1;
             }));
     }

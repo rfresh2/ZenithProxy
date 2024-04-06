@@ -10,7 +10,6 @@ import com.zenith.command.brigadier.CustomStringArgumentType;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.ActiveHours;
 import com.zenith.module.impl.ActiveHours.ActiveTime;
-import discord4j.rest.util.Color;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -151,6 +150,6 @@ public class ActiveHoursCommand extends Command {
                 : activeTimeListToString(CONFIG.client.extra.utility.actions.activeHours.activeTimes)), false)
             .addField("Force Reconnect", toggleStr(CONFIG.client.extra.utility.actions.activeHours.forceReconnect), false)
             .addField("Queue ETA Calc", toggleStr(CONFIG.client.extra.utility.actions.activeHours.queueEtaCalc), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

@@ -6,7 +6,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DISCORD;
@@ -128,6 +127,6 @@ public class ChatRelayCommand extends Command {
             .addField("Name Mentions", toggleStr(CONFIG.discord.chatRelay.mentionRoleOnNameMention), false)
             .addField("Mentions While Connected", toggleStr(CONFIG.discord.chatRelay.mentionWhileConnected), false)
             .addField("Send Messages", toggleStr(CONFIG.discord.chatRelay.sendMessages), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

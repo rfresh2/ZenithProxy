@@ -10,7 +10,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
-import discord4j.rest.util.Color;
 
 import java.util.Optional;
 
@@ -47,7 +46,7 @@ public class SpectatorCommand extends Command {
                         .forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
                 c.getSource().getEmbed()
                     .title("Spectators " + toggleStrCaps(CONFIG.server.spectator.allowSpectator))
-                    .color(Color.CYAN)
+                    .primaryColor()
                     .description(spectatorWhitelist());
                 return 1;
             }))
@@ -58,11 +57,11 @@ public class SpectatorCommand extends Command {
                               .ifPresentOrElse(e ->
                                                    c.getSource().getEmbed()
                                                        .title("Added user: " + escape(e.getUsername()) + " To Spectator Whitelist")
-                                                       .color(Color.CYAN)
+                                                       .primaryColor()
                                                        .description(spectatorWhitelist()),
                                                () -> c.getSource().getEmbed()
                                                    .title("Failed to add user: " + escape(playerName) + " to whitelist. Unable to lookup profile.")
-                                                   .color(Color.RUBY)
+                                                   .errorColor()
                                                    .description(spectatorWhitelist()));
                           return 1;
                       })))
@@ -71,7 +70,7 @@ public class SpectatorCommand extends Command {
                           PLAYER_LISTS.getSpectatorWhitelist().remove(playerName);
                           c.getSource().getEmbed()
                               .title("Removed user: " + escape(playerName) + " From Spectator Whitelist")
-                              .color(Color.CYAN)
+                              .primaryColor()
                               .description(spectatorWhitelist());
                           Proxy.getInstance().kickNonWhitelistedPlayers();
                           return 1;
@@ -80,14 +79,14 @@ public class SpectatorCommand extends Command {
                           PLAYER_LISTS.getSpectatorWhitelist().clear();
                           c.getSource().getEmbed()
                               .title("Spectator Whitelist Cleared")
-                              .color(Color.RUBY)
+                              .errorColor()
                               .description(spectatorWhitelist());
                           Proxy.getInstance().kickNonWhitelistedPlayers();
                       }))
                       .then(literal("list").executes(c -> {
                           c.getSource().getEmbed()
                               .title("Spectator Whitelist")
-                              .color(Color.CYAN)
+                              .primaryColor()
                               .description(spectatorWhitelist());
                       })))
             .then(literal("entity")
@@ -95,7 +94,7 @@ public class SpectatorCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Entity List")
                               .description(entityList())
-                              .color(Color.CYAN);
+                              .primaryColor();
                       }))
                       .then(argument("entityID", string()).executes(c -> {
                           final String entityInput = StringArgumentType.getString(c, "entityID");
@@ -104,12 +103,12 @@ public class SpectatorCommand extends Command {
                               CONFIG.server.spectator.spectatorEntity = entityInput;
                               c.getSource().getEmbed()
                                   .title("Set Entity")
-                                  .color(Color.CYAN);
+                                  .primaryColor();
                           } else {
                               c.getSource().getEmbed()
                                   .title("Invalid Entity")
                                   .description(entityList())
-                                  .color(Color.RUBY);
+                                  .errorColor();
                           }
                           return 1;
                       })))
@@ -118,7 +117,7 @@ public class SpectatorCommand extends Command {
                             CONFIG.server.spectator.spectatorPublicChatEnabled = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Spectator Chat " + toggleStrCaps(CONFIG.server.spectator.spectatorPublicChatEnabled))
-                                .color(Color.CYAN)
+                                .primaryColor()
                                 .description(spectatorWhitelist());
                             return 1;
                       })));

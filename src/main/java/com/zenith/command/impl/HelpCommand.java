@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
-import discord4j.rest.util.Color;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -38,7 +37,7 @@ public class HelpCommand extends Command {
         return command("help").executes(c -> {
                 c.getSource().getEmbed()
                     .title("Commands")
-                    .color(Color.CYAN);
+                    .primaryColor();
                 final String commandUsages = getCommandUsages(c.getSource().getSource(), CommandCategory.CORE);
                 final String prefix = COMMAND.getCommandPrefix(c.getSource().getSource());
                 c.getSource().getEmbed()
@@ -57,7 +56,7 @@ public class HelpCommand extends Command {
                 final String commandName = StringArgumentType.getString(c, "commandName");
                 c.getSource().getEmbed()
                     .title("Command Usage")
-                    .color(Color.CYAN);
+                    .primaryColor();
                 Arrays.stream(CommandCategory.values())
                     .filter(category -> category.getName().equalsIgnoreCase(commandName))
                     .findFirst()

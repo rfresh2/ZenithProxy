@@ -10,7 +10,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.DiscordBot;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoReply;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -65,6 +64,6 @@ public class AutoReplyCommand extends Command {
             .addField("AutoReply", toggleStr(CONFIG.client.extra.autoReply.enabled), false)
             .addField("Cooldown Seconds", CONFIG.client.extra.autoReply.cooldownSeconds, false)
             .addField("Message", CONFIG.client.extra.autoReply.message, false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

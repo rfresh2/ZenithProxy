@@ -12,7 +12,6 @@ import discord4j.core.DiscordClientBuilder;
 import discord4j.core.util.MentionUtil;
 import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
-import discord4j.rest.util.Color;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +56,7 @@ public class DiscordManageCommand extends Command {
                 CONFIG.discord.enable = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Discord Bot " + toggleStrCaps(CONFIG.discord.enable))
-                    .color(Color.CYAN);
+                    .primaryColor();
                 if (CONFIG.discord.enable) {
                     c.getSource().getEmbed()
                         .description("Discord bot will now start");
@@ -78,20 +77,20 @@ public class DiscordManageCommand extends Command {
                               c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("The channel ID provided is invalid")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           if (channelId.equals(CONFIG.discord.chatRelay.channelId)) {
                               c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("Cannot use the same channel ID for both the relay and main channel")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           CONFIG.discord.channelId = channelId;
                           c.getSource().getEmbed()
                                        .title("Channel set!")
-                                       .color(Color.CYAN)
+                                       .primaryColor()
                                        .description("Discord bot will now restart if enabled");
                           if (DISCORD.isRunning())
                               EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
@@ -109,20 +108,20 @@ public class DiscordManageCommand extends Command {
                               c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("The channel ID provided is invalid")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           if (channelId.equals(CONFIG.discord.channelId)) {
                               c.getSource().getEmbed()
                                   .title("Invalid Channel ID")
                                   .description("Cannot use the same channel ID for both the relay and main channel")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           CONFIG.discord.chatRelay.channelId = channelId;
                           c.getSource().getEmbed()
                                        .title("Relay Channel set!")
-                                       .color(Color.CYAN)
+                                       .primaryColor()
                                        .description("Discord bot will now restart if enabled");
                           if (DISCORD.isRunning())
                               EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
@@ -136,14 +135,14 @@ public class DiscordManageCommand extends Command {
                               c.getSource().getEmbed()
                                   .title("Invalid Token")
                                   .description("Discord API returned an error during test login")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return -1;
                           }
                           CONFIG.discord.token = token;
                           c.getSource().getEmbed()
-                                       .title("Token set!")
-                                       .color(Color.CYAN)
-                                       .description("Discord bot will now restart if enabled");
+                              .title("Token set!")
+                              .primaryColor()
+                              .description("Discord bot will now restart if enabled");
                           if (DISCORD.isRunning())
                               EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
                           return 1;
@@ -159,20 +158,20 @@ public class DiscordManageCommand extends Command {
                               c.getSource().getEmbed()
                                   .title("Invalid Role ID")
                                   .description("The role ID provided is invalid")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           CONFIG.discord.accountOwnerRoleId = roleId;
                           c.getSource().getEmbed()
                               .title("Role set!")
-                              .color(Color.CYAN);
+                              .primaryColor();
                           return 1;
                       })))
             .then(literal("manageProfileImage")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageProfileImage = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                         .color(Color.CYAN)
+                                         .primaryColor()
                                          .title("Manage Profile Image " + toggleStrCaps(CONFIG.discord.manageProfileImage));
                             return 1;
                       })))
@@ -180,7 +179,7 @@ public class DiscordManageCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageNickname = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                         .color(Color.CYAN)
+                                         .primaryColor()
                                          .title("Manage Nickname " + toggleStrCaps(CONFIG.discord.manageNickname));
                             return 1;
                       })))
@@ -188,7 +187,7 @@ public class DiscordManageCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.manageDescription = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                         .color(Color.CYAN)
+                                         .primaryColor()
                                          .title("Manage Description " + toggleStrCaps(CONFIG.discord.manageDescription));
                             return 1;
                       })))
@@ -196,7 +195,7 @@ public class DiscordManageCommand extends Command {
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.showNonWhitelistLoginIP = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                         .color(Color.CYAN)
+                                         .primaryColor()
                                          .title("Show Non-Whitelist IP " + toggleStrCaps(CONFIG.discord.showNonWhitelistLoginIP));
                             return 1;
                       })));
@@ -244,8 +243,8 @@ public class DiscordManageCommand extends Command {
             if (CONFIG.discord.enable) {
                 DISCORD.start();
                 DISCORD.sendEmbedMessage(Embed.builder()
-                                                 .title("Discord Bot Restarted")
-                                                 .color(Color.GREEN));
+                                             .title("Discord Bot Restarted")
+                                             .successColor());
             } else {
                 DISCORD_LOG.info("Discord bot is disabled, not starting");
             }

@@ -5,7 +5,6 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
@@ -31,7 +30,7 @@ public class DisplayCoordsCommand extends Command {
                 CONFIG.discord.reportCoords = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Coordinates " + toggleStrCaps(CONFIG.discord.reportCoords))
-                    .color(Color.CYAN);
+                    .primaryColor();
                 return 1;
             }));
     }

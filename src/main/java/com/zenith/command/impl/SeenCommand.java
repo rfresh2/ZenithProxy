@@ -6,7 +6,6 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
-import discord4j.rest.util.Color;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
@@ -40,12 +39,12 @@ public class SeenCommand extends Command {
                 if (seenResponse.isEmpty()) {
                     c.getSource().getEmbed()
                         .title(escape(playerName) + " not found")
-                        .color(Color.RUBY);
+                        .errorColor();
                     return -1;
                 }
                 c.getSource().getEmbed()
                     .title("Seen")
-                    .color(Color.CYAN);
+                    .primaryColor();
                 seenResponse.ifPresent((response) -> c.getSource().getEmbed()
                     .addField("Player", playerName, true)
                     .addField("\u200B", "\u200B", true)

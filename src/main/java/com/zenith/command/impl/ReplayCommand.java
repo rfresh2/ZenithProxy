@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.ReplayMod;
 import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
-import discord4j.rest.util.Color;
 
 import java.util.Arrays;
 
@@ -55,7 +54,7 @@ public class ReplayCommand extends Command {
                 if (module.isEnabled()) {
                     c.getSource().getEmbed()
                         .title("Error")
-                        .color(Color.RUBY)
+                        .errorColor()
                         .description("ReplayMod is already recording");
                     return 1;
                 }
@@ -68,7 +67,7 @@ public class ReplayCommand extends Command {
                 if (!module.isEnabled()) {
                     c.getSource().getEmbed()
                         .title("Error")
-                        .color(Color.RUBY)
+                        .errorColor()
                         .description("ReplayMod is not recording");
                     return 1;
                 }
@@ -110,7 +109,7 @@ public class ReplayCommand extends Command {
     @Override
     public void postPopulate(final Embed embed) {
         embed
-            .color(Color.CYAN)
+            .primaryColor()
             .addField("Discord Upload", toggleStr(CONFIG.client.extra.replayMod.sendRecordingsToDiscord), false)
             .addField("Max Recording Time", getMaxRecordingTimeStr(), false)
             .addField("Auto Record Mode", CONFIG.client.extra.replayMod.autoRecordMode.getName(), false);

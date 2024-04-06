@@ -7,7 +7,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoTotem;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -87,6 +86,6 @@ public class AutoTotemCommand extends Command {
             .addField("Pop Alert Mention", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlertMention), true)
             .addField("No Totems Alert", toggleStr(CONFIG.client.extra.autoTotem.noTotemsAlert), false)
             .addField("No Totems Alert Mention", toggleStr(CONFIG.client.extra.autoTotem.noTotemsAlertMention), true)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

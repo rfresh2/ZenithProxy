@@ -8,7 +8,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -54,6 +53,6 @@ public class ServerCommand extends Command {
         builder
             .addField("IP", CONFIG.client.server.address, false)
             .addField("Port", CONFIG.client.server.port, true)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

@@ -7,7 +7,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AntiLeak;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
@@ -62,6 +61,6 @@ public class AntiLeakCommand extends Command {
             .addField("AntiLeak", toggleStr(CONFIG.client.extra.antiLeak.enabled), false)
             .addField("RangeCheck", toggleStr(CONFIG.client.extra.antiLeak.rangeCheck), false)
             .addField("RangeCheck Factor", String.valueOf(CONFIG.client.extra.antiLeak.rangeFactor), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

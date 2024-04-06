@@ -7,7 +7,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.ChatHistory;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -77,6 +76,6 @@ public class ChatHistoryCommand extends Command {
             .addField("Seconds", CONFIG.server.extra.chatHistory.seconds, false)
             .addField("Max Count", CONFIG.server.extra.chatHistory.maxCount, false)
             .addField("Spectators", toggleStr(CONFIG.server.extra.chatHistory.spectators), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

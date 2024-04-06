@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CONFIG;
@@ -112,6 +111,6 @@ public class CommandConfigCommand extends Command {
             .addField("Ingame Slash Commands", toggleStr(CONFIG.inGameCommands.slashCommands), false)
             .addField("Ingame Slash Commands Replace Server Commands", toggleStr(CONFIG.inGameCommands.slashCommandsReplacesServerCommands), false)
             .addField("Ingame Prefix", CONFIG.inGameCommands.prefix, false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

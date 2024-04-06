@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.event.proxy.UpdateStartEvent;
 import com.zenith.feature.autoupdater.AutoUpdater;
-import discord4j.rest.util.Color;
 
 import java.util.Optional;
 
@@ -42,7 +41,7 @@ public class UpdateCommand extends Command {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 c.getSource().getEmbed()
                         .title("Failed updating")
-                        .color(Color.RUBY);
+                        .errorColor();
             }
             return 1;
         }).then(literal("c").executes(c -> {

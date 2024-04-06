@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -56,6 +55,6 @@ public class QueueWarningCommand extends Command {
             .addField("QueueWarning", toggleStr(CONFIG.discord.queueWarning.enabled), false)
             .addField("Position", CONFIG.discord.queueWarning.position, false)
             .addField("Mention", toggleStr(CONFIG.discord.queueWarning.mentionRole), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

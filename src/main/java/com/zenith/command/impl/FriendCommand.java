@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.PLAYER_LISTS;
@@ -70,6 +69,6 @@ public class FriendCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .description("**Friend List**\n" + playerListToString(PLAYER_LISTS.getFriendsList()))
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

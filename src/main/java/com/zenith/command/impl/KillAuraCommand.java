@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.KillAura;
-import discord4j.rest.util.Color;
 
 import java.util.stream.Collectors;
 
@@ -132,7 +131,7 @@ public class KillAuraCommand extends Command {
                                     } catch (Exception e) {
                                         c.getSource().getEmbed()
                                                      .title("Invalid Entity Type")
-                                                     .color(Color.RUBY);
+                                                     .errorColor();
                                     }
                                     return 1;
                                 })))
@@ -148,7 +147,7 @@ public class KillAuraCommand extends Command {
                                     } catch (Exception e) {
                                         c.getSource().getEmbed()
                                             .title("Invalid Entity Type")
-                                            .color(Color.RUBY);
+                                            .errorColor();
                                     }
                                     return 1;
                                 }))));
@@ -167,7 +166,7 @@ public class KillAuraCommand extends Command {
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon), false)
             .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks, false)
             .addField("Attack Range", CONFIG.client.extra.killAura.attackRange, false)
-            .color(Color.CYAN);
+            .primaryColor();
         if (CONFIG.client.extra.killAura.targetCustom) {
             builder.description("**Custom Targets**\n" + CONFIG.client.extra.killAura.customTargets.stream().map(Enum::name).collect(
                 Collectors.joining(", ", "[", "]")));

@@ -7,7 +7,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AntiKick;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -64,7 +63,7 @@ public class AntiKickCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .color(Color.CYAN)
+            .primaryColor()
             .addField("Enabled", toggleStrCaps(CONFIG.client.extra.antiKick.enabled), false)
             .addField("Player Inactivity Minutes", CONFIG.client.extra.antiKick.playerInactivityKickMins, false)
             .addField("Min Walk Distance", CONFIG.client.extra.antiKick.minWalkDistance, false);

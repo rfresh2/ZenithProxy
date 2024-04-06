@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.util.math.MathHelper;
-import discord4j.rest.util.Color;
 
 import java.time.Duration;
 
@@ -41,10 +40,10 @@ public class PlaytimeCommand extends Command {
                                              .addField("Player", playerName, true)
                                              .description(MathHelper.formatDurationLong(Duration.ofSeconds(response.playtimeSeconds())))
                                              .thumbnail(Proxy.getInstance().getAvatarURL(playerName).toString())
-                                             .color(Color.CYAN),
+                                             .primaryColor(),
                                      () -> c.getSource().getEmbed()
                                          .title(playerName + " not found")
-                                         .color(Color.RUBY));
+                                         .errorColor());
                 return 1;
             }));
     }

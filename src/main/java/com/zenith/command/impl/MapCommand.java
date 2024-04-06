@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.feature.map.MapGenerator;
 import com.zenith.feature.map.MapRenderer;
-import discord4j.rest.util.Color;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -53,7 +52,7 @@ public class MapCommand extends Command {
                                   .title("Map Not Found")
                                   .description("**Known Map ID's**\n" + knownIdList)
                                   .addField("Map ID", id, true)
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           var bytes = MapRenderer.render(mapData.getData(), id);
@@ -66,7 +65,7 @@ public class MapCommand extends Command {
                                   bytes
                               ))
                               .image("attachment://" + attachmentName)
-                              .color(Color.CYAN);
+                              .primaryColor();
                           return 1;
                       }))
                       .then(literal("all").executes(c -> {
@@ -77,7 +76,7 @@ public class MapCommand extends Command {
                           });
                           c.getSource().getEmbed()
                               .title("All Cached Maps Rendered")
-                              .color(Color.CYAN)
+                              .primaryColor()
                               .addField("Map Count", count.get(), false);
                           return 1;
                       })))
@@ -109,6 +108,6 @@ public class MapCommand extends Command {
                 bytes
             ))
             .image("attachment://" + attachmentName)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

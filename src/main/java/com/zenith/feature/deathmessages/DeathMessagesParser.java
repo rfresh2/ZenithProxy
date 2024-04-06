@@ -2,7 +2,6 @@ package com.zenith.feature.deathmessages;
 
 import com.zenith.discord.Embed;
 import com.zenith.util.ComponentSerializer;
-import discord4j.rest.util.Color;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 
@@ -57,7 +56,7 @@ public class DeathMessagesParser {
                                              .title("Unknown death message")
                                              .description(ComponentSerializer.serializeJson(component))
                                              .addField("Message", rawInput, false)
-                                             .color(Color.RUBY));
+                                             .errorColor());
         }
         DEFAULT_LOG.warn("No death message schema found for '{}'", rawInput);
         return Optional.empty();

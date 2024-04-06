@@ -6,7 +6,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.pathing.raycast.RaycastHelper;
-import discord4j.rest.util.Color;
 
 public class RaycastCommand extends Command {
     @Override
@@ -25,7 +24,7 @@ public class RaycastCommand extends Command {
            var embed = c.getSource().getEmbed();
            embed.title("Raycast Result")
                .addField("Hit", result.hit(), false)
-               .color(Color.CYAN);
+               .primaryColor();
            if (result.isBlock()) {
                 embed.addField("Block", result.block().block().toString(), false)
                      .addField("Pos", result.block().x() + ", " + result.block().y() + ", " + result.block().z(), false)
@@ -42,7 +41,7 @@ public class RaycastCommand extends Command {
                     .addField("Hit", result.hit(), false)
                     .addField("Entity", result.entity() != null ? result.entityType() != null ? result.entityType() : "N/A" : "N/A", false)
                     .addField("ID", result.entity() != null ? result.entity().getEntityId() : "N/A", false)
-                    .color(Color.CYAN);
+                    .primaryColor();
             }))
             .then(literal("b").executes(c -> {
                 var result = RaycastHelper.playerBlockRaycast(4.5, false);
@@ -52,7 +51,7 @@ public class RaycastCommand extends Command {
                     .addField("Block", result.block().toString(), false)
                     .addField("Pos", result.x() + ", " + result.y() + ", " + result.z(), false)
                     .addField("Direction", result.direction().name(), false)
-                    .color(Color.CYAN);
+                    .primaryColor();
             }));
     }
 }

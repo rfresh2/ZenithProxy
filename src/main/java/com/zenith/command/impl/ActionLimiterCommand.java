@@ -7,7 +7,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.ActionLimiter;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -106,6 +105,6 @@ public class ActionLimiterCommand extends Command {
             .addField("Allow Ender Chest", toggleStr(CONFIG.client.extra.actionLimiter.allowEnderChest), true)
             .addField("Allow Use Item", toggleStr(CONFIG.client.extra.actionLimiter.allowUseItem), true)
             .addField("Allow Chat", toggleStr(CONFIG.client.extra.actionLimiter.allowChat), true)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

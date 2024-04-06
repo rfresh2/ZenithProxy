@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.Spammer;
-import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +96,7 @@ public class SpammerCommand extends Command {
                           final String message = StringArgumentType.getString(c, "message");
                           CONFIG.client.extra.spammer.messages.add(message);
                           c.getSource().getEmbed()
-                                                 .color(Color.CYAN)
+                                                 .primaryColor()
                                                  .title("Message Added!");
                           return 1;
                       })))
@@ -141,7 +140,7 @@ public class SpammerCommand extends Command {
             .addField("Delay", CONFIG.client.extra.spammer.delayTicks, false)
             .addField("Random Order", toggleStr(CONFIG.client.extra.spammer.randomOrder), false)
             .addField("Append Random", toggleStr(CONFIG.client.extra.spammer.appendRandom), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 
     private Embed addListDescription(final Embed embedBuilder) {

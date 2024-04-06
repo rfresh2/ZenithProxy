@@ -323,14 +323,14 @@ public class DiscordBot {
         sendEmbedMessage(Embed.builder()
                              .title("Update complete!")
                              .description("Current Version: `" + escape(LAUNCH_CONFIG.version) + "`")
-                             .color(Color.GREEN));
+                             .successColor());
     }
 
     void sendQueueWarning() {
         sendEmbedMessage((CONFIG.discord.queueWarning.mentionRole ? mentionAccountOwner() : ""), Embed.builder()
             .title("Queue Warning")
             .addField("Queue Position", "[" + queuePositionStr() + "]", false)
-            .color(Color.MOON_YELLOW));
+            .inQueueColor());
     }
 
     static String mentionAccountOwner() {
@@ -367,7 +367,7 @@ public class DiscordBot {
         return Embed.builder()
             .title("Updating and restarting...")
             .description(verString)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 
     public static boolean isAllowedChatCharacter(char c0) {

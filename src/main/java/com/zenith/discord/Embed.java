@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zenith.Shared.CONFIG;
+
 /**
  * Mutable data class for discord embeds
  * Basically shadows EmbedCreateSpec while adding mutability
@@ -60,6 +62,26 @@ public class Embed {
 
     public Embed footer(String text, String iconUrl) {
         footer = EmbedCreateFields.Footer.of(text, iconUrl);
+        return this;
+    }
+
+    public Embed primaryColor() {
+        color = CONFIG.theme.primary.discord();
+        return this;
+    }
+
+    public Embed errorColor() {
+        color = CONFIG.theme.error.discord();
+        return this;
+    }
+
+    public Embed successColor() {
+        color = CONFIG.theme.success.discord();
+        return this;
+    }
+
+    public Embed inQueueColor() {
+        color = CONFIG.theme.inQueue.discord();
         return this;
     }
 

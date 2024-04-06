@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoReconnect;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -64,6 +63,6 @@ public class AutoReconnectCommand extends Command {
             .addField("AutoReconnect", toggleStr(CONFIG.client.extra.autoReconnect.enabled), false)
             .addField("Delay", CONFIG.client.extra.autoReconnect.delaySeconds, true)
             .addField("Max Attempts", CONFIG.client.extra.autoReconnect.maxAttempts, true)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

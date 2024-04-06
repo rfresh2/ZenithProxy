@@ -90,7 +90,7 @@ public class DiscordEventListener {
     public void handleConnectEvent(ConnectEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Proxy Connected")
-                             .color(Color.MOON_YELLOW)
+                             .inQueueColor()
                              .addField("Server", CONFIG.client.server.address, true)
                              .addField("Proxy IP", CONFIG.server.getProxyAddress(), false));
         updatePresence(bot.defaultConnectedPresence.get());
@@ -99,7 +99,7 @@ public class DiscordEventListener {
     public void handlePlayerOnlineEvent(PlayerOnlineEvent event) {
         var embedBuilder = Embed.builder()
             .title("Proxy Online")
-            .color(Color.MEDIUM_SEA_GREEN);
+            .successColor();
         event.queueWait()
             .ifPresent(duration -> embedBuilder.addField("Queue Duration", formatDuration(duration), true));
         sendEmbedMessage(embedBuilder);
@@ -110,7 +110,7 @@ public class DiscordEventListener {
             .title("Proxy Disconnected")
             .addField("Reason", event.reason(), false)
             .addField("Online Duration", formatDuration(event.onlineDuration()), false)
-            .color(Color.RUBY);
+            .errorColor();
         if (Proxy.getInstance().isOn2b2t()
             && !Proxy.getInstance().isPrio()
             && event.reason().startsWith("You have lost connection")
@@ -140,7 +140,7 @@ public class DiscordEventListener {
         sendEmbedMessage(Embed.builder()
                              .title("AutoEat Out Of Food")
                              .description("AutoEat threshold met but player has no food")
-                             .color(Color.RUBY));
+                             .errorColor());
     }
 
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
@@ -150,7 +150,7 @@ public class DiscordEventListener {
     public void handleStartQueueEvent(StartQueueEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Started Queuing")
-                             .color(Color.MOON_YELLOW)
+                             .inQueueColor()
                              .addField("Regular Queue", Queue.getQueueStatus().regular(), true)
                              .addField("Priority Queue", Queue.getQueueStatus().prio(), true));
         updatePresence(bot.getQueuePresence());
@@ -159,14 +159,14 @@ public class DiscordEventListener {
     public void handleDeathEvent(DeathEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Player Death")
-                             .color(Color.RUBY)
+                             .errorColor()
                              .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), false));
     }
 
     public void handleSelfDeathMessageEvent(SelfDeathMessageEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Death Message")
-                             .color(Color.RUBY)
+                             .errorColor()
                              .addField("Message", event.message(), false));
     }
 
@@ -174,7 +174,7 @@ public class DiscordEventListener {
         sendEmbedMessage(Embed.builder()
                              .title("Health AutoDisconnect Triggered")
                              .addField("Health", CACHE.getPlayerCache().getThePlayer().getHealth(), true)
-                             .color(Color.CYAN));
+                             .primaryColor());
     }
 
     public void handleProxyClientConnectedEvent(ProxyClientConnectedEvent event) {
@@ -182,7 +182,7 @@ public class DiscordEventListener {
             sendEmbedMessage(Embed.builder()
                                  .title("Client Connected")
                                  .addField("Username", event.clientGameProfile().getName(), true)
-                                 .color(Color.CYAN));
+                                 .primaryColor());
         }
     }
 
@@ -191,7 +191,7 @@ public class DiscordEventListener {
             sendEmbedMessage(Embed.builder()
                                  .title("Spectator Connected")
                                  .addField("Username", escape(event.clientGameProfile().getName()), true)
-                                 .color(Color.CYAN));
+                                 .primaryColor());
         }
     }
 
@@ -199,7 +199,7 @@ public class DiscordEventListener {
         if (!CONFIG.client.extra.clientConnectionMessages) return;
         var builder = Embed.builder()
             .title("Client Disconnected")
-            .color(Color.RUBY);
+            .errorColor();
         if (nonNull(event.clientGameProfile())) {
             builder = builder.addField("Username", escape(event.clientGameProfile().getName()), false);
         }
@@ -212,7 +212,7 @@ public class DiscordEventListener {
     public void handleVisualRangeEnterEvent(VisualRangeEnterEvent event) {
         var embedCreateSpec = Embed.builder()
             .title("Player In Visual Range")
-            .color(event.isFriend() ? Color.GREEN : Color.RUBY)
+            .color(event.isFriend() ? CONFIG.theme.success.discord() : CONFIG.theme.error.discord())
             .addField("Player Name", escape(event.playerEntry().getName()), true)
             .addField("Player UUID", ("[" + event.playerEntry().getProfileId().toString() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString());
@@ -234,7 +234,7 @@ public class DiscordEventListener {
                 PLAYER_LISTS.getFriendsList().add(event.playerEntry().getName());
                 e.reply().withEmbeds(Embed.builder()
                                          .title("Friend Added")
-                                         .color(Color.GREEN)
+                                         .successColor()
                                          .addField("Player Name", escape(event.playerEntry().getName()), true)
                                          .addField("Player UUID", ("[" + event.playerEntry().getProfileId() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId() + ")"), true)
                                          .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
@@ -262,7 +262,7 @@ public class DiscordEventListener {
     public void handleVisualRangeLeaveEvent(final VisualRangeLeaveEvent event) {
         var embedCreateSpec = Embed.builder()
             .title("Player Left Visual Range")
-            .color(event.isFriend() ? Color.GREEN : Color.RUBY)
+            .color(event.isFriend() ? CONFIG.theme.success.discord() : CONFIG.theme.error.discord())
             .addField("Player Name", escape(event.playerEntry().getName()), true)
             .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
@@ -280,7 +280,7 @@ public class DiscordEventListener {
     public void handleVisualRangeLogoutEvent(final VisualRangeLogoutEvent event) {
         var embedCreateSpec = Embed.builder()
             .title("Player Logout In Visual Range")
-            .color(event.isFriend() ? Color.GREEN : Color.RUBY)
+            .color(event.isFriend() ? CONFIG.theme.success.discord() : CONFIG.theme.error.discord())
             .addField("Player Name", escape(event.playerEntry().getName()), true)
             .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
@@ -298,7 +298,7 @@ public class DiscordEventListener {
     public void handleNonWhitelistedPlayerConnectedEvent(NonWhitelistedPlayerConnectedEvent event) {
         var builder = Embed.builder()
             .title("Non-Whitelisted Player Connected")
-            .color(Color.RUBY);
+            .errorColor();
         if (nonNull(event.remoteAddress()) && CONFIG.discord.showNonWhitelistLoginIP) {
             builder = builder.addField("IP", escape(event.remoteAddress().toString()), false);
         }
@@ -318,7 +318,7 @@ public class DiscordEventListener {
                         PLAYER_LISTS.getWhitelist().add(event.gameProfile().getName());
                         e.reply().withEmbeds(Embed.builder()
                                                  .title("Player Whitelisted")
-                                                 .color(Color.GREEN)
+                                                 .successColor()
                                                  .addField("Player Name", escape(event.gameProfile().getName()), true)
                                                  .addField("Player UUID", ("[" + event.gameProfile().getId().toString() + "](https://namemc.com/profile/" + event.gameProfile().getId().toString() + ")"), true)
                                                  .thumbnail(Proxy.getInstance().getAvatarURL(event.gameProfile().getId()).toString())
@@ -330,7 +330,7 @@ public class DiscordEventListener {
                                               + " attempted to whitelist " + event.gameProfile().getName() + " [" + event.gameProfile().getId().toString() + "] but was not authorized to do so!");
                         e.reply().withEmbeds(Embed.builder()
                                                  .title("Not Authorized!")
-                                                 .color(Color.RUBY)
+                                                 .errorColor()
                                                  .addField("Error",
                                                            "User: " + e.getInteraction().getMember().map(User::getTag).orElse("Unknown")
                                                                + " is not authorized to execute this command! Contact the account owner", true)
@@ -353,7 +353,7 @@ public class DiscordEventListener {
         if (CONFIG.client.extra.clientConnectionMessages) {
             var builder = Embed.builder()
                 .title("Spectator Disconnected")
-                .color(Color.RUBY);
+                .errorColor();
             if (nonNull(event.clientGameProfile())) {
                 builder = builder.addField("Username", escape(event.clientGameProfile().getName()), false);
             }
@@ -371,7 +371,7 @@ public class DiscordEventListener {
         sendEmbedMessage(Embed.builder()
                              .title("Active Hours Connect Triggered")
                              .addField("ETA", Queue.getQueueEta(queueLength), false)
-                             .color(Color.CYAN));
+                             .primaryColor());
     }
 
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
@@ -430,7 +430,7 @@ public class DiscordEventListener {
             var embed = Embed.builder()
                 .description(escape(message))
                 .footer("\u200b", avatarURL)
-                .color(event.isPublicChat() ? (event.message().startsWith(">") ? Color.MEDIUM_SEA_GREEN : Color.BLACK)
+                .color(event.isPublicChat() ? (event.publicChatContent().startsWith(">") ? Color.MEDIUM_SEA_GREEN : Color.BLACK)
                            : event.isDeathMessage() ? Color.RUBY
                     : event.isWhisper() ? Color.MAGENTA
                     : Color.MOON_YELLOW)
@@ -450,14 +450,14 @@ public class DiscordEventListener {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             sendRelayEmbedMessage(Embed.builder()
                                       .description(escape("**" + event.playerEntry().getName() + "** connected"))
-                                      .color(Color.MEDIUM_SEA_GREEN)
+                                      .successColor()
                                       .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                       .timestamp(Instant.now()));
         }
         if (CONFIG.client.extra.stalk.enabled && PLAYER_LISTS.getStalkList().contains(event.playerEntry().getProfile())) {
             sendEmbedMessage(mentionAccountOwner(), Embed.builder()
                 .title("Stalked Player Online!")
-                .color(Color.MEDIUM_SEA_GREEN)
+                .successColor()
                 .addField("Player Name", event.playerEntry().getName(), true)
                 .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString()));
         }
@@ -468,14 +468,14 @@ public class DiscordEventListener {
             if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
             sendRelayEmbedMessage(Embed.builder()
                                       .description(escape("**" + event.playerEntry().getName() + "** disconnected"))
-                                      .color(Color.RUBY)
+                                      .errorColor()
                                       .footer("\u200b", Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString())
                                       .timestamp(Instant.now()));
         }
         if (CONFIG.client.extra.stalk.enabled && PLAYER_LISTS.getStalkList().contains(event.playerEntry().getProfile())) {
             sendEmbedMessage(mentionAccountOwner(), Embed.builder()
                 .title("Stalked Player Offline!")
-                .color(Color.RUBY)
+                .errorColor()
                 .addField("Player Name", event.playerEntry().getName(), true)
                 .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString()));
         }
@@ -510,21 +510,21 @@ public class DiscordEventListener {
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Server Restarting")
-                             .color(Color.RUBY)
+                             .errorColor()
                              .addField("Message", event.message(), true));
     }
 
     public void handleProxyLoginFailedEvent(ProxyLoginFailedEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Login Failed")
-                             .color(Color.RUBY)
+                             .errorColor()
                              .addField("Help", "Try waiting and connecting again.", false));
     }
 
     public void handleStartConnectEvent(StartConnectEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Connecting...")
-                             .color(Color.MOON_YELLOW));
+                             .inQueueColor());
     }
 
     public void handlePrioStatusUpdateEvent(PrioStatusUpdateEvent event) {
@@ -533,11 +533,11 @@ public class DiscordEventListener {
         if (event.prio()) {
             embedCreateSpec
                 .title("Prio Queue Status Detected")
-                .color(Color.GREEN);
+                .successColor();
         } else {
             embedCreateSpec
                 .title("Prio Queue Status Lost")
-                .color(Color.RED);
+                .errorColor();
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioUpdate ? mentionAccountOwner() : ""), embedCreateSpec);
@@ -548,11 +548,11 @@ public class DiscordEventListener {
         if (event.prioBanned()) {
             embedCreateSpec
                 .title("Prio Ban Detected")
-                .color(Color.RED);
+                .errorColor();
         } else {
             embedCreateSpec
                 .title("Prio Unban Detected")
-                .color(Color.GREEN);
+                .successColor();
         }
         embedCreateSpec.addField("User", escape(CONFIG.authentication.username), false);
         sendEmbedMessage((CONFIG.discord.mentionRoleOnPrioBanUpdate ? mentionAccountOwner() : ""), embedCreateSpec);
@@ -561,13 +561,13 @@ public class DiscordEventListener {
     public void handleAutoReconnectEvent(final AutoReconnectEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("AutoReconnecting in " + event.delaySeconds() + "s")
-                             .color(Color.MOON_YELLOW));
+                             .inQueueColor());
     }
 
     public void handleMsaDeviceCodeLoginEvent(final MsaDeviceCodeLoginEvent event) {
         final var embed = Embed.builder()
             .title("Microsoft Device Code Login")
-            .color(Color.CYAN)
+            .primaryColor()
             .description("Login Here: " + event.deviceCode().getDirectVerificationUri());
         if (CONFIG.discord.mentionRoleOnDeviceCodeAuth)
             sendEmbedMessage(mentionAccountOwner(), embed);
@@ -581,7 +581,7 @@ public class DiscordEventListener {
             if (!killer.getName().equals(CONFIG.authentication.username)) return;
             sendEmbedMessage(Embed.builder()
                                  .title("Kill Detected")
-                                 .color(Color.CYAN)
+                                 .primaryColor()
                                  .addField("Victim", escape(event.deathMessageParseResult().getVictim()), false)
                                  .addField("Message", escape(event.deathMessageRaw()), false));
         });
@@ -590,7 +590,7 @@ public class DiscordEventListener {
     public void handleUpdateAvailableEvent(final UpdateAvailableEvent event) {
         var embedBuilder = Embed.builder()
             .title("Update Available!")
-            .color(Color.CYAN);
+            .primaryColor();
         event.getVersion().ifPresent(v -> {
             embedBuilder
                 .addField("Current", "`" + escape(LAUNCH_CONFIG.version) + "`", false)
@@ -606,13 +606,13 @@ public class DiscordEventListener {
     public void handleReplayStartedEvent(final ReplayStartedEvent event) {
         sendEmbedMessage(Embed.builder()
                              .title("Replay Recording Started")
-                             .color(Color.CYAN));
+                             .primaryColor());
     }
 
     public void handleReplayStoppedEvent(final ReplayStoppedEvent event) {
         var embed = Embed.builder()
             .title("Replay Recording Stopped")
-            .color(Color.CYAN);
+            .primaryColor();
         var replayFile = event.replayFile();
         if (replayFile != null && CONFIG.client.extra.replayMod.sendRecordingsToDiscord) {
             try (InputStream in = new BufferedInputStream(new FileInputStream(replayFile))) {
@@ -633,7 +633,7 @@ public class DiscordEventListener {
         var embed = Embed.builder()
             .title("Player Totem Popped")
             .addField("Totems Left", event.totemsRemaining(), false)
-            .color(Color.RUBY);
+            .errorColor();
         if (CONFIG.client.extra.autoTotem.totemPopAlertMention)
             sendEmbedMessage(mentionAccountOwner(), embed);
         else
@@ -643,7 +643,7 @@ public class DiscordEventListener {
     public void handleNoTotemsEvent(final NoTotemsEvent event) {
         var embed = Embed.builder()
             .title("Player Out of Totems")
-            .color(Color.RUBY);
+            .errorColor();
         if (CONFIG.client.extra.autoTotem.noTotemsAlertMention)
             sendEmbedMessage(mentionAccountOwner(), embed);
         else

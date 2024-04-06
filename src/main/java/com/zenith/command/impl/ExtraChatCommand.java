@@ -6,7 +6,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import java.util.Arrays;
 
@@ -78,6 +77,6 @@ public class ExtraChatCommand extends Command {
             .addField("Hide death Messages", toggleStr(CONFIG.client.extra.chat.hideDeathMessages), false)
             .addField("Show Connection Messages", toggleStr(CONFIG.client.extra.chat.showConnectionMessages), false)
             .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

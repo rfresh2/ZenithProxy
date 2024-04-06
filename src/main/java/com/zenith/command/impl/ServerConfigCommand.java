@@ -7,7 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -110,7 +109,7 @@ public class ServerConfigCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .color(Color.CYAN)
+            .primaryColor()
             .addField("Port", CONFIG.server.bind.port, false)
             .addField("Ping", toggleStr(CONFIG.server.ping.enabled), false)
             .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), false)

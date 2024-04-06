@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.util.Config;
-import discord4j.rest.util.Color;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -163,7 +162,7 @@ public class ClientConnectionCommand extends Command {
     @Override
     public void postPopulate(final Embed embed) {
         embed
-            .color(Color.CYAN)
+            .primaryColor()
             .addField("Proxy", toggleStr(CONFIG.client.connectionProxy.enabled), false)
             .addField("Proxy Type", CONFIG.client.connectionProxy.type.toString(), false)
             .addField("Proxy Host", CONFIG.client.connectionProxy.host, false)

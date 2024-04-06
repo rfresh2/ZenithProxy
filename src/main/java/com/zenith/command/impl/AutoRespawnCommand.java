@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoRespawn;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -51,6 +50,6 @@ public class AutoRespawnCommand extends Command {
         builder
             .addField("AutoRespawn", toggleStr(CONFIG.client.extra.autoRespawn.enabled), false)
             .addField("Delay (ms)", CONFIG.client.extra.autoRespawn.delayMillis, true)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

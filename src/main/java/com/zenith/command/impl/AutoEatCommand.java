@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoEat;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -42,7 +41,7 @@ public class AutoEatCommand extends Command {
                           CONFIG.client.extra.autoEat.healthThreshold = health;
                           c.getSource().getEmbed()
                               .title("AutoEat Health Threshold Set")
-                              .color(Color.CYAN)
+                              .primaryColor()
                               .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
                               .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
@@ -54,7 +53,7 @@ public class AutoEatCommand extends Command {
                           CONFIG.client.extra.autoEat.hungerThreshold = hunger;
                           c.getSource().getEmbed()
                               .title("AutoEat Hunger Threshold Set")
-                              .color(Color.CYAN)
+                              .primaryColor()
                               .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
                               .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
@@ -76,6 +75,6 @@ public class AutoEatCommand extends Command {
             .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
             .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
             .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

@@ -6,7 +6,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DATABASE;
@@ -132,6 +131,6 @@ public class DatabaseCommand extends Command {
             .addField("Restarts", toggleStr(CONFIG.database.restarts.enabled), false)
             .addField("Player Count", toggleStr(CONFIG.database.playerCount.enabled), false)
             .addField("Tablist", toggleStr(CONFIG.database.tablist.enabled), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.Spook;
 import com.zenith.util.Config;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -65,6 +64,6 @@ public class SpookCommand extends Command {
             .addField("Spook", toggleStr(CONFIG.client.extra.spook.enabled), false)
             .addField("Delay", CONFIG.client.extra.spook.tickDelay + " tick(s)", false)
             .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

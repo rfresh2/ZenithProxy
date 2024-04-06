@@ -12,7 +12,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
@@ -177,6 +176,6 @@ public class DebugCommand extends Command {
             .addField("Binary Nbt Component Serializer", toggleStr(CONFIG.debug.binaryNbtComponentSerializer), false)
             .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
             .addField("Teleport Resync", toggleStr(CONFIG.debug.teleportResync), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

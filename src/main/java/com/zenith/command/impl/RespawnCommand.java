@@ -10,7 +10,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.network.client.ClientSession;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CACHE;
 import static java.util.Objects.nonNull;
@@ -37,7 +36,7 @@ public class RespawnCommand extends Command {
                 }
                 c.getSource().getEmbed()
                     .title("Respawn performed")
-                    .color(Color.CYAN);
+                    .primaryColor();
             });
     }
 }

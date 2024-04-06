@@ -8,7 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AntiAFK;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
@@ -141,6 +140,6 @@ public class AntiAFKCommand extends Command {
             .addField("Jump", toggleStr(CONFIG.client.extra.antiafk.actions.jump)
                 + " - Delay: " + CONFIG.client.extra.antiafk.actions.jumpDelayTicks, false)
             .addField("Sneak", toggleStr(CONFIG.client.extra.antiafk.actions.sneak), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

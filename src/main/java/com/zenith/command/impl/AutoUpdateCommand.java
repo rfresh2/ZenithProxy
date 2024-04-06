@@ -10,7 +10,6 @@ import com.zenith.discord.Embed;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.GitAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.LAUNCH_CONFIG;
 import static com.zenith.Shared.saveLaunchConfig;
@@ -56,6 +55,6 @@ public class AutoUpdateCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoUpdater", toggleStr(LAUNCH_CONFIG.auto_update), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

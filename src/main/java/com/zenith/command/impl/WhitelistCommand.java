@@ -8,7 +8,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Shared.CONFIG;
@@ -83,6 +82,6 @@ public class WhitelistCommand extends Command {
         builder
             .description(playerListToString(PLAYER_LISTS.getWhitelist()))
             .addField("Auto Add Client", toggleStr(CONFIG.server.extra.whitelist.autoAddClient), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

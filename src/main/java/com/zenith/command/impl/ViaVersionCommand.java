@@ -8,7 +8,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
@@ -57,7 +56,7 @@ public class ViaVersionCommand extends Command {
                                   c.getSource().getEmbed()
                                       .title("Invalid Version!")
                                       .description("Please select a valid version. Example: 1.19.4")
-                                      .color(Color.RED);
+                                      .errorColor();
                               } else {
                                   CONFIG.client.viaversion.protocolVersion = closest.getVersion();
                                   c.getSource().getEmbed()
@@ -81,5 +80,5 @@ public class ViaVersionCommand extends Command {
             .addField("Client AutoConfig", toggleStr(CONFIG.client.viaversion.autoProtocolVersion), false)
             .addField("Client Version", ProtocolVersion.getProtocol(CONFIG.client.viaversion.protocolVersion).getName(), false)
             .addField("Server ViaVersion", toggleStr(CONFIG.server.viaversion.enabled), false)
-            .color(Color.CYAN);
+            .primaryColor();
     }}

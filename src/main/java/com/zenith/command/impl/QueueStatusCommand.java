@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.queue.Queue;
 import com.zenith.feature.queue.QueueStatus;
 import com.zenith.util.math.MathHelper;
-import discord4j.rest.util.Color;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -36,7 +35,7 @@ public class QueueStatusCommand extends Command {
                 .title("2b2t Queue Status")
                 .addField("Regular", queueStatus.regular() + (inQueue ? "" : " [ETA: " + Queue.getQueueEta(queueStatus.regular()) + "]"), false)
                 .addField("Priority", queueStatus.prio(), false)
-                .color(Color.CYAN);
+                .primaryColor();
             if (inQueue) {
                 final int queuePosition = Proxy.getInstance().getQueuePosition();
                 final Duration currentWaitDuration = Duration.between(Proxy.getInstance().getConnectTime(), Instant.now());

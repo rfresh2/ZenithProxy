@@ -8,7 +8,6 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
-import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -36,7 +35,7 @@ public class TablistCommand extends Command {
             if (!Proxy.getInstance().isConnected()) {
                 c.getSource().getEmbed()
                     .title("Proxy is not online!")
-                    .color(Color.RUBY);
+                    .errorColor();
             } else {
                 // embeds will be too small for tablist
                 List<String> playerNames = CACHE.getTabListCache().getEntries().stream()

@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AutoFish;
 import com.zenith.util.math.MathHelper;
-import discord4j.rest.util.Color;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.*;
@@ -73,6 +72,6 @@ public class AutoFishCommand extends Command {
             .addField("Cast Delay", CONFIG.client.extra.autoFish.castDelay + " ticks", false)
             .addField("Yaw", CONFIG.client.extra.autoFish.yaw, false)
             .addField("Pitch", CONFIG.client.extra.autoFish.pitch, false)
-            .color(Color.CYAN);
+            .primaryColor();
     }
 }

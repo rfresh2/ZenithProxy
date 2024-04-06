@@ -13,7 +13,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.Embed;
 import com.zenith.feature.items.ContainerClickAction;
-import discord4j.rest.util.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,7 +81,7 @@ public class InventoryCommand extends Command {
                                         c.getSource().getEmbed()
                                             .title("Error")
                                             .description("Slot: " + slot + " is empty")
-                                            .color(Color.RUBY);
+                                            .errorColor();
                                         return 1;
                                     }
                                     drop(slot, true);
@@ -98,7 +97,7 @@ public class InventoryCommand extends Command {
                               c.getSource().getEmbed()
                                   .title("Error")
                                   .description("Slot: " + slot + " is empty")
-                                  .color(Color.RUBY);
+                                  .errorColor();
                               return 1;
                           }
                           drop(slot, false);
@@ -170,7 +169,7 @@ public class InventoryCommand extends Command {
             embed
                 .title("Error")
                 .description("Not logged in!")
-                .color(Color.RUBY);
+                .errorColor();
             return false;
         }
         return true;
@@ -182,7 +181,7 @@ public class InventoryCommand extends Command {
             embed
                 .title("Error")
                 .description("Not logged in!")
-                .color(Color.RUBY);
+                .errorColor();
             return false;
         }
         return true;

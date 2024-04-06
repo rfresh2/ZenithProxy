@@ -11,7 +11,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.module.impl.ESP;
-import discord4j.rest.util.Color;
 
 import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
@@ -51,7 +50,7 @@ public class ESPCommand extends Command {
                 }
                 c.getSource().getEmbed()
                     .title("ESP " + toggleStrCaps(CONFIG.server.extra.esp.enable))
-                    .color(Color.CYAN);
+                    .primaryColor();
                 return 1;
             }));
     }
