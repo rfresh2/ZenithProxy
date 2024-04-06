@@ -13,14 +13,21 @@ import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
 
+import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.SERVER_LOG;
+
 public class StatusRequestHandler implements PacketHandler<ServerboundStatusRequestPacket, ServerConnection> {
     @Override
     public ServerboundStatusRequestPacket apply(final ServerboundStatusRequestPacket packet, final ServerConnection session) {
+        if (CONFIG.server.ping.logPings)
+            SERVER_LOG.info("[Ping] Request from: {}", session.getRemoteAddress());
         ServerInfoBuilder builder = session.getFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
         if (builder == null) {
             builder = $ -> new ServerStatusInfo(
-                new VersionInfo(session.getPacketProtocol().getCodec().getMinecraftVersion(), session.getPacketProtocol().getCodec().getProtocolVersion()),
-                new PlayerInfo(0, 20, new ArrayList<>()),
+                new VersionInfo(
+                    session.getPacketProtocol().getCodec().getMinecraftVersion(),
+                    session.getPacketProtocol().getCodec().getProtocolVersion()),
+                new PlayerInfo(20, 0, new ArrayList<>()),
                 Component.text("A Minecraft Server"),
                 null,
                 false

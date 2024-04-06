@@ -30,6 +30,7 @@ public class ServerConfigCommand extends Command {
                 "ping onlinePlayers on/off",
                 "ping maxPlayers <int>",
                 "ping lanBroadcast on/off",
+                "ping log on/off",
                 "timeout on/off",
                 "timeout <seconds>"
             )
@@ -76,6 +77,13 @@ public class ServerConfigCommand extends Command {
                                     context.getSource().getEmbed()
                                         .title("Ping LAN Broadcast Set!");
                                     return 1;
+                                })))
+                      .then(literal("log")
+                                .then(argument("toggle", toggle()).executes(c -> {
+                                    CONFIG.server.ping.logPings = getToggle(c, "toggle");
+                                    c.getSource().getEmbed()
+                                        .title("Ping Log " + toggleStrCaps(CONFIG.server.ping.logPings));
+                                    return 1;
                                 }))))
             .then(literal("timeout")
                       .then(argument("toggle", toggle()).executes(c -> {
@@ -108,6 +116,7 @@ public class ServerConfigCommand extends Command {
             .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), false)
             .addField("Ping Max Players", CONFIG.server.ping.maxPlayers, false)
             .addField("Ping LAN Broadcast", toggleStr(CONFIG.server.ping.lanBroadcast), false)
+            .addField("Ping Log", toggleStr(CONFIG.server.ping.logPings), false)
             .addField("Timeout", CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : toggleStr(false), false);
     }
 }

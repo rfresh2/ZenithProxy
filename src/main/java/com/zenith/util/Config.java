@@ -443,6 +443,7 @@ public final class Config {
             public boolean responseCaching = true;
             // could probably be increased 2-3x without issue
             public int responseCacheSeconds = 10;
+            public boolean logPings = false;
         }
 
         public static final class ServerViaVersion {
