@@ -1,7 +1,6 @@
 package com.zenith.network.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.ProtocolState;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.CollisionRule;
@@ -91,6 +90,8 @@ public class ServerConnection implements Session, SessionListener {
     protected long lastPingId = 0L;
     protected long lastPingTime = 0L;
     protected long ping = 0L;
+    protected long lastKeepAliveId = 0L;
+    protected long lastKeepAliveTime = 0L;
 
     protected boolean whitelistChecked = false;
     protected boolean isPlayer = false;
@@ -179,7 +180,6 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void connected(final Session session) {
-        session.setFlag(MinecraftConstants.PING_KEY, 0);
     }
 
     @Override

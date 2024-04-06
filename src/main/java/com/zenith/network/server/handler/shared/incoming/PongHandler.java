@@ -1,4 +1,4 @@
-package com.zenith.network.server.handler.player.incoming;
+package com.zenith.network.server.handler.shared.incoming;
 
 import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundPongPacket;
 import com.zenith.network.registry.PacketHandler;
