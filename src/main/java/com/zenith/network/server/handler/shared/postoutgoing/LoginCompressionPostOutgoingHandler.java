@@ -8,7 +8,7 @@ import com.zenith.network.server.ServerConnection;
 
 import static com.zenith.Shared.CONFIG;
 
-public class LoginCompressionOutgoingHandler implements PostOutgoingPacketHandler<ClientboundLoginCompressionPacket, ServerConnection> {
+public class LoginCompressionPostOutgoingHandler implements PostOutgoingPacketHandler<ClientboundLoginCompressionPacket, ServerConnection> {
     @Override
     public void accept(final ClientboundLoginCompressionPacket packet, final ServerConnection session) {
         session.setCompressionThreshold(packet.getThreshold(), CONFIG.server.compressionLevel, true);

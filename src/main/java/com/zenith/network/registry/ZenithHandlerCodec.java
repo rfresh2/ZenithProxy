@@ -57,10 +57,10 @@ import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandl
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
 import com.zenith.network.server.handler.shared.outgoing.KeepAliveOutgoingHandler;
-import com.zenith.network.server.handler.shared.outgoing.PingOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.SGameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
-import com.zenith.network.server.handler.shared.postoutgoing.LoginCompressionOutgoingHandler;
+import com.zenith.network.server.handler.shared.postoutgoing.LoginCompressionPostOutgoingHandler;
+import com.zenith.network.server.handler.shared.postoutgoing.PingPostOutgoingHandler;
 import com.zenith.network.server.handler.spectator.incoming.InteractEntitySpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.PlayerCommandSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
@@ -284,7 +284,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ServerboundLoginAcknowledgedPacket.class, new LoginAckHandler())
                 // state is switched to game and connection is set to spectator in SGameProfileOutgoingHandler
                 .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
-                .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionOutgoingHandler())
+                .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionPostOutgoingHandler())
                 .build())
             .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ServerConnection>builder()
                 .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
@@ -295,7 +295,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ServerboundKeepAlivePacket.class, new KeepAliveHandler())
                 .registerInbound(ServerboundPingRequestPacket.class, new PingRequestHandler())
                 .registerInbound(ServerboundPongPacket.class, new PongHandler())
-                .registerOutbound(ClientboundPingPacket.class, new PingOutgoingHandler())
+                .registerPostOutbound(ClientboundPingPacket.class, new PingPostOutgoingHandler())
                 .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
                 .registerOutbound(ClientboundKeepAlivePacket.class, new KeepAliveOutgoingHandler())
                 .build())
