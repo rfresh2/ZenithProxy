@@ -58,7 +58,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:b40c82ad47") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:15071dae02") {
+    shade("com.github.rfresh2:MCProtocolLib:3663c67d48") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
