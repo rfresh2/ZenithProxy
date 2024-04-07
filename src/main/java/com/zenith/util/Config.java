@@ -388,8 +388,13 @@ public final class Config {
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
         public boolean healthCheck = true;
         public long playerListsRefreshIntervalMins = 1440L; // one day as default
-
         public Spectator spectator = new Spectator();
+        public RateLimiter rateLimiter = new RateLimiter();
+
+        public static final class RateLimiter {
+            public boolean enabled = true;
+            public int rateLimitSeconds = 2;
+        }
 
         public static final class Spectator {
             public boolean allowSpectator = true;
