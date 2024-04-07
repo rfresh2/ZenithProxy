@@ -155,8 +155,7 @@ tasks {
         description = "Execute proxy"
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("com.zenith.Proxy")
-        jvmArgs = listOf("-Xmx300m", "-XX:+UseG1GC", "-Dio.netty.allocator.maxOrder=9", "-Dio.netty.eventLoopThreads=1",
-            "-Djava.util.concurrent.ForkJoinPool.common.parallelism=2", "-Dio.netty.leakDetection.level=disabled")
+        jvmArgs = listOf("-Xmx300m", "-XX:+UseG1GC")
     }
     val javaPathTask = register("javaPath", Task::class.java) {
         group = runGroup

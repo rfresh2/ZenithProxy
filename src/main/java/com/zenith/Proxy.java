@@ -34,6 +34,7 @@ import com.zenith.util.Config;
 import com.zenith.util.Wait;
 import com.zenith.via.ZenithClientChannelInitializer;
 import com.zenith.via.ZenithServerChannelInitializer;
+import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -94,6 +95,8 @@ public class Proxy {
     public static void main(String... args) {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
+        if (System.getProperty("io.netty.leakDetection.level") == null)
+            ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
         instance = new Proxy();
         instance.start();
     }
