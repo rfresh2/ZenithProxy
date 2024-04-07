@@ -649,6 +649,24 @@
   "methods":[{"name":"getDeathMessage","parameterTypes":[] }, {"name":"getKillerMob","parameterTypes":[] }, {"name":"getKillerPlayerName","parameterTypes":[] }, {"name":"getKillerPlayerUuid","parameterTypes":[] }, {"name":"getTime","parameterTypes":[] }, {"name":"getVictimPlayerName","parameterTypes":[] }, {"name":"getVictimPlayerUuid","parameterTypes":[] }, {"name":"getWeaponName","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.feature.api.ProfileData",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.zenith.feature.api.crafthead.model.CraftheadProfileProperties",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"com.zenith.feature.api.crafthead.model.CraftheadProfileResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.util.List"] }]
+},
+{
   "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
