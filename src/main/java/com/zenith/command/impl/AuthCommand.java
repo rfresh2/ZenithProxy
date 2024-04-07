@@ -61,7 +61,7 @@ public class AuthCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Authentication Max Attempts Set")
                     .primaryColor();
-                return 1;
+                return OK;
             })))
             .then(literal("alwaysRefreshOnLogin").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.alwaysRefreshOnLogin = getToggle(c, "toggle");

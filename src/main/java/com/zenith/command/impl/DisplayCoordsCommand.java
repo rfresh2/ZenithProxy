@@ -31,7 +31,7 @@ public class DisplayCoordsCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Coordinates " + toggleStrCaps(CONFIG.discord.reportCoords))
                     .primaryColor();
-                return 1;
+                return OK;
             }));
     }
 }

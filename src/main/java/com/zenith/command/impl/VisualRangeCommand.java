@@ -45,54 +45,54 @@ public class VisualRangeCommand extends Command {
                 MODULE.get(VisualRange.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("VisualRange " + toggleStrCaps(CONFIG.client.extra.visualRange.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("enter")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.enterAlert = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("VisualRange Enter Alerts " + toggleStrCaps(CONFIG.client.extra.visualRange.enterAlert));
-                            return 1;
+                            return OK;
                       }))
                       .then(literal("mention").then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.enterAlertMention = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("VisualRange Enter Mentions " + toggleStrCaps(CONFIG.client.extra.visualRange.enterAlertMention));
-                            return 1;
+                            return OK;
                       }))))
             .then(literal("ignoreFriends")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.ignoreFriends = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Ignore Friends " + toggleStrCaps(CONFIG.client.extra.visualRange.ignoreFriends));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("leave")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.leaveAlert = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Leave Alerts " + toggleStrCaps(CONFIG.client.extra.visualRange.leaveAlert));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("logout")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.logoutAlert = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Logout Alerts " + toggleStrCaps(CONFIG.client.extra.visualRange.logoutAlert));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("enemyReplayRecord")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.replayRecording = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Enemy Replay Recording " + toggleStrCaps(CONFIG.client.extra.visualRange.replayRecording));
-                            return 1;
+                            return OK;
                       }))
                       .then(literal("cooldown").then(argument("minutes", integer(0)).executes(c -> {
                           CONFIG.client.extra.visualRange.replayRecordingCooldownMins = getInteger(c, "minutes");
                           c.getSource().getEmbed()
                               .title("Enemy Replay Recording Cooldown Set");
-                          return 1;
+                          return OK;
                       }))));
     }
 

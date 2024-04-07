@@ -47,7 +47,7 @@ public class ChatRelayCommand extends Command {
                 }
                 c.getSource().getEmbed()
                     .title("Chat Relay " + toggleStrCaps(CONFIG.discord.chatRelay.enable));
-                return 1;
+                return OK;
             }))
             .then(literal("connectionMessages")
                       .then(argument("toggle", toggle()).executes(c -> {

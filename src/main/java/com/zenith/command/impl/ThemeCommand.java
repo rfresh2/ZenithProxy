@@ -59,7 +59,7 @@ public class ThemeCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
                         .addField("Help", "Use `theme list` to see available colors", false);
-                    return -1;
+                    return ERROR;
                 }
             })))
             .then(literal("success").then(argument("color", wordWithChars()).executes(c -> {
@@ -73,7 +73,7 @@ public class ThemeCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
                         .addField("Help", "Use `theme list` to see available colors", false);
-                    return -1;
+                    return ERROR;
                 }
             })))
             .then(literal("error").then(argument("color", wordWithChars()).executes(c -> {
@@ -87,7 +87,7 @@ public class ThemeCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
                         .addField("Help", "Use `theme list` to see available colors", false);
-                    return -1;
+                    return ERROR;
                 }
             })))
             .then(literal("inQueue").then(argument("color", wordWithChars()).executes(c -> {
@@ -101,7 +101,7 @@ public class ThemeCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
                         .addField("Help", "Use `theme list` to see available colors", false);
-                    return -1;
+                    return ERROR;
                 }
             })));
     }

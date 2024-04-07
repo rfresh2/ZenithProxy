@@ -30,7 +30,7 @@ public class ProxyClientConnectionCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Client connection messages " + toggleStrCaps(CONFIG.client.extra.clientConnectionMessages))
                     .primaryColor();
-                return 1;
+                return OK;
             }));
     }
 }

@@ -136,7 +136,7 @@ public class DiscordManageCommand extends Command {
                                   .title("Invalid Token")
                                   .description("Discord API returned an error during test login")
                                   .errorColor();
-                              return -1;
+                              return ERROR;
                           }
                           CONFIG.discord.token = token;
                           c.getSource().getEmbed()

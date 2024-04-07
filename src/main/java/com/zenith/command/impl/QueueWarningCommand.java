@@ -32,20 +32,20 @@ public class QueueWarningCommand extends Command {
                 CONFIG.discord.queueWarning.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("QueueWarning " + toggleStrCaps(CONFIG.discord.queueWarning.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("position").then(argument("pos", integer(1, 100)).executes(c -> {
                 CONFIG.discord.queueWarning.position = IntegerArgumentType.getInteger(c, "pos");
                 c.getSource().getEmbed()
                     .title("Position Updated!");
-                return 1;
+                return OK;
             })))
             .then(literal("mention")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.queueWarning.mentionRole = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Mention " + toggleStrCaps(CONFIG.discord.queueWarning.mentionRole));
-                            return 1;
+                            return OK;
                       })));
     }
 

@@ -65,7 +65,7 @@ public class ActiveHoursCommand extends Command {
             .then(literal("timezone").then(argument("tz", wordWithChars()).executes(c -> {
                 final String timeZoneId = CustomStringArgumentType.getString(c, "tz");
                 if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(timeZoneId))) {
-                    return -1;
+                    return ERROR;
                 } else {
                     CONFIG.client.extra.utility.actions.activeHours.timeZoneId = ZoneId.of(timeZoneId).getId();
                     c.getSource().getEmbed()
@@ -76,7 +76,7 @@ public class ActiveHoursCommand extends Command {
             .then(literal("add").then(argument("time", wordWithChars()).executes(c -> {
                 final String time = StringArgumentType.getString(c, "time");
                 if (!timeMatchesRegex(time)) {
-                    return -1;
+                    return ERROR;
                 } else {
                     final ActiveTime activeTime = ActiveTime.fromString(time);
                     if (!CONFIG.client.extra.utility.actions.activeHours.activeTimes.contains(activeTime)) {
@@ -90,7 +90,7 @@ public class ActiveHoursCommand extends Command {
             .then(literal("del").then(argument("time", wordWithChars()).executes(c -> {
                 final String time = StringArgumentType.getString(c, "time");
                 if (!timeMatchesRegex(time)) {
-                    return -1;
+                    return ERROR;
                 } else {
                     final ActiveTime activeTime = ActiveTime.fromString(time);
                     CONFIG.client.extra.utility.actions.activeHours.activeTimes.removeIf(s -> s.equals(activeTime));

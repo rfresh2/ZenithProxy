@@ -50,35 +50,35 @@ public class SpammerCommand extends Command {
                 MODULE.get(Spammer.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spammer " + toggleStrCaps(CONFIG.client.extra.spammer.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("whisper")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.whisper = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Whisper " + toggleStrCaps(CONFIG.client.extra.spammer.whisper));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("delayTicks")
                       .then(argument("delayTicks", integer(1, 10000)).executes(c -> {
                           CONFIG.client.extra.spammer.delayTicks = IntegerArgumentType.getInteger(c, "delayTicks");
                           c.getSource().getEmbed()
                               .title("Delay Updated!");
-                          return 1;
+                          return OK;
                       })))
             .then(literal("randomOrder")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.randomOrder = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Random Order " + toggleStrCaps(CONFIG.client.extra.spammer.randomOrder));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("appendRandom")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spammer.appendRandom = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Append Random " + toggleStrCaps(CONFIG.client.extra.spammer.appendRandom));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
@@ -113,7 +113,7 @@ public class SpammerCommand extends Command {
                                     } catch (final Exception e) {
                                         c.getSource().getEmbed()
                                             .title("Invalid Index!");
-                                        return -1;
+                                        return ERROR;
                                     }
                                 }))))
             .then(literal("del")
@@ -127,7 +127,7 @@ public class SpammerCommand extends Command {
                           } catch (final Exception e) {
                                 c.getSource().getEmbed()
                                     .title("Invalid Index!");
-                                return -1;
+                                return ERROR;
                           }
                       })));
     }

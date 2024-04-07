@@ -38,14 +38,14 @@ public class AutoFishCommand extends Command {
                 MODULE.get(AutoFish.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoFish " + toggleStr(CONFIG.client.extra.autoFish.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("castDelay")
                       .then(argument("delay", integer(0, 2000)).executes(c -> {
                           CONFIG.client.extra.autoFish.castDelay = IntegerArgumentType.getInteger(c, "delay");
                           c.getSource().getEmbed()
                               .title("Cast Delay set to " + CONFIG.client.extra.autoFish.castDelay + " ticks");
-                          return 1;
+                          return OK;
                       })))
             .then(literal("rotation")
                       .then(literal("sync").executes(c -> {
@@ -61,7 +61,7 @@ public class AutoFishCommand extends Command {
                                     CONFIG.client.extra.autoFish.pitch = IntegerArgumentType.getInteger(c, "pitch");
                                     c.getSource().getEmbed()
                                         .title("Rotation set to " + CONFIG.client.extra.autoFish.yaw + " " + CONFIG.client.extra.autoFish.pitch);
-                                    return 1;
+                                    return OK;
                                 }))));
     }
 

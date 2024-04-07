@@ -171,7 +171,7 @@ public class StatusCommand extends Command {
                 embed
                     .addField("Chat Relay", (!CONFIG.discord.chatRelay.channelId.isEmpty() ? toggleStr(CONFIG.discord.chatRelay.enable) : "Not Configured"), true)
                     .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update), true);
-                 return 1;
+                 return OK;
             });
     }
 }

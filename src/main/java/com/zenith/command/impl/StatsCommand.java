@@ -40,7 +40,7 @@ public class StatsCommand extends Command {
                 if (statsResponse.isEmpty()) {
                     c.getSource().getEmbed()
                         .title(playerName + " not found");
-                    return -1;
+                    return ERROR;
                 }
                 final StatsResponse playerStats = statsResponse.get();
                 c.getSource().getEmbed()

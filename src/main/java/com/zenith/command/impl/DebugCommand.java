@@ -50,7 +50,7 @@ public class DebugCommand extends Command {
                           CONFIG.debug.packetLog.enabled = getToggle(c, "toggle");
                           c.getSource().getEmbed()
                               .title("Packet Log " + toggleStrCaps(CONFIG.debug.packetLog.enabled));
-                          return 1;
+                          return OK;
                       }))
                       .then(literal("client")
                                 .then(argument("toggle", toggle()).executes(c -> {
@@ -67,7 +67,7 @@ public class DebugCommand extends Command {
                                     }
                                     c.getSource().getEmbed()
                                         .title("Client Packet Log " + toggleStrCaps(toggle));
-                                    return 1;
+                                    return OK;
                                 })))
                       .then(literal("server")
                                 .then(argument("toggle", toggle()).executes(c -> {
@@ -84,7 +84,7 @@ public class DebugCommand extends Command {
                                     }
                                     c.getSource().getEmbed()
                                         .title("Server Packet Log " + toggleStrCaps(toggle));
-                                    return 1;
+                                    return OK;
                                 })))
                       .then(literal("filter")
                                 .then(argument("filter", wordWithChars()).executes(c -> {
@@ -93,14 +93,14 @@ public class DebugCommand extends Command {
                                         CONFIG.debug.packetLog.packetFilter = "";
                                     c.getSource().getEmbed()
                                         .title("Packet Log Filter Set: " + CONFIG.debug.packetLog.packetFilter);
-                                    return 1;
+                                    return OK;
                                 }))))
             .then(literal("sync")
                         .then(literal("inventory").executes(c -> {
                             PlayerCache.sync();
                             c.getSource().getEmbed()
                                 .title("Inventory Synced");
-                            return 1;
+                            return OK;
                         }))
                         .then(literal("chunks").executes(c -> {
                             ChunkCache.sync();

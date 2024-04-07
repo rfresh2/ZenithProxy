@@ -59,13 +59,13 @@ public class ReleaseChannelCommand extends Command {
                                     final String channel = StringArgumentType.getString(c, "channel");
                                     final String minecraft_version = StringArgumentType.getString(c, "minecraft_version");
                                     setChannel(c, channel, minecraft_version, false);
-                                    return 1;
+                                    return OK;
                                 })
                                           .then(literal("pre").executes(c -> {
                                               final String channel = StringArgumentType.getString(c, "channel");
                                               final String minecraft_version = StringArgumentType.getString(c, "minecraft_version");
                                               setChannel(c, channel, minecraft_version, true);
-                                              return 1;
+                                              return OK;
                                           })))));
     }
 

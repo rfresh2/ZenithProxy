@@ -40,7 +40,7 @@ public class SeenCommand extends Command {
                     c.getSource().getEmbed()
                         .title(escape(playerName) + " not found")
                         .errorColor();
-                    return -1;
+                    return ERROR;
                 }
                 c.getSource().getEmbed()
                     .title("Seen")

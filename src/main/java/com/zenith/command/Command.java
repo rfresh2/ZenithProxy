@@ -31,6 +31,10 @@ public abstract class Command {
         return RequiredArgumentBuilder.argument(name, type);
     }
 
+    // command return codes
+    public static final int OK = 1;
+    public static final int ERROR = -1;
+
     public static boolean validateAccountOwner(final CommandContext context) {
         try {
             final boolean allowed = switch (context.getSource()) {

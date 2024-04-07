@@ -45,24 +45,24 @@ public class ActionLimiterCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.enabled = getToggle(c, "toggle");
                 MODULE.get(ActionLimiter.class).syncEnabledFromConfig();
-                return 1;
+                return OK;
             }))
             .then(literal("allowMovement").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.allowMovement = getToggle(c, "toggle");
-                return 1;
+                return OK;
             })))
             .then(literal("movementDistance").then(argument("distance", integer(0)).executes(c -> {
                 CONFIG.client.extra.actionLimiter.movementDistance = getInteger(c, "distance");
-                return 1;
+                return OK;
             })))
             .then(literal("movementHome").then(argument("x", integer()).then(argument("z", integer()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.movementHomeX = getInteger(c, "x");
                 CONFIG.client.extra.actionLimiter.movementHomeZ = getInteger(c, "z");
-                return 1;
+                return OK;
             }))))
             .then(literal("movementMinY").then(argument("y", integer(-64, 400)).executes(c -> {
                 CONFIG.client.extra.actionLimiter.movementMinY = getInteger(c, "y");
-                return 1;
+                return OK;
             })))
             .then(literal("allowInventory").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.allowInventory = getToggle(c, "toggle");

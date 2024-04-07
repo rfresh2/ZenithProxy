@@ -36,7 +36,7 @@ public class ServerCommand extends Command {
                           CONFIG.client.server.port = port;
                           c.getSource().getEmbed()
                               .title("Server Updated!");
-                          return 1;
+                          return OK;
                       }))
                       .executes(c -> {
                           final String ip = StringArgumentType.getString(c, "ip");
@@ -44,7 +44,7 @@ public class ServerCommand extends Command {
                           CONFIG.client.server.port = 25565;
                           c.getSource().getEmbed()
                               .title("Server Updated!");
-                          return 1;
+                          return OK;
                       }));
     }
 

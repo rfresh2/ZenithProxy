@@ -47,7 +47,7 @@ public class WhitelistCommand extends Command {
                                             .title("Added user: " + escape(e.getUsername()) + " To Whitelist"),
                                                                             () -> c.getSource().getEmbed()
                                     .title("Failed to add user: " + escape(player) + " to whitelist. Unable to lookup profile."));
-                    return 1;
+                    return OK;
                 })))
                 .then(literal("del").requires(Command::validateAccountOwner).then(argument("player", string()).executes(c -> {
                     final String player = StringArgumentType.getString(c, "player");

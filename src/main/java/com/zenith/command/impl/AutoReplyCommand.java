@@ -38,14 +38,14 @@ public class AutoReplyCommand extends Command {
                 MODULE.get(AutoReply.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoReply " + toggleStrCaps(CONFIG.client.extra.autoReply.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("cooldown").then(argument("secs", integer(0, 1000)).executes(c -> {
                 int delay = IntegerArgumentType.getInteger(c, "secs");
                 MODULE.get(AutoReply.class).updateCooldown(delay);
                 c.getSource().getEmbed()
                     .title("AutoReply Cooldown Updated!");
-                return 1;
+                return OK;
             })))
             .then(literal("message").then(argument("messageStr", greedyString()).executes(c -> {
                 String message = DiscordBot.sanitizeRelayInputMessage(StringArgumentType.getString(c, "messageStr"));
@@ -54,7 +54,7 @@ public class AutoReplyCommand extends Command {
                 CONFIG.client.extra.autoReply.message = message;
                 c.getSource().getEmbed()
                     .title("AutoReply Message Updated!");
-                return 1;
+                return OK;
             })));
     }
 

@@ -43,7 +43,7 @@ public class UpdateCommand extends Command {
                         .title("Failed updating")
                         .errorColor();
             }
-            return 1;
+            return OK;
         }).then(literal("c").executes(c -> {
             CONFIG.discord.isUpdating = true;
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;

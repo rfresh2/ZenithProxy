@@ -36,35 +36,35 @@ public class ExtraChatCommand extends Command {
                             CONFIG.client.extra.chat.hideChat = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Hide Chat " + toggleStrCaps(CONFIG.client.extra.chat.hideChat));
-                            return 1;
+                            return OK;
                         })))
             .then(literal("hideWhispers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideWhispers = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Hide Whispers " + toggleStrCaps(CONFIG.client.extra.chat.hideWhispers));
-                            return 1;
+                            return OK;
                         })))
             .then(literal("hideDeathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.hideDeathMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Hide Death Messages " + toggleStrCaps(CONFIG.client.extra.chat.hideDeathMessages));
-                            return 1;
+                            return OK;
                         })))
             .then(literal("showConnectionMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.chat.showConnectionMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Show Connection Messages " + toggleStrCaps(CONFIG.client.extra.chat.showConnectionMessages));
-                            return 1;
+                            return OK;
                         })))
             .then(literal("logChatMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.logChatMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Log Chat Messages " + toggleStrCaps(CONFIG.client.extra.logChatMessages));
-                            return 1;
+                            return OK;
                         })));
     }
 

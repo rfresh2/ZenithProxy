@@ -45,13 +45,13 @@ public class CommandConfigCommand extends Command {
                                 c.getSource().getEmbed()
                                     .title("Error")
                                     .description("Prefix must be a single character");
-                                return -1;
+                                return ERROR;
                             } else {
                                 CONFIG.discord.prefix = newPrefix;
                                 c.getSource().getEmbed()
                                     .title("Command Config")
                                     .description("Set discord prefix to " + CONFIG.discord.prefix);
-                                return 1;
+                                return OK;
                             }
                         }))))
             .then(literal("ingame")
@@ -59,7 +59,7 @@ public class CommandConfigCommand extends Command {
                           CONFIG.inGameCommands.enable = getToggle(c, "toggle");
                           c.getSource().getEmbed()
                               .title("In Game Commands " + toggleStrCaps(CONFIG.inGameCommands.enable));
-                          return 1;
+                          return OK;
                       }))
                       .then(literal("slashCommands")
                                 .then(argument("toggle", toggle()).executes(c -> {
@@ -67,7 +67,7 @@ public class CommandConfigCommand extends Command {
                                     c.getSource().getEmbed()
                                         .title("In Game Slash Commands " + toggleStrCaps(CONFIG.inGameCommands.slashCommands));
                                     syncSlashCommandsToCurrentPlayer();
-                                    return 1;
+                                    return OK;
                                 }))
                                 .then(literal("replaceServerCommands")
                                           .then(argument("toggle", toggle()).executes(c -> {
@@ -75,7 +75,7 @@ public class CommandConfigCommand extends Command {
                                               c.getSource().getEmbed()
                                                   .title("Replace Server Commands " + toggleStrCaps(CONFIG.inGameCommands.slashCommandsReplacesServerCommands));
                                               syncSlashCommandsToCurrentPlayer();
-                                              return 1;
+                                              return OK;
                                           }))))
                       .then(literal("prefix")
                                 .then(argument("prefix", wordWithChars())
@@ -85,13 +85,13 @@ public class CommandConfigCommand extends Command {
                                                   c.getSource().getEmbed()
                                                       .title("Error")
                                                       .description("Prefix must be a single character");
-                                                  return -1;
+                                                  return ERROR;
                                               } else {
                                                   CONFIG.inGameCommands.prefix = newPrefix;
                                                   c.getSource().getEmbed()
                                                       .title("Command Config")
                                                       .description("Set ingame prefix to " + CONFIG.inGameCommands.prefix);
-                                                  return 1;
+                                                  return OK;
                                               }
                                           }))));
     }

@@ -54,49 +54,49 @@ public class KillAuraCommand extends Command {
                 MODULE.get(KillAura.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                              .title("Kill Aura " + toggleStrCaps(CONFIG.client.extra.killAura.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("attackDelay")
                       .then(argument("ticks", integer(0, 1000)).executes(c -> {
                           CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
                           c.getSource().getEmbed()
                                        .title("Attack Delay Ticks Set!");
-                          return 1;
+                          return OK;
                       })))
             .then(literal("targetPlayers")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetPlayers = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .title("Target Players " + toggleStrCaps(CONFIG.client.extra.killAura.targetPlayers));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("targetHostileMobs")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .title("Target Mobs " + toggleStrCaps(CONFIG.client.extra.killAura.targetHostileMobs));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("targetNeutralMobs")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetNeutralMobs = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .title("Target Neutral Mobs " + toggleStrCaps(CONFIG.client.extra.killAura.targetNeutralMobs));
-                            return 1;
+                            return OK;
                       }))
                       .then(literal("onlyAggressive")
                                 .then(argument("toggle", toggle()).executes(c -> {
                                     CONFIG.client.extra.killAura.onlyNeutralAggressive = getToggle(c, "toggle");
                                     c.getSource().getEmbed()
                                                  .title("Target Neutral Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyNeutralAggressive));
-                                    return 1;
+                                    return OK;
                                 }))))
             .then(literal("targetArmorStands")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetArmorStands = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                          .title("Target Armor Stands " + toggleStrCaps(CONFIG.client.extra.killAura.targetArmorStands));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("weaponSwitch")
                       .then(argument("toggle", toggle()).executes(c -> {

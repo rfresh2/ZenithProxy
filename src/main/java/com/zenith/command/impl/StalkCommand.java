@@ -35,7 +35,7 @@ public class StalkCommand extends Command {
                 CONFIG.client.extra.stalk.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Stalk " + toggleStrCaps(CONFIG.client.extra.stalk.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
@@ -48,14 +48,14 @@ public class StalkCommand extends Command {
                             .title("Added player: " + escape(e.getUsername()) + " To Stalk List"),
                         () -> c.getSource().getEmbed()
                             .title("Failed to add player: " + escape(player) + " to stalk list. Unable to lookup profile."));
-                return 1;
+                return OK;
             })))
             .then(literal("del").then(argument("player", string()).executes(c -> {
                 final String player = StringArgumentType.getString(c, "player");
                 PLAYER_LISTS.getStalkList().remove(player);
                 c.getSource().getEmbed()
                     .title("Removed player: " + escape(player) + " From Stalk List");
-                return 1;
+                return OK;
             })));
     }
 

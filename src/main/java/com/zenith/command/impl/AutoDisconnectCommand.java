@@ -56,7 +56,7 @@ public class AutoDisconnectCommand extends Command {
                 MODULE.get(AutoDisconnect.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoDisconnect " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("health")
                       .then(argument("healthLevel", integer(1, 19)).executes(c -> {

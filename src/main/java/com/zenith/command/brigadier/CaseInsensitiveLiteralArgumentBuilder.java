@@ -3,6 +3,7 @@ package com.zenith.command.brigadier;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.zenith.command.Command;
 import com.zenith.command.util.CommandErrorHandler;
 import com.zenith.command.util.CommandSuccessHandler;
 import com.zenith.command.util.IExecutes;
@@ -44,7 +45,7 @@ public class CaseInsensitiveLiteralArgumentBuilder<S> extends LiteralArgumentBui
     public LiteralArgumentBuilder<S> executes(final IExecutes<S> command) {
         return this.executes((context) -> {
             command.execute(context);
-            return 1;
+            return Command.OK;
         });
     }
 

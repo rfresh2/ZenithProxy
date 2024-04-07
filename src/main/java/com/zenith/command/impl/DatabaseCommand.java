@@ -43,7 +43,7 @@ public class DatabaseCommand extends Command {
                 else DATABASE.stop();
                 c.getSource().getEmbed()
                     .title("Databases " + toggleStrCaps(CONFIG.database.enabled));
-                return 1;
+                return OK;
 
             }))
             .then(literal("queueWait")
@@ -53,7 +53,7 @@ public class DatabaseCommand extends Command {
                             else DATABASE.stopQueueWaitDatabase();
                             c.getSource().getEmbed()
                                 .title("Queue Wait Database " + toggleStrCaps(CONFIG.database.queueWait.enabled));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("queueLength")
                       .then(argument("toggle", toggle()).executes(c -> {
@@ -62,7 +62,7 @@ public class DatabaseCommand extends Command {
                             else DATABASE.stopQueueLengthDatabase();
                             c.getSource().getEmbed()
                                 .title("Queue Length Database " + toggleStrCaps(CONFIG.database.queueLength.enabled));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("publicChat")
                       .then(argument("toggle", toggle()).executes(c -> {
@@ -71,7 +71,7 @@ public class DatabaseCommand extends Command {
                             else DATABASE.stopChatsDatabase();
                             c.getSource().getEmbed()
                                 .title("Public Chat Database " + toggleStrCaps(CONFIG.database.chats.enabled));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("joinLeave")
                       .then(argument("toggle", toggle()).executes(c -> {
@@ -80,7 +80,7 @@ public class DatabaseCommand extends Command {
                             else DATABASE.stopConnectionsDatabase();
                             c.getSource().getEmbed()
                                 .title("Connections Database " + toggleStrCaps(CONFIG.database.connections.enabled));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("deathMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
@@ -89,7 +89,7 @@ public class DatabaseCommand extends Command {
                             else DATABASE.stopDeathsDatabase();
                             c.getSource().getEmbed()
                                 .title("Death Messages Database " + toggleStrCaps(CONFIG.database.deaths.enabled));
-                            return 1;
+                            return OK;
                       })))
             .then(literal("restarts")
                         .then(argument("toggle", toggle()).executes(c -> {
@@ -98,7 +98,7 @@ public class DatabaseCommand extends Command {
                                 else DATABASE.stopRestartsDatabase();
                                 c.getSource().getEmbed()
                                     .title("Restarts Database " + toggleStrCaps(CONFIG.database.restarts.enabled));
-                                return 1;
+                                return OK;
                         })))
             .then(literal("playerCount")
                         .then(argument("toggle", toggle()).executes(c -> {
@@ -107,7 +107,7 @@ public class DatabaseCommand extends Command {
                                 else DATABASE.stopPlayerCountDatabase();
                                 c.getSource().getEmbed()
                                     .title("Player Count Database " + toggleStrCaps(CONFIG.database.playerCount.enabled));
-                                return 1;
+                                return OK;
                         })))
             .then(literal("tablist")
                         .then(argument("toggle", toggle()).executes(c -> {
@@ -116,7 +116,7 @@ public class DatabaseCommand extends Command {
                                 else DATABASE.stopTablistDatabase();
                                 c.getSource().getEmbed()
                                     .title("Tablist Database " + toggleStrCaps(CONFIG.database.tablist.enabled));
-                                return 1;
+                                return OK;
                         })));
     }
 

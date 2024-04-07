@@ -31,7 +31,7 @@ public class SendMessageCommand extends Command {
                           final String message = c.getArgument("message", String.class);
                           if (c.getSource().getSource() == CommandSource.IN_GAME_PLAYER) {
                               var session = Proxy.getInstance().getCurrentPlayer().get();
-                              if (session == null) return -1;
+                              if (session == null) return ERROR;
                               var senderName = session.getProfileCache().getProfile().getName();
                               Proxy.getInstance().getActiveConnections().forEach(connection -> {
                                   connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + senderName + " > " + message + "&r"), false));

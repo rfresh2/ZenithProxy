@@ -33,7 +33,7 @@ public class AutoEatCommand extends Command {
                 MODULE.get(AutoEat.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("AutoEat " + toggleStrCaps(CONFIG.client.extra.autoEat.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("health")
                       .then(argument("health", integer(1, 19)).executes(c -> {
@@ -45,7 +45,7 @@ public class AutoEatCommand extends Command {
                               .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
                               .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
-                          return 1;
+                          return OK;
                       })))
             .then(literal("hunger")
                       .then(argument("hunger", integer(1, 19)).executes(c -> {
@@ -57,14 +57,14 @@ public class AutoEatCommand extends Command {
                               .addField("Health Threshold", CONFIG.client.extra.autoEat.healthThreshold, false)
                               .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold, false)
                               .addField("Warning", Boolean.toString(CONFIG.client.extra.autoEat.warning), false);
-                          return 1;
+                          return OK;
                       })))
             .then(literal("warning")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.autoEat.warning = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("AutoEat Warning " + toggleStrCaps(CONFIG.client.extra.autoEat.warning));
-                            return 1;
+                            return OK;
                       })));
     }
 

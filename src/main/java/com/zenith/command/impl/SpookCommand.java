@@ -36,14 +36,14 @@ public class SpookCommand extends Command {
                 MODULE.get(Spook.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spook " + toggleStrCaps(CONFIG.client.extra.spook.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("delay").then(argument("delayTicks", integer(0, 1000)).executes(c -> {
                 final int delay = IntegerArgumentType.getInteger(c, "delayTicks");
                 CONFIG.client.extra.spook.tickDelay = (long) delay;
                 c.getSource().getEmbed()
                     .title("Spook Delay Updated!");
-                return 1;
+                return OK;
             })))
             .then(literal("mode")
                       .then(literal("nearest").executes(c -> {

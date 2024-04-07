@@ -47,7 +47,7 @@ public class AutoUpdateCommand extends Command {
                 LAUNCH_CONFIG.auto_update = toggle;
                 saveLaunchConfig();
                 c.getSource().getEmbed().title("AutoUpdater " + toggleStrCaps(toggle));
-                return 1;
+                return OK;
             }));
     }
 

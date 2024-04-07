@@ -48,7 +48,7 @@ public class SpectatorCommand extends Command {
                     .title("Spectators " + toggleStrCaps(CONFIG.server.spectator.allowSpectator))
                     .primaryColor()
                     .description(spectatorWhitelist());
-                return 1;
+                return OK;
             }))
             .then(literal("whitelist")
                       .then(literal("add").then(argument("player", string()).executes(c -> {
