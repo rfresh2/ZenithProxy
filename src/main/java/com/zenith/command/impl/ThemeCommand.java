@@ -25,6 +25,12 @@ public class ThemeCommand extends Command {
             Changes the color theme of alerts and messages.
             
             Use `theme list` to see available colors.
+            
+            Where Colors Are Used:
+              * Primary: Most embeds and command responses if not an error.
+              * Success: General "this worked" responses, server join, and friends
+              * Error: Error responses, server leave, and enemies
+              * In Queue: The proxy is in queue, reconnecting, or is in a transitional state
             """,
             asList(
                "list",
