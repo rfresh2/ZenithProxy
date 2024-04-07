@@ -49,7 +49,7 @@ public final class Config {
 
     public static final class Theme {
         public ConfigColor primary = ConfigColor.CYAN;
-        public ConfigColor success = ConfigColor.GREEN;
+        public ConfigColor success = ConfigColor.MEDIUM_SEA_GREEN;
         public ConfigColor error = ConfigColor.RUBY;
         public ConfigColor inQueue = ConfigColor.MOON_YELLOW;
     }

@@ -31,6 +31,7 @@ public class ClientConnectionCommand extends Command {
             CommandCategory.MANAGE,
             "Manages the client's connection configuration",
             asList(
+                "autoConnect on/off",
                 "proxy on/off",
                 "proxy type <type>",
                 "proxy host <host>",
@@ -49,6 +50,13 @@ public class ClientConnectionCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("clientConnection").requires(Command::validateAccountOwner)
+            .then(literal("autoConnect")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.autoConnect = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Connect " + toggleStrCaps(CONFIG.client.autoConnect));
+                          return 1;
+                      })))
             .then(literal("proxy")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.connectionProxy.enabled = getToggle(c, "toggle");
@@ -163,6 +171,7 @@ public class ClientConnectionCommand extends Command {
     public void postPopulate(final Embed embed) {
         embed
             .primaryColor()
+            .addField("Auto Connect", toggleStr(CONFIG.client.autoConnect), false)
             .addField("Proxy", toggleStr(CONFIG.client.connectionProxy.enabled), false)
             .addField("Proxy Type", CONFIG.client.connectionProxy.type.toString(), false)
             .addField("Proxy Host", CONFIG.client.connectionProxy.host, false)

@@ -27,7 +27,6 @@ public class DebugCommand extends Command {
             CommandCategory.MANAGE,
             "Debug settings for developers",
             asList(
-                        "autoConnect on/off",
                         "sync inventory",
                         "sync chunks",
                         "clearEffects",
@@ -46,13 +45,6 @@ public class DebugCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("debug").requires(Command::validateAccountOwner)
-            .then(literal("autoConnect")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.autoConnect = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("Auto Connect " + toggleStrCaps(CONFIG.client.autoConnect));
-                            return 1;
-                      })))
             .then(literal("packetLog")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.debug.packetLog.enabled = getToggle(c, "toggle");
@@ -167,7 +159,6 @@ public class DebugCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .addField("Auto Connect", toggleStr(CONFIG.client.autoConnect), false)
             .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled), false)
             .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received), false)
             .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received), false)
