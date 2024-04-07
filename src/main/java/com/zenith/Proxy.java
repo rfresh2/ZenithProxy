@@ -45,15 +45,11 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -449,7 +445,7 @@ public class Proxy {
         try {
             return URI.create(String.format("https://minotar.net/helm/%s/64", playerName)).toURL();
         } catch (MalformedURLException e) {
-            SERVER_LOG.error("Failed to get avatar");
+            SERVER_LOG.error("Failed to get avatar URL for player: " + playerName, e);
             throw new UncheckedIOException(e);
         }
     }
@@ -514,26 +510,18 @@ public class Proxy {
 
     public void updateFavicon() {
         if (!CONFIG.authentication.username.equals("Unknown")) { // else use default icon
-            try (HttpClient httpClient = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.ALWAYS)
-                .connectTimeout(Duration.ofSeconds(5))
-                .build()) {
+            try {
                 final GameProfile profile = CACHE.getProfileCache().getProfile();
-                final URL avatarURL;
-                if (profile != null && profile.getId() != null)
-                    avatarURL = getAvatarURL(profile.getId());
-                else
-                    avatarURL = getAvatarURL(CONFIG.authentication.username);
-                final HttpRequest request = HttpRequest.newBuilder()
-                    .uri(avatarURL.toURI())
-                    .GET()
-                    .timeout(Duration.ofSeconds(30))
-                    .build();
-                final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
-                if (response.statusCode() != 200)
-                    throw new IOException("Unable to download server icon for \"" + CONFIG.authentication.username + "\"");
-                try (InputStream inputStream = response.body()) {
-                    this.serverIcon = inputStream.readAllBytes();
+                if (profile != null && profile.getId() != null) {
+                    // do uuid lookup
+                    final UUID uuid = profile.getId();
+                    this.serverIcon = MINOTAR.getAvatar(uuid).or(() -> CRAFTHEAD.getAvatar(uuid))
+                        .orElseThrow(() -> new IOException("Unable to download server icon for \"" + uuid + "\""));
+                } else {
+                    // do username lookup
+                    final String username = CONFIG.authentication.username;
+                    this.serverIcon = MINOTAR.getAvatar(username).or(() -> CRAFTHEAD.getAvatar(username))
+                        .orElseThrow(() -> new IOException("Unable to download server icon for \"" + username + "\""));
                 }
                 if (DISCORD.isRunning()) {
                     if (CONFIG.discord.manageNickname)
@@ -547,11 +535,12 @@ public class Proxy {
                           https://github.com/rfresh2/ZenithProxy
                         """.formatted(LAUNCH_CONFIG.version));
                 }
-            } catch (Exception e) {
-                SERVER_LOG.error("Unable to download server icon for \"{}\":\n", CONFIG.authentication.username, e);
+            } catch (final Throwable e) {
+                SERVER_LOG.error("Failed updating favicon");
+                SERVER_LOG.debug("Failed updating favicon", e);
             }
         }
-        if (DISCORD.isRunning())
+        if (DISCORD.isRunning() && this.serverIcon != null)
             if (CONFIG.discord.manageProfileImage) DISCORD.updateProfileImage(this.serverIcon);
     }
 

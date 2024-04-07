@@ -23,7 +23,7 @@ public class MojangApiTests {
 
 //    @Test
     public void getMojangProfileTest() {
-        var response = api.getProfileFromUsername("rfresh2");
+        var response = api.getProfile("rfresh2");
         assertTrue(response.isPresent());
         assertTrue(response.get().name().equals("rfresh2"));
         var uuid = response.get().uuid();
@@ -39,7 +39,7 @@ public class MojangApiTests {
 
 //    @Test
     public void getSessionServerProfileTest() {
-        var response = sessionServerApi.getProfileFromUUID(UUID.fromString("572e683c-888a-4a0d-bc10-5d9cfa76d892"));
+        var response = sessionServerApi.getProfile(UUID.fromString("572e683c-888a-4a0d-bc10-5d9cfa76d892"));
         assertTrue(response.isPresent());
         assertTrue(response.get().name().equals("rfresh2"));
         var uuid = response.get().uuid();

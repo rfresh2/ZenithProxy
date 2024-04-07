@@ -93,12 +93,14 @@ public class PlayerListsManager {
     }
 
     public static Optional<ProfileData> getProfileFromUsername(final String username) {
-        return MOJANG.getProfileFromUsername(username).map(o -> (ProfileData) o)
-            .or(() -> MINETOOLS.getProfileFromUsername(username));
+        return MOJANG.getProfile(username).map(o -> (ProfileData) o)
+            .or(() -> CRAFTHEAD.getProfile(username).map(o -> (ProfileData) o)
+                .or(() -> MINETOOLS.getProfileFromUsername(username)));
     }
 
     public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
-        return SESSION_SERVER.getProfileFromUUID(uuid).map(o -> (ProfileData) o)
-            .or(() -> MINETOOLS.getProfileFromUUID(uuid));
+        return SESSION_SERVER.getProfile(uuid).map(o -> (ProfileData) o)
+            .or(() -> CRAFTHEAD.getProfile(uuid).map(o -> (ProfileData) o)
+                .or(() -> MINETOOLS.getProfileFromUUID(uuid)));
     }
 }

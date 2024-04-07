@@ -28,7 +28,7 @@ public class SessionServerApi extends Api {
     }
 
 
-    public Optional<SessionProfileResponse> getProfileFromUUID(final UUID uuid) {
+    public Optional<SessionProfileResponse> getProfile(final UUID uuid) {
         return get("/session/minecraft/profile/" + uuid.toString(), SessionProfileResponse.class);
     }
 

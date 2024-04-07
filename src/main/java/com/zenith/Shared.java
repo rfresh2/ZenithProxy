@@ -12,7 +12,9 @@ import com.zenith.cache.DataCache;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
+import com.zenith.feature.api.crafthead.CraftheadApi;
 import com.zenith.feature.api.minetools.MinetoolsApi;
+import com.zenith.feature.api.minotar.MinotarApi;
 import com.zenith.feature.api.mojang.MojangApi;
 import com.zenith.feature.api.prioban.PriobanApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
@@ -93,6 +95,8 @@ public class Shared {
     public static final MojangApi MOJANG;
     public static final SessionServerApi SESSION_SERVER;
     public static final MinetoolsApi MINETOOLS;
+    public static final CraftheadApi CRAFTHEAD;
+    public static final MinotarApi MINOTAR;
     public static final PriobanApi PRIOBAN;
     public static final ZenithViaInitializer VIA_INITIALIZER;
     public static synchronized void loadConfig() {
@@ -224,6 +228,8 @@ public class Shared {
             MOJANG = new MojangApi();
             SESSION_SERVER = new SessionServerApi();
             MINETOOLS = new MinetoolsApi();
+            CRAFTHEAD = new CraftheadApi();
+            MINOTAR = new MinotarApi();
             PRIOBAN = new PriobanApi();
             VIA_INITIALIZER = new ZenithViaInitializer();
             final LanguageManager languageManager = new LanguageManager();

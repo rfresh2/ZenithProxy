@@ -10,7 +10,7 @@ public class MojangApi extends Api {
         super("https://api.mojang.com");
     }
 
-    public Optional<MojangProfileResponse> getProfileFromUsername(final String username) {
+    public Optional<MojangProfileResponse> getProfile(final String username) {
         return get("/users/profiles/minecraft/" + username, MojangProfileResponse.class);
     }
 }

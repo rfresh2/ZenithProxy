@@ -236,6 +236,7 @@ $v was destroyed by $m named $w
 $v was trampled to death by $m named $w
 $v was launched into space by $m.
 $v was catapulted off a cliff by $m.
+$v was poisoned to death by $m.
 
 # technically a mob with a name but mob type is not reported
 $v fell to death after being pushed by $w
