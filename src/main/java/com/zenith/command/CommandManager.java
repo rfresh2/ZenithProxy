@@ -89,7 +89,7 @@ public class CommandManager {
            new SeenCommand(),
            new SendMessageCommand(),
            new ServerCommand(),
-           new ServerConfigCommand(),
+           new ServerConnectionCommand(),
            new SpammerCommand(),
            new SpectatorCommand(),
            new SpookCommand(),

@@ -16,13 +16,17 @@ import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
-public class ServerConfigCommand extends Command {
+public class ServerConnectionCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.args(
-            "serverConfig",
+            "serverConnection",
             CommandCategory.MANAGE,
-            "Configures the MC server hosted by the proxy",
+            """
+            Configures the MC server hosted by Zenith and players' connections to it
+            
+            For Zenith -> destination MC server, use the `clientConnection` command
+            """,
             asList(
                 "port <port>",
                 "ping on/off",
@@ -38,7 +42,7 @@ public class ServerConfigCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("serverConfig").requires(Command::validateAccountOwner)
+        return command("serverConnection").requires(Command::validateAccountOwner)
             .then(literal("port").then(argument("port", integer(1, 65535)).executes(context -> {
                 CONFIG.server.bind.port = getInteger(context, "port");
                 context.getSource().getEmbed()
