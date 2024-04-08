@@ -27,10 +27,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundHelloPacket;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginCompressionPacket;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
+import com.github.steveice10.mc.protocol.packet.login.clientbound.*;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundKeyPacket;
 import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundLoginAcknowledgedPacket;
@@ -97,6 +94,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundLoginCompressionPacket.class, new CLoginCompressionHandler())
                 .registerInbound(ClientboundGameProfilePacket.class, new CGameProfileHandler())
                 .registerInbound(ClientboundLoginDisconnectPacket.class, new LoginDisconnectHandler())
+                .registerInbound(ClientboundCustomQueryPacket.class, new CCustomQueryHandler())
                 .registerPostOutbound(ServerboundLoginAcknowledgedPacket.class, new PostOutgoingLoginAckHandler())
                 .build())
             .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ClientSession>builder()
