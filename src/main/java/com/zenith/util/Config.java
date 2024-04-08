@@ -14,16 +14,16 @@ import static java.util.Arrays.asList;
 
 
 public final class Config {
-    public Authentication authentication = new Authentication();
-    public Client client = new Client();
-    public Debug debug = new Debug();
-    public Server server = new Server();
-    public InteractiveTerminal interactiveTerminal = new InteractiveTerminal();
-    public InGameCommands inGameCommands = new InGameCommands();
-    public Theme theme = new Theme();
-    public Discord discord = new Discord();
-    public Database database = new Database();
-    public AutoUpdater autoUpdater = new AutoUpdater();
+    public final Authentication authentication = new Authentication();
+    public final Client client = new Client();
+    public final Debug debug = new Debug();
+    public final Server server = new Server();
+    public final InteractiveTerminal interactiveTerminal = new InteractiveTerminal();
+    public final InGameCommands inGameCommands = new InGameCommands();
+    public final Theme theme = new Theme();
+    public final Discord discord = new Discord();
+    public final Database database = new Database();
+    public final AutoUpdater autoUpdater = new AutoUpdater();
 
     public static final class Authentication {
         public AccountType accountType = AccountType.DEVICE_CODE;
@@ -55,17 +55,17 @@ public final class Config {
     }
 
     public static final class Client {
-        public Extra extra = new Extra();
-        public Server server = new Server();
-        public ConnectionProxy connectionProxy = new ConnectionProxy();
+        public final Extra extra = new Extra();
+        public final Server server = new Server();
+        public final ConnectionProxy connectionProxy = new ConnectionProxy();
         public int compressionLevel = -1;
         public boolean autoConnect = false; // auto-connect proxy on process start
-        public ClientViaVersion viaversion = new ClientViaVersion();
+        public final ClientViaVersion viaversion = new ClientViaVersion();
         public String bindAddress = "0.0.0.0";
         public boolean maxPlaytimeReconnect = false;
         public long maxPlaytimeReconnectMins = 1440;
-        public ClientTimeout timeout = new ClientTimeout();
-        public Ping ping = new Ping();
+        public final ClientTimeout timeout = new ClientTimeout();
+        public final Ping ping = new Ping();
 
         public static final class ClientViaVersion {
             public boolean enabled = false;
@@ -88,32 +88,32 @@ public final class Config {
         }
 
         public static final class Extra {
-            public AntiAFK antiafk = new AntiAFK();
-            public Spook spook = new Spook();
-            public Utility utility = new Utility();
-            public AutoReconnect autoReconnect = new AutoReconnect();
-            public AutoRespawn autoRespawn = new AutoRespawn();
-            public Spammer spammer = new Spammer();
-            public AutoReply autoReply = new AutoReply();
-            public Stalk stalk = new Stalk();
-            public AutoEat autoEat = new AutoEat();
-            public AutoFish autoFish = new AutoFish();
-            public KillAura killAura = new KillAura();
-            public AutoTotem autoTotem = new AutoTotem();
-            public AntiLeak antiLeak = new AntiLeak();
-            public Chat chat = new Chat();
-            public AntiKick antiKick = new AntiKick();
-            public ReplayMod replayMod = new ReplayMod();
-            public ArrayList<PlayerEntry> friendsList = new ArrayList<>();
+            public final AntiAFK antiafk = new AntiAFK();
+            public final Spook spook = new Spook();
+            public final Utility utility = new Utility();
+            public final AutoReconnect autoReconnect = new AutoReconnect();
+            public final AutoRespawn autoRespawn = new AutoRespawn();
+            public final Spammer spammer = new Spammer();
+            public final AutoReply autoReply = new AutoReply();
+            public final Stalk stalk = new Stalk();
+            public final AutoEat autoEat = new AutoEat();
+            public final AutoFish autoFish = new AutoFish();
+            public final KillAura killAura = new KillAura();
+            public final AutoTotem autoTotem = new AutoTotem();
+            public final AntiLeak antiLeak = new AntiLeak();
+            public final Chat chat = new Chat();
+            public final AntiKick antiKick = new AntiKick();
+            public final ReplayMod replayMod = new ReplayMod();
+            public final ArrayList<PlayerEntry> friendsList = new ArrayList<>();
             public boolean clientConnectionMessages = true;
             public boolean autoConnectOnLogin = true;
             public boolean prioBan2b2tCheck = true;
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
             public boolean logChatMessages = true;
-            public ActionLimiter actionLimiter = new ActionLimiter();
-            public VisualRange visualRange = new VisualRange();
-            public AutoArmor autoArmor = new AutoArmor();
+            public final ActionLimiter actionLimiter = new ActionLimiter();
+            public final VisualRange visualRange = new VisualRange();
+            public final AutoArmor autoArmor = new AutoArmor();
 
             public static class VisualRange {
                 public boolean enabled = true;
@@ -137,7 +137,7 @@ public final class Config {
             }
 
             public static final class Chat {
-                public ArrayList<PlayerEntry> ignoreList = new ArrayList<>();
+                public final ArrayList<PlayerEntry> ignoreList = new ArrayList<>();
                 public boolean hideChat = false;
                 public boolean hideWhispers = false;
                 public boolean hideDeathMessages = false;
@@ -172,7 +172,7 @@ public final class Config {
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
                 public double attackRange = 3.5;
-                public ArrayList<EntityType> customTargets = new ArrayList<>();
+                public final ArrayList<EntityType> customTargets = new ArrayList<>();
             }
 
             public static final class AutoEat {
@@ -184,7 +184,7 @@ public final class Config {
 
             public static final class Stalk {
                 public boolean enabled = false;
-                public ArrayList<PlayerEntry> stalking = new ArrayList<>();
+                public final ArrayList<PlayerEntry> stalking = new ArrayList<>();
             }
 
             public static final class AutoFish {
@@ -246,11 +246,11 @@ public final class Config {
             }
 
             public static final class Utility {
-                public Actions actions = new Actions();
+                public final Actions actions = new Actions();
 
                 public static final class Actions {
-                    public AutoDisconnect autoDisconnect = new AutoDisconnect();
-                    public ActiveHours activeHours = new ActiveHours();
+                    public final AutoDisconnect autoDisconnect = new AutoDisconnect();
+                    public final ActiveHours activeHours = new ActiveHours();
                 }
 
                 public static final class AutoDisconnect {
@@ -269,7 +269,7 @@ public final class Config {
                     public boolean forceReconnect = false;
                     public boolean queueEtaCalc = true;
                     public String timeZoneId = "Universal";
-                    public ArrayList<ActiveTime> activeTimes = new ArrayList<>();
+                    public final ArrayList<ActiveTime> activeTimes = new ArrayList<>();
                 }
             }
 
@@ -290,7 +290,7 @@ public final class Config {
                 public long delayTicks = 200;
                 public boolean randomOrder = false;
                 public boolean appendRandom = false;
-                public ArrayList<String> messages = new ArrayList<>(asList(
+                public final ArrayList<String> messages = new ArrayList<>(asList(
                         "ZenithProxy on top!",
                         "I just skipped queue thanks to ZenithProxy!",
                         "Download ZenithProxy on GitHub today! It's free!"
@@ -339,8 +339,8 @@ public final class Config {
     }
 
     public static final class Debug {
-        public PacketLog packetLog = new PacketLog();
-        public Server server = new Server();
+        public final PacketLog packetLog = new PacketLog();
+        public final Server server = new Server();
         public boolean clearOldLogs = false;
         public boolean sendChunksBeforePlayerSpawn = false;
         public boolean binaryNbtComponentSerializer = true;
@@ -365,7 +365,7 @@ public final class Config {
         }
 
         public static final class Server {
-            public Cache cache = new Cache();
+            public final Cache cache = new Cache();
 
             public static final class Cache {
                 public boolean sendingmessages = true;
@@ -375,21 +375,21 @@ public final class Config {
     }
 
     public static final class Server {
-        public Bind bind = new Bind();
+        public final Bind bind = new Bind();
         public int compressionThreshold = 256;
         public int compressionLevel = -1;
         public boolean enabled = true;
-        public Extra extra = new Extra();
-        public Ping ping = new Ping();
-        public ServerViaVersion viaversion = new ServerViaVersion();
+        public final Extra extra = new Extra();
+        public final Ping ping = new Ping();
+        public final ServerViaVersion viaversion = new ServerViaVersion();
         public boolean verifyUsers = true;
         public boolean kickPrevious = false;
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
         public boolean healthCheck = true;
         public long playerListsRefreshIntervalMins = 1440L; // one day as default
-        public Spectator spectator = new Spectator();
-        public RateLimiter rateLimiter = new RateLimiter();
+        public final Spectator spectator = new Spectator();
+        public final RateLimiter rateLimiter = new RateLimiter();
 
         public static final class RateLimiter {
             public boolean enabled = true;
@@ -416,10 +416,10 @@ public final class Config {
         }
 
         public static final class Extra {
-            public ServerTimeout timeout = new ServerTimeout();
-            public Whitelist whitelist = new Whitelist();
-            public ESP esp = new ESP();
-            public ChatHistory chatHistory = new ChatHistory();
+            public final ServerTimeout timeout = new ServerTimeout();
+            public final Whitelist whitelist = new Whitelist();
+            public final ESP esp = new ESP();
+            public final ChatHistory chatHistory = new ChatHistory();
 
             public static class ChatHistory {
                 public boolean enable = false;
@@ -430,7 +430,7 @@ public final class Config {
 
             public static final class Whitelist {
                 public boolean enable = true;
-                public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
+                public final ArrayList<PlayerEntry> whitelist = new ArrayList<>();
                 public String kickmsg = "no whitelist?";
                 // Automatically adds the proxy client account to the whitelist if not present
                 // does not remove any entries
@@ -500,9 +500,9 @@ public final class Config {
         public boolean manageDescription = true;
         public boolean showNonWhitelistLoginIP = true;
         public boolean isUpdating = false; // internal use for update command state persistence
-        public QueueWarning queueWarning = new QueueWarning();
-        public ChatRelay chatRelay = new ChatRelay();
-        public ConnectionProxy connectionProxy = new ConnectionProxy();
+        public final QueueWarning queueWarning = new QueueWarning();
+        public final ChatRelay chatRelay = new ChatRelay();
+        public final ConnectionProxy connectionProxy = new ConnectionProxy();
         public static final class ConnectionProxy {
                 public boolean enabled = false;
                 public ConnectionProxyType type = ConnectionProxyType.HTTP;
@@ -544,15 +544,15 @@ public final class Config {
         public String username = "";
         public String password = "";
         public int writePool = 1;
-        public QueueWait queueWait = new QueueWait();
-        public Connections connections = new Connections();
-        public Chats chats = new Chats();
-        public Deaths deaths = new Deaths();
-        public QueueLength queueLength = new QueueLength();
-        public Restarts restarts = new Restarts();
-        public PlayerCount playerCount = new PlayerCount();
-        public Tablist tablist = new Tablist();
-        public Lock lock = new Lock();
+        public final QueueWait queueWait = new QueueWait();
+        public final Connections connections = new Connections();
+        public final Chats chats = new Chats();
+        public final Deaths deaths = new Deaths();
+        public final QueueLength queueLength = new QueueLength();
+        public final Restarts restarts = new Restarts();
+        public final PlayerCount playerCount = new PlayerCount();
+        public final Tablist tablist = new Tablist();
+        public final Lock lock = new Lock();
 
         public static final class QueueWait {
             // queue wait time monitor
