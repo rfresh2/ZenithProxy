@@ -21,7 +21,12 @@ public class ViaVersionCommand extends Command {
         return CommandUsage.args(
             "via",
             CommandCategory.MODULE,
-            "Configure ViaVersion. 'Client' = ZenithProxy connecting to the MC server. 'Server' = players connecting to ZenithProxy",
+            """
+             Configure the integrated ViaVersion module.
+             
+             `client` -> ZenithProxy connecting to the MC server
+             `server` -> players connecting to ZenithProxy
+             """,
             asList(
                 "client on/off",
                 "client autoConfig on/off",
