@@ -23,6 +23,9 @@ import static net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializ
 @UtilityClass
 public final class ComponentSerializer {
     private static final ComponentFlattener componentFlattener = ComponentFlattener.basic().toBuilder()
+        .complexMapper(TranslatableComponent.class, ComponentSerializer::translatableMapper)
+        .build();
+    private static final ComponentFlattener componentFlattenerWithLinks = ComponentFlattener.basic().toBuilder()
         .mapper(TextComponent.class, ComponentSerializer::linkMapper)
         .complexMapper(TranslatableComponent.class, ComponentSerializer::translatableMapper)
         .build();
@@ -41,7 +44,7 @@ public final class ComponentSerializer {
             System.setProperty(ColorLevel.COLOR_LEVEL_PROPERTY, colorLevel);
         }
         ansiComponentSerializer = ANSIComponentSerializer.builder()
-            .flattener(componentFlattener)
+            .flattener(componentFlattenerWithLinks)
             .build();
     }
 
@@ -56,6 +59,12 @@ public final class ComponentSerializer {
 
     public static String serializeAnsi(Component component) {
         return ansiComponentSerializer.serialize(component);
+    }
+
+    public static String serializePlainWithLinks(Component component) {
+        var builder = new StringBuilder();
+        componentFlattenerWithLinks.flatten(component, builder::append);
+        return builder.toString();
     }
 
     public static String serializePlain(Component component) {

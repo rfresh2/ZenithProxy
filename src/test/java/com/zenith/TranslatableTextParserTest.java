@@ -22,4 +22,10 @@ public class TranslatableTextParserTest {
         String serialize = ComponentSerializer.serializePlain(deserialize);
         assertEquals("<bonk2b2t> you should never talk about that with them", serialize);
     }
+
+    @Test
+    public void serializePlainWithLinkTest() {
+        final String chatText = "hello go to https://google.com";
+        Component deserialize = ComponentSerializer.deserialize(chatText);
+    }
 }

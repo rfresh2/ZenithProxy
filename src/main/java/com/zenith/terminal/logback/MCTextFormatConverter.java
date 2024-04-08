@@ -13,7 +13,7 @@ public class MCTextFormatConverter extends MessageConverter {
             // if the message doesn't start with a curly brace it ain't json
             if (formattedMessage.startsWith("{") || formattedMessage.contains("§")) {
                 Component component = ComponentSerializer.deserialize(formattedMessage);
-                return ComponentSerializer.serializePlain(component);
+                return ComponentSerializer.serializePlainWithLinks(component);
             }
         } catch (final Exception e) {
             // fall through
