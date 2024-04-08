@@ -113,14 +113,23 @@ public class DiscordEventListener {
             .errorColor();
         if (Proxy.getInstance().isOn2b2t()
             && !Proxy.getInstance().isPrio()
-            && event.reason().startsWith("You have lost connection")
-            && event.onlineDuration().toSeconds() >= 0L
-            && event.onlineDuration().toSeconds() <= 1L) {
-            embed.description("""
+            && event.reason().startsWith("You have lost connection")) {
+            if (event.onlineDuration().toSeconds() >= 0L
+                && event.onlineDuration().toSeconds() <= 1L) {
+                embed.description("""
                               You have likely been kicked for reaching the 2b2t non-prio account IP limit.
                               Consider configuring a connection proxy with the `clientConnection` command.
-                              Or migrate ZenithProxy instances to multiple hosts/IP's.""");
+                              Or migrate ZenithProxy instances to multiple hosts/IP's.
+                              """);
+            } else if (event.wasInQueue() && event.queuePosition() <= 1) {
+                embed.description("""
+                              You have likely been kicked due to being IP banned by 2b2t.
+                              
+                              To check, try connecting and waiting through queue with the same account from a different IP.
+                              """);
+            }
         }
+
         sendEmbedMessage(embed);
         EXECUTOR.execute(() -> updatePresence(bot.disconnectedPresence));
     }
