@@ -1,6 +1,5 @@
 package com.zenith.feature.pathing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundMovePlayerPosPacket;
 import lombok.Data;
 
 @Data
@@ -12,14 +11,6 @@ public class Position {
     public static int floor(double value) {
         int i = (int) value;
         return value < (double) i ? i - 1 : i;
-    }
-
-    public ServerboundMovePlayerPosPacket toPlayerPositionPacket() {
-        return toPlayerPositionPacket(false);
-    }
-
-    public ServerboundMovePlayerPosPacket toPlayerPositionPacket(boolean onGround) {
-        return new ServerboundMovePlayerPosPacket(onGround, x, y, z);
     }
 
     public BlockPos toBlockPos() {

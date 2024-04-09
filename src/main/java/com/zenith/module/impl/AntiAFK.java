@@ -128,30 +128,29 @@ public class AntiAFK extends Module {
         if (startWalkTickTimer.tick(CONFIG.client.extra.antiafk.actions.walkDelayTicks)) {
             shouldWalk = true;
             final WalkDirection directions = walkDirectionIterator.next();
-            currentPathingGoal = Pathing.getCurrentPlayerPos()
-                    .addX(CONFIG.client.extra.antiafk.actions.walkDistance * directions.from)
-                    .addZ(CONFIG.client.extra.antiafk.actions.walkDistance * directions.to)
-                    .toBlockPos();
+            var xGoal = Pathing.getCurrentPlayerX() + CONFIG.client.extra.antiafk.actions.walkDistance * directions.from;
+            var zGoal = Pathing.getCurrentPlayerZ() + CONFIG.client.extra.antiafk.actions.walkDistance * directions.to;
+            currentPathingGoal = new BlockPos(MathHelper.floorI(xGoal), MathHelper.floorI(Pathing.getCurrentPlayerY()), MathHelper.floorI(zGoal));
         }
         if (shouldWalk) {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
                 if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
-                    PATHING.moveRotSneakTowardsBlockPos(MathHelper.floorI(currentPathingGoal.getX()),
-                                                        MathHelper.floorI(currentPathingGoal.getZ()),
+                    PATHING.moveRotSneakTowardsBlockPos(currentPathingGoal.getX(),
+                                                        currentPathingGoal.getZ(),
                                                         MOVEMENT_PRIORITY);
                 else
-                    PATHING.moveRotTowardsBlockPos(MathHelper.floorI(currentPathingGoal.getX()),
-                                                    MathHelper.floorI(currentPathingGoal.getZ()),
+                    PATHING.moveRotTowardsBlockPos(currentPathingGoal.getX(),
+                                                    currentPathingGoal.getZ(),
                                                     MOVEMENT_PRIORITY);
             }
         }
     }
 
     private boolean reachedPathingGoal() {
-        final int px = MathHelper.floorI(Pathing.getCurrentPlayerPos().getX());
-        final int pz = MathHelper.floorI(Pathing.getCurrentPlayerPos().getZ());
+        final int px = MathHelper.floorI(Pathing.getCurrentPlayerX());
+        final int pz = MathHelper.floorI(Pathing.getCurrentPlayerZ());
         return px == currentPathingGoal.getX() && pz == currentPathingGoal.getZ();
     }
 

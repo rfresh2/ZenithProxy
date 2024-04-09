@@ -556,10 +556,10 @@ public class PlayerSimulation extends Module {
 
     private float getBlockSpeedFactor() {
         if (this.isGliding || this.isFlying) return 1.0f;
-        Block inBlock = World.getBlockAtBlockPos(Pathing.getCurrentPlayerPos().toBlockPos());
+        Block inBlock = World.getBlockAtBlockPos(MathHelper.floorI(Pathing.getCurrentPlayerX()), MathHelper.floorI(Pathing.getCurrentPlayerY()), MathHelper.floorI(Pathing.getCurrentPlayerZ()));
         float inBlockSpeedFactor = getBlockSpeedFactor(inBlock);
         if (inBlockSpeedFactor != 1.0f || World.isWater(inBlock)) return inBlockSpeedFactor;
-        Block underPlayer = World.getBlockAtBlockPos(Pathing.getCurrentPlayerPos().toBlockPos().addY(-1));
+        Block underPlayer = World.getBlockAtBlockPos(MathHelper.floorI(Pathing.getCurrentPlayerX()), MathHelper.floorI(Pathing.getCurrentPlayerY()) - 1, MathHelper.floorI(Pathing.getCurrentPlayerZ()));
         return getBlockSpeedFactor(underPlayer);
     }
 

@@ -1,14 +1,12 @@
 package com.zenith.util;
 
-import java.time.Instant;
-
 public class Timer {
 
     public static Timer newTickTimer() {
         return new Timer(50L);
     }
 
-    private Instant time = Instant.now();
+    private long time = System.currentTimeMillis();
     private final long tickTimeMs;
 
     public Timer() {
@@ -20,7 +18,7 @@ public class Timer {
     }
 
     public void reset() {
-        this.time = Instant.now();
+        this.time = System.currentTimeMillis();
     }
 
     public boolean tick(final long delay) {
@@ -28,8 +26,8 @@ public class Timer {
     }
 
     public boolean tick(final long delay, final boolean resetIfTick) {
-        if (Instant.now().toEpochMilli() - this.time.toEpochMilli() > delay * tickTimeMs) {
-            if (resetIfTick) this.time = Instant.now();
+        if (System.currentTimeMillis() - this.time > delay * tickTimeMs) {
+            if (resetIfTick) this.time = System.currentTimeMillis();
             return true;
         } else {
             return false;
