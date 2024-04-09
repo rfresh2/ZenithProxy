@@ -43,12 +43,14 @@ public class ActiveHoursCommand extends Command {
              Time zone Ids ("TZ identifier" column): https://w.wiki/8Yif"
              Time format: XX:XX, e.g.: 1:42, 14:42, 14:01
             """,
-            asList("on/off",
-                   "timezone <timezone ID>",
-                   "add/del <time>",
-                   "status",
-                   "forceReconnect on/off",
-                   "queueEtaCalc on/off")
+            asList(
+                "on/off",
+                "timezone <timezone ID>",
+                "add/del <time>",
+                "status",
+                "forceReconnect on/off",
+                "queueEtaCalc on/off"
+            )
         );
     }
 
@@ -60,22 +62,27 @@ public class ActiveHoursCommand extends Command {
                 MODULE.get(ActiveHours.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Active Hours " + toggleStrCaps(CONFIG.client.extra.utility.actions.activeHours.enabled));
-                return 1;
+                return OK;
             }))
             .then(literal("timezone").then(argument("tz", wordWithChars()).executes(c -> {
                 final String timeZoneId = CustomStringArgumentType.getString(c, "tz");
                 if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(timeZoneId))) {
-                    return ERROR;
+                    c.getSource().getEmbed()
+                        .title("Invalid Timezone")
+                        .addField("Help", "Time zone Ids: https://w.wiki/8Yif", false);
                 } else {
                     CONFIG.client.extra.utility.actions.activeHours.timeZoneId = ZoneId.of(timeZoneId).getId();
                     c.getSource().getEmbed()
                         .title("Set timezone: " + timeZoneId);
-                    return 1;
                 }
+                return OK;
             })))
             .then(literal("add").then(argument("time", wordWithChars()).executes(c -> {
                 final String time = StringArgumentType.getString(c, "time");
                 if (!timeMatchesRegex(time)) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Time Format")
+                        .addField("Help", "Time format: XX:XX, e.g.: 1:42, 14:42, 14:01", false);
                     return ERROR;
                 } else {
                     final ActiveTime activeTime = ActiveTime.fromString(time);
@@ -84,19 +91,22 @@ public class ActiveHoursCommand extends Command {
                     }
                     c.getSource().getEmbed()
                                  .title("Added time: " + time);
-                    return 1;
+                    return OK;
                 }
             })))
             .then(literal("del").then(argument("time", wordWithChars()).executes(c -> {
                 final String time = StringArgumentType.getString(c, "time");
                 if (!timeMatchesRegex(time)) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Time Format")
+                        .addField("Help", "Time format: XX:XX, e.g.: 1:42, 14:42, 14:01", false);
                     return ERROR;
                 } else {
                     final ActiveTime activeTime = ActiveTime.fromString(time);
                     CONFIG.client.extra.utility.actions.activeHours.activeTimes.removeIf(s -> s.equals(activeTime));
                     c.getSource().getEmbed()
                         .title("Removed time: " + time);
-                    return 1;
+                    return OK;
                 }
             })))
             .then(literal("status").executes(c -> {
@@ -108,14 +118,14 @@ public class ActiveHoursCommand extends Command {
                           CONFIG.client.extra.utility.actions.activeHours.forceReconnect = getToggle(c, "toggle");
                           c.getSource().getEmbed()
                               .title("Force Reconnect Set!");
-                          return 1;
+                          return OK;
                       })))
             .then(literal("queueEtaCalc")
                       .then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.utility.actions.activeHours.queueEtaCalc = getToggle(c, "toggle");
                           c.getSource().getEmbed()
                               .title("Queue ETA Calc Set!");
-                          return 1;
+                          return OK;
                       })));
     }
 
