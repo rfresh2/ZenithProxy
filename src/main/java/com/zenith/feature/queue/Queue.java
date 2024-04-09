@@ -49,7 +49,7 @@ public class Queue {
     // probably only valid for regular queue, prio seems to move a lot faster
     // returns double representing seconds until estimated queue completion time.
     public static long getQueueWait(final Integer queuePos) {
-        return (long) (26 * (Math.pow(queuePos.doubleValue(), 1.15)));
+        return (long) (53.8 * (Math.pow(queuePos.doubleValue(), 1.04)));
     }
 
     public static String getEtaStringFromSeconds(final long totalSeconds) {
