@@ -31,6 +31,7 @@ public class ServerConnectionCommand extends Command {
                 "port <port>",
                 "ping on/off",
                 "ping onlinePlayers on/off",
+                "ping onlinePlayerCount on/off",
                 "ping maxPlayers <int>",
                 "ping lanBroadcast on/off",
                 "ping log on/off",
@@ -66,6 +67,13 @@ public class ServerConnectionCommand extends Command {
                                     CONFIG.server.ping.onlinePlayers = getToggle(context, "onlinePlayersToggle");
                                     context.getSource().getEmbed()
                                         .title("Ping Reports Online Players Set!");
+                                    return 1;
+                                })))
+                      .then(literal("onlinePlayerCount")
+                                .then(argument("onlinePlayerCountToggle", toggle()).executes(context -> {
+                                    CONFIG.server.ping.onlinePlayerCount = getToggle(context, "onlinePlayerCountToggle");
+                                    context.getSource().getEmbed()
+                                        .title("Ping Online Player Count Set!");
                                     return 1;
                                 })))
                       .then(literal("maxPlayers").then(argument("maxPlayers", integer(0)).executes(context -> {
@@ -117,6 +125,7 @@ public class ServerConnectionCommand extends Command {
             .addField("Port", CONFIG.server.bind.port, false)
             .addField("Ping", toggleStr(CONFIG.server.ping.enabled), false)
             .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), false)
+            .addField("Ping Reports Online Player Count", toggleStr(CONFIG.server.ping.onlinePlayerCount), false)
             .addField("Ping Max Players", CONFIG.server.ping.maxPlayers, false)
             .addField("Ping LAN Broadcast", toggleStr(CONFIG.server.ping.lanBroadcast), false)
             .addField("Ping Log", toggleStr(CONFIG.server.ping.logPings), false)

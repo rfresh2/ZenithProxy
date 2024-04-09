@@ -450,6 +450,7 @@ public final class Config {
         public static final class Ping {
             public boolean enabled = true;
             public boolean onlinePlayers = true;
+            public boolean onlinePlayerCount = true;
             public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public boolean lanBroadcast = true;

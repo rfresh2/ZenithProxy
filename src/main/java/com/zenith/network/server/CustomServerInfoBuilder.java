@@ -75,16 +75,19 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
     }
 
     private PlayerInfo getPlayerInfo() {
+        var onlinePlayerCount = CONFIG.server.ping.onlinePlayerCount
+            ? Proxy.getInstance().getActiveConnections().size()
+            : 0;
         if (CONFIG.server.ping.onlinePlayers) {
             return new PlayerInfo(
                 CONFIG.server.ping.maxPlayers,
-                Proxy.getInstance().getActiveConnections().size(),
+                onlinePlayerCount,
                 List.of(getOnlinePlayerProfiles())
             );
         } else {
             return new PlayerInfo(
                 CONFIG.server.ping.maxPlayers,
-                0,
+                onlinePlayerCount,
                 Collections.emptyList()
             );
         }
@@ -95,10 +98,9 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
             return Proxy.getInstance().getActiveConnections().stream()
                     .map(connection -> connection.profileCache.getProfile())
                     .toArray(GameProfile[]::new);
-        } catch (final RuntimeException e) {
-            // do nothing, failsafe if we get some race condition
+        } catch (final Throwable e) {
+            return new GameProfile[0];
         }
-        return new GameProfile[0];
     }
 
     public Component getMotd() {
