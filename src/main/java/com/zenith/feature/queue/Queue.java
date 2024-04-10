@@ -2,6 +2,7 @@ package com.zenith.feature.queue;
 
 import com.zenith.feature.queue.mcping.MCPing;
 import com.zenith.feature.queue.mcping.data.FinalResponse;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -12,42 +13,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.zenith.Shared.*;
-import static java.time.temporal.ChronoUnit.MINUTES;
-import static java.util.Objects.isNull;
 
 public class Queue {
-    private static QueueStatus queueStatus;
+    @Getter
+    private static QueueStatus queueStatus = new QueueStatus(0, 0, 0);
     private static final Pattern digitPattern = Pattern.compile("\\d+");
     private static final MCPing mcPing = new MCPing();
+    private volatile static Instant lastUpdate = Instant.EPOCH;
 
     public static void start() {
         EXECUTOR.scheduleAtFixedRate(
             () -> Thread.ofVirtual().name("Queue Update").start(Queue::updateQueueStatus),
             500L,
-            Duration.of(CONFIG.server.queueStatusRefreshMinutes, MINUTES).toMillis(),
+            Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes).toMillis(),
             TimeUnit.MILLISECONDS);
     }
 
-    public static QueueStatus getQueueStatus() {
-        if (isNull(queueStatus)) {
-            updateQueueStatus();
-        }
-        return queueStatus;
-    }
-
     public static void updateQueueStatus() {
+        // prevent certain situations where users get a ton of these requests queued up somehow
+        // maybe due to losing internet?
+        if (lastUpdate.isAfter(Instant.now().minus(Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes)))) return;
+        lastUpdate = Instant.now();
         if (!pingUpdate()) {
             if (!apiUpdate()) {
                 SERVER_LOG.error("Failed updating queue status. Is the network down?");
-                if (isNull(queueStatus)) {
-                    queueStatus = new QueueStatus(0, 0, Instant.EPOCH.getEpochSecond());
-                }
             }
         }
     }
 
-    // probably only valid for regular queue, prio seems to move a lot faster
-    // returns double representing seconds until estimated queue completion time.
+    // returns seconds until estimated queue completion time
     public static long getQueueWait(final Integer queuePos) {
         return (long) (53.8 * (Math.pow(queuePos.doubleValue(), 1.04)));
     }
