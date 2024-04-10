@@ -69,7 +69,7 @@ public class ChunkCache implements CachedData {
     // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
     protected Map<String, Dimension> dimensionRegistry = new ConcurrentHashMap<>();
-    protected Dimension currentDimension = null;
+    protected @Nullable Dimension currentDimension = null;
     protected Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
@@ -418,6 +418,11 @@ public class ChunkCache implements CachedData {
         final var chunkZ = p.getZ();
         ByteBuf buf = Unpooled.wrappedBuffer(p.getChunkData());
         final var sectionsCount = getSectionsCount();
+        if (sectionsCount == 0) {
+            CACHE_LOG.debug("Received chunk while sectionsCount is 0. Ignoring chunk. Most likely due to a race condition");
+            CACHE_LOG.debug("Current dimension: {}", currentDimension);
+            return;
+        }
         var chunk = cache.get(chunkPosToLong(chunkX, chunkZ));
         if (chunk == null) {
             var blockEntitiesArray = p.getBlockEntities();
@@ -461,11 +466,13 @@ public class ChunkCache implements CachedData {
     }
 
     public int getMinSection() {
-        return currentDimension.minY() >> 4;
+        var dim = currentDimension;
+        return dim != null ? dim.minY() >> 4 : 0;
     }
 
     public int getMaxBuildHeight() {
-        return currentDimension.minY() + currentDimension.height();
+        var dim = currentDimension;
+        return dim != null ? dim.minY() + dim.height() : 0;
     }
 
     public Chunk get(int x, int z) {
@@ -511,13 +518,19 @@ public class ChunkCache implements CachedData {
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
         CACHE_LOG.debug("Updating current dimension to: {}", info.getDimension());
-        this.currentDimension = dimensionRegistry.get(info.getDimension());
+        Dimension newDim = dimensionRegistry.get(info.getDimension());
+        if (newDim == null) {
+            CACHE_LOG.error("Respawn packet tried updating dimension to unregistered dimension: {}", info.getDimension());
+            CACHE_LOG.error("Things are going to break...");
+        } else {
+            this.currentDimension = newDim;
+            this.worldName = currentDimension.dimensionName();
+        }
         this.dimensionType = info.getDimension();
-        this.worldName = currentDimension.dimensionName();
         this.hashedSeed = info.getHashedSeed();
         this.debug = info.isDebug();
         this.flat = info.isFlat();
-        CACHE_LOG.debug("Updated current dimension to {}", currentDimension.dimensionName());
+        CACHE_LOG.debug("Updated current dimension to {}", newDim);
     }
 
     public void updateWorldTime(final ClientboundSetTimePacket packet) {
