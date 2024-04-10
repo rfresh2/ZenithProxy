@@ -32,6 +32,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -47,6 +49,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
@@ -61,7 +64,10 @@ public class ChunkCache implements CachedData {
     private float rainStrength = 0f;
     private float thunderStrength = 0f;
     private int renderDistance = 25;
-    protected final ConcurrentHashMap<Long, Chunk> cache = new ConcurrentHashMap<>();
+    // iterators over this map are not thread safe.
+    // to do iteration, copy the key or value set into a new list, then iterate over that copied list.
+    // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
+    protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
     protected Map<String, Dimension> dimensionRegistry = new ConcurrentHashMap<>();
     protected Dimension currentDimension = null;
     protected Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
@@ -146,7 +152,8 @@ public class ChunkCache implements CachedData {
         final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return;
         currentPlayer.sendAsync(new ClientboundChunkBatchStartPacket());
-        CACHE.getChunkCache().cache.values().stream()
+        var chunks = new ArrayList<>(CACHE.getChunkCache().cache.values());
+        chunks.stream()
             .map(chunk -> new ClientboundLevelChunkWithLightPacket(
                 chunk.x,
                 chunk.z,
@@ -156,7 +163,7 @@ public class ChunkCache implements CachedData {
                 chunk.lightUpdateData)
             )
             .forEach(currentPlayer::sendAsync);
-        currentPlayer.sendAsync(new ClientboundChunkBatchFinishedPacket(CACHE.getChunkCache().cache.values().size()));
+        currentPlayer.sendAsync(new ClientboundChunkBatchFinishedPacket(chunks.size()));
     }
 
     public boolean isChunkLoaded(final int x, final int z) {
@@ -347,7 +354,8 @@ public class ChunkCache implements CachedData {
             }
             consumer.accept(new ClientboundGameEventPacket(GameEvent.LEVEL_CHUNKS_LOAD_START, null));
             consumer.accept(new ClientboundChunkBatchStartPacket());
-            this.cache.values().stream()
+            var chunks = new ArrayList<>(this.cache.values());
+            chunks.stream()
                 .sorted(Comparator.comparingInt(chunk -> Math.abs(chunk.x - centerX) + Math.abs(chunk.z - centerZ)))
                 .forEach(chunk ->
                     consumer.accept(new ClientboundLevelChunkWithLightPacket(
@@ -483,12 +491,16 @@ public class ChunkCache implements CachedData {
         if (!Proxy.getInstance().isConnected()) return;
         final int playerX = ((int) CACHE.getPlayerCache().getX()) >> 4;
         final int playerZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
-        final var toRemove = cache.keySet().stream()
+        var keys = new LongArrayList(cache.keySet());
+        var removedCount = new AtomicInteger(0);
+        keys.longStream()
             .filter(key -> distanceOutOfRange(playerX, playerZ, longToChunkX(key), longToChunkZ(key)))
-            .toList();
-        toRemove.forEach(cache::remove);
-        if (!toRemove.isEmpty()) {
-            CLIENT_LOG.debug("Reaped {} dead chunks", toRemove.size());
+            .forEach(key -> {
+                cache.remove(key);
+                removedCount.getAndIncrement();
+            });
+        if (removedCount.get() > 0) {
+            CLIENT_LOG.debug("Reaped {} dead chunks", removedCount.get());
         }
     }
 
