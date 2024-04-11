@@ -2,6 +2,7 @@ package com.zenith.module.impl;
 
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
@@ -179,7 +180,18 @@ public class PlayerSimulation extends Module {
         this.movementInput.movementSideways *= 0.98f;
         final MutableVec3d movementInputVec = new MutableVec3d(movementInput.movementSideways, 0, movementInput.movementForward);
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
-        travel(movementInputVec);
+        if (CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE
+            || CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
+            // todo: handle creative and spectator mode movement
+            //  for now, we just stay still (unless in a vehicle)
+            //  ideally we'd check if isFlying = true
+            //  but we don't cache or intercept where this would be set server side yet
+            velocity.setX(0);
+            velocity.setY(0);
+            velocity.setZ(0);
+        } else {
+            travel(movementInputVec);
+        }
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
             sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch),
