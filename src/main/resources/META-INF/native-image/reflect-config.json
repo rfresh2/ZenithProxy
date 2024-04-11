@@ -737,7 +737,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["int","int","int","int","java.time.OffsetDateTime","java.time.OffsetDateTime","int","int","int"] }]
+  "methods":[{"name":"<init>","parameterTypes":["int","int","int","int","java.time.OffsetDateTime","java.time.OffsetDateTime","int","int","int", "boolean"] }]
 },
 {
   "name":"com.zenith.feature.food.FoodData",

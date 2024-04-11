@@ -62,7 +62,7 @@ public class StatsCommand extends Command {
                     .addField("Kills", playerStats.killCount(), true)
                     .addField("\u200B", "\u200B", true)
                     .addField("Chats", playerStats.chatsCount(), true)
-                    .addField("\u200B", "\u200B", true)
+                    .addField("Priority Queue", playerStats.prio() ? "Yes (probably)" : "No (probably not)", true)
                     .addField("\u200B", "\u200B", true)
                     .thumbnail(Proxy.getInstance().getAvatarURL(playerName).toString());
                 return 1;
