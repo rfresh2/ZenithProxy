@@ -1,9 +1,9 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.math.MathHelper;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CONFIG;

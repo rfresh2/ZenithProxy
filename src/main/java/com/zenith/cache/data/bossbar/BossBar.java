@@ -1,12 +1,12 @@
 package com.zenith.cache.data.bossbar;
 
-import com.github.steveice10.mc.protocol.data.game.BossBarColor;
-import com.github.steveice10.mc.protocol.data.game.BossBarDivision;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.BossBarColor;
+import org.geysermc.mcprotocollib.protocol.data.game.BossBarDivision;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 
 import java.util.UUID;
 

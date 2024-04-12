@@ -1,10 +1,10 @@
 package com.zenith.cache.data.map;
 
-import com.github.steveice10.mc.protocol.data.game.level.map.MapData;
-import com.github.steveice10.mc.protocol.data.game.level.map.MapIcon;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundMapItemDataPacket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.geysermc.mcprotocollib.protocol.data.game.level.map.MapData;
+import org.geysermc.mcprotocollib.protocol.data.game.level.map.MapIcon;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundMapItemDataPacket;
 
 import java.util.HashSet;
 import java.util.Set;

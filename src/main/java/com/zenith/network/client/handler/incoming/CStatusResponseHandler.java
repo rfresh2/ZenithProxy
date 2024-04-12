@@ -1,12 +1,12 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
-import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoHandler;
-import com.github.steveice10.mc.protocol.packet.status.clientbound.ClientboundStatusResponsePacket;
-import com.github.steveice10.mc.protocol.packet.status.serverbound.ServerboundPingRequestPacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
+import org.geysermc.mcprotocollib.protocol.data.status.ServerStatusInfo;
+import org.geysermc.mcprotocollib.protocol.data.status.handler.ServerInfoHandler;
+import org.geysermc.mcprotocollib.protocol.packet.status.clientbound.ClientboundStatusResponsePacket;
+import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.ServerboundPingRequestPacket;
 
 public class CStatusResponseHandler implements PacketHandler<ClientboundStatusResponsePacket, ClientSession> {
     @Override

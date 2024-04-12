@@ -1,8 +1,8 @@
 package com.zenith.network.server;
 
-import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
 import com.google.common.base.Suppliers;
 import com.zenith.util.ComponentSerializer;
+import org.geysermc.mcprotocollib.protocol.data.status.handler.ServerInfoBuilder;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

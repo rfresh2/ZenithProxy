@@ -1,9 +1,9 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundKeyPacket;
 import com.zenith.network.UserAuthTask;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundKeyPacket;
 
 import javax.crypto.SecretKey;
 import java.security.PrivateKey;

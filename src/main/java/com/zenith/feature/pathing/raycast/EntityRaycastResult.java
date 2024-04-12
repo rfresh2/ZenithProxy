@@ -1,9 +1,9 @@
 package com.zenith.feature.pathing.raycast;
 
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 public record EntityRaycastResult(boolean hit, @Nullable Entity entity) {

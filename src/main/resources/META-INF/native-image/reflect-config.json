@@ -33,7 +33,7 @@
   "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
 },
 {
-  "name":"[Lcom.github.steveice10.mc.protocol.data.game.command.CommandNode;"
+  "name":"[Lorg.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;"
 },
 {
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
@@ -324,15 +324,15 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.github.steveice10.mc.protocol.data.game.entity.type.EntityType",
+  "name":"org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
   "allDeclaredFields":true
 },
 {
-  "name":"com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket",
+  "name":"org.geysermc.mcprotocollib.protocol.packet.ingame.client.ClientChatPacket",
   "fields":[{"name":"message"}]
 },
 {
-  "name":"com.github.steveice10.mc.protocol.packet.ingame.server.ServerStatisticsPacket",
+  "name":"org.geysermc.mcprotocollib.protocol.packet.ingame.server.ServerStatisticsPacket",
   "fields":[{"name":"statistics"}]
 },
 {
@@ -388,51 +388,51 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.packetlib.ProxyInfo$Type",
+  "name":"org.geysermc.mcprotocollib.network.ProxyInfo$Type",
   "allDeclaredFields":true
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpClientSession$1"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpClientSession$1"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketCodec"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCodec"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketCompressionAndSizeEncoder"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCompressionAndSizeEncoder"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketCompressionDecoder"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCompressionDecoder"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketEncryptionDecoder"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketEncryptionDecoder"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketEncryptionEncoder"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketEncryptionEncoder"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketSizeDecoder"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizeDecoder"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketSizeEncoder"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizeEncoder"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketSizer"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizer"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketVelocityCompression"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketVelocityCompression"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpPacketVelocityEncryptor"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketVelocityEncryptor"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpServer$1"
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpServer$1"
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpServerSession",
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpServerSession",
   "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
 },
 {
-  "name":"com.github.steveice10.packetlib.tcp.TcpSession",
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpSession",
   "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {

@@ -1,10 +1,10 @@
 package com.zenith.network.server.handler.player.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.ClientCommand;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.data.game.ClientCommand;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 
 import static com.zenith.Shared.CACHE;
 

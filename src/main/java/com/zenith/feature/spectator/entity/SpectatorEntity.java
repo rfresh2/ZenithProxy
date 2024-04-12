@@ -1,9 +1,9 @@
 package com.zenith.feature.spectator.entity;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.data.PlayerCache;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 
 import java.util.Optional;
 import java.util.UUID;

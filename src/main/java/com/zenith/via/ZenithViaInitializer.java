@@ -1,7 +1,5 @@
 package com.zenith.via;
 
-import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
-import com.github.steveice10.packetlib.Session;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
@@ -12,6 +10,8 @@ import net.raphimc.vialoader.ViaLoader;
 import net.raphimc.vialoader.impl.platform.ViaBackwardsPlatformImpl;
 import net.raphimc.vialoader.netty.VLPipeline;
 import net.raphimc.vialoader.netty.ViaCodec;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

@@ -1,10 +1,10 @@
 package com.zenith.cache.data.scoreboard;
 
-import com.github.steveice10.mc.protocol.data.game.chat.numbers.NumberFormat;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 import lombok.Data;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.chat.numbers.NumberFormat;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 
 @Data
 public class Score {

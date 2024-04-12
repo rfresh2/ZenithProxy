@@ -1,11 +1,11 @@
 package com.zenith.feature.replay;
 
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.module.impl.ReplayMod;
 import com.zenith.network.registry.PacketHandlerCodec;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 
 import java.util.EnumMap;
 

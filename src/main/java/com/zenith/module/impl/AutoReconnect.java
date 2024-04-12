@@ -1,12 +1,12 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.AutoReconnectEvent;
 import com.zenith.event.proxy.ConnectEvent;
 import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.module.Module;
 import com.zenith.util.Wait;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Future;

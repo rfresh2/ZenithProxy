@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
-import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.util.BrandSerializer;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
 
 import static com.zenith.Shared.CACHE;
 

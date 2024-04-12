@@ -1,12 +1,12 @@
 package com.zenith.network.registry;
 
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.network.client.ClientSession;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PacketHandlerStateCodec<S extends Session> {

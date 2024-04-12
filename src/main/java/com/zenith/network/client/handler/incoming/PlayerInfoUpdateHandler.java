@@ -1,17 +1,17 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.util.Config;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 
 import java.util.Objects;
 
-import static com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction.*;
 import static com.zenith.Shared.*;
+import static org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntryAction.*;
 
 public class PlayerInfoUpdateHandler implements ClientEventLoopPacketHandler<ClientboundPlayerInfoUpdatePacket, ClientSession> {
     @Override

@@ -1,9 +1,9 @@
 package com.zenith.network.server.handler.spectator.outgoing;
 
-import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.data.game.level.notify.GameEvent;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 
 public class GameEventSpectatorOutgoingHandler implements PacketHandler<ClientboundGameEventPacket, ServerConnection> {
     @Override

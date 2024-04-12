@@ -1,10 +1,10 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.module.Module;
 import com.zenith.util.Timer;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import java.util.HashSet;
 import java.util.Set;

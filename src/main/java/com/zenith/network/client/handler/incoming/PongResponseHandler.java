@@ -1,9 +1,9 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.status.clientbound.ClientboundPongResponsePacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.util.Config;
+import org.geysermc.mcprotocollib.protocol.packet.status.clientbound.ClientboundPongResponsePacket;
 
 import static com.zenith.Shared.CONFIG;
 

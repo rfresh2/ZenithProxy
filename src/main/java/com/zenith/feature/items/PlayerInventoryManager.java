@@ -1,11 +1,11 @@
 package com.zenith.feature.items;
 
 import com.github.rfresh2.EventConsumer;
-import com.github.steveice10.mc.protocol.data.game.inventory.ClickItemAction;
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.util.Timer;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.ClickItemAction;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.zenith.feature.map;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.BitStorage;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.io.MNBTIO;
 import com.zenith.cache.data.chunk.Chunk;
@@ -10,6 +9,7 @@ import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.SneakyThrows;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.BitStorage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

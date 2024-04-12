@@ -1,8 +1,8 @@
 package com.zenith.network.server.handler.spectator.outgoing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
 
 public class SetCarriedItemSpectatorOutgoingHandler implements PacketHandler<ClientboundSetCarriedItemPacket, ServerConnection> {
     @Override

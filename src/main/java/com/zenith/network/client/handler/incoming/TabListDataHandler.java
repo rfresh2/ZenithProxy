@@ -1,6 +1,5 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.event.proxy.PrioStatusEvent;
@@ -11,6 +10,7 @@ import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 
 import java.time.Duration;
 import java.time.Instant;

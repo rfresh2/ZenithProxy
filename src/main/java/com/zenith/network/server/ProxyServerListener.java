@@ -1,7 +1,5 @@
 package com.zenith.network.server;
 
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.event.server.*;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerConnectionAddedEvent;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
@@ -9,6 +7,8 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.event.server.*;
 
 import static com.zenith.Shared.*;
 

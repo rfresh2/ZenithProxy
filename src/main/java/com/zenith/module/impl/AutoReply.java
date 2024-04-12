@@ -1,11 +1,11 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.module.Module;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import java.time.Duration;
 import java.time.Instant;

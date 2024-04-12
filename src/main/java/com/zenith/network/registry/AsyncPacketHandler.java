@@ -1,8 +1,8 @@
 package com.zenith.network.registry;
 
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

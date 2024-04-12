@@ -1,9 +1,9 @@
 package com.zenith.network;
 
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.mc.protocol.packet.status.serverbound.ServerboundPingRequestPacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.util.Config;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.ServerboundPingRequestPacket;
 
 import java.util.concurrent.TimeUnit;
 

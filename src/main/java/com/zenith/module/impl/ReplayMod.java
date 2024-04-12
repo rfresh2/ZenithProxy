@@ -1,8 +1,5 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.codec.MinecraftPacket;
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.ReplayStartedEvent;
@@ -17,6 +14,9 @@ import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

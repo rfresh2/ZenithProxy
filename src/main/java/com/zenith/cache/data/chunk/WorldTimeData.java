@@ -1,6 +1,6 @@
 package com.zenith.cache.data.chunk;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
 
 public class WorldTimeData {
     private long lastUpdate;

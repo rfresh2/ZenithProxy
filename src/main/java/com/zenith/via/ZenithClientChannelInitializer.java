@@ -1,8 +1,8 @@
 package com.zenith.via;
 
-import com.github.steveice10.packetlib.tcp.TcpClientChannelInitializer;
-import com.github.steveice10.packetlib.tcp.TcpClientSession;
 import io.netty.channel.Channel;
+import org.geysermc.mcprotocollib.network.tcp.TcpClientChannelInitializer;
+import org.geysermc.mcprotocollib.network.tcp.TcpClientSession;
 
 import static com.zenith.Shared.VIA_INITIALIZER;
 

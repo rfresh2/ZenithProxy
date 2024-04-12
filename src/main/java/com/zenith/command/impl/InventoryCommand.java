@@ -1,8 +1,5 @@
 package com.zenith.command.impl;
 
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
-import com.github.steveice10.mc.protocol.data.game.inventory.DropItemAction;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.inventory.Container;
@@ -13,6 +10,9 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.Embed;
 import com.zenith.feature.items.ContainerClickAction;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.DropItemAction;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 
 import java.util.ArrayList;
 import java.util.Arrays;

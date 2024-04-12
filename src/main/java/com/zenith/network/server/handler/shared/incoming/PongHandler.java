@@ -1,9 +1,9 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundPongPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundPongPacket;
 
 public class PongHandler implements PacketHandler<ServerboundPongPacket, ServerConnection> {
     @Override

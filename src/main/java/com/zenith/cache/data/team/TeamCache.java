@@ -1,10 +1,10 @@
 package com.zenith.cache.data.team;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

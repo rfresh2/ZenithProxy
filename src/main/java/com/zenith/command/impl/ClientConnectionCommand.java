@@ -1,6 +1,5 @@
 package com.zenith.command.impl;
 
-import com.github.steveice10.packetlib.ProxyInfo;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
@@ -9,6 +8,7 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.util.Config;
+import org.geysermc.mcprotocollib.network.ProxyInfo;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;

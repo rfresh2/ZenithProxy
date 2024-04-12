@@ -1,12 +1,12 @@
 package com.zenith.feature.pathing;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
 import com.zenith.feature.pathing.blockdata.Block;
 import com.zenith.feature.pathing.blockdata.BlockState;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import lombok.experimental.UtilityClass;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

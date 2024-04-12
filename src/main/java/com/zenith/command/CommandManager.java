@@ -1,6 +1,5 @@
 package com.zenith.command;
 
-import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
 import com.google.common.base.Suppliers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
@@ -17,6 +16,7 @@ import com.zenith.command.util.BrigadierToMCProtocolLibConverter;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
+import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
