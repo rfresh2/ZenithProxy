@@ -27,7 +27,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build ZenithProxy
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: jarBuild
 
@@ -59,7 +59,7 @@ jobs:
           echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: nativeCompile
 
@@ -74,7 +74,7 @@ jobs:
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Upload Binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-native
           path: ZenithProxy.zip

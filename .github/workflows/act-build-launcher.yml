@@ -45,7 +45,7 @@ jobs:
           ${{ matrix.zip-command }}
 
       - name: Upload Binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
           path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
@@ -54,7 +54,7 @@ jobs:
         run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
 
       - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
@@ -76,7 +76,7 @@ jobs:
         run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launch.sh src/launcher/launch.bat
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: launcher-python
           path: ZenithProxy-launcher-python.zip
@@ -85,7 +85,7 @@ jobs:
         run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-python.sha1
 
       - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: launcher-python.sha1
           path: ZenithProxy-launcher-python.sha1
@@ -100,7 +100,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download job artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
@@ -109,7 +109,7 @@ jobs:
           cat artifacts/**/*.sha1 > hashes.txt
 
       - name: Upload Hashes Version
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hashes.txt
           path: hashes.txt
