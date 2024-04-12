@@ -32,7 +32,7 @@ jobs:
           echo "RELEASE_TAG=${{ github.ref_name }}" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Java
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           dependency-graph: generate-and-submit
           arguments: jarBuild
@@ -69,7 +69,7 @@ jobs:
           echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Linux Native
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: nativeCompile
 
