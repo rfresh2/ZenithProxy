@@ -35,7 +35,7 @@ val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.32"
 val postgresVersion = "42.7.3"
-val nettyVersion = "4.1.108.Final"
+val nettyVersion = "4.1.109.Final"
 val fastutilVersion = "8.5.13-SNAPSHOT"
 val jdbiVersion = "3.45.1"
 
@@ -49,9 +49,9 @@ dependencies {
     shade("com.github.mwiede:jsch:0.2.17")
     shade("com.google.guava:guava:33.1.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
-    shade("ch.qos.logback:logback-classic:1.5.4")
-    shade("org.slf4j:slf4j-api:2.0.12")
-    shade("org.slf4j:jul-to-slf4j:2.0.12")
+    shade("ch.qos.logback:logback-classic:1.5.5")
+    shade("org.slf4j:slf4j-api:2.0.13")
+    shade("org.slf4j:jul-to-slf4j:2.0.13")
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
