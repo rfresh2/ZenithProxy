@@ -26,6 +26,8 @@ public class InventoryCache {
     }
 
     public void setInventory(final int containerId, final ItemStack[] inventory) {
+        if (containerId == 0 && inventory.length != 46)
+            CACHE_LOG.debug("Setting player inventory with unexpected size: {}", inventory.length);
         containers.compute(containerId, (id, container) -> {
             if (container == null) {
                 container = new Container(containerId, inventory.length);
@@ -86,7 +88,7 @@ public class InventoryCache {
         packet.getChangedSlots().forEach(container::setItemStack);
     }
 
-    public void reset() {
+    public synchronized void reset() {
         CACHE_LOG.debug("Resetting inventory cache");
         containers.clear();
         containers.put(0, new Container(0, 46));
