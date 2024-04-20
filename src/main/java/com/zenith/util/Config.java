@@ -318,6 +318,7 @@ public final class Config {
 //                public boolean allowBlockPlacing = true;
                 public boolean allowInventory = true;
                 public boolean allowUseItem = true;
+                public boolean allowBookSigning = true;
                 public boolean allowInteract = true;
                 public boolean allowChat = true; // outbound chats, including commands
             }

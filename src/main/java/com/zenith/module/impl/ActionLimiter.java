@@ -8,6 +8,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundEditBookPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.event.proxy.PlayerLoginEvent;
@@ -53,6 +54,7 @@ public class ActionLimiter extends Module {
                 .registerInbound(ServerboundPlayerActionPacket.class, new ALPlayerActionHandler())
                 .registerInbound(ServerboundUseItemOnPacket.class, new ALUseItemOnHandler())
                 .registerInbound(ServerboundUseItemPacket.class, new ALUseItemHandler())
+                .registerInbound(ServerboundEditBookPacket.class, new ALEditBookHandler())
                 .registerOutbound(ClientboundMoveVehiclePacket.class, new ALCMoveVehicleHandler())
                 .registerOutbound(ClientboundLoginPacket.class, new ALLoginHandler())
                 .registerOutbound(ClientboundPlayerPositionPacket.class, new ALPlayerPositionHandler())
