@@ -24,7 +24,20 @@ public class AuthCommand extends Command {
         return CommandUsage.args(
             "auth",
             CommandCategory.MANAGE,
-            "Configures the proxy's authentication settings",
+            """
+            Configures the proxy's authentication settings.
+            
+            To switch accounts, use the `clear` command.
+            
+            The `attempts` setting configures the number of login attempts before a full login must be performed.
+            The `alwaysRefreshOnLogin` setting will always refresh the authentication token on login instead of trusting the cache. This can cause
+            Microsoft to rate limit your account if connecting frequently. Auth tokens will always refresh in the background before expiry even if this is off.
+            
+            `deviceCode` is the default and recommended authentication type.
+            If authentication fails, try logging into the account on the vanilla MC launcher and joining a server. Then try again in Zenith.
+            If this still fails, you can try one of the alternate auth types.
+            
+            """,
             asList(
                 "clear",
                 "attempts <int>",
