@@ -64,6 +64,13 @@ public class Authenticator {
         .withDeviceToken("Win32")
         .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false);
+    @Getter(lazy = true) private final StepFullJavaSession prismDeviceCodeAuthStep = MinecraftAuth.builder()
+        .withTimeout(300)
+        .withClientId("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb")
+        .deviceCode()
+        .withoutDeviceToken()
+        .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
+        .buildMinecraftJavaProfileStep(false);
 
     static {
         MinecraftAuth.LOGGER = new MCAuthLoggerBridge();
@@ -165,6 +172,11 @@ public class Authenticator {
         return getLocalWebserverStep().getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
     }
 
+    @SneakyThrows
+    private FullJavaSession prismDeviceCodeLogin() {
+        return getPrismDeviceCodeAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+    }
+
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
         AUTH_LOG.debug("Performing token refresh..");
         try {
@@ -181,6 +193,7 @@ public class Authenticator {
             case DEVICE_CODE -> getDeviceCodeAuthStep();
             case LOCAL_WEBSERVER -> getLocalWebserverStep();
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> getDeviceCodeAuthWithoutDeviceTokenStep();
+            case PRISM -> getPrismDeviceCodeAuthStep();
         };
     }
 
@@ -190,6 +203,7 @@ public class Authenticator {
             case DEVICE_CODE -> deviceCodeLogin();
             case LOCAL_WEBSERVER -> localWebserverLogin();
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> withoutDeviceTokenLogin();
+            case PRISM -> prismDeviceCodeLogin();
         };
     }
 

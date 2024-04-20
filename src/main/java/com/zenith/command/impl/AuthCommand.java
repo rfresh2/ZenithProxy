@@ -10,8 +10,6 @@ import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import com.zenith.util.Config;
 
-import java.util.Arrays;
-
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
@@ -31,12 +29,12 @@ public class AuthCommand extends Command {
                 "clear",
                 "attempts <int>",
                 "alwaysRefreshOnLogin on/off",
-                "type list",
-                "type <type>",
+                "type <deviceCode/emailAndPassword/deviceCode2/meteor/prism>",
                 "email <email>",
                 "password <password>",
                 "mention on/off",
-                "openBrowser on/off"
+                "openBrowser on/off",
+                "maxRefreshIntervalMins <minutes>"
             )
         );
     }
@@ -71,26 +69,39 @@ public class AuthCommand extends Command {
                 return 1;
             })))
             .then(literal("type").requires(this::validateDiscordOrTerminalSource)
-                      .then(literal("list").executes(c -> {
+                      .then(literal("deviceCode").executes(c -> {
+                          CONFIG.authentication.accountType = Config.Authentication.AccountType.DEVICE_CODE;
                           c.getSource().getEmbed()
-                              .title("Authentication Types")
+                              .title("Authentication Type Set")
                               .primaryColor();
                           return 1;
                       }))
-                      .then(argument("type", wordWithChars()).executes(c -> {
-                          String type = getString(c, "type").toUpperCase().trim();
-                          try {
-                              CONFIG.authentication.accountType = Config.Authentication.AccountType.valueOf(type);
-                              Proxy.getInstance().getAuthenticator().clearAuthCache();
-                              c.getSource().getEmbed()
-                                  .title("Authentication Type Set")
-                                  .primaryColor();
-                          } catch (final Exception e) {
-                              c.getSource().getEmbed()
-                                  .title("Invalid Authentication Type")
-                                  .description("Valid types: " + Arrays.toString(Config.Authentication.AccountType.values()))
-                                  .errorColor();
-                          }
+                      .then(literal("emailAndPassword").executes(c -> {
+                          CONFIG.authentication.accountType = Config.Authentication.AccountType.MSA;
+                          c.getSource().getEmbed()
+                              .title("Authentication Type Set")
+                              .primaryColor();
+                          return 1;
+                      }))
+                      .then(literal("deviceCode2").executes(c -> {
+                          CONFIG.authentication.accountType = Config.Authentication.AccountType.DEVICE_CODE_WITHOUT_DEVICE_TOKEN;
+                          c.getSource().getEmbed()
+                              .title("Authentication Type Set")
+                              .primaryColor();
+                          return 1;
+                      }))
+                      .then(literal("meteor").executes(c -> {
+                          CONFIG.authentication.accountType = Config.Authentication.AccountType.LOCAL_WEBSERVER;
+                          c.getSource().getEmbed()
+                              .title("Authentication Type Set")
+                              .primaryColor();
+                          return 1;
+                      }))
+                      .then(literal("prism").executes(c -> {
+                          CONFIG.authentication.accountType = Config.Authentication.AccountType.PRISM;
+                          c.getSource().getEmbed()
+                              .title("Authentication Type Set")
+                              .primaryColor();
                           return 1;
                       })))
             .then(literal("email").requires(this::validateTerminalSource)
@@ -141,6 +152,13 @@ public class AuthCommand extends Command {
                     .title("Open Browser On Login " + toggleStrCaps(CONFIG.authentication.openBrowserOnLogin))
                     .primaryColor();
                 return 1;
+            })))
+            .then(literal("maxRefreshInterval").then(argument("minutes", integer(5, 500)).executes(c -> {
+                CONFIG.authentication.maxRefreshIntervalMins = c.getArgument("minutes", Integer.class);
+                c.getSource().getEmbed()
+                    .title("Max Refresh Interval Set")
+                    .primaryColor();
+                return OK;
             })));
     }
 
@@ -155,11 +173,21 @@ public class AuthCommand extends Command {
     @Override
     public void postPopulate(final Embed builder) {
         builder
-            .addField("Account Type", CONFIG.authentication.accountType.toString(), false)
-            .addField("Available Types", Arrays.toString(Config.Authentication.AccountType.values()), false)
+            .addField("Account Type", authTypeToString(CONFIG.authentication.accountType), false)
             .addField("Attempts", CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe, false)
             .addField("Always Refresh On Login", toggleStr(CONFIG.authentication.alwaysRefreshOnLogin), false)
             .addField("Mention", toggleStr(CONFIG.discord.mentionRoleOnDeviceCodeAuth), false)
-            .addField("Open Browser", toggleStr(CONFIG.authentication.openBrowserOnLogin), false);
+            .addField("Open Browser", toggleStr(CONFIG.authentication.openBrowserOnLogin), false)
+            .addField("Max Refresh Interval", CONFIG.authentication.maxRefreshIntervalMins + " minutes", false);
+    }
+
+    private String authTypeToString(Config.Authentication.AccountType type) {
+        return switch (type) {
+            case DEVICE_CODE -> "deviceCode";
+            case MSA -> "emailAndPassword";
+            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> "deviceCode2";
+            case LOCAL_WEBSERVER -> "meteor";
+            case PRISM -> "prism";
+        };
     }
 }
