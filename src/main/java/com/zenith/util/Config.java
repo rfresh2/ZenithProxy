@@ -125,7 +125,12 @@ public final class Config {
                 public boolean leaveAlert = true;
                 public boolean logoutAlert = true;
                 public boolean replayRecording = false;
+                public ReplayRecordingMode replayRecordingMode = ReplayRecordingMode.ENEMY;
                 public int replayRecordingCooldownMins = 5;
+                public enum ReplayRecordingMode {
+                    ENEMY,
+                    ALL
+                }
             }
 
             public static class AutoArmor {

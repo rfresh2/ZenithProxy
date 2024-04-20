@@ -737,7 +737,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["int","int","int","int","java.time.OffsetDateTime","java.time.OffsetDateTime","int","int","int", "boolean"] }]
+  "methods":[{"name":"<init>","parameterTypes":["int","int","int","int","java.time.OffsetDateTime","java.time.OffsetDateTime","int","int","int","boolean"] }]
 },
 {
   "name":"com.zenith.feature.food.FoodData",
@@ -1122,6 +1122,10 @@
   "name":"com.zenith.util.Config$Client$Extra$VisualRange",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Client$Extra$VisualRange$ReplayRecordingMode",
+  "allDeclaredFields":true
 },
 {
   "name":"com.zenith.util.Config$Client$Ping",
