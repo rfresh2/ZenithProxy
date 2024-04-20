@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 public class ActionLimiterCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
             "actionLimiter",
             CommandCategory.MODULE,
             "Limits player actions",
@@ -35,7 +35,8 @@ public class ActionLimiterCommand extends Command {
                 "allowEnderChest on/off",
                 "allowUseItem on/off",
                 "allowChat on/off"
-            )
+            ),
+                asList("al")
         );
     }
 
