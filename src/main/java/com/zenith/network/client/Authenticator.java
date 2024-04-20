@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
@@ -217,9 +218,15 @@ public class Authenticator {
             AUTH_LOG.debug("Auth token refresh time is negative? {}", time);
             return;
         }
+        // random offset to prevent multiple instances possibly refreshing at the same time
+        var randomOffsetMs = ThreadLocalRandom.current().nextInt(5) * 60L * 1000L;
+        // fail-safe to avoid spamming refreshes
+        var minRefreshDelayMs = 30L * 1000L;
+        var expireTimeDelayMs = Math.max(minRefreshDelayMs, time - minRefreshDelayMs - randomOffsetMs);
+        var maxRefreshIntervalMs = (CONFIG.authentication.maxRefreshIntervalMins * 60L * 1000L) - randomOffsetMs;
         this.refreshTask = EXECUTOR.schedule(
             this::executeAuthCacheRefresh,
-            Math.min(time, Duration.ofHours(6).toMillis()),
+            Math.max(minRefreshDelayMs, Math.min(expireTimeDelayMs, maxRefreshIntervalMs)),
             MILLISECONDS);
         AUTH_LOG.debug("Auth cache refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
     }

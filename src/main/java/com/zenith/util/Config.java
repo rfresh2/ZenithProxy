@@ -38,6 +38,7 @@ public final class Config {
         public int msaLoginAttemptsBeforeCacheWipe = 2;
         public boolean openBrowserOnLogin = true;
         public boolean alwaysRefreshOnLogin = false;
+        public int maxRefreshIntervalMins = 360; // 6 hrs
 
         public enum AccountType {
             @SerializedName("msa") MSA,
