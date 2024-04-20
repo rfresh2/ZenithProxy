@@ -18,14 +18,17 @@ import java.util.stream.IntStream;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.DEFAULT_LOG;
+import static java.util.Arrays.asList;
 
 public class TablistCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simple(
+        return CommandUsage.simpleAliases(
             "tablist",
             CommandCategory.INFO,
-            "Displays the current server's tablist"
+            "Displays the current server's tablist",
+                asList("tab")
+
         );
     }
 
