@@ -32,8 +32,6 @@ import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
 import com.zenith.util.Wait;
-import com.zenith.via.ZenithClientChannelInitializer;
-import com.zenith.via.ZenithServerChannelInitializer;
 import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.NonNull;
@@ -320,7 +318,7 @@ public class Proxy {
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
-        this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
+//        this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);
     }
 
@@ -355,7 +353,7 @@ public class Proxy {
         var port = CONFIG.server.bind.port;
         SERVER_LOG.info("Starting server on {}:{}...", address, port);
         this.server = new TcpServer(address, port, MinecraftProtocol::new, tcpManager);
-        this.server.setGlobalFlag(MinecraftConstants.SERVER_CHANNEL_INITIALIZER, ZenithServerChannelInitializer.FACTORY);
+//        this.server.setGlobalFlag(MinecraftConstants.SERVER_CHANNEL_INITIALIZER, ZenithServerChannelInitializer.FACTORY);
         this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
         var serverInfoBuilder = new CustomServerInfoBuilder();
         this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);
