@@ -401,6 +401,11 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
+    public void connect(final boolean wait, final boolean transferring) {
+        this.session.connect(wait, transferring);
+    }
+
+    @Override
     public String getHost() {
         return this.session.getHost();
     }
@@ -453,6 +458,11 @@ public class ServerConnection implements Session, SessionListener {
     @Override
     public void setFlag(String key, Object value) {
         this.session.setFlag(key, value);
+    }
+
+    @Override
+    public void setFlags(final Map<String, Object> map) {
+
     }
 
     @Override

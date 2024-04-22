@@ -3,11 +3,11 @@ package com.zenith.cache.data;
 import com.github.steveice10.mc.protocol.data.game.entity.EntityEvent;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.GlobalPos;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerType;
 import com.github.steveice10.mc.protocol.data.game.inventory.CreativeGrabAction;
+import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundChangeDifficultyPacket;
@@ -178,6 +178,7 @@ public class PlayerCache implements CachedData {
             case EquipmentSlot.BOOTS -> inventory.getItemStack(8);
             case EquipmentSlot.OFF_HAND -> inventory.getItemStack(45);
             case EquipmentSlot.MAIN_HAND -> inventory.getItemStack(heldItemSlot + 36);
+            default -> null; // EquipmentSlot.BODY doesn't apply to players, only entities like horses
         };
     }
 

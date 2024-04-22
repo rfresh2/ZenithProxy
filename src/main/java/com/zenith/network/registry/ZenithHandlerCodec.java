@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundKe
 import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundPongPacket;
 import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
 import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
+import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundSelectKnownPacks;
 import com.github.steveice10.mc.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 import com.github.steveice10.mc.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.*;
@@ -110,6 +111,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundPingPacket.class, new PingHandler())
                 .registerInbound(ClientboundKeepAlivePacket.class, new CKeepAliveHandler())
                 .registerInbound(ClientboundDisconnectPacket.class, new CDisconnectHandler())
+                .registerInbound(ClientboundSelectKnownPacks.class, new CSelectKnownPacksHandler())
                 .registerPostOutbound(ServerboundFinishConfigurationPacket.class, new PostOutgoingFinishConfigurationHandler())
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ClientSession>builder()

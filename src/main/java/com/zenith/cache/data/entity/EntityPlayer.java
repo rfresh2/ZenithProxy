@@ -85,12 +85,12 @@ public class EntityPlayer extends EntityLiving {
         }
         double e = value;
         for (AttributeModifier modifier : attribute.getModifiers()) {
-            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_BASE) {
                 e += value * modifier.getAmount();
             }
         }
         for (AttributeModifier modifier : attribute.getModifiers()) {
-            if (modifier.getOperation() == ModifierOperation.MULTIPLY) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_TOTAL) {
                 e *= 1.0 + modifier.getAmount();
             }
         }

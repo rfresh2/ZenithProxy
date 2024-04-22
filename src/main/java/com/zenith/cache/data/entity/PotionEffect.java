@@ -1,13 +1,10 @@
 package com.zenith.cache.data.entity;
 
 import com.github.steveice10.mc.protocol.data.game.entity.Effect;
-import com.github.steveice10.opennbt.mini.MNBT;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
-
-import javax.annotation.Nullable;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +17,5 @@ public class PotionEffect {
     public boolean ambient;
     public boolean showParticles;
     public boolean showIcon;
-    @Nullable
-    public MNBT factorData;
+    public boolean blend;
 }

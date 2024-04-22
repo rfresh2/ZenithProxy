@@ -10,8 +10,8 @@ public class ZenithClientChannelInitializer extends TcpClientChannelInitializer 
     public static Factory FACTORY = ZenithClientChannelInitializer::new;
     private final TcpClientSession client;
 
-    public ZenithClientChannelInitializer(final TcpClientSession client) {
-        super(client);
+    public ZenithClientChannelInitializer(final TcpClientSession client, final boolean isTransferring) {
+        super(client, isTransferring);
         this.client = client;
     }
 

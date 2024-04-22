@@ -27,21 +27,19 @@ def setup_execute(config):
         print("Auto-selecting the java release channel based on current system")
         release_channel = "java"
 
-    ## Prompt can be added back for 1.20.5+ versions
-    minecraft_version = "1.20.4"
-    # while True:
-    #     print("Select a Minecraft version: (1/2)")
-    #     print("1. 1.20.1")
-    #     print("2. 1.20.4")
-    #     i1 = input("> ")
-    #     if i1 == "1":
-    #         minecraft_version = "1.20.1"
-    #         break
-    #     elif i1 == "2":
-    #         minecraft_version = "1.20.4"
-    #         break
-    #     else:
-    #         print("Invalid input. Enter 1 or 2")
+    while True:
+        print("Select a Minecraft version: (1/2)")
+        print("1. 1.20.4")
+        print("2. 1.20.5")
+        i1 = input("> ")
+        if i1 == "1":
+            minecraft_version = "1.20.4"
+            break
+        elif i1 == "2":
+            minecraft_version = "1.20.5"
+            break
+        else:
+            print("Invalid input. Enter 1 or 2")
 
     config.auto_update = True
     config.auto_update_launcher = True

@@ -3,7 +3,7 @@ package com.zenith.cache.data.entity;
 import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEquipmentPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateMobEffectPacket;
 import com.github.steveice10.packetlib.packet.Packet;
@@ -36,7 +36,7 @@ public class EntityLiving extends Entity {
                 potionEffect.isAmbient(),
                 potionEffect.isShowParticles(),
                 potionEffect.isShowIcon(),
-                potionEffect.getFactorData()
+                potionEffect.isBlend()
             )));
         }
         if (!isSelfPlayer() && !getEquipment().isEmpty()) {

@@ -9,8 +9,10 @@ import static com.zenith.Shared.CACHE;
 public class CRegistryDataHandler implements PacketHandler<ClientboundRegistryDataPacket, ClientSession> {
     @Override
     public ClientboundRegistryDataPacket apply(final ClientboundRegistryDataPacket packet, final ClientSession session) {
-        CACHE.getConfigurationCache().setRegistry(packet.getRegistry());
-        CACHE.getChunkCache().updateRegistryTag(packet.getRegistry());
+        CACHE.getConfigurationCache().getRegistryEntries().put(packet.getRegistry(), packet.getEntries());
+        if ("minecraft:dimension_type".equals(packet.getRegistry())) {
+            CACHE.getChunkCache().updateDimensionRegistry(packet.getEntries());
+        }
         return packet;
     }
 }

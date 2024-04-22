@@ -10,6 +10,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.cache.data.chunk.Dimension;
 import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
@@ -51,7 +52,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
+                CACHE.getChunkCache().getDimensionRegistry().values().stream().map(Dimension::dimensionName).toArray(String[]::new),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
@@ -59,7 +60,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
                 CACHE.getPlayerCache().isDoLimitedCrafting(),
                 new PlayerSpawnInfo(
-                    CACHE.getChunkCache().getCurrentDimension().dimensionName(),
+                    CACHE.getChunkCache().getCurrentDimension().dimensionId(),
                     CACHE.getChunkCache().getWorldName(),
                     CACHE.getChunkCache().getHashedSeed(),
                     GameMode.SPECTATOR,
@@ -68,14 +69,15 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getChunkCache().isFlat(),
                     CACHE.getPlayerCache().getLastDeathPos(),
                     CACHE.getPlayerCache().getPortalCooldown()
-                )
+                ),
+                false
             ));
         } else {
             EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
             session.send(new ClientboundLoginPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
+                CACHE.getChunkCache().getDimensionRegistry().values().stream().map(Dimension::dimensionName).toArray(String[]::new),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
@@ -83,7 +85,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
                 CACHE.getPlayerCache().isDoLimitedCrafting(),
                 new PlayerSpawnInfo(
-                    CACHE.getChunkCache().getCurrentDimension().dimensionName(),
+                    CACHE.getChunkCache().getCurrentDimension().dimensionId(),
                     CACHE.getChunkCache().getWorldName(),
                     CACHE.getChunkCache().getHashedSeed(),
                     CACHE.getPlayerCache().getGameMode(),
@@ -92,14 +94,14 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getChunkCache().isFlat(),
                     CACHE.getPlayerCache().getLastDeathPos(),
                     CACHE.getPlayerCache().getPortalCooldown()
-                )
+                ),
+                false
             ));
             if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
             CustomServerInfoBuilder serverInfoBuilder = Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
             session.send(new ClientboundServerDataPacket(
                 serverInfoBuilder.getMotd(),
-                Proxy.getInstance().getServerIcon(),
-                false
+                Proxy.getInstance().getServerIcon()
             ));
         }
     }

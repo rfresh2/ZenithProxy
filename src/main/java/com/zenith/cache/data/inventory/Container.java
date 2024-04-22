@@ -1,7 +1,7 @@
 package com.zenith.cache.data.inventory;
 
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.inventory.ContainerType;
+import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 

@@ -1,7 +1,7 @@
 package com.zenith.feature.items;
 
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.inventory.*;
+import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.zenith.cache.data.inventory.Container;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -47,16 +47,16 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                 if (isStackEmpty(mouseStack)) {
                     // round up to the nearest half stack
                     final int halfStackSize = (int) Math.ceil(clickStack.getAmount() / 2.0);
-                    predictedMouseStack = new ItemStack(clickStack.getId(), halfStackSize, clickStack.getNbt());
-                    changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() - halfStackSize, clickStack.getNbt()));
+                    predictedMouseStack = new ItemStack(clickStack.getId(), halfStackSize, clickStack.getDataComponents());
+                    changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() - halfStackSize, clickStack.getDataComponents()));
                 } else {
                     // if both stacks are the same item, place one item from the mouse stack into clickStack
                     //   if clickStack is full, return null
                     if (mouseStack.getId() == clickStack.getId()) {
                         if (clickStack.getAmount() == ITEMS.getItemData(clickStack.getId()).getStackSize()) return null;
                         var newMouseStackAmount = mouseStack.getAmount() - 1;
-                        predictedMouseStack = newMouseStackAmount == 0 ? Container.EMPTY_STACK : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getNbt());
-                        changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() + 1, clickStack.getNbt()));
+                        predictedMouseStack = newMouseStackAmount == 0 ? Container.EMPTY_STACK : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getDataComponents());
+                        changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() + 1, clickStack.getDataComponents()));
                     } else {
                         // if stacks are different, swap them
                         predictedMouseStack = clickStack;
@@ -97,7 +97,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                 // drop 1 item from the mouse stack
                 predictedMouseStack = mouseStack.getAmount() == 1
                     ? Container.EMPTY_STACK
-                    : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getNbt());
+                    : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getDataComponents());
             }
         }
         return new ServerboundContainerClickPacket(
@@ -162,7 +162,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                     slotId,
                     clickStack.getAmount() == 1
                         ? Container.EMPTY_STACK
-                        : new ItemStack(clickStack.getId(), clickStack.getAmount() - 1, clickStack.getNbt()));
+                        : new ItemStack(clickStack.getId(), clickStack.getAmount() - 1, clickStack.getDataComponents()));
             }
             case DROP_SELECTED_STACK -> {
                 // drop the entire stack from the selected slot

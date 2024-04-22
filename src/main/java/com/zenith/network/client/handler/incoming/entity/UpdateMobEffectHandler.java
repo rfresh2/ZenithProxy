@@ -24,7 +24,7 @@ public class UpdateMobEffectHandler implements ClientEventLoopPacketHandler<Clie
                     packet.isAmbient(),
                     packet.isShowParticles(),
                     packet.isShowIcon(),
-                    packet.getFactorData()
+                    packet.isBlend()
                 ));
             } else {
                 CLIENT_LOG.debug("Received ServerEntityEffectPacket for invalid entity (id={})", packet.getEntityId());

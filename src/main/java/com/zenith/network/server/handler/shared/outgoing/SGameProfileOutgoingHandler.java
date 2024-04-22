@@ -63,7 +63,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(clientGameProfile);
             if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
-                return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
+                return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false);
             } else {
                 if (!CONFIG.server.spectator.allowSpectator) {
                     session.disconnect("Spectator mode is disabled");
@@ -82,7 +82,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     spectatorFakeProfile.setProperties(spectatorProfileProperties);
                 }
                 session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
-                return new ClientboundGameProfilePacket(spectatorFakeProfile);
+                return new ClientboundGameProfilePacket(spectatorFakeProfile, false);
             }
         } catch (final Throwable e) {
             session.disconnect("Login Failed", e);

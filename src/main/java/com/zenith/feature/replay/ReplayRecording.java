@@ -17,6 +17,7 @@ import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGam
 import com.github.steveice10.packetlib.Session;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zenith.Proxy;
+import com.zenith.cache.data.chunk.Dimension;
 import com.zenith.feature.spectator.SpectatorPacketProvider;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -85,14 +86,14 @@ public class ReplayRecording implements Closeable {
 
     // Start recording while we already have a logged in session
     private void lateStartRecording() {
-        writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
+        writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
         CACHE.getConfigurationCache().getPackets(packet -> writePacket0(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
         writePacket0(Instant.now().toEpochMilli(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
         writePacket0(Instant.now().toEpochMilli(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
         writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
-            CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
+            CACHE.getChunkCache().getDimensionRegistry().values().stream().map(Dimension::dimensionName).toArray(String[]::new),
             CACHE.getPlayerCache().getMaxPlayers(),
             CACHE.getChunkCache().getServerViewDistance(),
             CACHE.getChunkCache().getServerSimulationDistance(),
@@ -100,7 +101,7 @@ public class ReplayRecording implements Closeable {
             CACHE.getPlayerCache().isEnableRespawnScreen(),
             CACHE.getPlayerCache().isDoLimitedCrafting(),
             new PlayerSpawnInfo(
-                CACHE.getChunkCache().getCurrentDimension().dimensionName(),
+                CACHE.getChunkCache().getCurrentDimension().dimensionId(),
                 CACHE.getChunkCache().getWorldName(),
                 CACHE.getChunkCache().getHashedSeed(),
                 CACHE.getPlayerCache().getGameMode(),
@@ -109,7 +110,8 @@ public class ReplayRecording implements Closeable {
                 CACHE.getChunkCache().isFlat(),
                 CACHE.getPlayerCache().getLastDeathPos(),
                 CACHE.getPlayerCache().getPortalCooldown()
-            )
+            ),
+            false
         ), Proxy.getInstance().getClient());
         CACHE.getAllData()
             .forEach(d -> d.getPackets(packet -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient())));
@@ -226,7 +228,7 @@ public class ReplayRecording implements Closeable {
         if (packet instanceof ClientboundLoginPacket loginPacket) {
             recordSelfSpawn = true;
             if (preConnectSyncNeeded) {
-                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
+                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false), session, ProtocolState.LOGIN);
                 CACHE.getConfigurationCache().getPackets(packet2 -> writeToFile(Instant.now().toEpochMilli(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
                 writeToFile(Instant.now().toEpochMilli(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 writeToFile(Instant.now().toEpochMilli(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);

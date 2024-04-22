@@ -1,10 +1,10 @@
-name: 1.20.4 Build and Release
+name: 1.20.5 Build and Release
 
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+1.20.4.pre'
-      - '[0-9]+.[0-9]+.[0-9]+\+1.20.4'
+      - '[0-9]+.[0-9]+.[0-9]+\+1.20.5.pre'
+      - '[0-9]+.[0-9]+.[0-9]+\+1.20.5'
 
 jobs:
   build-java-and-linux-amd64:
