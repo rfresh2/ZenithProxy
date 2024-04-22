@@ -429,6 +429,12 @@ public final class Config {
             public final Whitelist whitelist = new Whitelist();
             public final ESP esp = new ESP();
             public final ChatHistory chatHistory = new ChatHistory();
+            public final ServerSwitcher serverSwitcher = new ServerSwitcher();
+
+            public static class ServerSwitcher {
+                public ArrayList<ServerSwitcherServer> servers = new ArrayList<>();
+                public record ServerSwitcherServer(String name, String address, int port) { }
+            }
 
             public static class ChatHistory {
                 public boolean enable = false;

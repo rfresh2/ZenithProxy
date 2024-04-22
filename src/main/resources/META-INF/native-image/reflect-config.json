@@ -392,6 +392,9 @@
   "allDeclaredFields":true
 },
 {
+  "name":"com.github.steveice10.packetlib.tcp.TcpClientChannelInitializer"
+},
+{
   "name":"com.github.steveice10.packetlib.tcp.TcpClientSession$1"
 },
 {
@@ -1289,6 +1292,16 @@
   "name":"com.zenith.util.Config$Server$Extra$ESP",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Server$Extra$ServerSwitcher",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.util.Config$Server$Extra$ServerSwitcher$ServerSwitcherServer",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","int"] }, {"name":"address","parameterTypes":[] }, {"name":"name","parameterTypes":[] }, {"name":"port","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.util.Config$Server$Extra$ServerTimeout",

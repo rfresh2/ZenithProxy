@@ -90,6 +90,7 @@ public class CommandManager {
            new SendMessageCommand(),
            new ServerCommand(),
            new ServerConnectionCommand(),
+           new ServerSwitcherCommand(),
            new SpammerCommand(),
            new SpectatorCommand(),
            new SpookCommand(),
