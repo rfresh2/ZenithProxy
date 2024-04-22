@@ -98,6 +98,7 @@ public class CommandManager {
            new StatusCommand(),
            new TablistCommand(),
            new ThemeCommand(),
+           new TransferCommand(),
            new UpdateCommand(),
            new ViaVersionCommand(),
            new VisualRangeCommand(),

@@ -8,6 +8,8 @@ import com.github.steveice10.mc.protocol.data.game.scoreboard.NameTagVisibility;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamAction;
 import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamColor;
 import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundDisconnectPacket;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
+import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundTransferPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
@@ -380,6 +382,14 @@ public class ServerConnection implements Session, SessionListener {
         }
         this.currentTeamMembers = teamMembers;
         SERVER_LOG.debug("Synced Team members: {} for {}", currentTeamMembers, this.profileCache.getProfile().getName());
+    }
+
+    public void transfer(final String address, final int port) {
+        send(new ClientboundStoreCookiePacket("zenith-transfer-src", CONFIG.server.proxyIP.getBytes()), future -> {
+            send(new ClientboundTransferPacket(address, port), future2 -> {
+                this.session.disconnect(Component.text("Transferring to " + address + ":" + port));
+            });
+        });
     }
 
     //
