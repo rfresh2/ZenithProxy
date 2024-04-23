@@ -5,7 +5,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundCh
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
-import org.jetbrains.annotations.Nullable;
 
 import static com.zenith.Shared.*;
 
@@ -16,19 +15,19 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
         if (command.isBlank()) return packet;
         if (CONFIG.inGameCommands.slashCommands
             && CONFIG.inGameCommands.enable
-            && (IN_GAME_COMMAND.handleInGameCommand(command,
-                                                    session,
-                                                    CONFIG.inGameCommands.slashCommandsReplacesServerCommands)
-                || CONFIG.inGameCommands.slashCommandsReplacesServerCommands))
+            && (IN_GAME_COMMAND.handleInGameCommand(
+                command,
+                session,
+                CONFIG.inGameCommands.slashCommandsReplacesServerCommands)
+            || CONFIG.inGameCommands.slashCommandsReplacesServerCommands))
                 return null;
-        return replaceExtraChatServerCommands(packet, session);
+        return replaceExtraChatServerCommands(command, session) ? packet : null;
     }
 
-    private @Nullable ServerboundChatCommandPacket replaceExtraChatServerCommands(
-        final ServerboundChatCommandPacket packet,
+    public static boolean replaceExtraChatServerCommands(
+        final String command,
         final ServerConnection session
     ) {
-        final String command = packet.getCommand();
         final String commandLowercased = command.toLowerCase().split(" ")[0];
         // todo: replace these by executing `extraChat <cmd>`?
         return switch (commandLowercased) {
@@ -36,11 +35,11 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
                 CONFIG.client.extra.chat.ignoreList.forEach(s -> session.send(new ClientboundSystemChatPacket(
                     ComponentSerializer.minedown(
                         "&c" + s.getUsername()), true)));
-                yield null;
+                yield false;
             }
             case "ignoredeathmsgs" -> { // todo
                 session.sendAsyncAlert("&cNot implemented yet");
-                yield null;
+                yield false;
             }
             case "ignore" -> {
                 String[] split = command.split(" ");
@@ -49,7 +48,7 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
                     if (PLAYER_LISTS.getIgnoreList().contains(player)) {
                         PLAYER_LISTS.getIgnoreList().remove(player);
                         session.sendAsyncAlert("&cRemoved " + player + " from ignore list");
-                        yield null;
+                        yield false;
                     }
                     PLAYER_LISTS.getIgnoreList().add(player).ifPresentOrElse(
                         ignoreEntry -> session.sendAsyncAlert("&cAdded " + ignoreEntry.getUsername() + " to ignore list"),
@@ -58,33 +57,33 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
                 } else {
                     session.sendAsyncAlert("&cInvalid syntax. Usage: /ignore <name>");
                 }
-                yield null;
+                yield false;
             }
             case "togglechat" -> {
                 CONFIG.client.extra.chat.hideChat = !CONFIG.client.extra.chat.hideChat;
                 saveConfigAsync();
                 session.sendAsyncAlert("&cChat toggled " + (CONFIG.client.extra.chat.hideChat ? "off" : "on") + "&r");
-                yield null;
+                yield false;
             }
             case "toggleprivatemsgs" -> {
                 CONFIG.client.extra.chat.hideWhispers = !CONFIG.client.extra.chat.hideWhispers;
                 saveConfigAsync();
                 session.sendAsyncAlert("&cWhispers messages toggled " + (CONFIG.client.extra.chat.hideWhispers ? "off" : "on") + "&r");
-                yield null;
+                yield false;
             }
             case "toggledeathmsgs" -> {
                 CONFIG.client.extra.chat.hideDeathMessages = !CONFIG.client.extra.chat.hideDeathMessages;
                 saveConfigAsync();
                 session.sendAsyncAlert("&cDeath messages toggled " + (CONFIG.client.extra.chat.hideDeathMessages ? "off" : "on") + "&r");
-                yield null;
+                yield false;
             }
             case "toggleconnectionmsgs" -> {
                 CONFIG.client.extra.chat.showConnectionMessages = !CONFIG.client.extra.chat.showConnectionMessages;
                 saveConfigAsync();
                 session.sendAsyncAlert("&cConnection messages toggled " + (CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off") + "&r");
-                yield null;
+                yield false;
             }
-            default -> packet;
+            default -> true;
         };
     }
 }

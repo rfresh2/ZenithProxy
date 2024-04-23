@@ -232,6 +232,7 @@ public final class ZenithHandlerCodec {
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
                 .registerInbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
+                .registerOutbound(ServerboundChatCommandSignedPacket.class, new SignedChatCommandHandler())
                 .registerInbound(ServerboundChatPacket.class, new ChatHandler())
                 .registerInbound(ServerboundClientInformationPacket.class, new ClientInformationHandler())
                 .registerInbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionHandler())
