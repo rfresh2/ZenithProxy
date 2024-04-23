@@ -93,6 +93,7 @@ public class CommandManager {
            new ServerSwitcherCommand(),
            new SpammerCommand(),
            new SpectatorCommand(),
+           new SpectatorSwapCommand(),
            new SpookCommand(),
            new StalkCommand(),
            new StatsCommand(),

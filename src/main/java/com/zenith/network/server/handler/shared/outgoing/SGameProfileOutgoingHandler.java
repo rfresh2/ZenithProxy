@@ -28,9 +28,22 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 session.disconnect("Failed to Login");
                 return null;
             }
+            // this has some bearing on authorization
+            boolean onlySpectator = false; // can be set by cookie. or forcefully set if they're only on spectator whitelist
+            // this has no bearing on authorization
+            // todo: does this make any sense to keep?
+            boolean onlyControllingPlayer = false; // only set by cookie
+            if (session.isTransferring()) {
+                String spectatorCookieValue = session.getCookies().get(ServerConnection.COOKIE_ZENITH_SPECTATOR);
+                if (spectatorCookieValue != null) {
+                    var value = Boolean.parseBoolean(spectatorCookieValue);
+                    if (value) onlySpectator = true;
+                    else onlyControllingPlayer = true;
+                }
+            }
             if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
                 if (CONFIG.server.spectator.allowSpectator && PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
-                    session.setOnlySpectator(true);
+                    onlySpectator = true;
                 } else {
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                     SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
@@ -38,11 +51,16 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     return null;
                 }
             }
+            if (onlySpectator && onlyControllingPlayer) {
+                SERVER_LOG.debug("Disconnecting: {} as they cannot be both a spectator and controlling player", clientGameProfile.getName());
+                session.disconnect("Invalid login state");
+                return null;
+            }
             SERVER_LOG.info("Username: {} UUID: {} [{}] has passed the whitelist check!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
             session.setWhitelistChecked(true);
             synchronized (this) {
                 if (!Proxy.getInstance().isConnected()) {
-                    if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
+                    if (CONFIG.client.extra.autoConnectOnLogin && !onlySpectator) {
                         Proxy.getInstance().connect();
                     } else {
                         session.disconnect("Not connected to server!");
@@ -62,28 +80,31 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             }
             SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(clientGameProfile);
-            if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
+            if (!onlySpectator && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
                 return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false);
-            } else {
-                if (!CONFIG.server.spectator.allowSpectator) {
-                    session.disconnect("Spectator mode is disabled");
-                    return null;
-                }
-                SERVER_LOG.info("Logging in {} [{}] as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString());
-                session.setSpectator(true);
-                final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
-                                                                         clientGameProfile.getName());
-                // caching assumes the spectatorUUID is immutable
-                if (spectatorProfileProperties == null) {
-                    SessionService sessionService = new SessionService();
-                    sessionService.fillProfileProperties(spectatorFakeProfile);
-                    spectatorProfileProperties = spectatorFakeProfile.getProperties();
-                } else {
-                    spectatorFakeProfile.setProperties(spectatorProfileProperties);
-                }
-                session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
-                return new ClientboundGameProfilePacket(spectatorFakeProfile, false);
             }
+            if (onlyControllingPlayer) { // the above operation failed and we don't want to be put into spectator
+                session.disconnect("Someone is already controlling the player");
+                return null;
+            }
+            if (!CONFIG.server.spectator.allowSpectator) {
+                session.disconnect("Spectator mode is disabled");
+                return null;
+            }
+            SERVER_LOG.info("Logging in {} [{}] as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString());
+            session.setSpectator(true);
+            final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
+                                                                     clientGameProfile.getName());
+            // caching assumes the spectatorUUID is immutable
+            if (spectatorProfileProperties == null) {
+                SessionService sessionService = new SessionService();
+                sessionService.fillProfileProperties(spectatorFakeProfile);
+                spectatorProfileProperties = spectatorFakeProfile.getProperties();
+            } else {
+                spectatorFakeProfile.setProperties(spectatorProfileProperties);
+            }
+            session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
+            return new ClientboundGameProfilePacket(spectatorFakeProfile, false);
         } catch (final Throwable e) {
             session.disconnect("Login Failed", e);
             return null;

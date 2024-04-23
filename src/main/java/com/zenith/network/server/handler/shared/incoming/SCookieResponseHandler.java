@@ -14,7 +14,11 @@ public class SCookieResponseHandler implements PacketHandler<ServerboundCookieRe
     @Override
     public ServerboundCookieResponsePacket apply(final ServerboundCookieResponsePacket packet, final ServerConnection session) {
         if (session.isTransferring() && !session.isConfigured()) {
-            var cookieKey = packet.getKey();
+            if (!packet.getKey().startsWith("minecraft:")) {
+                SERVER_LOG.debug("Received unexpected cookie response: {}", packet.getKey());
+                return null;
+            }
+            var cookieKey = packet.getKey().split("minecraft:")[1];
             // todo: refactor this logic so we can cleanly add or remove cookies as needed
             if (cookieKey.equals(ServerConnection.COOKIE_ZENITH_TRANSFER_SRC)) {
                 session.setReceivedTransferSrcCookie(true);

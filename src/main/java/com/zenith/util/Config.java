@@ -487,6 +487,24 @@ public final class Config {
              else
                 return this.proxyIP;
         }
+
+        public String getProxyAddressForTransfer() {
+            // get only the IP/address part. no port
+            if (this.proxyIP.contains(":")) {
+                return this.proxyIP.split(":")[0];
+            } else {
+                return this.proxyIP;
+            }
+        }
+
+        public int getProxyPortForTransfer() {
+            // get only the port part. no IP/address
+            if (this.proxyIP.contains(":")) {
+                return Integer.parseInt(this.proxyIP.split(":")[1]);
+            } else {
+                return this.bind.port;
+            }
+        }
     }
 
     public static final class InteractiveTerminal {

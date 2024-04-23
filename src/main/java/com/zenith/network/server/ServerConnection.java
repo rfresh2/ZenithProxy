@@ -109,7 +109,6 @@ public class ServerConnection implements Session, SessionListener {
     // we have performed the configuration phase at zenith
     // any subsequent configurations should pass through to client
     protected boolean isConfigured = false;
-    protected boolean onlySpectator = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
@@ -392,13 +391,18 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public void transfer(final String address, final int port) {
-        sendAsync(new ClientboundStoreCookiePacket("zenith-transfer-src", CONFIG.server.proxyIP.getBytes()));
+        sendAsync(new ClientboundStoreCookiePacket(ServerConnection.COOKIE_ZENITH_TRANSFER_SRC, CONFIG.server.proxyIP.getBytes()));
         sendAsync(new ClientboundTransferPacket(address, port));
         disconnect(Component.text("Transferring to " + address + ":" + port));
     }
 
     public void transferToSpectator(final String address, final int port) {
-        sendAsync(new ClientboundStoreCookiePacket("zenith-spectator", new byte[] {1}));
+        sendAsync(new ClientboundStoreCookiePacket(ServerConnection.COOKIE_ZENITH_SPECTATOR, "true".getBytes()));
+        transfer(address, port);
+    }
+
+    public void transferToControllingPlayer(final String address, final int port) {
+        sendAsync(new ClientboundStoreCookiePacket(ServerConnection.COOKIE_ZENITH_SPECTATOR, "false".getBytes()));
         transfer(address, port);
     }
 

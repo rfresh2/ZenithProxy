@@ -101,6 +101,19 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Entered playercam!&r"), false));
                 }
             }
+            case "swap" -> {
+                var spectatorProfile = session.getProfileCache().getProfile();
+                if (spectatorProfile == null) return;
+                if (!PLAYER_LISTS.getWhitelist().contains(spectatorProfile.getId())) {
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cYou are not whitelisted!&r"), false));
+                    return;
+                }
+                if (Proxy.getInstance().getActivePlayer() != null) {
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cSomeone is already controlling the player!&r"), false));
+                    return;
+                }
+                session.transferToControllingPlayer(CONFIG.server.getProxyAddressForTransfer(), CONFIG.server.getProxyPortForTransfer());
+            }
             default -> handleCommandInput("help", session);
         }
     }
