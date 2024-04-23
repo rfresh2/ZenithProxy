@@ -19301,7 +19301,9 @@
     "reinforced_deepslate": 1,
     "decorated_pot": 4809,
     "crafter": 1,
-    "trial_spawner": 1
+    "trial_spawner": 1,
+    "vault": 1,
+    "heavy_core": 4810
   },
   "shapes": {
     "0": [],
@@ -136945,6 +136947,16 @@
         0.9375,
         1.0,
         0.9375
+      ]
+    ],
+    "4810": [
+      [
+        0.25,
+        0.0,
+        0.25,
+        0.75,
+        0.5,
+        0.75
       ]
     ]
   }

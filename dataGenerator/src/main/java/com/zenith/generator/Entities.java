@@ -44,8 +44,8 @@ public class Entities implements Generator {
         entityDesc.addProperty("name", registryKey.getPath());
 
         entityDesc.addProperty("displayName", Language.getInstance().getOrDefault(entityType.getDescriptionId()));
-        entityDesc.addProperty("width", entityType.getDimensions().width);
-        entityDesc.addProperty("height", entityType.getDimensions().height);
+        entityDesc.addProperty("width", entityType.getDimensions().width());
+        entityDesc.addProperty("height", entityType.getDimensions().height());
 
         String entityTypeString = "UNKNOWN";
         MinecraftServer minecraftServer = DataGenerator.SERVER_INSTANCE;

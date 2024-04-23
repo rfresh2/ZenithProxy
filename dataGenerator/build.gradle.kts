@@ -22,11 +22,11 @@ loom {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.20.4")
+    minecraft("com.mojang:minecraft:1.20.5")
     mappings(loom.layered {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.20.4:2024.04.14@zip")
     })
     modImplementation("net.fabricmc:fabric-loader:0.15.10")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.97.0+1.20.4")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.97.5+1.20.5")
 }

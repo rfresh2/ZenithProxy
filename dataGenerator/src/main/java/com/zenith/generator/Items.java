@@ -34,7 +34,7 @@ public class Items implements Generator {
         itemDesc.addProperty("name", registryKey.getPath());
 
         itemDesc.addProperty("displayName", Language.getInstance().getOrDefault(item.getDescriptionId()));
-        itemDesc.addProperty("stackSize", item.getMaxStackSize());
+        itemDesc.addProperty("stackSize", item.getDefaultMaxStackSize());
 
 //        List<Enchantment> enchantmentTargets = BuiltInRegistries.ENCHANTMENT.stream()
 //            .filter(enchantment -> enchantment.canEnchant(item.getDefaultInstance()))
@@ -46,8 +46,8 @@ public class Items implements Generator {
 //        }
 //        itemDesc.add("enchantCategories", enchantCategoriesArray);
 
-        if (item.canBeDepleted()) {
-            int maxDurability = item.getMaxDamage();
+        if (item.getDefaultInstance().isDamageableItem()) {
+            int maxDurability = item.getDefaultInstance().getMaxDamage();
             itemDesc.addProperty("maxDurability", maxDurability);
         }
         return itemDesc;

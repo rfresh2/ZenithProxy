@@ -53,7 +53,7 @@ public class Blocks implements Generator {
 
         blockDesc.addProperty("hardness", block.defaultDestroyTime());
         blockDesc.addProperty("resistance", block.getExplosionResistance());
-        blockDesc.addProperty("stackSize", blockItem.getMaxStackSize());
+        blockDesc.addProperty("stackSize", blockItem.getDefaultMaxStackSize());
         blockDesc.addProperty("diggable", block.defaultDestroyTime() != -1.0f);
         // todo: add material
 //        blockDesc.addProperty("material", findMatchingBlockMaterial(defaultState, materials));

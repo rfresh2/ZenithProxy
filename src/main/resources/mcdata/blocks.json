@@ -29713,10 +29713,15 @@
     "resistance": 50.0,
     "stackSize": 64,
     "diggable": true,
-    "defaultState": 26638,
+    "defaultState": 26644,
     "minStateId": 26638,
-    "maxStateId": 26643,
+    "maxStateId": 26649,
     "states": [
+      {
+        "name": "ominous",
+        "type": "bool",
+        "num_values": 2
+      },
       {
         "name": "trial_spawner_state",
         "type": "enum",
@@ -29729,6 +29734,68 @@
           "ejecting_reward",
           "cooldown"
         ]
+      }
+    ],
+    "boundingBox": "block"
+  },
+  {
+    "id": 1058,
+    "name": "vault",
+    "displayName": "Vault",
+    "hardness": 50.0,
+    "resistance": 50.0,
+    "stackSize": 64,
+    "diggable": true,
+    "defaultState": 26654,
+    "minStateId": 26650,
+    "maxStateId": 26681,
+    "states": [
+      {
+        "name": "facing",
+        "type": "enum",
+        "num_values": 4,
+        "values": [
+          "north",
+          "south",
+          "west",
+          "east"
+        ]
+      },
+      {
+        "name": "ominous",
+        "type": "bool",
+        "num_values": 2
+      },
+      {
+        "name": "vault_state",
+        "type": "enum",
+        "num_values": 4,
+        "values": [
+          "inactive",
+          "active",
+          "unlocking",
+          "ejecting"
+        ]
+      }
+    ],
+    "boundingBox": "block"
+  },
+  {
+    "id": 1059,
+    "name": "heavy_core",
+    "displayName": "Heavy Core",
+    "hardness": 10.0,
+    "resistance": 1200.0,
+    "stackSize": 64,
+    "diggable": true,
+    "defaultState": 26683,
+    "minStateId": 26682,
+    "maxStateId": 26683,
+    "states": [
+      {
+        "name": "waterlogged",
+        "type": "bool",
+        "num_values": 2
       }
     ],
     "boundingBox": "block"
