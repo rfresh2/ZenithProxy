@@ -87,6 +87,8 @@ public class AuthCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Authentication Type Set")
                               .primaryColor();
+                          Proxy.getInstance().cancelLogin();
+                          Proxy.getInstance().getAuthenticator().clearAuthCache();
                           return 1;
                       }))
                       .then(literal("emailAndPassword").executes(c -> {
@@ -94,6 +96,8 @@ public class AuthCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Authentication Type Set")
                               .primaryColor();
+                          Proxy.getInstance().cancelLogin();
+                          Proxy.getInstance().getAuthenticator().clearAuthCache();
                           return 1;
                       }))
                       .then(literal("deviceCode2").executes(c -> {
@@ -101,6 +105,8 @@ public class AuthCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Authentication Type Set")
                               .primaryColor();
+                          Proxy.getInstance().cancelLogin();
+                          Proxy.getInstance().getAuthenticator().clearAuthCache();
                           return 1;
                       }))
                       .then(literal("meteor").executes(c -> {
@@ -108,6 +114,8 @@ public class AuthCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Authentication Type Set")
                               .primaryColor();
+                          Proxy.getInstance().cancelLogin();
+                          Proxy.getInstance().getAuthenticator().clearAuthCache();
                           return 1;
                       }))
                       .then(literal("prism").executes(c -> {
@@ -115,6 +123,8 @@ public class AuthCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Authentication Type Set")
                               .primaryColor();
+                          Proxy.getInstance().cancelLogin();
+                          Proxy.getInstance().getAuthenticator().clearAuthCache();
                           return 1;
                       })))
             .then(literal("email").requires(this::validateTerminalSource)
