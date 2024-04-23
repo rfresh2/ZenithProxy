@@ -82,6 +82,13 @@ public class ServerConnection implements Session, SessionListener {
     // as requested by the player during login. may not be the same as what mojang api returns
     private @Nullable UUID loginProfileUUID;
     private int protocolVersion; // as reported by the client when they connected
+    protected boolean isTransferring = false;
+    // cookie keys
+    public static final String COOKIE_ZENITH_TRANSFER_SRC = "zenith-transfer-src";
+    protected boolean receivedTransferSrcCookie = false;
+    public static final String COOKIE_ZENITH_SPECTATOR = "zenith-spectator";
+    protected boolean receivedSpectatorCookie = false;
+    private final Map<String, String> cookies = new HashMap<>();
 
     public ServerConnection(final Session session) {
         ThreadLocalRandom.current().nextBytes(this.challenge);
@@ -385,11 +392,14 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public void transfer(final String address, final int port) {
-        send(new ClientboundStoreCookiePacket("zenith-transfer-src", CONFIG.server.proxyIP.getBytes()), future -> {
-            send(new ClientboundTransferPacket(address, port), future2 -> {
-                this.session.disconnect(Component.text("Transferring to " + address + ":" + port));
-            });
-        });
+        sendAsync(new ClientboundStoreCookiePacket("zenith-transfer-src", CONFIG.server.proxyIP.getBytes()));
+        sendAsync(new ClientboundTransferPacket(address, port));
+        disconnect(Component.text("Transferring to " + address + ":" + port));
+    }
+
+    public void transferToSpectator(final String address, final int port) {
+        sendAsync(new ClientboundStoreCookiePacket("zenith-spectator", new byte[] {1}));
+        transfer(address, port);
     }
 
     //

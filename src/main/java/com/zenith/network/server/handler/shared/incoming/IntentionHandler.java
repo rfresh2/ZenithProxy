@@ -23,6 +23,7 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
             }
             case TRANSFER -> {
                 SERVER_LOG.info("Transfer request from {}", session.getRemoteAddress());
+                session.setTransferring(true);
                 if (!CONFIG.server.acceptTransfers) {
                     session.disconnect("Transfers are disabled.");
                     return null;
