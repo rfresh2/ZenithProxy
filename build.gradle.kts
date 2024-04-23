@@ -55,10 +55,10 @@ dependencies {
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
-    shade("com.github.rfresh2.Discord4j:discord4j-core:b40c82ad47") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:3069dffbec") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:60956836fa") {
+    shade("com.github.rfresh2:MCProtocolLib:d1454557b8") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
