@@ -4,6 +4,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
@@ -12,6 +14,8 @@ import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
+
+import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
@@ -111,6 +115,18 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 if (Proxy.getInstance().getActivePlayer() != null) {
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cSomeone is already controlling the player!&r"), false));
                     return;
+                }
+                if (CONFIG.server.viaversion.enabled) {
+                    Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
+                        .filter(client -> client.getChannel() == session.getSession().getChannel())
+                        .map(con -> con.getProtocolInfo().getProtocolVersion())
+                        .map(ProtocolVersion::getProtocol)
+                        .findFirst();
+                    // TODO: uncomment when via updated
+//                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get() < ProtocolVersion.v1_20_5.getProtocol()) {
+//                        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cUnsupported Client MC Version&r"), false));
+//                        return;
+//                    }
                 }
                 session.transferToControllingPlayer(CONFIG.server.getProxyAddressForTransfer(), CONFIG.server.getProxyPortForTransfer());
             }

@@ -1,6 +1,8 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
@@ -11,6 +13,7 @@ import com.zenith.discord.Embed;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Config.Server.Extra.ServerSwitcher.ServerSwitcherServer;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
@@ -82,6 +85,22 @@ public class ServerSwitcherCommand extends Command {
                         .title("No player found");
                     return OK;
                 }
+                // TODO: uncomment when via updated
+                if (CONFIG.server.viaversion.enabled) {
+                    Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
+                        .filter(client -> client.getChannel() == currentPlayer.getSession().getChannel())
+                        .map(con -> con.getProtocolInfo().getProtocolVersion())
+                        .map(ProtocolVersion::getProtocol)
+                        .findFirst();
+//                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get() < ProtocolVersion.v1_20_5.getProtocol()) {
+//                        c.getSource().getEmbed()
+//                            .title("Unsupported Client MC Version")
+//                            .addField("Client Version", viaClientProtocolVersion.get().getName(), false)
+//                            .addField("Error", "The client version must be at least 1.20.5 to switch servers", false);
+//                        return ERROR;
+//                    }
+                }
+
                 currentPlayer.transfer(server.address(), server.port());
                 c.getSource().getEmbed()
                     .title("Switched To Server")
