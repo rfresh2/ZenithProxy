@@ -49,7 +49,7 @@ dependencies {
     shade("com.github.mwiede:jsch:0.2.17")
     shade("com.google.guava:guava:33.1.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
-    shade("ch.qos.logback:logback-classic:1.5.5")
+    shade("ch.qos.logback:logback-classic:1.5.6")
     shade("org.slf4j:slf4j-api:2.0.13")
     shade("org.slf4j:jul-to-slf4j:2.0.13")
     shade("com.mojang:brigadier:1.2.9")
@@ -80,7 +80,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.28.0") {
+    shade("org.redisson:redisson:3.29.0") {
         exclude(group = "io.netty")
     }
     shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion")
@@ -92,8 +92,8 @@ dependencies {
     shade("net.raphimc:ViaLoader:2.2.12")
     shade("com.viaversion:viaversion:4.9.3")
     shade("com.viaversion:viabackwards:4.9.2")
-    shade("org.jline:jline:3.25.1")
-    shade("org.jline:jline-terminal-jansi:3.25.1")
+    shade("org.jline:jline:3.26.0")
+    shade("org.jline:jline-terminal-jansi:3.26.0")
     shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     compileOnly("org.projectlombok:lombok:$lombokVersion")
