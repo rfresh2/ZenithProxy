@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing;
+package com.zenith.feature.world;
 
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.event.module.ClientBotTick;

@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing.raycast;
+package com.zenith.feature.world.raycast;
 
 import org.jetbrains.annotations.Nullable;
 

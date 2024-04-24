@@ -1,7 +1,7 @@
-package com.zenith.feature.pathing.blockdata;
+package com.zenith.feature.world.blockdata;
 
-import com.zenith.feature.pathing.BlockPos;
-import com.zenith.feature.pathing.CollisionBox;
+import com.zenith.feature.world.BlockPos;
+import com.zenith.feature.world.CollisionBox;
 
 import java.util.List;
 

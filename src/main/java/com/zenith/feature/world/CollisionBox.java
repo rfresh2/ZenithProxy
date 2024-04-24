@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing;
+package com.zenith.feature.world;
 
 public record CollisionBox(double minX, double maxX, double minY, double maxY, double minZ, double maxZ) {
     public boolean intersects(final CollisionBox collisionBox) {

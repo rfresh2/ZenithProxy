@@ -3,7 +3,7 @@ package com.zenith.module.impl;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
-import com.zenith.feature.pathing.Pathing;
+import com.zenith.feature.world.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;

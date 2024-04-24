@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing.raycast;
+package com.zenith.feature.world.raycast;
 
 import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
 import com.zenith.cache.data.entity.Entity;

@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing;
+package com.zenith.feature.world;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
