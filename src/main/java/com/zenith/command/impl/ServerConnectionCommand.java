@@ -12,6 +12,8 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.EXECUTOR;
+import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -25,10 +27,27 @@ public class ServerConnectionCommand extends Command {
             """
             Configures the MC server hosted by Zenith and players' connections to it
             
-            For Zenith -> destination MC server, use the `clientConnection` command
+            For Zenith -> destination MC server, use the `clientConnection` command.
+            
+            The `proxyIP` is the reported IP players should connect to. This is purely informational.
+            
+            The `bind` argument changes the port ZenithProxy listens on. The IP to connect to cannot be changed, its determined by the host machine.
+            IP you can run `curl https://api.ipify.org` in a terminal.
+            
+            The `ping` arguments configure the server list ping response ZenithProxy sends to players.
+            `onlinePlayers` = report MC profiles of players connected
+            `onlinePlayerCount` = report the number of players connected
+            `maxPlayers` = number of players that can connect (purely informational, does not actually limit)
+            `lanBroadcast` = LAN network ping broadcast
+            `log` = logs pings
+            
+            The `timeout` arguments configures how long until players are kicked due to read timeout (no packets received).
+            Read timeouts are caused by internet connection issues. A shorter timeout can help prevent the ZenithProxy
+            client from being kicked.
             """,
             asList(
-                "port <port>",
+                "proxyIP <ip>",
+                "bind port <port>",
                 "ping on/off",
                 "ping onlinePlayers on/off",
                 "ping onlinePlayerCount on/off",
@@ -44,6 +63,12 @@ public class ServerConnectionCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("serverConnection").requires(Command::validateAccountOwner)
+            .then(literal("proxyIP").then(argument("ip", wordWithChars()).executes(c -> {
+                CONFIG.server.proxyIP = getString(c, "ip");
+                c.getSource().getEmbed()
+                    .title("Proxy IP Set");
+                return OK;
+            })))
             .then(literal("port").then(argument("port", integer(1, 65535)).executes(context -> {
                 CONFIG.server.bind.port = getInteger(context, "port");
                 context.getSource().getEmbed()
@@ -122,6 +147,7 @@ public class ServerConnectionCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .primaryColor()
+            .addField("Proxy IP", CONFIG.server.proxyIP, false)
             .addField("Port", CONFIG.server.bind.port, false)
             .addField("Ping", toggleStr(CONFIG.server.ping.enabled), false)
             .addField("Ping Reports Online Players", toggleStr(CONFIG.server.ping.onlinePlayers), false)
