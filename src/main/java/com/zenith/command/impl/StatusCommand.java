@@ -153,7 +153,7 @@ public class StatusCommand extends Command {
                     // end row 1
                     .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("Dimension",
-                              (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().dimensionName().replace("minecraft:", ""): "None"),
+                              (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().name(): "None"),
                               true)
                     .addField("TPS", TPS.getTPS(), true)
                     // end row 2

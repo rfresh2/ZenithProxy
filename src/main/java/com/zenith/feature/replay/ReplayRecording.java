@@ -17,7 +17,6 @@ import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundGam
 import com.github.steveice10.packetlib.Session;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zenith.Proxy;
-import com.zenith.cache.data.chunk.Dimension;
 import com.zenith.feature.spectator.SpectatorPacketProvider;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -93,7 +92,7 @@ public class ReplayRecording implements Closeable {
         writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
-            CACHE.getChunkCache().getDimensionRegistry().values().stream().map(Dimension::dimensionName).toArray(String[]::new),
+            DIMENSION_DATA.dimensionNames().toArray(new String[0]),
             CACHE.getPlayerCache().getMaxPlayers(),
             CACHE.getChunkCache().getServerViewDistance(),
             CACHE.getChunkCache().getServerSimulationDistance(),
@@ -101,7 +100,7 @@ public class ReplayRecording implements Closeable {
             CACHE.getPlayerCache().isEnableRespawnScreen(),
             CACHE.getPlayerCache().isDoLimitedCrafting(),
             new PlayerSpawnInfo(
-                CACHE.getChunkCache().getCurrentDimension().dimensionId(),
+                CACHE.getChunkCache().getCurrentDimension().id(),
                 CACHE.getChunkCache().getWorldName(),
                 CACHE.getChunkCache().getHashedSeed(),
                 CACHE.getPlayerCache().getGameMode(),

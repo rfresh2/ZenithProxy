@@ -38,16 +38,14 @@ public class DimensionTypes implements Generator {
         JsonObject dimensionData = new JsonObject();
         dimensionData.addProperty("id", id);
         dimensionData.addProperty("name", key.location().getPath());
+        dimensionData.addProperty("minY", dimensionType.minY());
+        dimensionData.addProperty("height", dimensionType.height());
+        dimensionData.addProperty("buildHeight", dimensionType.minY() + dimensionType.height());
         dimensionData.addProperty("coordinateScale", dimensionType.coordinateScale());
         dimensionData.addProperty("hasCeiling", dimensionType.hasCeiling());
         dimensionData.addProperty("hasSkyLight", dimensionType.hasSkyLight());
-        dimensionData.addProperty("ultraWarm", dimensionType.ultraWarm());
-        dimensionData.addProperty("natural", dimensionType.natural());
-        dimensionData.addProperty("piglinSafe", dimensionType.piglinSafe());
         dimensionData.addProperty("bedWorks", dimensionType.bedWorks());
         dimensionData.addProperty("respawnAnchorWorks", dimensionType.respawnAnchorWorks());
-        dimensionData.addProperty("hasRaids", dimensionType.hasRaids());
-        dimensionData.addProperty("logicalHeight", dimensionType.logicalHeight());
         return dimensionData;
     }
 }

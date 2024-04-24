@@ -10,7 +10,6 @@ import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSe
 import com.github.steveice10.packetlib.Session;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
-import com.zenith.cache.data.chunk.Dimension;
 import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
@@ -52,7 +51,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getDimensionRegistry().values().stream().map(Dimension::dimensionName).toArray(String[]::new),
+                DIMENSION_DATA.dimensionNames().toArray(new String[0]),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
@@ -60,7 +59,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
                 CACHE.getPlayerCache().isDoLimitedCrafting(),
                 new PlayerSpawnInfo(
-                    CACHE.getChunkCache().getCurrentDimension().dimensionId(),
+                    CACHE.getChunkCache().getCurrentDimension().id(),
                     CACHE.getChunkCache().getWorldName(),
                     CACHE.getChunkCache().getHashedSeed(),
                     GameMode.SPECTATOR,
@@ -77,7 +76,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getDimensionRegistry().values().stream().map(Dimension::dimensionName).toArray(String[]::new),
+                DIMENSION_DATA.dimensionNames().toArray(new String[0]),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
@@ -85,7 +84,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
                 CACHE.getPlayerCache().isDoLimitedCrafting(),
                 new PlayerSpawnInfo(
-                    CACHE.getChunkCache().getCurrentDimension().dimensionId(),
+                    CACHE.getChunkCache().getCurrentDimension().id(),
                     CACHE.getChunkCache().getWorldName(),
                     CACHE.getChunkCache().getHashedSeed(),
                     CACHE.getPlayerCache().getGameMode(),

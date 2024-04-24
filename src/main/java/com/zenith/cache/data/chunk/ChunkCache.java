@@ -26,12 +26,11 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.dimension.DimensionData;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.BrandSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import lombok.Getter;
@@ -67,15 +66,7 @@ public class ChunkCache implements CachedData {
     // to do iteration, copy the key or value set into a new list, then iterate over that copied list.
     // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
-    protected static Int2ObjectMap<Dimension> VANILLA_DIMENSION_REGISTRY = new Int2ObjectOpenHashMap<>();
-    static {
-        VANILLA_DIMENSION_REGISTRY.put(0, new Dimension("minecraft:overworld", 0, 384, -64));
-        VANILLA_DIMENSION_REGISTRY.put(1, new Dimension("minecraft:overworld_caves", 1, 384, -64));
-        VANILLA_DIMENSION_REGISTRY.put(2, new Dimension("minecraft:the_end", 2, 256, 0));
-        VANILLA_DIMENSION_REGISTRY.put(3, new Dimension("minecraft:the_nether", 3, 256, 0));
-    }
-    protected final Int2ObjectMap<Dimension> dimensionRegistry = new Int2ObjectOpenHashMap<>(VANILLA_DIMENSION_REGISTRY);
-    protected @Nullable Dimension currentDimension = null;
+    protected @Nullable DimensionData currentDimension = null;
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
     protected MinecraftCodecHelper codec;
@@ -111,15 +102,11 @@ public class ChunkCache implements CachedData {
         this.hashedSeed = hashedSeed;
         this.debug = debug;
         this.flat = flat;
-        var worldDimension = dimensionRegistry.get(dimensionId);
+        var worldDimension = DIMENSION_DATA.getDimensionData(dimensionId);
         if (worldDimension == null) {
             CACHE_LOG.warn("Received unknown dimension ID: {}", dimensionId);
-            if (!dimensionRegistry.isEmpty()) {
-                worldDimension = dimensionRegistry.values().stream().findFirst().get();
-                CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.dimensionName());
-            } else {
-                throw new RuntimeException("No dimensions in registry");
-            }
+            worldDimension = DIMENSION_DATA.getDimensionData(0);
+            CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.name());
         }
         this.currentDimension = worldDimension;
         CACHE_LOG.debug("Updated current world to {}", worldName);
@@ -369,8 +356,6 @@ public class ChunkCache implements CachedData {
         this.thunderStrength = 0.0f;
         this.rainStrength = 0.0f;
         if (full) {
-            this.dimensionRegistry.clear();
-            this.dimensionRegistry.putAll(VANILLA_DIMENSION_REGISTRY);
             this.dimensionType = 0;
             this.worldName = null;
             this.hashedSeed = 0;
@@ -449,7 +434,7 @@ public class ChunkCache implements CachedData {
 
     public int getMaxBuildHeight() {
         var dim = currentDimension;
-        return dim != null ? dim.minY() + dim.height() : 0;
+        return dim != null ? dim.buildHeight() : 0;
     }
 
     public Chunk get(int x, int z) {
@@ -495,13 +480,13 @@ public class ChunkCache implements CachedData {
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
         CACHE_LOG.debug("Updating current dimension to: {}", info.getDimension());
-        Dimension newDim = dimensionRegistry.get(info.getDimension());
+        DimensionData newDim = DIMENSION_DATA.getDimensionData(info.getDimension());
         if (newDim == null) {
             CACHE_LOG.error("Respawn packet tried updating dimension to unregistered dimension: {}", info.getDimension());
             CACHE_LOG.error("Things are going to break...");
         } else {
             this.currentDimension = newDim;
-            this.worldName = currentDimension.dimensionName();
+            this.worldName = currentDimension.name();
         }
         this.dimensionType = info.getDimension();
         this.hashedSeed = info.getHashedSeed();

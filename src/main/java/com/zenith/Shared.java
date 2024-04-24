@@ -29,6 +29,7 @@ import com.zenith.feature.tps.TPSCalculator;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.feature.world.Pathing;
 import com.zenith.feature.world.blockdata.BlockDataManager;
+import com.zenith.feature.world.dimension.DimensionDataManager;
 import com.zenith.module.ModuleManager;
 import com.zenith.network.server.handler.player.InGameCommandManager;
 import com.zenith.terminal.TerminalManager;
@@ -81,6 +82,7 @@ public class Shared {
     public static final BlockDataManager BLOCK_DATA;
     public static final EntityDataManager ENTITY_DATA;
     public static final MapBlockColorManager MAP_BLOCK_COLOR;
+    public static final DimensionDataManager DIMENSION_DATA;
     public static final DatabaseManager DATABASE;
     public static final TPSCalculator TPS;
     public static final ModuleManager MODULE;
@@ -214,6 +216,7 @@ public class Shared {
             BLOCK_DATA = new BlockDataManager();
             ENTITY_DATA = new EntityDataManager();
             MAP_BLOCK_COLOR = new MapBlockColorManager();
+            DIMENSION_DATA = new DimensionDataManager();
             DATABASE = new DatabaseManager();
             TPS = new TPSCalculator();
             MODULE = new ModuleManager();

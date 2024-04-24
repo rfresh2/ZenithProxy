@@ -2,57 +2,49 @@
   {
     "id": 0,
     "name": "overworld",
+    "minY": -64,
+    "height": 384,
+    "buildHeight": 320,
     "coordinateScale": 1.0,
     "hasCeiling": false,
     "hasSkyLight": true,
-    "ultraWarm": false,
-    "natural": true,
-    "piglinSafe": false,
     "bedWorks": true,
-    "respawnAnchorWorks": false,
-    "hasRaids": true,
-    "logicalHeight": 384
+    "respawnAnchorWorks": false
   },
   {
     "id": 1,
     "name": "overworld_caves",
+    "minY": -64,
+    "height": 384,
+    "buildHeight": 320,
     "coordinateScale": 1.0,
     "hasCeiling": true,
     "hasSkyLight": true,
-    "ultraWarm": false,
-    "natural": true,
-    "piglinSafe": false,
     "bedWorks": true,
-    "respawnAnchorWorks": false,
-    "hasRaids": true,
-    "logicalHeight": 384
+    "respawnAnchorWorks": false
   },
   {
     "id": 2,
     "name": "the_end",
+    "minY": 0,
+    "height": 256,
+    "buildHeight": 256,
     "coordinateScale": 1.0,
     "hasCeiling": false,
     "hasSkyLight": false,
-    "ultraWarm": false,
-    "natural": false,
-    "piglinSafe": false,
     "bedWorks": false,
-    "respawnAnchorWorks": false,
-    "hasRaids": true,
-    "logicalHeight": 256
+    "respawnAnchorWorks": false
   },
   {
     "id": 3,
     "name": "the_nether",
+    "minY": 0,
+    "height": 256,
+    "buildHeight": 256,
     "coordinateScale": 8.0,
     "hasCeiling": true,
     "hasSkyLight": false,
-    "ultraWarm": true,
-    "natural": false,
-    "piglinSafe": true,
     "bedWorks": false,
-    "respawnAnchorWorks": true,
-    "hasRaids": false,
-    "logicalHeight": 128
+    "respawnAnchorWorks": true
   }
 ]
