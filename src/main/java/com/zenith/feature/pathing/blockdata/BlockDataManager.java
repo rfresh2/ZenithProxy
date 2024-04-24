@@ -20,10 +20,9 @@ import java.util.List;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class BlockDataManager {
-    private final Int2IntOpenHashMap blockStateIdToBlockId = new Int2IntOpenHashMap(24135);
-    private final Int2ObjectOpenHashMap<Block> blockIdToBlockData = new Int2ObjectOpenHashMap<>(1003);
-    private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(24135);
-
+    private final Int2IntOpenHashMap blockStateIdToBlockId = new Int2IntOpenHashMap(26644);
+    private final Int2ObjectOpenHashMap<Block> blockIdToBlockData = new Int2ObjectOpenHashMap<>(1058);
+    private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(26644);
 
     public BlockDataManager() {
         init();
