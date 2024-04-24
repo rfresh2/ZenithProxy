@@ -139,7 +139,7 @@ public class InventoryCommand extends Command {
             slotsWithItems[i] = i + "";
             var itemData = ITEMS.getItemData(itemStack.getId());
             sb.append("  ").append(i).append(" -> ");
-            sb.append(itemData.getName());
+            sb.append(itemData.name());
             if (itemStack.getAmount() > 1) sb.append(" (x").append(itemStack.getAmount()).append(") ");
             if (i == heldSlot) sb.append(" [Held]");
             sb.append("\n");

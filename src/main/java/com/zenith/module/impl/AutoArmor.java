@@ -4,7 +4,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
 import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.feature.items.ItemsData;
+import com.zenith.feature.items.ItemData;
 import com.zenith.module.Module;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,11 +65,11 @@ public class AutoArmor extends Module {
         delay = 50; // delay processing for a bit as its unlikely our inventory changed
     }
 
-    private record BestArmorData(ItemStack itemStack, int index, ItemsData itemsData, ArmorMaterial material) {}
+    private record BestArmorData(ItemStack itemStack, int index, ItemData itemsData, ArmorMaterial material) {}
 
     private BestArmorData getBestArmorInInventory(final EquipmentSlot equipmentSlot) {
         int bestArmorIndex = -1;
-        ItemsData bestArmorItemData = null;
+        ItemData bestArmorItemData = null;
         ArmorMaterial bestArmorMaterial = null;
         String equipmentTypeItemNameSuffix = ("_" + equipmentSlot.name()).toLowerCase();
         final List<ItemStack> inv = CACHE.getPlayerCache().getPlayerInventory();
@@ -77,9 +77,9 @@ public class AutoArmor extends Module {
             if (inv.size() <= i) break;
             final ItemStack stack = inv.get(i);
             if (stack == Container.EMPTY_STACK) continue;
-            final ItemsData itemData = ITEMS.getItemData(stack.getId());
+            final ItemData itemData = ITEMS.getItemData(stack.getId());
             if (itemData == null) continue;
-            if (!itemData.getName().toLowerCase().endsWith(equipmentTypeItemNameSuffix)) continue;
+            if (!itemData.name().toLowerCase().endsWith(equipmentTypeItemNameSuffix)) continue;
             final ArmorMaterial armorMaterial = getArmorMaterial(itemData);
             if (armorMaterial == null) continue;
             if (bestArmorMaterial == null || armorMaterial.compareTo(bestArmorMaterial) > 0) {
@@ -94,10 +94,10 @@ public class AutoArmor extends Module {
         return null;
     }
 
-    private @Nullable ArmorMaterial getArmorMaterial(final ItemsData itemData) {
-        final int underscoreIndex = itemData.getName().indexOf("_");
+    private @Nullable ArmorMaterial getArmorMaterial(final ItemData itemData) {
+        final int underscoreIndex = itemData.name().indexOf("_");
         if (underscoreIndex == -1) return null;
-        String materialName = itemData.getName().substring(0, underscoreIndex).toUpperCase(Locale.ROOT);
+        String materialName = itemData.name().substring(0, underscoreIndex).toUpperCase(Locale.ROOT);
         return ArmorMaterial.valueOf(materialName);
     }
 
