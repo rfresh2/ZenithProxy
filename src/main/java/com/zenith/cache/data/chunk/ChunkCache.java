@@ -103,7 +103,9 @@ public class ChunkCache implements CachedData {
     }
 
     public void setDimensionRegistry(final CompoundTag registryData) {
-        final var dimensionList = registryData.<CompoundTag>get("minecraft:dimension_type").getListTag("value").getValue();
+        CompoundTag compoundTag = registryData.<CompoundTag>get("minecraft:dimension_type");
+        if (compoundTag == null) return;
+        final var dimensionList = compoundTag.getListTag("value").getValue();
         for (Tag tag : dimensionList) {
             CompoundTag dimension = (CompoundTag) tag;
             String name = dimension.getStringTag("name").asRawString();
@@ -118,6 +120,7 @@ public class ChunkCache implements CachedData {
 
     public void setBiomes(final CompoundTag registryData) {
         final var biomeRegistry = registryData.<CompoundTag>get("minecraft:worldgen/biome");
+        if (biomeRegistry == null) return;
         for (Tag type : biomeRegistry.getListTag("value").getValue()) {
             CompoundTag biomeNBT = (CompoundTag) type;
             String biomeName = biomeNBT.getStringTag("name").asRawString();
