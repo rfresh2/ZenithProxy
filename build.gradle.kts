@@ -28,6 +28,7 @@ repositories {
     maven("https://repo.minebench.de/") { name = "minebench" }
     maven("https://repo.viaversion.com") { name = "ViaVersion" }
     maven("https://maven.lenni0451.net/releases") { name = "Lenni0451" }
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") { name = "sonatype-oss-snapshots" }
     mavenLocal()
 }
 
@@ -58,7 +59,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:3069dffbec") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:623f00a350") {
+    shade("com.github.rfresh2:MCProtocolLib:8d312c083d") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
