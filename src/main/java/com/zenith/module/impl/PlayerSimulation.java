@@ -9,8 +9,8 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.Serverb
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.feature.pathing.*;
-import com.zenith.feature.pathing.blockdata.Block;
+import com.zenith.feature.world.*;
+import com.zenith.feature.world.blockdata.Block;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;

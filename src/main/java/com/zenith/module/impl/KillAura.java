@@ -13,7 +13,7 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.feature.pathing.Pathing;
+import com.zenith.feature.world.Pathing;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 

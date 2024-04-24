@@ -1,8 +1,8 @@
-package com.zenith.feature.pathing;
+package com.zenith.feature.world;
 
 import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
-import com.zenith.feature.pathing.blockdata.Block;
-import com.zenith.feature.pathing.blockdata.BlockState;
+import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.blockdata.BlockState;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;

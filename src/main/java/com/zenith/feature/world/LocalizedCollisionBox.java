@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing;
+package com.zenith.feature.world;
 
 
 import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;

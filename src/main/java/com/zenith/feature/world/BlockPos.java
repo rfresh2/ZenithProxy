@@ -1,4 +1,4 @@
-package com.zenith.feature.pathing;
+package com.zenith.feature.world;
 
 import com.zenith.util.math.MathHelper;
 import lombok.Data;

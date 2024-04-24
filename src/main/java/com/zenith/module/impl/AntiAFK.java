@@ -5,9 +5,9 @@ import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.Server
 import com.google.common.collect.Iterators;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.DeathEvent;
-import com.zenith.feature.pathing.BlockPos;
-import com.zenith.feature.pathing.Input;
-import com.zenith.feature.pathing.Pathing;
+import com.zenith.feature.world.BlockPos;
+import com.zenith.feature.world.Input;
+import com.zenith.feature.world.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
