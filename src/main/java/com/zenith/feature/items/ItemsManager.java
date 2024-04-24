@@ -12,7 +12,7 @@ import java.util.Locale;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class ItemsManager {
-    private final Int2ObjectMap<ItemsData> itemsData = new Int2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<ItemsData> itemsData = new Int2ObjectOpenHashMap<>(1330);
 
     public ItemsManager() {
         init();

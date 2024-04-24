@@ -15,8 +15,8 @@ import java.util.Iterator;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class EntityDataManager {
-    private final Object2ObjectMap<String, EntityData> entityNameToData = new Object2ObjectOpenHashMap<>(124);
-    private final Reference2ObjectMap<EntityType, EntityData> entityTypeToData = new Reference2ObjectOpenHashMap<>(124);
+    private final Object2ObjectMap<String, EntityData> entityNameToData = new Object2ObjectOpenHashMap<>(130);
+    private final Reference2ObjectMap<EntityType, EntityData> entityTypeToData = new Reference2ObjectOpenHashMap<>(130);
 
     public EntityDataManager() {
         init();

@@ -12,7 +12,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class MapBlockColorManager {
-    private final Object2IntMap<String> blockNameToMapColorId = new Object2IntOpenHashMap<>(10058);
+    private final Object2IntMap<String> blockNameToMapColorId = new Object2IntOpenHashMap<>(1060);
     // todo: provide alternative color map? https://github.com/Godlander/vpp/blob/main/assets/minecraft/shaders/core/render/text.fsh
     private final Int2IntMap mapColorIdToColor = new Int2IntOpenHashMap(64);
 
