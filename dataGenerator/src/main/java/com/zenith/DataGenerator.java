@@ -43,7 +43,7 @@ public class DataGenerator implements DedicatedServerModInitializer {
             SERVER_INSTANCE = server;
             generators.forEach(Generator::generate);
             LOG.info("Data generation complete!");
-            Runtime.getRuntime().halt(0);
+            server.halt(false);
         });
     }
 
