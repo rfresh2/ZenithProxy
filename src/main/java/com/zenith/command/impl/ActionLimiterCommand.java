@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 public class ActionLimiterCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
             "actionLimiter",
             CommandCategory.MODULE,
             "Limits player actions",
@@ -34,8 +34,10 @@ public class ActionLimiterCommand extends Command {
                 "allowInteract on/off",
                 "allowEnderChest on/off",
                 "allowUseItem on/off",
+                "allowBookSigning on/off",
                 "allowChat on/off"
-            )
+            ),
+                asList("al")
         );
     }
 
@@ -84,6 +86,10 @@ public class ActionLimiterCommand extends Command {
                 CONFIG.client.extra.actionLimiter.allowUseItem = getToggle(c, "toggle");
                 return 1;
             })))
+            .then(literal("allowBookSigning").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.actionLimiter.allowBookSigning = getToggle(c, "toggle");
+                return 1;
+            })))
             .then(literal("allowChat").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.actionLimiter.allowChat = getToggle(c, "toggle");
                 return 1;
@@ -104,6 +110,7 @@ public class ActionLimiterCommand extends Command {
             .addField("Allow Interact", toggleStr(CONFIG.client.extra.actionLimiter.allowInteract), true)
             .addField("Allow Ender Chest", toggleStr(CONFIG.client.extra.actionLimiter.allowEnderChest), true)
             .addField("Allow Use Item", toggleStr(CONFIG.client.extra.actionLimiter.allowUseItem), true)
+            .addField("Allow Book Signing", toggleStr(CONFIG.client.extra.actionLimiter.allowBookSigning), true)
             .addField("Allow Chat", toggleStr(CONFIG.client.extra.actionLimiter.allowChat), true)
             .primaryColor();
     }

@@ -53,7 +53,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                     // if both stacks are the same item, place one item from the mouse stack into clickStack
                     //   if clickStack is full, return null
                     if (mouseStack.getId() == clickStack.getId()) {
-                        if (clickStack.getAmount() == ITEMS.getItemData(clickStack.getId()).getStackSize()) return null;
+                        if (clickStack.getAmount() == ITEMS.getItemData(clickStack.getId()).stackSize()) return null;
                         var newMouseStackAmount = mouseStack.getAmount() - 1;
                         predictedMouseStack = newMouseStackAmount == 0 ? Container.EMPTY_STACK : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getNbt());
                         changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() + 1, clickStack.getNbt()));

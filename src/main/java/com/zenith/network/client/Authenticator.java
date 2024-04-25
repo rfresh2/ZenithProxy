@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
@@ -61,6 +62,13 @@ public class Authenticator {
         .withRedirectUri("http://127.0.0.1")
         .localWebServer()
         .withDeviceToken("Win32")
+        .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
+        .buildMinecraftJavaProfileStep(false);
+    @Getter(lazy = true) private final StepFullJavaSession prismDeviceCodeAuthStep = MinecraftAuth.builder()
+        .withTimeout(300)
+        .withClientId("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb")
+        .deviceCode()
+        .withoutDeviceToken()
         .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false);
 
@@ -164,6 +172,11 @@ public class Authenticator {
         return getLocalWebserverStep().getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
     }
 
+    @SneakyThrows
+    private FullJavaSession prismDeviceCodeLogin() {
+        return getPrismDeviceCodeAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+    }
+
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
         AUTH_LOG.debug("Performing token refresh..");
         try {
@@ -180,6 +193,7 @@ public class Authenticator {
             case DEVICE_CODE -> getDeviceCodeAuthStep();
             case LOCAL_WEBSERVER -> getLocalWebserverStep();
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> getDeviceCodeAuthWithoutDeviceTokenStep();
+            case PRISM -> getPrismDeviceCodeAuthStep();
         };
     }
 
@@ -189,6 +203,7 @@ public class Authenticator {
             case DEVICE_CODE -> deviceCodeLogin();
             case LOCAL_WEBSERVER -> localWebserverLogin();
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> withoutDeviceTokenLogin();
+            case PRISM -> prismDeviceCodeLogin();
         };
     }
 
@@ -217,9 +232,15 @@ public class Authenticator {
             AUTH_LOG.debug("Auth token refresh time is negative? {}", time);
             return;
         }
+        // random offset to prevent multiple instances possibly refreshing at the same time
+        var randomOffsetMs = ThreadLocalRandom.current().nextInt(5) * 60L * 1000L;
+        // fail-safe to avoid spamming refreshes
+        var minRefreshDelayMs = 30L * 1000L;
+        var expireTimeDelayMs = Math.max(minRefreshDelayMs, time - minRefreshDelayMs - randomOffsetMs);
+        var maxRefreshIntervalMs = (CONFIG.authentication.maxRefreshIntervalMins * 60L * 1000L) - randomOffsetMs;
         this.refreshTask = EXECUTOR.schedule(
             this::executeAuthCacheRefresh,
-            Math.min(time, Duration.ofHours(6).toMillis()),
+            Math.max(minRefreshDelayMs, Math.min(expireTimeDelayMs, maxRefreshIntervalMs)),
             MILLISECONDS);
         AUTH_LOG.debug("Auth cache refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
     }

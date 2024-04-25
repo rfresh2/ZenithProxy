@@ -39,6 +39,14 @@ public class VisualRange extends Module {
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
         var isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
+        if (CONFIG.client.extra.visualRange.replayRecording) {
+            switch (CONFIG.client.extra.visualRange.replayRecordingMode) {
+                case ALL -> startReplayRecording();
+                case ENEMY -> {
+                    if (!isFriend) startReplayRecording();
+                }
+            }
+        }
         if (isFriend && CONFIG.client.extra.visualRange.ignoreFriends) {
             MODULE_LOG.debug("[Visual Range] Ignoring enter alert for friend: {}", event.playerEntry().getName());
             return;
@@ -47,17 +55,21 @@ public class VisualRange extends Module {
             MODULE_LOG.warn("[Visual Range] {} entered visual range [{}, {}, {}]", event.playerEntry().getName(), event.playerEntity().getX(), event.playerEntity().getY(), event.playerEntity().getZ());
             EVENT_BUS.post(new VisualRangeEnterEvent(event.playerEntry(), event.playerEntity(), isFriend));
         }
-        if (CONFIG.client.extra.visualRange.replayRecording && !isFriend) {
-            if (!MODULE.get(ReplayMod.class).isEnabled()) {
-                MODULE_LOG.info("[VisualRange] Starting replay recording");
-                MODULE.get(ReplayMod.class).enable();
-            }
-            cancelVisualRangeLeaveRecordingStopFuture();
-        }
     }
 
     public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
         var isFriend = PLAYER_LISTS.getFriendsList().contains(event.playerEntity().getUuid());
+        if (CONFIG.client.extra.visualRange.replayRecording) {
+            switch (CONFIG.client.extra.visualRange.replayRecordingMode) {
+                case ALL -> {
+                    if (!anyPlayerInVisualRange()) scheduleRecordingStop();
+                }
+                case ENEMY -> {
+                    if (!isFriend && !anyEnemyInVisualRange()) scheduleRecordingStop();
+                }
+            }
+        }
+
         if (isFriend && CONFIG.client.extra.visualRange.ignoreFriends) {
             MODULE_LOG.debug("[Visual Range] Ignoring leave alert for friend: {}", event.playerEntry().getName());
             return;
@@ -66,15 +78,23 @@ public class VisualRange extends Module {
             MODULE_LOG.warn("[Visual Range] {} left visual range [{}, {}, {}]", event.playerEntry().getName(), event.playerEntity().getX(), event.playerEntity().getY(), event.playerEntity().getZ());
             EVENT_BUS.post(new VisualRangeLeaveEvent(event.playerEntry(), event.playerEntity(), isFriend));
         }
-        if (CONFIG.client.extra.visualRange.replayRecording && !isFriend) {
-            if (!anyEnemyInVisualRange()) {
-                cancelVisualRangeLeaveRecordingStopFuture();
-                visualRangeLeaveRecordingStopFuture = EXECUTOR.schedule(
-                    this::disableReplayRecordingConditional,
-                    CONFIG.client.extra.visualRange.replayRecordingCooldownMins,
-                    TimeUnit.MINUTES);
-            }
+    }
+
+    private void scheduleRecordingStop() {
+        cancelVisualRangeLeaveRecordingStopFuture();
+        visualRangeLeaveRecordingStopFuture = EXECUTOR.schedule(
+            this::disableReplayRecordingConditional,
+            CONFIG.client.extra.visualRange.replayRecordingCooldownMins,
+            TimeUnit.MINUTES
+        );
+    }
+
+    private void startReplayRecording() {
+        if (!MODULE.get(ReplayMod.class).isEnabled()) {
+            MODULE_LOG.info("[VisualRange] Starting replay recording");
+            MODULE.get(ReplayMod.class).enable();
         }
+        cancelVisualRangeLeaveRecordingStopFuture();
     }
 
     private void cancelVisualRangeLeaveRecordingStopFuture() {
@@ -96,7 +116,14 @@ public class VisualRange extends Module {
     private boolean anyEnemyInVisualRange() {
         return CACHE.getEntityCache().getEntities().values().stream()
             .filter(entity -> entity instanceof EntityPlayer)
+            .filter(entity -> !entity.equals(CACHE.getPlayerCache().getThePlayer()))
             .anyMatch(entityPlayer -> !PLAYER_LISTS.getFriendsList().contains(entityPlayer.getUuid()));
+    }
+
+    private boolean anyPlayerInVisualRange() {
+        return CACHE.getEntityCache().getEntities().values().stream()
+            .filter(entity -> entity instanceof EntityPlayer)
+            .anyMatch(entity -> !entity.equals(CACHE.getPlayerCache().getThePlayer()));
     }
 
     public void handlePlayerLogoutInVisualRangeEvent(final PlayerLogoutInVisualRangeEvent event) {

@@ -1,12 +1,12 @@
 package com.zenith.module.impl;
 
-import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
-import com.zenith.feature.pathing.Pathing;
+import com.zenith.feature.world.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.Timer;
+import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector2f;
 
 import java.util.Objects;
@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 
 public class Spook extends Module {
     public final AtomicBoolean hasTarget = new AtomicBoolean(false);
@@ -51,9 +50,7 @@ public class Spook extends Module {
                         .noneMatch(entity -> Objects.equals(e, entity)));
             }
         }
-        if (isNull(Proxy.getInstance().getCurrentPlayer().get())
-                && !Proxy.getInstance().isInQueue()
-                && !MODULE.get(KillAura.class).isActive()) {
+        if (!MODULE.get(KillAura.class).isActive()) {
             stareTick();
         } else {
             hasTarget.lazySet(false);
@@ -70,12 +67,8 @@ public class Spook extends Module {
     private void stareTick() {
         if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay)) {
             switch (CONFIG.client.extra.spook.spookTargetingMode) {
-                case NEAREST:
-                    handleNearestTargetTick();
-                    break;
-                case VISUAL_RANGE:
-                    handleVisualRangeTargetTick();
-                    break;
+                case NEAREST -> handleNearestTargetTick();
+                case VISUAL_RANGE -> handleVisualRangeTargetTick();
             }
         }
     }
@@ -96,11 +89,9 @@ public class Spook extends Module {
     private void handleVisualRangeTargetTick() {
         synchronized (focusStack) {
             if (!this.focusStack.isEmpty()) {
-                final EntityPlayer target = this.focusStack.peek();
+                var target = this.focusStack.peek();
                 this.hasTarget.set(true);
-                Vector2f rotationTo = Pathing.rotationTo(target.getX(),
-                                                      target.getY() +1.6,
-                                                      target.getZ());
+                Vector2f rotationTo = Pathing.shortestRotationTo(target);
                 PATHING.rotate(rotationTo.getX(), rotationTo.getY(), MOVEMENT_PRIORITY);
             } else {
                 this.hasTarget.set(false);
@@ -113,14 +104,11 @@ public class Spook extends Module {
                 .filter(entity -> entity instanceof EntityPlayer)
                 .map(entity -> (EntityPlayer) entity)
                 .filter(e -> e != CACHE.getPlayerCache().getThePlayer())
-                .min((e1, e2) -> getDistanceToPlayer(e1) - getDistanceToPlayer(e2));
+                .min((e1, e2) -> (int) (getDistanceToPlayer(e1) - getDistanceToPlayer(e2)));
     }
 
-    private double getDistance(final EntityPlayer p1, final EntityPlayer p2) {
-        return Math.sqrt(Math.pow(p2.getX() - p1.getX(), 2) + Math.pow(p2.getY() - p1.getY(), 2) + Math.pow(p2.getZ() - p1.getZ(), 2));
-    }
-
-    private int getDistanceToPlayer(final EntityPlayer e) {
-        return (int) getDistance(e, CACHE.getPlayerCache().getThePlayer());
+    private double getDistanceToPlayer(final EntityPlayer e) {
+        var player = CACHE.getPlayerCache().getThePlayer();
+        return MathHelper.distanceSq3d(e.getX(), e.getY(), e.getZ(), player.getX(), player.getY(), player.getZ());
     }
 }

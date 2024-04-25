@@ -35,6 +35,8 @@ public class ReplayCommand extends Command {
             A `maxRecordingTime` of 0 means there is no limit, however, recording are always stopped on disconnects.
             
             `autoStart` will automatically start a new recording when the proxy connects.
+            
+            Additional recording modes can be configured in the `visualRange` command.
             """,
             asList(
                 "start",

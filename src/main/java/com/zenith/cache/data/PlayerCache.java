@@ -115,7 +115,7 @@ public class PlayerCache implements CachedData {
 
     @Override
     public void reset(boolean full) {
-        if (full)   {
+        if (full) {
             this.thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;

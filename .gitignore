@@ -24,3 +24,9 @@ __pycache__/
 /launcher-python*
 maps/
 replays/
+
+dataGenerator/run
+/dataGenerator/.gradle
+
+/dataGenerator/build
+/dataGenerator/.idea

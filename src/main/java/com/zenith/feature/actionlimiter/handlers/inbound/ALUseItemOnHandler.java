@@ -1,7 +1,7 @@
 package com.zenith.feature.actionlimiter.handlers.inbound;
 
-import com.zenith.feature.pathing.BlockPos;
-import com.zenith.feature.pathing.World;
+import com.zenith.feature.world.BlockPos;
+import com.zenith.feature.world.World;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundUseItemOnPacket;

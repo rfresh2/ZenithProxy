@@ -38,12 +38,14 @@ public final class Config {
         public int msaLoginAttemptsBeforeCacheWipe = 2;
         public boolean openBrowserOnLogin = true;
         public boolean alwaysRefreshOnLogin = false;
+        public int maxRefreshIntervalMins = 360; // 6 hrs
 
         public enum AccountType {
             @SerializedName("msa") MSA,
             @SerializedName("device_code") DEVICE_CODE,
             @SerializedName("local_webserver") LOCAL_WEBSERVER,
-            @SerializedName("device_code_without_device_token") DEVICE_CODE_WITHOUT_DEVICE_TOKEN
+            @SerializedName("device_code_without_device_token") DEVICE_CODE_WITHOUT_DEVICE_TOKEN,
+            @SerializedName("prism") PRISM
         }
     }
 
@@ -123,7 +125,12 @@ public final class Config {
                 public boolean leaveAlert = true;
                 public boolean logoutAlert = true;
                 public boolean replayRecording = false;
+                public ReplayRecordingMode replayRecordingMode = ReplayRecordingMode.ENEMY;
                 public int replayRecordingCooldownMins = 5;
+                public enum ReplayRecordingMode {
+                    ENEMY,
+                    ALL
+                }
             }
 
             public static class AutoArmor {
@@ -318,6 +325,7 @@ public final class Config {
 //                public boolean allowBlockPlacing = true;
                 public boolean allowInventory = true;
                 public boolean allowUseItem = true;
+                public boolean allowBookSigning = true;
                 public boolean allowInteract = true;
                 public boolean allowChat = true; // outbound chats, including commands
             }

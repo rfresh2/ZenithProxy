@@ -6,7 +6,7 @@ import com.github.steveice10.opennbt.tag.builtin.Tag;
 import com.github.steveice10.opennbt.tag.io.MNBTIO;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
-import com.zenith.feature.pathing.blockdata.Block;
+import com.zenith.feature.world.blockdata.Block;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.BrandSerializer;
 import io.netty.buffer.ByteBuf;

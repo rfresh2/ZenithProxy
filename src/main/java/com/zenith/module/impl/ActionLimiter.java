@@ -21,6 +21,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundEditBookPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 
@@ -53,6 +54,7 @@ public class ActionLimiter extends Module {
                 .registerInbound(ServerboundPlayerActionPacket.class, new ALPlayerActionHandler())
                 .registerInbound(ServerboundUseItemOnPacket.class, new ALUseItemOnHandler())
                 .registerInbound(ServerboundUseItemPacket.class, new ALUseItemHandler())
+                .registerInbound(ServerboundEditBookPacket.class, new ALEditBookHandler())
                 .registerOutbound(ClientboundMoveVehiclePacket.class, new ALCMoveVehicleHandler())
                 .registerOutbound(ClientboundLoginPacket.class, new ALLoginHandler())
                 .registerOutbound(ClientboundPlayerPositionPacket.class, new ALPlayerPositionHandler())

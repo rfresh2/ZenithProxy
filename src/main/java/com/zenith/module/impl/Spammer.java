@@ -7,9 +7,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -59,21 +57,19 @@ public class Spammer extends Module {
     }
 
     private String getNextPlayer() {
-        Set<String> playerNames = CACHE.getTabListCache().getEntries().stream()
-                .map(PlayerListEntry::getName)
-                .collect(Collectors.toSet());
-        if (playerNames.size() == 1) { return null; } // no other players connected
-        playerNames.removeAll(this.whisperedPlayers);
-        playerNames.remove(CONFIG.authentication.username);
-        if (!playerNames.isEmpty()) { // online players who haven't been messaged yet
-            String nextPlayer = playerNames.stream().toList().getFirst();
-            this.whisperedPlayers.add(nextPlayer);
-            return nextPlayer;
-        } else { // every player has been messaged, restarting cycle
+        var nextPlayer = CACHE.getTabListCache().getEntries().stream()
+            .map(PlayerListEntry::getName)
+            .filter(name -> !name.equals(CONFIG.authentication.username))
+            .filter(name -> !this.whisperedPlayers.contains(name))
+            .findFirst();
+        if (nextPlayer.isPresent()) {
+            this.whisperedPlayers.add(nextPlayer.get());
+            return nextPlayer.get();
+        } else {
+            if (this.whisperedPlayers.isEmpty()) return null;
             this.whisperedPlayers.clear();
             return getNextPlayer();
         }
-
     }
 
     public void clientTickStarting(final ClientBotTick.Starting event) {

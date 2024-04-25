@@ -7,6 +7,7 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.VisualRange;
+import com.zenith.util.Config;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -22,7 +23,19 @@ public class VisualRangeCommand extends Command {
         return CommandUsage.full(
             "visualRange",
             CommandCategory.MODULE,
-            "Configure the VisualRange notification feature",
+            """
+            Configure the VisualRange notification feature.
+            
+            Alerts are sent both in the terminal and in discord, with optional discord mentions.
+            
+            `replayRecording` settings will start recording when players enter your visual range and stop
+            when players leave, after the set cooldown.
+            
+            `enemy` mode will only record players who are not on your friends list.
+            `all` mode will record all players, regardless of being on the friends list.
+            
+            To add players to the friends list see the `friends` command.
+            """,
             asList(
                         "on/off",
                         "enter on/off",
@@ -30,8 +43,9 @@ public class VisualRangeCommand extends Command {
                         "leave on/off",
                         "logout on/off",
                         "ignoreFriends on/off",
-                        "enemyReplayRecord on/off",
-                        "enemyReplayRecord cooldown <minutes>"
+                        "replayRecording on/off",
+                        "replayRecording mode <enemy/all>",
+                        "replayRecording cooldown <minutes>"
                 ),
             asList("vr")
         );
@@ -81,13 +95,26 @@ public class VisualRangeCommand extends Command {
                                 .title("Logout Alerts " + toggleStrCaps(CONFIG.client.extra.visualRange.logoutAlert));
                             return OK;
                       })))
-            .then(literal("enemyReplayRecord")
+            .then(literal("replayRecording")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.replayRecording = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Enemy Replay Recording " + toggleStrCaps(CONFIG.client.extra.visualRange.replayRecording));
+                                .title("Replay Recording " + toggleStrCaps(CONFIG.client.extra.visualRange.replayRecording));
                             return OK;
                       }))
+                      .then(literal("mode")
+                                .then(literal("enemy").executes(c -> {
+                                    CONFIG.client.extra.visualRange.replayRecordingMode = Config.Client.Extra.VisualRange.ReplayRecordingMode.ENEMY;
+                                    c.getSource().getEmbed()
+                                        .title("Replay Recording Mode Set");
+                                    return OK;
+                                }))
+                                .then(literal("all").executes(c -> {
+                                    CONFIG.client.extra.visualRange.replayRecordingMode = Config.Client.Extra.VisualRange.ReplayRecordingMode.ALL;
+                                    c.getSource().getEmbed()
+                                        .title("Replay Recording Mode Set");
+                                    return OK;
+                                })))
                       .then(literal("cooldown").then(argument("minutes", integer(0)).executes(c -> {
                           CONFIG.client.extra.visualRange.replayRecordingCooldownMins = getInteger(c, "minutes");
                           c.getSource().getEmbed()
@@ -105,8 +132,9 @@ public class VisualRangeCommand extends Command {
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRange.ignoreFriends), false)
             .addField("Leave Alerts", toggleStr(CONFIG.client.extra.visualRange.leaveAlert), false)
             .addField("Logout Alerts", toggleStr(CONFIG.client.extra.visualRange.logoutAlert), false)
-            .addField("Enemy Replay Recording", toggleStr(CONFIG.client.extra.visualRange.replayRecording), false)
-            .addField("Enemy Replay Recording Cooldown", CONFIG.client.extra.visualRange.replayRecordingCooldownMins, false)
+            .addField("Replay Recording", toggleStr(CONFIG.client.extra.visualRange.replayRecording), false)
+            .addField("Replay Recording Mode", CONFIG.client.extra.visualRange.replayRecordingMode.toString().toLowerCase(), false)
+            .addField("Replay Recording Cooldown", CONFIG.client.extra.visualRange.replayRecordingCooldownMins, false)
             .primaryColor();
     }
 }

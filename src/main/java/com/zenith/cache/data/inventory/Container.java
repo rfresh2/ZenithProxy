@@ -25,17 +25,17 @@ public class Container {
 
     public Container(int containerId, int size) {
         this.containerId = containerId;
-        this.contents = populateContents(size);
+        this.contents = initializeEmptyContents(size);
     }
 
     public Container(final int containerId, final ContainerType type, final Component title) {
         this.containerId = containerId;
         this.type = type;
         this.title = title;
-        this.contents = populateContents(0);
+        this.contents = initializeEmptyContents(0);
     }
 
-    private List<ItemStack> populateContents(int size) {
+    private List<ItemStack> initializeEmptyContents(int size) {
         final List<ItemStack> contents = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             contents.add(EMPTY_STACK);
@@ -45,7 +45,7 @@ public class Container {
 
     public void setContents(final ItemStack[] inventory) {
         if (inventory.length != contents.size()) {
-            this.contents = populateContents(inventory.length);
+            this.contents = initializeEmptyContents(inventory.length);
         }
         for (int i = 0; i < inventory.length; i++) {
             contents.set(i, inventory[i]);
@@ -54,7 +54,7 @@ public class Container {
 
     public void setItemStack(final int slot, final ItemStack newItemStack) {
         if (slot < 0 || slot >= contents.size()) {
-            CACHE_LOG.warn("Invalid slot {} for containerId {}", slot, containerId);
+            CACHE_LOG.debug("Invalid slot: {} for containerId: {} from size: {}", slot, containerId, contents.size());
             return;
         }
         contents.set(slot, newItemStack);
@@ -62,7 +62,7 @@ public class Container {
 
     public ItemStack getItemStack(final int slot) {
         if (slot < 0 || slot >= contents.size()) {
-            CACHE_LOG.warn("Invalid slot {} for containerId {}", slot, containerId);
+            CACHE_LOG.debug("Invalid slot: {} for containerId: {} from size: {}", slot, containerId, contents.size());
             return EMPTY_STACK;
         }
         return contents.get(slot);
