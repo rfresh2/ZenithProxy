@@ -1,14 +1,14 @@
 package com.zenith.cache.data.config;
 
-import com.github.steveice10.mc.protocol.data.game.RegistryEntry;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundResourcePackPushPacket;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundUpdateEnabledFeaturesPacket;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundUpdateTagsPacket;
-import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.RegistryEntry;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundResourcePackPushPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundUpdateTagsPacket;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundUpdateEnabledFeaturesPacket;
 
 import java.util.List;
 import java.util.Map;

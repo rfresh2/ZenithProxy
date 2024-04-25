@@ -1,8 +1,8 @@
 package com.zenith.module;
 
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import static com.zenith.Shared.EVENT_BUS;
 

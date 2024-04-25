@@ -1,15 +1,15 @@
 package com.zenith.network.client;
 
-import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.packetlib.ProxyInfo;
-import com.github.steveice10.packetlib.tcp.TcpClientSession;
-import com.github.steveice10.packetlib.tcp.TcpConnectionManager;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.network.ProxyInfo;
+import org.geysermc.mcprotocollib.network.tcp.TcpClientSession;
+import org.geysermc.mcprotocollib.network.tcp.TcpConnectionManager;
+import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 
 import java.io.IOException;
 

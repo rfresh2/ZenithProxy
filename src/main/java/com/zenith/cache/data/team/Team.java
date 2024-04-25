@@ -1,9 +1,5 @@
 package com.zenith.cache.data.team;
 
-import com.github.steveice10.mc.protocol.data.game.scoreboard.CollisionRule;
-import com.github.steveice10.mc.protocol.data.game.scoreboard.NameTagVisibility;
-import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamColor;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.CollisionRule;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.NameTagVisibility;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.TeamColor;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 
 
 @Getter

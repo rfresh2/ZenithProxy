@@ -1,7 +1,7 @@
 package com.zenith.network;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,6 +1,6 @@
 package com.zenith.feature.world.raycast;
 
-import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.object.Direction;
 import com.zenith.feature.world.blockdata.Block;
 
 public record BlockRaycastResult(boolean hit, double x, double y, double z, Direction direction, Block block) {

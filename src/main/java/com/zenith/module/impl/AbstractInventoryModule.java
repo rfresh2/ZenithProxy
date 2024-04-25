@@ -1,14 +1,14 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
-import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerActionType;
-import com.github.steveice10.mc.protocol.data.game.inventory.MoveToHotbarAction;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import com.zenith.feature.items.ContainerClickAction;
 import com.zenith.module.Module;
 import lombok.Getter;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.MoveToHotbarAction;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

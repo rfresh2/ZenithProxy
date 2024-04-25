@@ -1,8 +1,8 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
 
 public class LoginDisconnectHandler implements PacketHandler<ClientboundLoginDisconnectPacket, ClientSession> {
     @Override

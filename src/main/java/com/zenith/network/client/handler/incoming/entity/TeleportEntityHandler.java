@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.incoming.entity;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundTeleportEntityPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CLIENT_LOG;

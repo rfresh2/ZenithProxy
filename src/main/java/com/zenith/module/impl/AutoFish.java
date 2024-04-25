@@ -1,10 +1,5 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.entity.object.ProjectileData;
-import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientBotTick;
@@ -12,6 +7,11 @@ import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.object.ProjectileData;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 
 import java.time.Instant;
 

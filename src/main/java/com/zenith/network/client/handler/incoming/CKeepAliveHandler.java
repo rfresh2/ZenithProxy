@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
-import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 
 public class CKeepAliveHandler implements PacketHandler<ClientboundKeepAlivePacket, ClientSession> {
     @Override

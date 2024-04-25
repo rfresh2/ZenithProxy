@@ -1,12 +1,12 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.ServerLoginHandler;
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.mc.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 import com.zenith.network.KeepAliveTask;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
+import org.geysermc.mcprotocollib.protocol.ServerLoginHandler;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 
 import static com.zenith.Shared.EXECUTOR;
 

@@ -1,11 +1,11 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.ClientCommand;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
+import org.geysermc.mcprotocollib.protocol.data.game.ClientCommand;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 
 import java.util.concurrent.TimeUnit;
 

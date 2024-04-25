@@ -1,9 +1,9 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 import com.zenith.cache.data.chunk.WorldBorderData;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 
 import static com.zenith.Shared.CACHE;
 

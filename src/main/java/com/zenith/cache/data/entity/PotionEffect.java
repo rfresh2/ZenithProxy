@@ -1,10 +1,10 @@
 package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.Effect;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 
 @Data
 @AllArgsConstructor

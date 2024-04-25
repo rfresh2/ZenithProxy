@@ -1,10 +1,5 @@
 package com.zenith.network.server.handler.spectator.postoutgoing;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.ProxySpectatorLoggedInEvent;
 import com.zenith.feature.spectator.SpectatorSync;
@@ -12,11 +7,16 @@ import com.zenith.network.registry.PostOutgoingPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntryAction;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 
 import java.util.EnumSet;
 
-import static com.github.steveice10.mc.protocol.data.game.entity.player.GameMode.SPECTATOR;
 import static com.zenith.Shared.*;
+import static org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode.SPECTATOR;
 
 public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerConnection> {
     @Override

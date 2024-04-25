@@ -1,7 +1,5 @@
 package com.zenith.network.server.handler.player.postoutgoing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.event.proxy.ProxyClientLoggedInEvent;
@@ -9,6 +7,8 @@ import com.zenith.network.registry.PostOutgoingPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 
 import static com.zenith.Shared.*;
 

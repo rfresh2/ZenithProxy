@@ -1,13 +1,13 @@
 package com.zenith.cache.data.stats;
 
-import com.github.steveice10.mc.protocol.data.game.advancement.Advancement;
-import com.github.steveice10.mc.protocol.data.game.statistic.Statistic;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateAdvancementsPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.advancement.Advancement;
+import org.geysermc.mcprotocollib.protocol.data.game.statistic.Statistic;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundUpdateAdvancementsPacket;
 
 import java.util.ArrayList;
 import java.util.Collections;

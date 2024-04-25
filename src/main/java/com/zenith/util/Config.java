@@ -1,11 +1,11 @@
 package com.zenith.util;
 
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.packetlib.ProxyInfo;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.whitelist.PlayerEntry;
 import com.zenith.module.impl.ActiveHours.ActiveTime;
 import lombok.Getter;
+import org.geysermc.mcprotocollib.network.ProxyInfo;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
 import java.util.ArrayList;
 import java.util.UUID;

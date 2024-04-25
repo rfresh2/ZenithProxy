@@ -1,7 +1,5 @@
 package com.zenith.discord;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.Proxy;
 import com.zenith.event.module.*;
 import com.zenith.event.proxy.*;
@@ -15,6 +13,8 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.discordjson.json.EmbedData;
 import discord4j.discordjson.json.MessageData;
 import discord4j.rest.util.Color;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 

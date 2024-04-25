@@ -1,8 +1,6 @@
 package com.zenith.network.client;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.codec.MinecraftCodec;
 import com.google.gson.JsonObject;
 import com.zenith.event.proxy.MsaDeviceCodeLoginEvent;
 import com.zenith.util.MCAuthLoggerBridge;
@@ -17,6 +15,8 @@ import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
 import net.raphimc.minecraftauth.step.msa.StepLocalWebServer;
 import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
 import net.raphimc.minecraftauth.util.MicrosoftConstants;
+import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -1,9 +1,9 @@
 package com.zenith.event.module;
 
 import com.github.rfresh2.CancellableEvent;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

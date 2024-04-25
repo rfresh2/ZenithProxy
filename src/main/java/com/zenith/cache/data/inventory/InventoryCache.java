@@ -1,12 +1,12 @@
 package com.zenith.cache.data.inventory;
 
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerType;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import org.jetbrains.annotations.Nullable;
 
 import static com.zenith.Shared.CACHE_LOG;

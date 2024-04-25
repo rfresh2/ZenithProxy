@@ -1,8 +1,8 @@
 package com.zenith.network.server.handler.shared.outgoing;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
 
 public class KeepAliveOutgoingHandler implements PacketHandler<ClientboundKeepAlivePacket, ServerConnection> {
     @Override

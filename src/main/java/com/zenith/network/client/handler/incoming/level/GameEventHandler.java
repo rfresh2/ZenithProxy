@@ -1,15 +1,15 @@
 package com.zenith.network.client.handler.incoming.level;
 
-import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
-import com.github.steveice10.mc.protocol.data.game.level.notify.GameEvent;
-import com.github.steveice10.mc.protocol.data.game.level.notify.RainStrengthValue;
-import com.github.steveice10.mc.protocol.data.game.level.notify.RespawnScreenValue;
-import com.github.steveice10.mc.protocol.data.game.level.notify.ThunderStrengthValue;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import com.zenith.event.module.WeatherChangeEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
+import org.geysermc.mcprotocollib.protocol.data.game.level.notify.GameEvent;
+import org.geysermc.mcprotocollib.protocol.data.game.level.notify.RainStrengthValue;
+import org.geysermc.mcprotocollib.protocol.data.game.level.notify.RespawnScreenValue;
+import org.geysermc.mcprotocollib.protocol.data.game.level.notify.ThunderStrengthValue;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;

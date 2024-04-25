@@ -1,6 +1,5 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.DeathMessageEvent;
 import com.zenith.event.proxy.SelfDeathMessageEvent;
@@ -13,6 +12,7 @@ import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 
 import java.util.Objects;
 import java.util.Optional;

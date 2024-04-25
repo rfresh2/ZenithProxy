@@ -1,16 +1,16 @@
 package com.zenith.cache.data.tab;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntryAction;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntryAction;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

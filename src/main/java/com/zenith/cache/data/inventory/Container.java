@@ -1,9 +1,9 @@
 package com.zenith.cache.data.inventory;
 
-import com.github.steveice10.mc.protocol.data.game.inventory.ContainerType;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;

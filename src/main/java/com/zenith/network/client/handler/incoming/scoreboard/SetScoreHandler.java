@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.incoming.scoreboard;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 import com.zenith.cache.data.scoreboard.Score;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetScorePacket;
 
 import static com.zenith.Shared.CACHE;
 

@@ -1,7 +1,5 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.feature.spectator.SpectatorSync;
@@ -11,6 +9,8 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.MODULE;

@@ -1,11 +1,11 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundPlayerInfoRemovePacket;
 import com.zenith.event.proxy.PlayerLogoutInVisualRangeEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerInfoRemovePacket;
 
 import java.util.Optional;
 

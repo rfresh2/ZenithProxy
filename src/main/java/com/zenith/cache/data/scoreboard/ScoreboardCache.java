@@ -1,12 +1,12 @@
 package com.zenith.cache.data.scoreboard;
 
-import com.github.steveice10.mc.protocol.data.game.scoreboard.ScoreboardPosition;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetDisplayObjectivePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.ScoreboardPosition;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetDisplayObjectivePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
 
 import java.util.EnumMap;
 import java.util.Map;

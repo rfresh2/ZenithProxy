@@ -1,8 +1,8 @@
 package com.zenith.network.client.handler.postoutgoing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.feature.spectator.SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache;

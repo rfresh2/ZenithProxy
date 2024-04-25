@@ -1,16 +1,16 @@
 package com.zenith.feature.spectator;
 
-import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Equipment;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Pose;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.player.Animation;
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.*;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
-import com.github.steveice10.packetlib.packet.Packet;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Equipment;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Animation;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.*;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.items.ItemData;
 import com.zenith.module.Module;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

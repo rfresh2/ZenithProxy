@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.zenith.Proxy;
 import com.zenith.database.dto.records.DeathsRecord;
 import com.zenith.event.proxy.DeathMessageEvent;
@@ -9,6 +8,7 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.whitelist.PlayerListsManager;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;

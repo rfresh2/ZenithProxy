@@ -1,13 +1,13 @@
 package com.zenith.network.server.handler.spectator.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.entity.player.InteractAction;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.InteractAction;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
 
 import static com.zenith.Shared.CACHE;
 

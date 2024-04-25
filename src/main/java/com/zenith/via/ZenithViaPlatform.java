@@ -1,6 +1,5 @@
 package com.zenith.via;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
@@ -8,6 +7,7 @@ import com.zenith.Proxy;
 import com.zenith.network.server.ServerConnection;
 import net.kyori.adventure.text.Component;
 import net.raphimc.vialoader.impl.platform.ViaVersionPlatformImpl;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

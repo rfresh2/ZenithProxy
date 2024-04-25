@@ -1,7 +1,7 @@
 package com.zenith.cache;
 
-import com.github.steveice10.packetlib.packet.Packet;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import java.util.function.Consumer;
 

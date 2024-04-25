@@ -1,15 +1,15 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.data.game.entity.player.HandPreference;
-import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
-import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
-import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.HandPreference;
+import org.geysermc.mcprotocollib.protocol.data.game.setting.ChatVisibility;
+import org.geysermc.mcprotocollib.protocol.data.game.setting.SkinPart;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 
 import java.util.List;
 

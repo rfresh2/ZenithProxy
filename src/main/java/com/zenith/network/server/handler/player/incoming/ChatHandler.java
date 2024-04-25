@@ -1,9 +1,9 @@
 package com.zenith.network.server.handler.player.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import static com.zenith.Shared.*;
 

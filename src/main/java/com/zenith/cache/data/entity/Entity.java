@@ -1,18 +1,18 @@
 package com.zenith.cache.data.entity;
 
-import com.github.steveice10.mc.protocol.data.game.entity.attribute.Attribute;
-import com.github.steveice10.mc.protocol.data.game.entity.attribute.AttributeType;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.object.ObjectData;
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetPassengersPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundUpdateAttributesPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.Attribute;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.object.ObjectData;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetPassengersPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundUpdateAttributesPacket;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.zenith.event.module;
 
-import com.github.steveice10.mc.protocol.data.game.entity.object.ProjectileData;
 import com.zenith.cache.data.entity.EntityStandard;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.object.ProjectileData;
 
 public record EntityFishHookSpawnEvent(EntityStandard fishHookObject) {
 

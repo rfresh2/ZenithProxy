@@ -1,19 +1,19 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.BooleanEntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
-import com.github.steveice10.mc.protocol.data.game.entity.type.EntityType;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
-import com.github.steveice10.mc.protocol.data.game.item.component.DataComponent;
-import com.github.steveice10.mc.protocol.data.game.item.component.DataComponentType;
-import com.github.steveice10.mc.protocol.data.game.item.component.DataComponents;
-import com.github.steveice10.mc.protocol.data.game.item.component.type.ObjectDataComponent;
 import com.zenith.Shared;
 import lombok.SneakyThrows;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.BooleanEntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponent;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponents;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.type.ObjectDataComponent;
 
 import java.util.HashMap;
 import java.util.Map;

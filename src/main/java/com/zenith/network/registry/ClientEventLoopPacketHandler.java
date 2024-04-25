@@ -1,7 +1,7 @@
 package com.zenith.network.registry;
 
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.network.client.ClientSession;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;

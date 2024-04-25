@@ -1,13 +1,13 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundCookieRequestPacket;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundHelloPacket;
-import com.github.steveice10.mc.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import com.zenith.network.UserAuthTask;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCookieRequestPacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundHelloPacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundHelloPacket;
 
 import static com.zenith.Shared.EXECUTOR;
 

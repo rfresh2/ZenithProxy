@@ -1,8 +1,8 @@
 package com.zenith.util;
 
-import com.github.steveice10.mc.protocol.codec.MinecraftCodecHelper;
 import io.netty.buffer.Unpooled;
 import lombok.experimental.UtilityClass;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
 
 @UtilityClass
 public class BrandSerializer {

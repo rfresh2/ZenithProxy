@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundTransferPacket;
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundTransferPacket;
 
 public class CTransferHandler implements PacketHandler<ClientboundTransferPacket, ClientSession> {
     @Override

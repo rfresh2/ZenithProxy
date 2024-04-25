@@ -1,12 +1,12 @@
 package com.zenith.feature.items;
 
-import com.github.steveice10.mc.protocol.data.game.inventory.*;
-import com.github.steveice10.mc.protocol.data.game.item.ItemStack;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import com.zenith.cache.data.inventory.Container;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.*;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import org.jetbrains.annotations.Nullable;
 
 import static com.zenith.Shared.*;

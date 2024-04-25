@@ -1,13 +1,13 @@
 package com.zenith.cache.data.recipe;
 
-import com.github.steveice10.mc.protocol.data.game.UnlockRecipesAction;
-import com.github.steveice10.mc.protocol.data.game.recipe.Recipe;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundRecipePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundUpdateRecipesPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.UnlockRecipesAction;
+import org.geysermc.mcprotocollib.protocol.data.game.recipe.Recipe;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRecipePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundUpdateRecipesPacket;
 
 import java.util.*;
 import java.util.function.Consumer;

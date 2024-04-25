@@ -1,16 +1,16 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.data.status.PlayerInfo;
-import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
-import com.github.steveice10.mc.protocol.data.status.VersionInfo;
-import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoBuilder;
-import com.github.steveice10.mc.protocol.packet.status.clientbound.ClientboundStatusResponsePacket;
-import com.github.steveice10.mc.protocol.packet.status.serverbound.ServerboundStatusRequestPacket;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
+import org.geysermc.mcprotocollib.protocol.data.status.PlayerInfo;
+import org.geysermc.mcprotocollib.protocol.data.status.ServerStatusInfo;
+import org.geysermc.mcprotocollib.protocol.data.status.VersionInfo;
+import org.geysermc.mcprotocollib.protocol.data.status.handler.ServerInfoBuilder;
+import org.geysermc.mcprotocollib.protocol.packet.status.clientbound.ClientboundStatusResponsePacket;
+import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.ServerboundStatusRequestPacket;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
 package com.zenith.network.server.handler.player.incoming;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
 
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.IN_GAME_COMMAND;

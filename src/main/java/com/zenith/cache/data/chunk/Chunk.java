@@ -1,11 +1,11 @@
 package com.zenith.cache.data.chunk;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
-import com.github.steveice10.mc.protocol.data.game.level.LightUpdateData;
-import com.github.steveice10.mc.protocol.data.game.level.block.BlockEntityInfo;
 import com.github.steveice10.opennbt.mini.MNBT;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
+import org.geysermc.mcprotocollib.protocol.data.game.level.LightUpdateData;
+import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityInfo;
 
 import java.util.List;
 

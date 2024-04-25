@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundPingPacket;
-import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundPongPacket;
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundPingPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundPongPacket;
 
 public class PingHandler implements ClientEventLoopPacketHandler<ClientboundPingPacket, ClientSession> {
     @Override

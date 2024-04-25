@@ -1,8 +1,8 @@
 package com.zenith.network.client.handler.incoming.inventory;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.inventory.ClientboundOpenScreenPacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.inventory.ClientboundOpenScreenPacket;
 
 import static com.zenith.Shared.CACHE;
 

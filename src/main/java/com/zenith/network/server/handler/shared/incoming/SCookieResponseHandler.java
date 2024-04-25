@@ -1,11 +1,11 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.github.steveice10.mc.protocol.MinecraftConstants;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ServerboundCookieResponsePacket;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundHelloPacket;
 import com.zenith.network.UserAuthTask;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ServerboundCookieResponsePacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundHelloPacket;
 
 import static com.zenith.Shared.EXECUTOR;
 import static com.zenith.Shared.SERVER_LOG;

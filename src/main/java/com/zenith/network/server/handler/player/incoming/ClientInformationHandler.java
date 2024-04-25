@@ -1,8 +1,8 @@
 package com.zenith.network.server.handler.player.incoming;
 
-import com.github.steveice10.mc.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 import com.zenith.network.registry.AsyncPacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 
 import static com.zenith.Shared.CACHE;
 

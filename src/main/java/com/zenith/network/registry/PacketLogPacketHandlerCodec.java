@@ -1,10 +1,10 @@
 package com.zenith.network.registry;
 
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.util.Config.Debug.PacketLog.PacketLogConfig;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.slf4j.Logger;
 
 import java.time.Instant;

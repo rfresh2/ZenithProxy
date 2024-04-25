@@ -1,10 +1,10 @@
 package com.zenith.network.server.handler.player.outgoing;
 
-import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
-import com.github.steveice10.mc.protocol.data.game.command.CommandType;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
+import org.geysermc.mcprotocollib.protocol.data.game.command.CommandType;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
 
 import java.util.OptionalInt;
 

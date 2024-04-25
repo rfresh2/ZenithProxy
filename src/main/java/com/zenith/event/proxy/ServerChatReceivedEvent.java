@@ -1,8 +1,8 @@
 package com.zenith.event.proxy;
 
-import com.github.steveice10.mc.protocol.data.game.PlayerListEntry;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 
 import java.util.Optional;
 

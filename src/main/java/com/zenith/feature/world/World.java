@@ -1,6 +1,6 @@
 package com.zenith.feature.world;
 
-import com.github.steveice10.mc.protocol.data.game.chunk.ChunkSection;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
 import com.zenith.feature.world.blockdata.Block;
 import com.zenith.feature.world.blockdata.BlockState;
 import com.zenith.util.math.MathHelper;

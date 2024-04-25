@@ -1,10 +1,10 @@
 package com.zenith.network.client.handler.outgoing;
 
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import com.zenith.event.module.OutboundChatEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;

@@ -1,17 +1,5 @@
 package com.zenith.module.impl;
 
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.inventory.ServerboundEditBookPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.serverbound.player.*;
 import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ServerConnectionRemovedEvent;
 import com.zenith.feature.actionlimiter.handlers.inbound.*;
@@ -25,6 +13,18 @@ import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.network.server.ServerConnection;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundEditBookPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundMoveVehiclePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;

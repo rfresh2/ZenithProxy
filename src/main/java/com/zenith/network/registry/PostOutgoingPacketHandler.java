@@ -1,7 +1,7 @@
 package com.zenith.network.registry;
 
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.packet.Packet;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 
 @FunctionalInterface
 public interface PostOutgoingPacketHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {

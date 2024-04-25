@@ -1,9 +1,9 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.configuration.clientbound.ClientboundSelectKnownPacks;
-import com.github.steveice10.mc.protocol.packet.configuration.serverbound.ServerboundSelectKnownPacks;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundSelectKnownPacks;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.ServerboundSelectKnownPacks;
 
 import java.util.Collections;
 

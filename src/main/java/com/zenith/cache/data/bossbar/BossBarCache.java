@@ -1,9 +1,9 @@
 package com.zenith.cache.data.bossbar;
 
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
-import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 
 import java.util.Map;
 import java.util.UUID;

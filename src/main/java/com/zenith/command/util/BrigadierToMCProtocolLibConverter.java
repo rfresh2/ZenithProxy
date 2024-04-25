@@ -1,9 +1,5 @@
 package com.zenith.command.util;
 
-import com.github.steveice10.mc.protocol.data.game.command.CommandNode;
-import com.github.steveice10.mc.protocol.data.game.command.CommandParser;
-import com.github.steveice10.mc.protocol.data.game.command.CommandType;
-import com.github.steveice10.mc.protocol.data.game.command.properties.*;
 import com.google.common.collect.Queues;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.*;
@@ -18,6 +14,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.experimental.UtilityClass;
+import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
+import org.geysermc.mcprotocollib.protocol.data.game.command.CommandParser;
+import org.geysermc.mcprotocollib.protocol.data.game.command.CommandType;
+import org.geysermc.mcprotocollib.protocol.data.game.command.properties.*;
 
 import java.util.List;
 import java.util.OptionalInt;

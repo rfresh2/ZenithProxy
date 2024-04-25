@@ -1,25 +1,6 @@
 package com.zenith.network.server;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.mc.protocol.data.game.scoreboard.CollisionRule;
-import com.github.steveice10.mc.protocol.data.game.scoreboard.NameTagVisibility;
-import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamAction;
-import com.github.steveice10.mc.protocol.data.game.scoreboard.TeamColor;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundDisconnectPacket;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundTransferPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
-import com.github.steveice10.mc.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
-import com.github.steveice10.packetlib.Session;
-import com.github.steveice10.packetlib.codec.PacketCodecHelper;
-import com.github.steveice10.packetlib.event.session.SessionListener;
-import com.github.steveice10.packetlib.packet.Packet;
-import com.github.steveice10.packetlib.tcp.TcpSession;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
@@ -38,6 +19,26 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.network.Flag;
+import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.codec.PacketCodecHelper;
+import org.geysermc.mcprotocollib.network.event.session.SessionListener;
+import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.network.tcp.TcpSession;
+import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.CollisionRule;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.NameTagVisibility;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.TeamAction;
+import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.TeamColor;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundDisconnectPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundTransferPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -451,7 +452,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public MinecraftProtocol getPacketProtocol() {
-        return this.session.getPacketProtocol();
+        return (MinecraftProtocol) this.session.getPacketProtocol();
     }
 
     @Override
@@ -465,23 +466,23 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public boolean hasFlag(String key) {
-        return this.session.hasFlag(key);
+    public boolean hasFlag(Flag<?> flag) {
+        return this.session.hasFlag(flag);
     }
 
     @Override
-    public <T> T getFlag(String key) {
+    public <T> T getFlag(Flag<T> key) {
         return this.session.getFlag(key);
     }
 
     @Override
-    public <T> T getFlag(String key, T def) {
+    public <T> T getFlag(Flag<T> key, T def) {
         return this.session.getFlag(key, def);
     }
 
     @Override
-    public void setFlag(String key, Object value) {
-        this.session.setFlag(key, value);
+    public <T> void setFlag(Flag<T> flag, T value) {
+        this.session.setFlag(flag, value);
     }
 
     @Override
@@ -616,7 +617,7 @@ public class ServerConnection implements Session, SessionListener {
 
     private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
         if (reason == null) return null;
-        MinecraftProtocol protocol = session.getPacketProtocol();
+        MinecraftProtocol protocol = (MinecraftProtocol) session.getPacketProtocol();
         if (protocol.getState() == ProtocolState.LOGIN) {
             return new ClientboundLoginDisconnectPacket(reason);
         } else if (protocol.getState() == ProtocolState.GAME) {

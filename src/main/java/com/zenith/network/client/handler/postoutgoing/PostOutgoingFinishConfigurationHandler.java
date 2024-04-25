@@ -1,9 +1,9 @@
 package com.zenith.network.client.handler.postoutgoing;
 
-import com.github.steveice10.mc.protocol.data.ProtocolState;
-import com.github.steveice10.mc.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 
 public class PostOutgoingFinishConfigurationHandler implements PostOutgoingPacketHandler<ServerboundFinishConfigurationPacket, ClientSession> {
     @Override

@@ -1,8 +1,8 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.github.steveice10.mc.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
 
 public class CStoreCookieHandler implements PacketHandler<ClientboundStoreCookiePacket, ClientSession> {
     @Override

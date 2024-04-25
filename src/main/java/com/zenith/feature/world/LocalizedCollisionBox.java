@@ -1,9 +1,9 @@
 package com.zenith.feature.world;
 
 
-import com.github.steveice10.mc.protocol.data.game.entity.object.Direction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.object.Direction;
 import org.jetbrains.annotations.Nullable;
 
 /**
