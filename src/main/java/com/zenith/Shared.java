@@ -211,12 +211,12 @@ public class Shared {
                 .setNameFormat("ZenithProxy Async EventBus - #%d")
                 .setDaemon(true)
                 .build()), DEFAULT_LOG);
+            DIMENSION_DATA = new DimensionDataManager();
             CACHE = new DataCache();
             PLAYER_LISTS = new PlayerListsManager();
             BLOCK_DATA = new BlockDataManager();
             ENTITY_DATA = new EntityDataManager();
             MAP_BLOCK_COLOR = new MapBlockColorManager();
-            DIMENSION_DATA = new DimensionDataManager();
             DATABASE = new DatabaseManager();
             TPS = new TPSCalculator();
             MODULE = new ModuleManager();

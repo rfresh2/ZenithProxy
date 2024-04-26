@@ -57,6 +57,14 @@
   }, {
     "pattern":"\\Qassets/viabackwards/data/chat-types-1.19.1.nbt\\E"
   }, {
+    "pattern":"\\Qassets/viabackwards/data/item-mappings-1.10.json\\E"
+  }, {
+    "pattern":"\\Qassets/viabackwards/data/item-mappings-1.11.1.json\\E"
+  }, {
+    "pattern":"\\Qassets/viabackwards/data/item-mappings-1.11.json\\E"
+  }, {
+    "pattern":"\\Qassets/viabackwards/data/item-mappings-1.12.json\\E"
+  }, {
     "pattern":"\\Qassets/viabackwards/data/legacy-mappings.json\\E"
   }, {
     "pattern":"\\Qassets/viabackwards/data/mappings-1.10to1.9.4.nbt\\E"
@@ -113,6 +121,8 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/channelmappings-1.13.json\\E"
   }, {
+    "pattern":"\\Qassets/viaversion/data/chat-registry-1.19.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viaversion/data/chat-types-1.19.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/damage-types-1.19.4.nbt\\E"
@@ -121,7 +131,11 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/en_US.properties\\E"
   }, {
+    "pattern":"\\Qassets/viaversion/data/extra-identifiers-1.20.3.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viaversion/data/heightmap-1.14.nbt\\E"
+  }, {
+    "pattern":"\\Qassets/viaversion/data/identifier-table.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/identifiers-1.10.nbt\\E"
   }, {

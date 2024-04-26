@@ -103,10 +103,11 @@ public class PlayerCache implements CachedData {
         if (container.getContainerId() != 0) {
             consumer.accept(new ClientboundOpenScreenPacket(container.getContainerId(), container.getType(), container.getTitle()));
         }
-        consumer.accept(new ClientboundContainerSetContentPacket(container.getContainerId(),
-                                                                 actionId.get(),
-                                                                 container.getContents().toArray(new ItemStack[0]),
-                                                                 new ItemStack(0, 0)));
+        consumer.accept(new ClientboundContainerSetContentPacket(
+            container.getContainerId(),
+            actionId.get(),
+            container.getContents().toArray(new ItemStack[0]),
+            null));
         if (!CONFIG.debug.sendChunksBeforePlayerSpawn)
             consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
         consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(Vector3i.from(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ()), 0.0f));
