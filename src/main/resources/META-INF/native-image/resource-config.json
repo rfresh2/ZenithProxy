@@ -239,6 +239,8 @@
   }, {
     "pattern":"\\Qmcdata/blocks.json\\E"
   }, {
+    "pattern":"\\Qmcdata/dimensions.json\\E"
+  }, {
     "pattern":"\\Qmcdata/entities.json\\E"
   }, {
     "pattern":"\\Qmcdata/foods.json\\E"
