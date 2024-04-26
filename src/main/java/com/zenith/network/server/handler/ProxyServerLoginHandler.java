@@ -59,7 +59,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
                 CACHE.getPlayerCache().isDoLimitedCrafting(),
                 new PlayerSpawnInfo(
-                    CACHE.getChunkCache().getCurrentDimension().dimensionName(),
+                    CACHE.getChunkCache().getCurrentDimension().name(),
                     CACHE.getChunkCache().getWorldName(),
                     CACHE.getChunkCache().getHashedSeed(),
                     GameMode.SPECTATOR,
@@ -83,7 +83,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 CACHE.getPlayerCache().isEnableRespawnScreen(),
                 CACHE.getPlayerCache().isDoLimitedCrafting(),
                 new PlayerSpawnInfo(
-                    CACHE.getChunkCache().getCurrentDimension().dimensionName(),
+                    CACHE.getChunkCache().getCurrentDimension().name(),
                     CACHE.getChunkCache().getWorldName(),
                     CACHE.getChunkCache().getHashedSeed(),
                     CACHE.getPlayerCache().getGameMode(),

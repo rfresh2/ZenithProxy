@@ -28,6 +28,7 @@ public class DataGenerator implements DedicatedServerModInitializer {
         new BlockCollisionShapes(),
         new Blocks(),
         new BlockToMapColorId(),
+        new DimensionTypes(),
         new Entities(),
         new Food(),
         new Items(),

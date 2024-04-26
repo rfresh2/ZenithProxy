@@ -26,14 +26,14 @@ import com.github.steveice10.packetlib.packet.Packet;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.dimension.DimensionData;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.BrandSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -45,8 +45,6 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,9 +66,8 @@ public class ChunkCache implements CachedData {
     // to do iteration, copy the key or value set into a new list, then iterate over that copied list.
     // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
-    protected Map<String, Dimension> dimensionRegistry = new ConcurrentHashMap<>();
-    protected @Nullable Dimension currentDimension = null;
-    protected Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
+    protected @Nullable DimensionData currentDimension = null;
+    protected Object2ObjectOpenHashMap<String, DimensionData> dimensionRegistry = new Object2ObjectOpenHashMap<>();
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
     protected MinecraftCodecHelper codec;
@@ -94,17 +91,18 @@ public class ChunkCache implements CachedData {
                                      5L,
                                      TimeUnit.MINUTES);
         codec = MinecraftCodec.CODEC.getHelperFactory().get();
+        resetDimensionRegistry();
     }
 
     public void updateRegistryTag(final CompoundTag registryData) {
         this.registryTag = registryData;
         setDimensionRegistry(registryData);
-        setBiomes(registryData);
     }
 
     public void setDimensionRegistry(final CompoundTag registryData) {
         CompoundTag compoundTag = registryData.<CompoundTag>get("minecraft:dimension_type");
         if (compoundTag == null) return;
+        resetDimensionRegistry();
         final var dimensionList = compoundTag.getListTag("value").getValue();
         for (Tag tag : dimensionList) {
             CompoundTag dimension = (CompoundTag) tag;
@@ -114,19 +112,7 @@ public class ChunkCache implements CachedData {
             int height = element.getNumberTag("height").asInt();
             int minY = element.getNumberTag("min_y").asInt();
             CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
-            dimensionRegistry.put(name, new Dimension(name, id, height, minY));
-        }
-    }
-
-    public void setBiomes(final CompoundTag registryData) {
-        final var biomeRegistry = registryData.<CompoundTag>get("minecraft:worldgen/biome");
-        if (biomeRegistry == null) return;
-        for (Tag type : biomeRegistry.getListTag("value").getValue()) {
-            CompoundTag biomeNBT = (CompoundTag) type;
-            String biomeName = biomeNBT.getStringTag("name").asRawString();
-            int biomeId = biomeNBT.getNumberTag("id").asInt();
-            Biome biome = new Biome(biomeName, biomeId);
-            biomes.put(biome.id(), biome);
+            dimensionRegistry.put(name, new DimensionData(id, name, minY, minY + height, height));
         }
     }
 
@@ -136,19 +122,15 @@ public class ChunkCache implements CachedData {
         this.hashedSeed = hashedSeed;
         this.debug = debug;
         this.flat = flat;
-        var worldDimension = dimensionRegistry.get(dimensionType);
+        var worldDimension = DIMENSION_DATA.getDimensionData(dimensionType);
         if (worldDimension == null) {
-            CACHE_LOG.warn("Received unknown dimension type: {}", dimensionType);
-            if (!dimensionRegistry.isEmpty()) {
-                worldDimension = dimensionRegistry.values().stream().findFirst().get();
-                CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.dimensionName());
-            } else {
-                throw new RuntimeException("No dimensions in registry");
-            }
+            CACHE_LOG.warn("Received unknown dimension ID: {}", dimensionType);
+            worldDimension = DIMENSION_DATA.getDimensionData(0);
+            CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.name());
         }
         this.currentDimension = worldDimension;
         CACHE_LOG.debug("Updated current world to {}", worldName);
-        CACHE_LOG.debug("Current dimension: {}", currentDimension);
+        CACHE_LOG.debug("Current dimension: {}", currentDimension.name());
     }
 
     public static void sync() {
@@ -394,9 +376,8 @@ public class ChunkCache implements CachedData {
         this.thunderStrength = 0.0f;
         this.rainStrength = 0.0f;
         if (full) {
-            this.biomes.clear();
-            this.dimensionRegistry.clear();
             this.dimensionType = null;
+            resetDimensionRegistry();
             this.worldName = null;
             this.hashedSeed = 0;
             this.debug = false;
@@ -409,6 +390,11 @@ public class ChunkCache implements CachedData {
             this.worldTimeData = null;
             this.serverBrand = null;
         }
+    }
+
+    public void resetDimensionRegistry() {
+        this.dimensionRegistry.clear();
+        DIMENSION_DATA.dimensionNames().forEach(name -> dimensionRegistry.put(name, DIMENSION_DATA.getDimensionData(name)));
     }
 
     @Override
@@ -475,7 +461,7 @@ public class ChunkCache implements CachedData {
 
     public int getMaxBuildHeight() {
         var dim = currentDimension;
-        return dim != null ? dim.minY() + dim.height() : 0;
+        return dim != null ? dim.buildHeight() : 0;
     }
 
     public Chunk get(int x, int z) {
@@ -521,13 +507,13 @@ public class ChunkCache implements CachedData {
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
         CACHE_LOG.debug("Updating current dimension to: {}", info.getDimension());
-        Dimension newDim = dimensionRegistry.get(info.getDimension());
+        DimensionData newDim = DIMENSION_DATA.getDimensionData(info.getDimension());
         if (newDim == null) {
             CACHE_LOG.error("Respawn packet tried updating dimension to unregistered dimension: {}", info.getDimension());
             CACHE_LOG.error("Things are going to break...");
         } else {
             this.currentDimension = newDim;
-            this.worldName = currentDimension.dimensionName();
+            this.worldName = currentDimension.name();
         }
         this.dimensionType = info.getDimension();
         this.hashedSeed = info.getHashedSeed();
