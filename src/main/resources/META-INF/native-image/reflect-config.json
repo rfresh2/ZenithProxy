@@ -33,9 +33,6 @@
   "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
 },
 {
-  "name":"[Lorg.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;"
-},
-{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
 },
 {
@@ -124,6 +121,9 @@
 },
 {
   "name":"[Ljava.util.UUID;"
+},
+{
+  "name":"[Lorg.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;"
 },
 {
   "name":"[Lsun.security.pkcs.SignerInfo;"
@@ -351,18 +351,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
-  "allDeclaredFields":true
-},
-{
-  "name":"org.geysermc.mcprotocollib.protocol.packet.ingame.client.ClientChatPacket",
-  "fields":[{"name":"message"}]
-},
-{
-  "name":"org.geysermc.mcprotocollib.protocol.packet.ingame.server.ServerStatisticsPacket",
-  "fields":[{"name":"statistics"}]
-},
-{
   "name":"com.github.steveice10.opennbt.tag.builtin.ByteArrayTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
@@ -413,57 +401,6 @@
 {
   "name":"com.github.steveice10.opennbt.tag.builtin.Tag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.ProxyInfo$Type",
-  "allDeclaredFields":true
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpClientChannelInitializer"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpClientSession$1"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCodec"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCompressionAndSizeEncoder"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCompressionDecoder"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketEncryptionDecoder"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketEncryptionEncoder"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizeDecoder"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizeEncoder"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizer"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketVelocityCompression"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketVelocityEncryptor"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpServer$1"
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpServerSession",
-  "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
-},
-{
-  "name":"org.geysermc.mcprotocollib.network.tcp.TcpSession",
-  "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
   "name":"com.google.common.util.concurrent.AbstractFuture",
@@ -1853,6 +1790,61 @@
 {
   "name":"org.eclipse.jgit.util.sha1.SHA1$Sha1Implementation",
   "methods":[{"name":"values","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.ProxyInfo$Type",
+  "allDeclaredFields":true
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpClientChannelInitializer"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpClientSession$1"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCodec"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCompressionAndSizeEncoder"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketCompressionDecoder"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketEncryptionDecoder"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketEncryptionEncoder"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizeDecoder"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizeEncoder"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketSizer"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketVelocityCompression"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpPacketVelocityEncryptor"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpServer$1"
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpServerSession",
+  "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.network.tcp.TcpSession",
+  "methods":[{"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
+  "allDeclaredFields":true
 },
 {
   "name":"org.jdbi.v3.core.Handles",
