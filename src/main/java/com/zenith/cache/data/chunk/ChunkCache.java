@@ -122,7 +122,7 @@ public class ChunkCache implements CachedData {
         this.hashedSeed = hashedSeed;
         this.debug = debug;
         this.flat = flat;
-        var worldDimension = DIMENSION_DATA.getDimensionData(dimensionType);
+        var worldDimension = dimensionRegistry.get(dimensionType);
         if (worldDimension == null) {
             CACHE_LOG.warn("Received unknown dimension ID: {}", dimensionType);
             worldDimension = DIMENSION_DATA.getDimensionData(0);
@@ -507,7 +507,7 @@ public class ChunkCache implements CachedData {
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
         CACHE_LOG.debug("Updating current dimension to: {}", info.getDimension());
-        DimensionData newDim = DIMENSION_DATA.getDimensionData(info.getDimension());
+        DimensionData newDim = dimensionRegistry.get(info.getDimension());
         if (newDim == null) {
             CACHE_LOG.error("Respawn packet tried updating dimension to unregistered dimension: {}", info.getDimension());
             CACHE_LOG.error("Things are going to break...");
