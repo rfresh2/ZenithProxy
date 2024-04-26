@@ -28,6 +28,7 @@ public class DataGenerator implements DedicatedServerModInitializer {
         new BlockCollisionShapes(),
         new Blocks(),
         new BlockToMapColorId(),
+        new DimensionTypes(),
         new Entities(),
         new Food(),
         new Items(),
@@ -43,7 +44,7 @@ public class DataGenerator implements DedicatedServerModInitializer {
             SERVER_INSTANCE = server;
             generators.forEach(Generator::generate);
             LOG.info("Data generation complete!");
-            Runtime.getRuntime().halt(0);
+            server.halt(false);
         });
     }
 

@@ -1,0 +1,50 @@
+[
+  {
+    "id": 0,
+    "name": "overworld",
+    "minY": -64,
+    "height": 384,
+    "buildHeight": 320,
+    "coordinateScale": 1.0,
+    "hasCeiling": false,
+    "hasSkyLight": true,
+    "bedWorks": true,
+    "respawnAnchorWorks": false
+  },
+  {
+    "id": 1,
+    "name": "overworld_caves",
+    "minY": -64,
+    "height": 384,
+    "buildHeight": 320,
+    "coordinateScale": 1.0,
+    "hasCeiling": true,
+    "hasSkyLight": true,
+    "bedWorks": true,
+    "respawnAnchorWorks": false
+  },
+  {
+    "id": 2,
+    "name": "the_end",
+    "minY": 0,
+    "height": 256,
+    "buildHeight": 256,
+    "coordinateScale": 1.0,
+    "hasCeiling": false,
+    "hasSkyLight": false,
+    "bedWorks": false,
+    "respawnAnchorWorks": false
+  },
+  {
+    "id": 3,
+    "name": "the_nether",
+    "minY": 0,
+    "height": 256,
+    "buildHeight": 256,
+    "coordinateScale": 8.0,
+    "hasCeiling": true,
+    "hasSkyLight": false,
+    "bedWorks": false,
+    "respawnAnchorWorks": true
+  }
+]

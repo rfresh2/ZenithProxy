@@ -39,7 +39,16 @@
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
 },
 {
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.Particle;"
+},
+{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.PlayerMessageSignature;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.RegistryEntry;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.data.StructuredData;"
 },
 {
   "name":"[Lcom.viaversion.viaversion.api.minecraft.item.DataItem;"
@@ -48,7 +57,25 @@
   "name":"[Lcom.viaversion.viaversion.api.minecraft.item.Item;"
 },
 {
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.BannerPatternLayer;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.Bee;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.FilterableString;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.FireworkExplosion;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.SuspiciousStewEffect;"
+},
+{
   "name":"[Lcom.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;"
+},
+{
+  "name":"[Lcom.viaversion.viaversion.libs.opennbt.tag.builtin.Tag;"
 },
 {
   "name":"[Lcom.zaxxer.hikari.util.ConcurrentBag$IConcurrentBagEntry;"

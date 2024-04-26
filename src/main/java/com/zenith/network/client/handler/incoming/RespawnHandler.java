@@ -34,7 +34,7 @@ public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundR
             // delay is a hacky workaround and might still get caught in race condition sometimes
             EXECUTOR.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
         }
-        if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().dimensionName(), packet.getCommonPlayerSpawnInfo().getDimension())) {
+        if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().name(), packet.getCommonPlayerSpawnInfo().getDimension())) {
             CACHE.reset(false);
             // only partial reset chunk and entity cache?
         }
