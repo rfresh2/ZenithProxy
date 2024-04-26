@@ -92,7 +92,7 @@ public class ReplayRecording implements Closeable {
         writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
-            DIMENSION_DATA.dimensionNames().toArray(new String[0]),
+            CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
             CACHE.getPlayerCache().getMaxPlayers(),
             CACHE.getChunkCache().getServerViewDistance(),
             CACHE.getChunkCache().getServerSimulationDistance(),

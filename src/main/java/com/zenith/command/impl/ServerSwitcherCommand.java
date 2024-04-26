@@ -85,20 +85,18 @@ public class ServerSwitcherCommand extends Command {
                         .title("No player found");
                     return OK;
                 }
-                // TODO: uncomment when via updated
                 if (CONFIG.server.viaversion.enabled) {
                     Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
                         .filter(client -> client.getChannel() == currentPlayer.getSession().getChannel())
-                        .map(con -> con.getProtocolInfo().getProtocolVersion())
-                        .map(ProtocolVersion::getProtocol)
+                        .map(con -> con.getProtocolInfo().protocolVersion())
                         .findFirst();
-//                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get() < ProtocolVersion.v1_20_5.getProtocol()) {
-//                        c.getSource().getEmbed()
-//                            .title("Unsupported Client MC Version")
-//                            .addField("Client Version", viaClientProtocolVersion.get().getName(), false)
-//                            .addField("Error", "The client version must be at least 1.20.5 to switch servers", false);
-//                        return ERROR;
-//                    }
+                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().getVersion() < ProtocolVersion.v1_20_5.getVersion()) {
+                        c.getSource().getEmbed()
+                            .title("Unsupported Client MC Version")
+                            .addField("Client Version", viaClientProtocolVersion.get().getName(), false)
+                            .addField("Error", "The client version must be at least 1.20.5 to switch servers", false);
+                        return ERROR;
+                    }
                 }
 
                 currentPlayer.transfer(server.address(), server.port());

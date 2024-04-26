@@ -119,14 +119,12 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 if (CONFIG.server.viaversion.enabled) {
                     Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
                         .filter(client -> client.getChannel() == session.getSession().getChannel())
-                        .map(con -> con.getProtocolInfo().getProtocolVersion())
-                        .map(ProtocolVersion::getProtocol)
+                        .map(con -> con.getProtocolInfo().protocolVersion())
                         .findFirst();
-                    // TODO: uncomment when via updated
-//                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get() < ProtocolVersion.v1_20_5.getProtocol()) {
-//                        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cUnsupported Client MC Version&r"), false));
-//                        return;
-//                    }
+                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().getVersion() < ProtocolVersion.v1_20_5.getVersion()) {
+                        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cUnsupported Client MC Version&r"), false));
+                        return;
+                    }
                 }
                 session.transferToControllingPlayer(CONFIG.server.getProxyAddressForTransfer(), CONFIG.server.getProxyPortForTransfer());
             }

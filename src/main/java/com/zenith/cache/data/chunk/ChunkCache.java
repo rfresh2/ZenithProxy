@@ -1,22 +1,5 @@
 package com.zenith.cache.data.chunk;
 
-import com.github.steveice10.opennbt.mini.MNBT;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.io.MNBTIO;
-import com.zenith.Proxy;
-import com.zenith.cache.CachedData;
-import com.zenith.feature.world.blockdata.Block;
-import com.zenith.feature.world.dimension.DimensionData;
-import com.zenith.network.server.ServerConnection;
-import com.zenith.util.BrandSerializer;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
@@ -37,6 +20,25 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
+import com.github.steveice10.opennbt.mini.MNBT;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
+import com.github.steveice10.opennbt.tag.builtin.Tag;
+import com.github.steveice10.opennbt.tag.io.MNBTIO;
+import com.zenith.Proxy;
+import com.zenith.cache.CachedData;
+import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.dimension.DimensionData;
+import com.zenith.network.server.ServerConnection;
+import com.zenith.util.BrandSerializer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -44,7 +46,6 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,6 +68,7 @@ public class ChunkCache implements CachedData {
     // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
     protected @Nullable DimensionData currentDimension = null;
+    protected Int2ObjectOpenHashMap<DimensionData> dimensionRegistry = new Int2ObjectOpenHashMap<>();
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
     protected MinecraftCodecHelper codec;
@@ -89,11 +91,28 @@ public class ChunkCache implements CachedData {
                                      5L,
                                      TimeUnit.MINUTES);
         codec = MinecraftCodec.CODEC.getHelperFactory().get();
+        resetDimensionRegistry();
     }
 
-    public void updateDimensionRegistry(final List<RegistryEntry> registryData) {
-        // TODO: check if these are sent by the server when it has non-vanilla dimensions
-        //  doesn't seem like its sent by default from vanilla servers
+    public void updateRegistryTag(final CompoundTag registryData) {
+        setDimensionRegistry(registryData);
+    }
+
+    public void setDimensionRegistry(final CompoundTag registryData) {
+        CompoundTag compoundTag = registryData.<CompoundTag>get("minecraft:dimension_type");
+        if (compoundTag == null) return;
+        resetDimensionRegistry();
+        final var dimensionList = compoundTag.getListTag("value").getValue();
+        for (Tag tag : dimensionList) {
+            CompoundTag dimension = (CompoundTag) tag;
+            String name = dimension.getStringTag("name").asRawString();
+            int id = dimension.getNumberTag("id").asInt();
+            CompoundTag element = dimension.get("element");
+            int height = element.getNumberTag("height").asInt();
+            int minY = element.getNumberTag("min_y").asInt();
+            CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
+            dimensionRegistry.put(id, new DimensionData(id, name, minY, minY + height, height));
+        }
     }
 
     public void setCurrentWorld(final int dimensionId, final String worldName, long hashedSeed, boolean debug, boolean flat) {
@@ -105,12 +124,16 @@ public class ChunkCache implements CachedData {
         var worldDimension = DIMENSION_DATA.getDimensionData(dimensionId);
         if (worldDimension == null) {
             CACHE_LOG.warn("Received unknown dimension ID: {}", dimensionId);
-            worldDimension = DIMENSION_DATA.getDimensionData(0);
-            CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.name());
+            if (!dimensionRegistry.isEmpty()) {
+                worldDimension = DIMENSION_DATA.getDimensionData(0);
+                CACHE_LOG.warn("Defaulting to first dimension in registry: {}", worldDimension.name());
+            } else {
+                throw new RuntimeException("No dimensions in registry");
+            }
         }
         this.currentDimension = worldDimension;
         CACHE_LOG.debug("Updated current world to {}", worldName);
-        CACHE_LOG.debug("Current dimension: {}", currentDimension);
+        CACHE_LOG.debug("Current dimension: {}", currentDimension.name());
     }
 
     public static void sync() {
@@ -357,6 +380,7 @@ public class ChunkCache implements CachedData {
         this.rainStrength = 0.0f;
         if (full) {
             this.dimensionType = 0;
+            resetDimensionRegistry();
             this.worldName = null;
             this.hashedSeed = 0;
             this.debug = false;
@@ -368,6 +392,14 @@ public class ChunkCache implements CachedData {
             this.worldTimeData = null;
             this.serverBrand = null;
         }
+    }
+
+    public void resetDimensionRegistry() {
+        this.dimensionRegistry.clear();
+        DIMENSION_DATA.dimensionNames().forEach(name -> {
+            var data = DIMENSION_DATA.getDimensionData(name);
+            dimensionRegistry.put(data.id(), data);
+        });
     }
 
     @Override
@@ -480,7 +512,7 @@ public class ChunkCache implements CachedData {
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {
         PlayerSpawnInfo info = packet.getCommonPlayerSpawnInfo();
         CACHE_LOG.debug("Updating current dimension to: {}", info.getDimension());
-        DimensionData newDim = DIMENSION_DATA.getDimensionData(info.getDimension());
+        DimensionData newDim = dimensionRegistry.get(info.getDimension());
         if (newDim == null) {
             CACHE_LOG.error("Respawn packet tried updating dimension to unregistered dimension: {}", info.getDimension());
             CACHE_LOG.error("Things are going to break...");
