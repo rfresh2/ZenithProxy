@@ -300,6 +300,10 @@ public class Proxy {
      * @throws IllegalStateException if already connected
      */
     public synchronized void connect() {
+        connect(CONFIG.client.server.address, CONFIG.client.server.port);
+    }
+
+    public synchronized void connect(final String address, final int port) {
         if (this.isConnected()) throw new IllegalStateException("Already connected!");
         this.connectTime = Instant.now();
         final MinecraftProtocol minecraftProtocol;
@@ -314,9 +318,9 @@ public class Proxy {
             }, 1L, TimeUnit.SECONDS);
             return;
         }
-        CLIENT_LOG.info("Connecting to {}:{}...", CONFIG.client.server.address, CONFIG.client.server.port);
-        this.client = new ClientSession(CONFIG.client.server.address, CONFIG.client.server.port, CONFIG.client.bindAddress, minecraftProtocol, getClientProxyInfo(), tcpManager);
-        if (Objects.equals(CONFIG.client.server.address, "connect.2b2t.org"))
+        CLIENT_LOG.info("Connecting to {}:{}...", address, port);
+        this.client = new ClientSession(address, port, CONFIG.client.bindAddress, minecraftProtocol, getClientProxyInfo(), tcpManager);
+        if (Objects.equals(address, "connect.2b2t.org"))
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
