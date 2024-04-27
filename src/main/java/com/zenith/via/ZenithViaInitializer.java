@@ -3,7 +3,6 @@ package com.zenith.via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
-import com.zenith.Proxy;
 import com.zenith.via.handler.ZViaProtocolStateHandler;
 import io.netty.channel.Channel;
 import net.raphimc.vialoader.ViaLoader;
@@ -40,9 +39,12 @@ public class ZenithViaInitializer {
         if (CONFIG.client.viaversion.autoProtocolVersion) updateClientViaProtocolVersion();
         if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
             CLIENT_LOG.warn("ViaVersion enabled but the protocol is the same as ours, connecting without ViaVersion");
-        } else if (Proxy.getInstance().isOn2b2t()) {
-            CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
-        } else {
+        }
+        // todo: add back when 2b2t adds 1.20.5 client support
+//        else if (Proxy.getInstance().isOn2b2t()) {
+//            CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
+//        }
+        else {
             init();
             UserConnectionImpl userConnection = new UserConnectionImpl(channel, true);
             new ProtocolPipelineImpl(userConnection);
