@@ -59,9 +59,7 @@ repositories {
     }
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
         name = "sonatype-oss-snapshots"
-        content {
-            includeGroup("net.kyori")
-        }
+        content { includeGroup("net.kyori") }
     }
     maven("https://repo1.maven.org/maven2/") { name = "maven central" }
     mavenLocal()
@@ -94,7 +92,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:3069dffbec") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:0efcf033fc") {
+    shade("com.github.rfresh2:MCProtocolLib:97aa6c2ef2") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
