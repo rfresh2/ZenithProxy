@@ -14,14 +14,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
         with:
-          distribution: 'temurin'
-          java-version: 21
+          java-version: '22'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Echo Versions and Paths
         run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
@@ -30,28 +35,11 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           arguments: jarBuild
-
-#      - name: Set Gradle JVM
-#        run: touch gradle.properties && echo "org.gradle.java.home=$JAVA_HOME" > gradle.properties
-
-      - name: Setup GraalVM
-        uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '22'
-          distribution: 'graalvm'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 #
 #      - name: Set ACT Runner Env Variables
 #        run: |
 #          export GRAALVM_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
 #          export JAVA_HOME=/opt/hostedtoolcache/graalvm-jdk-20.0.2_linux-x64_bin/20.0.2/x64/graalvm-jdk-20.0.2+9.1
-
-      - name: Echo Versions and Paths
-        run: |
-          echo "GRAALVM_HOME: $GRAALVM_HOME"
-          echo "JAVA_HOME: $JAVA_HOME"
-          java --version
-          native-image --version
 
       - name: Download GraalVM Profile
         run: |
