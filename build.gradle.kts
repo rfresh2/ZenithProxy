@@ -19,15 +19,45 @@ val javaLauncherProvider22 = javaToolchains.launcherFor { languageVersion = java
 java { toolchain { languageVersion = javaVersion21 } }
 
 repositories {
-    maven("https://jitpack.io") { name = "jitpack.io" }
+    maven("https://jitpack.io") {
+        name = "jitpack.io"
+        content { includeGroupByRegex("com.github.rfresh2.*") }
+    }
+    maven("https://libraries.minecraft.net") {
+        name = "minecraft"
+        content { includeGroup("com.mojang") }
+    }
+    maven("https://repo.opencollab.dev/maven-releases/") {
+        name = "opencollab-release"
+        content { includeGroupByRegex("org.cloudburstmc.*") }
+    }
+    maven("https://repo.opencollab.dev/maven-snapshots/") {
+        name = "opencollab-snapshot"
+        content { includeGroupByRegex("org.cloudburstmc.fastutil.*") }
+    }
+    maven("https://papermc.io/repo/repository/maven-public/") {
+        name = "paper"
+        content { includeGroup("com.velocitypowered") }
+    }
+    maven("https://repo.minebench.de/") {
+        name = "minebench"
+        content { includeGroup("de.themoep") }
+    }
+    maven("https://repo.viaversion.com") {
+        name = "ViaVersion"
+        content {
+            includeGroup("com.viaversion")
+            includeGroup("net.raphimc")
+        }
+    }
+    maven("https://maven.lenni0451.net/releases") {
+        name = "Lenni0451"
+        content {
+            includeGroup("net.raphimc")
+            includeGroup("net.lenni0451")
+        }
+    }
     maven("https://repo1.maven.org/maven2/") { name = "maven central" }
-    maven("https://libraries.minecraft.net") { name = "minecraft" }
-    maven("https://repo.opencollab.dev/maven-releases/") { name = "opencollab-release" }
-    maven("https://repo.opencollab.dev/maven-snapshots/") { name = "opencollab-snapshot" }
-    maven("https://papermc.io/repo/repository/maven-public/") { name = "paper" }
-    maven("https://repo.minebench.de/") { name = "minebench" }
-    maven("https://repo.viaversion.com") { name = "ViaVersion" }
-    maven("https://maven.lenni0451.net/releases") { name = "Lenni0451" }
     mavenLocal()
 }
 
