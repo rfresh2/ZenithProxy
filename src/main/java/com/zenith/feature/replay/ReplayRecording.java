@@ -3,6 +3,7 @@ package com.zenith.feature.replay;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorPacketProvider;
+import com.zenith.feature.world.dimension.DimensionData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -92,7 +93,7 @@ public class ReplayRecording implements Closeable {
         writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
-            CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
+            CACHE.getChunkCache().getDimensionRegistry().values().stream().map(DimensionData::name).toArray(String[]::new),
             CACHE.getPlayerCache().getMaxPlayers(),
             CACHE.getChunkCache().getServerViewDistance(),
             CACHE.getChunkCache().getServerSimulationDistance(),

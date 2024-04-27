@@ -6,6 +6,7 @@ import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
+import com.zenith.feature.world.dimension.DimensionData;
 import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
@@ -51,7 +52,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
+                CACHE.getChunkCache().getDimensionRegistry().values().stream().map(DimensionData::name).toArray(String[]::new),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
@@ -76,7 +77,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
+                CACHE.getChunkCache().getDimensionRegistry().values().stream().map(DimensionData::name).toArray(String[]::new),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
