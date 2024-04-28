@@ -26,7 +26,6 @@ public class ZenithViaLoader extends VLLoader {
             } else {
                 SERVER_LOG.info("ViaVersion requested server connection transfer to {}:{}", host, port);
                 SERVER_LOG.info("...but we can't transfer players");
-                SERVER_LOG.info("Players should use ViaFabricPlus, which implements this for clients");
                 // ???
             }
         });
