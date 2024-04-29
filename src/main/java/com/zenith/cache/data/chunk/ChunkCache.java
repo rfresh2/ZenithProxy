@@ -62,7 +62,7 @@ public class ChunkCache implements CachedData {
     private boolean isRaining = false;
     private float rainStrength = 0f;
     private float thunderStrength = 0f;
-    private int renderDistance = 25;
+    private int renderDistance = 25; // client-side setting as reported during login, not server. currently unused
     // iterators over this map are not thread safe.
     // to do iteration, copy the key or value set into a new list, then iterate over that copied list.
     // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
