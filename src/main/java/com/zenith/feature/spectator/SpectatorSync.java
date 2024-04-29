@@ -139,7 +139,7 @@ public final class SpectatorSync {
         final int spectZ = (int) spectConnection.getSpectatorPlayerCache().getZ() >> 4;
         final int playerX = (int) CACHE.getPlayerCache().getX() >> 4;
         final int playerZ = (int) CACHE.getPlayerCache().getZ() >> 4;
-        if (Math.abs(spectX - playerX) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1) || Math.abs(spectZ - playerZ) > (CACHE.getChunkCache().getRenderDistance() / 2 + 1)) {
+        if (Math.abs(spectX - playerX) > (CACHE.getChunkCache().getServerViewDistance() / 2 + 1) || Math.abs(spectZ - playerZ) > (CACHE.getChunkCache().getServerViewDistance() / 2 + 1)) {
             syncSpectatorPositionToProxiedPlayer(spectConnection);
         }
     }
