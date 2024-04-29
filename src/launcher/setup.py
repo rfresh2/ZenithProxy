@@ -30,13 +30,13 @@ def setup_execute(config):
     while True:
         print("Select a Minecraft version: (1/2)")
         print("1. 1.20.4")
-        print("2. 1.20.5")
+        print("2. 1.20.6")
         i1 = input("> ")
         if i1 == "1":
             minecraft_version = "1.20.4"
             break
         elif i1 == "2":
-            minecraft_version = "1.20.5"
+            minecraft_version = "1.20.6"
             break
         else:
             print("Invalid input. Enter 1 or 2")

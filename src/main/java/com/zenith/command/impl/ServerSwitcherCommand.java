@@ -34,7 +34,7 @@ public class ServerSwitcherCommand extends Command {
             
             Can be used to switch between multiple ZenithProxy instances quickly.
             
-            Servers being switched to must have transfers enabled and be on an MC version >=1.20.5
+            Servers being switched to must have transfers enabled and be on an MC version >=1.20.6
             """,
             asList(
                 "register <name> <address> <port>",
@@ -94,7 +94,7 @@ public class ServerSwitcherCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Unsupported Client MC Version")
                             .addField("Client Version", viaClientProtocolVersion.get().getName(), false)
-                            .addField("Error", "The client version must be at least 1.20.5 to switch servers", false);
+                            .addField("Error", "The client version must be at least 1.20.6 to switch servers", false);
                         return ERROR;
                     }
                 }
