@@ -43,7 +43,7 @@ public class Queue {
 
     // returns seconds until estimated queue completion time
     public static long getQueueWait(final Integer queuePos) {
-        return (long) (84.3 * (Math.pow(queuePos.doubleValue(), 1.05)));
+        return (long) (247 * (Math.pow(queuePos.doubleValue(), 0.885)));
     }
 
     public static String getEtaStringFromSeconds(final long totalSeconds) {
