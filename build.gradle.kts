@@ -117,12 +117,12 @@ dependencies {
     shade("org.redisson:redisson:3.29.0") {
         exclude(group = "io.netty")
     }
-    shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion")
-    shade("org.cloudburstmc.fastutil.maps:int-object-maps:$fastutilVersion")
-    shade("org.cloudburstmc.fastutil.maps:object-int-maps:$fastutilVersion")
-    shade("org.cloudburstmc.fastutil.maps:long-object-maps:$fastutilVersion")
-    shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion")
-    shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion")
+    shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion") { isChanging = false }
+    shade("org.cloudburstmc.fastutil.maps:int-object-maps:$fastutilVersion") { isChanging = false }
+    shade("org.cloudburstmc.fastutil.maps:object-int-maps:$fastutilVersion") { isChanging = false }
+    shade("org.cloudburstmc.fastutil.maps:long-object-maps:$fastutilVersion") { isChanging = false }
+    shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion") { isChanging = false }
+    shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion") { isChanging = false }
     shade("net.raphimc:ViaLoader:2.2.13")
     shade("com.viaversion:viaversion:4.10.0")
     shade("com.viaversion:viabackwards:4.10.0")
