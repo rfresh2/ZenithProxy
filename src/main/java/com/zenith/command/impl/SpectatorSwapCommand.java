@@ -8,6 +8,7 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
+import com.zenith.command.brigadier.CommandSource;
 
 import java.util.Optional;
 
@@ -27,8 +28,7 @@ public class SpectatorSwapCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        // todo: requires?
-        return command("swap").executes(c -> {
+        return command("swap").requires(c -> Command.validateCommandSource(c, CommandSource.IN_GAME_PLAYER)).executes(c -> {
             var player = Proxy.getInstance().getActivePlayer();
             if (player == null) {
                 c.getSource().getEmbed()
@@ -51,11 +51,7 @@ public class SpectatorSwapCommand extends Command {
                 }
             }
             player.transferToSpectator(CONFIG.server.getProxyAddressForTransfer(), CONFIG.server.getProxyPortForTransfer());
-            var currentProfile = player.getProfileCache().getProfile();
-            c.getSource().getEmbed()
-                .title("Swap Sent")
-                .primaryColor()
-                .addField("Player", currentProfile != null ? currentProfile.getName() : "Unknown", false);
+            c.getSource().setNoOutput(true);
         });
     }
 }
