@@ -37,6 +37,8 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             Optional<Boolean> onlySpectator = Optional.empty();
             if (session.isTransferring()) {
                 onlySpectator = session.getCookieCache().getSpectatorCookieValue();
+                var transferSrc = session.getCookieCache().getZenithTransferSrc();
+                transferSrc.ifPresent(s -> SERVER_LOG.info("{} transferring from ZenithProxy instance: {}", clientGameProfile.getName(), s));
             }
             if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
                 if (CONFIG.server.spectator.allowSpectator && PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {

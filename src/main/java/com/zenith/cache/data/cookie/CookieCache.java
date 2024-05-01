@@ -36,6 +36,10 @@ public class CookieCache implements CachedData {
         return zenithCookies.stream().allMatch(cookies::containsKey);
     }
 
+    public Optional<String> getZenithTransferSrc() {
+        return Optional.ofNullable(cookies.get(zenithTransferSrcKey));
+    }
+
     /**
      * S2C packets requesting cookie responses
      */
