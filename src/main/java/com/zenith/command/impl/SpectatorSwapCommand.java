@@ -42,7 +42,7 @@ public class SpectatorSwapCommand extends Command {
                     .filter(client -> client.getChannel() == player.getSession().getChannel())
                     .map(con -> con.getProtocolInfo().protocolVersion())
                     .findFirst();
-                if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().getVersion() < ProtocolVersion.v1_20_5.getVersion()) {
+                if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5)) {
                     c.getSource().getEmbed()
                         .title("Unsupported Client MC Version")
                         .errorColor()

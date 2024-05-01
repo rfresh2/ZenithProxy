@@ -121,7 +121,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                         .filter(client -> client.getChannel() == session.getSession().getChannel())
                         .map(con -> con.getProtocolInfo().protocolVersion())
                         .findFirst();
-                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().getVersion() < ProtocolVersion.v1_20_5.getVersion()) {
+                    if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5)) {
                         session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cUnsupported Client MC Version&r"), false));
                         return;
                     }
