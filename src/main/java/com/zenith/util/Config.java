@@ -392,6 +392,7 @@ public final class Config {
         public final ServerViaVersion viaversion = new ServerViaVersion();
         public boolean verifyUsers = true;
         public boolean acceptTransfers = true;
+        public boolean onlyZenithTransfers = true;
         public boolean kickPrevious = false;
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths

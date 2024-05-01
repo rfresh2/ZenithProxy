@@ -39,6 +39,12 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 onlySpectator = session.getCookieCache().getSpectatorCookieValue();
                 var transferSrc = session.getCookieCache().getZenithTransferSrc();
                 transferSrc.ifPresent(s -> SERVER_LOG.info("{} transferring from ZenithProxy instance: {}", clientGameProfile.getName(), s));
+                if (CONFIG.server.onlyZenithTransfers && transferSrc.isEmpty()) {
+                    // clients can spoof these cookies easily, but the whitelist would stop them anyway
+                    SERVER_LOG.info("Blocking transfer from non-ZenithProxy source. Username: {} UUID: {} [{}]", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
+                    session.disconnect("Transfer Blocked");
+                    return null;
+                }
             }
             if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
                 if (CONFIG.server.spectator.allowSpectator && PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
