@@ -45,8 +45,9 @@ public class SpectatorSwapCommand extends Command {
                 if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().getVersion() < ProtocolVersion.v1_20_5.getVersion()) {
                     c.getSource().getEmbed()
                         .title("Unsupported Client MC Version")
+                        .errorColor()
                         .addField("Client Version", viaClientProtocolVersion.get().getName(), false)
-                        .addField("Error", "The client version must be at least 1.20.6 to switch servers", false);
+                        .addField("Error", "Client version must be at least 1.20.6", false);
                     return;
                 }
             }
