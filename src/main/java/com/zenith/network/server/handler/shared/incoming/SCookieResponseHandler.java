@@ -19,26 +19,9 @@ public class SCookieResponseHandler implements PacketHandler<ServerboundCookieRe
                 return null;
             }
             var cookieKey = packet.getKey().split("minecraft:")[1];
-            // todo: refactor this logic so we can cleanly add or remove cookies as needed
-            if (cookieKey.equals(ServerConnection.COOKIE_ZENITH_TRANSFER_SRC)) {
-                session.setReceivedTransferSrcCookie(true);
-            } else if (cookieKey.equals(ServerConnection.COOKIE_ZENITH_SPECTATOR)) {
-                session.setReceivedSpectatorCookie(true);
-            } else {
-                SERVER_LOG.debug("Received unexpected cookie: {}", cookieKey);
-                return null;
-            }
-            var payload = packet.getPayload();
-            if (payload != null) {
-                try {
-                    var value = new String(payload);
-                    session.getCookies().put(cookieKey, value);
-                } catch (final Throwable e) {
-                    SERVER_LOG.debug("Unable to parse cookie response to string for key: {}", cookieKey, e);
-                    return null;
-                }
-            }
-            if (session.isReceivedTransferSrcCookie() && session.isReceivedSpectatorCookie()) {
+            session.getCookieCache().handleCookieResponse(cookieKey, packet.getPayload());
+
+            if (session.getCookieCache().receivedAllCookieResponses()) {
                 if (session.getFlag(MinecraftConstants.VERIFY_USERS_KEY, true)) {
                     session.send(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge(), true));
                 } else {

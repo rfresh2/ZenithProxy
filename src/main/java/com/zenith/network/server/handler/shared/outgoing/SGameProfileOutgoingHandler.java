@@ -12,6 +12,7 @@ import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -29,21 +30,17 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 return null;
             }
             // this has some bearing on authorization
-            boolean onlySpectator = false; // can be set by cookie. or forcefully set if they're only on spectator whitelist
-            // this has no bearing on authorization
-            // todo: does this make any sense to keep?
-            boolean onlyControllingPlayer = false; // only set by cookie
+            // can be set by cookie. or forcefully set if they're only on spectator whitelist
+            // true: only spectator -> also set by authorization, overrides any cookie state
+            // false: only controlling player
+            // empty: no preference, whichever is available
+            Optional<Boolean> onlySpectator = Optional.empty();
             if (session.isTransferring()) {
-                String spectatorCookieValue = session.getCookies().get(ServerConnection.COOKIE_ZENITH_SPECTATOR);
-                if (spectatorCookieValue != null) {
-                    var value = Boolean.parseBoolean(spectatorCookieValue);
-                    if (value) onlySpectator = true;
-                    else onlyControllingPlayer = true;
-                }
+                onlySpectator = session.getCookieCache().getSpectatorCookieValue();
             }
             if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
                 if (CONFIG.server.spectator.allowSpectator && PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
-                    onlySpectator = true;
+                    onlySpectator = Optional.of(true);
                 } else {
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                     SERVER_LOG.warn("Username: {} UUID: {} [{}] tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
@@ -51,16 +48,11 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     return null;
                 }
             }
-            if (onlySpectator && onlyControllingPlayer) {
-                SERVER_LOG.debug("Disconnecting: {} as they cannot be both a spectator and controlling player", clientGameProfile.getName());
-                session.disconnect("Invalid login state");
-                return null;
-            }
             SERVER_LOG.info("Username: {} UUID: {} [{}] has passed the whitelist check!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
             session.setWhitelistChecked(true);
             synchronized (this) {
                 if (!Proxy.getInstance().isConnected()) {
-                    if (CONFIG.client.extra.autoConnectOnLogin && !onlySpectator) {
+                    if (CONFIG.client.extra.autoConnectOnLogin && !onlySpectator.orElse(false)) {
                         Proxy.getInstance().connect();
                     } else {
                         session.disconnect("Not connected to server!");
@@ -80,10 +72,10 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             }
             SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
             session.getProfileCache().setProfile(clientGameProfile);
-            if (!onlySpectator && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
+            if (!onlySpectator.orElse(false) && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
                 return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false);
             }
-            if (onlyControllingPlayer) { // the above operation failed and we don't want to be put into spectator
+            if (onlySpectator.isPresent() && !onlySpectator.get()) { // the above operation failed and we don't want to be put into spectator
                 session.disconnect("Someone is already controlling the player");
                 return null;
             }

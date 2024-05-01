@@ -5,7 +5,6 @@ import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
-import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCookieRequestPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundHelloPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundHelloPacket;
 
@@ -20,8 +19,7 @@ public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, Serv
             // TODO: see how viaversion interacts with this sequence
             //  it seems to be legal for clients to not send a response to the cookie request, at which point we stall
             //  in this login sequence forever
-            session.sendAsync(new ClientboundCookieRequestPacket(ServerConnection.COOKIE_ZENITH_TRANSFER_SRC));
-            session.sendAsync(new ClientboundCookieRequestPacket(ServerConnection.COOKIE_ZENITH_SPECTATOR));
+            session.getCookieCache().getPackets(session::sendAsync);
         } else {
             if (session.getFlag(MinecraftConstants.VERIFY_USERS_KEY, true)) {
                 session.send(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge(), true));

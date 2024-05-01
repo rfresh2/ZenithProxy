@@ -4,6 +4,7 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
+import com.zenith.cache.data.cookie.CookieCache;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
@@ -32,7 +33,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.NameTagVisibilit
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.TeamAction;
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.TeamColor;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundDisconnectPacket;
-import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundTransferPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
@@ -84,12 +84,7 @@ public class ServerConnection implements Session, SessionListener {
     private @Nullable UUID loginProfileUUID;
     private int protocolVersion; // as reported by the client when they connected
     protected boolean isTransferring = false;
-    // cookie keys
-    public static final String COOKIE_ZENITH_TRANSFER_SRC = "zenith-transfer-src";
-    protected boolean receivedTransferSrcCookie = false;
-    public static final String COOKIE_ZENITH_SPECTATOR = "zenith-spectator";
-    protected boolean receivedSpectatorCookie = false;
-    private final Map<String, String> cookies = new HashMap<>();
+    protected final CookieCache cookieCache = new CookieCache();
 
     public ServerConnection(final Session session) {
         ThreadLocalRandom.current().nextBytes(this.challenge);
@@ -392,18 +387,18 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public void transfer(final String address, final int port) {
-        sendAsync(new ClientboundStoreCookiePacket(ServerConnection.COOKIE_ZENITH_TRANSFER_SRC, CONFIG.server.proxyIP.getBytes()));
+        cookieCache.getStoreSrcPacket(this::sendAsync);
         sendAsync(new ClientboundTransferPacket(address, port));
         disconnect(Component.text("Transferring to " + address + ":" + port));
     }
 
     public void transferToSpectator(final String address, final int port) {
-        sendAsync(new ClientboundStoreCookiePacket(ServerConnection.COOKIE_ZENITH_SPECTATOR, "true".getBytes()));
+        cookieCache.getStoreSpectatorDestPacket(this::sendAsync, true);
         transfer(address, port);
     }
 
     public void transferToControllingPlayer(final String address, final int port) {
-        sendAsync(new ClientboundStoreCookiePacket(ServerConnection.COOKIE_ZENITH_SPECTATOR, "false".getBytes()));
+        cookieCache.getStoreSpectatorDestPacket(this::sendAsync, false);
         transfer(address, port);
     }
 
