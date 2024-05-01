@@ -89,6 +89,7 @@ public class Proxy {
     private TcpConnectionManager tcpManager;
 
     public static void main(String... args) {
+        Locale.setDefault(Locale.ENGLISH);
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         if (System.getProperty("io.netty.leakDetection.level") == null)
