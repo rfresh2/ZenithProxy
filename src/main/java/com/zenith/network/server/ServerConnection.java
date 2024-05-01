@@ -166,7 +166,6 @@ public class ServerConnection implements Session, SessionListener {
         return packet;
     }
 
-
     @Override
     public void packetSent(Session session, Packet packet) {
         try {
@@ -183,13 +182,10 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void connected(final Session session) {
-    }
+    public void connected(final Session session) {}
 
     @Override
-    public void disconnecting(final Session session, final Component reason, final Throwable cause) {
-
-    }
+    public void disconnecting(final Session session, final Component reason, final Throwable cause) {}
 
     @Override
     public void disconnected(final Session session, final Component reason, final Throwable cause) {
@@ -447,7 +443,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public MinecraftProtocol getPacketProtocol() {
-        return (MinecraftProtocol) this.session.getPacketProtocol();
+        return this.session.getPacketProtocol();
     }
 
     @Override
@@ -482,7 +478,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public void setFlags(final Map<String, Object> map) {
-
+        this.session.setFlags(map);
     }
 
     @Override
@@ -612,7 +608,7 @@ public class ServerConnection implements Session, SessionListener {
 
     private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
         if (reason == null) return null;
-        MinecraftProtocol protocol = (MinecraftProtocol) session.getPacketProtocol();
+        MinecraftProtocol protocol = session.getPacketProtocol();
         if (protocol.getState() == ProtocolState.LOGIN) {
             return new ClientboundLoginDisconnectPacket(reason);
         } else if (protocol.getState() == ProtocolState.GAME) {
