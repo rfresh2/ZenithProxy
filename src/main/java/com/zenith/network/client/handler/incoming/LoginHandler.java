@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.EVENT_BUS;
+import static java.util.Arrays.asList;
 
 public class LoginHandler implements PacketHandler<ClientboundLoginPacket, ClientSession> {
     @Override
@@ -38,8 +39,7 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
             .setGameMode(packet.getCommonPlayerSpawnInfo().getGameMode())
             .setEnableRespawnScreen(packet.isEnableRespawnScreen())
             .setReducedDebugInfo(packet.isReducedDebugInfo());
-        // todo: set this in configuration phase ?
-//        CACHE.getChunkCache().updateRegistryTag(packet.getRegistry());
+        CACHE.getChunkCache().setWorldNames(asList(packet.getWorldNames()));
         CACHE.getChunkCache().setCurrentWorld(
             packet.getCommonPlayerSpawnInfo().getDimension(),
             packet.getCommonPlayerSpawnInfo().getWorldName(),

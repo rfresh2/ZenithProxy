@@ -53,6 +53,7 @@ import java.util.function.Consumer;
 
 import static com.zenith.Shared.*;
 import static com.zenith.cache.data.chunk.Chunk.*;
+import static java.util.Arrays.asList;
 
 @Getter
 @Setter
@@ -69,6 +70,7 @@ public class ChunkCache implements CachedData {
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
     protected @Nullable DimensionData currentDimension = null;
     protected Int2ObjectOpenHashMap<DimensionData> dimensionRegistry = new Int2ObjectOpenHashMap<>();
+    protected List<String> worldNames = new ArrayList<>();
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
     protected MinecraftCodecHelper codec;
@@ -389,12 +391,13 @@ public class ChunkCache implements CachedData {
         }
     }
 
-    public void resetDimensionRegistry() {
+    public synchronized void resetDimensionRegistry() {
         this.dimensionRegistry.clear();
         DIMENSION_DATA.dimensionNames().forEach(name -> {
             var data = DIMENSION_DATA.getDimensionData(name);
             dimensionRegistry.put(data.id(), data);
         });
+        worldNames = asList("minecraft:overworld", "minecraft:the_nether", "minecraft:the_end");
     }
 
     @Override
