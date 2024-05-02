@@ -104,11 +104,22 @@ public class ChunkCache implements CachedData {
             if (!entry.getId().startsWith("minecraft:")) continue;
             String name = entry.getId().split("minecraft:")[1];
             CompoundTag tag = entry.getData();
-            if (tag == null) continue;
-            int height = tag.getNumberTag("height").asInt();
-            int minY = tag.getNumberTag("min_y").asInt();
-            CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
-            dimensionRegistry.put(id, new DimensionData(id, name, minY, minY + height, height));
+            DimensionData dimensionData;
+            if (tag == null) { // occurs when we report to the server we have the core 1.20.6 pack
+                // just populate from our own registry
+                dimensionData = DIMENSION_DATA.getDimensionData(id);
+            } else {
+                int height = tag.getNumberTag("height").asInt();
+                int minY = tag.getNumberTag("min_y").asInt();
+                dimensionData = new DimensionData(id, name, minY, minY + height, height);
+            }
+            if (dimensionData == null) {
+                CACHE_LOG.error("Undefined dimension registry data for name: {} and ID: {}", name, id);
+                dimensionData = DIMENSION_DATA.getDimensionData(0); // fill in with overworld data just so we don't crash ourselves
+                continue;
+            }
+            CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, dimensionData.height(), dimensionData.minY());
+            dimensionRegistry.put(id, dimensionData);
         }
     }
 
