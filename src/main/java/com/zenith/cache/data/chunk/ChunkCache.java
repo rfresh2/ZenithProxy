@@ -1,5 +1,23 @@
 package com.zenith.cache.data.chunk;
 
+import com.github.steveice10.opennbt.mini.MNBT;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
+import com.github.steveice10.opennbt.tag.io.MNBTIO;
+import com.zenith.Proxy;
+import com.zenith.cache.CachedData;
+import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.dimension.DimensionData;
+import com.zenith.network.server.ServerConnection;
+import com.zenith.util.BrandSerializer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
@@ -20,25 +38,6 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
-import com.github.steveice10.opennbt.mini.MNBT;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.Tag;
-import com.github.steveice10.opennbt.tag.io.MNBTIO;
-import com.zenith.Proxy;
-import com.zenith.cache.CachedData;
-import com.zenith.feature.world.blockdata.Block;
-import com.zenith.feature.world.dimension.DimensionData;
-import com.zenith.network.server.ServerConnection;
-import com.zenith.util.BrandSerializer;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -46,6 +45,7 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -94,22 +94,17 @@ public class ChunkCache implements CachedData {
         resetDimensionRegistry();
     }
 
-    public void updateRegistryTag(final CompoundTag registryData) {
-        setDimensionRegistry(registryData);
-    }
-
-    public void setDimensionRegistry(final CompoundTag registryData) {
-        CompoundTag compoundTag = registryData.<CompoundTag>get("minecraft:dimension_type");
-        if (compoundTag == null) return;
-        resetDimensionRegistry();
-        final var dimensionList = compoundTag.getListTag("value").getValue();
-        for (Tag tag : dimensionList) {
-            CompoundTag dimension = (CompoundTag) tag;
-            String name = dimension.getStringTag("name").asRawString();
-            int id = dimension.getNumberTag("id").asInt();
-            CompoundTag element = dimension.get("element");
-            int height = element.getNumberTag("height").asInt();
-            int minY = element.getNumberTag("min_y").asInt();
+    public void updateDimensionRegistry(final List<RegistryEntry> entries) {
+        if (entries == null || entries.isEmpty()) return;
+        dimensionRegistry.clear();
+        for (int id = 0; id < entries.size(); id++) {
+            RegistryEntry entry = entries.get(id);
+            if (!entry.getId().startsWith("minecraft:")) continue;
+            String name = entry.getId().split("minecraft:")[1];
+            CompoundTag tag = entry.getData();
+            if (tag == null) continue;
+            int height = tag.getNumberTag("height").asInt();
+            int minY = tag.getNumberTag("min_y").asInt();
             CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
             dimensionRegistry.put(id, new DimensionData(id, name, minY, minY + height, height));
         }
