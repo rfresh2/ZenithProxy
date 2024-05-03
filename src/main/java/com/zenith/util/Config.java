@@ -469,7 +469,7 @@ public final class Config {
         }
 
         public static final class ServerViaVersion {
-            public boolean enabled = false;
+            public boolean enabled = true;
         }
 
         public String getProxyAddress() {
