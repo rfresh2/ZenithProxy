@@ -6,6 +6,7 @@ import com.zenith.event.proxy.*;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.queue.Queue;
+import com.zenith.util.DisconnectReasonInfo;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.User;
@@ -109,6 +110,7 @@ public class DiscordEventListener {
         var embed = Embed.builder()
             .title("Proxy Disconnected")
             .addField("Reason", event.reason(), false)
+            .addField("Why?", "[Wiki](" + DisconnectReasonInfo.getDisconnectCategory(event.reason()).getWikiURL() + ")", false)
             .addField("Online Duration", formatDuration(event.onlineDuration()), false)
             .errorColor();
         if (Proxy.getInstance().isOn2b2t()
