@@ -477,7 +477,8 @@ public final class Config {
         }
 
         public static final class ServerViaVersion {
-            public boolean enabled = false;
+            public boolean enabled = true;
+            public boolean autoRemoveFromPipeline = true;
         }
 
         public String getProxyAddress() {
