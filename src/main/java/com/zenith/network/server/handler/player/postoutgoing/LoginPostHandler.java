@@ -61,8 +61,8 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
     }
 
     private void checkDisableServerVia(ServerConnection session) {
-        if (CONFIG.server.viaversion.enabled) {
-            // the ConnectedClients map is not populated with the connection until  ClientboundLoginPacket is sent to the player
+        if (CONFIG.server.viaversion.enabled && CONFIG.server.viaversion.autoRemoveFromPipeline) {
+            // the ConnectedClients map is not populated with the connection until ClientboundLoginPacket is sent to the player
             Via.getManager().getConnectionManager().getConnectedClients().values().stream()
                 .filter(c -> c.getChannel() == session.getSession().getChannel())
                 .findAny()
