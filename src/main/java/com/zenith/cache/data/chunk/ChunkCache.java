@@ -40,7 +40,6 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,14 +102,15 @@ public class ChunkCache implements CachedData {
             RegistryEntry entry = entries.get(id);
             if (!entry.getId().startsWith("minecraft:")) continue;
             String name = entry.getId().split("minecraft:")[1];
-            CompoundTag tag = entry.getData();
+            MNBT tag = entry.getData();
             DimensionData dimensionData;
             if (tag == null) { // occurs when we report to the server we have the core 1.20.6 pack
                 // just populate from our own registry
                 dimensionData = DIMENSION_DATA.getDimensionData(id);
             } else {
-                int height = tag.getNumberTag("height").asInt();
-                int minY = tag.getNumberTag("min_y").asInt();
+                CompoundTag nbt = (CompoundTag) MNBTIO.read(tag);
+                int height = nbt.getNumberTag("height").asInt();
+                int minY = nbt.getNumberTag("min_y").asInt();
                 dimensionData = new DimensionData(id, name, minY, minY + height, height);
             }
             if (dimensionData == null) {
@@ -240,13 +240,9 @@ public class ChunkCache implements CachedData {
         tileEntityTag.putInt("x", position.getX());
         tileEntityTag.putInt("y", position.getY());
         tileEntityTag.putInt("z", position.getZ());
-        try {
-            // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
-            final MNBT nbt = MNBTIO.write(tileEntityTag, false);
-            updateOrAddBlockEntity(chunk, position, type, nbt);
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
+        final MNBT nbt = MNBTIO.write(tileEntityTag, false);
+        updateOrAddBlockEntity(chunk, position, type, nbt);
     }
 
     private void updateOrAddBlockEntity(final Chunk chunk, final Vector3i position, final BlockEntityType type, final MNBT nbt) {
