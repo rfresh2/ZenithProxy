@@ -13,25 +13,28 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.sound.BuiltinSound;
 import org.geysermc.mcprotocollib.protocol.data.game.level.sound.SoundCategory;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static java.util.Arrays.asList;
+
 public class SpectatorEntityGhast extends SpectatorMob {
     @Override
-    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
+    public List<EntityMetadata<?, ?>> getSelfEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorFakeProfile, spectatorEntityId, true);
     }
 
     @Override
-    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
+    public List<EntityMetadata<?, ?>> getEntityMetadata(final GameProfile spectatorRealProfile, GameProfile spectatorFakeProfile, int spectatorEntityId) {
         return getEntityMetadata(spectatorFakeProfile, spectatorEntityId, false);
     }
 
-    private EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId, final boolean self) {
-        return new EntityMetadata[]{
+    private List<EntityMetadata<?, ?>> getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId, final boolean self) {
+        return asList(
             new ObjectEntityMetadata<>(2, MetadataType.OPTIONAL_CHAT, Optional.of(Component.text(spectatorProfile.getName()))),
-            new BooleanEntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
-        };
+            new BooleanEntityMetadata(3, MetadataType.BOOLEAN, !self) // hide nametag on self
+        );
     }
 
     @Override

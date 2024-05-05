@@ -130,7 +130,7 @@ public final class SpectatorSync {
                     spawnSpectatorForOtherSessions(session, connection);
                     connection.syncTeamMembers();
                 });
-        session.sendAsync(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getEntityMetadataAsArray()));
+        session.sendAsync(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getMetadata()));
         syncPlayerEquipmentWithSpectatorsFromCache();
     }
 

@@ -40,7 +40,7 @@ public abstract class Entity {
     protected int leashedId;
     protected boolean isLeashed;
     protected Map<AttributeType, Attribute> attributes = new ConcurrentHashMap<>();
-    protected List<EntityMetadata> metadata = new ArrayList<>();
+    protected List<EntityMetadata<?, ?>> metadata = new ArrayList<>();
     protected IntArrayList passengerIds = new IntArrayList();
     protected boolean isInVehicle;
     protected int vehicleId;
@@ -55,12 +55,8 @@ public abstract class Entity {
             consumer.accept(new ClientboundSetPassengersPacket(this.entityId, passengerIds.toIntArray()));
         }
         if (!this.metadata.isEmpty()) {
-            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, metadata.toArray(new EntityMetadata[0])));
+            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, metadata));
         }
-    }
-
-    public EntityMetadata[] getEntityMetadataAsArray() {
-        return metadata.toArray(new EntityMetadata[0]);
     }
 
     public void updateAttributes(@NonNull List<Attribute> attributes) {

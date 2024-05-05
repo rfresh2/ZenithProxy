@@ -7,6 +7,8 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTyp
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 
+import java.util.ArrayList;
+
 public class GlowingEntityMetadataPacketHandler implements PacketHandler<ClientboundSetEntityDataPacket, ServerConnection> {
     @Override
     public ClientboundSetEntityDataPacket apply(final ClientboundSetEntityDataPacket packet, final ServerConnection session) {
@@ -25,9 +27,9 @@ public class GlowingEntityMetadataPacketHandler implements PacketHandler<Clientb
         }
         if (!edited) {
             byte b = 0x40;
-            metadata = new EntityMetadata[metadata.length + 1];
-            System.arraycopy(packet.getMetadata(), 0, metadata, 0, packet.getMetadata().length);
-            metadata[metadata.length - 1] = new ByteEntityMetadata(0, MetadataType.BYTE, b);
+            metadata = new ArrayList<>(metadata.size() + 1);
+            metadata.addAll(packet.getMetadata());
+            metadata.add(new ByteEntityMetadata(0, MetadataType.BYTE, b));
             p = new ClientboundSetEntityDataPacket(packet.getEntityId(), metadata);
         }
         return p;

@@ -24,14 +24,14 @@ public class ViaVersionCommand extends Command {
             """
              Configure the integrated ViaVersion module.
              
-             `client` -> ZenithProxy connecting to the MC server
-             `server` -> players connecting to ZenithProxy
+             `zenithToServer` -> ZenithProxy connecting to the MC server
+             `playerToZenith` -> players connecting to ZenithProxy
              """,
             asList(
-                "client on/off",
-                "client autoConfig on/off",
-                "client version <MC version>",
-                "server on/off"
+                "zenithToServer on/off",
+                "zenithToServer autoConfig on/off",
+                "zenithToServer version <MC version>",
+                "playerToZenith on/off"
             )
         );
     }
@@ -39,18 +39,18 @@ public class ViaVersionCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("via")
-            .then(literal("client")
+            .then(literal("zenithToServer")
                 .then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.client.viaversion.enabled = getToggle(c, "toggle");
                     c.getSource().getEmbed()
-                        .title("Client ViaVersion " + toggleStrCaps(CONFIG.client.viaversion.enabled));
+                        .title("Zenith To Server ViaVersion " + toggleStrCaps(CONFIG.client.viaversion.enabled));
                     return 1;
                 }))
                 .then(literal("autoConfig")
                           .then(argument("toggle", toggle()).executes(c -> {
                                 CONFIG.client.viaversion.autoProtocolVersion = getToggle(c, "toggle");
                                 c.getSource().getEmbed()
-                                    .title("Client ViaVersion AutoConfig " + toggleStrCaps(CONFIG.client.viaversion.autoProtocolVersion));
+                                    .title("Zenith To Server ViaVersion AutoConfig " + toggleStrCaps(CONFIG.client.viaversion.autoProtocolVersion));
                                 return 1;
                           })))
                 .then(literal("version")
@@ -65,15 +65,15 @@ public class ViaVersionCommand extends Command {
                               } else {
                                   CONFIG.client.viaversion.protocolVersion = closest.getVersion();
                                   c.getSource().getEmbed()
-                                      .title("Client ViaVersion Version Updated!");
+                                      .title("Zenith To Server ViaVersion Version Updated!");
                               }
                               return 1;
                           }))))
-            .then(literal("server")
+            .then(literal("playerToZenith")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.server.viaversion.enabled = getToggle(c, "toggle");
                             c.getSource().getEmbed()
-                                .title("Server ViaVersion " + toggleStrCaps(CONFIG.server.viaversion.enabled));
+                                .title("Player To Zenith ViaVersion " + toggleStrCaps(CONFIG.server.viaversion.enabled));
                             return 1;
                       })));
     }
@@ -81,9 +81,9 @@ public class ViaVersionCommand extends Command {
     @Override
     public void postPopulate(final Embed embedBuilder) {
         embedBuilder
-            .addField("Client ViaVersion", toggleStr(CONFIG.client.viaversion.enabled), false)
-            .addField("Client AutoConfig", toggleStr(CONFIG.client.viaversion.autoProtocolVersion), false)
-            .addField("Client Version", ProtocolVersion.getProtocol(CONFIG.client.viaversion.protocolVersion).getName(), false)
-            .addField("Server ViaVersion", toggleStr(CONFIG.server.viaversion.enabled), false)
+            .addField("Zenith To Server ViaVersion", toggleStr(CONFIG.client.viaversion.enabled), false)
+            .addField("Zenith To Server AutoConfig", toggleStr(CONFIG.client.viaversion.autoProtocolVersion), false)
+            .addField("Zenith To Server Version", ProtocolVersion.getProtocol(CONFIG.client.viaversion.protocolVersion).getName(), false)
+            .addField("Player To Zenith ViaVersion", toggleStr(CONFIG.server.viaversion.enabled), false)
             .primaryColor();
     }}
