@@ -109,8 +109,7 @@ public class DiscordEventListener {
     public void handleDisconnectEvent(DisconnectEvent event) {
         var embed = Embed.builder()
             .title("Proxy Disconnected")
-            .addField("Reason", event.reason(), false)
-            .addField("Why?", "[Wiki](" + DisconnectReasonInfo.getDisconnectCategory(event.reason()).getWikiURL() + ")", false)
+            .addField("Reason", "[" + event.reason() + "](" + DisconnectReasonInfo.getDisconnectCategory(event.reason()).getWikiURL() + ")", false)
             .addField("Online Duration", formatDuration(event.onlineDuration()), false)
             .errorColor();
         if (Proxy.getInstance().isOn2b2t()
