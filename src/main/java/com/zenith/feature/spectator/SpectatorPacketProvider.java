@@ -2,7 +2,6 @@ package com.zenith.feature.spectator;
 
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Equipment;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
@@ -49,7 +48,7 @@ public class SpectatorPacketProvider {
         return asList(
             new ClientboundSetEquipmentPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                new Equipment[] { helmet, chestplate, leggings, boots, mainHand, offHand })
+                asList( helmet, chestplate, leggings, boots, mainHand, offHand ))
         );
     }
 
@@ -67,7 +66,7 @@ public class SpectatorPacketProvider {
                 CACHE.getPlayerCache().getThePlayer().getHeadYaw()),
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                CACHE.getPlayerCache().getThePlayer().getEntityMetadataAsArray())
+                CACHE.getPlayerCache().getThePlayer().getMetadata())
         );
     }
 
@@ -75,7 +74,7 @@ public class SpectatorPacketProvider {
         return asList(
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                new EntityMetadata[] { new ObjectEntityMetadata<>(6, MetadataType.POSE, CACHE.getPlayerCache().isSneaking() ? Pose.SNEAKING : Pose.STANDING) })
+                asList(new ObjectEntityMetadata<>(6, MetadataType.POSE, CACHE.getPlayerCache().isSneaking() ? Pose.SNEAKING : Pose.STANDING)))
         );
     }
 

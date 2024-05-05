@@ -42,8 +42,7 @@ public class EntityLiving extends Entity {
         if (!isSelfPlayer() && !getEquipment().isEmpty()) {
             consumer.accept(new ClientboundSetEquipmentPacket(this.entityId, getEquipment().entrySet().stream()
                 .map(entry -> new Equipment(entry.getKey(), entry.getValue()))
-                .toList()
-                .toArray(new Equipment[0])));
+                .toList()));
         }
         super.addPackets(consumer);
     }

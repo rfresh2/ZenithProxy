@@ -141,7 +141,7 @@ public class KillAura extends AbstractInventoryModule {
         return false;
     }
 
-    private EntityMetadata getMetadataFromId(List<EntityMetadata> metadata, int id) {
+    private EntityMetadata<?, ?> getMetadataFromId(List<EntityMetadata<?, ?>> metadata, int id) {
         for (int i = 0; i < metadata.size(); i++) {
             if (metadata.get(i).getId() == id) {
                 return metadata.get(i);

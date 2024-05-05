@@ -15,9 +15,11 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.Boolea
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.zenith.Shared.SERVER_LOG;
+import static java.util.Arrays.asList;
 
 public class SpectatorEntityPlayerHead extends SpectatorMob {
     // example command to summon a player head:
@@ -27,17 +29,17 @@ public class SpectatorEntityPlayerHead extends SpectatorMob {
     private int playerHeadItemId = Shared.ITEMS.getItemId("player_head");
 
     @Override
-    public EntityMetadata[] getSelfEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {
+    public List<EntityMetadata<?, ?>> getSelfEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {
         return getEntityMetadata(spectatorRealProfile, spectatorEntityId, true);
     }
 
     @Override
-    public EntityMetadata[] getEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {
+    public List<EntityMetadata<?, ?>> getEntityMetadata(final GameProfile spectatorRealProfile, final GameProfile spectatorFakeProfile, final int spectatorEntityId) {
         return getEntityMetadata(spectatorRealProfile, spectatorEntityId, false);
     }
 
     @SneakyThrows
-    private EntityMetadata[] getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId, final boolean self) {
+    private List<EntityMetadata<?, ?>> getEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId, final boolean self) {
         var tag = new CompoundTag();
         var ownerTag = new CompoundTag();
         tag.put("SkullOwner", ownerTag);
@@ -62,11 +64,11 @@ public class SpectatorEntityPlayerHead extends SpectatorMob {
             SERVER_LOG.warn("Failed to get textures for player head spectator entity", e);
         }
         var mnbt = MNBTIO.write(tag, false);
-        return new EntityMetadata[]{
+        return asList(
             new ObjectEntityMetadata<>(2, MetadataType.OPTIONAL_CHAT, Optional.of(Component.text(spectatorProfile.getName()))),
             new BooleanEntityMetadata(3, MetadataType.BOOLEAN, !self), // hide nametag on self
             new ObjectEntityMetadata<>(23, MetadataType.ITEM, new ItemStack(playerHeadItemId, 1, mnbt))
-        };
+        );
     }
 
     @Override

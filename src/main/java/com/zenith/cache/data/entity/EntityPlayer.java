@@ -11,7 +11,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.Attribute;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeModifier;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.ModifierOperation;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
@@ -147,7 +146,7 @@ public class EntityPlayer extends EntityLiving {
                 this.entityId,
                 this.headYaw
             ));
-            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getMetadata().toArray(new EntityMetadata[0])));
+            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getMetadata()));
         }
         super.addPackets(consumer);
     }

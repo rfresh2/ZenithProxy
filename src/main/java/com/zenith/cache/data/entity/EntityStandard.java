@@ -35,8 +35,7 @@ public class EntityStandard extends EntityLiving {
         if (!equipment.isEmpty()) {
             consumer.accept(new ClientboundSetEquipmentPacket(this.entityId, this.equipment.entrySet().stream()
                 .map(entry -> new Equipment(entry.getKey(), entry.getValue()))
-                .toList()
-                .toArray(new Equipment[0])));
+                .toList()));
         }
         consumer.accept(new ClientboundRotateHeadPacket(
             this.entityId,
