@@ -10,7 +10,7 @@ import static com.zenith.Shared.CACHE;
 public class SpawnPositionHandler implements ClientEventLoopPacketHandler<ClientboundSetDefaultSpawnPositionPacket, ClientSession> {
     @Override
     public boolean applyAsync(ClientboundSetDefaultSpawnPositionPacket packet, ClientSession session) {
-        CACHE.getPlayerCache().setSpawnPosition(MutableVec3i.from(packet.getPosition()));
+        CACHE.getPlayerCache().setSpawnPosition(new MutableVec3i(packet.getX(), packet.getY(), packet.getZ()));
         return true;
     }
 }
