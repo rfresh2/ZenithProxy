@@ -81,15 +81,15 @@ dependencies {
     shade("org.eclipse.jgit:org.eclipse.jgit:6.9.0.202403050737-r")
     shade("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.9.0.202403050737-r")
     shade("com.github.mwiede:jsch:0.2.17")
-    shade("com.google.guava:guava:33.1.0-jre")
+    shade("com.google.guava:guava:33.2.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.5.6")
     shade("org.slf4j:slf4j-api:2.0.13")
     shade("org.slf4j:jul-to-slf4j:2.0.13")
     shade("com.mojang:brigadier:1.2.9")
-    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
+    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
-    shade("com.github.rfresh2.Discord4j:discord4j-core:3069dffbec") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:72e6525fc6") {
         exclude(group = "io.netty")
     }
     shade("com.github.rfresh2:MCProtocolLib:1325a32168") {
