@@ -18,7 +18,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
@@ -156,24 +155,23 @@ public class ChunkCache implements CachedData {
 
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
         try {
-            final var pos = record.getPosition();
-            if (pos.getY() < currentDimension.minY() || pos.getY() >= currentDimension.minY() + currentDimension.height()) {
+            if (record.getY() < currentDimension.minY() || record.getY() >= currentDimension.minY() + currentDimension.height()) {
                 // certain client modules might cause the server to send us block updates out of bounds if we send illegal dig packets
                 // instead of causing a retry of the block update, just return true and ignore it
                 return true;
             }
 
-            final var chunk = get(pos.getX() >> 4, pos.getZ() >> 4);
+            final var chunk = get(record.getX() >> 4, record.getZ() >> 4);
             if (chunk != null) {
-                var chunkSection = chunk.getChunkSection(pos.getY());
+                var chunkSection = chunk.getChunkSection(record.getY());
                 if (chunkSection == null)
                     chunkSection = new ChunkSection(0,
                                                     DataPalette.createForChunk(),
                                                     DataPalette.createForBiome());
-                chunkSection.setBlock(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, record.getBlock());
-                handleBlockUpdateBlockEntity(record, pos, chunk);
+                chunkSection.setBlock(record.getX() & 15, record.getY() & 15, record.getZ() & 15, record.getBlock());
+                handleBlockUpdateBlockEntity(record, record.getX(), record.getY(), record.getZ(), chunk);
             } else {
-                CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", pos.getX() >> 4, pos.getZ() >> 4);
+                CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", record.getX() >> 4, record.getZ() >> 4);
                 return false;
             }
         } catch (final Exception e) {
@@ -185,12 +183,12 @@ public class ChunkCache implements CachedData {
 
     // update any block entities implicitly affected by this block update
     // server doesn't send us tile entity update packets and relies on logic in client
-    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, Vector3i pos, Chunk chunk) {
+    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, int x, int y, int z, Chunk chunk) {
         if (record.getBlock() == Block.AIR.id()) {
             synchronized (chunk.blockEntities) {
-                chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == pos.getX() &&
-                    tileEntity.getY() == pos.getY() &&
-                    tileEntity.getZ() == pos.getZ());
+                chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == x &&
+                    tileEntity.getY() == y &&
+                    tileEntity.getZ() == z);
             }
         } else {
             final var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());
@@ -200,7 +198,7 @@ public class ChunkCache implements CachedData {
             }
             final var blockName = block.name();
             final var type = getBlockUpdateBlockEntityTypeOrNull(blockName);
-            if (type != null) writeBlockEntity(chunk, blockName, type, pos);
+            if (type != null) writeBlockEntity(chunk, blockName, type, x, y, z);
         }
     }
 
@@ -221,33 +219,32 @@ public class ChunkCache implements CachedData {
         return null;
     }
 
-    private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final Vector3i position) {
+    private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final int x, final int y, final int z) {
         final CompoundTag tileEntityTag = new CompoundTag();
             // there's probably more properties some tile entities need but this seems to work well enough
         tileEntityTag.putString("id", "minecraft:" + blockName);
-        tileEntityTag.putInt("x", position.getX());
-        tileEntityTag.putInt("y", position.getY());
-        tileEntityTag.putInt("z", position.getZ());
+        tileEntityTag.putInt("x", x);
+        tileEntityTag.putInt("y", y);
+        tileEntityTag.putInt("z", z);
         // todo: improve mem pressure writing MNBT. this method shouldn't be called super frequently and the nbt is small so its ok for now
         final MNBT nbt = MNBTIO.write(tileEntityTag, false);
-        updateOrAddBlockEntity(chunk, position, type, nbt);
+        updateOrAddBlockEntity(chunk, x, y, z, type, nbt);
     }
 
-    private void updateOrAddBlockEntity(final Chunk chunk, final Vector3i position, final BlockEntityType type, final MNBT nbt) {
+    private void updateOrAddBlockEntity(final Chunk chunk, final int x, final int y, final int z, final BlockEntityType type, final MNBT nbt) {
         synchronized (chunk.blockEntities) {
             boolean found = false;
             for (BlockEntityInfo tileEntity : chunk.blockEntities) {
-                if (tileEntity.getX() == position.getX() &&
-                    tileEntity.getY() == position.getY() &&
-                    tileEntity.getZ() == position.getZ()) {
+                if (tileEntity.getX() == x &&
+                    tileEntity.getY() == y &&
+                    tileEntity.getZ() == z) {
                     tileEntity.setNbt(nbt);
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                chunk.blockEntities.add(
-                    new BlockEntityInfo(position.getX(), position.getY(), position.getZ(), type, nbt));
+                chunk.blockEntities.add(new BlockEntityInfo(x, y, z, type, nbt));
             }
         }
     }
@@ -294,13 +291,13 @@ public class ChunkCache implements CachedData {
     }
 
     public boolean updateBlockEntity(final ClientboundBlockEntityDataPacket packet) {
-        final int chunkX = packet.getPosition().getX() >> 4;
-        final int chunkZ = packet.getPosition().getZ() >> 4;
+        final int chunkX = packet.getX() >> 4;
+        final int chunkZ = packet.getZ() >> 4;
         final var chunk = this.cache.get(chunkPosToLong(chunkX, chunkZ));
         if (chunk == null) return false;
         // when we place certain tile entities like beds, the server sends us a block entity update packet with empty nbt
         //  wiki.vg says this should mean the tile entity gets removed, however that doesn't seem to be correct
-        updateOrAddBlockEntity(chunk, packet.getPosition(), packet.getType(), packet.getNbt());
+        updateOrAddBlockEntity(chunk, packet.getX(), packet.getY(), packet.getZ(), packet.getType(), packet.getNbt());
         return true;
     }
 

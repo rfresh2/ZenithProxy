@@ -13,7 +13,7 @@ public class BlockEntityDataHandler implements ClientEventLoopPacketHandler<Clie
     @Override
     public boolean applyAsync(@NonNull ClientboundBlockEntityDataPacket packet, @NonNull ClientSession session) {
         if (!CACHE.getChunkCache().updateBlockEntity(packet)) {
-            CLIENT_LOG.warn("Received ServerUpdateTileEntityPacket for chunk column that does not exist: {}, data: {}", packet.getPosition(), packet.getNbt());
+            CLIENT_LOG.warn("Received ServerUpdateTileEntityPacket for chunk column that does not exist: [{}, {}, {}], data: {}", packet.getX(), packet.getY(), packet.getZ(), packet.getNbt());
             return false;
         }
         return true;

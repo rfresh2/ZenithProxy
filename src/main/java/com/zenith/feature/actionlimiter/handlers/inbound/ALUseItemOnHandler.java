@@ -13,9 +13,7 @@ public class ALUseItemOnHandler implements PacketHandler<ServerboundUseItemOnPac
     public ServerboundUseItemOnPacket apply(final ServerboundUseItemOnPacket packet, final ServerConnection session) {
         if (!CONFIG.client.extra.actionLimiter.allowUseItem) return null;
         if (!CONFIG.client.extra.actionLimiter.allowEnderChest) {
-            var blockAtBlockPos = World.getBlockAtBlockPos(new BlockPos(packet.getPosition().getX(),
-                                                                          packet.getPosition().getY(),
-                                                                          packet.getPosition().getZ()));
+            var blockAtBlockPos = World.getBlockAtBlockPos(new BlockPos(packet.getX(), packet.getY(), packet.getZ()));
             if (blockAtBlockPos.name().equals("ender_chest")) {
                 return null;
             }
