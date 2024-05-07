@@ -128,7 +128,7 @@ public class ReplayRecording implements Closeable {
     public void writePacket(final long time, final MinecraftPacket packet, final Session session) {
         var protocolState = session.getPacketProtocol().getState();
         if (protocolState != ProtocolState.GAME) return;
-        executor.execute(() -> writePacket0(time, packet, session, protocolState));
+        if (!executor.isShutdown()) executor.execute(() -> writePacket0(time, packet, session, protocolState));
     }
 
     private void writePacket0(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
