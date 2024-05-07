@@ -10,6 +10,7 @@
     "defaultState": 0,
     "minStateId": 0,
     "maxStateId": 0,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "empty"
   },
@@ -24,6 +25,7 @@
     "defaultState": 1,
     "minStateId": 1,
     "maxStateId": 1,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -38,6 +40,7 @@
     "defaultState": 2,
     "minStateId": 2,
     "maxStateId": 2,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -52,6 +55,7 @@
     "defaultState": 3,
     "minStateId": 3,
     "maxStateId": 3,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -66,6 +70,7 @@
     "defaultState": 4,
     "minStateId": 4,
     "maxStateId": 4,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -80,6 +85,7 @@
     "defaultState": 5,
     "minStateId": 5,
     "maxStateId": 5,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -94,6 +100,7 @@
     "defaultState": 6,
     "minStateId": 6,
     "maxStateId": 6,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -108,6 +115,7 @@
     "defaultState": 7,
     "minStateId": 7,
     "maxStateId": 7,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -122,6 +130,7 @@
     "defaultState": 9,
     "minStateId": 8,
     "maxStateId": 9,
+    "mapColorId": 1,
     "states": [
       {
         "name": "snowy",
@@ -142,6 +151,7 @@
     "defaultState": 10,
     "minStateId": 10,
     "maxStateId": 10,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -156,6 +166,7 @@
     "defaultState": 11,
     "minStateId": 11,
     "maxStateId": 11,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -170,6 +181,7 @@
     "defaultState": 13,
     "minStateId": 12,
     "maxStateId": 13,
+    "mapColorId": 34,
     "states": [
       {
         "name": "snowy",
@@ -190,6 +202,7 @@
     "defaultState": 14,
     "minStateId": 14,
     "maxStateId": 14,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -204,6 +217,7 @@
     "defaultState": 15,
     "minStateId": 15,
     "maxStateId": 15,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "block"
   },
@@ -218,6 +232,7 @@
     "defaultState": 16,
     "minStateId": 16,
     "maxStateId": 16,
+    "mapColorId": 34,
     "states": [],
     "boundingBox": "block"
   },
@@ -232,6 +247,7 @@
     "defaultState": 17,
     "minStateId": 17,
     "maxStateId": 17,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -246,6 +262,7 @@
     "defaultState": 18,
     "minStateId": 18,
     "maxStateId": 18,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -260,6 +277,7 @@
     "defaultState": 19,
     "minStateId": 19,
     "maxStateId": 19,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -274,6 +292,7 @@
     "defaultState": 20,
     "minStateId": 20,
     "maxStateId": 20,
+    "mapColorId": 36,
     "states": [],
     "boundingBox": "block"
   },
@@ -288,6 +307,7 @@
     "defaultState": 21,
     "minStateId": 21,
     "maxStateId": 21,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -302,6 +322,7 @@
     "defaultState": 22,
     "minStateId": 22,
     "maxStateId": 22,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -316,6 +337,7 @@
     "defaultState": 23,
     "minStateId": 23,
     "maxStateId": 23,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -330,6 +352,7 @@
     "defaultState": 24,
     "minStateId": 24,
     "maxStateId": 24,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -344,6 +367,7 @@
     "defaultState": 25,
     "minStateId": 25,
     "maxStateId": 26,
+    "mapColorId": 7,
     "states": [
       {
         "name": "stage",
@@ -368,6 +392,7 @@
     "defaultState": 27,
     "minStateId": 27,
     "maxStateId": 28,
+    "mapColorId": 7,
     "states": [
       {
         "name": "stage",
@@ -392,6 +417,7 @@
     "defaultState": 29,
     "minStateId": 29,
     "maxStateId": 30,
+    "mapColorId": 7,
     "states": [
       {
         "name": "stage",
@@ -416,6 +442,7 @@
     "defaultState": 31,
     "minStateId": 31,
     "maxStateId": 32,
+    "mapColorId": 7,
     "states": [
       {
         "name": "stage",
@@ -440,6 +467,7 @@
     "defaultState": 33,
     "minStateId": 33,
     "maxStateId": 34,
+    "mapColorId": 7,
     "states": [
       {
         "name": "stage",
@@ -464,6 +492,7 @@
     "defaultState": 35,
     "minStateId": 35,
     "maxStateId": 36,
+    "mapColorId": 20,
     "states": [
       {
         "name": "stage",
@@ -488,6 +517,7 @@
     "defaultState": 37,
     "minStateId": 37,
     "maxStateId": 38,
+    "mapColorId": 7,
     "states": [
       {
         "name": "stage",
@@ -512,6 +542,7 @@
     "defaultState": 44,
     "minStateId": 39,
     "maxStateId": 78,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -558,6 +589,7 @@
     "defaultState": 79,
     "minStateId": 79,
     "maxStateId": 79,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -572,6 +604,7 @@
     "defaultState": 80,
     "minStateId": 80,
     "maxStateId": 95,
+    "mapColorId": 12,
     "states": [
       {
         "name": "level",
@@ -610,6 +643,7 @@
     "defaultState": 96,
     "minStateId": 96,
     "maxStateId": 111,
+    "mapColorId": 4,
     "states": [
       {
         "name": "level",
@@ -648,6 +682,7 @@
     "defaultState": 112,
     "minStateId": 112,
     "maxStateId": 112,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -662,6 +697,7 @@
     "defaultState": 113,
     "minStateId": 113,
     "maxStateId": 116,
+    "mapColorId": 2,
     "states": [
       {
         "name": "dusted",
@@ -688,6 +724,7 @@
     "defaultState": 117,
     "minStateId": 117,
     "maxStateId": 117,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -702,6 +739,7 @@
     "defaultState": 118,
     "minStateId": 118,
     "maxStateId": 118,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -716,6 +754,7 @@
     "defaultState": 119,
     "minStateId": 119,
     "maxStateId": 122,
+    "mapColorId": 11,
     "states": [
       {
         "name": "dusted",
@@ -742,6 +781,7 @@
     "defaultState": 123,
     "minStateId": 123,
     "maxStateId": 123,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -756,6 +796,7 @@
     "defaultState": 124,
     "minStateId": 124,
     "maxStateId": 124,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -770,6 +811,7 @@
     "defaultState": 125,
     "minStateId": 125,
     "maxStateId": 125,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -784,6 +826,7 @@
     "defaultState": 126,
     "minStateId": 126,
     "maxStateId": 126,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -798,6 +841,7 @@
     "defaultState": 127,
     "minStateId": 127,
     "maxStateId": 127,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -812,6 +856,7 @@
     "defaultState": 128,
     "minStateId": 128,
     "maxStateId": 128,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -826,6 +871,7 @@
     "defaultState": 129,
     "minStateId": 129,
     "maxStateId": 129,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -840,6 +886,7 @@
     "defaultState": 131,
     "minStateId": 130,
     "maxStateId": 132,
+    "mapColorId": 13,
     "states": [
       {
         "name": "axis",
@@ -865,6 +912,7 @@
     "defaultState": 134,
     "minStateId": 133,
     "maxStateId": 135,
+    "mapColorId": 34,
     "states": [
       {
         "name": "axis",
@@ -890,6 +938,7 @@
     "defaultState": 137,
     "minStateId": 136,
     "maxStateId": 138,
+    "mapColorId": 2,
     "states": [
       {
         "name": "axis",
@@ -915,6 +964,7 @@
     "defaultState": 140,
     "minStateId": 139,
     "maxStateId": 141,
+    "mapColorId": 10,
     "states": [
       {
         "name": "axis",
@@ -940,6 +990,7 @@
     "defaultState": 143,
     "minStateId": 142,
     "maxStateId": 144,
+    "mapColorId": 15,
     "states": [
       {
         "name": "axis",
@@ -965,6 +1016,7 @@
     "defaultState": 146,
     "minStateId": 145,
     "maxStateId": 147,
+    "mapColorId": 36,
     "states": [
       {
         "name": "axis",
@@ -990,6 +1042,7 @@
     "defaultState": 149,
     "minStateId": 148,
     "maxStateId": 150,
+    "mapColorId": 26,
     "states": [
       {
         "name": "axis",
@@ -1015,6 +1068,7 @@
     "defaultState": 152,
     "minStateId": 151,
     "maxStateId": 153,
+    "mapColorId": 28,
     "states": [
       {
         "name": "axis",
@@ -1040,6 +1094,7 @@
     "defaultState": 155,
     "minStateId": 154,
     "maxStateId": 155,
+    "mapColorId": 34,
     "states": [
       {
         "name": "waterlogged",
@@ -1060,6 +1115,7 @@
     "defaultState": 157,
     "minStateId": 156,
     "maxStateId": 158,
+    "mapColorId": 34,
     "states": [
       {
         "name": "axis",
@@ -1085,6 +1141,7 @@
     "defaultState": 160,
     "minStateId": 159,
     "maxStateId": 161,
+    "mapColorId": 18,
     "states": [
       {
         "name": "axis",
@@ -1110,6 +1167,7 @@
     "defaultState": 163,
     "minStateId": 162,
     "maxStateId": 164,
+    "mapColorId": 34,
     "states": [
       {
         "name": "axis",
@@ -1135,6 +1193,7 @@
     "defaultState": 166,
     "minStateId": 165,
     "maxStateId": 167,
+    "mapColorId": 2,
     "states": [
       {
         "name": "axis",
@@ -1160,6 +1219,7 @@
     "defaultState": 169,
     "minStateId": 168,
     "maxStateId": 170,
+    "mapColorId": 10,
     "states": [
       {
         "name": "axis",
@@ -1185,6 +1245,7 @@
     "defaultState": 172,
     "minStateId": 171,
     "maxStateId": 173,
+    "mapColorId": 15,
     "states": [
       {
         "name": "axis",
@@ -1210,6 +1271,7 @@
     "defaultState": 175,
     "minStateId": 174,
     "maxStateId": 176,
+    "mapColorId": 36,
     "states": [
       {
         "name": "axis",
@@ -1235,6 +1297,7 @@
     "defaultState": 178,
     "minStateId": 177,
     "maxStateId": 179,
+    "mapColorId": 26,
     "states": [
       {
         "name": "axis",
@@ -1260,6 +1323,7 @@
     "defaultState": 181,
     "minStateId": 180,
     "maxStateId": 182,
+    "mapColorId": 13,
     "states": [
       {
         "name": "axis",
@@ -1285,6 +1349,7 @@
     "defaultState": 184,
     "minStateId": 183,
     "maxStateId": 185,
+    "mapColorId": 28,
     "states": [
       {
         "name": "axis",
@@ -1310,6 +1375,7 @@
     "defaultState": 187,
     "minStateId": 186,
     "maxStateId": 188,
+    "mapColorId": 18,
     "states": [
       {
         "name": "axis",
@@ -1335,6 +1401,7 @@
     "defaultState": 190,
     "minStateId": 189,
     "maxStateId": 191,
+    "mapColorId": 13,
     "states": [
       {
         "name": "axis",
@@ -1360,6 +1427,7 @@
     "defaultState": 193,
     "minStateId": 192,
     "maxStateId": 194,
+    "mapColorId": 34,
     "states": [
       {
         "name": "axis",
@@ -1385,6 +1453,7 @@
     "defaultState": 196,
     "minStateId": 195,
     "maxStateId": 197,
+    "mapColorId": 2,
     "states": [
       {
         "name": "axis",
@@ -1410,6 +1479,7 @@
     "defaultState": 199,
     "minStateId": 198,
     "maxStateId": 200,
+    "mapColorId": 10,
     "states": [
       {
         "name": "axis",
@@ -1435,6 +1505,7 @@
     "defaultState": 202,
     "minStateId": 201,
     "maxStateId": 203,
+    "mapColorId": 21,
     "states": [
       {
         "name": "axis",
@@ -1460,6 +1531,7 @@
     "defaultState": 205,
     "minStateId": 204,
     "maxStateId": 206,
+    "mapColorId": 43,
     "states": [
       {
         "name": "axis",
@@ -1485,6 +1557,7 @@
     "defaultState": 208,
     "minStateId": 207,
     "maxStateId": 209,
+    "mapColorId": 26,
     "states": [
       {
         "name": "axis",
@@ -1510,6 +1583,7 @@
     "defaultState": 211,
     "minStateId": 210,
     "maxStateId": 212,
+    "mapColorId": 28,
     "states": [
       {
         "name": "axis",
@@ -1535,6 +1609,7 @@
     "defaultState": 214,
     "minStateId": 213,
     "maxStateId": 215,
+    "mapColorId": 13,
     "states": [
       {
         "name": "axis",
@@ -1560,6 +1635,7 @@
     "defaultState": 217,
     "minStateId": 216,
     "maxStateId": 218,
+    "mapColorId": 34,
     "states": [
       {
         "name": "axis",
@@ -1585,6 +1661,7 @@
     "defaultState": 220,
     "minStateId": 219,
     "maxStateId": 221,
+    "mapColorId": 2,
     "states": [
       {
         "name": "axis",
@@ -1610,6 +1687,7 @@
     "defaultState": 223,
     "minStateId": 222,
     "maxStateId": 224,
+    "mapColorId": 10,
     "states": [
       {
         "name": "axis",
@@ -1635,6 +1713,7 @@
     "defaultState": 226,
     "minStateId": 225,
     "maxStateId": 227,
+    "mapColorId": 15,
     "states": [
       {
         "name": "axis",
@@ -1660,6 +1739,7 @@
     "defaultState": 229,
     "minStateId": 228,
     "maxStateId": 230,
+    "mapColorId": 42,
     "states": [
       {
         "name": "axis",
@@ -1685,6 +1765,7 @@
     "defaultState": 232,
     "minStateId": 231,
     "maxStateId": 233,
+    "mapColorId": 26,
     "states": [
       {
         "name": "axis",
@@ -1710,6 +1791,7 @@
     "defaultState": 235,
     "minStateId": 234,
     "maxStateId": 236,
+    "mapColorId": 28,
     "states": [
       {
         "name": "axis",
@@ -1735,6 +1817,7 @@
     "defaultState": 264,
     "minStateId": 237,
     "maxStateId": 264,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -1774,6 +1857,7 @@
     "defaultState": 292,
     "minStateId": 265,
     "maxStateId": 292,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -1813,6 +1897,7 @@
     "defaultState": 320,
     "minStateId": 293,
     "maxStateId": 320,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -1852,6 +1937,7 @@
     "defaultState": 348,
     "minStateId": 321,
     "maxStateId": 348,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -1891,6 +1977,7 @@
     "defaultState": 376,
     "minStateId": 349,
     "maxStateId": 376,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -1930,6 +2017,7 @@
     "defaultState": 404,
     "minStateId": 377,
     "maxStateId": 404,
+    "mapColorId": 20,
     "states": [
       {
         "name": "distance",
@@ -1969,6 +2057,7 @@
     "defaultState": 432,
     "minStateId": 405,
     "maxStateId": 432,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -2008,6 +2097,7 @@
     "defaultState": 460,
     "minStateId": 433,
     "maxStateId": 460,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -2047,6 +2137,7 @@
     "defaultState": 488,
     "minStateId": 461,
     "maxStateId": 488,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -2086,6 +2177,7 @@
     "defaultState": 516,
     "minStateId": 489,
     "maxStateId": 516,
+    "mapColorId": 7,
     "states": [
       {
         "name": "distance",
@@ -2125,6 +2217,7 @@
     "defaultState": 517,
     "minStateId": 517,
     "maxStateId": 517,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -2139,6 +2232,7 @@
     "defaultState": 518,
     "minStateId": 518,
     "maxStateId": 518,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -2153,6 +2247,7 @@
     "defaultState": 519,
     "minStateId": 519,
     "maxStateId": 519,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -2167,6 +2262,7 @@
     "defaultState": 520,
     "minStateId": 520,
     "maxStateId": 520,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -2181,6 +2277,7 @@
     "defaultState": 521,
     "minStateId": 521,
     "maxStateId": 521,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -2195,6 +2292,7 @@
     "defaultState": 522,
     "minStateId": 522,
     "maxStateId": 522,
+    "mapColorId": 32,
     "states": [],
     "boundingBox": "block"
   },
@@ -2209,6 +2307,7 @@
     "defaultState": 524,
     "minStateId": 523,
     "maxStateId": 534,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -2242,6 +2341,7 @@
     "defaultState": 535,
     "minStateId": 535,
     "maxStateId": 535,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -2256,6 +2356,7 @@
     "defaultState": 536,
     "minStateId": 536,
     "maxStateId": 536,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -2270,6 +2371,7 @@
     "defaultState": 537,
     "minStateId": 537,
     "maxStateId": 537,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -2284,6 +2386,7 @@
     "defaultState": 539,
     "minStateId": 538,
     "maxStateId": 1687,
+    "mapColorId": 13,
     "states": [
       {
         "name": "instrument",
@@ -2366,6 +2469,7 @@
     "defaultState": 1691,
     "minStateId": 1688,
     "maxStateId": 1703,
+    "mapColorId": 8,
     "states": [
       {
         "name": "facing",
@@ -2406,6 +2510,7 @@
     "defaultState": 1707,
     "minStateId": 1704,
     "maxStateId": 1719,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -2446,6 +2551,7 @@
     "defaultState": 1723,
     "minStateId": 1720,
     "maxStateId": 1735,
+    "mapColorId": 16,
     "states": [
       {
         "name": "facing",
@@ -2486,6 +2592,7 @@
     "defaultState": 1739,
     "minStateId": 1736,
     "maxStateId": 1751,
+    "mapColorId": 17,
     "states": [
       {
         "name": "facing",
@@ -2526,6 +2633,7 @@
     "defaultState": 1755,
     "minStateId": 1752,
     "maxStateId": 1767,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -2566,6 +2674,7 @@
     "defaultState": 1771,
     "minStateId": 1768,
     "maxStateId": 1783,
+    "mapColorId": 19,
     "states": [
       {
         "name": "facing",
@@ -2606,6 +2715,7 @@
     "defaultState": 1787,
     "minStateId": 1784,
     "maxStateId": 1799,
+    "mapColorId": 20,
     "states": [
       {
         "name": "facing",
@@ -2646,6 +2756,7 @@
     "defaultState": 1803,
     "minStateId": 1800,
     "maxStateId": 1815,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -2686,6 +2797,7 @@
     "defaultState": 1819,
     "minStateId": 1816,
     "maxStateId": 1831,
+    "mapColorId": 22,
     "states": [
       {
         "name": "facing",
@@ -2726,6 +2838,7 @@
     "defaultState": 1835,
     "minStateId": 1832,
     "maxStateId": 1847,
+    "mapColorId": 23,
     "states": [
       {
         "name": "facing",
@@ -2766,6 +2879,7 @@
     "defaultState": 1851,
     "minStateId": 1848,
     "maxStateId": 1863,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -2806,6 +2920,7 @@
     "defaultState": 1867,
     "minStateId": 1864,
     "maxStateId": 1879,
+    "mapColorId": 25,
     "states": [
       {
         "name": "facing",
@@ -2846,6 +2961,7 @@
     "defaultState": 1883,
     "minStateId": 1880,
     "maxStateId": 1895,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -2886,6 +3002,7 @@
     "defaultState": 1899,
     "minStateId": 1896,
     "maxStateId": 1911,
+    "mapColorId": 27,
     "states": [
       {
         "name": "facing",
@@ -2926,6 +3043,7 @@
     "defaultState": 1915,
     "minStateId": 1912,
     "maxStateId": 1927,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -2966,6 +3084,7 @@
     "defaultState": 1931,
     "minStateId": 1928,
     "maxStateId": 1943,
+    "mapColorId": 29,
     "states": [
       {
         "name": "facing",
@@ -3006,6 +3125,7 @@
     "defaultState": 1957,
     "minStateId": 1944,
     "maxStateId": 1967,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -3044,6 +3164,7 @@
     "defaultState": 1981,
     "minStateId": 1968,
     "maxStateId": 1991,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -3082,6 +3203,7 @@
     "defaultState": 1998,
     "minStateId": 1992,
     "maxStateId": 2003,
+    "mapColorId": 11,
     "states": [
       {
         "name": "extended",
@@ -3115,6 +3237,7 @@
     "defaultState": 2004,
     "minStateId": 2004,
     "maxStateId": 2004,
+    "mapColorId": 3,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3129,6 +3252,7 @@
     "defaultState": 2005,
     "minStateId": 2005,
     "maxStateId": 2005,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3143,6 +3267,7 @@
     "defaultState": 2006,
     "minStateId": 2006,
     "maxStateId": 2006,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3157,6 +3282,7 @@
     "defaultState": 2007,
     "minStateId": 2007,
     "maxStateId": 2007,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3171,6 +3297,7 @@
     "defaultState": 2008,
     "minStateId": 2008,
     "maxStateId": 2008,
+    "mapColorId": 12,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3185,6 +3312,7 @@
     "defaultState": 2010,
     "minStateId": 2009,
     "maxStateId": 2010,
+    "mapColorId": 12,
     "states": [
       {
         "name": "half",
@@ -3209,6 +3337,7 @@
     "defaultState": 2017,
     "minStateId": 2011,
     "maxStateId": 2022,
+    "mapColorId": 11,
     "states": [
       {
         "name": "extended",
@@ -3242,6 +3371,7 @@
     "defaultState": 2025,
     "minStateId": 2023,
     "maxStateId": 2046,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -3284,6 +3414,7 @@
     "defaultState": 2047,
     "minStateId": 2047,
     "maxStateId": 2047,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "block"
   },
@@ -3298,6 +3429,7 @@
     "defaultState": 2048,
     "minStateId": 2048,
     "maxStateId": 2048,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -3312,6 +3444,7 @@
     "defaultState": 2049,
     "minStateId": 2049,
     "maxStateId": 2049,
+    "mapColorId": 16,
     "states": [],
     "boundingBox": "block"
   },
@@ -3326,6 +3459,7 @@
     "defaultState": 2050,
     "minStateId": 2050,
     "maxStateId": 2050,
+    "mapColorId": 17,
     "states": [],
     "boundingBox": "block"
   },
@@ -3340,6 +3474,7 @@
     "defaultState": 2051,
     "minStateId": 2051,
     "maxStateId": 2051,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -3354,6 +3489,7 @@
     "defaultState": 2052,
     "minStateId": 2052,
     "maxStateId": 2052,
+    "mapColorId": 19,
     "states": [],
     "boundingBox": "block"
   },
@@ -3368,6 +3504,7 @@
     "defaultState": 2053,
     "minStateId": 2053,
     "maxStateId": 2053,
+    "mapColorId": 20,
     "states": [],
     "boundingBox": "block"
   },
@@ -3382,6 +3519,7 @@
     "defaultState": 2054,
     "minStateId": 2054,
     "maxStateId": 2054,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -3396,6 +3534,7 @@
     "defaultState": 2055,
     "minStateId": 2055,
     "maxStateId": 2055,
+    "mapColorId": 22,
     "states": [],
     "boundingBox": "block"
   },
@@ -3410,6 +3549,7 @@
     "defaultState": 2056,
     "minStateId": 2056,
     "maxStateId": 2056,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "block"
   },
@@ -3424,6 +3564,7 @@
     "defaultState": 2057,
     "minStateId": 2057,
     "maxStateId": 2057,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -3438,6 +3579,7 @@
     "defaultState": 2058,
     "minStateId": 2058,
     "maxStateId": 2058,
+    "mapColorId": 25,
     "states": [],
     "boundingBox": "block"
   },
@@ -3452,6 +3594,7 @@
     "defaultState": 2059,
     "minStateId": 2059,
     "maxStateId": 2059,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -3466,6 +3609,7 @@
     "defaultState": 2060,
     "minStateId": 2060,
     "maxStateId": 2060,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -3480,6 +3624,7 @@
     "defaultState": 2061,
     "minStateId": 2061,
     "maxStateId": 2061,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -3494,6 +3639,7 @@
     "defaultState": 2062,
     "minStateId": 2062,
     "maxStateId": 2062,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -3508,6 +3654,7 @@
     "defaultState": 2063,
     "minStateId": 2063,
     "maxStateId": 2074,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -3545,6 +3692,7 @@
     "defaultState": 2075,
     "minStateId": 2075,
     "maxStateId": 2075,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3559,6 +3707,7 @@
     "defaultState": 2076,
     "minStateId": 2076,
     "maxStateId": 2076,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3573,6 +3722,7 @@
     "defaultState": 2077,
     "minStateId": 2077,
     "maxStateId": 2077,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3587,6 +3737,7 @@
     "defaultState": 2078,
     "minStateId": 2078,
     "maxStateId": 2078,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3601,6 +3752,7 @@
     "defaultState": 2079,
     "minStateId": 2079,
     "maxStateId": 2079,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3615,6 +3767,7 @@
     "defaultState": 2080,
     "minStateId": 2080,
     "maxStateId": 2080,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3629,6 +3782,7 @@
     "defaultState": 2081,
     "minStateId": 2081,
     "maxStateId": 2081,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3643,6 +3797,7 @@
     "defaultState": 2082,
     "minStateId": 2082,
     "maxStateId": 2082,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3657,6 +3812,7 @@
     "defaultState": 2083,
     "minStateId": 2083,
     "maxStateId": 2083,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3671,6 +3827,7 @@
     "defaultState": 2084,
     "minStateId": 2084,
     "maxStateId": 2084,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3685,6 +3842,7 @@
     "defaultState": 2085,
     "minStateId": 2085,
     "maxStateId": 2085,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3699,6 +3857,7 @@
     "defaultState": 2086,
     "minStateId": 2086,
     "maxStateId": 2086,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3713,6 +3872,7 @@
     "defaultState": 2087,
     "minStateId": 2087,
     "maxStateId": 2087,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3727,6 +3887,7 @@
     "defaultState": 2088,
     "minStateId": 2088,
     "maxStateId": 2088,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3741,6 +3902,7 @@
     "defaultState": 2089,
     "minStateId": 2089,
     "maxStateId": 2089,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3755,6 +3917,7 @@
     "defaultState": 2090,
     "minStateId": 2090,
     "maxStateId": 2090,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3769,6 +3932,7 @@
     "defaultState": 2091,
     "minStateId": 2091,
     "maxStateId": 2091,
+    "mapColorId": 30,
     "states": [],
     "boundingBox": "block"
   },
@@ -3783,6 +3947,7 @@
     "defaultState": 2092,
     "minStateId": 2092,
     "maxStateId": 2092,
+    "mapColorId": 6,
     "states": [],
     "boundingBox": "block"
   },
@@ -3797,6 +3962,7 @@
     "defaultState": 2093,
     "minStateId": 2093,
     "maxStateId": 2093,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -3811,6 +3977,7 @@
     "defaultState": 2095,
     "minStateId": 2094,
     "maxStateId": 2095,
+    "mapColorId": 4,
     "states": [
       {
         "name": "unstable",
@@ -3831,6 +3998,7 @@
     "defaultState": 2096,
     "minStateId": 2096,
     "maxStateId": 2096,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "block"
   },
@@ -3845,6 +4013,7 @@
     "defaultState": 2160,
     "minStateId": 2097,
     "maxStateId": 2352,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -3901,6 +4070,7 @@
     "defaultState": 2353,
     "minStateId": 2353,
     "maxStateId": 2353,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -3915,6 +4085,7 @@
     "defaultState": 2354,
     "minStateId": 2354,
     "maxStateId": 2354,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -3929,6 +4100,7 @@
     "defaultState": 2355,
     "minStateId": 2355,
     "maxStateId": 2355,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "empty"
   },
@@ -3943,6 +4115,7 @@
     "defaultState": 2356,
     "minStateId": 2356,
     "maxStateId": 2359,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -3969,6 +4142,7 @@
     "defaultState": 2391,
     "minStateId": 2360,
     "maxStateId": 2871,
+    "mapColorId": 4,
     "states": [
       {
         "name": "age",
@@ -4032,6 +4206,7 @@
     "defaultState": 2872,
     "minStateId": 2872,
     "maxStateId": 2872,
+    "mapColorId": 17,
     "states": [],
     "boundingBox": "empty"
   },
@@ -4046,6 +4221,7 @@
     "defaultState": 2873,
     "minStateId": 2873,
     "maxStateId": 2873,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -4060,6 +4236,7 @@
     "defaultState": 2885,
     "minStateId": 2874,
     "maxStateId": 2953,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -4112,6 +4289,7 @@
     "defaultState": 2955,
     "minStateId": 2954,
     "maxStateId": 2977,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -4153,6 +4331,7 @@
     "defaultState": 4138,
     "minStateId": 2978,
     "maxStateId": 4273,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -4231,6 +4410,7 @@
     "defaultState": 4274,
     "minStateId": 4274,
     "maxStateId": 4274,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -4245,6 +4425,7 @@
     "defaultState": 4275,
     "minStateId": 4275,
     "maxStateId": 4275,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -4259,6 +4440,7 @@
     "defaultState": 4276,
     "minStateId": 4276,
     "maxStateId": 4276,
+    "mapColorId": 31,
     "states": [],
     "boundingBox": "block"
   },
@@ -4273,6 +4455,7 @@
     "defaultState": 4277,
     "minStateId": 4277,
     "maxStateId": 4277,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "block"
   },
@@ -4287,6 +4470,7 @@
     "defaultState": 4278,
     "minStateId": 4278,
     "maxStateId": 4285,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -4317,6 +4501,7 @@
     "defaultState": 4286,
     "minStateId": 4286,
     "maxStateId": 4293,
+    "mapColorId": 10,
     "states": [
       {
         "name": "moisture",
@@ -4347,6 +4532,7 @@
     "defaultState": 4295,
     "minStateId": 4294,
     "maxStateId": 4301,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -4378,6 +4564,7 @@
     "defaultState": 4303,
     "minStateId": 4302,
     "maxStateId": 4333,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -4421,6 +4608,7 @@
     "defaultState": 4335,
     "minStateId": 4334,
     "maxStateId": 4365,
+    "mapColorId": 34,
     "states": [
       {
         "name": "rotation",
@@ -4464,6 +4652,7 @@
     "defaultState": 4367,
     "minStateId": 4366,
     "maxStateId": 4397,
+    "mapColorId": 2,
     "states": [
       {
         "name": "rotation",
@@ -4507,6 +4696,7 @@
     "defaultState": 4399,
     "minStateId": 4398,
     "maxStateId": 4429,
+    "mapColorId": 15,
     "states": [
       {
         "name": "rotation",
@@ -4550,6 +4740,7 @@
     "defaultState": 4431,
     "minStateId": 4430,
     "maxStateId": 4461,
+    "mapColorId": 36,
     "states": [
       {
         "name": "rotation",
@@ -4593,6 +4784,7 @@
     "defaultState": 4463,
     "minStateId": 4462,
     "maxStateId": 4493,
+    "mapColorId": 10,
     "states": [
       {
         "name": "rotation",
@@ -4636,6 +4828,7 @@
     "defaultState": 4495,
     "minStateId": 4494,
     "maxStateId": 4525,
+    "mapColorId": 26,
     "states": [
       {
         "name": "rotation",
@@ -4679,6 +4872,7 @@
     "defaultState": 4527,
     "minStateId": 4526,
     "maxStateId": 4557,
+    "mapColorId": 28,
     "states": [
       {
         "name": "rotation",
@@ -4722,6 +4916,7 @@
     "defaultState": 4559,
     "minStateId": 4558,
     "maxStateId": 4589,
+    "mapColorId": 18,
     "states": [
       {
         "name": "rotation",
@@ -4765,6 +4960,7 @@
     "defaultState": 4601,
     "minStateId": 4590,
     "maxStateId": 4653,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -4819,6 +5015,7 @@
     "defaultState": 4655,
     "minStateId": 4654,
     "maxStateId": 4661,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -4850,6 +5047,7 @@
     "defaultState": 4663,
     "minStateId": 4662,
     "maxStateId": 4681,
+    "mapColorId": 0,
     "states": [
       {
         "name": "shape",
@@ -4887,6 +5085,7 @@
     "defaultState": 4693,
     "minStateId": 4682,
     "maxStateId": 4761,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -4939,6 +5138,7 @@
     "defaultState": 4763,
     "minStateId": 4762,
     "maxStateId": 4769,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -4970,6 +5170,7 @@
     "defaultState": 4771,
     "minStateId": 4770,
     "maxStateId": 4777,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -5001,6 +5202,7 @@
     "defaultState": 4779,
     "minStateId": 4778,
     "maxStateId": 4785,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -5032,6 +5234,7 @@
     "defaultState": 4787,
     "minStateId": 4786,
     "maxStateId": 4793,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -5063,6 +5266,7 @@
     "defaultState": 4795,
     "minStateId": 4794,
     "maxStateId": 4801,
+    "mapColorId": 36,
     "states": [
       {
         "name": "facing",
@@ -5094,6 +5298,7 @@
     "defaultState": 4803,
     "minStateId": 4802,
     "maxStateId": 4809,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -5125,6 +5330,7 @@
     "defaultState": 4811,
     "minStateId": 4810,
     "maxStateId": 4817,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -5156,6 +5362,7 @@
     "defaultState": 4819,
     "minStateId": 4818,
     "maxStateId": 4825,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -5187,6 +5394,7 @@
     "defaultState": 4827,
     "minStateId": 4826,
     "maxStateId": 4833,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -5218,6 +5426,7 @@
     "defaultState": 4867,
     "minStateId": 4834,
     "maxStateId": 4897,
+    "mapColorId": 13,
     "states": [
       {
         "name": "attached",
@@ -5266,6 +5475,7 @@
     "defaultState": 4931,
     "minStateId": 4898,
     "maxStateId": 4961,
+    "mapColorId": 34,
     "states": [
       {
         "name": "attached",
@@ -5314,6 +5524,7 @@
     "defaultState": 4995,
     "minStateId": 4962,
     "maxStateId": 5025,
+    "mapColorId": 2,
     "states": [
       {
         "name": "attached",
@@ -5362,6 +5573,7 @@
     "defaultState": 5059,
     "minStateId": 5026,
     "maxStateId": 5089,
+    "mapColorId": 15,
     "states": [
       {
         "name": "attached",
@@ -5410,6 +5622,7 @@
     "defaultState": 5123,
     "minStateId": 5090,
     "maxStateId": 5153,
+    "mapColorId": 42,
     "states": [
       {
         "name": "attached",
@@ -5458,6 +5671,7 @@
     "defaultState": 5187,
     "minStateId": 5154,
     "maxStateId": 5217,
+    "mapColorId": 10,
     "states": [
       {
         "name": "attached",
@@ -5506,6 +5720,7 @@
     "defaultState": 5251,
     "minStateId": 5218,
     "maxStateId": 5281,
+    "mapColorId": 26,
     "states": [
       {
         "name": "attached",
@@ -5554,6 +5769,7 @@
     "defaultState": 5315,
     "minStateId": 5282,
     "maxStateId": 5345,
+    "mapColorId": 53,
     "states": [
       {
         "name": "attached",
@@ -5602,6 +5818,7 @@
     "defaultState": 5379,
     "minStateId": 5346,
     "maxStateId": 5409,
+    "mapColorId": 56,
     "states": [
       {
         "name": "attached",
@@ -5650,6 +5867,7 @@
     "defaultState": 5443,
     "minStateId": 5410,
     "maxStateId": 5473,
+    "mapColorId": 28,
     "states": [
       {
         "name": "attached",
@@ -5698,6 +5916,7 @@
     "defaultState": 5507,
     "minStateId": 5474,
     "maxStateId": 5537,
+    "mapColorId": 18,
     "states": [
       {
         "name": "attached",
@@ -5746,6 +5965,7 @@
     "defaultState": 5539,
     "minStateId": 5538,
     "maxStateId": 5545,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -5777,6 +5997,7 @@
     "defaultState": 5547,
     "minStateId": 5546,
     "maxStateId": 5553,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -5808,6 +6029,7 @@
     "defaultState": 5555,
     "minStateId": 5554,
     "maxStateId": 5561,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -5839,6 +6061,7 @@
     "defaultState": 5563,
     "minStateId": 5562,
     "maxStateId": 5569,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -5870,6 +6093,7 @@
     "defaultState": 5571,
     "minStateId": 5570,
     "maxStateId": 5577,
+    "mapColorId": 42,
     "states": [
       {
         "name": "facing",
@@ -5901,6 +6125,7 @@
     "defaultState": 5579,
     "minStateId": 5578,
     "maxStateId": 5585,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -5932,6 +6157,7 @@
     "defaultState": 5587,
     "minStateId": 5586,
     "maxStateId": 5593,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -5963,6 +6189,7 @@
     "defaultState": 5595,
     "minStateId": 5594,
     "maxStateId": 5601,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -5994,6 +6221,7 @@
     "defaultState": 5603,
     "minStateId": 5602,
     "maxStateId": 5609,
+    "mapColorId": 53,
     "states": [
       {
         "name": "facing",
@@ -6025,6 +6253,7 @@
     "defaultState": 5611,
     "minStateId": 5610,
     "maxStateId": 5617,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -6056,6 +6285,7 @@
     "defaultState": 5619,
     "minStateId": 5618,
     "maxStateId": 5625,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -6087,6 +6317,7 @@
     "defaultState": 5635,
     "minStateId": 5626,
     "maxStateId": 5649,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -6128,6 +6359,7 @@
     "defaultState": 5651,
     "minStateId": 5650,
     "maxStateId": 5651,
+    "mapColorId": 11,
     "states": [
       {
         "name": "powered",
@@ -6148,6 +6380,7 @@
     "defaultState": 5663,
     "minStateId": 5652,
     "maxStateId": 5715,
+    "mapColorId": 6,
     "states": [
       {
         "name": "facing",
@@ -6202,6 +6435,7 @@
     "defaultState": 5717,
     "minStateId": 5716,
     "maxStateId": 5717,
+    "mapColorId": 13,
     "states": [
       {
         "name": "powered",
@@ -6222,6 +6456,7 @@
     "defaultState": 5719,
     "minStateId": 5718,
     "maxStateId": 5719,
+    "mapColorId": 34,
     "states": [
       {
         "name": "powered",
@@ -6242,6 +6477,7 @@
     "defaultState": 5721,
     "minStateId": 5720,
     "maxStateId": 5721,
+    "mapColorId": 2,
     "states": [
       {
         "name": "powered",
@@ -6262,6 +6498,7 @@
     "defaultState": 5723,
     "minStateId": 5722,
     "maxStateId": 5723,
+    "mapColorId": 10,
     "states": [
       {
         "name": "powered",
@@ -6282,6 +6519,7 @@
     "defaultState": 5725,
     "minStateId": 5724,
     "maxStateId": 5725,
+    "mapColorId": 15,
     "states": [
       {
         "name": "powered",
@@ -6302,6 +6540,7 @@
     "defaultState": 5727,
     "minStateId": 5726,
     "maxStateId": 5727,
+    "mapColorId": 36,
     "states": [
       {
         "name": "powered",
@@ -6322,6 +6561,7 @@
     "defaultState": 5729,
     "minStateId": 5728,
     "maxStateId": 5729,
+    "mapColorId": 26,
     "states": [
       {
         "name": "powered",
@@ -6342,6 +6582,7 @@
     "defaultState": 5731,
     "minStateId": 5730,
     "maxStateId": 5731,
+    "mapColorId": 28,
     "states": [
       {
         "name": "powered",
@@ -6362,6 +6603,7 @@
     "defaultState": 5733,
     "minStateId": 5732,
     "maxStateId": 5733,
+    "mapColorId": 18,
     "states": [
       {
         "name": "powered",
@@ -6382,6 +6624,7 @@
     "defaultState": 5735,
     "minStateId": 5734,
     "maxStateId": 5735,
+    "mapColorId": 11,
     "states": [
       {
         "name": "lit",
@@ -6402,6 +6645,7 @@
     "defaultState": 5737,
     "minStateId": 5736,
     "maxStateId": 5737,
+    "mapColorId": 59,
     "states": [
       {
         "name": "lit",
@@ -6422,6 +6666,7 @@
     "defaultState": 5738,
     "minStateId": 5738,
     "maxStateId": 5739,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -6442,6 +6687,7 @@
     "defaultState": 5740,
     "minStateId": 5740,
     "maxStateId": 5747,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -6473,6 +6719,7 @@
     "defaultState": 5757,
     "minStateId": 5748,
     "maxStateId": 5771,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -6514,6 +6761,7 @@
     "defaultState": 5772,
     "minStateId": 5772,
     "maxStateId": 5779,
+    "mapColorId": 8,
     "states": [
       {
         "name": "layers",
@@ -6544,6 +6792,7 @@
     "defaultState": 5780,
     "minStateId": 5780,
     "maxStateId": 5780,
+    "mapColorId": 5,
     "states": [],
     "boundingBox": "block"
   },
@@ -6558,6 +6807,7 @@
     "defaultState": 5781,
     "minStateId": 5781,
     "maxStateId": 5781,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "block"
   },
@@ -6572,6 +6822,7 @@
     "defaultState": 5782,
     "minStateId": 5782,
     "maxStateId": 5797,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -6610,6 +6861,7 @@
     "defaultState": 5798,
     "minStateId": 5798,
     "maxStateId": 5798,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -6624,6 +6876,7 @@
     "defaultState": 5799,
     "minStateId": 5799,
     "maxStateId": 5814,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -6662,6 +6915,7 @@
     "defaultState": 5816,
     "minStateId": 5815,
     "maxStateId": 5816,
+    "mapColorId": 10,
     "states": [
       {
         "name": "has_record",
@@ -6682,6 +6936,7 @@
     "defaultState": 5848,
     "minStateId": 5817,
     "maxStateId": 5848,
+    "mapColorId": 13,
     "states": [
       {
         "name": "east",
@@ -6722,6 +6977,7 @@
     "defaultState": 5849,
     "minStateId": 5849,
     "maxStateId": 5849,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -6736,6 +6992,7 @@
     "defaultState": 5850,
     "minStateId": 5850,
     "maxStateId": 5850,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -6750,6 +7007,7 @@
     "defaultState": 5851,
     "minStateId": 5851,
     "maxStateId": 5851,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -6764,6 +7022,7 @@
     "defaultState": 5853,
     "minStateId": 5852,
     "maxStateId": 5854,
+    "mapColorId": 29,
     "states": [
       {
         "name": "axis",
@@ -6789,6 +7048,7 @@
     "defaultState": 5856,
     "minStateId": 5855,
     "maxStateId": 5857,
+    "mapColorId": 29,
     "states": [
       {
         "name": "axis",
@@ -6814,6 +7074,7 @@
     "defaultState": 5858,
     "minStateId": 5858,
     "maxStateId": 5858,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "empty"
   },
@@ -6828,6 +7089,7 @@
     "defaultState": 5859,
     "minStateId": 5859,
     "maxStateId": 5862,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -6854,6 +7116,7 @@
     "defaultState": 5863,
     "minStateId": 5863,
     "maxStateId": 5863,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -6868,6 +7131,7 @@
     "defaultState": 5864,
     "minStateId": 5864,
     "maxStateId": 5865,
+    "mapColorId": 0,
     "states": [
       {
         "name": "axis",
@@ -6892,6 +7156,7 @@
     "defaultState": 5866,
     "minStateId": 5866,
     "maxStateId": 5869,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -6918,6 +7183,7 @@
     "defaultState": 5870,
     "minStateId": 5870,
     "maxStateId": 5873,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -6944,6 +7210,7 @@
     "defaultState": 5874,
     "minStateId": 5874,
     "maxStateId": 5880,
+    "mapColorId": 0,
     "states": [
       {
         "name": "bites",
@@ -6973,6 +7240,7 @@
     "defaultState": 5884,
     "minStateId": 5881,
     "maxStateId": 5944,
+    "mapColorId": 0,
     "states": [
       {
         "name": "delay",
@@ -7020,6 +7288,7 @@
     "defaultState": 5945,
     "minStateId": 5945,
     "maxStateId": 5945,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "block"
   },
@@ -7034,6 +7303,7 @@
     "defaultState": 5946,
     "minStateId": 5946,
     "maxStateId": 5946,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -7048,6 +7318,7 @@
     "defaultState": 5947,
     "minStateId": 5947,
     "maxStateId": 5947,
+    "mapColorId": 16,
     "states": [],
     "boundingBox": "block"
   },
@@ -7062,6 +7333,7 @@
     "defaultState": 5948,
     "minStateId": 5948,
     "maxStateId": 5948,
+    "mapColorId": 17,
     "states": [],
     "boundingBox": "block"
   },
@@ -7076,6 +7348,7 @@
     "defaultState": 5949,
     "minStateId": 5949,
     "maxStateId": 5949,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -7090,6 +7363,7 @@
     "defaultState": 5950,
     "minStateId": 5950,
     "maxStateId": 5950,
+    "mapColorId": 19,
     "states": [],
     "boundingBox": "block"
   },
@@ -7104,6 +7378,7 @@
     "defaultState": 5951,
     "minStateId": 5951,
     "maxStateId": 5951,
+    "mapColorId": 20,
     "states": [],
     "boundingBox": "block"
   },
@@ -7118,6 +7393,7 @@
     "defaultState": 5952,
     "minStateId": 5952,
     "maxStateId": 5952,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -7132,6 +7408,7 @@
     "defaultState": 5953,
     "minStateId": 5953,
     "maxStateId": 5953,
+    "mapColorId": 22,
     "states": [],
     "boundingBox": "block"
   },
@@ -7146,6 +7423,7 @@
     "defaultState": 5954,
     "minStateId": 5954,
     "maxStateId": 5954,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "block"
   },
@@ -7160,6 +7438,7 @@
     "defaultState": 5955,
     "minStateId": 5955,
     "maxStateId": 5955,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -7174,6 +7453,7 @@
     "defaultState": 5956,
     "minStateId": 5956,
     "maxStateId": 5956,
+    "mapColorId": 25,
     "states": [],
     "boundingBox": "block"
   },
@@ -7188,6 +7468,7 @@
     "defaultState": 5957,
     "minStateId": 5957,
     "maxStateId": 5957,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -7202,6 +7483,7 @@
     "defaultState": 5958,
     "minStateId": 5958,
     "maxStateId": 5958,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -7216,6 +7498,7 @@
     "defaultState": 5959,
     "minStateId": 5959,
     "maxStateId": 5959,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -7230,6 +7513,7 @@
     "defaultState": 5960,
     "minStateId": 5960,
     "maxStateId": 5960,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -7244,6 +7528,7 @@
     "defaultState": 5976,
     "minStateId": 5961,
     "maxStateId": 6024,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -7294,6 +7579,7 @@
     "defaultState": 6040,
     "minStateId": 6025,
     "maxStateId": 6088,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -7344,6 +7630,7 @@
     "defaultState": 6104,
     "minStateId": 6089,
     "maxStateId": 6152,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -7394,6 +7681,7 @@
     "defaultState": 6168,
     "minStateId": 6153,
     "maxStateId": 6216,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -7444,6 +7732,7 @@
     "defaultState": 6232,
     "minStateId": 6217,
     "maxStateId": 6280,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -7494,6 +7783,7 @@
     "defaultState": 6296,
     "minStateId": 6281,
     "maxStateId": 6344,
+    "mapColorId": 36,
     "states": [
       {
         "name": "facing",
@@ -7544,6 +7834,7 @@
     "defaultState": 6360,
     "minStateId": 6345,
     "maxStateId": 6408,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -7594,6 +7885,7 @@
     "defaultState": 6424,
     "minStateId": 6409,
     "maxStateId": 6472,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -7644,6 +7936,7 @@
     "defaultState": 6488,
     "minStateId": 6473,
     "maxStateId": 6536,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -7694,6 +7987,7 @@
     "defaultState": 6537,
     "minStateId": 6537,
     "maxStateId": 6537,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -7708,6 +8002,7 @@
     "defaultState": 6538,
     "minStateId": 6538,
     "maxStateId": 6538,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -7722,6 +8017,7 @@
     "defaultState": 6539,
     "minStateId": 6539,
     "maxStateId": 6539,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -7736,6 +8032,7 @@
     "defaultState": 6540,
     "minStateId": 6540,
     "maxStateId": 6540,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -7750,6 +8047,7 @@
     "defaultState": 6541,
     "minStateId": 6541,
     "maxStateId": 6541,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -7764,6 +8062,7 @@
     "defaultState": 6542,
     "minStateId": 6542,
     "maxStateId": 6542,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -7778,6 +8077,7 @@
     "defaultState": 6543,
     "minStateId": 6543,
     "maxStateId": 6543,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -7792,6 +8092,7 @@
     "defaultState": 6544,
     "minStateId": 6544,
     "maxStateId": 6544,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -7806,6 +8107,7 @@
     "defaultState": 6545,
     "minStateId": 6545,
     "maxStateId": 6545,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -7820,6 +8122,7 @@
     "defaultState": 6546,
     "minStateId": 6546,
     "maxStateId": 6546,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -7834,6 +8137,7 @@
     "defaultState": 6547,
     "minStateId": 6547,
     "maxStateId": 6547,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -7848,6 +8152,7 @@
     "defaultState": 6548,
     "minStateId": 6548,
     "maxStateId": 6548,
+    "mapColorId": 9,
     "states": [],
     "boundingBox": "block"
   },
@@ -7862,6 +8167,7 @@
     "defaultState": 6549,
     "minStateId": 6549,
     "maxStateId": 6612,
+    "mapColorId": 10,
     "states": [
       {
         "name": "down",
@@ -7907,6 +8213,7 @@
     "defaultState": 6613,
     "minStateId": 6613,
     "maxStateId": 6676,
+    "mapColorId": 28,
     "states": [
       {
         "name": "down",
@@ -7952,6 +8259,7 @@
     "defaultState": 6677,
     "minStateId": 6677,
     "maxStateId": 6740,
+    "mapColorId": 3,
     "states": [
       {
         "name": "down",
@@ -7997,6 +8305,7 @@
     "defaultState": 6772,
     "minStateId": 6741,
     "maxStateId": 6772,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -8037,6 +8346,7 @@
     "defaultState": 6776,
     "minStateId": 6773,
     "maxStateId": 6778,
+    "mapColorId": 0,
     "states": [
       {
         "name": "axis",
@@ -8067,6 +8377,7 @@
     "defaultState": 6810,
     "minStateId": 6779,
     "maxStateId": 6810,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -8107,6 +8418,7 @@
     "defaultState": 6811,
     "minStateId": 6811,
     "maxStateId": 6811,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -8121,6 +8433,7 @@
     "defaultState": 6812,
     "minStateId": 6812,
     "maxStateId": 6812,
+    "mapColorId": 19,
     "states": [],
     "boundingBox": "block"
   },
@@ -8135,6 +8448,7 @@
     "defaultState": 6813,
     "minStateId": 6813,
     "maxStateId": 6816,
+    "mapColorId": 7,
     "states": [
       {
         "name": "facing",
@@ -8161,6 +8475,7 @@
     "defaultState": 6817,
     "minStateId": 6817,
     "maxStateId": 6820,
+    "mapColorId": 7,
     "states": [
       {
         "name": "facing",
@@ -8187,6 +8502,7 @@
     "defaultState": 6821,
     "minStateId": 6821,
     "maxStateId": 6828,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -8217,6 +8533,7 @@
     "defaultState": 6829,
     "minStateId": 6829,
     "maxStateId": 6836,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -8247,6 +8564,7 @@
     "defaultState": 6868,
     "minStateId": 6837,
     "maxStateId": 6868,
+    "mapColorId": 7,
     "states": [
       {
         "name": "east",
@@ -8287,6 +8605,7 @@
     "defaultState": 6996,
     "minStateId": 6869,
     "maxStateId": 6996,
+    "mapColorId": 61,
     "states": [
       {
         "name": "down",
@@ -8337,6 +8656,7 @@
     "defaultState": 7004,
     "minStateId": 6997,
     "maxStateId": 7028,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -8378,6 +8698,7 @@
     "defaultState": 7040,
     "minStateId": 7029,
     "maxStateId": 7108,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -8430,6 +8751,7 @@
     "defaultState": 7120,
     "minStateId": 7109,
     "maxStateId": 7188,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -8482,6 +8804,7 @@
     "defaultState": 7200,
     "minStateId": 7189,
     "maxStateId": 7268,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -8534,6 +8857,7 @@
     "defaultState": 7270,
     "minStateId": 7269,
     "maxStateId": 7270,
+    "mapColorId": 24,
     "states": [
       {
         "name": "snowy",
@@ -8554,6 +8878,7 @@
     "defaultState": 7271,
     "minStateId": 7271,
     "maxStateId": 7271,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "block"
   },
@@ -8568,6 +8893,7 @@
     "defaultState": 7272,
     "minStateId": 7272,
     "maxStateId": 7272,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -8582,6 +8908,7 @@
     "defaultState": 7304,
     "minStateId": 7273,
     "maxStateId": 7304,
+    "mapColorId": 35,
     "states": [
       {
         "name": "east",
@@ -8622,6 +8949,7 @@
     "defaultState": 7316,
     "minStateId": 7305,
     "maxStateId": 7384,
+    "mapColorId": 35,
     "states": [
       {
         "name": "facing",
@@ -8674,6 +9002,7 @@
     "defaultState": 7385,
     "minStateId": 7385,
     "maxStateId": 7388,
+    "mapColorId": 28,
     "states": [
       {
         "name": "age",
@@ -8700,6 +9029,7 @@
     "defaultState": 7389,
     "minStateId": 7389,
     "maxStateId": 7389,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -8714,6 +9044,7 @@
     "defaultState": 7397,
     "minStateId": 7390,
     "maxStateId": 7397,
+    "mapColorId": 6,
     "states": [
       {
         "name": "has_bottle_0",
@@ -8744,6 +9075,7 @@
     "defaultState": 7398,
     "minStateId": 7398,
     "maxStateId": 7398,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -8758,6 +9090,7 @@
     "defaultState": 7399,
     "minStateId": 7399,
     "maxStateId": 7401,
+    "mapColorId": 11,
     "states": [
       {
         "name": "level",
@@ -8783,6 +9116,7 @@
     "defaultState": 7402,
     "minStateId": 7402,
     "maxStateId": 7402,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -8797,6 +9131,7 @@
     "defaultState": 7403,
     "minStateId": 7403,
     "maxStateId": 7405,
+    "mapColorId": 11,
     "states": [
       {
         "name": "level",
@@ -8822,6 +9157,7 @@
     "defaultState": 7406,
     "minStateId": 7406,
     "maxStateId": 7406,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "empty"
   },
@@ -8836,6 +9172,7 @@
     "defaultState": 7411,
     "minStateId": 7407,
     "maxStateId": 7414,
+    "mapColorId": 27,
     "states": [
       {
         "name": "eye",
@@ -8867,6 +9204,7 @@
     "defaultState": 7415,
     "minStateId": 7415,
     "maxStateId": 7415,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -8881,6 +9219,7 @@
     "defaultState": 7416,
     "minStateId": 7416,
     "maxStateId": 7416,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -8895,6 +9234,7 @@
     "defaultState": 7418,
     "minStateId": 7417,
     "maxStateId": 7418,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -8915,6 +9255,7 @@
     "defaultState": 7419,
     "minStateId": 7419,
     "maxStateId": 7430,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -8951,6 +9292,7 @@
     "defaultState": 7442,
     "minStateId": 7431,
     "maxStateId": 7510,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -9003,6 +9345,7 @@
     "defaultState": 7511,
     "minStateId": 7511,
     "maxStateId": 7511,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -9017,6 +9360,7 @@
     "defaultState": 7512,
     "minStateId": 7512,
     "maxStateId": 7512,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -9031,6 +9375,7 @@
     "defaultState": 7514,
     "minStateId": 7513,
     "maxStateId": 7520,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -9062,6 +9407,7 @@
     "defaultState": 7530,
     "minStateId": 7521,
     "maxStateId": 7536,
+    "mapColorId": 0,
     "states": [
       {
         "name": "attached",
@@ -9098,6 +9444,7 @@
     "defaultState": 7664,
     "minStateId": 7537,
     "maxStateId": 7664,
+    "mapColorId": 0,
     "states": [
       {
         "name": "attached",
@@ -9148,6 +9495,7 @@
     "defaultState": 7665,
     "minStateId": 7665,
     "maxStateId": 7665,
+    "mapColorId": 33,
     "states": [],
     "boundingBox": "block"
   },
@@ -9162,6 +9510,7 @@
     "defaultState": 7677,
     "minStateId": 7666,
     "maxStateId": 7745,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -9214,6 +9563,7 @@
     "defaultState": 7757,
     "minStateId": 7746,
     "maxStateId": 7825,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -9266,6 +9616,7 @@
     "defaultState": 7837,
     "minStateId": 7826,
     "maxStateId": 7905,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -9318,6 +9669,7 @@
     "defaultState": 7912,
     "minStateId": 7906,
     "maxStateId": 7917,
+    "mapColorId": 26,
     "states": [
       {
         "name": "conditional",
@@ -9351,6 +9703,7 @@
     "defaultState": 7918,
     "minStateId": 7918,
     "maxStateId": 7918,
+    "mapColorId": 31,
     "states": [],
     "boundingBox": "block"
   },
@@ -9365,6 +9718,7 @@
     "defaultState": 7922,
     "minStateId": 7919,
     "maxStateId": 8242,
+    "mapColorId": 11,
     "states": [
       {
         "name": "east",
@@ -9430,6 +9784,7 @@
     "defaultState": 8246,
     "minStateId": 8243,
     "maxStateId": 8566,
+    "mapColorId": 11,
     "states": [
       {
         "name": "east",
@@ -9495,6 +9850,7 @@
     "defaultState": 8567,
     "minStateId": 8567,
     "maxStateId": 8567,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9509,6 +9865,7 @@
     "defaultState": 8568,
     "minStateId": 8568,
     "maxStateId": 8568,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9523,6 +9880,7 @@
     "defaultState": 8569,
     "minStateId": 8569,
     "maxStateId": 8569,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9537,6 +9895,7 @@
     "defaultState": 8570,
     "minStateId": 8570,
     "maxStateId": 8570,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9551,6 +9910,7 @@
     "defaultState": 8571,
     "minStateId": 8571,
     "maxStateId": 8571,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9565,6 +9925,7 @@
     "defaultState": 8572,
     "minStateId": 8572,
     "maxStateId": 8572,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9579,6 +9940,7 @@
     "defaultState": 8573,
     "minStateId": 8573,
     "maxStateId": 8573,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9593,6 +9955,7 @@
     "defaultState": 8574,
     "minStateId": 8574,
     "maxStateId": 8574,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9607,6 +9970,7 @@
     "defaultState": 8575,
     "minStateId": 8575,
     "maxStateId": 8575,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9621,6 +9985,7 @@
     "defaultState": 8576,
     "minStateId": 8576,
     "maxStateId": 8576,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9635,6 +10000,7 @@
     "defaultState": 8577,
     "minStateId": 8577,
     "maxStateId": 8577,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9649,6 +10015,7 @@
     "defaultState": 8578,
     "minStateId": 8578,
     "maxStateId": 8578,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9663,6 +10030,7 @@
     "defaultState": 8579,
     "minStateId": 8579,
     "maxStateId": 8579,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9677,6 +10045,7 @@
     "defaultState": 8580,
     "minStateId": 8580,
     "maxStateId": 8580,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9691,6 +10060,7 @@
     "defaultState": 8581,
     "minStateId": 8581,
     "maxStateId": 8581,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9705,6 +10075,7 @@
     "defaultState": 8582,
     "minStateId": 8582,
     "maxStateId": 8582,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9719,6 +10090,7 @@
     "defaultState": 8583,
     "minStateId": 8583,
     "maxStateId": 8583,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9733,6 +10105,7 @@
     "defaultState": 8584,
     "minStateId": 8584,
     "maxStateId": 8584,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9747,6 +10120,7 @@
     "defaultState": 8585,
     "minStateId": 8585,
     "maxStateId": 8585,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9761,6 +10135,7 @@
     "defaultState": 8586,
     "minStateId": 8586,
     "maxStateId": 8586,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9775,6 +10150,7 @@
     "defaultState": 8587,
     "minStateId": 8587,
     "maxStateId": 8587,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9789,6 +10165,7 @@
     "defaultState": 8588,
     "minStateId": 8588,
     "maxStateId": 8588,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9803,6 +10180,7 @@
     "defaultState": 8589,
     "minStateId": 8589,
     "maxStateId": 8589,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9817,6 +10195,7 @@
     "defaultState": 8590,
     "minStateId": 8590,
     "maxStateId": 8590,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9831,6 +10210,7 @@
     "defaultState": 8591,
     "minStateId": 8591,
     "maxStateId": 8591,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9845,6 +10225,7 @@
     "defaultState": 8592,
     "minStateId": 8592,
     "maxStateId": 8592,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9859,6 +10240,7 @@
     "defaultState": 8593,
     "minStateId": 8593,
     "maxStateId": 8593,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9873,6 +10255,7 @@
     "defaultState": 8594,
     "minStateId": 8594,
     "maxStateId": 8594,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -9887,6 +10270,7 @@
     "defaultState": 8595,
     "minStateId": 8595,
     "maxStateId": 8602,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -9917,6 +10301,7 @@
     "defaultState": 8603,
     "minStateId": 8603,
     "maxStateId": 8610,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -9947,6 +10332,7 @@
     "defaultState": 8620,
     "minStateId": 8611,
     "maxStateId": 8634,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -9988,6 +10374,7 @@
     "defaultState": 8644,
     "minStateId": 8635,
     "maxStateId": 8658,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10029,6 +10416,7 @@
     "defaultState": 8668,
     "minStateId": 8659,
     "maxStateId": 8682,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10070,6 +10458,7 @@
     "defaultState": 8692,
     "minStateId": 8683,
     "maxStateId": 8706,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10111,6 +10500,7 @@
     "defaultState": 8716,
     "minStateId": 8707,
     "maxStateId": 8730,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10152,6 +10542,7 @@
     "defaultState": 8740,
     "minStateId": 8731,
     "maxStateId": 8754,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10193,6 +10584,7 @@
     "defaultState": 8764,
     "minStateId": 8755,
     "maxStateId": 8778,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10234,6 +10626,7 @@
     "defaultState": 8788,
     "minStateId": 8779,
     "maxStateId": 8802,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10275,6 +10668,7 @@
     "defaultState": 8812,
     "minStateId": 8803,
     "maxStateId": 8826,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -10316,6 +10710,7 @@
     "defaultState": 8843,
     "minStateId": 8827,
     "maxStateId": 8858,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10359,6 +10754,7 @@
     "defaultState": 8860,
     "minStateId": 8859,
     "maxStateId": 8866,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10390,6 +10786,7 @@
     "defaultState": 8883,
     "minStateId": 8867,
     "maxStateId": 8898,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10433,6 +10830,7 @@
     "defaultState": 8900,
     "minStateId": 8899,
     "maxStateId": 8906,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10464,6 +10862,7 @@
     "defaultState": 8923,
     "minStateId": 8907,
     "maxStateId": 8938,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10507,6 +10906,7 @@
     "defaultState": 8940,
     "minStateId": 8939,
     "maxStateId": 8946,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10538,6 +10938,7 @@
     "defaultState": 8963,
     "minStateId": 8947,
     "maxStateId": 8978,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10581,6 +10982,7 @@
     "defaultState": 8980,
     "minStateId": 8979,
     "maxStateId": 8986,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10612,6 +11014,7 @@
     "defaultState": 9003,
     "minStateId": 8987,
     "maxStateId": 9018,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10655,6 +11058,7 @@
     "defaultState": 9020,
     "minStateId": 9019,
     "maxStateId": 9026,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10686,6 +11090,7 @@
     "defaultState": 9043,
     "minStateId": 9027,
     "maxStateId": 9058,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10729,6 +11134,7 @@
     "defaultState": 9060,
     "minStateId": 9059,
     "maxStateId": 9066,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10760,6 +11166,7 @@
     "defaultState": 9083,
     "minStateId": 9067,
     "maxStateId": 9098,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -10803,6 +11210,7 @@
     "defaultState": 9100,
     "minStateId": 9099,
     "maxStateId": 9106,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -10834,6 +11242,7 @@
     "defaultState": 9107,
     "minStateId": 9107,
     "maxStateId": 9110,
+    "mapColorId": 6,
     "states": [
       {
         "name": "facing",
@@ -10860,6 +11269,7 @@
     "defaultState": 9111,
     "minStateId": 9111,
     "maxStateId": 9114,
+    "mapColorId": 6,
     "states": [
       {
         "name": "facing",
@@ -10886,6 +11296,7 @@
     "defaultState": 9115,
     "minStateId": 9115,
     "maxStateId": 9118,
+    "mapColorId": 6,
     "states": [
       {
         "name": "facing",
@@ -10912,6 +11323,7 @@
     "defaultState": 9120,
     "minStateId": 9119,
     "maxStateId": 9142,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -10953,6 +11365,7 @@
     "defaultState": 9143,
     "minStateId": 9143,
     "maxStateId": 9158,
+    "mapColorId": 30,
     "states": [
       {
         "name": "power",
@@ -10991,6 +11404,7 @@
     "defaultState": 9159,
     "minStateId": 9159,
     "maxStateId": 9174,
+    "mapColorId": 6,
     "states": [
       {
         "name": "power",
@@ -11029,6 +11443,7 @@
     "defaultState": 9176,
     "minStateId": 9175,
     "maxStateId": 9190,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -11069,6 +11484,7 @@
     "defaultState": 9207,
     "minStateId": 9191,
     "maxStateId": 9222,
+    "mapColorId": 13,
     "states": [
       {
         "name": "inverted",
@@ -11112,6 +11528,7 @@
     "defaultState": 9223,
     "minStateId": 9223,
     "maxStateId": 9223,
+    "mapColorId": 4,
     "states": [],
     "boundingBox": "block"
   },
@@ -11126,6 +11543,7 @@
     "defaultState": 9224,
     "minStateId": 9224,
     "maxStateId": 9224,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -11140,6 +11558,7 @@
     "defaultState": 9225,
     "minStateId": 9225,
     "maxStateId": 9234,
+    "mapColorId": 11,
     "states": [
       {
         "name": "enabled",
@@ -11172,6 +11591,7 @@
     "defaultState": 9235,
     "minStateId": 9235,
     "maxStateId": 9235,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -11186,6 +11606,7 @@
     "defaultState": 9236,
     "minStateId": 9236,
     "maxStateId": 9236,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -11200,6 +11621,7 @@
     "defaultState": 9238,
     "minStateId": 9237,
     "maxStateId": 9239,
+    "mapColorId": 14,
     "states": [
       {
         "name": "axis",
@@ -11225,6 +11647,7 @@
     "defaultState": 9251,
     "minStateId": 9240,
     "maxStateId": 9319,
+    "mapColorId": 14,
     "states": [
       {
         "name": "facing",
@@ -11277,6 +11700,7 @@
     "defaultState": 9333,
     "minStateId": 9320,
     "maxStateId": 9343,
+    "mapColorId": 0,
     "states": [
       {
         "name": "powered",
@@ -11315,6 +11739,7 @@
     "defaultState": 9345,
     "minStateId": 9344,
     "maxStateId": 9355,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -11348,6 +11773,7 @@
     "defaultState": 9356,
     "minStateId": 9356,
     "maxStateId": 9356,
+    "mapColorId": 36,
     "states": [],
     "boundingBox": "block"
   },
@@ -11362,6 +11788,7 @@
     "defaultState": 9357,
     "minStateId": 9357,
     "maxStateId": 9357,
+    "mapColorId": 37,
     "states": [],
     "boundingBox": "block"
   },
@@ -11376,6 +11803,7 @@
     "defaultState": 9358,
     "minStateId": 9358,
     "maxStateId": 9358,
+    "mapColorId": 38,
     "states": [],
     "boundingBox": "block"
   },
@@ -11390,6 +11818,7 @@
     "defaultState": 9359,
     "minStateId": 9359,
     "maxStateId": 9359,
+    "mapColorId": 39,
     "states": [],
     "boundingBox": "block"
   },
@@ -11404,6 +11833,7 @@
     "defaultState": 9360,
     "minStateId": 9360,
     "maxStateId": 9360,
+    "mapColorId": 40,
     "states": [],
     "boundingBox": "block"
   },
@@ -11418,6 +11848,7 @@
     "defaultState": 9361,
     "minStateId": 9361,
     "maxStateId": 9361,
+    "mapColorId": 41,
     "states": [],
     "boundingBox": "block"
   },
@@ -11432,6 +11863,7 @@
     "defaultState": 9362,
     "minStateId": 9362,
     "maxStateId": 9362,
+    "mapColorId": 42,
     "states": [],
     "boundingBox": "block"
   },
@@ -11446,6 +11878,7 @@
     "defaultState": 9363,
     "minStateId": 9363,
     "maxStateId": 9363,
+    "mapColorId": 43,
     "states": [],
     "boundingBox": "block"
   },
@@ -11460,6 +11893,7 @@
     "defaultState": 9364,
     "minStateId": 9364,
     "maxStateId": 9364,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -11474,6 +11908,7 @@
     "defaultState": 9365,
     "minStateId": 9365,
     "maxStateId": 9365,
+    "mapColorId": 45,
     "states": [],
     "boundingBox": "block"
   },
@@ -11488,6 +11923,7 @@
     "defaultState": 9366,
     "minStateId": 9366,
     "maxStateId": 9366,
+    "mapColorId": 46,
     "states": [],
     "boundingBox": "block"
   },
@@ -11502,6 +11938,7 @@
     "defaultState": 9367,
     "minStateId": 9367,
     "maxStateId": 9367,
+    "mapColorId": 47,
     "states": [],
     "boundingBox": "block"
   },
@@ -11516,6 +11953,7 @@
     "defaultState": 9368,
     "minStateId": 9368,
     "maxStateId": 9368,
+    "mapColorId": 48,
     "states": [],
     "boundingBox": "block"
   },
@@ -11530,6 +11968,7 @@
     "defaultState": 9369,
     "minStateId": 9369,
     "maxStateId": 9369,
+    "mapColorId": 49,
     "states": [],
     "boundingBox": "block"
   },
@@ -11544,6 +11983,7 @@
     "defaultState": 9370,
     "minStateId": 9370,
     "maxStateId": 9370,
+    "mapColorId": 50,
     "states": [],
     "boundingBox": "block"
   },
@@ -11558,6 +11998,7 @@
     "defaultState": 9371,
     "minStateId": 9371,
     "maxStateId": 9371,
+    "mapColorId": 51,
     "states": [],
     "boundingBox": "block"
   },
@@ -11572,6 +12013,7 @@
     "defaultState": 9403,
     "minStateId": 9372,
     "maxStateId": 9403,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11612,6 +12054,7 @@
     "defaultState": 9435,
     "minStateId": 9404,
     "maxStateId": 9435,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11652,6 +12095,7 @@
     "defaultState": 9467,
     "minStateId": 9436,
     "maxStateId": 9467,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11692,6 +12136,7 @@
     "defaultState": 9499,
     "minStateId": 9468,
     "maxStateId": 9499,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11732,6 +12177,7 @@
     "defaultState": 9531,
     "minStateId": 9500,
     "maxStateId": 9531,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11772,6 +12218,7 @@
     "defaultState": 9563,
     "minStateId": 9532,
     "maxStateId": 9563,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11812,6 +12259,7 @@
     "defaultState": 9595,
     "minStateId": 9564,
     "maxStateId": 9595,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11852,6 +12300,7 @@
     "defaultState": 9627,
     "minStateId": 9596,
     "maxStateId": 9627,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11892,6 +12341,7 @@
     "defaultState": 9659,
     "minStateId": 9628,
     "maxStateId": 9659,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11932,6 +12382,7 @@
     "defaultState": 9691,
     "minStateId": 9660,
     "maxStateId": 9691,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -11972,6 +12423,7 @@
     "defaultState": 9723,
     "minStateId": 9692,
     "maxStateId": 9723,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -12012,6 +12464,7 @@
     "defaultState": 9755,
     "minStateId": 9724,
     "maxStateId": 9755,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -12052,6 +12505,7 @@
     "defaultState": 9787,
     "minStateId": 9756,
     "maxStateId": 9787,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -12092,6 +12546,7 @@
     "defaultState": 9819,
     "minStateId": 9788,
     "maxStateId": 9819,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -12132,6 +12587,7 @@
     "defaultState": 9851,
     "minStateId": 9820,
     "maxStateId": 9851,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -12172,6 +12628,7 @@
     "defaultState": 9883,
     "minStateId": 9852,
     "maxStateId": 9883,
+    "mapColorId": 0,
     "states": [
       {
         "name": "east",
@@ -12212,6 +12669,7 @@
     "defaultState": 9895,
     "minStateId": 9884,
     "maxStateId": 9963,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -12264,6 +12722,7 @@
     "defaultState": 9975,
     "minStateId": 9964,
     "maxStateId": 10043,
+    "mapColorId": 36,
     "states": [
       {
         "name": "facing",
@@ -12316,6 +12775,7 @@
     "defaultState": 10055,
     "minStateId": 10044,
     "maxStateId": 10123,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -12368,6 +12828,7 @@
     "defaultState": 10135,
     "minStateId": 10124,
     "maxStateId": 10203,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -12420,6 +12881,7 @@
     "defaultState": 10215,
     "minStateId": 10204,
     "maxStateId": 10283,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -12472,6 +12934,7 @@
     "defaultState": 10295,
     "minStateId": 10284,
     "maxStateId": 10363,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -12524,6 +12987,7 @@
     "defaultState": 10364,
     "minStateId": 10364,
     "maxStateId": 10364,
+    "mapColorId": 1,
     "states": [],
     "boundingBox": "block"
   },
@@ -12538,6 +13002,7 @@
     "defaultState": 10366,
     "minStateId": 10365,
     "maxStateId": 10366,
+    "mapColorId": 0,
     "states": [
       {
         "name": "waterlogged",
@@ -12558,6 +13023,7 @@
     "defaultState": 10398,
     "minStateId": 10367,
     "maxStateId": 10398,
+    "mapColorId": 0,
     "states": [
       {
         "name": "level",
@@ -12601,6 +13067,7 @@
     "defaultState": 10414,
     "minStateId": 10399,
     "maxStateId": 10462,
+    "mapColorId": 6,
     "states": [
       {
         "name": "facing",
@@ -12651,6 +13118,7 @@
     "defaultState": 10463,
     "minStateId": 10463,
     "maxStateId": 10463,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "block"
   },
@@ -12665,6 +13133,7 @@
     "defaultState": 10464,
     "minStateId": 10464,
     "maxStateId": 10464,
+    "mapColorId": 31,
     "states": [],
     "boundingBox": "block"
   },
@@ -12679,6 +13148,7 @@
     "defaultState": 10465,
     "minStateId": 10465,
     "maxStateId": 10465,
+    "mapColorId": 31,
     "states": [],
     "boundingBox": "block"
   },
@@ -12693,6 +13163,7 @@
     "defaultState": 10477,
     "minStateId": 10466,
     "maxStateId": 10545,
+    "mapColorId": 23,
     "states": [
       {
         "name": "facing",
@@ -12745,6 +13216,7 @@
     "defaultState": 10557,
     "minStateId": 10546,
     "maxStateId": 10625,
+    "mapColorId": 31,
     "states": [
       {
         "name": "facing",
@@ -12797,6 +13269,7 @@
     "defaultState": 10637,
     "minStateId": 10626,
     "maxStateId": 10705,
+    "mapColorId": 31,
     "states": [
       {
         "name": "facing",
@@ -12849,6 +13322,7 @@
     "defaultState": 10709,
     "minStateId": 10706,
     "maxStateId": 10711,
+    "mapColorId": 23,
     "states": [
       {
         "name": "type",
@@ -12879,6 +13353,7 @@
     "defaultState": 10715,
     "minStateId": 10712,
     "maxStateId": 10717,
+    "mapColorId": 31,
     "states": [
       {
         "name": "type",
@@ -12909,6 +13384,7 @@
     "defaultState": 10721,
     "minStateId": 10718,
     "maxStateId": 10723,
+    "mapColorId": 31,
     "states": [
       {
         "name": "type",
@@ -12939,6 +13415,7 @@
     "defaultState": 10724,
     "minStateId": 10724,
     "maxStateId": 10724,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -12953,6 +13430,7 @@
     "defaultState": 10726,
     "minStateId": 10725,
     "maxStateId": 10727,
+    "mapColorId": 18,
     "states": [
       {
         "name": "axis",
@@ -12978,6 +13456,7 @@
     "defaultState": 10728,
     "minStateId": 10728,
     "maxStateId": 10728,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "block"
   },
@@ -12992,6 +13471,7 @@
     "defaultState": 10729,
     "minStateId": 10729,
     "maxStateId": 10729,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -13006,6 +13486,7 @@
     "defaultState": 10730,
     "minStateId": 10730,
     "maxStateId": 10730,
+    "mapColorId": 16,
     "states": [],
     "boundingBox": "block"
   },
@@ -13020,6 +13501,7 @@
     "defaultState": 10731,
     "minStateId": 10731,
     "maxStateId": 10731,
+    "mapColorId": 17,
     "states": [],
     "boundingBox": "block"
   },
@@ -13034,6 +13516,7 @@
     "defaultState": 10732,
     "minStateId": 10732,
     "maxStateId": 10732,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -13048,6 +13531,7 @@
     "defaultState": 10733,
     "minStateId": 10733,
     "maxStateId": 10733,
+    "mapColorId": 19,
     "states": [],
     "boundingBox": "block"
   },
@@ -13062,6 +13546,7 @@
     "defaultState": 10734,
     "minStateId": 10734,
     "maxStateId": 10734,
+    "mapColorId": 20,
     "states": [],
     "boundingBox": "block"
   },
@@ -13076,6 +13561,7 @@
     "defaultState": 10735,
     "minStateId": 10735,
     "maxStateId": 10735,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -13090,6 +13576,7 @@
     "defaultState": 10736,
     "minStateId": 10736,
     "maxStateId": 10736,
+    "mapColorId": 22,
     "states": [],
     "boundingBox": "block"
   },
@@ -13104,6 +13591,7 @@
     "defaultState": 10737,
     "minStateId": 10737,
     "maxStateId": 10737,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "block"
   },
@@ -13118,6 +13606,7 @@
     "defaultState": 10738,
     "minStateId": 10738,
     "maxStateId": 10738,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -13132,6 +13621,7 @@
     "defaultState": 10739,
     "minStateId": 10739,
     "maxStateId": 10739,
+    "mapColorId": 25,
     "states": [],
     "boundingBox": "block"
   },
@@ -13146,6 +13636,7 @@
     "defaultState": 10740,
     "minStateId": 10740,
     "maxStateId": 10740,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -13160,6 +13651,7 @@
     "defaultState": 10741,
     "minStateId": 10741,
     "maxStateId": 10741,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -13174,6 +13666,7 @@
     "defaultState": 10742,
     "minStateId": 10742,
     "maxStateId": 10742,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -13188,6 +13681,7 @@
     "defaultState": 10743,
     "minStateId": 10743,
     "maxStateId": 10743,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -13202,6 +13696,7 @@
     "defaultState": 10744,
     "minStateId": 10744,
     "maxStateId": 10744,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -13216,6 +13711,7 @@
     "defaultState": 10745,
     "minStateId": 10745,
     "maxStateId": 10745,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -13230,6 +13726,7 @@
     "defaultState": 10746,
     "minStateId": 10746,
     "maxStateId": 10746,
+    "mapColorId": 5,
     "states": [],
     "boundingBox": "block"
   },
@@ -13244,6 +13741,7 @@
     "defaultState": 10748,
     "minStateId": 10747,
     "maxStateId": 10748,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -13268,6 +13766,7 @@
     "defaultState": 10750,
     "minStateId": 10749,
     "maxStateId": 10750,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -13292,6 +13791,7 @@
     "defaultState": 10752,
     "minStateId": 10751,
     "maxStateId": 10752,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -13316,6 +13816,7 @@
     "defaultState": 10754,
     "minStateId": 10753,
     "maxStateId": 10754,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -13340,6 +13841,7 @@
     "defaultState": 10756,
     "minStateId": 10755,
     "maxStateId": 10756,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -13364,6 +13866,7 @@
     "defaultState": 10758,
     "minStateId": 10757,
     "maxStateId": 10758,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -13388,6 +13891,7 @@
     "defaultState": 10759,
     "minStateId": 10759,
     "maxStateId": 10774,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13426,6 +13930,7 @@
     "defaultState": 10775,
     "minStateId": 10775,
     "maxStateId": 10790,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13464,6 +13969,7 @@
     "defaultState": 10791,
     "minStateId": 10791,
     "maxStateId": 10806,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13502,6 +14008,7 @@
     "defaultState": 10807,
     "minStateId": 10807,
     "maxStateId": 10822,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13540,6 +14047,7 @@
     "defaultState": 10823,
     "minStateId": 10823,
     "maxStateId": 10838,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13578,6 +14086,7 @@
     "defaultState": 10839,
     "minStateId": 10839,
     "maxStateId": 10854,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13616,6 +14125,7 @@
     "defaultState": 10855,
     "minStateId": 10855,
     "maxStateId": 10870,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13654,6 +14164,7 @@
     "defaultState": 10871,
     "minStateId": 10871,
     "maxStateId": 10886,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13692,6 +14203,7 @@
     "defaultState": 10887,
     "minStateId": 10887,
     "maxStateId": 10902,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13730,6 +14242,7 @@
     "defaultState": 10903,
     "minStateId": 10903,
     "maxStateId": 10918,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13768,6 +14281,7 @@
     "defaultState": 10919,
     "minStateId": 10919,
     "maxStateId": 10934,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13806,6 +14320,7 @@
     "defaultState": 10935,
     "minStateId": 10935,
     "maxStateId": 10950,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13844,6 +14359,7 @@
     "defaultState": 10951,
     "minStateId": 10951,
     "maxStateId": 10966,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13882,6 +14398,7 @@
     "defaultState": 10967,
     "minStateId": 10967,
     "maxStateId": 10982,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13920,6 +14437,7 @@
     "defaultState": 10983,
     "minStateId": 10983,
     "maxStateId": 10998,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13958,6 +14476,7 @@
     "defaultState": 10999,
     "minStateId": 10999,
     "maxStateId": 11014,
+    "mapColorId": 13,
     "states": [
       {
         "name": "rotation",
@@ -13996,6 +14515,7 @@
     "defaultState": 11015,
     "minStateId": 11015,
     "maxStateId": 11018,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14022,6 +14542,7 @@
     "defaultState": 11019,
     "minStateId": 11019,
     "maxStateId": 11022,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14048,6 +14569,7 @@
     "defaultState": 11023,
     "minStateId": 11023,
     "maxStateId": 11026,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14074,6 +14596,7 @@
     "defaultState": 11027,
     "minStateId": 11027,
     "maxStateId": 11030,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14100,6 +14623,7 @@
     "defaultState": 11031,
     "minStateId": 11031,
     "maxStateId": 11034,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14126,6 +14650,7 @@
     "defaultState": 11035,
     "minStateId": 11035,
     "maxStateId": 11038,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14152,6 +14677,7 @@
     "defaultState": 11039,
     "minStateId": 11039,
     "maxStateId": 11042,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14178,6 +14704,7 @@
     "defaultState": 11043,
     "minStateId": 11043,
     "maxStateId": 11046,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14204,6 +14731,7 @@
     "defaultState": 11047,
     "minStateId": 11047,
     "maxStateId": 11050,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14230,6 +14758,7 @@
     "defaultState": 11051,
     "minStateId": 11051,
     "maxStateId": 11054,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14256,6 +14785,7 @@
     "defaultState": 11055,
     "minStateId": 11055,
     "maxStateId": 11058,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14282,6 +14812,7 @@
     "defaultState": 11059,
     "minStateId": 11059,
     "maxStateId": 11062,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14308,6 +14839,7 @@
     "defaultState": 11063,
     "minStateId": 11063,
     "maxStateId": 11066,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14334,6 +14866,7 @@
     "defaultState": 11067,
     "minStateId": 11067,
     "maxStateId": 11070,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14360,6 +14893,7 @@
     "defaultState": 11071,
     "minStateId": 11071,
     "maxStateId": 11074,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14386,6 +14920,7 @@
     "defaultState": 11075,
     "minStateId": 11075,
     "maxStateId": 11078,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -14412,6 +14947,7 @@
     "defaultState": 11079,
     "minStateId": 11079,
     "maxStateId": 11079,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -14426,6 +14962,7 @@
     "defaultState": 11080,
     "minStateId": 11080,
     "maxStateId": 11080,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -14440,6 +14977,7 @@
     "defaultState": 11081,
     "minStateId": 11081,
     "maxStateId": 11081,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -14454,6 +14992,7 @@
     "defaultState": 11093,
     "minStateId": 11082,
     "maxStateId": 11161,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -14506,6 +15045,7 @@
     "defaultState": 11165,
     "minStateId": 11162,
     "maxStateId": 11167,
+    "mapColorId": 13,
     "states": [
       {
         "name": "type",
@@ -14536,6 +15076,7 @@
     "defaultState": 11171,
     "minStateId": 11168,
     "maxStateId": 11173,
+    "mapColorId": 34,
     "states": [
       {
         "name": "type",
@@ -14566,6 +15107,7 @@
     "defaultState": 11177,
     "minStateId": 11174,
     "maxStateId": 11179,
+    "mapColorId": 2,
     "states": [
       {
         "name": "type",
@@ -14596,6 +15138,7 @@
     "defaultState": 11183,
     "minStateId": 11180,
     "maxStateId": 11185,
+    "mapColorId": 10,
     "states": [
       {
         "name": "type",
@@ -14626,6 +15169,7 @@
     "defaultState": 11189,
     "minStateId": 11186,
     "maxStateId": 11191,
+    "mapColorId": 15,
     "states": [
       {
         "name": "type",
@@ -14656,6 +15200,7 @@
     "defaultState": 11195,
     "minStateId": 11192,
     "maxStateId": 11197,
+    "mapColorId": 36,
     "states": [
       {
         "name": "type",
@@ -14686,6 +15231,7 @@
     "defaultState": 11201,
     "minStateId": 11198,
     "maxStateId": 11203,
+    "mapColorId": 26,
     "states": [
       {
         "name": "type",
@@ -14716,6 +15262,7 @@
     "defaultState": 11207,
     "minStateId": 11204,
     "maxStateId": 11209,
+    "mapColorId": 28,
     "states": [
       {
         "name": "type",
@@ -14746,6 +15293,7 @@
     "defaultState": 11213,
     "minStateId": 11210,
     "maxStateId": 11215,
+    "mapColorId": 18,
     "states": [
       {
         "name": "type",
@@ -14776,6 +15324,7 @@
     "defaultState": 11219,
     "minStateId": 11216,
     "maxStateId": 11221,
+    "mapColorId": 18,
     "states": [
       {
         "name": "type",
@@ -14806,6 +15355,7 @@
     "defaultState": 11225,
     "minStateId": 11222,
     "maxStateId": 11227,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -14836,6 +15386,7 @@
     "defaultState": 11231,
     "minStateId": 11228,
     "maxStateId": 11233,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -14866,6 +15417,7 @@
     "defaultState": 11237,
     "minStateId": 11234,
     "maxStateId": 11239,
+    "mapColorId": 2,
     "states": [
       {
         "name": "type",
@@ -14896,6 +15448,7 @@
     "defaultState": 11243,
     "minStateId": 11240,
     "maxStateId": 11245,
+    "mapColorId": 2,
     "states": [
       {
         "name": "type",
@@ -14926,6 +15479,7 @@
     "defaultState": 11249,
     "minStateId": 11246,
     "maxStateId": 11251,
+    "mapColorId": 13,
     "states": [
       {
         "name": "type",
@@ -14956,6 +15510,7 @@
     "defaultState": 11255,
     "minStateId": 11252,
     "maxStateId": 11257,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -14986,6 +15541,7 @@
     "defaultState": 11261,
     "minStateId": 11258,
     "maxStateId": 11263,
+    "mapColorId": 28,
     "states": [
       {
         "name": "type",
@@ -15016,6 +15572,7 @@
     "defaultState": 11267,
     "minStateId": 11264,
     "maxStateId": 11269,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -15046,6 +15603,7 @@
     "defaultState": 11273,
     "minStateId": 11270,
     "maxStateId": 11275,
+    "mapColorId": 44,
     "states": [
       {
         "name": "type",
@@ -15076,6 +15634,7 @@
     "defaultState": 11279,
     "minStateId": 11276,
     "maxStateId": 11281,
+    "mapColorId": 35,
     "states": [
       {
         "name": "type",
@@ -15106,6 +15665,7 @@
     "defaultState": 11285,
     "minStateId": 11282,
     "maxStateId": 11287,
+    "mapColorId": 14,
     "states": [
       {
         "name": "type",
@@ -15136,6 +15696,7 @@
     "defaultState": 11291,
     "minStateId": 11288,
     "maxStateId": 11293,
+    "mapColorId": 15,
     "states": [
       {
         "name": "type",
@@ -15166,6 +15727,7 @@
     "defaultState": 11297,
     "minStateId": 11294,
     "maxStateId": 11299,
+    "mapColorId": 15,
     "states": [
       {
         "name": "type",
@@ -15196,6 +15758,7 @@
     "defaultState": 11303,
     "minStateId": 11300,
     "maxStateId": 11305,
+    "mapColorId": 16,
     "states": [
       {
         "name": "type",
@@ -15226,6 +15789,7 @@
     "defaultState": 11306,
     "minStateId": 11306,
     "maxStateId": 11306,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -15240,6 +15804,7 @@
     "defaultState": 11307,
     "minStateId": 11307,
     "maxStateId": 11307,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -15254,6 +15819,7 @@
     "defaultState": 11308,
     "minStateId": 11308,
     "maxStateId": 11308,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -15268,6 +15834,7 @@
     "defaultState": 11309,
     "minStateId": 11309,
     "maxStateId": 11309,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -15282,6 +15849,7 @@
     "defaultState": 11317,
     "minStateId": 11310,
     "maxStateId": 11341,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -15323,6 +15891,7 @@
     "defaultState": 11349,
     "minStateId": 11342,
     "maxStateId": 11373,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -15364,6 +15933,7 @@
     "defaultState": 11381,
     "minStateId": 11374,
     "maxStateId": 11405,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -15405,6 +15975,7 @@
     "defaultState": 11413,
     "minStateId": 11406,
     "maxStateId": 11437,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -15446,6 +16017,7 @@
     "defaultState": 11445,
     "minStateId": 11438,
     "maxStateId": 11469,
+    "mapColorId": 36,
     "states": [
       {
         "name": "facing",
@@ -15487,6 +16059,7 @@
     "defaultState": 11477,
     "minStateId": 11470,
     "maxStateId": 11501,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -15528,6 +16101,7 @@
     "defaultState": 11509,
     "minStateId": 11502,
     "maxStateId": 11533,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -15569,6 +16143,7 @@
     "defaultState": 11541,
     "minStateId": 11534,
     "maxStateId": 11565,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -15610,6 +16185,7 @@
     "defaultState": 11597,
     "minStateId": 11566,
     "maxStateId": 11597,
+    "mapColorId": 34,
     "states": [
       {
         "name": "east",
@@ -15650,6 +16226,7 @@
     "defaultState": 11629,
     "minStateId": 11598,
     "maxStateId": 11629,
+    "mapColorId": 2,
     "states": [
       {
         "name": "east",
@@ -15690,6 +16267,7 @@
     "defaultState": 11661,
     "minStateId": 11630,
     "maxStateId": 11661,
+    "mapColorId": 10,
     "states": [
       {
         "name": "east",
@@ -15730,6 +16308,7 @@
     "defaultState": 11693,
     "minStateId": 11662,
     "maxStateId": 11693,
+    "mapColorId": 15,
     "states": [
       {
         "name": "east",
@@ -15770,6 +16349,7 @@
     "defaultState": 11725,
     "minStateId": 11694,
     "maxStateId": 11725,
+    "mapColorId": 36,
     "states": [
       {
         "name": "east",
@@ -15810,6 +16390,7 @@
     "defaultState": 11757,
     "minStateId": 11726,
     "maxStateId": 11757,
+    "mapColorId": 26,
     "states": [
       {
         "name": "east",
@@ -15850,6 +16431,7 @@
     "defaultState": 11789,
     "minStateId": 11758,
     "maxStateId": 11789,
+    "mapColorId": 28,
     "states": [
       {
         "name": "east",
@@ -15890,6 +16472,7 @@
     "defaultState": 11821,
     "minStateId": 11790,
     "maxStateId": 11821,
+    "mapColorId": 18,
     "states": [
       {
         "name": "east",
@@ -15930,6 +16513,7 @@
     "defaultState": 11833,
     "minStateId": 11822,
     "maxStateId": 11885,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -15984,6 +16568,7 @@
     "defaultState": 11897,
     "minStateId": 11886,
     "maxStateId": 11949,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -16038,6 +16623,7 @@
     "defaultState": 11961,
     "minStateId": 11950,
     "maxStateId": 12013,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -16092,6 +16678,7 @@
     "defaultState": 12025,
     "minStateId": 12014,
     "maxStateId": 12077,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -16146,6 +16733,7 @@
     "defaultState": 12089,
     "minStateId": 12078,
     "maxStateId": 12141,
+    "mapColorId": 36,
     "states": [
       {
         "name": "facing",
@@ -16200,6 +16788,7 @@
     "defaultState": 12153,
     "minStateId": 12142,
     "maxStateId": 12205,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -16254,6 +16843,7 @@
     "defaultState": 12217,
     "minStateId": 12206,
     "maxStateId": 12269,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -16308,6 +16898,7 @@
     "defaultState": 12281,
     "minStateId": 12270,
     "maxStateId": 12333,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -16362,6 +16953,7 @@
     "defaultState": 12338,
     "minStateId": 12334,
     "maxStateId": 12339,
+    "mapColorId": 0,
     "states": [
       {
         "name": "facing",
@@ -16390,6 +16982,7 @@
     "defaultState": 12403,
     "minStateId": 12340,
     "maxStateId": 12403,
+    "mapColorId": 24,
     "states": [
       {
         "name": "down",
@@ -16435,6 +17028,7 @@
     "defaultState": 12404,
     "minStateId": 12404,
     "maxStateId": 12409,
+    "mapColorId": 24,
     "states": [
       {
         "name": "age",
@@ -16463,6 +17057,7 @@
     "defaultState": 12410,
     "minStateId": 12410,
     "maxStateId": 12410,
+    "mapColorId": 16,
     "states": [],
     "boundingBox": "block"
   },
@@ -16477,6 +17072,7 @@
     "defaultState": 12412,
     "minStateId": 12411,
     "maxStateId": 12413,
+    "mapColorId": 16,
     "states": [
       {
         "name": "axis",
@@ -16502,6 +17098,7 @@
     "defaultState": 12425,
     "minStateId": 12414,
     "maxStateId": 12493,
+    "mapColorId": 16,
     "states": [
       {
         "name": "facing",
@@ -16554,6 +17151,7 @@
     "defaultState": 12494,
     "minStateId": 12494,
     "maxStateId": 12494,
+    "mapColorId": 2,
     "states": [],
     "boundingBox": "block"
   },
@@ -16568,6 +17166,7 @@
     "defaultState": 12495,
     "minStateId": 12495,
     "maxStateId": 12496,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -16592,6 +17191,7 @@
     "defaultState": 12498,
     "minStateId": 12497,
     "maxStateId": 12506,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -16628,6 +17228,7 @@
     "defaultState": 12508,
     "minStateId": 12507,
     "maxStateId": 12508,
+    "mapColorId": 7,
     "states": [
       {
         "name": "half",
@@ -16652,6 +17253,7 @@
     "defaultState": 12509,
     "minStateId": 12509,
     "maxStateId": 12512,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -16678,6 +17280,7 @@
     "defaultState": 12513,
     "minStateId": 12513,
     "maxStateId": 12513,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -16692,6 +17295,7 @@
     "defaultState": 12514,
     "minStateId": 12514,
     "maxStateId": 12514,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "empty"
   },
@@ -16706,6 +17310,7 @@
     "defaultState": 12521,
     "minStateId": 12515,
     "maxStateId": 12526,
+    "mapColorId": 24,
     "states": [
       {
         "name": "conditional",
@@ -16739,6 +17344,7 @@
     "defaultState": 12533,
     "minStateId": 12527,
     "maxStateId": 12538,
+    "mapColorId": 27,
     "states": [
       {
         "name": "conditional",
@@ -16772,6 +17378,7 @@
     "defaultState": 12539,
     "minStateId": 12539,
     "maxStateId": 12542,
+    "mapColorId": 5,
     "states": [
       {
         "name": "age",
@@ -16798,6 +17405,7 @@
     "defaultState": 12543,
     "minStateId": 12543,
     "maxStateId": 12543,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -16812,6 +17420,7 @@
     "defaultState": 12544,
     "minStateId": 12544,
     "maxStateId": 12544,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -16826,6 +17435,7 @@
     "defaultState": 12545,
     "minStateId": 12545,
     "maxStateId": 12545,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -16840,6 +17450,7 @@
     "defaultState": 12547,
     "minStateId": 12546,
     "maxStateId": 12548,
+    "mapColorId": 2,
     "states": [
       {
         "name": "axis",
@@ -16865,6 +17476,7 @@
     "defaultState": 12549,
     "minStateId": 12549,
     "maxStateId": 12549,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "empty"
   },
@@ -16879,6 +17491,7 @@
     "defaultState": 12555,
     "minStateId": 12550,
     "maxStateId": 12561,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -16912,6 +17525,7 @@
     "defaultState": 12566,
     "minStateId": 12562,
     "maxStateId": 12567,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -16940,6 +17554,7 @@
     "defaultState": 12572,
     "minStateId": 12568,
     "maxStateId": 12573,
+    "mapColorId": 8,
     "states": [
       {
         "name": "facing",
@@ -16968,6 +17583,7 @@
     "defaultState": 12578,
     "minStateId": 12574,
     "maxStateId": 12579,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -16996,6 +17612,7 @@
     "defaultState": 12584,
     "minStateId": 12580,
     "maxStateId": 12585,
+    "mapColorId": 16,
     "states": [
       {
         "name": "facing",
@@ -17024,6 +17641,7 @@
     "defaultState": 12590,
     "minStateId": 12586,
     "maxStateId": 12591,
+    "mapColorId": 17,
     "states": [
       {
         "name": "facing",
@@ -17052,6 +17670,7 @@
     "defaultState": 12596,
     "minStateId": 12592,
     "maxStateId": 12597,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -17080,6 +17699,7 @@
     "defaultState": 12602,
     "minStateId": 12598,
     "maxStateId": 12603,
+    "mapColorId": 19,
     "states": [
       {
         "name": "facing",
@@ -17108,6 +17728,7 @@
     "defaultState": 12608,
     "minStateId": 12604,
     "maxStateId": 12609,
+    "mapColorId": 20,
     "states": [
       {
         "name": "facing",
@@ -17136,6 +17757,7 @@
     "defaultState": 12614,
     "minStateId": 12610,
     "maxStateId": 12615,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -17164,6 +17786,7 @@
     "defaultState": 12620,
     "minStateId": 12616,
     "maxStateId": 12621,
+    "mapColorId": 22,
     "states": [
       {
         "name": "facing",
@@ -17192,6 +17815,7 @@
     "defaultState": 12626,
     "minStateId": 12622,
     "maxStateId": 12627,
+    "mapColorId": 23,
     "states": [
       {
         "name": "facing",
@@ -17220,6 +17844,7 @@
     "defaultState": 12632,
     "minStateId": 12628,
     "maxStateId": 12633,
+    "mapColorId": 46,
     "states": [
       {
         "name": "facing",
@@ -17248,6 +17873,7 @@
     "defaultState": 12638,
     "minStateId": 12634,
     "maxStateId": 12639,
+    "mapColorId": 25,
     "states": [
       {
         "name": "facing",
@@ -17276,6 +17902,7 @@
     "defaultState": 12644,
     "minStateId": 12640,
     "maxStateId": 12645,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -17304,6 +17931,7 @@
     "defaultState": 12650,
     "minStateId": 12646,
     "maxStateId": 12651,
+    "mapColorId": 27,
     "states": [
       {
         "name": "facing",
@@ -17332,6 +17960,7 @@
     "defaultState": 12656,
     "minStateId": 12652,
     "maxStateId": 12657,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -17360,6 +17989,7 @@
     "defaultState": 12662,
     "minStateId": 12658,
     "maxStateId": 12663,
+    "mapColorId": 29,
     "states": [
       {
         "name": "facing",
@@ -17388,6 +18018,7 @@
     "defaultState": 12664,
     "minStateId": 12664,
     "maxStateId": 12667,
+    "mapColorId": 8,
     "states": [
       {
         "name": "facing",
@@ -17414,6 +18045,7 @@
     "defaultState": 12668,
     "minStateId": 12668,
     "maxStateId": 12671,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -17440,6 +18072,7 @@
     "defaultState": 12672,
     "minStateId": 12672,
     "maxStateId": 12675,
+    "mapColorId": 16,
     "states": [
       {
         "name": "facing",
@@ -17466,6 +18099,7 @@
     "defaultState": 12676,
     "minStateId": 12676,
     "maxStateId": 12679,
+    "mapColorId": 17,
     "states": [
       {
         "name": "facing",
@@ -17492,6 +18126,7 @@
     "defaultState": 12680,
     "minStateId": 12680,
     "maxStateId": 12683,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -17518,6 +18153,7 @@
     "defaultState": 12684,
     "minStateId": 12684,
     "maxStateId": 12687,
+    "mapColorId": 19,
     "states": [
       {
         "name": "facing",
@@ -17544,6 +18180,7 @@
     "defaultState": 12688,
     "minStateId": 12688,
     "maxStateId": 12691,
+    "mapColorId": 20,
     "states": [
       {
         "name": "facing",
@@ -17570,6 +18207,7 @@
     "defaultState": 12692,
     "minStateId": 12692,
     "maxStateId": 12695,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -17596,6 +18234,7 @@
     "defaultState": 12696,
     "minStateId": 12696,
     "maxStateId": 12699,
+    "mapColorId": 22,
     "states": [
       {
         "name": "facing",
@@ -17622,6 +18261,7 @@
     "defaultState": 12700,
     "minStateId": 12700,
     "maxStateId": 12703,
+    "mapColorId": 23,
     "states": [
       {
         "name": "facing",
@@ -17648,6 +18288,7 @@
     "defaultState": 12704,
     "minStateId": 12704,
     "maxStateId": 12707,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -17674,6 +18315,7 @@
     "defaultState": 12708,
     "minStateId": 12708,
     "maxStateId": 12711,
+    "mapColorId": 25,
     "states": [
       {
         "name": "facing",
@@ -17700,6 +18342,7 @@
     "defaultState": 12712,
     "minStateId": 12712,
     "maxStateId": 12715,
+    "mapColorId": 26,
     "states": [
       {
         "name": "facing",
@@ -17726,6 +18369,7 @@
     "defaultState": 12716,
     "minStateId": 12716,
     "maxStateId": 12719,
+    "mapColorId": 27,
     "states": [
       {
         "name": "facing",
@@ -17752,6 +18396,7 @@
     "defaultState": 12720,
     "minStateId": 12720,
     "maxStateId": 12723,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -17778,6 +18423,7 @@
     "defaultState": 12724,
     "minStateId": 12724,
     "maxStateId": 12727,
+    "mapColorId": 29,
     "states": [
       {
         "name": "facing",
@@ -17804,6 +18450,7 @@
     "defaultState": 12728,
     "minStateId": 12728,
     "maxStateId": 12728,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "block"
   },
@@ -17818,6 +18465,7 @@
     "defaultState": 12729,
     "minStateId": 12729,
     "maxStateId": 12729,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -17832,6 +18480,7 @@
     "defaultState": 12730,
     "minStateId": 12730,
     "maxStateId": 12730,
+    "mapColorId": 16,
     "states": [],
     "boundingBox": "block"
   },
@@ -17846,6 +18495,7 @@
     "defaultState": 12731,
     "minStateId": 12731,
     "maxStateId": 12731,
+    "mapColorId": 17,
     "states": [],
     "boundingBox": "block"
   },
@@ -17860,6 +18510,7 @@
     "defaultState": 12732,
     "minStateId": 12732,
     "maxStateId": 12732,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -17874,6 +18525,7 @@
     "defaultState": 12733,
     "minStateId": 12733,
     "maxStateId": 12733,
+    "mapColorId": 19,
     "states": [],
     "boundingBox": "block"
   },
@@ -17888,6 +18540,7 @@
     "defaultState": 12734,
     "minStateId": 12734,
     "maxStateId": 12734,
+    "mapColorId": 20,
     "states": [],
     "boundingBox": "block"
   },
@@ -17902,6 +18555,7 @@
     "defaultState": 12735,
     "minStateId": 12735,
     "maxStateId": 12735,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -17916,6 +18570,7 @@
     "defaultState": 12736,
     "minStateId": 12736,
     "maxStateId": 12736,
+    "mapColorId": 22,
     "states": [],
     "boundingBox": "block"
   },
@@ -17930,6 +18585,7 @@
     "defaultState": 12737,
     "minStateId": 12737,
     "maxStateId": 12737,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "block"
   },
@@ -17944,6 +18600,7 @@
     "defaultState": 12738,
     "minStateId": 12738,
     "maxStateId": 12738,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -17958,6 +18615,7 @@
     "defaultState": 12739,
     "minStateId": 12739,
     "maxStateId": 12739,
+    "mapColorId": 25,
     "states": [],
     "boundingBox": "block"
   },
@@ -17972,6 +18630,7 @@
     "defaultState": 12740,
     "minStateId": 12740,
     "maxStateId": 12740,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -17986,6 +18645,7 @@
     "defaultState": 12741,
     "minStateId": 12741,
     "maxStateId": 12741,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -18000,6 +18660,7 @@
     "defaultState": 12742,
     "minStateId": 12742,
     "maxStateId": 12742,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -18014,6 +18675,7 @@
     "defaultState": 12743,
     "minStateId": 12743,
     "maxStateId": 12743,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -18028,6 +18690,7 @@
     "defaultState": 12744,
     "minStateId": 12744,
     "maxStateId": 12744,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "block"
   },
@@ -18042,6 +18705,7 @@
     "defaultState": 12745,
     "minStateId": 12745,
     "maxStateId": 12745,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -18056,6 +18720,7 @@
     "defaultState": 12746,
     "minStateId": 12746,
     "maxStateId": 12746,
+    "mapColorId": 16,
     "states": [],
     "boundingBox": "block"
   },
@@ -18070,6 +18735,7 @@
     "defaultState": 12747,
     "minStateId": 12747,
     "maxStateId": 12747,
+    "mapColorId": 17,
     "states": [],
     "boundingBox": "block"
   },
@@ -18084,6 +18750,7 @@
     "defaultState": 12748,
     "minStateId": 12748,
     "maxStateId": 12748,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -18098,6 +18765,7 @@
     "defaultState": 12749,
     "minStateId": 12749,
     "maxStateId": 12749,
+    "mapColorId": 19,
     "states": [],
     "boundingBox": "block"
   },
@@ -18112,6 +18780,7 @@
     "defaultState": 12750,
     "minStateId": 12750,
     "maxStateId": 12750,
+    "mapColorId": 20,
     "states": [],
     "boundingBox": "block"
   },
@@ -18126,6 +18795,7 @@
     "defaultState": 12751,
     "minStateId": 12751,
     "maxStateId": 12751,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -18140,6 +18810,7 @@
     "defaultState": 12752,
     "minStateId": 12752,
     "maxStateId": 12752,
+    "mapColorId": 22,
     "states": [],
     "boundingBox": "block"
   },
@@ -18154,6 +18825,7 @@
     "defaultState": 12753,
     "minStateId": 12753,
     "maxStateId": 12753,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "block"
   },
@@ -18168,6 +18840,7 @@
     "defaultState": 12754,
     "minStateId": 12754,
     "maxStateId": 12754,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -18182,6 +18855,7 @@
     "defaultState": 12755,
     "minStateId": 12755,
     "maxStateId": 12755,
+    "mapColorId": 25,
     "states": [],
     "boundingBox": "block"
   },
@@ -18196,6 +18870,7 @@
     "defaultState": 12756,
     "minStateId": 12756,
     "maxStateId": 12756,
+    "mapColorId": 26,
     "states": [],
     "boundingBox": "block"
   },
@@ -18210,6 +18885,7 @@
     "defaultState": 12757,
     "minStateId": 12757,
     "maxStateId": 12757,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -18224,6 +18900,7 @@
     "defaultState": 12758,
     "minStateId": 12758,
     "maxStateId": 12758,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -18238,6 +18915,7 @@
     "defaultState": 12759,
     "minStateId": 12759,
     "maxStateId": 12759,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -18252,6 +18930,7 @@
     "defaultState": 12760,
     "minStateId": 12760,
     "maxStateId": 12785,
+    "mapColorId": 12,
     "states": [
       {
         "name": "age",
@@ -18300,6 +18979,7 @@
     "defaultState": 12786,
     "minStateId": 12786,
     "maxStateId": 12786,
+    "mapColorId": 12,
     "states": [],
     "boundingBox": "empty"
   },
@@ -18314,6 +18994,7 @@
     "defaultState": 12787,
     "minStateId": 12787,
     "maxStateId": 12787,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -18328,6 +19009,7 @@
     "defaultState": 12788,
     "minStateId": 12788,
     "maxStateId": 12799,
+    "mapColorId": 2,
     "states": [
       {
         "name": "eggs",
@@ -18364,6 +19046,7 @@
     "defaultState": 12800,
     "minStateId": 12800,
     "maxStateId": 12802,
+    "mapColorId": 28,
     "states": [
       {
         "name": "hatch",
@@ -18389,6 +19072,7 @@
     "defaultState": 12803,
     "minStateId": 12803,
     "maxStateId": 12803,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -18403,6 +19087,7 @@
     "defaultState": 12804,
     "minStateId": 12804,
     "maxStateId": 12804,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -18417,6 +19102,7 @@
     "defaultState": 12805,
     "minStateId": 12805,
     "maxStateId": 12805,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -18431,6 +19117,7 @@
     "defaultState": 12806,
     "minStateId": 12806,
     "maxStateId": 12806,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -18445,6 +19132,7 @@
     "defaultState": 12807,
     "minStateId": 12807,
     "maxStateId": 12807,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -18459,6 +19147,7 @@
     "defaultState": 12808,
     "minStateId": 12808,
     "maxStateId": 12808,
+    "mapColorId": 25,
     "states": [],
     "boundingBox": "block"
   },
@@ -18473,6 +19162,7 @@
     "defaultState": 12809,
     "minStateId": 12809,
     "maxStateId": 12809,
+    "mapColorId": 20,
     "states": [],
     "boundingBox": "block"
   },
@@ -18487,6 +19177,7 @@
     "defaultState": 12810,
     "minStateId": 12810,
     "maxStateId": 12810,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -18501,6 +19192,7 @@
     "defaultState": 12811,
     "minStateId": 12811,
     "maxStateId": 12811,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -18515,6 +19207,7 @@
     "defaultState": 12812,
     "minStateId": 12812,
     "maxStateId": 12812,
+    "mapColorId": 18,
     "states": [],
     "boundingBox": "block"
   },
@@ -18529,6 +19222,7 @@
     "defaultState": 12813,
     "minStateId": 12813,
     "maxStateId": 12814,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18549,6 +19243,7 @@
     "defaultState": 12815,
     "minStateId": 12815,
     "maxStateId": 12816,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18569,6 +19264,7 @@
     "defaultState": 12817,
     "minStateId": 12817,
     "maxStateId": 12818,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18589,6 +19285,7 @@
     "defaultState": 12819,
     "minStateId": 12819,
     "maxStateId": 12820,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18609,6 +19306,7 @@
     "defaultState": 12821,
     "minStateId": 12821,
     "maxStateId": 12822,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18629,6 +19327,7 @@
     "defaultState": 12823,
     "minStateId": 12823,
     "maxStateId": 12824,
+    "mapColorId": 25,
     "states": [
       {
         "name": "waterlogged",
@@ -18649,6 +19348,7 @@
     "defaultState": 12825,
     "minStateId": 12825,
     "maxStateId": 12826,
+    "mapColorId": 20,
     "states": [
       {
         "name": "waterlogged",
@@ -18669,6 +19369,7 @@
     "defaultState": 12827,
     "minStateId": 12827,
     "maxStateId": 12828,
+    "mapColorId": 24,
     "states": [
       {
         "name": "waterlogged",
@@ -18689,6 +19390,7 @@
     "defaultState": 12829,
     "minStateId": 12829,
     "maxStateId": 12830,
+    "mapColorId": 28,
     "states": [
       {
         "name": "waterlogged",
@@ -18709,6 +19411,7 @@
     "defaultState": 12831,
     "minStateId": 12831,
     "maxStateId": 12832,
+    "mapColorId": 18,
     "states": [
       {
         "name": "waterlogged",
@@ -18729,6 +19432,7 @@
     "defaultState": 12833,
     "minStateId": 12833,
     "maxStateId": 12834,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18749,6 +19453,7 @@
     "defaultState": 12835,
     "minStateId": 12835,
     "maxStateId": 12836,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18769,6 +19474,7 @@
     "defaultState": 12837,
     "minStateId": 12837,
     "maxStateId": 12838,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18789,6 +19495,7 @@
     "defaultState": 12839,
     "minStateId": 12839,
     "maxStateId": 12840,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18809,6 +19516,7 @@
     "defaultState": 12841,
     "minStateId": 12841,
     "maxStateId": 12842,
+    "mapColorId": 21,
     "states": [
       {
         "name": "waterlogged",
@@ -18829,6 +19537,7 @@
     "defaultState": 12843,
     "minStateId": 12843,
     "maxStateId": 12844,
+    "mapColorId": 25,
     "states": [
       {
         "name": "waterlogged",
@@ -18849,6 +19558,7 @@
     "defaultState": 12845,
     "minStateId": 12845,
     "maxStateId": 12846,
+    "mapColorId": 20,
     "states": [
       {
         "name": "waterlogged",
@@ -18869,6 +19579,7 @@
     "defaultState": 12847,
     "minStateId": 12847,
     "maxStateId": 12848,
+    "mapColorId": 24,
     "states": [
       {
         "name": "waterlogged",
@@ -18889,6 +19600,7 @@
     "defaultState": 12849,
     "minStateId": 12849,
     "maxStateId": 12850,
+    "mapColorId": 28,
     "states": [
       {
         "name": "waterlogged",
@@ -18909,6 +19621,7 @@
     "defaultState": 12851,
     "minStateId": 12851,
     "maxStateId": 12852,
+    "mapColorId": 18,
     "states": [
       {
         "name": "waterlogged",
@@ -18929,6 +19642,7 @@
     "defaultState": 12853,
     "minStateId": 12853,
     "maxStateId": 12860,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -18960,6 +19674,7 @@
     "defaultState": 12861,
     "minStateId": 12861,
     "maxStateId": 12868,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -18991,6 +19706,7 @@
     "defaultState": 12869,
     "minStateId": 12869,
     "maxStateId": 12876,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -19022,6 +19738,7 @@
     "defaultState": 12877,
     "minStateId": 12877,
     "maxStateId": 12884,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -19053,6 +19770,7 @@
     "defaultState": 12885,
     "minStateId": 12885,
     "maxStateId": 12892,
+    "mapColorId": 21,
     "states": [
       {
         "name": "facing",
@@ -19084,6 +19802,7 @@
     "defaultState": 12893,
     "minStateId": 12893,
     "maxStateId": 12900,
+    "mapColorId": 25,
     "states": [
       {
         "name": "facing",
@@ -19115,6 +19834,7 @@
     "defaultState": 12901,
     "minStateId": 12901,
     "maxStateId": 12908,
+    "mapColorId": 20,
     "states": [
       {
         "name": "facing",
@@ -19146,6 +19866,7 @@
     "defaultState": 12909,
     "minStateId": 12909,
     "maxStateId": 12916,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -19177,6 +19898,7 @@
     "defaultState": 12917,
     "minStateId": 12917,
     "maxStateId": 12924,
+    "mapColorId": 28,
     "states": [
       {
         "name": "facing",
@@ -19208,6 +19930,7 @@
     "defaultState": 12925,
     "minStateId": 12925,
     "maxStateId": 12932,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -19239,6 +19962,7 @@
     "defaultState": 12933,
     "minStateId": 12933,
     "maxStateId": 12940,
+    "mapColorId": 27,
     "states": [
       {
         "name": "pickles",
@@ -19270,6 +19994,7 @@
     "defaultState": 12941,
     "minStateId": 12941,
     "maxStateId": 12941,
+    "mapColorId": 5,
     "states": [],
     "boundingBox": "block"
   },
@@ -19284,6 +20009,7 @@
     "defaultState": 12942,
     "minStateId": 12942,
     "maxStateId": 12943,
+    "mapColorId": 31,
     "states": [
       {
         "name": "waterlogged",
@@ -19304,6 +20030,7 @@
     "defaultState": 12944,
     "minStateId": 12944,
     "maxStateId": 12944,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "empty"
   },
@@ -19318,6 +20045,7 @@
     "defaultState": 12945,
     "minStateId": 12945,
     "maxStateId": 12956,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -19361,6 +20089,7 @@
     "defaultState": 12957,
     "minStateId": 12957,
     "maxStateId": 12957,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -19375,6 +20104,7 @@
     "defaultState": 12958,
     "minStateId": 12958,
     "maxStateId": 12958,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "empty"
   },
@@ -19389,6 +20119,7 @@
     "defaultState": 12959,
     "minStateId": 12959,
     "maxStateId": 12959,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "empty"
   },
@@ -19403,6 +20134,7 @@
     "defaultState": 12960,
     "minStateId": 12960,
     "maxStateId": 12961,
+    "mapColorId": 12,
     "states": [
       {
         "name": "drag",
@@ -19423,6 +20155,7 @@
     "defaultState": 12973,
     "minStateId": 12962,
     "maxStateId": 13041,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -19475,6 +20208,7 @@
     "defaultState": 13053,
     "minStateId": 13042,
     "maxStateId": 13121,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -19527,6 +20261,7 @@
     "defaultState": 13133,
     "minStateId": 13122,
     "maxStateId": 13201,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -19579,6 +20314,7 @@
     "defaultState": 13213,
     "minStateId": 13202,
     "maxStateId": 13281,
+    "mapColorId": 14,
     "states": [
       {
         "name": "facing",
@@ -19631,6 +20367,7 @@
     "defaultState": 13293,
     "minStateId": 13282,
     "maxStateId": 13361,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -19683,6 +20420,7 @@
     "defaultState": 13373,
     "minStateId": 13362,
     "maxStateId": 13441,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -19735,6 +20473,7 @@
     "defaultState": 13453,
     "minStateId": 13442,
     "maxStateId": 13521,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -19787,6 +20526,7 @@
     "defaultState": 13533,
     "minStateId": 13522,
     "maxStateId": 13601,
+    "mapColorId": 2,
     "states": [
       {
         "name": "facing",
@@ -19839,6 +20579,7 @@
     "defaultState": 13613,
     "minStateId": 13602,
     "maxStateId": 13681,
+    "mapColorId": 14,
     "states": [
       {
         "name": "facing",
@@ -19891,6 +20632,7 @@
     "defaultState": 13693,
     "minStateId": 13682,
     "maxStateId": 13761,
+    "mapColorId": 10,
     "states": [
       {
         "name": "facing",
@@ -19943,6 +20685,7 @@
     "defaultState": 13773,
     "minStateId": 13762,
     "maxStateId": 13841,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -19995,6 +20738,7 @@
     "defaultState": 13853,
     "minStateId": 13842,
     "maxStateId": 13921,
+    "mapColorId": 35,
     "states": [
       {
         "name": "facing",
@@ -20047,6 +20791,7 @@
     "defaultState": 13933,
     "minStateId": 13922,
     "maxStateId": 14001,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -20099,6 +20844,7 @@
     "defaultState": 14013,
     "minStateId": 14002,
     "maxStateId": 14081,
+    "mapColorId": 14,
     "states": [
       {
         "name": "facing",
@@ -20151,6 +20897,7 @@
     "defaultState": 14085,
     "minStateId": 14082,
     "maxStateId": 14087,
+    "mapColorId": 10,
     "states": [
       {
         "name": "type",
@@ -20181,6 +20928,7 @@
     "defaultState": 14091,
     "minStateId": 14088,
     "maxStateId": 14093,
+    "mapColorId": 15,
     "states": [
       {
         "name": "type",
@@ -20211,6 +20959,7 @@
     "defaultState": 14097,
     "minStateId": 14094,
     "maxStateId": 14099,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -20241,6 +20990,7 @@
     "defaultState": 14103,
     "minStateId": 14100,
     "maxStateId": 14105,
+    "mapColorId": 14,
     "states": [
       {
         "name": "type",
@@ -20271,6 +21021,7 @@
     "defaultState": 14109,
     "minStateId": 14106,
     "maxStateId": 14111,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -20301,6 +21052,7 @@
     "defaultState": 14115,
     "minStateId": 14112,
     "maxStateId": 14117,
+    "mapColorId": 2,
     "states": [
       {
         "name": "type",
@@ -20331,6 +21083,7 @@
     "defaultState": 14121,
     "minStateId": 14118,
     "maxStateId": 14123,
+    "mapColorId": 2,
     "states": [
       {
         "name": "type",
@@ -20361,6 +21114,7 @@
     "defaultState": 14127,
     "minStateId": 14124,
     "maxStateId": 14129,
+    "mapColorId": 14,
     "states": [
       {
         "name": "type",
@@ -20391,6 +21145,7 @@
     "defaultState": 14133,
     "minStateId": 14130,
     "maxStateId": 14135,
+    "mapColorId": 10,
     "states": [
       {
         "name": "type",
@@ -20421,6 +21176,7 @@
     "defaultState": 14139,
     "minStateId": 14136,
     "maxStateId": 14141,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -20451,6 +21207,7 @@
     "defaultState": 14145,
     "minStateId": 14142,
     "maxStateId": 14147,
+    "mapColorId": 35,
     "states": [
       {
         "name": "type",
@@ -20481,6 +21238,7 @@
     "defaultState": 14151,
     "minStateId": 14148,
     "maxStateId": 14153,
+    "mapColorId": 11,
     "states": [
       {
         "name": "type",
@@ -20511,6 +21269,7 @@
     "defaultState": 14157,
     "minStateId": 14154,
     "maxStateId": 14159,
+    "mapColorId": 14,
     "states": [
       {
         "name": "type",
@@ -20541,6 +21300,7 @@
     "defaultState": 14163,
     "minStateId": 14160,
     "maxStateId": 14483,
+    "mapColorId": 28,
     "states": [
       {
         "name": "east",
@@ -20606,6 +21366,7 @@
     "defaultState": 14487,
     "minStateId": 14484,
     "maxStateId": 14807,
+    "mapColorId": 23,
     "states": [
       {
         "name": "east",
@@ -20671,6 +21432,7 @@
     "defaultState": 14811,
     "minStateId": 14808,
     "maxStateId": 15131,
+    "mapColorId": 15,
     "states": [
       {
         "name": "east",
@@ -20736,6 +21498,7 @@
     "defaultState": 15135,
     "minStateId": 15132,
     "maxStateId": 15455,
+    "mapColorId": 11,
     "states": [
       {
         "name": "east",
@@ -20801,6 +21564,7 @@
     "defaultState": 15459,
     "minStateId": 15456,
     "maxStateId": 15779,
+    "mapColorId": 10,
     "states": [
       {
         "name": "east",
@@ -20866,6 +21630,7 @@
     "defaultState": 15783,
     "minStateId": 15780,
     "maxStateId": 16103,
+    "mapColorId": 11,
     "states": [
       {
         "name": "east",
@@ -20931,6 +21696,7 @@
     "defaultState": 16107,
     "minStateId": 16104,
     "maxStateId": 16427,
+    "mapColorId": 44,
     "states": [
       {
         "name": "east",
@@ -20996,6 +21762,7 @@
     "defaultState": 16431,
     "minStateId": 16428,
     "maxStateId": 16751,
+    "mapColorId": 35,
     "states": [
       {
         "name": "east",
@@ -21061,6 +21828,7 @@
     "defaultState": 16755,
     "minStateId": 16752,
     "maxStateId": 17075,
+    "mapColorId": 11,
     "states": [
       {
         "name": "east",
@@ -21126,6 +21894,7 @@
     "defaultState": 17079,
     "minStateId": 17076,
     "maxStateId": 17399,
+    "mapColorId": 35,
     "states": [
       {
         "name": "east",
@@ -21191,6 +21960,7 @@
     "defaultState": 17403,
     "minStateId": 17400,
     "maxStateId": 17723,
+    "mapColorId": 2,
     "states": [
       {
         "name": "east",
@@ -21256,6 +22026,7 @@
     "defaultState": 17727,
     "minStateId": 17724,
     "maxStateId": 18047,
+    "mapColorId": 2,
     "states": [
       {
         "name": "east",
@@ -21321,6 +22092,7 @@
     "defaultState": 18051,
     "minStateId": 18048,
     "maxStateId": 18371,
+    "mapColorId": 14,
     "states": [
       {
         "name": "east",
@@ -21386,6 +22158,7 @@
     "defaultState": 18403,
     "minStateId": 18372,
     "maxStateId": 18403,
+    "mapColorId": 2,
     "states": [
       {
         "name": "bottom",
@@ -21426,6 +22199,7 @@
     "defaultState": 18404,
     "minStateId": 18404,
     "maxStateId": 18407,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -21452,6 +22226,7 @@
     "defaultState": 18409,
     "minStateId": 18408,
     "maxStateId": 18419,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -21485,6 +22260,7 @@
     "defaultState": 18421,
     "minStateId": 18420,
     "maxStateId": 18427,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -21516,6 +22292,7 @@
     "defaultState": 18429,
     "minStateId": 18428,
     "maxStateId": 18435,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -21547,6 +22324,7 @@
     "defaultState": 18436,
     "minStateId": 18436,
     "maxStateId": 18436,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "block"
   },
@@ -21561,6 +22339,7 @@
     "defaultState": 18437,
     "minStateId": 18437,
     "maxStateId": 18437,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "block"
   },
@@ -21575,6 +22354,7 @@
     "defaultState": 18442,
     "minStateId": 18438,
     "maxStateId": 18449,
+    "mapColorId": 6,
     "states": [
       {
         "name": "face",
@@ -21611,6 +22391,7 @@
     "defaultState": 18453,
     "minStateId": 18450,
     "maxStateId": 18465,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -21647,6 +22428,7 @@
     "defaultState": 18466,
     "minStateId": 18466,
     "maxStateId": 18466,
+    "mapColorId": 13,
     "states": [],
     "boundingBox": "block"
   },
@@ -21661,6 +22443,7 @@
     "defaultState": 18467,
     "minStateId": 18467,
     "maxStateId": 18470,
+    "mapColorId": 11,
     "states": [
       {
         "name": "facing",
@@ -21687,6 +22470,7 @@
     "defaultState": 18472,
     "minStateId": 18471,
     "maxStateId": 18502,
+    "mapColorId": 30,
     "states": [
       {
         "name": "attachment",
@@ -21729,6 +22513,7 @@
     "defaultState": 18506,
     "minStateId": 18503,
     "maxStateId": 18506,
+    "mapColorId": 6,
     "states": [
       {
         "name": "hanging",
@@ -21754,6 +22539,7 @@
     "defaultState": 18510,
     "minStateId": 18507,
     "maxStateId": 18510,
+    "mapColorId": 6,
     "states": [
       {
         "name": "hanging",
@@ -21779,6 +22565,7 @@
     "defaultState": 18514,
     "minStateId": 18511,
     "maxStateId": 18542,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -21820,6 +22607,7 @@
     "defaultState": 18546,
     "minStateId": 18543,
     "maxStateId": 18574,
+    "mapColorId": 34,
     "states": [
       {
         "name": "facing",
@@ -21861,6 +22649,7 @@
     "defaultState": 18575,
     "minStateId": 18575,
     "maxStateId": 18578,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -21887,6 +22676,7 @@
     "defaultState": 18580,
     "minStateId": 18579,
     "maxStateId": 18581,
+    "mapColorId": 56,
     "states": [
       {
         "name": "axis",
@@ -21912,6 +22702,7 @@
     "defaultState": 18583,
     "minStateId": 18582,
     "maxStateId": 18584,
+    "mapColorId": 56,
     "states": [
       {
         "name": "axis",
@@ -21937,6 +22728,7 @@
     "defaultState": 18586,
     "minStateId": 18585,
     "maxStateId": 18587,
+    "mapColorId": 57,
     "states": [
       {
         "name": "axis",
@@ -21962,6 +22754,7 @@
     "defaultState": 18589,
     "minStateId": 18588,
     "maxStateId": 18590,
+    "mapColorId": 57,
     "states": [
       {
         "name": "axis",
@@ -21987,6 +22780,7 @@
     "defaultState": 18591,
     "minStateId": 18591,
     "maxStateId": 18591,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -22001,6 +22795,7 @@
     "defaultState": 18592,
     "minStateId": 18592,
     "maxStateId": 18592,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22015,6 +22810,7 @@
     "defaultState": 18593,
     "minStateId": 18593,
     "maxStateId": 18593,
+    "mapColorId": 58,
     "states": [],
     "boundingBox": "block"
   },
@@ -22029,6 +22825,7 @@
     "defaultState": 18594,
     "minStateId": 18594,
     "maxStateId": 18594,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22043,6 +22840,7 @@
     "defaultState": 18595,
     "minStateId": 18595,
     "maxStateId": 18595,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22057,6 +22855,7 @@
     "defaultState": 18597,
     "minStateId": 18596,
     "maxStateId": 18598,
+    "mapColorId": 53,
     "states": [
       {
         "name": "axis",
@@ -22082,6 +22881,7 @@
     "defaultState": 18600,
     "minStateId": 18599,
     "maxStateId": 18601,
+    "mapColorId": 53,
     "states": [
       {
         "name": "axis",
@@ -22107,6 +22907,7 @@
     "defaultState": 18603,
     "minStateId": 18602,
     "maxStateId": 18604,
+    "mapColorId": 54,
     "states": [
       {
         "name": "axis",
@@ -22132,6 +22933,7 @@
     "defaultState": 18606,
     "minStateId": 18605,
     "maxStateId": 18607,
+    "mapColorId": 54,
     "states": [
       {
         "name": "axis",
@@ -22157,6 +22959,7 @@
     "defaultState": 18608,
     "minStateId": 18608,
     "maxStateId": 18608,
+    "mapColorId": 52,
     "states": [],
     "boundingBox": "block"
   },
@@ -22171,6 +22974,7 @@
     "defaultState": 18609,
     "minStateId": 18609,
     "maxStateId": 18609,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22185,6 +22989,7 @@
     "defaultState": 18610,
     "minStateId": 18610,
     "maxStateId": 18610,
+    "mapColorId": 28,
     "states": [],
     "boundingBox": "block"
   },
@@ -22199,6 +23004,7 @@
     "defaultState": 18611,
     "minStateId": 18611,
     "maxStateId": 18636,
+    "mapColorId": 35,
     "states": [
       {
         "name": "age",
@@ -22247,6 +23053,7 @@
     "defaultState": 18637,
     "minStateId": 18637,
     "maxStateId": 18637,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22261,6 +23068,7 @@
     "defaultState": 18638,
     "minStateId": 18638,
     "maxStateId": 18663,
+    "mapColorId": 23,
     "states": [
       {
         "name": "age",
@@ -22309,6 +23117,7 @@
     "defaultState": 18664,
     "minStateId": 18664,
     "maxStateId": 18664,
+    "mapColorId": 23,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22323,6 +23132,7 @@
     "defaultState": 18665,
     "minStateId": 18665,
     "maxStateId": 18665,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "empty"
   },
@@ -22337,6 +23147,7 @@
     "defaultState": 18666,
     "minStateId": 18666,
     "maxStateId": 18666,
+    "mapColorId": 53,
     "states": [],
     "boundingBox": "block"
   },
@@ -22351,6 +23162,7 @@
     "defaultState": 18667,
     "minStateId": 18667,
     "maxStateId": 18667,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -22365,6 +23177,7 @@
     "defaultState": 18671,
     "minStateId": 18668,
     "maxStateId": 18673,
+    "mapColorId": 53,
     "states": [
       {
         "name": "type",
@@ -22395,6 +23208,7 @@
     "defaultState": 18677,
     "minStateId": 18674,
     "maxStateId": 18679,
+    "mapColorId": 56,
     "states": [
       {
         "name": "type",
@@ -22425,6 +23239,7 @@
     "defaultState": 18681,
     "minStateId": 18680,
     "maxStateId": 18681,
+    "mapColorId": 53,
     "states": [
       {
         "name": "powered",
@@ -22445,6 +23260,7 @@
     "defaultState": 18683,
     "minStateId": 18682,
     "maxStateId": 18683,
+    "mapColorId": 56,
     "states": [
       {
         "name": "powered",
@@ -22465,6 +23281,7 @@
     "defaultState": 18715,
     "minStateId": 18684,
     "maxStateId": 18715,
+    "mapColorId": 53,
     "states": [
       {
         "name": "east",
@@ -22505,6 +23322,7 @@
     "defaultState": 18747,
     "minStateId": 18716,
     "maxStateId": 18747,
+    "mapColorId": 56,
     "states": [
       {
         "name": "east",
@@ -22545,6 +23363,7 @@
     "defaultState": 18763,
     "minStateId": 18748,
     "maxStateId": 18811,
+    "mapColorId": 53,
     "states": [
       {
         "name": "facing",
@@ -22595,6 +23414,7 @@
     "defaultState": 18827,
     "minStateId": 18812,
     "maxStateId": 18875,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -22645,6 +23465,7 @@
     "defaultState": 18883,
     "minStateId": 18876,
     "maxStateId": 18907,
+    "mapColorId": 53,
     "states": [
       {
         "name": "facing",
@@ -22686,6 +23507,7 @@
     "defaultState": 18915,
     "minStateId": 18908,
     "maxStateId": 18939,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -22727,6 +23549,7 @@
     "defaultState": 18951,
     "minStateId": 18940,
     "maxStateId": 19019,
+    "mapColorId": 53,
     "states": [
       {
         "name": "facing",
@@ -22779,6 +23602,7 @@
     "defaultState": 19031,
     "minStateId": 19020,
     "maxStateId": 19099,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -22831,6 +23655,7 @@
     "defaultState": 19109,
     "minStateId": 19100,
     "maxStateId": 19123,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -22872,6 +23697,7 @@
     "defaultState": 19133,
     "minStateId": 19124,
     "maxStateId": 19147,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -22913,6 +23739,7 @@
     "defaultState": 19159,
     "minStateId": 19148,
     "maxStateId": 19211,
+    "mapColorId": 53,
     "states": [
       {
         "name": "facing",
@@ -22967,6 +23794,7 @@
     "defaultState": 19223,
     "minStateId": 19212,
     "maxStateId": 19275,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -23021,6 +23849,7 @@
     "defaultState": 19277,
     "minStateId": 19276,
     "maxStateId": 19307,
+    "mapColorId": 53,
     "states": [
       {
         "name": "rotation",
@@ -23064,6 +23893,7 @@
     "defaultState": 19309,
     "minStateId": 19308,
     "maxStateId": 19339,
+    "mapColorId": 56,
     "states": [
       {
         "name": "rotation",
@@ -23107,6 +23937,7 @@
     "defaultState": 19341,
     "minStateId": 19340,
     "maxStateId": 19347,
+    "mapColorId": 53,
     "states": [
       {
         "name": "facing",
@@ -23138,6 +23969,7 @@
     "defaultState": 19349,
     "minStateId": 19348,
     "maxStateId": 19355,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -23169,6 +24001,7 @@
     "defaultState": 19357,
     "minStateId": 19356,
     "maxStateId": 19359,
+    "mapColorId": 22,
     "states": [
       {
         "name": "mode",
@@ -23195,6 +24028,7 @@
     "defaultState": 19370,
     "minStateId": 19360,
     "maxStateId": 19371,
+    "mapColorId": 22,
     "states": [
       {
         "name": "orientation",
@@ -23229,6 +24063,7 @@
     "defaultState": 19372,
     "minStateId": 19372,
     "maxStateId": 19380,
+    "mapColorId": 13,
     "states": [
       {
         "name": "level",
@@ -23260,6 +24095,7 @@
     "defaultState": 19381,
     "minStateId": 19381,
     "maxStateId": 19396,
+    "mapColorId": 14,
     "states": [
       {
         "name": "power",
@@ -23298,6 +24134,7 @@
     "defaultState": 19397,
     "minStateId": 19397,
     "maxStateId": 19420,
+    "mapColorId": 18,
     "states": [
       {
         "name": "facing",
@@ -23337,6 +24174,7 @@
     "defaultState": 19421,
     "minStateId": 19421,
     "maxStateId": 19444,
+    "mapColorId": 13,
     "states": [
       {
         "name": "facing",
@@ -23376,6 +24214,7 @@
     "defaultState": 19445,
     "minStateId": 19445,
     "maxStateId": 19445,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -23390,6 +24229,7 @@
     "defaultState": 19446,
     "minStateId": 19446,
     "maxStateId": 19446,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -23404,6 +24244,7 @@
     "defaultState": 19447,
     "minStateId": 19447,
     "maxStateId": 19447,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23418,6 +24259,7 @@
     "defaultState": 19448,
     "minStateId": 19448,
     "maxStateId": 19448,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23432,6 +24274,7 @@
     "defaultState": 19449,
     "minStateId": 19449,
     "maxStateId": 19449,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23446,6 +24289,7 @@
     "defaultState": 19450,
     "minStateId": 19450,
     "maxStateId": 19454,
+    "mapColorId": 29,
     "states": [
       {
         "name": "charges",
@@ -23473,6 +24317,7 @@
     "defaultState": 19455,
     "minStateId": 19455,
     "maxStateId": 19455,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -23487,6 +24332,7 @@
     "defaultState": 19456,
     "minStateId": 19456,
     "maxStateId": 19456,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -23501,6 +24347,7 @@
     "defaultState": 19457,
     "minStateId": 19457,
     "maxStateId": 19457,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -23515,6 +24362,7 @@
     "defaultState": 19458,
     "minStateId": 19458,
     "maxStateId": 19458,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -23529,6 +24377,7 @@
     "defaultState": 19459,
     "minStateId": 19459,
     "maxStateId": 19459,
+    "mapColorId": 6,
     "states": [],
     "boundingBox": "block"
   },
@@ -23543,6 +24392,7 @@
     "defaultState": 19460,
     "minStateId": 19460,
     "maxStateId": 19460,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23557,6 +24407,7 @@
     "defaultState": 19472,
     "minStateId": 19461,
     "maxStateId": 19540,
+    "mapColorId": 29,
     "states": [
       {
         "name": "facing",
@@ -23609,6 +24460,7 @@
     "defaultState": 19544,
     "minStateId": 19541,
     "maxStateId": 19864,
+    "mapColorId": 29,
     "states": [
       {
         "name": "east",
@@ -23674,6 +24526,7 @@
     "defaultState": 19868,
     "minStateId": 19865,
     "maxStateId": 19870,
+    "mapColorId": 29,
     "states": [
       {
         "name": "type",
@@ -23704,6 +24557,7 @@
     "defaultState": 19871,
     "minStateId": 19871,
     "maxStateId": 19871,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23718,6 +24572,7 @@
     "defaultState": 19872,
     "minStateId": 19872,
     "maxStateId": 19872,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23732,6 +24587,7 @@
     "defaultState": 19873,
     "minStateId": 19873,
     "maxStateId": 19873,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23746,6 +24602,7 @@
     "defaultState": 19874,
     "minStateId": 19874,
     "maxStateId": 19874,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23760,6 +24617,7 @@
     "defaultState": 19878,
     "minStateId": 19875,
     "maxStateId": 19880,
+    "mapColorId": 29,
     "states": [
       {
         "name": "type",
@@ -23790,6 +24648,7 @@
     "defaultState": 19892,
     "minStateId": 19881,
     "maxStateId": 19960,
+    "mapColorId": 29,
     "states": [
       {
         "name": "facing",
@@ -23842,6 +24701,7 @@
     "defaultState": 19964,
     "minStateId": 19961,
     "maxStateId": 20284,
+    "mapColorId": 29,
     "states": [
       {
         "name": "east",
@@ -23907,6 +24767,7 @@
     "defaultState": 20285,
     "minStateId": 20285,
     "maxStateId": 20285,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -23921,6 +24782,7 @@
     "defaultState": 20297,
     "minStateId": 20286,
     "maxStateId": 20365,
+    "mapColorId": 29,
     "states": [
       {
         "name": "facing",
@@ -23973,6 +24835,7 @@
     "defaultState": 20369,
     "minStateId": 20366,
     "maxStateId": 20371,
+    "mapColorId": 29,
     "states": [
       {
         "name": "type",
@@ -24003,6 +24866,7 @@
     "defaultState": 20373,
     "minStateId": 20372,
     "maxStateId": 20373,
+    "mapColorId": 29,
     "states": [
       {
         "name": "powered",
@@ -24023,6 +24887,7 @@
     "defaultState": 20383,
     "minStateId": 20374,
     "maxStateId": 20397,
+    "mapColorId": 0,
     "states": [
       {
         "name": "face",
@@ -24064,6 +24929,7 @@
     "defaultState": 20401,
     "minStateId": 20398,
     "maxStateId": 20721,
+    "mapColorId": 29,
     "states": [
       {
         "name": "east",
@@ -24129,6 +24995,7 @@
     "defaultState": 20722,
     "minStateId": 20722,
     "maxStateId": 20722,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -24143,6 +25010,7 @@
     "defaultState": 20723,
     "minStateId": 20723,
     "maxStateId": 20723,
+    "mapColorId": 35,
     "states": [],
     "boundingBox": "block"
   },
@@ -24157,6 +25025,7 @@
     "defaultState": 20724,
     "minStateId": 20724,
     "maxStateId": 20724,
+    "mapColorId": 14,
     "states": [],
     "boundingBox": "block"
   },
@@ -24171,6 +25040,7 @@
     "defaultState": 20728,
     "minStateId": 20725,
     "maxStateId": 20740,
+    "mapColorId": 2,
     "states": [
       {
         "name": "candles",
@@ -24207,6 +25077,7 @@
     "defaultState": 20744,
     "minStateId": 20741,
     "maxStateId": 20756,
+    "mapColorId": 3,
     "states": [
       {
         "name": "candles",
@@ -24243,6 +25114,7 @@
     "defaultState": 20760,
     "minStateId": 20757,
     "maxStateId": 20772,
+    "mapColorId": 15,
     "states": [
       {
         "name": "candles",
@@ -24279,6 +25151,7 @@
     "defaultState": 20776,
     "minStateId": 20773,
     "maxStateId": 20788,
+    "mapColorId": 16,
     "states": [
       {
         "name": "candles",
@@ -24315,6 +25188,7 @@
     "defaultState": 20792,
     "minStateId": 20789,
     "maxStateId": 20804,
+    "mapColorId": 17,
     "states": [
       {
         "name": "candles",
@@ -24351,6 +25225,7 @@
     "defaultState": 20808,
     "minStateId": 20805,
     "maxStateId": 20820,
+    "mapColorId": 18,
     "states": [
       {
         "name": "candles",
@@ -24387,6 +25262,7 @@
     "defaultState": 20824,
     "minStateId": 20821,
     "maxStateId": 20836,
+    "mapColorId": 19,
     "states": [
       {
         "name": "candles",
@@ -24423,6 +25299,7 @@
     "defaultState": 20840,
     "minStateId": 20837,
     "maxStateId": 20852,
+    "mapColorId": 20,
     "states": [
       {
         "name": "candles",
@@ -24459,6 +25336,7 @@
     "defaultState": 20856,
     "minStateId": 20853,
     "maxStateId": 20868,
+    "mapColorId": 21,
     "states": [
       {
         "name": "candles",
@@ -24495,6 +25373,7 @@
     "defaultState": 20872,
     "minStateId": 20869,
     "maxStateId": 20884,
+    "mapColorId": 22,
     "states": [
       {
         "name": "candles",
@@ -24531,6 +25410,7 @@
     "defaultState": 20888,
     "minStateId": 20885,
     "maxStateId": 20900,
+    "mapColorId": 23,
     "states": [
       {
         "name": "candles",
@@ -24567,6 +25447,7 @@
     "defaultState": 20904,
     "minStateId": 20901,
     "maxStateId": 20916,
+    "mapColorId": 24,
     "states": [
       {
         "name": "candles",
@@ -24603,6 +25484,7 @@
     "defaultState": 20920,
     "minStateId": 20917,
     "maxStateId": 20932,
+    "mapColorId": 25,
     "states": [
       {
         "name": "candles",
@@ -24639,6 +25521,7 @@
     "defaultState": 20936,
     "minStateId": 20933,
     "maxStateId": 20948,
+    "mapColorId": 26,
     "states": [
       {
         "name": "candles",
@@ -24675,6 +25558,7 @@
     "defaultState": 20952,
     "minStateId": 20949,
     "maxStateId": 20964,
+    "mapColorId": 27,
     "states": [
       {
         "name": "candles",
@@ -24711,6 +25595,7 @@
     "defaultState": 20968,
     "minStateId": 20965,
     "maxStateId": 20980,
+    "mapColorId": 28,
     "states": [
       {
         "name": "candles",
@@ -24747,6 +25632,7 @@
     "defaultState": 20984,
     "minStateId": 20981,
     "maxStateId": 20996,
+    "mapColorId": 29,
     "states": [
       {
         "name": "candles",
@@ -24783,6 +25669,7 @@
     "defaultState": 20998,
     "minStateId": 20997,
     "maxStateId": 20998,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24803,6 +25690,7 @@
     "defaultState": 21000,
     "minStateId": 20999,
     "maxStateId": 21000,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24823,6 +25711,7 @@
     "defaultState": 21002,
     "minStateId": 21001,
     "maxStateId": 21002,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24843,6 +25732,7 @@
     "defaultState": 21004,
     "minStateId": 21003,
     "maxStateId": 21004,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24863,6 +25753,7 @@
     "defaultState": 21006,
     "minStateId": 21005,
     "maxStateId": 21006,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24883,6 +25774,7 @@
     "defaultState": 21008,
     "minStateId": 21007,
     "maxStateId": 21008,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24903,6 +25795,7 @@
     "defaultState": 21010,
     "minStateId": 21009,
     "maxStateId": 21010,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24923,6 +25816,7 @@
     "defaultState": 21012,
     "minStateId": 21011,
     "maxStateId": 21012,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24943,6 +25837,7 @@
     "defaultState": 21014,
     "minStateId": 21013,
     "maxStateId": 21014,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24963,6 +25858,7 @@
     "defaultState": 21016,
     "minStateId": 21015,
     "maxStateId": 21016,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -24983,6 +25879,7 @@
     "defaultState": 21018,
     "minStateId": 21017,
     "maxStateId": 21018,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25003,6 +25900,7 @@
     "defaultState": 21020,
     "minStateId": 21019,
     "maxStateId": 21020,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25023,6 +25921,7 @@
     "defaultState": 21022,
     "minStateId": 21021,
     "maxStateId": 21022,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25043,6 +25942,7 @@
     "defaultState": 21024,
     "minStateId": 21023,
     "maxStateId": 21024,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25063,6 +25963,7 @@
     "defaultState": 21026,
     "minStateId": 21025,
     "maxStateId": 21026,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25083,6 +25984,7 @@
     "defaultState": 21028,
     "minStateId": 21027,
     "maxStateId": 21028,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25103,6 +26005,7 @@
     "defaultState": 21030,
     "minStateId": 21029,
     "maxStateId": 21030,
+    "mapColorId": 0,
     "states": [
       {
         "name": "lit",
@@ -25123,6 +26026,7 @@
     "defaultState": 21031,
     "minStateId": 21031,
     "maxStateId": 21031,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -25137,6 +26041,7 @@
     "defaultState": 21032,
     "minStateId": 21032,
     "maxStateId": 21032,
+    "mapColorId": 24,
     "states": [],
     "boundingBox": "block"
   },
@@ -25151,6 +26056,7 @@
     "defaultState": 21042,
     "minStateId": 21033,
     "maxStateId": 21044,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -25184,6 +26090,7 @@
     "defaultState": 21054,
     "minStateId": 21045,
     "maxStateId": 21056,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -25217,6 +26124,7 @@
     "defaultState": 21066,
     "minStateId": 21057,
     "maxStateId": 21068,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -25250,6 +26158,7 @@
     "defaultState": 21078,
     "minStateId": 21069,
     "maxStateId": 21080,
+    "mapColorId": 24,
     "states": [
       {
         "name": "facing",
@@ -25283,6 +26192,7 @@
     "defaultState": 21081,
     "minStateId": 21081,
     "maxStateId": 21081,
+    "mapColorId": 43,
     "states": [],
     "boundingBox": "block"
   },
@@ -25297,6 +26207,7 @@
     "defaultState": 21085,
     "minStateId": 21082,
     "maxStateId": 21087,
+    "mapColorId": 43,
     "states": [
       {
         "name": "type",
@@ -25327,6 +26238,7 @@
     "defaultState": 21099,
     "minStateId": 21088,
     "maxStateId": 21167,
+    "mapColorId": 43,
     "states": [
       {
         "name": "facing",
@@ -25379,6 +26291,7 @@
     "defaultState": 21171,
     "minStateId": 21168,
     "maxStateId": 21491,
+    "mapColorId": 43,
     "states": [
       {
         "name": "east",
@@ -25444,6 +26357,7 @@
     "defaultState": 21492,
     "minStateId": 21492,
     "maxStateId": 21492,
+    "mapColorId": 43,
     "states": [],
     "boundingBox": "block"
   },
@@ -25458,6 +26372,7 @@
     "defaultState": 21496,
     "minStateId": 21493,
     "maxStateId": 21498,
+    "mapColorId": 43,
     "states": [
       {
         "name": "type",
@@ -25488,6 +26403,7 @@
     "defaultState": 21510,
     "minStateId": 21499,
     "maxStateId": 21578,
+    "mapColorId": 43,
     "states": [
       {
         "name": "facing",
@@ -25540,6 +26456,7 @@
     "defaultState": 21582,
     "minStateId": 21579,
     "maxStateId": 21902,
+    "mapColorId": 43,
     "states": [
       {
         "name": "east",
@@ -25605,6 +26522,7 @@
     "defaultState": 21903,
     "minStateId": 21903,
     "maxStateId": 21903,
+    "mapColorId": 43,
     "states": [],
     "boundingBox": "block"
   },
@@ -25619,6 +26537,7 @@
     "defaultState": 21904,
     "minStateId": 21904,
     "maxStateId": 21904,
+    "mapColorId": 43,
     "states": [],
     "boundingBox": "block"
   },
@@ -25633,6 +26552,7 @@
     "defaultState": 21908,
     "minStateId": 21905,
     "maxStateId": 21910,
+    "mapColorId": 43,
     "states": [
       {
         "name": "type",
@@ -25663,6 +26583,7 @@
     "defaultState": 21922,
     "minStateId": 21911,
     "maxStateId": 21990,
+    "mapColorId": 43,
     "states": [
       {
         "name": "facing",
@@ -25715,6 +26636,7 @@
     "defaultState": 21994,
     "minStateId": 21991,
     "maxStateId": 22314,
+    "mapColorId": 43,
     "states": [
       {
         "name": "east",
@@ -25780,6 +26702,7 @@
     "defaultState": 22315,
     "minStateId": 22315,
     "maxStateId": 22315,
+    "mapColorId": 43,
     "states": [],
     "boundingBox": "block"
   },
@@ -25794,6 +26717,7 @@
     "defaultState": 22316,
     "minStateId": 22316,
     "maxStateId": 22316,
+    "mapColorId": 36,
     "states": [],
     "boundingBox": "block"
   },
@@ -25808,6 +26732,7 @@
     "defaultState": 22317,
     "minStateId": 22317,
     "maxStateId": 22317,
+    "mapColorId": 21,
     "states": [],
     "boundingBox": "block"
   },
@@ -25822,6 +26747,7 @@
     "defaultState": 22318,
     "minStateId": 22318,
     "maxStateId": 22318,
+    "mapColorId": 8,
     "states": [],
     "boundingBox": "empty"
   },
@@ -25836,6 +26762,7 @@
     "defaultState": 22320,
     "minStateId": 22319,
     "maxStateId": 22414,
+    "mapColorId": 23,
     "states": [
       {
         "name": "power",
@@ -25889,6 +26816,7 @@
     "defaultState": 22416,
     "minStateId": 22415,
     "maxStateId": 22798,
+    "mapColorId": 23,
     "states": [
       {
         "name": "facing",
@@ -25953,6 +26881,7 @@
     "defaultState": 22799,
     "minStateId": 22799,
     "maxStateId": 22799,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -25967,6 +26896,7 @@
     "defaultState": 22927,
     "minStateId": 22800,
     "maxStateId": 22927,
+    "mapColorId": 29,
     "states": [
       {
         "name": "down",
@@ -26017,6 +26947,7 @@
     "defaultState": 22929,
     "minStateId": 22928,
     "maxStateId": 22929,
+    "mapColorId": 29,
     "states": [
       {
         "name": "bloom",
@@ -26037,6 +26968,7 @@
     "defaultState": 22937,
     "minStateId": 22930,
     "maxStateId": 22937,
+    "mapColorId": 29,
     "states": [
       {
         "name": "can_summon",
@@ -26067,6 +26999,7 @@
     "defaultState": 22938,
     "minStateId": 22938,
     "maxStateId": 22938,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -26081,6 +27014,7 @@
     "defaultState": 22939,
     "minStateId": 22939,
     "maxStateId": 22939,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -26095,6 +27029,7 @@
     "defaultState": 22940,
     "minStateId": 22940,
     "maxStateId": 22940,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -26109,6 +27044,7 @@
     "defaultState": 22941,
     "minStateId": 22941,
     "maxStateId": 22941,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -26123,6 +27059,7 @@
     "defaultState": 22942,
     "minStateId": 22942,
     "maxStateId": 22942,
+    "mapColorId": 11,
     "states": [],
     "boundingBox": "block"
   },
@@ -26137,6 +27074,7 @@
     "defaultState": 22943,
     "minStateId": 22943,
     "maxStateId": 22943,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -26151,6 +27089,7 @@
     "defaultState": 22944,
     "minStateId": 22944,
     "maxStateId": 22944,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -26165,6 +27104,7 @@
     "defaultState": 22945,
     "minStateId": 22945,
     "maxStateId": 22945,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -26179,6 +27119,7 @@
     "defaultState": 22946,
     "minStateId": 22946,
     "maxStateId": 22946,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -26193,6 +27134,7 @@
     "defaultState": 22947,
     "minStateId": 22947,
     "maxStateId": 22947,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -26207,6 +27149,7 @@
     "defaultState": 22948,
     "minStateId": 22948,
     "maxStateId": 22948,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -26221,6 +27164,7 @@
     "defaultState": 22949,
     "minStateId": 22949,
     "maxStateId": 22949,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -26235,6 +27179,7 @@
     "defaultState": 22950,
     "minStateId": 22950,
     "maxStateId": 22950,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -26249,6 +27194,7 @@
     "defaultState": 22951,
     "minStateId": 22951,
     "maxStateId": 22951,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -26263,6 +27209,7 @@
     "defaultState": 22952,
     "minStateId": 22952,
     "maxStateId": 22952,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -26277,6 +27224,7 @@
     "defaultState": 22953,
     "minStateId": 22953,
     "maxStateId": 22953,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -26291,6 +27239,7 @@
     "defaultState": 22954,
     "minStateId": 22954,
     "maxStateId": 22954,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -26305,6 +27254,7 @@
     "defaultState": 22955,
     "minStateId": 22955,
     "maxStateId": 22955,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -26319,6 +27269,7 @@
     "defaultState": 22967,
     "minStateId": 22956,
     "maxStateId": 23035,
+    "mapColorId": 55,
     "states": [
       {
         "name": "facing",
@@ -26371,6 +27322,7 @@
     "defaultState": 23047,
     "minStateId": 23036,
     "maxStateId": 23115,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -26423,6 +27375,7 @@
     "defaultState": 23127,
     "minStateId": 23116,
     "maxStateId": 23195,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -26475,6 +27428,7 @@
     "defaultState": 23207,
     "minStateId": 23196,
     "maxStateId": 23275,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -26527,6 +27481,7 @@
     "defaultState": 23279,
     "minStateId": 23276,
     "maxStateId": 23281,
+    "mapColorId": 55,
     "states": [
       {
         "name": "type",
@@ -26557,6 +27512,7 @@
     "defaultState": 23285,
     "minStateId": 23282,
     "maxStateId": 23287,
+    "mapColorId": 56,
     "states": [
       {
         "name": "type",
@@ -26587,6 +27543,7 @@
     "defaultState": 23291,
     "minStateId": 23288,
     "maxStateId": 23293,
+    "mapColorId": 44,
     "states": [
       {
         "name": "type",
@@ -26617,6 +27574,7 @@
     "defaultState": 23297,
     "minStateId": 23294,
     "maxStateId": 23299,
+    "mapColorId": 15,
     "states": [
       {
         "name": "type",
@@ -26647,6 +27605,7 @@
     "defaultState": 23300,
     "minStateId": 23300,
     "maxStateId": 23300,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -26661,6 +27620,7 @@
     "defaultState": 23301,
     "minStateId": 23301,
     "maxStateId": 23301,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -26675,6 +27635,7 @@
     "defaultState": 23302,
     "minStateId": 23302,
     "maxStateId": 23302,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -26689,6 +27650,7 @@
     "defaultState": 23303,
     "minStateId": 23303,
     "maxStateId": 23303,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -26703,6 +27665,7 @@
     "defaultState": 23304,
     "minStateId": 23304,
     "maxStateId": 23304,
+    "mapColorId": 55,
     "states": [],
     "boundingBox": "block"
   },
@@ -26717,6 +27680,7 @@
     "defaultState": 23305,
     "minStateId": 23305,
     "maxStateId": 23305,
+    "mapColorId": 56,
     "states": [],
     "boundingBox": "block"
   },
@@ -26731,6 +27695,7 @@
     "defaultState": 23306,
     "minStateId": 23306,
     "maxStateId": 23306,
+    "mapColorId": 44,
     "states": [],
     "boundingBox": "block"
   },
@@ -26745,6 +27710,7 @@
     "defaultState": 23307,
     "minStateId": 23307,
     "maxStateId": 23307,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -26759,6 +27725,7 @@
     "defaultState": 23319,
     "minStateId": 23308,
     "maxStateId": 23387,
+    "mapColorId": 55,
     "states": [
       {
         "name": "facing",
@@ -26811,6 +27778,7 @@
     "defaultState": 23399,
     "minStateId": 23388,
     "maxStateId": 23467,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -26863,6 +27831,7 @@
     "defaultState": 23479,
     "minStateId": 23468,
     "maxStateId": 23547,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -26915,6 +27884,7 @@
     "defaultState": 23559,
     "minStateId": 23548,
     "maxStateId": 23627,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -26967,6 +27937,7 @@
     "defaultState": 23631,
     "minStateId": 23628,
     "maxStateId": 23633,
+    "mapColorId": 55,
     "states": [
       {
         "name": "type",
@@ -26997,6 +27968,7 @@
     "defaultState": 23637,
     "minStateId": 23634,
     "maxStateId": 23639,
+    "mapColorId": 56,
     "states": [
       {
         "name": "type",
@@ -27027,6 +27999,7 @@
     "defaultState": 23643,
     "minStateId": 23640,
     "maxStateId": 23645,
+    "mapColorId": 44,
     "states": [
       {
         "name": "type",
@@ -27057,6 +28030,7 @@
     "defaultState": 23649,
     "minStateId": 23646,
     "maxStateId": 23651,
+    "mapColorId": 15,
     "states": [
       {
         "name": "type",
@@ -27087,6 +28061,7 @@
     "defaultState": 23663,
     "minStateId": 23652,
     "maxStateId": 23715,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -27141,6 +28116,7 @@
     "defaultState": 23727,
     "minStateId": 23716,
     "maxStateId": 23779,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -27195,6 +28171,7 @@
     "defaultState": 23791,
     "minStateId": 23780,
     "maxStateId": 23843,
+    "mapColorId": 55,
     "states": [
       {
         "name": "facing",
@@ -27249,6 +28226,7 @@
     "defaultState": 23855,
     "minStateId": 23844,
     "maxStateId": 23907,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -27303,6 +28281,7 @@
     "defaultState": 23919,
     "minStateId": 23908,
     "maxStateId": 23971,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -27357,6 +28336,7 @@
     "defaultState": 23983,
     "minStateId": 23972,
     "maxStateId": 24035,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -27411,6 +28391,7 @@
     "defaultState": 24047,
     "minStateId": 24036,
     "maxStateId": 24099,
+    "mapColorId": 55,
     "states": [
       {
         "name": "facing",
@@ -27465,6 +28446,7 @@
     "defaultState": 24111,
     "minStateId": 24100,
     "maxStateId": 24163,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -27519,6 +28501,7 @@
     "defaultState": 24179,
     "minStateId": 24164,
     "maxStateId": 24227,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -27569,6 +28552,7 @@
     "defaultState": 24243,
     "minStateId": 24228,
     "maxStateId": 24291,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -27619,6 +28603,7 @@
     "defaultState": 24307,
     "minStateId": 24292,
     "maxStateId": 24355,
+    "mapColorId": 55,
     "states": [
       {
         "name": "facing",
@@ -27669,6 +28654,7 @@
     "defaultState": 24371,
     "minStateId": 24356,
     "maxStateId": 24419,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -27719,6 +28705,7 @@
     "defaultState": 24435,
     "minStateId": 24420,
     "maxStateId": 24483,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -27769,6 +28756,7 @@
     "defaultState": 24499,
     "minStateId": 24484,
     "maxStateId": 24547,
+    "mapColorId": 44,
     "states": [
       {
         "name": "facing",
@@ -27819,6 +28807,7 @@
     "defaultState": 24563,
     "minStateId": 24548,
     "maxStateId": 24611,
+    "mapColorId": 55,
     "states": [
       {
         "name": "facing",
@@ -27869,6 +28858,7 @@
     "defaultState": 24627,
     "minStateId": 24612,
     "maxStateId": 24675,
+    "mapColorId": 56,
     "states": [
       {
         "name": "facing",
@@ -27919,6 +28909,7 @@
     "defaultState": 24677,
     "minStateId": 24676,
     "maxStateId": 24677,
+    "mapColorId": 15,
     "states": [
       {
         "name": "waterlogged",
@@ -27939,6 +28930,7 @@
     "defaultState": 24679,
     "minStateId": 24678,
     "maxStateId": 24679,
+    "mapColorId": 44,
     "states": [
       {
         "name": "waterlogged",
@@ -27959,6 +28951,7 @@
     "defaultState": 24681,
     "minStateId": 24680,
     "maxStateId": 24681,
+    "mapColorId": 56,
     "states": [
       {
         "name": "waterlogged",
@@ -27979,6 +28972,7 @@
     "defaultState": 24683,
     "minStateId": 24682,
     "maxStateId": 24683,
+    "mapColorId": 55,
     "states": [
       {
         "name": "waterlogged",
@@ -27999,6 +28993,7 @@
     "defaultState": 24685,
     "minStateId": 24684,
     "maxStateId": 24685,
+    "mapColorId": 15,
     "states": [
       {
         "name": "waterlogged",
@@ -28019,6 +29014,7 @@
     "defaultState": 24687,
     "minStateId": 24686,
     "maxStateId": 24687,
+    "mapColorId": 44,
     "states": [
       {
         "name": "waterlogged",
@@ -28039,6 +29035,7 @@
     "defaultState": 24689,
     "minStateId": 24688,
     "maxStateId": 24689,
+    "mapColorId": 56,
     "states": [
       {
         "name": "waterlogged",
@@ -28059,6 +29056,7 @@
     "defaultState": 24691,
     "minStateId": 24690,
     "maxStateId": 24691,
+    "mapColorId": 55,
     "states": [
       {
         "name": "waterlogged",
@@ -28079,6 +29077,7 @@
     "defaultState": 24695,
     "minStateId": 24692,
     "maxStateId": 24695,
+    "mapColorId": 15,
     "states": [
       {
         "name": "lit",
@@ -28104,6 +29103,7 @@
     "defaultState": 24699,
     "minStateId": 24696,
     "maxStateId": 24699,
+    "mapColorId": 44,
     "states": [
       {
         "name": "lit",
@@ -28129,6 +29129,7 @@
     "defaultState": 24703,
     "minStateId": 24700,
     "maxStateId": 24703,
+    "mapColorId": 56,
     "states": [
       {
         "name": "lit",
@@ -28154,6 +29155,7 @@
     "defaultState": 24707,
     "minStateId": 24704,
     "maxStateId": 24707,
+    "mapColorId": 55,
     "states": [
       {
         "name": "lit",
@@ -28179,6 +29181,7 @@
     "defaultState": 24711,
     "minStateId": 24708,
     "maxStateId": 24711,
+    "mapColorId": 15,
     "states": [
       {
         "name": "lit",
@@ -28204,6 +29207,7 @@
     "defaultState": 24715,
     "minStateId": 24712,
     "maxStateId": 24715,
+    "mapColorId": 44,
     "states": [
       {
         "name": "lit",
@@ -28229,6 +29233,7 @@
     "defaultState": 24719,
     "minStateId": 24716,
     "maxStateId": 24719,
+    "mapColorId": 56,
     "states": [
       {
         "name": "lit",
@@ -28254,6 +29259,7 @@
     "defaultState": 24723,
     "minStateId": 24720,
     "maxStateId": 24723,
+    "mapColorId": 55,
     "states": [
       {
         "name": "lit",
@@ -28279,6 +29285,7 @@
     "defaultState": 24743,
     "minStateId": 24724,
     "maxStateId": 24747,
+    "mapColorId": 15,
     "states": [
       {
         "name": "facing",
@@ -28317,6 +29324,7 @@
     "defaultState": 24753,
     "minStateId": 24748,
     "maxStateId": 24767,
+    "mapColorId": 48,
     "states": [
       {
         "name": "thickness",
@@ -28358,6 +29366,7 @@
     "defaultState": 24768,
     "minStateId": 24768,
     "maxStateId": 24768,
+    "mapColorId": 48,
     "states": [],
     "boundingBox": "block"
   },
@@ -28372,6 +29381,7 @@
     "defaultState": 24770,
     "minStateId": 24769,
     "maxStateId": 24820,
+    "mapColorId": 7,
     "states": [
       {
         "name": "age",
@@ -28425,6 +29435,7 @@
     "defaultState": 24822,
     "minStateId": 24821,
     "maxStateId": 24822,
+    "mapColorId": 7,
     "states": [
       {
         "name": "berries",
@@ -28445,6 +29456,7 @@
     "defaultState": 24823,
     "minStateId": 24823,
     "maxStateId": 24823,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "empty"
   },
@@ -28459,6 +29471,7 @@
     "defaultState": 24824,
     "minStateId": 24824,
     "maxStateId": 24824,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "block"
   },
@@ -28473,6 +29486,7 @@
     "defaultState": 24825,
     "minStateId": 24825,
     "maxStateId": 24825,
+    "mapColorId": 7,
     "states": [],
     "boundingBox": "block"
   },
@@ -28487,6 +29501,7 @@
     "defaultState": 24826,
     "minStateId": 24826,
     "maxStateId": 24826,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -28501,6 +29516,7 @@
     "defaultState": 24827,
     "minStateId": 24827,
     "maxStateId": 24842,
+    "mapColorId": 7,
     "states": [
       {
         "name": "facing",
@@ -28538,6 +29554,7 @@
     "defaultState": 24843,
     "minStateId": 24843,
     "maxStateId": 24843,
+    "mapColorId": 27,
     "states": [],
     "boundingBox": "block"
   },
@@ -28552,6 +29569,7 @@
     "defaultState": 24845,
     "minStateId": 24844,
     "maxStateId": 24875,
+    "mapColorId": 7,
     "states": [
       {
         "name": "facing",
@@ -28594,6 +29612,7 @@
     "defaultState": 24877,
     "minStateId": 24876,
     "maxStateId": 24883,
+    "mapColorId": 7,
     "states": [
       {
         "name": "facing",
@@ -28625,6 +29644,7 @@
     "defaultState": 24887,
     "minStateId": 24884,
     "maxStateId": 24899,
+    "mapColorId": 7,
     "states": [
       {
         "name": "facing",
@@ -28665,6 +29685,7 @@
     "defaultState": 24901,
     "minStateId": 24900,
     "maxStateId": 24901,
+    "mapColorId": 10,
     "states": [
       {
         "name": "waterlogged",
@@ -28685,6 +29706,7 @@
     "defaultState": 24902,
     "minStateId": 24902,
     "maxStateId": 24902,
+    "mapColorId": 10,
     "states": [],
     "boundingBox": "block"
   },
@@ -28699,6 +29721,7 @@
     "defaultState": 24903,
     "minStateId": 24903,
     "maxStateId": 24903,
+    "mapColorId": 45,
     "states": [],
     "boundingBox": "block"
   },
@@ -28713,6 +29736,7 @@
     "defaultState": 24905,
     "minStateId": 24904,
     "maxStateId": 24906,
+    "mapColorId": 59,
     "states": [
       {
         "name": "axis",
@@ -28738,6 +29762,7 @@
     "defaultState": 24907,
     "minStateId": 24907,
     "maxStateId": 24907,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -28752,6 +29777,7 @@
     "defaultState": 24919,
     "minStateId": 24908,
     "maxStateId": 24987,
+    "mapColorId": 59,
     "states": [
       {
         "name": "facing",
@@ -28804,6 +29830,7 @@
     "defaultState": 24991,
     "minStateId": 24988,
     "maxStateId": 24993,
+    "mapColorId": 59,
     "states": [
       {
         "name": "type",
@@ -28834,6 +29861,7 @@
     "defaultState": 24997,
     "minStateId": 24994,
     "maxStateId": 25317,
+    "mapColorId": 59,
     "states": [
       {
         "name": "east",
@@ -28899,6 +29927,7 @@
     "defaultState": 25318,
     "minStateId": 25318,
     "maxStateId": 25318,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -28913,6 +29942,7 @@
     "defaultState": 25330,
     "minStateId": 25319,
     "maxStateId": 25398,
+    "mapColorId": 59,
     "states": [
       {
         "name": "facing",
@@ -28965,6 +29995,7 @@
     "defaultState": 25402,
     "minStateId": 25399,
     "maxStateId": 25404,
+    "mapColorId": 59,
     "states": [
       {
         "name": "type",
@@ -28995,6 +30026,7 @@
     "defaultState": 25408,
     "minStateId": 25405,
     "maxStateId": 25728,
+    "mapColorId": 59,
     "states": [
       {
         "name": "east",
@@ -29060,6 +30092,7 @@
     "defaultState": 25729,
     "minStateId": 25729,
     "maxStateId": 25729,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -29074,6 +30107,7 @@
     "defaultState": 25741,
     "minStateId": 25730,
     "maxStateId": 25809,
+    "mapColorId": 59,
     "states": [
       {
         "name": "facing",
@@ -29126,6 +30160,7 @@
     "defaultState": 25813,
     "minStateId": 25810,
     "maxStateId": 25815,
+    "mapColorId": 59,
     "states": [
       {
         "name": "type",
@@ -29156,6 +30191,7 @@
     "defaultState": 25819,
     "minStateId": 25816,
     "maxStateId": 26139,
+    "mapColorId": 59,
     "states": [
       {
         "name": "east",
@@ -29221,6 +30257,7 @@
     "defaultState": 26140,
     "minStateId": 26140,
     "maxStateId": 26140,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -29235,6 +30272,7 @@
     "defaultState": 26152,
     "minStateId": 26141,
     "maxStateId": 26220,
+    "mapColorId": 59,
     "states": [
       {
         "name": "facing",
@@ -29287,6 +30325,7 @@
     "defaultState": 26224,
     "minStateId": 26221,
     "maxStateId": 26226,
+    "mapColorId": 59,
     "states": [
       {
         "name": "type",
@@ -29317,6 +30356,7 @@
     "defaultState": 26230,
     "minStateId": 26227,
     "maxStateId": 26550,
+    "mapColorId": 59,
     "states": [
       {
         "name": "east",
@@ -29382,6 +30422,7 @@
     "defaultState": 26551,
     "minStateId": 26551,
     "maxStateId": 26551,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -29396,6 +30437,7 @@
     "defaultState": 26552,
     "minStateId": 26552,
     "maxStateId": 26552,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -29410,6 +30452,7 @@
     "defaultState": 26553,
     "minStateId": 26553,
     "maxStateId": 26553,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -29424,6 +30467,7 @@
     "defaultState": 26555,
     "minStateId": 26554,
     "maxStateId": 26556,
+    "mapColorId": 59,
     "states": [
       {
         "name": "axis",
@@ -29449,6 +30493,7 @@
     "defaultState": 26557,
     "minStateId": 26557,
     "maxStateId": 26557,
+    "mapColorId": 29,
     "states": [],
     "boundingBox": "block"
   },
@@ -29463,6 +30508,7 @@
     "defaultState": 26558,
     "minStateId": 26558,
     "maxStateId": 26558,
+    "mapColorId": 60,
     "states": [],
     "boundingBox": "block"
   },
@@ -29477,6 +30523,7 @@
     "defaultState": 26559,
     "minStateId": 26559,
     "maxStateId": 26559,
+    "mapColorId": 15,
     "states": [],
     "boundingBox": "block"
   },
@@ -29491,6 +30538,7 @@
     "defaultState": 26560,
     "minStateId": 26560,
     "maxStateId": 26560,
+    "mapColorId": 30,
     "states": [],
     "boundingBox": "block"
   },
@@ -29505,6 +30553,7 @@
     "defaultState": 26561,
     "minStateId": 26561,
     "maxStateId": 26561,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -29519,6 +30568,7 @@
     "defaultState": 26562,
     "minStateId": 26562,
     "maxStateId": 26562,
+    "mapColorId": 0,
     "states": [],
     "boundingBox": "block"
   },
@@ -29533,6 +30583,7 @@
     "defaultState": 26564,
     "minStateId": 26563,
     "maxStateId": 26565,
+    "mapColorId": 2,
     "states": [
       {
         "name": "axis",
@@ -29558,6 +30609,7 @@
     "defaultState": 26567,
     "minStateId": 26566,
     "maxStateId": 26568,
+    "mapColorId": 61,
     "states": [
       {
         "name": "axis",
@@ -29583,6 +30635,7 @@
     "defaultState": 26570,
     "minStateId": 26569,
     "maxStateId": 26571,
+    "mapColorId": 20,
     "states": [
       {
         "name": "axis",
@@ -29608,6 +30661,7 @@
     "defaultState": 26572,
     "minStateId": 26572,
     "maxStateId": 26572,
+    "mapColorId": 12,
     "states": [],
     "boundingBox": "empty"
   },
@@ -29622,6 +30676,7 @@
     "defaultState": 26573,
     "minStateId": 26573,
     "maxStateId": 26573,
+    "mapColorId": 59,
     "states": [],
     "boundingBox": "block"
   },
@@ -29636,6 +30691,7 @@
     "defaultState": 26583,
     "minStateId": 26574,
     "maxStateId": 26589,
+    "mapColorId": 50,
     "states": [
       {
         "name": "cracked",
@@ -29672,6 +30728,7 @@
     "defaultState": 26635,
     "minStateId": 26590,
     "maxStateId": 26637,
+    "mapColorId": 11,
     "states": [
       {
         "name": "crafting",
@@ -29716,6 +30773,7 @@
     "defaultState": 26638,
     "minStateId": 26638,
     "maxStateId": 26643,
+    "mapColorId": 11,
     "states": [
       {
         "name": "trial_spawner_state",

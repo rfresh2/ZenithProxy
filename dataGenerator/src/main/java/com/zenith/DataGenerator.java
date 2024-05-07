@@ -27,7 +27,6 @@ public class DataGenerator implements DedicatedServerModInitializer {
     public static List<Generator> generators = asList(
         new BlockCollisionShapes(),
         new Blocks(),
-        new BlockToMapColorId(),
         new DimensionTypes(),
         new Entities(),
         new Food(),

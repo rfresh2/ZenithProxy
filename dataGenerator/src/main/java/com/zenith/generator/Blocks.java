@@ -64,6 +64,7 @@ public class Blocks implements Generator {
         blockDesc.addProperty("defaultState", Block.getId(defaultState));
         blockDesc.addProperty("minStateId", Block.getId(blockStates.getFirst()));
         blockDesc.addProperty("maxStateId", Block.getId(blockStates.getLast()));
+        blockDesc.addProperty("mapColorId", block.defaultMapColor().id);
 
         JsonArray stateProperties = new JsonArray();
 

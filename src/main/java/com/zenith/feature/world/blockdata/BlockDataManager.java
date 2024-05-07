@@ -39,12 +39,13 @@ public class BlockDataManager {
                 blockNameToId.put(blockName, blockId);
                 int minStateId = e.get("minStateId").asInt();
                 int maxStateId = e.get("maxStateId").asInt();
+                int mapColorId = e.get("mapColorId").asInt();
                 String boundingBoxType = e.get("boundingBox").asText();
                 boolean isBlock = boundingBoxType.equals("block"); // empty otherwise
                 for (int i = minStateId; i <= maxStateId; i++) {
                     blockStateIdToBlockId.put(i, blockId);
                 }
-                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId));
+                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId, mapColorId));
             }
         } catch (final Exception e) {
             throw new RuntimeException(e);
