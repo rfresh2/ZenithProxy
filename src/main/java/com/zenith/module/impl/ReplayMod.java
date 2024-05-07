@@ -74,11 +74,19 @@ public class ReplayMod extends Module {
     }
 
     public void onInboundPacket(final Packet packet, final Session session) {
-        replayRecording.handleInboundPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
+        try {
+            replayRecording.handleInboundPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
+        } catch (final Throwable e) {
+            MODULE_LOG.error("[ReplayMod] Failed to handle inbound packet", e);
+        }
     }
 
     public void onPostOutgoing(final Packet packet, final Session session) {
-        replayRecording.handleOutgoingPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
+        try {
+            replayRecording.handleOutgoingPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
+        } catch (final Throwable e) {
+            MODULE_LOG.error("[ReplayMod] Failed to handle outgoing packet", e);
+        }
     }
 
     public void onDisconnectEvent(final DisconnectEvent event) {
