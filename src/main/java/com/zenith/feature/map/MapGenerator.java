@@ -99,11 +99,11 @@ public class MapGenerator {
                 int blockStateId = chunk.getBlockStateId(sectionX, height, sectionZ);
                 Block block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
                 int mapColorId = 0;
-                if (block != null) mapColorId = MAP_BLOCK_COLOR.getMapColorId(block.name());
+                if (block != null) mapColorId = block.mapColorId();
                 while (mapColorId == 0 && height > chunk.minY()) {
                     blockStateId = chunk.getBlockStateId(sectionX, --height, sectionZ);
                     block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-                    if (block != null) mapColorId = MAP_BLOCK_COLOR.getMapColorId(block.name());
+                    if (block != null) mapColorId = block.mapColorId();
                 }
                 if (height > chunk.minY() && World.isWater(block)) {
                     int yUnderBlock = height - 1;
