@@ -116,6 +116,7 @@ public class AntiAFK extends Module {
 
     private void jumpTick() {
         if (jumpTimer.tick(CONFIG.client.extra.antiafk.actions.jumpDelayTicks)) {
+            if (CONFIG.client.extra.antiafk.actions.jumpOnlyInWater && !MODULE.get(PlayerSimulation.class).isTouchingWater()) return;
             PATHING.jump(MOVEMENT_PRIORITY + 1);
         }
     }

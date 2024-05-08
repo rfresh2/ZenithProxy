@@ -218,7 +218,8 @@ public final class Config {
                     public boolean rotate = true;
                     public long rotateDelayTicks = 300L;
                     public boolean jump = false;
-                    public long jumpDelayTicks = 1000L;
+                    public boolean jumpOnlyInWater = true;
+                    public long jumpDelayTicks = 1L;
                     public boolean sneak = false;
                 }
             }
