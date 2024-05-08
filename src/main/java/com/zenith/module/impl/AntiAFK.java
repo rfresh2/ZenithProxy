@@ -137,7 +137,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
+                if (!MODULE.get(PlayerSimulation.class).isTouchingWater() && (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak))
                     PATHING.moveRotSneakTowardsBlockPos(currentPathingGoal.getX(),
                                                         currentPathingGoal.getZ(),
                                                         MOVEMENT_PRIORITY);
