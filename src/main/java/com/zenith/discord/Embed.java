@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.zenith.Shared.CONFIG;
+import static com.zenith.Shared.DISCORD_LOG;
 
 /**
  * Mutable data class for discord embeds
@@ -86,6 +87,9 @@ public class Embed {
     }
 
     public EmbedCreateSpec toSpec() {
+        if (!validateEmbed(this)) {
+            return EmbedCreateSpec.builder().build();
+        }
         return EmbedCreateSpec.builder()
             .title(title == null ? Possible.absent() : Possible.of(title))
             .description(description == null ? Possible.absent() : Possible.of(description))
@@ -122,4 +126,57 @@ public class Embed {
         String name,
         byte[] data
     ) { }
+
+    private boolean validateEmbed(Embed embed) {
+        int charCount = 0;
+        if (embed.isTitlePresent()) {
+            charCount += embed.title().length();
+            if (embed.title().length() > 256) {
+                DISCORD_LOG.error("Embed title exceeds 256 characters: {}", embed.title());
+                return false;
+            }
+        }
+        if (embed.isDescriptionPresent()) {
+            charCount += embed.description().length();
+            if (embed.description().length() > 4096) {
+                DISCORD_LOG.error("Embed description exceeds 4096 characters: {}", embed.description());
+                return false;
+            }
+        }
+        if (embed.fields().size() > 25) {
+            DISCORD_LOG.error("Embed contains more than 25 fields");
+            return false;
+        }
+        for (int i = 0; i < embed.fields().size(); i++) {
+            var field = embed.fields().get(i);
+            if (field.name().length() > 256) {
+                DISCORD_LOG.error("Embed field name exceeds 256 characters: {}", field.name());
+                return false;
+            }
+            if (field.value().length() > 1024) {
+                DISCORD_LOG.error("Embed field value exceeds 1024 characters: {}", field.value());
+                return false;
+            }
+            charCount += field.name().length() + field.value().length();
+        }
+        if (embed.footer() != null) {
+            if (embed.footer().text().length() > 2048) {
+                DISCORD_LOG.error("Embed footer text exceeds 2048 characters: {}", embed.footer().text());
+                return false;
+            }
+            charCount += embed.footer().text().length();
+        }
+        if (embed.author() != null) {
+            if (embed.author().name().length() > 256) {
+                DISCORD_LOG.error("Embed author name exceeds 256 characters: {}", embed.author().name());
+                return false;
+            }
+            charCount += embed.author().name().length();
+        }
+        if (charCount > 6000) {
+            DISCORD_LOG.error("Embed character count exceeds 6000 characters");
+            return false;
+        }
+        return true;
+    }
 }
