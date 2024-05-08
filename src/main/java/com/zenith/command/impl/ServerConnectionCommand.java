@@ -26,24 +26,19 @@ public class ServerConnectionCommand extends Command {
             CommandCategory.MANAGE,
             """
             Configures the MC server hosted by Zenith and players' connections to it
+                        
+            The `proxyIP` is the IP players should connect to. This is purely informational.
             
-            For Zenith -> destination MC server, use the `clientConnection` command.
-            
-            The `proxyIP` is the reported IP players should connect to. This is purely informational.
-            
-            The `bind` argument changes the port ZenithProxy listens on. The IP to connect to cannot be changed, its determined by the host machine.
-            IP you can run `curl https://api.ipify.org` in a terminal.
+            The `bind` argument changes the port ZenithProxy listens on..
             
             The `ping` arguments configure the server list ping response ZenithProxy sends to players.
-            `onlinePlayers` = report MC profiles of players connected
-            `onlinePlayerCount` = report the number of players connected
-            `maxPlayers` = number of players that can connect (purely informational, does not actually limit)
-            `lanBroadcast` = LAN network ping broadcast
+            `onlinePlayers` = MC profiles of players
+            `onlinePlayerCount` = number of players connected
+            `maxPlayers` = number of players that can connect
+            `lanBroadcast` = LAN server broadcast
             `log` = logs pings
             
-            The `timeout` arguments configures how long until players are kicked due to read timeout (no packets received).
-            Read timeouts are caused by internet connection issues. A shorter timeout can help prevent the ZenithProxy
-            client from being kicked.
+            The `timeout` arguments configures how long until players are kicked due no packets being received.
             """,
             asList(
                 "proxyIP <ip>",

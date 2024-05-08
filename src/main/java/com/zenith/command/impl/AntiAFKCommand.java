@@ -33,6 +33,7 @@ public class AntiAFKCommand extends Command {
                     "safeWalk on/off",
                     "walkDistance <int>",
                     "jump on/off",
+                    "jump onlyInWater on/off",
                     "jump delay <int>",
                     "sneak on/off"
             ),
@@ -110,6 +111,12 @@ public class AntiAFKCommand extends Command {
                               .title("Jump " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.jump));
                           return 1;
                       }))
+                      .then(literal("onlyInWater").then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.client.extra.antiafk.actions.jumpOnlyInWater = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                .title("Jump Only In Water " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.jumpOnlyInWater));
+                            return 1;
+                      })))
                       .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
                           CONFIG.client.extra.antiafk.actions.jumpDelayTicks = IntegerArgumentType.getInteger(c, "delay");
                           c.getSource().getEmbed()
@@ -138,6 +145,7 @@ public class AntiAFKCommand extends Command {
             .addField("Safe Walk", toggleStr(CONFIG.client.extra.antiafk.actions.safeWalk), false)
             .addField("Walk Distance", CONFIG.client.extra.antiafk.actions.walkDistance, false)
             .addField("Jump", toggleStr(CONFIG.client.extra.antiafk.actions.jump)
+                + " - Only In Water: " + toggleStr(CONFIG.client.extra.antiafk.actions.jumpOnlyInWater)
                 + " - Delay: " + CONFIG.client.extra.antiafk.actions.jumpDelayTicks, false)
             .addField("Sneak", toggleStr(CONFIG.client.extra.antiafk.actions.sneak), false)
             .primaryColor();

@@ -50,13 +50,15 @@ public class CommandDocsGenerator {
                     sb.append(command.getDescription()).append("\n\n");
                     if (!command.getAliases().isEmpty()) {
                         sb.append("**Aliases:** ");
-                        sb.append(command.getAliases().stream().collect(Collectors.joining(" / ", "`", "`")));
+                        sb.append(command.getAliases().stream().collect(Collectors.joining("` / `", "`", "`")));
                         sb.append("\n\n");
                     }
                     if (!command.getUsageLines().isEmpty()) {
                         sb.append("#### Usage").append("\n");
                         command.getUsageLines().forEach(line -> {
-                            sb.append("  ```").append(command.getName()).append(" ").append(line).append("```\n\n");
+                            sb.append("  ```").append(command.getName());
+                            if (!line.isBlank()) sb.append(" ").append(line);
+                            sb.append("```\n\n");
                         });
                         sb.append("\n");
                     }

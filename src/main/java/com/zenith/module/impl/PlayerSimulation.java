@@ -34,8 +34,7 @@ public class PlayerSimulation extends Module {
     private float pitch;
     private float lastYaw;
     private float lastPitch;
-    @Getter
-    private boolean onGround;
+    @Getter private boolean onGround;
     private boolean lastOnGround;
     private boolean isSneaking;
     private boolean wasSneaking;
@@ -50,7 +49,7 @@ public class PlayerSimulation extends Module {
     private boolean isGliding;
     private boolean wasGliding;
     private double fallDistance;
-    private boolean isTouchingWater;
+    @Getter private boolean isTouchingWater;
     private int ticksSinceLastPositionPacketSent;
     private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
     private Input movementInput = new Input();
@@ -180,8 +179,7 @@ public class PlayerSimulation extends Module {
         this.movementInput.movementSideways *= 0.98f;
         final MutableVec3d movementInputVec = new MutableVec3d(movementInput.movementSideways, 0, movementInput.movementForward);
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
-        if (CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE
-            || CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
+        if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
             // todo: handle creative and spectator mode movement
             //  for now, we just stay still (unless in a vehicle)
             //  ideally we'd check if isFlying = true

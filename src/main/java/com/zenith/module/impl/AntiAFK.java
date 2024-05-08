@@ -116,6 +116,7 @@ public class AntiAFK extends Module {
 
     private void jumpTick() {
         if (jumpTimer.tick(CONFIG.client.extra.antiafk.actions.jumpDelayTicks)) {
+            if (CONFIG.client.extra.antiafk.actions.jumpOnlyInWater && !MODULE.get(PlayerSimulation.class).isTouchingWater()) return;
             PATHING.jump(MOVEMENT_PRIORITY + 1);
         }
     }
@@ -136,7 +137,7 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                if (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak)
+                if (!MODULE.get(PlayerSimulation.class).isTouchingWater() && (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak))
                     PATHING.moveRotSneakTowardsBlockPos(currentPathingGoal.getX(),
                                                         currentPathingGoal.getZ(),
                                                         MOVEMENT_PRIORITY);

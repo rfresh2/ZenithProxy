@@ -134,6 +134,7 @@ This project is also used to support the [2b2t.vc API](https://api.2b2t.vc) and 
     * Discord: `.` (e.g. `.help`)
     * In-game: `/` OR `!` -> (e.g. `/help`)
     * Terminal: N/A -> (e.g. `help`)
+* [Full Commands Documentation](https://github.com/rfresh2/ZenithProxy/wiki/Commands)
 
 ### Running on Linux Servers
 
