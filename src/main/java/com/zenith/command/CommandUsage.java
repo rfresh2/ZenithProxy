@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.COMMAND;
+import static com.zenith.Shared.DEFAULT_LOG;
 
 @Getter
 @Setter
@@ -45,11 +46,17 @@ public class CommandUsage {
     }
 
     public String serialize(CommandSource commandSource) {
-        return this.description
+        var result = this.description
             + "\n**Commands**"
             + usageLines.stream()
             .map(line -> "\n" + COMMAND.getCommandPrefix(commandSource) + name + " " + line)
             .collect(Collectors.joining());
+        if (result.length() > 1024) {
+            DEFAULT_LOG.error("Command usage too long", new RuntimeException());
+            return this.shortSerialize(commandSource);
+        }
+        return result;
+
     }
 
     public String shortSerialize(CommandSource commandSource) {
