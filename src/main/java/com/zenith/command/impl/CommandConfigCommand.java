@@ -18,19 +18,22 @@ import static java.util.Arrays.asList;
 public class CommandConfigCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("commandConfig",
-                                 CommandCategory.MANAGE,
-                                 "Configures settings related to ZenithProxy commands",
-                                 asList(
-                                     "discord prefix <string>",
-                                     "ingame on/off",
-                                     "ingame slashCommands on/off",
-                                     "ingame slashCommands replaceServerCommands on/off",
-                                     "ingame prefix <string>"
-                                    // todo: might add command to config these at some point. But I think these should always be on
-//                                     "ingame logToDiscord on/off",
-//                                     "terminal logToDiscord on/off"
-                                 ));
+        return CommandUsage.args(
+            "commandConfig",
+            CommandCategory.MANAGE,
+            """
+            Configures ZenithProxy command prefixes and settings.
+            """,
+            asList(
+                "discord prefix <string>",
+                "ingame on/off",
+                "ingame slashCommands on/off",
+                "ingame slashCommands replaceServerCommands on/off",
+                "ingame prefix <string>"
+                // todo: might add command to config these at some point. But I think these should always be on
+//                "ingame logToDiscord on/off",
+//                "terminal logToDiscord on/off"
+            ));
     }
 
     @Override

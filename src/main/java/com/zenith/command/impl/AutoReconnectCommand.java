@@ -22,7 +22,7 @@ public class AutoReconnectCommand extends Command {
         return CommandUsage.args(
             "autoReconnect",
             CommandCategory.MODULE,
-            "Configure the AutoReconnect feature",
+            "Configures the AutoReconnect module",
             asList(
                 "on/off",
                 "delay <seconds>",

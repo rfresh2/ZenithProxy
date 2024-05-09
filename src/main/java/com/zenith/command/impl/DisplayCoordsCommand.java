@@ -17,7 +17,9 @@ public class DisplayCoordsCommand extends Command {
         return CommandUsage.full(
             "displayCoords",
             CommandCategory.MANAGE,
-            "Sets whether proxy status commands should display coordinates. Only usable by account owner(s).",
+            """
+            Configures whether the discord bot's messages should display coordinates. Only usable by account owner(s).
+            """,
             asList("on/off"),
             asList("coords")
         );

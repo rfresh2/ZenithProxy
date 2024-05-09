@@ -13,7 +13,7 @@ public class RaycastCommand extends Command {
         return CommandUsage.simple(
             "raycast",
             CommandCategory.INFO,
-            "Raycast to the block in front of you"
+            "Debug testing command. Gets the block or entity the player is currently looking at."
         );
     }
 

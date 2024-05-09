@@ -27,7 +27,9 @@ public class StatusCommand extends Command {
         return CommandUsage.full(
             "status",
             CommandCategory.CORE,
-            "Gets the current proxy status",
+            """
+            Prints the current status of ZenithProxy, the in-game player, and modules.
+            """,
             asList(
                 "",
                 "modules"

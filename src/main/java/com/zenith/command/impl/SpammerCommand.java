@@ -24,21 +24,24 @@ import static java.util.Arrays.asList;
 public class SpammerCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.full("spammer",
-                                 CommandCategory.MODULE,
-                                 "Spams messages",
-                                 asList(
-                                     "on/off",
-                                     "whisper on/off",
-                                     "delayTicks <int>",
-                                     "randomOrder on/off",
-                                     "appendRandom on/off",
-                                     "list",
-                                     "clear",
-                                     "add <message>",
-                                     "addAt <index> <message>",
-                                     "del <index>"),
-                                 asList("spam")
+        return CommandUsage.full(
+            "spammer",
+            CommandCategory.MODULE,
+            """
+            Spams messages or whispers in-game. Use with caution, this can and will get you muted.
+            """,
+            asList(
+                "on/off",
+                "whisper on/off",
+                "delayTicks <int>",
+                "randomOrder on/off",
+                "appendRandom on/off",
+                "list",
+                "clear",
+                "add <message>",
+                "addAt <index> <message>",
+                "del <index>"),
+            asList("spam")
         );
     }
 

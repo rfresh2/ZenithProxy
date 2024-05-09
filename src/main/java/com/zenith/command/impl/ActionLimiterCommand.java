@@ -22,7 +22,15 @@ public class ActionLimiterCommand extends Command {
         return CommandUsage.full(
             "actionLimiter",
             CommandCategory.MODULE,
-            "Limits player actions",
+            """
+            Limits player actions and movements.
+            
+            Players who login with the same account as the one used by ZenithProxy will be immune to these restrictions.
+            
+            If the movement limits are reached by a player, they will be disconnected while the proxy account will stay logged in.
+            
+            Other limits do not disconnect players and instead cancel the actions.
+            """,
             asList(
                 "on/off",
                 "allowMovement on/off",
@@ -37,7 +45,7 @@ public class ActionLimiterCommand extends Command {
                 "allowBookSigning on/off",
                 "allowChat on/off"
             ),
-                asList("al")
+            asList("al")
         );
     }
 

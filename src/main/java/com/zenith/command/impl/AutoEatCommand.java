@@ -19,10 +19,17 @@ import static java.util.Arrays.asList;
 public class AutoEatCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("autoEat",
-                                 CommandCategory.MODULE,
-                                 "Configures the AutoEat feature",
-                                 asList("on/off", "health <int>", "hunger <int>", "warning on/off"));
+        return CommandUsage.args(
+            "autoEat",
+            CommandCategory.MODULE,
+            "Configures the AutoEat module",
+            asList(
+                "on/off",
+                "health <int>",
+                "hunger <int>",
+                "warning on/off"
+            )
+        );
     }
 
     @Override

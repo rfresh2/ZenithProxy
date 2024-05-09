@@ -23,8 +23,16 @@ public class SpookCommand extends Command {
         return CommandUsage.args(
             "spook",
             CommandCategory.MODULE,
-            "Automatically spooks nearby players",
-            asList("on/off", "delay <ticks>", "mode <visualRange/nearest>")
+            """
+            Rotates and stares at players in visual range.
+            
+            Can often confuse other players in-game into thinking you are a real player.
+            """,
+            asList(
+                "on/off",
+                "delay <ticks>",
+                "mode <visualRange/nearest>"
+            )
         );
     }
 

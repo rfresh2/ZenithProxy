@@ -32,7 +32,7 @@ public class DiscordManageCommand extends Command {
         return CommandUsage.args(
             "discord",
             CommandCategory.MANAGE,
-            "Manages the discord bot configuration",
+            "Manages the Discord bot's configuration",
             asList(
                 "on/off",
                 "channel <channel ID>",

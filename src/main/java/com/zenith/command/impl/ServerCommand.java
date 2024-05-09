@@ -20,8 +20,11 @@ public class ServerCommand extends Command {
         return CommandUsage.args(
             "server",
             CommandCategory.MANAGE,
-            "Change the server the proxy connects to.",
-            asList("<IP>", "<IP> <port>")
+            "Change the MC server ZenithProxy connects to.",
+            asList(
+                "<IP>",
+                "<IP> <port>"
+            )
         );
     }
 

@@ -16,7 +16,11 @@ public class ReconnectCommand extends Command {
         return CommandUsage.simple(
             "reconnect",
             CommandCategory.MANAGE,
-            "disconnect and reconnect the proxy client"
+            """
+            Disconnect and reconnects from the destination MC server.
+            
+            Can be used to perform a reconnect "queue skip" on 2b2t
+            """
         );
     }
 

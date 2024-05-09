@@ -17,7 +17,7 @@ public class ProxyClientConnectionCommand extends Command {
         return CommandUsage.args(
             "clientConnectionMessages",
             CommandCategory.INFO,
-            "Send notification messages when a client connects to the proxy",
+            "Send notification messages when a player connects to ZenithProxy",
             asList("on/off")
         );
     }

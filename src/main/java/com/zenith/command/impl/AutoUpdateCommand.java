@@ -21,10 +21,19 @@ public class AutoUpdateCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("autoUpdate",
-                                 CommandCategory.MANAGE,
-                                 "Configures the autoupdater.",
-                                 asList("on/off"));
+        return CommandUsage.args(
+            "autoUpdate",
+            CommandCategory.MANAGE,
+            """
+            Configures the AutoUpdater.
+            
+            Updates are not immediately applied while the client is connected.
+            When an update is found, it will be applied 30 seconds after the next disconnect, or immediately if already disconnected.
+            """,
+            asList(
+                "on/off"
+            )
+        );
     }
 
     @Override

@@ -23,12 +23,13 @@ public class StatsCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args("stats",
-                                 CommandCategory.INFO,
-                                 "Gets the 2b2t stats of a player",
-                                 asList(
-                                     "<playerName>"
-                                 ));
+        return CommandUsage.args(
+            "stats",
+            CommandCategory.INFO,
+            "Gets the 2b2t stats of a player using https://api.2b2t.vc",
+            asList(
+                "<playerName>"
+            ));
     }
 
     @Override

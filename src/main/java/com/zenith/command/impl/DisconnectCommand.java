@@ -18,7 +18,7 @@ public class DisconnectCommand extends Command {
         return CommandUsage.simpleAliases(
             "disconnect",
             CommandCategory.CORE,
-            "Disconnect the current player from the server",
+            "Disconnects ZenithProxy from the destination MC server",
             asList("dc")
         );
     }

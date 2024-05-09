@@ -19,17 +19,27 @@ public class ChatRelayCommand extends Command {
         return CommandUsage.args(
             "chatRelay",
             CommandCategory.MANAGE,
-            "Configures the ChatRelay feature",
-            asList("on/off",
-                   "connectionMessages on/off",
-                   "whispers on/off",
-                   "publicChat on/off",
-                   "deathMessages on/off",
-                   "serverMessages on/off",
-                   "whisperMentions on/off",
-                   "nameMentions on/off",
-                   "mentionsWhileConnected on/off",
-                   "sendMessages on/off"
+            """
+            Configures the Discord ChatRelay feature.
+            
+            The ChatRelay is a live feed of chat messages and/or connection messages from the server to a Discord channel.
+            
+            Mentions can be configured when a whisper is received or your name is seen in chat.
+            
+            Messages typed in the ChatRelay discord channel will be sent as chat messages in-game
+            Discord message replies will be sent as whispers in-game
+            """,
+            asList(
+                "on/off",
+                "connectionMessages on/off",
+                "whispers on/off",
+                "publicChat on/off",
+                "deathMessages on/off",
+                "serverMessages on/off",
+                "whisperMentions on/off",
+                "nameMentions on/off",
+                "mentionsWhileConnected on/off",
+                "sendMessages on/off"
             )
         );
     }
