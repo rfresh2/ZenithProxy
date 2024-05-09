@@ -23,7 +23,7 @@ public class CommandDocsGenerator {
 
     @Test
     public void generateDocs() {
-        var outputFile = new File("build/commands.md");
+        var outputFile = new File("build/Commands.md");
         if (outputFile.exists()) {
             outputFile.delete();
         }

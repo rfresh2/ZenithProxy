@@ -1,0 +1,75 @@
+name: Publish Commands Wiki
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+\+1.20.6'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Gradle Wrapper Verification
+        uses: gradle/wrapper-validation-action@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Build ZenithProxy
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: commands
+          path: build/Commands.md
+
+  edit:
+    runs-on: ubuntu-latest
+    needs:
+      - generate
+    steps:
+      - name: Check out wiki repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          fetch-depth: 0
+
+      - name: Print Wiki Repo
+        run: |
+          ls -lah
+
+      - name: Download job artifact
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Replace Contents
+        run: |
+          mv -f artifacts/Commands.md Commands.md
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add Commands.md
+          git commit -m "Update Commands"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          repository: ${{github.repository}}.wiki
+          github_token: ${{ secrets.GITHUB_TOKEN }}
