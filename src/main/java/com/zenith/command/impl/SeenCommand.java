@@ -20,13 +20,16 @@ import static java.util.Arrays.asList;
 public class SeenCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.full("seen",
-                                 CommandCategory.INFO,
-                                 "Gets the first and last times a player was seen on 2b2t",
-                                 asList(
-                                     "<playerName>"
-                                 ),
-                                 asList("firstseen", "lastseen")
+        return CommandUsage.full(
+            "seen",
+            CommandCategory.INFO,
+            """
+            Gets the first and last times a player was seen on 2b2t using https://api.2b2t.vc
+            """,
+            asList(
+                "<playerName>"
+            ),
+            asList("firstseen", "lastseen")
         );
     }
 

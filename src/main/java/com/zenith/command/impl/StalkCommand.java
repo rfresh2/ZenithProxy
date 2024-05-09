@@ -23,8 +23,14 @@ public class StalkCommand extends Command {
         return CommandUsage.args(
             "stalk",
             CommandCategory.MODULE,
-            "Configures the stalk module which sends discord mentions when a player connects",
-            asList("on/off", "list", "add/del <player>")
+            """
+            Sends alerts when players join or leave
+            """,
+            asList(
+                "on/off",
+                "list",
+                "add/del <player>"
+            )
         );
     }
 

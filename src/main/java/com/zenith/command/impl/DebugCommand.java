@@ -25,21 +25,24 @@ public class DebugCommand extends Command {
         return CommandUsage.args(
             "debug",
             CommandCategory.MANAGE,
-            "Debug settings for developers",
+            """
+            Debug settings for features in testing or for use in development.
+            """,
             asList(
-                        "sync inventory",
-                        "sync chunks",
-                        "clearEffects",
-                        "packetLog on/off",
-                        "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
-                        "packetLog server on/off",
-                        "packetLog filter <string>",
-                        "sendChunksBeforePlayerSpawn on/off",
-                        "binaryNbtComponentSerializer on/off",
-                        "kickDisconnect on/off",
-                        "dc",
-                        "teleportResync on/off"
-                ));
+                "sync inventory",
+                "sync chunks",
+                "clearEffects",
+                "packetLog on/off",
+                "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
+                "packetLog server on/off",
+                "packetLog filter <string>",
+                "sendChunksBeforePlayerSpawn on/off",
+                "binaryNbtComponentSerializer on/off",
+                "kickDisconnect on/off",
+                "dc",
+                "teleportResync on/off"
+            )
+        );
     }
 
     @Override

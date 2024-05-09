@@ -19,10 +19,14 @@ public class QueueStatusCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.simpleAliases("queueStatus",
-                                          CommandCategory.INFO,
-                                          "Prints the current 2b2t queue status",
-                                          asList("queue", "q")
+        return CommandUsage.simpleAliases(
+            "queueStatus",
+            CommandCategory.INFO,
+            "Gets the current 2b2t queue length and wait ETA",
+            asList(
+                "queue",
+                "q"
+            )
         );
     }
 

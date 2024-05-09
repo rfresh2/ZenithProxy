@@ -18,7 +18,9 @@ public class IgnoreCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args("ignore",
                                  CommandCategory.MODULE,
-                                 "Ignores a player",
+                                 """
+                                 Hides chat and death messages and notifications for a configured list of players.
+                                 """,
                                  asList(
                                      "add/del <player>",
                                      "list",

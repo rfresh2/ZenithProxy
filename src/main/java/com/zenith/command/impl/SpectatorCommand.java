@@ -28,11 +28,23 @@ public class SpectatorCommand extends Command {
         return CommandUsage.args(
             "spectator",
             CommandCategory.CORE,
-            "Configure the Spectator feature",
-            asList("on/off",
-                        "whitelist add/del <player>", "whitelist list", "whitelist clear",
-                        "entity list", "entity <entity>",
-                        "chat on/off")
+            """
+            Configures the Spectator feature.
+            
+            The spectator whitelist only allows players to join as spectators.
+            Players who are regular whitelisted (i.e. with the `whitelist` command) can always join as spectators regardless.
+            
+            Spectator entities control what entity is used to represent spectators in-game.
+            """,
+            asList(
+                "on/off",
+                "whitelist add/del <player>",
+                "whitelist list",
+                "whitelist clear",
+                "entity list",
+                "entity <entity>",
+                "chat on/off"
+            )
         );
     }
 

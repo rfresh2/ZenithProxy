@@ -18,7 +18,11 @@ public class ExtraChatCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args("extraChat",
                                  CommandCategory.MODULE,
-                                 "Extra chat commands",
+                                 """
+                                 Configures the ExtraChat module.
+                                 
+                                 Allows hiding types of messages in-game or in the terminal chat log.
+                                 """,
                                  Arrays.asList(
                                      "hideChat on/off",
                                      "hideWhispers on/off",

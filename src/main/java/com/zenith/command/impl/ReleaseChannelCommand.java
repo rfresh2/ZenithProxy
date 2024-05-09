@@ -30,7 +30,11 @@ public class ReleaseChannelCommand extends Command {
         return CommandUsage.full(
             "channel",
             CommandCategory.MANAGE,
-            "Changes the current release channel.",
+            """
+            Configures the current AutoUpdater release channel.
+            
+            The release channel is a combination of a platform (java or linux) and a Minecraft protocol version.
+            .""",
             asList(
                 "list",
                 "set <platform> <minecraft version>"

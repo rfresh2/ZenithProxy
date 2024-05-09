@@ -22,20 +22,29 @@ public class AntiAFKCommand extends Command {
         return CommandUsage.full(
             "antiAFK",
             CommandCategory.MODULE,
-            "Configure the AntiAFK feature",
-            asList("on/off",
-                    "rotate on/off",
-                    "rotate delay <int>",
-                    "swing on/off",
-                    "swing delay <int>",
-                    "walk on/off",
-                    "walk delay <int>",
-                    "safeWalk on/off",
-                    "walkDistance <int>",
-                    "jump on/off",
-                    "jump onlyInWater on/off",
-                    "jump delay <int>",
-                    "sneak on/off"
+            """
+            Configures the AntiAFK module.
+            
+            To avoid being kicked on 2b2t the only required action is swing OR walk.
+            
+            The walk action will move the player roughly in a square shape. To avoid falling down any ledges, enable safeWalk
+            
+            For delay settings, 1 tick = 50ms
+            """,
+            asList(
+                "on/off",
+                "rotate on/off",
+                "rotate delay <ticks>",
+                "swing on/off",
+                "swing delay <ticks>",
+                "walk on/off",
+                "walk delay <ticks>",
+                "safeWalk on/off",
+                "walkDistance <ticks>",
+                "jump on/off",
+                "jump onlyInWater on/off",
+                "jump delay <int>",
+                "sneak on/off"
             ),
             asList("afk")
         );

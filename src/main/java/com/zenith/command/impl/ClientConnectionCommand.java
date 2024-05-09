@@ -29,7 +29,9 @@ public class ClientConnectionCommand extends Command {
         return CommandUsage.args(
             "clientConnection",
             CommandCategory.MANAGE,
-            "Manages the client's connection configuration",
+            """
+            Manages the connection configuration from ZenithProxy to the destination MC server.
+            """,
             asList(
                 "autoConnect on/off",
                 "proxy on/off",

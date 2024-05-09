@@ -25,8 +25,16 @@ public class AutoReplyCommand extends Command {
         return CommandUsage.args(
             "autoReply",
             CommandCategory.MODULE,
-            "Configure the AutoReply feature",
-            asList("on/off", "cooldown <seconds>", "message <message>")
+            """
+            Configures the AutoReply module.
+            
+            Automatically replies to whispers with a custom message.
+            """,
+            asList(
+                "on/off",
+                "cooldown <seconds>",
+                "message <message>"
+            )
         );
     }
 

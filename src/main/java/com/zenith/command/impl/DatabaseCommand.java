@@ -16,21 +16,26 @@ import static java.util.Arrays.asList;
 public class DatabaseCommand extends Command {
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.full("database",
-                                 CommandCategory.MANAGE,
-                                 "Configures what 2b2t server data is collected by the proxy. No database logs personal data.",
-                                 asList(
-                                     "on/off",
-                                     "queueWait on/off",
-                                     "queueLength on/off",
-                                     "publicChat on/off",
-                                     "joinLeave on/off",
-                                     "deathMessages on/off",
-                                     "restarts on/off",
-                                     "playerCount on/off",
-                                     "tablist on/off"
-                                 ),
-                                 asList("db")
+        return CommandUsage.full(
+            "database",
+            CommandCategory.MANAGE,
+            """
+            Configures the database module used for https://api.2b2t.vc
+            
+            This is disabled by default. No ZenithProxy users contribute or collect data, this is purely for use with my own accounts.
+            """,
+            asList(
+                "on/off",
+                "queueWait on/off",
+                "queueLength on/off",
+                "publicChat on/off",
+                "joinLeave on/off",
+                "deathMessages on/off",
+                "restarts on/off",
+                "playerCount on/off",
+                "tablist on/off"
+            ),
+            asList("db")
         );
     }
 

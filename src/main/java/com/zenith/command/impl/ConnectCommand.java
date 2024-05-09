@@ -16,7 +16,7 @@ public class ConnectCommand extends Command {
         return CommandUsage.simpleAliases(
             "connect",
             CommandCategory.CORE,
-            "Connect the current player to the server",
+            "Connects ZenithProxy to the destination MC server",
             asList("c")
         );
     }

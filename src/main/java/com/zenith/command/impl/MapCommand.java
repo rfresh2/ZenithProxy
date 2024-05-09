@@ -21,12 +21,13 @@ public class MapCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args(
             "map",
-            CommandCategory.INFO, """
-    Generate and render map images.
-    Map ID's to render must be cached during the current session
-    Generated maps can optionally be aligned to the vanilla map grid, or generated with a custom view distance.
-    Generated maps cannot be larger than what chunks are currently cached in the proxy
-    """,
+            CommandCategory.INFO,
+    """
+            Generate and render map images.
+            Map ID's to render must be cached during the current session
+            Generated maps can optionally be aligned to the vanilla map grid, or generated with a custom view distance.
+            Generated maps cannot be larger than what chunks are currently cached in the proxy
+            """,
             asList(
                 "render <mapId>",
                 "render all",

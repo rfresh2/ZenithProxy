@@ -26,8 +26,8 @@ public class TablistCommand extends Command {
         return CommandUsage.simpleAliases(
             "tablist",
             CommandCategory.INFO,
-            "Displays the current server's tablist",
-                asList("tab")
+            "Prints the current MC server's player list",
+            asList("tab")
 
         );
     }

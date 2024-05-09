@@ -20,7 +20,7 @@ public class PlaytimeCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.full("playtime",
                                  CommandCategory.INFO,
-                                 "Gets the playtime of someone on 2b2t",
+                                 "Gets the playtime of a player on 2b2t using https://api.2b2t.vc/",
                                  asList(
                                      "<playerName>"
                                  ),

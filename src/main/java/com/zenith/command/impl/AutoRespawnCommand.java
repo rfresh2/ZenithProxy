@@ -22,8 +22,11 @@ public class AutoRespawnCommand extends Command {
         return CommandUsage.args(
             "autoRespawn",
             CommandCategory.MODULE,
-            "Automatically respawn the player after dying.",
-            asList("on/off", "delay <milliseconds>")
+            "Automatically respawns the player after dying.",
+            asList(
+                "on/off",
+                "delay <milliseconds>"
+            )
         );
     }
 

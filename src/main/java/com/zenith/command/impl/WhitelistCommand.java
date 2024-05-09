@@ -25,8 +25,10 @@ public class WhitelistCommand extends Command {
             "whitelist",
             CommandCategory.CORE,
             """
-            Manage the proxy's whitelist. Only usable by users with the account owner role.
-                autoAddClient will automatically add the account logged into by ZenithProxy to the whitelist""",
+            Manages the list of players allowed to login.
+            
+            Whitelisted players are allowed to both control the account in-game and spectate.
+            """,
             asList(
                 "add/del <player>",
                 "list",

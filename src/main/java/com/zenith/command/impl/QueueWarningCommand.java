@@ -20,8 +20,12 @@ public class QueueWarningCommand extends Command {
         return CommandUsage.args(
             "queueWarning",
             CommandCategory.INFO,
-            "Configure warning messages for when 2b2t queue positions are reached",
-            asList("on/off", "position <integer>", "mention on/off")
+            "Configure alerts sent when 2b2t queue positions are reached",
+            asList(
+                "on/off",
+                "position <integer>",
+                "mention on/off"
+            )
         );
     }
 

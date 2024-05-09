@@ -21,7 +21,11 @@ public class AutoFishCommand extends Command {
     public CommandUsage commandUsage() {
         return CommandUsage.args("autoFish",
                                  CommandCategory.MODULE,
-                                 "Configures the AutoFish module",
+                                 """
+                                 Configures the AutoFish module.
+                                 
+                                 AutoFishing will prevent you from being AFK kicked. It's recommended to disable AntiAFK.
+                                 """,
                                  asList(
                                      "on/off",
                                      "castDelay <ticks>",
