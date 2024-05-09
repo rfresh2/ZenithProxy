@@ -47,14 +47,15 @@ public class CommandDocsGenerator {
                 .filter(command -> command.getCategory() == category)
                 .forEachOrdered(command -> {
                     sb.append("### ").append(command.getName()).append("\n\n");
-                    sb.append(command.getDescription()).append("\n\n");
+                    asList(command.getDescription().split("\n"))
+                        .forEach(line -> sb.append(line).append("\n\n"));
                     if (!command.getAliases().isEmpty()) {
                         sb.append("**Aliases:** ");
                         sb.append(command.getAliases().stream().collect(Collectors.joining("` / `", "`", "`")));
                         sb.append("\n\n");
                     }
                     if (!command.getUsageLines().isEmpty()) {
-                        sb.append("**Usage**").append("\n");
+                        sb.append("**Usage**").append("\n\n");
                         command.getUsageLines().forEach(line -> {
                             sb.append("  ```").append(command.getName());
                             if (!line.isBlank()) sb.append(" ").append(line);
