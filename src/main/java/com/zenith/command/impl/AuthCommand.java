@@ -29,13 +29,14 @@ public class AuthCommand extends Command {
             
             To switch accounts, use the `clear` command.
             
-            The `attempts` setting configures the number of login attempts before a full login must be performed.
-            The `alwaysRefreshOnLogin` setting will always refresh the authentication token on login instead of trusting the cache. This can cause
-            Microsoft to rate limit your account if connecting frequently. Auth tokens will always refresh in the background before expiry even if this is off.
+            `attempts` configures the number of login attempts before wiping the cache.
+            
+            `alwaysRefreshOnLogin` will always refresh the token on login instead of trusting the cache. This can cause
+            Microsoft to rate limit your account. Auth tokens will always refresh in the background even if this is off.
             
             `deviceCode` is the default and recommended authentication type.
             If authentication fails, try logging into the account on the vanilla MC launcher and joining a server. Then try again in Zenith.
-            If this still fails, you can try one of the alternate auth types.
+            If this still fails, try one of the alternate auth types.
             
             """,
             asList(
@@ -47,7 +48,8 @@ public class AuthCommand extends Command {
                 "password <password>",
                 "mention on/off",
                 "openBrowser on/off",
-                "maxRefreshIntervalMins <minutes>"
+                "maxRefreshIntervalMins <minutes>",
+                "useClientConnectionProxy on/off"
             )
         );
     }
@@ -182,6 +184,13 @@ public class AuthCommand extends Command {
                     .title("Max Refresh Interval Set")
                     .primaryColor();
                 return OK;
+            })))
+            .then(literal("useClientConnectionProxy").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.authentication.useClientConnectionProxy = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Use Client Connection Proxy " + toggleStrCaps(CONFIG.authentication.useClientConnectionProxy))
+                    .primaryColor();
+                return 1;
             })));
     }
 
@@ -201,7 +210,8 @@ public class AuthCommand extends Command {
             .addField("Always Refresh On Login", toggleStr(CONFIG.authentication.alwaysRefreshOnLogin), false)
             .addField("Mention", toggleStr(CONFIG.discord.mentionRoleOnDeviceCodeAuth), false)
             .addField("Open Browser", toggleStr(CONFIG.authentication.openBrowserOnLogin), false)
-            .addField("Max Refresh Interval", CONFIG.authentication.maxRefreshIntervalMins + " minutes", false);
+            .addField("Max Refresh Interval", CONFIG.authentication.maxRefreshIntervalMins + " minutes", false)
+            .addField("Use Client Connection Proxy", toggleStr(CONFIG.authentication.useClientConnectionProxy), false);
     }
 
     private String authTypeToString(Config.Authentication.AccountType type) {
