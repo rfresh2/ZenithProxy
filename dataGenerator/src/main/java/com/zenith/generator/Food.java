@@ -4,14 +4,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zenith.DataGenerator;
 import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ChorusFruitItem;
 import net.minecraft.world.item.Item;
 
 import java.io.FileWriter;
 import java.io.Writer;
+import java.util.List;
 
 public class Food implements Generator {
     @Override
@@ -51,6 +57,14 @@ public class Food implements Generator {
 
         foodDesc.addProperty("effectiveQuality", foodPoints + saturation);
         foodDesc.addProperty("saturationRatio", saturationRatio);
+        List<Holder<MobEffect>> effects = foodComponent.effects().stream()
+            .map(FoodProperties.PossibleEffect::effect)
+            .map(MobEffectInstance::getEffect)
+            .toList();
+        boolean isSafeFood = !effects.contains(MobEffects.POISON)
+            && !effects.contains(MobEffects.HUNGER)
+            && !(foodItem instanceof ChorusFruitItem); // technically safe but better to avoid unexpected teleports
+        foodDesc.addProperty("isSafeFood", isSafeFood);
         return foodDesc;
     }
 }

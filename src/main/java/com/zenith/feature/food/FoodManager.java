@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 import static com.zenith.Shared.OBJECT_MAPPER;
 import static java.util.Objects.nonNull;
@@ -28,10 +27,7 @@ public class FoodManager {
     public boolean isSafeFood(final int id) {
         final FoodData foodData = getFoodData(id);
         if (nonNull(foodData)) {
-            return !Objects.equals(foodData.name(), "chorus_fruit")
-                    && !Objects.equals(foodData.name(), "rotten_flesh")
-                    && !Objects.equals(foodData.name(), "spider_eye")
-                    && !Objects.equals(foodData.name(), "poisonous_potato");
+            return foodData.isSafeFood();
         }
         return false;
     }
@@ -50,7 +46,8 @@ public class FoodManager {
                 int stackSize = e.get("stackSize").asInt();
                 double foodPoints = e.get("foodPoints").asDouble();
                 double saturation = e.get("saturation").asDouble();
-                foodDataMap.put(itemId, new FoodData(itemId, itemName, stackSize, foodPoints, saturation));
+                boolean isSafeFood = e.get("isSafeFood").asBoolean();
+                foodDataMap.put(itemId, new FoodData(itemId, itemName, stackSize, foodPoints, saturation, isSafeFood));
             }
         } catch (final Exception e) {
             throw new RuntimeException(e);
