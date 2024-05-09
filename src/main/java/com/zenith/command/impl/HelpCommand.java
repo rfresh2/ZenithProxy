@@ -41,7 +41,8 @@ public class HelpCommand extends Command {
                 final String commandUsages = getCommandUsages(c.getSource().getSource(), CommandCategory.CORE);
                 final String prefix = COMMAND.getCommandPrefix(c.getSource().getSource());
                 c.getSource().getEmbed()
-                    .description("**More info:** "
+                    .description("[Commands Wiki](https://github.com/rfresh2/ZenithProxy/wiki/Commands)\n\n"
+                                     + "**More Info:** "
                                      + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
                                      + "\n\n**Categories**\n"
                                      + Arrays.stream(CommandCategory.values())
@@ -78,7 +79,8 @@ public class HelpCommand extends Command {
         final String commandUsages = getCommandUsages(c.getSource(), category);
         final String prefix = COMMAND.getCommandPrefix(c.getSource());
         c.getEmbed()
-            .description("**More info:** "
+            .description("[Commands Wiki](https://github.com/rfresh2/ZenithProxy/wiki/Commands)\n\n"
+                             + "**More Info:** "
                              + "\n  `" + prefix + "help <command>` or `" + prefix + "help <category>`"
                              + "\n"
                              + "\n**" + category.getName() + " Commands**"
