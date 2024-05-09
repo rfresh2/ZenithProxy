@@ -7,7 +7,8 @@
     "foodPoints": 4.0,
     "saturation": 2.4,
     "effectiveQuality": 6.4,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 846,
@@ -17,7 +18,8 @@
     "foodPoints": 6.0,
     "saturation": 7.2000003,
     "effectiveQuality": 13.200001,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 852,
@@ -27,7 +29,8 @@
     "foodPoints": 5.0,
     "saturation": 6.0,
     "effectiveQuality": 11.0,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 878,
@@ -37,7 +40,8 @@
     "foodPoints": 3.0,
     "saturation": 1.8000001,
     "effectiveQuality": 4.8,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 879,
@@ -47,7 +51,8 @@
     "foodPoints": 8.0,
     "saturation": 12.8,
     "effectiveQuality": 20.8,
-    "saturationRatio": 1.6
+    "saturationRatio": 1.6,
+    "isSafeFood": true
   },
   {
     "id": 881,
@@ -57,7 +62,8 @@
     "foodPoints": 4.0,
     "saturation": 9.6,
     "effectiveQuality": 13.6,
-    "saturationRatio": 2.4
+    "saturationRatio": 2.4,
+    "isSafeFood": true
   },
   {
     "id": 882,
@@ -67,7 +73,8 @@
     "foodPoints": 4.0,
     "saturation": 9.6,
     "effectiveQuality": 13.6,
-    "saturationRatio": 2.4
+    "saturationRatio": 2.4,
+    "isSafeFood": true
   },
   {
     "id": 932,
@@ -77,7 +84,8 @@
     "foodPoints": 2.0,
     "saturation": 0.4,
     "effectiveQuality": 2.4,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   },
   {
     "id": 933,
@@ -87,7 +95,8 @@
     "foodPoints": 2.0,
     "saturation": 0.4,
     "effectiveQuality": 2.4,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   },
   {
     "id": 934,
@@ -97,7 +106,8 @@
     "foodPoints": 1.0,
     "saturation": 0.2,
     "effectiveQuality": 1.2,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   },
   {
     "id": 935,
@@ -107,7 +117,8 @@
     "foodPoints": 1.0,
     "saturation": 0.2,
     "effectiveQuality": 1.2,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": false
   },
   {
     "id": 936,
@@ -117,7 +128,8 @@
     "foodPoints": 5.0,
     "saturation": 6.0,
     "effectiveQuality": 11.0,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 937,
@@ -127,7 +139,8 @@
     "foodPoints": 6.0,
     "saturation": 9.6,
     "effectiveQuality": 15.6,
-    "saturationRatio": 1.6
+    "saturationRatio": 1.6,
+    "isSafeFood": true
   },
   {
     "id": 977,
@@ -137,7 +150,8 @@
     "foodPoints": 2.0,
     "saturation": 0.4,
     "effectiveQuality": 2.4,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   },
   {
     "id": 981,
@@ -147,7 +161,8 @@
     "foodPoints": 2.0,
     "saturation": 1.2,
     "effectiveQuality": 3.2,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 982,
@@ -157,7 +172,8 @@
     "foodPoints": 1.0,
     "saturation": 0.6,
     "effectiveQuality": 1.6,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 985,
@@ -167,7 +183,8 @@
     "foodPoints": 3.0,
     "saturation": 1.8000001,
     "effectiveQuality": 4.8,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 986,
@@ -177,7 +194,8 @@
     "foodPoints": 8.0,
     "saturation": 12.8,
     "effectiveQuality": 20.8,
-    "saturationRatio": 1.6
+    "saturationRatio": 1.6,
+    "isSafeFood": true
   },
   {
     "id": 987,
@@ -187,7 +205,8 @@
     "foodPoints": 2.0,
     "saturation": 1.2,
     "effectiveQuality": 3.2,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": false
   },
   {
     "id": 988,
@@ -197,7 +216,8 @@
     "foodPoints": 6.0,
     "saturation": 7.2000003,
     "effectiveQuality": 13.200001,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 989,
@@ -207,7 +227,8 @@
     "foodPoints": 4.0,
     "saturation": 0.8,
     "effectiveQuality": 4.8,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": false
   },
   {
     "id": 997,
@@ -217,7 +238,8 @@
     "foodPoints": 2.0,
     "saturation": 3.2,
     "effectiveQuality": 5.2,
-    "saturationRatio": 1.6
+    "saturationRatio": 1.6,
+    "isSafeFood": false
   },
   {
     "id": 1090,
@@ -227,7 +249,8 @@
     "foodPoints": 3.0,
     "saturation": 3.6000001,
     "effectiveQuality": 6.6000004,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1091,
@@ -237,7 +260,8 @@
     "foodPoints": 1.0,
     "saturation": 0.6,
     "effectiveQuality": 1.6,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 1092,
@@ -247,7 +271,8 @@
     "foodPoints": 5.0,
     "saturation": 6.0,
     "effectiveQuality": 11.0,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1093,
@@ -257,7 +282,8 @@
     "foodPoints": 2.0,
     "saturation": 1.2,
     "effectiveQuality": 3.2,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": false
   },
   {
     "id": 1095,
@@ -267,7 +293,8 @@
     "foodPoints": 6.0,
     "saturation": 14.400001,
     "effectiveQuality": 20.400002,
-    "saturationRatio": 2.4
+    "saturationRatio": 2.4,
+    "isSafeFood": true
   },
   {
     "id": 1104,
@@ -277,7 +304,8 @@
     "foodPoints": 8.0,
     "saturation": 4.8,
     "effectiveQuality": 12.8,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 1111,
@@ -287,7 +315,8 @@
     "foodPoints": 3.0,
     "saturation": 1.8000001,
     "effectiveQuality": 4.8,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 1112,
@@ -297,7 +326,8 @@
     "foodPoints": 5.0,
     "saturation": 6.0,
     "effectiveQuality": 11.0,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1113,
@@ -307,7 +337,8 @@
     "foodPoints": 10.0,
     "saturation": 12.0,
     "effectiveQuality": 22.0,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1124,
@@ -317,7 +348,8 @@
     "foodPoints": 2.0,
     "saturation": 1.2,
     "effectiveQuality": 3.2,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": true
   },
   {
     "id": 1125,
@@ -327,7 +359,8 @@
     "foodPoints": 6.0,
     "saturation": 9.6,
     "effectiveQuality": 15.6,
-    "saturationRatio": 1.6
+    "saturationRatio": 1.6,
+    "isSafeFood": true
   },
   {
     "id": 1143,
@@ -337,7 +370,8 @@
     "foodPoints": 4.0,
     "saturation": 2.4,
     "effectiveQuality": 6.4,
-    "saturationRatio": 0.6
+    "saturationRatio": 0.6,
+    "isSafeFood": false
   },
   {
     "id": 1147,
@@ -347,7 +381,8 @@
     "foodPoints": 1.0,
     "saturation": 1.2,
     "effectiveQuality": 2.2,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1149,
@@ -357,7 +392,8 @@
     "foodPoints": 6.0,
     "saturation": 7.2000003,
     "effectiveQuality": 13.200001,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1183,
@@ -367,7 +403,8 @@
     "foodPoints": 6.0,
     "saturation": 7.2000003,
     "effectiveQuality": 13.200001,
-    "saturationRatio": 1.2
+    "saturationRatio": 1.2,
+    "isSafeFood": true
   },
   {
     "id": 1204,
@@ -377,7 +414,8 @@
     "foodPoints": 2.0,
     "saturation": 0.4,
     "effectiveQuality": 2.4,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   },
   {
     "id": 1205,
@@ -387,7 +425,8 @@
     "foodPoints": 2.0,
     "saturation": 0.4,
     "effectiveQuality": 2.4,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   },
   {
     "id": 1212,
@@ -397,6 +436,7 @@
     "foodPoints": 6.0,
     "saturation": 1.2,
     "effectiveQuality": 7.2,
-    "saturationRatio": 0.2
+    "saturationRatio": 0.2,
+    "isSafeFood": true
   }
 ]

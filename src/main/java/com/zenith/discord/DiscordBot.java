@@ -274,7 +274,7 @@ public class DiscordBot {
                 final AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
                 if (autoUpdater != null
                     && autoUpdater.getUpdateAvailable()
-                    && Math.random() > 0.75 // 25% chance to show update available
+                    && Math.random() < 0.25
                 ) {
                     this.client.updatePresence(getUpdateAvailablePresence(autoUpdater))
                         .block(BLOCK_TIMEOUT);
