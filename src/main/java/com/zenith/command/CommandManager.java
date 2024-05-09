@@ -13,8 +13,6 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.command.impl.*;
 import com.zenith.command.util.BrigadierToMCProtocolLibConverter;
-import it.unimi.dsi.fastutil.objects.ObjectCollection;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
 
@@ -28,7 +26,71 @@ import static java.util.Arrays.asList;
 
 @Getter
 public class CommandManager {
-    private final Reference2ObjectOpenHashMap<Class<? extends Command>, Command> commandsClassMap = new Reference2ObjectOpenHashMap<>();
+    private final List<Command> commandsList = asList(
+        new ActionLimiterCommand(),
+        new ActiveHoursCommand(),
+        new AntiAFKCommand(),
+        new AntiKickCommand(),
+        new AntiLeakCommand(),
+        new AuthCommand(),
+        new AutoArmorCommand(),
+        new AutoDisconnectCommand(),
+        new AutoEatCommand(),
+        new AutoFishCommand(),
+        new AutoReconnectCommand(),
+        new AutoReplyCommand(),
+        new AutoRespawnCommand(),
+        new AutoTotemCommand(),
+        new AutoUpdateCommand(),
+        new ChatHistoryCommand(),
+        new ChatRelayCommand(),
+        new ClientConnectionCommand(),
+        new CommandConfigCommand(),
+        new ConnectCommand(),
+        new DatabaseCommand(),
+        new DebugCommand(),
+        new DisconnectCommand(),
+        new DiscordManageCommand(),
+        new DisplayCoordsCommand(),
+        new ESPCommand(),
+        new ExtraChatCommand(),
+        new FriendCommand(),
+        new HelpCommand(),
+        new IgnoreCommand(),
+        new InventoryCommand(),
+        new KickCommand(),
+        new KillAuraCommand(),
+        new MapCommand(),
+        new PlaytimeCommand(),
+        new PrioCommand(),
+        new ProxyClientConnectionCommand(),
+        new QueueStatusCommand(),
+        new QueueWarningCommand(),
+        new RaycastCommand(),
+        new ReconnectCommand(),
+        new ReleaseChannelCommand(),
+        new ReplayCommand(),
+        new RespawnCommand(),
+        new SeenCommand(),
+        new SendMessageCommand(),
+        new ServerCommand(),
+        new ServerConnectionCommand(),
+        new ServerSwitcherCommand(),
+        new SpammerCommand(),
+        new SpectatorCommand(),
+        new SpectatorSwapCommand(),
+        new SpookCommand(),
+        new StalkCommand(),
+        new StatsCommand(),
+        new StatusCommand(),
+        new TablistCommand(),
+        new ThemeCommand(),
+        new TransferCommand(),
+        new UpdateCommand(),
+        new ViaVersionCommand(),
+        new VisualRangeCommand(),
+        new WhitelistCommand()
+    );
     private final CommandDispatcher<CommandContext> dispatcher;
     private final Supplier<CommandNode[]> MCProtocolLibCommandNodesSupplier;
 
@@ -41,88 +103,15 @@ public class CommandManager {
     }
 
     public void registerCommands() {
-       asList(
-           new ActionLimiterCommand(),
-           new ActiveHoursCommand(),
-           new AntiAFKCommand(),
-           new AntiKickCommand(),
-           new AntiLeakCommand(),
-           new AuthCommand(),
-           new AutoArmorCommand(),
-           new AutoDisconnectCommand(),
-           new AutoEatCommand(),
-           new AutoFishCommand(),
-           new AutoReconnectCommand(),
-           new AutoReplyCommand(),
-           new AutoRespawnCommand(),
-           new AutoTotemCommand(),
-           new AutoUpdateCommand(),
-           new ChatHistoryCommand(),
-           new ChatRelayCommand(),
-           new ClientConnectionCommand(),
-           new CommandConfigCommand(),
-           new ConnectCommand(),
-           new DatabaseCommand(),
-           new DebugCommand(),
-           new DisconnectCommand(),
-           new DiscordManageCommand(),
-           new DisplayCoordsCommand(),
-           new ESPCommand(),
-           new ExtraChatCommand(),
-           new FriendCommand(),
-           new HelpCommand(),
-           new IgnoreCommand(),
-           new InventoryCommand(),
-           new KickCommand(),
-           new KillAuraCommand(),
-           new MapCommand(),
-           new PlaytimeCommand(),
-           new PrioCommand(),
-           new ProxyClientConnectionCommand(),
-           new QueueStatusCommand(),
-           new QueueWarningCommand(),
-           new RaycastCommand(),
-           new ReconnectCommand(),
-           new ReleaseChannelCommand(),
-           new ReplayCommand(),
-           new RespawnCommand(),
-           new SeenCommand(),
-           new SendMessageCommand(),
-           new ServerCommand(),
-           new ServerConnectionCommand(),
-           new ServerSwitcherCommand(),
-           new SpammerCommand(),
-           new SpectatorCommand(),
-           new SpectatorSwapCommand(),
-           new SpookCommand(),
-           new StalkCommand(),
-           new StatsCommand(),
-           new StatusCommand(),
-           new TablistCommand(),
-           new ThemeCommand(),
-           new TransferCommand(),
-           new UpdateCommand(),
-           new ViaVersionCommand(),
-           new VisualRangeCommand(),
-           new WhitelistCommand()
-       ).forEach(this::addCommand);
+        commandsList.forEach(this::registerCommand);
     }
 
-    private void addCommand(Command command) {
-        commandsClassMap.put(command.getClass(), command);
-        registerCommand(command);
-    }
-
-    public <T extends Command> T getCommand(Class<T> clazz) {
-        return (T) commandsClassMap.get(clazz);
-    }
-
-    public ObjectCollection<Command> getCommands() {
-        return commandsClassMap.values();
+    public List<Command> getCommands() {
+        return commandsList;
     }
 
     public List<Command> getCommands(final CommandCategory category) {
-        return commandsClassMap.values().stream()
+        return commandsList.stream()
             .filter(command -> category == CommandCategory.ALL || command.commandUsage().getCategory() == category)
             .toList();
     }

@@ -54,7 +54,7 @@ public class CommandDocsGenerator {
                         sb.append("\n\n");
                     }
                     if (!command.getUsageLines().isEmpty()) {
-                        sb.append("#### Usage").append("\n");
+                        sb.append("**Usage**").append("\n");
                         command.getUsageLines().forEach(line -> {
                             sb.append("  ```").append(command.getName());
                             if (!line.isBlank()) sb.append(" ").append(line);
