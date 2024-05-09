@@ -8,6 +8,9 @@ import com.zenith.util.WebBrowserHelper;
 import com.zenith.util.math.MathHelper;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import net.lenni0451.commons.httpclient.HttpClient;
+import net.lenni0451.commons.httpclient.proxy.ProxyHandler;
+import net.lenni0451.commons.httpclient.proxy.ProxyType;
 import net.raphimc.minecraftauth.MinecraftAuth;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaSession;
@@ -154,33 +157,33 @@ public class Authenticator {
 
     @SneakyThrows
     private FullJavaSession deviceCodeLogin() {
-        return getDeviceCodeAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+        return getDeviceCodeAuthStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
 
     @SneakyThrows
     private FullJavaSession withoutDeviceTokenLogin() {
-        return getDeviceCodeAuthWithoutDeviceTokenStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+        return getDeviceCodeAuthWithoutDeviceTokenStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
 
     @SneakyThrows
     private FullJavaSession msaLogin() {
-        return getMsaAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
+        return getMsaAuthStep().getFromInput(createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
     }
 
     @SneakyThrows
     private FullJavaSession localWebserverLogin() {
-        return getLocalWebserverStep().getFromInput(MinecraftAuth.createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
+        return getLocalWebserverStep().getFromInput(createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
     }
 
     @SneakyThrows
     private FullJavaSession prismDeviceCodeLogin() {
-        return getPrismDeviceCodeAuthStep().getFromInput(MinecraftAuth.createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
+        return getPrismDeviceCodeAuthStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
 
     private Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
         AUTH_LOG.debug("Performing token refresh..");
         try {
-            return Optional.of(getAuthStep().refresh(MinecraftAuth.createHttpClient(), session));
+            return Optional.of(getAuthStep().refresh(createHttpClient(), session));
         } catch (Exception e) {
             AUTH_LOG.debug("Failed to refresh token", e);
             return Optional.empty();
@@ -312,5 +315,26 @@ public class Authenticator {
             return Optional.empty();
         }
         return Optional.of(authCacheSession);
+    }
+
+    private static HttpClient createHttpClient() {
+        var client = MinecraftAuth.createHttpClient();
+        if (CONFIG.authentication.useClientConnectionProxy && CONFIG.client.connectionProxy.enabled) {
+            var type = switch (CONFIG.client.connectionProxy.type) {
+                case SOCKS5 -> ProxyType.SOCKS5;
+                case SOCKS4 -> ProxyType.SOCKS4;
+                case HTTP -> ProxyType.HTTP;
+            };
+            var user = CONFIG.client.connectionProxy.user.isEmpty() ? null : CONFIG.client.connectionProxy.user;
+            var pass = CONFIG.client.connectionProxy.password.isEmpty() ? null : CONFIG.client.connectionProxy.password;
+            client.setProxyHandler(new ProxyHandler(
+                type,
+                CONFIG.client.connectionProxy.host,
+                CONFIG.client.connectionProxy.port,
+                user,
+                pass
+            ));
+        }
+        return client;
     }
 }

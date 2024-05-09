@@ -39,6 +39,7 @@ public final class Config {
         public boolean openBrowserOnLogin = true;
         public boolean alwaysRefreshOnLogin = false;
         public int maxRefreshIntervalMins = 360; // 6 hrs
+        public boolean useClientConnectionProxy = false;
 
         public enum AccountType {
             @SerializedName("msa") MSA,
