@@ -40,7 +40,7 @@ public class ActiveHoursCommand extends Command {
             
             If Queue ETA calc is disabled, connects will occur exactly at the set times instead.
             
-             Time zone Ids ("TZ identifier" column): https://w.wiki/8Yif"
+             Time zone Ids ("TZ Identifier" column): https://w.wiki/A2fd
              Time format: XX:XX, e.g.: 1:42, 14:42, 14:01
             """,
             asList(
