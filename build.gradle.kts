@@ -124,8 +124,8 @@ dependencies {
     shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion") { isChanging = false }
     shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion") { isChanging = false }
     shade("net.raphimc:ViaLoader:2.2.13")
-    shade("com.viaversion:viaversion:4.10.1")
-    shade("com.viaversion:viabackwards:4.10.1")
+    shade("com.viaversion:viaversion:4.10.2")
+    shade("com.viaversion:viabackwards:4.10.2")
     shade("org.jline:jline:3.26.1")
     shade("org.jline:jline-terminal-jansi:3.26.1")
     shade("ar.com.hjg:pngj:2.1.0")
