@@ -2,10 +2,7 @@ package com.zenith.feature.api.sessionserver;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.feature.api.Api;
-import com.zenith.feature.api.sessionserver.model.HasJoinedResponse;
-import com.zenith.feature.api.sessionserver.model.JoinServerErrorResponse;
-import com.zenith.feature.api.sessionserver.model.JoinServerRequest;
-import com.zenith.feature.api.sessionserver.model.SessionProfileResponse;
+import com.zenith.feature.api.sessionserver.model.*;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.KeyGenerator;
@@ -17,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -79,6 +77,31 @@ public class SessionServerApi extends Api {
             return Optional.of(GSON.fromJson(response.body(), HasJoinedResponse.class).toGameProfile());
         } catch (Exception e) {
             DEFAULT_LOG.error("Failed to join server. name: {}, serverId: {}", name, serverId, e);
+            return Optional.empty();
+        }
+    }
+
+    public Optional<GameProfile> getProfileAndSkin(final UUID uuid) {
+        final HttpRequest httpRequest = buildBaseRequest("/session/minecraft/profile/" + uuid.toString().replace("-", "") + "?unsigned=false")
+            .GET()
+            .build();
+        try (var client = buildHttpClient()) {
+            var response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                DEFAULT_LOG.error("Failed to get profile and skin for uuid: {}. Status code: {}, Response body: {}", uuid, response.statusCode(), response.body());
+                return Optional.empty();
+            }
+            var profileAndSkin = Optional.of(GSON.fromJson(response.body(), MojangProfileAndSkin.class)).get();
+            var propsResponse = profileAndSkin.properties();
+            var props = new ArrayList<GameProfile.Property>(propsResponse.size());
+            for (var prop : propsResponse) {
+                props.add(new GameProfile.Property(prop.name(), prop.value(), prop.signature()));
+            }
+            var gameProfile = new GameProfile(profileAndSkin.uuid(), profileAndSkin.name());
+            gameProfile.setProperties(props);
+            return Optional.of(gameProfile);
+        } catch (Exception e) {
+            DEFAULT_LOG.error("Failed to get profile and skin for uuid: {}", uuid, e);
             return Optional.empty();
         }
     }
