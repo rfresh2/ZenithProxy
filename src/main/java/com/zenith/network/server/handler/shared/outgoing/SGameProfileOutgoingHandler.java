@@ -1,7 +1,6 @@
 package com.zenith.network.server.handler.shared.outgoing;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.mc.auth.service.SessionService;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
 import com.zenith.network.registry.PacketHandler;
@@ -11,14 +10,14 @@ import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 
-import java.util.List;
+import java.util.UUID;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerConnection> {
-
-    private static List<GameProfile.Property> spectatorProfileProperties = null;
+    // can be anything really, just needs to be unique and not taken by a real player seen in-game
+    private static final UUID spectatorFakeUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
     @Override
     public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerConnection session) {
@@ -71,15 +70,16 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 }
                 SERVER_LOG.info("Logging in {} [{}] as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString());
                 session.setSpectator(true);
-                final GameProfile spectatorFakeProfile = new GameProfile(CONFIG.server.spectator.spectatorUUID,
-                                                                         clientGameProfile.getName());
+                final GameProfile spectatorFakeProfile = new GameProfile(spectatorFakeUUID, clientGameProfile.getName());
                 // caching assumes the spectatorUUID is immutable
-                if (spectatorProfileProperties == null) {
-                    SessionService sessionService = new SessionService();
-                    sessionService.fillProfileProperties(spectatorFakeProfile);
-                    spectatorProfileProperties = spectatorFakeProfile.getProperties();
+                if (clientGameProfile.getProperty("textures") == null) {
+                    SESSION_SERVER.getProfileAndSkin(clientGameProfile.getId()).ifPresentOrElse(p -> {
+                        spectatorFakeProfile.setProperties(p.getProperties());
+                    }, () -> {
+                        SERVER_LOG.info("Failed getting spectator skin for {} [{}]", clientGameProfile.getName(), clientGameProfile.getId().toString());
+                    });
                 } else {
-                    spectatorFakeProfile.setProperties(spectatorProfileProperties);
+                    spectatorFakeProfile.setProperties(clientGameProfile.getProperties());
                 }
                 session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
                 return new ClientboundGameProfilePacket(spectatorFakeProfile);
