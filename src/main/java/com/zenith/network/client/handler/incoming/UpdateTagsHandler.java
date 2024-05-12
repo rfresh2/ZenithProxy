@@ -8,6 +8,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.Clientbound
 import static com.zenith.Shared.CACHE;
 
 public class UpdateTagsHandler implements PacketHandler<ClientboundUpdateTagsPacket, ClientSession> {
+    public static UpdateTagsHandler INSTANCE = new UpdateTagsHandler();
     @Override
     public ClientboundUpdateTagsPacket apply(final ClientboundUpdateTagsPacket packet, final ClientSession session) {
         CACHE.getConfigurationCache().setTags(packet.getTags());

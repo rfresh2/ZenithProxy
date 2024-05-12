@@ -9,6 +9,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.Clientbound
 import static com.zenith.Shared.CACHE;
 
 public class CustomPayloadHandler implements PacketHandler<ClientboundCustomPayloadPacket, ClientSession> {
+    public static CustomPayloadHandler INSTANCE = new CustomPayloadHandler();
     @Override
     public ClientboundCustomPayloadPacket apply(ClientboundCustomPayloadPacket packet, ClientSession session) {
         if (packet.getChannel().equalsIgnoreCase("minecraft:brand")) {

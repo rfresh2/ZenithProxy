@@ -6,6 +6,7 @@ import org.geysermc.mcprotocollib.protocol.packet.status.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.ServerboundPingRequestPacket;
 
 public class PingRequestHandler implements PacketHandler<ServerboundPingRequestPacket, ServerConnection> {
+    public static PingRequestHandler INSTANCE = new PingRequestHandler();
     @Override
     public ServerboundPingRequestPacket apply(final ServerboundPingRequestPacket packet, final ServerConnection session) {
         session.send(new ClientboundPongResponsePacket(packet.getPingTime()));

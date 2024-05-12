@@ -7,6 +7,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.Serverbound
 import static com.zenith.Shared.CACHE;
 
 public class ClientInformationHandler implements AsyncPacketHandler<ServerboundClientInformationPacket, ServerConnection> {
+    public static ClientInformationHandler INSTANCE = new ClientInformationHandler();
     @Override
     public boolean applyAsync(ServerboundClientInformationPacket packet, ServerConnection session) {
         CACHE.getChunkCache().setRenderDistance(packet.getRenderDistance());
