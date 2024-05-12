@@ -95,9 +95,13 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     public GameProfile[] getOnlinePlayerProfiles() {
         try {
-            return Proxy.getInstance().getActiveConnections().stream()
-                    .map(connection -> connection.profileCache.getProfile())
-                    .toArray(GameProfile[]::new);
+            var connections = Proxy.getInstance().getActiveConnections().getArray();
+            var result = new GameProfile[connections.length];
+            for (int i = 0; i < connections.length; i++) {
+                var connection = connections[i];
+                result[i] = connection.profileCache.getProfile();
+            }
+            return result;
         } catch (final Throwable e) {
             return new GameProfile[0];
         }

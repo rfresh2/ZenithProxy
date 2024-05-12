@@ -9,7 +9,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.DiscordBot;
-import com.zenith.network.server.ServerConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,9 @@ public class KickCommand extends Command {
             .executes(c -> {
                 final boolean kickCurrentPlayer = c.getSource().getSource() != CommandSource.IN_GAME_PLAYER;
                 final List<String> kickedPlayers = new ArrayList<>();
-                for (ServerConnection connection : Proxy.getInstance().getActiveConnections()) {
+                var connections = Proxy.getInstance().getActiveConnections().getArray();
+                for (int i = 0; i < connections.length; i++) {
+                    var connection = connections[i];
                     if (connection.equals(Proxy.getInstance().getCurrentPlayer().get()) && !kickCurrentPlayer) continue;
                     kickedPlayers.add(connection.getProfileCache().getProfile().getName());
                     connection.disconnect(CONFIG.server.extra.whitelist.kickmsg);
@@ -44,25 +45,26 @@ public class KickCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Kicked " + kickedPlayers.size() + " players")
                     .addField("Players", kickedPlayers.stream().map(DiscordBot::escape).collect(Collectors.joining(", ")), false);
-                return 1;
+                return OK;
             })
             .then(argument("player", string()).executes(c -> {
                 final String playerName = StringArgumentType.getString(c, "player");
-                List<ServerConnection> connections = Proxy.getInstance().getActiveConnections().stream()
-                    .filter(connection -> connection.getProfileCache().getProfile().getName().equalsIgnoreCase(playerName))
-                    .collect(Collectors.toList());
-                if (!connections.isEmpty()) {
-                    connections.forEach(connection -> connection.disconnect(CONFIG.server.extra.whitelist.kickmsg));
-                    c.getSource().getEmbed()
-                        .title("Kicked " + escape(playerName))
-                        .primaryColor();
-                } else {
-                    c.getSource().getEmbed()
-                        .title("Unable to kick " + escape(playerName))
-                        .errorColor()
-                        .addField("Reason", "Player is not connected", false);
+                var connections = Proxy.getInstance().getActiveConnections().getArray();
+                for (int i = 0; i < connections.length; i++) {
+                    var connection = connections[i];
+                    if (connection.getProfileCache().getProfile().getName().equalsIgnoreCase(playerName)) {
+                        connection.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+                        c.getSource().getEmbed()
+                            .title("Kicked " + escape(playerName))
+                            .primaryColor();
+                        return OK;
+                    }
                 }
-                return 1;
+                c.getSource().getEmbed()
+                    .title("Unable to kick " + escape(playerName))
+                    .errorColor()
+                    .addField("Reason", "Player is not connected", false);
+                return OK;
             }));
     }
 }

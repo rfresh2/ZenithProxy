@@ -34,9 +34,11 @@ public class SendMessageCommand extends Command {
                               var session = Proxy.getInstance().getCurrentPlayer().get();
                               if (session == null) return ERROR;
                               var senderName = session.getProfileCache().getProfile().getName();
-                              Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                              var connections = Proxy.getInstance().getActiveConnections().getArray();
+                              for (int i = 0; i < connections.length; i++) {
+                                  var connection = connections[i];
                                   connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + senderName + " > " + message + "&r"), false));
-                              });
+                              }
                               c.getSource().setSensitiveInput(true);
                               c.getSource().setNoOutput(true);
                           } else {

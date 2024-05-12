@@ -135,7 +135,11 @@ public class ServerConnectionCommand extends Command {
 
     private void syncTimeout() {
         int t = CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : 0;
-        Proxy.getInstance().getActiveConnections().forEach(connection -> connection.setReadTimeout(t));
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.setReadTimeout(t);
+        }
     }
 
     @Override

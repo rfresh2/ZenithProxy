@@ -213,10 +213,12 @@ public class ServerConnection implements Session, SessionListener {
                     EVENT_BUS.post(new ProxyClientDisconnectedEvent(reasonStr));
                 }
             } else {
-                Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                var connections = Proxy.getInstance().getActiveConnections().getArray();
+                for (int i = 0; i < connections.length; i++) {
+                    var connection = connections[i];
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
                     connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
-                });
+                }
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
         }
@@ -228,7 +230,8 @@ public class ServerConnection implements Session, SessionListener {
 
     public void setLoggedIn() {
         this.isLoggedIn = true;
-        Proxy.getInstance().getActiveConnections().add(this);
+        if (!Proxy.getInstance().getActiveConnections().contains(this))
+            Proxy.getInstance().getActiveConnections().add(this);
     }
 
     @Override

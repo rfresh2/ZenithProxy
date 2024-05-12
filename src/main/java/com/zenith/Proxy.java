@@ -17,6 +17,7 @@ import com.zenith.network.server.ServerConnection;
 import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
+import com.zenith.util.FastArrayList;
 import com.zenith.util.Wait;
 import com.zenith.via.ZenithClientChannelInitializer;
 import com.zenith.via.ZenithServerChannelInitializer;
@@ -55,7 +56,10 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -74,7 +78,7 @@ public class Proxy {
     protected final Authenticator authenticator = new Authenticator();
     protected byte[] serverIcon;
     protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
-    protected final CopyOnWriteArraySet<ServerConnection> activeConnections = new CopyOnWriteArraySet<>();
+    protected final FastArrayList<ServerConnection> activeConnections = new FastArrayList<>(ServerConnection.class);
     private boolean inQueue = false;
     private int queuePosition = 0;
     @Setter private Instant connectTime;
@@ -313,7 +317,11 @@ public class Proxy {
             minecraftProtocol = this.logIn();
         } catch (final Exception e) {
             EVENT_BUS.post(new ProxyLoginFailedEvent());
-            getActiveConnections().forEach(connection -> connection.disconnect("Login failed"));
+            var connections = getActiveConnections().getArray();
+            for (int i = 0; i < connections.length; i++) {
+                var connection = connections[i];
+                connection.disconnect("Login failed");
+            }
             EXECUTOR.schedule(() -> {
                 EVENT_BUS.post(new DisconnectEvent(LOGIN_FAILED));
             }, 1L, TimeUnit.SECONDS);
@@ -462,11 +470,17 @@ public class Proxy {
     }
 
     public List<ServerConnection> getSpectatorConnections() {
-        if (getActiveConnections().isEmpty()) return Collections.emptyList();
-        if (getActiveConnections().size() == 1 && hasActivePlayer()) return Collections.emptyList();
-        return getActiveConnections().stream()
-            .filter(ServerConnection::isSpectator)
-            .toList();
+        var connections = getActiveConnections().getArray();
+        if (connections.length == 0) return Collections.emptyList();
+        if (connections.length == 1 && hasActivePlayer()) return Collections.emptyList();
+        final List<ServerConnection> result = new ArrayList<>(connections.length);
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            if (connection.isSpectator()) {
+                result.add(connection);
+            }
+        }
+        return result;
     }
 
     public boolean hasActivePlayer() {
@@ -496,11 +510,14 @@ public class Proxy {
     }
 
     public void kickNonWhitelistedPlayers() {
-        Proxy.getInstance().getActiveConnections().stream()
-            .filter(con -> nonNull(con.getProfileCache().getProfile()))
-            .filter(con -> !PLAYER_LISTS.getWhitelist().contains(con.getProfileCache().getProfile()))
-            .filter(con -> !(PLAYER_LISTS.getSpectatorWhitelist().contains(con.getProfileCache().getProfile()) && con.isSpectator()))
-            .forEach(con -> con.disconnect("Not whitelisted"));
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            if (connection.getProfileCache().getProfile() == null) continue;
+            if (PLAYER_LISTS.getWhitelist().contains(connection.getProfileCache().getProfile())) continue;
+            if (PLAYER_LISTS.getSpectatorWhitelist().contains(connection.getProfileCache().getProfile()) && connection.isSpectator()) continue;
+            connection.disconnect("Not whitelisted");
+        }
     }
 
     public boolean isOnlineOn2b2tForAtLeastDuration(Duration duration) {

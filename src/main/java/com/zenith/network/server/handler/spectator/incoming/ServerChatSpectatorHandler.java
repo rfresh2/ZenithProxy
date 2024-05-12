@@ -24,9 +24,11 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                     TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), packet.getMessage());
                     handleCommandInput(packet.getMessage(), session);
                 } else {
-                    Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                    var connections = Proxy.getInstance().getActiveConnections().getArray();
+                    for (int i = 0; i < connections.length; i++) {
+                        var connection = connections[i];
                         connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r"), false));
-                    });
+                    }
                 }
             });
         }
@@ -71,14 +73,16 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 boolean spectatorEntitySet = session.setSpectatorEntity(entityId);
                 if (spectatorEntitySet) {
                     // respawn entity on all connections
-                    Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                    var connections = Proxy.getInstance().getActiveConnections().getArray();
+                    for (int i = 0; i < connections.length; i++) {
+                        var connection = connections[i];
                         connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                         if (!connection.equals(session) || session.isShowSelfEntity()) {
                             connection.send(session.getEntitySpawnPacket());
                             connection.send(session.getEntityMetadataPacket());
                             SpectatorSync.updateSpectatorPosition(session);
                         }
-                    });
+                    }
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Updated entity to: " + entityId + "&r"), false));
                 } else {
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cNo entity found with id: " + entityId + "&r"), false));
@@ -95,9 +99,11 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 } else {
                     session.setCameraTarget(CACHE.getPlayerCache().getThePlayer());
                     session.send(new ClientboundSetCameraPacket(CACHE.getPlayerCache().getEntityId()));
-                    Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                    var connections = Proxy.getInstance().getActiveConnections().getArray();
+                    for (int i = 0; i < connections.length; i++) {
+                        var connection = connections[i];
                         connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
-                    });
+                    }
                     session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Entered playercam!&r"), false));
                 }
             }

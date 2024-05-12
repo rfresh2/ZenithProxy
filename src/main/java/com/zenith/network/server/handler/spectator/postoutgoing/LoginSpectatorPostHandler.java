@@ -44,18 +44,19 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
         EVENT_BUS.postAsync(new ProxySpectatorLoggedInEvent(session));
         SpectatorSync.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         //send cached data
-        Proxy.getInstance().getActiveConnections().stream()
-                .filter(connection -> !connection.equals(session))
-                .forEach(connection -> {
-                    connection.send(new ClientboundSystemChatPacket(
-                        ComponentSerializer.minedown("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
-                    ));
-                    if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
-                        connection.send(new ClientboundSystemChatPacket(
-                            ComponentSerializer.minedown("&9Send private messages: \"!m <message>\"&r"), false
-                        ));
-                    }
-                });
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            if (connection.equals(session)) continue;
+            connection.send(new ClientboundSystemChatPacket(
+                ComponentSerializer.minedown("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
+            ));
+            if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
+                connection.send(new ClientboundSystemChatPacket(
+                    ComponentSerializer.minedown("&9Send private messages: \"!m <message>\"&r"), false
+                ));
+            }
+        }
         session.setLoggedIn();
         ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();

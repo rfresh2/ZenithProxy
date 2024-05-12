@@ -102,9 +102,11 @@ public class ReplayMod extends Module {
         try {
             this.replayRecording.startRecording();
             EVENT_BUS.postAsync(new ReplayStartedEvent());
-            Proxy.getInstance().getActiveConnections().forEach(session -> {
-                session.sendAsyncAlert("&cReplay recording started");
-            });
+            var connections = Proxy.getInstance().getActiveConnections().getArray();
+            for (int i = 0; i < connections.length; i++) {
+                var connection = connections[i];
+                connection.sendAsyncAlert("&cReplay recording started");
+            }
         } catch (final Exception e) {
             MODULE_LOG.error("Failed to start ReplayMod recording", e);
             disable();
@@ -125,9 +127,11 @@ public class ReplayMod extends Module {
         } else {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
-        Proxy.getInstance().getActiveConnections().forEach(session -> {
-            session.sendAsyncAlert("&cReplay recording stopped");
-        });
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.sendAsyncAlert("&cReplay recording stopped");
+        }
     }
 
     public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
