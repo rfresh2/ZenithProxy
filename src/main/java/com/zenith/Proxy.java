@@ -471,9 +471,10 @@ public class Proxy {
 
     public List<ServerConnection> getSpectatorConnections() {
         var connections = getActiveConnections().getArray();
+        // optimize most frequent cases as fast-paths to avoid list alloc
         if (connections.length == 0) return Collections.emptyList();
         if (connections.length == 1 && hasActivePlayer()) return Collections.emptyList();
-        final List<ServerConnection> result = new ArrayList<>(connections.length);
+        final List<ServerConnection> result = new ArrayList<>(hasActivePlayer() ? connections.length - 1 : connections.length);
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
             if (connection.isSpectator()) {

@@ -200,26 +200,28 @@ public final class SpectatorSync {
         var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
         if (!spectatorConnections.isEmpty()) {
             final List<CachedData> cachedData = asList(CACHE.getChunkCache(), CACHE.getEntityCache(), CACHE.getMapDataCache());
-            spectatorConnections.forEach(session -> {
+            for (int i = 0; i < spectatorConnections.size(); i++) {
+                var connection = spectatorConnections.get(i);
                 final List<CachedData> data = new ArrayList<>(4);
                 data.addAll(cachedData);
-                data.add(session.getSpectatorPlayerCache());
-                SpectatorSync.initSpectator(session, () -> data);
-            });
+                data.add(connection.getSpectatorPlayerCache());
+                SpectatorSync.initSpectator(connection, () -> data);
+            }
         }
     }
 
     public static void checkSpectatorPositionOutOfRender(final int chunkX, final int chunkZ) {
         var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
         if (!spectatorConnections.isEmpty()) {
-            spectatorConnections.forEach(connection -> {
+            for (int i = 0; i < spectatorConnections.size(); i++) {
+                var connection = spectatorConnections.get(i);
                 final int spectX = (int) connection.getSpectatorPlayerCache().getX() >> 4;
                 final int spectZ = (int) connection.getSpectatorPlayerCache().getZ() >> 4;
                 if ((spectX == chunkX || spectX + 1 == chunkX || spectX - 1 == chunkX)
                     && (spectZ == chunkZ || spectZ + 1 == chunkZ || spectZ - 1 == chunkZ)) {
                     SpectatorSync.syncSpectatorPositionToProxiedPlayer(connection);
                 }
-            });
+            }
         }
     }
 
@@ -245,9 +247,10 @@ public final class SpectatorSync {
         var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
         if (!spectatorConnections.isEmpty()) {
             var packets = packetProvider.get();
-            spectatorConnections.forEach(connection -> {
+            for (int i = 0; i < spectatorConnections.size(); i++) {
+                var connection = spectatorConnections.get(i);
                 packets.forEach(connection::sendAsync);
-            });
+            }
         }
     }
 }
