@@ -5,6 +5,7 @@ import com.zenith.network.server.ServerConnection;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 
 public class KeepAliveHandler implements PacketHandler<ServerboundKeepAlivePacket, ServerConnection> {
+    public static KeepAliveHandler INSTANCE = new KeepAliveHandler();
     @Override
     public ServerboundKeepAlivePacket apply(final ServerboundKeepAlivePacket packet, final ServerConnection session) {
         if (packet.getPingId() == session.getLastKeepAliveId()) {
