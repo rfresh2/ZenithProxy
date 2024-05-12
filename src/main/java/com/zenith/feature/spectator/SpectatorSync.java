@@ -55,12 +55,14 @@ public final class SpectatorSync {
         ));
         spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
         updateSpectatorPosition(spectConnection);
-        Proxy.getInstance().getActiveConnections().forEach(c -> {
-            if (!c.equals(spectConnection) || spectConnection.isShowSelfEntity()) {
-                c.sendAsync(spectConnection.getEntitySpawnPacket());
-                c.sendAsync(spectConnection.getEntityMetadataPacket());
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            if (!connection.equals(spectConnection) || spectConnection.isShowSelfEntity()) {
+                connection.sendAsync(spectConnection.getEntitySpawnPacket());
+                connection.sendAsync(spectConnection.getEntityMetadataPacket());
             }
-        });
+        }
     }
 
     private static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
@@ -124,12 +126,14 @@ public final class SpectatorSync {
         session.sendAsync(session.getEntitySpawnPacket());
         session.sendAsync(session.getSelfEntityMetadataPacket());
         SpectatorPacketProvider.playerSpawn().forEach(session::sendAsync);
-        Proxy.getInstance().getActiveConnections().stream()
-                .filter(connection -> !connection.equals(session))
-                .forEach(connection -> {
-                    spawnSpectatorForOtherSessions(session, connection);
-                    connection.syncTeamMembers();
-                });
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            if (!connection.equals(session)) {
+                spawnSpectatorForOtherSessions(session, connection);
+                connection.syncTeamMembers();
+            }
+        }
         session.sendAsync(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getMetadata()));
         syncPlayerEquipmentWithSpectatorsFromCache();
     }
@@ -165,22 +169,23 @@ public final class SpectatorSync {
         double newX = selfSession.getSpectatorPlayerCache().getX() + xOffset;
         double newY = selfSession.getSpectatorPlayerCache().getY() + playerEyeHeight - specEntityEyeHeight + yOffset;
         double newZ = selfSession.getSpectatorPlayerCache().getZ() + zOffset;
-        Proxy.getInstance().getActiveConnections()
-                .forEach(connection -> {
-                    connection.sendAsync(new ClientboundTeleportEntityPacket(
-                        selfSession.getSpectatorEntityId(),
-                        newX,
-                        newY,
-                        newZ,
-                        getDisplayYaw(selfSession),
-                        getDisplayPitch(selfSession),
-                        false
-                    ));
-                    connection.sendAsync(new ClientboundRotateHeadPacket(
-                        selfSession.getSpectatorEntityId(),
-                        getDisplayYaw(selfSession)
-                    ));
-                });
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.sendAsync(new ClientboundTeleportEntityPacket(
+                selfSession.getSpectatorEntityId(),
+                newX,
+                newY,
+                newZ,
+                getDisplayYaw(selfSession),
+                getDisplayPitch(selfSession),
+                false
+            ));
+            connection.sendAsync(new ClientboundRotateHeadPacket(
+                selfSession.getSpectatorEntityId(),
+                getDisplayYaw(selfSession)
+            ));
+        }
     }
 
     public static void sendPlayerSneakStatus() {
@@ -195,26 +200,28 @@ public final class SpectatorSync {
         var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
         if (!spectatorConnections.isEmpty()) {
             final List<CachedData> cachedData = asList(CACHE.getChunkCache(), CACHE.getEntityCache(), CACHE.getMapDataCache());
-            spectatorConnections.forEach(session -> {
+            for (int i = 0; i < spectatorConnections.size(); i++) {
+                var connection = spectatorConnections.get(i);
                 final List<CachedData> data = new ArrayList<>(4);
                 data.addAll(cachedData);
-                data.add(session.getSpectatorPlayerCache());
-                SpectatorSync.initSpectator(session, () -> data);
-            });
+                data.add(connection.getSpectatorPlayerCache());
+                SpectatorSync.initSpectator(connection, () -> data);
+            }
         }
     }
 
     public static void checkSpectatorPositionOutOfRender(final int chunkX, final int chunkZ) {
         var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
         if (!spectatorConnections.isEmpty()) {
-            spectatorConnections.forEach(connection -> {
+            for (int i = 0; i < spectatorConnections.size(); i++) {
+                var connection = spectatorConnections.get(i);
                 final int spectX = (int) connection.getSpectatorPlayerCache().getX() >> 4;
                 final int spectZ = (int) connection.getSpectatorPlayerCache().getZ() >> 4;
                 if ((spectX == chunkX || spectX + 1 == chunkX || spectX - 1 == chunkX)
                     && (spectZ == chunkZ || spectZ + 1 == chunkZ || spectZ - 1 == chunkZ)) {
                     SpectatorSync.syncSpectatorPositionToProxiedPlayer(connection);
                 }
-            });
+            }
         }
     }
 
@@ -240,9 +247,10 @@ public final class SpectatorSync {
         var spectatorConnections = Proxy.getInstance().getSpectatorConnections();
         if (!spectatorConnections.isEmpty()) {
             var packets = packetProvider.get();
-            spectatorConnections.forEach(connection -> {
+            for (int i = 0; i < spectatorConnections.size(); i++) {
+                var connection = spectatorConnections.get(i);
                 packets.forEach(connection::sendAsync);
-            });
+            }
         }
     }
 }

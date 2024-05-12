@@ -23,7 +23,11 @@ public class PlayerCommandSpectatorHandler implements PacketHandler<ServerboundP
         } else {
             if (packet.getState() == PlayerState.START_SNEAKING || packet.getState() == PlayerState.START_SPRINTING) {
                 session.getSoundPacket().ifPresent(p -> {
-                    Proxy.getInstance().getActiveConnections().forEach(connection -> connection.send(p));
+                    var connections = Proxy.getInstance().getActiveConnections().getArray();
+                    for (int i = 0; i < connections.length; i++) {
+                        var connection = connections[i];
+                        connection.send(p);
+                    }
                 });
             }
         }

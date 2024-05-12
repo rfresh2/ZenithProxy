@@ -30,7 +30,11 @@ public class TransferCommand extends Command {
             .then(argument("address", wordWithChars()).then(argument("port", integer(1, 65535)).executes(ctx -> {
                 String address = getString(ctx, "address");
                 int port = getInteger(ctx, "port");
-                Proxy.getInstance().getActiveConnections().forEach(con -> con.transfer(address, port));
+                var connections = Proxy.getInstance().getActiveConnections().getArray();
+                for (int i = 0; i < connections.length; i++) {
+                    var connection = connections[i];
+                    connection.transfer(address, port);
+                }
                 return 1;
             })));
     }

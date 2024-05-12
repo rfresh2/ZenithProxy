@@ -33,13 +33,14 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
         session.initializeTeam();
         session.syncTeamMembers();
         // init any active spectators
-        Proxy.getInstance().getActiveConnections().stream()
-                .filter(connection -> !connection.equals(session))
-                .filter(connection -> !connection.hasCameraTarget())
-                .forEach(connection -> {
-                    session.send(connection.getEntitySpawnPacket());
-                    session.send(connection.getEntityMetadataPacket());
-                });
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            if (connection.equals(session)) continue;
+            if (connection.hasCameraTarget()) continue;
+            session.send(connection.getEntitySpawnPacket());
+            session.send(connection.getEntityMetadataPacket());
+        }
         // add spectators and self to team
         if (CONFIG.client.extra.chat.hideChat) {
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));

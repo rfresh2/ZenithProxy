@@ -13,7 +13,11 @@ public class CTransferHandler implements PacketHandler<ClientboundTransferPacket
     public ClientboundTransferPacket apply(final ClientboundTransferPacket packet, final ClientSession session) {
         var reason = Component.text("Destination server requested transfer to: " + packet.getHost() + ":" + packet.getPort());
         // todo: should we send a transfer packet to all active connections so they can reconnect to us seamlessly?
-        Proxy.getInstance().getActiveConnections().forEach(c -> c.disconnect(reason));
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.disconnect(reason);
+        }
         session.disconnect(reason);
         // TODO: this does not follow the protocol exactly
         //  we need a persistent cookie store and we also need to connect with transfer intention

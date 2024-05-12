@@ -40,10 +40,12 @@ public class ClientListener implements SessionListener {
             final Packet p = ZenithHandlerCodec.CLIENT_REGISTRY.handleInbound(packet, this.session);
             if (p != null && (state == ProtocolState.GAME || state == ProtocolState.CONFIGURATION)) {
                 // sends on each connection's own event loop
-                Proxy.getInstance().getActiveConnections().forEach(connection -> {
-                    if (state == ProtocolState.CONFIGURATION && !connection.isConfigured()) return;
-                    connection.sendAsync(packet);
-                });
+                var connections = Proxy.getInstance().getActiveConnections().getArray();
+                for (int i = 0; i < connections.length; i++) {
+                    var connection = connections[i];
+                    if (state == ProtocolState.CONFIGURATION && !connection.isConfigured()) continue;
+                    connection.sendAsync(p);
+                }
             }
         } catch (Exception e) {
             CLIENT_LOG.error("", e);
@@ -95,7 +97,11 @@ public class ClientListener implements SessionListener {
         } catch (final Exception e) {
             // fall through
         }
-        Proxy.getInstance().getActiveConnections().forEach(connection -> connection.disconnect(reason));
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.disconnect(reason);
+        }
     }
 
     @Override

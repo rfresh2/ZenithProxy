@@ -19,9 +19,11 @@ public class InteractEntitySpectatorHandler implements PacketHandler<Serverbound
             if (entity != null) {
                 session.setCameraTarget(entity);
                 session.send(new ClientboundSetCameraPacket(packet.getEntityId()));
-                Proxy.getInstance().getActiveConnections().forEach(connection -> {
+                var connections = Proxy.getInstance().getActiveConnections().getArray();
+                for (int i = 0; i < connections.length; i++) {
+                    var connection = connections[i];
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
-                });
+                }
             }
         }
         return null;
