@@ -20,7 +20,8 @@ public class DisconnectReasonInfo {
         SOCKS_PROXY("socks5-proxy"),
         AUTHENTICATION_FAIL("authentication-failure"),
         AUTHENTICATION_RATE_LIMIT("authentication-rate-limiting"),
-        ALREADY_CONNECTED("already-connected");
+        ALREADY_CONNECTED("already-connected"),
+        ILLEGAL_DISCONNECT("illegal-disconnect");
 
         private final String wikiHeader;
 
@@ -72,6 +73,8 @@ public class DisconnectReasonInfo {
             return SERVER_RESTART;
         } else if (reason.startsWith("You are already connected to this proxy")) {
             return ALREADY_CONNECTED;
+        } else if (reason.startsWith("Illegal characters in chat")) {
+            return ILLEGAL_DISCONNECT;
         }
         DEFAULT_LOG.debug("Unknown disconnect reason category for: {}", reason);
         return CONNECTION_ISSUE;

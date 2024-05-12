@@ -672,6 +672,16 @@
   "methods":[{"name":"<init>","parameterTypes":["java.util.UUID","java.lang.String","java.lang.String"] }, {"name":"accessToken","parameterTypes":[] }, {"name":"selectedProfile","parameterTypes":[] }, {"name":"serverId","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.feature.api.sessionserver.model.MojangProfileAndSkin",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.util.List"] }, {"name":"id","parameterTypes":[] }, {"name":"name","parameterTypes":[] }, {"name":"properties","parameterTypes":[] }]
+},
+{
+  "name":"com.zenith.feature.api.sessionserver.model.MojangProfileProperties",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String"] }, {"name":"name","parameterTypes":[] }, {"name":"signature","parameterTypes":[] }, {"name":"value","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.feature.api.sessionserver.model.SessionProfileResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,

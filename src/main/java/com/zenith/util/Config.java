@@ -8,7 +8,6 @@ import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static java.util.Arrays.asList;
 
@@ -412,8 +411,6 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
-            // skin shown in-game for spectators
-            public UUID spectatorUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
             // todo: log spectator chats to discord relay and terminal

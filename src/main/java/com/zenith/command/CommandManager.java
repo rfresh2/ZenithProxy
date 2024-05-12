@@ -76,6 +76,7 @@ public class CommandManager {
         new ServerCommand(),
         new ServerConnectionCommand(),
         new ServerSwitcherCommand(),
+        new SkinCommand(),
         new SpammerCommand(),
         new SpectatorCommand(),
         new SpectatorSwapCommand(),
@@ -103,7 +104,7 @@ public class CommandManager {
     }
 
     public void registerCommands() {
-        commandsList.forEach(this::registerCommand);
+       commandsList.forEach(this::registerCommand);
     }
 
     public List<Command> getCommands() {
