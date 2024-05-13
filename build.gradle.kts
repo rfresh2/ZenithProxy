@@ -70,7 +70,7 @@ configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.32"
 val postgresVersion = "42.7.3"
 val nettyVersion = "4.1.109.Final"
-val fastutilVersion = "8.5.13-SNAPSHOT"
+val fastutilVersion = "b3ff25af48"
 val jdbiVersion = "3.45.1"
 
 dependencies {
@@ -92,7 +92,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:72e6525fc6") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:a1ea188927") {
+    shade("com.github.rfresh2:MCProtocolLib:f78047aaed") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
@@ -117,12 +117,12 @@ dependencies {
     shade("org.redisson:redisson:3.29.0") {
         exclude(group = "io.netty")
     }
-    shade("org.cloudburstmc.fastutil.maps:object-object-maps:$fastutilVersion") { isChanging = false }
-    shade("org.cloudburstmc.fastutil.maps:int-object-maps:$fastutilVersion") { isChanging = false }
-    shade("org.cloudburstmc.fastutil.maps:object-int-maps:$fastutilVersion") { isChanging = false }
-    shade("org.cloudburstmc.fastutil.maps:long-object-maps:$fastutilVersion") { isChanging = false }
-    shade("org.cloudburstmc.fastutil.maps:int-int-maps:$fastutilVersion") { isChanging = false }
-    shade("org.cloudburstmc.fastutil.maps:reference-object-maps:$fastutilVersion") { isChanging = false }
+    shade("com.github.rfresh2.fastutil:object-object-maps:$fastutilVersion")
+    shade("com.github.rfresh2.fastutil:int-object-maps:$fastutilVersion")
+    shade("com.github.rfresh2.fastutil:object-int-maps:$fastutilVersion")
+    shade("com.github.rfresh2.fastutil:long-object-maps:$fastutilVersion")
+    shade("com.github.rfresh2.fastutil:int-int-maps:$fastutilVersion")
+    shade("com.github.rfresh2.fastutil:reference-object-maps:$fastutilVersion")
     shade("net.raphimc:ViaLoader:2.2.13")
     shade("com.viaversion:viaversion:4.10.2")
     shade("com.viaversion:viabackwards:4.10.2")
