@@ -1,8 +1,8 @@
 package com.zenith.cache.data.chunk;
 
-import com.github.steveice10.opennbt.mini.MNBT;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.io.MNBTIO;
+import com.viaversion.nbt.io.MNBTIO;
+import com.viaversion.nbt.mini.MNBT;
+import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.world.blockdata.Block;
@@ -108,8 +108,8 @@ public class ChunkCache implements CachedData {
                 dimensionData = DIMENSION_DATA.getDimensionData(id);
             } else {
                 CompoundTag nbt = (CompoundTag) MNBTIO.read(tag);
-                int height = nbt.getNumberTag("height").asInt();
-                int minY = nbt.getNumberTag("min_y").asInt();
+                int height = nbt.getInt("height");
+                int minY = nbt.getInt("min_y");
                 dimensionData = new DimensionData(id, name, minY, minY + height, height);
             }
             if (dimensionData == null) {

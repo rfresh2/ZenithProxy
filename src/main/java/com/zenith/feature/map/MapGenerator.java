@@ -1,7 +1,7 @@
 package com.zenith.feature.map;
 
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.io.MNBTIO;
+import com.viaversion.nbt.io.MNBTIO;
+import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.cache.data.chunk.Chunk;
 import com.zenith.feature.world.World;
 import com.zenith.feature.world.blockdata.Block;
