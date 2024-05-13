@@ -1,36 +1,23 @@
 package com.zenith.network.registry;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import io.netty.channel.DefaultEventLoop;
+import io.netty.channel.EventLoop;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
-import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.SERVER_LOG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @FunctionalInterface
 public interface AsyncPacketHandler<P extends Packet, S extends Session> extends PacketHandler<P, S> {
-    static final ExecutorService ASYNC_EXECUTOR_SERVICE =
-        Executors.newFixedThreadPool(1,
-                                     new ThreadFactoryBuilder()
-                                         .setNameFormat("ZenithProxy Async PacketHandler #%d")
-                                         .setDaemon(true)
-                                         .build());
-    static final ScheduledExecutorService RETRY_EXECUTOR_SERVICE =
-        Executors.newScheduledThreadPool(1,
-                                         new ThreadFactoryBuilder()
-                                             .setNameFormat("ZenithProxy Async PacketHandler Retry #%d")
-                                             .setDaemon(true)
-                                             .build());
+    EventLoop EVENT_LOOP = new DefaultEventLoop(new DefaultThreadFactory("ZenithProxy Async Packet Handler", true));
 
     boolean applyAsync(P packet, S session);
 
     default P apply(P packet, S session) {
         if (packet == null) return null;
-        ASYNC_EXECUTOR_SERVICE.execute(() -> {
+        EVENT_LOOP.execute(() -> {
             applyWithRetries(packet, session, 0);
         });
         return packet;
@@ -40,15 +27,15 @@ public interface AsyncPacketHandler<P extends Packet, S extends Session> extends
         try {
             if (!applyAsync(packet, session)) {
                 if (tryCount > 1) {
-                    CLIENT_LOG.debug("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
+                    SERVER_LOG.debug("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
                     return;
                 }
-                RETRY_EXECUTOR_SERVICE.schedule(() -> {
+                EVENT_LOOP.schedule(() -> {
                     applyWithRetries(packet, session, tryCount + 1);
                 }, 250, MILLISECONDS);
             }
         } catch (final Throwable e) {
-            CLIENT_LOG.error("Async handler error", e);
+            SERVER_LOG.error("Async handler error", e);
         }
     }
 }
