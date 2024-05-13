@@ -354,55 +354,55 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.ByteArrayTag",
+  "name":"com.viaversion.nbt.tag.ByteArrayTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.ByteTag",
+  "name":"com.viaversion.nbt.tag.ByteTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.CompoundTag",
+  "name":"com.viaversion.nbt.tag.CompoundTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.DoubleTag",
+  "name":"com.viaversion.nbt.tag.DoubleTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.FloatTag",
+  "name":"com.viaversion.nbt.tag.FloatTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.IntArrayTag",
+  "name":"com.viaversion.nbt.tag.IntArrayTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.IntTag",
+  "name":"com.viaversion.nbt.tag.IntTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.ListTag",
+  "name":"com.viaversion.nbt.tag.ListTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.LongArrayTag",
+  "name":"com.viaversion.nbt.tag.LongArrayTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.LongTag",
+  "name":"com.viaversion.nbt.tag.LongTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.ShortTag",
+  "name":"com.viaversion.nbt.tag.ShortTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.StringTag",
+  "name":"com.viaversion.nbt.tag.StringTag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.github.steveice10.opennbt.tag.builtin.Tag",
+  "name":"com.viaversion.nbt.tag.Tag",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
