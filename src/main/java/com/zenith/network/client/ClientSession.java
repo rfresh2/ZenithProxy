@@ -18,7 +18,7 @@ import static com.zenith.Shared.CLIENT_LOG;
 @Getter
 @Setter
 public class ClientSession extends TcpClientSession {
-    private static final EventLoop CLIENT_EVENT_LOOP = new DefaultEventLoop(new DefaultThreadFactory("Client Event Loop", true));
+    private final EventLoop eventLoop = new DefaultEventLoop(new DefaultThreadFactory("Client Event Loop", true));
     protected boolean serverProbablyOff;
     protected long ping = 0L;
     protected long lastPingId = 0L;
@@ -71,6 +71,6 @@ public class ClientSession extends TcpClientSession {
     }
 
     public EventLoop getClientEventLoop() {
-        return CLIENT_EVENT_LOOP;
+        return eventLoop;
     }
 }

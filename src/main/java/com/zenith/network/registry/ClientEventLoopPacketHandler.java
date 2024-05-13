@@ -3,6 +3,8 @@ package com.zenith.network.registry;
 import com.zenith.network.client.ClientSession;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
+import java.util.concurrent.RejectedExecutionException;
+
 import static com.zenith.Shared.CLIENT_LOG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -13,9 +15,13 @@ public interface ClientEventLoopPacketHandler<P extends Packet, S extends Client
 
     default P apply(P packet, S session) {
         if (packet == null) return null;
-        session.getClientEventLoop().execute(() -> {
-            applyWithRetries(packet, session, 0);
-        });
+        try {
+            session.getClientEventLoop().execute(() -> {
+                applyWithRetries(packet, session, 0);
+            });
+        } catch (final RejectedExecutionException e) {
+            // fall through
+        }
         return packet;
     }
 
@@ -30,6 +36,8 @@ public interface ClientEventLoopPacketHandler<P extends Packet, S extends Client
                     applyWithRetries(packet, session, tryCount + 1);
                 }, 250, MILLISECONDS);
             }
+        } catch (final RejectedExecutionException e) {
+            // fall through
         } catch (final Throwable e) {
             CLIENT_LOG.error("Async handler error", e);
         }
