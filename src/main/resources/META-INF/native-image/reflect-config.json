@@ -66,6 +66,9 @@
   "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.FireworkExplosion;"
 },
 {
+  "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.PotionEffect;"
+},
+{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.item.data.SuspiciousStewEffect;"
 },
 {
@@ -354,58 +357,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.viaversion.nbt.tag.ByteArrayTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.ByteTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.CompoundTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.DoubleTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.FloatTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.IntArrayTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.IntTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.ListTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.LongArrayTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.LongTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.ShortTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.StringTag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.viaversion.nbt.tag.Tag",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
   "name":"com.google.common.util.concurrent.AbstractFuture",
   "fields":[{"name":"listeners"}, {"name":"value"}, {"name":"waiters"}]
 },
@@ -554,6 +505,58 @@
 {
   "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.ByteArrayTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.ByteTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.CompoundTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.DoubleTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.FloatTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.IntArrayTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.IntTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.ListTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.LongArrayTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.LongTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.ShortTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.StringTag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.viaversion.nbt.tag.Tag",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.viaversion.viaversion.api.minecraft.item.DataItem",
