@@ -1,9 +1,8 @@
 package com.zenith.cache.data.chunk;
 
-import com.github.steveice10.opennbt.mini.MNBT;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.Tag;
-import com.github.steveice10.opennbt.tag.io.MNBTIO;
+import com.viaversion.nbt.io.MNBTIO;
+import com.viaversion.nbt.mini.MNBT;
+import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import com.zenith.feature.world.blockdata.Block;
@@ -94,21 +93,24 @@ public class ChunkCache implements CachedData {
 
     public void updateRegistryTag(final CompoundTag registryData) {
         this.registryTag = registryData;
-        setDimensionRegistry(registryData);
+        try {
+            setDimensionRegistry(registryData);
+        } catch (final Throwable e) {
+            CACHE_LOG.error("Error updating dimension registry: {}", registryData, e);
+        }
     }
 
     public void setDimensionRegistry(final CompoundTag registryData) {
-        CompoundTag compoundTag = registryData.<CompoundTag>get("minecraft:dimension_type");
+        CompoundTag compoundTag = registryData.getCompoundTag("minecraft:dimension_type");
         if (compoundTag == null) return;
         resetDimensionRegistry();
-        final var dimensionList = compoundTag.getListTag("value").getValue();
-        for (Tag tag : dimensionList) {
-            CompoundTag dimension = (CompoundTag) tag;
-            String name = dimension.getStringTag("name").asRawString();
-            int id = dimension.getNumberTag("id").asInt();
-            CompoundTag element = dimension.get("element");
-            int height = element.getNumberTag("height").asInt();
-            int minY = element.getNumberTag("min_y").asInt();
+        final var dimensionList = compoundTag.getListTag("value", CompoundTag.class);
+        for (CompoundTag dimension : dimensionList) {
+            String name = dimension.getString("name");
+            int id = dimension.getInt("id");
+            CompoundTag element = dimension.getCompoundTag("element");
+            int height = element.getInt("height");
+            int minY = element.getInt("min_y");
             CACHE_LOG.debug("Adding dimension from registry: {} {} {} {}", name, id, height, minY);
             dimensionRegistry.put(name, new DimensionData(id, name, minY, minY + height, height));
         }

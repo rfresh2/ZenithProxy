@@ -1,10 +1,10 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.IntArrayTag;
-import com.github.steveice10.opennbt.tag.builtin.ListTag;
-import com.github.steveice10.opennbt.tag.io.MNBTIO;
+import com.viaversion.nbt.io.MNBTIO;
+import com.viaversion.nbt.tag.CompoundTag;
+import com.viaversion.nbt.tag.IntArrayTag;
+import com.viaversion.nbt.tag.ListTag;
 import com.zenith.Shared;
 import lombok.SneakyThrows;
 import net.kyori.adventure.text.Component;
@@ -52,7 +52,7 @@ public class SpectatorEntityPlayerHead extends SpectatorMob {
         ownerTag.put("Id", uuidTag);
         try {
             var propertiesTag = new CompoundTag();
-            var texturesTag = new ListTag(CompoundTag.class);
+            var texturesTag = new ListTag<>(CompoundTag.class);
             var textureProperty = spectatorProfile.getProperty("textures");
             propertiesTag.put("textures", texturesTag);
             var textureValueTag = new CompoundTag();

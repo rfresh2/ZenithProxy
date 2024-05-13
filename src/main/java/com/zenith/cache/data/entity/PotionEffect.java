@@ -1,6 +1,6 @@
 package com.zenith.cache.data.entity;
 
-import com.github.steveice10.opennbt.mini.MNBT;
+import com.viaversion.nbt.mini.MNBT;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;

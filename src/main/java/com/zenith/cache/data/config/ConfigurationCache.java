@@ -1,6 +1,6 @@
 package com.zenith.cache.data.config;
 
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
+import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
