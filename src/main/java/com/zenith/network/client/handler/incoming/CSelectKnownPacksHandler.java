@@ -12,7 +12,7 @@ public class CSelectKnownPacksHandler implements PacketHandler<ClientboundSelect
     public ClientboundSelectKnownPacks apply(final ClientboundSelectKnownPacks packet, final ClientSession session) {
         // we could also respond with the core pack instead. would prevent the server from sending all the registry data
 //        session.sendAsync(new ServerboundSelectKnownPacks(List.of(new KnownPack("minecraft", "core", "1.20.6"))));
-        session.sendAsync(new ServerboundSelectKnownPacks(Collections.emptyList()));
+        session.send(new ServerboundSelectKnownPacks(Collections.emptyList()));
         return null;
     }
 }
