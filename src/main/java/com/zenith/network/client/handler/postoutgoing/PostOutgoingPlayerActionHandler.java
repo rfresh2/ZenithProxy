@@ -1,21 +1,21 @@
 package com.zenith.network.client.handler.postoutgoing;
 
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.PostOutgoingPacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.feature.spectator.SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache;
 
-public class PostOutgoingPlayerActionHandler implements PostOutgoingPacketHandler<ServerboundPlayerActionPacket, ClientSession> {
+public class PostOutgoingPlayerActionHandler implements ClientEventLoopPacketHandler<ServerboundPlayerActionPacket, ClientSession> {
     @Override
-    public void accept(final ServerboundPlayerActionPacket packet, final ClientSession session) {
+    public boolean applyAsync(final ServerboundPlayerActionPacket packet, final ClientSession session) {
         switch (packet.getAction()) {
             case DROP_ITEM -> {
                 var heldItemSlot = CACHE.getPlayerCache().getHeldItemSlot();
                 var invIndex = heldItemSlot + 36;
                 var itemStack = CACHE.getPlayerCache().getPlayerInventory().get(invIndex);
-                if (itemStack == null) return;
+                if (itemStack == null) return true;
                 itemStack.setAmount(itemStack.getAmount() - 1);
                 if (itemStack.getAmount() <= 0)
                     CACHE.getPlayerCache().getPlayerInventory().set(invIndex, null);
@@ -37,5 +37,6 @@ public class PostOutgoingPlayerActionHandler implements PostOutgoingPacketHandle
                 syncPlayerEquipmentWithSpectatorsFromCache();
             }
         }
+        return true;
     }
 }

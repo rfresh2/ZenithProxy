@@ -267,7 +267,6 @@ public class Proxy {
             if (CONFIG.debug.kickDisconnect) this.kickDisconnect(reason, cause);
             else this.client.disconnect(reason, cause);
         }
-        CACHE.reset(true);
     }
 
     public void disconnect(final String reason) {
@@ -275,7 +274,6 @@ public class Proxy {
             if (CONFIG.debug.kickDisconnect) this.kickDisconnect(reason, null);
             else this.client.disconnect(reason);
         }
-        CACHE.reset(true);
     }
 
     public void kickDisconnect(final String reason, final Throwable cause) {

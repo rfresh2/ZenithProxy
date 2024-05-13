@@ -1,6 +1,6 @@
 package com.zenith.network.client;
 
-import io.netty.channel.DefaultEventLoopGroup;
+import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.Getter;
@@ -15,12 +15,10 @@ import java.io.IOException;
 
 import static com.zenith.Shared.CLIENT_LOG;
 
-
 @Getter
 @Setter
 public class ClientSession extends TcpClientSession {
-    private static final DefaultEventLoopGroup CLIENT_EVENT_LOOP_GROUP = new DefaultEventLoopGroup(1, new DefaultThreadFactory("Client Event Loop"));
-    private static final EventLoop CLIENT_EVENT_LOOP = CLIENT_EVENT_LOOP_GROUP.next();
+    private final EventLoop eventLoop = new DefaultEventLoop(new DefaultThreadFactory("Client Event Loop", true));
     protected boolean serverProbablyOff;
     protected long ping = 0L;
     protected long lastPingId = 0L;
@@ -73,6 +71,6 @@ public class ClientSession extends TcpClientSession {
     }
 
     public EventLoop getClientEventLoop() {
-        return CLIENT_EVENT_LOOP;
+        return eventLoop;
     }
 }

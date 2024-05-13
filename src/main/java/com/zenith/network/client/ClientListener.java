@@ -118,6 +118,8 @@ public class ClientListener implements SessionListener {
         var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());
         var disconnectTime = Instant.now();
         var onlineDuration = Duration.between(connectTime, disconnectTime);
+        // stop processing packets before we reset the client cache to avoid race conditions
+        this.session.getClientEventLoop().shutdownGracefully().awaitUninterruptibly();
         EVENT_BUS.post(new DisconnectEvent(reasonStr, onlineDuration, Proxy.getInstance().isInQueue(), Proxy.getInstance().getQueuePosition()));
     }
 
