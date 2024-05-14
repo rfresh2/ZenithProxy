@@ -11,7 +11,6 @@ import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -61,14 +60,11 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             if (!Proxy.getInstance().isConnected()) {
                 if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
                     try {
-                        EXECUTOR.submit(() -> Proxy.getInstance().connect()).get(15, TimeUnit.SECONDS);
+                        Proxy.getInstance().connect();
                     } catch (final Throwable e) {
-                        if (!Proxy.getInstance().isConnected() && !Proxy.getInstance().getLoggingIn().get()) {
-                            session.disconnect("Failed to connect to server");
-                            return;
-                        }
-                        // else, we are either connected or logging in so let's continue and hit the next wait barrier
-                        // if we're logging in, most likely the auth failed and is retrying inside a blocking task
+                        SERVER_LOG.info("Failed `autoConnectOnLogin` client connect", e);
+                        session.disconnect("Failed to connect to server", e);
+                        return;
                     }
                 } else {
                     session.disconnect("Not connected to server!");
