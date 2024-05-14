@@ -12,6 +12,8 @@ import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundG
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -60,11 +62,16 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             synchronized (this) {
                 if (!Proxy.getInstance().isConnected()) {
                     if (CONFIG.client.extra.autoConnectOnLogin && !onlySpectator.orElse(false)) {
-                        Proxy.getInstance().connect(false);
-                        Wait.waitUntil(() -> {
-                            var client = Proxy.getInstance().getClient();
-                            return client != null && client.isConnected();
-                        }, 5);
+                        try {
+                            EXECUTOR.submit(() -> Proxy.getInstance().connect()).get(15, TimeUnit.SECONDS);
+                        } catch (final Throwable e) {
+                            if (!Proxy.getInstance().isConnected() && !Proxy.getInstance().getLoggingIn().get()) {
+                                session.disconnect("Failed to connect to server");
+                                return null;
+                            }
+                            // else, we are either connected or logging in so let's continue and hit the next wait barrier
+                            // if we're logging in, most likely the auth failed and is retrying inside a blocking task
+                        }
                     } else {
                         session.disconnect("Not connected to server!");
                     }
@@ -76,7 +83,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     && CACHE.getProfileCache().getProfile() != null
                     && (client.isOnline()
                         || (client.isInQueue() && Proxy.getInstance().getQueuePosition() > 1));
-            }, 30)) {
+            }, 15)) {
                 SERVER_LOG.info("Timed out waiting for the proxy to login");
                 session.disconnect("Timed out waiting for the proxy to login");
                 return null;

@@ -21,7 +21,9 @@ import com.zenith.util.FastArrayList;
 import com.zenith.util.Wait;
 import com.zenith.via.ZenithClientChannelInitializer;
 import com.zenith.via.ZenithServerChannelInitializer;
+import io.netty.util.NettyRuntime;
 import io.netty.util.ResourceLeakDetector;
+import io.netty.util.internal.SystemPropertyUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -85,7 +87,7 @@ public class Proxy {
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
-    private final AtomicBoolean loggingIn = new AtomicBoolean(false);
+    @Getter private final AtomicBoolean loggingIn = new AtomicBoolean(false);
     @Setter private AutoUpdater autoUpdater;
     private LanBroadcaster lanBroadcaster;
     // might move to config and make the user deal with it when it changes
@@ -143,7 +145,10 @@ public class Proxy {
             Queue.start();
             saveConfigAsync();
             MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
-            this.tcpManager = new TcpConnectionManager();
+            this.tcpManager = new TcpConnectionManager(
+                Math.max(
+                    3, // increase default from 1 to avoid possible thread starvation issues on low end systems
+                    SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2)));
             this.startServer();
             CACHE.reset(true);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
@@ -303,18 +308,10 @@ public class Proxy {
      * @throws IllegalStateException if already connected
      */
     public synchronized void connect() {
-        connect(true);
-    }
-
-    public synchronized void connect(boolean clientWait) {
-        connect(CONFIG.client.server.address, CONFIG.client.server.port, clientWait);
+        connect(CONFIG.client.server.address, CONFIG.client.server.port);
     }
 
     public synchronized void connect(final String address, final int port) {
-        connect(address, port, true);
-    }
-
-    public synchronized void connect(final String address, final int port, boolean clientWait) {
         if (this.isConnected()) throw new IllegalStateException("Already connected!");
         this.connectTime = Instant.now();
         final MinecraftProtocol minecraftProtocol;
@@ -340,7 +337,7 @@ public class Proxy {
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
-        this.client.connect(clientWait);
+        this.client.connect(true);
     }
 
     @Nullable
