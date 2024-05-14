@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
@@ -119,7 +120,7 @@ public class ClientListener implements SessionListener {
         var disconnectTime = Instant.now();
         var onlineDuration = Duration.between(connectTime, disconnectTime);
         // stop processing packets before we reset the client cache to avoid race conditions
-        this.session.getClientEventLoop().shutdownGracefully().awaitUninterruptibly();
+        this.session.getClientEventLoop().shutdownGracefully(0L, 15L, TimeUnit.SECONDS).awaitUninterruptibly();
         EVENT_BUS.post(new DisconnectEvent(reasonStr, onlineDuration, Proxy.getInstance().isInQueue(), Proxy.getInstance().getQueuePosition()));
     }
 
