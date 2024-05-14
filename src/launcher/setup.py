@@ -63,20 +63,22 @@ def setup_execute(config):
             else:
                 print("Invalid input. Enter y or n")
 
-    while True:
-        print("Select authentication method: (1/2)")
-        print("1. Device Code (Recommended)")
-        print("2. Username and Password")
-
-        i1 = input("> ")
-        if i1 == "1":
-            auth_method = "device_code"
-            break
-        elif i1 == "2":
-            auth_method = "msa"
-            break
-        else:
-            print("Invalid input. Enter 1 or 2")
+    print("Auto-selecting device code authentication. This can be changed later using the `auth` command.")
+    auth_method = "device_code"
+    # while True:
+    #     print("Select authentication method: (1/2)")
+    #     print("1. Device Code (Recommended)")
+    #     print("2. Username and Password")
+    #
+    #     i1 = input("> ")
+    #     if i1 == "1":
+    #         auth_method = "device_code"
+    #         break
+    #     elif i1 == "2":
+    #         auth_method = "msa"
+    #         break
+    #     else:
+    #         print("Invalid input. Enter 1 or 2")
 
     if auth_method == "msa":
         while True:
