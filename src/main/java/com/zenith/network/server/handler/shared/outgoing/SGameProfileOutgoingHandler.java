@@ -40,63 +40,76 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             }
             SERVER_LOG.info("Username: {} UUID: {} [{}] has passed the whitelist check!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getRemoteAddress());
             session.setWhitelistChecked(true);
-            synchronized (this) {
-                if (!Proxy.getInstance().isConnected()) {
-                    if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
-                        try {
-                            EXECUTOR.submit(() -> Proxy.getInstance().connect()).get(15, TimeUnit.SECONDS);
-                        } catch (final Throwable e) {
-                            if (!Proxy.getInstance().isConnected() && !Proxy.getInstance().getLoggingIn().get()) {
-                                session.disconnect("Failed to connect to server");
-                                return null;
-                            }
-                            // else, we are either connected or logging in so let's continue and hit the next wait barrier
-                            // if we're logging in, most likely the auth failed and is retrying inside a blocking task
-                        }
-                    } else {
-                        session.disconnect("Not connected to server!");
-                    }
+            EXECUTOR.execute(() -> {
+                try {
+                    // this method is called asynchronously off the event loop due to blocking calls possibly causing thread starvation
+                    finishLogin(session);
+                } catch (final Throwable e) {
+                    session.disconnect("Login Failed", e);
                 }
-            }
-            if (!Wait.waitUntil(() -> {
-                var client = Proxy.getInstance().getClient();
-                return client != null
-                    && CACHE.getProfileCache().getProfile() != null
-                    && (client.isOnline()
-                        || (client.isInQueue() && Proxy.getInstance().getQueuePosition() > 1));
-            }, 15)) {
-                SERVER_LOG.info("Timed out waiting for the proxy to login");
-                session.disconnect("Timed out waiting for the proxy to login");
-                return null;
-            }
-            SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-            session.getProfileCache().setProfile(clientGameProfile);
-            if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
-                return new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile());
-            } else {
-                if (!CONFIG.server.spectator.allowSpectator) {
-                    session.disconnect("Spectator mode is disabled");
-                    return null;
-                }
-                SERVER_LOG.info("Logging in {} [{}] as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString());
-                session.setSpectator(true);
-                final GameProfile spectatorFakeProfile = new GameProfile(spectatorFakeUUID, clientGameProfile.getName());
-                // caching assumes the spectatorUUID is immutable
-                if (clientGameProfile.getProperty("textures") == null) {
-                    SESSION_SERVER.getProfileAndSkin(clientGameProfile.getId()).ifPresentOrElse(p -> {
-                        spectatorFakeProfile.setProperties(p.getProperties());
-                    }, () -> {
-                        SERVER_LOG.info("Failed getting spectator skin for {} [{}]", clientGameProfile.getName(), clientGameProfile.getId().toString());
-                    });
-                } else {
-                    spectatorFakeProfile.setProperties(clientGameProfile.getProperties());
-                }
-                session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
-                return new ClientboundGameProfilePacket(spectatorFakeProfile);
-            }
+            });
+            return null;
         } catch (final Throwable e) {
             session.disconnect("Login Failed", e);
             return null;
+        }
+    }
+
+    private void finishLogin(ServerConnection session) {
+        final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
+        synchronized (this) {
+            if (!Proxy.getInstance().isConnected()) {
+                if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
+                    try {
+                        EXECUTOR.submit(() -> Proxy.getInstance().connect()).get(15, TimeUnit.SECONDS);
+                    } catch (final Throwable e) {
+                        if (!Proxy.getInstance().isConnected() && !Proxy.getInstance().getLoggingIn().get()) {
+                            session.disconnect("Failed to connect to server");
+                            return;
+                        }
+                        // else, we are either connected or logging in so let's continue and hit the next wait barrier
+                        // if we're logging in, most likely the auth failed and is retrying inside a blocking task
+                    }
+                } else {
+                    session.disconnect("Not connected to server!");
+                }
+            }
+        }
+        if (!Wait.waitUntil(() -> {
+            var client = Proxy.getInstance().getClient();
+            return client != null
+                && CACHE.getProfileCache().getProfile() != null
+                && (client.isOnline()
+                || (client.isInQueue() && Proxy.getInstance().getQueuePosition() > 1));
+        }, 15)) {
+            SERVER_LOG.info("Timed out waiting for the proxy to login");
+            session.disconnect("Timed out waiting for the proxy to login");
+            return;
+        }
+        SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
+        session.getProfileCache().setProfile(clientGameProfile);
+        if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
+            session.sendAsync(new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()));
+        } else {
+            if (!CONFIG.server.spectator.allowSpectator) {
+                session.disconnect("Spectator mode is disabled");
+                return;
+            }
+            SERVER_LOG.info("Logging in {} [{}] as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString());
+            session.setSpectator(true);
+            final GameProfile spectatorFakeProfile = new GameProfile(spectatorFakeUUID, clientGameProfile.getName());
+            // caching assumes the spectatorUUID is immutable
+            if (clientGameProfile.getProperty("textures") == null) {
+                SESSION_SERVER.getProfileAndSkin(clientGameProfile.getId()).ifPresentOrElse(p -> {
+                    spectatorFakeProfile.setProperties(p.getProperties());
+                }, () -> {
+                    SERVER_LOG.info("Failed getting spectator skin for {} [{}]", clientGameProfile.getName(), clientGameProfile.getId().toString());
+                });
+            } else {
+                spectatorFakeProfile.setProperties(clientGameProfile.getProperties());
+            }
+            session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
+            session.sendAsync(new ClientboundGameProfilePacket(spectatorFakeProfile));
         }
     }
 }
