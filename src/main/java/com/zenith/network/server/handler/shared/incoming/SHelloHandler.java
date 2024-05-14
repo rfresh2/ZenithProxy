@@ -22,7 +22,7 @@ public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, Serv
             session.getCookieCache().getPackets(session::sendAsync);
         } else {
             if (session.getFlag(MinecraftConstants.VERIFY_USERS_KEY, true)) {
-            session.sendAsync(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge()));
+                session.sendAsync(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge(), true));
             } else {
                 EXECUTOR.execute(new UserAuthTask(session, null));
             }
