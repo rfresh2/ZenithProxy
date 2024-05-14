@@ -21,7 +21,9 @@ import com.zenith.util.FastArrayList;
 import com.zenith.util.Wait;
 import com.zenith.via.ZenithClientChannelInitializer;
 import com.zenith.via.ZenithServerChannelInitializer;
+import io.netty.util.NettyRuntime;
 import io.netty.util.ResourceLeakDetector;
+import io.netty.util.internal.SystemPropertyUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -143,7 +145,10 @@ public class Proxy {
             Queue.start();
             saveConfigAsync();
             MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
-            this.tcpManager = new TcpConnectionManager();
+            this.tcpManager = new TcpConnectionManager(
+                Math.max(
+                    3, // increase default from 1 to avoid possible thread starvation issues on low end systems
+                    SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2)));
             this.startServer();
             CACHE.reset(true);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
