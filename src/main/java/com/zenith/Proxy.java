@@ -303,10 +303,18 @@ public class Proxy {
      * @throws IllegalStateException if already connected
      */
     public synchronized void connect() {
-        connect(CONFIG.client.server.address, CONFIG.client.server.port);
+        connect(true);
+    }
+
+    public synchronized void connect(boolean clientWait) {
+        connect(CONFIG.client.server.address, CONFIG.client.server.port, clientWait);
     }
 
     public synchronized void connect(final String address, final int port) {
+        connect(address, port, true);
+    }
+
+    public synchronized void connect(final String address, final int port, boolean clientWait) {
         if (this.isConnected()) throw new IllegalStateException("Already connected!");
         this.connectTime = Instant.now();
         final MinecraftProtocol minecraftProtocol;
@@ -332,7 +340,7 @@ public class Proxy {
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
-        this.client.connect(true);
+        this.client.connect(clientWait);
     }
 
     @Nullable
