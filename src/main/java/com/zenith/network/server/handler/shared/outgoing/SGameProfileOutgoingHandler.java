@@ -22,6 +22,8 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
     @Override
     public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerConnection session) {
         try {
+            // finishLogin will send a second ClientboundGameProfilePacket, just return it as is
+            if (session.isWhitelistChecked()) return packet;
             final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             if (isNull(clientGameProfile)) {
                 session.disconnect("Failed to Login");
