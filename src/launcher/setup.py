@@ -13,7 +13,7 @@ def setup_execute(config):
         while True:
             print("Select a ZenithProxy platform: (1/2)")
             print("1. java")
-            print("2. linux")
+            print("2. linux (Recommended)")
             i1 = input("> ")
             if i1 == "1":
                 release_channel = "java"
@@ -27,21 +27,19 @@ def setup_execute(config):
         print("Auto-selecting the java release channel based on current system")
         release_channel = "java"
 
-    ## Prompt can be added back for 1.20.5+ versions
-    minecraft_version = "1.20.4"
-    # while True:
-    #     print("Select a Minecraft version: (1/2)")
-    #     print("1. 1.20.1")
-    #     print("2. 1.20.4")
-    #     i1 = input("> ")
-    #     if i1 == "1":
-    #         minecraft_version = "1.20.1"
-    #         break
-    #     elif i1 == "2":
-    #         minecraft_version = "1.20.4"
-    #         break
-    #     else:
-    #         print("Invalid input. Enter 1 or 2")
+    while True:
+        print("Select a Minecraft version: (1/2)")
+        print("1. 1.20.4")
+        print("2. 1.20.6")
+        i1 = input("> ")
+        if i1 == "1":
+            minecraft_version = "1.20.4"
+            break
+        elif i1 == "2":
+            minecraft_version = "1.20.6"
+            break
+        else:
+            print("Invalid input. Enter 1 or 2")
 
     config.auto_update = True
     config.auto_update_launcher = True
@@ -108,21 +106,25 @@ def setup_execute(config):
             print("Invalid port number. Must be between 1 and 65535")
 
     while True:
-        print("Input the IP address players should connect to. This can be a domain name or an IP address.")
-        print(
-            "If you are unsure, leave this blank and the proxy will use the IP address of the machine it is running on."
-        )
-        print("If you are using a domain name, make sure you have DNS records set up (see README.md)")
-        ip = input("> ")
-        if ip == "":
+        print("Are you running ZenithProxy on a PC or other computer in your home? (y/n)")
+        print("If you are running this on a VPS or server, enter 'n'.")
+        i1 = input("> ")
+        if i1 == "y":
+            ip = "localhost"
+            break
+        elif i1 == "n":
+            print("Attempting to determine IP for players to connect to...")
             response = requests.get("https://api.ipify.org", timeout=10)
             if response.status_code == 200:
                 ip = response.content.decode()
+                print("Found IP:", ip)
                 break
             else:
-                print("Failed to get IP address:", response.status_code, response.reason)
+                print("Failed to get IP:", response.status_code, response.reason)
+                ip = "localhost"
+                break
         else:
-            break
+            print("Invalid input. Enter y or n")
 
     while True:
         print("Enable Discord bot? (y/n)")
@@ -263,5 +265,3 @@ def verify_discord_bot_token(token):
     except Exception as e:
         print("ERROR: Verifying discord bot", e)
         return False
-
-
