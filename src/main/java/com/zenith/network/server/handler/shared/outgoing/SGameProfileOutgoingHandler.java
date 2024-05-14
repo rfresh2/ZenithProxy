@@ -42,7 +42,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             synchronized (this) {
                 if (!Proxy.getInstance().isConnected()) {
                     if (CONFIG.client.extra.autoConnectOnLogin && !session.isOnlySpectator()) {
-                        Proxy.getInstance().connect(false);
+                        EXECUTOR.execute(() -> Proxy.getInstance().connect(false));
                         Wait.waitUntil(() -> {
                             var client = Proxy.getInstance().getClient();
                             return client != null && client.isConnected();
