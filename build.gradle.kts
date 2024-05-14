@@ -114,7 +114,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.29.0") {
+    shade("org.redisson:redisson:3.30.0") {
         exclude(group = "io.netty")
     }
     shade("com.github.rfresh2.fastutil:object-object-maps:$fastutilVersion")
