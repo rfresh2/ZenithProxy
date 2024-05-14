@@ -38,6 +38,8 @@ def update_launcher_exec(config, api):
         launcher_asset_bytes = api.download_asset(launcher_asset_id)
         if launcher_asset_bytes is None:
             raise LauncherUpdateError("Failed to download launcher asset:", launcher_asset_file_name)
+        if not os.path.exists("launcher"):
+            os.makedirs("launcher")
         for file_name in os.listdir("launcher"):
             if file_name.startswith("launch"):
                 os.remove("launcher/" + file_name)

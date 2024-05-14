@@ -46,12 +46,12 @@ try:
     while True:
         json_data = read_launch_config_file()
         if json_data is None:
-            print("launch_config.json not found, running setup.")
+            print("Running setup...")
             setup_execute(config)
             continue
         config.load_launch_config_data(json_data)
         if not config.validate_launch_config():
-            print("launch_config.json has invalid values, running setup.")
+            print("launch_config.json has invalid values, running setup...")
             setup_execute(config)
             continue
         print("Loaded launch_config.json successfully")
