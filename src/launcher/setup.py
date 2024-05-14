@@ -93,8 +93,8 @@ def setup_execute(config):
                 break
 
     while True:
-        print("Input port the proxy will use.")
-        print("If you are unsure, leave this blank; port 25565 will be selected.")
+        print("Input the port ZenithProxy will be hosted on.")
+        print("If you are unsure, just press enter; port 25565 will be selected.")
         port = input("> ")
         if port == "":
             port = 25565
@@ -142,6 +142,7 @@ def setup_execute(config):
 
     if discord_bot:
         print("See README.md for Discord bot setup instructions")
+        print("https://github.com/rfresh2/ZenithProxy/?tab=readme-ov-file#discord-bot-setup")
         while True:
             print("Enter Discord bot token:")
             discord_bot_token = input("> ")
@@ -202,8 +203,8 @@ def setup_execute(config):
     # Write config.json
     config = {}
 
-    if auth_method == "msa":
-        config["authentication"] = {"accountType": "msa", "email": username, "password": password}
+    # if auth_method == "msa":
+    #     config["authentication"] = {"accountType": "msa", "email": username, "password": password}
 
     ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
     proxy_address = ip + ":" + str(port) if ip_pattern.match(ip) else ip
