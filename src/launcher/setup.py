@@ -13,7 +13,7 @@ def setup_execute(config):
         while True:
             print("Select a ZenithProxy platform: (1/2)")
             print("1. java")
-            print("2. linux")
+            print("2. linux (Recommended)")
             i1 = input("> ")
             if i1 == "1":
                 release_channel = "java"
@@ -63,20 +63,22 @@ def setup_execute(config):
             else:
                 print("Invalid input. Enter y or n")
 
-    while True:
-        print("Select authentication method: (1/2)")
-        print("1. Device Code (Recommended)")
-        print("2. Username and Password")
-
-        i1 = input("> ")
-        if i1 == "1":
-            auth_method = "device_code"
-            break
-        elif i1 == "2":
-            auth_method = "msa"
-            break
-        else:
-            print("Invalid input. Enter 1 or 2")
+    print("Auto-selecting device code authentication. This can be changed later using the `auth` command.")
+    auth_method = "device_code"
+    # while True:
+    #     print("Select authentication method: (1/2)")
+    #     print("1. Device Code (Recommended)")
+    #     print("2. Username and Password")
+    #
+    #     i1 = input("> ")
+    #     if i1 == "1":
+    #         auth_method = "device_code"
+    #         break
+    #     elif i1 == "2":
+    #         auth_method = "msa"
+    #         break
+    #     else:
+    #         print("Invalid input. Enter 1 or 2")
 
     if auth_method == "msa":
         while True:
@@ -91,8 +93,8 @@ def setup_execute(config):
                 break
 
     while True:
-        print("Input port the proxy will use.")
-        print("If you are unsure, leave this blank; port 25565 will be selected.")
+        print("Input the port ZenithProxy will be hosted on.")
+        print("If you are unsure, just press enter; port 25565 will be selected.")
         port = input("> ")
         if port == "":
             port = 25565
@@ -106,21 +108,25 @@ def setup_execute(config):
             print("Invalid port number. Must be between 1 and 65535")
 
     while True:
-        print("Input the IP address players should connect to. This can be a domain name or an IP address.")
-        print(
-            "If you are unsure, leave this blank and the proxy will use the IP address of the machine it is running on."
-        )
-        print("If you are using a domain name, make sure you have DNS records set up (see README.md)")
-        ip = input("> ")
-        if ip == "":
+        print("Are you running ZenithProxy on a PC or other computer in your home? (y/n)")
+        print("If you are running this on a VPS or server, enter 'n'.")
+        i1 = input("> ")
+        if i1 == "y":
+            ip = "localhost"
+            break
+        elif i1 == "n":
+            print("Attempting to determine IP for players to connect to...")
             response = requests.get("https://api.ipify.org", timeout=10)
             if response.status_code == 200:
                 ip = response.content.decode()
+                print("Found IP:", ip)
                 break
             else:
-                print("Failed to get IP address:", response.status_code, response.reason)
+                print("Failed to get IP:", response.status_code, response.reason)
+                ip = "localhost"
+                break
         else:
-            break
+            print("Invalid input. Enter y or n")
 
     while True:
         print("Enable Discord bot? (y/n)")
@@ -136,6 +142,7 @@ def setup_execute(config):
 
     if discord_bot:
         print("See README.md for Discord bot setup instructions")
+        print("https://github.com/rfresh2/ZenithProxy/?tab=readme-ov-file#discord-bot-setup")
         while True:
             print("Enter Discord bot token:")
             discord_bot_token = input("> ")
@@ -196,8 +203,8 @@ def setup_execute(config):
     # Write config.json
     config = {}
 
-    if auth_method == "msa":
-        config["authentication"] = {"accountType": "msa", "email": username, "password": password}
+    # if auth_method == "msa":
+    #     config["authentication"] = {"accountType": "msa", "email": username, "password": password}
 
     ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
     proxy_address = ip + ":" + str(port) if ip_pattern.match(ip) else ip
@@ -261,5 +268,3 @@ def verify_discord_bot_token(token):
     except Exception as e:
         print("ERROR: Verifying discord bot", e)
         return False
-
-

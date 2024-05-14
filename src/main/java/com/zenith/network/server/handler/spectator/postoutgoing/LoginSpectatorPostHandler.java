@@ -26,7 +26,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
             session.disconnect("Login without whitelist check?");
             return;
         }
-        session.send(new ClientboundPlayerInfoUpdatePacket(
+        session.sendAsync(new ClientboundPlayerInfoUpdatePacket(
             EnumSet.of(PlayerListEntryAction.ADD_PLAYER, PlayerListEntryAction.UPDATE_LISTED, PlayerListEntryAction.UPDATE_GAME_MODE),
             new PlayerListEntry[]{new PlayerListEntry(
                 session.getSpectatorFakeProfileCache().getProfile().getId(),
@@ -48,11 +48,11 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
             if (connection.equals(session)) continue;
-            connection.send(new ClientboundSystemChatPacket(
+            connection.sendAsync(new ClientboundSystemChatPacket(
                 ComponentSerializer.minedown("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
             ));
             if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
-                connection.send(new ClientboundSystemChatPacket(
+                connection.sendAsync(new ClientboundSystemChatPacket(
                     ComponentSerializer.minedown("&9Send private messages: \"!m <message>\"&r"), false
                 ));
             }
@@ -64,8 +64,8 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
         // send command help
         session.sendAsyncAlert("&aSpectating &r&c" + CACHE.getProfileCache().getProfile().getName());
         if (CONFIG.inGameCommands.enable) {
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&aCommand Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
-            session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&chelp &7- &8List Commands"), false));
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&aCommand Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&chelp &7- &8List Commands"), false));
         }
     }
 }

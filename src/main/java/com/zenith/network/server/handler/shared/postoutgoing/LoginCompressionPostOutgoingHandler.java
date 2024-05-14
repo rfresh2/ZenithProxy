@@ -12,6 +12,6 @@ public class LoginCompressionPostOutgoingHandler implements PostOutgoingPacketHa
     @Override
     public void accept(final ClientboundLoginCompressionPacket packet, final ServerConnection session) {
         session.setCompressionThreshold(packet.getThreshold(), CONFIG.server.compressionLevel, true);
-        session.send(new ClientboundGameProfilePacket(session.getFlag(MinecraftConstants.PROFILE_KEY), false));
+        session.sendAsync(new ClientboundGameProfilePacket(session.getFlag(MinecraftConstants.PROFILE_KEY), false));
     }
 }
