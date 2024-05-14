@@ -16,7 +16,7 @@ public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, Serv
         session.setUsername(packet.getUsername());
         session.setLoginProfileUUID(packet.getProfileId());
         if (session.getFlag(MinecraftConstants.VERIFY_USERS_KEY, true)) {
-            session.send(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge()));
+                session.sendAsync(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge(), true));
         } else {
             EXECUTOR.execute(new UserAuthTask(session, null));
         }
