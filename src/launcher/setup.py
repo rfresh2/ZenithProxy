@@ -26,7 +26,7 @@ def setup_execute(config):
     else:
         print("Auto-selecting the java release channel based on current system")
         release_channel = "java"
-
+    print("")
     while True:
         print("Select a Minecraft version: (1/2)")
         print("1. 1.20.4")
@@ -40,7 +40,7 @@ def setup_execute(config):
             break
         else:
             print("Invalid input. Enter 1 or 2")
-
+    print("")
     config.auto_update = True
     config.auto_update_launcher = True
     config.release_channel = release_channel + "." + minecraft_version
@@ -62,35 +62,7 @@ def setup_execute(config):
                 break
             else:
                 print("Invalid input. Enter y or n")
-
-    print("Auto-selecting device code authentication. This can be changed later using the `auth` command.")
-    auth_method = "device_code"
-    # while True:
-    #     print("Select authentication method: (1/2)")
-    #     print("1. Device Code (Recommended)")
-    #     print("2. Username and Password")
-    #
-    #     i1 = input("> ")
-    #     if i1 == "1":
-    #         auth_method = "device_code"
-    #         break
-    #     elif i1 == "2":
-    #         auth_method = "msa"
-    #         break
-    #     else:
-    #         print("Invalid input. Enter 1 or 2")
-
-    if auth_method == "msa":
-        while True:
-            print("Enter your Microsoft account email/username:")
-            username = input("> ")
-            if "@" in username:
-                break
-        while True:
-            print("Enter your Microsoft account password:")
-            password = input("> ")
-            if len(password) > 0:
-                break
+        print("")
 
     while True:
         print("Input the port ZenithProxy will be hosted on.")
@@ -106,6 +78,7 @@ def setup_execute(config):
             break
         except ValueError:
             print("Invalid port number. Must be between 1 and 65535")
+    print("")
 
     while True:
         print("Are you running ZenithProxy on a PC or other computer in your home? (y/n)")
@@ -127,6 +100,7 @@ def setup_execute(config):
                 break
         else:
             print("Invalid input. Enter y or n")
+    print("")
 
     while True:
         print("Enable Discord bot? (y/n)")
@@ -139,6 +113,7 @@ def setup_execute(config):
             break
         else:
             print("Invalid input. Enter y or n")
+    print("")
 
     if discord_bot:
         print("See README.md for Discord bot setup instructions")
@@ -151,6 +126,7 @@ def setup_execute(config):
                 continue
             if verify_discord_bot_token(discord_bot_token):
                 break
+        print("")
         while True:
             print("Enter a Discord channel ID to manage ZenithProxy in:")
             discord_channel_id = input("> ")
@@ -162,6 +138,7 @@ def setup_execute(config):
                 break
             except ValueError:
                 print("Invalid ID")
+        print("")
         while True:
             print("Enter a Discord Role ID to grant management permissions like the whitelist to:")
             discord_admin_role_id = input("> ")
@@ -173,6 +150,7 @@ def setup_execute(config):
                 break
             except ValueError:
                 print("Invalid ID")
+        print("")
         while True:
             print("Enable Discord Chat Relay? (y/n)")
             i3 = input("> ")
@@ -184,6 +162,7 @@ def setup_execute(config):
                 break
             else:
                 print("Invalid input. Enter y or n")
+        print("")
         if chat_relay:
             while True:
                 print("Enter a Discord channel ID for the Chat Relay:")
@@ -199,6 +178,7 @@ def setup_execute(config):
                     break
                 except ValueError:
                     print("Invalid ID")
+            print("")
 
     # Write config.json
     config = {}
@@ -232,7 +212,7 @@ def setup_execute(config):
     with open("config.json", "w") as f:
         f.write(json.dumps(config, indent=2))
         print("config.json written successfully!")
-
+    print("")
     print("Setup complete!")
 
 
