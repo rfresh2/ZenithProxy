@@ -8,6 +8,7 @@ import com.zenith.cache.data.chunk.ChunkCache;
 import com.zenith.cache.data.config.ConfigurationCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.map.MapDataCache;
+import com.zenith.cache.data.mcpl.CachedChunkSectionCountProvider;
 import com.zenith.cache.data.recipe.RecipeCache;
 import com.zenith.cache.data.scoreboard.ScoreboardCache;
 import com.zenith.cache.data.stats.StatisticsCache;
@@ -37,6 +38,7 @@ public class DataCache {
     protected final TeamCache teamCache = new TeamCache();
     protected final ScoreboardCache scoreboardCache = new ScoreboardCache();
     protected final ConfigurationCache configurationCache = new ConfigurationCache();
+    protected final CachedChunkSectionCountProvider sectionCountProvider = new CachedChunkSectionCountProvider();
 
     public Collection<CachedData> getAllData() {
         return Arrays.asList(profileCache, playerCache, chunkCache, statsCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache, teamCache, scoreboardCache);

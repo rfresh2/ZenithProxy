@@ -143,6 +143,7 @@ public class Proxy {
             Queue.start();
             saveConfigAsync();
             MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
+            MinecraftConstants.CHUNK_SECTION_COUNT_PROVIDER = CACHE.getSectionCountProvider();
             this.tcpManager = new TcpConnectionManager();
             this.startServer();
             CACHE.reset(true);

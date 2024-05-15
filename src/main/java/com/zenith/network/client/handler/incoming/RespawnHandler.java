@@ -3,7 +3,7 @@ package com.zenith.network.client.handler.incoming;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.ClientEventLoopPacketHandler;
+import com.zenith.network.registry.PacketHandler;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 
@@ -13,12 +13,27 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Shared.*;
 
-public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundRespawnPacket, ClientSession> {
+public class RespawnHandler implements PacketHandler<ClientboundRespawnPacket, ClientSession> {
 
     private final AtomicBoolean isSpectatorRespawning = new AtomicBoolean(false);
 
     @Override
-    public boolean applyAsync(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
+    public ClientboundRespawnPacket apply(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
+        CACHE.getSectionCountProvider().updateDimension(packet.getCommonPlayerSpawnInfo());
+        session.getClientEventLoop().execute(() -> handleRespawn(packet));
+        return packet;
+    }
+
+    private void spectatorRespawn() {
+        try {
+            // load world and init self
+            SpectatorSync.sendRespawn();
+        } finally {
+            isSpectatorRespawning.set(false);
+        }
+    }
+
+    private void handleRespawn(ClientboundRespawnPacket packet) {
         // must send respawn packet before cache gets reset
         // lots of race conditions with packet sequence could happen
         if (isSpectatorRespawning.compareAndSet(false, true)) {
@@ -50,15 +65,5 @@ public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundR
             // todo: what do here?
         }
         MODULE.get(PlayerSimulation.class).handleRespawn();
-        return true;
-    }
-
-    private void spectatorRespawn() {
-        try {
-            // load world and init self
-            SpectatorSync.sendRespawn();
-        } finally {
-            isSpectatorRespawning.set(false);
-        }
     }
 }
