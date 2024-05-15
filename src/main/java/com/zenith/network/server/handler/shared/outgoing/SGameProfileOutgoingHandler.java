@@ -70,6 +70,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     }
                 } else {
                     session.disconnect("Not connected to server!");
+                    return;
                 }
             }
         }
@@ -88,6 +89,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         session.getProfileCache().setProfile(clientGameProfile);
         if (!session.isOnlySpectator() && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
             session.sendAsync(new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()));
+            return;
         } else {
             if (!CONFIG.server.spectator.allowSpectator) {
                 session.disconnect("Spectator mode is disabled");
@@ -108,6 +110,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             }
             session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
             session.sendAsync(new ClientboundGameProfilePacket(spectatorFakeProfile));
+            return;
         }
     }
 }
