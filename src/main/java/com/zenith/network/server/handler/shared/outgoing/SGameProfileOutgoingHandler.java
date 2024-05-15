@@ -107,6 +107,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         session.getProfileCache().setProfile(clientGameProfile);
         if (!onlySpectator.orElse(false) && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
             session.sendAsync(new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false));
+            return;
         }
         if (onlySpectator.isPresent() && !onlySpectator.get()) { // the above operation failed and we don't want to be put into spectator
             session.disconnect("Someone is already controlling the player");
