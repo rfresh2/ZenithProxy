@@ -15,7 +15,6 @@ public class Chunk {
     final int x;
     final int z;
     final ChunkSection[] sections;
-    final int sectionsCount;
     final int maxSection;
     final int minSection;
     final List<BlockEntityInfo> blockEntities;
@@ -60,5 +59,9 @@ public class Chunk {
 
     public int maxY() {
         return (maxSection << 4) - 1;
+    }
+
+    public int getSectionsCount() {
+        return sections.length;
     }
 }

@@ -263,7 +263,7 @@ public class ChunkCache implements CachedData {
                 return false;
             } else {
                 ByteBuf buf = Unpooled.wrappedBuffer(biomeData.getBuffer());
-                for (int j = 0; j < chunk.sectionsCount; j++) {
+                for (int j = 0; j < chunk.getSections().length; j++) {
                     DataPalette biomesData = codec.readDataPalette(buf, PaletteType.BIOME);
                     chunk.sections[j].setBiomeData(biomesData);
                 }
@@ -399,13 +399,6 @@ public class ChunkCache implements CachedData {
     public void add(final ClientboundLevelChunkWithLightPacket p) {
         final var chunkX = p.getX();
         final var chunkZ = p.getZ();
-        ByteBuf buf = Unpooled.wrappedBuffer(p.getChunkData());
-        final var sectionsCount = getSectionsCount();
-        if (sectionsCount == 0) {
-            CACHE_LOG.debug("Received chunk while sectionsCount is 0. Ignoring chunk. Most likely due to a race condition");
-            CACHE_LOG.debug("Current dimension: {}", currentDimension);
-            return;
-        }
         var chunk = cache.get(chunkPosToLong(chunkX, chunkZ));
         if (chunk == null) {
             var blockEntitiesArray = p.getBlockEntities();
@@ -414,16 +407,12 @@ public class ChunkCache implements CachedData {
             chunk = new Chunk(
                 chunkX,
                 chunkZ,
-                new ChunkSection[sectionsCount],
-                sectionsCount,
+                p.getSections(),
                 getMaxSection(),
                 getMinSection(),
                 blockEntities,
                 p.getLightData(),
                 p.getHeightMaps());
-        }
-        for (int i = 0; i < chunk.sectionsCount; i++) {
-            chunk.sections[i] = readChunkSection(buf);
         }
         cache.put(chunkPosToLong(chunkX, chunkZ), chunk);
     }
