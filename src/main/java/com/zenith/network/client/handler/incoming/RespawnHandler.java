@@ -3,7 +3,7 @@ package com.zenith.network.client.handler.incoming;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
-import com.zenith.network.registry.PacketHandler;
+import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 
@@ -13,27 +13,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Shared.*;
 
-public class RespawnHandler implements PacketHandler<ClientboundRespawnPacket, ClientSession> {
+public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundRespawnPacket, ClientSession> {
 
     private final AtomicBoolean isSpectatorRespawning = new AtomicBoolean(false);
 
     @Override
     public ClientboundRespawnPacket apply(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
         CACHE.getSectionCountProvider().updateDimension(packet.getCommonPlayerSpawnInfo());
-        session.getClientEventLoop().execute(() -> handleRespawn(packet));
+        ClientEventLoopPacketHandler.super.apply(packet, session);
         return packet;
     }
 
-    private void spectatorRespawn() {
-        try {
-            // load world and init self
-            SpectatorSync.sendRespawn();
-        } finally {
-            isSpectatorRespawning.set(false);
-        }
-    }
-
-    private void handleRespawn(ClientboundRespawnPacket packet) {
+    @Override
+    public boolean applyAsync(final ClientboundRespawnPacket packet, final ClientSession session) {
         // must send respawn packet before cache gets reset
         // lots of race conditions with packet sequence could happen
         if (isSpectatorRespawning.compareAndSet(false, true)) {
@@ -65,5 +57,15 @@ public class RespawnHandler implements PacketHandler<ClientboundRespawnPacket, C
             // todo: what do here?
         }
         MODULE.get(PlayerSimulation.class).handleRespawn();
+        return true;
+    }
+
+    private void spectatorRespawn() {
+        try {
+            // load world and init self
+            SpectatorSync.sendRespawn();
+        } finally {
+            isSpectatorRespawning.set(false);
+        }
     }
 }
