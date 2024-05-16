@@ -87,6 +87,9 @@
   "name":"[Lcom.zenith.feature.queue.mcping.rawData.ForgeDataListItem;"
 },
 {
+  "name":"[Lcom.zenith.network.registry.PacketHandlerCodec;"
+},
+{
   "name":"[Lcom.zenith.network.server.ServerConnection;"
 },
 {
