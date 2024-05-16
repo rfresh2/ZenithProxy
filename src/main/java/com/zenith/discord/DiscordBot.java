@@ -187,7 +187,7 @@ public class DiscordBot {
     public void setBotDescription(String description) {
         try {
             restClient.getApplicationService()
-                .setCurrentApplicationInfo(ApplicationEditSpec.builder()
+                .modifyCurrentApplicationInfo(ApplicationEditSpec.builder()
                                                .description(description)
                                                .build()
                                                .asRequest())
