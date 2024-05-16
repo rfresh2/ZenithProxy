@@ -9,8 +9,6 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.Clien
 import java.util.HashSet;
 import java.util.Set;
 
-import static java.util.Objects.nonNull;
-
 @Data
 @AllArgsConstructor
 public class StoredMapData {
@@ -33,11 +31,10 @@ public class StoredMapData {
     }
 
     public void addData(final MapData mapData) {
-        if (nonNull(mapData)) {
-            for (int i = 0; i < mapData.getColumns(); i++) {
-                for (int j = 0; j < mapData.getRows(); j++) {
-                    data[mapData.getX() + i + (mapData.getY() + j) * 128] = mapData.getData()[i + j * mapData.getColumns()];
-                }
+        if (mapData == null) return;
+        for (int i = 0; i < mapData.getColumns(); i++) {
+            for (int j = 0; j < mapData.getRows(); j++) {
+                data[mapData.getX() + i + (mapData.getY() + j) * 128] = mapData.getData()[i + j * mapData.getColumns()];
             }
         }
     }

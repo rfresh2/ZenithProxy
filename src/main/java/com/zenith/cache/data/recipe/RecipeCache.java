@@ -33,7 +33,7 @@ public class RecipeCache implements CachedData {
         // just unlock all recipes instead of using what's cached lol
         final String[] allRecipeIds = recipeRegistry.stream()
             .map(Recipe::getIdentifier)
-            .toList().toArray(new String[0]);
+            .toArray(String[]::new);
         consumer.accept(new ClientboundRecipePacket(
             allRecipeIds,
             openCraftingBook,
