@@ -6,16 +6,17 @@ import com.zenith.event.module.ClientBotTick;
 import com.zenith.util.Timer;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ClickItemAction;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClosePacket;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 
 public class PlayerInventoryManager {
     private static final InventoryActionRequest DEFAULT_ACTION_REQUEST = new InventoryActionRequest(null, Collections.emptyList(), Integer.MIN_VALUE);
     private final Timer tickTimer = Timer.newTickTimer();
-    private final int actionDelayTicks = 2;
+    private final int actionDelayTicks = 5;
     private InventoryActionRequest currentActionRequest = DEFAULT_ACTION_REQUEST;
 
     public PlayerInventoryManager() {
@@ -52,11 +53,23 @@ public class PlayerInventoryManager {
 
     public synchronized void handleTick(final ClientBotTick event) {
         if (currentActionRequest == DEFAULT_ACTION_REQUEST) return;
+        if (CONFIG.debug.ncpStrictInventory) {
+            if (CACHE.getPlayerCache().getInventoryCache().getMouseStack() != null) {
+                PATHING.stop(Integer.MAX_VALUE);
+            }
+        }
         if (tickTimer.tick(actionDelayTicks)) {
             var nextAction = currentActionRequest.nextAction();
             if (nextAction != null) {
                 var packet = nextAction.toPacket();
-                if (packet != null) Proxy.getInstance().getClient().sendAsync(packet);
+                if (packet != null) {
+                    Proxy.getInstance().getClient().sendAsync(packet);
+                    if (CONFIG.debug.ncpStrictInventory) {
+                        if (packet.getCarriedItem() == null)
+                            Proxy.getInstance().getClient().sendAsync(new ServerboundContainerClosePacket(0));
+                        else PATHING.stop(Integer.MAX_VALUE);
+                    }
+                }
             }
             if (currentActionRequest.isCompleted()) currentActionRequest = DEFAULT_ACTION_REQUEST;
         }

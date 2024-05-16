@@ -17,11 +17,11 @@ import java.lang.reflect.Array;
 @Data
 public class FastArrayList<T> {
     // Access this array through the generated getter for iterations and read operations. Write ops only through the add/remove methods
-    private T @NonNull [] array;
+    protected T @NonNull [] array;
     // can't allocate typed array without class reference
     // Java's ArrayList always allocates Object[] and casts elements returned by getters
     // but we're avoiding that here as we want consumers to access the underlying array reference directly
-    private final Class<T> clazz;
+    protected final Class<T> clazz;
 
     public FastArrayList(@NonNull Class<T> clazz) {
         this.clazz = clazz;

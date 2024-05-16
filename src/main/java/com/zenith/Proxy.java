@@ -239,6 +239,7 @@ public class Proxy {
         try {
             CompletableFuture.runAsync(() -> {
                 if (nonNull(this.client)) this.client.disconnect(MinecraftConstants.SERVER_CLOSING_MESSAGE);
+                MODULE.get(AutoReconnect.class).cancelAutoReconnect();
                 stopServer();
                 tcpManager.close();
                 saveConfig();

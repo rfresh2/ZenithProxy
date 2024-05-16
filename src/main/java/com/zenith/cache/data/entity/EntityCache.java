@@ -27,17 +27,24 @@ public class EntityCache implements CachedData {
 
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
-        // it would be preferable to not have this intermediary list :/ could impact memory if there are a lot of entities
-        final List<Packet> packets = new ArrayList<>();
+        // it would be preferable to not have this intermediary list but we need to sort :/
+        // size is a rough estimate, some entities will provide much more packets than others
+        final List<Packet> packets = new ArrayList<>(this.entities.size() * 6);
         this.entities.values().forEach(entity -> entity.addPackets(packets::add));
-        // sort ClientboundAddEntityPacket first
+        // send all ClientboundAddEntityPackets first
         // some entity metadata references other entities that need to exist first
-        packets.sort((p1, p2) -> {
-            if (p1 instanceof ClientboundAddEntityPacket) return -1;
-            if (p2 instanceof ClientboundAddEntityPacket) return 1;
-            return 0;
-        });
-        packets.forEach(consumer);
+        for (int i = 0; i < packets.size(); i++) {
+            var packet = packets.get(i);
+            if (packet instanceof ClientboundAddEntityPacket) {
+                consumer.accept(packet);
+            }
+        }
+        for (int i = 0; i < packets.size(); i++) {
+            var packet = packets.get(i);
+            if (!(packet instanceof ClientboundAddEntityPacket)) {
+                consumer.accept(packet);
+            }
+        }
 //        EXECUTOR.scheduleAtFixedRate(
 //            this::reapDeadEntities,
 //            5L,

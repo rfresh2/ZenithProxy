@@ -40,7 +40,8 @@ public class DebugCommand extends Command {
                 "binaryNbtComponentSerializer on/off",
                 "kickDisconnect on/off",
                 "dc",
-                "teleportResync on/off"
+                "teleportResync on/off",
+                "ncpStrictInventory on/off"
             )
         );
     }
@@ -156,6 +157,12 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Teleport Resync " + toggleStrCaps(CONFIG.debug.teleportResync));
                 return 1;
+            })))
+            .then(literal("ncpStrictInventory").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.ncpStrictInventory = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("NCP Strict Inventory " + toggleStrCaps(CONFIG.debug.ncpStrictInventory));
+                return 1;
             })));
     }
 
@@ -170,6 +177,7 @@ public class DebugCommand extends Command {
             .addField("Binary Nbt Component Serializer", toggleStr(CONFIG.debug.binaryNbtComponentSerializer), false)
             .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
             .addField("Teleport Resync", toggleStr(CONFIG.debug.teleportResync), false)
+            .addField("NCP Strict Inventory", toggleStr(CONFIG.debug.ncpStrictInventory), false)
             .primaryColor();
     }
 }

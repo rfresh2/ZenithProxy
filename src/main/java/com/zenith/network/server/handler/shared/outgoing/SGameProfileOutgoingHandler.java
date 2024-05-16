@@ -89,6 +89,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                     }
                 } else {
                     session.disconnect("Not connected to server!");
+                    return;
                 }
             }
         }
@@ -131,5 +132,6 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         }
         session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
         session.sendAsync(new ClientboundGameProfilePacket(spectatorFakeProfile, false));
+        return;
     }
 }
