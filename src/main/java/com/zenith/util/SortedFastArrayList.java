@@ -14,7 +14,7 @@ public class SortedFastArrayList<T> extends FastArrayList<T> {
     }
 
     @Override
-    public void add(@NonNull T element) {
+    public synchronized void add(@NonNull T element) {
         T[] newArray = (T[]) Array.newInstance(clazz, this.array.length + 1);
         System.arraycopy(this.array, 0, newArray, 0, this.array.length);
         newArray[this.array.length] = element;

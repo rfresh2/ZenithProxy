@@ -426,7 +426,7 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public MinecraftProtocol getPacketProtocol() {
-        return (MinecraftProtocol) this.session.getPacketProtocol();
+        return this.session.getPacketProtocol();
     }
 
     @Override
