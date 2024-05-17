@@ -208,7 +208,12 @@ public class DiscordBot {
             this.relayChannelMessageQueueProcessFuture.cancel(true);
         EVENT_BUS.unsubscribe(eventListener);
         if (client != null) {
-            client.logout().block(Duration.ofSeconds(20));
+            try {
+                client.logout().block(Duration.ofSeconds(20));
+            } catch (final Throwable e){
+                DISCORD_LOG.error("Failed logging out of discord. Things might break?", e);
+                // fall through
+            }
             client = null;
         }
         if (restClient != null) restClient = null;
