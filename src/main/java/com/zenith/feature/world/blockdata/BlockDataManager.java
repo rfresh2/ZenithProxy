@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zenith.feature.world.CollisionBox;
+import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -101,6 +103,7 @@ public class BlockDataManager {
                     blockStateIdToCollisionBoxes.put(i, collisionBoxes);
                 }
             }
+            DataPalette.GLOBAL_PALETTE_BITS_PER_ENTRY = MathHelper.log2Ceil(blockStateIdToBlockId.size());
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

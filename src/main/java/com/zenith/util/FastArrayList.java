@@ -46,17 +46,18 @@ public class FastArrayList<T> {
         return false;
     }
 
-    public void add(@NonNull T element) {
+    public synchronized void add(@NonNull T element) {
         T[] newArray = (T[]) Array.newInstance(clazz, this.array.length + 1);
         System.arraycopy(this.array, 0, newArray, 0, this.array.length);
         newArray[this.array.length] = element;
         this.array = newArray;
     }
 
-    public boolean remove(@NonNull T element) {
+    public synchronized boolean remove(@NonNull T element) {
+        var a = array;
         int index = -1;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].equals(element)) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i].equals(element)) {
                 index = i;
                 break;
             }
@@ -64,9 +65,9 @@ public class FastArrayList<T> {
         if (index == -1) {
             return false;
         }
-        T[] newArray = (T[]) Array.newInstance(clazz, this.array.length - 1);
-        System.arraycopy(this.array, 0, newArray, 0, index);
-        System.arraycopy(this.array, index + 1, newArray, index, this.array.length - index - 1);
+        T[] newArray = (T[]) Array.newInstance(clazz, a.length - 1);
+        System.arraycopy(a, 0, newArray, 0, index);
+        System.arraycopy(a, index + 1, newArray, index, a.length - index - 1);
         this.array = newArray;
         return true;
     }
