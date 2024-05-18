@@ -30,11 +30,11 @@ public class CommandUsage {
     }
 
     public static CommandUsage simple(final String name, final CommandCategory category, final String description) {
-        return new CommandUsage(name, category, description, Collections.emptyList(), Collections.emptyList());
+        return new CommandUsage(name, category, description, Collections.singletonList(""), Collections.emptyList());
     }
 
     public static CommandUsage simpleAliases(final String name, final CommandCategory category, final String description, final List<String> aliases) {
-        return new CommandUsage(name, category, description, Collections.emptyList(), aliases);
+        return new CommandUsage(name, category, description, Collections.singletonList(""), aliases);
     }
 
     public static CommandUsage args(final String name, final CommandCategory category, final String description, final List<String> usageLines) {
