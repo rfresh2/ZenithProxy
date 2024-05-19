@@ -98,7 +98,7 @@ dependencies {
         exclude(group = "com.microsoft.azure")
         exclude(group = "fr.litarvan")
     }
-    shade("net.raphimc:MinecraftAuth:4.0.1")
+    shade("net.raphimc:MinecraftAuth:4.0.2")
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
     shade("io.netty:netty-codec-http2:$nettyVersion")
