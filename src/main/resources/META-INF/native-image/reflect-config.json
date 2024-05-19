@@ -1521,6 +1521,9 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
 },
 {
+  "name":"java.net.http.HttpClient"
+},
+{
   "name":"java.nio.Bits",
   "fields":[{"name":"MAX_MEMORY"}, {"name":"UNALIGNED"}]
 },
@@ -1763,6 +1766,9 @@
 },
 {
   "name":"kotlin.jvm.JvmClassMappingKt"
+},
+{
+  "name":"net.lenni0451.commons.httpclient.executor.HttpClientExecutor"
 },
 {
   "name":"net.raphimc.viaaprilfools.api.AprilFoolsProtocolVersion"
