@@ -334,6 +334,9 @@
   "fields":[{"name":"tableBusy"}]
 },
 {
+  "name":"com.github.luben.zstd.Zstd"
+},
+{
   "name":"com.github.steveice10.mc.auth.data.GameProfile",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

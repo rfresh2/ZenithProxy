@@ -89,7 +89,7 @@ dependencies {
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     shade("com.github.rfresh2:SimpleEventBus:1.1")
-    shade("com.github.rfresh2.Discord4j:discord4j-core:029aea3e1b") {
+    shade("com.github.rfresh2.Discord4j:discord4j-core:3f91d0f9a8") {
         exclude(group = "io.netty")
     }
     shade("com.github.rfresh2:MCProtocolLib:55d9b638f8") {
