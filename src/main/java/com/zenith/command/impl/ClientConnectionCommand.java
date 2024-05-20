@@ -40,6 +40,7 @@ public class ClientConnectionCommand extends Command {
                 "proxy port <port>",
                 "proxy user <user>",
                 "proxy password <password>",
+                "proxy auth clear",
                 "bindAddress <address>",
                 "timeout on/off",
                 "timeout <seconds>",
@@ -94,6 +95,13 @@ public class ClientConnectionCommand extends Command {
                                         .title("Proxy Port Set");
                                     return 1;
                                 })))
+                      .then(literal("auth").then(literal("clear").executes(c -> {
+                          CONFIG.client.connectionProxy.user = "";
+                          CONFIG.client.connectionProxy.password = "";
+                          c.getSource().getEmbed()
+                              .title("Proxy User and Password Cleared");
+                          return 1;
+                      })))
                       .then(literal("user")
                                 .then(argument("user", wordWithChars()).executes(c -> {
                                     c.getSource().setSensitiveInput(true);
