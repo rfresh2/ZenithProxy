@@ -33,12 +33,6 @@
   "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
 },
 {
-  "name":"[Lcom.viaversion.nbt.tag.CompoundTag;"
-},
-{
-  "name":"[Lcom.viaversion.nbt.tag.Tag;"
-},
-{
   "name":"[Lcom.viaversion.viaversion.api.minecraft.BlockChangeRecord;"
 },
 {
@@ -528,8 +522,7 @@
 },
 {
   "name":"com.viaversion.nbt.tag.CompoundTag",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.lang.String"] }]
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.viaversion.nbt.tag.DoubleTag",
@@ -595,11 +588,6 @@
 },
 {
   "name":"com.viaversion.viaversion.protocols.protocol1_13to1_12_2.data.RecipeData$Recipe",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.viaversion.viaversion.protocols.v1_12_2to1_13.data.RecipeData$Recipe",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
