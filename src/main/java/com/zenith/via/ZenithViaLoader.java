@@ -1,6 +1,6 @@
 package com.zenith.via;
 
-import com.viaversion.viabackwards.protocol.protocol1_20_3to1_20_5.provider.TransferProvider;
+import com.viaversion.viabackwards.protocol.v1_20_5to1_20_3.provider.TransferProvider;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.protocol.version.VersionProvider;
