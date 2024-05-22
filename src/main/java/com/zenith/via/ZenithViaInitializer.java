@@ -1,9 +1,11 @@
 package com.zenith.via;
 
+import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_15;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import com.zenith.Proxy;
+import com.zenith.util.Wait;
 import com.zenith.via.handler.ZViaProtocolStateHandler;
 import io.netty.channel.Channel;
 import net.raphimc.vialoader.ViaLoader;
@@ -27,7 +29,22 @@ public class ZenithViaInitializer {
                 new ZenithViaLoader(),
                 null,
                 null,
-                ViaBackwardsPlatformImpl::new
+                () -> {
+                    // there's some race condition in via loading here that can cause viabackwards to fail its init
+                    // might be related to graalvm compiler optimizations, haven't reproduced on java yet
+                    // this code is just adding some retries very hackily
+                    if (!Wait.waitUntil(() -> {
+                        try {
+                            EntityTypes1_15.PUFFERFISH.getId();
+                            return true;
+                        } catch (final Throwable e) {
+                            return false;
+                        }
+                    }, 5)) {
+                        DEFAULT_LOG.error("Timed out waiting for via entity id mappings to load :(");
+                    }
+                    return new ViaBackwardsPlatformImpl();
+                }
             );
         }
     }
