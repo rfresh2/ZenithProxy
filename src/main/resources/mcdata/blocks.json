@@ -12,7 +12,8 @@
     "maxStateId": 0,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1,
@@ -27,7 +28,8 @@
     "maxStateId": 1,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 2,
@@ -42,7 +44,8 @@
     "maxStateId": 2,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 3,
@@ -57,7 +60,8 @@
     "maxStateId": 3,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 4,
@@ -72,7 +76,8 @@
     "maxStateId": 4,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 5,
@@ -87,7 +92,8 @@
     "maxStateId": 5,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 6,
@@ -102,7 +108,8 @@
     "maxStateId": 6,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 7,
@@ -117,7 +124,8 @@
     "maxStateId": 7,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 8,
@@ -138,7 +146,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 9,
@@ -153,7 +162,8 @@
     "maxStateId": 10,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 10,
@@ -168,7 +178,8 @@
     "maxStateId": 11,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 11,
@@ -189,7 +200,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 12,
@@ -204,7 +216,8 @@
     "maxStateId": 14,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 13,
@@ -219,7 +232,8 @@
     "maxStateId": 15,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 14,
@@ -234,7 +248,8 @@
     "maxStateId": 16,
     "mapColorId": 34,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 15,
@@ -249,7 +264,8 @@
     "maxStateId": 17,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 16,
@@ -264,7 +280,8 @@
     "maxStateId": 18,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 17,
@@ -279,7 +296,8 @@
     "maxStateId": 19,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 18,
@@ -294,7 +312,8 @@
     "maxStateId": 20,
     "mapColorId": 36,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 19,
@@ -309,7 +328,8 @@
     "maxStateId": 21,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 20,
@@ -324,7 +344,8 @@
     "maxStateId": 22,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 21,
@@ -339,7 +360,8 @@
     "maxStateId": 23,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 22,
@@ -354,7 +376,8 @@
     "maxStateId": 24,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 23,
@@ -379,7 +402,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 24,
@@ -404,7 +428,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 25,
@@ -429,7 +454,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 26,
@@ -454,7 +480,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 27,
@@ -479,7 +506,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 28,
@@ -504,7 +532,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 29,
@@ -529,7 +558,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 30,
@@ -576,7 +606,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 31,
@@ -591,7 +622,8 @@
     "maxStateId": 79,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 32,
@@ -630,7 +662,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 33,
@@ -669,7 +702,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 34,
@@ -684,7 +718,8 @@
     "maxStateId": 112,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 35,
@@ -711,7 +746,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "brushable_block"
   },
   {
     "id": 36,
@@ -726,7 +762,8 @@
     "maxStateId": 117,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 37,
@@ -741,7 +778,8 @@
     "maxStateId": 118,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 38,
@@ -768,7 +806,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "brushable_block"
   },
   {
     "id": 39,
@@ -783,7 +822,8 @@
     "maxStateId": 123,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 40,
@@ -798,7 +838,8 @@
     "maxStateId": 124,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 41,
@@ -813,7 +854,8 @@
     "maxStateId": 125,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 42,
@@ -828,7 +870,8 @@
     "maxStateId": 126,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 43,
@@ -843,7 +886,8 @@
     "maxStateId": 127,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 44,
@@ -858,7 +902,8 @@
     "maxStateId": 128,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 45,
@@ -873,7 +918,8 @@
     "maxStateId": 129,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 46,
@@ -899,7 +945,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 47,
@@ -925,7 +972,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 48,
@@ -951,7 +999,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 49,
@@ -977,7 +1026,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 50,
@@ -1003,7 +1053,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 51,
@@ -1029,7 +1080,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 52,
@@ -1055,7 +1107,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 53,
@@ -1081,7 +1134,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 54,
@@ -1102,7 +1156,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 55,
@@ -1128,7 +1183,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 56,
@@ -1154,7 +1210,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 57,
@@ -1180,7 +1237,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 58,
@@ -1206,7 +1264,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 59,
@@ -1232,7 +1291,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 60,
@@ -1258,7 +1318,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 61,
@@ -1284,7 +1345,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 62,
@@ -1310,7 +1372,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 63,
@@ -1336,7 +1399,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 64,
@@ -1362,7 +1426,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 65,
@@ -1388,7 +1453,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 66,
@@ -1414,7 +1480,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 67,
@@ -1440,7 +1507,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 68,
@@ -1466,7 +1534,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 69,
@@ -1492,7 +1561,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 70,
@@ -1518,7 +1588,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 71,
@@ -1544,7 +1615,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 72,
@@ -1570,7 +1642,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 73,
@@ -1596,7 +1669,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 74,
@@ -1622,7 +1696,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 75,
@@ -1648,7 +1723,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 76,
@@ -1674,7 +1750,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 77,
@@ -1700,7 +1777,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 78,
@@ -1726,7 +1804,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 79,
@@ -1752,7 +1831,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 80,
@@ -1778,7 +1858,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 81,
@@ -1804,7 +1885,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 82,
@@ -1844,7 +1926,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 83,
@@ -1884,7 +1967,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 84,
@@ -1924,7 +2008,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 85,
@@ -1964,7 +2049,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 86,
@@ -2004,7 +2090,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 87,
@@ -2044,7 +2131,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 88,
@@ -2084,7 +2172,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 89,
@@ -2124,7 +2213,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 90,
@@ -2164,7 +2254,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 91,
@@ -2204,7 +2295,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 92,
@@ -2219,7 +2311,8 @@
     "maxStateId": 517,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 93,
@@ -2234,7 +2327,8 @@
     "maxStateId": 518,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 94,
@@ -2249,7 +2343,8 @@
     "maxStateId": 519,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 95,
@@ -2264,7 +2359,8 @@
     "maxStateId": 520,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 96,
@@ -2279,7 +2375,8 @@
     "maxStateId": 521,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 97,
@@ -2294,7 +2391,8 @@
     "maxStateId": 522,
     "mapColorId": 32,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 98,
@@ -2328,7 +2426,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "dispenser"
   },
   {
     "id": 99,
@@ -2343,7 +2442,8 @@
     "maxStateId": 535,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 100,
@@ -2358,7 +2458,8 @@
     "maxStateId": 536,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 101,
@@ -2373,7 +2474,8 @@
     "maxStateId": 537,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 102,
@@ -2456,7 +2558,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 103,
@@ -2497,7 +2600,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 104,
@@ -2538,7 +2642,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 105,
@@ -2579,7 +2684,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 106,
@@ -2620,7 +2726,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 107,
@@ -2661,7 +2768,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 108,
@@ -2702,7 +2810,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 109,
@@ -2743,7 +2852,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 110,
@@ -2784,7 +2894,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 111,
@@ -2825,7 +2936,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 112,
@@ -2866,7 +2978,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 113,
@@ -2907,7 +3020,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 114,
@@ -2948,7 +3062,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 115,
@@ -2989,7 +3104,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 116,
@@ -3030,7 +3146,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 117,
@@ -3071,7 +3188,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 118,
@@ -3112,7 +3230,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bed"
   },
   {
     "id": 119,
@@ -3151,7 +3270,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 120,
@@ -3190,7 +3310,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 121,
@@ -3224,7 +3345,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 122,
@@ -3239,7 +3361,8 @@
     "maxStateId": 2004,
     "mapColorId": 3,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 123,
@@ -3254,7 +3377,8 @@
     "maxStateId": 2005,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 124,
@@ -3269,7 +3393,8 @@
     "maxStateId": 2006,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 125,
@@ -3284,7 +3409,8 @@
     "maxStateId": 2007,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 126,
@@ -3299,7 +3425,8 @@
     "maxStateId": 2008,
     "mapColorId": 12,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 127,
@@ -3324,7 +3451,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 128,
@@ -3358,7 +3486,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 129,
@@ -3401,7 +3530,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 130,
@@ -3416,7 +3546,8 @@
     "maxStateId": 2047,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 131,
@@ -3431,7 +3562,8 @@
     "maxStateId": 2048,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 132,
@@ -3446,7 +3578,8 @@
     "maxStateId": 2049,
     "mapColorId": 16,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 133,
@@ -3461,7 +3594,8 @@
     "maxStateId": 2050,
     "mapColorId": 17,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 134,
@@ -3476,7 +3610,8 @@
     "maxStateId": 2051,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 135,
@@ -3491,7 +3626,8 @@
     "maxStateId": 2052,
     "mapColorId": 19,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 136,
@@ -3506,7 +3642,8 @@
     "maxStateId": 2053,
     "mapColorId": 20,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 137,
@@ -3521,7 +3658,8 @@
     "maxStateId": 2054,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 138,
@@ -3536,7 +3674,8 @@
     "maxStateId": 2055,
     "mapColorId": 22,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 139,
@@ -3551,7 +3690,8 @@
     "maxStateId": 2056,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 140,
@@ -3566,7 +3706,8 @@
     "maxStateId": 2057,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 141,
@@ -3581,7 +3722,8 @@
     "maxStateId": 2058,
     "mapColorId": 25,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 142,
@@ -3596,7 +3738,8 @@
     "maxStateId": 2059,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 143,
@@ -3611,7 +3754,8 @@
     "maxStateId": 2060,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 144,
@@ -3626,7 +3770,8 @@
     "maxStateId": 2061,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 145,
@@ -3641,7 +3786,8 @@
     "maxStateId": 2062,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 146,
@@ -3679,7 +3825,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "piston"
   },
   {
     "id": 147,
@@ -3694,7 +3841,8 @@
     "maxStateId": 2075,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 148,
@@ -3709,7 +3857,8 @@
     "maxStateId": 2076,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 149,
@@ -3724,7 +3873,8 @@
     "maxStateId": 2077,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 150,
@@ -3739,7 +3889,8 @@
     "maxStateId": 2078,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 151,
@@ -3754,7 +3905,8 @@
     "maxStateId": 2079,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 152,
@@ -3769,7 +3921,8 @@
     "maxStateId": 2080,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 153,
@@ -3784,7 +3937,8 @@
     "maxStateId": 2081,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 154,
@@ -3799,7 +3953,8 @@
     "maxStateId": 2082,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 155,
@@ -3814,7 +3969,8 @@
     "maxStateId": 2083,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 156,
@@ -3829,7 +3985,8 @@
     "maxStateId": 2084,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 157,
@@ -3844,7 +4001,8 @@
     "maxStateId": 2085,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 158,
@@ -3859,7 +4017,8 @@
     "maxStateId": 2086,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 159,
@@ -3874,7 +4033,8 @@
     "maxStateId": 2087,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 160,
@@ -3889,7 +4049,8 @@
     "maxStateId": 2088,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 161,
@@ -3904,7 +4065,8 @@
     "maxStateId": 2089,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 162,
@@ -3919,7 +4081,8 @@
     "maxStateId": 2090,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 163,
@@ -3934,7 +4097,8 @@
     "maxStateId": 2091,
     "mapColorId": 30,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 164,
@@ -3949,7 +4113,8 @@
     "maxStateId": 2092,
     "mapColorId": 6,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 165,
@@ -3964,7 +4129,8 @@
     "maxStateId": 2093,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 166,
@@ -3985,7 +4151,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 167,
@@ -4000,7 +4167,8 @@
     "maxStateId": 2096,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 168,
@@ -4057,7 +4225,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "chiseled_bookshelf"
   },
   {
     "id": 169,
@@ -4072,7 +4241,8 @@
     "maxStateId": 2353,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 170,
@@ -4087,7 +4257,8 @@
     "maxStateId": 2354,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 171,
@@ -4102,7 +4273,8 @@
     "maxStateId": 2355,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 172,
@@ -4129,7 +4301,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 173,
@@ -4193,7 +4366,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 174,
@@ -4208,7 +4382,8 @@
     "maxStateId": 2872,
     "mapColorId": 17,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 175,
@@ -4223,7 +4398,8 @@
     "maxStateId": 2873,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "mob_spawner"
   },
   {
     "id": 176,
@@ -4276,7 +4452,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 177,
@@ -4318,7 +4495,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "chest"
   },
   {
     "id": 178,
@@ -4397,7 +4575,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 179,
@@ -4412,7 +4591,8 @@
     "maxStateId": 4274,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 180,
@@ -4427,7 +4607,8 @@
     "maxStateId": 4275,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 181,
@@ -4442,7 +4623,8 @@
     "maxStateId": 4276,
     "mapColorId": 31,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 182,
@@ -4457,7 +4639,8 @@
     "maxStateId": 4277,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 183,
@@ -4488,7 +4671,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 184,
@@ -4519,7 +4703,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 185,
@@ -4551,7 +4736,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "furnace"
   },
   {
     "id": 186,
@@ -4595,7 +4781,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 187,
@@ -4639,7 +4826,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 188,
@@ -4683,7 +4871,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 189,
@@ -4727,7 +4916,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 190,
@@ -4771,7 +4961,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 191,
@@ -4815,7 +5006,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 192,
@@ -4859,7 +5051,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 193,
@@ -4903,7 +5096,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 194,
@@ -4947,7 +5141,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 195,
@@ -5002,7 +5197,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 196,
@@ -5034,7 +5230,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 197,
@@ -5072,7 +5269,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 198,
@@ -5125,7 +5323,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 199,
@@ -5157,7 +5356,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 200,
@@ -5189,7 +5389,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 201,
@@ -5221,7 +5422,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 202,
@@ -5253,7 +5455,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 203,
@@ -5285,7 +5488,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 204,
@@ -5317,7 +5521,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 205,
@@ -5349,7 +5554,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 206,
@@ -5381,7 +5587,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 207,
@@ -5413,7 +5620,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 208,
@@ -5462,7 +5670,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 209,
@@ -5511,7 +5720,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 210,
@@ -5560,7 +5770,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 211,
@@ -5609,7 +5820,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 212,
@@ -5658,7 +5870,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 213,
@@ -5707,7 +5920,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 214,
@@ -5756,7 +5970,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 215,
@@ -5805,7 +6020,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 216,
@@ -5854,7 +6070,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 217,
@@ -5903,7 +6120,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 218,
@@ -5952,7 +6170,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 219,
@@ -5984,7 +6203,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 220,
@@ -6016,7 +6236,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 221,
@@ -6048,7 +6269,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 222,
@@ -6080,7 +6302,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 223,
@@ -6112,7 +6335,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 224,
@@ -6144,7 +6368,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 225,
@@ -6176,7 +6401,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 226,
@@ -6208,7 +6434,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 227,
@@ -6240,7 +6467,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 228,
@@ -6272,7 +6500,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 229,
@@ -6304,7 +6533,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hanging_sign"
   },
   {
     "id": 230,
@@ -6346,7 +6576,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 231,
@@ -6367,7 +6598,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 232,
@@ -6422,7 +6654,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 233,
@@ -6443,7 +6676,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 234,
@@ -6464,7 +6698,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 235,
@@ -6485,7 +6720,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 236,
@@ -6506,7 +6742,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 237,
@@ -6527,7 +6764,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 238,
@@ -6548,7 +6786,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 239,
@@ -6569,7 +6808,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 240,
@@ -6590,7 +6830,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 241,
@@ -6611,7 +6852,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 242,
@@ -6632,7 +6874,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 243,
@@ -6653,7 +6896,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 244,
@@ -6674,7 +6918,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 245,
@@ -6706,7 +6951,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 246,
@@ -6748,7 +6994,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 247,
@@ -6779,7 +7026,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 248,
@@ -6794,7 +7042,8 @@
     "maxStateId": 5780,
     "mapColorId": 5,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 249,
@@ -6809,7 +7058,8 @@
     "maxStateId": 5781,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 250,
@@ -6848,7 +7098,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 251,
@@ -6863,7 +7114,8 @@
     "maxStateId": 5798,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 252,
@@ -6902,7 +7154,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 253,
@@ -6923,7 +7176,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "jukebox"
   },
   {
     "id": 254,
@@ -6964,7 +7218,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 255,
@@ -6979,7 +7234,8 @@
     "maxStateId": 5849,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 256,
@@ -6994,7 +7250,8 @@
     "maxStateId": 5850,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 257,
@@ -7009,7 +7266,8 @@
     "maxStateId": 5851,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 258,
@@ -7035,7 +7293,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 259,
@@ -7061,7 +7320,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 260,
@@ -7076,7 +7336,8 @@
     "maxStateId": 5858,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 261,
@@ -7103,7 +7364,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 262,
@@ -7118,7 +7380,8 @@
     "maxStateId": 5863,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 263,
@@ -7143,7 +7406,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 264,
@@ -7170,7 +7434,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 265,
@@ -7197,7 +7462,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 266,
@@ -7227,7 +7493,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 267,
@@ -7275,7 +7542,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 268,
@@ -7290,7 +7558,8 @@
     "maxStateId": 5945,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 269,
@@ -7305,7 +7574,8 @@
     "maxStateId": 5946,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 270,
@@ -7320,7 +7590,8 @@
     "maxStateId": 5947,
     "mapColorId": 16,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 271,
@@ -7335,7 +7606,8 @@
     "maxStateId": 5948,
     "mapColorId": 17,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 272,
@@ -7350,7 +7622,8 @@
     "maxStateId": 5949,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 273,
@@ -7365,7 +7638,8 @@
     "maxStateId": 5950,
     "mapColorId": 19,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 274,
@@ -7380,7 +7654,8 @@
     "maxStateId": 5951,
     "mapColorId": 20,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 275,
@@ -7395,7 +7670,8 @@
     "maxStateId": 5952,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 276,
@@ -7410,7 +7686,8 @@
     "maxStateId": 5953,
     "mapColorId": 22,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 277,
@@ -7425,7 +7702,8 @@
     "maxStateId": 5954,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 278,
@@ -7440,7 +7718,8 @@
     "maxStateId": 5955,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 279,
@@ -7455,7 +7734,8 @@
     "maxStateId": 5956,
     "mapColorId": 25,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 280,
@@ -7470,7 +7750,8 @@
     "maxStateId": 5957,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 281,
@@ -7485,7 +7766,8 @@
     "maxStateId": 5958,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 282,
@@ -7500,7 +7782,8 @@
     "maxStateId": 5959,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 283,
@@ -7515,7 +7798,8 @@
     "maxStateId": 5960,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 284,
@@ -7566,7 +7850,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 285,
@@ -7617,7 +7902,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 286,
@@ -7668,7 +7954,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 287,
@@ -7719,7 +8006,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 288,
@@ -7770,7 +8058,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 289,
@@ -7821,7 +8110,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 290,
@@ -7872,7 +8162,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 291,
@@ -7923,7 +8214,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 292,
@@ -7974,7 +8266,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 293,
@@ -7989,7 +8282,8 @@
     "maxStateId": 6537,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 294,
@@ -8004,7 +8298,8 @@
     "maxStateId": 6538,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 295,
@@ -8019,7 +8314,8 @@
     "maxStateId": 6539,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 296,
@@ -8034,7 +8330,8 @@
     "maxStateId": 6540,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 297,
@@ -8049,7 +8346,8 @@
     "maxStateId": 6541,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 298,
@@ -8064,7 +8362,8 @@
     "maxStateId": 6542,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 299,
@@ -8079,7 +8378,8 @@
     "maxStateId": 6543,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 300,
@@ -8094,7 +8394,8 @@
     "maxStateId": 6544,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 301,
@@ -8109,7 +8410,8 @@
     "maxStateId": 6545,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 302,
@@ -8124,7 +8426,8 @@
     "maxStateId": 6546,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 303,
@@ -8139,7 +8442,8 @@
     "maxStateId": 6547,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 304,
@@ -8154,7 +8458,8 @@
     "maxStateId": 6548,
     "mapColorId": 9,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 305,
@@ -8200,7 +8505,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 306,
@@ -8246,7 +8552,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 307,
@@ -8292,7 +8599,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 308,
@@ -8333,7 +8641,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 309,
@@ -8364,7 +8673,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 310,
@@ -8405,7 +8715,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 311,
@@ -8420,7 +8731,8 @@
     "maxStateId": 6811,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 312,
@@ -8435,7 +8747,8 @@
     "maxStateId": 6812,
     "mapColorId": 19,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 313,
@@ -8462,7 +8775,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 314,
@@ -8489,7 +8803,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 315,
@@ -8520,7 +8835,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 316,
@@ -8551,7 +8867,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 317,
@@ -8592,7 +8909,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 318,
@@ -8643,7 +8961,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 319,
@@ -8685,7 +9004,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 320,
@@ -8738,7 +9058,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 321,
@@ -8791,7 +9112,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 322,
@@ -8844,7 +9166,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 323,
@@ -8865,7 +9188,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 324,
@@ -8880,7 +9204,8 @@
     "maxStateId": 7271,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 325,
@@ -8895,7 +9220,8 @@
     "maxStateId": 7272,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 326,
@@ -8936,7 +9262,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 327,
@@ -8989,7 +9316,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 328,
@@ -9016,7 +9344,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 329,
@@ -9031,7 +9360,8 @@
     "maxStateId": 7389,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "enchanting_table"
   },
   {
     "id": 330,
@@ -9062,7 +9392,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "brewing_stand"
   },
   {
     "id": 331,
@@ -9077,7 +9408,8 @@
     "maxStateId": 7398,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 332,
@@ -9103,7 +9435,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 333,
@@ -9118,7 +9451,8 @@
     "maxStateId": 7402,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 334,
@@ -9144,7 +9478,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 335,
@@ -9159,7 +9494,8 @@
     "maxStateId": 7406,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "end_portal"
   },
   {
     "id": 336,
@@ -9191,7 +9527,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 337,
@@ -9206,7 +9543,8 @@
     "maxStateId": 7415,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 338,
@@ -9221,7 +9559,8 @@
     "maxStateId": 7416,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 339,
@@ -9242,7 +9581,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 340,
@@ -9279,7 +9619,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 341,
@@ -9332,7 +9673,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 342,
@@ -9347,7 +9689,8 @@
     "maxStateId": 7511,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 343,
@@ -9362,7 +9705,8 @@
     "maxStateId": 7512,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 344,
@@ -9394,7 +9738,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "ender_chest"
   },
   {
     "id": 345,
@@ -9431,7 +9776,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 346,
@@ -9482,7 +9828,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 347,
@@ -9497,7 +9844,8 @@
     "maxStateId": 7665,
     "mapColorId": 33,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 348,
@@ -9550,7 +9898,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 349,
@@ -9603,7 +9952,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 350,
@@ -9656,7 +10006,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 351,
@@ -9690,7 +10041,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "command_block"
   },
   {
     "id": 352,
@@ -9705,7 +10057,8 @@
     "maxStateId": 7918,
     "mapColorId": 31,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "beacon"
   },
   {
     "id": 353,
@@ -9771,7 +10124,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 354,
@@ -9837,7 +10191,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 355,
@@ -9852,7 +10207,8 @@
     "maxStateId": 8567,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 356,
@@ -9867,7 +10223,8 @@
     "maxStateId": 8568,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 357,
@@ -9882,7 +10239,8 @@
     "maxStateId": 8569,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 358,
@@ -9897,7 +10255,8 @@
     "maxStateId": 8570,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 359,
@@ -9912,7 +10271,8 @@
     "maxStateId": 8571,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 360,
@@ -9927,7 +10287,8 @@
     "maxStateId": 8572,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 361,
@@ -9942,7 +10303,8 @@
     "maxStateId": 8573,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 362,
@@ -9957,7 +10319,8 @@
     "maxStateId": 8574,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 363,
@@ -9972,7 +10335,8 @@
     "maxStateId": 8575,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 364,
@@ -9987,7 +10351,8 @@
     "maxStateId": 8576,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 365,
@@ -10002,7 +10367,8 @@
     "maxStateId": 8577,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 366,
@@ -10017,7 +10383,8 @@
     "maxStateId": 8578,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 367,
@@ -10032,7 +10399,8 @@
     "maxStateId": 8579,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 368,
@@ -10047,7 +10415,8 @@
     "maxStateId": 8580,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 369,
@@ -10062,7 +10431,8 @@
     "maxStateId": 8581,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 370,
@@ -10077,7 +10447,8 @@
     "maxStateId": 8582,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 371,
@@ -10092,7 +10463,8 @@
     "maxStateId": 8583,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 372,
@@ -10107,7 +10479,8 @@
     "maxStateId": 8584,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 373,
@@ -10122,7 +10495,8 @@
     "maxStateId": 8585,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 374,
@@ -10137,7 +10511,8 @@
     "maxStateId": 8586,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 375,
@@ -10152,7 +10527,8 @@
     "maxStateId": 8587,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 376,
@@ -10167,7 +10543,8 @@
     "maxStateId": 8588,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 377,
@@ -10182,7 +10559,8 @@
     "maxStateId": 8589,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 378,
@@ -10197,7 +10575,8 @@
     "maxStateId": 8590,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 379,
@@ -10212,7 +10591,8 @@
     "maxStateId": 8591,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 380,
@@ -10227,7 +10607,8 @@
     "maxStateId": 8592,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 381,
@@ -10242,7 +10623,8 @@
     "maxStateId": 8593,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 382,
@@ -10257,7 +10639,8 @@
     "maxStateId": 8594,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 383,
@@ -10288,7 +10671,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 384,
@@ -10319,7 +10703,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 385,
@@ -10361,7 +10746,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 386,
@@ -10403,7 +10789,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 387,
@@ -10445,7 +10832,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 388,
@@ -10487,7 +10875,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 389,
@@ -10529,7 +10918,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 390,
@@ -10571,7 +10961,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 391,
@@ -10613,7 +11004,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 392,
@@ -10655,7 +11047,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 393,
@@ -10697,7 +11090,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 394,
@@ -10741,7 +11135,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 395,
@@ -10773,7 +11168,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 396,
@@ -10817,7 +11213,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 397,
@@ -10849,7 +11246,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 398,
@@ -10893,7 +11291,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 399,
@@ -10925,7 +11324,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 400,
@@ -10969,7 +11369,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 401,
@@ -11001,7 +11402,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 402,
@@ -11045,7 +11447,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 403,
@@ -11077,7 +11480,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 404,
@@ -11121,7 +11525,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 405,
@@ -11153,7 +11558,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 406,
@@ -11197,7 +11603,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 407,
@@ -11229,7 +11636,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "skull"
   },
   {
     "id": 408,
@@ -11256,7 +11664,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 409,
@@ -11283,7 +11692,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 410,
@@ -11310,7 +11720,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 411,
@@ -11352,7 +11763,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "trapped_chest"
   },
   {
     "id": 412,
@@ -11391,7 +11803,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 413,
@@ -11430,7 +11843,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 414,
@@ -11471,7 +11885,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "comparator"
   },
   {
     "id": 415,
@@ -11515,7 +11930,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "daylight_detector"
   },
   {
     "id": 416,
@@ -11530,7 +11946,8 @@
     "maxStateId": 9223,
     "mapColorId": 4,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 417,
@@ -11545,7 +11962,8 @@
     "maxStateId": 9224,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 418,
@@ -11578,7 +11996,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "hopper"
   },
   {
     "id": 419,
@@ -11593,7 +12012,8 @@
     "maxStateId": 9235,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 420,
@@ -11608,7 +12028,8 @@
     "maxStateId": 9236,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 421,
@@ -11634,7 +12055,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 422,
@@ -11687,7 +12109,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 423,
@@ -11726,7 +12149,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 424,
@@ -11760,7 +12184,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "dropper"
   },
   {
     "id": 425,
@@ -11775,7 +12200,8 @@
     "maxStateId": 9356,
     "mapColorId": 36,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 426,
@@ -11790,7 +12216,8 @@
     "maxStateId": 9357,
     "mapColorId": 37,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 427,
@@ -11805,7 +12232,8 @@
     "maxStateId": 9358,
     "mapColorId": 38,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 428,
@@ -11820,7 +12248,8 @@
     "maxStateId": 9359,
     "mapColorId": 39,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 429,
@@ -11835,7 +12264,8 @@
     "maxStateId": 9360,
     "mapColorId": 40,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 430,
@@ -11850,7 +12280,8 @@
     "maxStateId": 9361,
     "mapColorId": 41,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 431,
@@ -11865,7 +12296,8 @@
     "maxStateId": 9362,
     "mapColorId": 42,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 432,
@@ -11880,7 +12312,8 @@
     "maxStateId": 9363,
     "mapColorId": 43,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 433,
@@ -11895,7 +12328,8 @@
     "maxStateId": 9364,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 434,
@@ -11910,7 +12344,8 @@
     "maxStateId": 9365,
     "mapColorId": 45,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 435,
@@ -11925,7 +12360,8 @@
     "maxStateId": 9366,
     "mapColorId": 46,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 436,
@@ -11940,7 +12376,8 @@
     "maxStateId": 9367,
     "mapColorId": 47,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 437,
@@ -11955,7 +12392,8 @@
     "maxStateId": 9368,
     "mapColorId": 48,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 438,
@@ -11970,7 +12408,8 @@
     "maxStateId": 9369,
     "mapColorId": 49,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 439,
@@ -11985,7 +12424,8 @@
     "maxStateId": 9370,
     "mapColorId": 50,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 440,
@@ -12000,7 +12440,8 @@
     "maxStateId": 9371,
     "mapColorId": 51,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 441,
@@ -12041,7 +12482,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 442,
@@ -12082,7 +12524,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 443,
@@ -12123,7 +12566,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 444,
@@ -12164,7 +12608,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 445,
@@ -12205,7 +12650,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 446,
@@ -12246,7 +12692,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 447,
@@ -12287,7 +12734,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 448,
@@ -12328,7 +12776,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 449,
@@ -12369,7 +12818,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 450,
@@ -12410,7 +12860,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 451,
@@ -12451,7 +12902,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 452,
@@ -12492,7 +12944,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 453,
@@ -12533,7 +12986,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 454,
@@ -12574,7 +13028,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 455,
@@ -12615,7 +13070,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 456,
@@ -12656,7 +13112,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 457,
@@ -12709,7 +13166,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 458,
@@ -12762,7 +13220,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 459,
@@ -12815,7 +13274,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 460,
@@ -12868,7 +13328,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 461,
@@ -12921,7 +13382,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 462,
@@ -12974,7 +13436,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 463,
@@ -12989,7 +13452,8 @@
     "maxStateId": 10364,
     "mapColorId": 1,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 464,
@@ -13010,7 +13474,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 465,
@@ -13054,7 +13519,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 466,
@@ -13105,7 +13571,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 467,
@@ -13120,7 +13587,8 @@
     "maxStateId": 10463,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 468,
@@ -13135,7 +13603,8 @@
     "maxStateId": 10464,
     "mapColorId": 31,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 469,
@@ -13150,7 +13619,8 @@
     "maxStateId": 10465,
     "mapColorId": 31,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 470,
@@ -13203,7 +13673,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 471,
@@ -13256,7 +13727,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 472,
@@ -13309,7 +13781,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 473,
@@ -13340,7 +13813,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 474,
@@ -13371,7 +13845,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 475,
@@ -13402,7 +13877,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 476,
@@ -13417,7 +13893,8 @@
     "maxStateId": 10724,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 477,
@@ -13443,7 +13920,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 478,
@@ -13458,7 +13936,8 @@
     "maxStateId": 10728,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 479,
@@ -13473,7 +13952,8 @@
     "maxStateId": 10729,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 480,
@@ -13488,7 +13968,8 @@
     "maxStateId": 10730,
     "mapColorId": 16,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 481,
@@ -13503,7 +13984,8 @@
     "maxStateId": 10731,
     "mapColorId": 17,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 482,
@@ -13518,7 +14000,8 @@
     "maxStateId": 10732,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 483,
@@ -13533,7 +14016,8 @@
     "maxStateId": 10733,
     "mapColorId": 19,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 484,
@@ -13548,7 +14032,8 @@
     "maxStateId": 10734,
     "mapColorId": 20,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 485,
@@ -13563,7 +14048,8 @@
     "maxStateId": 10735,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 486,
@@ -13578,7 +14064,8 @@
     "maxStateId": 10736,
     "mapColorId": 22,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 487,
@@ -13593,7 +14080,8 @@
     "maxStateId": 10737,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 488,
@@ -13608,7 +14096,8 @@
     "maxStateId": 10738,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 489,
@@ -13623,7 +14112,8 @@
     "maxStateId": 10739,
     "mapColorId": 25,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 490,
@@ -13638,7 +14128,8 @@
     "maxStateId": 10740,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 491,
@@ -13653,7 +14144,8 @@
     "maxStateId": 10741,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 492,
@@ -13668,7 +14160,8 @@
     "maxStateId": 10742,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 493,
@@ -13683,7 +14176,8 @@
     "maxStateId": 10743,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 494,
@@ -13698,7 +14192,8 @@
     "maxStateId": 10744,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 495,
@@ -13713,7 +14208,8 @@
     "maxStateId": 10745,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 496,
@@ -13728,7 +14224,8 @@
     "maxStateId": 10746,
     "mapColorId": 5,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 497,
@@ -13753,7 +14250,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 498,
@@ -13778,7 +14276,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 499,
@@ -13803,7 +14302,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 500,
@@ -13828,7 +14328,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 501,
@@ -13853,7 +14354,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 502,
@@ -13878,7 +14380,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 503,
@@ -13917,7 +14420,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 504,
@@ -13956,7 +14460,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 505,
@@ -13995,7 +14500,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 506,
@@ -14034,7 +14540,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 507,
@@ -14073,7 +14580,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 508,
@@ -14112,7 +14620,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 509,
@@ -14151,7 +14660,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 510,
@@ -14190,7 +14700,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 511,
@@ -14229,7 +14740,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 512,
@@ -14268,7 +14780,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 513,
@@ -14307,7 +14820,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 514,
@@ -14346,7 +14860,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 515,
@@ -14385,7 +14900,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 516,
@@ -14424,7 +14940,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 517,
@@ -14463,7 +14980,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 518,
@@ -14502,7 +15020,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 519,
@@ -14529,7 +15048,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 520,
@@ -14556,7 +15076,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 521,
@@ -14583,7 +15104,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 522,
@@ -14610,7 +15132,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 523,
@@ -14637,7 +15160,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 524,
@@ -14664,7 +15188,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 525,
@@ -14691,7 +15216,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 526,
@@ -14718,7 +15244,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 527,
@@ -14745,7 +15272,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 528,
@@ -14772,7 +15300,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 529,
@@ -14799,7 +15328,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 530,
@@ -14826,7 +15356,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 531,
@@ -14853,7 +15384,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 532,
@@ -14880,7 +15412,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 533,
@@ -14907,7 +15440,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 534,
@@ -14934,7 +15468,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "banner"
   },
   {
     "id": 535,
@@ -14949,7 +15484,8 @@
     "maxStateId": 11079,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 536,
@@ -14964,7 +15500,8 @@
     "maxStateId": 11080,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 537,
@@ -14979,7 +15516,8 @@
     "maxStateId": 11081,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 538,
@@ -15032,7 +15570,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 539,
@@ -15063,7 +15602,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 540,
@@ -15094,7 +15634,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 541,
@@ -15125,7 +15666,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 542,
@@ -15156,7 +15698,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 543,
@@ -15187,7 +15730,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 544,
@@ -15218,7 +15762,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 545,
@@ -15249,7 +15794,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 546,
@@ -15280,7 +15826,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 547,
@@ -15311,7 +15858,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 548,
@@ -15342,7 +15890,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 549,
@@ -15373,7 +15922,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 550,
@@ -15404,7 +15954,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 551,
@@ -15435,7 +15986,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 552,
@@ -15466,7 +16018,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 553,
@@ -15497,7 +16050,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 554,
@@ -15528,7 +16082,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 555,
@@ -15559,7 +16114,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 556,
@@ -15590,7 +16146,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 557,
@@ -15621,7 +16178,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 558,
@@ -15652,7 +16210,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 559,
@@ -15683,7 +16242,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 560,
@@ -15714,7 +16274,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 561,
@@ -15745,7 +16306,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 562,
@@ -15776,7 +16338,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 563,
@@ -15791,7 +16354,8 @@
     "maxStateId": 11306,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 564,
@@ -15806,7 +16370,8 @@
     "maxStateId": 11307,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 565,
@@ -15821,7 +16386,8 @@
     "maxStateId": 11308,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 566,
@@ -15836,7 +16402,8 @@
     "maxStateId": 11309,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 567,
@@ -15878,7 +16445,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 568,
@@ -15920,7 +16488,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 569,
@@ -15962,7 +16531,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 570,
@@ -16004,7 +16574,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 571,
@@ -16046,7 +16617,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 572,
@@ -16088,7 +16660,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 573,
@@ -16130,7 +16703,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 574,
@@ -16172,7 +16746,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 575,
@@ -16213,7 +16788,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 576,
@@ -16254,7 +16830,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 577,
@@ -16295,7 +16872,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 578,
@@ -16336,7 +16914,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 579,
@@ -16377,7 +16956,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 580,
@@ -16418,7 +16998,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 581,
@@ -16459,7 +17040,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 582,
@@ -16500,7 +17082,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 583,
@@ -16555,7 +17138,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 584,
@@ -16610,7 +17194,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 585,
@@ -16665,7 +17250,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 586,
@@ -16720,7 +17306,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 587,
@@ -16775,7 +17362,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 588,
@@ -16830,7 +17418,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 589,
@@ -16885,7 +17474,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 590,
@@ -16940,7 +17530,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 591,
@@ -16969,7 +17560,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 592,
@@ -17015,7 +17607,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 593,
@@ -17044,7 +17637,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 594,
@@ -17059,7 +17653,8 @@
     "maxStateId": 12410,
     "mapColorId": 16,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 595,
@@ -17085,7 +17680,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 596,
@@ -17138,7 +17734,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 597,
@@ -17153,7 +17750,8 @@
     "maxStateId": 12494,
     "mapColorId": 2,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 598,
@@ -17178,7 +17776,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 599,
@@ -17215,7 +17814,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 600,
@@ -17240,7 +17840,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 601,
@@ -17267,7 +17868,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 602,
@@ -17282,7 +17884,8 @@
     "maxStateId": 12513,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 603,
@@ -17297,7 +17900,8 @@
     "maxStateId": 12514,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "end_gateway"
   },
   {
     "id": 604,
@@ -17331,7 +17935,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "command_block"
   },
   {
     "id": 605,
@@ -17365,7 +17970,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "command_block"
   },
   {
     "id": 606,
@@ -17392,7 +17998,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 607,
@@ -17407,7 +18014,8 @@
     "maxStateId": 12543,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 608,
@@ -17422,7 +18030,8 @@
     "maxStateId": 12544,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 609,
@@ -17437,7 +18046,8 @@
     "maxStateId": 12545,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 610,
@@ -17463,7 +18073,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 611,
@@ -17478,7 +18089,8 @@
     "maxStateId": 12549,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 612,
@@ -17512,7 +18124,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 613,
@@ -17541,7 +18154,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 614,
@@ -17570,7 +18184,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 615,
@@ -17599,7 +18214,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 616,
@@ -17628,7 +18244,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 617,
@@ -17657,7 +18274,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 618,
@@ -17686,7 +18304,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 619,
@@ -17715,7 +18334,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 620,
@@ -17744,7 +18364,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 621,
@@ -17773,7 +18394,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 622,
@@ -17802,7 +18424,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 623,
@@ -17831,7 +18454,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 624,
@@ -17860,7 +18484,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 625,
@@ -17889,7 +18514,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 626,
@@ -17918,7 +18544,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 627,
@@ -17947,7 +18574,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 628,
@@ -17976,7 +18604,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 629,
@@ -18005,7 +18634,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "shulker_box"
   },
   {
     "id": 630,
@@ -18032,7 +18662,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 631,
@@ -18059,7 +18690,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 632,
@@ -18086,7 +18718,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 633,
@@ -18113,7 +18746,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 634,
@@ -18140,7 +18774,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 635,
@@ -18167,7 +18802,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 636,
@@ -18194,7 +18830,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 637,
@@ -18221,7 +18858,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 638,
@@ -18248,7 +18886,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 639,
@@ -18275,7 +18914,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 640,
@@ -18302,7 +18942,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 641,
@@ -18329,7 +18970,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 642,
@@ -18356,7 +18998,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 643,
@@ -18383,7 +19026,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 644,
@@ -18410,7 +19054,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 645,
@@ -18437,7 +19082,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 646,
@@ -18452,7 +19098,8 @@
     "maxStateId": 12728,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 647,
@@ -18467,7 +19114,8 @@
     "maxStateId": 12729,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 648,
@@ -18482,7 +19130,8 @@
     "maxStateId": 12730,
     "mapColorId": 16,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 649,
@@ -18497,7 +19146,8 @@
     "maxStateId": 12731,
     "mapColorId": 17,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 650,
@@ -18512,7 +19162,8 @@
     "maxStateId": 12732,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 651,
@@ -18527,7 +19178,8 @@
     "maxStateId": 12733,
     "mapColorId": 19,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 652,
@@ -18542,7 +19194,8 @@
     "maxStateId": 12734,
     "mapColorId": 20,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 653,
@@ -18557,7 +19210,8 @@
     "maxStateId": 12735,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 654,
@@ -18572,7 +19226,8 @@
     "maxStateId": 12736,
     "mapColorId": 22,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 655,
@@ -18587,7 +19242,8 @@
     "maxStateId": 12737,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 656,
@@ -18602,7 +19258,8 @@
     "maxStateId": 12738,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 657,
@@ -18617,7 +19274,8 @@
     "maxStateId": 12739,
     "mapColorId": 25,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 658,
@@ -18632,7 +19290,8 @@
     "maxStateId": 12740,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 659,
@@ -18647,7 +19306,8 @@
     "maxStateId": 12741,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 660,
@@ -18662,7 +19322,8 @@
     "maxStateId": 12742,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 661,
@@ -18677,7 +19338,8 @@
     "maxStateId": 12743,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 662,
@@ -18692,7 +19354,8 @@
     "maxStateId": 12744,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 663,
@@ -18707,7 +19370,8 @@
     "maxStateId": 12745,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 664,
@@ -18722,7 +19386,8 @@
     "maxStateId": 12746,
     "mapColorId": 16,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 665,
@@ -18737,7 +19402,8 @@
     "maxStateId": 12747,
     "mapColorId": 17,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 666,
@@ -18752,7 +19418,8 @@
     "maxStateId": 12748,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 667,
@@ -18767,7 +19434,8 @@
     "maxStateId": 12749,
     "mapColorId": 19,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 668,
@@ -18782,7 +19450,8 @@
     "maxStateId": 12750,
     "mapColorId": 20,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 669,
@@ -18797,7 +19466,8 @@
     "maxStateId": 12751,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 670,
@@ -18812,7 +19482,8 @@
     "maxStateId": 12752,
     "mapColorId": 22,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 671,
@@ -18827,7 +19498,8 @@
     "maxStateId": 12753,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 672,
@@ -18842,7 +19514,8 @@
     "maxStateId": 12754,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 673,
@@ -18857,7 +19530,8 @@
     "maxStateId": 12755,
     "mapColorId": 25,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 674,
@@ -18872,7 +19546,8 @@
     "maxStateId": 12756,
     "mapColorId": 26,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 675,
@@ -18887,7 +19562,8 @@
     "maxStateId": 12757,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 676,
@@ -18902,7 +19578,8 @@
     "maxStateId": 12758,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 677,
@@ -18917,7 +19594,8 @@
     "maxStateId": 12759,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 678,
@@ -18966,7 +19644,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 679,
@@ -18981,7 +19660,8 @@
     "maxStateId": 12786,
     "mapColorId": 12,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 680,
@@ -18996,7 +19676,8 @@
     "maxStateId": 12787,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 681,
@@ -19033,7 +19714,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 682,
@@ -19059,7 +19741,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 683,
@@ -19074,7 +19757,8 @@
     "maxStateId": 12803,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 684,
@@ -19089,7 +19773,8 @@
     "maxStateId": 12804,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 685,
@@ -19104,7 +19789,8 @@
     "maxStateId": 12805,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 686,
@@ -19119,7 +19805,8 @@
     "maxStateId": 12806,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 687,
@@ -19134,7 +19821,8 @@
     "maxStateId": 12807,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 688,
@@ -19149,7 +19837,8 @@
     "maxStateId": 12808,
     "mapColorId": 25,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 689,
@@ -19164,7 +19853,8 @@
     "maxStateId": 12809,
     "mapColorId": 20,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 690,
@@ -19179,7 +19869,8 @@
     "maxStateId": 12810,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 691,
@@ -19194,7 +19885,8 @@
     "maxStateId": 12811,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 692,
@@ -19209,7 +19901,8 @@
     "maxStateId": 12812,
     "mapColorId": 18,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 693,
@@ -19230,7 +19923,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 694,
@@ -19251,7 +19945,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 695,
@@ -19272,7 +19967,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 696,
@@ -19293,7 +19989,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 697,
@@ -19314,7 +20011,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 698,
@@ -19335,7 +20033,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 699,
@@ -19356,7 +20055,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 700,
@@ -19377,7 +20077,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 701,
@@ -19398,7 +20099,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 702,
@@ -19419,7 +20121,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 703,
@@ -19440,7 +20143,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 704,
@@ -19461,7 +20165,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 705,
@@ -19482,7 +20187,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 706,
@@ -19503,7 +20209,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 707,
@@ -19524,7 +20231,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 708,
@@ -19545,7 +20253,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 709,
@@ -19566,7 +20275,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 710,
@@ -19587,7 +20297,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 711,
@@ -19608,7 +20319,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 712,
@@ -19629,7 +20341,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 713,
@@ -19661,7 +20374,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 714,
@@ -19693,7 +20407,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 715,
@@ -19725,7 +20440,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 716,
@@ -19757,7 +20473,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 717,
@@ -19789,7 +20506,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 718,
@@ -19821,7 +20539,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 719,
@@ -19853,7 +20572,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 720,
@@ -19885,7 +20605,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 721,
@@ -19917,7 +20638,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 722,
@@ -19949,7 +20671,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 723,
@@ -19981,7 +20704,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 724,
@@ -19996,7 +20720,8 @@
     "maxStateId": 12941,
     "mapColorId": 5,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 725,
@@ -20017,7 +20742,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "conduit"
   },
   {
     "id": 726,
@@ -20032,7 +20758,8 @@
     "maxStateId": 12944,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 727,
@@ -20076,7 +20803,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 728,
@@ -20091,7 +20819,8 @@
     "maxStateId": 12957,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 729,
@@ -20106,7 +20835,8 @@
     "maxStateId": 12958,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 730,
@@ -20121,7 +20851,8 @@
     "maxStateId": 12959,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 731,
@@ -20142,7 +20873,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 732,
@@ -20195,7 +20927,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 733,
@@ -20248,7 +20981,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 734,
@@ -20301,7 +21035,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 735,
@@ -20354,7 +21089,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 736,
@@ -20407,7 +21143,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 737,
@@ -20460,7 +21197,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 738,
@@ -20513,7 +21251,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 739,
@@ -20566,7 +21305,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 740,
@@ -20619,7 +21359,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 741,
@@ -20672,7 +21413,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 742,
@@ -20725,7 +21467,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 743,
@@ -20778,7 +21521,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 744,
@@ -20831,7 +21575,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 745,
@@ -20884,7 +21629,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 746,
@@ -20915,7 +21661,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 747,
@@ -20946,7 +21693,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 748,
@@ -20977,7 +21725,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 749,
@@ -21008,7 +21757,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 750,
@@ -21039,7 +21789,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 751,
@@ -21070,7 +21821,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 752,
@@ -21101,7 +21853,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 753,
@@ -21132,7 +21885,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 754,
@@ -21163,7 +21917,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 755,
@@ -21194,7 +21949,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 756,
@@ -21225,7 +21981,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 757,
@@ -21256,7 +22013,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 758,
@@ -21287,7 +22045,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 759,
@@ -21353,7 +22112,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 760,
@@ -21419,7 +22179,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 761,
@@ -21485,7 +22246,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 762,
@@ -21551,7 +22313,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 763,
@@ -21617,7 +22380,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 764,
@@ -21683,7 +22447,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 765,
@@ -21749,7 +22514,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 766,
@@ -21815,7 +22581,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 767,
@@ -21881,7 +22648,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 768,
@@ -21947,7 +22715,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 769,
@@ -22013,7 +22782,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 770,
@@ -22079,7 +22849,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 771,
@@ -22145,7 +22916,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 772,
@@ -22186,7 +22958,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 773,
@@ -22213,7 +22986,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 774,
@@ -22247,7 +23021,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "barrel"
   },
   {
     "id": 775,
@@ -22279,7 +23054,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "smoker"
   },
   {
     "id": 776,
@@ -22311,7 +23087,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "blast_furnace"
   },
   {
     "id": 777,
@@ -22326,7 +23103,8 @@
     "maxStateId": 18436,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 778,
@@ -22341,7 +23119,8 @@
     "maxStateId": 18437,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 779,
@@ -22378,7 +23157,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 780,
@@ -22415,7 +23195,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "lectern"
   },
   {
     "id": 781,
@@ -22430,7 +23211,8 @@
     "maxStateId": 18466,
     "mapColorId": 13,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 782,
@@ -22457,7 +23239,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 783,
@@ -22500,7 +23283,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "bell"
   },
   {
     "id": 784,
@@ -22526,7 +23310,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 785,
@@ -22552,7 +23337,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 786,
@@ -22594,7 +23380,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "campfire"
   },
   {
     "id": 787,
@@ -22636,7 +23423,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "campfire"
   },
   {
     "id": 788,
@@ -22663,7 +23451,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 789,
@@ -22689,7 +23478,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 790,
@@ -22715,7 +23505,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 791,
@@ -22741,7 +23532,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 792,
@@ -22767,7 +23559,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 793,
@@ -22782,7 +23575,8 @@
     "maxStateId": 18591,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 794,
@@ -22797,7 +23591,8 @@
     "maxStateId": 18592,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 795,
@@ -22812,7 +23607,8 @@
     "maxStateId": 18593,
     "mapColorId": 58,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 796,
@@ -22827,7 +23623,8 @@
     "maxStateId": 18594,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 797,
@@ -22842,7 +23639,8 @@
     "maxStateId": 18595,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 798,
@@ -22868,7 +23666,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 799,
@@ -22894,7 +23693,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 800,
@@ -22920,7 +23720,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 801,
@@ -22946,7 +23747,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 802,
@@ -22961,7 +23763,8 @@
     "maxStateId": 18608,
     "mapColorId": 52,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 803,
@@ -22976,7 +23779,8 @@
     "maxStateId": 18609,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 804,
@@ -22991,7 +23795,8 @@
     "maxStateId": 18610,
     "mapColorId": 28,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 805,
@@ -23040,7 +23845,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 806,
@@ -23055,7 +23861,8 @@
     "maxStateId": 18637,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 807,
@@ -23104,7 +23911,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 808,
@@ -23119,7 +23927,8 @@
     "maxStateId": 18664,
     "mapColorId": 23,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 809,
@@ -23134,7 +23943,8 @@
     "maxStateId": 18665,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 810,
@@ -23149,7 +23959,8 @@
     "maxStateId": 18666,
     "mapColorId": 53,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 811,
@@ -23164,7 +23975,8 @@
     "maxStateId": 18667,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 812,
@@ -23195,7 +24007,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 813,
@@ -23226,7 +24039,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 814,
@@ -23247,7 +24061,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 815,
@@ -23268,7 +24083,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 816,
@@ -23309,7 +24125,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 817,
@@ -23350,7 +24167,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 818,
@@ -23401,7 +24219,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 819,
@@ -23452,7 +24271,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 820,
@@ -23494,7 +24314,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 821,
@@ -23536,7 +24357,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 822,
@@ -23589,7 +24411,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 823,
@@ -23642,7 +24465,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 824,
@@ -23684,7 +24508,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 825,
@@ -23726,7 +24551,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 826,
@@ -23781,7 +24607,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 827,
@@ -23836,7 +24663,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 828,
@@ -23880,7 +24708,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 829,
@@ -23924,7 +24753,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 830,
@@ -23956,7 +24786,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 831,
@@ -23988,7 +24819,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": "sign"
   },
   {
     "id": 832,
@@ -24015,7 +24847,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "structure_block"
   },
   {
     "id": 833,
@@ -24050,7 +24883,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "jigsaw"
   },
   {
     "id": 834,
@@ -24082,7 +24916,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 835,
@@ -24121,7 +24956,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 836,
@@ -24161,7 +24997,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "beehive"
   },
   {
     "id": 837,
@@ -24201,7 +25038,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "beehive"
   },
   {
     "id": 838,
@@ -24216,7 +25054,8 @@
     "maxStateId": 19445,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 839,
@@ -24231,7 +25070,8 @@
     "maxStateId": 19446,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 840,
@@ -24246,7 +25086,8 @@
     "maxStateId": 19447,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 841,
@@ -24261,7 +25102,8 @@
     "maxStateId": 19448,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 842,
@@ -24276,7 +25118,8 @@
     "maxStateId": 19449,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 843,
@@ -24304,7 +25147,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 844,
@@ -24319,7 +25163,8 @@
     "maxStateId": 19455,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 845,
@@ -24334,7 +25179,8 @@
     "maxStateId": 19456,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 846,
@@ -24349,7 +25195,8 @@
     "maxStateId": 19457,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 847,
@@ -24364,7 +25211,8 @@
     "maxStateId": 19458,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 848,
@@ -24379,7 +25227,8 @@
     "maxStateId": 19459,
     "mapColorId": 6,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 849,
@@ -24394,7 +25243,8 @@
     "maxStateId": 19460,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 850,
@@ -24447,7 +25297,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 851,
@@ -24513,7 +25364,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 852,
@@ -24544,7 +25396,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 853,
@@ -24559,7 +25412,8 @@
     "maxStateId": 19871,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 854,
@@ -24574,7 +25428,8 @@
     "maxStateId": 19872,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 855,
@@ -24589,7 +25444,8 @@
     "maxStateId": 19873,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 856,
@@ -24604,7 +25460,8 @@
     "maxStateId": 19874,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 857,
@@ -24635,7 +25492,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 858,
@@ -24688,7 +25546,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 859,
@@ -24754,7 +25613,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 860,
@@ -24769,7 +25629,8 @@
     "maxStateId": 20285,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 861,
@@ -24822,7 +25683,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 862,
@@ -24853,7 +25715,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 863,
@@ -24874,7 +25737,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 864,
@@ -24916,7 +25780,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 865,
@@ -24982,7 +25847,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 866,
@@ -24997,7 +25863,8 @@
     "maxStateId": 20722,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 867,
@@ -25012,7 +25879,8 @@
     "maxStateId": 20723,
     "mapColorId": 35,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 868,
@@ -25027,7 +25895,8 @@
     "maxStateId": 20724,
     "mapColorId": 14,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 869,
@@ -25064,7 +25933,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 870,
@@ -25101,7 +25971,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 871,
@@ -25138,7 +26009,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 872,
@@ -25175,7 +26047,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 873,
@@ -25212,7 +26085,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 874,
@@ -25249,7 +26123,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 875,
@@ -25286,7 +26161,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 876,
@@ -25323,7 +26199,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 877,
@@ -25360,7 +26237,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 878,
@@ -25397,7 +26275,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 879,
@@ -25434,7 +26313,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 880,
@@ -25471,7 +26351,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 881,
@@ -25508,7 +26389,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 882,
@@ -25545,7 +26427,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 883,
@@ -25582,7 +26465,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 884,
@@ -25619,7 +26503,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 885,
@@ -25656,7 +26541,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 886,
@@ -25677,7 +26563,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 887,
@@ -25698,7 +26585,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 888,
@@ -25719,7 +26607,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 889,
@@ -25740,7 +26629,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 890,
@@ -25761,7 +26651,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 891,
@@ -25782,7 +26673,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 892,
@@ -25803,7 +26695,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 893,
@@ -25824,7 +26717,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 894,
@@ -25845,7 +26739,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 895,
@@ -25866,7 +26761,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 896,
@@ -25887,7 +26783,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 897,
@@ -25908,7 +26805,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 898,
@@ -25929,7 +26827,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 899,
@@ -25950,7 +26849,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 900,
@@ -25971,7 +26871,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 901,
@@ -25992,7 +26893,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 902,
@@ -26013,7 +26915,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 903,
@@ -26028,7 +26931,8 @@
     "maxStateId": 21031,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 904,
@@ -26043,7 +26947,8 @@
     "maxStateId": 21032,
     "mapColorId": 24,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 905,
@@ -26077,7 +26982,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 906,
@@ -26111,7 +27017,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 907,
@@ -26145,7 +27052,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 908,
@@ -26179,7 +27087,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 909,
@@ -26194,7 +27103,8 @@
     "maxStateId": 21081,
     "mapColorId": 43,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 910,
@@ -26225,7 +27135,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 911,
@@ -26278,7 +27189,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 912,
@@ -26344,7 +27256,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 913,
@@ -26359,7 +27272,8 @@
     "maxStateId": 21492,
     "mapColorId": 43,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 914,
@@ -26390,7 +27304,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 915,
@@ -26443,7 +27358,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 916,
@@ -26509,7 +27425,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 917,
@@ -26524,7 +27441,8 @@
     "maxStateId": 21903,
     "mapColorId": 43,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 918,
@@ -26539,7 +27457,8 @@
     "maxStateId": 21904,
     "mapColorId": 43,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 919,
@@ -26570,7 +27489,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 920,
@@ -26623,7 +27543,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 921,
@@ -26689,7 +27610,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 922,
@@ -26704,7 +27626,8 @@
     "maxStateId": 22315,
     "mapColorId": 43,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 923,
@@ -26719,7 +27642,8 @@
     "maxStateId": 22316,
     "mapColorId": 36,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 924,
@@ -26734,7 +27658,8 @@
     "maxStateId": 22317,
     "mapColorId": 21,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 925,
@@ -26749,7 +27674,8 @@
     "maxStateId": 22318,
     "mapColorId": 8,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 926,
@@ -26803,7 +27729,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "sculk_sensor"
   },
   {
     "id": 927,
@@ -26868,7 +27795,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "calibrated_sculk_sensor"
   },
   {
     "id": 928,
@@ -26883,7 +27811,8 @@
     "maxStateId": 22799,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 929,
@@ -26934,7 +27863,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 930,
@@ -26955,7 +27885,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "sculk_catalyst"
   },
   {
     "id": 931,
@@ -26986,7 +27917,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "sculk_shrieker"
   },
   {
     "id": 932,
@@ -27001,7 +27933,8 @@
     "maxStateId": 22938,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 933,
@@ -27016,7 +27949,8 @@
     "maxStateId": 22939,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 934,
@@ -27031,7 +27965,8 @@
     "maxStateId": 22940,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 935,
@@ -27046,7 +27981,8 @@
     "maxStateId": 22941,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 936,
@@ -27061,7 +27997,8 @@
     "maxStateId": 22942,
     "mapColorId": 11,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 937,
@@ -27076,7 +28013,8 @@
     "maxStateId": 22943,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 938,
@@ -27091,7 +28029,8 @@
     "maxStateId": 22944,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 939,
@@ -27106,7 +28045,8 @@
     "maxStateId": 22945,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 940,
@@ -27121,7 +28061,8 @@
     "maxStateId": 22946,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 941,
@@ -27136,7 +28077,8 @@
     "maxStateId": 22947,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 942,
@@ -27151,7 +28093,8 @@
     "maxStateId": 22948,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 943,
@@ -27166,7 +28109,8 @@
     "maxStateId": 22949,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 944,
@@ -27181,7 +28125,8 @@
     "maxStateId": 22950,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 945,
@@ -27196,7 +28141,8 @@
     "maxStateId": 22951,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 946,
@@ -27211,7 +28157,8 @@
     "maxStateId": 22952,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 947,
@@ -27226,7 +28173,8 @@
     "maxStateId": 22953,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 948,
@@ -27241,7 +28189,8 @@
     "maxStateId": 22954,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 949,
@@ -27256,7 +28205,8 @@
     "maxStateId": 22955,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 950,
@@ -27309,7 +28259,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 951,
@@ -27362,7 +28313,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 952,
@@ -27415,7 +28367,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 953,
@@ -27468,7 +28421,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 954,
@@ -27499,7 +28453,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 955,
@@ -27530,7 +28485,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 956,
@@ -27561,7 +28517,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 957,
@@ -27592,7 +28549,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 958,
@@ -27607,7 +28565,8 @@
     "maxStateId": 23300,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 959,
@@ -27622,7 +28581,8 @@
     "maxStateId": 23301,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 960,
@@ -27637,7 +28597,8 @@
     "maxStateId": 23302,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 961,
@@ -27652,7 +28613,8 @@
     "maxStateId": 23303,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 962,
@@ -27667,7 +28629,8 @@
     "maxStateId": 23304,
     "mapColorId": 55,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 963,
@@ -27682,7 +28645,8 @@
     "maxStateId": 23305,
     "mapColorId": 56,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 964,
@@ -27697,7 +28661,8 @@
     "maxStateId": 23306,
     "mapColorId": 44,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 965,
@@ -27712,7 +28677,8 @@
     "maxStateId": 23307,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 966,
@@ -27765,7 +28731,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 967,
@@ -27818,7 +28785,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 968,
@@ -27871,7 +28839,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 969,
@@ -27924,7 +28893,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 970,
@@ -27955,7 +28925,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 971,
@@ -27986,7 +28957,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 972,
@@ -28017,7 +28989,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 973,
@@ -28048,7 +29021,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 974,
@@ -28103,7 +29077,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 975,
@@ -28158,7 +29133,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 976,
@@ -28213,7 +29189,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 977,
@@ -28268,7 +29245,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 978,
@@ -28323,7 +29301,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 979,
@@ -28378,7 +29357,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 980,
@@ -28433,7 +29413,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 981,
@@ -28488,7 +29469,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 982,
@@ -28539,7 +29521,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 983,
@@ -28590,7 +29573,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 984,
@@ -28641,7 +29625,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 985,
@@ -28692,7 +29677,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 986,
@@ -28743,7 +29729,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 987,
@@ -28794,7 +29781,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 988,
@@ -28845,7 +29833,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 989,
@@ -28896,7 +29885,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 990,
@@ -28917,7 +29907,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 991,
@@ -28938,7 +29929,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 992,
@@ -28959,7 +29951,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 993,
@@ -28980,7 +29973,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 994,
@@ -29001,7 +29995,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 995,
@@ -29022,7 +30017,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 996,
@@ -29043,7 +30039,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 997,
@@ -29064,7 +30061,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 998,
@@ -29090,7 +30088,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 999,
@@ -29116,7 +30115,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1000,
@@ -29142,7 +30142,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1001,
@@ -29168,7 +30169,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1002,
@@ -29194,7 +30196,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1003,
@@ -29220,7 +30223,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1004,
@@ -29246,7 +30250,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1005,
@@ -29272,7 +30277,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1006,
@@ -29311,7 +30317,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1007,
@@ -29353,7 +30360,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1008,
@@ -29368,7 +30376,8 @@
     "maxStateId": 24768,
     "mapColorId": 48,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1009,
@@ -29422,7 +30431,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1010,
@@ -29443,7 +30453,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1011,
@@ -29458,7 +30469,8 @@
     "maxStateId": 24823,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1012,
@@ -29473,7 +30485,8 @@
     "maxStateId": 24824,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1013,
@@ -29488,7 +30501,8 @@
     "maxStateId": 24825,
     "mapColorId": 7,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1014,
@@ -29503,7 +30517,8 @@
     "maxStateId": 24826,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1015,
@@ -29541,7 +30556,8 @@
         ]
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1016,
@@ -29556,7 +30572,8 @@
     "maxStateId": 24843,
     "mapColorId": 27,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1017,
@@ -29599,7 +30616,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1018,
@@ -29631,7 +30649,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1019,
@@ -29672,7 +30691,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1020,
@@ -29693,7 +30713,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1021,
@@ -29708,7 +30729,8 @@
     "maxStateId": 24902,
     "mapColorId": 10,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1022,
@@ -29723,7 +30745,8 @@
     "maxStateId": 24903,
     "mapColorId": 45,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1023,
@@ -29749,7 +30772,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1024,
@@ -29764,7 +30788,8 @@
     "maxStateId": 24907,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1025,
@@ -29817,7 +30842,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1026,
@@ -29848,7 +30874,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1027,
@@ -29914,7 +30941,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1028,
@@ -29929,7 +30957,8 @@
     "maxStateId": 25318,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1029,
@@ -29982,7 +31011,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1030,
@@ -30013,7 +31043,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1031,
@@ -30079,7 +31110,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1032,
@@ -30094,7 +31126,8 @@
     "maxStateId": 25729,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1033,
@@ -30147,7 +31180,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1034,
@@ -30178,7 +31212,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1035,
@@ -30244,7 +31279,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1036,
@@ -30259,7 +31295,8 @@
     "maxStateId": 26140,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1037,
@@ -30312,7 +31349,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1038,
@@ -30343,7 +31381,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1039,
@@ -30409,7 +31448,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1040,
@@ -30424,7 +31464,8 @@
     "maxStateId": 26551,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1041,
@@ -30439,7 +31480,8 @@
     "maxStateId": 26552,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1042,
@@ -30454,7 +31496,8 @@
     "maxStateId": 26553,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1043,
@@ -30480,7 +31523,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1044,
@@ -30495,7 +31539,8 @@
     "maxStateId": 26557,
     "mapColorId": 29,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1045,
@@ -30510,7 +31555,8 @@
     "maxStateId": 26558,
     "mapColorId": 60,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1046,
@@ -30525,7 +31571,8 @@
     "maxStateId": 26559,
     "mapColorId": 15,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1047,
@@ -30540,7 +31587,8 @@
     "maxStateId": 26560,
     "mapColorId": 30,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1048,
@@ -30555,7 +31603,8 @@
     "maxStateId": 26561,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1049,
@@ -30570,7 +31619,8 @@
     "maxStateId": 26562,
     "mapColorId": 0,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1050,
@@ -30596,7 +31646,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1051,
@@ -30622,7 +31673,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1052,
@@ -30648,7 +31700,8 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1053,
@@ -30663,7 +31716,8 @@
     "maxStateId": 26572,
     "mapColorId": 12,
     "states": [],
-    "boundingBox": "empty"
+    "boundingBox": "empty",
+    "blockEntityType": ""
   },
   {
     "id": 1054,
@@ -30678,7 +31732,8 @@
     "maxStateId": 26573,
     "mapColorId": 59,
     "states": [],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": ""
   },
   {
     "id": 1055,
@@ -30715,7 +31770,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "decorated_pot"
   },
   {
     "id": 1056,
@@ -30760,7 +31816,8 @@
         "num_values": 2
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "crafter"
   },
   {
     "id": 1057,
@@ -30789,6 +31846,7 @@
         ]
       }
     ],
-    "boundingBox": "block"
+    "boundingBox": "block",
+    "blockEntityType": "trial_spawner"
   }
 ]

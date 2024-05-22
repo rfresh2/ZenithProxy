@@ -188,27 +188,9 @@ public class ChunkCache implements CachedData {
                 CLIENT_LOG.debug("Received block update packet for unknown block: {}", record.getBlock());
                 return;
             }
-            final var blockName = block.name();
-            final var type = getBlockUpdateBlockEntityTypeOrNull(blockName);
-            if (type != null) writeBlockEntity(chunk, blockName, type, x, y, z);
+            if (block.blockEntityType() != null)
+                writeBlockEntity(chunk, block.name(), block.blockEntityType(), x, y, z);
         }
-    }
-
-    private BlockEntityType getBlockUpdateBlockEntityTypeOrNull(final String blockName) {
-        if (blockName.equals("chest")) {
-            return BlockEntityType.CHEST;
-        } else if (blockName.equals("trapped_chest")) {
-            return BlockEntityType.TRAPPED_CHEST;
-        } else if (blockName.equals("ender_chest")) {
-            return BlockEntityType.ENDER_CHEST;
-        } else if (blockName.equals("enchanting_table")) {
-            return BlockEntityType.ENCHANTING_TABLE;
-        } else if (blockName.endsWith("_bed")) {
-            return BlockEntityType.BED;
-        } else if (blockName.endsWith("_banner")) {
-            return BlockEntityType.BANNER;
-        }
-        return null;
     }
 
     private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final int x, final int y, final int z) {
