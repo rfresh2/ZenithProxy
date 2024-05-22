@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
+import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -48,7 +49,12 @@ public class BlockDataManager {
                 for (int i = minStateId; i <= maxStateId; i++) {
                     blockStateIdToBlockId.put(i, blockId);
                 }
-                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId, mapColorId));
+                String blockEntityTypeStr = e.get("blockEntityType").asText();
+                BlockEntityType blockEntityType = null;
+                if (!blockEntityTypeStr.isEmpty()) {
+                    blockEntityType = BlockEntityType.valueOf(blockEntityTypeStr.toUpperCase());
+                }
+                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId, mapColorId, blockEntityType));
             }
         } catch (final Exception e) {
             throw new RuntimeException(e);

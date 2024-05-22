@@ -97,6 +97,13 @@ public class Blocks implements Generator {
         VoxelShape blockCollisionShape = defaultState.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
         blockDesc.addProperty("boundingBox", blockCollisionShape.isEmpty() ? "empty" : "block");
 
+        var blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.stream()
+            .filter(type -> type.isValid(defaultState))
+            .findFirst()
+            .map(type -> type.builtInRegistryHolder().key().location().getPath())
+            .orElse("");
+        blockDesc.addProperty("blockEntityType", blockEntityType);
+
         return blockDesc;
     }
 
