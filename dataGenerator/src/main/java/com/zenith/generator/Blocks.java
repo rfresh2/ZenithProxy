@@ -102,7 +102,7 @@ public class Blocks implements Generator {
             .findFirst()
             .map(type -> type.builtInRegistryHolder().key().location().getPath())
             .orElse("");
-        blockDesc.addProperty("blockEntityType", blockEntityType);
+        blockDesc.addProperty("blockEntityType", blockEntityType.toUpperCase());
 
         return blockDesc;
     }

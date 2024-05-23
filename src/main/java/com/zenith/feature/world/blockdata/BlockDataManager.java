@@ -52,7 +52,7 @@ public class BlockDataManager {
                 String blockEntityTypeStr = e.get("blockEntityType").asText();
                 BlockEntityType blockEntityType = null;
                 if (!blockEntityTypeStr.isEmpty()) {
-                    blockEntityType = BlockEntityType.valueOf(blockEntityTypeStr.toUpperCase());
+                    blockEntityType = BlockEntityType.valueOf(blockEntityTypeStr);
                 }
                 blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId, mapColorId, blockEntityType));
             }

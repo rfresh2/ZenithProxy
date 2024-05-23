@@ -747,7 +747,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "brushable_block"
+    "blockEntityType": "BRUSHABLE_BLOCK"
   },
   {
     "id": 36,
@@ -807,7 +807,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "brushable_block"
+    "blockEntityType": "BRUSHABLE_BLOCK"
   },
   {
     "id": 39,
@@ -2427,7 +2427,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "dispenser"
+    "blockEntityType": "DISPENSER"
   },
   {
     "id": 99,
@@ -2601,7 +2601,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 104,
@@ -2643,7 +2643,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 105,
@@ -2685,7 +2685,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 106,
@@ -2727,7 +2727,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 107,
@@ -2769,7 +2769,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 108,
@@ -2811,7 +2811,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 109,
@@ -2853,7 +2853,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 110,
@@ -2895,7 +2895,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 111,
@@ -2937,7 +2937,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 112,
@@ -2979,7 +2979,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 113,
@@ -3021,7 +3021,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 114,
@@ -3063,7 +3063,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 115,
@@ -3105,7 +3105,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 116,
@@ -3147,7 +3147,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 117,
@@ -3189,7 +3189,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 118,
@@ -3231,7 +3231,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bed"
+    "blockEntityType": "BED"
   },
   {
     "id": 119,
@@ -3826,7 +3826,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "piston"
+    "blockEntityType": "PISTON"
   },
   {
     "id": 147,
@@ -4226,7 +4226,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "chiseled_bookshelf"
+    "blockEntityType": "CHISELED_BOOKSHELF"
   },
   {
     "id": 169,
@@ -4399,7 +4399,7 @@
     "mapColorId": 11,
     "states": [],
     "boundingBox": "block",
-    "blockEntityType": "mob_spawner"
+    "blockEntityType": "MOB_SPAWNER"
   },
   {
     "id": 176,
@@ -4496,7 +4496,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "chest"
+    "blockEntityType": "CHEST"
   },
   {
     "id": 178,
@@ -4737,7 +4737,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "furnace"
+    "blockEntityType": "FURNACE"
   },
   {
     "id": 186,
@@ -4782,7 +4782,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 187,
@@ -4827,7 +4827,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 188,
@@ -4872,7 +4872,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 189,
@@ -4917,7 +4917,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 190,
@@ -4962,7 +4962,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 191,
@@ -5007,7 +5007,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 192,
@@ -5052,7 +5052,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 193,
@@ -5097,7 +5097,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 194,
@@ -5142,7 +5142,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 195,
@@ -5357,7 +5357,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 200,
@@ -5390,7 +5390,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 201,
@@ -5423,7 +5423,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 202,
@@ -5456,7 +5456,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 203,
@@ -5489,7 +5489,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 204,
@@ -5522,7 +5522,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 205,
@@ -5555,7 +5555,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 206,
@@ -5588,7 +5588,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 207,
@@ -5621,7 +5621,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 208,
@@ -5671,7 +5671,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 209,
@@ -5721,7 +5721,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 210,
@@ -5771,7 +5771,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 211,
@@ -5821,7 +5821,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 212,
@@ -5871,7 +5871,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 213,
@@ -5921,7 +5921,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 214,
@@ -5971,7 +5971,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 215,
@@ -6021,7 +6021,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 216,
@@ -6071,7 +6071,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 217,
@@ -6121,7 +6121,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 218,
@@ -6171,7 +6171,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 219,
@@ -6204,7 +6204,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 220,
@@ -6237,7 +6237,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 221,
@@ -6270,7 +6270,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 222,
@@ -6303,7 +6303,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 223,
@@ -6336,7 +6336,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 224,
@@ -6369,7 +6369,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 225,
@@ -6402,7 +6402,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 226,
@@ -6435,7 +6435,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 227,
@@ -6468,7 +6468,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 228,
@@ -6501,7 +6501,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 229,
@@ -6534,7 +6534,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hanging_sign"
+    "blockEntityType": "HANGING_SIGN"
   },
   {
     "id": 230,
@@ -7177,7 +7177,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "jukebox"
+    "blockEntityType": "JUKEBOX"
   },
   {
     "id": 254,
@@ -9361,7 +9361,7 @@
     "mapColorId": 28,
     "states": [],
     "boundingBox": "block",
-    "blockEntityType": "enchanting_table"
+    "blockEntityType": "ENCHANTING_TABLE"
   },
   {
     "id": 330,
@@ -9393,7 +9393,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "brewing_stand"
+    "blockEntityType": "BREWING_STAND"
   },
   {
     "id": 331,
@@ -9495,7 +9495,7 @@
     "mapColorId": 29,
     "states": [],
     "boundingBox": "empty",
-    "blockEntityType": "end_portal"
+    "blockEntityType": "END_PORTAL"
   },
   {
     "id": 336,
@@ -9739,7 +9739,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "ender_chest"
+    "blockEntityType": "ENDER_CHEST"
   },
   {
     "id": 345,
@@ -10042,7 +10042,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "command_block"
+    "blockEntityType": "COMMAND_BLOCK"
   },
   {
     "id": 352,
@@ -10058,7 +10058,7 @@
     "mapColorId": 31,
     "states": [],
     "boundingBox": "block",
-    "blockEntityType": "beacon"
+    "blockEntityType": "BEACON"
   },
   {
     "id": 353,
@@ -11136,7 +11136,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 395,
@@ -11169,7 +11169,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 396,
@@ -11214,7 +11214,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 397,
@@ -11247,7 +11247,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 398,
@@ -11292,7 +11292,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 399,
@@ -11325,7 +11325,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 400,
@@ -11370,7 +11370,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 401,
@@ -11403,7 +11403,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 402,
@@ -11448,7 +11448,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 403,
@@ -11481,7 +11481,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 404,
@@ -11526,7 +11526,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 405,
@@ -11559,7 +11559,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 406,
@@ -11604,7 +11604,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 407,
@@ -11637,7 +11637,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "skull"
+    "blockEntityType": "SKULL"
   },
   {
     "id": 408,
@@ -11764,7 +11764,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "trapped_chest"
+    "blockEntityType": "TRAPPED_CHEST"
   },
   {
     "id": 412,
@@ -11886,7 +11886,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "comparator"
+    "blockEntityType": "COMPARATOR"
   },
   {
     "id": 415,
@@ -11931,7 +11931,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "daylight_detector"
+    "blockEntityType": "DAYLIGHT_DETECTOR"
   },
   {
     "id": 416,
@@ -11997,7 +11997,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "hopper"
+    "blockEntityType": "HOPPER"
   },
   {
     "id": 419,
@@ -12185,7 +12185,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "dropper"
+    "blockEntityType": "DROPPER"
   },
   {
     "id": 425,
@@ -14421,7 +14421,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 504,
@@ -14461,7 +14461,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 505,
@@ -14501,7 +14501,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 506,
@@ -14541,7 +14541,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 507,
@@ -14581,7 +14581,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 508,
@@ -14621,7 +14621,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 509,
@@ -14661,7 +14661,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 510,
@@ -14701,7 +14701,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 511,
@@ -14741,7 +14741,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 512,
@@ -14781,7 +14781,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 513,
@@ -14821,7 +14821,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 514,
@@ -14861,7 +14861,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 515,
@@ -14901,7 +14901,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 516,
@@ -14941,7 +14941,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 517,
@@ -14981,7 +14981,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 518,
@@ -15021,7 +15021,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 519,
@@ -15049,7 +15049,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 520,
@@ -15077,7 +15077,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 521,
@@ -15105,7 +15105,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 522,
@@ -15133,7 +15133,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 523,
@@ -15161,7 +15161,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 524,
@@ -15189,7 +15189,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 525,
@@ -15217,7 +15217,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 526,
@@ -15245,7 +15245,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 527,
@@ -15273,7 +15273,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 528,
@@ -15301,7 +15301,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 529,
@@ -15329,7 +15329,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 530,
@@ -15357,7 +15357,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 531,
@@ -15385,7 +15385,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 532,
@@ -15413,7 +15413,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 533,
@@ -15441,7 +15441,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 534,
@@ -15469,7 +15469,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "banner"
+    "blockEntityType": "BANNER"
   },
   {
     "id": 535,
@@ -17901,7 +17901,7 @@
     "mapColorId": 29,
     "states": [],
     "boundingBox": "empty",
-    "blockEntityType": "end_gateway"
+    "blockEntityType": "END_GATEWAY"
   },
   {
     "id": 604,
@@ -17936,7 +17936,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "command_block"
+    "blockEntityType": "COMMAND_BLOCK"
   },
   {
     "id": 605,
@@ -17971,7 +17971,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "command_block"
+    "blockEntityType": "COMMAND_BLOCK"
   },
   {
     "id": 606,
@@ -18155,7 +18155,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 614,
@@ -18185,7 +18185,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 615,
@@ -18215,7 +18215,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 616,
@@ -18245,7 +18245,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 617,
@@ -18275,7 +18275,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 618,
@@ -18305,7 +18305,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 619,
@@ -18335,7 +18335,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 620,
@@ -18365,7 +18365,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 621,
@@ -18395,7 +18395,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 622,
@@ -18425,7 +18425,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 623,
@@ -18455,7 +18455,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 624,
@@ -18485,7 +18485,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 625,
@@ -18515,7 +18515,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 626,
@@ -18545,7 +18545,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 627,
@@ -18575,7 +18575,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 628,
@@ -18605,7 +18605,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 629,
@@ -18635,7 +18635,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "shulker_box"
+    "blockEntityType": "SHULKER_BOX"
   },
   {
     "id": 630,
@@ -20743,7 +20743,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "conduit"
+    "blockEntityType": "CONDUIT"
   },
   {
     "id": 726,
@@ -23022,7 +23022,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "barrel"
+    "blockEntityType": "BARREL"
   },
   {
     "id": 775,
@@ -23055,7 +23055,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "smoker"
+    "blockEntityType": "SMOKER"
   },
   {
     "id": 776,
@@ -23088,7 +23088,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "blast_furnace"
+    "blockEntityType": "BLAST_FURNACE"
   },
   {
     "id": 777,
@@ -23196,7 +23196,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "lectern"
+    "blockEntityType": "LECTERN"
   },
   {
     "id": 781,
@@ -23284,7 +23284,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "bell"
+    "blockEntityType": "BELL"
   },
   {
     "id": 784,
@@ -23381,7 +23381,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "campfire"
+    "blockEntityType": "CAMPFIRE"
   },
   {
     "id": 787,
@@ -23424,7 +23424,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "campfire"
+    "blockEntityType": "CAMPFIRE"
   },
   {
     "id": 788,
@@ -24709,7 +24709,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 829,
@@ -24754,7 +24754,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 830,
@@ -24787,7 +24787,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 831,
@@ -24820,7 +24820,7 @@
       }
     ],
     "boundingBox": "empty",
-    "blockEntityType": "sign"
+    "blockEntityType": "SIGN"
   },
   {
     "id": 832,
@@ -24848,7 +24848,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "structure_block"
+    "blockEntityType": "STRUCTURE_BLOCK"
   },
   {
     "id": 833,
@@ -24884,7 +24884,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "jigsaw"
+    "blockEntityType": "JIGSAW"
   },
   {
     "id": 834,
@@ -24998,7 +24998,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "beehive"
+    "blockEntityType": "BEEHIVE"
   },
   {
     "id": 837,
@@ -25039,7 +25039,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "beehive"
+    "blockEntityType": "BEEHIVE"
   },
   {
     "id": 838,
@@ -27730,7 +27730,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "sculk_sensor"
+    "blockEntityType": "SCULK_SENSOR"
   },
   {
     "id": 927,
@@ -27796,7 +27796,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "calibrated_sculk_sensor"
+    "blockEntityType": "CALIBRATED_SCULK_SENSOR"
   },
   {
     "id": 928,
@@ -27886,7 +27886,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "sculk_catalyst"
+    "blockEntityType": "SCULK_CATALYST"
   },
   {
     "id": 931,
@@ -27918,7 +27918,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "sculk_shrieker"
+    "blockEntityType": "SCULK_SHRIEKER"
   },
   {
     "id": 932,
@@ -31771,7 +31771,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "decorated_pot"
+    "blockEntityType": "DECORATED_POT"
   },
   {
     "id": 1056,
@@ -31817,7 +31817,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "crafter"
+    "blockEntityType": "CRAFTER"
   },
   {
     "id": 1057,
@@ -31852,7 +31852,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "trial_spawner"
+    "blockEntityType": "TRIAL_SPAWNER"
   },
   {
     "id": 1058,
@@ -31896,7 +31896,7 @@
       }
     ],
     "boundingBox": "block",
-    "blockEntityType": "vault"
+    "blockEntityType": "VAULT"
   },
   {
     "id": 1059,
