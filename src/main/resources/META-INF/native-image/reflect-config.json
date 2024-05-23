@@ -375,76 +375,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.jcraft.jsch.DH25519",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.DH448",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.DHEC256",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.UserAuthNone",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.UserAuthPublicKey",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.bc.SignatureEd25519"
-},
-{
-  "name":"com.jcraft.jsch.bc.SignatureEd448"
-},
-{
-  "name":"com.jcraft.jsch.bc.XDH",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.AES128CTR",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.ECDHN",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.HMACSHA1",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.HMACSHA256ETM",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.Random",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.SHA256",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.SHA512",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.SignatureECDSA256",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.SignatureRSA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.jcraft.jsch.jce.SignatureRSASHA512",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.sun.crypto.provider.AESCipher$General",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -1801,23 +1731,6 @@
 {
   "name":"org.apache.commons.logging.impl.WeakHashtable",
   "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.eclipse.jgit.internal.JGitText",
-  "allPublicFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.eclipse.jgit.lib.CoreConfig$LogRefUpdates",
-  "methods":[{"name":"values","parameterTypes":[] }]
-},
-{
-  "name":"org.eclipse.jgit.lib.CoreConfig$TrustPackedRefsStat",
-  "methods":[{"name":"values","parameterTypes":[] }]
-},
-{
-  "name":"org.eclipse.jgit.util.sha1.SHA1$Sha1Implementation",
-  "methods":[{"name":"values","parameterTypes":[] }]
 },
 {
   "name":"org.geysermc.mcprotocollib.network.ProxyInfo$Type",

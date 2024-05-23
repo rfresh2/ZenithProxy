@@ -24,6 +24,7 @@ public class RestAutoUpdater extends AutoUpdater {
             : "https://api.github.com";
         this.httpClient = HttpClient.newBuilder()
             .followRedirects(HttpClient.Redirect.ALWAYS)
+            .connectTimeout(Duration.ofSeconds(2))
             .build();
     }
 

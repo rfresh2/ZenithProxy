@@ -8,7 +8,7 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.feature.autoupdater.AutoUpdater;
-import com.zenith.feature.autoupdater.GitAutoUpdater;
+import com.zenith.feature.autoupdater.NoOpAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 
 import static com.zenith.Shared.LAUNCH_CONFIG;
@@ -45,7 +45,7 @@ public class AutoUpdateCommand extends Command {
                 AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
                 if (toggle) {
                     if (autoUpdater == null) {
-                        if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
+                        if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new NoOpAutoUpdater();
                         else autoUpdater = new RestAutoUpdater();
                         Proxy.getInstance().setAutoUpdater(autoUpdater);
                     }
