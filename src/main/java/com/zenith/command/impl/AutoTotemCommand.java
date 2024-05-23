@@ -24,6 +24,7 @@ public class AutoTotemCommand extends Command {
             "Automatically equips totems in the offhand",
             asList(
                 "on/off",
+                "inGame on/off",
                 "health <int>",
                 "popAlert on/off",
                 "popAlert mention on/off",
@@ -42,6 +43,13 @@ public class AutoTotemCommand extends Command {
                     .title("AutoTotem " + toggleStrCaps(CONFIG.client.extra.autoTotem.enabled));
                 return OK;
             }))
+            .then(literal("inGame")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoTotem.inGame = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("AutoTotem In Game " + toggleStrCaps(CONFIG.client.extra.autoTotem.inGame));
+                          return OK;
+                      })))
             .then(literal("health")
                       .then(argument("healthArg", integer(0, 20)).executes(c -> {
                           CONFIG.client.extra.autoTotem.healthThreshold = c.getArgument("healthArg", Integer.class);
@@ -81,6 +89,7 @@ public class AutoTotemCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("Auto Totem", toggleStr(CONFIG.client.extra.autoTotem.enabled), false)
+            .addField("In Game", toggleStr(CONFIG.client.extra.autoTotem.inGame), false)
             .addField("Health Threshold", CONFIG.client.extra.autoTotem.healthThreshold, true)
             .addField("Pop Alert", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlert), false)
             .addField("Pop Alert Mention", toggleStr(CONFIG.client.extra.autoTotem.totemPopAlertMention), true)

@@ -153,6 +153,7 @@ public final class Config {
 
             public static final class AutoTotem {
                 public boolean enabled = true;
+                public boolean inGame = false;
                 public int healthThreshold = 20;
                 public boolean noTotemsAlert = false;
                 public boolean noTotemsAlertMention = false;
