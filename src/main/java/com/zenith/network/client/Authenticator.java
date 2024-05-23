@@ -144,8 +144,7 @@ public class Authenticator {
     }
 
     private boolean shouldUseCachedSessionWithoutRefresh(FullJavaSession session) {
-        // return true if expiry time is at least 5 mins in the future
-        return session.getMcProfile().getMcToken().getExpireTimeMs() - System.currentTimeMillis() > (5 * 60 * 1000);
+        return session.getMcProfile().getMcToken().getExpireTimeMs() > System.currentTimeMillis();
     }
 
     private MinecraftProtocol createMinecraftProtocol(FullJavaSession authSession) {
@@ -239,7 +238,7 @@ public class Authenticator {
         var randomOffsetMs = ThreadLocalRandom.current().nextInt(5) * 60L * 1000L;
         // fail-safe to avoid spamming refreshes
         var minRefreshDelayMs = 30L * 1000L;
-        var expireTimeDelayMs = Math.max(minRefreshDelayMs, time - minRefreshDelayMs - randomOffsetMs);
+        var expireTimeDelayMs = Math.max(minRefreshDelayMs, time + randomOffsetMs);
         var maxRefreshIntervalMs = (CONFIG.authentication.maxRefreshIntervalMins * 60L * 1000L) - randomOffsetMs;
         this.refreshTask = EXECUTOR.schedule(
             this::executeAuthCacheRefresh,
@@ -250,7 +249,7 @@ public class Authenticator {
 
     private void executeAuthCacheRefresh() {
         try {
-            AUTH_LOG.debug("Running background auth token refresh..");
+            AUTH_LOG.info("Running background auth token refresh..");
             var authCache = loadAuthCache();
             if (authCache.isEmpty()) {
                 AUTH_LOG.error("No auth cache found to background refresh");
