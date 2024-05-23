@@ -4,7 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
-import com.zenith.feature.autoupdater.GitAutoUpdater;
+import com.zenith.feature.autoupdater.NoOpAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AutoReconnect;
@@ -168,7 +168,7 @@ public class Proxy {
                 }
             }
             if (LAUNCH_CONFIG.auto_update) {
-                if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new GitAutoUpdater();
+                if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new NoOpAutoUpdater();
                 else autoUpdater = new RestAutoUpdater();
                 autoUpdater.start();
                 DEFAULT_LOG.info("Started AutoUpdater");
