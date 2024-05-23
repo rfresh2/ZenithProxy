@@ -177,10 +177,10 @@ public class ChunkCache implements CachedData {
                     chunkSection = new ChunkSection(0, DataPalette.createForChunk(), DataPalette.createForBiome());
                 // relative positions in the chunk
                 int relativeX = record.getX() & 15;
-                int y = record.getY();
+                int relativeY = record.getY() & 15;
                 int relativeZ = record.getZ() & 15;
-                chunkSection.setBlock(relativeX, y, relativeZ, record.getBlock());
-                handleBlockUpdateBlockEntity(record, relativeX, y, relativeZ, chunk);
+                chunkSection.setBlock(relativeX, relativeY, relativeZ, record.getBlock());
+                handleBlockUpdateBlockEntity(record, relativeX, record.getY(), relativeZ, chunk);
             } else {
                 CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", record.getX() >> 4, record.getZ() >> 4);
                 return false;
@@ -210,7 +210,7 @@ public class ChunkCache implements CachedData {
     }
 
     private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final int relativeX, final int y, final int relativeZ) {
-        final MNBT nbt = getBlockEntityNBT(blockName, relativeX, y, relativeZ);
+        final MNBT nbt = getBlockEntityNBT(blockName, (chunk.getX() * 16) + relativeX, y, (chunk.getZ() * 16) + relativeZ);
         updateOrAddBlockEntity(chunk, relativeX, y, relativeZ, type, nbt);
     }
 
