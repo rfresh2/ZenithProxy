@@ -175,8 +175,12 @@ public class ChunkCache implements CachedData {
                 var chunkSection = chunk.getChunkSection(record.getY());
                 if (chunkSection == null)
                     chunkSection = new ChunkSection(0, DataPalette.createForChunk(), DataPalette.createForBiome());
-                chunkSection.setBlock(record.getX() & 15, record.getY() & 15, record.getZ() & 15, record.getBlock());
-                handleBlockUpdateBlockEntity(record, record.getX(), record.getY(), record.getZ(), chunk);
+                // relative positions in the chunk
+                int relativeX = record.getX() & 15;
+                int y = record.getY();
+                int relativeZ = record.getZ() & 15;
+                chunkSection.setBlock(relativeX, y, relativeZ, record.getBlock());
+                handleBlockUpdateBlockEntity(record, relativeX, y, relativeZ, chunk);
             } else {
                 CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", record.getX() >> 4, record.getZ() >> 4);
                 return false;
@@ -190,23 +194,24 @@ public class ChunkCache implements CachedData {
 
     // update any block entities implicitly affected by this block update
     // server doesn't send us tile entity update packets and relies on logic in client
-    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, int x, int y, int z, Chunk chunk) {
+    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, int relativeX, int y, int relativeZ, Chunk chunk) {
         if (record.getBlock() == Block.AIR.id()) {
-            chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == x && tileEntity.getY() == y && tileEntity.getZ() == z);
+            chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == relativeX && tileEntity.getY() == y && tileEntity.getZ() == relativeZ);
         } else {
             final var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());
             if (block == null) {
                 CLIENT_LOG.debug("Received block update packet for unknown block: {}", record.getBlock());
                 return;
             }
-            if (block.blockEntityType() != null)
-                writeBlockEntity(chunk, block.name(), block.blockEntityType(), x, y, z);
+            if (block.blockEntityType() != null && !chunkContainsBlockEntityTypeAtPos(chunk, relativeX, y, relativeZ, block.blockEntityType())) {
+                writeBlockEntity(chunk, block.name(), block.blockEntityType(), relativeX, y, relativeZ);
+            }
         }
     }
 
-    private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final int x, final int y, final int z) {
-        final MNBT nbt = getBlockEntityNBT(blockName, x, y, z);
-        updateOrAddBlockEntity(chunk, x, y, z, type, nbt);
+    private void writeBlockEntity(final Chunk chunk, final String blockName, final BlockEntityType type, final int relativeX, final int y, final int relativeZ) {
+        final MNBT nbt = getBlockEntityNBT(blockName, relativeX, y, relativeZ);
+        updateOrAddBlockEntity(chunk, relativeX, y, relativeZ, type, nbt);
     }
 
     private MNBT getBlockEntityNBT(final String blockName, final int x, final int y, final int z) {
@@ -223,18 +228,32 @@ public class ChunkCache implements CachedData {
         }
     }
 
-    private void updateOrAddBlockEntity(final Chunk chunk, final int x, final int y, final int z, final BlockEntityType type, final MNBT nbt) {
+    private void updateOrAddBlockEntity(final Chunk chunk, final int relativeX, final int y, final int relativeZ, final BlockEntityType type, final MNBT nbt) {
         synchronized (chunk.blockEntities) {
             for (BlockEntityInfo tileEntity : chunk.blockEntities) {
-                if (tileEntity.getX() == x
+                if (tileEntity.getX() == relativeX
                     && tileEntity.getY() == y
-                    && tileEntity.getZ() == z) {
+                    && tileEntity.getZ() == relativeZ) {
                     tileEntity.setNbt(nbt);
                     return;
                 }
             }
-            chunk.blockEntities.add(new BlockEntityInfo(x, y, z, type, nbt));
+            chunk.blockEntities.add(new BlockEntityInfo(relativeX, y, relativeZ, type, nbt));
         }
+    }
+
+    private boolean chunkContainsBlockEntityTypeAtPos(final Chunk chunk, final int relativeX, final int y, final int relativeZ, final BlockEntityType type) {
+        synchronized (chunk.blockEntities) {
+            for (BlockEntityInfo tileEntity : chunk.blockEntities) {
+                if (tileEntity.getType() == type
+                    && tileEntity.getX() == relativeX
+                    && tileEntity.getY() == y
+                    && tileEntity.getZ() == relativeZ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean handleChunkBiomes(final ClientboundChunksBiomesPacket packet) {
@@ -284,7 +303,7 @@ public class ChunkCache implements CachedData {
         if (chunk == null) return false;
         // when we place certain tile entities like beds, the server sends us a block entity update packet with empty nbt
         //  wiki.vg says this should mean the tile entity gets removed, however that doesn't seem to be correct
-        updateOrAddBlockEntity(chunk, packet.getX(), packet.getY(), packet.getZ(), packet.getType(), packet.getNbt());
+        updateOrAddBlockEntity(chunk, packet.getX() & 15, packet.getY(), packet.getZ() & 15, packet.getType(), packet.getNbt());
         return true;
     }
 
