@@ -18,7 +18,8 @@ public class UpdateAdvancementsHandler implements ClientEventLoopPacketHandler<C
             CACHE.getStatsCache().getProgress().clear();
         }
         CACHE.getStatsCache().getAdvancements().addAll(List.of(packet.getAdvancements()));
-        CACHE.getStatsCache().getAdvancements().removeIf(advancement -> List.of(packet.getRemovedAdvancements()).contains(advancement.getId()));
+        List<@NonNull String> removedAdvancements = List.of(packet.getRemovedAdvancements());
+        CACHE.getStatsCache().getAdvancements().removeIf(advancement -> removedAdvancements.contains(advancement.getId()));
         packet.getProgress().forEach((id, criterions) -> CACHE.getStatsCache().getProgress().computeIfAbsent(id, s -> new HashMap<>()).putAll(criterions));
         return true;
     }

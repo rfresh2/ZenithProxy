@@ -4,6 +4,7 @@ import com.zenith.cache.CachedData;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -45,11 +46,7 @@ public class BossBarCache implements CachedData {
         this.bossBars.remove(packet.getUuid());
     }
 
-    public BossBar get(@NonNull ClientboundBossEventPacket packet) {
-        BossBar bossBar = this.bossBars.get(packet.getUuid());
-        if (bossBar == null)    {
-            return new BossBar(packet.getUuid());
-        }
-        return bossBar;
+    public @Nullable BossBar get(@NonNull ClientboundBossEventPacket packet) {
+        return this.bossBars.get(packet.getUuid());
     }
 }

@@ -3,45 +3,27 @@ package com.zenith.network.client.handler.incoming;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.data.game.BossBarAction;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundBossEventPacket;
 
-import java.util.function.Consumer;
-
 import static com.zenith.Shared.CACHE;
-import static java.util.Objects.isNull;
 
 public class BossEventHandler implements ClientEventLoopPacketHandler<ClientboundBossEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundBossEventPacket packet, @NonNull ClientSession session) {
-        Consumer<ClientboundBossEventPacket> consumer = p -> {
-            throw new IllegalStateException();
-        };
-        switch (packet.getAction())    {
-            case ADD:
-                consumer = CACHE.getBossBarCache()::add;
-                break;
-            case REMOVE:
-                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
-                consumer = CACHE.getBossBarCache()::remove;
-                break;
-            case UPDATE_HEALTH:
-                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
-                consumer = p -> CACHE.getBossBarCache().get(p).setHealth(p.getHealth());
-                break;
-            case UPDATE_TITLE:
-                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
-                consumer = p -> CACHE.getBossBarCache().get(p).setTitle(p.getTitle());
-                break;
-            case UPDATE_STYLE:
-                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
-                consumer = p -> CACHE.getBossBarCache().get(p).setColor(p.getColor()).setDivision(p.getDivision());
-                break;
-            case UPDATE_FLAGS:
-                if (isNull(CACHE.getBossBarCache().get(packet))) return false;
-                consumer = p -> CACHE.getBossBarCache().get(p).setDarkenSky(p.isDarkenSky()).setPlayEndMusic(p.isPlayEndMusic());
-                break;
+        if (packet.getAction() == BossBarAction.ADD) {
+            CACHE.getBossBarCache().add(packet);
+            return true;
         }
-        consumer.accept(packet);
+        var bossBar = CACHE.getBossBarCache().get(packet);
+        if (bossBar == null) return false;
+        switch (packet.getAction()) {
+            case REMOVE -> CACHE.getBossBarCache().remove(packet);
+            case UPDATE_HEALTH -> bossBar.setHealth(packet.getHealth());
+            case UPDATE_TITLE -> bossBar.setTitle(packet.getTitle());
+            case UPDATE_STYLE -> bossBar.setColor(packet.getColor()).setDivision(packet.getDivision());
+            case UPDATE_FLAGS -> bossBar.setDarkenSky(packet.isDarkenSky()).setPlayEndMusic(packet.isPlayEndMusic());
+        }
         return true;
     }
 }
