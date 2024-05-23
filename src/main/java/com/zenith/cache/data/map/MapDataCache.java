@@ -17,17 +17,13 @@ public class MapDataCache implements CachedData {
     public void upsert(final ClientboundMapItemDataPacket serverMapDataPacket) {
         mapDataMap.compute(serverMapDataPacket.getMapId(), (key, oldValue) -> {
             if (oldValue == null) {
-                final var newData = new StoredMapData(
-                        serverMapDataPacket.getMapId(),
-                        serverMapDataPacket.getScale(),
-                        serverMapDataPacket.isLocked());
-                newData.addData(serverMapDataPacket.getData());
-                newData.addIcons(serverMapDataPacket.getIcons());
-                return newData;
+                return new StoredMapData(serverMapDataPacket);
             } else {
                 oldValue.setScale(serverMapDataPacket.getScale());
                 oldValue.setLocked(serverMapDataPacket.isLocked());
-                oldValue.addIcons(serverMapDataPacket.getIcons());
+                // map icons will not be resent by the server unless changed
+                if (serverMapDataPacket.getIcons().length != 0)
+                    oldValue.setIcons(serverMapDataPacket.getIcons());
                 oldValue.addData(serverMapDataPacket.getData());
                 return oldValue;
             }

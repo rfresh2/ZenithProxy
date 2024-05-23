@@ -4,13 +4,17 @@ import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.network.packet.Packet;
-import org.geysermc.mcprotocollib.protocol.data.game.UnlockRecipesAction;
 import org.geysermc.mcprotocollib.protocol.data.game.recipe.Recipe;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRecipePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundUpdateRecipesPacket;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
+
+import static java.util.Arrays.asList;
 
 @Data
 public class RecipeCache implements CachedData {
@@ -71,21 +75,20 @@ public class RecipeCache implements CachedData {
     }
 
     public synchronized void updateUnlockedRecipes(final ClientboundRecipePacket packet) {
-        final UnlockRecipesAction action = packet.getAction();
-        switch (action) {
+        switch (packet.getAction()) {
             case INIT -> {
-                this.knownRecipes.addAll(Arrays.asList(packet.getRecipeIdsToChange()));
-                this.displayedRecipes.addAll(Arrays.asList(packet.getRecipeIdsToInit()));
+                this.knownRecipes.addAll(asList(packet.getRecipeIdsToChange()));
+                this.displayedRecipes.addAll(asList(packet.getRecipeIdsToInit()));
             }
             case ADD -> {
-                final List<String> toAdd = Arrays.asList(packet.getRecipeIdsToChange());
+                final List<String> toAdd = asList(packet.getRecipeIdsToChange());
                 this.knownRecipes.addAll(toAdd);
                 this.displayedRecipes.addAll(toAdd);
             }
             case REMOVE -> {
-                final List<String> toRemove = Arrays.asList(packet.getRecipeIdsToChange());
-                this.knownRecipes.removeAll(toRemove);
-                this.displayedRecipes.removeAll(toRemove);
+                final List<String> toRemove = asList(packet.getRecipeIdsToChange());
+                toRemove.forEach(this.knownRecipes::remove);
+                toRemove.forEach(this.displayedRecipes::remove);
             }
         }
         this.openCraftingBook = packet.isOpenCraftingBook();
