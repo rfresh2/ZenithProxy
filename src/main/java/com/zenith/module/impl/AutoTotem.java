@@ -64,7 +64,7 @@ public class AutoTotem extends AbstractInventoryModule {
             && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())) {
             if (isItemEquipped()) return;
             if (switchToTotemManual()) {
-                delay = 5;
+                delay = (int) Math.min(Math.max(1, Proxy.getInstance().getClient().getPing() / 50L), 5);
             }
         }
     }
