@@ -1,5 +1,7 @@
 package com.zenith.cache.data.entity;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import lombok.Data;
 import lombok.NonNull;
@@ -40,7 +42,7 @@ public abstract class Entity {
     protected int leashedId;
     protected boolean isLeashed;
     protected Map<AttributeType, Attribute> attributes = new ConcurrentHashMap<>();
-    protected List<EntityMetadata<?, ?>> metadata = new ArrayList<>();
+    protected Int2ObjectMap<EntityMetadata<?, ?>> metadata = new Int2ObjectArrayMap<>();
     protected IntArrayList passengerIds = new IntArrayList();
     protected boolean isInVehicle;
     protected int vehicleId;
@@ -55,7 +57,7 @@ public abstract class Entity {
             consumer.accept(new ClientboundSetPassengersPacket(this.entityId, passengerIds.toIntArray()));
         }
         if (!this.metadata.isEmpty()) {
-            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, metadata));
+            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, new ArrayList<>(metadata.values())));
         }
     }
 

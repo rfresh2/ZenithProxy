@@ -123,7 +123,7 @@ public class KillAura extends AbstractInventoryModule {
                 if (neutralEntities.contains(e.getEntityType())) {
                     if (CONFIG.client.extra.killAura.onlyNeutralAggressive) {
                         // https://wiki.vg/Entity_metadata#Mob
-                        var byteMetadata = getMetadataFromId(entity.getMetadata(), 15);
+                        var byteMetadata = entity.getMetadata().get(15);
                         if (byteMetadata == null) return false;
                         if (byteMetadata instanceof ByteEntityMetadata byteData) {
                             var data = byteData.getPrimitiveValue() & 0x04;
@@ -139,15 +139,6 @@ public class KillAura extends AbstractInventoryModule {
             }
         }
         return false;
-    }
-
-    private EntityMetadata<?, ?> getMetadataFromId(List<EntityMetadata<?, ?>> metadata, int id) {
-        for (int i = 0; i < metadata.size(); i++) {
-            if (metadata.get(i).getId() == id) {
-                return metadata.get(i);
-            }
-        }
-        return null;
     }
 
     public void handleBotTickStopped(final ClientBotTick.Stopped event) {

@@ -19,6 +19,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.play
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHealthPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -146,7 +147,7 @@ public class EntityPlayer extends EntityLiving {
                 this.entityId,
                 this.headYaw
             ));
-            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, this.getMetadata()));
+            consumer.accept(new ClientboundSetEntityDataPacket(this.entityId, new ArrayList<>(this.getMetadata().values())));
         }
         super.addPackets(consumer);
     }

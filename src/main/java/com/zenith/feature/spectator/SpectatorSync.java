@@ -92,10 +92,8 @@ public final class SpectatorSync {
         spectatorEntityPlayer.setEntityId(session.getSpectatorSelfEntityId());
         spectatorEntityPlayer.setYaw(CACHE.getPlayerCache().getYaw());
         spectatorEntityPlayer.setPitch(CACHE.getPlayerCache().getPitch());
-        spectatorEntityPlayer.setMetadata(asList(
-            new FloatEntityMetadata(9, MetadataType.FLOAT, 20.0f), // health
-            new ByteEntityMetadata(17, MetadataType.BYTE, (byte) 255) // visible skin parts
-        ));
+        spectatorEntityPlayer.getMetadata().put(9, new FloatEntityMetadata(9, MetadataType.FLOAT, 20.0f)); // health
+        spectatorEntityPlayer.getMetadata().put(17, new ByteEntityMetadata(17, MetadataType.BYTE, (byte) 255)); // visible skin parts
         return spectatorEntityPlayer;
     }
 
@@ -134,7 +132,7 @@ public final class SpectatorSync {
                 connection.syncTeamMembers();
             }
         }
-        session.sendAsync(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), spectatorEntityPlayer.getMetadata()));
+        session.sendAsync(new ClientboundSetEntityDataPacket(session.getSpectatorSelfEntityId(), new ArrayList<>(spectatorEntityPlayer.getMetadata().values())));
         syncPlayerEquipmentWithSpectatorsFromCache();
     }
 

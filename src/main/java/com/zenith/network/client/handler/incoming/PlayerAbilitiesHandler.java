@@ -9,12 +9,13 @@ import static com.zenith.Shared.CACHE;
 public class PlayerAbilitiesHandler implements ClientEventLoopPacketHandler<ClientboundPlayerAbilitiesPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundPlayerAbilitiesPacket packet, final ClientSession session) {
-        CACHE.getPlayerCache().setInvincible(packet.isInvincible());
-        CACHE.getPlayerCache().setCanFly(packet.isCanFly());
-        CACHE.getPlayerCache().setFlying(packet.isFlying());
-        CACHE.getPlayerCache().setCreative(packet.isCreative());
-        CACHE.getPlayerCache().setFlySpeed(packet.getFlySpeed());
-        CACHE.getPlayerCache().setWalkSpeed(packet.getWalkSpeed());
+        CACHE.getPlayerCache()
+            .setInvincible(packet.isInvincible())
+            .setCanFly(packet.isCanFly())
+            .setFlying(packet.isFlying())
+            .setCreative(packet.isCreative())
+            .setFlySpeed(packet.getFlySpeed())
+            .setWalkSpeed(packet.getWalkSpeed());
         return true;
     }
 }

@@ -11,6 +11,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.spawn.ClientboundAddEntityPacket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.zenith.Shared.CACHE;
@@ -66,7 +67,7 @@ public class SpectatorPacketProvider {
                 CACHE.getPlayerCache().getThePlayer().getHeadYaw()),
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                CACHE.getPlayerCache().getThePlayer().getMetadata())
+                new ArrayList<>(CACHE.getPlayerCache().getThePlayer().getMetadata().values()))
         );
     }
 
