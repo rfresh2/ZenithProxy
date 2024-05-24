@@ -8,7 +8,6 @@ import com.zenith.feature.world.Pathing;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
@@ -18,7 +17,6 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.Serv
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Set;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -123,7 +121,7 @@ public class KillAura extends AbstractInventoryModule {
                 if (neutralEntities.contains(e.getEntityType())) {
                     if (CONFIG.client.extra.killAura.onlyNeutralAggressive) {
                         // https://wiki.vg/Entity_metadata#Mob
-                        var byteMetadata = getMetadataFromId(entity.getMetadata(), 15);
+                        var byteMetadata = entity.getMetadata().get(15);
                         if (byteMetadata == null) return false;
                         if (byteMetadata instanceof ByteEntityMetadata byteData) {
                             var data = byteData.getPrimitiveValue() & 0x04;
@@ -139,15 +137,6 @@ public class KillAura extends AbstractInventoryModule {
             }
         }
         return false;
-    }
-
-    private EntityMetadata<?, ?> getMetadataFromId(List<EntityMetadata<?, ?>> metadata, int id) {
-        for (int i = 0; i < metadata.size(); i++) {
-            if (metadata.get(i).getId() == id) {
-                return metadata.get(i);
-            }
-        }
-        return null;
     }
 
     public void handleBotTickStopped(final ClientBotTick.Stopped event) {

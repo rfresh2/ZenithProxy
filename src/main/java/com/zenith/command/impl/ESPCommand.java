@@ -12,8 +12,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTyp
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 
-import java.util.List;
-
 import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
@@ -42,13 +40,11 @@ public class ESPCommand extends Command {
                 if (player != null) {
                     // resend all entity metadata from cache
                     CACHE.getEntityCache().getEntities().values().forEach(e -> {
-                        List<EntityMetadata<?, ?>> metadata = asList(
-                            e.getMetadata().stream()
-                                .filter(m -> m.getId() == 0)
-                                .findAny()
-                                .orElseGet(() -> new ByteEntityMetadata(0, MetadataType.BYTE, (byte) 0))
-                        );
-                        player.sendAsync(new ClientboundSetEntityDataPacket(e.getEntityId(), metadata));
+                        EntityMetadata<?, ?> toSend;
+                        toSend = e.getMetadata().get(0);
+                        if (toSend == null)
+                            toSend = new ByteEntityMetadata(0, MetadataType.BYTE, (byte) 0);
+                        player.sendAsync(new ClientboundSetEntityDataPacket(e.getEntityId(), asList(toSend)));
                     });
                 }
                 c.getSource().getEmbed()
