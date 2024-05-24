@@ -54,14 +54,12 @@ public class AutoTotem extends AbstractInventoryModule {
     private void handleClientTick(ClientTickEvent event) {
         if (!CONFIG.client.extra.autoTotem.inGame) return;
         if (!Proxy.getInstance().hasActivePlayer()) return;
-        if (CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
         if (delay > 0) {
             delay--;
             return;
         }
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-            && playerHealthBelowThreshold()
-            && Instant.now().minus(Duration.ofSeconds(2)).isAfter(Proxy.getInstance().getConnectTime())) {
+            && playerHealthBelowThreshold()) {
             if (isItemEquipped()) return;
             if (switchToTotemManual()) {
                 delay = 1;
@@ -77,6 +75,8 @@ public class AutoTotem extends AbstractInventoryModule {
                 var actionSlot = MoveToHotbarAction.OFF_HAND;
                 var action = new ContainerClickAction(i, ContainerActionType.MOVE_TO_HOTBAR_SLOT, actionSlot);
                 CLIENT_LOG.debug("[{}] Swapping totem to offhand {}", getClass().getSimpleName(), actionSlot.getId());
+                if (CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0)
+                    sendClientPacketAsync(new ServerboundContainerClosePacket(CACHE.getPlayerCache().getInventoryCache().getOpenContainerId()));
                 sendClientPacketAsync(action.toPacket());
                 if (CONFIG.debug.ncpStrictInventory) {
                     sendClientPacketAsync(new ServerboundContainerClosePacket(0));
