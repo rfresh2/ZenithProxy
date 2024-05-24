@@ -3,18 +3,17 @@ package com.zenith.network.client.handler.incoming;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerChatPacket;
-
-import static com.zenith.Shared.CLIENT_LOG;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 
 public class PlayerChatHandler implements ClientEventLoopPacketHandler<ClientboundPlayerChatPacket, ClientSession> {
 
         @Override
         public boolean applyAsync(ClientboundPlayerChatPacket packet, ClientSession session) {
-            CLIENT_LOG.info("Player Chat: {}", packet.getContent());
-            // todo: handle this like system chats
-            // todo: does the content use text components?
-            // todo: do we need to care about the chat reporting shit?
             // we shouldn't receive any of these packets on 2b or any anarchy server due to no chat reports plugins
+            // zenith does not support chat signing currently
+
+            // resend as a system chat to hit our normal handlers and pass through to connected players
+            session.callPacketReceived(new ClientboundSystemChatPacket(packet.getUnsignedContent(), false));
             return true;
         }
 }
