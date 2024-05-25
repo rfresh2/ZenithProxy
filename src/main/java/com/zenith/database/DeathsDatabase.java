@@ -36,7 +36,7 @@ public class DeathsDatabase extends LiveDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        try (var handle = this.queryExecutor.getJdbi().open()) {
+        try (var handle = this.queryExecutor.jdbi().open()) {
             var result = handle.select("SELECT time FROM deaths ORDER BY time DESC LIMIT 1;")
                 .mapTo(OffsetDateTime.class)
                 .findOne();
@@ -54,35 +54,35 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time) {
-        final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.getVictim());
+        final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.victim());
         if (victimEntry.isEmpty()) {
-            DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.getVictim());
+            DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.victim());
             return;
         }
         var victimPlayerName = victimEntry.get().getName();
         var victimPlayerUuid = victimEntry.get().getProfileId();
         var pojo = new DeathsRecord(time, rawDeathMessage, victimPlayerName, victimPlayerUuid, null, null, null, null);
 
-        if (deathMessageParseResult.getKiller().isPresent()) {
-            final Killer killer = deathMessageParseResult.getKiller().get();
-            if (killer.getType().equals(KillerType.PLAYER)) {
-                final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.getName());
+        if (deathMessageParseResult.killer().isPresent()) {
+            final Killer killer = deathMessageParseResult.killer().get();
+            if (killer.type().equals(KillerType.PLAYER)) {
+                final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.name());
                 if (killerEntry.isEmpty()) {
                     pojo
-                        .setKillerPlayerName(killer.getName());
-                    DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.getKiller());
+                        .setKillerPlayerName(killer.name());
+                    DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.killer());
                 } else {
                     pojo
                         .setKillerPlayerName(killerEntry.get().getName())
                         .setKillerPlayerUuid(killerEntry.get().getProfileId());
                 }
-            } else if (killer.getType().equals(KillerType.MOB)) {
+            } else if (killer.type().equals(KillerType.MOB)) {
                 pojo
-                    .setKillerMob(killer.getName());
+                    .setKillerMob(killer.name());
             }
         }
-        if (deathMessageParseResult.getWeapon().isPresent()) {
-            pojo.setWeaponName(deathMessageParseResult.getWeapon().get());
+        if (deathMessageParseResult.weapon().isPresent()) {
+            pojo.setWeaponName(deathMessageParseResult.weapon().get());
         }
         this.insert(time.toInstant(), pojo, handle ->
             handle.createUpdate("INSERT INTO deaths (time, death_message, victim_player_name, victim_player_uuid, killer_player_name, killer_player_uuid, weapon_name, killer_mob) VALUES (:time, :deathMessage, :victimPlayerName, :victimPlayerUuid, :killerPlayerName, :killerPlayerUuid, :weaponName, :killerMob)")

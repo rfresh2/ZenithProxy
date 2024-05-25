@@ -97,22 +97,6 @@ public class EntityPlayer extends EntityLiving {
         return (float) e;
     }
 
-//    @Override
-//    public void mountVehicle(int vehicleId) {
-//        super.mountVehicle(vehicleId);
-//        if (this.selfPlayer) {
-//            MODULE_MANAGER.get(PlayerSimulation.class).handleVehicleMounted();
-//        }
-//    }
-//
-//    @Override
-//    public void dismountVehicle() {
-//        super.dismountVehicle();
-//        if (this.selfPlayer) {
-//            MODULE_MANAGER.get(PlayerSimulation.class).handleVehicleDismounted();
-//        }
-//    }
-
     public boolean isAlive() {
         return this.health > 0.0f;
     }

@@ -1,6 +1,7 @@
 package com.zenith.util;
 
 import com.zenith.Shared;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 import static com.zenith.Shared.DEFAULT_LOG;
@@ -9,6 +10,7 @@ import static com.zenith.util.DisconnectReasonInfo.DisconnectCategory.*;
 @UtilityClass
 public class DisconnectReasonInfo {
 
+    @Getter
     public enum DisconnectCategory {
         KICK("kicked"),
         CONNECTION_ISSUE_PLAYER("connection-issue-you"),
@@ -27,10 +29,6 @@ public class DisconnectReasonInfo {
 
         DisconnectCategory(String wikiHeader) {
             this.wikiHeader = wikiHeader;
-        }
-
-        public String getWikiHeader() {
-            return wikiHeader;
         }
 
         public String getWikiURL() {

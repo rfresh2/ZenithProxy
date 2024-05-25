@@ -71,7 +71,7 @@ public class SystemChatHandler implements ClientEventLoopPacketHandler<Clientbou
             deathMessage = deathMessagesHelper.parse(component, messageString);
             if (deathMessage.isPresent()) {
                 EVENT_BUS.postAsync(new DeathMessageEvent(deathMessage.get(), messageString));
-                if (deathMessage.get().getVictim().equals(CACHE.getProfileCache().getProfile().getName())) {
+                if (deathMessage.get().victim().equals(CACHE.getProfileCache().getProfile().getName())) {
                     EVENT_BUS.postAsync(new SelfDeathMessageEvent(messageString));
                 }
             } else {

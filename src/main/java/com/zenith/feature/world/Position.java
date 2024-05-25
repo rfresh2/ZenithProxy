@@ -1,13 +1,6 @@
 package com.zenith.feature.world;
 
-import lombok.Data;
-
-@Data
-public class Position {
-    private final double x;
-    private final double y;
-    private final double z;
-
+public record Position(double x, double y, double z) {
     public static int floor(double value) {
         int i = (int) value;
         return value < (double) i ? i - 1 : i;
@@ -30,10 +23,10 @@ public class Position {
     }
 
     public Position add(final double x, final double y, final double z) {
-        return new Position(getX() + x, getY() + y, getZ() + z);
+        return new Position(x() + x, y() + y, z() + z);
     }
 
     public Position minus(final Position position) {
-        return new Position(this.x - position.getX(), this.y - position.getY(), this.z - position.getZ());
+        return new Position(this.x - position.x(), this.y - position.y(), this.z - position.z());
     }
 }

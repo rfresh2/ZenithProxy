@@ -13,33 +13,16 @@ public final class ConnectionPool {
     private final HikariDataSource writePool;
 
     public ConnectionPool() {
-        writePool = createDataSource(CONFIG.database.writePool);
+        writePool = createDataSource();
     }
 
-    public ConnectionPool(final String customUrl, final String customUser, final String customPass) {
-        writePool = createDataSource(1, customUrl, customUser, customPass);
-    }
-
-    private static HikariDataSource createDataSource(int maxPoolSize, String url, String user, String pass) {
-        HikariConfig config = new HikariConfig();
-        config.setDriverClassName("org.postgresql.Driver");
-        config.setJdbcUrl(url);
-        config.setUsername(user);
-        config.setPassword(pass);
-        config.setMaximumPoolSize(maxPoolSize);
-        config.setConnectionTimeout(5000);
-        config.setKeepaliveTime(Duration.ofMinutes(1).toMillis());
-        config.setMaxLifetime(Duration.ofMinutes(5).toMillis());
-        return new HikariDataSource(config);
-    }
-
-    private static HikariDataSource createDataSource(int maxPoolSize) {
+    private static HikariDataSource createDataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.postgresql.Driver");
         config.setJdbcUrl("jdbc:postgresql://" + CONFIG.database.host + ":" + CONFIG.database.port + "/postgres");
         config.setUsername(CONFIG.database.username);
         config.setPassword(CONFIG.database.password);
-        config.setMaximumPoolSize(maxPoolSize);
+        config.setMaximumPoolSize(1);
         config.setConnectionTimeout(5000);
         config.setKeepaliveTime(Duration.ofMinutes(1).toMillis());
         config.setMaxLifetime(Duration.ofMinutes(5).toMillis());

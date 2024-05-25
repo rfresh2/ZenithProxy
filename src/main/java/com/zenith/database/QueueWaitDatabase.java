@@ -79,7 +79,7 @@ public class QueueWaitDatabase extends Database {
     }
 
     private void writeQueueWait(int initialQueueLen, Instant initialQueueTime, Instant endQueueTime) {
-        try (var handle = this.queryExecutor.getJdbi().open()) {
+        try (var handle = this.queryExecutor.jdbi().open()) {
             handle.createUpdate("INSERT INTO queuewait (player_name, prio, initial_queue_len, start_queue_time, end_queue_time) VALUES (:player_name, :prio, :initial_queue_len, :start_queue_time, :end_queue_time)")
                     .bind("player_name", CONFIG.authentication.username)
                     .bind("prio", CONFIG.authentication.prio)

@@ -7,7 +7,7 @@ import org.geysermc.mcprotocollib.network.tcp.TcpClientSession;
 import static com.zenith.Shared.VIA_INITIALIZER;
 
 public class ZenithClientChannelInitializer extends TcpClientChannelInitializer {
-    public static Factory FACTORY = ZenithClientChannelInitializer::new;
+    public static final Factory FACTORY = ZenithClientChannelInitializer::new;
     private final TcpClientSession client;
 
     public ZenithClientChannelInitializer(final TcpClientSession client) {

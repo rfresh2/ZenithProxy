@@ -122,7 +122,7 @@ public class RestAutoUpdater extends AutoUpdater {
             releaseNodes.sort((a, b) -> b.get("published_at").asText().compareTo(a.get("published_at").asText()));
 
             if (!releaseNodes.isEmpty()) {
-                return Pair.of(releaseNodes.get(0).get("id").asText(), releaseNodes.get(0).get("tag_name").asText());
+                return Pair.of(releaseNodes.getFirst().get("id").asText(), releaseNodes.getFirst().get("tag_name").asText());
             }
         } catch (Throwable e) {
             DEFAULT_LOG.error("Failed to parse latest release ID.", e);

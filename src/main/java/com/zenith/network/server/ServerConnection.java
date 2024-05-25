@@ -249,7 +249,7 @@ public class ServerConnection implements Session, SessionListener {
         this.session.send(packet, channelFutureListener);
     }
 
-    public Future<Void> sendDirect(Packet packet) {
+    public Future<Void> sendDirect(@NotNull Packet packet) {
         return this.session.sendDirect(packet);
     }
 
@@ -586,7 +586,7 @@ public class ServerConnection implements Session, SessionListener {
 
     private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
         if (reason == null) return null;
-        MinecraftProtocol protocol = (MinecraftProtocol) session.getPacketProtocol();
+        MinecraftProtocol protocol = session.getPacketProtocol();
         if (protocol.getState() == ProtocolState.LOGIN) {
             return new ClientboundLoginDisconnectPacket(reason);
         } else if (protocol.getState() == ProtocolState.GAME) {

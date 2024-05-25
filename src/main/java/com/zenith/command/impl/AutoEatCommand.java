@@ -44,8 +44,7 @@ public class AutoEatCommand extends Command {
             }))
             .then(literal("health")
                       .then(argument("health", integer(1, 19)).executes(c -> {
-                          int health = IntegerArgumentType.getInteger(c, "health");
-                          CONFIG.client.extra.autoEat.healthThreshold = health;
+                          CONFIG.client.extra.autoEat.healthThreshold = IntegerArgumentType.getInteger(c, "health");
                           c.getSource().getEmbed()
                               .title("AutoEat Health Threshold Set")
                               .primaryColor()
@@ -56,8 +55,7 @@ public class AutoEatCommand extends Command {
                       })))
             .then(literal("hunger")
                       .then(argument("hunger", integer(1, 19)).executes(c -> {
-                          int hunger = IntegerArgumentType.getInteger(c, "hunger");
-                          CONFIG.client.extra.autoEat.hungerThreshold = hunger;
+                          CONFIG.client.extra.autoEat.hungerThreshold = IntegerArgumentType.getInteger(c, "hunger");
                           c.getSource().getEmbed()
                               .title("AutoEat Hunger Threshold Set")
                               .primaryColor()

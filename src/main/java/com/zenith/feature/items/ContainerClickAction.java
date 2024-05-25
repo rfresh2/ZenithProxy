@@ -88,18 +88,14 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         if (isStackEmpty(mouseStack)) return null; // can't drop if mouse stack is empty
         ItemStack predictedMouseStack = Container.EMPTY_STACK;
         if (!(param instanceof final ClickItemAction clickItemAction)) return null;
-        switch (clickItemAction) {
-            case LEFT_CLICK -> {
-                // drop the entire stack from the mouse stack
-                predictedMouseStack = Container.EMPTY_STACK;
-            }
-            case RIGHT_CLICK -> {
-                // drop 1 item from the mouse stack
-                predictedMouseStack = mouseStack.getAmount() == 1
+        predictedMouseStack = switch (clickItemAction) {
+            case LEFT_CLICK -> // drop the entire stack from the mouse stack
+                Container.EMPTY_STACK;
+            case RIGHT_CLICK -> // drop 1 item from the mouse stack
+                mouseStack.getAmount() == 1
                     ? Container.EMPTY_STACK
                     : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getNbt());
-            }
-        }
+        };
         return new ServerboundContainerClickPacket(
             0,
             CACHE.getPlayerCache().getActionId().incrementAndGet(),
@@ -120,14 +116,9 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
         int hotBarSlot = -1;
         switch (moveToHotbarAction) {
-            case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9 -> {
-                // swap the clickStack with the item in the hotbar slot
+            case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9 -> // swap the clickStack with the item in the hotbar slot
                 hotBarSlot = moveToHotbarAction.getId() + 36;
-
-            }
-            case OFF_HAND -> {
-                hotBarSlot = 45;
-            }
+            case OFF_HAND -> hotBarSlot = 45;
             default -> { return null; }
         }
         final ItemStack swapStack = CACHE.getPlayerCache().getPlayerInventory().get(hotBarSlot);
@@ -156,18 +147,14 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         final Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
 
         switch (dropItemAction) {
-            case DROP_FROM_SELECTED -> {
-                // drop 1 item from the selected slot
+            case DROP_FROM_SELECTED -> // drop 1 item from the selected slot
                 changedSlots.put(
                     slotId,
                     clickStack.getAmount() == 1
                         ? Container.EMPTY_STACK
                         : new ItemStack(clickStack.getId(), clickStack.getAmount() - 1, clickStack.getNbt()));
-            }
-            case DROP_SELECTED_STACK -> {
-                // drop the entire stack from the selected slot
+            case DROP_SELECTED_STACK -> // drop the entire stack from the selected slot
                 changedSlots.put(slotId, Container.EMPTY_STACK);
-            }
             default -> { return null; }
         }
         return new ServerboundContainerClickPacket(

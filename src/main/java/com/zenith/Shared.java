@@ -199,9 +199,8 @@ public class Shared {
 
     static {
         try {
-            Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
-                DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e);
-            });
+            Thread.setDefaultUncaughtExceptionHandler(
+                (thread, e) -> DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e));
             EXECUTOR = Executors.newScheduledThreadPool(4, new ThreadFactoryBuilder()
                 .setNameFormat("ZenithProxy Scheduled Executor - #%d")
                 .setDaemon(true)

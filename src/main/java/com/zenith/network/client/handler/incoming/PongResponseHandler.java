@@ -8,7 +8,7 @@ import org.geysermc.mcprotocollib.protocol.packet.status.clientbound.Clientbound
 import static com.zenith.Shared.CONFIG;
 
 public class PongResponseHandler implements PacketHandler<ClientboundPongResponsePacket, ClientSession> {
-    public static PongResponseHandler INSTANCE = new PongResponseHandler();
+    public static final PongResponseHandler INSTANCE = new PongResponseHandler();
     @Override
     public ClientboundPongResponsePacket apply(final ClientboundPongResponsePacket packet, final ClientSession session) {
         if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.PACKET && session.getLastPingId() == packet.getPingTime()) {

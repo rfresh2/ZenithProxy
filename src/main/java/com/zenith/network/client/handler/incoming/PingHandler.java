@@ -7,7 +7,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundPongPacket;
 
 public class PingHandler implements ClientEventLoopPacketHandler<ClientboundPingPacket, ClientSession> {
-    public static PingHandler INSTANCE = new PingHandler();
+    public static final PingHandler INSTANCE = new PingHandler();
     @Override
     public boolean applyAsync(final ClientboundPingPacket packet, final ClientSession session) {
         // grim ac uses this to determine leniency in player movements. should be synced to actual ping from player

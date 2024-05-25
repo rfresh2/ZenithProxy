@@ -24,7 +24,7 @@ public class ChatDatabase extends LiveDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        try (var handle = this.queryExecutor.getJdbi().open()) {
+        try (var handle = this.queryExecutor.jdbi().open()) {
             var result = handle.select("SELECT time FROM chats ORDER BY time DESC LIMIT 1;")
                 .mapTo(OffsetDateTime.class)
                 .findOne();

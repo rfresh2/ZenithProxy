@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 
 import static com.zenith.Shared.OBJECT_MAPPER;
 
+@Getter
 public class LanguageManager {
     public static final Pattern PATTERN = Pattern.compile("%((\\d+)\\$)?s");
-    @Getter
-    private Map<String, MessageFormat> languageDataMap = new HashMap<>();
+    private final Map<String, MessageFormat> languageDataMap = new HashMap<>();
 
     public LanguageManager() {
         init();
@@ -44,7 +44,7 @@ public class LanguageManager {
 
         // Replace positional format codes like %2$s
         Matcher matcher = PATTERN.matcher(escapedInput);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int lastIndex = -1;
         while (matcher.find()) {
             int argumentIndex = 0;

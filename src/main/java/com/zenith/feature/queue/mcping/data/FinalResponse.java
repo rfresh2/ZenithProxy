@@ -2,9 +2,11 @@ package com.zenith.feature.queue.mcping.data;
 
 import com.zenith.feature.queue.mcping.rawData.Players;
 import com.zenith.feature.queue.mcping.rawData.Version;
+import lombok.Getter;
 
 import java.util.regex.Pattern;
 
+@Getter
 public class FinalResponse extends MCResponse {
 
     private static final Pattern STRIP_PATTERN = Pattern.compile("(?<!<@)[&§](?i)[0-9a-fklmnorx]");
@@ -30,10 +32,6 @@ public class FinalResponse extends MCResponse {
 
     public Version getVersion() {
         return version;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getFavIcon() {

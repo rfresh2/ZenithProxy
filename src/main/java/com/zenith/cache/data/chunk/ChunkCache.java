@@ -400,10 +400,7 @@ public class ChunkCache implements CachedData {
         if (chunk == null) {
             var blockEntitiesArray = p.getBlockEntities();
             var blockEntities = Collections.synchronizedList(new ArrayList<BlockEntityInfo>(blockEntitiesArray.length));
-            for (int i = 0; i < blockEntitiesArray.length; i++) {
-                var blockEntity = blockEntitiesArray[i];
-                blockEntities.add(blockEntity);
-            }
+            Collections.addAll(blockEntities, blockEntitiesArray);
             chunk = new Chunk(
                 chunkX,
                 chunkZ,

@@ -91,9 +91,8 @@ public class TablistCommand extends Command {
                 }
                 outputMessages.add(out.toString());
                 try {
-                    outputMessages.forEach(outputMessage -> {
-                        c.getSource().getMultiLineOutput().add("```\n" + outputMessage + "\n```");
-                    });
+                    outputMessages.forEach(
+                        outputMessage -> c.getSource().getMultiLineOutput().add("```\n" + outputMessage + "\n```"));
                 } catch (final Exception e) {
                     DEFAULT_LOG.error("", e);
                 }

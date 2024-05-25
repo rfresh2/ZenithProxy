@@ -7,7 +7,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 
 public class CKeepAliveHandler implements PacketHandler<ClientboundKeepAlivePacket, ClientSession> {
-    public static CKeepAliveHandler INSTANCE = new CKeepAliveHandler();
+    public static final CKeepAliveHandler INSTANCE = new CKeepAliveHandler();
     @Override
     public ClientboundKeepAlivePacket apply(final ClientboundKeepAlivePacket packet, final ClientSession session) {
         if (session.getFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true)) {

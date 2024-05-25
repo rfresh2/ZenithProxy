@@ -139,9 +139,9 @@ public final class DeathMessageSchemaInstance {
             }
         }
         if (isNull(victim) || iterator.hasNext()) return Optional.empty(); // we shouldn't ever reach this but just in case
-        if (playerNames.size() == 2 && (killer == null || killer.getType() != KillerType.PLAYER)) {
+        if (playerNames.size() == 2 && (killer == null || killer.type() != KillerType.PLAYER)) {
             DEFAULT_LOG.warn("Expected player killer but found: {}", killer);
-        } else if (playerNames.size() == 1 && (killer != null && killer.getType() == KillerType.PLAYER)) {
+        } else if (playerNames.size() == 1 && (killer != null && killer.type() == KillerType.PLAYER)) {
             DEFAULT_LOG.warn("Expected no player killer but found: {}", killer);
         }
         return Optional.of(new DeathMessageParseResult(victim, Optional.ofNullable(killer), Optional.ofNullable(weapon), this));

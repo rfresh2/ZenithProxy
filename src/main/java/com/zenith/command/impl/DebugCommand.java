@@ -116,11 +116,9 @@ public class DebugCommand extends Command {
                 CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();
                 var session = Proxy.getInstance().getCurrentPlayer().get();
                 if (session != null) {
-                    asList(Effect.values()).forEach(effect -> {
-                        session.sendAsync(new ClientboundRemoveMobEffectPacket(
-                            CACHE.getPlayerCache().getEntityId(),
-                            effect));
-                    });
+                    asList(Effect.values()).forEach(effect -> session.sendAsync(new ClientboundRemoveMobEffectPacket(
+                        CACHE.getPlayerCache().getEntityId(),
+                        effect)));
                 }
                 c.getSource().getEmbed()
                     .title("Cleared Effects");

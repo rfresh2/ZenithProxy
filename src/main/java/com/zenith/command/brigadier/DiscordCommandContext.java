@@ -3,10 +3,12 @@ package com.zenith.command.brigadier;
 import com.zenith.discord.Embed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.rest.entity.RestChannel;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class DiscordCommandContext extends CommandContext {
     private final MessageCreateEvent messageCreateEvent;
     private final RestChannel restChannel;
@@ -21,11 +23,4 @@ public class DiscordCommandContext extends CommandContext {
         return new DiscordCommandContext(input, new Embed(), new ArrayList<>(), messageCreateEvent, restChannel);
     }
 
-    public MessageCreateEvent getMessageCreateEvent() {
-        return messageCreateEvent;
-    }
-
-    public RestChannel getRestChannel() {
-        return restChannel;
-    }
 }

@@ -85,7 +85,7 @@ public final class Config {
             public int packetPingIntervalSeconds = 10;
 
             public enum Mode {
-                TABLIST, PACKET;
+                TABLIST, PACKET
             }
         }
 
@@ -523,7 +523,7 @@ public final class Config {
                 public String password = "";
 
                 public enum ConnectionProxyType {
-                    HTTP, SOCKS4, SOCKS5;
+                    HTTP, SOCKS4, SOCKS5
                 }
         }
         public static final class QueueWarning {
@@ -554,7 +554,6 @@ public final class Config {
         public int port = 5432;
         public String username = "";
         public String password = "";
-        public int writePool = 1;
         public final QueueWait queueWait = new QueueWait();
         public final Connections connections = new Connections();
         public final Chats chats = new Chats();

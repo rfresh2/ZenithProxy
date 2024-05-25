@@ -1,6 +1,7 @@
 package com.zenith.database;
 
 import io.netty.resolver.DefaultAddressResolverGroup;
+import lombok.Getter;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -10,6 +11,7 @@ import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DATABASE_LOG;
 import static java.util.Objects.isNull;
 
+@Getter
 public class RedisClient {
 
     private RedissonClient redissonClient;
@@ -40,10 +42,6 @@ public class RedisClient {
 
     public boolean isShutDown() {
         return isNull(redissonClient) || redissonClient.isShuttingDown() || redissonClient.isShutdown();
-    }
-
-    public RedissonClient getRedissonClient() {
-        return redissonClient;
     }
 
     public static RedissonClient buildRedisClient() {

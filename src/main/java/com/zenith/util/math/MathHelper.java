@@ -150,11 +150,9 @@ public class MathHelper {
         var months = durationInSeconds / secondsInMonth;
         var days = (durationInSeconds % secondsInMonth) / secondsInDay;
         var hours = (durationInSeconds % secondsInDay) / secondsInHour;
-        final StringBuilder sb = new StringBuilder();
-        sb.append((months > 0) ? months + " month" + (months != 1 ? "s" : "") + ", " : "");
-        sb.append((days > 0) ? days + " day" + (days != 1 ? "s" : "") + ", " : "");
-        sb.append(hours + " hour" + (hours != 1 ? "s" : ""));
-        return sb.toString();
+        return ((months > 0) ? months + " month" + (months != 1 ? "s" : "") + ", " : "")
+            + ((days > 0) ? days + " day" + (days != 1 ? "s" : "") + ", " : "")
+            + hours + " hour" + (hours != 1 ? "s" : "");
     }
 
     public static int smallestEncompassingPowerOfTwo(int value) {

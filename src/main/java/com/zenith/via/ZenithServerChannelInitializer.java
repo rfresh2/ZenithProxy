@@ -7,7 +7,7 @@ import org.geysermc.mcprotocollib.network.tcp.TcpServerChannelInitializer;
 import static com.zenith.Shared.VIA_INITIALIZER;
 
 public class ZenithServerChannelInitializer extends TcpServerChannelInitializer {
-    public static Factory FACTORY = ZenithServerChannelInitializer::new;
+    public static final Factory FACTORY = ZenithServerChannelInitializer::new;
 
     public ZenithServerChannelInitializer(final TcpServer server) {
         super(server);

@@ -15,7 +15,7 @@ public class BrandSerializer {
         byteBuf.readBytes(bytes);
         byteBuf.release();
         return bytes;
-    };
+    }
 
     // append ' (ZenithProxy)' to the end of the original brand
     public static byte[] appendBrand(final MinecraftCodecHelper codec, final byte[] original) {
