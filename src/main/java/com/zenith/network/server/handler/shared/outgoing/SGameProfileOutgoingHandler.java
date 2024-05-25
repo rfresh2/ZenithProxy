@@ -122,11 +122,9 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         session.setSpectator(true);
         final GameProfile spectatorFakeProfile = new GameProfile(spectatorFakeUUID, clientGameProfile.getName());
         if (clientGameProfile.getProperty("textures") == null) {
-            SESSION_SERVER.getProfileAndSkin(clientGameProfile.getId()).ifPresentOrElse(p -> {
-                spectatorFakeProfile.setProperties(p.getProperties());
-            }, () -> {
-                SERVER_LOG.info("Failed getting spectator skin for {} [{}]", clientGameProfile.getName(), clientGameProfile.getId().toString());
-            });
+                SESSION_SERVER.getProfileAndSkin(clientGameProfile.getId())
+                    .ifPresentOrElse(p -> spectatorFakeProfile.setProperties(p.getProperties()),
+                                     () -> SERVER_LOG.info("Failed getting spectator skin for {} [{}]", clientGameProfile.getName(), clientGameProfile.getId().toString()));
         } else {
             spectatorFakeProfile.setProperties(clientGameProfile.getProperties());
         }

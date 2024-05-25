@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
@@ -129,8 +130,8 @@ public class ReleaseChannelCommand extends Command {
             return false;
         }
         // check if we have the required CPU flags
-        try {
-            List<String> flags = Files.lines(Paths.get("/proc/cpuinfo"))
+        try (Stream<String> linesStream = Files.lines(Paths.get("/proc/cpuinfo"))) {
+            List<String> flags = linesStream
                 .filter(line -> line.startsWith("flags"))
                 .map(line -> line.split(":")[1].trim().split(" "))
                 .flatMap(Arrays::stream)
@@ -154,7 +155,7 @@ public class ReleaseChannelCommand extends Command {
             final Process process = processBuilder.start();
             final StringBuilder stream = readStream(process.getInputStream());
             var output = stream.toString();
-            String[] lines = output.split(System.getProperty("line.separator"));
+            String[] lines = output.split(System.lineSeparator());
             // ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
             // get the version from the last word of the first line
             String[] firstLineWordSplit = lines[0].split(" ");
@@ -184,7 +185,7 @@ public class ReleaseChannelCommand extends Command {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(iStream))) {
             while ((line = bufferedReader.readLine()) != null) {
                 builder.append(line);
-                builder.append(System.getProperty("line.separator"));
+                builder.append(System.lineSeparator());
             }
         }
         return builder;

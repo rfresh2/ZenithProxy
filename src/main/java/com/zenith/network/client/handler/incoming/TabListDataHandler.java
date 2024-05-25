@@ -110,7 +110,7 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
                     final List<String> hyphenSplit = Arrays.asList(line.split("—"));
                     if (!hyphenSplit.isEmpty()) {
                         // " XX ping"
-                        final String pingSection = hyphenSplit.get(hyphenSplit.size() - 1);
+                        final String pingSection = hyphenSplit.getLast();
                         final List<String> pingSectionSpaceSplit = Arrays.asList(pingSection.split(" "));
                         if (!pingSectionSpaceSplit.isEmpty()) {
                             final String ping = pingSectionSpaceSplit.get(1);

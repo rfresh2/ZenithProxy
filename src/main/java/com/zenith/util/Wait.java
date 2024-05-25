@@ -17,6 +17,7 @@ public class Wait {
         Thread.sleep(milliseconds);
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     public static void waitSpinLoop() {
         while (true) {
             try {

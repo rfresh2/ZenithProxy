@@ -3,11 +3,13 @@ package com.zenith.cache.data;
 import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
+import lombok.Setter;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+@Setter
 public class ServerProfileCache implements CachedData {
 
     protected GameProfile profile;
@@ -17,10 +19,6 @@ public class ServerProfileCache implements CachedData {
 
     public @Nullable GameProfile getProfile() {
         return profile;
-    }
-
-    public void setProfile(final GameProfile profile) {
-        this.profile = profile;
     }
 
     @Override

@@ -224,7 +224,7 @@ public class DiscordEventListener {
             .title("Player In Visual Range")
             .color(event.isFriend() ? CONFIG.theme.success.discord() : CONFIG.theme.error.discord())
             .addField("Player Name", escape(event.playerEntry().getName()), true)
-            .addField("Player UUID", ("[" + event.playerEntry().getProfileId().toString() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
+            .addField("Player UUID", ("[" + event.playerEntry().getProfileId() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntry().getProfileId()).toString());
 
         if (CONFIG.discord.reportCoords) {
@@ -274,7 +274,7 @@ public class DiscordEventListener {
             .title("Player Left Visual Range")
             .color(event.isFriend() ? CONFIG.theme.success.discord() : CONFIG.theme.error.discord())
             .addField("Player Name", escape(event.playerEntry().getName()), true)
-            .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
+            .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
 
         if (CONFIG.discord.reportCoords) {
@@ -292,7 +292,7 @@ public class DiscordEventListener {
             .title("Player Logout In Visual Range")
             .color(event.isFriend() ? CONFIG.theme.success.discord() : CONFIG.theme.error.discord())
             .addField("Player Name", escape(event.playerEntry().getName()), true)
-            .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId().toString() + ")"), true)
+            .addField("Player UUID", ("[" + event.playerEntity().getUuid() + "](https://namemc.com/profile/" + event.playerEntry().getProfileId() + ")"), true)
             .thumbnail(Proxy.getInstance().getAvatarURL(event.playerEntity().getUuid()).toString());
 
         if (CONFIG.discord.reportCoords) {
@@ -426,11 +426,11 @@ public class DiscordEventListener {
             } else if (event.isDeathMessage()) {
                 if (!CONFIG.discord.chatRelay.deathMessages) return;
                 DeathMessageParseResult death = event.deathMessage().get();
-                message = message.replace(death.getVictim(), "**" + death.getVictim() + "**");
-                var k = death.getKiller().filter(killer -> killer.getType() == KillerType.PLAYER);
-                if (k.isPresent()) message = message.replace(k.get().getName(), "**" + k.get().getName() + "**");
-                senderName = death.getVictim();
-                senderUUID = CACHE.getTabListCache().getFromName(death.getVictim()).map(PlayerListEntry::getProfileId).orElse(null);
+                message = message.replace(death.victim(), "**" + death.victim() + "**");
+                var k = death.killer().filter(killer -> killer.type() == KillerType.PLAYER);
+                if (k.isPresent()) message = message.replace(k.get().name(), "**" + k.get().name() + "**");
+                senderName = death.victim();
+                senderUUID = CACHE.getTabListCache().getFromName(death.victim()).map(PlayerListEntry::getProfileId).orElse(null);
             } else {
                 if (!CONFIG.discord.chatRelay.serverMessages) return;
                 senderName = "Hausemaster";
@@ -505,7 +505,7 @@ public class DiscordEventListener {
                 final MessageData messageData = event.event().getMessage().getReferencedMessage().get().getData();
                 // abort if reply is not to a message sent by us
                 if (bot.client.getSelfId().asLong() != messageData.author().id().asLong()) return;
-                final EmbedData embed = messageData.embeds().get(0);
+                final EmbedData embed = messageData.embeds().getFirst();
                 final String sender = bot.extractRelayEmbedSenderUsername(embed.color(), embed.description().get());
                 Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket("/w " + sender + " " + event.message()));
             } catch (final Exception e) {
@@ -589,12 +589,12 @@ public class DiscordEventListener {
 
     public void handleDeathMessageEvent(final DeathMessageEvent event) {
         if (!CONFIG.client.extra.killMessage) return;
-        event.deathMessageParseResult().getKiller().ifPresent(killer -> {
-            if (!killer.getName().equals(CONFIG.authentication.username)) return;
+        event.deathMessageParseResult().killer().ifPresent(killer -> {
+            if (!killer.name().equals(CONFIG.authentication.username)) return;
             sendEmbedMessage(Embed.builder()
                                  .title("Kill Detected")
                                  .primaryColor()
-                                 .addField("Victim", escape(event.deathMessageParseResult().getVictim()), false)
+                                 .addField("Victim", escape(event.deathMessageParseResult().victim()), false)
                                  .addField("Message", escape(event.deathMessageRaw()), false));
         });
     }
@@ -603,11 +603,9 @@ public class DiscordEventListener {
         var embedBuilder = Embed.builder()
             .title("Update Available!")
             .primaryColor();
-        event.getVersion().ifPresent(v -> {
-            embedBuilder
-                .addField("Current", "`" + escape(LAUNCH_CONFIG.version) + "`", false)
-                .addField("New", "`" + escape(v) + "`", false);
-        });
+        event.getVersion().ifPresent(v -> embedBuilder
+            .addField("Current", "`" + escape(LAUNCH_CONFIG.version) + "`", false)
+            .addField("New", "`" + escape(v) + "`", false));
         embedBuilder.addField(
             "Info",
             "Update will be applied after the next disconnect.\nOr apply now: `update`",

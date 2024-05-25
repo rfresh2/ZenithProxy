@@ -2,7 +2,6 @@ package com.zenith.cache.data.entity;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
@@ -45,11 +44,6 @@ public class EntityCache implements CachedData {
                 consumer.accept(packet);
             }
         }
-//        EXECUTOR.scheduleAtFixedRate(
-//            this::reapDeadEntities,
-//            5L,
-//            5L,
-//            TimeUnit.MINUTES);
     }
 
 
@@ -98,21 +92,5 @@ public class EntityCache implements CachedData {
             .map(entity -> (E) entity)
             .findFirst()
             .orElse(null);
-    }
-
-    private void reapDeadEntities() {
-        if (!Proxy.getInstance().isConnected()) return;
-        int playerChunkX = (int) CACHE.getPlayerCache().getX() >> 4;
-        int playerChunkZ = ((int) CACHE.getPlayerCache().getZ()) >> 4;
-        this.entities.values()
-            .removeIf(entity -> distanceOutOfRange(
-                playerChunkX,
-                playerChunkZ,
-                ((int) entity.getX()) >> 4,
-                ((int) entity.getZ()) >> 4));
-    }
-
-    private boolean distanceOutOfRange(final int x1, final int y1, final int x2, final int y2) {
-        return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) > maxDistanceExpected;
     }
 }

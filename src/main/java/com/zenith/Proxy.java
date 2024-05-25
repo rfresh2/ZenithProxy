@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -322,9 +323,7 @@ public class Proxy {
                 var connection = connections[i];
                 connection.disconnect("Login failed");
             }
-            EXECUTOR.schedule(() -> {
-                EVENT_BUS.post(new DisconnectEvent(LOGIN_FAILED));
-            }, 1L, TimeUnit.SECONDS);
+            EXECUTOR.schedule(() -> EVENT_BUS.post(new DisconnectEvent(LOGIN_FAILED)), 1L, TimeUnit.SECONDS);
             return;
         }
         CLIENT_LOG.info("Connecting to {}:{}...", address, port);
@@ -363,7 +362,9 @@ public class Proxy {
         if (this.server != null && this.server.isListening())
             throw new IllegalStateException("Server already started!");
         if (!CONFIG.server.enabled) return;
-        this.serverIcon = getClass().getClassLoader().getResourceAsStream("servericon.png").readAllBytes();
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("servericon.png")) {
+            this.serverIcon = in.readAllBytes();
+        }
         var address = CONFIG.server.bind.address;
         var port = CONFIG.server.bind.port;
         SERVER_LOG.info("Starting server on {}:{}...", address, port);

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class HikariConnectionFactory implements ConnectionFactory {
     private final ConnectionPool connectionPool;
     @Override
-    public Connection openConnection() throws SQLException {
+    public Connection openConnection() {
         return connectionPool.getWriteConnection();
     }
 

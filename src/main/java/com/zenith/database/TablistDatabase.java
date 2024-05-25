@@ -27,7 +27,7 @@ public class TablistDatabase extends LockingDatabase {
 
     @Override
     public Instant getLastEntryTime() {
-        try (var handle = this.queryExecutor.getJdbi().open()) {
+        try (var handle = this.queryExecutor.jdbi().open()) {
             var result = handle.select("SELECT time FROM tablist ORDER BY time DESC LIMIT 1;")
                 .mapTo(OffsetDateTime.class)
                 .findOne();
@@ -47,7 +47,7 @@ public class TablistDatabase extends LockingDatabase {
     }
 
     private void syncTablist() {
-        try (var handle = this.queryExecutor.getJdbi().open()) {
+        try (var handle = this.queryExecutor.jdbi().open()) {
             handle.inTransaction(transaction -> {
                 transaction.createUpdate("LOCK TABLE tablist;").execute();
                 transaction.createUpdate("DELETE FROM tablist;").execute();

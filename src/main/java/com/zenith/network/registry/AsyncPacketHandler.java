@@ -17,9 +17,7 @@ public interface AsyncPacketHandler<P extends Packet, S extends Session> extends
 
     default P apply(P packet, S session) {
         if (packet == null) return null;
-        EVENT_LOOP.execute(() -> {
-            applyWithRetries(packet, session, 0);
-        });
+        EVENT_LOOP.execute(() -> applyWithRetries(packet, session, 0));
         return packet;
     }
 
@@ -30,9 +28,7 @@ public interface AsyncPacketHandler<P extends Packet, S extends Session> extends
                     SERVER_LOG.debug("Unable to apply async handler for packet: " + packet.getClass().getSimpleName());
                     return;
                 }
-                EVENT_LOOP.schedule(() -> {
-                    applyWithRetries(packet, session, tryCount + 1);
-                }, 250, MILLISECONDS);
+                EVENT_LOOP.schedule(() -> applyWithRetries(packet, session, tryCount + 1), 250, MILLISECONDS);
             }
         } catch (final Throwable e) {
             SERVER_LOG.error("Async handler error", e);

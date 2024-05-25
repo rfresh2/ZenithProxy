@@ -67,7 +67,7 @@ public class ReplayMod extends Module {
         var startT = replayRecording.getStartT();
         if (startT == 0L) return;
         if (CONFIG.client.extra.replayMod.maxRecordingTimeMins <= 0) return;
-        if (Instant.now().toEpochMilli() - (CONFIG.client.extra.replayMod.maxRecordingTimeMins * 60 * 1000) > startT) {
+        if (Instant.now().toEpochMilli() - ((long) CONFIG.client.extra.replayMod.maxRecordingTimeMins * 60 * 1000) > startT) {
             MODULE_LOG.info("Stopping ReplayMod recording due to max recording time");
             disable();
         }

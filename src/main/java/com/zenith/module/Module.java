@@ -2,6 +2,7 @@ package com.zenith.module;
 
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
+import lombok.Getter;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import static com.zenith.Shared.EVENT_BUS;
@@ -9,6 +10,7 @@ import static com.zenith.Shared.EVENT_BUS;
 /**
  * Module system base class.
  */
+@Getter
 public abstract class Module {
     boolean enabled = false;
 
@@ -42,10 +44,6 @@ public abstract class Module {
 
     public synchronized void syncEnabledFromConfig() {
         setEnabled(shouldBeEnabled());
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public void onEnable() { }

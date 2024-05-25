@@ -16,9 +16,7 @@ public interface ClientEventLoopPacketHandler<P extends Packet, S extends Client
     default P apply(P packet, S session) {
         if (packet == null) return null;
         try {
-            session.getClientEventLoop().execute(() -> {
-                applyWithRetries(packet, session, 0);
-            });
+            session.getClientEventLoop().execute(() -> applyWithRetries(packet, session, 0));
         } catch (final RejectedExecutionException e) {
             // fall through
         }
@@ -32,9 +30,7 @@ public interface ClientEventLoopPacketHandler<P extends Packet, S extends Client
                     CLIENT_LOG.debug("Unable to apply async handler for packet: {}", packet.getClass().getSimpleName());
                     return;
                 }
-                session.getClientEventLoop().schedule(() -> {
-                    applyWithRetries(packet, session, tryCount + 1);
-                }, 250, MILLISECONDS);
+                session.getClientEventLoop().schedule(() -> applyWithRetries(packet, session, tryCount + 1), 250, MILLISECONDS);
             }
         } catch (final RejectedExecutionException e) {
             // fall through

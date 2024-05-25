@@ -248,7 +248,7 @@ public class ServerConnection implements Session, SessionListener {
         this.session.send(packet, channelFutureListener);
     }
 
-    public Future<Void> sendDirect(Packet packet) {
+    public Future<Void> sendDirect(@NotNull Packet packet) {
         return this.session.sendDirect(packet);
     }
 

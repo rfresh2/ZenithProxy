@@ -14,7 +14,7 @@ import static java.util.Objects.nonNull;
 
 public class FoodManager {
     // key = item ID
-    private Int2ObjectMap<FoodData> foodDataMap = new Int2ObjectOpenHashMap<>(40);
+    private final Int2ObjectMap<FoodData> foodDataMap = new Int2ObjectOpenHashMap<>(40);
 
     public FoodManager() {
         init();

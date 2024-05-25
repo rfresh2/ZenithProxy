@@ -154,19 +154,19 @@ public class DeathMessageParserTest {
             componentBuilder.append(Component.text(killerName).clickEvent(ClickEvent.suggestCommand("/w " + killerName)));
         final Optional<DeathMessageParseResult> deathMessageParseResult = deathMessagesParser.parse(componentBuilder.build(), rawInput);
         assertTrue(deathMessageParseResult.isPresent());
-        assertEquals(deathMessageParseResult.get().getVictim(), victim);
+        assertEquals(deathMessageParseResult.get().victim(), victim);
         if (nonNull(killerName)) {
-            assertTrue(deathMessageParseResult.get().getKiller().isPresent());
-            assertEquals(deathMessageParseResult.get().getKiller().get().getName(), killerName);
-            assertEquals(deathMessageParseResult.get().getKiller().get().getType(), killerType);
+            assertTrue(deathMessageParseResult.get().killer().isPresent());
+            assertEquals(deathMessageParseResult.get().killer().get().name(), killerName);
+            assertEquals(deathMessageParseResult.get().killer().get().type(), killerType);
         } else {
-            assertFalse(deathMessageParseResult.get().getKiller().isPresent());
+            assertFalse(deathMessageParseResult.get().killer().isPresent());
         }
         if (nonNull(weapon)) {
-            assertTrue(deathMessageParseResult.get().getWeapon().isPresent());
-            assertEquals(deathMessageParseResult.get().getWeapon().get(), weapon);
+            assertTrue(deathMessageParseResult.get().weapon().isPresent());
+            assertEquals(deathMessageParseResult.get().weapon().get(), weapon);
         } else {
-            assertFalse(deathMessageParseResult.get().getWeapon().isPresent());
+            assertFalse(deathMessageParseResult.get().weapon().isPresent());
         }
     }
 

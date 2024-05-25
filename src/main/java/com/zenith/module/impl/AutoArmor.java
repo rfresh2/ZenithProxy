@@ -18,7 +18,7 @@ import static java.util.Arrays.asList;
 public class AutoArmor extends Module {
     private int delay = 0;
     public static final int MOVEMENT_PRIORITY = 1000;
-    private static List<EquipmentSlot> ARMOR_SLOTS = asList(EquipmentSlot.HELMET, EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS);
+    private static final List<EquipmentSlot> ARMOR_SLOTS = asList(EquipmentSlot.HELMET, EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS);
 
     @Override
     public void subscribeEvents() {
@@ -101,40 +101,29 @@ public class AutoArmor extends Module {
         return ArmorMaterial.valueOf(materialName);
     }
 
-    private static class ArmorMaterial implements Comparable<ArmorMaterial> {
-        static ArmorMaterial LEATHER = new ArmorMaterial(0);
-        static ArmorMaterial GOLD = new ArmorMaterial(1);
-        static ArmorMaterial CHAIN = new ArmorMaterial(2);
-        static ArmorMaterial IRON = new ArmorMaterial(3);
-        static ArmorMaterial DIAMOND = new ArmorMaterial(4);
-        static ArmorMaterial NETHERITE = new ArmorMaterial(5);
-        private final int priority;
-
-        ArmorMaterial(int priority) {
-            this.priority = priority;
-        }
+    private record ArmorMaterial(int priority) implements Comparable<ArmorMaterial> {
+            static final ArmorMaterial LEATHER = new ArmorMaterial(0);
+            static final ArmorMaterial GOLD = new ArmorMaterial(1);
+            static final ArmorMaterial CHAIN = new ArmorMaterial(2);
+            static final ArmorMaterial IRON = new ArmorMaterial(3);
+            static final ArmorMaterial DIAMOND = new ArmorMaterial(4);
+            static final ArmorMaterial NETHERITE = new ArmorMaterial(5);
 
         public static @Nullable ArmorMaterial valueOf(final String materialName) {
-            switch (materialName) {
-                case "LEATHER":
-                    return LEATHER;
-                case "GOLD":
-                    return GOLD;
-                case "CHAIN":
-                    return CHAIN;
-                case "IRON":
-                    return IRON;
-                case "DIAMOND":
-                    return DIAMOND;
-                case "NETHERITE":
-                    return NETHERITE;
-            }
-            return null;
+            return switch (materialName) {
+                case "LEATHER" -> LEATHER;
+                case "GOLD" -> GOLD;
+                case "CHAIN" -> CHAIN;
+                case "IRON" -> IRON;
+                case "DIAMOND" -> DIAMOND;
+                case "NETHERITE" -> NETHERITE;
+                default -> null;
+            };
         }
 
-        public int compareTo(ArmorMaterial o) {
-            if (o == null) return 1;
-            return Integer.compare(this.priority, o.priority);
+            public int compareTo(ArmorMaterial o) {
+                if (o == null) return 1;
+                return Integer.compare(this.priority, o.priority);
+            }
         }
-    }
 }

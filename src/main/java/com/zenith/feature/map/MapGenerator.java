@@ -172,7 +172,7 @@ public class MapGenerator {
         return chunkToHeightMap;
     }
 
-    private static BitStorage getCachedHeightMapData(Chunk chunk) throws IOException {
+    private static BitStorage getCachedHeightMapData(Chunk chunk) {
         var heightMaps = chunk.getHeightMaps();
         var heightMapNBT = (CompoundTag) MNBTIO.read(heightMaps);
         long[] worldSurfaces = heightMapNBT.getLongArrayTag("WORLD_SURFACE").getValue();
@@ -181,7 +181,7 @@ public class MapGenerator {
     }
 
     @NotNull
-    private static Long2ObjectMap<BitStorage> generateHeightMapFromChunkData(final int minChunkX, final int minChunkZ, final int maxChunkX, final int maxChunkZ) throws IOException {
+    private static Long2ObjectMap<BitStorage> generateHeightMapFromChunkData(final int minChunkX, final int minChunkZ, final int maxChunkX, final int maxChunkZ) {
         final Long2ObjectMap<BitStorage> chunkToHeightMap = new Long2ObjectOpenHashMap<>((maxChunkX - minChunkX) * (maxChunkZ - minChunkZ));
         for (int chunkX = minChunkX; chunkX < maxChunkX; chunkX++) {
             for (int chunkZ = minChunkZ; chunkZ < maxChunkZ; chunkZ++) {
