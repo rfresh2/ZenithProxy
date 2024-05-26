@@ -3,10 +3,10 @@ package com.zenith.network.client.handler.incoming;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.protocol.data.game.advancement.Advancement;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundUpdateAdvancementsPacket;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static com.zenith.Shared.CACHE;
 
@@ -17,9 +17,18 @@ public class UpdateAdvancementsHandler implements ClientEventLoopPacketHandler<C
             CACHE.getStatsCache().getAdvancements().clear();
             CACHE.getStatsCache().getProgress().clear();
         }
-        CACHE.getStatsCache().getAdvancements().addAll(List.of(packet.getAdvancements()));
-        List<@NonNull String> removedAdvancements = List.of(packet.getRemovedAdvancements());
-        CACHE.getStatsCache().getAdvancements().removeIf(advancement -> removedAdvancements.contains(advancement.getId()));
+        for (int i = 0; i < packet.getAdvancements().length; i++) {
+            CACHE.getStatsCache().getAdvancements().add(packet.getAdvancements()[i]);
+        }
+        for (int i = 0; i < packet.getRemovedAdvancements().length; i++) {
+            var advancement = packet.getRemovedAdvancements()[i];
+            for (Advancement existing : CACHE.getStatsCache().getAdvancements()) {
+                if (existing.getId().equals(advancement)) {
+                    CACHE.getStatsCache().getAdvancements().remove(existing);
+                    break;
+                }
+            }
+        }
         packet.getProgress().forEach((id, criterions) -> CACHE.getStatsCache().getProgress().computeIfAbsent(id, s -> new HashMap<>()).putAll(criterions));
         return true;
     }

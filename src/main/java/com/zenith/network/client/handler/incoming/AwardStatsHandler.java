@@ -10,7 +10,7 @@ import static com.zenith.Shared.CACHE;
 public class AwardStatsHandler implements ClientEventLoopPacketHandler<ClientboundAwardStatsPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundAwardStatsPacket packet, @NonNull ClientSession session) {
-        CACHE.getStatsCache().getStatistics().putAll(packet.getStatistics()); //cache all locally
+        CACHE.getStatsCache().getStatistics().putAll(packet.getStatistics());
         return true;
     }
 }
