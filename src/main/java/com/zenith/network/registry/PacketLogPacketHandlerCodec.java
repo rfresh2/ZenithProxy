@@ -7,7 +7,6 @@ import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.slf4j.Logger;
 
-import java.time.Instant;
 import java.util.EnumMap;
 import java.util.function.Supplier;
 
@@ -38,21 +37,21 @@ class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     @Override
     public <P extends Packet, S extends Session> P handleInbound(@NonNull P packet, @NonNull S session) {
         if (getPacketLogConfig().received && shouldLog(packet))
-            logger.debug("[{}] [{}] Received: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().receivedBody ? packet : packet.getClass());
+            logger.debug("[{}] [{}] Received: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().receivedBody ? packet : packet.getClass());
         return packet;
     }
 
     @Override
     public <P extends Packet, S extends Session> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         if (getPacketLogConfig().preSent && shouldLog(packet))
-            logger.debug("[{}] [{}] Sending: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().preSentBody ? packet : packet.getClass());
+            logger.debug("[{}] [{}] Sending: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().preSentBody ? packet : packet.getClass());
         return packet;
     }
 
     @Override
     public <P extends Packet, S extends Session> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (getPacketLogConfig().postSent && shouldLog(packet))
-            logger.debug("[{}] [{}] Sent: {}", Instant.now().toEpochMilli(), session.getClass().getSimpleName(), getPacketLogConfig().postSentBody ? packet : packet.getClass());
+            logger.debug("[{}] [{}] Sent: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().postSentBody ? packet : packet.getClass());
     }
 
     private boolean shouldLog(Packet packet) {

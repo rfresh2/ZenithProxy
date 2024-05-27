@@ -381,6 +381,7 @@ public final class Config {
             public static final class Cache {
                 public boolean sendingmessages = true;
                 public boolean unknownplayers = false;
+                public boolean unlockAllRecipes = true;
             }
         }
     }

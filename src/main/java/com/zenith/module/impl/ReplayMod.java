@@ -20,7 +20,6 @@ import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Instant;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -67,7 +66,7 @@ public class ReplayMod extends Module {
         var startT = replayRecording.getStartT();
         if (startT == 0L) return;
         if (CONFIG.client.extra.replayMod.maxRecordingTimeMins <= 0) return;
-        if (Instant.now().toEpochMilli() - ((long) CONFIG.client.extra.replayMod.maxRecordingTimeMins * 60 * 1000) > startT) {
+        if (System.currentTimeMillis() - ((long) CONFIG.client.extra.replayMod.maxRecordingTimeMins * 60 * 1000) > startT) {
             MODULE_LOG.info("Stopping ReplayMod recording due to max recording time");
             disable();
         }
@@ -75,7 +74,7 @@ public class ReplayMod extends Module {
 
     public void onInboundPacket(final Packet packet, final Session session) {
         try {
-            replayRecording.handleInboundPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
+            replayRecording.handleInboundPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
             MODULE_LOG.error("[ReplayMod] Failed to handle inbound packet", e);
         }
@@ -83,7 +82,7 @@ public class ReplayMod extends Module {
 
     public void onPostOutgoing(final Packet packet, final Session session) {
         try {
-            replayRecording.handleOutgoingPacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, session);
+            replayRecording.handleOutgoingPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
             MODULE_LOG.error("[ReplayMod] Failed to handle outgoing packet", e);
         }
