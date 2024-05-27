@@ -370,7 +370,6 @@ public class Proxy {
         SERVER_LOG.info("Starting server on {}:{}...", address, port);
         this.server = new TcpServer(address, port, MinecraftProtocol::new, tcpManager);
         this.server.setGlobalFlag(MinecraftConstants.SERVER_CHANNEL_INITIALIZER, ZenithServerChannelInitializer.FACTORY);
-        this.server.setGlobalFlag(MinecraftConstants.VERIFY_USERS_KEY, CONFIG.server.verifyUsers);
         var serverInfoBuilder = new CustomServerInfoBuilder();
         this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);
         if (this.lanBroadcaster == null && CONFIG.server.ping.lanBroadcast) {

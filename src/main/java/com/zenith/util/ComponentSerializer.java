@@ -80,6 +80,12 @@ public final class ComponentSerializer {
             .toComponent();
     }
 
+    public static Component minedown(String message) {
+        return new MineDown(message)
+            .urlDetection(false) // this uses a url matching regex by default that adds mem usage and isn't needed
+            .toComponent();
+    }
+
     public static Component deserializeEmbed(final Embed embed) {
         return EmbedSerializer.serialize(embed);
     }

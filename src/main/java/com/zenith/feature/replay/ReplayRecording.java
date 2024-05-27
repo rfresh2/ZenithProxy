@@ -25,7 +25,6 @@ import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundG
 
 import java.io.*;
 import java.nio.file.Path;
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
@@ -63,7 +62,7 @@ public class ReplayRecording implements Closeable {
         if (CONFIG.client.server.port != 25565)
             serverName += ":" + CONFIG.client.server.port;
         metadata.setServerName(serverName);
-        metadata.setDate(Instant.now().toEpochMilli());
+        metadata.setDate(System.currentTimeMillis());
         metadata.setMcversion(MinecraftCodec.CODEC.getMinecraftVersion());
         metadata.setProtocol(MinecraftCodec.CODEC.getProtocolVersion());
         // todo: when to init?
@@ -86,10 +85,10 @@ public class ReplayRecording implements Closeable {
     // Start recording while we already have a logged in session
     private void lateStartRecording() {
         writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
-        CACHE.getConfigurationCache().getPackets(packet -> writePacket0(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
-        writePacket0(Instant.now().toEpochMilli(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
-        writePacket0(Instant.now().toEpochMilli(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
-        writePacket(Instant.now().toEpochMilli(), new ClientboundLoginPacket(
+        CACHE.getConfigurationCache().getPackets(packet -> writePacket0(System.currentTimeMillis(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
+        writePacket0(System.currentTimeMillis(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+        writePacket0(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+        writePacket(System.currentTimeMillis(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
             CACHE.getChunkCache().getDimensionRegistry().keySet().toArray(new String[0]),
@@ -112,10 +111,10 @@ public class ReplayRecording implements Closeable {
             )
         ), Proxy.getInstance().getClient());
         CACHE.getAllData()
-            .forEach(d -> d.getPackets(packet -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) packet, Proxy.getInstance().getClient())));
-        SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
-        SpectatorPacketProvider.playerPosition().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
-        SpectatorPacketProvider.playerEquipment().forEach(p -> writePacket(Instant.now().toEpochMilli(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+            .forEach(d -> d.getPackets(packet -> writePacket(System.currentTimeMillis(), (MinecraftPacket) packet, Proxy.getInstance().getClient())));
+        SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(System.currentTimeMillis(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+        SpectatorPacketProvider.playerPosition().forEach(p -> writePacket(System.currentTimeMillis(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+        SpectatorPacketProvider.playerEquipment().forEach(p -> writePacket(System.currentTimeMillis(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
     }
 
     // Start recording before we've connected
@@ -141,7 +140,7 @@ public class ReplayRecording implements Closeable {
     private void writeToFile(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
         int t = (int) time;
         if (t == 0) {
-            startT = Instant.now().toEpochMilli();
+            startT = System.currentTimeMillis();
         } else {
             t = (int) (time - startT);
         }
@@ -227,10 +226,10 @@ public class ReplayRecording implements Closeable {
             recordSelfSpawn = true;
             if (preConnectSyncNeeded) {
                 writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
-                CACHE.getConfigurationCache().getPackets(packet2 -> writeToFile(Instant.now().toEpochMilli(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
-                writeToFile(Instant.now().toEpochMilli(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
-                writeToFile(Instant.now().toEpochMilli(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
-                time = Instant.now().toEpochMilli();
+                CACHE.getConfigurationCache().getPackets(packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
+                writeToFile(System.currentTimeMillis(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+                writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+                time = System.currentTimeMillis();
                 preConnectSyncNeeded = false;
             }
         }
