@@ -8,7 +8,6 @@ public class PostOutgoingPlayerStatusOnlyHandler implements ClientEventLoopPacke
     @Override
     public boolean applyAsync(final ServerboundMovePlayerStatusOnlyPacket packet, final ClientSession session) {
         // todo: cache onground
-//        CLIENT_LOG.info("Client set onGround: {}", packet.isOnGround());
         return true;
     }
 }

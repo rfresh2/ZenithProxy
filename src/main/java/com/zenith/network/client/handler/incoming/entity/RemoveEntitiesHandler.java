@@ -14,7 +14,9 @@ import static com.zenith.Shared.*;
 public class RemoveEntitiesHandler implements ClientEventLoopPacketHandler<ClientboundRemoveEntitiesPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundRemoveEntitiesPacket packet, @NonNull ClientSession session) {
-        for (int id : packet.getEntityIds()) {
+        var entityIds = packet.getEntityIds();
+        for (int i = 0; i < entityIds.length; i++) {
+            final int id = entityIds[i];
             try {
                 Entity removed = CACHE.getEntityCache().remove(id);
                 if (removed != null) {

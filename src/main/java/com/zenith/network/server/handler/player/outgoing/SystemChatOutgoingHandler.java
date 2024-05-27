@@ -12,7 +12,6 @@ import java.util.Objects;
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
-// todo: also handle regular player chat packets although they should be disabled on 2b2t
 public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSystemChatPacket, ServerConnection> {
     @Override
     public ClientboundSystemChatPacket apply(ClientboundSystemChatPacket packet, ServerConnection session) {

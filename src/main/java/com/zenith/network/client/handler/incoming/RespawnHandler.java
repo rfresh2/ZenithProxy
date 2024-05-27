@@ -53,9 +53,6 @@ public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundR
         if (!packet.isKeepMetadata()) {
             CACHE.getPlayerCache().getThePlayer().getMetadata().clear();
         }
-        if (!packet.isKeepAttributes()) {
-            // todo: what do here?
-        }
         MODULE.get(PlayerSimulation.class).handleRespawn();
         return true;
     }
