@@ -121,9 +121,6 @@ public final class ZenithHandlerCodec {
                 .registerPostOutbound(ServerboundFinishConfigurationPacket.class, new PostOutgoingFinishConfigurationHandler())
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ClientSession>builder()
-                //
-                // Inbound packets
-                //
                 .registerInbound(ClientboundDisconnectPacket.class, CDisconnectHandler.INSTANCE)
                 .registerInbound(ClientboundStartConfigurationPacket.class, new CStartConfigurationHandler())
                 .registerInbound(ClientboundUpdateAdvancementsPacket.class, new UpdateAdvancementsHandler())
@@ -183,7 +180,6 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundStoreCookiePacket.class, new CStoreCookieHandler())
                 .registerInbound(ClientboundCookieRequestPacket.class, new CCookieRequestHandler())
                 .registerInbound(ClientboundTransferPacket.class, new CTransferHandler())
-                //ENTITY
                 .registerInbound(ClientboundEntityEventPacket.class, new EntityEventHandler())
                 .registerInbound(ClientboundSetEntityLinkPacket.class, new SetEntityLinkHandler())
                 .registerInbound(ClientboundTakeItemEntityPacket.class, new TakeItemEntityHandler())
@@ -200,14 +196,11 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundMoveVehiclePacket.class, new MoveVehicleHandler())
                 .registerInbound(ClientboundSetPassengersPacket.class, new EntitySetPassengersHandler())
                 .registerInbound(ClientboundTeleportEntityPacket.class, new TeleportEntityHandler())
-                //SPAWN
                 .registerInbound(ClientboundAddExperienceOrbPacket.class, new AddExperienceOrbHandler())
                 .registerInbound(ClientboundAddEntityPacket.class, new AddEntityHandler())
                 .registerInbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
-                // Outbound
                 .registerOutbound(ServerboundChatPacket.class, new OutgoingChatHandler())
                 .registerOutbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())
-                //Postoutgoing
                 .registerPostOutbound(ServerboundAcceptTeleportationPacket.class, new PostOutgoingAcceptTeleportHandler())
                 .registerPostOutbound(ServerboundConfigurationAcknowledgedPacket.class, new PostOutgoingConfigurationAckHandler())
                 .registerPostOutbound(ServerboundMoveVehiclePacket.class, new PostOutgoingMoveVehicleHandler())

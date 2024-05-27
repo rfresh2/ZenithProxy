@@ -24,15 +24,11 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
             return;
         }
         checkDisableServerVia(session);
-        // todo: move this after cache is sent
-        //  queue packets received in the meantime to be sent after cache is sent
         session.setLoggedIn(); // allows server packets to start being sent to player
         EVENT_BUS.postAsync(new ProxyClientLoggedInEvent(session));
-        // send cached data
         DataCache.sendCacheData(CACHE.getAllData(), session);
         session.initializeTeam();
         session.syncTeamMembers();
-        // init any active spectators
         var connections = Proxy.getInstance().getActiveConnections().getArray();
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
@@ -41,7 +37,6 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
             session.send(connection.getEntitySpawnPacket());
             session.send(connection.getEntityMetadataPacket());
         }
-        // add spectators and self to team
         if (CONFIG.client.extra.chat.hideChat) {
             session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7Chat is currently disabled. To enable chat, type &c/togglechat&7."), false));
         }

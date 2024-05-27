@@ -39,13 +39,10 @@ public class AddEntityHandler implements ClientEventLoopPacketHandler<Clientboun
                 .setVelX(packet.getMotionX())
                 .setVelY(packet.getMotionY())
                 .setVelZ(packet.getMotionZ());
-            CACHE.getEntityCache().remove(packet.getEntityId());
             CACHE.getEntityCache().add(entity);
-            if (entity.getEntityType() == EntityType.FISHING_BOBBER) {
+            if (entity.getEntityType() == EntityType.FISHING_BOBBER)
                 EVENT_BUS.postAsync(new EntityFishHookSpawnEvent(entity));
-            }
         }
-
         return true;
     }
 

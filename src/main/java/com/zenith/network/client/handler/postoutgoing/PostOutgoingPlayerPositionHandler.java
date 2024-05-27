@@ -16,7 +16,6 @@ public class PostOutgoingPlayerPositionHandler implements ClientEventLoopPacketH
                 .setY(packet.getY())
                 .setZ(packet.getZ());
         SpectatorSync.syncPlayerPositionWithSpectators();
-//        CLIENT_LOG.info("Client set player position: {}, {}, {}", packet.getX(), packet.getY(), packet.getZ());
         return true;
     }
 }

@@ -37,10 +37,11 @@ public class StatisticsCache implements CachedData {
                 new String[0],
                 this.progress
         ));
-        // avoiding possible concurrent modification
-        Object2IntMap<Statistic> stats = new Object2IntOpenHashMap<>(statistics.size());
-        stats.putAll(statistics);
-        consumer.accept(new ClientboundAwardStatsPacket(stats));
+
+        consumer.accept(new ClientboundAwardStatsPacket(
+            // avoiding possible concurrent modification
+            new Object2IntOpenHashMap<>(this.statistics)
+        ));
     }
 
     @Override

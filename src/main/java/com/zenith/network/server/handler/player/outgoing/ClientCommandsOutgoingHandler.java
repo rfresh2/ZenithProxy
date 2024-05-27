@@ -37,7 +37,6 @@ public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundC
         return packet;
     }
 
-    // todo: check what happens if there is a duplicate command node name
     private static CommandNode[] combineCommandNodes(
         final CommandNode[] nodesA, // these nodes are essentially left as-is, except for the root node
         final CommandNode[] nodesB // these nodes are added to the end of the nodesA array, with indices offset

@@ -108,7 +108,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
     }
 
     public Component getMotd() {
-        var sb = new StringBuilder();
+        var sb = new StringBuilder(150);
         sb.append("&f[&r&b").append(CONFIG.authentication.username).append("&r&f]&r - ");
         if (Proxy.getInstance().isConnected()) {
             sb
@@ -121,7 +121,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
     private String getMotdStatus() { // in minedown formatted string
         var proxy = Proxy.getInstance();
         if (proxy.isInQueue()) {
-            var sb = new StringBuilder();
+            var sb = new StringBuilder(100);
             var prio = proxy.isPrio();
             if (prio) sb.append("&cIn Prio Queue&r");
             else sb.append("&cIn Queue&r");
