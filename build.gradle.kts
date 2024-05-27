@@ -70,7 +70,7 @@ configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.32"
 val postgresVersion = "42.7.3"
 val nettyVersion = "4.1.109.Final"
-val fastutilVersion = "b3ff25af48"
+val fastutilVersion = "edaf36bfd3"
 val jdbiVersion = "3.45.1"
 
 dependencies {
@@ -89,7 +89,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:3f91d0f9a8") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:97650a60da") {
+    shade("com.github.rfresh2:MCProtocolLib:960b52b436") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
