@@ -1,4 +1,4 @@
-package com.zenith.feature.world.blockdata;
+package com.zenith.mc.block;
 
 import com.zenith.util.Registry;
 import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType;

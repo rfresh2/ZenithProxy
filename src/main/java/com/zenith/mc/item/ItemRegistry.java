@@ -1,4 +1,4 @@
-package com.zenith.feature.items;
+package com.zenith.mc.item;
 
 import com.zenith.util.Registry;
 

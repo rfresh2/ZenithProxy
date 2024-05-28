@@ -1,7 +1,7 @@
 package com.zenith.generator;
 
 import com.squareup.javapoet.CodeBlock;
-import com.zenith.feature.world.blockdata.Block;
+import com.zenith.mc.block.Block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.EmptyBlockGetter;

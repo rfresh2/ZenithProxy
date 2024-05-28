@@ -1,5 +1,7 @@
 package com.zenith.feature.world;
 
+import com.zenith.mc.block.BlockPos;
+
 public record Position(double x, double y, double z) {
     public static int floor(double value) {
         int i = (int) value;

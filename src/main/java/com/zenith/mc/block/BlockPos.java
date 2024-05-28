@@ -1,4 +1,4 @@
-package com.zenith.feature.world;
+package com.zenith.mc.block;
 
 import com.zenith.util.math.MathHelper;
 import lombok.Data;

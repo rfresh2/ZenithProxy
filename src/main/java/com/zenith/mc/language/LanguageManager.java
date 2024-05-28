@@ -1,4 +1,4 @@
-package com.zenith.feature.language;
+package com.zenith.mc.language;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Getter;

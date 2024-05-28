@@ -2,7 +2,7 @@ package com.zenith.generator;
 
 import com.mojang.datafixers.util.Pair;
 import com.squareup.javapoet.CodeBlock;
-import com.zenith.feature.food.FoodData;
+import com.zenith.mc.food.FoodData;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
@@ -30,7 +30,7 @@ public class FoodRegistryGenerator extends RegistryGenerator<FoodData> {
             .filter(Item::isEdible)
             .forEach(food -> {
                 FoodProperties foodComponent = Objects.requireNonNull(food.getFoodComponent(food.getDefaultInstance()));
-                float foodPoints = foodComponent.getNutrition();
+                int foodPoints = foodComponent.getNutrition();
                 float saturationRatio = foodComponent.getSaturationModifier() * 2.0F;
                 float saturation = foodPoints * saturationRatio;
                 List<MobEffect> effects = foodComponent.getEffects().stream()
@@ -66,7 +66,7 @@ public class FoodRegistryGenerator extends RegistryGenerator<FoodData> {
     @Override
     public CodeBlock dataInitializer(final FoodData data) {
         return CodeBlock.of(
-            "new $T($L, $S, $L, $L, $L, $L)",
+            "new $T($L, $S, $L, $Lf, $Lf, $L)",
             FoodData.class,
             data.id(),
             data.name(),

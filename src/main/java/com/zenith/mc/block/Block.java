@@ -1,4 +1,4 @@
-package com.zenith.feature.world.blockdata;
+package com.zenith.mc.block;
 
 import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType;
 import org.jetbrains.annotations.Nullable;

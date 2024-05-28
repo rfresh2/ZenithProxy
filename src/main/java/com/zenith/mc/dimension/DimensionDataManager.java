@@ -1,4 +1,4 @@
-package com.zenith.feature.world.dimension;
+package com.zenith.mc.dimension;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 

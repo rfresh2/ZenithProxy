@@ -1,8 +1,9 @@
-package com.zenith.feature.map;
+package com.zenith.mc.map;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.node.IntNode;
+import com.zenith.feature.map.Brightness;
 import com.zenith.util.Color;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;

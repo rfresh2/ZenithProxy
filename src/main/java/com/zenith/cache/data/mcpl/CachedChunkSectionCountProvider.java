@@ -1,6 +1,6 @@
 package com.zenith.cache.data.mcpl;
 
-import com.zenith.feature.world.dimension.DimensionData;
+import com.zenith.mc.dimension.DimensionData;
 import org.geysermc.mcprotocollib.protocol.ChunkSectionCountProvider;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnInfo;
 

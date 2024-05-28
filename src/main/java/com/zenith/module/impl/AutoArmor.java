@@ -2,8 +2,8 @@ package com.zenith.module.impl;
 
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.feature.items.ItemData;
-import com.zenith.feature.items.ItemRegistry;
+import com.zenith.mc.item.ItemData;
+import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.Module;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.ItemStack;
