@@ -5,7 +5,7 @@ import com.viaversion.nbt.mini.MNBTWriter;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.Proxy;
 import com.zenith.cache.CachedData;
-import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.blockdata.BlockRegistry;
 import com.zenith.feature.world.dimension.DimensionData;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.BrandSerializer;
@@ -184,7 +184,7 @@ public class ChunkCache implements CachedData {
     // update any block entities implicitly affected by this block update
     // server doesn't send us tile entity update packets and relies on logic in client
     private void handleBlockUpdateBlockEntity(BlockChangeEntry record, int relativeX, int y, int relativeZ, Chunk chunk) {
-        if (record.getBlock() == Block.AIR.id()) {
+        if (record.getBlock() == BlockRegistry.AIR.id()) {
             chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == relativeX && tileEntity.getY() == y && tileEntity.getZ() == relativeZ);
         } else {
             final var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());

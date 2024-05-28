@@ -10,6 +10,7 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.Embed;
 import com.zenith.feature.items.ContainerClickAction;
+import com.zenith.feature.items.ItemRegistry;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.DropItemAction;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
@@ -137,7 +138,7 @@ public class InventoryCommand extends Command {
             var itemStack = playerInv.get(i);
             if (itemStack == Container.EMPTY_STACK) continue;
             slotsWithItems[i] = i + "";
-            var itemData = ITEMS.getItemData(itemStack.getId());
+            var itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
             sb.append("  ").append(i).append(" -> ");
             sb.append(itemData.name());
             if (itemStack.getAmount() > 1) sb.append(" (x").append(itemStack.getAmount()).append(") ");

@@ -6,7 +6,14 @@ group = "com.zenith"
 version = "1.0.0"
 
 repositories {
+    mavenLocal() {
+        content { includeGroup("com.zenith") }
+    }
     mavenCentral()
+    maven("https://jitpack.io") {
+        name = "jitpack.io"
+        content { includeGroupByRegex("com.github.rfresh2.*") }
+    }
     maven("https://maven.parchmentmc.org")
 }
 
@@ -20,6 +27,7 @@ loom {
         }
     }
 }
+val lombokVersion = "1.18.32"
 
 dependencies {
     minecraft("com.mojang:minecraft:1.20.4")
@@ -29,4 +37,15 @@ dependencies {
     })
     modImplementation("net.fabricmc:fabric-loader:0.15.10")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.97.0+1.20.4")
+    implementation("com.squareup:javapoet:1.13.0")
+    implementation("com.github.rfresh2:MCProtocolLib:960b52b436") {
+        exclude("*")
+    }
+    implementation("com.zenith:ZenithProxy:1.20.4") {
+        exclude("*")
+    }
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
+    testCompileOnly("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+    testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
 }

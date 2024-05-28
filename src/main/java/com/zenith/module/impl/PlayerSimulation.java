@@ -3,6 +3,7 @@ package com.zenith.module.impl;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.world.*;
 import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.blockdata.BlockRegistry;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
@@ -61,8 +62,6 @@ public class PlayerSimulation extends Module {
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
-    private final int bubbleColumnDownwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").minStateId();
-    private final int bubbleColumnUpwardBlockStateId = BLOCK_DATA.getBlockFromName("bubble_column").maxStateId();
 
     @Override
     public void subscribeEvents() {
@@ -374,9 +373,9 @@ public class PlayerSimulation extends Module {
         if (collidingBlockStates.isEmpty()) return;
         for (int i = 0; i < collidingBlockStates.size(); i++) {
             var blockState = collidingBlockStates.get(i);
-            if (blockState.id() == bubbleColumnDownwardBlockStateId) {
+            if (blockState.id() == BlockRegistry.BUBBLE_COLUMN.minStateId()) {
                 velocity.setY(Math.max(-0.3, velocity.getY() - 0.03));
-            } else if (blockState.id() == bubbleColumnUpwardBlockStateId) {
+            } else if (blockState.id() == BlockRegistry.BUBBLE_COLUMN.maxStateId()) {
                 velocity.setY(Math.min(0.7, velocity.getY() + 0.06));
             }
         }

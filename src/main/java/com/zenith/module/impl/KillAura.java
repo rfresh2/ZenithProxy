@@ -4,8 +4,9 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientBotTick;
+import com.zenith.feature.items.ItemRegistry;
 import com.zenith.feature.world.Pathing;
-import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.ItemStack;
@@ -43,8 +44,16 @@ public class KillAura extends AbstractInventoryModule {
     private boolean isAttacking = false;
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
     private static final int MOVEMENT_PRIORITY = 500;
-    private final IntList swords = ITEMS.getItemsContaining("_sword");
-    private final IntList axes = ITEMS.getItemsContaining("_axe");
+    private final IntSet swords = IntSet.of(
+        ItemRegistry.DIAMOND_SWORD.id(),
+        ItemRegistry.NETHERITE_SWORD.id(),
+        ItemRegistry.IRON_SWORD.id()
+    );
+    private final IntSet axes = IntSet.of(
+        ItemRegistry.NETHERITE_AXE.id(),
+        ItemRegistry.DIAMOND_AXE.id(),
+        ItemRegistry.IRON_AXE.id()
+    );
 
     public KillAura() {
         super(false, 1, MOVEMENT_PRIORITY);
