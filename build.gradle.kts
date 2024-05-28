@@ -211,7 +211,7 @@ tasks {
         }
     }
     processResources{ finalizedBy(commitHashTask, releaseTagTask) }
-    jar { enabled = true }
+    jar { enabled = false }
     shadowJar {
         from(collectReachabilityMetadata)
         archiveBaseName.set(project.name)

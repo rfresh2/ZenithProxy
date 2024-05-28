@@ -2,7 +2,7 @@ package com.zenith.feature.world;
 
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.feature.entities.EntityData;
+import com.zenith.mc.entity.EntityData;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.util.math.MathHelper;
 import lombok.NonNull;

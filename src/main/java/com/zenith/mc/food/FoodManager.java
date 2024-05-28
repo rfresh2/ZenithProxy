@@ -1,4 +1,4 @@
-package com.zenith.feature.food;
+package com.zenith.mc.food;
 
 import static java.util.Objects.nonNull;
 

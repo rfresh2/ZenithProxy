@@ -1,6 +1,4 @@
-package com.zenith.feature.world.blockdata;
-
-import com.zenith.feature.world.CollisionBox;
+package com.zenith.mc.block;
 
 import java.util.List;
 

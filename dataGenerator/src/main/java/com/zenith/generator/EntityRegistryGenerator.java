@@ -1,7 +1,7 @@
 package com.zenith.generator;
 
 import com.squareup.javapoet.CodeBlock;
-import com.zenith.feature.entities.EntityData;
+import com.zenith.mc.entity.EntityData;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
@@ -46,7 +46,7 @@ public class EntityRegistryGenerator extends RegistryGenerator<EntityData> {
 
     @Override
     public CodeBlock dataInitializer(final EntityData data) {
-        return CodeBlock.of("new $T($L, $S, $L, $L, $T.$L)",
+        return CodeBlock.of("new $T($L, $S, $Lf, $Lf, $T.$L)",
                             EntityData.class,
                             data.id(),
                             data.name(),

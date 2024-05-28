@@ -1,6 +1,7 @@
 package com.zenith.feature.items;
 
 import com.zenith.cache.data.inventory.Container;
+import com.zenith.mc.item.ItemRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;

@@ -10,7 +10,7 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.Embed;
 import com.zenith.feature.items.ContainerClickAction;
-import com.zenith.feature.items.ItemRegistry;
+import com.zenith.mc.item.ItemRegistry;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.DropItemAction;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;

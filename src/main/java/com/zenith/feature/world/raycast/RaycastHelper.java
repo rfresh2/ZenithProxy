@@ -2,12 +2,12 @@ package com.zenith.feature.world.raycast;
 
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
-import com.zenith.feature.entities.EntityData;
-import com.zenith.feature.world.CollisionBox;
-import com.zenith.feature.world.LocalizedCollisionBox;
 import com.zenith.feature.world.World;
-import com.zenith.feature.world.blockdata.Block;
-import com.zenith.feature.world.blockdata.BlockRegistry;
+import com.zenith.mc.block.Block;
+import com.zenith.mc.block.BlockRegistry;
+import com.zenith.mc.block.CollisionBox;
+import com.zenith.mc.block.LocalizedCollisionBox;
+import com.zenith.mc.entity.EntityData;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3d;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.object.Direction;

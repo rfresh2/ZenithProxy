@@ -1,10 +1,10 @@
-package com.zenith.feature.food;
+package com.zenith.mc.food;
 
 public record FoodData(
     int id,
     String name,
     int stackSize,
-    double foodPoints,
-    double saturation,
+    float foodPoints,
+    float saturation,
     boolean isSafeFood
 ) { }

@@ -1,5 +1,6 @@
 package com.zenith.feature.world;
 
+import com.zenith.mc.block.LocalizedCollisionBox;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

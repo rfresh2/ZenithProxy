@@ -2,7 +2,7 @@ package com.zenith.generator;
 
 import com.squareup.javapoet.CodeBlock;
 import com.zenith.DataGenerator;
-import com.zenith.feature.world.dimension.DimensionData;
+import com.zenith.mc.dimension.DimensionData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.IdMap;
 import net.minecraft.core.Registry;

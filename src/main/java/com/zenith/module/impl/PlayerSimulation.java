@@ -1,9 +1,11 @@
 package com.zenith.module.impl;
 
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.feature.world.*;
-import com.zenith.feature.world.blockdata.Block;
-import com.zenith.feature.world.blockdata.BlockRegistry;
+import com.zenith.feature.world.Input;
+import com.zenith.feature.world.MovementInputRequest;
+import com.zenith.feature.world.Pathing;
+import com.zenith.feature.world.World;
+import com.zenith.mc.block.*;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;

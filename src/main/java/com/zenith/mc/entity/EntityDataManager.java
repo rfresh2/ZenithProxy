@@ -1,4 +1,4 @@
-package com.zenith.feature.entities;
+package com.zenith.mc.entity;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
