@@ -5,6 +5,7 @@ import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
+import com.zenith.feature.items.ItemRegistry;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.object.ProjectileData;
@@ -25,7 +26,6 @@ public class AutoFish extends AbstractInventoryModule {
     private int delay = 0;
     public static final int MOVEMENT_PRIORITY = 10;
     private Instant castTime = Instant.EPOCH;
-    private final int fishingRodId = ITEMS.getItemId("fishing_rod");
 
     public AutoFish() {
         super(false, 2, MOVEMENT_PRIORITY);
@@ -133,6 +133,6 @@ public class AutoFish extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
-        return itemStack.getId() == fishingRodId;
+        return itemStack.getId() == ItemRegistry.FISHING_ROD.id();
     }
 }

@@ -79,8 +79,7 @@ public class BlockCollisionShapes implements Generator {
                     }
                 }
 
-                var registryKey = blockRegistry.getKey(entry.getKey());
-                resultObject.add(registryKey.getPath(), blockCollision);
+                resultObject.add(Integer.toString(blockRegistry.getId(entry.getKey())), blockCollision);
             }
 
             return resultObject;

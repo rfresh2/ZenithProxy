@@ -5,6 +5,7 @@ import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.cache.data.chunk.Chunk;
 import com.zenith.feature.world.World;
 import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.blockdata.BlockRegistry;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -205,7 +206,7 @@ public class MapGenerator {
                 for (int y = maxBuildHeight; y > minBuildHeight; y--) {
                     final int blockStateId = chunk.getBlockStateId(x, y, z);
                     Block block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-                    if (block != null && block.id() != Block.AIR.id()) {
+                    if (block != null && block != BlockRegistry.AIR) {
                         int index = x + z * 16;
                         storage.set(index, y - minBuildHeight);
                         break;

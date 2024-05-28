@@ -1,109 +1,109 @@
 {
   "blocks": {
-    "air": 0,
-    "stone": 1,
-    "granite": 1,
-    "polished_granite": 1,
-    "diorite": 1,
-    "polished_diorite": 1,
-    "andesite": 1,
-    "polished_andesite": 1,
-    "grass_block": 1,
-    "dirt": 1,
-    "coarse_dirt": 1,
-    "podzol": 1,
-    "cobblestone": 1,
-    "oak_planks": 1,
-    "spruce_planks": 1,
-    "birch_planks": 1,
-    "jungle_planks": 1,
-    "acacia_planks": 1,
-    "cherry_planks": 1,
-    "dark_oak_planks": 1,
-    "mangrove_planks": 1,
-    "bamboo_planks": 1,
-    "bamboo_mosaic": 1,
-    "oak_sapling": 0,
-    "spruce_sapling": 0,
-    "birch_sapling": 0,
-    "jungle_sapling": 0,
-    "acacia_sapling": 0,
-    "cherry_sapling": 0,
-    "dark_oak_sapling": 0,
-    "mangrove_propagule": 0,
-    "bedrock": 1,
-    "water": 0,
-    "lava": 0,
-    "sand": 1,
-    "suspicious_sand": 1,
-    "red_sand": 1,
-    "gravel": 1,
-    "suspicious_gravel": 1,
-    "gold_ore": 1,
-    "deepslate_gold_ore": 1,
-    "iron_ore": 1,
-    "deepslate_iron_ore": 1,
-    "coal_ore": 1,
-    "deepslate_coal_ore": 1,
-    "nether_gold_ore": 1,
-    "oak_log": 1,
-    "spruce_log": 1,
-    "birch_log": 1,
-    "jungle_log": 1,
-    "acacia_log": 1,
-    "cherry_log": 1,
-    "dark_oak_log": 1,
-    "mangrove_log": 1,
-    "mangrove_roots": 1,
-    "muddy_mangrove_roots": 1,
-    "bamboo_block": 1,
-    "stripped_spruce_log": 1,
-    "stripped_birch_log": 1,
-    "stripped_jungle_log": 1,
-    "stripped_acacia_log": 1,
-    "stripped_cherry_log": 1,
-    "stripped_dark_oak_log": 1,
-    "stripped_oak_log": 1,
-    "stripped_mangrove_log": 1,
-    "stripped_bamboo_block": 1,
-    "oak_wood": 1,
-    "spruce_wood": 1,
-    "birch_wood": 1,
-    "jungle_wood": 1,
-    "acacia_wood": 1,
-    "cherry_wood": 1,
-    "dark_oak_wood": 1,
-    "mangrove_wood": 1,
-    "stripped_oak_wood": 1,
-    "stripped_spruce_wood": 1,
-    "stripped_birch_wood": 1,
-    "stripped_jungle_wood": 1,
-    "stripped_acacia_wood": 1,
-    "stripped_cherry_wood": 1,
-    "stripped_dark_oak_wood": 1,
-    "stripped_mangrove_wood": 1,
-    "oak_leaves": 1,
-    "spruce_leaves": 1,
-    "birch_leaves": 1,
-    "jungle_leaves": 1,
-    "acacia_leaves": 1,
-    "cherry_leaves": 1,
-    "dark_oak_leaves": 1,
-    "mangrove_leaves": 1,
-    "azalea_leaves": 1,
-    "flowering_azalea_leaves": 1,
-    "sponge": 1,
-    "wet_sponge": 1,
-    "glass": 1,
-    "lapis_ore": 1,
-    "deepslate_lapis_ore": 1,
-    "lapis_block": 1,
-    "dispenser": 1,
-    "sandstone": 1,
-    "chiseled_sandstone": 1,
-    "cut_sandstone": 1,
-    "note_block": 1,
-    "white_bed": [
+    "0": 0,
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 1,
+    "5": 1,
+    "6": 1,
+    "7": 1,
+    "8": 1,
+    "9": 1,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+    "13": 1,
+    "14": 1,
+    "15": 1,
+    "16": 1,
+    "17": 1,
+    "18": 1,
+    "19": 1,
+    "20": 1,
+    "21": 1,
+    "22": 1,
+    "23": 0,
+    "24": 0,
+    "25": 0,
+    "26": 0,
+    "27": 0,
+    "28": 0,
+    "29": 0,
+    "30": 0,
+    "31": 1,
+    "32": 0,
+    "33": 0,
+    "34": 1,
+    "35": 1,
+    "36": 1,
+    "37": 1,
+    "38": 1,
+    "39": 1,
+    "40": 1,
+    "41": 1,
+    "42": 1,
+    "43": 1,
+    "44": 1,
+    "45": 1,
+    "46": 1,
+    "47": 1,
+    "48": 1,
+    "49": 1,
+    "50": 1,
+    "51": 1,
+    "52": 1,
+    "53": 1,
+    "54": 1,
+    "55": 1,
+    "56": 1,
+    "57": 1,
+    "58": 1,
+    "59": 1,
+    "60": 1,
+    "61": 1,
+    "62": 1,
+    "63": 1,
+    "64": 1,
+    "65": 1,
+    "66": 1,
+    "67": 1,
+    "68": 1,
+    "69": 1,
+    "70": 1,
+    "71": 1,
+    "72": 1,
+    "73": 1,
+    "74": 1,
+    "75": 1,
+    "76": 1,
+    "77": 1,
+    "78": 1,
+    "79": 1,
+    "80": 1,
+    "81": 1,
+    "82": 1,
+    "83": 1,
+    "84": 1,
+    "85": 1,
+    "86": 1,
+    "87": 1,
+    "88": 1,
+    "89": 1,
+    "90": 1,
+    "91": 1,
+    "92": 1,
+    "93": 1,
+    "94": 1,
+    "95": 1,
+    "96": 1,
+    "97": 1,
+    "98": 1,
+    "99": 1,
+    "100": 1,
+    "101": 1,
+    "102": 1,
+    "103": [
       2,
       3,
       2,
@@ -121,7 +121,7 @@
       5,
       4
     ],
-    "orange_bed": [
+    "104": [
       2,
       3,
       2,
@@ -139,7 +139,7 @@
       5,
       4
     ],
-    "magenta_bed": [
+    "105": [
       2,
       3,
       2,
@@ -157,7 +157,7 @@
       5,
       4
     ],
-    "light_blue_bed": [
+    "106": [
       2,
       3,
       2,
@@ -175,7 +175,7 @@
       5,
       4
     ],
-    "yellow_bed": [
+    "107": [
       2,
       3,
       2,
@@ -193,7 +193,7 @@
       5,
       4
     ],
-    "lime_bed": [
+    "108": [
       2,
       3,
       2,
@@ -211,7 +211,7 @@
       5,
       4
     ],
-    "pink_bed": [
+    "109": [
       2,
       3,
       2,
@@ -229,7 +229,7 @@
       5,
       4
     ],
-    "gray_bed": [
+    "110": [
       2,
       3,
       2,
@@ -247,7 +247,7 @@
       5,
       4
     ],
-    "light_gray_bed": [
+    "111": [
       2,
       3,
       2,
@@ -265,7 +265,7 @@
       5,
       4
     ],
-    "cyan_bed": [
+    "112": [
       2,
       3,
       2,
@@ -283,7 +283,7 @@
       5,
       4
     ],
-    "purple_bed": [
+    "113": [
       2,
       3,
       2,
@@ -301,7 +301,7 @@
       5,
       4
     ],
-    "blue_bed": [
+    "114": [
       2,
       3,
       2,
@@ -319,7 +319,7 @@
       5,
       4
     ],
-    "brown_bed": [
+    "115": [
       2,
       3,
       2,
@@ -337,7 +337,7 @@
       5,
       4
     ],
-    "green_bed": [
+    "116": [
       2,
       3,
       2,
@@ -355,7 +355,7 @@
       5,
       4
     ],
-    "red_bed": [
+    "117": [
       2,
       3,
       2,
@@ -373,7 +373,7 @@
       5,
       4
     ],
-    "black_bed": [
+    "118": [
       2,
       3,
       2,
@@ -391,9 +391,9 @@
       5,
       4
     ],
-    "powered_rail": 0,
-    "detector_rail": 0,
-    "sticky_piston": [
+    "119": 0,
+    "120": 0,
+    "121": [
       6,
       7,
       8,
@@ -407,13 +407,13 @@
       1,
       1
     ],
-    "cobweb": 0,
-    "short_grass": 0,
-    "fern": 0,
-    "dead_bush": 0,
-    "seagrass": 0,
-    "tall_seagrass": 0,
-    "piston": [
+    "122": 0,
+    "123": 0,
+    "124": 0,
+    "125": 0,
+    "126": 0,
+    "127": 0,
+    "128": [
       6,
       7,
       8,
@@ -427,7 +427,7 @@
       1,
       1
     ],
-    "piston_head": [
+    "129": [
       12,
       12,
       13,
@@ -453,53 +453,53 @@
       23,
       23
     ],
-    "white_wool": 1,
-    "orange_wool": 1,
-    "magenta_wool": 1,
-    "light_blue_wool": 1,
-    "yellow_wool": 1,
-    "lime_wool": 1,
-    "pink_wool": 1,
-    "gray_wool": 1,
-    "light_gray_wool": 1,
-    "cyan_wool": 1,
-    "purple_wool": 1,
-    "blue_wool": 1,
-    "brown_wool": 1,
-    "green_wool": 1,
-    "red_wool": 1,
-    "black_wool": 1,
-    "moving_piston": 0,
-    "dandelion": 0,
-    "torchflower": 0,
-    "poppy": 0,
-    "blue_orchid": 0,
-    "allium": 0,
-    "azure_bluet": 0,
-    "red_tulip": 0,
-    "orange_tulip": 0,
-    "white_tulip": 0,
-    "pink_tulip": 0,
-    "oxeye_daisy": 0,
-    "cornflower": 0,
-    "wither_rose": 0,
-    "lily_of_the_valley": 0,
-    "brown_mushroom": 0,
-    "red_mushroom": 0,
-    "gold_block": 1,
-    "iron_block": 1,
-    "bricks": 1,
-    "tnt": 1,
-    "bookshelf": 1,
-    "chiseled_bookshelf": 1,
-    "mossy_cobblestone": 1,
-    "obsidian": 1,
-    "torch": 0,
-    "wall_torch": 0,
-    "fire": 0,
-    "soul_fire": 0,
-    "spawner": 1,
-    "oak_stairs": [
+    "130": 1,
+    "131": 1,
+    "132": 1,
+    "133": 1,
+    "134": 1,
+    "135": 1,
+    "136": 1,
+    "137": 1,
+    "138": 1,
+    "139": 1,
+    "140": 1,
+    "141": 1,
+    "142": 1,
+    "143": 1,
+    "144": 1,
+    "145": 1,
+    "146": 0,
+    "147": 0,
+    "148": 0,
+    "149": 0,
+    "150": 0,
+    "151": 0,
+    "152": 0,
+    "153": 0,
+    "154": 0,
+    "155": 0,
+    "156": 0,
+    "157": 0,
+    "158": 0,
+    "159": 0,
+    "160": 0,
+    "161": 0,
+    "162": 0,
+    "163": 1,
+    "164": 1,
+    "165": 1,
+    "166": 1,
+    "167": 1,
+    "168": 1,
+    "169": 1,
+    "170": 1,
+    "171": 0,
+    "172": 0,
+    "173": 0,
+    "174": 0,
+    "175": 1,
+    "176": [
       24,
       24,
       25,
@@ -581,7 +581,7 @@
       42,
       42
     ],
-    "chest": [
+    "177": [
       48,
       48,
       49,
@@ -607,24 +607,24 @@
       51,
       51
     ],
-    "redstone_wire": 0,
-    "diamond_ore": 1,
-    "deepslate_diamond_ore": 1,
-    "diamond_block": 1,
-    "crafting_table": 1,
-    "wheat": 0,
-    "farmland": 53,
-    "furnace": 1,
-    "oak_sign": 0,
-    "spruce_sign": 0,
-    "birch_sign": 0,
-    "acacia_sign": 0,
-    "cherry_sign": 0,
-    "jungle_sign": 0,
-    "dark_oak_sign": 0,
-    "mangrove_sign": 0,
-    "bamboo_sign": 0,
-    "oak_door": [
+    "178": 0,
+    "179": 1,
+    "180": 1,
+    "181": 1,
+    "182": 1,
+    "183": 0,
+    "184": 53,
+    "185": 1,
+    "186": 0,
+    "187": 0,
+    "188": 0,
+    "189": 0,
+    "190": 0,
+    "191": 0,
+    "192": 0,
+    "193": 0,
+    "194": 0,
+    "195": [
       54,
       54,
       55,
@@ -690,7 +690,7 @@
       54,
       54
     ],
-    "ladder": [
+    "196": [
       58,
       58,
       59,
@@ -700,8 +700,8 @@
       61,
       61
     ],
-    "rail": 0,
-    "cobblestone_stairs": [
+    "197": 0,
+    "198": [
       24,
       24,
       25,
@@ -783,27 +783,27 @@
       42,
       42
     ],
-    "oak_wall_sign": 0,
-    "spruce_wall_sign": 0,
-    "birch_wall_sign": 0,
-    "acacia_wall_sign": 0,
-    "cherry_wall_sign": 0,
-    "jungle_wall_sign": 0,
-    "dark_oak_wall_sign": 0,
-    "mangrove_wall_sign": 0,
-    "bamboo_wall_sign": 0,
-    "oak_hanging_sign": 0,
-    "spruce_hanging_sign": 0,
-    "birch_hanging_sign": 0,
-    "acacia_hanging_sign": 0,
-    "cherry_hanging_sign": 0,
-    "jungle_hanging_sign": 0,
-    "dark_oak_hanging_sign": 0,
-    "crimson_hanging_sign": 0,
-    "warped_hanging_sign": 0,
-    "mangrove_hanging_sign": 0,
-    "bamboo_hanging_sign": 0,
-    "oak_wall_hanging_sign": [
+    "199": 0,
+    "200": 0,
+    "201": 0,
+    "202": 0,
+    "203": 0,
+    "204": 0,
+    "205": 0,
+    "206": 0,
+    "207": 0,
+    "208": 0,
+    "209": 0,
+    "210": 0,
+    "211": 0,
+    "212": 0,
+    "213": 0,
+    "214": 0,
+    "215": 0,
+    "216": 0,
+    "217": 0,
+    "218": 0,
+    "219": [
       62,
       62,
       62,
@@ -813,7 +813,7 @@
       63,
       63
     ],
-    "spruce_wall_hanging_sign": [
+    "220": [
       62,
       62,
       62,
@@ -823,7 +823,7 @@
       63,
       63
     ],
-    "birch_wall_hanging_sign": [
+    "221": [
       62,
       62,
       62,
@@ -833,7 +833,7 @@
       63,
       63
     ],
-    "acacia_wall_hanging_sign": [
+    "222": [
       62,
       62,
       62,
@@ -843,7 +843,7 @@
       63,
       63
     ],
-    "cherry_wall_hanging_sign": [
+    "223": [
       62,
       62,
       62,
@@ -853,7 +853,7 @@
       63,
       63
     ],
-    "jungle_wall_hanging_sign": [
+    "224": [
       62,
       62,
       62,
@@ -863,7 +863,7 @@
       63,
       63
     ],
-    "dark_oak_wall_hanging_sign": [
+    "225": [
       62,
       62,
       62,
@@ -873,7 +873,7 @@
       63,
       63
     ],
-    "mangrove_wall_hanging_sign": [
+    "226": [
       62,
       62,
       62,
@@ -883,7 +883,7 @@
       63,
       63
     ],
-    "crimson_wall_hanging_sign": [
+    "227": [
       62,
       62,
       62,
@@ -893,7 +893,7 @@
       63,
       63
     ],
-    "warped_wall_hanging_sign": [
+    "228": [
       62,
       62,
       62,
@@ -903,7 +903,7 @@
       63,
       63
     ],
-    "bamboo_wall_hanging_sign": [
+    "229": [
       62,
       62,
       62,
@@ -913,9 +913,9 @@
       63,
       63
     ],
-    "lever": 0,
-    "stone_pressure_plate": 0,
-    "iron_door": [
+    "230": 0,
+    "231": 0,
+    "232": [
       54,
       54,
       55,
@@ -981,21 +981,21 @@
       54,
       54
     ],
-    "oak_pressure_plate": 0,
-    "spruce_pressure_plate": 0,
-    "birch_pressure_plate": 0,
-    "jungle_pressure_plate": 0,
-    "acacia_pressure_plate": 0,
-    "cherry_pressure_plate": 0,
-    "dark_oak_pressure_plate": 0,
-    "mangrove_pressure_plate": 0,
-    "bamboo_pressure_plate": 0,
-    "redstone_ore": 1,
-    "deepslate_redstone_ore": 1,
-    "redstone_torch": 0,
-    "redstone_wall_torch": 0,
-    "stone_button": 0,
-    "snow": [
+    "233": 0,
+    "234": 0,
+    "235": 0,
+    "236": 0,
+    "237": 0,
+    "238": 0,
+    "239": 0,
+    "240": 0,
+    "241": 0,
+    "242": 1,
+    "243": 1,
+    "244": 0,
+    "245": 0,
+    "246": 0,
+    "247": [
       0,
       64,
       65,
@@ -1005,13 +1005,13 @@
       69,
       70
     ],
-    "ice": 1,
-    "snow_block": 1,
-    "cactus": 71,
-    "clay": 1,
-    "sugar_cane": 0,
-    "jukebox": 1,
-    "oak_fence": [
+    "248": 1,
+    "249": 1,
+    "250": 71,
+    "251": 1,
+    "252": 0,
+    "253": 1,
+    "254": [
       72,
       73,
       72,
@@ -1045,18 +1045,18 @@
       86,
       87
     ],
-    "netherrack": 1,
-    "soul_sand": 88,
-    "soul_soil": 1,
-    "basalt": 1,
-    "polished_basalt": 1,
-    "soul_torch": 0,
-    "soul_wall_torch": 0,
-    "glowstone": 1,
-    "nether_portal": 0,
-    "carved_pumpkin": 1,
-    "jack_o_lantern": 1,
-    "cake": [
+    "255": 1,
+    "256": 88,
+    "257": 1,
+    "258": 1,
+    "259": 1,
+    "260": 0,
+    "261": 0,
+    "262": 1,
+    "263": 0,
+    "264": 1,
+    "265": 1,
+    "266": [
       89,
       90,
       91,
@@ -1065,24 +1065,24 @@
       94,
       95
     ],
-    "repeater": 96,
-    "white_stained_glass": 1,
-    "orange_stained_glass": 1,
-    "magenta_stained_glass": 1,
-    "light_blue_stained_glass": 1,
-    "yellow_stained_glass": 1,
-    "lime_stained_glass": 1,
-    "pink_stained_glass": 1,
-    "gray_stained_glass": 1,
-    "light_gray_stained_glass": 1,
-    "cyan_stained_glass": 1,
-    "purple_stained_glass": 1,
-    "blue_stained_glass": 1,
-    "brown_stained_glass": 1,
-    "green_stained_glass": 1,
-    "red_stained_glass": 1,
-    "black_stained_glass": 1,
-    "oak_trapdoor": [
+    "267": 96,
+    "268": 1,
+    "269": 1,
+    "270": 1,
+    "271": 1,
+    "272": 1,
+    "273": 1,
+    "274": 1,
+    "275": 1,
+    "276": 1,
+    "277": 1,
+    "278": 1,
+    "279": 1,
+    "280": 1,
+    "281": 1,
+    "282": 1,
+    "283": 1,
+    "284": [
       97,
       97,
       97,
@@ -1148,7 +1148,7 @@
       99,
       99
     ],
-    "spruce_trapdoor": [
+    "285": [
       97,
       97,
       97,
@@ -1214,7 +1214,7 @@
       99,
       99
     ],
-    "birch_trapdoor": [
+    "286": [
       97,
       97,
       97,
@@ -1280,7 +1280,7 @@
       99,
       99
     ],
-    "jungle_trapdoor": [
+    "287": [
       97,
       97,
       97,
@@ -1346,7 +1346,7 @@
       99,
       99
     ],
-    "acacia_trapdoor": [
+    "288": [
       97,
       97,
       97,
@@ -1412,7 +1412,7 @@
       99,
       99
     ],
-    "cherry_trapdoor": [
+    "289": [
       97,
       97,
       97,
@@ -1478,7 +1478,7 @@
       99,
       99
     ],
-    "dark_oak_trapdoor": [
+    "290": [
       97,
       97,
       97,
@@ -1544,7 +1544,7 @@
       99,
       99
     ],
-    "mangrove_trapdoor": [
+    "291": [
       97,
       97,
       97,
@@ -1610,7 +1610,7 @@
       99,
       99
     ],
-    "bamboo_trapdoor": [
+    "292": [
       97,
       97,
       97,
@@ -1676,22 +1676,22 @@
       99,
       99
     ],
-    "stone_bricks": 1,
-    "mossy_stone_bricks": 1,
-    "cracked_stone_bricks": 1,
-    "chiseled_stone_bricks": 1,
-    "packed_mud": 1,
-    "mud_bricks": 1,
-    "infested_stone": 1,
-    "infested_cobblestone": 1,
-    "infested_stone_bricks": 1,
-    "infested_mossy_stone_bricks": 1,
-    "infested_cracked_stone_bricks": 1,
-    "infested_chiseled_stone_bricks": 1,
-    "brown_mushroom_block": 1,
-    "red_mushroom_block": 1,
-    "mushroom_stem": 1,
-    "iron_bars": [
+    "293": 1,
+    "294": 1,
+    "295": 1,
+    "296": 1,
+    "297": 1,
+    "298": 1,
+    "299": 1,
+    "300": 1,
+    "301": 1,
+    "302": 1,
+    "303": 1,
+    "304": 1,
+    "305": 1,
+    "306": 1,
+    "307": 1,
+    "308": [
       103,
       104,
       103,
@@ -1725,7 +1725,7 @@
       117,
       118
     ],
-    "chain": [
+    "309": [
       119,
       119,
       120,
@@ -1733,7 +1733,7 @@
       121,
       121
     ],
-    "glass_pane": [
+    "310": [
       122,
       123,
       122,
@@ -1767,15 +1767,15 @@
       136,
       137
     ],
-    "pumpkin": 1,
-    "melon": 1,
-    "attached_pumpkin_stem": 0,
-    "attached_melon_stem": 0,
-    "pumpkin_stem": 0,
-    "melon_stem": 0,
-    "vine": 0,
-    "glow_lichen": 0,
-    "oak_fence_gate": [
+    "311": 1,
+    "312": 1,
+    "313": 0,
+    "314": 0,
+    "315": 0,
+    "316": 0,
+    "317": 0,
+    "318": 0,
+    "319": [
       0,
       0,
       138,
@@ -1809,7 +1809,7 @@
       139,
       139
     ],
-    "brick_stairs": [
+    "320": [
       24,
       24,
       25,
@@ -1891,7 +1891,7 @@
       42,
       42
     ],
-    "stone_brick_stairs": [
+    "321": [
       24,
       24,
       25,
@@ -1973,7 +1973,7 @@
       42,
       42
     ],
-    "mud_brick_stairs": [
+    "322": [
       24,
       24,
       25,
@@ -2055,10 +2055,10 @@
       42,
       42
     ],
-    "mycelium": 1,
-    "lily_pad": 140,
-    "nether_bricks": 1,
-    "nether_brick_fence": [
+    "323": 1,
+    "324": 140,
+    "325": 1,
+    "326": [
       141,
       142,
       141,
@@ -2092,7 +2092,7 @@
       155,
       156
     ],
-    "nether_brick_stairs": [
+    "327": [
       24,
       24,
       25,
@@ -2174,15 +2174,15 @@
       42,
       42
     ],
-    "nether_wart": 0,
-    "enchanting_table": 157,
-    "brewing_stand": 158,
-    "cauldron": 159,
-    "water_cauldron": 159,
-    "lava_cauldron": 159,
-    "powder_snow_cauldron": 159,
-    "end_portal": 0,
-    "end_portal_frame": [
+    "328": 0,
+    "329": 157,
+    "330": 158,
+    "331": 159,
+    "332": 159,
+    "333": 159,
+    "334": 159,
+    "335": 0,
+    "336": [
       160,
       160,
       160,
@@ -2192,10 +2192,10 @@
       161,
       161
     ],
-    "end_stone": 1,
-    "dragon_egg": 162,
-    "redstone_lamp": 1,
-    "cocoa": [
+    "337": 1,
+    "338": 162,
+    "339": 1,
+    "340": [
       163,
       164,
       165,
@@ -2209,7 +2209,7 @@
       173,
       174
     ],
-    "sandstone_stairs": [
+    "341": [
       24,
       24,
       25,
@@ -2291,13 +2291,13 @@
       42,
       42
     ],
-    "emerald_ore": 1,
-    "deepslate_emerald_ore": 1,
-    "ender_chest": 175,
-    "tripwire_hook": 0,
-    "tripwire": 0,
-    "emerald_block": 1,
-    "spruce_stairs": [
+    "342": 1,
+    "343": 1,
+    "344": 175,
+    "345": 0,
+    "346": 0,
+    "347": 1,
+    "348": [
       24,
       24,
       25,
@@ -2379,7 +2379,7 @@
       42,
       42
     ],
-    "birch_stairs": [
+    "349": [
       24,
       24,
       25,
@@ -2461,7 +2461,7 @@
       42,
       42
     ],
-    "jungle_stairs": [
+    "350": [
       24,
       24,
       25,
@@ -2543,9 +2543,9 @@
       42,
       42
     ],
-    "command_block": 1,
-    "beacon": 1,
-    "cobblestone_wall": [
+    "351": 1,
+    "352": 1,
+    "353": [
       176,
       177,
       178,
@@ -2871,7 +2871,7 @@
       335,
       336
     ],
-    "mossy_cobblestone_wall": [
+    "354": [
       337,
       338,
       339,
@@ -3197,47 +3197,47 @@
       496,
       497
     ],
-    "flower_pot": 498,
-    "potted_torchflower": 498,
-    "potted_oak_sapling": 498,
-    "potted_spruce_sapling": 498,
-    "potted_birch_sapling": 498,
-    "potted_jungle_sapling": 498,
-    "potted_acacia_sapling": 498,
-    "potted_cherry_sapling": 498,
-    "potted_dark_oak_sapling": 498,
-    "potted_mangrove_propagule": 498,
-    "potted_fern": 498,
-    "potted_dandelion": 498,
-    "potted_poppy": 498,
-    "potted_blue_orchid": 498,
-    "potted_allium": 498,
-    "potted_azure_bluet": 498,
-    "potted_red_tulip": 498,
-    "potted_orange_tulip": 498,
-    "potted_white_tulip": 498,
-    "potted_pink_tulip": 498,
-    "potted_oxeye_daisy": 498,
-    "potted_cornflower": 498,
-    "potted_lily_of_the_valley": 498,
-    "potted_wither_rose": 498,
-    "potted_red_mushroom": 498,
-    "potted_brown_mushroom": 498,
-    "potted_dead_bush": 498,
-    "potted_cactus": 498,
-    "carrots": 0,
-    "potatoes": 0,
-    "oak_button": 0,
-    "spruce_button": 0,
-    "birch_button": 0,
-    "jungle_button": 0,
-    "acacia_button": 0,
-    "cherry_button": 0,
-    "dark_oak_button": 0,
-    "mangrove_button": 0,
-    "bamboo_button": 0,
-    "skeleton_skull": 499,
-    "skeleton_wall_skull": [
+    "355": 498,
+    "356": 498,
+    "357": 498,
+    "358": 498,
+    "359": 498,
+    "360": 498,
+    "361": 498,
+    "362": 498,
+    "363": 498,
+    "364": 498,
+    "365": 498,
+    "366": 498,
+    "367": 498,
+    "368": 498,
+    "369": 498,
+    "370": 498,
+    "371": 498,
+    "372": 498,
+    "373": 498,
+    "374": 498,
+    "375": 498,
+    "376": 498,
+    "377": 498,
+    "378": 498,
+    "379": 498,
+    "380": 498,
+    "381": 498,
+    "382": 498,
+    "383": 0,
+    "384": 0,
+    "385": 0,
+    "386": 0,
+    "387": 0,
+    "388": 0,
+    "389": 0,
+    "390": 0,
+    "391": 0,
+    "392": 0,
+    "393": 0,
+    "394": 499,
+    "395": [
       500,
       500,
       501,
@@ -3247,8 +3247,8 @@
       503,
       503
     ],
-    "wither_skeleton_skull": 499,
-    "wither_skeleton_wall_skull": [
+    "396": 499,
+    "397": [
       500,
       500,
       501,
@@ -3258,8 +3258,8 @@
       503,
       503
     ],
-    "zombie_head": 499,
-    "zombie_wall_head": [
+    "398": 499,
+    "399": [
       500,
       500,
       501,
@@ -3269,8 +3269,8 @@
       503,
       503
     ],
-    "player_head": 499,
-    "player_wall_head": [
+    "400": 499,
+    "401": [
       500,
       500,
       501,
@@ -3280,8 +3280,8 @@
       503,
       503
     ],
-    "creeper_head": 499,
-    "creeper_wall_head": [
+    "402": 499,
+    "403": [
       500,
       500,
       501,
@@ -3291,8 +3291,8 @@
       503,
       503
     ],
-    "dragon_head": 499,
-    "dragon_wall_head": [
+    "404": 499,
+    "405": [
       500,
       500,
       501,
@@ -3302,8 +3302,8 @@
       503,
       503
     ],
-    "piglin_head": 504,
-    "piglin_wall_head": [
+    "406": 504,
+    "407": [
       505,
       505,
       506,
@@ -3313,25 +3313,25 @@
       508,
       508
     ],
-    "anvil": [
+    "408": [
       509,
       509,
       510,
       510
     ],
-    "chipped_anvil": [
+    "409": [
       509,
       509,
       510,
       510
     ],
-    "damaged_anvil": [
+    "410": [
       509,
       509,
       510,
       510
     ],
-    "trapped_chest": [
+    "411": [
       48,
       48,
       49,
@@ -3357,13 +3357,13 @@
       51,
       51
     ],
-    "light_weighted_pressure_plate": 0,
-    "heavy_weighted_pressure_plate": 0,
-    "comparator": 96,
-    "daylight_detector": 511,
-    "redstone_block": 1,
-    "nether_quartz_ore": 1,
-    "hopper": [
+    "412": 0,
+    "413": 0,
+    "414": 96,
+    "415": 511,
+    "416": 1,
+    "417": 1,
+    "418": [
       512,
       513,
       514,
@@ -3375,10 +3375,10 @@
       515,
       516
     ],
-    "quartz_block": 1,
-    "chiseled_quartz_block": 1,
-    "quartz_pillar": 1,
-    "quartz_stairs": [
+    "419": 1,
+    "420": 1,
+    "421": 1,
+    "422": [
       24,
       24,
       25,
@@ -3460,25 +3460,25 @@
       42,
       42
     ],
-    "activator_rail": 0,
-    "dropper": 1,
-    "white_terracotta": 1,
-    "orange_terracotta": 1,
-    "magenta_terracotta": 1,
-    "light_blue_terracotta": 1,
-    "yellow_terracotta": 1,
-    "lime_terracotta": 1,
-    "pink_terracotta": 1,
-    "gray_terracotta": 1,
-    "light_gray_terracotta": 1,
-    "cyan_terracotta": 1,
-    "purple_terracotta": 1,
-    "blue_terracotta": 1,
-    "brown_terracotta": 1,
-    "green_terracotta": 1,
-    "red_terracotta": 1,
-    "black_terracotta": 1,
-    "white_stained_glass_pane": [
+    "423": 0,
+    "424": 1,
+    "425": 1,
+    "426": 1,
+    "427": 1,
+    "428": 1,
+    "429": 1,
+    "430": 1,
+    "431": 1,
+    "432": 1,
+    "433": 1,
+    "434": 1,
+    "435": 1,
+    "436": 1,
+    "437": 1,
+    "438": 1,
+    "439": 1,
+    "440": 1,
+    "441": [
       517,
       518,
       517,
@@ -3512,7 +3512,7 @@
       531,
       532
     ],
-    "orange_stained_glass_pane": [
+    "442": [
       533,
       534,
       533,
@@ -3546,7 +3546,7 @@
       547,
       548
     ],
-    "magenta_stained_glass_pane": [
+    "443": [
       549,
       550,
       549,
@@ -3580,7 +3580,7 @@
       563,
       564
     ],
-    "light_blue_stained_glass_pane": [
+    "444": [
       565,
       566,
       565,
@@ -3614,7 +3614,7 @@
       579,
       580
     ],
-    "yellow_stained_glass_pane": [
+    "445": [
       581,
       582,
       581,
@@ -3648,7 +3648,7 @@
       595,
       596
     ],
-    "lime_stained_glass_pane": [
+    "446": [
       597,
       598,
       597,
@@ -3682,7 +3682,7 @@
       611,
       612
     ],
-    "pink_stained_glass_pane": [
+    "447": [
       613,
       614,
       613,
@@ -3716,7 +3716,7 @@
       627,
       628
     ],
-    "gray_stained_glass_pane": [
+    "448": [
       629,
       630,
       629,
@@ -3750,7 +3750,7 @@
       643,
       644
     ],
-    "light_gray_stained_glass_pane": [
+    "449": [
       645,
       646,
       645,
@@ -3784,7 +3784,7 @@
       659,
       660
     ],
-    "cyan_stained_glass_pane": [
+    "450": [
       661,
       662,
       661,
@@ -3818,7 +3818,7 @@
       675,
       676
     ],
-    "purple_stained_glass_pane": [
+    "451": [
       677,
       678,
       677,
@@ -3852,7 +3852,7 @@
       691,
       692
     ],
-    "blue_stained_glass_pane": [
+    "452": [
       693,
       694,
       693,
@@ -3886,7 +3886,7 @@
       707,
       708
     ],
-    "brown_stained_glass_pane": [
+    "453": [
       709,
       710,
       709,
@@ -3920,7 +3920,7 @@
       723,
       724
     ],
-    "green_stained_glass_pane": [
+    "454": [
       725,
       726,
       725,
@@ -3954,7 +3954,7 @@
       739,
       740
     ],
-    "red_stained_glass_pane": [
+    "455": [
       741,
       742,
       741,
@@ -3988,7 +3988,7 @@
       755,
       756
     ],
-    "black_stained_glass_pane": [
+    "456": [
       757,
       758,
       757,
@@ -4022,7 +4022,7 @@
       771,
       772
     ],
-    "acacia_stairs": [
+    "457": [
       24,
       24,
       25,
@@ -4104,7 +4104,7 @@
       42,
       42
     ],
-    "cherry_stairs": [
+    "458": [
       24,
       24,
       25,
@@ -4186,7 +4186,7 @@
       42,
       42
     ],
-    "dark_oak_stairs": [
+    "459": [
       24,
       24,
       25,
@@ -4268,7 +4268,7 @@
       42,
       42
     ],
-    "mangrove_stairs": [
+    "460": [
       24,
       24,
       25,
@@ -4350,7 +4350,7 @@
       42,
       42
     ],
-    "bamboo_stairs": [
+    "461": [
       24,
       24,
       25,
@@ -4432,7 +4432,7 @@
       42,
       42
     ],
-    "bamboo_mosaic_stairs": [
+    "462": [
       24,
       24,
       25,
@@ -4514,10 +4514,10 @@
       42,
       42
     ],
-    "slime_block": 1,
-    "barrier": 1,
-    "light": 0,
-    "iron_trapdoor": [
+    "463": 1,
+    "464": 1,
+    "465": 0,
+    "466": [
       97,
       97,
       97,
@@ -4583,10 +4583,10 @@
       99,
       99
     ],
-    "prismarine": 1,
-    "prismarine_bricks": 1,
-    "dark_prismarine": 1,
-    "prismarine_stairs": [
+    "467": 1,
+    "468": 1,
+    "469": 1,
+    "470": [
       24,
       24,
       25,
@@ -4668,7 +4668,7 @@
       42,
       42
     ],
-    "prismarine_brick_stairs": [
+    "471": [
       24,
       24,
       25,
@@ -4750,7 +4750,7 @@
       42,
       42
     ],
-    "dark_prismarine_stairs": [
+    "472": [
       24,
       24,
       25,
@@ -4832,7 +4832,7 @@
       42,
       42
     ],
-    "prismarine_slab": [
+    "473": [
       773,
       773,
       774,
@@ -4840,7 +4840,7 @@
       1,
       1
     ],
-    "prismarine_brick_slab": [
+    "474": [
       773,
       773,
       774,
@@ -4848,7 +4848,7 @@
       1,
       1
     ],
-    "dark_prismarine_slab": [
+    "475": [
       773,
       773,
       774,
@@ -4856,69 +4856,69 @@
       1,
       1
     ],
-    "sea_lantern": 1,
-    "hay_block": 1,
-    "white_carpet": 775,
-    "orange_carpet": 775,
-    "magenta_carpet": 775,
-    "light_blue_carpet": 775,
-    "yellow_carpet": 775,
-    "lime_carpet": 775,
-    "pink_carpet": 775,
-    "gray_carpet": 775,
-    "light_gray_carpet": 775,
-    "cyan_carpet": 775,
-    "purple_carpet": 775,
-    "blue_carpet": 775,
-    "brown_carpet": 775,
-    "green_carpet": 775,
-    "red_carpet": 775,
-    "black_carpet": 775,
-    "terracotta": 1,
-    "coal_block": 1,
-    "packed_ice": 1,
-    "sunflower": 0,
-    "lilac": 0,
-    "rose_bush": 0,
-    "peony": 0,
-    "tall_grass": 0,
-    "large_fern": 0,
-    "white_banner": 0,
-    "orange_banner": 0,
-    "magenta_banner": 0,
-    "light_blue_banner": 0,
-    "yellow_banner": 0,
-    "lime_banner": 0,
-    "pink_banner": 0,
-    "gray_banner": 0,
-    "light_gray_banner": 0,
-    "cyan_banner": 0,
-    "purple_banner": 0,
-    "blue_banner": 0,
-    "brown_banner": 0,
-    "green_banner": 0,
-    "red_banner": 0,
-    "black_banner": 0,
-    "white_wall_banner": 0,
-    "orange_wall_banner": 0,
-    "magenta_wall_banner": 0,
-    "light_blue_wall_banner": 0,
-    "yellow_wall_banner": 0,
-    "lime_wall_banner": 0,
-    "pink_wall_banner": 0,
-    "gray_wall_banner": 0,
-    "light_gray_wall_banner": 0,
-    "cyan_wall_banner": 0,
-    "purple_wall_banner": 0,
-    "blue_wall_banner": 0,
-    "brown_wall_banner": 0,
-    "green_wall_banner": 0,
-    "red_wall_banner": 0,
-    "black_wall_banner": 0,
-    "red_sandstone": 1,
-    "chiseled_red_sandstone": 1,
-    "cut_red_sandstone": 1,
-    "red_sandstone_stairs": [
+    "476": 1,
+    "477": 1,
+    "478": 775,
+    "479": 775,
+    "480": 775,
+    "481": 775,
+    "482": 775,
+    "483": 775,
+    "484": 775,
+    "485": 775,
+    "486": 775,
+    "487": 775,
+    "488": 775,
+    "489": 775,
+    "490": 775,
+    "491": 775,
+    "492": 775,
+    "493": 775,
+    "494": 1,
+    "495": 1,
+    "496": 1,
+    "497": 0,
+    "498": 0,
+    "499": 0,
+    "500": 0,
+    "501": 0,
+    "502": 0,
+    "503": 0,
+    "504": 0,
+    "505": 0,
+    "506": 0,
+    "507": 0,
+    "508": 0,
+    "509": 0,
+    "510": 0,
+    "511": 0,
+    "512": 0,
+    "513": 0,
+    "514": 0,
+    "515": 0,
+    "516": 0,
+    "517": 0,
+    "518": 0,
+    "519": 0,
+    "520": 0,
+    "521": 0,
+    "522": 0,
+    "523": 0,
+    "524": 0,
+    "525": 0,
+    "526": 0,
+    "527": 0,
+    "528": 0,
+    "529": 0,
+    "530": 0,
+    "531": 0,
+    "532": 0,
+    "533": 0,
+    "534": 0,
+    "535": 1,
+    "536": 1,
+    "537": 1,
+    "538": [
       24,
       24,
       25,
@@ -5000,7 +5000,7 @@
       42,
       42
     ],
-    "oak_slab": [
+    "539": [
       773,
       773,
       774,
@@ -5008,7 +5008,7 @@
       1,
       1
     ],
-    "spruce_slab": [
+    "540": [
       773,
       773,
       774,
@@ -5016,7 +5016,7 @@
       1,
       1
     ],
-    "birch_slab": [
+    "541": [
       773,
       773,
       774,
@@ -5024,7 +5024,7 @@
       1,
       1
     ],
-    "jungle_slab": [
+    "542": [
       773,
       773,
       774,
@@ -5032,7 +5032,7 @@
       1,
       1
     ],
-    "acacia_slab": [
+    "543": [
       773,
       773,
       774,
@@ -5040,7 +5040,7 @@
       1,
       1
     ],
-    "cherry_slab": [
+    "544": [
       773,
       773,
       774,
@@ -5048,7 +5048,7 @@
       1,
       1
     ],
-    "dark_oak_slab": [
+    "545": [
       773,
       773,
       774,
@@ -5056,7 +5056,7 @@
       1,
       1
     ],
-    "mangrove_slab": [
+    "546": [
       773,
       773,
       774,
@@ -5064,7 +5064,7 @@
       1,
       1
     ],
-    "bamboo_slab": [
+    "547": [
       773,
       773,
       774,
@@ -5072,7 +5072,7 @@
       1,
       1
     ],
-    "bamboo_mosaic_slab": [
+    "548": [
       773,
       773,
       774,
@@ -5080,7 +5080,7 @@
       1,
       1
     ],
-    "stone_slab": [
+    "549": [
       773,
       773,
       774,
@@ -5088,7 +5088,7 @@
       1,
       1
     ],
-    "smooth_stone_slab": [
+    "550": [
       773,
       773,
       774,
@@ -5096,7 +5096,7 @@
       1,
       1
     ],
-    "sandstone_slab": [
+    "551": [
       773,
       773,
       774,
@@ -5104,7 +5104,7 @@
       1,
       1
     ],
-    "cut_sandstone_slab": [
+    "552": [
       773,
       773,
       774,
@@ -5112,7 +5112,7 @@
       1,
       1
     ],
-    "petrified_oak_slab": [
+    "553": [
       773,
       773,
       774,
@@ -5120,7 +5120,7 @@
       1,
       1
     ],
-    "cobblestone_slab": [
+    "554": [
       773,
       773,
       774,
@@ -5128,7 +5128,7 @@
       1,
       1
     ],
-    "brick_slab": [
+    "555": [
       773,
       773,
       774,
@@ -5136,7 +5136,7 @@
       1,
       1
     ],
-    "stone_brick_slab": [
+    "556": [
       773,
       773,
       774,
@@ -5144,7 +5144,7 @@
       1,
       1
     ],
-    "mud_brick_slab": [
+    "557": [
       773,
       773,
       774,
@@ -5152,7 +5152,7 @@
       1,
       1
     ],
-    "nether_brick_slab": [
+    "558": [
       773,
       773,
       774,
@@ -5160,7 +5160,7 @@
       1,
       1
     ],
-    "quartz_slab": [
+    "559": [
       773,
       773,
       774,
@@ -5168,7 +5168,7 @@
       1,
       1
     ],
-    "red_sandstone_slab": [
+    "560": [
       773,
       773,
       774,
@@ -5176,7 +5176,7 @@
       1,
       1
     ],
-    "cut_red_sandstone_slab": [
+    "561": [
       773,
       773,
       774,
@@ -5184,7 +5184,7 @@
       1,
       1
     ],
-    "purpur_slab": [
+    "562": [
       773,
       773,
       774,
@@ -5192,11 +5192,11 @@
       1,
       1
     ],
-    "smooth_stone": 1,
-    "smooth_sandstone": 1,
-    "smooth_quartz": 1,
-    "smooth_red_sandstone": 1,
-    "spruce_fence_gate": [
+    "563": 1,
+    "564": 1,
+    "565": 1,
+    "566": 1,
+    "567": [
       0,
       0,
       138,
@@ -5230,7 +5230,7 @@
       139,
       139
     ],
-    "birch_fence_gate": [
+    "568": [
       0,
       0,
       138,
@@ -5264,7 +5264,7 @@
       139,
       139
     ],
-    "jungle_fence_gate": [
+    "569": [
       0,
       0,
       138,
@@ -5298,7 +5298,7 @@
       139,
       139
     ],
-    "acacia_fence_gate": [
+    "570": [
       0,
       0,
       138,
@@ -5332,7 +5332,7 @@
       139,
       139
     ],
-    "cherry_fence_gate": [
+    "571": [
       0,
       0,
       138,
@@ -5366,7 +5366,7 @@
       139,
       139
     ],
-    "dark_oak_fence_gate": [
+    "572": [
       0,
       0,
       138,
@@ -5400,7 +5400,7 @@
       139,
       139
     ],
-    "mangrove_fence_gate": [
+    "573": [
       0,
       0,
       138,
@@ -5434,7 +5434,7 @@
       139,
       139
     ],
-    "bamboo_fence_gate": [
+    "574": [
       0,
       0,
       138,
@@ -5468,7 +5468,7 @@
       139,
       139
     ],
-    "spruce_fence": [
+    "575": [
       776,
       777,
       776,
@@ -5502,7 +5502,7 @@
       790,
       791
     ],
-    "birch_fence": [
+    "576": [
       792,
       793,
       792,
@@ -5536,7 +5536,7 @@
       806,
       807
     ],
-    "jungle_fence": [
+    "577": [
       808,
       809,
       808,
@@ -5570,7 +5570,7 @@
       822,
       823
     ],
-    "acacia_fence": [
+    "578": [
       824,
       825,
       824,
@@ -5604,7 +5604,7 @@
       838,
       839
     ],
-    "cherry_fence": [
+    "579": [
       840,
       841,
       840,
@@ -5638,7 +5638,7 @@
       854,
       855
     ],
-    "dark_oak_fence": [
+    "580": [
       856,
       857,
       856,
@@ -5672,7 +5672,7 @@
       870,
       871
     ],
-    "mangrove_fence": [
+    "581": [
       872,
       873,
       872,
@@ -5706,7 +5706,7 @@
       886,
       887
     ],
-    "bamboo_fence": [
+    "582": [
       888,
       889,
       888,
@@ -5740,7 +5740,7 @@
       902,
       903
     ],
-    "spruce_door": [
+    "583": [
       54,
       54,
       55,
@@ -5806,7 +5806,7 @@
       54,
       54
     ],
-    "birch_door": [
+    "584": [
       54,
       54,
       55,
@@ -5872,7 +5872,7 @@
       54,
       54
     ],
-    "jungle_door": [
+    "585": [
       54,
       54,
       55,
@@ -5938,7 +5938,7 @@
       54,
       54
     ],
-    "acacia_door": [
+    "586": [
       54,
       54,
       55,
@@ -6004,7 +6004,7 @@
       54,
       54
     ],
-    "cherry_door": [
+    "587": [
       54,
       54,
       55,
@@ -6070,7 +6070,7 @@
       54,
       54
     ],
-    "dark_oak_door": [
+    "588": [
       54,
       54,
       55,
@@ -6136,7 +6136,7 @@
       54,
       54
     ],
-    "mangrove_door": [
+    "589": [
       54,
       54,
       55,
@@ -6202,7 +6202,7 @@
       54,
       54
     ],
-    "bamboo_door": [
+    "590": [
       54,
       54,
       55,
@@ -6268,7 +6268,7 @@
       54,
       54
     ],
-    "end_rod": [
+    "591": [
       904,
       905,
       904,
@@ -6276,7 +6276,7 @@
       906,
       906
     ],
-    "chorus_plant": [
+    "592": [
       907,
       908,
       909,
@@ -6342,10 +6342,10 @@
       969,
       970
     ],
-    "chorus_flower": 1,
-    "purpur_block": 1,
-    "purpur_pillar": 1,
-    "purpur_stairs": [
+    "593": 1,
+    "594": 1,
+    "595": 1,
+    "596": [
       24,
       24,
       25,
@@ -6427,9 +6427,9 @@
       42,
       42
     ],
-    "end_stone_bricks": 1,
-    "torchflower_crop": 0,
-    "pitcher_crop": [
+    "597": 1,
+    "598": 0,
+    "599": [
       971,
       971,
       0,
@@ -6441,88 +6441,88 @@
       0,
       972
     ],
-    "pitcher_plant": 0,
-    "beetroots": 0,
-    "dirt_path": 53,
-    "end_gateway": 0,
-    "repeating_command_block": 1,
-    "chain_command_block": 1,
-    "frosted_ice": 1,
-    "magma_block": 1,
-    "nether_wart_block": 1,
-    "red_nether_bricks": 1,
-    "bone_block": 1,
-    "structure_void": 0,
-    "observer": 1,
-    "shulker_box": 1,
-    "white_shulker_box": 1,
-    "orange_shulker_box": 1,
-    "magenta_shulker_box": 1,
-    "light_blue_shulker_box": 1,
-    "yellow_shulker_box": 1,
-    "lime_shulker_box": 1,
-    "pink_shulker_box": 1,
-    "gray_shulker_box": 1,
-    "light_gray_shulker_box": 1,
-    "cyan_shulker_box": 1,
-    "purple_shulker_box": 1,
-    "blue_shulker_box": 1,
-    "brown_shulker_box": 1,
-    "green_shulker_box": 1,
-    "red_shulker_box": 1,
-    "black_shulker_box": 1,
-    "white_glazed_terracotta": 1,
-    "orange_glazed_terracotta": 1,
-    "magenta_glazed_terracotta": 1,
-    "light_blue_glazed_terracotta": 1,
-    "yellow_glazed_terracotta": 1,
-    "lime_glazed_terracotta": 1,
-    "pink_glazed_terracotta": 1,
-    "gray_glazed_terracotta": 1,
-    "light_gray_glazed_terracotta": 1,
-    "cyan_glazed_terracotta": 1,
-    "purple_glazed_terracotta": 1,
-    "blue_glazed_terracotta": 1,
-    "brown_glazed_terracotta": 1,
-    "green_glazed_terracotta": 1,
-    "red_glazed_terracotta": 1,
-    "black_glazed_terracotta": 1,
-    "white_concrete": 1,
-    "orange_concrete": 1,
-    "magenta_concrete": 1,
-    "light_blue_concrete": 1,
-    "yellow_concrete": 1,
-    "lime_concrete": 1,
-    "pink_concrete": 1,
-    "gray_concrete": 1,
-    "light_gray_concrete": 1,
-    "cyan_concrete": 1,
-    "purple_concrete": 1,
-    "blue_concrete": 1,
-    "brown_concrete": 1,
-    "green_concrete": 1,
-    "red_concrete": 1,
-    "black_concrete": 1,
-    "white_concrete_powder": 1,
-    "orange_concrete_powder": 1,
-    "magenta_concrete_powder": 1,
-    "light_blue_concrete_powder": 1,
-    "yellow_concrete_powder": 1,
-    "lime_concrete_powder": 1,
-    "pink_concrete_powder": 1,
-    "gray_concrete_powder": 1,
-    "light_gray_concrete_powder": 1,
-    "cyan_concrete_powder": 1,
-    "purple_concrete_powder": 1,
-    "blue_concrete_powder": 1,
-    "brown_concrete_powder": 1,
-    "green_concrete_powder": 1,
-    "red_concrete_powder": 1,
-    "black_concrete_powder": 1,
-    "kelp": 0,
-    "kelp_plant": 0,
-    "dried_kelp_block": 1,
-    "turtle_egg": [
+    "600": 0,
+    "601": 0,
+    "602": 53,
+    "603": 0,
+    "604": 1,
+    "605": 1,
+    "606": 1,
+    "607": 1,
+    "608": 1,
+    "609": 1,
+    "610": 1,
+    "611": 0,
+    "612": 1,
+    "613": 1,
+    "614": 1,
+    "615": 1,
+    "616": 1,
+    "617": 1,
+    "618": 1,
+    "619": 1,
+    "620": 1,
+    "621": 1,
+    "622": 1,
+    "623": 1,
+    "624": 1,
+    "625": 1,
+    "626": 1,
+    "627": 1,
+    "628": 1,
+    "629": 1,
+    "630": 1,
+    "631": 1,
+    "632": 1,
+    "633": 1,
+    "634": 1,
+    "635": 1,
+    "636": 1,
+    "637": 1,
+    "638": 1,
+    "639": 1,
+    "640": 1,
+    "641": 1,
+    "642": 1,
+    "643": 1,
+    "644": 1,
+    "645": 1,
+    "646": 1,
+    "647": 1,
+    "648": 1,
+    "649": 1,
+    "650": 1,
+    "651": 1,
+    "652": 1,
+    "653": 1,
+    "654": 1,
+    "655": 1,
+    "656": 1,
+    "657": 1,
+    "658": 1,
+    "659": 1,
+    "660": 1,
+    "661": 1,
+    "662": 1,
+    "663": 1,
+    "664": 1,
+    "665": 1,
+    "666": 1,
+    "667": 1,
+    "668": 1,
+    "669": 1,
+    "670": 1,
+    "671": 1,
+    "672": 1,
+    "673": 1,
+    "674": 1,
+    "675": 1,
+    "676": 1,
+    "677": 1,
+    "678": 0,
+    "679": 0,
+    "680": 1,
+    "681": [
       973,
       973,
       973,
@@ -6536,48 +6536,48 @@
       974,
       974
     ],
-    "sniffer_egg": 975,
-    "dead_tube_coral_block": 1,
-    "dead_brain_coral_block": 1,
-    "dead_bubble_coral_block": 1,
-    "dead_fire_coral_block": 1,
-    "dead_horn_coral_block": 1,
-    "tube_coral_block": 1,
-    "brain_coral_block": 1,
-    "bubble_coral_block": 1,
-    "fire_coral_block": 1,
-    "horn_coral_block": 1,
-    "dead_tube_coral": 0,
-    "dead_brain_coral": 0,
-    "dead_bubble_coral": 0,
-    "dead_fire_coral": 0,
-    "dead_horn_coral": 0,
-    "tube_coral": 0,
-    "brain_coral": 0,
-    "bubble_coral": 0,
-    "fire_coral": 0,
-    "horn_coral": 0,
-    "dead_tube_coral_fan": 0,
-    "dead_brain_coral_fan": 0,
-    "dead_bubble_coral_fan": 0,
-    "dead_fire_coral_fan": 0,
-    "dead_horn_coral_fan": 0,
-    "tube_coral_fan": 0,
-    "brain_coral_fan": 0,
-    "bubble_coral_fan": 0,
-    "fire_coral_fan": 0,
-    "horn_coral_fan": 0,
-    "dead_tube_coral_wall_fan": 0,
-    "dead_brain_coral_wall_fan": 0,
-    "dead_bubble_coral_wall_fan": 0,
-    "dead_fire_coral_wall_fan": 0,
-    "dead_horn_coral_wall_fan": 0,
-    "tube_coral_wall_fan": 0,
-    "brain_coral_wall_fan": 0,
-    "bubble_coral_wall_fan": 0,
-    "fire_coral_wall_fan": 0,
-    "horn_coral_wall_fan": 0,
-    "sea_pickle": [
+    "682": 975,
+    "683": 1,
+    "684": 1,
+    "685": 1,
+    "686": 1,
+    "687": 1,
+    "688": 1,
+    "689": 1,
+    "690": 1,
+    "691": 1,
+    "692": 1,
+    "693": 0,
+    "694": 0,
+    "695": 0,
+    "696": 0,
+    "697": 0,
+    "698": 0,
+    "699": 0,
+    "700": 0,
+    "701": 0,
+    "702": 0,
+    "703": 0,
+    "704": 0,
+    "705": 0,
+    "706": 0,
+    "707": 0,
+    "708": 0,
+    "709": 0,
+    "710": 0,
+    "711": 0,
+    "712": 0,
+    "713": 0,
+    "714": 0,
+    "715": 0,
+    "716": 0,
+    "717": 0,
+    "718": 0,
+    "719": 0,
+    "720": 0,
+    "721": 0,
+    "722": 0,
+    "723": [
       976,
       976,
       977,
@@ -6587,10 +6587,10 @@
       979,
       979
     ],
-    "blue_ice": 1,
-    "conduit": 980,
-    "bamboo_sapling": 0,
-    "bamboo": [
+    "724": 1,
+    "725": 980,
+    "726": 0,
+    "727": [
       981,
       982,
       983,
@@ -6604,11 +6604,11 @@
       991,
       992
     ],
-    "potted_bamboo": 498,
-    "void_air": 0,
-    "cave_air": 0,
-    "bubble_column": 0,
-    "polished_granite_stairs": [
+    "728": 498,
+    "729": 0,
+    "730": 0,
+    "731": 0,
+    "732": [
       24,
       24,
       25,
@@ -6690,7 +6690,7 @@
       42,
       42
     ],
-    "smooth_red_sandstone_stairs": [
+    "733": [
       24,
       24,
       25,
@@ -6772,7 +6772,7 @@
       42,
       42
     ],
-    "mossy_stone_brick_stairs": [
+    "734": [
       24,
       24,
       25,
@@ -6854,7 +6854,7 @@
       42,
       42
     ],
-    "polished_diorite_stairs": [
+    "735": [
       24,
       24,
       25,
@@ -6936,7 +6936,7 @@
       42,
       42
     ],
-    "mossy_cobblestone_stairs": [
+    "736": [
       24,
       24,
       25,
@@ -7018,7 +7018,7 @@
       42,
       42
     ],
-    "end_stone_brick_stairs": [
+    "737": [
       24,
       24,
       25,
@@ -7100,7 +7100,7 @@
       42,
       42
     ],
-    "stone_stairs": [
+    "738": [
       24,
       24,
       25,
@@ -7182,7 +7182,7 @@
       42,
       42
     ],
-    "smooth_sandstone_stairs": [
+    "739": [
       24,
       24,
       25,
@@ -7264,7 +7264,7 @@
       42,
       42
     ],
-    "smooth_quartz_stairs": [
+    "740": [
       24,
       24,
       25,
@@ -7346,7 +7346,7 @@
       42,
       42
     ],
-    "granite_stairs": [
+    "741": [
       24,
       24,
       25,
@@ -7428,7 +7428,7 @@
       42,
       42
     ],
-    "andesite_stairs": [
+    "742": [
       24,
       24,
       25,
@@ -7510,7 +7510,7 @@
       42,
       42
     ],
-    "red_nether_brick_stairs": [
+    "743": [
       24,
       24,
       25,
@@ -7592,7 +7592,7 @@
       42,
       42
     ],
-    "polished_andesite_stairs": [
+    "744": [
       24,
       24,
       25,
@@ -7674,7 +7674,7 @@
       42,
       42
     ],
-    "diorite_stairs": [
+    "745": [
       24,
       24,
       25,
@@ -7756,7 +7756,7 @@
       42,
       42
     ],
-    "polished_granite_slab": [
+    "746": [
       773,
       773,
       774,
@@ -7764,7 +7764,7 @@
       1,
       1
     ],
-    "smooth_red_sandstone_slab": [
+    "747": [
       773,
       773,
       774,
@@ -7772,7 +7772,7 @@
       1,
       1
     ],
-    "mossy_stone_brick_slab": [
+    "748": [
       773,
       773,
       774,
@@ -7780,7 +7780,7 @@
       1,
       1
     ],
-    "polished_diorite_slab": [
+    "749": [
       773,
       773,
       774,
@@ -7788,7 +7788,7 @@
       1,
       1
     ],
-    "mossy_cobblestone_slab": [
+    "750": [
       773,
       773,
       774,
@@ -7796,7 +7796,7 @@
       1,
       1
     ],
-    "end_stone_brick_slab": [
+    "751": [
       773,
       773,
       774,
@@ -7804,7 +7804,7 @@
       1,
       1
     ],
-    "smooth_sandstone_slab": [
+    "752": [
       773,
       773,
       774,
@@ -7812,7 +7812,7 @@
       1,
       1
     ],
-    "smooth_quartz_slab": [
+    "753": [
       773,
       773,
       774,
@@ -7820,7 +7820,7 @@
       1,
       1
     ],
-    "granite_slab": [
+    "754": [
       773,
       773,
       774,
@@ -7828,7 +7828,7 @@
       1,
       1
     ],
-    "andesite_slab": [
+    "755": [
       773,
       773,
       774,
@@ -7836,7 +7836,7 @@
       1,
       1
     ],
-    "red_nether_brick_slab": [
+    "756": [
       773,
       773,
       774,
@@ -7844,7 +7844,7 @@
       1,
       1
     ],
-    "polished_andesite_slab": [
+    "757": [
       773,
       773,
       774,
@@ -7852,7 +7852,7 @@
       1,
       1
     ],
-    "diorite_slab": [
+    "758": [
       773,
       773,
       774,
@@ -7860,7 +7860,7 @@
       1,
       1
     ],
-    "brick_wall": [
+    "759": [
       993,
       994,
       995,
@@ -8186,7 +8186,7 @@
       1152,
       1153
     ],
-    "prismarine_wall": [
+    "760": [
       1154,
       1155,
       1156,
@@ -8512,7 +8512,7 @@
       1313,
       1314
     ],
-    "red_sandstone_wall": [
+    "761": [
       1315,
       1316,
       1317,
@@ -8838,7 +8838,7 @@
       1474,
       1475
     ],
-    "mossy_stone_brick_wall": [
+    "762": [
       1476,
       1477,
       1478,
@@ -9164,7 +9164,7 @@
       1635,
       1636
     ],
-    "granite_wall": [
+    "763": [
       1637,
       1638,
       1639,
@@ -9490,7 +9490,7 @@
       1796,
       1797
     ],
-    "stone_brick_wall": [
+    "764": [
       1798,
       1799,
       1800,
@@ -9816,7 +9816,7 @@
       1957,
       1958
     ],
-    "mud_brick_wall": [
+    "765": [
       1959,
       1960,
       1961,
@@ -10142,7 +10142,7 @@
       2118,
       2119
     ],
-    "nether_brick_wall": [
+    "766": [
       2120,
       2121,
       2122,
@@ -10468,7 +10468,7 @@
       2279,
       2280
     ],
-    "andesite_wall": [
+    "767": [
       2281,
       2282,
       2283,
@@ -10794,7 +10794,7 @@
       2440,
       2441
     ],
-    "red_nether_brick_wall": [
+    "768": [
       2442,
       2443,
       2444,
@@ -11120,7 +11120,7 @@
       2601,
       2602
     ],
-    "sandstone_wall": [
+    "769": [
       2603,
       2604,
       2605,
@@ -11446,7 +11446,7 @@
       2762,
       2763
     ],
-    "end_stone_brick_wall": [
+    "770": [
       2764,
       2765,
       2766,
@@ -11772,7 +11772,7 @@
       2923,
       2924
     ],
-    "diorite_wall": [
+    "771": [
       2925,
       2926,
       2927,
@@ -12098,14 +12098,14 @@
       3084,
       3085
     ],
-    "scaffolding": 3086,
-    "loom": 1,
-    "barrel": 1,
-    "smoker": 1,
-    "blast_furnace": 1,
-    "cartography_table": 1,
-    "fletching_table": 1,
-    "grindstone": [
+    "772": 3086,
+    "773": 1,
+    "774": 1,
+    "775": 1,
+    "776": 1,
+    "777": 1,
+    "778": 1,
+    "779": [
       3087,
       3087,
       3088,
@@ -12119,10 +12119,10 @@
       3094,
       3094
     ],
-    "lectern": 3095,
-    "smithing_table": 1,
-    "stonecutter": 3096,
-    "bell": [
+    "780": 3095,
+    "781": 1,
+    "782": 3096,
+    "783": [
       3097,
       3097,
       3097,
@@ -12156,45 +12156,45 @@
       3105,
       3105
     ],
-    "lantern": [
+    "784": [
       3106,
       3106,
       3107,
       3107
     ],
-    "soul_lantern": [
+    "785": [
       3106,
       3106,
       3107,
       3107
     ],
-    "campfire": 3108,
-    "soul_campfire": 3108,
-    "sweet_berry_bush": 0,
-    "warped_stem": 1,
-    "stripped_warped_stem": 1,
-    "warped_hyphae": 1,
-    "stripped_warped_hyphae": 1,
-    "warped_nylium": 1,
-    "warped_fungus": 0,
-    "warped_wart_block": 1,
-    "warped_roots": 0,
-    "nether_sprouts": 0,
-    "crimson_stem": 1,
-    "stripped_crimson_stem": 1,
-    "crimson_hyphae": 1,
-    "stripped_crimson_hyphae": 1,
-    "crimson_nylium": 1,
-    "crimson_fungus": 0,
-    "shroomlight": 1,
-    "weeping_vines": 0,
-    "weeping_vines_plant": 0,
-    "twisting_vines": 0,
-    "twisting_vines_plant": 0,
-    "crimson_roots": 0,
-    "crimson_planks": 1,
-    "warped_planks": 1,
-    "crimson_slab": [
+    "786": 3108,
+    "787": 3108,
+    "788": 0,
+    "789": 1,
+    "790": 1,
+    "791": 1,
+    "792": 1,
+    "793": 1,
+    "794": 0,
+    "795": 1,
+    "796": 0,
+    "797": 0,
+    "798": 1,
+    "799": 1,
+    "800": 1,
+    "801": 1,
+    "802": 1,
+    "803": 0,
+    "804": 1,
+    "805": 0,
+    "806": 0,
+    "807": 0,
+    "808": 0,
+    "809": 0,
+    "810": 1,
+    "811": 1,
+    "812": [
       773,
       773,
       774,
@@ -12202,7 +12202,7 @@
       1,
       1
     ],
-    "warped_slab": [
+    "813": [
       773,
       773,
       774,
@@ -12210,9 +12210,9 @@
       1,
       1
     ],
-    "crimson_pressure_plate": 0,
-    "warped_pressure_plate": 0,
-    "crimson_fence": [
+    "814": 0,
+    "815": 0,
+    "816": [
       3109,
       3110,
       3109,
@@ -12246,7 +12246,7 @@
       3123,
       3124
     ],
-    "warped_fence": [
+    "817": [
       3125,
       3126,
       3125,
@@ -12280,7 +12280,7 @@
       3139,
       3140
     ],
-    "crimson_trapdoor": [
+    "818": [
       97,
       97,
       97,
@@ -12346,7 +12346,7 @@
       99,
       99
     ],
-    "warped_trapdoor": [
+    "819": [
       97,
       97,
       97,
@@ -12412,7 +12412,7 @@
       99,
       99
     ],
-    "crimson_fence_gate": [
+    "820": [
       0,
       0,
       138,
@@ -12446,7 +12446,7 @@
       139,
       139
     ],
-    "warped_fence_gate": [
+    "821": [
       0,
       0,
       138,
@@ -12480,7 +12480,7 @@
       139,
       139
     ],
-    "crimson_stairs": [
+    "822": [
       24,
       24,
       25,
@@ -12562,7 +12562,7 @@
       42,
       42
     ],
-    "warped_stairs": [
+    "823": [
       24,
       24,
       25,
@@ -12644,9 +12644,9 @@
       42,
       42
     ],
-    "crimson_button": 0,
-    "warped_button": 0,
-    "crimson_door": [
+    "824": 0,
+    "825": 0,
+    "826": [
       54,
       54,
       55,
@@ -12712,7 +12712,7 @@
       54,
       54
     ],
-    "warped_door": [
+    "827": [
       54,
       54,
       55,
@@ -12778,29 +12778,29 @@
       54,
       54
     ],
-    "crimson_sign": 0,
-    "warped_sign": 0,
-    "crimson_wall_sign": 0,
-    "warped_wall_sign": 0,
-    "structure_block": 1,
-    "jigsaw": 1,
-    "composter": 3141,
-    "target": 1,
-    "bee_nest": 1,
-    "beehive": 1,
-    "honey_block": 3142,
-    "honeycomb_block": 1,
-    "netherite_block": 1,
-    "ancient_debris": 1,
-    "crying_obsidian": 1,
-    "respawn_anchor": 1,
-    "potted_crimson_fungus": 498,
-    "potted_warped_fungus": 498,
-    "potted_crimson_roots": 498,
-    "potted_warped_roots": 498,
-    "lodestone": 1,
-    "blackstone": 1,
-    "blackstone_stairs": [
+    "828": 0,
+    "829": 0,
+    "830": 0,
+    "831": 0,
+    "832": 1,
+    "833": 1,
+    "834": 3141,
+    "835": 1,
+    "836": 1,
+    "837": 1,
+    "838": 3142,
+    "839": 1,
+    "840": 1,
+    "841": 1,
+    "842": 1,
+    "843": 1,
+    "844": 498,
+    "845": 498,
+    "846": 498,
+    "847": 498,
+    "848": 1,
+    "849": 1,
+    "850": [
       24,
       24,
       25,
@@ -12882,7 +12882,7 @@
       42,
       42
     ],
-    "blackstone_wall": [
+    "851": [
       3143,
       3144,
       3145,
@@ -13208,7 +13208,7 @@
       3302,
       3303
     ],
-    "blackstone_slab": [
+    "852": [
       773,
       773,
       774,
@@ -13216,11 +13216,11 @@
       1,
       1
     ],
-    "polished_blackstone": 1,
-    "polished_blackstone_bricks": 1,
-    "cracked_polished_blackstone_bricks": 1,
-    "chiseled_polished_blackstone": 1,
-    "polished_blackstone_brick_slab": [
+    "853": 1,
+    "854": 1,
+    "855": 1,
+    "856": 1,
+    "857": [
       773,
       773,
       774,
@@ -13228,7 +13228,7 @@
       1,
       1
     ],
-    "polished_blackstone_brick_stairs": [
+    "858": [
       24,
       24,
       25,
@@ -13310,7 +13310,7 @@
       42,
       42
     ],
-    "polished_blackstone_brick_wall": [
+    "859": [
       3304,
       3305,
       3306,
@@ -13636,8 +13636,8 @@
       3463,
       3464
     ],
-    "gilded_blackstone": 1,
-    "polished_blackstone_stairs": [
+    "860": 1,
+    "861": [
       24,
       24,
       25,
@@ -13719,7 +13719,7 @@
       42,
       42
     ],
-    "polished_blackstone_slab": [
+    "862": [
       773,
       773,
       774,
@@ -13727,9 +13727,9 @@
       1,
       1
     ],
-    "polished_blackstone_pressure_plate": 0,
-    "polished_blackstone_button": 0,
-    "polished_blackstone_wall": [
+    "863": 0,
+    "864": 0,
+    "865": [
       3465,
       3466,
       3467,
@@ -14055,10 +14055,10 @@
       3624,
       3625
     ],
-    "chiseled_nether_bricks": 1,
-    "cracked_nether_bricks": 1,
-    "quartz_bricks": 1,
-    "candle": [
+    "866": 1,
+    "867": 1,
+    "868": 1,
+    "869": [
       3626,
       3626,
       3626,
@@ -14076,7 +14076,7 @@
       3629,
       3629
     ],
-    "white_candle": [
+    "870": [
       3626,
       3626,
       3626,
@@ -14094,7 +14094,7 @@
       3629,
       3629
     ],
-    "orange_candle": [
+    "871": [
       3626,
       3626,
       3626,
@@ -14112,7 +14112,7 @@
       3629,
       3629
     ],
-    "magenta_candle": [
+    "872": [
       3626,
       3626,
       3626,
@@ -14130,7 +14130,7 @@
       3629,
       3629
     ],
-    "light_blue_candle": [
+    "873": [
       3626,
       3626,
       3626,
@@ -14148,7 +14148,7 @@
       3629,
       3629
     ],
-    "yellow_candle": [
+    "874": [
       3626,
       3626,
       3626,
@@ -14166,7 +14166,7 @@
       3629,
       3629
     ],
-    "lime_candle": [
+    "875": [
       3626,
       3626,
       3626,
@@ -14184,7 +14184,7 @@
       3629,
       3629
     ],
-    "pink_candle": [
+    "876": [
       3626,
       3626,
       3626,
@@ -14202,7 +14202,7 @@
       3629,
       3629
     ],
-    "gray_candle": [
+    "877": [
       3626,
       3626,
       3626,
@@ -14220,7 +14220,7 @@
       3629,
       3629
     ],
-    "light_gray_candle": [
+    "878": [
       3626,
       3626,
       3626,
@@ -14238,7 +14238,7 @@
       3629,
       3629
     ],
-    "cyan_candle": [
+    "879": [
       3626,
       3626,
       3626,
@@ -14256,7 +14256,7 @@
       3629,
       3629
     ],
-    "purple_candle": [
+    "880": [
       3626,
       3626,
       3626,
@@ -14274,7 +14274,7 @@
       3629,
       3629
     ],
-    "blue_candle": [
+    "881": [
       3626,
       3626,
       3626,
@@ -14292,7 +14292,7 @@
       3629,
       3629
     ],
-    "brown_candle": [
+    "882": [
       3626,
       3626,
       3626,
@@ -14310,7 +14310,7 @@
       3629,
       3629
     ],
-    "green_candle": [
+    "883": [
       3626,
       3626,
       3626,
@@ -14328,7 +14328,7 @@
       3629,
       3629
     ],
-    "red_candle": [
+    "884": [
       3626,
       3626,
       3626,
@@ -14346,7 +14346,7 @@
       3629,
       3629
     ],
-    "black_candle": [
+    "885": [
       3626,
       3626,
       3626,
@@ -14364,26 +14364,26 @@
       3629,
       3629
     ],
-    "candle_cake": 3630,
-    "white_candle_cake": 3630,
-    "orange_candle_cake": 3630,
-    "magenta_candle_cake": 3630,
-    "light_blue_candle_cake": 3630,
-    "yellow_candle_cake": 3630,
-    "lime_candle_cake": 3630,
-    "pink_candle_cake": 3630,
-    "gray_candle_cake": 3630,
-    "light_gray_candle_cake": 3630,
-    "cyan_candle_cake": 3630,
-    "purple_candle_cake": 3630,
-    "blue_candle_cake": 3630,
-    "brown_candle_cake": 3630,
-    "green_candle_cake": 3630,
-    "red_candle_cake": 3630,
-    "black_candle_cake": 3630,
-    "amethyst_block": 1,
-    "budding_amethyst": 1,
-    "amethyst_cluster": [
+    "886": 3630,
+    "887": 3630,
+    "888": 3630,
+    "889": 3630,
+    "890": 3630,
+    "891": 3630,
+    "892": 3630,
+    "893": 3630,
+    "894": 3630,
+    "895": 3630,
+    "896": 3630,
+    "897": 3630,
+    "898": 3630,
+    "899": 3630,
+    "900": 3630,
+    "901": 3630,
+    "902": 3630,
+    "903": 1,
+    "904": 1,
+    "905": [
       3631,
       3631,
       3632,
@@ -14397,7 +14397,7 @@
       3636,
       3636
     ],
-    "large_amethyst_bud": [
+    "906": [
       3637,
       3637,
       3638,
@@ -14411,7 +14411,7 @@
       3642,
       3642
     ],
-    "medium_amethyst_bud": [
+    "907": [
       3643,
       3643,
       3644,
@@ -14425,7 +14425,7 @@
       3648,
       3648
     ],
-    "small_amethyst_bud": [
+    "908": [
       3649,
       3649,
       3650,
@@ -14439,8 +14439,8 @@
       3654,
       3654
     ],
-    "tuff": 1,
-    "tuff_slab": [
+    "909": 1,
+    "910": [
       773,
       773,
       774,
@@ -14448,7 +14448,7 @@
       1,
       1
     ],
-    "tuff_stairs": [
+    "911": [
       24,
       24,
       25,
@@ -14530,7 +14530,7 @@
       42,
       42
     ],
-    "tuff_wall": [
+    "912": [
       3655,
       3656,
       3657,
@@ -14856,8 +14856,8 @@
       3814,
       3815
     ],
-    "polished_tuff": 1,
-    "polished_tuff_slab": [
+    "913": 1,
+    "914": [
       773,
       773,
       774,
@@ -14865,7 +14865,7 @@
       1,
       1
     ],
-    "polished_tuff_stairs": [
+    "915": [
       24,
       24,
       25,
@@ -14947,7 +14947,7 @@
       42,
       42
     ],
-    "polished_tuff_wall": [
+    "916": [
       3816,
       3817,
       3818,
@@ -15273,9 +15273,9 @@
       3975,
       3976
     ],
-    "chiseled_tuff": 1,
-    "tuff_bricks": 1,
-    "tuff_brick_slab": [
+    "917": 1,
+    "918": 1,
+    "919": [
       773,
       773,
       774,
@@ -15283,7 +15283,7 @@
       1,
       1
     ],
-    "tuff_brick_stairs": [
+    "920": [
       24,
       24,
       25,
@@ -15365,7 +15365,7 @@
       42,
       42
     ],
-    "tuff_brick_wall": [
+    "921": [
       3977,
       3978,
       3979,
@@ -15691,35 +15691,35 @@
       4136,
       4137
     ],
-    "chiseled_tuff_bricks": 1,
-    "calcite": 1,
-    "tinted_glass": 1,
-    "powder_snow": 0,
-    "sculk_sensor": 4138,
-    "calibrated_sculk_sensor": 4138,
-    "sculk": 1,
-    "sculk_vein": 0,
-    "sculk_catalyst": 1,
-    "sculk_shrieker": 4139,
-    "copper_block": 1,
-    "exposed_copper": 1,
-    "weathered_copper": 1,
-    "oxidized_copper": 1,
-    "copper_ore": 1,
-    "deepslate_copper_ore": 1,
-    "oxidized_cut_copper": 1,
-    "weathered_cut_copper": 1,
-    "exposed_cut_copper": 1,
-    "cut_copper": 1,
-    "oxidized_chiseled_copper": 1,
-    "weathered_chiseled_copper": 1,
-    "exposed_chiseled_copper": 1,
-    "chiseled_copper": 1,
-    "waxed_oxidized_chiseled_copper": 1,
-    "waxed_weathered_chiseled_copper": 1,
-    "waxed_exposed_chiseled_copper": 1,
-    "waxed_chiseled_copper": 1,
-    "oxidized_cut_copper_stairs": [
+    "922": 1,
+    "923": 1,
+    "924": 1,
+    "925": 0,
+    "926": 4138,
+    "927": 4138,
+    "928": 1,
+    "929": 0,
+    "930": 1,
+    "931": 4139,
+    "932": 1,
+    "933": 1,
+    "934": 1,
+    "935": 1,
+    "936": 1,
+    "937": 1,
+    "938": 1,
+    "939": 1,
+    "940": 1,
+    "941": 1,
+    "942": 1,
+    "943": 1,
+    "944": 1,
+    "945": 1,
+    "946": 1,
+    "947": 1,
+    "948": 1,
+    "949": 1,
+    "950": [
       24,
       24,
       25,
@@ -15801,7 +15801,7 @@
       42,
       42
     ],
-    "weathered_cut_copper_stairs": [
+    "951": [
       24,
       24,
       25,
@@ -15883,7 +15883,7 @@
       42,
       42
     ],
-    "exposed_cut_copper_stairs": [
+    "952": [
       24,
       24,
       25,
@@ -15965,7 +15965,7 @@
       42,
       42
     ],
-    "cut_copper_stairs": [
+    "953": [
       24,
       24,
       25,
@@ -16047,7 +16047,7 @@
       42,
       42
     ],
-    "oxidized_cut_copper_slab": [
+    "954": [
       773,
       773,
       774,
@@ -16055,7 +16055,7 @@
       1,
       1
     ],
-    "weathered_cut_copper_slab": [
+    "955": [
       773,
       773,
       774,
@@ -16063,7 +16063,7 @@
       1,
       1
     ],
-    "exposed_cut_copper_slab": [
+    "956": [
       773,
       773,
       774,
@@ -16071,7 +16071,7 @@
       1,
       1
     ],
-    "cut_copper_slab": [
+    "957": [
       773,
       773,
       774,
@@ -16079,15 +16079,15 @@
       1,
       1
     ],
-    "waxed_copper_block": 1,
-    "waxed_weathered_copper": 1,
-    "waxed_exposed_copper": 1,
-    "waxed_oxidized_copper": 1,
-    "waxed_oxidized_cut_copper": 1,
-    "waxed_weathered_cut_copper": 1,
-    "waxed_exposed_cut_copper": 1,
-    "waxed_cut_copper": 1,
-    "waxed_oxidized_cut_copper_stairs": [
+    "958": 1,
+    "959": 1,
+    "960": 1,
+    "961": 1,
+    "962": 1,
+    "963": 1,
+    "964": 1,
+    "965": 1,
+    "966": [
       24,
       24,
       25,
@@ -16169,7 +16169,7 @@
       42,
       42
     ],
-    "waxed_weathered_cut_copper_stairs": [
+    "967": [
       24,
       24,
       25,
@@ -16251,7 +16251,7 @@
       42,
       42
     ],
-    "waxed_exposed_cut_copper_stairs": [
+    "968": [
       24,
       24,
       25,
@@ -16333,7 +16333,7 @@
       42,
       42
     ],
-    "waxed_cut_copper_stairs": [
+    "969": [
       24,
       24,
       25,
@@ -16415,7 +16415,7 @@
       42,
       42
     ],
-    "waxed_oxidized_cut_copper_slab": [
+    "970": [
       773,
       773,
       774,
@@ -16423,7 +16423,7 @@
       1,
       1
     ],
-    "waxed_weathered_cut_copper_slab": [
+    "971": [
       773,
       773,
       774,
@@ -16431,7 +16431,7 @@
       1,
       1
     ],
-    "waxed_exposed_cut_copper_slab": [
+    "972": [
       773,
       773,
       774,
@@ -16439,7 +16439,7 @@
       1,
       1
     ],
-    "waxed_cut_copper_slab": [
+    "973": [
       773,
       773,
       774,
@@ -16447,7 +16447,7 @@
       1,
       1
     ],
-    "copper_door": [
+    "974": [
       54,
       54,
       55,
@@ -16513,7 +16513,7 @@
       54,
       54
     ],
-    "exposed_copper_door": [
+    "975": [
       54,
       54,
       55,
@@ -16579,7 +16579,7 @@
       54,
       54
     ],
-    "oxidized_copper_door": [
+    "976": [
       54,
       54,
       55,
@@ -16645,7 +16645,7 @@
       54,
       54
     ],
-    "weathered_copper_door": [
+    "977": [
       54,
       54,
       55,
@@ -16711,7 +16711,7 @@
       54,
       54
     ],
-    "waxed_copper_door": [
+    "978": [
       54,
       54,
       55,
@@ -16777,7 +16777,7 @@
       54,
       54
     ],
-    "waxed_exposed_copper_door": [
+    "979": [
       54,
       54,
       55,
@@ -16843,7 +16843,7 @@
       54,
       54
     ],
-    "waxed_oxidized_copper_door": [
+    "980": [
       54,
       54,
       55,
@@ -16909,7 +16909,7 @@
       54,
       54
     ],
-    "waxed_weathered_copper_door": [
+    "981": [
       54,
       54,
       55,
@@ -16975,7 +16975,7 @@
       54,
       54
     ],
-    "copper_trapdoor": [
+    "982": [
       97,
       97,
       97,
@@ -17041,7 +17041,7 @@
       99,
       99
     ],
-    "exposed_copper_trapdoor": [
+    "983": [
       97,
       97,
       97,
@@ -17107,7 +17107,7 @@
       99,
       99
     ],
-    "oxidized_copper_trapdoor": [
+    "984": [
       97,
       97,
       97,
@@ -17173,7 +17173,7 @@
       99,
       99
     ],
-    "weathered_copper_trapdoor": [
+    "985": [
       97,
       97,
       97,
@@ -17239,7 +17239,7 @@
       99,
       99
     ],
-    "waxed_copper_trapdoor": [
+    "986": [
       97,
       97,
       97,
@@ -17305,7 +17305,7 @@
       99,
       99
     ],
-    "waxed_exposed_copper_trapdoor": [
+    "987": [
       97,
       97,
       97,
@@ -17371,7 +17371,7 @@
       99,
       99
     ],
-    "waxed_oxidized_copper_trapdoor": [
+    "988": [
       97,
       97,
       97,
@@ -17437,7 +17437,7 @@
       99,
       99
     ],
-    "waxed_weathered_copper_trapdoor": [
+    "989": [
       97,
       97,
       97,
@@ -17503,23 +17503,23 @@
       99,
       99
     ],
-    "copper_grate": 1,
-    "exposed_copper_grate": 1,
-    "weathered_copper_grate": 1,
-    "oxidized_copper_grate": 1,
-    "waxed_copper_grate": 1,
-    "waxed_exposed_copper_grate": 1,
-    "waxed_weathered_copper_grate": 1,
-    "waxed_oxidized_copper_grate": 1,
-    "copper_bulb": 1,
-    "exposed_copper_bulb": 1,
-    "weathered_copper_bulb": 1,
-    "oxidized_copper_bulb": 1,
-    "waxed_copper_bulb": 1,
-    "waxed_exposed_copper_bulb": 1,
-    "waxed_weathered_copper_bulb": 1,
-    "waxed_oxidized_copper_bulb": 1,
-    "lightning_rod": [
+    "990": 1,
+    "991": 1,
+    "992": 1,
+    "993": 1,
+    "994": 1,
+    "995": 1,
+    "996": 1,
+    "997": 1,
+    "998": 1,
+    "999": 1,
+    "1000": 1,
+    "1001": 1,
+    "1002": 1,
+    "1003": 1,
+    "1004": 1,
+    "1005": 1,
+    "1006": [
       904,
       904,
       904,
@@ -17545,7 +17545,7 @@
       906,
       906
     ],
-    "pointed_dripstone": [
+    "1007": [
       4140,
       4141,
       4142,
@@ -17567,16 +17567,16 @@
       4158,
       4159
     ],
-    "dripstone_block": 1,
-    "cave_vines": 0,
-    "cave_vines_plant": 0,
-    "spore_blossom": 0,
-    "azalea": 4160,
-    "flowering_azalea": 4160,
-    "moss_carpet": 775,
-    "pink_petals": 0,
-    "moss_block": 1,
-    "big_dripleaf": [
+    "1008": 1,
+    "1009": 0,
+    "1010": 0,
+    "1011": 0,
+    "1012": 4160,
+    "1013": 4160,
+    "1014": 775,
+    "1015": 0,
+    "1016": 1,
+    "1017": [
       4161,
       4161,
       4162,
@@ -17610,14 +17610,14 @@
       0,
       0
     ],
-    "big_dripleaf_stem": 0,
-    "small_dripleaf": 0,
-    "hanging_roots": 0,
-    "rooted_dirt": 1,
-    "mud": 4164,
-    "deepslate": 1,
-    "cobbled_deepslate": 1,
-    "cobbled_deepslate_stairs": [
+    "1018": 0,
+    "1019": 0,
+    "1020": 0,
+    "1021": 1,
+    "1022": 4164,
+    "1023": 1,
+    "1024": 1,
+    "1025": [
       24,
       24,
       25,
@@ -17699,7 +17699,7 @@
       42,
       42
     ],
-    "cobbled_deepslate_slab": [
+    "1026": [
       773,
       773,
       774,
@@ -17707,7 +17707,7 @@
       1,
       1
     ],
-    "cobbled_deepslate_wall": [
+    "1027": [
       4165,
       4166,
       4167,
@@ -18033,8 +18033,8 @@
       4324,
       4325
     ],
-    "polished_deepslate": 1,
-    "polished_deepslate_stairs": [
+    "1028": 1,
+    "1029": [
       24,
       24,
       25,
@@ -18116,7 +18116,7 @@
       42,
       42
     ],
-    "polished_deepslate_slab": [
+    "1030": [
       773,
       773,
       774,
@@ -18124,7 +18124,7 @@
       1,
       1
     ],
-    "polished_deepslate_wall": [
+    "1031": [
       4326,
       4327,
       4328,
@@ -18450,8 +18450,8 @@
       4485,
       4486
     ],
-    "deepslate_tiles": 1,
-    "deepslate_tile_stairs": [
+    "1032": 1,
+    "1033": [
       24,
       24,
       25,
@@ -18533,7 +18533,7 @@
       42,
       42
     ],
-    "deepslate_tile_slab": [
+    "1034": [
       773,
       773,
       774,
@@ -18541,7 +18541,7 @@
       1,
       1
     ],
-    "deepslate_tile_wall": [
+    "1035": [
       4487,
       4488,
       4489,
@@ -18867,8 +18867,8 @@
       4646,
       4647
     ],
-    "deepslate_bricks": 1,
-    "deepslate_brick_stairs": [
+    "1036": 1,
+    "1037": [
       24,
       24,
       25,
@@ -18950,7 +18950,7 @@
       42,
       42
     ],
-    "deepslate_brick_slab": [
+    "1038": [
       773,
       773,
       774,
@@ -18958,7 +18958,7 @@
       1,
       1
     ],
-    "deepslate_brick_wall": [
+    "1039": [
       4648,
       4649,
       4650,
@@ -19284,26 +19284,26 @@
       4807,
       4808
     ],
-    "chiseled_deepslate": 1,
-    "cracked_deepslate_bricks": 1,
-    "cracked_deepslate_tiles": 1,
-    "infested_deepslate": 1,
-    "smooth_basalt": 1,
-    "raw_iron_block": 1,
-    "raw_copper_block": 1,
-    "raw_gold_block": 1,
-    "potted_azalea_bush": 498,
-    "potted_flowering_azalea_bush": 498,
-    "ochre_froglight": 1,
-    "verdant_froglight": 1,
-    "pearlescent_froglight": 1,
-    "frogspawn": 0,
-    "reinforced_deepslate": 1,
-    "decorated_pot": 4809,
-    "crafter": 1,
-    "trial_spawner": 1,
-    "vault": 1,
-    "heavy_core": 4810
+    "1040": 1,
+    "1041": 1,
+    "1042": 1,
+    "1043": 1,
+    "1044": 1,
+    "1045": 1,
+    "1046": 1,
+    "1047": 1,
+    "1048": 498,
+    "1049": 498,
+    "1050": 1,
+    "1051": 1,
+    "1052": 1,
+    "1053": 0,
+    "1054": 1,
+    "1055": 4809,
+    "1056": 1,
+    "1057": 1,
+    "1058": 1,
+    "1059": 4810
   },
   "shapes": {
     "0": [],

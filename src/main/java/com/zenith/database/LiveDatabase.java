@@ -1,5 +1,6 @@
 package com.zenith.database;
 
+import lombok.Getter;
 import org.jdbi.v3.core.HandleConsumer;
 import org.redisson.api.RBoundedBlockingQueue;
 
@@ -7,14 +8,20 @@ import java.time.Instant;
 
 import static com.zenith.Shared.DATABASE_LOG;
 import static com.zenith.Shared.OBJECT_MAPPER;
-import static java.util.Objects.isNull;
 
 public abstract class LiveDatabase extends LockingDatabase {
 
-    protected RBoundedBlockingQueue<String> queue = null;
+    @Getter(lazy = true)
+    private final RBoundedBlockingQueue<String> queue = buildQueue();
 
     public LiveDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
+    }
+
+    private RBoundedBlockingQueue<String> buildQueue() {
+        final RBoundedBlockingQueue<String> q = redisClient.getRedissonClient().getBoundedBlockingQueue(getQueueKey());
+        q.trySetCapacity(500);
+        return q;
     }
 
     public void insert(final Instant instant, final Object pojo, final HandleConsumer query) {
@@ -29,16 +36,12 @@ public abstract class LiveDatabase extends LockingDatabase {
     // todo: refactor locking database class into hierarchy
 
     void liveQueueRunnable(Object pojo) {
-        if (isNull(queue)) {
-            queue = redisClient.getRedissonClient().getBoundedBlockingQueue(getQueueKey());
-            queue.trySetCapacity(500);
-        }
         try {
             String json = OBJECT_MAPPER.writeValueAsString(pojo);
-            queue.offerAsync(json).thenAcceptAsync((success) -> {
+            getQueue().offerAsync(json).thenAcceptAsync((success) -> {
                 if (!success) {
                     DATABASE_LOG.warn("{} reached capacity, flushing queue", getQueueKey());
-                    queue.clear();
+                    getQueue().clear();
                 }
             });
         } catch (final Exception e) {

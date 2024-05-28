@@ -9,7 +9,8 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import org.jetbrains.annotations.Nullable;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.CLIENT_LOG;
 
 public record ContainerClickAction(int slotId, ContainerActionType actionType, ContainerAction param) {
     public @Nullable ServerboundContainerClickPacket toPacket() {
@@ -53,7 +54,7 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                     // if both stacks are the same item, place one item from the mouse stack into clickStack
                     //   if clickStack is full, return null
                     if (mouseStack.getId() == clickStack.getId()) {
-                        if (clickStack.getAmount() == ITEMS.getItemData(clickStack.getId()).stackSize()) return null;
+                        if (clickStack.getAmount() == ItemRegistry.REGISTRY.get(clickStack.getId()).stackSize()) return null;
                         var newMouseStackAmount = mouseStack.getAmount() - 1;
                         predictedMouseStack = newMouseStackAmount == 0 ? Container.EMPTY_STACK : new ItemStack(mouseStack.getId(), mouseStack.getAmount() - 1, mouseStack.getDataComponents());
                         changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() + 1, clickStack.getDataComponents()));

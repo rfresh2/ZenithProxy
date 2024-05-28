@@ -1,7 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
-import com.zenith.Shared;
+import com.zenith.feature.items.ItemRegistry;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
@@ -21,15 +21,13 @@ public class SpectatorEntityPlayerHead extends SpectatorMob {
     // /summon minecraft:item_display ~ ~ ~ {item:{id:"minecraft:player_head",Count:1b,tag:{SkullOwner:"rfresh2"}}}
     // the uuid and textures get populated by the server usually. but in this case, we're the server
 
-    private final int playerHeadItemId = Shared.ITEMS.getItemId("player_head");
-
     @Override
     public ArrayList<EntityMetadata<?, ?>> getBaseEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
         final Map<DataComponentType<?>, DataComponent<?, ?>> dataComponentsMap = new HashMap<>();
         dataComponentsMap.put(DataComponentType.PROFILE, new ObjectDataComponent<GameProfile>(DataComponentType.PROFILE, spectatorProfile));
         final DataComponents dataComponents = new DataComponents(dataComponentsMap);
         return metadataListOf(
-            new ObjectEntityMetadata<>(23, MetadataType.ITEM, new ItemStack(playerHeadItemId, 1, dataComponents))
+            new ObjectEntityMetadata<>(23, MetadataType.ITEM, new ItemStack(ItemRegistry.PLAYER_HEAD.id(), 1, dataComponents))
         );
     }
 

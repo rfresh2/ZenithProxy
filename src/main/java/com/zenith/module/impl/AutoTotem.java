@@ -8,6 +8,7 @@ import com.zenith.event.module.NoTotemsEvent;
 import com.zenith.event.module.PlayerTotemPopAlertEvent;
 import com.zenith.event.proxy.TotemPopEvent;
 import com.zenith.feature.items.ContainerClickAction;
+import com.zenith.feature.items.ItemRegistry;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.MoveToHotbarAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -24,7 +25,6 @@ import static java.util.Objects.nonNull;
 public class AutoTotem extends AbstractInventoryModule {
     private int delay = 0;
     private static final int MOVEMENT_PRIORITY = 1000;
-    private final int totemId = ITEMS.getItemId("totem_of_undying");
     private Instant lastNoTotemsAlert = Instant.EPOCH;
     private static final Duration noTotemsAlertCooldown = Duration.ofMinutes(30);
 
@@ -71,7 +71,7 @@ public class AutoTotem extends AbstractInventoryModule {
         final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
             ItemStack itemStack = inventory.get(i);
-            if (nonNull(itemStack) && itemStack.getId() == totemId) {
+            if (nonNull(itemStack) && itemStack.getId() == ItemRegistry.TOTEM_OF_UNDYING.id()) {
                 var actionSlot = MoveToHotbarAction.OFF_HAND;
                 var action = new ContainerClickAction(i, ContainerActionType.MOVE_TO_HOTBAR_SLOT, actionSlot);
                 CLIENT_LOG.debug("[{}] Swapping totem to offhand {}", getClass().getSimpleName(), actionSlot.getId());
@@ -128,7 +128,7 @@ public class AutoTotem extends AbstractInventoryModule {
     private int countTotems() {
         var count = 0;
         for (ItemStack item : CACHE.getPlayerCache().getPlayerInventory()) {
-            if (item != Container.EMPTY_STACK && item.getId() == totemId)
+            if (item != Container.EMPTY_STACK && item.getId() == ItemRegistry.TOTEM_OF_UNDYING.id())
                 count++;
         }
         return count;
@@ -136,6 +136,6 @@ public class AutoTotem extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(ItemStack itemStack) {
-        return itemStack.getId() == totemId;
+        return itemStack.getId() == ItemRegistry.TOTEM_OF_UNDYING.id();
     }
 }

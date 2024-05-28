@@ -21,7 +21,6 @@ import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.entities.EntityDataManager;
 import com.zenith.feature.food.FoodManager;
-import com.zenith.feature.items.ItemsManager;
 import com.zenith.feature.items.PlayerInventoryManager;
 import com.zenith.feature.language.LanguageManager;
 import com.zenith.feature.map.MapBlockColorManager;
@@ -91,7 +90,6 @@ public class Shared {
     public static final InGameCommandManager IN_GAME_COMMAND;
     public static final CommandManager COMMAND;
     public static final FoodManager FOOD;
-    public static final ItemsManager ITEMS;
     public static final PlayerInventoryManager INVENTORY;
     public static final VcApi VC;
     public static final MojangApi MOJANG;
@@ -224,7 +222,6 @@ public class Shared {
             IN_GAME_COMMAND = new InGameCommandManager();
             COMMAND = new CommandManager();
             FOOD = new FoodManager();
-            ITEMS = new ItemsManager();
             INVENTORY = new PlayerInventoryManager();
             VC = new VcApi();
             MOJANG = new MojangApi();

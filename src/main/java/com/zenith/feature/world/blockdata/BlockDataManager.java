@@ -8,12 +8,10 @@ import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zenith.feature.world.CollisionBox;
 import com.zenith.util.math.MathHelper;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
-import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -23,43 +21,20 @@ import java.util.List;
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class BlockDataManager {
-    private final Int2IntOpenHashMap blockStateIdToBlockId = new Int2IntOpenHashMap(26684);
-    private final Int2ObjectOpenHashMap<Block> blockIdToBlockData = new Int2ObjectOpenHashMap<>(1060);
+    private final Int2ObjectOpenHashMap<Block> blockStateIdToBlock = new Int2ObjectOpenHashMap(26684);
     private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(26684);
-
 
     public BlockDataManager() {
         init();
     }
 
     private void init() {
-        final Object2IntOpenHashMap<String> blockNameToId = new Object2IntOpenHashMap<>(1003);
-        try (JsonParser blocksParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream("/mcdata/blocks.json"))) {
-            TreeNode node = blocksParser.getCodec().readTree(blocksParser);
-            for (Iterator<JsonNode> it = ((ArrayNode) node).elements(); it.hasNext(); ) {
-                final var e = it.next();
-                int blockId = e.get("id").asInt();
-                String blockName = e.get("name").asText();
-                blockNameToId.put(blockName, blockId);
-                int minStateId = e.get("minStateId").asInt();
-                int maxStateId = e.get("maxStateId").asInt();
-                int mapColorId = e.get("mapColorId").asInt();
-                String boundingBoxType = e.get("boundingBox").asText();
-                boolean isBlock = boundingBoxType.equals("block"); // empty otherwise
-                for (int i = minStateId; i <= maxStateId; i++) {
-                    blockStateIdToBlockId.put(i, blockId);
-                }
-                String blockEntityTypeStr = e.get("blockEntityType").asText();
-                BlockEntityType blockEntityType = null;
-                if (!blockEntityTypeStr.isEmpty()) {
-                    blockEntityType = BlockEntityType.valueOf(blockEntityTypeStr);
-                }
-                blockIdToBlockData.put(blockId, new Block(blockId, blockName, isBlock, minStateId, maxStateId, mapColorId, blockEntityType));
+        for (Int2ObjectMap.Entry<Block> entry : BlockRegistry.REGISTRY.getIdMap().int2ObjectEntrySet()) {
+            var block = entry.getValue();
+            for (int i = block.minStateId(); i <= block.maxStateId(); i++) {
+                blockStateIdToBlock.put(i, block);
             }
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
         }
-
         try (JsonParser shapesParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream(
             "/mcdata/blockCollisionShapes.json"))) {
             final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
@@ -86,7 +61,7 @@ public class BlockDataManager {
             ObjectNode blocksNode = (ObjectNode) node.get("blocks");
             for (Iterator<String> it = blocksNode.fieldNames(); it.hasNext(); ) {
                 String blockName = it.next();
-                int blockId = blockNameToId.getInt(blockName);
+                int blockId = Integer.parseInt(blockName);
                 JsonNode shapeNode = blocksNode.get(blockName);
                 final IntArrayList shapeIds = new IntArrayList(2);
                 if (shapeNode.isInt()) {
@@ -100,7 +75,7 @@ public class BlockDataManager {
                     }
                 } else throw new RuntimeException("Unexpected shape node type: " + shapeNode.getNodeType());
 
-                Block blockData = blockIdToBlockData.get(blockId);
+                Block blockData = BlockRegistry.REGISTRY.get(blockId);
                 for (int i = blockData.minStateId(); i <= blockData.maxStateId(); i++) {
                     int nextShapeId = shapeIds.getInt(0);
                     if (shapeIds.size() > 1)
@@ -109,16 +84,16 @@ public class BlockDataManager {
                     blockStateIdToCollisionBoxes.put(i, collisionBoxes);
                 }
             }
-            DataPalette.GLOBAL_PALETTE_BITS_PER_ENTRY = MathHelper.log2Ceil(blockStateIdToBlockId.size());
+            DataPalette.GLOBAL_PALETTE_BITS_PER_ENTRY = MathHelper.log2Ceil(blockStateIdToBlock.size());
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public @Nullable Block getBlockDataFromBlockStateId(int blockStateId) {
-        Block blockData2 = blockIdToBlockData.get(blockStateIdToBlockId.get(blockStateId));
-        if (blockData2 == blockIdToBlockData.defaultReturnValue()) return null;
-        return blockData2;
+        Block blockData = blockStateIdToBlock.get(blockStateId);
+        if (blockData == blockStateIdToBlock.defaultReturnValue()) return null;
+        return blockData;
     }
 
     public @Nullable List<CollisionBox> getCollisionBoxesFromBlockStateId(int blockStateId) {
@@ -127,21 +102,13 @@ public class BlockDataManager {
         return collisionBoxes;
     }
 
-    // not efficient, avoid calling outside initialization logic
-    public Block getBlockFromName(final String name) {
-        return blockIdToBlockData.values().stream()
-            .filter(block -> block.name().equals(name))
-            .findAny()
-            .orElseThrow();
-    }
-
     public float getBlockSlipperiness(Block block) {
         float slippy = 0.6f;
-        if (block.name().equals("ice")) slippy = 0.98f;
-        if (block.name().equals("slime_block")) slippy = 0.8f;
-        if (block.name().equals("packed_ice")) slippy = 0.98f;
-        if (block.name().equals("frosted_ice")) slippy = 0.98f;
-        if (block.name().equals("blue_ice")) slippy = 0.989f;
+        if (block == BlockRegistry.ICE) slippy = 0.98f;
+        if (block == BlockRegistry.SLIME_BLOCK) slippy = 0.8f;
+        if (block == BlockRegistry.PACKED_ICE) slippy = 0.98f;
+        if (block == BlockRegistry.FROSTED_ICE) slippy = 0.98f;
+        if (block == BlockRegistry.BLUE_ICE) slippy = 0.989f;
         return slippy;
     }
 }

@@ -1,12 +1,13 @@
 package com.zenith.feature.world;
 
-import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
 import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.blockdata.BlockRegistry;
 import com.zenith.feature.world.blockdata.BlockState;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import lombok.experimental.UtilityClass;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class World {
     }
 
     public BlockState getBlockState(final int x, final int y, final int z) {
-        return new BlockState(getBlockAtBlockPos(new BlockPos(x, y, z)), getBlockStateId(x, y, z), new BlockPos(x, y, z));
+        return new BlockState(getBlockAtBlockPos(x, y, z), getBlockStateId(x, y, z));
     }
 
     public Block getBlockAtBlockPos(final BlockPos blockPos) {
@@ -60,7 +61,7 @@ public class World {
     public Block getBlockAtBlockPos(final int x, final int y, final int z) {
         Block blockData = BLOCK_DATA.getBlockDataFromBlockStateId(getBlockStateId(x, y, z));
         if (blockData == null)
-            return Block.AIR;
+            return BlockRegistry.AIR;
         return blockData;
     }
 
@@ -92,12 +93,9 @@ public class World {
         return false;
     }
 
-    private static final int waterId = BLOCK_DATA.getBlockFromName("water").id();
-    private static final int bubbleColumnId = BLOCK_DATA.getBlockFromName("bubble_column").id();
-
     public boolean isWater(Block block) {
-        return block.id() == waterId
-            || block.id() == bubbleColumnId;
+        return block == BlockRegistry.WATER
+            || block == BlockRegistry.BUBBLE_COLUMN;
     }
 
     public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {

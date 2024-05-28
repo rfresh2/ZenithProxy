@@ -3,6 +3,7 @@ package com.zenith.module.impl;
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.items.ItemData;
+import com.zenith.feature.items.ItemRegistry;
 import com.zenith.module.Module;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -55,7 +56,7 @@ public class AutoArmor extends Module {
                 delay = 5;
                 return;
             }
-            final ArmorMaterial currentArmorMaterial = getArmorMaterial(ITEMS.getItemData(currentItemStack.getId()));
+            final ArmorMaterial currentArmorMaterial = getArmorMaterial(ItemRegistry.REGISTRY.get(currentItemStack.getId()));
             if (currentArmorMaterial == null || bestArmorInInventory.material().compareTo(currentArmorMaterial) > 0) {
                 INVENTORY.invActionReq(this, INVENTORY.swapSlots(bestArmorInInventory.index(), invSlotId), MOVEMENT_PRIORITY);
                 delay = 5;
@@ -77,7 +78,7 @@ public class AutoArmor extends Module {
             if (inv.size() <= i) break;
             final ItemStack stack = inv.get(i);
             if (stack == Container.EMPTY_STACK) continue;
-            final ItemData itemData = ITEMS.getItemData(stack.getId());
+            final ItemData itemData = ItemRegistry.REGISTRY.get(stack.getId());
             if (itemData == null) continue;
             if (!itemData.name().toLowerCase().endsWith(equipmentTypeItemNameSuffix)) continue;
             final ArmorMaterial armorMaterial = getArmorMaterial(itemData);

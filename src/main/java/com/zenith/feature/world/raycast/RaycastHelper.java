@@ -7,6 +7,7 @@ import com.zenith.feature.world.CollisionBox;
 import com.zenith.feature.world.LocalizedCollisionBox;
 import com.zenith.feature.world.World;
 import com.zenith.feature.world.blockdata.Block;
+import com.zenith.feature.world.blockdata.BlockRegistry;
 import com.zenith.util.math.MathHelper;
 import org.cloudburstmc.math.vector.Vector3d;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.object.Direction;
@@ -40,7 +41,7 @@ public class RaycastHelper {
         int resY = MathHelper.floorI(startY);
         int resZ = MathHelper.floorI(startZ);
         Block block = getBlockAt(resX, resY, resZ, includeFluids);
-        if (!block.equals(Block.AIR)) {
+        if (!block.equals(BlockRegistry.AIR)) {
             return new BlockRaycastResult(true, resX, resY, resZ, Direction.DOWN, block);
         }
 
@@ -76,7 +77,7 @@ public class RaycastHelper {
 
             final int blockStateId = World.getBlockStateId(resX, resY, resZ);
             block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-            if (!block.equals(Block.AIR)) {
+            if (!block.equals(BlockRegistry.AIR)) {
                 var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, blockStateId, block, includeFluids);
                 if (raycastResult.hit()) return raycastResult;
             }
@@ -142,7 +143,7 @@ public class RaycastHelper {
     private static Block getBlockAt(final int x, final int y, final int z, final boolean includeFluids) {
         var block = World.getBlockAtBlockPos(x, y, z);
         if (!includeFluids && World.isWater(block)) {
-            return Block.AIR;
+            return BlockRegistry.AIR;
         } else {
             return block;
         }
@@ -158,7 +159,7 @@ public class RaycastHelper {
         Block block,
         boolean includeFluids) {
         if (!includeFluids && World.isWater(block)) {
-            return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, Block.AIR);
+            return new BlockRaycastResult(false, 0, 0, 0, Direction.UP, BlockRegistry.AIR);
         }
         final List<CollisionBox> collisionBoxes = BLOCK_DATA.getCollisionBoxesFromBlockStateId(blockStateId);
         if (collisionBoxes == null || collisionBoxes.isEmpty()) return BlockRaycastResult.miss();

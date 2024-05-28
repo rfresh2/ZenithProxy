@@ -7,10 +7,11 @@ plugins {
     id("org.graalvm.buildtools.native") version "0.10.2"
     // todo: use official version when https://github.com/johnrengelman/shadow/pull/879 is merged
     id("io.github.goooler.shadow") version "8.1.7"
+    `maven-publish`
 }
 
 group = "com.zenith"
-version = "1.0.0"
+version = "1.20.6"
 
 val javaVersion22 = JavaLanguageVersion.of(22)
 val javaVersion21 = JavaLanguageVersion.of(21)
@@ -69,7 +70,7 @@ val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 val lombokVersion = "1.18.32"
 val postgresVersion = "42.7.3"
-val nettyVersion = "4.1.109.Final"
+val nettyVersion = "4.1.110.Final"
 val fastutilVersion = "edaf36bfd3"
 val jdbiVersion = "3.45.1"
 
@@ -210,7 +211,7 @@ tasks {
         }
     }
     processResources{ finalizedBy(commitHashTask, releaseTagTask) }
-    jar { enabled = false }
+    jar { enabled = true }
     shadowJar {
         from(collectReachabilityMetadata)
         archiveBaseName.set(project.name)
@@ -270,7 +271,6 @@ tasks {
         dependsOn(jarBuildTask)
     }
     generateResourcesConfigFile { dependsOn(shadowJar) }
-    build { dependsOn(shadowJar) }
 }
 
 graalvmNative {
@@ -310,4 +310,23 @@ graalvmNative {
         }
     }
     metadataRepository { enabled = true }
+}
+
+/** Publishing stuff for dataGenerator subproject **/
+// avoiding publishing the shaded jar. we need a few adhoc workarounds
+// jar task also needs to be enabled above for publishing task to work correct
+val javaComponent = components["java"] as AdhocComponentWithVariants
+javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
+    skip()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.zenith"
+            artifactId = "ZenithProxy"
+            version = project.version.toString()
+            from(javaComponent)
+        }
+    }
 }

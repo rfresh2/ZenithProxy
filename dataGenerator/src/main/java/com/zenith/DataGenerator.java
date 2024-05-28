@@ -26,13 +26,13 @@ public class DataGenerator implements DedicatedServerModInitializer {
         .create();
     public static List<Generator> generators = asList(
         new BlockCollisionShapes(),
-        new Blocks(),
-        new DimensionTypes(),
-        new Entities(),
-        new Food(),
-        new Items(),
+        new DimensionTypesRegistryGenerator(),
+        new EntityRegistryGenerator(),
+        new FoodRegistryGenerator(),
         new Language(),
-        new MapColorIdToColor()
+        new MapColorIdToColor(),
+        new BlockRegistryGenerator(),
+        new ItemRegistryGenerator()
     );
     public static MinecraftServer SERVER_INSTANCE;
 
