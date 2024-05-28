@@ -229,7 +229,7 @@
   }, {
     "pattern":"\\Qlogback.xml\\E"
   }, {
-      "pattern": "\\Qmcdata/blockCollisionShapes.json\\E"
+    "pattern":"\\Qmcdata/blockCollisionShapes.json\\E"
   }, {
     "pattern":"\\Qmcdata/language.json\\E"
   }, {
