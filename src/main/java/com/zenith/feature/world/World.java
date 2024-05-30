@@ -65,14 +65,17 @@ public class World {
 
     public List<LocalizedCollisionBox> getSolidBlockCollisionBoxes(final LocalizedCollisionBox cb) {
         final List<LocalizedCollisionBox> boundingBoxList = new ArrayList<>();
-        for (long blockPos : getBlockPosLongListInCollisionBox(cb)) {
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
             var x = BlockPos.getX(blockPos);
             var y = BlockPos.getY(blockPos);
             var z = BlockPos.getZ(blockPos);
             final BlockState blockState = getBlockState(blockPos);
             if (blockState.isSolidBlock()) {
-                for (CollisionBox collisionBox : blockState.getCollisionBoxes()) {
-                    boundingBoxList.add(new LocalizedCollisionBox(collisionBox, x, y, z));
+                List<CollisionBox> collisionBoxes = blockState.getCollisionBoxes();
+                for (int j = 0; j < collisionBoxes.size(); j++) {
+                    boundingBoxList.add(new LocalizedCollisionBox(collisionBoxes.get(j), x, y, z));
                 }
             }
         }
@@ -82,7 +85,9 @@ public class World {
     public boolean isTouchingWater(final LocalizedCollisionBox cb) {
         // adjust collision box slightly to avoid false positives at borders?
         final LocalizedCollisionBox box = cb.stretch(-0.001, -0.001, -0.001);
-        for (long blockPos : getBlockPosLongListInCollisionBox(box)) {
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
             final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
             if (isWater(blockAtBlockPos))
                 if (BlockPos.getY(blockPos) + 1.0 >= box.getMinY())
@@ -134,7 +139,9 @@ public class World {
 
     public List<BlockState> getCollidingBlockStates(final LocalizedCollisionBox cb) {
         final List<BlockState> blockStates = new ArrayList<>(0);
-        for (long blockPos : getBlockPosLongListInCollisionBox(cb)) {
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
             var blockState = getBlockState(blockPos);
             if (blockState.id() == 0) continue; // air
             blockStates.add(blockState);
@@ -143,13 +150,15 @@ public class World {
     }
 
     public static boolean isSpaceEmpty(final LocalizedCollisionBox cb) {
-        for (long blockPos : getBlockPosLongListInCollisionBox(cb)) {
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
             var x = BlockPos.getX(blockPos);
             var y = BlockPos.getY(blockPos);
             var z = BlockPos.getZ(blockPos);
             var blockStateCBs = getBlockState(blockPos).getCollisionBoxes();
-            for (int i = 0; i < blockStateCBs.size(); i++) {
-                var localizedCB = new LocalizedCollisionBox(blockStateCBs.get(i), x, y, z);
+            for (int j = 0; j < blockStateCBs.size(); j++) {
+                var localizedCB = new LocalizedCollisionBox(blockStateCBs.get(j), x, y, z);
                 if (localizedCB.intersects(cb)) return false;
             }
         }
@@ -159,13 +168,15 @@ public class World {
     public static Optional<BlockPos> findSupportingBlockPos(final LocalizedCollisionBox cb) {
         BlockPos supportingBlock = null;
         double dist = Double.MAX_VALUE;
-        for (long blockPos2 : getBlockPosLongListInCollisionBox(cb)) {
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos2 = blockPosList.getLong(i);
             var blockStateCBs = getBlockState(blockPos2).getCollisionBoxes();
             var x = BlockPos.getX(blockPos2);
             var y = BlockPos.getY(blockPos2);
             var z = BlockPos.getZ(blockPos2);
-            for (int i = 0; i < blockStateCBs.size(); i++) {
-                var localizedCB = new LocalizedCollisionBox(blockStateCBs.get(i), x, y, z);
+            for (int j = 0; j < blockStateCBs.size(); j++) {
+                var localizedCB = new LocalizedCollisionBox(blockStateCBs.get(j), x, y, z);
                 if (localizedCB.intersects(cb)) {
                     final double curDist = MathHelper.distanceSq3d(x, y, z, cb.getX(), cb.getY(), cb.getZ());
                     if (curDist < dist || curDist == dist && (supportingBlock == null || BlockPos.compare(supportingBlock.getX(), supportingBlock.getY(), supportingBlock.getZ(), x, y, z) < 0)) {
