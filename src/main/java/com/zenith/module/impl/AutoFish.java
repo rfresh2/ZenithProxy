@@ -68,7 +68,7 @@ public class AutoFish extends AbstractInventoryModule {
             if (event.getOwnerEntityId() != CACHE.getPlayerCache().getEntityId()) return;
             fishHookEntityId = event.fishHookObject().getEntityId();
         } catch (final Exception e) {
-            MODULE_LOG.error("Failed to handle EntityFishHookSpawnEvent", e);
+            error("Failed to handle EntityFishHookSpawnEvent", e);
         }
     }
 

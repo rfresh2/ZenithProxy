@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.MODULE_LOG;
 
 /**
  * Module system base class.
@@ -69,5 +70,39 @@ public abstract class Module {
                 clientSession.sendAsync(packet);
             }
         }
+    }
+
+    private final String moduleLogPrefix = "[" + this.getClass().getSimpleName() + "] ";
+
+    public void info(String msg) {
+        MODULE_LOG.info(moduleLogPrefix + msg);
+    }
+
+    public void info(String msg, Object... args) {
+        MODULE_LOG.info(moduleLogPrefix + msg, args);
+    }
+
+    public void error(String msg) {
+        MODULE_LOG.error(moduleLogPrefix + msg);
+    }
+
+    public void error(String msg, Object... args) {
+        MODULE_LOG.error(moduleLogPrefix + msg, args);
+    }
+
+    public void debug(String msg) {
+        MODULE_LOG.debug(moduleLogPrefix + msg);
+    }
+
+    public void debug(String msg, Object... args) {
+        MODULE_LOG.debug(moduleLogPrefix + msg, args);
+    }
+
+    public void warn(String msg) {
+        MODULE_LOG.warn(msg);
+    }
+
+    public void warn(String msg, Object... args) {
+        MODULE_LOG.warn(moduleLogPrefix + msg, args);
     }
 }

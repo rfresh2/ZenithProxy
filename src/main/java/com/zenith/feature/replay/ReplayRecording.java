@@ -3,6 +3,7 @@ package com.zenith.feature.replay;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zenith.Proxy;
 import com.zenith.feature.spectator.SpectatorPacketProvider;
+import com.zenith.module.impl.ReplayMod;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -133,7 +134,7 @@ public class ReplayRecording implements Closeable {
         try {
             writeToFile(time, packet, session, protocolState);
         } catch (final Throwable e) {
-            MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
+            MODULE.get(ReplayMod.class).error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
         }
     }
 
@@ -159,7 +160,7 @@ public class ReplayRecording implements Closeable {
             packetBuf.setInt(lenIndex, packetBodySize); // write actual length
             packetBuf.readBytes(writerStream, packetSize);
         } catch (final Throwable e) {
-            MODULE_LOG.error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
+            MODULE.get(ReplayMod.class).error("Failed to write packet {}", packet.getClass().getSimpleName(), e);
         } finally {
             packetBuf.release();
         }
@@ -174,7 +175,7 @@ public class ReplayRecording implements Closeable {
                     throw new Exception("");
                 }
             } catch (final Exception e) {
-                MODULE_LOG.error("Failed waiting for termination of ReplayMod PacketHandler executor", e);
+                MODULE.get(ReplayMod.class).error("Failed waiting for termination of ReplayMod PacketHandler executor", e);
             }
         }
         if (writerStream != null) {

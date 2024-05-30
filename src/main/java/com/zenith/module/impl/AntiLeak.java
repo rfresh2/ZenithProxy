@@ -55,7 +55,7 @@ public class AntiLeak extends Module {
         } else
             event.cancel();
         if (event.isCancelled()) {
-            MODULE_LOG.info("AntiLeak cancelled chat message: " + message);
+            info("Cancelled chat message: " + message);
             if (Proxy.getInstance().hasActivePlayer())
                 Proxy.getInstance().getCurrentPlayer().get()
                     .sendAsyncAlert("&cAntiLeak Cancelled Chat");

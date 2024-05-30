@@ -40,9 +40,9 @@ public class AutoDisconnect extends Module {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
             if (event.newHealth() <= CONFIG.client.extra.utility.actions.autoDisconnect.health) {
                 if (shouldDisconnect()) {
-                    MODULE_LOG.info("[AutoDisconnect] Health disconnect: {} < {}",
-                                    event.newHealth(),
-                                    CONFIG.client.extra.utility.actions.autoDisconnect.health);
+                    info("Health disconnect: {} < {}",
+                         event.newHealth(),
+                         CONFIG.client.extra.utility.actions.autoDisconnect.health);
                     EVENT_BUS.postAsync(new HealthAutoDisconnectEvent());
                     Proxy.getInstance().disconnect(AUTO_DISCONNECT);
                 }
@@ -64,7 +64,7 @@ public class AutoDisconnect extends Module {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
             ServerConnection currentConnection = Proxy.getInstance().getCurrentPlayer().get();
             if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
-                MODULE_LOG.info("[AutoDisconnect] Auto Client Disconnect");
+                info("Auto Client Disconnect");
                 Proxy.getInstance().disconnect();
             }
         }
@@ -78,7 +78,7 @@ public class AutoDisconnect extends Module {
                 || PLAYER_LISTS.getSpectatorWhitelist().contains(playerUUID)
             ) return;
             if (shouldDisconnect()) {
-                MODULE_LOG.info("[AutoDisconnect] Non-friended player seen: {}", event.playerEntry().getProfile());
+                info("Non-friended player seen: {}", event.playerEntry().getProfile());
                 Proxy.getInstance().disconnect(AUTO_DISCONNECT);
             }
         }
@@ -88,7 +88,7 @@ public class AutoDisconnect extends Module {
         if (Proxy.getInstance().hasActivePlayer()) {
             var whilePlayerConnected = CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected;
             if (!whilePlayerConnected)
-                MODULE_LOG.debug("[AutoDisconnect] Not disconnecting because a player is connected and whilePlayerConnected setting is disabled");
+                debug("Not disconnecting because a player is connected and whilePlayerConnected setting is disabled");
             return whilePlayerConnected;
         }
         return true;

@@ -107,7 +107,7 @@ public class AutoTotem extends AbstractInventoryModule {
             var totemCount = countTotems();
             if (totemCount < 1) {
                 lastNoTotemsAlert = Instant.now();
-                MODULE_LOG.info("[AutoTotem] No Totems Left");
+                info("No Totems Left");
                 EVENT_BUS.postAsync(new NoTotemsEvent());
             }
         }
@@ -117,7 +117,7 @@ public class AutoTotem extends AbstractInventoryModule {
         if (totemPopEvent.entityId() == CACHE.getPlayerCache().getEntityId()) {
             var totemCount = countTotems();
             EVENT_BUS.postAsync(new PlayerTotemPopAlertEvent(totemCount));
-            MODULE_LOG.info("Player Totem Popped - {} remaining", totemCount);
+            info("Player Totem Popped - {} remaining", totemCount);
         }
     }
 
