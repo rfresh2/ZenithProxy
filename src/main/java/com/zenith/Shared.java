@@ -34,6 +34,7 @@ import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
 import com.zenith.via.ZenithViaInitializer;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,6 +143,24 @@ public class Shared {
         }
     }
 
+    public static @Nullable String getExecutableCommit() {
+        return readResourceTxt("zenith_commit.txt");
+    }
+
+    public static @Nullable String getExecutableReleaseVersion() {
+        return readResourceTxt("zenith_release.txt");
+    }
+
+    private static @Nullable String readResourceTxt(final String name) {
+        try (InputStream in = Shared.class.getResourceAsStream(name)) {
+            if (in == null) return null;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                return reader.readLine();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+    }
     public static void saveConfigAsync() {
         Thread.ofVirtual().name("Async Config Save").start(Shared::saveConfig);
     }

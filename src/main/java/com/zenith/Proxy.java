@@ -122,6 +122,15 @@ public class Proxy {
         loadConfig();
         loadLaunchConfig();
         DEFAULT_LOG.info("Starting ZenithProxy-{}", LAUNCH_CONFIG.version);
+        @Nullable String exeReleaseVersion = getExecutableReleaseVersion();
+        if (exeReleaseVersion == null) {
+            DEFAULT_LOG.warn("Detected unofficial ZenithProxy development build!");
+        } else if (!LAUNCH_CONFIG.version.equals(exeReleaseVersion)) {
+            DEFAULT_LOG.error("launch_config.json version and actual ZenithProxy version do not match!");
+            if (LAUNCH_CONFIG.auto_update)
+                DEFAULT_LOG.error("AutoUpdater is enabled but will break!");
+            DEFAULT_LOG.error("Use the official launcher: https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3");
+        }
         initEventHandlers();
         try {
             if (CONFIG.debug.clearOldLogs) clearOldLogs();
