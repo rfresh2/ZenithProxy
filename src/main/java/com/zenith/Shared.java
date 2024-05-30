@@ -26,8 +26,7 @@ import com.zenith.feature.world.Pathing;
 import com.zenith.mc.block.BlockDataManager;
 import com.zenith.mc.dimension.DimensionDataManager;
 import com.zenith.mc.entity.EntityDataManager;
-import com.zenith.mc.food.FoodManager;
-import com.zenith.mc.language.LanguageManager;
+import com.zenith.mc.language.TranslationRegistryInitializer;
 import com.zenith.mc.map.MapBlockColorManager;
 import com.zenith.module.ModuleManager;
 import com.zenith.network.server.handler.player.InGameCommandManager;
@@ -35,14 +34,10 @@ import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
 import com.zenith.via.ZenithViaInitializer;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -89,7 +84,6 @@ public class Shared {
     public static final TerminalManager TERMINAL;
     public static final InGameCommandManager IN_GAME_COMMAND;
     public static final CommandManager COMMAND;
-    public static final FoodManager FOOD;
     public static final PlayerInventoryManager INVENTORY;
     public static final VcApi VC;
     public static final MojangApi MOJANG;
@@ -221,7 +215,6 @@ public class Shared {
             TERMINAL = new TerminalManager();
             IN_GAME_COMMAND = new InGameCommandManager();
             COMMAND = new CommandManager();
-            FOOD = new FoodManager();
             INVENTORY = new PlayerInventoryManager();
             VC = new VcApi();
             MOJANG = new MojangApi();
@@ -231,10 +224,7 @@ public class Shared {
             MINOTAR = new MinotarApi();
             PRIOBAN = new PriobanApi();
             VIA_INITIALIZER = new ZenithViaInitializer();
-            final LanguageManager languageManager = new LanguageManager();
-            TranslationRegistry translationRegistry = TranslationRegistry.create(Key.key("minecraft"));
-            translationRegistry.registerAll(Locale.ENGLISH, languageManager.getLanguageDataMap());
-            GlobalTranslator.translator().addSource(translationRegistry);
+            TranslationRegistryInitializer.registerAllTranslations();
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to initialize!", e);
             throw e;

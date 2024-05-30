@@ -3,6 +3,8 @@ package com.zenith.module.impl;
 import com.zenith.Proxy;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientBotTick;
+import com.zenith.mc.food.FoodRegistry;
+import com.zenith.mc.food.FoodData;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 
@@ -97,6 +99,7 @@ public class AutoEat extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
-        return FOOD.isSafeFood(itemStack.getId());
+        FoodData foodData = FoodRegistry.REGISTRY.get(itemStack.getId());
+        return foodData != null && foodData.isSafeFood();
     }
 }
