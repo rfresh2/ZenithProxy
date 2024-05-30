@@ -121,9 +121,9 @@ dependencies {
     shade("com.github.rfresh2.fastutil:long-object-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:int-int-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:reference-object-maps:$fastutilVersion")
-    shade("net.raphimc:ViaLoader:3.0.0-20240517.153411-1")
-    shade("com.viaversion:viaversion:5.0.0-20240521.184911-15")
-    shade("com.viaversion:viabackwards:5.0.0-20240521.111710-6")
+    shade("net.raphimc:ViaLoader:3.0.0-20240523.160714-2") // TODO
+    shade("com.viaversion:viaversion:5.0.0-20240529.144926-26")
+    shade("com.viaversion:viabackwards:5.0.0-20240528.085310-10")
     shade("org.jline:jline:3.26.1")
     shade("org.jline:jline-terminal-jansi:3.26.1")
     shade("ar.com.hjg:pngj:2.1.0")
