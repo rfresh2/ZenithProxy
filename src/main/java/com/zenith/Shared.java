@@ -26,7 +26,6 @@ import com.zenith.feature.world.Pathing;
 import com.zenith.mc.block.BlockDataManager;
 import com.zenith.mc.dimension.DimensionDataManager;
 import com.zenith.mc.entity.EntityDataManager;
-import com.zenith.mc.food.FoodManager;
 import com.zenith.mc.language.LanguageManager;
 import com.zenith.mc.map.MapBlockColorManager;
 import com.zenith.module.ModuleManager;
@@ -89,7 +88,6 @@ public class Shared {
     public static final TerminalManager TERMINAL;
     public static final InGameCommandManager IN_GAME_COMMAND;
     public static final CommandManager COMMAND;
-    public static final FoodManager FOOD;
     public static final PlayerInventoryManager INVENTORY;
     public static final VcApi VC;
     public static final MojangApi MOJANG;
@@ -221,7 +219,6 @@ public class Shared {
             TERMINAL = new TerminalManager();
             IN_GAME_COMMAND = new InGameCommandManager();
             COMMAND = new CommandManager();
-            FOOD = new FoodManager();
             INVENTORY = new PlayerInventoryManager();
             VC = new VcApi();
             MOJANG = new MojangApi();
