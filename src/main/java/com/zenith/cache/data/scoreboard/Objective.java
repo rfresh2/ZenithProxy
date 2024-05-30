@@ -1,7 +1,5 @@
 package com.zenith.cache.data.scoreboard;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
@@ -12,6 +10,8 @@ import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.ObjectiveAction;
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.ScoreType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetObjectivePacket;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 @Data
@@ -24,7 +24,7 @@ public class Objective {
     protected ScoreType scoreType;
     protected NumberFormat numberFormat;
 
-    protected final Object2ObjectMap<String, Score> scores = new Object2ObjectOpenHashMap<>();
+    protected final Map<String, Score> scores = new ConcurrentHashMap<>();
 
     public void addPackets(Consumer<Packet> consumer) {
         consumer.accept(new ClientboundSetObjectivePacket(
