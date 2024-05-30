@@ -1,6 +1,5 @@
 package com.zenith.module.impl;
 
-import com.zenith.Proxy;
 import com.zenith.event.module.ClientTickEvent;
 import com.zenith.event.module.ReplayStartedEvent;
 import com.zenith.event.module.ReplayStoppedEvent;
@@ -101,11 +100,7 @@ public class ReplayMod extends Module {
         try {
             this.replayRecording.startRecording();
             EVENT_BUS.postAsync(new ReplayStartedEvent());
-            var connections = Proxy.getInstance().getActiveConnections().getArray();
-            for (int i = 0; i < connections.length; i++) {
-                var connection = connections[i];
-                connection.sendAsyncAlert("&cReplay recording started");
-            }
+            inGameAlert("&cReplay recording started");
         } catch (final Exception e) {
             error("Failed to start recording", e);
             disable();
@@ -126,11 +121,7 @@ public class ReplayMod extends Module {
         } else {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
-        var connections = Proxy.getInstance().getActiveConnections().getArray();
-        for (int i = 0; i < connections.length; i++) {
-            var connection = connections[i];
-            connection.sendAsyncAlert("&cReplay recording stopped");
-        }
+        inGameAlert("&cReplay recording stopped");
     }
 
     public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {

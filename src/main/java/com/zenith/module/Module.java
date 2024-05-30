@@ -105,4 +105,12 @@ public abstract class Module {
     public void warn(String msg, Object... args) {
         MODULE_LOG.warn(moduleLogPrefix + msg, args);
     }
+
+    public void inGameAlert(String minedown) {
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.sendAsyncAlert(minedown);
+        }
+    }
 }
