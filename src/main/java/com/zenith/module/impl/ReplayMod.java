@@ -28,7 +28,7 @@ public class ReplayMod extends Module {
     private final PacketHandlerCodec codec = new ReplayModPacketHandlerCodec(this, Integer.MIN_VALUE, "replay-mod");
     private final Path replayDirectory = Paths.get("replays");
     private ReplayRecording replayRecording = new ReplayRecording(replayDirectory);
-    private final ReplayModPersistentEventListener persistentEventListener = new ReplayModPersistentEventListener();
+    private final ReplayModPersistentEventListener persistentEventListener = new ReplayModPersistentEventListener(this);
 
     public ReplayMod() {
         super();
@@ -67,7 +67,7 @@ public class ReplayMod extends Module {
         if (startT == 0L) return;
         if (CONFIG.client.extra.replayMod.maxRecordingTimeMins <= 0) return;
         if (System.currentTimeMillis() - ((long) CONFIG.client.extra.replayMod.maxRecordingTimeMins * 60 * 1000) > startT) {
-            MODULE_LOG.info("Stopping ReplayMod recording due to max recording time");
+            info("Stopping recording due to max recording time");
             disable();
         }
     }
@@ -76,7 +76,7 @@ public class ReplayMod extends Module {
         try {
             replayRecording.handleInboundPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
-            MODULE_LOG.error("[ReplayMod] Failed to handle inbound packet", e);
+            error("Failed to handle inbound packet", e);
         }
     }
 
@@ -84,7 +84,7 @@ public class ReplayMod extends Module {
         try {
             replayRecording.handleOutgoingPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
-            MODULE_LOG.error("[ReplayMod] Failed to handle outgoing packet", e);
+            error("Failed to handle outgoing packet", e);
         }
     }
 
@@ -96,7 +96,7 @@ public class ReplayMod extends Module {
      * Consumers should call enable/disable instead of start/stop recording
      */
     private void startRecording() {
-        MODULE_LOG.info("Starting ReplayMod recording");
+        info("Starting recording");
         this.replayRecording = new ReplayRecording(replayDirectory);
         try {
             this.replayRecording.startRecording();
@@ -107,21 +107,21 @@ public class ReplayMod extends Module {
                 connection.sendAsyncAlert("&cReplay recording started");
             }
         } catch (final Exception e) {
-            MODULE_LOG.error("Failed to start ReplayMod recording", e);
+            error("Failed to start recording", e);
             disable();
         }
     }
 
     private void stopRecording() {
-        MODULE_LOG.info("Stopping ReplayMod recording");
+        info("Stopping recording");
         try {
             this.replayRecording.close();
         } catch (final Exception e) {
-            MODULE_LOG.error("Failed to save ReplayMod recording", e);
+            error("Failed to save recording", e);
         }
         var file = replayRecording.getReplayFile();
         if (file.exists()) {
-            MODULE_LOG.info("ReplayMod recording saved to {}", file.getPath());
+            info("Recording saved to {}", file.getPath());
             EVENT_BUS.postAsync(new ReplayStoppedEvent(replayRecording.getReplayFile()));
         } else {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
@@ -135,7 +135,7 @@ public class ReplayMod extends Module {
 
     public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
-            MODULE_LOG.info("Stopping ReplayMod recording due to player disconnect");
+            info("Stopping recording due to player disconnect");
             disable();
         }
     }
@@ -144,6 +144,11 @@ public class ReplayMod extends Module {
      * Event listeners even when the module is disabled
      */
     public static class ReplayModPersistentEventListener {
+        private final ReplayMod instance;
+
+        public ReplayModPersistentEventListener(ReplayMod instance) {
+            this.instance = instance;
+        }
 
         public void subscribeEvents() {
             EVENT_BUS.subscribe(
@@ -154,7 +159,7 @@ public class ReplayMod extends Module {
 
         public void handleProxyClientConnectedEvent(final ProxyClientConnectedEvent event) {
             if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
-                MODULE_LOG.info("Starting ReplayMod recording because player connected");
+                instance.info("Starting recording because player connected");
                 MODULE.get(ReplayMod.class).enable();
             }
         }

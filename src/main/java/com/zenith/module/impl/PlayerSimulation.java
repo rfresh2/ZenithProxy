@@ -655,7 +655,7 @@ public class PlayerSimulation extends Module {
         var lastAccepted = CACHE.getPlayerCache().getLastTeleportAccepted();
         var lastReceived = CACHE.getPlayerCache().getLastTeleportReceived();
         if (lastAccepted < lastReceived) {
-            MODULE_LOG.warn("Detected teleport desync, resyncing. lastAccepted: {}, lastReceived: {}", lastAccepted, lastReceived);
+            warn("Detected teleport desync, resyncing. lastAccepted: {}, lastReceived: {}", lastAccepted, lastReceived);
             sendClientPacketAsync(new ServerboundAcceptTeleportationPacket(lastAccepted + 1));
             sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(
                 onGround,

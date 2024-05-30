@@ -74,7 +74,7 @@ public class ActiveHours extends Module {
         for (Instant activeTime : activeTimes) {
             if (nowPlusQueueWait.isAfter(activeTime.minus(timeRange))
                 && nowPlusQueueWait.isBefore(activeTime.plus(timeRange))) {
-                MODULE_LOG.info("ActiveHours triggered for time: {}", activeTime);
+                info("Connect triggered for registered time: {}", activeTime);
                 EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
                 this.lastActiveHoursConnect = Instant.now();
                 proxy.disconnect(SYSTEM_DISCONNECT);
