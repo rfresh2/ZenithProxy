@@ -4845,7 +4845,7 @@
   "merchant.title": "{0} - {1}",
   "merchant.trades": "Trades",
   "mirror.front_back": "↑ ↓",
-  "mirror.left_right": "�? →",
+  "mirror.left_right": "← →",
   "mirror.none": "|",
   "mount.onboard": "Press {0} to Dismount",
   "multiplayer.applyingPack": "Applying resource pack",
