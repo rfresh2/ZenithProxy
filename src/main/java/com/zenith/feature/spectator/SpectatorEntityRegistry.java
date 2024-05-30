@@ -2,11 +2,12 @@ package com.zenith.feature.spectator;
 
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.feature.spectator.entity.mob.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.zenith.Shared.SERVER_LOG;
 import static java.util.Objects.isNull;
@@ -15,7 +16,7 @@ public final class SpectatorEntityRegistry {
 
     private SpectatorEntityRegistry() {}
 
-    static final Object2ObjectOpenHashMap<String, SpectatorEntity> spectatorEntityMap = new Object2ObjectOpenHashMap<>();
+    static final Map<String, SpectatorEntity> spectatorEntityMap = new ConcurrentHashMap<>();
 
     static {
         spectatorEntityMap.put("cat", new SpectatorEntityCat());

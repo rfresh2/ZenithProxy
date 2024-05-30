@@ -1,11 +1,11 @@
 package com.zenith.mc.dimension;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DimensionDataManager {
-    private final Object2ObjectOpenHashMap<String, DimensionData> dimensionNameToData = new Object2ObjectOpenHashMap<>(4);
+    private final Map<String, DimensionData> dimensionNameToData = new ConcurrentHashMap<>(4);
 
     public DimensionDataManager() {
         init();
@@ -22,9 +22,7 @@ public class DimensionDataManager {
     }
 
     public DimensionData getDimensionData(final String name) {
-        var data = dimensionNameToData.get(name);
-        if (data == dimensionNameToData.defaultReturnValue()) return null;
-        return data;
+        return dimensionNameToData.get(name);
     }
 
     public Collection<String> dimensionNames() {
