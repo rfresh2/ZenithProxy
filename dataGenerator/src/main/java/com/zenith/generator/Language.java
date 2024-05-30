@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.zenith.DataGenerator;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
@@ -17,13 +18,13 @@ public class Language implements Generator {
     @Override
     public void generate() {
         try {
-            String rawJson = new String(Language.class.getResourceAsStream("/assets/minecraft/lang/en_us.json").readAllBytes());
+            String rawJson = new String(Language.class.getResourceAsStream("/assets/minecraft/lang/en_us.json").readAllBytes(), StandardCharsets.UTF_8);
             Map<String, String> json = (Map<String, String>) DataGenerator.gson.fromJson(rawJson, TypeToken.getParameterized(Map.class, String.class, String.class));
 
             // Transform MC's language map values into java MessageFormat objects
             json.replaceAll((k, v) -> convertToMessageFormat(v));
 
-            byte[] bytes = DataGenerator.gson.toJson(json).getBytes();
+            byte[] bytes = DataGenerator.gson.toJson(json).getBytes(StandardCharsets.UTF_8);
             Files.write(
                 DataGenerator.outputFile("language.json").toPath(),
                 bytes,
