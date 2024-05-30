@@ -205,6 +205,10 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20to1.20.2.nbt\\E"
   }, {
+    "pattern":"\\Qcom/zenith/zenith_release.txt\\E"
+  }, {
+    "pattern":"\\Qcom/zenith/zenith_commit.txt\\E"
+  }, {
     "pattern":"\\Qcommons-logging.properties\\E"
   }, {
     "pattern":"\\Qdeath_message_mobs.schema\\E"
@@ -264,10 +268,6 @@
     "pattern":"\\Qservericon.png\\E"
   }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
-  }, {
-    "pattern":"\\Qzenith_commit.txt\\E"
-  }, {
-    "pattern":"\\Qzenith_release.txt\\E"
   }, {
     "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"
   }, {
