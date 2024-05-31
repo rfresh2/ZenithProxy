@@ -5,6 +5,7 @@ import com.viaversion.nbt.mini.MNBT;
 import com.viaversion.nbt.mini.MNBTWriter;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.Proxy;
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.dimension.DimensionData;
@@ -41,8 +42,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -373,12 +372,13 @@ public class ChunkCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
+    public void reset(CacheResetType type) {
+        // chunk reset, i.e. from changing worlds
         this.cache.clear();
         this.isRaining = false;
         this.thunderStrength = 0.0f;
         this.rainStrength = 0.0f;
-        if (full) {
+        if (type == CacheResetType.FULL) {
             this.dimensionType = 0;
             resetDimensionRegistry();
             this.worldName = null;

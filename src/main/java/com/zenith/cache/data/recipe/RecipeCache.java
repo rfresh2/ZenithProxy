@@ -1,5 +1,6 @@
 package com.zenith.cache.data.recipe;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Data;
@@ -68,8 +69,8 @@ public class RecipeCache implements CachedData {
     }
 
     @Override
-    public synchronized void reset(final boolean full) {
-        if (full) {
+    public synchronized void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
             this.recipeRegistry.clear();
             this.knownRecipes.clear();
             this.displayedRecipes.clear();

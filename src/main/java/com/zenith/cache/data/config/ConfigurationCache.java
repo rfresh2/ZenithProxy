@@ -1,5 +1,6 @@
 package com.zenith.cache.data.config;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
@@ -41,8 +42,8 @@ public class ConfigurationCache implements CachedData {
     }
 
     @Override
-    public void reset(final boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL) {
             this.registryEntries.clear();
             this.enabledFeatures = new String[]{"minecraft:vanilla"};
             this.resourcePacks = new ConcurrentHashMap<>();

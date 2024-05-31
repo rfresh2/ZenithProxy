@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public interface CachedData {
     void getPackets(@NonNull Consumer<Packet> consumer);
 
-    void reset(boolean full);
+    void reset(CacheResetType type);
 
     default String getSendingMessage()  {
         return null;

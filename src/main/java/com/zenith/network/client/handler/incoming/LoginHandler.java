@@ -1,6 +1,7 @@
 package com.zenith.network.client.handler.incoming;
 
 import com.zenith.Proxy;
+import com.zenith.cache.CacheResetType;
 import com.zenith.event.proxy.PlayerOnlineEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
@@ -20,16 +21,8 @@ import static java.util.Arrays.asList;
 public class LoginHandler implements PacketHandler<ClientboundLoginPacket, ClientSession> {
     @Override
     public ClientboundLoginPacket apply(@NonNull ClientboundLoginPacket packet, @NonNull ClientSession session) {
+        CACHE.reset(CacheResetType.LOGIN);
         CACHE.getSectionCountProvider().updateDimension(packet.getCommonPlayerSpawnInfo());
-        // todo: handle join game server switches more accurately to vanilla
-        //  https://discord.com/channels/1127460556710883391/1127461501960208465/1197657407631937536
-        var currentProfile = CACHE.getProfileCache().getProfile();
-        var currentServerBrand = CACHE.getChunkCache().getServerBrandRaw();
-        var registryEntries = CACHE.getConfigurationCache().getRegistryEntries();
-        CACHE.reset(true);
-        CACHE.getProfileCache().setProfile(currentProfile);
-        CACHE.getChunkCache().setServerBrand(currentServerBrand);
-        CACHE.getConfigurationCache().setRegistryEntries(registryEntries);
         CACHE.getPlayerCache()
             .setHardcore(packet.isHardcore())
             .setEntityId(packet.getEntityId())
@@ -53,8 +46,6 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
 
         session.send(new ServerboundClientInformationPacket(
             "en_US",
-            // todo: maybe set this to a config.
-            //  or figure out how we don't overwrite this for clients when they connect due to metadata cache
             25,
             ChatVisibility.FULL,
             true,

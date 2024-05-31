@@ -1,5 +1,6 @@
 package com.zenith.cache.data.stats;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -45,9 +46,11 @@ public class StatisticsCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
-        this.statistics.clear();
-        this.advancements.clear();
-        this.progress.clear();
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
+            this.statistics.clear();
+            this.advancements.clear();
+            this.progress.clear();
+        }
     }
 }

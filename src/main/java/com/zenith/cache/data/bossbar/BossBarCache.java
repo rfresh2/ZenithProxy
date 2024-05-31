@@ -1,5 +1,6 @@
 package com.zenith.cache.data.bossbar;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.network.packet.Packet;
@@ -20,7 +21,9 @@ public class BossBarCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
+    public void reset(CacheResetType type) {
+        // these technically only reset in the vanilla client on full resets
+        // really don't want to deal with any zombie bars tho so let's err on the side of caution by always resetting
         this.bossBars.clear();
     }
 

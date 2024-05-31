@@ -2,6 +2,7 @@ package com.zenith.cache.data.entity;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
@@ -48,10 +49,12 @@ public class EntityCache implements CachedData {
 
 
     @Override
-    public void reset(boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
             this.entities.clear();
         } else {
+            // unload all entities
+            // defer self-player reset logic to PlayerCache
             this.entities.keySet().removeIf(i -> i != CACHE.getPlayerCache().getEntityId());
         }
         this.recentlyRemovedPlayers.invalidateAll();

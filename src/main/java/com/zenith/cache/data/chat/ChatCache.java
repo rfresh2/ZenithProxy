@@ -1,5 +1,6 @@
 package com.zenith.cache.data.chat;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
@@ -25,11 +26,13 @@ public class ChatCache implements CachedData {
     }
 
     @Override
-    public void reset(final boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.PROTOCOL_SWITCH || type == CacheResetType.FULL) {
             this.commandNodes = new CommandNode[0];
             this.firstCommandNodeIndex = 0;
-            this.lastChatTimestamp = 0L;
+            if (type == CacheResetType.FULL) {
+                this.lastChatTimestamp = 0L;
+            }
         }
     }
 }

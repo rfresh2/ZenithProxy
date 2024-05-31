@@ -1,5 +1,6 @@
 package com.zenith.cache.data.cookie;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import org.geysermc.mcprotocollib.network.packet.Packet;
@@ -57,8 +58,8 @@ public class CookieCache implements CachedData {
     }
 
     @Override
-    public void reset(final boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL) {
             cookies.clear();
         }
     }
