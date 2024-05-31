@@ -1,5 +1,6 @@
 package com.zenith.cache.data.tab;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,8 +42,8 @@ public class TabListCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
             this.tablist.clear();
             this.header = Component.text("");
             this.footer = Component.text("");

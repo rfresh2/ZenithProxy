@@ -50,11 +50,11 @@ public class DataCache {
         return Arrays.asList(spectatorPlayerCache, chunkCache, tabListCache, bossBarCache, entityCache, chatCache, mapDataCache, recipeCache, teamCache, scoreboardCache);
     }
 
-    public boolean reset(boolean full) {
-        CACHE_LOG.debug("Clearing " + (full ? "full" : "partial") +" cache...");
+    public boolean reset(CacheResetType type) {
+        CACHE_LOG.debug("Clearing cache using type: " + type.name().toLowerCase() + "...");
 
         try {
-            this.getAllData().forEach(d -> d.reset(full));
+            this.getAllData().forEach(d -> d.reset(type));
 
             CACHE_LOG.debug("Cache cleared.");
         } catch (Exception e) {

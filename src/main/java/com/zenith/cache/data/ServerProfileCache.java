@@ -1,6 +1,7 @@
 package com.zenith.cache.data;
 
 import com.github.steveice10.mc.auth.data.GameProfile;
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
 import lombok.Setter;
@@ -22,8 +23,8 @@ public class ServerProfileCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
-        if (full)   {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL)   {
             this.profile = null;
         }
     }

@@ -1,5 +1,6 @@
 package com.zenith.network.client.handler.incoming;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
@@ -42,8 +43,7 @@ public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundR
             EXECUTOR.schedule(this::spectatorRespawn, 3L, TimeUnit.SECONDS);
         }
         if (!Objects.equals(CACHE.getChunkCache().getCurrentDimension().name(), packet.getCommonPlayerSpawnInfo().getDimension())) {
-            CACHE.reset(false);
-            // only partial reset chunk and entity cache?
+            CACHE.reset(CacheResetType.RESPAWN);
         }
         CACHE.getPlayerCache()
             .setGameMode(packet.getCommonPlayerSpawnInfo().getGameMode())

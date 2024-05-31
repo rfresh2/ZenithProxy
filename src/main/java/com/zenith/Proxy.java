@@ -2,6 +2,7 @@ package com.zenith;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.github.steveice10.mc.auth.data.GameProfile;
+import com.zenith.cache.CacheResetType;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.NoOpAutoUpdater;
@@ -156,7 +157,7 @@ public class Proxy {
             MinecraftConstants.CHUNK_SECTION_COUNT_PROVIDER = CACHE.getSectionCountProvider();
             this.tcpManager = new TcpConnectionManager();
             this.startServer();
-            CACHE.reset(true);
+            CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
@@ -613,7 +614,7 @@ public class Proxy {
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {
-        CACHE.reset(true);
+        CACHE.reset(CacheResetType.FULL);
         this.disconnectTime = Instant.now();
         this.inQueue = false;
         this.queuePosition = 0;

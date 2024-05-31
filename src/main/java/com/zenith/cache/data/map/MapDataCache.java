@@ -1,5 +1,6 @@
 package com.zenith.cache.data.map;
 
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
@@ -36,8 +37,8 @@ public class MapDataCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL || type == CacheResetType.LOGIN || type == CacheResetType.PROTOCOL_SWITCH) {
             mapDataMap.clear();
         }
     }

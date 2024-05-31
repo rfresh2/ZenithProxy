@@ -1,6 +1,7 @@
 package com.zenith.cache.data;
 
 import com.zenith.Proxy;
+import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
@@ -114,11 +115,12 @@ public class PlayerCache implements CachedData {
     }
 
     @Override
-    public void reset(boolean full) {
-        if (full) {
+    public void reset(CacheResetType type) {
+        if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
             this.thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;
+            // server should reset our inventory contents through packets automatically on respawn?
             this.inventoryCache.reset();
             this.heldItemSlot = 0;
             this.doLimitedCrafting = false;

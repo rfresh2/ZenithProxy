@@ -205,9 +205,9 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20to1.20.2.nbt\\E"
   }, {
-    "pattern":"\\Qcom/zenith/zenith_release.txt\\E"
-  }, {
     "pattern":"\\Qcom/zenith/zenith_commit.txt\\E"
+  }, {
+    "pattern":"\\Qcom/zenith/zenith_release.txt\\E"
   }, {
     "pattern":"\\Qcommons-logging.properties\\E"
   }, {
