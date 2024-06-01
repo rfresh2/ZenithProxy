@@ -54,16 +54,6 @@ public class FoodRegistryGenerator extends RegistryGenerator<FoodData> {
     }
 
     @Override
-    public String dataNameMapper(final FoodData data) {
-        return data.name();
-    }
-
-    @Override
-    public int idMapper(final FoodData data) {
-        return data.id();
-    }
-
-    @Override
     public CodeBlock dataInitializer(final FoodData data) {
         return CodeBlock.of(
             "new $T($L, $S, $L, $Lf, $Lf, $L)",

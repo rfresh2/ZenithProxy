@@ -39,16 +39,6 @@ public class DimensionTypesRegistryGenerator extends RegistryGenerator<Dimension
     }
 
     @Override
-    public String dataNameMapper(final DimensionData data) {
-        return data.name();
-    }
-
-    @Override
-    public int idMapper(final DimensionData data) {
-        return data.id();
-    }
-
-    @Override
     public CodeBlock dataInitializer(final DimensionData data) {
         return CodeBlock.of("new $T($L, $S, $L, $L, $L)",
                             this.dataType,

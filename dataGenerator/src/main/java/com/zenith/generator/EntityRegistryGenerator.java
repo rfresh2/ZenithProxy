@@ -35,16 +35,6 @@ public class EntityRegistryGenerator extends RegistryGenerator<EntityData> {
     }
 
     @Override
-    public String dataNameMapper(final EntityData data) {
-        return data.name();
-    }
-
-    @Override
-    public int idMapper(final EntityData data) {
-        return data.id();
-    }
-
-    @Override
     public CodeBlock dataInitializer(final EntityData data) {
         return CodeBlock.of("new $T($L, $S, $Lf, $Lf, $T.$L)",
                             EntityData.class,

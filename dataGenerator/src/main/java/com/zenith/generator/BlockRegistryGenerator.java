@@ -46,16 +46,6 @@ public class BlockRegistryGenerator extends RegistryGenerator<Block> {
     }
 
     @Override
-    public String dataNameMapper(final Block data) {
-        return data.name();
-    }
-
-    @Override
-    public int idMapper(final Block data) {
-        return data.id();
-    }
-
-    @Override
     public CodeBlock dataInitializer(final Block data) {
         if (data.blockEntityType() == null) {
             return CodeBlock.of(
