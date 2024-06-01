@@ -27,16 +27,6 @@ public class ItemRegistryGenerator extends RegistryGenerator<ItemData> {
     }
 
     @Override
-    public String dataNameMapper(final ItemData data) {
-        return data.name();
-    }
-
-    @Override
-    public int idMapper(final ItemData data) {
-        return data.id();
-    }
-
-    @Override
     public CodeBlock dataInitializer(final ItemData item) {
         return CodeBlock.of("new $T($L, $S, $L)",
                             this.dataType,
