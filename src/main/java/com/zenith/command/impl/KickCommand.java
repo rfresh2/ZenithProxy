@@ -25,8 +25,13 @@ public class KickCommand extends Command {
         return CommandUsage.args(
             "kick",
             CommandCategory.MANAGE,
-            "Kick a player from the proxy. Only usable by account owners",
-            asList("<player>"));
+            """
+            Kicks all players or a specific player. Only usable by account owners.
+            """,
+            asList(
+                "",
+                "<player>"
+            ));
     }
 
     @Override

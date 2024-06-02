@@ -104,6 +104,8 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             session.disconnect("Timed out waiting for the proxy to login");
             return;
         }
+        // avoid race condition if player disconnects sometime during our wait
+        if (!session.isConnected()) return;
         SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
         session.getProfileCache().setProfile(clientGameProfile);
         if (!onlySpectator.orElse(false) && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
